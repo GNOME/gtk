@@ -303,6 +303,7 @@ struct _GdkEventCrossing
   GdkNotifyType detail;
   gboolean focus;
   guint state;
+  GObject *related_target;
 };
 
 /*
@@ -323,6 +324,7 @@ struct _GdkEventFocus
   gint16 in;
   GdkCrossingMode mode;
   GdkNotifyType detail;
+  GObject *related_target;
 };
 
 /*
@@ -639,6 +641,9 @@ union _GdkEvent
 void           gdk_event_set_target              (GdkEvent *event,
                                                   GObject  *user_data);
 GObject *      gdk_event_get_target              (const GdkEvent *event);
+void           gdk_event_set_related_target       (GdkEvent *event,
+                                                  GObject  *user_data);
+GObject *      gdk_event_get_related_target      (const GdkEvent *event);
 
 
 #endif /* __GDK_EVENTS_PRIVATE_H__ */
