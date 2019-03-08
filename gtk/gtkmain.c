@@ -1407,7 +1407,8 @@ static void
 synth_crossing (GtkWidget       *widget,
                 GtkWidget       *toplevel,
                 gboolean         enter,
-                GtkWidget       *other_widget,
+                GtkWidget       *target,
+                GtkWidget       *related_target,
                 GdkEvent        *source,
                 GdkNotifyType    notify_type,
                 GdkCrossingMode  crossing_mode)
@@ -1430,8 +1431,8 @@ synth_crossing (GtkWidget       *widget,
     {
       gdouble x, y;
       event = gdk_event_new (enter ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY);
-      if (other_widget)
-        event->crossing.child_surface = g_object_ref (gtk_widget_get_surface (other_widget));
+      if (related_target)
+        event->crossing.child_surface = g_object_ref (gtk_widget_get_surface (related_target));
       gdk_event_get_coords (source, &x, &y);
       event->crossing.x = x;
       event->crossing.y = y;
@@ -1442,6 +1443,7 @@ synth_crossing (GtkWidget       *widget,
     }
 
   gdk_event_set_target (event, G_OBJECT (target));
+  gdk_event_set_related_target (event, G_OBJECT (related_target));
   gdk_event_set_device (event, gdk_event_get_device (source));
   gdk_event_set_source_device (event, gdk_event_get_source_device (source));
 
@@ -1500,7 +1502,7 @@ gtk_synthesize_crossing_events (GtkWindow       *toplevel,
             leave_type : get_virtual_notify_type (leave_type);
 
           synth_crossing (widget, GTK_WIDGET (toplevel), FALSE,
-                          new_target, event, notify_type, mode);
+                          old_target, new_target, event, notify_type, mode);
           widget = gtk_widget_get_parent (widget);
         }
     }
@@ -1525,7 +1527,7 @@ gtk_synthesize_crossing_events (GtkWindow       *toplevel,
             enter_type : get_virtual_notify_type (enter_type);
 
           synth_crossing (widget, GTK_WIDGET (toplevel), TRUE,
-                          old_target, event, notify_type, mode);
+                          new_target, old_target, event, notify_type, mode);
         }
     }
 }
@@ -2425,6 +2427,12 @@ GtkWidget *
 gtk_get_event_target (const GdkEvent *event)
 {
   return GTK_WIDGET (gdk_event_get_target (event));
+}
+
+GtkWidget *
+gtk_get_event_related_target (const GdkEvent *event)
+{
+  return GTK_WIDGET (gdk_event_get_related_target (event));
 }
 
 /**

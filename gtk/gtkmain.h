@@ -156,6 +156,9 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_get_event_target         (const GdkEvent  *event);
 
 GDK_AVAILABLE_IN_ALL
+GtkWidget *gtk_get_event_related_target (const GdkEvent  *event);
+
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_get_event_target_with_type (GdkEvent *event,
                                            GType     type);
 
