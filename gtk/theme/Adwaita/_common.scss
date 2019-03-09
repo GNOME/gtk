@@ -1834,6 +1834,8 @@ window.devel {
       background: $bg_color -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat,
                   image($bg_color); /* background-color would flash */
       color: transparentize($fg_color,.95);
+
+      label { color: $backdrop_fg_color; }
     }
   }
 }
