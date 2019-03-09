@@ -50,6 +50,8 @@ gboolean                gsk_renderer_realize                    (GskRenderer    
                                                                  GError                 **error);
 GDK_AVAILABLE_IN_ALL
 void                    gsk_renderer_unrealize                  (GskRenderer             *renderer);
+GDK_AVAILABLE_IN_ALL
+gboolean                gsk_renderer_is_realized                (GskRenderer             *renderer);
 
 GDK_AVAILABLE_IN_ALL
 GdkTexture *            gsk_renderer_render_texture             (GskRenderer             *renderer,
