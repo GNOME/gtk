@@ -76,17 +76,31 @@
           </object>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
-            <property name="expand">1</property>
-            <property name="min-content-height">100</property>
-            <property name="min-content-width">100</property>
+          <object class="GtkBox">
             <child>
-              <object class="GtkViewport">
+              <object class="GtkScrolledWindow">
+                <property name="expand">1</property>
+                <property name="min-content-height">100</property>
+                <property name="min-content-width">100</property>
                 <child>
-                  <object class="GtkPicture" id="picture">
-                    <property name="can-shrink">0</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
+                  <object class="GtkViewport">
+                    <child>
+                      <object class="GtkPicture" id="picture">
+                        <property name="can-shrink">0</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="hscrollbar-policy">never</property>
+                <child>
+                  <object class="GtkListBox" id="renderer_listbox">
+                    <property name="selection-mode">none</property>
                   </object>
                 </child>
               </object>
