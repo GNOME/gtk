@@ -1,4 +1,5 @@
 node_editor_sources = [
+  'gtkrendererpaintable.c',
   'main.c',
   'node-editor-application.c',
   'node-editor-window.c',
