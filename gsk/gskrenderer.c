@@ -68,7 +68,6 @@ typedef struct
   GdkSurface *surface;
   GskRenderNode *prev_node;
   GskRenderNode *root_node;
-  GdkDisplay *display;
 
   GskProfiler *profiler;
 
@@ -81,7 +80,6 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GskRenderer, gsk_renderer, G_TYPE_OBJECT)
 
 enum {
   PROP_SURFACE = 1,
-  PROP_DISPLAY,
 
   N_PROPS
 };
@@ -134,31 +132,8 @@ gsk_renderer_dispose (GObject *gobject)
   g_assert (!priv->is_realized);
 
   g_clear_object (&priv->profiler);
-  g_clear_object (&priv->display);
 
   G_OBJECT_CLASS (gsk_renderer_parent_class)->dispose (gobject);
-}
-
-static void
-gsk_renderer_set_property (GObject      *gobject,
-                           guint         prop_id,
-                           const GValue *value,
-                           GParamSpec   *pspec)
-{
-  GskRenderer *self = GSK_RENDERER (gobject);
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
-
-  switch (prop_id)
-    {
-    case PROP_DISPLAY:
-      /* Construct-only */
-      priv->display = g_value_dup_object (value);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
-      break;
-    }
 }
 
 static void
@@ -176,31 +151,10 @@ gsk_renderer_get_property (GObject    *gobject,
       g_value_set_object (value, priv->surface);
       break;
 
-    case PROP_DISPLAY:
-      g_value_set_object (value, priv->display);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
     }
-}
-
-static void
-gsk_renderer_constructed (GObject *gobject)
-{
-  GskRenderer *self = GSK_RENDERER (gobject);
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
-
-  if (priv->display == NULL)
-    {
-      GdkDisplayManager *manager = gdk_display_manager_get ();
-
-      priv->display = gdk_display_manager_get_default_display (manager);
-      g_assert (priv->display != NULL);
-    }
-
-  G_OBJECT_CLASS (gsk_renderer_parent_class)->constructed (gobject);
 }
 
 static void
@@ -213,24 +167,8 @@ gsk_renderer_class_init (GskRendererClass *klass)
   klass->render = gsk_renderer_real_render;
   klass->render_texture = gsk_renderer_real_render_texture;
 
-  gobject_class->constructed = gsk_renderer_constructed;
-  gobject_class->set_property = gsk_renderer_set_property;
   gobject_class->get_property = gsk_renderer_get_property;
   gobject_class->dispose = gsk_renderer_dispose;
-
-  /**
-   * GskRenderer:display:
-   *
-   * The #GdkDisplay used by the #GskRenderer.
-   */
-  gsk_renderer_properties[PROP_DISPLAY] =
-    g_param_spec_object ("display",
-			 "Display",
-			 "The GdkDisplay object used by the renderer",
-			 GDK_TYPE_DISPLAY,
-			 G_PARAM_READWRITE |
-			 G_PARAM_CONSTRUCT_ONLY |
-			 G_PARAM_STATIC_STRINGS);
 
   gsk_renderer_properties[PROP_SURFACE] =
     g_param_spec_object ("surface",
@@ -290,24 +228,6 @@ gsk_renderer_get_root_node (GskRenderer *renderer)
 }
 
 /**
- * gsk_renderer_get_display:
- * @renderer: a #GskRenderer
- *
- * Retrieves the #GdkDisplay used when creating the #GskRenderer.
- *
- * Returns: (transfer none): a #GdkDisplay
- */
-GdkDisplay *
-gsk_renderer_get_display (GskRenderer *renderer)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
-
-  return priv->display;
-}
-
-/*< private >
  * gsk_renderer_is_realized:
  * @renderer: a #GskRenderer
  *
@@ -674,9 +594,7 @@ gsk_renderer_new_for_surface (GdkSurface *surface)
        * information to stdout.
        */
       verbose |= renderer_possibilities[i].verbose;
-      renderer = g_object_new (renderer_type,
-                               "display", gdk_surface_get_display (surface),
-                               NULL);
+      renderer = g_object_new (renderer_type, NULL);
 
       if (gsk_renderer_realize (renderer, surface, &error))
         {

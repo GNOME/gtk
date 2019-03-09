@@ -461,7 +461,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
                                 float offset_x,
                                 float offset_y)
 {
-  GdkDisplay *display = gsk_renderer_get_display (renderer);
+  GdkDisplay *display = gdk_surface_get_display (gsk_renderer_get_surface (renderer));
 
   switch (gsk_render_node_get_node_type (node))
     {
