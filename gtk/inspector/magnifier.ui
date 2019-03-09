@@ -5,9 +5,19 @@
       <object class="GtkScrolledWindow">
         <property name="expand">1</property>
         <child>
-          <object class="GtkMagnifier" id="magnifier">
-            <property name="visible">True</property>
-            <property name="resize">True</property>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkMagnifier" id="magnifier">
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="resize">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkListBox" id="renderer_listbox">
+                <property name="width-request">240</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
