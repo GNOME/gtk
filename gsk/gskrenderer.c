@@ -79,7 +79,9 @@ typedef struct
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GskRenderer, gsk_renderer, G_TYPE_OBJECT)
 
 enum {
-  PROP_SURFACE = 1,
+  PROP_0,
+  PROP_REALIZED,
+  PROP_SURFACE,
 
   N_PROPS
 };
@@ -147,6 +149,10 @@ gsk_renderer_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
+    case PROP_REALIZED:
+      g_value_set_boolean (value, priv->is_realized);
+      break;
+
     case PROP_SURFACE:
       g_value_set_object (value, priv->surface);
       break;
@@ -170,13 +176,19 @@ gsk_renderer_class_init (GskRendererClass *klass)
   gobject_class->get_property = gsk_renderer_get_property;
   gobject_class->dispose = gsk_renderer_dispose;
 
+  gsk_renderer_properties[PROP_REALIZED] =
+    g_param_spec_boolean ("realized",
+                          "Realized",
+                          "The renderer has been associated with a surface",
+                          FALSE,
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
   gsk_renderer_properties[PROP_SURFACE] =
     g_param_spec_object ("surface",
                          "Surface",
                          "The surface associated to the renderer",
                          GDK_TYPE_SURFACE,
-                         G_PARAM_READABLE |
-                         G_PARAM_STATIC_STRINGS);
+                         G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, gsk_renderer_properties);
 }
