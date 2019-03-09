@@ -2,7 +2,6 @@
 <FILE>GskRenderer</FILE>
 gsk_renderer_new_for_surface
 gsk_renderer_get_surface
-gsk_renderer_get_display
 gsk_renderer_realize
 gsk_renderer_unrealize
 gsk_renderer_render
