@@ -21,6 +21,8 @@
 
 #include "node-editor-window.h"
 
+#include "gtkrendererpaintableprivate.h"
+
 #include "gsk/gskrendernodeparserprivate.h"
 
 typedef struct
@@ -37,6 +39,10 @@ struct _NodeEditorWindow
   GtkWidget *picture;
   GtkWidget *text_view;
   GtkTextBuffer *text_buffer;
+
+  GtkWidget *renderer_listbox;
+  GListStore *renderers;
+  GdkPaintable *paintable;
 
   GArray *errors;
 };
@@ -114,6 +120,7 @@ text_changed (GtkTextBuffer    *buffer,
       GtkSnapshot *snapshot;
       GdkPaintable *paintable;
       graphene_rect_t bounds;
+      guint i;
 
       snapshot = gtk_snapshot_new ();
       gsk_render_node_get_bounds (node, &bounds);
@@ -122,6 +129,12 @@ text_changed (GtkTextBuffer    *buffer,
       gsk_render_node_unref (node);
       paintable = gtk_snapshot_free_to_paintable (snapshot, &bounds.size);
       gtk_picture_set_paintable (GTK_PICTURE (self->picture), paintable);
+      for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->renderers)); i++)
+        {
+          gpointer item = g_list_model_get_item (G_LIST_MODEL (self->renderers), i);
+          gtk_renderer_paintable_set_paintable (item, paintable);
+          g_object_unref (item);
+        }
       g_clear_object (&paintable);
     }
   else
@@ -388,7 +401,74 @@ node_editor_window_finalize (GObject *object)
 
   g_array_free (self->errors, TRUE);
 
+  g_clear_object (&self->renderers);
+
   G_OBJECT_CLASS (node_editor_window_parent_class)->finalize (object);
+}
+
+static void
+node_editor_window_add_renderer (NodeEditorWindow *self,
+                                 GskRenderer      *renderer,
+                                 const char       *description)
+{
+  GdkSurface *surface;
+  GdkPaintable *paintable;
+
+  surface = gtk_widget_get_surface (GTK_WIDGET (self));
+  g_assert (surface != NULL);
+
+  if (renderer != NULL && !gsk_renderer_realize (renderer, surface, NULL))
+    {
+      g_object_unref (renderer);
+      return;
+    }
+
+  paintable = gtk_renderer_paintable_new (renderer, gtk_picture_get_paintable (GTK_PICTURE (self->picture)));
+  g_object_set_data_full (G_OBJECT (paintable), "description", g_strdup (description), g_free);
+  g_clear_object (&renderer);
+
+  g_list_store_append (self->renderers, paintable);
+  g_object_unref (paintable);
+}
+
+static void
+node_editor_window_realize (GtkWidget *widget)
+{
+  NodeEditorWindow *self = NODE_EDITOR_WINDOW (widget);
+
+  GTK_WIDGET_CLASS (node_editor_window_parent_class)->realize (widget);
+
+#if 0
+  node_editor_window_add_renderer (self,
+                                   NULL,
+                                   "Default");
+#endif
+  node_editor_window_add_renderer (self,
+                                   gsk_gl_renderer_new (),
+                                   "OpenGL");
+#ifdef GDK_RENDERING_VULKAN
+  node_editor_window_add_renderer (self,
+                                   gsk_vulkan_renderer_new (),
+                                   "Vulkan");
+#endif
+#ifdef GDK_WINDOWING_BROADWAY
+  node_editor_window_add_renderer (self,
+                                   gsk_broadway_renderer_new (),
+                                   "Broadway");
+#endif
+  node_editor_window_add_renderer (self,
+                                   gsk_cairo_renderer_new (),
+                                   "Cairo");
+}
+
+static void
+node_editor_window_unrealize (GtkWidget *widget)
+{
+  NodeEditorWindow *self = NODE_EDITOR_WINDOW (widget);
+
+  g_list_store_remove_all (self->renderers);
+
+  GTK_WIDGET_CLASS (node_editor_window_parent_class)->unrealize (widget);
 }
 
 static void
@@ -399,12 +479,16 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
 
   object_class->finalize = node_editor_window_finalize;
 
-  gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
+  gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gtk/gtk4/node-editor/node-editor-window.ui");
+
+  widget_class->realize = node_editor_window_realize;
+  widget_class->unrealize = node_editor_window_unrealize;
 
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, text_buffer);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, text_view);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, picture);
+  gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, renderer_listbox);
 
   gtk_widget_class_bind_template_callback (widget_class, text_changed);
   gtk_widget_class_bind_template_callback (widget_class, text_view_query_tooltip_cb);
@@ -413,10 +497,36 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_bind_template_callback (widget_class, export_image_cb);
 }
 
+static GtkWidget *
+node_editor_window_create_renderer_widget (gpointer item,
+                                           gpointer user_data)
+{
+  GdkPaintable *paintable = item;
+  GtkWidget *box, *label, *picture;
+
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_widget_set_size_request (box, 120, 90);
+
+  label = gtk_label_new (g_object_get_data (G_OBJECT (paintable), "description"));
+  gtk_container_add (GTK_CONTAINER (box), label);
+
+  picture = gtk_picture_new_for_paintable (paintable);
+  gtk_container_add (GTK_CONTAINER (box), picture);
+
+  return box;
+}
+
 static void
 node_editor_window_init (NodeEditorWindow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->renderers = g_list_store_new (GDK_TYPE_PAINTABLE);
+  gtk_list_box_bind_model (GTK_LIST_BOX (self->renderer_listbox),
+                           G_LIST_MODEL (self->renderers),
+                           node_editor_window_create_renderer_widget,
+                           self,
+                           NULL);
 
   self->errors = g_array_new (FALSE, TRUE, sizeof (TextViewError));
   g_array_set_clear_func (self->errors, (GDestroyNotify)text_view_error_free);
