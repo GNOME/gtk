@@ -192,6 +192,8 @@ gtk_renderer_paintable_unset_paintable (GtkRendererPaintable *self)
     g_signal_handlers_disconnect_by_func (self->paintable,
                                           gdk_paintable_invalidate_size,
                                           self);
+
+  g_clear_object (&self->paintable);
 }
 
 static void
@@ -261,6 +263,8 @@ gtk_renderer_paintable_set_renderer (GtkRendererPaintable *self,
 
   if (self->paintable)
     gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_RENDERER]);
 }
 
 GskRenderer *
@@ -303,6 +307,8 @@ gtk_renderer_paintable_set_paintable (GtkRendererPaintable *self,
 
   gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
   gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PAINTABLE]);
 }
 
 GdkPaintable *
