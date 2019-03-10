@@ -205,6 +205,7 @@ gtk_public_sources = files([
   'gtkcssprovider.c',
   'gtkcsssection.c',
   'gtkdialog.c',
+  'gtkdiffpaintable.c',
   'gtkdnd.c',
   'gtkdragdest.c',
   'gtkdragsource.c',
