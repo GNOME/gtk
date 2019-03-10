@@ -23,6 +23,7 @@
 #include "gtkmagnifierprivate.h"
 
 #include "gtkadjustment.h"
+#include "gtkdiffpaintableprivate.h"
 #include "gtklabel.h"
 #include "gtklistbox.h"
 #include "gtkpicture.h"
@@ -133,19 +134,30 @@ static GtkWidget *
 gtk_inspector_magnifier_create_renderer_widget (gpointer item,
                                                 gpointer user_data)
 {
+  GtkInspectorMagnifier *self = user_data;
+  GtkInspectorMagnifierPrivate *priv = gtk_inspector_magnifier_get_instance_private (self);
   GdkPaintable *paintable = item;
-  GtkWidget *box, *label, *picture;
+  GdkPaintable *diff;
+  GtkWidget *vbox, *hbox, *label, *picture;
 
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_widget_set_size_request (box, 160, 120);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_widget_set_size_request (vbox, 160, 60);
 
   label = gtk_label_new (g_object_get_data (G_OBJECT (paintable), "description"));
-  gtk_container_add (GTK_CONTAINER (box), label);
+  gtk_container_add (GTK_CONTAINER (vbox), label);
+
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+  gtk_container_add (GTK_CONTAINER (vbox), hbox);
 
   picture = gtk_picture_new_for_paintable (paintable);
-  gtk_container_add (GTK_CONTAINER (box), picture);
+  gtk_container_add (GTK_CONTAINER (hbox), picture);
 
-  return box;
+  diff = gtk_diff_paintable_new (paintable, priv->paintable);
+  picture = gtk_picture_new_for_paintable (diff);
+  gtk_container_add (GTK_CONTAINER (hbox), picture);
+  g_object_unref (diff);
+
+  return vbox;
 }
 
 static void
