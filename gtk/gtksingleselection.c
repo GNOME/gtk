@@ -451,10 +451,15 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
                        G_TYPE_OBJECT,
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GtkSingleSelection:model:
+   *
+   * The model being managed
+   */
   properties[PROP_MODEL] =
     g_param_spec_object ("model",
                        P_("The model"),
-                       P_("The model"),
+                       P_("The model being managed"),
                        G_TYPE_LIST_MODEL,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
@@ -548,7 +553,9 @@ gtk_single_selection_set_selected (GtkSingleSelection *self,
     gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), position, old_position - position + 1);
   else
     gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), old_position, position - old_position + 1);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
 }
 
 /**
