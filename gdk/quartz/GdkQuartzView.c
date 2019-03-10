@@ -727,6 +727,9 @@
 
 -(void)setFrame: (NSRect)frame
 {
+  if (GDK_WINDOW_DESTROYED (gdk_window))
+    return;
+  
   [super setFrame: frame];
 
   if ([self window])
