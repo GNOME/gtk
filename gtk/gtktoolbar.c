@@ -345,6 +345,19 @@ add_ctrl_tab_bindings (GtkBindingSet    *binding_set,
 				GTK_TYPE_DIRECTION_TYPE, direction);
 }
 
+static GtkWidget *
+gtk_toolbar_next_focus_child (GtkWidget        *widget,
+                              GtkWidget        *child,
+                              GtkDirectionType  direction)
+{
+  if (child &&
+      (direction == GTK_DIR_TAB_FORWARD ||
+       direction == GTK_DIR_TAB_BACKWARD))
+    return NULL;
+
+  return GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->next_focus_child (widget, child, direction);
+}
+
 static void
 gtk_toolbar_class_init (GtkToolbarClass *klass)
 {
@@ -366,6 +379,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   widget_class->measure = gtk_toolbar_measure;
   widget_class->size_allocate = gtk_toolbar_size_allocate;
   widget_class->style_updated = gtk_toolbar_style_updated;
+  widget_class->next_focus_child = gtk_toolbar_next_focus_child;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TOOL_BAR);
 
