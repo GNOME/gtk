@@ -1232,7 +1232,6 @@ gtk_notebook_init (GtkNotebook *notebook)
   GtkEventController *controller;
   GtkGesture *gesture;
 
-  gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
   gtk_widget_set_has_surface (GTK_WIDGET (notebook), FALSE);
 
   notebook->priv = gtk_notebook_get_instance_private (notebook);
