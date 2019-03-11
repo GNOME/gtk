@@ -309,14 +309,14 @@ configure_monitor (GdkMonitor       *monitor,
 static void
 display_rect (GdkQuartzDisplay *display)
 {
-  uint32_t disp, count = 0;
+  uint32_t disp, n_displays = 0;
   float min_x = 0.0, max_x = 0.0, min_y = 0.0, max_y = 0.0;
   float min_x_mm = 0.0, max_x_mm = 0.0, min_y_mm = 0.0, max_y_mm = 0.0;
   float main_height;
   CGDirectDisplayID *displays;
 
-  count = get_active_displays (&displays);
-  for (disp = 0; disp < count; ++disp)
+  n_displays = get_active_displays (&displays);
+  for (disp = 0; disp < n_displays; ++disp)
     {
       CGRect bounds = CGDisplayBounds (displays[disp]);
       CGSize disp_size = CGDisplayScreenSize (displays[disp]);
@@ -423,9 +423,9 @@ gdk_quartz_display_get_monitor (GdkDisplay *display,
                                 int         monitor_num)
 {
   GdkQuartzDisplay *quartz_display = GDK_QUARTZ_DISPLAY (display);
-  int count = gdk_quartz_display_get_n_monitors (display);
+  int n_displays = gdk_quartz_display_get_n_monitors (display);
 
-  if (monitor_num >= 0 && monitor_num < count)
+  if (monitor_num >= 0 && monitor_num < n_displays)
     return g_ptr_array_index (quartz_display->monitors, monitor_num);
 
   return NULL;
@@ -482,13 +482,13 @@ G_DEFINE_TYPE (GdkQuartzDisplay, gdk_quartz_display, GDK_TYPE_DISPLAY)
 static void
 gdk_quartz_display_init (GdkQuartzDisplay *display)
 {
-  uint32_t count = 0, disp;
+  uint32_t n_displays = 0, disp;
   CGDirectDisplayID *displays;
 
   display_rect(display); /* Initialize the overall display coordinates. */
-  count = get_active_displays (&displays);
-  display->monitors = g_ptr_array_new_full (max_displays, g_object_unref);
-  for (disp = 0; disp < count; ++disp)
+  n_displays = get_active_displays (&displays);
+  display->monitors = g_ptr_array_new_full (n_displays, g_object_unref);
+  for (disp = 0; disp < n_displays; ++disp)
     {
       GdkQuartzMonitor *monitor = g_object_new (GDK_TYPE_QUARTZ_MONITOR,
                                                        "display", display, NULL);
