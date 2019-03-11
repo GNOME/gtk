@@ -1540,6 +1540,9 @@ gdk_event_translate (GdkEvent *event,
 
           grab = _gdk_display_get_last_device_grab (_gdk_display,
                                                     gdk_seat_get_pointer (seat));
+          if (!grab)
+            [impl->toplevel makeKeyWindow];
+
         }
     }
 
