@@ -2858,25 +2858,28 @@ switch {
 
 
 //selection-mode
-@each $s,$as in ('','-selectionmode'),
-                  (':hover', '-hover-selectionmode'),
-                  (':active', '-active-selectionmode'),
-                  (':backdrop', '-backdrop-selectionmode'),
-                  (':checked', '-checked-selectionmode'),
-                  (':checked:hover', '-checked-hover-selectionmode'),
-                  (':checked:active', '-checked-active-selectionmode'),
-                  (':backdrop:checked', '-checked-backdrop-selectionmode') {
+@each $s, $as, $asd in  ('', 'none', 'transparent'),
+                        (':hover', 'none', 'transparent'),
+                        (':active', 'none', 'transparent'),
+                        (':backdrop', 'none', 'transparent'),
+                        (':checked', '-gtk-icontheme(\'emblem-ok-symbolic\')', '#{$osd_fg_color}'),
+                        (':checked:hover', '-gtk-icontheme(\'emblem-ok-symbolic\')', '#{$osd_fg_color}'),
+                        (':checked:active', '-gtk-icontheme(\'emblem-ok-symbolic\')', '#{$osd_fg_color}'),
+                        (':backdrop:checked', '-gtk-icontheme(\'emblem-ok-symbolic\')', '#{transparentize($osd_fg_color, 0.4)}') {
   .view.content-view.check#{$s}:not(list),
   .content-view .tile check#{$s}:not(list) {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox#{$as}.png"), url("assets/checkbox#{$as}@2.png"));
-    background-color: transparent;
-    min-width: 40px;
-    min-height: 40px;
+    margin: 4px;
+    min-width: 32px;
+    min-height: 32px;
+    color: #{$asd};
+    background-color: transparentize($selected_bg_color, .05);
+    border-radius: 5px;
     background-image: none;
-    transition: none;
+    transition: 200ms;
     box-shadow: none;
     border-width: 0;
+    -gtk-icon-source: #{$as};
+    -gtk-icon-shadow: none;
   }
 }
 
