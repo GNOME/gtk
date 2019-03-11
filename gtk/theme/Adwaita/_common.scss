@@ -2858,25 +2858,30 @@ switch {
 
 
 //selection-mode
-@each $s,$as in ('','-selectionmode'),
-                  (':hover', '-hover-selectionmode'),
-                  (':active', '-active-selectionmode'),
-                  (':backdrop', '-backdrop-selectionmode'),
-                  (':checked', '-checked-selectionmode'),
-                  (':checked:hover', '-checked-hover-selectionmode'),
-                  (':checked:active', '-checked-active-selectionmode'),
-                  (':backdrop:checked', '-checked-backdrop-selectionmode') {
-  .view.content-view.check#{$s}:not(list),
-  .content-view .tile check#{$s}:not(list) {
-    -gtk-icon-shadow: none;
-    -gtk-icon-source: -gtk-scaled(url("assets/checkbox#{$as}.png"), url("assets/checkbox#{$as}@2.png"));
-    background-color: transparent;
-    min-width: 40px;
-    min-height: 40px;
+@each $check_state, $check_icon, $check_color, $check_background in
+  ('', 'none', 'transparent', '#{transparentize($selected_bg_color, .05)}'),
+  (':hover', 'none', 'transparent', '#{transparentize($selected_bg_color, .05)}'),
+  (':active', 'none', 'transparent', '#{transparentize($selected_bg_color, .05)}'),
+  (':backdrop', 'none', 'transparent', '#{transparentize(desaturate($selected_bg_color, 10%), .05)}'),
+  (':checked', '-gtk-icontheme(\'emblem-ok-symbolic\')', '#{$osd_fg_color}', '#{transparentize($selected_bg_color, .05)}'),
+  (':checked:hover', '-gtk-icontheme(\'emblem-ok-symbolic\')', '#{$osd_fg_color}', '#{transparentize($selected_bg_color, .05)}'),
+  (':checked:active', '-gtk-icontheme(\'emblem-ok-symbolic\')', '#{$osd_fg_color}', '#{transparentize($selected_bg_color, .05)}'),
+  (':backdrop:checked', '-gtk-icontheme(\'emblem-ok-symbolic\')', '#{transparentize($osd_fg_color, 0.2)}', '#{transparentize(desaturate($selected_bg_color, 10%), .05)}'), {
+
+  .view.content-view.check#{$check_state}:not(list),
+  .content-view .tile check#{$check_state}:not(list) {
+    margin: 4px;
+    min-width: 32px;
+    min-height: 32px;
+    color: #{$check_color};
+    background-color: #{$check_background};
+    border-radius: 5px;
     background-image: none;
-    transition: none;
+    transition: 200ms;
     box-shadow: none;
     border-width: 0;
+    -gtk-icon-source: #{$check_icon};
+    -gtk-icon-shadow: none;
   }
 }
 
