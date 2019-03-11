@@ -46,6 +46,19 @@ gtk_gizmo_snapshot (GtkWidget   *widget,
     GTK_WIDGET_CLASS (gtk_gizmo_parent_class)->snapshot (widget, snapshot);
 }
 
+static GtkWidget *
+gtk_gizmo_next_focus_child (GtkWidget        *widget,
+                            GtkWidget        *child,
+                            GtkDirectionType  direction)
+{
+  GtkGizmo *self = GTK_GIZMO (widget);
+
+  if (self->focus_func)
+    return self->focus_func (self, child, direction);
+  else
+    return GTK_WIDGET_CLASS (gtk_gizmo_parent_class)->next_focus_child (widget, child, direction);
+}
+
 static void
 gtk_gizmo_finalize (GObject *object)
 {
@@ -76,6 +89,7 @@ gtk_gizmo_class_init (GtkGizmoClass *klass)
   widget_class->measure = gtk_gizmo_measure;
   widget_class->size_allocate = gtk_gizmo_size_allocate;
   widget_class->snapshot = gtk_gizmo_snapshot;
+  widget_class->next_focus_child = gtk_gizmo_next_focus_child;
 }
 
 static void
@@ -90,6 +104,16 @@ gtk_gizmo_new (const char              *css_name,
                GtkGizmoAllocateFunc allocate_func,
                GtkGizmoSnapshotFunc snapshot_func)
 {
+  return gtk_gizmo_new_with_focus (css_name, measure_func, allocate_func, snapshot_func, NULL);
+}
+
+GtkWidget *
+gtk_gizmo_new_with_focus (const char              *css_name,
+                          GtkGizmoMeasureFunc  measure_func,
+                          GtkGizmoAllocateFunc allocate_func,
+                          GtkGizmoSnapshotFunc snapshot_func,
+                          GtkGizmoFocusFunc    focus_func)
+{
   GtkGizmo *gizmo = GTK_GIZMO (g_object_new (GTK_TYPE_GIZMO,
                                              "css-name", css_name,
                                              NULL));
@@ -97,6 +121,7 @@ gtk_gizmo_new (const char              *css_name,
   gizmo->measure_func  = measure_func;
   gizmo->allocate_func = allocate_func;
   gizmo->snapshot_func = snapshot_func;
+  gizmo->focus_func    = focus_func;
 
   return GTK_WIDGET (gizmo);
 }

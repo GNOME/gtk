@@ -27,7 +27,9 @@ typedef void    (* GtkGizmoAllocateFunc)  (GtkGizmo *gizmo,
                                            int       baseline);
 typedef void    (* GtkGizmoSnapshotFunc)  (GtkGizmo    *gizmo,
                                            GtkSnapshot *snapshot);
-
+typedef GtkWidget * (* GtkGizmoFocusFunc) (GtkGizmo         *gizmo,
+                                           GtkWidget        *child,
+                                           GtkDirectionType  direction);
 
 struct _GtkGizmo
 {
@@ -36,6 +38,7 @@ struct _GtkGizmo
   GtkGizmoMeasureFunc  measure_func;
   GtkGizmoAllocateFunc allocate_func;
   GtkGizmoSnapshotFunc snapshot_func;
+  GtkGizmoFocusFunc    focus_func;
 };
 
 struct _GtkGizmoClass
@@ -49,6 +52,12 @@ GtkWidget *gtk_gizmo_new (const char          *css_name,
                           GtkGizmoMeasureFunc  measure_func,
                           GtkGizmoAllocateFunc allocate_func,
                           GtkGizmoSnapshotFunc snapshot_func);
+
+GtkWidget *gtk_gizmo_new_with_focus (const char          *css_name,
+                                     GtkGizmoMeasureFunc  measure_func,
+                                     GtkGizmoAllocateFunc allocate_func,
+                                     GtkGizmoSnapshotFunc snapshot_func,
+                                     GtkGizmoFocusFunc    focus_func);
 
 
 #endif
