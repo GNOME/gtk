@@ -704,6 +704,9 @@ static void gtk_notebook_allocate_tabs       (GtkGizmo         *gizmo,
                                               int               baseline);
 static void     gtk_notebook_snapshot_tabs   (GtkGizmo         *gizmo,
                                               GtkSnapshot      *snapshot);
+static GtkWidget *gtk_notebook_next_focus_child_tabs (GtkGizmo         *gizmo,
+                                                      GtkWidget        *child,
+                                                      GtkDirectionType  direction);
 
 /*** GtkNotebook Private Functions ***/
 static void gtk_notebook_real_remove         (GtkNotebook      *notebook,
@@ -1281,10 +1284,11 @@ gtk_notebook_init (GtkNotebook *notebook)
   gtk_widget_hide (priv->header_widget);
   gtk_container_add (GTK_CONTAINER (priv->box), priv->header_widget);
 
-  priv->tabs_widget = gtk_gizmo_new ("tabs",
-                                     gtk_notebook_measure_tabs,
-                                     gtk_notebook_allocate_tabs,
-                                     gtk_notebook_snapshot_tabs);
+  priv->tabs_widget = gtk_gizmo_new_with_focus ("tabs",
+                                                gtk_notebook_measure_tabs,
+                                                gtk_notebook_allocate_tabs,
+                                                gtk_notebook_snapshot_tabs,
+                                                gtk_notebook_next_focus_child_tabs);
   gtk_widget_set_hexpand (priv->tabs_widget, TRUE);
   gtk_container_add (GTK_CONTAINER (priv->header_widget), priv->tabs_widget);
 
@@ -4238,6 +4242,27 @@ gtk_notebook_snapshot_tabs (GtkGizmo    *gizmo,
     gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->cur_page->tab_widget, snapshot);
 }
 
+static GtkWidget *
+gtk_notebook_next_focus_child_tabs (GtkGizmo        *gizmo,
+                                    GtkWidget        *child,
+                                    GtkDirectionType  direction)
+{
+  GtkWidget *widget = gtk_widget_get_parent (gtk_widget_get_parent (GTK_WIDGET (gizmo)));
+  GtkNotebook *notebook = GTK_NOTEBOOK (gtk_widget_get_parent (widget));
+  GtkNotebookPrivate *priv = notebook->priv;
+
+  if (direction == GTK_DIR_TAB_FORWARD ||
+      direction == GTK_DIR_TAB_BACKWARD)
+    {
+      if (child == NULL)
+        return priv->cur_page->tab_widget;
+      else
+        return NULL;
+    }
+
+  return gtk_widget_next_focus_child (GTK_WIDGET (gizmo), child, direction);
+}
+
 /* Private GtkNotebook Size Allocate Functions:
  *
  * gtk_notebook_calculate_shown_tabs
@@ -7040,4 +7065,3 @@ gtk_notebook_get_pages (GtkNotebook *notebook)
 
   return priv->pages;
 }
-
