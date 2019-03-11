@@ -123,6 +123,9 @@ static void gtk_box_measure (GtkWidget      *widget,
                              int            *natural,
                              int            *minimum_baseline,
                              int            *natural_baseline);
+GtkWidget * gtk_box_next_focus_child (GtkWidget        *widget,
+                                      GtkWidget        *child,
+                                      GtkDirectionType  direction);
 
 G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkBox)
@@ -140,6 +143,7 @@ gtk_box_class_init (GtkBoxClass *class)
 
   widget_class->size_allocate = gtk_box_size_allocate;
   widget_class->measure = gtk_box_measure;
+  widget_class->next_focus_child = gtk_box_next_focus_child;
 
   container_class->add = gtk_box_add;
   container_class->remove = gtk_box_remove;
@@ -1148,4 +1152,27 @@ gtk_box_reorder_child_after (GtkBox    *box,
   gtk_css_node_insert_after (gtk_widget_get_css_node (widget),
                              gtk_widget_get_css_node (child),
                              sibling ? gtk_widget_get_css_node (sibling) : NULL);
+}
+
+GtkWidget *
+gtk_box_next_focus_child (GtkWidget *widget,
+                          GtkWidget *child,
+                          GtkDirectionType direction)
+{
+  if (direction == GTK_DIR_TAB_FORWARD)
+    {
+      if (child)
+        return gtk_widget_get_next_sibling (child);
+      else
+        return gtk_widget_get_first_child (widget);
+    }
+  else if (direction == GTK_DIR_TAB_BACKWARD)
+    {
+      if (child)
+        return gtk_widget_get_prev_sibling (child);
+      else
+        return gtk_widget_get_last_child (widget);
+    }
+
+  return GTK_WIDGET_CLASS (gtk_box_parent_class)->next_focus_child (widget, child, direction);
 }
