@@ -629,33 +629,15 @@ find_toplevel_under_pointer (GdkDisplay *display,
 static GdkWindow *
 find_toplevel_for_keyboard_event (NSEvent *nsevent)
 {
-  GList *list, *l;
-  GdkWindow *window;
-  GdkDisplay *display;
-  GdkQuartzView *view;
-  GdkSeat *seat;
+  GdkQuartzView *view = (GdkQuartzView *)[[nsevent window] contentView];
+  GdkWindow *window  = [view gdkWindow];
+  GdkDisplay *display = gdk_window_get_display (window);
+  GdkSeat *seat = gdk_display_get_default_seat (display);
+  GdkDevice *device = gdk_seat_get_keyboard (seat);
+  GdkDeviceGrabInfo *grab = _gdk_display_get_last_device_grab (display, device);
 
-  view = (GdkQuartzView *)[[nsevent window] contentView];
-  window = [view gdkWindow];
-
-  display = gdk_window_get_display (window);
-  seat = gdk_display_get_default_seat (display);
-
-  list = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_KEYBOARD);
-  for (l = list; l; l = l->next)
-    {
-      GdkDeviceGrabInfo *grab;
-      GdkDevice *device = l->data;
-
-      grab = _gdk_display_get_last_device_grab (display, device);
-      if (grab && grab->window && !grab->owner_events)
-        {
-          window = gdk_window_get_effective_toplevel (grab->window);
-          break;
-        }
-    }
-
-  g_list_free (list);
+  if (grab && grab->window && !grab->owner_events)
+    window = gdk_window_get_effective_toplevel (grab->window);
 
   return window;
 }
