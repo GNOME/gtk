@@ -1182,22 +1182,6 @@ flip_child (int            width,
 }
 
 static void
-gtk_paned_set_child_visible (GtkPaned  *paned,
-                             guint      id,
-                             gboolean   visible)
-{
-  GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
-  GtkWidget *child;
-
-  child = id == CHILD1 ? priv->child1 : priv->child2;
-
-  if (child == NULL)
-    return;
-
-  gtk_widget_set_child_visible (child, visible);
-}
-
-static void
 gtk_paned_size_allocate (GtkWidget *widget,
                          int        width,
                          int        height,
@@ -1321,25 +1305,18 @@ gtk_paned_size_allocate (GtkWidget *widget,
     {
       if (priv->child1 && gtk_widget_get_visible (priv->child1))
         {
-          gtk_paned_set_child_visible (paned, CHILD1, TRUE);
-          gtk_paned_set_child_visible (paned, CHILD2, FALSE);
+          gtk_widget_set_child_visible (priv->child1, TRUE);
 
           gtk_widget_size_allocate (priv->child1,
                                     &(GtkAllocation) {0, 0, width, height}, -1);
         }
       else if (priv->child2 && gtk_widget_get_visible (priv->child2))
         {
-          gtk_paned_set_child_visible (paned, CHILD1, FALSE);
-          gtk_paned_set_child_visible (paned, CHILD2, TRUE);
+          gtk_widget_set_child_visible (priv->child2, TRUE);
 
           gtk_widget_size_allocate (priv->child2,
                                     &(GtkAllocation) {0, 0, width, height}, -1);
 
-        }
-      else
-        {
-          gtk_paned_set_child_visible (paned, CHILD1, FALSE);
-          gtk_paned_set_child_visible (paned, CHILD2, FALSE);
         }
     }
 }
@@ -1810,8 +1787,8 @@ gtk_paned_calc_position (GtkPaned *paned,
                               &priv->min_position, &priv->max_position,
                               &priv->child1_size);
 
-  gtk_paned_set_child_visible (paned, CHILD1, priv->child1_size != 0);
-  gtk_paned_set_child_visible (paned, CHILD2, priv->child1_size != allocation);
+  gtk_widget_set_child_visible (priv->child1, priv->child1_size != 0);
+  gtk_widget_set_child_visible (priv->child2, priv->child1_size != allocation);
 
   g_object_freeze_notify (G_OBJECT (paned));
   if (priv->child1_size != old_position)
