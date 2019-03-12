@@ -224,8 +224,7 @@ atk_key_event_from_gdk_event_key (GdkEventKey *key)
   event->keyval = key->keyval;
   event->length = key->length;
   if (key->string && key->string [0] && 
-      (key->state & GDK_CONTROL_MASK ||
-       g_unichar_isgraph (g_utf8_get_char (key->string))))
+      g_unichar_isgraph (g_utf8_get_char (key->string)))
     {
       event->string = key->string;
     }
