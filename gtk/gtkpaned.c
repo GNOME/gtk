@@ -1300,6 +1300,8 @@ gtk_paned_size_allocate (GtkWidget *widget,
             child2_allocation.height = child2_height;
         }
 
+      gtk_widget_set_child_visible (priv->handle_widget, TRUE);
+
       gtk_widget_size_allocate (priv->handle_widget, &handle_allocation, -1);
       gtk_widget_size_allocate (priv->child1, &child1_allocation, -1);
       gtk_widget_size_allocate (priv->child2, &child2_allocation, -1);
@@ -1321,6 +1323,8 @@ gtk_paned_size_allocate (GtkWidget *widget,
                                     &(GtkAllocation) {0, 0, width, height}, -1);
 
         }
+
+      gtk_widget_set_child_visible (priv->handle_widget, FALSE);
     }
 }
 
