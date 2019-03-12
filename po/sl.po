@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-02 16:48+0000\n"
-"PO-Revision-Date: 2019-03-07 18:34+0100\n"
+"POT-Creation-Date: 2019-03-12 18:15+0000\n"
+"PO-Revision-Date: 2019-03-12 20:09+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -1283,7 +1283,7 @@ msgstr "_Velikost:"
 #. create the text entry widget
 #: gtk/deprecated/gtkfontsel.c:577
 msgid "_Preview:"
-msgstr "_Predogled: "
+msgstr "_Predogled:"
 
 #: gtk/deprecated/gtkfontsel.c:1693 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/ui/gtkassistant.ui:50
@@ -1568,7 +1568,7 @@ msgid ""
 "See the <a href=\"%s\">%s</a> for details."
 msgstr ""
 "Ta program je objavljen brez vsakršnega jamstva. Več podrobnosti\n"
-"je zapisanih v datoteki <a href=»%s«>%s</a>"
+"je zapisanih v datoteki <a href=\"%s\">%s</a>."
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -1648,7 +1648,7 @@ msgstr "Leva poševnica"
 
 #: gtk/gtkappchooserbutton.c:295
 msgid "Other application…"
-msgstr "Drug program ..."
+msgstr "Drug program …"
 
 #: gtk/gtkappchooserdialog.c:204 gtk/gtkappchooserdialog.c:211
 #: gtk/gtkappchooserdialog.c:228 gtk/ui/gtkappchooserdialog.ui:5
@@ -1692,7 +1692,7 @@ msgstr "Privzeti program"
 #: gtk/gtkappchooserwidget.c:643
 #, c-format
 msgid "No applications found for “%s”."
-msgstr "Ni mogoče najti programa za »%s«"
+msgstr "Ni mogoče najti programa za »%s«."
 
 #: gtk/gtkappchooserwidget.c:726
 msgid "Recommended Applications"
@@ -1901,7 +1901,7 @@ msgstr "Neveljavno"
 #.
 #: gtk/gtkcellrendereraccel.c:414 gtk/gtkcellrendereraccel.c:488
 msgid "New accelerator…"
-msgstr "Nov pospeševalnik ..."
+msgstr "Nov pospeševalnik …"
 
 #: gtk/gtkcellrendererprogress.c:377 gtk/gtkcellrendererprogress.c:470
 #, c-format
@@ -2613,7 +2613,7 @@ msgstr "Ležeče"
 
 #: gtk/gtkfontchooserwidget.c:1526
 msgid "Slant"
-msgstr ""
+msgstr "Nagib"
 
 #: gtk/gtkfontchooserwidget.c:1527
 msgid "Optical Size"
@@ -2629,19 +2629,19 @@ msgstr "Ligature"
 
 #: gtk/gtkfontchooserwidget.c:2112
 msgid "Letter Case"
-msgstr ""
+msgstr "Črke"
 
 #: gtk/gtkfontchooserwidget.c:2113
 msgid "Number Case"
-msgstr ""
+msgstr "Številke"
 
 #: gtk/gtkfontchooserwidget.c:2114
 msgid "Number Spacing"
-msgstr ""
+msgstr "Številski razmiki"
 
 #: gtk/gtkfontchooserwidget.c:2115
 msgid "Number Formatting"
-msgstr ""
+msgstr "Oblikovanje števil"
 
 #: gtk/gtkfontchooserwidget.c:2116
 msgid "Character Variants"
@@ -3190,7 +3190,7 @@ msgstr "_Odstrani"
 
 #: gtk/gtkplacessidebar.c:3698
 msgid "Rename…"
-msgstr "Preimenuj ..."
+msgstr "Preimenuj …"
 
 #: gtk/gtkplacessidebar.c:3702 gtk/gtkplacesview.c:1737
 msgid "_Mount"
@@ -3491,7 +3491,7 @@ msgstr "Pridobivanje podatkov tiskalnika ni uspelo"
 
 #: gtk/gtkprintunixdialog.c:2070
 msgid "Getting printer information…"
-msgstr "Pridobivanje podatkov tiskalnika ..."
+msgstr "Pridobivanje podatkov tiskalnika …"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
@@ -4637,76 +4637,69 @@ msgid "General"
 msgstr "Splošno"
 
 #: gtk/open-type-layout.h:13
-#, fuzzy
-#| msgid "Accessible name"
 msgctxt "OpenType layout"
 msgid "Access All Alternates"
-msgstr "Dostopno ime"
+msgstr "Dostop do vseh alternativnih variacij znakov"
 
 #: gtk/open-type-layout.h:14
 msgctxt "OpenType layout"
 msgid "Above-base Forms"
-msgstr ""
+msgstr "Oblike nad osnovnico"
 
 #: gtk/open-type-layout.h:15
 msgctxt "OpenType layout"
 msgid "Above-base Mark Positioning"
-msgstr ""
+msgstr "Oblike označne postavitve nad osnovnico"
 
 #: gtk/open-type-layout.h:16
 msgctxt "OpenType layout"
 msgid "Above-base Substitutions"
-msgstr ""
+msgstr "Zamenjave ligature nad osnovnico"
 
 #: gtk/open-type-layout.h:17
-#, fuzzy
-#| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Alternative Fractions"
-msgstr "Overitev"
+msgstr "Pokončni ulomki"
 
 #: gtk/open-type-layout.h:18
 msgctxt "OpenType layout"
 msgid "Akhands"
-msgstr ""
+msgstr "Zamenjave zaporedja znakov Akhandi"
 
 #: gtk/open-type-layout.h:19
 msgctxt "OpenType layout"
 msgid "Below-base Forms"
-msgstr ""
+msgstr "Oblike pod osnovnico"
 
 #: gtk/open-type-layout.h:20
 msgctxt "OpenType layout"
 msgid "Below-base Mark Positioning"
-msgstr ""
+msgstr "Oblike označne postavitve pod osnovnico"
 
 #: gtk/open-type-layout.h:21
 msgctxt "OpenType layout"
 msgid "Below-base Substitutions"
-msgstr ""
+msgstr "Zamenjave ligature pod osnovnico"
 
 #: gtk/open-type-layout.h:22
 msgctxt "OpenType layout"
 msgid "Contextual Alternates"
-msgstr ""
+msgstr "Vsebinske zamenjave znakov"
 
 #: gtk/open-type-layout.h:23
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Case-Sensitive Forms"
-msgstr "Začetno stanje"
+msgstr "Prilagoditve za velike črke"
 
 #: gtk/open-type-layout.h:24
 msgctxt "OpenType layout"
 msgid "Glyph Composition / Decomposition"
-msgstr ""
+msgstr "Sestavljivi / Razstavljivi znaki"
 
 #: gtk/open-type-layout.h:25
 msgctxt "OpenType layout"
 msgid "Conjunct Form After Ro"
-msgstr ""
+msgstr "Združene oblike za znakom Ro"
 
 #: gtk/open-type-layout.h:26
 msgctxt "OpenType layout"
@@ -4721,22 +4714,22 @@ msgstr "Vsebinske ligature"
 #: gtk/open-type-layout.h:28
 msgctxt "OpenType layout"
 msgid "Centered CJK Punctuation"
-msgstr ""
+msgstr "Sredinjeni ločilni znaki CJK"
 
 #: gtk/open-type-layout.h:29
 msgctxt "OpenType layout"
 msgid "Capital Spacing"
-msgstr ""
+msgstr "Razmične velike črke"
 
 #: gtk/open-type-layout.h:30
 msgctxt "OpenType layout"
 msgid "Contextual Swash"
-msgstr ""
+msgstr "Znakovni prelivi"
 
 #: gtk/open-type-layout.h:31
 msgctxt "OpenType layout"
 msgid "Cursive Positioning"
-msgstr ""
+msgstr "Položajno prilagajanje kurzive"
 
 #: gtk/open-type-layout.h:32
 msgctxt "OpenType layout"
@@ -4764,24 +4757,19 @@ msgid "Denominators"
 msgstr "Denominatorji"
 
 #: gtk/open-type-layout.h:37
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Dotless Forms"
-msgstr "Začetno stanje"
+msgstr "Ne-točkovne oblike"
 
 #: gtk/open-type-layout.h:38
-#, fuzzy
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Expert Forms"
-msgstr "Pozivnik terminala"
+msgstr "Napredne oblike"
 
 #: gtk/open-type-layout.h:39
 msgctxt "OpenType layout"
 msgid "Final Glyph on Line Alternates"
-msgstr ""
+msgstr "Končni znaki vrstic"
 
 #: gtk/open-type-layout.h:40
 msgctxt "OpenType layout"
@@ -4801,7 +4789,7 @@ msgstr "Končne oblike"
 #: gtk/open-type-layout.h:43
 msgctxt "OpenType layout"
 msgid "Flattened accent forms"
-msgstr ""
+msgstr "Ploske oblike preglasov"
 
 #: gtk/open-type-layout.h:44
 msgctxt "OpenType layout"
@@ -4834,11 +4822,9 @@ msgid "Historical Forms"
 msgstr "Zgodovinski znaki"
 
 #: gtk/open-type-layout.h:50
-#, fuzzy
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Horizontal Kana Alternates"
-msgstr "LRM oznaka z _leve proti desni"
+msgstr "Dodatni vodoravni znaki Kana"
 
 #: gtk/open-type-layout.h:51
 msgctxt "OpenType layout"
@@ -4868,7 +4854,7 @@ msgstr "Začetne oblike"
 #: gtk/open-type-layout.h:56
 msgctxt "OpenType layout"
 msgid "Isolated Forms"
-msgstr ""
+msgstr "Izolirane oblike"
 
 #: gtk/open-type-layout.h:57
 msgctxt "OpenType layout"
@@ -4878,7 +4864,7 @@ msgstr "Ležeče pisave"
 #: gtk/open-type-layout.h:58
 msgctxt "OpenType layout"
 msgid "Justification Alternates"
-msgstr ""
+msgstr "Poravnalne oblike"
 
 #: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
@@ -4916,31 +4902,24 @@ msgid "Standard Ligatures"
 msgstr "Običajne ligature"
 
 #: gtk/open-type-layout.h:66
-#, fuzzy
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Leading Jamo Forms"
-msgstr "Pozivnik terminala"
+msgstr "Glavne oblike Jamo"
 
 #: gtk/open-type-layout.h:67
-#, fuzzy
-#| msgctxt "event phase"
-#| msgid "Capture"
 msgctxt "OpenType layout"
 msgid "Lining Figures"
-msgstr "Zajem"
+msgstr "Črtni znaki"
 
 #: gtk/open-type-layout.h:68
 msgctxt "OpenType layout"
 msgid "Localized Forms"
-msgstr ""
+msgstr "Jezikovno prilagojene oblike"
 
 #: gtk/open-type-layout.h:69
-#, fuzzy
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right alternates"
-msgstr "LRM oznaka z _leve proti desni"
+msgstr "Različice za zapis z leve proti desni"
 
 #: gtk/open-type-layout.h:70
 msgctxt "OpenType layout"
@@ -4950,7 +4929,7 @@ msgstr "Zrcaljene oblike z leve proti desni"
 #: gtk/open-type-layout.h:71
 msgctxt "OpenType layout"
 msgid "Mark Positioning"
-msgstr ""
+msgstr "Označne postavitve"
 
 #: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
@@ -4970,19 +4949,17 @@ msgstr "Grški matematični znaki"
 #: gtk/open-type-layout.h:75
 msgctxt "OpenType layout"
 msgid "Mark to Mark Positioning"
-msgstr ""
+msgstr "Označne postavitve"
 
 #: gtk/open-type-layout.h:76
 msgctxt "OpenType layout"
 msgid "Mark Positioning via Substitution"
-msgstr ""
+msgstr "Oblike označne postavitve z zamenjavo"
 
 #: gtk/open-type-layout.h:77
-#, fuzzy
-#| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Alternate Annotation Forms"
-msgstr "Overitev"
+msgstr "Izmenjujoče anotacijske oblike"
 
 #: gtk/open-type-layout.h:78
 msgctxt "OpenType layout"
@@ -5002,7 +4979,7 @@ msgstr "Numeratorji"
 #: gtk/open-type-layout.h:81
 msgctxt "OpenType layout"
 msgid "Oldstyle Figures"
-msgstr ""
+msgstr "Staroslogovni znaki"
 
 #: gtk/open-type-layout.h:82
 msgctxt "OpenType layout"
@@ -5042,22 +5019,22 @@ msgstr "Sorazmerne sličice"
 #: gtk/open-type-layout.h:89
 msgctxt "OpenType layout"
 msgid "Pre-Base Forms"
-msgstr ""
+msgstr "Oblike pred osnovnico"
 
 #: gtk/open-type-layout.h:90
 msgctxt "OpenType layout"
 msgid "Pre-base Substitutions"
-msgstr ""
+msgstr "Zamenjave ligature pred osnovnico"
 
 #: gtk/open-type-layout.h:91
 msgctxt "OpenType layout"
 msgid "Post-base Forms"
-msgstr ""
+msgstr "Oblike za osnovnico"
 
 #: gtk/open-type-layout.h:92
 msgctxt "OpenType layout"
 msgid "Post-base Substitutions"
-msgstr ""
+msgstr "Zamenjave ligature za osnovnico"
 
 #: gtk/open-type-layout.h:93
 msgctxt "OpenType layout"
@@ -5077,7 +5054,7 @@ msgstr "Naključno"
 #: gtk/open-type-layout.h:96
 msgctxt "OpenType layout"
 msgid "Required Contextual Alternates"
-msgstr ""
+msgstr "Zahtevane vsebinske zamenjave"
 
 #: gtk/open-type-layout.h:97
 msgctxt "OpenType layout"
@@ -5092,7 +5069,7 @@ msgstr "Zahtevane ligature"
 #: gtk/open-type-layout.h:99
 msgctxt "OpenType layout"
 msgid "Reph Forms"
-msgstr ""
+msgstr "Oblike Reph"
 
 #: gtk/open-type-layout.h:100
 msgctxt "OpenType layout"
@@ -5100,28 +5077,24 @@ msgid "Right Bounds"
 msgstr "Desne meje"
 
 #: gtk/open-type-layout.h:101
-#, fuzzy
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
-msgstr "RLM oznaka z _desne proti levi"
+msgstr "Različice za zapis z desne proti levi"
 
 #: gtk/open-type-layout.h:102
-#, fuzzy
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
-msgstr "RLM oznaka z _desne proti levi"
+msgstr "Zrcaljene oblike z desne proti levi"
 
 #: gtk/open-type-layout.h:103
 msgctxt "OpenType layout"
 msgid "Ruby Notation Forms"
-msgstr ""
+msgstr "Notacijske oblike Ruby"
 
 #: gtk/open-type-layout.h:104
 msgctxt "OpenType layout"
 msgid "Required Variation Alternates"
-msgstr ""
+msgstr "Zahtevani variacijski znaki"
 
 #: gtk/open-type-layout.h:105
 msgctxt "OpenType layout"
@@ -5131,7 +5104,7 @@ msgstr "Slogovne različice"
 #: gtk/open-type-layout.h:106
 msgctxt "OpenType layout"
 msgid "Scientific Inferiors"
-msgstr ""
+msgstr "Znanstveni zapisi"
 
 #: gtk/open-type-layout.h:107
 msgctxt "OpenType layout"
@@ -5256,7 +5229,7 @@ msgstr "RLM oznaka z _desne proti levi"
 #: gtk/open-type-layout.h:131
 msgctxt "OpenType layout"
 msgid "Stretching Glyph Decomposition"
-msgstr ""
+msgstr "Raztegljivi razstavljivi znaki"
 
 #: gtk/open-type-layout.h:132
 msgctxt "OpenType layout"
@@ -5271,18 +5244,17 @@ msgstr "Nadpisano"
 #: gtk/open-type-layout.h:134
 msgctxt "OpenType layout"
 msgid "Swash"
-msgstr ""
+msgstr "Znakovni prelivi"
 
 #: gtk/open-type-layout.h:135
 msgctxt "OpenType layout"
 msgid "Titling"
-msgstr ""
+msgstr "Naslavljanje"
 
 #: gtk/open-type-layout.h:136
-#, fuzzy
 msgctxt "OpenType layout"
 msgid "Trailing Jamo Forms"
-msgstr "Pozivnik terminala"
+msgstr "Podporne oblike Jamo"
 
 #: gtk/open-type-layout.h:137
 msgctxt "OpenType layout"
@@ -5290,12 +5262,9 @@ msgid "Traditional Name Forms"
 msgstr "Tradicionalne imenske oblike"
 
 #: gtk/open-type-layout.h:138
-#, fuzzy
-#| msgctxt "cover page"
-#| msgid "Standard"
 msgctxt "OpenType layout"
 msgid "Tabular Figures"
-msgstr "Zaupno"
+msgstr "Tabularne oblike"
 
 #: gtk/open-type-layout.h:139
 msgctxt "OpenType layout"
@@ -5310,14 +5279,12 @@ msgstr "Tretjinske širine"
 #: gtk/open-type-layout.h:141
 msgctxt "OpenType layout"
 msgid "Unicase"
-msgstr ""
+msgstr "Unicase"
 
 #: gtk/open-type-layout.h:142
-#, fuzzy
-#| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Metrics"
-msgstr "Overitev"
+msgstr "Metrično razmerje"
 
 #: gtk/open-type-layout.h:143
 msgctxt "OpenType layout"
@@ -5332,20 +5299,17 @@ msgstr "Navpično pisanje"
 #: gtk/open-type-layout.h:145
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Half Metrics"
-msgstr ""
+msgstr "Nadomestne širine za navpično pisanje"
 
 #: gtk/open-type-layout.h:146
 msgctxt "OpenType layout"
 msgid "Vowel Jamo Forms"
-msgstr ""
+msgstr "Samoglasniške oblike Jamo"
 
 #: gtk/open-type-layout.h:147
-#, fuzzy
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Kana Alternates"
-msgstr "Navpično"
+msgstr "Dodatni navpični znaki Kana"
 
 #: gtk/open-type-layout.h:148
 msgctxt "OpenType layout"
@@ -5355,19 +5319,17 @@ msgstr "Navpično spodsekavanje"
 #: gtk/open-type-layout.h:149
 msgctxt "OpenType layout"
 msgid "Proportional Alternate Vertical Metrics"
-msgstr ""
+msgstr "Proporcionalne nadomestne širine za navpično pisanje"
 
 #: gtk/open-type-layout.h:150
 msgctxt "OpenType layout"
 msgid "Vertical Alternates and Rotation"
-msgstr ""
+msgstr "Pretvorbe znakov za navpično pisanje"
 
 #: gtk/open-type-layout.h:151
-#, fuzzy
-#| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Vertical Alternates for Rotation"
-msgstr "Overitev"
+msgstr "Zamenjave za navpično pisanje"
 
 #: gtk/open-type-layout.h:152
 msgctxt "OpenType layout"
@@ -6545,7 +6507,6 @@ msgid "Ugaritic"
 msgstr "ugaritski"
 
 #: gtk/script-names.c:70
-#, fuzzy
 msgctxt "Script"
 msgid "New Tai Lue"
 msgstr "novi taj lue"
@@ -6583,7 +6544,7 @@ msgstr "kharoški"
 #: gtk/script-names.c:77
 msgctxt "Script"
 msgid "Unknown"
-msgstr "Neznano"
+msgstr "neznani"
 
 #: gtk/script-names.c:78
 msgctxt "Script"
@@ -6591,10 +6552,9 @@ msgid "Balinese"
 msgstr "balijski"
 
 #: gtk/script-names.c:79
-#, fuzzy
 msgctxt "Script"
 msgid "Cuneiform"
-msgstr "Cuneiform"
+msgstr "kuneiform"
 
 #: gtk/script-names.c:80
 msgctxt "Script"
@@ -6612,10 +6572,9 @@ msgid "N'Ko"
 msgstr "nkojski"
 
 #: gtk/script-names.c:83
-#, fuzzy
 msgctxt "Script"
 msgid "Kayah Li"
-msgstr "Kajah Li"
+msgstr "kaja li"
 
 #: gtk/script-names.c:84
 msgctxt "Script"
@@ -6695,7 +6654,7 @@ msgstr "vpisni pahlavijski"
 #: gtk/script-names.c:99
 msgctxt "Script"
 msgid "Inscriptional Parthian"
-msgstr "vpisni partijska"
+msgstr "vpisni partijski"
 
 #: gtk/script-names.c:100
 msgctxt "Script"
@@ -6790,7 +6749,7 @@ msgstr "sorasompeng"
 #: gtk/script-names.c:118
 msgctxt "Script"
 msgid "Takri"
-msgstr "takrijška"
+msgstr "takrijski"
 
 #: gtk/script-names.c:119
 msgctxt "Script"
@@ -6825,12 +6784,12 @@ msgstr "khojski"
 #: gtk/script-names.c:125
 msgctxt "Script"
 msgid "Khudawadi, Sindhi"
-msgstr ""
+msgstr "sindski, kudavadi"
 
 #: gtk/script-names.c:126
 msgctxt "Script"
 msgid "Linear A"
-msgstr "Linearno A"
+msgstr "linearni A"
 
 #: gtk/script-names.c:127
 msgctxt "Script"
@@ -6890,7 +6849,7 @@ msgstr "paučinhauski"
 #: gtk/script-names.c:138
 msgctxt "Script"
 msgid "Psalter Pahlavi"
-msgstr "Psalter Pahlavi"
+msgstr "psalter pahlavi"
 
 #: gtk/script-names.c:139
 msgctxt "Script"
@@ -6925,17 +6884,17 @@ msgstr "hatranski"
 #: gtk/script-names.c:145
 msgctxt "Script"
 msgid "Multani"
-msgstr "Multani"
+msgstr "multani"
 
 #: gtk/script-names.c:146
 msgctxt "Script"
 msgid "Old Hungarian"
-msgstr "Staro madžarska pisava"
+msgstr "staromadžarski"
 
 #: gtk/script-names.c:147
 msgctxt "Script"
 msgid "Signwriting"
-msgstr "Znakovna pisava"
+msgstr "znakovni"
 
 #: gtk/script-names.c:148
 msgctxt "Script"
@@ -6945,7 +6904,7 @@ msgstr "adlamski"
 #: gtk/script-names.c:149
 msgctxt "Script"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "bhaiksuški"
 
 #: gtk/script-names.c:150
 msgctxt "Script"
@@ -6970,7 +6929,7 @@ msgstr "tangutski"
 #: gtk/script-names.c:154
 msgctxt "Script"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "masaram gondi"
 
 #: gtk/script-names.c:155
 msgctxt "Script"
@@ -6980,12 +6939,12 @@ msgstr "nušujski"
 #: gtk/script-names.c:156
 msgctxt "Script"
 msgid "Soyombo"
-msgstr "Sojombojski"
+msgstr "sojombojski"
 
 #: gtk/script-names.c:157
 msgctxt "Script"
 msgid "Zanabazar Square"
-msgstr ""
+msgstr "zanzibarski"
 
 #: gtk/ui/gtkaboutdialog.ui:137
 msgid "About"
@@ -7057,7 +7016,7 @@ msgstr "Izberite barvo"
 
 #: gtk/ui/gtkcoloreditor.ui:57
 msgid "Pick a color from the screen"
-msgstr ""
+msgstr "Izbor barve na zaslonu"
 
 #: gtk/ui/gtkcoloreditor.ui:89
 msgid "Color Name"
