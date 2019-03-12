@@ -1864,6 +1864,9 @@ gtk_main_do_event (GdkEvent *event)
 
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
+      if (_gtk_accessibility_key_snooper (grab_widget, (GdkEventKey *) event))
+        break;
+
       /* make focus visible in a window that receives a key event */
       {
         GtkWidget *window;
