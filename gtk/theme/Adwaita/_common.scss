@@ -272,7 +272,7 @@ entry {
     padding-left: 8px;
     padding-right: 8px;
     border: 1px solid;
-    border-radius: 3px;
+    border-radius: $button_radius;
     transition: all 200ms $ease-out-quad;
 
     @include entry(normal);
