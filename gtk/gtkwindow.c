@@ -10486,8 +10486,6 @@ gtk_window_draw (GtkWidget *widget,
  * Presents a window to the user. This function should not be used
  * as when it is called, it is too late to gather a valid timestamp
  * to allow focus stealing prevention to work correctly.
- *
- * Deprecated: 3.24: Use gtk_window_present_with_time() instead.
  **/
 void
 gtk_window_present (GtkWindow *window)
