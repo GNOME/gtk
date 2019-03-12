@@ -88,6 +88,10 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngineQuartz, _gtk_search_engine_quartz, GT
       GtkSearchHit *hit;
 
       result_path = [[result valueForAttribute:@"kMDItemPath"] UTF8String];
+
+      if (result_path == NULL)
+        continue;
+
       file = g_file_new_for_path (result_path);
 
       hit = g_new (GtkSearchHit, 1);
