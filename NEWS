@@ -1,3 +1,9 @@
+Overview of Changes in GTK+ 3.24.7
+==================================
+
+* Undeprecate gtk_window_present
+
+
 Overview of Changes in GTK+ 3.24.6
 ==================================
 
