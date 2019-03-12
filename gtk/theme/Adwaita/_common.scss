@@ -985,7 +985,7 @@ toolbar.inline-toolbar toolbutton:backdrop {
   }
 
   &:only-child {
-    border-radius: 3px;
+    border-radius: $button_radius;
     border-style: solid;
   }
 }
@@ -999,18 +999,18 @@ toolbar.inline-toolbar toolbutton:backdrop {
   @extend %linked_vertical_middle;
 
   &:first-child {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
+    border-top-left-radius: $button_radius;
+    border-top-right-radius: $button_radius;
   }
 
   &:last-child {
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: $button_radius;
+    border-bottom-right-radius: $button_radius;
     border-style: solid;
   }
 
   &:only-child {
-    border-radius: 3px;
+    border-radius: $button_radius;
     border-style: solid;
   }
 }
