@@ -1,3 +1,41 @@
+Overview of Changes in GTK+ 3.24.6
+==================================
+
+* Link against fribidi
+
+* Broadway: Ensure focus on click
+
+* Fix some compiler warnings
+
+* Improve menu positioning with move-to-rect
+
+* Improve activation of the onscreen keyboard
+
+* Use C locale when generating code
+
+* Treeview: Make sure separator nodes have height > 0
+
+* theme
+ - Fix some inconsistences for radii
+
+* quartz:
+ - Full-screen only normal windows
+ - Restore key-window switching when changing windows
+ - Change monitor geometry calculation
+ - search: Limit the cop of Spotlight search
+
+* Translation updates:
+ Basque
+ Dutch
+ Finnish
+ Icelandic
+ Kazakh
+ Korean
+ Romanian
+ Serbian
+ Slovenian
+
+
 Overview of Changes in GTK+ 3.24.5
 ==================================
 
