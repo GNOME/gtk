@@ -19,9 +19,10 @@ gdk_broadway_sources = files(
 
 gdk_broadway_public_headers = files(
   'gdkbroadwaydisplay.h',
-  'gdkbroadwaysurface.h',
+  'gdkbroadwaywindow.h',
   'gdkbroadwaycursor.h',
   'gdkbroadwaymonitor.h',
+  'gdkbroadwayvisual.h',
 )
 
 # Broadway backend headers aren't installed it seems
@@ -67,11 +68,11 @@ libgdk_broadway = static_library('gdk-broadway',
 
 # gtk4-broadwayd
 
-broadwayd_syslib = os_win32 ? find_library('ws2_32') : shmlib
+broadwayd_syslib = os_win32 ? cc.find_library('ws2_32') : shmlib
 
 executable('broadwayd',
   clienthtml_h, broadwayjs_h,
-  'broadwayd.c', 'broadway-server.c', 'broadway-output.c',
+  'broadwayd.c', 'broadway-server.c', 'broadway-buffer.c', 'broadway-output.c',
   include_directories: [confinc, gdkinc, include_directories('.')],
   c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"', ],
   dependencies : [broadwayd_syslib, gdk_deps],
