@@ -343,15 +343,36 @@ pango_dep      = dependency('pango', version: pango_req,
 
 # Require PangoFT2 if on X11 or wayland
 require_pangoft2 = wayland_enabled or x11_enabled
-pangoft_dep    = dependency('pangoft2', required: require_pangoft2,
-                            fallback : ['pango', 'libpangoft2_dep'])
+if require_pangoft2
+  pangoft_dep    = dependency('pangoft2', fallback : ['pango', 'libpangoft2_dep'])
+else
+  pangoft_dep    = dependency('pangoft2', required: false)
+endif
 
 if pangoft_dep.found()
   # Need at least 2.7.1 for FT_Get_Var_Design_Coordinates()
   # We get the dependency itself from pango, but pango doesn't care
   # about ft2 version, so an extra check is needed.
-  ft2_dep      = dependency('freetype2', version: '>= 2.7.1', required: require_pangoft2,
-                            fallback : ['freetype2', 'freetype_dep'])
+
+  # Update once Meson can have deps declared in a declarative manner
+  ft2_dep      = dependency('freetype2', version: '>= 2.7.1', required: false)
+
+  if not ft2_dep.found() and cc.get_id() == 'msvc'
+    if cc.has_header('ft2build.h') and cc.has_header('freetype/ftmm.h')
+      ft_lib = cc.find_library('freetype', required: false)
+      if ft_lib.found()
+        if cc.has_function('FT_Get_Var_Design_Coordinates', dependencies: ft_lib,
+                           prefix: '''#include <ft2build.h>
+                                      #include FT_MULTIPLE_MASTERS_H''')
+          ft2_dep = ft_lib
+        endif
+      endif
+    endif
+  endif
+
+  if not ft2_dep.found()
+    ft2_dep      = dependency('freetype2', version: '>= 2.7.1', fallback : ['freetype2', 'freetype_dep'])
+  endif
 endif
 
 if win32_enabled
