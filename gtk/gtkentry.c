@@ -2416,6 +2416,11 @@ gtk_entry_set_icon_activatable (GtkEntry             *entry,
 
   activatable = activatable != FALSE;
 
+  if (activatable)
+    gtk_style_context_add_class (gtk_widget_get_style_context (icon_info->widget), "clickable");
+  else
+    gtk_style_context_remove_class (gtk_widget_get_style_context (icon_info->widget), "clickable");
+
   if (icon_info->nonactivatable != !activatable)
     {
       icon_info->nonactivatable = !activatable;
