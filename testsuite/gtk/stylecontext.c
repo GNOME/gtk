@@ -374,11 +374,12 @@ test_style_priorities_setup (PrioritiesFixture *f,
                              gconstpointer      unused)
 {
   GError *error = NULL;
+  GtkWidgetPath *path;
   f->blue_provider = gtk_css_provider_new ();
   f->red_provider = gtk_css_provider_new ();
   f->green_provider = gtk_css_provider_new ();
   f->context = gtk_style_context_new ();
-  GtkWidgetPath *path = gtk_widget_path_new ();
+  path = gtk_widget_path_new ();
 
   gtk_css_provider_load_from_data (f->blue_provider, "* { color: blue; }", -1, &error);
   g_assert_no_error (error);
