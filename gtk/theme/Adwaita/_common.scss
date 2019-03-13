@@ -331,9 +331,9 @@ entry {
     image { // entry icons colors
       color: mix($fg_color, $base_color, 80%);
 
-      &:hover { color: $fg_color; }
+      &.clickable:hover { color: $fg_color; }
 
-      &:active { color: $selected_bg_color; }
+      &.clickable:active { color: $selected_bg_color; }
 
       &:backdrop { color: mix($backdrop_fg_color, $backdrop_base_color, 80%); }
     }
