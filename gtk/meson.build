@@ -840,10 +840,6 @@ if wayland_enabled
   gtk_sources += gtk_use_wayland_sources
 endif
 
-if broadway_enabled
-  gtk_sources += ['gtkimcontextbroadway.c']
-endif
-
 if win32_enabled
   gtk_cargs += []
   gtk_sources += gtk_use_win32_sources
