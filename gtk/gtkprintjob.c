@@ -19,6 +19,7 @@
  * SECTION:gtkprintjob
  * @Title: GtkPrintJob
  * @Short_description: Represents a print job
+ * @Include: gtk/gtkunixprint.h
  *
  * A #GtkPrintJob object represents a job that is sent to a
  * printer. You only need to deal directly with print jobs if
