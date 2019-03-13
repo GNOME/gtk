@@ -29,6 +29,7 @@
 #include "gtkbox.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkstylecontext.h"
 #include "gtkeventcontrollerkey.h"
@@ -55,6 +56,14 @@ typedef struct {
   GtkWidget *icon;
   GdkKeymap *keymap;
 } GtkPasswordEntryPrivate;
+
+enum {
+  PROP_PLACEHOLDER_TEXT = 1,
+  PROP_ACTIVATES_DEFAULT,
+  NUM_PROPERTIES 
+};
+
+static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
 
 static void gtk_password_entry_editable_init (GtkEditableInterface *iface);
 
@@ -158,10 +167,26 @@ gtk_password_entry_set_property (GObject      *object,
                                  const GValue *value,
                                  GParamSpec   *pspec)
 {
+  GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (object);
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
   if (gtk_editable_delegate_set_property (object, prop_id, value, pspec))
     return;
 
-  G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  switch (prop_id)
+    {
+    case PROP_PLACEHOLDER_TEXT:
+      gtk_text_set_placeholder_text (GTK_TEXT (priv->entry), g_value_get_string (value));
+      break;
+
+    case PROP_ACTIVATES_DEFAULT:
+      gtk_text_set_activates_default (GTK_TEXT (priv->entry), g_value_get_boolean (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -170,10 +195,26 @@ gtk_password_entry_get_property (GObject    *object,
                                  GValue     *value,
                                  GParamSpec *pspec)
 {
+  GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (object);
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
   if (gtk_editable_delegate_get_property (object, prop_id, value, pspec))
     return;
 
-  G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  switch (prop_id)
+    {
+    case PROP_PLACEHOLDER_TEXT:
+      g_value_set_string (value, gtk_text_get_placeholder_text (GTK_TEXT (priv->entry)));
+      break;
+
+    case PROP_ACTIVATES_DEFAULT:
+      g_value_set_boolean (value, gtk_text_get_activates_default (GTK_TEXT (priv->entry)));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -257,7 +298,22 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   widget_class->grab_focus = gtk_password_entry_grab_focus;
   widget_class->mnemonic_activate = gtk_password_entry_mnemonic_activate;
  
-  gtk_editable_install_properties (object_class, 1);
+  props[PROP_PLACEHOLDER_TEXT] =
+      g_param_spec_string ("placeholder-text",
+                           P_("Placeholder text"),
+                           P_("Show text in the entry when it’s empty and unfocused"),
+                           NULL,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  props[PROP_ACTIVATES_DEFAULT] =
+      g_param_spec_boolean ("activates-default",
+                            P_("Activates default"),
+                            P_("Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
+  gtk_editable_install_properties (object_class, NUM_PROPERTIES);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
