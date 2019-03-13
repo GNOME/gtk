@@ -784,6 +784,10 @@ gtkversion_cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
 gtkversion_cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
 gtkversion_cdata.set('GTK_BINARY_AGE', gtk_binary_age)
 gtkversion_cdata.set('GTK_INTERFACE_AGE', gtk_interface_age)
+gtkversion_cdata.set('GTK_API_VERSION', gtk_api_version)
+gtkversion_cdata.set('GTK_BINARY_VERSION', gtk_binary_version)
+gtkversion_cdata.set('GTK_VERSION', meson.project_version())
+gtkversion_cdata.set('EXE_MANIFEST_ARCHITECTURE', '*')
 
 gtkversion = configure_file(input: 'gtkversion.h.in',
                             output: 'gtkversion.h',
@@ -840,6 +844,41 @@ if win32_enabled
   gtk_cargs += []
   gtk_sources += gtk_use_win32_sources
   gtk_deps += [ giowin32_dep, pangowin32_dep ]
+
+  gtk_rc_body = configure_file(
+    input: 'gtk-win32.rc.body.in',
+    output: 'gtk-win32.rc.body',
+	configuration: gtkversion_cdata,
+  )
+  gtk_rc_manifest = configure_file(
+    input: 'libgtk3.manifest.in',
+    output: 'libgtk3.manifest',
+    configuration: gtkversion_cdata,
+  )
+
+  # Unfortunately, an extra directive in the .rc file is required for earlier
+  # Visual Studio for embedding manifests via .rc files (2010 [v16] and earlier)
+  # using ISOLATIONAWARE_MANIFEST_RESOURCE_ID to really work.  Somehow for
+  # Visual Studio 2008 builds, this does not yet work.
+  old_msvc = false
+
+  if cc.get_id() == 'msvc' and cc.version().split('.')[0].to_int() < 17
+    old_msvc = true
+  endif
+
+  gtk_rc = custom_target(
+             'gtk.rc',
+             output: 'gtk.rc',
+             input: gtk_rc_body,
+             command: [find_program('gen-rc.py'),
+               '@OUTPUT@',
+               '@INPUT@',
+               old_msvc ? '1' : ''
+             ],
+             install: false,
+           )
+  gtk_res = import('windows').compile_resources(gtk_rc)
+  gtk_sources += gtk_res
 else
   gtk_deps += [ atkbridge_dep, ]
 endif
