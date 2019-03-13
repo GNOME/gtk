@@ -784,6 +784,10 @@ gtkversion_cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
 gtkversion_cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
 gtkversion_cdata.set('GTK_BINARY_AGE', gtk_binary_age)
 gtkversion_cdata.set('GTK_INTERFACE_AGE', gtk_interface_age)
+gtkversion_cdata.set('GTK_API_VERSION', gtk_api_version)
+gtkversion_cdata.set('GTK_BINARY_VERSION', gtk_binary_version)
+gtkversion_cdata.set('GTK_VERSION', meson.project_version())
+gtkversion_cdata.set('EXE_MANIFEST_ARCHITECTURE', '*')
 
 gtkversion = configure_file(input: 'gtkversion.h.in',
                             output: 'gtkversion.h',
@@ -844,6 +848,19 @@ if win32_enabled
   gtk_cargs += []
   gtk_sources += gtk_use_win32_sources
   gtk_deps += [ giowin32_dep, pangowin32_dep ]
+
+  gtk_rc_body = configure_file(
+    input: 'gtk-win32.rc.body.in',
+    output: 'gtk-win32.rc.body',
+	configuration: gtkversion_cdata,
+  )
+  gtk_rc_manifest = configure_file(
+    input: 'libgtk3.manifest.in',
+    output: 'libgtk3.manifest',
+    configuration: gtkversion_cdata,
+  )
+  gtk_res = import('windows').compile_resources(gtk_rc_body)
+  gtk_sources += gtk_res
 else
   gtk_deps += [ atkbridge_dep, ]
 endif
