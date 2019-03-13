@@ -1,9 +1,9 @@
 /* -*- mode: C; c-basic-offset: 2; indent-tabs-mode: nil; -*- */
 
 #include <gtk/gtk.h>
-#include <math.h>
 #include <string.h>
 
+#include "gtk/fallback-c89.c"
 #include "frame-stats.h"
 
 #define RADIUS 64
