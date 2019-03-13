@@ -177,6 +177,9 @@ gdkversion_cdata = configuration_data()
 gdkversion_cdata.set('GTK_MAJOR_VERSION', gtk_major_version)
 gdkversion_cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
 gdkversion_cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
+gdkversion_cdata.set('GTK_API_VERSION', gtk_api_version)
+gdkversion_cdata.set('GTK_BINARY_VERSION', gtk_binary_version)
+gdkversion_cdata.set('GTK_VERSION', meson.project_version())
 
 gdkversionmacros = configure_file(
   input  : 'gdkversionmacros.h.in',
@@ -212,6 +215,14 @@ if win32_enabled
                cc.find_library('imm32'),
                cc.find_library('setupapi'),
                cc.find_library('winmm')]
+
+  gdk_rc = configure_file(
+    input: 'win32/rc/gdk.rc.in',
+    output: 'gdk.rc',
+    configuration: gdkversion_cdata,
+  )
+  gdk_res = import('windows').compile_resources(gdk_rc, include_directories: include_directories('win32/rc'))
+  gdk_sources += gdk_res
 endif
 
 gdk_sources = [
