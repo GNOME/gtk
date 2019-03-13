@@ -306,10 +306,35 @@ if os_unix
 endif
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req,
                             fallback : ['glib', 'libgmodule_dep'])
-cairo_dep      = dependency('cairo', version: cairo_req,
-                            fallback : ['cairo', 'libcairo_dep'])
-cairogobj_dep  = dependency('cairo-gobject', version: cairo_req,
-                            fallback : ['cairo', 'libcairogobject_dep'])
+
+# Update when we can find depedencies in a declarative manner
+cairo_dep      = dependency('cairo', version: cairo_req, required: cc.get_id() != 'msvc')
+cairogobj_dep  = dependency('cairo-gobject', version: cairo_req, required: cc.get_id() != 'msvc')
+
+# Remove when we can find depedencies in a declarative manner
+if not cairo_dep.found() and cc.get_id() == 'msvc'
+  if cc.has_header('cairo.h') and cc.has_header('cairo-win32.h')
+    cairo_dep = cc.find_library('cairo', required: false)
+  endif
+endif
+
+if not cairo_dep.found()
+  cairo_dep      = dependency('cairo', version: cairo_req,
+                              fallback : ['cairo', 'libcairo_dep'])
+endif
+
+# Remove when we can find depedencies in a declarative manner
+if not cairogobj_dep.found() and cc.get_id() == 'msvc'
+  if cc.has_header('cairo-gobject.h')
+    cairogobj_dep = cc.find_library('cairo-gobject', required: false)
+  endif
+endif
+
+if not cairogobj_dep.found()
+  cairogobj_dep  = dependency('cairo-gobject', version: cairo_req,
+                              fallback : ['cairo', 'libcairogobject_dep'])
+endif
+
 pango_dep      = dependency('pango', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
 
@@ -369,6 +394,8 @@ if cairo_found_type == 'internal'
   cairo_features = subproject('cairo').get_variable('built_features')
 endif
 
+cairogobj_found_type = cairogobj_dep.type_name()
+
 cairo_backends = []
 foreach backend: [ ['cairo-xlib', cairo_req, x11_enabled],
                    ['cairo-win32', cairo_req, win32_enabled],
@@ -382,12 +409,14 @@ foreach backend: [ ['cairo-xlib', cairo_req, x11_enabled],
       if dependency(cairo_backend, version: cairo_backend_req, required : cc.get_id() != 'msvc').found()
         cairo_backends += cairo_backend
       endif
-    else
+    elif cairo_found_type == 'internal'
       foreach f: cairo_features
         if f['name'] == cairo_backend
           cairo_backends += cairo_backend
         endif
       endforeach
+    elif cc.get_id() == 'msvc' and cairo_dep.found()
+      cairo_backends += 'cairo-win32'
     endif
   endif
 endforeach
@@ -395,10 +424,10 @@ endforeach
 cairo_pkg_found = false
 cairogobj_pkg_found = false
 
-if cairo_dep.found()
+if cairo_found_type == 'internal' or cairo_found_type == 'pkgconfig'
   cairo_pkg_found = true
 endif
-if cairogobj_dep.found()
+if cairogobj_found_type == 'internal' or cairogobj_found_type == 'pkgconfig'
   cairogobj_pkg_found = true
 endif
 
@@ -612,9 +641,13 @@ gdk_packages = ' '.join([ pango_pkgname, pango_req,
 
 if cairo_pkg_found
   gdk_packages += ' '.join([ ' cairo', cairo_req ])
+elif cc.get_id() == 'msvc' and cairo_dep.found()
+  gdk_packages += ' '.join([ ' -lcairo' ])
 endif
 if cairogobj_pkg_found
   gdk_packages += ' '.join([ ' cairo-gobject', cairo_req ])
+elif cc.get_id() == 'msvc' and cairogobj_dep.found()
+  gdk_packages += ' '.join([ ' -lcairo-gobject' ])
 endif
 
 pkgconf.set('GDK_PACKAGES', gdk_packages)
