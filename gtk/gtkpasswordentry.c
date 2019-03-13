@@ -62,6 +62,8 @@ typedef struct {
 
 enum {
   PROP_SHOW_PEEK_ICON = 1,
+  PROP_PLACEHOLDER_TEXT,
+  PROP_ACTIVATES_DEFAULT,
   NUM_PROPERTIES 
 };
 
@@ -210,12 +212,21 @@ gtk_password_entry_set_property (GObject      *object,
                                  GParamSpec   *pspec)
 {
   GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (object);
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
 
   if (gtk_editable_delegate_set_property (object, prop_id, value, pspec))
     return;
 
   switch (prop_id)
     {
+    case PROP_PLACEHOLDER_TEXT:
+      gtk_text_set_placeholder_text (GTK_TEXT (priv->entry), g_value_get_string (value));
+      break;
+
+    case PROP_ACTIVATES_DEFAULT:
+      gtk_text_set_activates_default (GTK_TEXT (priv->entry), g_value_get_boolean (value));
+      break;
+
     case PROP_SHOW_PEEK_ICON:
       gtk_password_entry_set_show_peek_icon (entry, g_value_get_boolean (value));
       break;
@@ -233,12 +244,21 @@ gtk_password_entry_get_property (GObject    *object,
                                  GParamSpec *pspec)
 {
   GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (object);
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
 
   if (gtk_editable_delegate_get_property (object, prop_id, value, pspec))
     return;
 
   switch (prop_id)
     {
+    case PROP_PLACEHOLDER_TEXT:
+      g_value_set_string (value, gtk_text_get_placeholder_text (GTK_TEXT (priv->entry)));
+      break;
+
+    case PROP_ACTIVATES_DEFAULT:
+      g_value_set_boolean (value, gtk_text_get_activates_default (GTK_TEXT (priv->entry)));
+      break;
+
     case PROP_SHOW_PEEK_ICON:
       g_value_set_boolean (value, gtk_password_entry_get_show_peek_icon (entry));
       break;
@@ -334,6 +354,20 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
       g_param_spec_boolean ("show-peek-icon",
                             P_("Show Peek Icon"),
                             P_("Whether to show an icon for revealing the content"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  props[PROP_PLACEHOLDER_TEXT] =
+      g_param_spec_string ("placeholder-text",
+                           P_("Placeholder text"),
+                           P_("Show text in the entry when it’s empty and unfocused"),
+                           NULL,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  props[PROP_ACTIVATES_DEFAULT] =
+      g_param_spec_boolean ("activates-default",
+                            P_("Activates default"),
+                            P_("Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
