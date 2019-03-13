@@ -47,6 +47,7 @@ demos = files([
   'paintable_animated.c',
   'paintable_mediastream.c',
   'panes.c',
+  'password_entry.c',
   'pickers.c',
   'pixbufs.c',
   'popover.c',
