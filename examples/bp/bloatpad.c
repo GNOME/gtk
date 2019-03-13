@@ -537,6 +537,7 @@ bloat_pad_startup (GApplication *application)
     { "win.justify::center", { "<Primary>m", NULL } },
     { "win.justify::right", { "<Primary>r", NULL } }
   };
+  const gchar *new_accels[] = { "<Primary>n", "<Primary>t", NULL };
 
   G_APPLICATION_CLASS (bloat_pad_parent_class)
     ->startup (application);
@@ -604,7 +605,6 @@ bloat_pad_startup (GApplication *application)
   g_object_unref (item);
   g_object_unref (icon);
 
-  const gchar *new_accels[] = { "<Primary>n", "<Primary>t", NULL };
   gtk_application_set_accels_for_action (GTK_APPLICATION (application), "app.new", new_accels);
 
   dump_accels (GTK_APPLICATION (application));
