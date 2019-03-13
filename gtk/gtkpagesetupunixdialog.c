@@ -49,6 +49,7 @@
  * SECTION:gtkpagesetupunixdialog
  * @Short_description: A page setup dialog
  * @Title: GtkPageSetupUnixDialog
+ * @Include: gtk/gtkunixprint.h
  *
  * #GtkPageSetupUnixDialog implements a page setup dialog for platforms
  * which don’t provide a native page setup dialog, like Unix. It can

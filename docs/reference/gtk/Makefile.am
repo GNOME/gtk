@@ -276,7 +276,7 @@ GTKDOC_LIBS = \
 
 
 # Extra options to supply to gtkdoc-mkdb
-MKDB_OPTIONS=--output-format=xml --name-space=gtk
+MKDB_OPTIONS=--output-format=xml --name-space=gtk --default-includes=gtk/gtk.h
 
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
 content_files =					\
