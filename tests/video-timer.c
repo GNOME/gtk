@@ -237,11 +237,12 @@ collect_old_frames (void)
   for (l = past_frames; l; l = l_next)
     {
       FrameData *frame_data = l->data;
+      GdkFrameTimings *timings;
       gboolean remove = FALSE;
       l_next = l->next;
 
-      GdkFrameTimings *timings = gdk_frame_clock_get_timings (frame_clock,
-                                                              frame_data->frame_counter);
+      timings = gdk_frame_clock_get_timings (frame_clock,
+                                             frame_data->frame_counter);
       if (timings == NULL)
         {
           remove = TRUE;
