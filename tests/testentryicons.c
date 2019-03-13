@@ -242,6 +242,7 @@ main (int argc, char **argv)
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
   entry = gtk_password_entry_new ();
+  gtk_password_entry_set_show_peek_icon (GTK_PASSWORD_ENTRY (entry), TRUE);
   gtk_widget_set_hexpand (entry, TRUE);
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 3, 1, 1);
 

@@ -26,9 +26,12 @@
 #include "gtkbindings.h"
 #include "gtktextprivate.h"
 #include "gtkeditable.h"
+#include "gtkgesturemultipress.h"
 #include "gtkbox.h"
 #include "gtkimage.h"
+#include "gtkcheckmenuitem.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkstylecontext.h"
 #include "gtkeventcontrollerkey.h"
@@ -54,7 +57,15 @@ typedef struct {
   GtkWidget *entry;
   GtkWidget *icon;
   GdkKeymap *keymap;
+  GtkWidget *peek_icon;
 } GtkPasswordEntryPrivate;
+
+enum {
+  PROP_SHOW_PEEK_ICON = 1,
+  NUM_PROPERTIES 
+};
+
+static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
 
 static void gtk_password_entry_editable_init (GtkEditableInterface *iface);
 
@@ -88,6 +99,44 @@ focus_changed (GtkWidget *widget)
 }
 
 static void
+gtk_password_entry_toggle_peek (GtkPasswordEntry *entry)
+{
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  if (gtk_text_get_visibility (GTK_TEXT (priv->entry)))
+    {
+      gtk_text_set_visibility (GTK_TEXT (priv->entry), FALSE);
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "password-invisible");
+    }
+  else
+    {
+      gtk_text_set_visibility (GTK_TEXT (priv->entry), TRUE);
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "password-visible");
+    }
+}
+
+static void
+populate_popup (GtkText          *text,
+                GtkWidget        *popup,
+                GtkPasswordEntry *entry)
+{
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  if (priv->peek_icon != NULL)
+    {
+      GtkWidget *item;
+
+      item = gtk_check_menu_item_new_with_mnemonic (_("_Show text"));
+      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item),
+                                      gtk_text_get_visibility (text));
+      g_signal_connect_swapped (item, "activate",
+                                G_CALLBACK (gtk_password_entry_toggle_peek), entry);
+      gtk_widget_show (item);
+      gtk_menu_shell_append (GTK_MENU_SHELL (popup), item);
+    }
+}
+
+static void
 gtk_password_entry_init (GtkPasswordEntry *entry)
 {
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
@@ -106,6 +155,7 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   gtk_container_add (GTK_CONTAINER (priv->box), priv->entry);
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
   g_signal_connect_swapped (priv->entry, "notify::has-focus", G_CALLBACK (focus_changed), entry);
+  g_signal_connect (priv->entry, "populate-popup", G_CALLBACK (populate_popup), entry);
 
   priv->icon = gtk_image_new_from_icon_name ("dialog-warning-symbolic");
   gtk_widget_set_tooltip_text (priv->icon, _("Caps Lock is on"));
@@ -141,6 +191,7 @@ gtk_password_entry_dispose (GObject *object)
 
   g_clear_pointer (&priv->entry, gtk_widget_unparent);
   g_clear_pointer (&priv->icon, gtk_widget_unparent);
+  g_clear_pointer (&priv->peek_icon, gtk_widget_unparent);
   g_clear_pointer (&priv->box, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_password_entry_parent_class)->dispose (object);
@@ -158,10 +209,21 @@ gtk_password_entry_set_property (GObject      *object,
                                  const GValue *value,
                                  GParamSpec   *pspec)
 {
+  GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (object);
+
   if (gtk_editable_delegate_set_property (object, prop_id, value, pspec))
     return;
 
-  G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  switch (prop_id)
+    {
+    case PROP_SHOW_PEEK_ICON:
+      gtk_password_entry_set_show_peek_icon (entry, g_value_get_boolean (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -170,10 +232,21 @@ gtk_password_entry_get_property (GObject    *object,
                                  GValue     *value,
                                  GParamSpec *pspec)
 {
+  GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (object);
+
   if (gtk_editable_delegate_get_property (object, prop_id, value, pspec))
     return;
 
-  G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+  switch (prop_id)
+    {
+    case PROP_SHOW_PEEK_ICON:
+      g_value_set_boolean (value, gtk_password_entry_get_show_peek_icon (entry));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -257,7 +330,15 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   widget_class->grab_focus = gtk_password_entry_grab_focus;
   widget_class->mnemonic_activate = gtk_password_entry_mnemonic_activate;
  
-  gtk_editable_install_properties (object_class, 1);
+  props[PROP_SHOW_PEEK_ICON] =
+      g_param_spec_boolean ("show-peek-icon",
+                            P_("Show Peek Icon"),
+                            P_("Whether to show an icon for revealing the content"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
+  gtk_editable_install_properties (object_class, NUM_PROPERTIES);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
@@ -289,4 +370,48 @@ GtkWidget *
 gtk_password_entry_new (void)
 {
   return GTK_WIDGET (g_object_new (GTK_TYPE_PASSWORD_ENTRY, NULL));
+}
+
+void
+gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
+                                       gboolean          show_peek_icon)
+{
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  g_return_if_fail (GTK_IS_PASSWORD_ENTRY (entry));
+
+  if (show_peek_icon == (priv->peek_icon != NULL))
+    return;
+
+  if (show_peek_icon)
+    {
+      GtkGesture *press;
+
+      priv->peek_icon = gtk_image_new_from_icon_name ("password-invisible");
+      gtk_style_context_add_class (gtk_widget_get_style_context (priv->peek_icon), "clickable");
+      gtk_widget_set_tooltip_text (priv->peek_icon, _("Show text"));
+      gtk_container_add (GTK_CONTAINER (priv->box), priv->peek_icon);
+
+      press = gtk_gesture_multi_press_new ();
+      g_signal_connect_swapped (press, "released",
+                                G_CALLBACK (gtk_password_entry_toggle_peek), entry);
+      gtk_widget_add_controller (priv->peek_icon, GTK_EVENT_CONTROLLER (press));
+    }
+  else
+    {
+      g_clear_pointer (&priv->peek_icon, gtk_widget_unparent);
+      gtk_text_set_visibility (GTK_TEXT (priv->entry), FALSE);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (entry), props[PROP_SHOW_PEEK_ICON]);
+}
+
+gboolean
+gtk_password_entry_get_show_peek_icon (GtkPasswordEntry *entry)
+{
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  g_return_val_if_fail (GTK_IS_PASSWORD_ENTRY (entry), FALSE);
+
+  return priv->peek_icon != NULL;
 }
