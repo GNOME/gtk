@@ -258,6 +258,14 @@ if gdk_backends.length() == 0
   error('No backends enabled')
 endif
 
+gdk_link_args = common_ldflags
+
+# Somehow gdk_win32_display_manager_get_type is not being exported as it
+# seems that it was optimized out by the MSVC linker.  Force-export it here.
+if cc.get_id() == 'msvc'
+  gdk_link_args += [ '-export:gdk_win32_display_manager_get_type' ]
+endif
+
 libgdk = shared_library('gdk-3',
                         sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
                         dependencies: gdk_deps,
@@ -267,7 +275,7 @@ libgdk = shared_library('gdk-3',
                           '-DG_LOG_DOMAIN="Gdk"',
                         ] + common_cflags,
                         link_whole: gdk_backends,
-                        link_args: common_ldflags,
+                        link_args: gdk_link_args,
                         darwin_versions : gtk_osxversions,
                         install: true)
 
