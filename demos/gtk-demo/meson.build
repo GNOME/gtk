@@ -110,3 +110,13 @@ gtkdemo = executable(
   include_directories : confinc,
   install: true
 )
+
+gtkapplicationdemo = executable(
+  'gtk3-demo-application',
+  'application.c',
+  demos_h,
+  gtkdemo_resources,
+  dependencies: gtkdemo_deps,
+  include_directories : confinc,
+  install: true
+)
