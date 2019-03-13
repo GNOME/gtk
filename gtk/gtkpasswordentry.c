@@ -124,6 +124,7 @@ gtk_password_entry_realize (GtkWidget *widget)
 
   priv->keymap = gdk_display_get_keymap (gtk_widget_get_display (widget));
   g_signal_connect (priv->keymap, "state-changed", G_CALLBACK (keymap_state_changed), entry);
+  keymap_state_changed (priv->keymap, widget);
 }
 
 static void
