@@ -35,6 +35,13 @@ gdk_win32_public_headers = files(
   'gdkwin32window.h',
 )
 
+GDK_WIN32_CFLAGS = ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"', '-DINSIDE_GDK_WIN32']
+
+if win32_has_egl
+  GDK_WIN32_CFLAGS += '-DGDK_WIN32_ENABLE_EGL'
+endif
+
+
 install_headers(gdk_win32_public_headers, subdir: 'gtk-3.0/gdk/win32')
 install_headers('gdkwin32.h', subdir: 'gtk-3.0/gdk')
 
@@ -44,5 +51,5 @@ gdk_win32_deps = [ # FIXME
 libgdk_win32 = static_library('gdk-win32',
   gdk_win32_sources, gdkconfig, gdkenum_h,
   include_directories: [confinc, gdkinc],
-  c_args: ['-DGDK_COMPILATION', '-DG_LOG_DOMAIN="Gdk"', '-DINSIDE_GDK_WIN32'],
+  c_args: GDK_WIN32_CFLAGS,
   dependencies: [gdk_deps, gdk_win32_deps])
