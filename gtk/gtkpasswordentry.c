@@ -26,8 +26,10 @@
 #include "gtkbindings.h"
 #include "gtktextprivate.h"
 #include "gtkeditable.h"
+#include "gtkgesturemultipress.h"
 #include "gtkbox.h"
 #include "gtkimage.h"
+#include "gtkcheckmenuitem.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
@@ -41,13 +43,14 @@
  * @Short_description: An entry for secrets
  * @Title: GtkPasswordEntry
  *
- * #GtkPasswordEntry is entry that has been tailored for
- * entering secrets. It does not show its contents in clear text,
- * does not allow to copy it to the clipboard, and it shows a
- * warning when Caps-Lock is engaged.
+ * #GtkPasswordEntry is entry that has been tailored for entering secrets.
+ * It does not show its contents in clear text, does not allow to copy it
+ * to the clipboard, and it shows a warning when Caps Lock is engaged.
  *
- * GtkPasswordEntry provides no API of its own and should be used
- * with the #GtkEditable API.
+ * Optionally, it can offer a way to reveal the contents in clear text.
+ *
+ * GtkPasswordEntry provides only minimal API and should be used with the
+ * #GtkEditable API.
  */
 
 typedef struct {
@@ -55,11 +58,13 @@ typedef struct {
   GtkWidget *entry;
   GtkWidget *icon;
   GdkKeymap *keymap;
+  GtkWidget *peek_icon;
 } GtkPasswordEntryPrivate;
 
 enum {
   PROP_PLACEHOLDER_TEXT = 1,
   PROP_ACTIVATES_DEFAULT,
+  PROP_SHOW_PEEK_ICON,
   NUM_PROPERTIES 
 };
 
@@ -97,13 +102,53 @@ focus_changed (GtkWidget *widget)
 }
 
 static void
+gtk_password_entry_toggle_peek (GtkPasswordEntry *entry)
+{
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  if (gtk_text_get_visibility (GTK_TEXT (priv->entry)))
+    {
+      gtk_text_set_visibility (GTK_TEXT (priv->entry), FALSE);
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "eye-not-looking-symbolic");
+      gtk_widget_set_tooltip_text (priv->peek_icon, _("Show text"));
+    }
+  else
+    {
+      gtk_text_set_visibility (GTK_TEXT (priv->entry), TRUE);
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "eye-open-negative-filled-symbolic");
+      gtk_widget_set_tooltip_text (priv->peek_icon, _("Hide text"));
+    }
+}
+
+static void
+populate_popup (GtkText          *text,
+                GtkWidget        *popup,
+                GtkPasswordEntry *entry)
+{
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  if (priv->peek_icon != NULL)
+    {
+      GtkWidget *item;
+
+      item = gtk_check_menu_item_new_with_mnemonic (_("_Show text"));
+      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item),
+                                      gtk_text_get_visibility (text));
+      g_signal_connect_swapped (item, "activate",
+                                G_CALLBACK (gtk_password_entry_toggle_peek), entry);
+      gtk_widget_show (item);
+      gtk_menu_shell_append (GTK_MENU_SHELL (popup), item);
+    }
+}
+
+static void
 gtk_password_entry_init (GtkPasswordEntry *entry)
 {
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
 
   gtk_widget_set_has_surface (GTK_WIDGET (entry), FALSE);
 
-  priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   gtk_widget_set_hexpand (priv->box, FALSE);
   gtk_widget_set_vexpand (priv->box, FALSE);
   gtk_widget_set_parent (priv->box, GTK_WIDGET (entry));
@@ -115,6 +160,7 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   gtk_container_add (GTK_CONTAINER (priv->box), priv->entry);
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
   g_signal_connect_swapped (priv->entry, "notify::has-focus", G_CALLBACK (focus_changed), entry);
+  g_signal_connect (priv->entry, "populate-popup", G_CALLBACK (populate_popup), entry);
 
   priv->icon = gtk_image_new_from_icon_name ("caps-lock-symbolic");
   gtk_widget_set_tooltip_text (priv->icon, _("Caps Lock is on"));
@@ -152,6 +198,7 @@ gtk_password_entry_dispose (GObject *object)
 
   g_clear_pointer (&priv->entry, gtk_widget_unparent);
   g_clear_pointer (&priv->icon, gtk_widget_unparent);
+  g_clear_pointer (&priv->peek_icon, gtk_widget_unparent);
   g_clear_pointer (&priv->box, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_password_entry_parent_class)->dispose (object);
@@ -183,6 +230,9 @@ gtk_password_entry_set_property (GObject      *object,
 
     case PROP_ACTIVATES_DEFAULT:
       gtk_text_set_activates_default (GTK_TEXT (priv->entry), g_value_get_boolean (value));
+
+    case PROP_SHOW_PEEK_ICON:
+      gtk_password_entry_set_show_peek_icon (entry, g_value_get_boolean (value));
       break;
 
     default:
@@ -211,6 +261,9 @@ gtk_password_entry_get_property (GObject    *object,
 
     case PROP_ACTIVATES_DEFAULT:
       g_value_set_boolean (value, gtk_text_get_activates_default (GTK_TEXT (priv->entry)));
+
+    case PROP_SHOW_PEEK_ICON:
+      g_value_set_boolean (value, gtk_password_entry_get_show_peek_icon (entry));
       break;
 
     default:
@@ -314,6 +367,13 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  props[PROP_SHOW_PEEK_ICON] =
+      g_param_spec_boolean ("show-peek-icon",
+                            P_("Show Peek Icon"),
+                            P_("Whether to show an icon for revealing the content"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
   gtk_editable_install_properties (object_class, NUM_PROPERTIES);
 
@@ -347,4 +407,66 @@ GtkWidget *
 gtk_password_entry_new (void)
 {
   return GTK_WIDGET (g_object_new (GTK_TYPE_PASSWORD_ENTRY, NULL));
+}
+
+/**
+ * gtk_password_entry_set_show_peek_icon:
+ * @entry: a #GtkPasswordEntry
+ * show_peek_icon: whether to show the peek icon
+ *
+ * Sets whether the entry should have a clickable icon
+ * to show the contents of the entry in clear text.
+ *
+ * Setting this to %FALSE also hides the text again.
+ */
+void
+gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
+                                       gboolean          show_peek_icon)
+{
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  g_return_if_fail (GTK_IS_PASSWORD_ENTRY (entry));
+
+  if (show_peek_icon == (priv->peek_icon != NULL))
+    return;
+
+  if (show_peek_icon)
+    {
+      GtkGesture *press;
+
+      priv->peek_icon = gtk_image_new_from_icon_name ("eye-not-looking-symbolic");
+      gtk_widget_set_tooltip_text (priv->peek_icon, _("Show text"));
+      gtk_container_add (GTK_CONTAINER (priv->box), priv->peek_icon);
+
+      press = gtk_gesture_multi_press_new ();
+      g_signal_connect_swapped (press, "released",
+                                G_CALLBACK (gtk_password_entry_toggle_peek), entry);
+      gtk_widget_add_controller (priv->peek_icon, GTK_EVENT_CONTROLLER (press));
+    }
+  else
+    {
+      g_clear_pointer (&priv->peek_icon, gtk_widget_unparent);
+      gtk_text_set_visibility (GTK_TEXT (priv->entry), FALSE);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (entry), props[PROP_SHOW_PEEK_ICON]);
+}
+
+/**
+ * gtk_password_entry_get_show_peek_icon:
+ * @entry: a #GtkPasswordEntry
+ *
+ * Returns whether the entry is showing a clickable icon
+ * to reveal the contents of the entry in clear text.
+ *
+ * Returns: %TRUE if an icon is shown
+ */
+gboolean
+gtk_password_entry_get_show_peek_icon (GtkPasswordEntry *entry)
+{
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  g_return_val_if_fail (GTK_IS_PASSWORD_ENTRY (entry), FALSE);
+
+  return priv->peek_icon != NULL;
 }
