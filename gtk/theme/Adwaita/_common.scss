@@ -335,6 +335,7 @@ entry {
 
       &.clickable:active { color: $selected_bg_color; }
 
+      &.indicator,
       &:backdrop { color: mix($backdrop_fg_color, $backdrop_base_color, 80%); }
     }
 
