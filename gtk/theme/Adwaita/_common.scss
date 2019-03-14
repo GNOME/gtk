@@ -331,7 +331,7 @@ entry {
     image { // entry icons colors
       color: mix($fg_color, $base_color, 80%);
 
-      &.clickable:hover { color: $fg_color; }
+      &.clickable:hover:not(:backdrop) { color: $fg_color; }
 
       &.clickable:active { color: $selected_bg_color; }
 
