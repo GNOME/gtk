@@ -119,11 +119,13 @@ gtk_password_entry_toggle_peek (GtkPasswordEntry *entry)
     {
       gtk_text_set_visibility (GTK_TEXT (priv->entry), FALSE);
       gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "eye-not-looking-symbolic");
+      gtk_widget_set_tooltip_text (priv->peek_icon, _("Show text"));
     }
   else
     {
       gtk_text_set_visibility (GTK_TEXT (priv->entry), TRUE);
       gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "eye-open-negative-filled-symbolic");
+      gtk_widget_set_tooltip_text (priv->peek_icon, _("Hide text"));
     }
 }
 
