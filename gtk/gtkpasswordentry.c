@@ -558,9 +558,16 @@ update_strength (GObject          *object,
 {
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
 
-  int strength = 0;
+  int strength = -1;
 
   g_signal_emit (entry, signals[GET_STRENGTH], 0, &strength);
+
+  if (strength == -1)
+    {
+      const char *text = gtk_editable_get_text (GTK_EDITABLE (priv->entry));
+
+      strength = CLAMP (0, 100, 10 * g_utf8_strlen (text, -1));
+    }
 
   gtk_level_bar_set_value (GTK_LEVEL_BAR (priv->strength_widget), strength);
 }
