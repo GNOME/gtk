@@ -118,12 +118,12 @@ gtk_password_entry_toggle_peek (GtkPasswordEntry *entry)
   if (gtk_text_get_visibility (GTK_TEXT (priv->entry)))
     {
       gtk_text_set_visibility (GTK_TEXT (priv->entry), FALSE);
-      gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "password-invisible");
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "eye-not-looking-symbolic");
     }
   else
     {
       gtk_text_set_visibility (GTK_TEXT (priv->entry), TRUE);
-      gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "password-visible");
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "eye-open-negative-filled-symbolic");
     }
 }
 
@@ -155,7 +155,7 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
 
   gtk_widget_set_has_surface (GTK_WIDGET (entry), FALSE);
 
-  priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   gtk_widget_set_hexpand (priv->box, FALSE);
   gtk_widget_set_vexpand (priv->box, FALSE);
   gtk_widget_set_parent (priv->box, GTK_WIDGET (entry));
@@ -169,7 +169,7 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   g_signal_connect_swapped (priv->entry, "notify::has-focus", G_CALLBACK (focus_changed), entry);
   g_signal_connect (priv->entry, "populate-popup", G_CALLBACK (populate_popup), entry);
 
-  priv->icon = gtk_image_new_from_icon_name ("dialog-warning-symbolic");
+  priv->icon = gtk_image_new_from_icon_name ("caps-lock-symbolic");
   gtk_widget_set_tooltip_text (priv->icon, _("Caps Lock is on"));
   gtk_container_add (GTK_CONTAINER (priv->box), priv->icon);
 
@@ -501,7 +501,7 @@ gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
     {
       GtkGesture *press;
 
-      priv->peek_icon = gtk_image_new_from_icon_name ("password-invisible");
+      priv->peek_icon = gtk_image_new_from_icon_name ("eye-not-looking-symbolic");
       gtk_style_context_add_class (gtk_widget_get_style_context (priv->peek_icon), "clickable");
       gtk_widget_set_tooltip_text (priv->peek_icon, _("Show text"));
       gtk_container_add (GTK_CONTAINER (priv->box), priv->peek_icon);
