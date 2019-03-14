@@ -27,6 +27,19 @@ update_button (GObject    *object,
                             text[0] != '\0' && g_str_equal (text, text2));
 }
 
+static int
+get_strength (GtkPasswordEntry *entry)
+{
+  const char *text;
+  int strength;
+
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
+
+  strength = CLAMP (10 * strlen (text), 0, 100);
+
+  return strength;
+}
+
 GtkWidget *
 do_password_entry (GtkWidget *do_widget)
 {
@@ -59,6 +72,8 @@ do_password_entry (GtkWidget *do_widget)
                     NULL);
       g_signal_connect (entry, "notify::text", G_CALLBACK (update_button), NULL);
       gtk_password_entry_set_show_peek_icon (GTK_PASSWORD_ENTRY (entry), TRUE);
+      gtk_password_entry_set_show_strength (GTK_PASSWORD_ENTRY (entry), TRUE);
+      g_signal_connect (entry, "get-strength", G_CALLBACK (get_strength), NULL);
       gtk_container_add (GTK_CONTAINER (box), entry);
 
       entry2 = gtk_password_entry_new ();
