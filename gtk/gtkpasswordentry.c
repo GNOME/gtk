@@ -116,7 +116,7 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
   g_signal_connect_swapped (priv->entry, "notify::has-focus", G_CALLBACK (focus_changed), entry);
 
-  priv->icon = gtk_image_new_from_icon_name ("dialog-warning-symbolic");
+  priv->icon = gtk_image_new_from_icon_name ("caps-lock-symbolic");
   gtk_widget_set_tooltip_text (priv->icon, _("Caps Lock is on"));
   gtk_container_add (GTK_CONTAINER (priv->box), priv->icon);
 
