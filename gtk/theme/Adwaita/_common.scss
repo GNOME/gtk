@@ -372,6 +372,19 @@ entry {
     &:backdrop { background-color: transparent; }
   }
 
+  levelbar {
+    margin-bottom: 2px;
+    block,
+    trough {
+      border: none;
+      padding: 0px;
+      min-height: 2px;
+    }
+    block.low {
+      background-color: red;
+    }
+  }
+
    // linked entries
   .linked:not(.vertical) > & { @extend %linked; }
   .linked:not(.vertical) > &:focus + &,
