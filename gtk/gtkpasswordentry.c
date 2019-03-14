@@ -30,6 +30,7 @@
 #include "gtkbox.h"
 #include "gtkimage.h"
 #include "gtkcheckmenuitem.h"
+#include "gtklevelbar.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
@@ -58,16 +59,25 @@ typedef struct {
   GtkWidget *icon;
   GdkKeymap *keymap;
   GtkWidget *peek_icon;
+  GtkWidget *strength_widget;
 } GtkPasswordEntryPrivate;
 
 enum {
   PROP_SHOW_PEEK_ICON = 1,
+  PROP_SHOW_STRENGTH,
   PROP_PLACEHOLDER_TEXT,
   PROP_ACTIVATES_DEFAULT,
   NUM_PROPERTIES 
 };
 
 static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
+
+enum {
+  GET_STRENGTH,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0, };
 
 static void gtk_password_entry_editable_init (GtkEditableInterface *iface);
 
@@ -194,6 +204,7 @@ gtk_password_entry_dispose (GObject *object)
   g_clear_pointer (&priv->entry, gtk_widget_unparent);
   g_clear_pointer (&priv->icon, gtk_widget_unparent);
   g_clear_pointer (&priv->peek_icon, gtk_widget_unparent);
+  g_clear_pointer (&priv->strength_widget, gtk_widget_unparent);
   g_clear_pointer (&priv->box, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_password_entry_parent_class)->dispose (object);
@@ -231,6 +242,10 @@ gtk_password_entry_set_property (GObject      *object,
       gtk_password_entry_set_show_peek_icon (entry, g_value_get_boolean (value));
       break;
 
+    case PROP_SHOW_STRENGTH:
+      gtk_password_entry_set_show_strength (entry, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -263,6 +278,10 @@ gtk_password_entry_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_password_entry_get_show_peek_icon (entry));
       break;
 
+    case PROP_SHOW_STRENGTH:
+      g_value_set_boolean (value, gtk_password_entry_get_show_strength (entry));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -284,6 +303,18 @@ gtk_password_entry_measure (GtkWidget      *widget,
   gtk_widget_measure (priv->box, orientation, for_size,
                       minimum, natural,
                       minimum_baseline, natural_baseline);
+
+  if (priv->strength_widget)
+    {
+      int s_minimum, s_natural;
+
+      gtk_widget_measure (priv->box, orientation, for_size,
+                          &s_minimum, &s_natural,
+                          NULL, NULL);
+
+      *minimum = MAX (*minimum, s_minimum);
+      *natural = MAX (*natural, s_natural);
+    }
 }
 
 static void
@@ -294,6 +325,25 @@ gtk_password_entry_size_allocate (GtkWidget *widget,
 {
   GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (widget);
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  if (priv->strength_widget)
+    {
+      GtkAllocation s_alloc;
+      int min, nat;
+
+      gtk_widget_measure (priv->strength_widget,
+                          GTK_ORIENTATION_VERTICAL,
+                          -1,
+                          &min, &nat,
+                          NULL, NULL);
+
+      s_alloc.x = 0;
+      s_alloc.y = height - nat;
+      s_alloc.width = width;
+      s_alloc.height = nat;
+
+      gtk_widget_size_allocate (priv->strength_widget, &s_alloc, -1);
+    }
 
   gtk_widget_size_allocate (priv->box,
                             &(GtkAllocation) { 0, 0, width, height },
@@ -333,6 +383,19 @@ gtk_password_entry_mnemonic_activate (GtkWidget *widget,
 }
 
 static void
+gtk_password_entry_snapshot (GtkWidget   *widget,
+                             GtkSnapshot *snapshot)
+{
+  GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (widget);
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  if (priv->strength_widget)
+    gtk_widget_snapshot_child (widget, priv->strength_widget, snapshot);
+
+  gtk_widget_snapshot_child (widget, priv->box, snapshot);
+}
+
+static void
 gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -346,6 +409,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   widget_class->realize = gtk_password_entry_realize;
   widget_class->measure = gtk_password_entry_measure;
   widget_class->size_allocate = gtk_password_entry_size_allocate;
+  widget_class->snapshot = gtk_password_entry_snapshot;
   widget_class->get_accessible = gtk_password_entry_get_accessible;
   widget_class->grab_focus = gtk_password_entry_grab_focus;
   widget_class->mnemonic_activate = gtk_password_entry_mnemonic_activate;
@@ -354,6 +418,13 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
       g_param_spec_boolean ("show-peek-icon",
                             P_("Show Peek Icon"),
                             P_("Whether to show an icon for revealing the content"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  props[PROP_SHOW_STRENGTH] =
+      g_param_spec_boolean ("show-strength",
+                            P_("Show Strength"),
+                            P_("Whether to show an indicator for password quality"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -374,6 +445,15 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
   gtk_editable_install_properties (object_class, NUM_PROPERTIES);
 
+  signals[GET_STRENGTH] =
+    g_signal_new (I_("get-strength"),
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  g_signal_accumulator_first_wins, NULL,
+                  NULL,
+                  G_TYPE_INT, 0);
+  
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
 }
@@ -448,4 +528,58 @@ gtk_password_entry_get_show_peek_icon (GtkPasswordEntry *entry)
   g_return_val_if_fail (GTK_IS_PASSWORD_ENTRY (entry), FALSE);
 
   return priv->peek_icon != NULL;
+}
+
+static void
+update_strength (GObject          *object,
+                 GParamSpec       *pspec,
+                 GtkPasswordEntry *entry)
+{
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  int strength = 0;
+
+  g_signal_emit (entry, signals[GET_STRENGTH], 0, &strength);
+
+  gtk_level_bar_set_value (GTK_LEVEL_BAR (priv->strength_widget), strength);
+}
+
+void
+gtk_password_entry_set_show_strength (GtkPasswordEntry *entry,
+                                      gboolean          show_strength)
+{
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  g_return_if_fail (GTK_IS_PASSWORD_ENTRY (entry));
+
+  if (show_strength == (priv->strength_widget != NULL))
+    return;
+
+  if (show_strength)
+    {
+      priv->strength_widget = gtk_level_bar_new_for_interval (0.0, 100.0);
+      gtk_level_bar_set_mode (GTK_LEVEL_BAR (priv->strength_widget), GTK_LEVEL_BAR_MODE_CONTINUOUS);
+      gtk_level_bar_add_offset_value (GTK_LEVEL_BAR (priv->strength_widget), GTK_LEVEL_BAR_OFFSET_LOW, 25);
+      gtk_level_bar_add_offset_value (GTK_LEVEL_BAR (priv->strength_widget), GTK_LEVEL_BAR_OFFSET_HIGH, 50);
+      gtk_level_bar_add_offset_value (GTK_LEVEL_BAR (priv->strength_widget), GTK_LEVEL_BAR_OFFSET_FULL, 100);
+      gtk_widget_set_parent (priv->strength_widget, GTK_WIDGET (entry));
+      g_signal_connect (priv->entry, "notify::text", G_CALLBACK (update_strength), entry);
+    }
+  else
+    {
+      g_signal_handlers_disconnect_by_func (priv->entry, update_strength, entry);
+      g_clear_pointer (&priv->strength_widget, gtk_widget_unparent);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (entry), props[PROP_SHOW_STRENGTH]);
+}
+
+gboolean
+gtk_password_entry_get_show_strength (GtkPasswordEntry *entry)
+{
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  g_return_val_if_fail (GTK_IS_PASSWORD_ENTRY (entry), FALSE);
+
+  return priv->strength_widget != NULL;
 }
