@@ -172,6 +172,8 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   g_signal_connect (priv->entry, "populate-popup", G_CALLBACK (populate_popup), entry);
 
   priv->icon = gtk_image_new_from_icon_name ("caps-lock-symbolic");
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->icon), "indicator");
+  gtk_widget_set_cursor (priv->icon, gtk_widget_get_cursor (priv->entry));
   gtk_widget_set_tooltip_text (priv->icon, _("Caps Lock is on"));
   gtk_container_add (GTK_CONTAINER (priv->box), priv->icon);
 
