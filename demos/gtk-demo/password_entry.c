@@ -53,6 +53,7 @@ do_password_entry (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), box);
 
       entry = gtk_password_entry_new ();
+      gtk_password_entry_set_show_peek_icon (GTK_PASSWORD_ENTRY (entry), TRUE);
       g_object_set (entry,
                     "placeholder-text", "Password",
                     "activates-default", TRUE,
@@ -61,6 +62,7 @@ do_password_entry (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (box), entry);
 
       entry2 = gtk_password_entry_new ();
+      gtk_password_entry_set_show_peek_icon (GTK_PASSWORD_ENTRY (entry2), TRUE);
       g_object_set (entry2,
                     "placeholder-text", "Confirm",
                     "activates-default", TRUE,
