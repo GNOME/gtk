@@ -58,7 +58,10 @@ typedef enum
 {
  GDK_QUARTZ_BORDERLESS_WINDOW = NSBorderlessWindowMask,
  GDK_QUARTZ_CLOSABLE_WINDOW = NSClosableWindowMask,
+#if MAC_OS_X_VERSION_MIN_REQUIRED > 1060
+ /* Added in 10.7. Apple's docs are wrong to say it's from earlier. */
  GDK_QUARTZ_FULLSCREEN_WINDOW = NSFullScreenWindowMask,
+#endif
  GDK_QUARTZ_MINIATURIZABLE_WINDOW = NSMiniaturizableWindowMask,
  GDK_QUARTZ_RESIZABLE_WINDOW = NSResizableWindowMask,
  GDK_QUARTZ_TITLED_WINDOW = NSTitledWindowMask,
@@ -75,7 +78,7 @@ typedef enum
 } GdkQuartzWindowMask;
 #endif
 
-#ifndef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
 static FullscreenSavedGeometry *get_fullscreen_geometry (GdkWindow *window);
 #endif
 
@@ -1156,7 +1159,7 @@ gdk_window_quartz_hide (GdkWindow *window)
   gdk_seat_ungrab (seat);
 
   /* Make sure we're not stuck in fullscreen mode. */
-#ifndef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
   if (get_fullscreen_geometry (window))
     SetSystemUIMode (kUIModeNormal, 0);
 #endif
@@ -2706,14 +2709,17 @@ gdk_quartz_window_deiconify (GdkWindow *window)
     }
 }
 
-#ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
-
 static gboolean
 window_is_fullscreen (GdkWindow *window)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
 
-  return ([impl->toplevel styleMask] & GDK_QUARTZ_FULLSCREEN_WINDOW) != 0;
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
+  if (gdk_quartz_osx_version() >= GDK_OSX_LION)
+    return ([impl->toplevel styleMask] & GDK_QUARTZ_FULLSCREEN_WINDOW) != 0;
+  else
+#endif
+    return g_object_get_data (G_OBJECT (window), FULLSCREEN_DATA);
 }
 
 static void
@@ -2727,8 +2733,58 @@ gdk_quartz_window_fullscreen (GdkWindow *window)
 
   impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
 
-  if (!window_is_fullscreen (window))
-    [impl->toplevel toggleFullScreen:nil];
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
+  if (gdk_quartz_osx_version() >= GDK_OSX_LION)
+    {
+      if (!window_is_fullscreen (window))
+        [impl->toplevel toggleFullScreen:nil];
+    }
+  else
+    {
+#endif
+      FullscreenSavedGeometry *geometry;
+      GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+      NSRect frame;
+
+      if (GDK_WINDOW_DESTROYED (window) ||
+          !WINDOW_IS_TOPLEVEL (window))
+        return;
+
+      geometry = get_fullscreen_geometry (window);
+      if (!geometry)
+        {
+          geometry = g_new (FullscreenSavedGeometry, 1);
+
+          geometry->x = window->x;
+          geometry->y = window->y;
+          geometry->width = window->width;
+          geometry->height = window->height;
+
+          if (!gdk_window_get_decorations (window, &geometry->decor))
+            geometry->decor = GDK_DECOR_ALL;
+
+          g_object_set_data_full (G_OBJECT (window),
+                                  FULLSCREEN_DATA, geometry, 
+                                  g_free);
+
+          gdk_window_set_decorations (window, 0);
+
+          frame = [[impl->toplevel screen] frame];
+          move_resize_window_internal (window,
+                                       0, 0, 
+                                       frame.size.width, frame.size.height);
+          [impl->toplevel setContentSize:frame.size];
+          [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
+
+          clear_toplevel_order ();
+        }
+
+      SetSystemUIMode (kUIModeAllHidden, kUIOptionAutoShowMenuBar);
+
+      gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
+    }
+#endif
 }
 
 static void
@@ -2740,119 +2796,81 @@ gdk_quartz_window_unfullscreen (GdkWindow *window)
       !WINDOW_IS_TOPLEVEL (window))
     return;
 
-  impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
-
-  if (window_is_fullscreen (window))
-    [impl->toplevel toggleFullScreen:nil];
-}
-
-void
-_gdk_quartz_window_update_fullscreen_state (GdkWindow *window)
-{
-  gboolean is_fullscreen;
-  gboolean was_fullscreen;
-
-  if (GDK_WINDOW_DESTROYED (window) || !WINDOW_IS_TOPLEVEL (window))
-    return;
-  
-  is_fullscreen = window_is_fullscreen (window);
-  was_fullscreen = (gdk_window_get_state (window) & GDK_WINDOW_STATE_FULLSCREEN) != 0;
-
-  if (is_fullscreen != was_fullscreen)
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
+  if (gdk_quartz_osx_version() >= GDK_OSX_LION)
     {
-      if (is_fullscreen)
-        gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
-      else
-        gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
+      impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+
+      if (window_is_fullscreen (window))
+        [impl->toplevel toggleFullScreen:nil];
     }
+  else
+    {
+#endif
+      GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+      FullscreenSavedGeometry *geometry;
+
+      if (GDK_WINDOW_DESTROYED (window) ||
+          !WINDOW_IS_TOPLEVEL (window))
+        return;
+
+      geometry = get_fullscreen_geometry (window);
+      if (geometry)
+        {
+          SetSystemUIMode (kUIModeNormal, 0);
+
+          move_resize_window_internal (window,
+                                       geometry->x,
+                                       geometry->y,
+                                       geometry->width,
+                                       geometry->height);
+
+          gdk_window_set_decorations (window, geometry->decor);
+
+          g_object_set_data (G_OBJECT (window), FULLSCREEN_DATA, NULL);
+
+          [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
+          clear_toplevel_order ();
+
+          gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
+        }
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
+    }
+#endif
 }
 
-#else
-
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
 static FullscreenSavedGeometry *
 get_fullscreen_geometry (GdkWindow *window)
 {
   return g_object_get_data (G_OBJECT (window), FULLSCREEN_DATA);
 }
-
-static void
-gdk_quartz_window_fullscreen (GdkWindow *window)
-{
-  FullscreenSavedGeometry *geometry;
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
-  NSRect frame;
-
-  if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
-    return;
-
-  geometry = get_fullscreen_geometry (window);
-  if (!geometry)
-    {
-      geometry = g_new (FullscreenSavedGeometry, 1);
-
-      geometry->x = window->x;
-      geometry->y = window->y;
-      geometry->width = window->width;
-      geometry->height = window->height;
-
-      if (!gdk_window_get_decorations (window, &geometry->decor))
-        geometry->decor = GDK_DECOR_ALL;
-
-      g_object_set_data_full (G_OBJECT (window),
-                              FULLSCREEN_DATA, geometry, 
-                              g_free);
-
-      gdk_window_set_decorations (window, 0);
-
-      frame = [[impl->toplevel screen] frame];
-      move_resize_window_internal (window,
-                                   0, 0, 
-                                   frame.size.width, frame.size.height);
-      [impl->toplevel setContentSize:frame.size];
-      [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
-
-      clear_toplevel_order ();
-    }
-
-  SetSystemUIMode (kUIModeAllHidden, kUIOptionAutoShowMenuBar);
-
-  gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
-}
-
-static void
-gdk_quartz_window_unfullscreen (GdkWindow *window)
-{
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
-  FullscreenSavedGeometry *geometry;
-
-  if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
-    return;
-
-  geometry = get_fullscreen_geometry (window);
-  if (geometry)
-    {
-      SetSystemUIMode (kUIModeNormal, 0);
-
-      move_resize_window_internal (window,
-                                   geometry->x,
-                                   geometry->y,
-                                   geometry->width,
-                                   geometry->height);
-      
-      gdk_window_set_decorations (window, geometry->decor);
-
-      g_object_set_data (G_OBJECT (window), FULLSCREEN_DATA, NULL);
-
-      [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
-      clear_toplevel_order ();
-
-      gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
-    }
-}
-
 #endif
+
+void
+_gdk_quartz_window_update_fullscreen_state (GdkWindow *window)
+{
+  if (GDK_WINDOW_DESTROYED (window) || !WINDOW_IS_TOPLEVEL (window))
+    return;
+
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
+  if (gdk_quartz_osx_version() >= GDK_OSX_LION)
+    {
+      gboolean is_fullscreen = window_is_fullscreen (window);
+      gboolean was_fullscreen = (gdk_window_get_state (window) &&
+                                 GDK_WINDOW_STATE_FULLSCREEN) != 0;
+
+      if (is_fullscreen != was_fullscreen)
+        {
+          if (is_fullscreen)
+            gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
+          else
+            gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
+        }
+    }
+#endif
+}
 
 static void
 gdk_quartz_window_set_keep_above (GdkWindow *window,
