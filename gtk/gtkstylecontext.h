@@ -26,7 +26,6 @@
 #include <gtk/gtkcsssection.h>
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtktypes.h>
-#include <atk/atk.h>
 
 G_BEGIN_DECLS
 

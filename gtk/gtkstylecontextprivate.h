@@ -26,6 +26,8 @@
 #include "gtkbitmaskprivate.h"
 #include "gtkcssvalueprivate.h"
 
+#include <atk/atk.h>
+
 G_BEGIN_DECLS
 
 GtkStyleContext *gtk_style_context_new_for_node              (GtkCssNode      *node);
