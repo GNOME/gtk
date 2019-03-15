@@ -85,7 +85,8 @@ keymap_state_changed (GdkKeymap *keymap,
 
   if (gtk_editable_get_editable (GTK_EDITABLE (entry)) &&
       gtk_widget_has_focus (priv->entry) &&
-      gdk_keymap_get_caps_lock_state (priv->keymap))
+      gdk_keymap_get_caps_lock_state (priv->keymap) &&
+      !priv->peek_icon)
     gtk_widget_show (priv->icon);
   else
     gtk_widget_hide (priv->icon);
@@ -448,6 +449,8 @@ gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
       g_clear_pointer (&priv->peek_icon, gtk_widget_unparent);
       gtk_text_set_visibility (GTK_TEXT (priv->entry), FALSE);
     }
+
+  keymap_state_changed (priv->keymap, GTK_WIDGET (entry));
 
   g_object_notify_by_pspec (G_OBJECT (entry), props[PROP_SHOW_PEEK_ICON]);
 }
