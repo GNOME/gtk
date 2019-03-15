@@ -338,6 +338,10 @@ entry {
       &:backdrop { color: mix($backdrop_fg_color, $backdrop_base_color, 80%); }
     }
 
+    &.password image.caps-lock-indicator {
+      color: mix($backdrop_fg_color, $backdrop_base_color, 80%);
+    }
+
     &:drop(active) {
       &:focus, & {
         border-color: $drop_target_color;
