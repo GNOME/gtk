@@ -281,6 +281,7 @@ struct _GtkEntryPrivate
   guint         selection_handle_dragged : 1;
   guint         populate_all            : 1;
   guint         handling_key_event      : 1;
+  guint         show_peek_icon          : 1;
 };
 
 struct _EntryIconInfo
@@ -384,6 +385,7 @@ enum {
   PROP_TABS,
   PROP_SHOW_EMOJI_ICON,
   PROP_ENABLE_EMOJI_COMPLETION,
+  PROP_SHOW_PEEK_ICON,
   PROP_EDITING_CANCELED,
   NUM_PROPERTIES = PROP_EDITING_CANCELED
 };
@@ -705,6 +707,8 @@ static GtkEntryBuffer *get_buffer                      (GtkEntry       *entry);
 static void         set_show_emoji_icon                (GtkEntry       *entry,
                                                         gboolean        value);
 static void         set_enable_emoji_completion        (GtkEntry       *entry,
+                                                        gboolean        value);
+static void         set_show_peek_icon                 (GtkEntry       *entry,
                                                         gboolean        value);
 
 static void     gtk_entry_measure  (GtkCssGadget        *gadget,
@@ -1543,6 +1547,13 @@ gtk_entry_class_init (GtkEntryClass *class)
       g_param_spec_boolean ("enable-emoji-completion",
                             P_("Enable Emoji completion"),
                             P_("Whether to suggest Emoji replacements"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  entry_props[PROP_SHOW_PEEK_ICON] =
+      g_param_spec_boolean ("show-peek-icon",
+                            P_("Peek icon"),
+                            P_("Whether to show an icon to reveal the content"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -2460,6 +2471,10 @@ gtk_entry_set_property (GObject         *object,
       set_enable_emoji_completion (entry, g_value_get_boolean (value));
       break;
 
+    case PROP_SHOW_PEEK_ICON:
+      set_show_peek_icon (entry, g_value_get_boolean (value));
+      break;
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -2718,6 +2733,10 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_ENABLE_EMOJI_COMPLETION:
       g_value_set_boolean (value, priv->enable_emoji_completion);
+      break;
+
+    case PROP_SHOW_PEEK_ICON:
+      g_value_set_boolean (value, priv->show_peek_icon);
       break;
 
     default:
@@ -11182,3 +11201,61 @@ set_enable_emoji_completion (GtkEntry *entry,
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_ENABLE_EMOJI_COMPLETION]);
 }
+
+static void
+toggle_peek (GtkEntry *entry,
+             int       icon,
+             GdkEvent *event,
+             gpointer  data)
+{
+  if (icon == GTK_ENTRY_ICON_SECONDARY)
+    {
+      if (gtk_entry_get_visibility (entry))
+        {
+          gtk_entry_set_visibility (entry, FALSE);
+
+          gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, "eye-not-looking-symbolic");
+          gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY, _("Show text"));
+        }
+      else
+        {
+          gtk_entry_set_visibility (entry, TRUE);
+
+          gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, "eye-open-negative-filled-symbolic");
+          gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY, _("Hide text"));
+        }
+    }
+}
+
+static void
+set_show_peek_icon (GtkEntry *entry,
+                    gboolean  value)
+{
+  GtkEntryPrivate *priv = entry->priv;
+
+  if (priv->show_peek_icon == value)
+    return;
+
+  priv->show_peek_icon = value;
+
+  if (priv->show_peek_icon)
+    {
+      gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, "eye-not-looking-symbolic");
+      gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY, _("Show text"));
+      gtk_entry_set_icon_sensitive (entry, GTK_ENTRY_ICON_SECONDARY, TRUE);
+      gtk_entry_set_icon_activatable (entry, GTK_ENTRY_ICON_SECONDARY, TRUE);
+
+      g_signal_connect (entry, "icon-press", G_CALLBACK (toggle_peek), NULL);
+    }
+  else
+    {
+      g_signal_handlers_disconnect_by_func (entry, toggle_peek, NULL);
+
+      gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+      gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_SHOW_PEEK_ICON]);
+  gtk_widget_queue_resize (GTK_WIDGET (entry));
+}
+
