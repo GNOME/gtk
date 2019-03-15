@@ -77,11 +77,10 @@ typedef struct _GskCssDelimToken GskCssDelimToken;
 typedef struct _GskCssNumberToken GskCssNumberToken;
 typedef struct _GskCssDimensionToken GskCssDimensionToken;
 
-typedef void (* GskCssTokenizerErrorFunc) (GskCssTokenizer      *parser,
-                                           const GskCssLocation *location,
-                                           const GskCssToken    *token,
-                                           const GError         *error,
-                                           gpointer              user_data);
+typedef void (* GskCssTokenizerErrorFunc) (GskCssTokenizer   *parser,
+                                           const GskCssToken *token,
+                                           const GError      *error,
+                                           gpointer           user_data);
 
 struct _GskCssStringToken {
   GskCssTokenType  type;
@@ -136,18 +135,16 @@ void                    gsk_css_token_print                     (const GskCssTok
                                                                  GString                *string);
 char *                  gsk_css_token_to_string                 (const GskCssToken      *token);
 
-GskCssTokenizer *       gsk_css_tokenizer_new                   (GBytes                 *bytes,
-                                                                 GskCssTokenizerErrorFunc func,
-                                                                 gpointer                user_data,
-                                                                 GDestroyNotify          user_destroy);
+GskCssTokenizer *       gsk_css_tokenizer_new                   (GBytes                 *bytes);
 
 GskCssTokenizer *       gsk_css_tokenizer_ref                   (GskCssTokenizer        *tokenizer);
 void                    gsk_css_tokenizer_unref                 (GskCssTokenizer        *tokenizer);
 
 const GskCssLocation *  gsk_css_tokenizer_get_location          (GskCssTokenizer        *tokenizer);
 
-void                    gsk_css_tokenizer_read_token            (GskCssTokenizer        *tokenizer,
-                                                                 GskCssToken            *token);
+gboolean                gsk_css_tokenizer_read_token            (GskCssTokenizer        *tokenizer,
+                                                                 GskCssToken            *token,
+                                                                 GError                **error);
 
 G_END_DECLS
 

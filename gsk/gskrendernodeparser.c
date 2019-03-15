@@ -80,12 +80,12 @@ tokenize (GBytes *bytes,
   GArray *tokens;
   GskCssToken token;
 
-  tokenizer = gsk_css_tokenizer_new (bytes, NULL, NULL, NULL);
+  tokenizer = gsk_css_tokenizer_new (bytes);
   tokens = g_array_new (FALSE, TRUE, sizeof (GskCssToken));
 
-  for (gsk_css_tokenizer_read_token (tokenizer, &token);
+  for (gsk_css_tokenizer_read_token (tokenizer, &token, NULL);
        !gsk_css_token_is (&token, GSK_CSS_TOKEN_EOF);
-       gsk_css_tokenizer_read_token (tokenizer, &token))
+       gsk_css_tokenizer_read_token (tokenizer, &token, NULL))
     {
       g_array_append_val (tokens, token);
     }
