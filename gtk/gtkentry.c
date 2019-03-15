@@ -10860,8 +10860,6 @@ show_capslock_feedback (GtkEntry    *entry,
 
   if (priv->caps_lock_warning_shown)
     gtk_entry_set_icon_tooltip_text (entry, GTK_ENTRY_ICON_SECONDARY, text);
-  else
-    g_warning ("Can't show Caps Lock warning, since secondary icon is set");
 }
 
 static void
