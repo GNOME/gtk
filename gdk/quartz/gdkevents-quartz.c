@@ -41,6 +41,11 @@
 #define GRIP_HEIGHT 15
 #define GDK_LION_RESIZE 5
 
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 1060
+#define NSEventTypeRotate 13
+#define NSEventTypeMagnify 30
+#endif
+
 #define WINDOW_IS_TOPLEVEL(window)		     \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
@@ -1312,14 +1317,16 @@ _gdk_quartz_events_get_current_keyboard_modifiers (void)
 GdkModifierType
 _gdk_quartz_events_get_current_mouse_modifiers (void)
 {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
   if (gdk_quartz_osx_version () >= GDK_OSX_SNOW_LEOPARD)
-    {
-      return get_mouse_button_modifiers_from_ns_buttons ([NSClassFromString(@"NSEvent") pressedMouseButtons]);
-    }
+    return get_mouse_button_modifiers_from_ns_buttons ([NSClassFromString(@"NSEvent") pressedMouseButtons]);
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1060
   else
-    {
-      return get_mouse_button_modifiers_from_ns_buttons (GetCurrentButtonState ());
-    }
+#endif
+#endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1060
+    return get_mouse_button_modifiers_from_ns_buttons (GetCurrentButtonState ());
+#endif
 }
 
 /* Detect window resizing */
