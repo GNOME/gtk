@@ -65,6 +65,7 @@ demos = files([
   'spinner.c',
   'stack.c',
   'tabs.c',
+  'tagged_entry.c',
   'textmask.c',
   'textview.c',
   'textscroll.c',
@@ -76,7 +77,13 @@ demos = files([
 
 gtkdemo_deps = [ libgtk_dep, ]
 
-extra_demo_sources = files(['main.c', 'gtkfishbowl.c', 'fontplane.c', 'gtkgears.c', 'puzzlepiece.c', 'bluroverlay.c'])
+extra_demo_sources = files(['main.c',
+                            'gtkfishbowl.c',
+                            'fontplane.c',
+                            'gtkgears.c',
+                            'puzzlepiece.c',
+                            'bluroverlay.c',
+                            'demotaggedentry.c'])
 
 if harfbuzz_dep.found() and pangoft_dep.found()
   demos += files('font_features.c')
