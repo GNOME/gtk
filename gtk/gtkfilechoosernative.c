@@ -40,6 +40,9 @@
 #include "gtklabel.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilefilterprivate.h"
+#ifdef GDK_WINDOWING_QUARTZ
+#include <gdk/quartz/gdkquartz.h>
+#endif
 
 /**
  * SECTION:gtkfilechoosernative
@@ -754,8 +757,10 @@ gtk_file_chooser_native_show (GtkNativeDialog *native)
     self->mode = MODE_WIN32;
 #endif
 
-#ifdef GDK_WINDOWING_QUARTZ
-  if (gtk_file_chooser_native_quartz_show (self))
+#if defined (GDK_WINDOWING_QUARTZ) && \
+  MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+    if (gdk_quartz_osx_version() >= GDK_OSX_SNOW_LEOPARD &&
+        gtk_file_chooser_native_quartz_show (self))
     self->mode = MODE_QUARTZ;
 #endif
 
@@ -783,8 +788,10 @@ gtk_file_chooser_native_hide (GtkNativeDialog *native)
 #endif
       break;
     case MODE_QUARTZ:
-#ifdef GDK_WINDOWING_QUARTZ
-      gtk_file_chooser_native_quartz_hide (self);
+#if defined (GDK_WINDOWING_QUARTZ) && \
+  MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+      if (gdk_quartz_osx_version() >= GDK_OSX_SNOW_LEOPARD)
+        gtk_file_chooser_native_quartz_hide (self);
 #endif
       break;
     case MODE_PORTAL:

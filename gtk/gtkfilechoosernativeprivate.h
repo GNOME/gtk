@@ -20,6 +20,9 @@
 #define __GTK_FILE_CHOOSER_NATIVE_PRIVATE_H__
 
 #include <gtk/gtkfilechoosernative.h>
+#ifdef GDK_WINDOWING_QUARTZ
+#include <AvailabilityMacros.h>
+#endif
 
 G_BEGIN_DECLS
 
@@ -58,8 +61,10 @@ struct _GtkFileChooserNative
 gboolean gtk_file_chooser_native_win32_show (GtkFileChooserNative *self);
 void gtk_file_chooser_native_win32_hide (GtkFileChooserNative *self);
 
+#if defined GDK_WINDOWING_QUARTZ && MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 gboolean gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self);
 void gtk_file_chooser_native_quartz_hide (GtkFileChooserNative *self);
+#endif
 
 gboolean gtk_file_chooser_native_portal_show (GtkFileChooserNative *self);
 void gtk_file_chooser_native_portal_hide (GtkFileChooserNative *self);
