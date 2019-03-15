@@ -10527,7 +10527,6 @@ gtk_window_present_with_time (GtkWindow *window,
   GtkWindowPrivate *priv;
   GtkWidget *widget;
   GdkWindow *gdk_window;
-  static gsize warned_current_time = FALSE;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
@@ -10545,15 +10544,6 @@ gtk_window_present_with_time (GtkWindow *window,
       /* Translate a timestamp of GDK_CURRENT_TIME appropriately */
       if (timestamp == GDK_CURRENT_TIME)
         {
-	  if (g_once_init_enter (&warned_current_time))
-	    {
-	      gboolean warned = TRUE;
-	      g_warning ("gtk_window_present_with_time() should not be called with 0, or "
-			 "GDK_CURRENT_TIME as a timestamp, the timestamp should instead be "
-			 "gathered at the time the user initiated the request for the window "
-			 "to be shown");
-	      g_once_init_leave (&warned_current_time, warned);
-	    }
 #ifdef GDK_WINDOWING_X11
 	  if (GDK_IS_X11_WINDOW(gdk_window))
 	    {
