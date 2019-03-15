@@ -77,12 +77,6 @@ typedef struct _GtkCssDelimToken GtkCssDelimToken;
 typedef struct _GtkCssNumberToken GtkCssNumberToken;
 typedef struct _GtkCssDimensionToken GtkCssDimensionToken;
 
-typedef void (* GtkCssTokenizerErrorFunc) (GtkCssTokenizer      *parser,
-                                           const GtkCssLocation *location,
-                                           const GtkCssToken    *token,
-                                           const GError         *error,
-                                           gpointer              user_data);
-
 struct _GtkCssStringToken {
   GtkCssTokenType  type;
   char            *string;
@@ -136,18 +130,16 @@ void                    gtk_css_token_print                     (const GtkCssTok
                                                                  GString                *string);
 char *                  gtk_css_token_to_string                 (const GtkCssToken      *token);
 
-GtkCssTokenizer *       gtk_css_tokenizer_new                   (GBytes                 *bytes,
-                                                                 GtkCssTokenizerErrorFunc func,
-                                                                 gpointer                user_data,
-                                                                 GDestroyNotify          user_destroy);
+GtkCssTokenizer *       gtk_css_tokenizer_new                   (GBytes                 *bytes);
 
 GtkCssTokenizer *       gtk_css_tokenizer_ref                   (GtkCssTokenizer        *tokenizer);
 void                    gtk_css_tokenizer_unref                 (GtkCssTokenizer        *tokenizer);
 
 const GtkCssLocation *  gtk_css_tokenizer_get_location          (GtkCssTokenizer        *tokenizer);
 
-void                    gtk_css_tokenizer_read_token            (GtkCssTokenizer        *tokenizer,
-                                                                 GtkCssToken            *token);
+gboolean                gtk_css_tokenizer_read_token            (GtkCssTokenizer        *tokenizer,
+                                                                 GtkCssToken            *token,
+                                                                 GError                **error);
 
 G_END_DECLS
 
