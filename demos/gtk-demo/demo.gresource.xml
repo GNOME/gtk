@@ -207,6 +207,7 @@
     <file>spinbutton.c</file>
     <file>spinner.c</file>
     <file>tabs.c</file>
+    <file>tagged_entry.c</file>
     <file>textview.c</file>
     <file>textscroll.c</file>
     <file>theming_style_classes.c</file>
@@ -261,6 +262,10 @@
   </gresource>
   <gresource prefix="/dnd">
     <file>dnd.css</file>
+  </gresource>
+  <gresource prefix="/tagged_entry">
+    <file>demotaggedentry.c</file>
+    <file>demotaggedentry.h</file>
   </gresource>
   <gresource prefix="/org/gtk/Demo">
     <file>icons/16x16/actions/application-exit.png</file>
