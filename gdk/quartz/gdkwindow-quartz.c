@@ -487,6 +487,10 @@ _gdk_windowing_after_process_all_updates (void)
 
       _gdk_quartz_drawable_flush (NULL);
 
+      /* 10.14 needs to be told that the view needs to be redrawn, see
+       * https://gitlab.gnome.org/GNOME/gtk/issues/1479 */
+      if (gdk_quartz_osx_version() >= GDK_OSX_MOJAVE)
+           [[nswindow contentView] setNeedsDisplay:YES];
       [nswindow enableFlushWindow];
       [nswindow flushWindow];
       [nswindow release];
