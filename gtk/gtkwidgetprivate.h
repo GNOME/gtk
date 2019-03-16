@@ -242,7 +242,7 @@ GdkSurface *       _gtk_widget_get_device_surface          (GtkWidget *widget,
                                                             GdkDevice *device);
 GList *           _gtk_widget_list_devices                 (GtkWidget *widget);
 
-void              gtk_synthesize_crossing_events           (GtkWindow       *toplevel,
+void              gtk_synthesize_crossing_events           (GtkRoot         *toplevel,
                                                             GtkWidget       *from,
                                                             GtkWidget       *to,
                                                             GdkEvent        *event,

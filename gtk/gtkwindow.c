@@ -7191,7 +7191,7 @@ gtk_window_set_focus (GtkWindow *window,
   if (event->any.surface)
     g_object_ref (event->any.surface);
 
-  gtk_synthesize_crossing_events (window, old_focus, focus, event, GDK_CROSSING_NORMAL);
+  gtk_synthesize_crossing_events (GTK_ROOT (window), old_focus, focus, event, GDK_CROSSING_NORMAL);
 
   g_object_unref (event);
 
