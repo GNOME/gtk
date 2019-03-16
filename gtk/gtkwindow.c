@@ -440,8 +440,6 @@ static gint gtk_window_focus              (GtkWidget        *widget,
 				           GtkDirectionType  direction);
 static void gtk_window_move_focus         (GtkWidget         *widget,
                                            GtkDirectionType   dir);
-static void gtk_window_real_set_focus     (GtkWindow         *window,
-					   GtkWidget         *focus);
 
 static void gtk_window_real_activate_default (GtkWindow         *window);
 static void gtk_window_real_activate_focus   (GtkWindow         *window);
@@ -816,8 +814,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   container_class->remove = gtk_window_remove;
   container_class->forall = gtk_window_forall;
 
-  klass->set_focus = gtk_window_real_set_focus;
-
   klass->activate_default = gtk_window_real_activate_default;
   klass->activate_focus = gtk_window_real_activate_focus;
   klass->keys_changed = gtk_window_keys_changed;
@@ -1119,24 +1115,6 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   g_object_class_install_properties (gobject_class, LAST_ARG, window_props);
   gtk_root_install_properties (gobject_class, LAST_ARG);
-
-  /**
-   * GtkWindow:set-focus:
-   * @window: the window which received the signal
-   * @widget: (nullable): the newly focused widget (or %NULL for no focus)
-   *
-   * This signal is emitted whenever the currently focused widget in
-   * this window changes.
-   */
-  window_signals[SET_FOCUS] =
-    g_signal_new (I_("set-focus"),
-                  G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkWindowClass, set_focus),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 1,
-                  GTK_TYPE_WIDGET);
 
   /**
    * GtkWindow::activate-focus:
@@ -2776,27 +2754,6 @@ gtk_window_get_role (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
   return priv->wm_role;
-}
-
-/**
- * gtk_window_set_focus:
- * @window: a #GtkWindow
- * @focus: (allow-none): widget to be the new focus widget, or %NULL to unset
- *   any focus widget for the toplevel window.
- *
- * If @focus is not the current focus widget, and is focusable, sets
- * it as the focus widget for the window. If @focus is %NULL, unsets
- * the focus widget for this window. To set the focus to a particular
- * widget in the toplevel, it is usually more convenient to use
- * gtk_widget_grab_focus() instead of this function.
- **/
-void
-gtk_window_set_focus (GtkWindow *window,
-		      GtkWidget *focus)
-{
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  g_signal_emit (window, window_signals[SET_FOCUS], 0, focus);
 }
 
 /**
@@ -7328,10 +7285,24 @@ set_focus_widget (GtkWindow *window,
     do_focus_change (priv->focus_widget, TRUE);
 }
 
-static void
-gtk_window_real_set_focus (GtkWindow *window,
-			   GtkWidget *focus)
+/**
+ * gtk_window_set_focus:
+ * @window: a #GtkWindow
+ * @focus: (allow-none): widget to be the new focus widget, or %NULL to unset
+ *   any focus widget for the toplevel window.
+ *
+ * If @focus is not the current focus widget, and is focusable, sets
+ * it as the focus widget for the window. If @focus is %NULL, unsets
+ * the focus widget for this window. To set the focus to a particular
+ * widget in the toplevel, it is usually more convenient to use
+ * gtk_widget_grab_focus() instead of this function.
+ **/
+void
+gtk_window_set_focus (GtkWindow *window,
+                      GtkWidget *focus)
 {
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
   if (focus && !gtk_widget_is_sensitive (focus))
     return;
 

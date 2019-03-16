@@ -57,7 +57,6 @@ struct _GtkWindow
 /**
  * GtkWindowClass:
  * @parent_class: The parent class.
- * @set_focus: Sets child as the focus widget for the window.
  * @activate_focus: Activates the current focused widget within the window.
  * @activate_default: Activates the default widget for the window.
  * @keys_changed: Signal gets emitted when the set of accelerators or
@@ -71,9 +70,6 @@ struct _GtkWindowClass
   GtkBinClass parent_class;
 
   /*< public >*/
-
-  void     (* set_focus)   (GtkWindow *window,
-                            GtkWidget *focus);
 
   /* G_SIGNAL_ACTION signals for keybindings */
 
