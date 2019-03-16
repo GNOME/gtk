@@ -202,6 +202,29 @@ gtk_root_get_focus (GtkRoot *self)
 }
 
 /**
+ * gtk_root_activate_focus:
+ * @self: a #GtkRoot
+ *
+ * Activates the current focused widget within the root.
+ *
+ * Returns: %TRUE if a widget got activated.
+ **/
+gboolean
+gtk_root_activate_focus (GtkRoot *self)
+{
+  GtkWidget *focus_widget;
+
+  g_return_val_if_fail (GTK_IS_ROOT (self), FALSE);
+
+  focus_widget = gtk_root_get_focus (self);
+
+  if (focus_widget && gtk_widget_is_sensitive (focus_widget))
+    return gtk_widget_activate (focus_widget);
+
+  return FALSE;
+}
+
+/**
  * gtk_root_set_default:
  * @self: a #GtkRoot
  * @widget: (allow-none): widget to be the default, or %NULL
