@@ -338,7 +338,8 @@ gesture_released (GtkGestureMultiPress *gesture,
     return;
 
   child = gtk_bin_get_child (GTK_BIN (popover));
-  if (!gtk_widget_compute_bounds (child, GTK_WIDGET (popover), &child_bounds) ||
+  if (!child ||
+      !gtk_widget_compute_bounds (child, GTK_WIDGET (popover), &child_bounds) ||
       !graphene_rect_contains_point (&child_bounds,
                                      &(graphene_point_t){x, y}))
     gtk_popover_popdown (popover);
