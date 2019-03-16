@@ -38,7 +38,9 @@ libgdk_quartz_la_SOURCES =    	\
 	gdkglcontext-quartz.c	\
 	gdkglcontext-quartz.h	\
 	gdkglobals-quartz.c	\
+	gdkinternal-quartz.h	\
 	gdkkeys-quartz.c	\
+	gdkkeys-quartz.h	\
 	gdkmonitor-quartz.c     \
 	gdkmonitor-quartz.h     \
 	gdkprivate-quartz.h	\

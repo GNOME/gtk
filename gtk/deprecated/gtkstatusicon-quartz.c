@@ -22,7 +22,9 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#include <quartz/gdkquartz.h>
+#define __GTK_H_INSIDE__
+#include <quartz/gdkquartz-gtk-only.h>
+#undef __GTK_H_INSIDE__
 
 #define QUARTZ_POOL_ALLOC NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init]
 #define QUARTZ_POOL_RELEASE [pool release]

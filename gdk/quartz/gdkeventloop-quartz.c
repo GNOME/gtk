@@ -7,6 +7,7 @@
 #include <unistd.h>
 
 #include "gdkprivate-quartz.h"
+#include "gdkinternal-quartz.h"
 #include <gdk/gdkdisplayprivate.h>
 
 /* 
@@ -150,6 +151,18 @@ static const char *const state_names[]  = {
   "POLLING_RESTART",
   "POLLING_DESCRIPTORS"
 };
+#endif
+
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101200
+typedef enum
+  {
+   GDK_QUARTZ_EVENT_MASK_ANY = NSAnyEventMask,
+  } GdkQuartzEventMask;
+#else
+typedef enum
+  {
+   GDK_QUARTZ_EVENT_MASK_ANY = NSEventMaskAny,
+  } GdkQuartzEventMask;
 #endif
 
 static SelectThreadState select_thread_state = BEFORE_START;

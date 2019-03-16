@@ -23,6 +23,7 @@
 #include "gdkselection.h"
 #include "gdkproperty.h"
 #include "gdkquartz.h"
+#include "gdkinternal-quartz.h"
 
 gboolean
 _gdk_quartz_display_set_selection_owner (GdkDisplay *display,

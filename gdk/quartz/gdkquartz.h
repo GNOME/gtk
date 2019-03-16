@@ -20,25 +20,10 @@
 #ifndef __GDK_QUARTZ_H__
 #define __GDK_QUARTZ_H__
 
-#include <AppKit/AppKit.h>
-
 #include <gdk/gdk.h>
 #include <gdk/gdkprivate.h>
 
 G_BEGIN_DECLS
-
-/* NSInteger only exists in Leopard and newer.  This check has to be
- * done after inclusion of the system headers.  If NSInteger has not
- * been defined, we know for sure that we are on 32-bit.
- */
-#ifndef NSINTEGER_DEFINED
-typedef int NSInteger;
-typedef unsigned int NSUInteger;
-#endif
-
-#ifndef CGFLOAT_DEFINED
-typedef float CGFloat;
-#endif
 
 typedef enum
 {
@@ -61,13 +46,6 @@ typedef enum
 
 GDK_AVAILABLE_IN_ALL
 GdkOSXVersion gdk_quartz_osx_version (void);
-
-GDK_AVAILABLE_IN_ALL
-GdkAtom   gdk_quartz_pasteboard_type_to_atom_libgtk_only        (NSString       *type);
-GDK_AVAILABLE_IN_ALL
-NSString *gdk_quartz_target_to_pasteboard_type_libgtk_only      (const gchar    *target);
-GDK_AVAILABLE_IN_ALL
-NSString *gdk_quartz_atom_to_pasteboard_type_libgtk_only        (GdkAtom         atom);
 
 G_END_DECLS
 

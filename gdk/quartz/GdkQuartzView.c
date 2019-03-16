@@ -23,6 +23,7 @@
 #include "gdkquartzwindow.h"
 #include "gdkprivate-quartz.h"
 #include "gdkquartz.h"
+#include "gdkinternal-quartz.h"
 
 @implementation GdkQuartzView
 

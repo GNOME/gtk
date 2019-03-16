@@ -25,6 +25,7 @@
 #include "gdkwindow.h"
 #include "gdkinternals.h"
 #include "gdkmain.h"
+#include "gdkinternal-quartz.h"
 
 G_BEGIN_DECLS
 
