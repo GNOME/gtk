@@ -38,6 +38,7 @@ typedef struct {
   GdkDisplay *display;
   GskRenderer *renderer;
   GdkSurface *surface;
+  GdkSurfaceState state;
   GtkWidget *relative_to;
   GtkWidget *focus_widget;
   gboolean active;
@@ -174,6 +175,41 @@ gtk_popup_focus_out (GtkWidget *widget)
   gtk_popup_set_is_active (GTK_POPUP (widget), FALSE);
 }
 
+static void
+ensure_state_flag_backdrop (GtkWidget *widget)
+{
+  GtkPopup *popup = GTK_POPUP (widget);
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+
+  if ((priv->state & GDK_SURFACE_STATE_FOCUSED) != 0)
+    gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_BACKDROP);
+  else
+    gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_BACKDROP, FALSE);
+}
+
+static void
+surface_state_changed (GtkWidget *widget)
+{
+  GtkPopup *popup = GTK_POPUP (widget);
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+  GdkSurfaceState new_surface_state;
+  GdkSurfaceState changed_mask;
+
+  new_surface_state = gdk_surface_get_state (_gtk_widget_get_surface (widget));
+  changed_mask = new_surface_state ^ priv->state;
+  priv->state = new_surface_state;
+
+  if (changed_mask & GDK_SURFACE_STATE_FOCUSED)
+    ensure_state_flag_backdrop (widget);
+}
+
+static void
+surface_size_changed (GtkWindow *window,
+                      guint      width,
+                      guint      height)
+{
+  g_print ("new surface size %d %d\n", width, height);
+}
 
 static void
 gtk_popup_init (GtkPopup *popup)
@@ -223,6 +259,9 @@ gtk_popup_realize (GtkWidget *widget)
 #endif
 
   gtk_widget_set_surface (widget, priv->surface);
+  g_signal_connect_swapped (priv->surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
+  g_signal_connect_swapped (priv->surface, "size-changed", G_CALLBACK (surface_size_changed), widget);
+
   gtk_widget_register_surface (widget, priv->surface);
 
   GTK_WIDGET_CLASS (gtk_popup_parent_class)->realize (widget);
@@ -240,6 +279,9 @@ gtk_popup_unrealize (GtkWidget *widget)
 
   gsk_renderer_unrealize (priv->renderer);
   g_clear_object (&priv->renderer);
+
+  g_signal_handlers_disconnect_by_func (priv->surface, surface_state_changed, widget);
+  g_signal_handlers_disconnect_by_func (priv->surface, surface_size_changed, widget);
 
   g_clear_object (&priv->surface);
 }
