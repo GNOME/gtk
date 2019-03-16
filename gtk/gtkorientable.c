@@ -22,7 +22,9 @@
 #include "config.h"
 
 #include "gtkorientableprivate.h"
+
 #include "gtkprivate.h"
+#include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
 

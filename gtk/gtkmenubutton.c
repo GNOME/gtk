@@ -110,18 +110,19 @@
 
 #include "config.h"
 
+#include "gtkaccessible.h"
+#include "gtkactionable.h"
+#include "gtkimage.h"
+#include "gtkintl.h"
+#include "gtkmain.h"
 #include "gtkmenubutton.h"
 #include "gtkmenubuttonprivate.h"
-#include "gtktypebuiltins.h"
-#include "gtkimage.h"
-#include "gtkactionable.h"
-#include "gtkmain.h"
-#include "gtkaccessible.h"
 #include "gtkpopover.h"
-#include "a11y/gtkmenubuttonaccessible.h"
-
 #include "gtkprivate.h"
-#include "gtkintl.h"
+#include "gtkstylecontext.h"
+#include "gtktypebuiltins.h"
+
+#include "a11y/gtkmenubuttonaccessible.h"
 
 struct _GtkMenuButtonPrivate
 {

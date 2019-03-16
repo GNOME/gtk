@@ -21,14 +21,15 @@
 #include "config.h"
 
 #include "gtkoverlay.h"
-#include "gtkbuildable.h"
-#include "gtkscrolledwindow.h"
-#include "gtkwidgetprivate.h"
-#include "gtkmarshalers.h"
-#include "gtksnapshot.h"
 
-#include "gtkprivate.h"
+#include "gtkbuildable.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
+#include "gtkprivate.h"
+#include "gtkscrolledwindow.h"
+#include "gtksnapshot.h"
+#include "gtkstylecontext.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtkoverlay

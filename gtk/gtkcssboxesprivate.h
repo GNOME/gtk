@@ -19,6 +19,7 @@
 #define __GTK_CSS_BOXES_PRIVATE_H__
 
 #include "gtkcsstypesprivate.h"
+#include "gtktypes.h"
 
 G_BEGIN_DECLS
 

@@ -28,6 +28,7 @@
 #include "gtklabel.h"
 #include "gtklistbox.h"
 #include "gtksizegroup.h"
+#include "gtkstylecontext.h"
 #include "gtkswitch.h"
 #include "gtkwidgetprivate.h"
 

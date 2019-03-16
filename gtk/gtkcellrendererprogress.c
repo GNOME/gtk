@@ -31,6 +31,7 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
+#include "gtkstylecontext.h"
 
 
 /**

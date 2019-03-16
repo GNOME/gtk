@@ -25,17 +25,19 @@
 
 #include "config.h"
 
-#include <string.h>
-
 #include "gtkmessagedialog.h"
-#include "gtkdialogprivate.h"
+
 #include "gtkaccessible.h"
-#include "gtkbuildable.h"
-#include "gtklabel.h"
 #include "gtkbox.h"
+#include "gtkbuildable.h"
+#include "gtkdialogprivate.h"
 #include "gtkintl.h"
+#include "gtklabel.h"
 #include "gtkprivate.h"
+#include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
+
+#include <string.h>
 
 /**
  * SECTION:gtkmessagedialog

@@ -26,6 +26,7 @@
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
 #include "gtksnapshot.h"
+#include "gtkstylecontext.h"
 #include "gtktreeprivate.h"
 
 #include "a11y/gtktextcellaccessible.h"
