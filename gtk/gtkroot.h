@@ -62,6 +62,8 @@ void        gtk_root_set_focus (GtkRoot   *self,
                                 GtkWidget *focus);
 GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_root_get_focus (GtkRoot   *self);
+GDK_AVAILABLE_IN_ALL
+gboolean    gtk_root_activate_focus (GtkRoot *self);
 
 GDK_AVAILABLE_IN_ALL
 void        gtk_root_set_default (GtkRoot   *self,
