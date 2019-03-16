@@ -394,12 +394,12 @@ msgstr "Llista de gent que ha contribuït amb imatges al programa"
 
 #: gtk/gtkaboutdialog.c:543
 msgid "Translator credits"
-msgstr "Traductors"
+msgstr "Equip de traducció"
 
 #: gtk/gtkaboutdialog.c:544
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
-msgstr "El nom dels traductors. Aquesta cadena s'ha de marcar com a traduïble"
+msgstr "Equip de traducció. Aquesta cadena s'ha de marcar com a traduïble"
 
 #: gtk/gtkaboutdialog.c:556
 msgid "Logo"
