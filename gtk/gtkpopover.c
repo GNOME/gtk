@@ -1370,19 +1370,15 @@ gtk_popover_measure (GtkWidget      *widget,
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
   int minimal_size;
 
   *minimum = 0;
   *natural = 0;
 
-  if (child != NULL)
-    {
-      if (for_size >= 0)
-        for_size -= TAIL_HEIGHT;
+  if (for_size >= 0)
+    for_size -= TAIL_HEIGHT;
 
-      gtk_widget_measure (priv->contents_widget, orientation, for_size, minimum, natural, NULL, NULL);
-    }
+  gtk_widget_measure (priv->contents_widget, orientation, for_size, minimum, natural, NULL, NULL);
 
   minimal_size = get_minimal_size (popover, orientation);
   *minimum = MAX (*minimum, minimal_size);
