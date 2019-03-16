@@ -24,15 +24,16 @@
 
 #include "config.h"
 
-#include "gtktogglebutton.h"
+#include "gtktogglebuttonprivate.h"
 
 #include "gtkbuttonprivate.h"
-#include "gtktogglebuttonprivate.h"
+#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
+#include "gtkstylecontext.h"
+
 #include "a11y/gtktogglebuttonaccessible.h"
 
 

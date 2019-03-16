@@ -33,6 +33,7 @@
 #include "gtkpicture.h"
 #include "gtkselectionprivate.h"
 #include "gtksettingsprivate.h"
+#include "gtkstylecontext.h"
 #include "gtktooltipprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowgroup.h"

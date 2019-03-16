@@ -18,21 +18,22 @@
 
 #include "config.h"
 
-#include <string.h>
-
-#include "gtksettings.h"
-
 #include "gtksettingsprivate.h"
-#include "gtkintl.h"
-#include "gtkwidget.h"
-#include "gtkprivate.h"
+
 #include "gtkcssproviderprivate.h"
 #include "gtkhslaprivate.h"
+#include "gtkintl.h"
+#include "gtkprivate.h"
+#include "gtkscrolledwindow.h"
+#include "gtkstylecontext.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
-#include "gtkscrolledwindow.h"
+#include "gtkwidget.h"
+
 #include "gdk/gdk-private.h"
+
+#include <string.h>
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"

@@ -20,7 +20,6 @@
 
 #include <glib-object.h>
 #include <gsk/gsk.h>
-#include <gtk/gtkstylecontext.h>
 
 G_BEGIN_DECLS
 

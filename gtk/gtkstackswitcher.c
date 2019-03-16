@@ -18,18 +18,21 @@
  */
 
 #include "config.h"
+
 #include "gtkstackswitcher.h"
-#include "gtkradiobutton.h"
-#include "gtklabel.h"
+
 #include "gtkdnd.h"
 #include "gtkdragdest.h"
+#include "gtkimage.h"
+#include "gtkintl.h"
+#include "gtklabel.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
-#include "gtkwidgetprivate.h"
-#include "gtktypebuiltins.h"
-#include "gtkimage.h"
+#include "gtkradiobutton.h"
 #include "gtkselectionmodel.h"
+#include "gtkstylecontext.h"
+#include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtkstackswitcher

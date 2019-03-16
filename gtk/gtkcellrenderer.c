@@ -23,6 +23,7 @@
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
+#include "gtkstylecontext.h"
 #include "gtktreeprivate.h"
 #include "gtktypebuiltins.h"
 

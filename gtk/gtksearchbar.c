@@ -32,12 +32,13 @@
 #include "gtkbutton.h"
 #include "gtkcenterbox.h"
 #include "gtkentryprivate.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkrevealer.h"
 #include "gtksearchentryprivate.h"
 #include "gtksnapshot.h"
-#include "gtkeventcontrollerkey.h"
+#include "gtkstylecontext.h"
 
 /**
  * SECTION:gtksearchbar

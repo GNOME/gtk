@@ -23,6 +23,7 @@
 #include "gtkcssstylechangeprivate.h"
 #include "gtkbitmaskprivate.h"
 #include "gtkcsstypesprivate.h"
+#include "gtkstylecontext.h"
 
 G_BEGIN_DECLS
 

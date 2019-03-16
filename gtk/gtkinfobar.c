@@ -45,6 +45,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkorientable.h"
+#include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 

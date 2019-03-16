@@ -29,6 +29,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtksizegroup.h"
+#include "gtkstylecontext.h"
 
 #include <math.h>
 

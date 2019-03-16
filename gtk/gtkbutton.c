@@ -66,6 +66,7 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
+#include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 
 #include "a11y/gtkbuttonaccessible.h"

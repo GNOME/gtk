@@ -18,11 +18,14 @@
  */
 
 #include "config.h"
-#include "gtkseparatormenuitem.h"
+
 #include "gtkseparatortoolitem.h"
+
 #include "gtkintl.h"
-#include "gtktoolbarprivate.h"
 #include "gtkprivate.h"
+#include "gtkseparatormenuitem.h"
+#include "gtkstylecontext.h"
+#include "gtktoolbarprivate.h"
 #include "gtkwidgetprivate.h"
 
 /**

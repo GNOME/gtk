@@ -34,6 +34,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtksearchentryprivate.h"
+#include "gtkstylecontext.h"
 #include "gtktext.h"
 
 #define BOX_SPACE 6

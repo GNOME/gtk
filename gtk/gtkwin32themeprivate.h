@@ -20,6 +20,7 @@
 #ifndef __GTK_WIN32_THEME_PART_H__
 #define __GTK_WIN32_THEME_PART_H__
 
+#include "gtkborder.h"
 #include "gtkcssparserprivate.h"
 
 G_BEGIN_DECLS

@@ -29,21 +29,20 @@
 
 #include "gtkfontbutton.h"
 
-#include "gtkmain.h"
 #include "gtkbox.h"
-#include "gtklabel.h"
+#include "gtkcssprovider.h"
 #include "gtkfontchooser.h"
 #include "gtkfontchooserdialog.h"
-#include "gtkimage.h"
-#include "gtkmarshalers.h"
-#include "gtkseparator.h"
-#include "gtkprivate.h"
+#include "gtkfontchooserutils.h"
 #include "gtkintl.h"
-#include "gtkcssprovider.h"
+#include "gtklabel.h"
+#include "gtkmarshalers.h"
+#include "gtkprivate.h"
+#include "gtkseparator.h"
+#include "gtkstylecontext.h"
 
 #include <string.h>
 #include <stdio.h>
-#include "gtkfontchooserutils.h"
 
 
 /**

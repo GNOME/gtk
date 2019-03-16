@@ -74,14 +74,15 @@
 #include "gtkintl.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
-#include "gtkstack.h"
+#include "gtklistlistmodelprivate.h"
+#include "gtkmaplistmodel.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
 #include "gtksizegroup.h"
 #include "gtksizerequest.h"
+#include "gtkstack.h"
+#include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
-#include "gtklistlistmodelprivate.h"
-#include "gtkmaplistmodel.h"
 
 #include "a11y/gtkwindowaccessible.h"
 

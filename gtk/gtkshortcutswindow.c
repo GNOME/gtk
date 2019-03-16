@@ -22,11 +22,13 @@
 
 #include "gtkbindings.h"
 #include "gtkbox.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkgrid.h"
 #include "gtkheaderbar.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtklistbox.h"
+#include "gtkmain.h"
 #include "gtkmenubutton.h"
 #include "gtkpopover.h"
 #include "gtkprivate.h"
@@ -38,13 +40,10 @@
 #include "gtkshortcutsshortcutprivate.h"
 #include "gtksizegroup.h"
 #include "gtkstack.h"
+#include "gtkstylecontext.h"
 #include "gtktogglebutton.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkeventcontrollerkey.h"
-#include "gtkprivate.h"
-#include "gtkintl.h"
-#include "gtkmain.h"
 
 /**
  * SECTION:gtkshortcutswindow

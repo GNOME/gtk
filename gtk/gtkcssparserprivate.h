@@ -18,7 +18,6 @@
 #ifndef __GTK_CSS_PARSER_PRIVATE_H__
 #define __GTK_CSS_PARSER_PRIVATE_H__
 
-#include "gtk/gtkcsstypesprivate.h"
 #include <gtk/gtkcssprovider.h>
 
 G_BEGIN_DECLS
