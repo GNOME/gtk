@@ -1262,7 +1262,7 @@ msgstr "Llista de gent que ha contribuït amb imatges al programa"
 
 #: gtk/gtkaboutdialog.c:530
 msgid "Translator credits"
-msgstr "Equip de traducció del GNOME"
+msgstr "Traductors"
 
 #: gtk/gtkaboutdialog.c:531
 msgid ""
