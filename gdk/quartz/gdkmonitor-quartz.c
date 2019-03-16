@@ -23,7 +23,6 @@
 #include "gdkmonitor-quartz.h"
 #include "gdkdisplay-quartz.h"
 
-
 G_DEFINE_TYPE (GdkQuartzMonitor, gdk_quartz_monitor, GDK_TYPE_MONITOR)
 
 static void

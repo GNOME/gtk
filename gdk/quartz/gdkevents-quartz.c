@@ -34,8 +34,10 @@
 #include "gdkquartz.h"
 #include "gdkquartzdisplay.h"
 #include "gdkprivate-quartz.h"
+#include "gdkinternal-quartz.h"
 #include "gdkquartzdevicemanager-core.h"
 #include "gdkquartzkeys.h"
+#include "gdkkeys-quartz.h"
 
 #define GRIP_WIDTH 15
 #define GRIP_HEIGHT 15
@@ -45,6 +47,7 @@
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
+
 
 /* This is the window corresponding to the key window */
 static GdkWindow   *current_keyboard_window;
@@ -1312,14 +1315,16 @@ _gdk_quartz_events_get_current_keyboard_modifiers (void)
 GdkModifierType
 _gdk_quartz_events_get_current_mouse_modifiers (void)
 {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
   if (gdk_quartz_osx_version () >= GDK_OSX_SNOW_LEOPARD)
-    {
-      return get_mouse_button_modifiers_from_ns_buttons ([NSClassFromString(@"NSEvent") pressedMouseButtons]);
-    }
+    return get_mouse_button_modifiers_from_ns_buttons ([NSClassFromString(@"NSEvent") pressedMouseButtons]);
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1060
   else
-    {
-      return get_mouse_button_modifiers_from_ns_buttons (GetCurrentButtonState ());
-    }
+#endif
+#endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1060
+    return get_mouse_button_modifiers_from_ns_buttons (GetCurrentButtonState ());
+#endif
 }
 
 /* Detect window resizing */

@@ -25,6 +25,7 @@
 
 #include "gdkquartzmonitor.h"
 #include "gdkprivate-quartz.h"
+#include "gdkinternal-quartz.h"
 
 struct _GdkQuartzMonitor
 {

@@ -222,7 +222,6 @@ libgdk_3_la_LIBADD += x11/libgdk-x11.la
 endif # USE_X11
 
 if USE_QUARTZ
-libgdk_3_la_CFLAGS += -xobjective-c
 libgdk_3_la_LIBADD += quartz/libgdk-quartz.la
 endif # USE_QUARTZ
 

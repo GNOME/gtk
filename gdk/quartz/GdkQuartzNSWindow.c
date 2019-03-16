@@ -21,6 +21,8 @@
 #include "gdkquartzwindow.h"
 #include "gdkdnd-quartz.h"
 #include "gdkprivate-quartz.h"
+#include "gdkinternal-quartz.h"
+#include "gdkquartzdnd.h"
 
 @implementation GdkQuartzNSWindow
 

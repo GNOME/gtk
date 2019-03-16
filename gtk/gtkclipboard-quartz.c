@@ -31,7 +31,7 @@
 #include "gtktextbuffer.h"
 #include "gtkselectionprivate.h"
 #include "gtkquartz.h"
-#include "../gdk/quartz/gdkquartz.h"
+#include "quartz/gdkquartz-gtk-only.h"
 
 enum {
   OWNER_CHANGE,

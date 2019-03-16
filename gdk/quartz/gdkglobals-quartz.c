@@ -20,6 +20,7 @@
 #include "gdktypes.h"
 #include "gdkprivate.h"
 #include "gdkquartz.h"
+#include "gdkinternal-quartz.h"
 
 GdkDisplay *_gdk_display = NULL;
 GdkScreen *_gdk_screen = NULL;

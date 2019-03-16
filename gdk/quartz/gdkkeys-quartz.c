@@ -55,6 +55,8 @@
 #include "gdkquartzkeys.h"
 #include "gdkkeysprivate.h"
 #include "gdkkeysyms.h"
+#include "gdkkeys-quartz.h"
+#include "gdkinternal-quartz.h"
 
 #define NUM_KEYCODES 128
 #define KEYVALS_PER_KEYCODE 4
