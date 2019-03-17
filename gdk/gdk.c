@@ -33,6 +33,8 @@
 
 #include "gdk-private.h"
 
+#include "gdkconstructor.h"
+
 #ifndef HAVE_XCONVERTCASE
 #include "gdkkeysyms.h"
 #endif
