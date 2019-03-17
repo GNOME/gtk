@@ -237,6 +237,7 @@ gtk_popup_realize (GtkWidget *widget)
                             0, 10);
 #else
   priv->surface = gdk_surface_new_toplevel (priv->display, 20, 20);
+  gdk_surface_set_transient_for (priv->surface, gtk_widget_get_surface (priv->relative_to));
 #endif
 
   gtk_widget_set_surface (widget, priv->surface);
@@ -565,6 +566,7 @@ gtk_popup_set_relative_to (GtkPopup  *popup,
   priv->relative_to = relative_to;
   g_signal_connect (priv->relative_to, "size-allocate", G_CALLBACK (size_changed), popup);
   priv->display = gtk_widget_get_display (relative_to);
+  gtk_widget_set_parent (GTK_WIDGET (popup), relative_to);
 }
 
 static void
