@@ -4553,28 +4553,28 @@ static void
 connect_mnemonics_visible_notify (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkWidget *toplevel;
+  GtkRoot *root;
   gboolean connected;
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (label));
+  root = gtk_widget_get_root (GTK_WIDGET (label));
 
-  if (!GTK_IS_WINDOW (toplevel))
+  if (!GTK_IS_WINDOW (root))
     return;
 
   /* always set up this widgets initial value */
   priv->mnemonics_visible =
-    gtk_window_get_mnemonics_visible (GTK_WINDOW (toplevel));
+    gtk_window_get_mnemonics_visible (GTK_WINDOW (root));
 
   connected =
-    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (toplevel), quark_mnemonics_visible_connected));
+    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (root), quark_mnemonics_visible_connected));
 
   if (!connected)
     {
-      g_signal_connect (toplevel,
+      g_signal_connect (root,
                         "notify::mnemonics-visible",
                         G_CALLBACK (label_mnemonics_visible_changed),
                         label);
-      g_object_set_qdata (G_OBJECT (toplevel),
+      g_object_set_qdata (G_OBJECT (root),
                           quark_mnemonics_visible_connected,
                           GINT_TO_POINTER (1));
     }
@@ -5859,12 +5859,10 @@ gtk_label_move_cursor (GtkLabel       *label,
                                                  count > 0 ?
                                                  GTK_DIR_RIGHT : GTK_DIR_LEFT))
                     {
-                      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (label));
+                      GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (label));
 
-                      if (toplevel)
-                        gtk_widget_child_focus (toplevel,
-                                                count > 0 ?
-                                                GTK_DIR_RIGHT : GTK_DIR_LEFT);
+                      if (root)
+                        gtk_widget_child_focus (GTK_WIDGET (root), count > 0 ? GTK_DIR_RIGHT : GTK_DIR_LEFT);
                     }
                 }
               else
@@ -6146,11 +6144,14 @@ gtk_label_activate_link (GtkLabel    *label,
                          const gchar *uri)
 {
   GtkWidget *widget = GTK_WIDGET (label);
-  GtkWidget *top_level = gtk_widget_get_toplevel (widget);
+  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
   guint32 timestamp = gtk_get_current_event_time ();
   GError *error = NULL;
 
-  if (!gtk_show_uri_on_window (GTK_WINDOW (top_level), uri, timestamp, &error))
+  if (!GTK_IS_WINDOW (toplevel))
+    return FALSE;
+
+  if (!gtk_show_uri_on_window (GTK_WINDOW (toplevel), uri, timestamp, &error))
     {
       g_warning ("Unable to show '%s': %s", uri, error->message);
       g_error_free (error);
