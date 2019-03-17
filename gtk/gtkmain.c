@@ -1626,7 +1626,6 @@ handle_pointing_event (GdkEvent *event)
 {
   GtkWidget *target = NULL, *old_target = NULL, *event_widget;
   GtkRoot *toplevel;
-  GtkWidget *toplevel_widget;
   GdkEventSequence *sequence;
   GdkDevice *device;
   gdouble x, y;
@@ -1636,11 +1635,7 @@ handle_pointing_event (GdkEvent *event)
   if (!device || !gdk_event_get_coords (event, &x, &y))
     return event_widget;
 
-  toplevel_widget = gtk_widget_get_toplevel (event_widget);
-  if (!GTK_IS_ROOT (toplevel_widget))
-    return event_widget;
-
-  toplevel = GTK_ROOT (toplevel_widget);
+  toplevel = gtk_widget_get_root (event_widget);
 
   sequence = gdk_event_get_event_sequence (event);
 
@@ -1668,10 +1663,10 @@ handle_pointing_event (GdkEvent *event)
       target = gtk_root_lookup_pointer_focus_implicit_grab (toplevel, device, sequence);
 
       if (!target)
-        target = gtk_widget_pick (toplevel_widget, x, y);
+        target = gtk_widget_pick (GTK_WIDGET (toplevel), x, y);
 
       if (!target)
-        target = toplevel_widget;
+        target = GTK_WIDGET (toplevel);
 
       old_target = update_pointer_focus_state (toplevel, event, target);
 
@@ -1877,7 +1872,7 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_DELETE:
       g_object_ref (target_widget);
       if (!gtk_window_group_get_current_grab (window_group) ||
-          gtk_widget_get_toplevel (gtk_window_group_get_current_grab (window_group)) == target_widget)
+          GTK_WIDGET (gtk_widget_get_root (gtk_window_group_get_current_grab (window_group))) == target_widget)
         {
           if (!GTK_IS_WINDOW (target_widget) ||
               !gtk_window_emit_close_request (GTK_WINDOW (target_widget)))
@@ -1910,11 +1905,11 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_KEY_RELEASE:
       /* make focus visible in a window that receives a key event */
       {
-        GtkWidget *window;
+        GtkRoot *root;
 
-        window = gtk_widget_get_toplevel (grab_widget);
-        if (GTK_IS_WINDOW (window))
-          gtk_window_set_focus_visible (GTK_WINDOW (window), TRUE);
+        root = gtk_widget_get_root (grab_widget);
+        if (GTK_IS_WINDOW (root))
+          gtk_window_set_focus_visible (GTK_WINDOW (root), TRUE);
       }
 
       /* Catch alt press to enable auto-mnemonics;
@@ -1926,17 +1921,17 @@ gtk_main_do_event (GdkEvent *event)
           !GTK_IS_MENU_SHELL (grab_widget))
         {
           gboolean mnemonics_visible;
-          GtkWidget *window;
+          GtkRoot *root;
 
           mnemonics_visible = (event->any.type == GDK_KEY_PRESS);
 
-          window = gtk_widget_get_toplevel (grab_widget);
-          if (GTK_IS_WINDOW (window))
+          root = gtk_widget_get_root (grab_widget);
+          if (GTK_IS_WINDOW (root))
             {
               if (mnemonics_visible)
-                _gtk_window_schedule_mnemonics_visible (GTK_WINDOW (window));
+                _gtk_window_schedule_mnemonics_visible (GTK_WINDOW (root));
               else
-                gtk_window_set_mnemonics_visible (GTK_WINDOW (window), FALSE);
+                gtk_window_set_mnemonics_visible (GTK_WINDOW (root), FALSE);
             }
         }
       /* else fall through */

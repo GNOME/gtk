@@ -884,7 +884,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
                          int                 y)
 {
   GtkDragSourceInfo *info;
-  GtkWidget *toplevel;
+  GtkRoot *root;
   GdkDrag *drag;
   int dx, dy;
   GtkDragContent *content;
@@ -892,13 +892,12 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     device = gdk_device_get_associated_device (device);
 
-  toplevel = gtk_widget_get_toplevel (widget);
-  gtk_widget_translate_coordinates (widget, toplevel,
-                                    x, y, &x, &y);
-  gdk_surface_get_device_position (gtk_widget_get_surface (toplevel),
-                                  device,
-                                  &dx, &dy,
-                                  NULL);
+  root = gtk_widget_get_root (widget);
+  gtk_widget_translate_coordinates (widget, GTK_WIDGET (root), x, y, &x, &y);
+  gdk_surface_get_device_position (gtk_widget_get_surface (GTK_WIDGET (root)),
+                                   device,
+                                   &dx, &dy,
+                                   NULL);
   dx -= x;
   dy -= y;
 
@@ -906,7 +905,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   content->widget = g_object_ref (widget);
   content->formats = gdk_content_formats_ref (target_list);
 
-  drag = gdk_drag_begin (gtk_widget_get_surface (toplevel), device, GDK_CONTENT_PROVIDER (content), actions, dx, dy);
+  drag = gdk_drag_begin (gtk_widget_get_surface (GTK_WIDGET (root)), device, GDK_CONTENT_PROVIDER (content), actions, dx, dy);
   if (drag == NULL)
     {
       g_object_unref (content);
