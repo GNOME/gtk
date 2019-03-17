@@ -524,7 +524,7 @@ ensure_dialog (GtkColorButton *button)
   priv->cs_dialog = dialog = gtk_color_chooser_dialog_new (priv->title, NULL);
   gtk_window_set_hide_on_close (GTK_WINDOW (dialog), TRUE);
 
-  if (gtk_widget_is_toplevel (parent) && GTK_IS_WINDOW (parent))
+  if (GTK_IS_WINDOW (parent))
   {
     if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (dialog)))
       gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));

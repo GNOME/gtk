@@ -534,12 +534,11 @@ gtk_menu_item_accessible_get_keybinding (AtkAction *action,
 
       if (GTK_IS_MENU_BAR (parent))
         {
-          GtkWidget *toplevel;
+          GtkRoot *root;
 
-          toplevel = gtk_widget_get_toplevel (parent);
-          if (toplevel && GTK_IS_WINDOW (toplevel))
-            mnemonic_modifier =
-              gtk_window_get_mnemonic_modifier (GTK_WINDOW (toplevel));
+          root = gtk_widget_get_root (parent);
+          if (root && GTK_IS_WINDOW (root))
+            mnemonic_modifier = gtk_window_get_mnemonic_modifier (GTK_WINDOW (root));
         }
 
       child = find_item_label (temp_item);

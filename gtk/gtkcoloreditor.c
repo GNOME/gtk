@@ -193,7 +193,7 @@ popup_edit (GtkWidget      *widget,
             GtkColorEditor *editor)
 {
   GtkWidget *popup = NULL;
-  GtkWidget *toplevel;
+  GtkRoot *root;
   GtkWidget *focus;
   gint position;
   gint s, e;
@@ -224,8 +224,8 @@ popup_edit (GtkWidget      *widget,
   else if (popup)
     {
       dismiss_current_popup (editor);
-      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (editor));
-      g_set_object (&editor->priv->popdown_focus, gtk_root_get_focus (GTK_ROOT (toplevel)));
+      root = gtk_widget_get_root (GTK_WIDGET (editor));
+      g_set_object (&editor->priv->popdown_focus, gtk_root_get_focus (root));
       editor->priv->current_popup = popup;
       editor->priv->popup_position = position;
       gtk_widget_show (popup);
