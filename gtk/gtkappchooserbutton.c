@@ -273,16 +273,14 @@ other_application_item_activated_cb (GtkAppChooserButton *self)
 {
   GtkAppChooserButtonPrivate *priv = gtk_app_chooser_button_get_instance_private (self);
   GtkWidget *dialog, *widget;
-  GtkWindow *toplevel;
+  GtkRoot *root;
 
-  toplevel = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (self)));
-  dialog = gtk_app_chooser_dialog_new_for_content_type (toplevel,
+  root = gtk_widget_get_root (GTK_WIDGET (self));
+  dialog = gtk_app_chooser_dialog_new_for_content_type (GTK_WINDOW (root),
                                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                                         priv->content_type);
-
-  gtk_window_set_modal (GTK_WINDOW (dialog), gtk_window_get_modal (toplevel));
-  gtk_app_chooser_dialog_set_heading (GTK_APP_CHOOSER_DIALOG (dialog),
-                                      priv->heading);
+  gtk_window_set_modal (GTK_WINDOW (dialog), gtk_window_get_modal (GTK_WINDOW (root)));
+  gtk_app_chooser_dialog_set_heading (GTK_APP_CHOOSER_DIALOG (dialog), priv->heading);
 
   widget = gtk_app_chooser_dialog_get_widget (GTK_APP_CHOOSER_DIALOG (dialog));
   g_object_set (widget,
