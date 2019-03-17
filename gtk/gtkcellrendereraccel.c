@@ -475,7 +475,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   if (!is_editable)
     return NULL;
 
-  surface = gtk_widget_get_surface (gtk_widget_get_toplevel (widget));
+  surface = gtk_widget_get_surface (widget);
 
   if (event)
     seat = gdk_event_get_seat (event);

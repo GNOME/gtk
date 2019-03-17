@@ -2443,7 +2443,7 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
 
   gdk_event_get_coords (event, &x, &y);
   if (!gtk_widget_compute_point (event_widget,
-                                 gtk_widget_get_toplevel (event_widget),
+                                 GTK_WIDGET (gtk_widget_get_root (event_widget)),
                                  &GRAPHENE_POINT_INIT (x, y),
                                  &p))
       return;
@@ -2924,7 +2924,7 @@ gtk_widget_unparent (GtkWidget *widget)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidget *old_parent;
   GtkWidget *old_prev_sibling;
-  GtkWidget *toplevel;
+  GtkRoot *root;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -2937,9 +2937,9 @@ gtk_widget_unparent (GtkWidget *widget)
 
   g_object_freeze_notify (G_OBJECT (widget));
 
-  toplevel = _gtk_widget_get_toplevel (widget);
-  if (_gtk_widget_is_toplevel (toplevel))
-    _gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
+  root = _gtk_widget_get_root (widget);
+  if (GTK_IS_WINDOW (root))
+    _gtk_window_unset_focus_and_default (GTK_WINDOW (root), widget);
 
   if (gtk_widget_get_focus_child (priv->parent) == widget)
     gtk_widget_set_focus_child (priv->parent, NULL);
@@ -2962,7 +2962,7 @@ gtk_widget_unparent (GtkWidget *widget)
   if (priv->root)
     gtk_widget_unroot (widget);
 
-  toplevel = NULL;
+  root = NULL;
 
   /* Removing a widget from a container restores the child visible
    * flag to the default state, so it doesn't affect the child
@@ -3179,14 +3179,15 @@ gtk_widget_hide (GtkWidget *widget)
 
   if (_gtk_widget_get_visible (widget))
     {
-      GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
       GtkWidget *parent;
+      GtkRoot *root;
 
       g_object_ref (widget);
       gtk_widget_push_verify_invariants (widget);
 
-      if (toplevel != widget && _gtk_widget_is_toplevel (toplevel))
-        _gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
+      root = _gtk_widget_get_root (widget);
+      if (GTK_WIDGET (root) != widget && GTK_IS_WINDOW (root))
+        _gtk_window_unset_focus_and_default (GTK_WINDOW (root), widget);
 
       /* a parent may now be expand=FALSE since we're hidden. */
       if (priv->need_compute_expand ||
@@ -3229,14 +3230,12 @@ gtk_widget_real_hide (GtkWidget *widget)
 static void
 update_cursor_on_state_change (GtkWidget *widget)
 {
-  GtkWidget *toplevel;
+  GtkRoot *root;
 
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (!GTK_IS_WINDOW (toplevel))
-    return;
-
-  gtk_window_update_pointer_focus_on_state_change (GTK_WINDOW (toplevel),
-                                                   widget);
+  root = _gtk_widget_get_root (widget);
+  if (root)
+    gtk_window_update_pointer_focus_on_state_change (GTK_WINDOW (root),
+                                                     widget);
 }
 
 /**
@@ -4175,14 +4174,14 @@ gtk_widget_get_frame_clock (GtkWidget *widget)
 
   if (priv->realized)
     {
-      /* We use gtk_widget_get_toplevel() here to make it explicit that
+      /* We use gtk_widget_get_root() here to make it explicit that
        * the frame clock is a property of the toplevel that a widget
        * is anchored to; gdk_surface_get_toplevel() will go up the
        * hierarchy anyways, but should squash any funny business with
        * reparenting windows and widgets.
        */
-      GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
-      GdkSurface *surface = _gtk_widget_get_surface (toplevel);
+      GtkRoot *root = _gtk_widget_get_root (widget);
+      GdkSurface *surface = _gtk_widget_get_surface (GTK_WIDGET (root));
       g_assert (surface != NULL);
 
       return gdk_surface_get_frame_clock (surface);
@@ -4628,7 +4627,7 @@ gtk_widget_translate_coordinates (GtkWidget  *src_widget,
  *
  * Translates the given @point in @widget's coordinates to coordinates
  * relative to @target’s coodinate system. In order to perform this
- * operation, both widgets must share a common ancestor.
+ * operation, both widgets must share a common root.
  *
  * Returns: %TRUE if the point could be determined, %FALSE on failure.
  *   In this case, 0 is stored in @out_point.
@@ -5575,10 +5574,11 @@ static void
 gtk_widget_real_move_focus (GtkWidget         *widget,
                             GtkDirectionType   direction)
 {
-  GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
+  GtkRoot *root;
 
-  if (widget != toplevel && GTK_IS_WINDOW (toplevel))
-    g_signal_emit (toplevel, widget_signals[MOVE_FOCUS], 0, direction);
+  root = _gtk_widget_get_root (widget);
+  if (widget != GTK_WIDGET (root))
+    g_signal_emit (root, widget_signals[MOVE_FOCUS], 0, direction);
 }
 
 static gboolean
@@ -5701,12 +5701,10 @@ gtk_widget_has_visible_focus (GtkWidget *widget)
 
   if (priv->has_focus)
     {
-      GtkWidget *toplevel;
+      GtkRoot *root = _gtk_widget_get_root (widget);
 
-      toplevel = _gtk_widget_get_toplevel (widget);
-
-      if (GTK_IS_WINDOW (toplevel))
-        draw_focus = gtk_window_get_focus_visible (GTK_WINDOW (toplevel));
+      if (GTK_IS_WINDOW (root))
+        draw_focus = gtk_window_get_focus_visible (GTK_WINDOW (root));
       else
         draw_focus = TRUE;
     }
@@ -5922,7 +5920,8 @@ gtk_widget_device_is_shadowed (GtkWidget *widget,
                                GdkDevice *device)
 {
   GtkWindowGroup *group;
-  GtkWidget *grab_widget, *toplevel;
+  GtkWidget *grab_widget;
+  GtkRoot *root;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
@@ -5930,10 +5929,10 @@ gtk_widget_device_is_shadowed (GtkWidget *widget,
   if (!_gtk_widget_get_realized (widget))
     return TRUE;
 
-  toplevel = _gtk_widget_get_toplevel (widget);
+  root = _gtk_widget_get_root (widget);
 
-  if (GTK_IS_WINDOW (toplevel))
-    group = gtk_window_get_group (GTK_WINDOW (toplevel));
+  if (GTK_IS_WINDOW (root))
+    group = gtk_window_get_group (GTK_WINDOW (root));
   else
     group = gtk_window_get_group (NULL);
 
@@ -6297,9 +6296,11 @@ gtk_widget_get_has_surface (GtkWidget *widget)
 gboolean
 gtk_widget_is_toplevel (GtkWidget *widget)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return GTK_IS_ROOT (widget);
+  return priv->parent == NULL && GTK_IS_ROOT (widget);
 }
 
 /**
@@ -6477,12 +6478,6 @@ gtk_widget_reposition_after (GtkWidget *widget,
                  gtk_widget_get_name (parent), (void *)parent,
                  gtk_widget_get_name (widget), (void *)widget,
                  gtk_widget_get_name (priv->parent), (void *)priv->parent);
-      return;
-    }
-
-  if (_gtk_widget_is_toplevel (widget))
-    {
-      g_warning ("Can't set a parent on a toplevel widget");
       return;
     }
 
@@ -7256,13 +7251,13 @@ gtk_widget_set_child_visible (GtkWidget *widget,
     priv->child_visible = TRUE;
   else
     {
-      GtkWidget *toplevel;
+      GtkRoot *root;
 
       priv->child_visible = FALSE;
 
-      toplevel = _gtk_widget_get_toplevel (widget);
-      if (toplevel != widget && _gtk_widget_is_toplevel (toplevel))
-	_gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
+      root = _gtk_widget_get_root (widget);
+      if (GTK_WIDGET (root) != widget && GTK_IS_WINDOW (root))
+	_gtk_window_unset_focus_and_default (GTK_WINDOW (root), widget);
     }
 
   if (priv->parent && _gtk_widget_get_realized (priv->parent))
@@ -7334,7 +7329,7 @@ _gtk_widget_scale_changed (GtkWidget *widget)
 gint
 gtk_widget_get_scale_factor (GtkWidget *widget)
 {
-  GtkWidget *toplevel;
+  GtkRoot *root;
   GdkDisplay *display;
   GdkMonitor *monitor;
 
@@ -7343,9 +7338,9 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
   if (_gtk_widget_get_realized (widget))
     return gdk_surface_get_scale_factor (_gtk_widget_get_surface (widget));
 
-  toplevel = _gtk_widget_get_toplevel (widget);
-  if (toplevel && toplevel != widget)
-    return gtk_widget_get_scale_factor (toplevel);
+  root = _gtk_widget_get_root (widget);
+  if (root && GTK_WIDGET (root) != widget)
+    return gtk_widget_get_scale_factor (GTK_WIDGET (root));
 
   /* else fall back to something that is more likely to be right than
    * just returning 1:
@@ -10138,7 +10133,8 @@ _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
   if (g_slist_length (accel_groups) == 0)
     {
       accel_group = gtk_accel_group_new ();
-      gtk_window_add_accel_group (GTK_WINDOW (toplevel), accel_group);
+      if (GTK_IS_WINDOW (toplevel))
+        gtk_window_add_accel_group (GTK_WINDOW (toplevel), accel_group);
     }
   else
     {
@@ -10234,14 +10230,14 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
   if (strcmp (tagname, "accelerator") == 0)
     {
       AccelGroupParserData *accel_data;
-      GtkWidget *toplevel;
+      GtkRoot *root;
 
       accel_data = (AccelGroupParserData*)user_data;
       g_assert (accel_data->object);
 
-      toplevel = _gtk_widget_get_toplevel (GTK_WIDGET (accel_data->object));
+      root = _gtk_widget_get_root (GTK_WIDGET (accel_data->object));
 
-      _gtk_widget_buildable_finish_accelerator (GTK_WIDGET (buildable), toplevel, user_data);
+      _gtk_widget_buildable_finish_accelerator (GTK_WIDGET (buildable), GTK_WIDGET (root), user_data);
     }
   else if (strcmp (tagname, "accessibility") == 0)
     {
@@ -11166,6 +11162,9 @@ gtk_widget_compute_transform (GtkWidget         *widget,
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (target), FALSE);
   g_return_val_if_fail (out_transform != NULL, FALSE);
+
+  if (widget->priv->root != target->priv->root)
+    return FALSE;
 
   /* optimization for common case: parent wants coordinates of a direct child */
   if (target == widget->priv->parent)
@@ -13455,7 +13454,7 @@ gtk_widget_set_cursor (GtkWidget *widget,
                        GdkCursor *cursor)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkWidget *toplevel;
+  GtkRoot *root;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (cursor == NULL || GDK_IS_CURSOR (cursor));
@@ -13463,9 +13462,9 @@ gtk_widget_set_cursor (GtkWidget *widget,
   if (!g_set_object (&priv->cursor, cursor))
     return;
 
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (GTK_IS_WINDOW (toplevel))
-    gtk_window_maybe_update_cursor (GTK_WINDOW (toplevel), widget, NULL);
+  root = _gtk_widget_get_root (widget);
+  if (root)
+    gtk_root_maybe_update_cursor (root, widget, NULL);
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CURSOR]);
 }
