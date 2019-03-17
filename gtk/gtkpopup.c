@@ -30,6 +30,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkmnemonichash.h"
 #include "gtkintl.h"
+#include "gtkmain.h"
 #include "gdk/gdkeventsprivate.h"
 #include "gtkpointerfocusprivate.h"
 
@@ -114,13 +115,16 @@ gtk_popup_move_resize (GtkPopup *popup)
   rect.height = gtk_widget_get_height (priv->relative_to);
   gtk_widget_translate_coordinates (priv->relative_to, gtk_widget_get_toplevel (priv->relative_to),
                                     rect.x, rect.y, &rect.x, &rect.y);
-
+#if 0
   gdk_surface_move_to_rect (priv->surface,
                             &rect,
                             GDK_GRAVITY_SOUTH,
                             GDK_GRAVITY_NORTH,
                             GDK_ANCHOR_FLIP_Y,
                             0, 10);
+#else
+  gdk_surface_move_resize (priv->surface, rect.x, rect.y, req.width, req.height);
+#endif
 }
 
 static void
@@ -237,6 +241,7 @@ gtk_popup_realize (GtkWidget *widget)
                             0, 10);
 #else
   priv->surface = gdk_surface_new_toplevel (priv->display, 20, 20);
+  gdk_surface_set_transient_for (priv->surface, gtk_widget_get_surface (priv->relative_to));
 #endif
 
   gtk_widget_set_surface (widget, priv->surface);
@@ -280,12 +285,16 @@ gtk_popup_move_focus (GtkWidget         *widget,
 static void
 gtk_popup_show (GtkWidget *widget)
 {
+  GtkPopup *popup = GTK_POPUP (widget);
+
   _gtk_widget_set_visible_flag (widget, TRUE);
   gtk_css_node_validate (gtk_widget_get_css_node (widget));
   gtk_widget_realize (widget);
+  gtk_popup_root_check_resize (GTK_ROOT (widget));
   gtk_widget_map (widget);
 
-  gtk_popup_move_focus (widget, GTK_DIR_TAB_FORWARD);
+  if (!gtk_widget_get_focus_child (widget))
+    gtk_widget_child_focus (widget, GTK_DIR_TAB_FORWARD);
 }
 
 static void
@@ -309,6 +318,7 @@ gtk_popup_map (GtkWidget *widget)
     gtk_widget_map (child);
 
   gdk_surface_show (priv->surface);
+  gdk_surface_focus (priv->surface, gtk_get_current_event_time ());
 }
 
 static void
@@ -565,6 +575,7 @@ gtk_popup_set_relative_to (GtkPopup  *popup,
   priv->relative_to = relative_to;
   g_signal_connect (priv->relative_to, "size-allocate", G_CALLBACK (size_changed), popup);
   priv->display = gtk_widget_get_display (relative_to);
+  gtk_widget_set_parent (GTK_WIDGET (popup), relative_to);
 }
 
 static void
@@ -841,12 +852,10 @@ gtk_popup_root_update_pointer_focus_on_state_change (GtkRoot   *root,
 
       gtk_pointer_focus_ref (focus);
 
-#if 0
       if (focus->grab_widget &&
           (focus->grab_widget == widget ||
            gtk_widget_is_ancestor (focus->grab_widget, widget)))
         gtk_pointer_focus_set_implicit_grab (focus, NULL);
-#endif
 
       if (GTK_WIDGET (focus->toplevel) == widget)
         {
@@ -965,8 +974,8 @@ gtk_popup_root_maybe_update_cursor (GtkRoot   *root,
   for (l = priv->foci; l; l = l->next)
     {
       GtkPointerFocus *focus = l->data;
-      GtkWidget *grab_widget, *target;
-      //GtkWindowGroup *group;
+      GtkWidget *grab_widget = NULL;
+      GtkWidget  *target;
 
       if (focus->sequence)
         continue;
@@ -974,13 +983,12 @@ gtk_popup_root_maybe_update_cursor (GtkRoot   *root,
         continue;
 
 #if 0
-      group = gtk_window_get_group (window);
-      grab_widget = gtk_window_group_get_current_device_grab (group,
-                                                              focus->device);
-      if (!grab_widget)
-        grab_widget = gtk_window_group_get_current_grab (group);
-#else
-      grab_widget = NULL;
+        {
+          GtkWindowGroup *group = gtk_window_get_group (root);
+          grab_widget = gtk_window_group_get_current_device_grab (group, focus->device);
+          if (!grab_widget)
+            grab_widget = gtk_window_group_get_current_grab (group);
+        }
 #endif
 
       if (!grab_widget)
