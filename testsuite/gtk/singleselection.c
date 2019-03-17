@@ -279,6 +279,12 @@ test_create (void)
   GtkSelectionModel *selection;
   GListStore *store;
   
+  if (glib_check_version (2, 59, 0) != NULL)
+    {
+      g_test_skip ("g_list_store_get_item() has overflow issues before GLIB 2.59.0");
+      return;
+    }
+
   store = new_store (1, 5, 2);
   selection = new_model (store, FALSE, FALSE);
   g_assert_false (gtk_single_selection_get_autoselect (GTK_SINGLE_SELECTION (selection)));
@@ -298,13 +304,18 @@ test_create (void)
   g_object_unref (selection);
 }
 
-#if GLIB_CHECK_VERSION (2, 58, 0) /* g_list_store_splice() is broken before 2.58 */
 static void
 test_changes (void)
 {
   GtkSelectionModel *selection;
   GListStore *store;
   
+  if (glib_check_version (2, 58, 0) != NULL)
+    {
+      g_test_skip ("g_list_store_splice() is broken before GLIB 2.58.0");
+      return;
+    }
+
   store = new_store (1, 5, 1);
   selection = new_model (store, FALSE, FALSE);
   assert_model (selection, "1 2 3 4 5");
@@ -333,16 +344,20 @@ test_changes (void)
   g_object_unref (selection);
   g_object_unref (store);
 }
-#endif
 
-#if GLIB_CHECK_VERSION (2, 59, 0) /* g_list_store_get_item() has overflow issues before */
 static void
 test_selection (void)
 {
   GtkSelectionModel *selection;
   GListStore *store;
   gboolean ret;
-  
+
+  if (glib_check_version (2, 59, 0) != NULL)
+    {
+      g_test_skip ("g_list_store_get_item() has overflow issues before GLIB 2.59.0");
+      return;
+    }
+
   store = new_store (1, 5, 1);
   selection = new_model (store, TRUE, FALSE);
   assert_selection (selection, "1");
@@ -386,15 +401,19 @@ test_selection (void)
   g_object_unref (store);
   g_object_unref (selection);
 }
-#endif
 
-#if GLIB_CHECK_VERSION (2, 59, 0) /* g_list_store_get_item() has overflow issues before */
 static void
 test_autoselect (void)
 {
   GtkSelectionModel *selection;
   GListStore *store;
   
+  if (glib_check_version (2, 59, 0) != NULL)
+    {
+      g_test_skip ("g_list_store_get_item() has overflow issues before GLIB 2.59.0");
+      return;
+    }
+
   store = new_empty_store ();
   selection = new_model (store, TRUE, FALSE);
   assert_model (selection, "");
@@ -460,6 +479,12 @@ test_autoselect_toggle (void)
   GtkSelectionModel *selection;
   GListStore *store;
   
+  if (glib_check_version (2, 59, 0) != NULL)
+    {
+      g_test_skip ("g_list_store_get_item() has overflow issues before GLIB 2.59.0");
+      return;
+    }
+
   store = new_store (1, 1, 1);
   selection = new_model (store, TRUE, TRUE);
   assert_model (selection, "1");
@@ -488,9 +513,7 @@ test_autoselect_toggle (void)
   g_object_unref (store);
   g_object_unref (selection);
 }
-#endif
 
-#if GLIB_CHECK_VERSION (2, 59, 0) /* g_list_store_get_item() has overflow issues before */
 static void
 test_can_unselect (void)
 {
@@ -498,6 +521,12 @@ test_can_unselect (void)
   GListStore *store;
   gboolean ret;
   
+  if (glib_check_version (2, 59, 0) != NULL)
+    {
+      g_test_skip ("g_list_store_get_item() has overflow issues before GLIB 2.59.0");
+      return;
+    }
+
   store = new_store (1, 5, 1);
   selection = new_model (store, TRUE, FALSE);
   assert_selection (selection, "1");
@@ -521,9 +550,7 @@ test_can_unselect (void)
   g_object_unref (store);
   g_object_unref (selection);
 }
-#endif
 
-#if GLIB_CHECK_VERSION (2, 59, 0) /* g_list_store_get_item() has overflow issues before */
 static int
 sort_inverse (gconstpointer a, gconstpointer b, gpointer data)
 {
@@ -539,6 +566,12 @@ test_persistence (void)
   GtkSelectionModel *selection;
   GListStore *store;
   
+  if (glib_check_version (2, 59, 0) != NULL)
+    {
+      g_test_skip ("g_list_store_get_item() has overflow issues before GLIB 2.59.0");
+      return;
+    }
+
   store = new_store (1, 5, 1);
   selection = new_model (store, TRUE, FALSE);
   assert_selection (selection, "1");
@@ -558,7 +591,6 @@ test_persistence (void)
   g_object_unref (store);
   g_object_unref (selection);
 }
-#endif
 
 static void
 check_query_range (GtkSelectionModel *selection)
@@ -621,7 +653,6 @@ main (int argc, char *argv[])
   changes_quark = g_quark_from_static_string ("What did I see? Can I believe what I saw?");
   selection_quark = g_quark_from_static_string ("Mana mana, badibidibi");
 
-#if GLIB_CHECK_VERSION (2, 59, 0) /* g_list_store_get_item() has overflow issues before */
   g_test_add_func ("/singleselection/create", test_create);
   g_test_add_func ("/singleselection/autoselect", test_autoselect);
   g_test_add_func ("/singleselection/autoselect-toggle", test_autoselect_toggle);
@@ -629,10 +660,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/singleselection/can-unselect", test_can_unselect);
   g_test_add_func ("/singleselection/persistence", test_persistence);
   g_test_add_func ("/singleselection/query-range", test_query_range);
-#if GLIB_CHECK_VERSION (2, 58, 0) /* g_list_store_splice() is broken before 2.58 */
   g_test_add_func ("/singleselection/changes", test_changes);
-#endif
-#endif
 
   return g_test_run ();
 }
