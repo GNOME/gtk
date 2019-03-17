@@ -35,7 +35,6 @@
 #include "gtkgesturesingle.h"
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
-#include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientableprivate.h"
 #include "gtkprivate.h"
@@ -768,7 +767,6 @@ gesture_drag_begin_cb (GtkGestureDrag *gesture,
         priv->drag_pos = start_y - handle_area.origin.y;
 
       priv->panning = TRUE;
-      gtk_grab_add (GTK_WIDGET (paned));
 
       gtk_gesture_set_state (GTK_GESTURE (gesture),
                              GTK_EVENT_SEQUENCE_CLAIMED);
@@ -804,7 +802,6 @@ gesture_drag_end_cb (GtkGestureDrag *gesture,
   if (!priv->panning)
     gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
 
-  gtk_grab_remove (GTK_WIDGET (paned));
   priv->panning = FALSE;
 }
 
