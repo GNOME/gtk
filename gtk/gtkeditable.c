@@ -935,7 +935,10 @@ gtk_editable_delegate_set_property (GObject      *object,
   GType type = G_TYPE_FROM_INSTANCE (object);
   guint first_prop;
 
-  first_prop = GPOINTER_TO_UINT (g_type_get_qdata (type, quark_editable_data));
+  do {
+    first_prop = GPOINTER_TO_UINT (g_type_get_qdata (type, quark_editable_data));
+    type = g_type_parent (type);
+  } while (first_prop == 0 && type != 0);
 
   if (prop_id < first_prop)
     return FALSE;
@@ -994,7 +997,10 @@ gtk_editable_delegate_get_property (GObject    *object,
   GType type = G_TYPE_FROM_INSTANCE (object);
   guint first_prop;
 
-  first_prop = GPOINTER_TO_UINT (g_type_get_qdata (type, quark_editable_data));
+  do {
+    first_prop = GPOINTER_TO_UINT (g_type_get_qdata (type, quark_editable_data));
+    type = g_type_parent (type);
+  } while (first_prop == 0 && type != 0);
 
   if (prop_id < first_prop)
     return FALSE;
