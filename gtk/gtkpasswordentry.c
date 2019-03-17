@@ -230,7 +230,12 @@ gtk_password_entry_set_property (GObject      *object,
       break;
 
     case PROP_ACTIVATES_DEFAULT:
-      gtk_text_set_activates_default (GTK_TEXT (priv->entry), g_value_get_boolean (value));
+      if (gtk_text_get_activates_default (GTK_TEXT (priv->entry)) != g_value_get_boolean (value))
+        {
+          gtk_text_set_activates_default (GTK_TEXT (priv->entry), g_value_get_boolean (value));
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
 
     case PROP_SHOW_PEEK_ICON:
       gtk_password_entry_set_show_peek_icon (entry, g_value_get_boolean (value));
@@ -359,7 +364,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
                            P_("Placeholder text"),
                            P_("Show text in the entry when it’s empty and unfocused"),
                            NULL,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE);
 
   props[PROP_ACTIVATES_DEFAULT] =
       g_param_spec_boolean ("activates-default",
