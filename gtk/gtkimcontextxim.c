@@ -1580,40 +1580,6 @@ on_status_toplevel_notify_display (GtkWindow    *toplevel,
 			    gtk_widget_get_display (GTK_WIDGET (toplevel)));
 }
 
-/* Called when the toplevel window is moved; updates the position of
- * the status window to follow it.
- */
-static gboolean
-on_status_toplevel_configure (GtkWidget     *toplevel,
-			      GdkEvent      *event,
-			      StatusWindow  *status_window)
-{
-  if (gdk_event_get_event_type (event) == GDK_CONFIGURE)
-    {
-      GdkRectangle rect;
-      GtkRequisition requisition;
-      gint y;
-      gint height;
-
-      if (status_window->window)
-        {
-          height = DisplayHeight(GDK_SURFACE_XDISPLAY (gtk_widget_get_surface (toplevel)), 0);
-
-          gdk_surface_get_frame_extents (gtk_widget_get_surface (toplevel), &rect);
-          gtk_widget_get_preferred_size ( (status_window->window), &requisition, NULL);
-
-          if (rect.y + rect.height + requisition.height < height)
-	    y = rect.y + rect.height;
-          else
-	    y = height - requisition.height;
-
-          gtk_window_move (GTK_WINDOW (status_window->window), rect.x, y);
-        }
-    }
-
-  return GDK_EVENT_PROPAGATE;
-}
-
 /* Frees a status window and removes its link from the status_windows list
  */
 static void
@@ -1629,9 +1595,6 @@ status_window_free (StatusWindow *status_window)
 					status_window);
   g_signal_handlers_disconnect_by_func (status_window->toplevel,
 					G_CALLBACK (on_status_toplevel_notify_display),
-					status_window);
-  g_signal_handlers_disconnect_by_func (status_window->toplevel,
-					G_CALLBACK (on_status_toplevel_configure),
 					status_window);
 
   if (status_window->window)
@@ -1660,9 +1623,6 @@ status_window_get (GtkWidget *toplevel)
 
   g_signal_connect (toplevel, "destroy",
 		    G_CALLBACK (on_status_toplevel_destroy),
-		    status_window);
-  g_signal_connect (toplevel, "event",
-		    G_CALLBACK (on_status_toplevel_configure),
 		    status_window);
   g_signal_connect (toplevel, "notify::display",
 		    G_CALLBACK (on_status_toplevel_notify_display),
@@ -1695,8 +1655,6 @@ status_window_make_window (StatusWindow *status_window)
 
   gtk_window_set_display (GTK_WINDOW (status_window->window),
 			  gtk_widget_get_display (status_window->toplevel));
-
-  on_status_toplevel_configure (status_window->toplevel, NULL, status_window);
 }
 
 /* Updates the text in the status window, hiding or
