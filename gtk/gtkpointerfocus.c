@@ -31,7 +31,7 @@ target_destroyed (gpointer  data,
 }
 
 GtkPointerFocus *
-gtk_pointer_focus_new (GtkWindow        *toplevel,
+gtk_pointer_focus_new (GtkRoot          *toplevel,
                        GtkWidget        *widget,
                        GdkDevice        *device,
                        GdkEventSequence *sequence,
