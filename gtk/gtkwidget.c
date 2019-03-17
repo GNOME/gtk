@@ -13183,7 +13183,7 @@ gtk_widget_set_focus_child (GtkWidget *widget,
  *
  * Returns the current focus child of @widget.
  *
- * Returns: (nullable): (transfer none): The current focus child of @widget,
+ * Returns: (nullable) (transfer none): The current focus child of @widget,
  *   or %NULL in case the focus child is unset.
  */
 GtkWidget *
