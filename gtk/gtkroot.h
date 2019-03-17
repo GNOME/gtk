@@ -51,8 +51,11 @@ struct _GtkRootInterface
   void                  (* get_surface_transform)       (GtkRoot                *root,
                                                          int                    *x,
                                                          int                    *y);
+
+  /* size allocation */
   void                  (* check_resize)                (GtkRoot                *root);
 
+  /* mnemonics */
   void                  (* add_mnemonic)                (GtkRoot                *root,
                                                          guint                   keyval,
                                                          GtkWidget              *target);
@@ -61,6 +64,32 @@ struct _GtkRootInterface
                                                          GtkWidget              *target);
   gboolean              (* activate_key)                (GtkRoot                *root,
                                                          GdkEventKey            *event);
+
+  /* pointer focus */
+  void                  (* update_pointer_focus)        (GtkRoot                *root,
+                                                         GdkDevice              *device,
+                                                         GdkEventSequence       *sequence,
+                                                         GtkWidget              *target,
+                                                         double                  x,
+                                                         double                  y);
+  void                  (* update_pointer_focus_on_state_change) (GtkRoot       *root,
+                                                                  GtkWidget     *widget);
+  GtkWidget *           (* lookup_pointer_focus)        (GtkRoot                *root,
+                                                         GdkDevice              *device,
+                                                         GdkEventSequence       *sequence);
+  GtkWidget *           (* lookup_pointer_focus_implicit_grab) (GtkRoot          *root,
+                                                                GdkDevice        *device,
+                                                                GdkEventSequence *sequence);
+  GtkWidget *           (* lookup_effective_pointer_focus) (GtkRoot          *root,
+                                                            GdkDevice        *device,
+                                                            GdkEventSequence *sequence);
+  void                  (* set_pointer_focus_grab)      (GtkRoot                *root,
+                                                         GdkDevice        *device,
+                                                         GdkEventSequence *sequence,
+                                                         GtkWidget        *target);
+  void                  (* maybe_update_cursor)         (GtkRoot          *root,
+                                                         GtkWidget        *widget,
+                                                         GdkDevice        *device); 
 };
 
 GDK_AVAILABLE_IN_ALL
