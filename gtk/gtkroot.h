@@ -51,6 +51,7 @@ struct _GtkRootInterface
   void                  (* get_surface_transform)       (GtkRoot                *root,
                                                          int                    *x,
                                                          int                    *y);
+  void                  (* check_resize)                (GtkRoot                *root);
 };
 
 GDK_AVAILABLE_IN_ALL
