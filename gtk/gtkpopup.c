@@ -31,6 +31,7 @@
 #include "gtkmnemonichash.h"
 #include "gtkintl.h"
 #include "gdk/gdkeventsprivate.h"
+#include "gtkpointerfocusprivate.h"
 
 static GListStore *popup_list = NULL;
 
@@ -44,6 +45,7 @@ typedef struct {
   gboolean active;
   GtkWidget *default_widget;
   GtkMnemonicHash *mnemonic_hash;
+  GList *foci;
 } GtkPopupPrivate;
 
 enum {
@@ -138,27 +140,6 @@ gtk_popup_root_check_resize (GtkRoot *root)
                            gdk_surface_get_height (priv->surface),
                            -1, NULL);
     }
-}
-
-static void gtk_popup_root_add_mnemonic    (GtkRoot   *root,
-                                            guint      keyval,
-                                            GtkWidget *target);
-static void gtk_popup_root_remove_mnemonic (GtkRoot   *root,
-                                            guint      keyval,
-                                            GtkWidget *target);
-static gboolean gtk_popup_root_activate_key (GtkRoot     *root,
-                                             GdkEventKey *event);
-
-static void
-gtk_popup_root_interface_init (GtkRootInterface *iface)
-{
-  iface->get_display = gtk_popup_root_get_display;
-  iface->get_renderer = gtk_popup_root_get_renderer;
-  iface->get_surface_transform = gtk_popup_root_get_surface_transform;
-  iface->check_resize = gtk_popup_root_check_resize;
-  iface->add_mnemonic = gtk_popup_root_add_mnemonic;
-  iface->remove_mnemonic = gtk_popup_root_remove_mnemonic;
-  iface->activate_key = gtk_popup_root_activate_key;
 }
 
 static void gtk_popup_set_is_active (GtkPopup *popup, gboolean active);
@@ -762,3 +743,287 @@ gtk_popup_root_activate_key (GtkRoot     *root,
 
   return FALSE;
 }
+
+static GtkPointerFocus *
+gtk_popup_lookup_pointer_focus (GtkPopup         *popup,
+                                GdkDevice        *device,
+                                GdkEventSequence *sequence)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+  GList *l;
+
+  for (l = priv->foci; l; l = l->next)
+    {
+      GtkPointerFocus *focus = l->data;
+
+      if (focus->device == device && focus->sequence == sequence)
+        return focus;
+    }
+
+  return NULL;
+}
+
+static void
+gtk_popup_add_pointer_focus (GtkPopup        *popup,
+                             GtkPointerFocus *focus)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+
+  priv->foci = g_list_prepend (priv->foci, gtk_pointer_focus_ref (focus));
+}
+
+static void
+gtk_popup_remove_pointer_focus (GtkPopup        *popup,
+                                GtkPointerFocus *focus)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+  GList *pos;
+
+  pos = g_list_find (priv->foci, focus);
+  if (!pos)
+    return;
+
+  priv->foci = g_list_remove (priv->foci, focus);
+  gtk_pointer_focus_unref (focus);
+}
+
+static void
+gtk_popup_root_update_pointer_focus (GtkRoot          *root,
+                                     GdkDevice        *device,
+                                     GdkEventSequence *sequence,
+                                     GtkWidget        *target,
+                                     double            x,
+                                     double            y)
+{
+  GtkPopup *popup = GTK_POPUP (root);
+  GtkPointerFocus *focus;
+
+  focus = gtk_popup_lookup_pointer_focus (popup, device, sequence);
+  if (focus)
+    {
+      gtk_pointer_focus_ref (focus);
+
+      if (target)
+        {
+          gtk_pointer_focus_set_target (focus, target);
+          gtk_pointer_focus_set_coordinates (focus, x, y);
+        }
+      else
+        {
+          gtk_popup_remove_pointer_focus (popup, focus);
+        }
+
+      gtk_pointer_focus_unref (focus);
+    }
+  else if (target)
+    {
+      focus = gtk_pointer_focus_new (root, target, device, sequence, x, y);
+      gtk_popup_add_pointer_focus (popup, focus);
+      gtk_pointer_focus_unref (focus);
+    }
+}
+
+static void
+gtk_popup_root_update_pointer_focus_on_state_change (GtkRoot   *root,
+                                                     GtkWidget *widget)
+{
+  GtkPopup *popup = GTK_POPUP (root);
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+  GList *l = priv->foci, *cur;
+
+  while (l)
+    {
+      GtkPointerFocus *focus = l->data;
+
+      cur = l;
+      focus = cur->data;
+      l = cur->next;
+
+      gtk_pointer_focus_ref (focus);
+
+#if 0
+      if (focus->grab_widget &&
+          (focus->grab_widget == widget ||
+           gtk_widget_is_ancestor (focus->grab_widget, widget)))
+        gtk_pointer_focus_set_implicit_grab (focus, NULL);
+#endif
+
+      if (GTK_WIDGET (focus->toplevel) == widget)
+        {
+          /* Unmapping the toplevel, remove pointer focus */
+          priv->foci = g_list_remove_link (priv->foci, cur);
+          gtk_pointer_focus_unref (focus);
+        }
+      else if (focus->target == widget ||
+               gtk_widget_is_ancestor (focus->target, widget))
+        {
+          gtk_pointer_focus_repick_target (focus);
+        }
+
+      gtk_pointer_focus_unref (focus);
+    }
+}
+
+static GtkWidget *
+gtk_popup_root_lookup_pointer_focus (GtkRoot          *root,
+                                     GdkDevice        *device,
+                                     GdkEventSequence *sequence)
+{
+  GtkPopup *popup = GTK_POPUP (root);
+  GtkPointerFocus *focus;
+
+  focus = gtk_popup_lookup_pointer_focus (popup, device, sequence);
+  return focus ? gtk_pointer_focus_get_target (focus) : NULL;
+}
+
+static GtkWidget *
+gtk_popup_root_lookup_effective_pointer_focus (GtkRoot          *root,
+                                               GdkDevice        *device,
+                                               GdkEventSequence *sequence)
+{
+  GtkPopup *popup = GTK_POPUP (root);
+  GtkPointerFocus *focus;
+
+  focus = gtk_popup_lookup_pointer_focus (popup, device, sequence);
+  return focus ? gtk_pointer_focus_get_effective_target (focus) : NULL;
+}
+
+static GtkWidget *
+gtk_popup_root_lookup_pointer_focus_implicit_grab (GtkRoot          *root,
+                                                   GdkDevice        *device,
+                                                    GdkEventSequence *sequence)
+{
+  GtkPopup *popup = GTK_POPUP (root);
+  GtkPointerFocus *focus;
+
+  focus = gtk_popup_lookup_pointer_focus (popup, device, sequence);
+  return focus ? gtk_pointer_focus_get_implicit_grab (focus) : NULL;
+}
+
+static void
+gtk_popup_root_set_pointer_focus_grab (GtkRoot          *root,
+                                       GdkDevice        *device,
+                                       GdkEventSequence *sequence,
+                                       GtkWidget        *grab_widget)
+{
+  GtkPopup *popup = GTK_POPUP (root);
+  GtkPointerFocus *focus;
+
+  focus = gtk_popup_lookup_pointer_focus (popup, device, sequence);
+  if (!focus && !grab_widget)
+    return;
+  g_assert (focus != NULL);
+  gtk_pointer_focus_set_implicit_grab (focus, grab_widget);
+}
+
+static void
+update_cursor (GtkRoot   *root,
+               GdkDevice *device,
+               GtkWidget *grab_widget,
+               GtkWidget *target)
+{
+  GdkCursor *cursor = NULL;
+
+  if (grab_widget && !gtk_widget_is_ancestor (target, grab_widget))
+    {
+      /* Outside the grab widget, cursor stays to whatever the grab
+       * widget says.
+       */
+      cursor = gtk_widget_get_cursor (grab_widget);
+    }
+  else
+    {
+      /* Inside the grab widget or in absence of grabs, allow walking
+       * up the hierarchy to find out the cursor.
+       */
+      while (target)
+        {
+          if (grab_widget && target == grab_widget)
+            break;
+
+          cursor = gtk_widget_get_cursor (target);
+
+          if (cursor)
+            break;
+
+          target = _gtk_widget_get_parent (target);
+        }
+    }
+
+  gdk_surface_set_device_cursor (gtk_widget_get_surface (GTK_WIDGET (root)), device, cursor);
+}
+
+static void
+gtk_popup_root_maybe_update_cursor (GtkRoot   *root,
+                                    GtkWidget *widget,
+                                    GdkDevice *device)
+{
+  GtkPopup *popup = GTK_POPUP (root);
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+  GList *l;
+
+  for (l = priv->foci; l; l = l->next)
+    {
+      GtkPointerFocus *focus = l->data;
+      GtkWidget *grab_widget, *target;
+      //GtkWindowGroup *group;
+
+      if (focus->sequence)
+        continue;
+      if (device && device != focus->device)
+        continue;
+
+#if 0
+      group = gtk_window_get_group (window);
+      grab_widget = gtk_window_group_get_current_device_grab (group,
+                                                              focus->device);
+      if (!grab_widget)
+        grab_widget = gtk_window_group_get_current_grab (group);
+#else
+      grab_widget = NULL;
+#endif
+
+      if (!grab_widget)
+        grab_widget = gtk_pointer_focus_get_implicit_grab (focus);
+
+      target = gtk_pointer_focus_get_target (focus);
+
+      if (widget)
+        {
+          /* Check whether the changed widget affects the current cursor
+           * lookups.
+           */
+          if (grab_widget && grab_widget != widget &&
+              !gtk_widget_is_ancestor (widget, grab_widget))
+            continue;
+          if (target != widget &&
+              !gtk_widget_is_ancestor (target, widget))
+            continue;
+        }
+
+      update_cursor (focus->toplevel, focus->device, grab_widget, target);
+
+      if (device)
+        break;
+    }
+}
+
+static void
+gtk_popup_root_interface_init (GtkRootInterface *iface)
+{
+  iface->get_display = gtk_popup_root_get_display;
+  iface->get_renderer = gtk_popup_root_get_renderer;
+  iface->get_surface_transform = gtk_popup_root_get_surface_transform;
+  iface->check_resize = gtk_popup_root_check_resize;
+  iface->add_mnemonic = gtk_popup_root_add_mnemonic;
+  iface->remove_mnemonic = gtk_popup_root_remove_mnemonic;
+  iface->activate_key = gtk_popup_root_activate_key;
+  iface->update_pointer_focus = gtk_popup_root_update_pointer_focus;
+  iface->update_pointer_focus_on_state_change = gtk_popup_root_update_pointer_focus_on_state_change;
+  iface->lookup_pointer_focus = gtk_popup_root_lookup_pointer_focus;
+  iface->lookup_pointer_focus_implicit_grab = gtk_popup_root_lookup_pointer_focus_implicit_grab;
+  iface->lookup_effective_pointer_focus = gtk_popup_root_lookup_effective_pointer_focus;
+  iface->set_pointer_focus_grab = gtk_popup_root_set_pointer_focus_grab;
+  iface->maybe_update_cursor = gtk_popup_root_maybe_update_cursor;
+}
+
