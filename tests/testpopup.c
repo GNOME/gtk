@@ -31,41 +31,55 @@ add_content (GtkWidget *parent)
 
   gtk_widget_grab_default (button);
 
-  return box;
+  return entry;
 }
 
-static gboolean
+static GtkWidget *
 create_popup (GtkWidget *parent)
 {
   GtkWidget *popup;
 
   popup = gtk_popup_new ();
+
   gtk_popup_set_relative_to (GTK_POPUP (popup), parent);
   gtk_style_context_add_class (gtk_widget_get_style_context (popup), "background");
   gtk_style_context_add_class (gtk_widget_get_style_context (popup), "frame");
 
   add_content (popup);
 
-  gtk_widget_show (popup);
+  return popup;
+}
 
-  return FALSE;
+static void
+toggle_popup (GtkToggleButton *button, GtkWidget *popup)
+{
+  gtk_widget_set_visible (popup, !gtk_widget_get_visible (popup));
 }
 
 int
 main (int argc, char *argv[])
 {
   GtkWidget *window;
-  GtkWidget *label;
+  GtkWidget *entry;
+  GtkWidget *box;
+  GtkWidget *popup;
+  GtkWidget *button;
 
   gtk_init ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 200);
 
-  label = add_content (window);
+  entry = add_content (window);
+  box = gtk_widget_get_parent (entry);
+
+  popup = create_popup (entry);
+
+  button = gtk_toggle_button_new_with_mnemonic ("_Popup");
+  g_signal_connect (button, "toggled", G_CALLBACK (toggle_popup), popup);
+  gtk_container_add (GTK_CONTAINER (box), button);
 
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
-  g_signal_connect_swapped (window, "map", G_CALLBACK (create_popup), label);
 
   gtk_widget_show (window);
 
