@@ -841,12 +841,10 @@ gtk_popup_root_update_pointer_focus_on_state_change (GtkRoot   *root,
 
       gtk_pointer_focus_ref (focus);
 
-#if 0
       if (focus->grab_widget &&
           (focus->grab_widget == widget ||
            gtk_widget_is_ancestor (focus->grab_widget, widget)))
         gtk_pointer_focus_set_implicit_grab (focus, NULL);
-#endif
 
       if (GTK_WIDGET (focus->toplevel) == widget)
         {
@@ -965,8 +963,8 @@ gtk_popup_root_maybe_update_cursor (GtkRoot   *root,
   for (l = priv->foci; l; l = l->next)
     {
       GtkPointerFocus *focus = l->data;
-      GtkWidget *grab_widget, *target;
-      //GtkWindowGroup *group;
+      GtkWidget *grab_widget = NULL;
+      GtkWidget  *target;
 
       if (focus->sequence)
         continue;
@@ -974,13 +972,12 @@ gtk_popup_root_maybe_update_cursor (GtkRoot   *root,
         continue;
 
 #if 0
-      group = gtk_window_get_group (window);
-      grab_widget = gtk_window_group_get_current_device_grab (group,
-                                                              focus->device);
-      if (!grab_widget)
-        grab_widget = gtk_window_group_get_current_grab (group);
-#else
-      grab_widget = NULL;
+        {
+          GtkWindowGroup *group = gtk_window_get_group (root);
+          grab_widget = gtk_window_group_get_current_device_grab (group, focus->device);
+          if (!grab_widget)
+            grab_widget = gtk_window_group_get_current_grab (group);
+        }
 #endif
 
       if (!grab_widget)
