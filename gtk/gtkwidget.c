@@ -55,6 +55,7 @@
 #include "gtkprivate.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
+#include "gtkrootprivate.h"
 #include "gtkscrollable.h"
 #include "gtkselection.h"
 #include "gtksettingsprivate.h"
@@ -3673,8 +3674,8 @@ gtk_widget_connect_frame_clock (GtkWidget *widget)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkFrameClock *frame_clock;
 
-  if (GTK_IS_CONTAINER (widget) && _gtk_widget_is_toplevel (widget))
-    gtk_container_start_idle_sizer (GTK_CONTAINER (widget));
+  if (GTK_IS_ROOT (widget))
+    gtk_root_start_layout_phase (GTK_ROOT (widget));
 
   frame_clock = gtk_widget_get_frame_clock (widget);
 
@@ -3694,8 +3695,8 @@ gtk_widget_disconnect_frame_clock (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  if (GTK_IS_CONTAINER (widget) && _gtk_widget_is_toplevel (widget))
-    gtk_container_stop_idle_sizer (GTK_CONTAINER (widget));
+  if (GTK_IS_ROOT (widget))
+    gtk_root_stop_layout_phase (GTK_ROOT (widget));
 
   gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
 
@@ -11515,9 +11516,9 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
       if (!priv->visible)
         break;
 
-      if (_gtk_widget_is_toplevel (widget))
+      if (GTK_IS_ROOT (widget))
         {
-          gtk_container_start_idle_sizer (GTK_CONTAINER (widget));
+          gtk_root_start_layout_phase (GTK_ROOT (widget));
           break;
         }
 
