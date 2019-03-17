@@ -34,10 +34,9 @@
 static void
 gtk_drag_dest_realized (GtkWidget *widget)
 {
-  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  GtkRoot *root = gtk_widget_get_root (widget);
 
-  if (gtk_widget_is_toplevel (toplevel))
-    gdk_surface_register_dnd (gtk_widget_get_surface (toplevel));
+  gdk_surface_register_dnd (gtk_widget_get_surface (GTK_WIDGET (root)));
 }
 
 static void
@@ -45,10 +44,10 @@ gtk_drag_dest_hierarchy_changed (GtkWidget  *widget,
                                  GParamSpec *pspec,
                                  gpointer    data)
 {
-  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  GtkRoot *root = gtk_widget_get_root (widget);
 
-  if (gtk_widget_is_toplevel (toplevel) && gtk_widget_get_realized (toplevel))
-    gdk_surface_register_dnd (gtk_widget_get_surface (toplevel));
+  if (root && gtk_widget_get_realized (GTK_WIDGET (root)))
+    gdk_surface_register_dnd (gtk_widget_get_surface (GTK_WIDGET (root)));
 }
 
 static void
