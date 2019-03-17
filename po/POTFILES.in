@@ -243,6 +243,7 @@ gtk/gtkradiotoolbutton.c
 gtk/gtkrange.c
 gtk/gtkrecentmanager.c
 gtk/gtkrevealer.c
+gtk/gtkroot.c
 gtk/gtkscalebutton.c
 gtk/gtkscale.c
 gtk/gtkscrollable.c
