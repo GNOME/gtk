@@ -30,6 +30,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkmnemonichash.h"
 #include "gtkintl.h"
+#include "gtkmain.h"
 #include "gdk/gdkeventsprivate.h"
 #include "gtkpointerfocusprivate.h"
 
@@ -281,6 +282,9 @@ gtk_popup_move_focus (GtkWidget         *widget,
 static void
 gtk_popup_show (GtkWidget *widget)
 {
+  GtkPopup *popup = GTK_POPUP (widget);
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+
   _gtk_widget_set_visible_flag (widget, TRUE);
   gtk_css_node_validate (gtk_widget_get_css_node (widget));
   gtk_widget_realize (widget);
@@ -310,6 +314,7 @@ gtk_popup_map (GtkWidget *widget)
     gtk_widget_map (child);
 
   gdk_surface_show (priv->surface);
+  gdk_surface_focus (priv->surface, gtk_get_current_event_time ());
 }
 
 static void
