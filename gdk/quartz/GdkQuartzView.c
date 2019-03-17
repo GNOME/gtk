@@ -33,6 +33,7 @@
       markedRange = NSMakeRange (NSNotFound, 0);
       selectedRange = NSMakeRange (0, 0);
     }
+  [self setValue: @(YES) forKey: @"postsFrameChangedNotifications"];
 
   return self;
 }

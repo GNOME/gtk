@@ -208,6 +208,11 @@ gdk_window_impl_quartz_finalize (GObject *object)
   if (impl->transient_for)
     g_object_unref (impl->transient_for);
 
+  if (impl->view)
+    [[NSNotificationCenter defaultCenter] removeObserver: impl->toplevel
+                                       name: @"NSViewFrameDidChangeNotification"
+                                     object: impl->view];
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -909,6 +914,10 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
 	impl->view = [[GdkQuartzView alloc] initWithFrame:content_rect];
 	[impl->view setGdkWindow:window];
 	[impl->toplevel setContentView:impl->view];
+        [[NSNotificationCenter defaultCenter] addObserver: impl->toplevel
+                                      selector: @selector (windowDidResize:)
+                                      name: @"NSViewFrameDidChangeNotification"
+                                      object: impl->view];
 	[impl->view release];
       }
       break;
