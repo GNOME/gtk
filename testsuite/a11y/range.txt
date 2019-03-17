@@ -1,7 +1,7 @@
 window1
   "window"
   index: 0
-  state: enabled resizable sensitive showing visible
+  state: active enabled resizable sensitive showing visible
   toolkit: gtk
   window-type: normal
   <AtkComponent>
@@ -21,7 +21,7 @@ window1
       parent: grid1
       index: 0
       description: 45.5
-      state: enabled focusable horizontal sensitive showing visible
+      state: enabled focusable focused horizontal sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget

@@ -242,6 +242,12 @@ GdkSurface *       _gtk_widget_get_device_surface          (GtkWidget *widget,
                                                             GdkDevice *device);
 GList *           _gtk_widget_list_devices                 (GtkWidget *widget);
 
+void              gtk_synthesize_crossing_events           (GtkRoot         *toplevel,
+                                                            GtkWidget       *from,
+                                                            GtkWidget       *to,
+                                                            GdkEvent        *event,
+                                                            GdkCrossingMode  mode);
+
 void              _gtk_widget_synthesize_crossing          (GtkWidget       *from,
                                                             GtkWidget       *to,
                                                             GdkDevice       *device,
@@ -311,14 +317,13 @@ void              gtk_widget_forall                        (GtkWidget           
                                                             GtkCallback           callback,
                                                             gpointer              user_data);
 
-GtkWidget        *gtk_widget_get_focus_child               (GtkWidget            *widget);
-
 void              gtk_widget_focus_sort                    (GtkWidget        *widget,
                                                             GtkDirectionType  direction,
                                                             GPtrArray        *focus_order);
 gboolean          gtk_widget_focus_move                    (GtkWidget        *widget,
-                                                            GtkDirectionType  direction,
-                                                            GPtrArray        *focus_order);
+                                                            GtkDirectionType  direction);
+void              gtk_widget_set_has_focus                 (GtkWidget        *widget,
+                                                            gboolean          has_focus);
 void              gtk_widget_get_surface_allocation         (GtkWidget *widget,
 							     GtkAllocation *allocation);
 
@@ -334,6 +339,7 @@ void              gtk_widget_cancel_event_sequence         (GtkWidget           
 gboolean          gtk_widget_run_controllers               (GtkWidget           *widget,
                                                             const GdkEvent      *event,
                                                             GtkPropagationPhase  phase);
+
 
 /* inline getters */
 

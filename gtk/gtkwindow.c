@@ -122,16 +122,12 @@
  * elements representing the #GtkAccelGroup objects you want to add to
  * your window (synonymous with gtk_window_add_accel_group().
  *
- * It also supports the <initial-focus> element, whose name property names
- * the widget to receive the focus when the window is mapped.
- *
  * An example of a UI definition fragment with accel groups:
  * |[
  * <object class="GtkWindow">
  *   <accel-groups>
  *     <group name="accelgroup1"/>
  *   </accel-groups>
- *   <initial-focus name="thunderclap"/>
  * </object>
  * 
  * ...
@@ -440,8 +436,6 @@ static gint gtk_window_focus              (GtkWidget        *widget,
 				           GtkDirectionType  direction);
 static void gtk_window_move_focus         (GtkWidget         *widget,
                                            GtkDirectionType   dir);
-static void gtk_window_real_set_focus     (GtkWindow         *window,
-					   GtkWidget         *focus);
 
 static void gtk_window_real_activate_default (GtkWindow         *window);
 static void gtk_window_real_activate_focus   (GtkWindow         *window);
@@ -816,8 +810,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   container_class->remove = gtk_window_remove;
   container_class->forall = gtk_window_forall;
 
-  klass->set_focus = gtk_window_real_set_focus;
-
   klass->activate_default = gtk_window_real_activate_default;
   klass->activate_focus = gtk_window_real_activate_focus;
   klass->keys_changed = gtk_window_keys_changed;
@@ -1118,24 +1110,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_ARG, window_props);
-
-  /**
-   * GtkWindow:set-focus:
-   * @window: the window which received the signal
-   * @widget: (nullable): the newly focused widget (or %NULL for no focus)
-   *
-   * This signal is emitted whenever the currently focused widget in
-   * this window changes.
-   */
-  window_signals[SET_FOCUS] =
-    g_signal_new (I_("set-focus"),
-                  G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkWindowClass, set_focus),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 1,
-                  GTK_TYPE_WIDGET);
+  gtk_root_install_properties (gobject_class, LAST_ARG);
 
   /**
    * GtkWindow::activate-focus:
@@ -2095,6 +2070,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_FOCUS_VISIBLE:
       gtk_window_set_focus_visible (window, g_value_get_boolean (value));
       break;
+    case LAST_ARG + GTK_ROOT_PROP_FOCUS_WIDGET:
+      gtk_window_set_focus (window, g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2209,6 +2187,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_IS_MAXIMIZED:
       g_value_set_boolean (value, gtk_window_is_maximized (window));
+      break;
+    case LAST_ARG + GTK_ROOT_PROP_FOCUS_WIDGET:
+      g_value_set_object (value, gtk_window_get_focus (window));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2365,55 +2346,6 @@ static const GMarkupParser window_parser =
     window_start_element
   };
 
-typedef struct {
-  GObject *object;
-  GtkBuilder *builder;
-  gchar *name;
-  gint line;
-  gint col;
-} NameSubParserData;
-
-static void
-focus_start_element (GMarkupParseContext  *context,
-                     const gchar          *element_name,
-                     const gchar         **names,
-                     const gchar         **values,
-                     gpointer              user_data,
-                     GError              **error)
-{
-  NameSubParserData *data = (NameSubParserData*)user_data;
-
-  if (strcmp (element_name, "initial-focus") == 0)
-    {
-      const gchar *name;
-
-      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
-        return;
-
-      if (!g_markup_collect_attributes (element_name, names, values, error,
-                                        G_MARKUP_COLLECT_STRING, "name", &name,
-                                        G_MARKUP_COLLECT_INVALID))
-        {
-          _gtk_builder_prefix_error (data->builder, context, error);
-          return;
-        }
-
-      data->name = g_strdup (name);
-      g_markup_parse_context_get_position (context, &data->line, &data->col);
-    }
-  else
-    {
-      _gtk_builder_error_unhandled_tag (data->builder, context,
-                                        "GtkWindow", element_name,
-                                        error);
-    }
-}
-
-static const GMarkupParser focus_parser =
-{
-  focus_start_element
-};
-
 static gboolean
 gtk_window_buildable_custom_tag_start (GtkBuildable  *buildable,
                                        GtkBuilder    *builder,
@@ -2441,21 +2373,6 @@ gtk_window_buildable_custom_tag_start (GtkBuildable  *buildable,
       return TRUE;
     }
 
-  if (strcmp (tagname, "initial-focus") == 0)
-    {
-      NameSubParserData *data;
-
-      data = g_slice_new0 (NameSubParserData);
-      data->name = NULL;
-      data->object = G_OBJECT (buildable);
-      data->builder = builder;
-
-      *parser = focus_parser;
-      *parser_data = data;
-
-      return TRUE;
-    }
-
   return FALSE;
 }
 
@@ -2477,23 +2394,6 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
                                data->items, (GDestroyNotify) item_list_free);
 
       g_slice_free (GSListSubParserData, data);
-    }
-
-  if (strcmp (tagname, "initial-focus") == 0)
-    {
-      NameSubParserData *data = (NameSubParserData*)user_data;
-
-      if (data->name)
-        {
-          GObject *object;
-
-          object = _gtk_builder_lookup_object (builder, data->name, data->line, data->col);
-          if (object)
-            gtk_window_set_focus (GTK_WINDOW (buildable), GTK_WIDGET (object));
-          g_free (data->name);
-        }
-
-      g_slice_free (NameSubParserData, data);
     }
 }
 
@@ -2769,70 +2669,6 @@ gtk_window_get_role (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
   return priv->wm_role;
-}
-
-/**
- * gtk_window_set_focus:
- * @window: a #GtkWindow
- * @focus: (allow-none): widget to be the new focus widget, or %NULL to unset
- *   any focus widget for the toplevel window.
- *
- * If @focus is not the current focus widget, and is focusable, sets
- * it as the focus widget for the window. If @focus is %NULL, unsets
- * the focus widget for this window. To set the focus to a particular
- * widget in the toplevel, it is usually more convenient to use
- * gtk_widget_grab_focus() instead of this function.
- **/
-void
-gtk_window_set_focus (GtkWindow *window,
-		      GtkWidget *focus)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *parent;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  if (focus)
-    {
-      g_return_if_fail (GTK_IS_WIDGET (focus));
-      g_return_if_fail (gtk_widget_get_can_focus (focus));
-
-      if (!gtk_widget_get_visible (GTK_WIDGET (window)))
-        priv->initial_focus = focus;
-      else
-        gtk_widget_grab_focus (focus);
-    }
-  else
-    {
-      /* Clear the existing focus chain, so that when we focus into
-       * the window again, we start at the beginnning.
-       */
-      GtkWidget *widget = priv->focus_widget;
-      if (widget)
-	{
-	  while ((parent = _gtk_widget_get_parent (widget)))
-	    {
-	      widget = parent;
-              gtk_widget_set_focus_child (widget, NULL);
-	    }
-	}
-      
-      _gtk_window_internal_set_focus (window, NULL);
-    }
-}
-
-void
-_gtk_window_internal_set_focus (GtkWindow *window,
-				GtkWidget *focus)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv->initial_focus = NULL;
-  if ((priv->focus_widget != focus) ||
-      (focus && !gtk_widget_has_focus (focus)))
-    g_signal_emit (window, window_signals[SET_FOCUS], 0, focus);
 }
 
 /**
@@ -7072,42 +6908,31 @@ gtk_window_real_activate_focus (GtkWindow *window)
 
 static void
 do_focus_change (GtkWidget *widget,
-		 gboolean   in)
+                 gboolean   in)
 {
   GdkSeat *seat;
-  GList *devices, *d;
-
-  g_object_ref (widget);
+  GdkDevice *device;
+  GdkEvent *event;
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-  devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_KEYBOARD);
-  devices = g_list_prepend (devices, gdk_seat_get_keyboard (seat));
+  device = gdk_seat_get_keyboard (seat);
 
-  for (d = devices; d; d = d->next)
-    {
-      GdkDevice *dev = d->data;
-      GdkEvent *fevent;
-      GdkSurface *surface;
+  event = gdk_event_new (GDK_FOCUS_CHANGE);
+  gdk_event_set_display (event, gtk_widget_get_display (widget));
+  gdk_event_set_device (event, device);
 
-      surface = _gtk_widget_get_surface (widget);
+  event->any.type = GDK_FOCUS_CHANGE;
+  event->any.surface = _gtk_widget_get_surface (widget);
+  if (event->any.surface)
+    g_object_ref (event->any.surface);
+  event->focus_change.in = in;
+  event->focus_change.mode = GDK_CROSSING_STATE_CHANGED;
+  event->focus_change.detail = GDK_NOTIFY_ANCESTOR;
 
-      fevent = gdk_event_new (GDK_FOCUS_CHANGE);
-      gdk_event_set_display (fevent, gtk_widget_get_display (widget));
+  gtk_widget_set_has_focus (widget, in);
+  gtk_widget_event (widget, event);
 
-      fevent->any.type = GDK_FOCUS_CHANGE;
-      fevent->any.surface = surface;
-      if (surface)
-        g_object_ref (surface);
-      fevent->focus_change.in = in;
-      gdk_event_set_device (fevent, dev);
-
-      gtk_widget_send_focus_change (widget, fevent);
-
-      g_object_unref (fevent);
-    }
-
-  g_list_free (devices);
-  g_object_unref (widget);
+  g_object_unref (event);
 }
 
 static gboolean
@@ -7325,80 +7150,56 @@ gtk_window_move_focus (GtkWidget        *widget,
     gtk_window_set_focus (GTK_WINDOW (widget), NULL);
 }
 
-static void
-gtk_window_real_set_focus (GtkWindow *window,
-			   GtkWidget *focus)
+/**
+ * gtk_window_set_focus:
+ * @window: a #GtkWindow
+ * @focus: (allow-none): widget to be the new focus widget, or %NULL to unset
+ *   any focus widget for the toplevel window.
+ *
+ * If @focus is not the current focus widget, and is focusable, sets
+ * it as the focus widget for the window. If @focus is %NULL, unsets
+ * the focus widget for this window. To set the focus to a particular
+ * widget in the toplevel, it is usually more convenient to use
+ * gtk_widget_grab_focus() instead of this function.
+ **/
+void
+gtk_window_set_focus (GtkWindow *window,
+                      GtkWidget *focus)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *old_focus = priv->focus_widget;
+  GtkWidget *old_focus = NULL;
+  GdkSeat *seat;
+  GdkDevice *device;
+  GdkEvent *event;
 
-  if (old_focus)
-    {
-      g_object_ref (old_focus);
-      g_object_freeze_notify (G_OBJECT (old_focus));
-    }
-  if (focus)
-    {
-      g_object_ref (focus);
-      g_object_freeze_notify (G_OBJECT (focus));
-    }
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (focus && !gtk_widget_is_sensitive (focus))
+    return;
 
   if (priv->focus_widget)
-    {
-      if (gtk_widget_get_receives_default (priv->focus_widget) &&
-	  (priv->focus_widget != priv->default_widget))
-        {
-          _gtk_widget_set_has_default (priv->focus_widget, FALSE);
+    old_focus = g_object_ref (priv->focus_widget);
+  g_set_object (&priv->focus_widget, NULL);
 
-	  if (priv->default_widget)
-            _gtk_widget_set_has_default (priv->default_widget, TRUE);
-	}
+  seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (window)));
+  device = gdk_seat_get_keyboard (seat);
 
-      priv->focus_widget = NULL;
+  event = gdk_event_new (GDK_FOCUS_CHANGE);
+  gdk_event_set_display (event, gtk_widget_get_display (GTK_WIDGET (window)));
+  gdk_event_set_device (event, device);
+  event->any.surface = _gtk_widget_get_surface (GTK_WIDGET (window));
+  if (event->any.surface)
+    g_object_ref (event->any.surface);
 
-      if (priv->is_active)
-	do_focus_change (old_focus, FALSE);
+  gtk_synthesize_crossing_events (GTK_ROOT (window), old_focus, focus, event, GDK_CROSSING_NORMAL);
 
-      g_object_notify (G_OBJECT (old_focus), "is-focus");
-    }
+  g_object_unref (event);
 
-  /* The above notifications may have set a new focus widget,
-   * if so, we don't want to override it.
-   */
-  if (focus && !priv->focus_widget)
-    {
-      priv->focus_widget = focus;
+  g_set_object (&priv->focus_widget, focus);
 
-      if (gtk_widget_get_receives_default (priv->focus_widget) &&
-	  (priv->focus_widget != priv->default_widget))
-	{
-	  if (gtk_widget_get_can_default (priv->focus_widget))
-            _gtk_widget_set_has_default (priv->focus_widget, TRUE);
+  g_clear_object (&old_focus);
 
-	  if (priv->default_widget)
-            _gtk_widget_set_has_default (priv->default_widget, FALSE);
-	}
-
-      if (priv->is_active)
-	do_focus_change (priv->focus_widget, TRUE);
-
-      /* It's possible for do_focus_change() above to have callbacks
-       * that clear priv->focus_widget here.
-       */
-      if (priv->focus_widget)
-        g_object_notify (G_OBJECT (priv->focus_widget), "is-focus");
-    }
-
-  if (old_focus)
-    {
-      g_object_thaw_notify (G_OBJECT (old_focus));
-      g_object_unref (old_focus);
-    }
-  if (focus)
-    {
-      g_object_thaw_notify (G_OBJECT (focus));
-      g_object_unref (focus);
-    }
+  g_object_notify (G_OBJECT (window), "focus-widget");
 }
 
 static void

@@ -814,6 +814,8 @@ gtk_tree_view_column_cell_layout_get_area (GtkCellLayout   *cell_layout)
 
 static void
 focus_in (GtkEventControllerKey *controller,
+          GdkCrossingMode        mode,
+          GdkNotifyType          detail,
           GtkTreeViewColumn     *column)
 {
   _gtk_tree_view_set_focus_column (GTK_TREE_VIEW (column->priv->tree_view), column);
@@ -1016,11 +1018,8 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
       gtk_widget_set_can_focus (priv->button, FALSE);
       if (gtk_widget_has_focus (priv->button))
 	{
-	  GtkWidget *toplevel = gtk_widget_get_toplevel (priv->tree_view);
-	  if (gtk_widget_is_toplevel (toplevel))
-	    {
-	      gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
-	    }
+          GtkRoot *root = gtk_widget_get_root (priv->tree_view);
+	  gtk_root_set_focus (root, NULL);
 	}
     }
   /* Queue a resize on the assumption that we always want to catch all changes

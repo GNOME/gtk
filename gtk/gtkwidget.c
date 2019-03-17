@@ -484,7 +484,6 @@ enum {
   GRAB_NOTIFY,
   CHILD_NOTIFY,
   MNEMONIC_ACTIVATE,
-  FOCUS,
   MOVE_FOCUS,
   KEYNAV_FAILED,
   DRAG_BEGIN,
@@ -1669,23 +1668,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_BOOLEAN__BOOLEAN,
 		  G_TYPE_BOOLEAN, 1,
 		  G_TYPE_BOOLEAN);
-
-  /**
-   * GtkWidget::focus:
-   * @widget: the object which received the signal.
-   * @direction:
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
-   */
-  widget_signals[FOCUS] =
-    g_signal_new (I_("focus"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, focus),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__ENUM,
-		  G_TYPE_BOOLEAN, 1,
-		  GTK_TYPE_DIRECTION_TYPE);
 
   /**
    * GtkWidget::move-focus:
@@ -5321,107 +5303,25 @@ _gtk_widget_grab_notify (GtkWidget *widget,
  * gtk_widget_grab_focus:
  * @widget: a #GtkWidget
  *
- * Causes @widget to have the keyboard focus for the #GtkWindow it's
- * inside. @widget must be a focusable widget, such as a #GtkEntry;
- * something like #GtkFrame won’t work.
+ * Causes @widget (or one of its descendents) to have the keyboard focus
+ * for the #GtkWindow it's inside.
  *
- * More precisely, it must have the %GTK_CAN_FOCUS flag set. Use
- * gtk_widget_set_can_focus() to modify that flag.
- *
- * The widget also needs to be realized and mapped. This is indicated by the
- * related signals. Grabbing the focus immediately after creating the widget
- * will likely fail and cause critical warnings.
+ * @widget must be focusable, or have a ::grab_focus implementation that
+ * transfers the focus to a descendant of @widget that is focusable.
  **/
 void
 gtk_widget_grab_focus (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (!gtk_widget_is_sensitive (widget))
-    return;
-
-  g_object_ref (widget);
   GTK_WIDGET_GET_CLASS (widget)->grab_focus (widget);
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_FOCUS]);
-  g_object_unref (widget);
-}
-
-static void
-reset_focus_recurse (GtkWidget *widget,
-		     gpointer   data)
-{
-  gtk_widget_set_focus_child (widget, NULL);
-
-  gtk_widget_forall (widget,
-                     reset_focus_recurse,
-                     NULL);
 }
 
 static void
 gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 {
-  GtkWidget *toplevel;
-  GtkWidget *widget;
-
-  /* clear the current focus setting, break if the current widget
-   * is the focus widget's parent, since containers above that will
-   * be set by the next loop.
-   */
-  toplevel = _gtk_widget_get_toplevel (focus_widget);
-  if (_gtk_widget_is_toplevel (toplevel) && GTK_IS_WINDOW (toplevel))
-    {
-      widget = gtk_window_get_focus (GTK_WINDOW (toplevel));
-
-      if (widget == focus_widget)
-        {
-          /* We call _gtk_window_internal_set_focus() here so that the
-           * toplevel window can request the focus if necessary.
-           * This is needed when the toplevel is a GtkPlug
-           */
-          if (!gtk_widget_has_focus (widget))
-            _gtk_window_internal_set_focus (GTK_WINDOW (toplevel), focus_widget);
-
-          return;
-        }
-
-      if (widget)
-        {
-          GtkWidget *common_ancestor = gtk_widget_common_ancestor (widget, focus_widget);
-
-          if (widget != common_ancestor)
-            {
-              while (widget->priv->parent)
-                {
-                  widget = widget->priv->parent;
-                  gtk_widget_set_focus_child (widget, NULL);
-                  if (widget == common_ancestor)
-                    break;
-                }
-            }
-        }
-    }
-  else if (toplevel != focus_widget)
-    {
-      /* gtk_widget_grab_focus() operates on a tree without window...
-       * actually, this is very questionable behavior.
-       */
-
-      gtk_widget_forall (toplevel,
-                         reset_focus_recurse,
-                         NULL);
-    }
-
-  /* now propagate the new focus up the widget tree and finally
-   * set it on the window
-   */
-  widget = focus_widget;
-  while (widget->priv->parent)
-    {
-      gtk_widget_set_focus_child (widget->priv->parent, widget);
-      widget = widget->priv->parent;
-    }
-  if (GTK_IS_WINDOW (widget))
-    _gtk_window_internal_set_focus (GTK_WINDOW (widget), focus_widget);
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (focus_widget);
+  gtk_root_set_focus (priv->root, focus_widget);
 }
 
 static gboolean
@@ -5536,17 +5436,8 @@ gtk_widget_real_focus (GtkWidget         *widget,
     }
   else
     {
-      GPtrArray *focus_order = g_ptr_array_new ();
-      gboolean ret = FALSE;
-
-      /* Try focusing any of the child widgets, depending on the given @direction */
-
-      gtk_widget_focus_sort (widget, direction, focus_order);
-      ret = gtk_widget_focus_move (widget, direction, focus_order);
-
-      g_ptr_array_unref (focus_order);
-
-      if (ret)
+      /* Try focusing any of the child widgets, depending on the given direction */
+      if (gtk_widget_focus_move (widget, direction))
         return TRUE;
     }
 
@@ -5560,10 +5451,7 @@ gtk_widget_real_move_focus (GtkWidget         *widget,
   GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
 
   if (widget != toplevel && GTK_IS_WINDOW (toplevel))
-    {
-      g_signal_emit (toplevel, widget_signals[MOVE_FOCUS], 0,
-                     direction);
-    }
+    g_signal_emit (toplevel, widget_signals[MOVE_FOCUS], 0, direction);
 }
 
 static gboolean
@@ -5594,9 +5482,15 @@ gtk_widget_real_keynav_failed (GtkWidget        *widget,
  * @widget: a #GtkWidget
  * @can_focus: whether or not @widget can own the input focus.
  *
- * Specifies whether @widget can own the input focus. See
- * gtk_widget_grab_focus() for actually setting the input focus on a
- * widget.
+ * Specifies whether @widget can own the input focus.
+ * 
+ * Note that having @can_focus be %TRUE is only one of the
+ * necessary conditions for being focusable. A widget must
+ * also be sensitive and not have a ancestor that is marked
+ * as not child-focusable in order to receive input focus.
+ *
+ * See gtk_widget_grab_focus() for actually setting the input
+ * focus on a widget.
  **/
 void
 gtk_widget_set_can_focus (GtkWidget *widget,
@@ -5709,16 +5603,14 @@ gtk_widget_has_visible_focus (GtkWidget *widget)
 gboolean
 gtk_widget_is_focus (GtkWidget *widget)
 {
-  GtkWidget *toplevel;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  toplevel = _gtk_widget_get_toplevel (widget);
+  if (priv->root)
+    return widget == gtk_root_get_focus (priv->root);
 
-  if (GTK_IS_WINDOW (toplevel))
-    return widget == gtk_window_get_focus (GTK_WINDOW (toplevel));
-  else
-    return FALSE;
+  return FALSE;
 }
 
 /**
@@ -7580,8 +7472,6 @@ gboolean
 gtk_widget_child_focus (GtkWidget       *widget,
                         GtkDirectionType direction)
 {
-  gboolean return_val;
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   if (!_gtk_widget_get_visible (widget) ||
@@ -7593,12 +7483,7 @@ gtk_widget_child_focus (GtkWidget       *widget,
    * focus
    */
 
-  g_signal_emit (widget,
-		 widget_signals[FOCUS],
-		 0,
-		 direction, &return_val);
-
-  return return_val;
+  return GTK_WIDGET_GET_CLASS (widget)->focus (widget, direction);
 }
 
 /**
@@ -8924,14 +8809,7 @@ gtk_widget_propagate_state (GtkWidget          *widget,
     priv->state_flags |= GTK_STATE_FLAG_INSENSITIVE;
 
   if (gtk_widget_is_focus (widget) && !gtk_widget_is_sensitive (widget))
-    {
-      GtkWidget *window;
-
-      window = _gtk_widget_get_toplevel (widget);
-
-      if (window && _gtk_widget_is_toplevel (window))
-        gtk_window_set_focus (GTK_WINDOW (window), NULL);
-    }
+    gtk_root_set_focus (priv->root, NULL);
 
   new_flags = priv->state_flags;
 
@@ -11696,59 +11574,17 @@ gtk_widget_get_overflow (GtkWidget *widget)
   return priv->overflow;
 }
 
-/**
- * gtk_widget_send_focus_change:
- * @widget: a #GtkWidget
- * @event: a #GdkEvent of type GDK_FOCUS_CHANGE
- *
- * Sends the focus change @event to @widget
- *
- * This function is not meant to be used by applications. The only time it
- * should be used is when it is necessary for a #GtkWidget to assign focus
- * to a widget that is semantically owned by the first widget even though
- * it’s not a direct child - for instance, a search entry in a floating
- * window similar to the quick search in #GtkTreeView.
- *
- * An example of its usage is:
- *
- * |[<!-- language="C" -->
- *   GdkEvent *fevent = gdk_event_new (GDK_FOCUS_CHANGE);
- *
- *   fevent->focus_change.type = GDK_FOCUS_CHANGE;
- *   fevent->focus_change.in = TRUE;
- *   fevent->focus_change.surface = _gtk_widget_get_surface (widget);
- *   if (fevent->focus_change.surface != NULL)
- *     g_object_ref (fevent->focus_change.surface);
- *
- *   gtk_widget_send_focus_change (widget, fevent);
- *
- *   g_object_unref (event);
- * ]|
- *
- * Returns: the return value from the event signal emission: %TRUE
- *   if the event was handled, and %FALSE otherwise
- */
-gboolean
-gtk_widget_send_focus_change (GtkWidget *widget,
-                              GdkEvent  *event)
+void
+gtk_widget_set_has_focus (GtkWidget *widget,
+                          gboolean   has_focus)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  gboolean res;
 
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  g_return_val_if_fail (event != NULL && event->any.type == GDK_FOCUS_CHANGE, FALSE);
+  if (priv->has_focus == has_focus)
+    return;
 
-  g_object_ref (widget);
-
-  priv->has_focus = event->focus_change.in;
-
-  res = gtk_widget_event (widget, event);
-
+  priv->has_focus = has_focus;
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_FOCUS]);
-
-  g_object_unref (widget);
-
-  return res;
 }
 
 /**
@@ -13470,26 +13306,7 @@ gtk_widget_set_focus_child (GtkWidget *widget,
       g_return_if_fail (gtk_widget_get_parent (child) == widget);
     }
 
-  if (priv->focus_child)
-    gtk_widget_unset_state_flags (priv->focus_child,
-                                  GTK_STATE_FLAG_FOCUSED|GTK_STATE_FLAG_FOCUS_VISIBLE);
-
-  if (child)
-    {
-      GtkWidget *toplevel;
-      GtkStateFlags flags = GTK_STATE_FLAG_FOCUSED;
-
-      toplevel = _gtk_widget_get_toplevel (widget);
-      if (!GTK_IS_WINDOW (toplevel) || gtk_window_get_focus_visible (GTK_WINDOW (toplevel)))
-        flags |= GTK_STATE_FLAG_FOCUS_VISIBLE;
-
-      gtk_widget_set_state_flags (child, flags, FALSE);
-    }
-
   g_set_object (&priv->focus_child, child);
-
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_set_focus_child (GTK_CONTAINER (widget), child);
 }
 
 /**

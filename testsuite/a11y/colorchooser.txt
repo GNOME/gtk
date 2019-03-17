@@ -2,7 +2,7 @@ window1
   "dialog"
   index: 0
   name: Select a Color
-  state: enabled sensitive showing visible
+  state: active enabled sensitive showing visible
   toolkit: gtk
   window-type: dialog
   <AtkComponent>
@@ -58,7 +58,7 @@ window1
               parent: unnamed-GtkContainerAccessible-1
               index: 0
               name: Light Scarlet Red
-              state: enabled focusable sensitive showing visible
+              state: enabled focusable focused sensitive showing visible
               toolkit: gtk
               <AtkComponent>
               layer: widget

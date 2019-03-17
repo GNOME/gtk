@@ -6222,7 +6222,7 @@ gtk_label_activate_current_link (GtkLabel *label)
           if (window)
             {
               default_widget = gtk_window_get_default_widget (window);
-              focus_widget = gtk_window_get_focus (window);
+              focus_widget = gtk_root_get_focus (GTK_ROOT (window));
 
               if (default_widget != widget &&
                   !(widget == focus_widget && (!default_widget || !gtk_widget_is_sensitive (default_widget))))

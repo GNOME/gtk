@@ -614,6 +614,8 @@ static void     gtk_tree_view_key_controller_key_released (GtkEventControllerKey
                                                            GdkModifierType        state,
                                                            GtkTreeView           *tree_view);
 static void     gtk_tree_view_key_controller_focus_out    (GtkEventControllerKey *key,
+                                                           GdkCrossingMode        mode,
+                                                           GdkNotifyType          detail,
                                                            GtkTreeView           *tree_view);
 
 static gint     gtk_tree_view_focus                (GtkWidget        *widget,
@@ -5475,6 +5477,8 @@ gtk_tree_view_motion_controller_leave (GtkEventControllerMotion *controller,
 
 static void
 gtk_tree_view_key_controller_focus_out (GtkEventControllerKey *key,
+                                        GdkCrossingMode        mode,
+                                        GdkNotifyType          detail,
                                         GtkTreeView           *tree_view)
 {
   gtk_widget_queue_draw (GTK_WIDGET (tree_view));
@@ -10151,7 +10155,8 @@ send_focus_change (GtkWidget *widget,
       fevent->focus_change.in = in;
       gdk_event_set_device (fevent, device);
 
-      gtk_widget_send_focus_change (widget, fevent);
+      gtk_widget_set_has_focus (widget, in);
+      gtk_widget_event (widget, fevent);
 
       g_object_unref (fevent);
     }

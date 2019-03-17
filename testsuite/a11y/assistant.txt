@@ -13,7 +13,7 @@ window1
     parent: content
     index: 0
     name: Page 1
-    state: enabled focusable sensitive showing visible
+    state: enabled focusable focused sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget

@@ -158,42 +158,6 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkListBoxRow" id="focus_widget_row">
-                    <property name="activatable">0</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="margin">10</property>
-                        <property name="spacing">40</property>
-                        <child>
-                          <object class="GtkLabel" id="focus_widget_label">
-                            <property name="label" translatable="yes">Focus Widget</property>
-                            <property name="halign">start</property>
-                            <property name="valign">baseline</property>
-                            <property name="xalign">0.0</property>
-                            <property name="hexpand">1</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="focus_widget">
-                            <property name="selectable">1</property>
-                            <property name="halign">end</property>
-                            <property name="valign">baseline</property>
-                            <property name="ellipsize">end</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="focus_widget_button">
-                            <property name="halign">end</property>
-                            <property name="valign">baseline</property>
-                            <property name="label" translatable="yes">Properties</property>
-                            <signal name="clicked" handler="show_focus_widget"/>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
                   <object class="GtkListBoxRow" id="mnemonic_label_row">
                     <property name="activatable">0</property>
                     <child>
@@ -616,7 +580,6 @@
       <widget name="state_label"/>
       <widget name="buildable_id_label"/>
       <widget name="default_widget_label"/>
-      <widget name="focus_widget_label"/>
       <widget name="frame_clock_label"/>
     </widgets>
   </object>

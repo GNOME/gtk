@@ -46,9 +46,6 @@ struct _GtkInspectorMiscInfoPrivate {
   GtkWidget *default_widget_row;
   GtkWidget *default_widget;
   GtkWidget *default_widget_button;
-  GtkWidget *focus_widget_row;
-  GtkWidget *focus_widget;
-  GtkWidget *focus_widget_button;
   GtkWidget *mnemonic_label_row;
   GtkWidget *mnemonic_label;
   GtkWidget *request_mode_row;
@@ -218,43 +215,6 @@ show_default_widget (GtkWidget *button, GtkInspectorMiscInfo *sl)
 }
 
 static void
-update_focus_widget (GtkInspectorMiscInfo *sl)
-{
-  GtkWidget *widget;
-
-  widget = gtk_window_get_focus (GTK_WINDOW (sl->priv->object));
-  if (widget)
-    {
-      gchar *tmp;
-      tmp = g_strdup_printf ("%p", widget);
-      gtk_label_set_label (GTK_LABEL (sl->priv->focus_widget), tmp);
-      g_free (tmp);
-      gtk_widget_set_sensitive (sl->priv->focus_widget_button, TRUE);
-    }
-  else
-    {
-      gtk_label_set_label (GTK_LABEL (sl->priv->focus_widget), "NULL");   
-      gtk_widget_set_sensitive (sl->priv->focus_widget_button, FALSE);
-    }
-}
-
-static void
-set_focus_cb (GtkWindow *window, GtkWidget *focus, GtkInspectorMiscInfo *sl)
-{
-  update_focus_widget (sl);
-}
-
-static void
-show_focus_widget (GtkWidget *button, GtkInspectorMiscInfo *sl)
-{
-  GtkWidget *widget;
-
-  widget = gtk_window_get_focus (GTK_WINDOW (sl->priv->object));
-  if (widget)
-    show_object (sl, G_OBJECT (widget), "properties");
-}
-
-static void
 show_mnemonic_label (GtkWidget *button, GtkInspectorMiscInfo *sl)
 {
   GtkWidget *widget;
@@ -358,7 +318,6 @@ update_info (gpointer data)
   if (GTK_IS_WINDOW (sl->priv->object))
     {
       update_default_widget (sl);
-      update_focus_widget (sl);
     }
 
   if (GDK_IS_FRAME_CLOCK (sl->priv->object))
@@ -408,7 +367,6 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
   if (sl->priv->object)
     {
       g_signal_handlers_disconnect_by_func (sl->priv->object, state_flags_changed, sl);
-      g_signal_handlers_disconnect_by_func (sl->priv->object, set_focus_cb, sl);
       g_signal_handlers_disconnect_by_func (sl->priv->object, allocation_changed, sl);
       disconnect_each_other (sl->priv->object, G_OBJECT (sl));
       disconnect_each_other (sl, sl->priv->object);
@@ -475,14 +433,10 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
   if (GTK_IS_WINDOW (object))
     {
       gtk_widget_show (sl->priv->default_widget_row);
-      gtk_widget_show (sl->priv->focus_widget_row);
-
-      g_signal_connect_object (object, "set-focus", G_CALLBACK (set_focus_cb), sl, G_CONNECT_AFTER);
     }
   else
     {
       gtk_widget_hide (sl->priv->default_widget_row);
-      gtk_widget_hide (sl->priv->focus_widget_row);
     }
 
   if (GDK_IS_FRAME_CLOCK (object))
@@ -595,9 +549,6 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, default_widget_row);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, default_widget);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, default_widget_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, focus_widget_row);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, focus_widget);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, focus_widget_button);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, mnemonic_label_row);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, mnemonic_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, request_mode_row);
@@ -631,7 +582,6 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, child_visible);
 
   gtk_widget_class_bind_template_callback (widget_class, show_default_widget);
-  gtk_widget_class_bind_template_callback (widget_class, show_focus_widget);
   gtk_widget_class_bind_template_callback (widget_class, show_frame_clock);
 }
 

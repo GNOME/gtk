@@ -2,7 +2,7 @@ window1
   "dialog"
   index: 0
   name: About FancyPants
-  state: enabled sensitive showing visible
+  state: active enabled sensitive showing visible
   toolkit: gtk
   window-type: dialog
   <AtkComponent>
@@ -374,7 +374,7 @@ See the GNU General Public License, version 3 or later for details.
         parent: stack_switcher
         index: 0
         name: About
-        state: checked enabled focusable sensitive showing visible
+        state: checked enabled focusable focused sensitive showing visible
         toolkit: gtk
         <AtkComponent>
         layer: widget

@@ -82,6 +82,7 @@
 #include "gtkdebug.h"
 #include "gtkfilechoosererrorstackprivate.h"
 #include "gtkentryprivate.h"
+#include "gtkroot.h"
 
 #include <cairo-gobject.h>
 
@@ -340,6 +341,7 @@ struct _GtkFileChooserWidgetPrivate {
   GSource *focus_entry_idle;
 
   gulong toplevel_set_focus_id;
+  GtkWidget *toplevel_current_focus_widget;
   GtkWidget *toplevel_last_focus_widget;
 
   gint sort_column;
@@ -1361,7 +1363,7 @@ key_press_cb (GtkEventController *controller,
           GtkWidget *default_widget, *focus_widget;
 
           default_widget = gtk_window_get_default_widget (window);
-          focus_widget = gtk_window_get_focus (window);
+          focus_widget = gtk_root_get_focus (GTK_ROOT (window));
 
           if (widget != default_widget &&
               !(widget == focus_widget && (!default_widget || !gtk_widget_get_sensitive (default_widget))))
@@ -2709,7 +2711,7 @@ location_mode_set (GtkFileChooserWidget *impl,
           switch_to_file_list = FALSE;
           if (toplevel)
             {
-              current_focus = gtk_window_get_focus (toplevel);
+              current_focus = gtk_root_get_focus (GTK_ROOT (toplevel));
               if (!current_focus || current_focus == priv->location_entry)
                 switch_to_file_list = TRUE;
             }
@@ -3560,13 +3562,14 @@ gtk_file_chooser_widget_dispose (GObject *object)
  * widget on our toplevel.  See gtk_file_chooser_widget_hierarchy_changed()
  */
 static void
-toplevel_set_focus_cb (GtkWindow             *window,
-                       GtkWidget             *focus,
+toplevel_set_focus_cb (GtkWindow            *window,
+                       GParamSpec           *pspec,
                        GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  priv->toplevel_last_focus_widget = gtk_window_get_focus (window);
+  priv->toplevel_last_focus_widget = priv->toplevel_current_focus_widget;
+  priv->toplevel_current_focus_widget = gtk_root_get_focus (GTK_ROOT (window));
 }
 
 /* We monitor the focus widget on our toplevel to be able to know which widget
@@ -3584,9 +3587,10 @@ gtk_file_chooser_widget_root (GtkWidget *widget)
   toplevel = gtk_widget_get_toplevel (widget);
 
   g_assert (priv->toplevel_set_focus_id == 0);
-  priv->toplevel_set_focus_id = g_signal_connect (toplevel, "set-focus",
+  priv->toplevel_set_focus_id = g_signal_connect (toplevel, "notify::focus-widget",
                                                   G_CALLBACK (toplevel_set_focus_cb), impl);
-  priv->toplevel_last_focus_widget = gtk_window_get_focus (GTK_WINDOW (toplevel));
+  priv->toplevel_last_focus_widget = NULL;
+  priv->toplevel_current_focus_widget = gtk_root_get_focus (GTK_ROOT (toplevel));
 }
 
 static void
@@ -3602,6 +3606,7 @@ gtk_file_chooser_widget_unroot (GtkWidget *widget)
       g_signal_handler_disconnect (toplevel, priv->toplevel_set_focus_id);
       priv->toplevel_set_focus_id = 0;
       priv->toplevel_last_focus_widget = NULL;
+      priv->toplevel_current_focus_widget = NULL;
     }
 
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->unroot (widget);
@@ -5806,7 +5811,7 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
 
   toplevel = get_toplevel (GTK_WIDGET (impl));
   if (toplevel)
-    current_focus = gtk_window_get_focus (toplevel);
+    current_focus = gtk_root_get_focus (GTK_ROOT (toplevel));
   else
     current_focus = NULL;
 
@@ -6655,7 +6660,7 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserEmbed *chooser_embed)
 
   retval = FALSE;
 
-  current_focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
+  current_focus = gtk_root_get_focus (GTK_ROOT (toplevel));
 
   if (current_focus == priv->browse_files_tree_view)
     {
