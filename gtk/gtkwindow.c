@@ -6208,7 +6208,7 @@ gtk_window_propagate_key_event (GtkWindow        *window,
   
   while (!handled &&
          focus && focus != widget &&
-         gtk_widget_get_toplevel (focus) == widget)
+         gtk_widget_get_root (focus) == GTK_ROOT (widget))
     {
       GtkWidget *parent;
       
