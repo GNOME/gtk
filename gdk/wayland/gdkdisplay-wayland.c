@@ -932,12 +932,10 @@ gdk_wayland_display_notify_startup_complete (GdkDisplay  *display,
 					     const gchar *startup_id)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  gchar *free_this = NULL;
 
   if (startup_id == NULL)
     {
-      startup_id = free_this = display_wayland->startup_notification_id;
-      display_wayland->startup_notification_id = NULL;
+      startup_id = display_wayland->startup_notification_id;
 
       if (startup_id == NULL)
         return;
@@ -945,8 +943,6 @@ gdk_wayland_display_notify_startup_complete (GdkDisplay  *display,
 
   if (display_wayland->gtk_shell)
     gtk_shell1_set_startup_id (display_wayland->gtk_shell, startup_id);
-
-  g_free (free_this);
 }
 
 static GdkKeymap *
