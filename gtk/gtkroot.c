@@ -90,6 +90,30 @@ gtk_root_default_activate_key (GtkRoot     *self,
 }
 
 static void
+gtk_root_default_update_pointer_focus (GtkRoot          *root,
+                                       GdkDevice        *device,
+                                       GdkEventSequence *sequence,
+                                       GtkWidget        *target,
+                                       double            x,
+                                       double            y)
+{
+}
+
+static void
+gtk_root_default_update_pointer_focus_on_state_change (GtkRoot   *root,
+                                                       GtkWidget *widget)
+{
+}
+
+static GtkWidget *
+gtk_root_default_lookup_pointer_focus (GtkRoot          *root,
+                                       GdkDevice        *device,
+                                       GdkEventSequence *sequence)
+{
+  return NULL;
+}
+
+static void
 gtk_root_default_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_root_default_get_display;
@@ -99,6 +123,9 @@ gtk_root_default_init (GtkRootInterface *iface)
   iface->add_mnemonic = gtk_root_default_add_mnemonic;
   iface->remove_mnemonic = gtk_root_default_remove_mnemonic;
   iface->activate_key = gtk_root_default_activate_key;
+  iface->update_pointer_focus = gtk_root_default_update_pointer_focus;
+  iface->update_pointer_focus_on_state_change = gtk_root_default_update_pointer_focus_on_state_change;
+  iface->lookup_pointer_focus = gtk_root_default_lookup_pointer_focus;
 
   g_object_interface_install_property (iface,
       g_param_spec_object ("focus-widget",
@@ -477,4 +504,63 @@ gtk_root_activate_key (GtkRoot     *root,
   g_return_val_if_fail (GTK_ROOT (root), FALSE);
 
   return GTK_ROOT_GET_IFACE (root)->activate_key (root, event); 
+}
+
+void
+gtk_root_update_pointer_focus (GtkRoot          *root,
+                               GdkDevice        *device,
+                               GdkEventSequence *sequence,
+                               GtkWidget        *target,
+                               double            x,
+                               double            y)
+{
+  GTK_ROOT_GET_IFACE (root)->update_pointer_focus (root, device, sequence, target, x, y);
+}
+
+void
+gtk_root_update_pointer_focus_on_state_change (GtkRoot   *root,
+                                               GtkWidget *widget)
+{
+  GTK_ROOT_GET_IFACE (root)->update_pointer_focus_on_state_change (root, widget);
+}
+
+GtkWidget *
+gtk_root_lookup_pointer_focus (GtkRoot          *root,
+                               GdkDevice        *device,
+                               GdkEventSequence *sequence)
+{
+  return GTK_ROOT_GET_IFACE (root)->lookup_pointer_focus (root, device, sequence);
+}
+
+GtkWidget *
+gtk_root_lookup_pointer_focus_implicit_grab (GtkRoot          *root,
+                                             GdkDevice        *device,
+                                             GdkEventSequence *sequence)
+{
+  return GTK_ROOT_GET_IFACE (root)->lookup_pointer_focus_implicit_grab (root, device, sequence);
+}
+
+GtkWidget *
+gtk_root_lookup_effective_pointer_focus (GtkRoot          *root,
+                                         GdkDevice        *device,
+                                         GdkEventSequence *sequence)
+{
+  return GTK_ROOT_GET_IFACE (root)->lookup_effective_pointer_focus (root, device, sequence);
+}
+
+void
+gtk_root_set_pointer_focus_grab (GtkRoot          *root,
+                                 GdkDevice        *device,
+                                 GdkEventSequence *sequence,
+                                 GtkWidget        *target)
+{
+  GTK_ROOT_GET_IFACE (root)->set_pointer_focus_grab (root, device, sequence, target);
+}
+
+void
+gtk_root_maybe_update_cursor (GtkRoot   *root,
+                              GtkWidget *widget,
+                              GdkDevice *device)
+{
+  GTK_ROOT_GET_IFACE (root)->maybe_update_cursor (root, widget, device);
 }
