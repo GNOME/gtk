@@ -29,7 +29,8 @@
 #include "config.h"
 
 #include "gtkintl.h"
-#include "gtkwidget.h"
+#include "gtkprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtktypebuiltins.h"
@@ -38,6 +39,8 @@
 struct _GtkEventControllerMotion
 {
   GtkEventController parent_instance;
+
+  const GdkEvent *current_event;
 
   guint is_pointer_focus       : 1;
   guint contains_pointer_focus : 1;
@@ -132,7 +135,11 @@ gtk_event_controller_motion_handle_event (GtkEventController *controller,
 
       update_pointer_focus (motion, TRUE, detail);
 
+      motion->current_event = event;
+
       g_signal_emit (controller, signals[ENTER], 0, x, y, mode, detail);
+
+      motion->current_event = NULL;
     }
   else if (type == GDK_LEAVE_NOTIFY)
     {
@@ -144,13 +151,18 @@ gtk_event_controller_motion_handle_event (GtkEventController *controller,
 
       update_pointer_focus (motion, FALSE, detail);
 
+      motion->current_event = event;
+
       g_signal_emit (controller, signals[LEAVE], 0, mode, detail);
+
+      motion->current_event = NULL;
     }
   else if (type == GDK_MOTION_NOTIFY)
     {
       double x, y;
 
       gdk_event_get_coords (event, &x, &y);
+
       g_signal_emit (controller, signals[MOTION], 0, x, y);
     }
 
@@ -300,3 +312,56 @@ gtk_event_controller_motion_new (void)
   return g_object_new (GTK_TYPE_EVENT_CONTROLLER_MOTION,
                        NULL);
 }
+
+/**
+ * gtk_event_controller_motion_get_pointer_origin:
+ * @controller: a #GtkEventControllerMotion
+ *
+ * Returns the widget that contained the pointer before.
+ *
+ * This function can only be used in handlers for the
+ * #GtkEventControllerMotion::enter and
+ * #GtkEventControllerMotion::leave signals.
+ *
+ * Returns: (transfer none): the previous pointer focus
+ */
+GtkWidget *
+gtk_event_controller_motion_get_pointer_origin (GtkEventControllerMotion *controller)
+{
+  GtkWidget *origin;
+
+  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_MOTION (controller), NULL);
+  g_return_val_if_fail (controller->current_event != NULL, NULL);
+
+  if (gdk_event_get_event_type (controller->current_event) == GDK_ENTER_NOTIFY)
+    origin = (GtkWidget *)gdk_event_get_related_target (controller->current_event);
+  else
+    origin = (GtkWidget *)gdk_event_get_target (controller->current_event);
+
+  return origin;
+}
+
+/**
+ * gtk_event_controller_motion_get_pointer_target:
+ * @controller: a #GtkEventControllerMotion
+ *
+ * Returns the widget that will contain the pointer afterwards.
+ *
+ * This function can only be used in handlers for the
+ * #GtkEventControllerMotion::enter and
+ * #GtkEventControllerMotion::leave signals.
+ *
+ * Returns: (transfer none): the next pointer focus
+ */
+GtkWidget *
+gtk_event_controller_motion_get_pointer_target (GtkEventControllerMotion *controller)
+{
+  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_MOTION (controller), NULL);
+  g_return_val_if_fail (controller->current_event != NULL, NULL);
+
+  if (gdk_event_get_event_type (controller->current_event) == GDK_ENTER_NOTIFY)
+    return (GtkWidget *)gdk_event_get_target (controller->current_event);
+  else
+    return (GtkWidget *)gdk_event_get_related_target (controller->current_event);
+}
+
