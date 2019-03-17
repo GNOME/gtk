@@ -3437,11 +3437,8 @@ update_cursor_on_state_change (GtkWidget *widget)
   GtkWidget *toplevel;
 
   toplevel = gtk_widget_get_toplevel (widget);
-  if (!GTK_IS_WINDOW (toplevel))
-    return;
-
-  gtk_window_update_pointer_focus_on_state_change (GTK_WINDOW (toplevel),
-                                                   widget);
+  if (GTK_IS_ROOT (toplevel))
+    gtk_root_update_pointer_focus_on_state_change (GTK_ROOT (toplevel), widget);
 }
 
 /**
