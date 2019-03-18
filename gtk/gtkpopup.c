@@ -116,13 +116,15 @@ gtk_popup_move_resize (GtkPopup *popup)
   gtk_widget_translate_coordinates (priv->relative_to,
                                     GTK_WIDGET (gtk_widget_get_root (priv->relative_to)),
                                     rect.x, rect.y, &rect.x, &rect.y);
-
+  gdk_surface_move_resize (priv->surface, rect.x, rect.y, rect.width, rect.height);
+#if 0
   gdk_surface_move_to_rect (priv->surface,
                             &rect,
                             GDK_GRAVITY_SOUTH,
                             GDK_GRAVITY_NORTH,
                             GDK_ANCHOR_FLIP_Y,
                             0, 10);
+#endif
 }
 
 static void
@@ -284,14 +286,14 @@ static void
 gtk_popup_show (GtkWidget *widget)
 {
   GtkPopup *popup = GTK_POPUP (widget);
-  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
 
   _gtk_widget_set_visible_flag (widget, TRUE);
   gtk_css_node_validate (gtk_widget_get_css_node (widget));
   gtk_widget_realize (widget);
   gtk_widget_map (widget);
 
-  gtk_popup_move_focus (widget, GTK_DIR_TAB_FORWARD);
+  if (!gtk_widget_get_focus_child (widget))
+    gtk_widget_child_focus (widget, GTK_DIR_TAB_FORWARD);
 }
 
 static void
