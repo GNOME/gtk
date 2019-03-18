@@ -215,8 +215,12 @@ static void     gtk_menu_motion            (GtkEventController *controller,
 static void     gtk_menu_enter             (GtkEventController *controller,
                                             double              x,
                                             double              y,
+                                            GdkCrossingMode     mode,
+                                            GdkNotifyType       detail,
                                             gpointer            user_data);
 static void     gtk_menu_leave             (GtkEventController *controller,
+                                            GdkCrossingMode     mode,
+                                            GdkNotifyType       detail,
                                             gpointer            user_data);
 static gboolean gtk_menu_key_pressed       (GtkEventControllerKey *controller,
                                             guint                  keyval,
@@ -3165,6 +3169,8 @@ static void
 gtk_menu_enter (GtkEventController *controller,
                 double              x,
                 double              y,
+                GdkCrossingMode     mode,
+                GdkNotifyType       detail,
                 gpointer            user_data)
 {
   GdkDevice *source_device;
@@ -3191,6 +3197,8 @@ gtk_menu_enter (GtkEventController *controller,
 
 static void
 gtk_menu_leave (GtkEventController *controller,
+                GdkCrossingMode     mode,
+                GdkNotifyType       detail,
                 gpointer            user_data)
 {
   GtkMenu *menu;

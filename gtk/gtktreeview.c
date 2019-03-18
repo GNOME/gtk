@@ -929,8 +929,12 @@ static void gtk_tree_view_drag_gesture_end                  (GtkGestureDrag *ges
 static void gtk_tree_view_motion_controller_enter           (GtkEventControllerMotion *controller,
                                                              double                    x,
                                                              double                    y,
+                                                             GdkCrossingMode           mode,
+                                                             GdkNotifyType             detail,
                                                              GtkTreeView              *tree_view);
 static void gtk_tree_view_motion_controller_leave           (GtkEventControllerMotion *controller,
+                                                             GdkCrossingMode           mode,
+                                                             GdkNotifyType             detail,
                                                              GtkTreeView              *tree_view);
 static void gtk_tree_view_motion_controller_motion          (GtkEventControllerMotion *controller,
                                                              double                    x,
@@ -5437,6 +5441,8 @@ static void
 gtk_tree_view_motion_controller_enter (GtkEventControllerMotion *controller,
                                        double                    x,
                                        double                    y,
+                                       GdkCrossingMode           mode,
+                                       GdkNotifyType             detail,
                                        GtkTreeView              *tree_view)
 {
   GtkTreeRBTree *tree;
@@ -5462,6 +5468,8 @@ gtk_tree_view_motion_controller_enter (GtkEventControllerMotion *controller,
 
 static void
 gtk_tree_view_motion_controller_leave (GtkEventControllerMotion *controller,
+                                       GdkCrossingMode           mode,
+                                       GdkNotifyType             detail,
                                        GtkTreeView              *tree_view)
 {
   if (tree_view->priv->prelight_node)

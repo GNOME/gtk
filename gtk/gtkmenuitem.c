@@ -141,8 +141,12 @@ static void gtk_menu_item_destroy        (GtkWidget        *widget);
 static void gtk_menu_item_enter          (GtkEventController *controller,
                                           double              x,
                                           double              y,
+                                          GdkCrossingMode     mode,
+                                          GdkNotifyType       detail,
                                           gpointer            user_data);
 static void gtk_menu_item_leave          (GtkEventController *controller,
+                                          GdkCrossingMode     mode,
+                                          GdkNotifyType       detail,
                                           gpointer            user_data);
 static void gtk_menu_item_parent_cb      (GObject          *object,
                                           GParamSpec       *pspec,
@@ -1117,22 +1121,20 @@ static void
 gtk_menu_item_enter (GtkEventController *controller,
                      double              x,
                      double              y,
+                     GdkCrossingMode     mode,
+                     GdkNotifyType       detail,
                      gpointer            user_data)
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (user_data);
   GtkWidget *menu_shell;
-  GdkCrossingMode mode;
   GdkEvent *event;
 
   event = gtk_get_current_event (); /* FIXME controller event */
 
-  if (gdk_event_get_crossing_mode ((GdkEvent *)event, &mode))
-    {
-      if (mode == GDK_CROSSING_GTK_GRAB ||
-          mode == GDK_CROSSING_GTK_UNGRAB ||
-          mode == GDK_CROSSING_STATE_CHANGED)
-        return;
-    }
+  if (mode == GDK_CROSSING_GTK_GRAB ||
+      mode == GDK_CROSSING_GTK_UNGRAB ||
+      mode == GDK_CROSSING_STATE_CHANGED)
+    return;
 
   if (gdk_event_get_device ((GdkEvent*) event) ==
       gdk_event_get_source_device ((GdkEvent*) event))
@@ -1147,6 +1149,8 @@ gtk_menu_item_enter (GtkEventController *controller,
 
 static void
 gtk_menu_item_leave (GtkEventController *controller,
+                     GdkCrossingMode     mode,
+                     GdkNotifyType       detail,
                      gpointer            user_data)
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (user_data);
