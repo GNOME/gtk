@@ -608,11 +608,16 @@ find_toplevel_under_pointer (GdkDisplay *display,
 
   info = _gdk_display_get_pointer_info (display, gdk_seat_get_pointer (seat));
   toplevel = info->toplevel_under_pointer;
-  if (toplevel && WINDOW_IS_TOPLEVEL (toplevel))
-    get_window_point_from_screen_point (toplevel, screen_point, x, y);
-
+  if (!(toplevel && WINDOW_IS_TOPLEVEL (toplevel)))
+    {
+      gint gdk_x = 0, gdk_y = 0;
+      _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, &gdk_x, &gdk_y);
+      toplevel = _gdk_quartz_window_find_child (_gdk_root, gdk_x, gdk_y, TRUE);
+      info->toplevel_under_pointer = g_object_ref (toplevel);
+    }
   if (toplevel)
     {
+      get_window_point_from_screen_point (toplevel, screen_point, x, y);
       /* If the coordinates are out of window bounds, this toplevel is not
        * under the pointer and we thus return NULL. This can occur when
        * toplevel under pointer has not yet been updated due to a very recent
