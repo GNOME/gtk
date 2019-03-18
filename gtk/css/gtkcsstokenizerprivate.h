@@ -118,6 +118,8 @@ struct _GtkCssLocation
 void                    gtk_css_token_clear                     (GtkCssToken            *token);
 
 gboolean                gtk_css_token_is_finite                 (const GtkCssToken      *token);
+gboolean                gtk_css_token_is_preserved              (const GtkCssToken      *token,
+                                                                 GtkCssTokenType        *out_closing);
 #define gtk_css_token_is(token, _type) ((token)->type == (_type))
 gboolean                gtk_css_token_is_ident                  (const GtkCssToken      *token,
                                                                  const char             *ident);

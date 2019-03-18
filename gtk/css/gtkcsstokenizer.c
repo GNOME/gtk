@@ -268,6 +268,83 @@ gtk_css_token_is_finite (const GtkCssToken *token)
     }
 }
 
+/*
+ * gtk_css_token_is_preserved:
+ * @token: a #GtkCssToken
+ * @out_closing: (allow-none): Type of the token that closes a block
+ *     started with this token
+ *
+ * A token is considered preserved when it does not start a block.
+ *
+ * Tokens that start a block require different error recovery when parsing,
+ * so CSS parsers want to look at this function
+ *
+ * Returns: %TRUE if the token is considered preserved.
+ **/
+gboolean
+gtk_css_token_is_preserved (const GtkCssToken *token,
+                            GtkCssTokenType   *out_closing)
+{
+  switch (token->type)
+    {
+    case GTK_CSS_TOKEN_FUNCTION:
+    case GTK_CSS_TOKEN_OPEN_PARENS:
+      if (out_closing)
+        *out_closing = GTK_CSS_TOKEN_CLOSE_PARENS;
+      return FALSE;
+
+    case GTK_CSS_TOKEN_OPEN_SQUARE:
+      if (out_closing)
+        *out_closing = GTK_CSS_TOKEN_CLOSE_SQUARE;
+      return FALSE;
+
+    case GTK_CSS_TOKEN_OPEN_CURLY:
+      if (out_closing)
+        *out_closing = GTK_CSS_TOKEN_CLOSE_CURLY;
+      return FALSE;
+
+    default:
+      g_assert_not_reached ();
+    case GTK_CSS_TOKEN_EOF:
+    case GTK_CSS_TOKEN_WHITESPACE:
+    case GTK_CSS_TOKEN_STRING:
+    case GTK_CSS_TOKEN_URL:
+    case GTK_CSS_TOKEN_PERCENTAGE:
+    case GTK_CSS_TOKEN_CLOSE_PARENS:
+    case GTK_CSS_TOKEN_CLOSE_SQUARE:
+    case GTK_CSS_TOKEN_CLOSE_CURLY:
+    case GTK_CSS_TOKEN_COMMA:
+    case GTK_CSS_TOKEN_COLON:
+    case GTK_CSS_TOKEN_SEMICOLON:
+    case GTK_CSS_TOKEN_CDC:
+    case GTK_CSS_TOKEN_CDO:
+    case GTK_CSS_TOKEN_INCLUDE_MATCH:
+    case GTK_CSS_TOKEN_DASH_MATCH:
+    case GTK_CSS_TOKEN_PREFIX_MATCH:
+    case GTK_CSS_TOKEN_SUFFIX_MATCH:
+    case GTK_CSS_TOKEN_SUBSTRING_MATCH:
+    case GTK_CSS_TOKEN_COLUMN:
+    case GTK_CSS_TOKEN_COMMENT:
+    case GTK_CSS_TOKEN_IDENT:
+    case GTK_CSS_TOKEN_AT_KEYWORD:
+    case GTK_CSS_TOKEN_HASH_UNRESTRICTED:
+    case GTK_CSS_TOKEN_HASH_ID:
+    case GTK_CSS_TOKEN_DELIM:
+    case GTK_CSS_TOKEN_SIGNED_INTEGER:
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER:
+    case GTK_CSS_TOKEN_SIGNED_NUMBER:
+    case GTK_CSS_TOKEN_SIGNLESS_NUMBER:
+    case GTK_CSS_TOKEN_BAD_STRING:
+    case GTK_CSS_TOKEN_BAD_URL:
+    case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_DIMENSION:
+      if (out_closing)
+        *out_closing = GTK_CSS_TOKEN_EOF;
+      return TRUE;
+    }
+}
+
 gboolean
 gtk_css_token_is_ident (const GtkCssToken *token,
                         const char        *ident)
