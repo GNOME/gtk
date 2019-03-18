@@ -113,7 +113,8 @@ gtk_popup_move_resize (GtkPopup *popup)
   rect.y = 0;
   rect.width = gtk_widget_get_width (priv->relative_to);
   rect.height = gtk_widget_get_height (priv->relative_to);
-  gtk_widget_translate_coordinates (priv->relative_to, gtk_widget_get_toplevel (priv->relative_to),
+  gtk_widget_translate_coordinates (priv->relative_to,
+                                    GTK_WIDGET (gtk_widget_get_root (priv->relative_to)),
                                     rect.x, rect.y, &rect.x, &rect.y);
 
   gdk_surface_move_to_rect (priv->surface,
