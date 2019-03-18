@@ -31,7 +31,7 @@ add_content (GtkWidget *parent)
 
   gtk_widget_grab_default (button);
 
-  return box;
+  return entry;
 }
 
 static GtkWidget *
@@ -60,6 +60,7 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *window;
+  GtkWidget *entry;
   GtkWidget *box;
   GtkWidget *popup;
   GtkWidget *button;
@@ -69,9 +70,10 @@ main (int argc, char *argv[])
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 200);
 
-  box = add_content (window);
+  entry = add_content (window);
+  box = gtk_widget_get_parent (entry);
 
-  popup = create_popup (box);
+  popup = create_popup (entry);
 
   button = gtk_toggle_button_new_with_mnemonic ("_Popup");
   g_signal_connect (button, "toggled", G_CALLBACK (toggle_popup), popup);
