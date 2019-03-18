@@ -45,6 +45,11 @@ GType               gtk_event_controller_motion_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkEventController *gtk_event_controller_motion_new      (void);
 
+GDK_AVAILABLE_IN_ALL
+GtkWidget *         gtk_event_controller_motion_get_pointer_origin (GtkEventControllerMotion *controller);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *         gtk_event_controller_motion_get_pointer_target (GtkEventControllerMotion *controller);
+
 G_END_DECLS
 
 #endif /* __GTK_EVENT_CONTROLLER_MOTION_H__ */
