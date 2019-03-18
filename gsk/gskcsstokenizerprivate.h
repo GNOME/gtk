@@ -123,6 +123,8 @@ struct _GskCssLocation
 void                    gsk_css_token_clear                     (GskCssToken            *token);
 
 gboolean                gsk_css_token_is_finite                 (const GskCssToken      *token);
+gboolean                gsk_css_token_is_preserved              (const GskCssToken      *token,
+                                                                 GskCssTokenType        *out_closing);
 #define gsk_css_token_is(token, _type) ((token)->type == (_type))
 gboolean                gsk_css_token_is_ident                  (const GskCssToken      *token,
                                                                  const char             *ident);
