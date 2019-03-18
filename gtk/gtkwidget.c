@@ -791,7 +791,10 @@ gtk_widget_real_snapshot (GtkWidget   *widget,
   for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
-    gtk_widget_snapshot_child (widget, child, snapshot);
+    {
+      if (gtk_widget_get_root (child) == gtk_widget_get_root (widget))
+        gtk_widget_snapshot_child (widget, child, snapshot);
+    }
 }
 
 static gboolean
