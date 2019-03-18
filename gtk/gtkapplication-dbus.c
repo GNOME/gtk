@@ -331,6 +331,30 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
                                 NULL,
                                 &error);
 
+  if (error && g_str_has_prefix (error->message, "GDBus.Error:org.gnome.SessionManager.AlreadyRegistered:"))
+    {
+      /* Often applications forget to unset DESKTOP_AUTOSTART_ID after
+       * registering it for themselves. This happens even for well-known
+       * applications such as gnome media-keys. For example, if you start
+       * terminal with Ctrl+Alt+T, any applications started from such
+       * terminal will fail to RegisterClient here.
+       */
+      g_warning ("Parent application forgot to unset DESKTOP_AUTOSTART_ID, retrying RegisterClient with default ID");
+      g_clear_error (&error);
+      error = NULL;
+
+      g_free (client_id);
+      client_id = g_strdup ("");
+
+      res = g_dbus_proxy_call_sync (dbus->sm_proxy,
+                                    "RegisterClient",
+                                    g_variant_new ("(ss)", dbus->application_id, client_id),
+                                    G_DBUS_CALL_FLAGS_NONE,
+                                    G_MAXINT,
+                                    NULL,
+                                    &error);
+    }
+
   if (error)
     {
       g_warning ("Failed to register client: %s", error->message);
