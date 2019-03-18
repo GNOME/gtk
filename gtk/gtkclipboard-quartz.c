@@ -564,8 +564,16 @@ void
 gtk_clipboard_clear (GtkClipboard *clipboard)
 {
   clipboard_unset (clipboard);
-
-  [clipboard->pasteboard declareTypes:nil owner:nil];
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
+  if (gdk_quartz_osx_version() >= GDK_OSX_SNOW_LEOPARD)
+    [clipboard->pasteboard clearContents];
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1060
+  else
+#endif
+#endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 1060
+    [clipboard->pasteboard declareTypes:nil owner:nil];
+#endif
 }
 
 static void
@@ -851,7 +859,6 @@ gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
 /**
  * gtk_clipboard_wait_for_text:
  * @clipboard:
- * @target:
  *
  * Returns: (nullable):
  */
@@ -899,7 +906,7 @@ gtk_clipboard_wait_for_image (GtkClipboard *clipboard)
  * gtk_clipboard_wait_for_uris:
  * @clipboard:
  *
- * Returns: (nullable) (array zero-terminated=1):
+ * Returns: (nullable) (array zero-terminated=1) (transfer full) (element-type utf8):
  */
 gchar **
 gtk_clipboard_wait_for_uris (GtkClipboard *clipboard)
@@ -1275,6 +1282,8 @@ _gtk_clipboard_store_all (void)
 /**
  * gtk_clipboard_get_selection:
  * @clipboard:
+ *
+ * Returns: the selection
  *
  * Since: 3.22
  */
