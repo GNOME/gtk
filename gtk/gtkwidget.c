@@ -13367,6 +13367,8 @@ gtk_widget_forall (GtkWidget   *widget,
  *
  * gtk_widget_snapshot_child() takes care of translating the origin of
  * @snapshot, and deciding whether the child needs to be snapshot.
+ *
+ * This function does nothing for children that implement #GtkNative.
  **/
 void
 gtk_widget_snapshot_child (GtkWidget   *widget,
@@ -13377,6 +13379,9 @@ gtk_widget_snapshot_child (GtkWidget   *widget,
 
   g_return_if_fail (_gtk_widget_get_parent (child) == widget);
   g_return_if_fail (snapshot != NULL);
+
+  if (GTK_IS_NATIVE (child))
+    return;
 
   gtk_snapshot_save (snapshot);
   gtk_snapshot_transform (snapshot, priv->transform);
