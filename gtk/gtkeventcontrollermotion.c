@@ -239,6 +239,8 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
                             FALSE,
                             G_PARAM_READABLE);
 
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
+
   /**
    * GtkEventControllerMotion::enter:
    * @controller: The object that received the signal
