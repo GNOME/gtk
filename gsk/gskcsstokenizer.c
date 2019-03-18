@@ -267,6 +267,83 @@ gsk_css_token_is_finite (const GskCssToken *token)
     }
 }
 
+/*
+ * gsk_css_token_is_preserved:
+ * @token: a #GskCssToken
+ * @out_closing: (allow-none): Type of the token that closes a block
+ *     started with this token
+ *
+ * A token is considered preserved when it does not start a block.
+ *
+ * Tokens that start a block require different error recovery when parsing,
+ * so CSS parsers want to look at this function
+ *
+ * Returns: %TRUE if the token is considered preserved.
+ **/
+gboolean
+gsk_css_token_is_preserved (const GskCssToken *token,
+                            GskCssTokenType   *out_closing)
+{
+  switch (token->type)
+    {
+    case GSK_CSS_TOKEN_FUNCTION:
+    case GSK_CSS_TOKEN_OPEN_PARENS:
+      if (out_closing)
+        *out_closing = GSK_CSS_TOKEN_CLOSE_PARENS;
+      return FALSE;
+
+    case GSK_CSS_TOKEN_OPEN_SQUARE:
+      if (out_closing)
+        *out_closing = GSK_CSS_TOKEN_CLOSE_SQUARE;
+      return FALSE;
+
+    case GSK_CSS_TOKEN_OPEN_CURLY:
+      if (out_closing)
+        *out_closing = GSK_CSS_TOKEN_CLOSE_CURLY;
+      return FALSE;
+
+    default:
+      g_assert_not_reached ();
+    case GSK_CSS_TOKEN_EOF:
+    case GSK_CSS_TOKEN_WHITESPACE:
+    case GSK_CSS_TOKEN_STRING:
+    case GSK_CSS_TOKEN_URL:
+    case GSK_CSS_TOKEN_PERCENTAGE:
+    case GSK_CSS_TOKEN_CLOSE_PARENS:
+    case GSK_CSS_TOKEN_CLOSE_SQUARE:
+    case GSK_CSS_TOKEN_CLOSE_CURLY:
+    case GSK_CSS_TOKEN_COMMA:
+    case GSK_CSS_TOKEN_COLON:
+    case GSK_CSS_TOKEN_SEMICOLON:
+    case GSK_CSS_TOKEN_CDC:
+    case GSK_CSS_TOKEN_CDO:
+    case GSK_CSS_TOKEN_INCLUDE_MATCH:
+    case GSK_CSS_TOKEN_DASH_MATCH:
+    case GSK_CSS_TOKEN_PREFIX_MATCH:
+    case GSK_CSS_TOKEN_SUFFIX_MATCH:
+    case GSK_CSS_TOKEN_SUBSTRING_MATCH:
+    case GSK_CSS_TOKEN_COLUMN:
+    case GSK_CSS_TOKEN_COMMENT:
+    case GSK_CSS_TOKEN_IDENT:
+    case GSK_CSS_TOKEN_AT_KEYWORD:
+    case GSK_CSS_TOKEN_HASH_UNRESTRICTED:
+    case GSK_CSS_TOKEN_HASH_ID:
+    case GSK_CSS_TOKEN_DELIM:
+    case GSK_CSS_TOKEN_SIGNED_INTEGER:
+    case GSK_CSS_TOKEN_SIGNLESS_INTEGER:
+    case GSK_CSS_TOKEN_SIGNED_NUMBER:
+    case GSK_CSS_TOKEN_SIGNLESS_NUMBER:
+    case GSK_CSS_TOKEN_BAD_STRING:
+    case GSK_CSS_TOKEN_BAD_URL:
+    case GSK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
+    case GSK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
+    case GSK_CSS_TOKEN_DIMENSION:
+      if (out_closing)
+        *out_closing = GSK_CSS_TOKEN_EOF;
+      return TRUE;
+    }
+}
+
 gboolean
 gsk_css_token_is_ident (const GskCssToken *token,
                         const char        *ident)
