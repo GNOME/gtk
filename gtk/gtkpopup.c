@@ -52,6 +52,7 @@ typedef struct {
 enum {
   ACTIVATE_FOCUS,
   ACTIVATE_DEFAULT,
+  CLOSE,
   LAST_SIGNAL
 };
 
@@ -184,7 +185,6 @@ surface_size_changed (GtkWindow *window,
                       guint      width,
                       guint      height)
 {
-  g_print ("new surface size %d %d\n", width, height);
 }
 
 static void
@@ -224,12 +224,6 @@ gtk_popup_realize (GtkWidget *widget)
   priv->surface = gdk_surface_new_popup (priv->display, &parent_rect);
   gdk_surface_set_transient_for (priv->surface, gtk_widget_get_surface (priv->relative_to));
   gdk_surface_set_type_hint (priv->surface, GDK_SURFACE_TYPE_HINT_POPUP_MENU);
-  gdk_surface_move_to_rect (priv->surface,
-                            &parent_rect,
-                            GDK_GRAVITY_SOUTH,
-                            GDK_GRAVITY_NORTH,
-                            GDK_ANCHOR_FLIP_Y,
-                            0, 10);
 
   gtk_widget_set_surface (widget, priv->surface);
   g_signal_connect_swapped (priv->surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
@@ -290,11 +284,34 @@ gtk_popup_hide (GtkWidget *widget)
 }
 
 static void
+grab_prepare_func (GdkSeat    *seat,
+                   GdkSurface *surface,
+                   gpointer    data)
+{
+  gdk_surface_show (surface);
+}
+
+static void
 gtk_popup_map (GtkWidget *widget)
 {
   GtkPopup *popup = GTK_POPUP (widget);
   GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
   GtkWidget *child;
+  GdkRectangle parent_rect;
+
+  gdk_seat_grab (gdk_display_get_default_seat (priv->display),
+                 priv->surface,
+                 GDK_SEAT_CAPABILITY_ALL,
+                 TRUE,
+                 NULL, NULL, grab_prepare_func, NULL);
+
+  gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
+  gdk_surface_move_to_rect (priv->surface,
+                            &parent_rect,
+                            GDK_GRAVITY_SOUTH,
+                            GDK_GRAVITY_NORTH,
+                            GDK_ANCHOR_FLIP_Y,
+                            0, 10);
 
   GTK_WIDGET_CLASS (gtk_popup_parent_class)->map (widget);
 
@@ -302,7 +319,6 @@ gtk_popup_map (GtkWidget *widget)
   if (child != NULL && gtk_widget_get_visible (child))
     gtk_widget_map (child);
 
-  gdk_surface_show (priv->surface);
   gdk_surface_focus (priv->surface, gtk_get_current_event_time ());
 }
 
@@ -316,6 +332,7 @@ gtk_popup_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_popup_parent_class)->unmap (widget);
 
   gdk_surface_hide (priv->surface);
+  gdk_seat_ungrab (gdk_display_get_default_seat (priv->display));
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child != NULL)
@@ -457,6 +474,12 @@ gtk_popup_activate_focus (GtkPopup *popup)
 }
 
 static void
+gtk_popup_close (GtkPopup *popup)
+{
+  gtk_widget_hide (GTK_WIDGET (popup));
+}
+
+static void
 add_tab_bindings (GtkBindingSet    *binding_set,
                   GdkModifierType   modifiers,
                   GtkDirectionType  direction)
@@ -497,6 +520,7 @@ gtk_popup_class_init (GtkPopupClass *klass)
 
   klass->activate_default = gtk_popup_activate_default;
   klass->activate_focus = gtk_popup_activate_focus;
+  klass->close = gtk_popup_close;
 
   gtk_root_install_properties (object_class, 1);
 
@@ -520,6 +544,16 @@ gtk_popup_class_init (GtkPopupClass *klass)
                   G_TYPE_NONE,
                   0);
 
+  signals[CLOSE] =
+    g_signal_new (I_("close"),
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkPopupClass, close),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  0);
+
   binding_set = gtk_binding_set_by_class (klass);
 
   add_tab_bindings (binding_set, 0, GTK_DIR_TAB_FORWARD);
@@ -533,6 +567,7 @@ gtk_popup_class_init (GtkPopupClass *klass)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0, "activate-default", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0, "activate-default", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0, "activate-default", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
 }
 
 GtkWidget *
