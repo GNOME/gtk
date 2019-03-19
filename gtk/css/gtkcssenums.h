@@ -60,6 +60,8 @@ typedef enum
  * GtkCssParserWarning:
  * @GTK_CSS_PARSER_WARNING_DEPRECATED: The given construct is
  *     deprecated and will be removed in a future version
+ * @GTK_CSS_PARSER_WARNING_SYNTAX: A syntax construct was used
+ *     that should be avoided
  *
  * Warnings that can occur while parsing CSS.
  *
@@ -68,7 +70,8 @@ typedef enum
  */
 typedef enum
 {
-  GTK_CSS_PARSER_WARNING_DEPRECATED
+  GTK_CSS_PARSER_WARNING_DEPRECATED,
+  GTK_CSS_PARSER_WARNING_SYNTAX
 } GtkCssParserWarning;
 
 #endif /* __GTK_CSS_ENUMS_H__ */
