@@ -51,9 +51,9 @@ create_popup (GtkWidget *parent)
 }
 
 static void
-toggle_popup (GtkToggleButton *button, GtkWidget *popup)
+show_popup (GtkToggleButton *button, GtkWidget *popup)
 {
-  gtk_widget_set_visible (popup, !gtk_widget_get_visible (popup));
+  gtk_widget_show (popup);
 }
 
 static GtkWidget *
@@ -191,6 +191,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (box), grid);
 
   combo = enum_combo (GDK_TYPE_GRAVITY);
+  gtk_combo_box_set_active_id (GTK_COMBO_BOX (combo), "GDK_GRAVITY_SOUTH");
   g_object_bind_property_full (combo, "active-id",
                                popup, "parent-anchor",
                                G_BINDING_SYNC_CREATE,
@@ -206,6 +207,7 @@ main (int argc, char *argv[])
   gtk_grid_attach (GTK_GRID (grid), combo, 1, 0, 2, 1);
                               
   combo = enum_combo (GDK_TYPE_GRAVITY);
+  gtk_combo_box_set_active_id (GTK_COMBO_BOX (combo), "GDK_GRAVITY_NORTH");
   g_object_bind_property_full (combo, "active-id",
                                popup, "surface-anchor",
                                G_BINDING_SYNC_CREATE,
@@ -270,9 +272,9 @@ main (int argc, char *argv[])
   gtk_grid_attach (GTK_GRID (grid), offset_x, 1, 5, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), offset_y, 2, 5, 1, 1);
 
-  button = gtk_toggle_button_new_with_mnemonic ("_Popup");
+  button = gtk_button_new_with_mnemonic ("_Popup");
   gtk_widget_set_halign (button, GTK_ALIGN_END);
-  g_signal_connect (button, "toggled", G_CALLBACK (toggle_popup), popup);
+  g_signal_connect (button, "clicked", G_CALLBACK (show_popup), popup);
   gtk_container_add (GTK_CONTAINER (box), button);
   
   gtk_widget_show (window);
