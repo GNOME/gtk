@@ -1,6 +1,6 @@
 * { padding: 0; -gtk-secondary-caret-color: #3584e4; }
 
-button:focus(visible), checkbutton:focus(visible), radiobutton:focus(visible), switch:focus(visible), scale:focus(visible), label:focus(visible), row:focus(visible), flowboxchild:focus(visible) { outline-color: alpha(currentColor,0.3); outline-style: dashed; outline-offset: -3px; outline-width: 1px; -gtk-outline-radius: 2px; }
+button:focus(visible), checkbutton:focus(visible), radiobutton:focus(visible), switch:focus(visible), scale:focus(visible), label:focus(visible), row:focus(visible), flowboxchild:focus(visible) { outline-color: alpha(currentColor,0.3); outline-style: dashed; outline-offset: -3px; outline-width: 1px; -gtk-outline-radius: 3px; }
 
 /*************** Base States * */
 .background { color: #2e3436; background-color: #f6f5f4; }
@@ -131,6 +131,8 @@ spinbutton:not(.vertical) image:hover, spinbutton.vertical text image:hover, ent
 spinbutton:not(.vertical) image:active, spinbutton.vertical text image:active, entry image:active { color: #3584e4; }
 
 spinbutton:not(.vertical) image:backdrop, spinbutton.vertical text image:backdrop, entry image:backdrop { color: #a7aaaa; }
+
+spinbutton.password:not(.vertical) image.caps-lock-indicator, spinbutton.vertical text.password image.caps-lock-indicator, entry.password image.caps-lock-indicator { color: #a7aaaa; }
 
 spinbutton:drop(active):focus:not(.vertical), spinbutton.vertical text:drop(active):focus, spinbutton:drop(active):not(.vertical), spinbutton.vertical text:drop(active), entry:drop(active):focus, entry:drop(active) { border-color: #4e9a06; box-shadow: inset 0 0 0 1px #4e9a06; }
 
