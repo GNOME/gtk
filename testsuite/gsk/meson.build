@@ -18,6 +18,14 @@ compare_render = executable(
   install_dir: testexecdir
 )
 
+node_parser = executable(
+  'node-parser',
+  ['node-parser.c'],
+  dependencies: libgtk_dep,
+  install: get_option('install-tests'),
+  install_dir: testexecdir
+)
+
 test('nodes (cairo)', test_render_nodes,
      args: [ '--tap', '-k' ],
      env: [ 'GIO_USE_VOLUME_MONITOR=unix',
@@ -53,6 +61,26 @@ foreach gl_test : gl_tests
   test('GL ' + gl_test[0], compare_render,
        args: [join_paths(meson.current_source_dir(), 'gl', gl_test[1] + '.txt'),
               join_paths(meson.current_source_dir(), 'gl', gl_test[1] + '.gl.png')],
+       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+              'GSETTINGS_BACKEND=memory',
+              'GTK_CSD=1',
+              'G_ENABLE_DIAGNOSTIC=0',
+              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+              'GSK_RENDERER=opengl'
+            ],
+       suite: 'gsk')
+endforeach
+
+node_parser_tests = [
+  'crash1',
+  'crash2',
+  'crash3',
+]
+
+foreach test : node_parser_tests
+  test('parser ' + test, node_parser,
+       args: [join_paths(meson.current_source_dir(), 'nodeparser', test + '.node')],
        env: [ 'GIO_USE_VOLUME_MONITOR=unix',
               'GSETTINGS_BACKEND=memory',
               'GTK_CSD=1',
