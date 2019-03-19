@@ -1,668 +1,841 @@
 
 #include "gskrendernodeparserprivate.h"
 
-#include "gskcsstokenizerprivate.h"
+#include "gskcssparserprivate.h"
 #include "gskroundedrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gsktransform.h"
 
-typedef struct
+typedef struct _Declaration Declaration;
+
+struct _Declaration
 {
-  int n_tokens;
-  GskCssToken *tokens;
+  const char *name;
+  gboolean (* parse_func) (GskCssParser *parser, gpointer result);
+  gpointer result;
+};
 
-  int pos;
-  const GskCssToken *cur;
-} Parser;
-
-static void
-skip (Parser *p)
+static gboolean
+parse_color_channel_value (GskCssParser *parser,
+                           double       *value,
+                           gboolean      is_percentage)
 {
-  p->pos ++;
-
-  g_assert_cmpint (p->pos, <, p->n_tokens);
-  p->cur = &p->tokens[p->pos];
-}
-
-static const GskCssToken *
-lookahead (Parser *p,
-           int     lookahead)
-{
-  g_assert_cmpint (p->pos, <, p->n_tokens - lookahead);
-
-  return &p->tokens[p->pos + lookahead];
-}
-
-static void
-expect (Parser *p,
-        int     expected_type)
-{
-  if (p->cur->type != expected_type)
-    g_error ("Expected token type %d but found %d ('%s')",
-             expected_type, p->cur->type, gsk_css_token_to_string (p->cur));
-}
-
-static void
-expect_skip (Parser *p,
-             int     expected_type)
-{
-  expect (p, expected_type);
-  skip (p);
-}
-
-static void
-expect_skip_ident (Parser     *p,
-                   const char *ident)
-{
-  if (!gsk_css_token_is_ident (p->cur, ident))
-    g_error ("Expected ident '%s', but found token %s",
-             ident, p->cur->string.string);
-
-  skip (p);
-}
-
-static void
-parser_init (Parser      *p,
-             GskCssToken *tokens,
-             int          n_tokens)
-{
-  p->tokens = tokens;
-  p->pos = 0;
-  p->cur = &tokens[p->pos];
-  p->n_tokens = n_tokens;
-}
-
-static GskCssToken *
-tokenize (GBytes *bytes,
-          int    *n_tokens)
-{
-  GskCssTokenizer *tokenizer;
-  GArray *tokens;
-  GskCssToken token;
-
-  tokenizer = gsk_css_tokenizer_new (bytes);
-  tokens = g_array_new (FALSE, TRUE, sizeof (GskCssToken));
-
-  for (gsk_css_tokenizer_read_token (tokenizer, &token, NULL);
-       !gsk_css_token_is (&token, GSK_CSS_TOKEN_EOF);
-       gsk_css_tokenizer_read_token (tokenizer, &token, NULL))
+  if (is_percentage)
     {
-      g_array_append_val (tokens, token);
-    }
+      if (!gsk_css_parser_consume_percentage (parser, value))
+        return FALSE;
 
-  g_array_append_val (tokens, token);
-
-  *n_tokens = (int) tokens->len;
-
-  return (GskCssToken *) g_array_free (tokens, FALSE);
-}
-
-static double
-number_value (Parser *p)
-{
-  if (!gsk_css_token_is (p->cur, GSK_CSS_TOKEN_SIGNED_INTEGER) &&
-      !gsk_css_token_is (p->cur, GSK_CSS_TOKEN_SIGNLESS_INTEGER) &&
-      !gsk_css_token_is (p->cur, GSK_CSS_TOKEN_SIGNED_NUMBER) &&
-      !gsk_css_token_is (p->cur, GSK_CSS_TOKEN_SIGNLESS_NUMBER))
-    expect (p, GSK_CSS_TOKEN_SIGNED_NUMBER);
-
-  return p->cur->number.number;
-}
-
-static void
-parse_double4 (Parser *p,
-               double *out_values)
-{
-  int i;
-
-  expect_skip (p, GSK_CSS_TOKEN_OPEN_PARENS);
-  out_values[0] = number_value (p);
-  skip (p);
-
-  for (i = 0; i < 3; i ++)
-    {
-      expect_skip (p, GSK_CSS_TOKEN_COMMA);
-      out_values[1 + i] = number_value (p);
-      skip (p);
-    }
-
-  expect_skip (p, GSK_CSS_TOKEN_CLOSE_PARENS);
-}
-
-static void
-parse_tuple (Parser *p,
-             double *out_values)
-{
-  expect_skip (p, GSK_CSS_TOKEN_OPEN_PARENS);
-  out_values[0] = number_value (p);
-  skip (p);
-
-  expect_skip (p, GSK_CSS_TOKEN_COMMA);
-
-  out_values[1] = number_value (p);
-  skip (p);
-
-  expect_skip (p, GSK_CSS_TOKEN_CLOSE_PARENS);
-}
-
-/*
- * The cases we allow are:
- * (x, y, w, h) (w1, h1) (w2, h2) (w3, h3) (w4, h4) for the full rect
- * (x, y, w, h) s1 s2 s3 s4                         for rect + quad corners
- * (x, y, w, h) s                                   for rect + all corners the same size
- * (x, y, w, h)                                     for just the rect with 0-sized corners
- */
-static void
-parse_rounded_rect (Parser         *p,
-                    GskRoundedRect *result)
-{
-  double rect[4];
-  double corner0[2];
-  double corner1[2];
-  double corner2[2];
-  double corner3[2];
-
-  parse_double4 (p, rect);
-
-  if (gsk_css_token_is (p->cur, GSK_CSS_TOKEN_OPEN_PARENS))
-    {
-      parse_tuple (p, corner0);
-      parse_tuple (p, corner1);
-      parse_tuple (p, corner2);
-      parse_tuple (p, corner3);
-    }
-  else if (gsk_css_token_is (p->cur, GSK_CSS_TOKEN_SIGNED_INTEGER) ||
-           gsk_css_token_is (p->cur, GSK_CSS_TOKEN_SIGNLESS_INTEGER) ||
-           gsk_css_token_is (p->cur, GSK_CSS_TOKEN_SIGNED_NUMBER) ||
-           gsk_css_token_is (p->cur, GSK_CSS_TOKEN_SIGNLESS_NUMBER))
-    {
-      double val = number_value (p);
-
-      corner0[0] = corner0[1] = val;
-
-      skip (p);
-
-      if (gsk_css_token_is (p->cur, GSK_CSS_TOKEN_SIGNED_INTEGER) ||
-          gsk_css_token_is (p->cur, GSK_CSS_TOKEN_SIGNLESS_INTEGER) ||
-          gsk_css_token_is (p->cur, GSK_CSS_TOKEN_SIGNED_NUMBER) ||
-          gsk_css_token_is (p->cur, GSK_CSS_TOKEN_SIGNLESS_NUMBER))
-        {
-          corner1[0] = corner1[1] = number_value (p);
-          skip (p);
-          corner2[0] = corner2[1] = number_value (p);
-          skip (p);
-          corner3[0] = corner3[1] = number_value (p);
-          skip (p);
-        }
-      else
-        {
-          corner1[0] = corner1[1] = val;
-          corner2[0] = corner2[1] = val;
-          corner3[0] = corner3[1] = val;
-        }
+      *value = CLAMP (*value, 0.0, 100.0) / 100.0;
+      return TRUE;
     }
   else
     {
-      corner0[0] = corner0[1] = 0.0;
-      corner1[0] = corner1[1] = 0.0;
-      corner2[0] = corner2[1] = 0.0;
-      corner3[0] = corner3[1] = 0.0;
-    }
+      if (!gsk_css_parser_consume_number (parser, value))
+        return FALSE;
 
-  gsk_rounded_rect_init (result,
-                         &GRAPHENE_RECT_INIT (rect[0], rect[1], rect[2], rect[3]),
-                         &(graphene_size_t) { corner0[0], corner0[1] },
-                         &(graphene_size_t) { corner1[0], corner1[1] },
-                         &(graphene_size_t) { corner2[0], corner2[1] },
-                         &(graphene_size_t) { corner3[0], corner3[1] });
+      *value = CLAMP (*value, 0.0, 255.0) / 255.0;
+      return TRUE;
+    }
 }
 
-static void
-parse_matrix (Parser            *p,
-              graphene_matrix_t *matrix)
+static guint
+parse_color_channel (GskCssParser *parser,
+                     guint         arg,
+                     gpointer      data)
 {
-  float vals[16];
-  int i;
+  GdkRGBA *rgba = data;
 
-  expect_skip (p, GSK_CSS_TOKEN_OPEN_PARENS);
-
-  vals[0] = number_value (p);
-  skip (p);
-
-  for (i = 1; i < 16; i ++)
+  if (arg == 0)
     {
-      expect_skip (p, GSK_CSS_TOKEN_COMMA);
-      vals[i] = number_value (p);
-      skip (p);
+      /* We abuse rgba->alpha to store if we use percentages or numbers */
+      if (gsk_css_token_is (gsk_css_parser_get_token (parser), GSK_CSS_TOKEN_PERCENTAGE))
+        rgba->alpha = 1.0;
+      else
+        rgba->alpha = 0.0;
+
+      if (!parse_color_channel_value (parser, &rgba->red, rgba->alpha != 0.0))
+        return 0;
+    }
+  else if (arg == 1)
+    {
+      if (!parse_color_channel_value (parser, &rgba->green, rgba->alpha != 0.0))
+        return 0;
+    }
+  else if (arg == 2)
+    {
+      if (!parse_color_channel_value (parser, &rgba->blue, rgba->alpha != 0.0))
+        return 0;
+    }
+  else if (arg == 3)
+    {
+      if (!gsk_css_parser_consume_number (parser, &rgba->alpha))
+        return FALSE;
+
+      rgba->alpha = CLAMP (rgba->alpha, 0.0, 1.0);
+    }
+  else
+    {
+      g_assert_not_reached ();
     }
 
-  expect_skip (p, GSK_CSS_TOKEN_CLOSE_PARENS);
-
-  graphene_matrix_init_from_float (matrix, vals);
+  return 1;
 }
 
-static double
-parse_float_param (Parser     *p,
-                   const char *param_name)
+static gboolean
+rgba_init_chars (GdkRGBA    *rgba,
+                 const char  s[8])
 {
-  double value;
+  guint i;
 
-  expect_skip_ident (p, param_name);
-  expect_skip (p, GSK_CSS_TOKEN_COLON);
-  value = number_value (p);
-  skip (p);
+  for (i = 0; i < 8; i++)
+    {
+      if (!g_ascii_isxdigit (s[i]))
+        return FALSE;
+    }
 
-  return value;
+  rgba->red =   (g_ascii_xdigit_value (s[0]) * 16 + g_ascii_xdigit_value (s[1])) / 255.0;
+  rgba->green = (g_ascii_xdigit_value (s[2]) * 16 + g_ascii_xdigit_value (s[3])) / 255.0;
+  rgba->blue =  (g_ascii_xdigit_value (s[4]) * 16 + g_ascii_xdigit_value (s[5])) / 255.0;
+  rgba->alpha = (g_ascii_xdigit_value (s[6]) * 16 + g_ascii_xdigit_value (s[7])) / 255.0;
+
+  return TRUE;
 }
 
-static void
-parse_tuple_param (Parser     *p,
-                   const char *param_name,
-                   double     *values)
+static gboolean
+gsk_rgba_parse (GskCssParser *parser,
+                GdkRGBA      *rgba)
 {
-  expect_skip_ident (p, param_name);
-  expect_skip (p, GSK_CSS_TOKEN_COLON);
+  const GskCssToken *token;
 
-  parse_tuple (p, values);
-}
-
-static void
-parse_double4_param (Parser     *p,
-                     const char *param_name,
-                     double     *values)
-{
-  expect_skip_ident (p, param_name);
-  expect_skip (p, GSK_CSS_TOKEN_COLON);
-
-  parse_double4 (p, values);
-}
-
-static void
-parse_rounded_rect_param (Parser         *p,
-                          const char     *param_name,
-                          GskRoundedRect *rect)
-{
-  expect_skip_ident (p, param_name);
-  expect_skip (p, GSK_CSS_TOKEN_COLON);
-
-  parse_rounded_rect (p, rect);
-}
-
-static void
-parse_matrix_param (Parser            *p,
-                    const char        *param_name,
-                    graphene_matrix_t *matrix)
-{
-  expect_skip_ident (p, param_name);
-  expect_skip (p, GSK_CSS_TOKEN_COLON);
-
-  parse_matrix (p, matrix);
-}
-
-static GskRenderNode *
-parse_node (Parser *p)
-{
-  GskRenderNode *result = NULL;
-
-  if (gsk_css_token_is_ident (p->cur, "color"))
+  token = gsk_css_parser_get_token (parser);
+  if (gsk_css_token_is_function (token, "rgb"))
     {
-      double color[4];
-      double bounds[4];
+      if (!gsk_css_parser_consume_function (parser, 3, 3, parse_color_channel, rgba))
+        return FALSE;
 
-      skip (p);
-      expect_skip (p, GSK_CSS_TOKEN_OPEN_CURLY);
-
-      parse_double4_param (p, "bounds", bounds);
-
-      expect_skip_ident (p, "color");
-      expect_skip (p, GSK_CSS_TOKEN_COLON);
-      parse_double4 (p, color);
-
-      expect_skip (p, GSK_CSS_TOKEN_CLOSE_CURLY);
-      result = gsk_color_node_new (&(GdkRGBA) { color[0], color[1], color[2], color[3] },
-                                   &GRAPHENE_RECT_INIT (bounds[0], bounds[1], bounds[2], bounds[3]));
+      rgba->alpha = 1.0;
+      return TRUE;
     }
-  else if (gsk_css_token_is_ident (p->cur, "opacity"))
+  else if (gsk_css_token_is_function (token, "rgba"))
     {
-      double opacity = 0.0;
-      GskRenderNode *child;
-
-      skip (p);
-      expect_skip (p, GSK_CSS_TOKEN_OPEN_CURLY);
-      expect_skip_ident (p, "opacity");
-      expect_skip (p, GSK_CSS_TOKEN_COLON);
-      opacity = number_value (p);
-      skip (p);
-
-      child = parse_node (p);
-
-      expect_skip (p, GSK_CSS_TOKEN_CLOSE_CURLY);
-      result = gsk_opacity_node_new (child, opacity);
-      gsk_render_node_unref (child);
+      return gsk_css_parser_consume_function (parser, 4, 4, parse_color_channel, rgba);
     }
-  else if (gsk_css_token_is_ident (p->cur, "container"))
+  else if (gsk_css_token_is (token, GSK_CSS_TOKEN_HASH_ID) ||
+           gsk_css_token_is (token, GSK_CSS_TOKEN_HASH_UNRESTRICTED))
     {
-      GPtrArray *children = g_ptr_array_new ();
-      guint i;
+      const char *s = token->string.string;
 
-      skip (p);
-      expect_skip (p, GSK_CSS_TOKEN_OPEN_CURLY);
-      while (p->cur->type != GSK_CSS_TOKEN_CLOSE_CURLY)
-        g_ptr_array_add (children, parse_node (p));
-
-
-      expect_skip (p, GSK_CSS_TOKEN_CLOSE_CURLY);
-      result = gsk_container_node_new ((GskRenderNode **)children->pdata, children->len);
-
-      for (i = 0; i < children->len; i ++)
-        gsk_render_node_unref (g_ptr_array_index (children, i));
-
-      g_ptr_array_free (children, TRUE);
-    }
-  else if (gsk_css_token_is_ident (p->cur, "outset_shadow"))
-    {
-      GskRoundedRect outline;
-      double color[4];
-      float dx, dy, spread, blur_radius;
-
-      skip (p);
-      expect_skip (p, GSK_CSS_TOKEN_OPEN_CURLY);
-      parse_rounded_rect_param (p, "outline", &outline);
-
-      parse_double4_param (p, "color", color);
-      dx = parse_float_param (p, "dx");
-      dy = parse_float_param (p, "dy");
-      spread = parse_float_param (p, "spread");
-      blur_radius = parse_float_param (p, "blur_radius");
-
-      expect_skip (p, GSK_CSS_TOKEN_CLOSE_CURLY);
-      result = gsk_outset_shadow_node_new (&outline,
-                                           &(GdkRGBA) { color[0], color[1], color[2], color[3] },
-                                           dx, dy,
-                                           spread,
-                                           blur_radius);
-    }
-  else if (gsk_css_token_is_ident (p->cur, "cross_fade"))
-    {
-      double progress;
-      GskRenderNode *start_child;
-      GskRenderNode *end_child;
-
-      skip (p);
-      expect_skip (p, GSK_CSS_TOKEN_OPEN_CURLY);
-
-      progress = parse_float_param (p, "progress");
-      start_child = parse_node (p);
-      end_child = parse_node (p);
-
-      expect_skip (p, GSK_CSS_TOKEN_CLOSE_CURLY);
-      result = gsk_cross_fade_node_new (start_child, end_child, progress);
-
-      gsk_render_node_unref (start_child);
-      gsk_render_node_unref (end_child);
-    }
-  else if (gsk_css_token_is_ident (p->cur, "clip"))
-    {
-      double clip_rect[4];
-      GskRenderNode *child;
-
-      skip (p);
-      expect_skip (p, GSK_CSS_TOKEN_OPEN_CURLY);
-
-      parse_double4_param (p, "clip", clip_rect);
-      child = parse_node (p);
-
-      expect_skip (p, GSK_CSS_TOKEN_CLOSE_CURLY);
-      result = gsk_clip_node_new (child,
-                                  &GRAPHENE_RECT_INIT (
-                                    clip_rect[0], clip_rect[1],
-                                    clip_rect[2], clip_rect[3]
-                                  ));
-
-      gsk_render_node_unref (child);
-    }
-  else if (gsk_css_token_is_ident (p->cur, "rounded_clip"))
-    {
-      GskRoundedRect clip_rect;
-      GskRenderNode *child;
-
-      skip (p);
-      expect_skip (p, GSK_CSS_TOKEN_OPEN_CURLY);
-
-      parse_rounded_rect_param (p, "clip", &clip_rect);
-      child = parse_node (p);
-
-
-      expect_skip (p, GSK_CSS_TOKEN_CLOSE_CURLY);
-      result = gsk_rounded_clip_node_new (child, &clip_rect);
-
-      gsk_render_node_unref (child);
-    }
-  else if (gsk_css_token_is_ident (p->cur, "linear_gradient"))
-    {
-      GArray *stops = g_array_new (FALSE, TRUE, sizeof (GskColorStop));
-      double bounds[4];
-      double start[2];
-      double end[2];
-
-      skip (p);
-      expect_skip (p, GSK_CSS_TOKEN_OPEN_CURLY);
-      parse_double4_param (p, "bounds", bounds);
-      parse_tuple_param (p, "start", start);
-      parse_tuple_param (p, "end", end);
-
-      expect_skip_ident (p, "stops");
-      expect_skip (p, GSK_CSS_TOKEN_COLON);
-      while (p->cur->type == GSK_CSS_TOKEN_OPEN_PARENS)
+      switch (strlen (s))
         {
-          GskColorStop stop;
-          double color[4];
+          case 3:
+            if (rgba_init_chars (rgba, (char[8]) {s[0], s[0], s[1], s[1], s[2], s[2], 'F', 'F' }))
+              return TRUE;
+            break;
 
-          skip (p);
-          stop.offset = number_value (p);
-          skip (p);
-          expect_skip (p, GSK_CSS_TOKEN_COMMA);
-          parse_double4 (p, color);
-          expect_skip (p, GSK_CSS_TOKEN_CLOSE_PARENS);
+          case 4:
+            if (rgba_init_chars (rgba, (char[8]) {s[0], s[0], s[1], s[1], s[2], s[2], s[3], s[3] }))
+              return TRUE;
+            break;
 
-          stop.color = (GdkRGBA) { color[0], color[1], color[2], color[3] };
-          g_array_append_val (stops, stop);
+          case 6:
+            if (rgba_init_chars (rgba, (char[8]) {s[0], s[1], s[2], s[3], s[4], s[5], 'F', 'F' }))
+              return TRUE;
+            break;
+
+          case 8:
+            if (rgba_init_chars (rgba, s))
+              return TRUE;
+            break;
+
+          default:
+            break;
         }
 
-      expect_skip (p, GSK_CSS_TOKEN_CLOSE_CURLY);
-      result = gsk_linear_gradient_node_new (&GRAPHENE_RECT_INIT (
-                                               bounds[0], bounds[1],
-                                               bounds[2], bounds[3]
-                                             ),
-                                             &(graphene_point_t) { start[0], start[1] },
-                                             &(graphene_point_t) { end[0], end[1] },
-                                             (GskColorStop *)stops->data,
-                                             stops->len);
-      g_array_free (stops, TRUE);
+      gsk_css_parser_error_value (parser, "Hash code is not a valid hex color.");
+      return FALSE;
     }
-  else if (gsk_css_token_is_ident (p->cur, "transform"))
+  else if (gsk_css_token_is (token, GSK_CSS_TOKEN_IDENT))
     {
-      GskTransform *transform;
-      GskRenderNode *child;
-
-      skip (p);
-      expect_skip (p, GSK_CSS_TOKEN_OPEN_CURLY);
-      expect_skip_ident (p, "transform");
-      expect_skip (p, GSK_CSS_TOKEN_COLON);
-
-      if (p->cur->type == GSK_CSS_TOKEN_OPEN_PARENS)
+      if (gsk_css_token_is_ident (token, "transparent"))
         {
-          graphene_matrix_t matrix;
-          parse_matrix (p, &matrix);
-
-          transform = gsk_transform_matrix (NULL, &matrix);
+          rgba = &(GdkRGBA) { 0, 0, 0, 0 };
+        }
+      else if (gdk_rgba_parse (rgba, token->string.string))
+        {
+          /* everything's fine */
         }
       else
         {
-          expect (p, GSK_CSS_TOKEN_IDENT);
+          gsk_css_parser_error_value (parser, "\"%s\" is not a known color name.", token->string.string);
+          return FALSE;
+        }
 
-          for (transform = NULL;;)
+      gsk_css_parser_consume_token (parser);
+      return TRUE;
+    }
+  else
+    {
+      gsk_css_parser_error_syntax (parser, "Expected a valid color.");
+      return FALSE;
+    }
+}
+
+static gboolean
+parse_semicolon (GskCssParser *parser)
+{
+  const GskCssToken *token;
+
+  token = gsk_css_parser_get_token (parser);
+  if (gsk_css_token_is (token, GSK_CSS_TOKEN_EOF))
+    {
+      gsk_css_parser_warn_syntax (parser, "No ';' at end of block");
+      return TRUE;
+    }
+  else if (!gsk_css_token_is (token, GSK_CSS_TOKEN_SEMICOLON))
+    {
+      gsk_css_parser_error_syntax (parser, "Expected ';' at end of statement");
+      return FALSE;
+    }
+
+  gsk_css_parser_consume_token (parser);
+  return TRUE;
+}
+
+static gboolean
+parse_rect_without_semicolon (GskCssParser    *parser,
+                              graphene_rect_t *out_rect)
+{
+  double numbers[4];
+  
+  if (!gsk_css_parser_consume_number (parser, &numbers[0]) ||
+      !gsk_css_parser_consume_number (parser, &numbers[1]) ||
+      !gsk_css_parser_consume_number (parser, &numbers[2]) ||
+      !gsk_css_parser_consume_number (parser, &numbers[3]))
+    return FALSE;
+
+  graphene_rect_init (out_rect, numbers[0], numbers[1], numbers[2], numbers[3]);
+
+  return TRUE;
+}
+
+static gboolean
+parse_rect (GskCssParser *parser,
+            gpointer      out_rect)
+{
+  graphene_rect_t r;
+
+  if (!parse_rect_without_semicolon (parser, &r) ||
+      !parse_semicolon (parser))
+    return FALSE;
+
+  graphene_rect_init_from_rect (out_rect, &r);
+  return TRUE;
+}
+
+static gboolean
+parse_rounded_rect (GskCssParser *parser,
+                    gpointer      out_rect)
+{
+  const GskCssToken *token;
+  graphene_rect_t r;
+  graphene_size_t corners[4];
+  double d;
+  guint i;
+
+  if (!parse_rect_without_semicolon (parser, &r))
+    return FALSE;
+
+  token = gsk_css_parser_get_token (parser);
+  if (!gsk_css_token_is_delim (token, '/'))
+    {
+      if (!parse_semicolon (parser))
+        return FALSE;
+      gsk_rounded_rect_init_from_rect (out_rect, &r, 0);
+      return TRUE;
+    }
+  gsk_css_parser_consume_token (parser);
+
+  for (i = 0; i < 4; i++)
+    {
+      token = gsk_css_parser_get_token (parser);
+      if (gsk_css_token_is (token, GSK_CSS_TOKEN_SEMICOLON) ||
+          gsk_css_token_is (token, GSK_CSS_TOKEN_EOF))
+        break;
+      if (!gsk_css_parser_consume_number (parser, &d))
+        return FALSE;
+      corners[i].width = d;
+    }
+
+  if (i == 0)
+    {
+      gsk_css_parser_error_syntax (parser, "Expected a number");
+      return FALSE;
+    }
+
+  /* The magic (i - 1) >> 1 below makes it take the correct value
+   * according to spec. Feel free to check the 4 cases
+   */
+  for (; i < 4; i++)
+    corners[i].width = corners[(i - 1) >> 1].width;
+
+  token = gsk_css_parser_get_token (parser);
+  if (gsk_css_token_is_delim (token, '/'))
+    {
+      gsk_css_parser_consume_token (parser);
+
+      for (i = 0; i < 4; i++)
+        {
+          token = gsk_css_parser_get_token (parser);
+          if (gsk_css_token_is (token, GSK_CSS_TOKEN_SEMICOLON) ||
+              gsk_css_token_is (token, GSK_CSS_TOKEN_EOF))
+            break;
+          if (!gsk_css_parser_consume_number (parser, &d))
+            return FALSE;
+          corners[i].height = d;
+        }
+
+      if (i == 0)
+        {
+          gsk_css_parser_error_syntax (parser, "Expected a number");
+          return FALSE;
+        }
+
+      for (; i < 4; i++)
+        corners[i].height = corners[(i - 1) >> 1].height;
+    }
+  else
+    {
+      for (i = 0; i < 4; i++)
+        corners[i].height = corners[i].width;
+    }
+
+  if (!parse_semicolon (parser))
+    return FALSE;
+
+  gsk_rounded_rect_init (out_rect, &r, &corners[0], &corners[1], &corners[2], &corners[3]);
+
+  return TRUE;
+}
+
+static gboolean
+parse_color (GskCssParser *parser,
+             gpointer      out_color)
+{
+  GdkRGBA color;
+
+  if (!gsk_rgba_parse (parser, &color) ||
+      !parse_semicolon (parser))
+    return FALSE;
+
+  *(GdkRGBA *) out_color = color;
+
+  return TRUE;
+}
+
+static gboolean
+parse_double (GskCssParser *parser,
+              gpointer      out_double)
+{
+  double d;
+
+  if (!gsk_css_parser_consume_number (parser, &d) ||
+      !parse_semicolon (parser))
+    return FALSE;
+
+  *(double *) out_double = d;
+
+  return TRUE;
+}
+
+static gboolean
+parse_point (GskCssParser *parser,
+             gpointer      out_point)
+{
+  double x, y;
+
+  if (!gsk_css_parser_consume_number (parser, &x) ||
+      !gsk_css_parser_consume_number (parser, &y) ||
+      !parse_semicolon (parser))
+    return FALSE;
+
+  graphene_point_init (out_point, x, y);
+
+  return TRUE;
+}
+
+static gboolean
+parse_string (GskCssParser *parser,
+              gpointer      out_string)
+{
+  const GskCssToken *token;
+  char *s;
+
+  token = gsk_css_parser_get_token (parser);
+  if (!gsk_css_token_is (token, GSK_CSS_TOKEN_STRING))
+    return FALSE;
+
+  s = g_strdup (token->string.string);
+  gsk_css_parser_consume_token (parser);
+
+  if (!parse_semicolon (parser))
+    {
+      g_free (s);
+      return FALSE;
+    }
+
+  g_free (*(char **) out_string);
+  *(char **) out_string = s;
+
+  return TRUE;
+}
+
+static gboolean
+parse_stops (GskCssParser *parser,
+             gpointer      out_stops)
+{
+  GArray *stops;
+  GskColorStop stop;
+
+  stops = g_array_new (FALSE, FALSE, sizeof (GskColorStop));
+
+  do
+    {
+      if (!gsk_css_parser_consume_number (parser, &stop.offset) ||
+          !gsk_rgba_parse (parser, &stop.color))
+        { /* do nothing */ }
+      else if (stops->len == 0 && stop.offset < 0)
+        gsk_css_parser_error_value (parser, "Color stop offset must be >= 0");
+      else if (stops->len > 0 && stop.offset < g_array_index (stops, GskColorStop, stops->len - 1).offset)
+        gsk_css_parser_error_value (parser, "Color stop offset must be >= previous value");
+      else if (stop.offset > 1)
+        gsk_css_parser_error_value (parser, "Color stop offset must be <= 1");
+      else
+        {
+          g_array_append_val (stops, stop);
+          continue;
+        }
+
+      g_array_free (stops, TRUE);
+      return FALSE;
+    }
+  while (gsk_css_parser_consume_if (parser, GSK_CSS_TOKEN_COMMA));
+
+  if (stops->len < 2)
+    {
+      gsk_css_parser_error_value (parser, "At least 2 color stops need to be specified");
+      g_array_free (stops, TRUE);
+      return FALSE;
+    }
+
+  if (*(GArray **) out_stops)
+    g_array_free (*(GArray **) out_stops, TRUE);
+  *(GArray **) out_stops = stops;
+
+  return parse_semicolon (parser);
+}
+
+static gboolean
+parse_node (GskCssParser *parser, gpointer out_node);
+
+static GskRenderNode *
+parse_container_node (GskCssParser *parser)
+{
+  GskRenderNode *node;
+  GPtrArray *nodes;
+  const GskCssToken *token;
+  
+  nodes = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
+
+  for (token = gsk_css_parser_get_token (parser);
+       !gsk_css_token_is (token, GSK_CSS_TOKEN_EOF);
+       token = gsk_css_parser_get_token (parser))
+    {
+      node = NULL;
+      if (parse_node (parser, &node))
+        {
+          g_ptr_array_add (nodes, node);
+        }
+      else
+        {
+          gsk_css_parser_skip_until (parser, GSK_CSS_TOKEN_OPEN_CURLY);
+          gsk_css_parser_skip (parser);
+        }
+    }
+
+  node = gsk_container_node_new ((GskRenderNode **) nodes->pdata, nodes->len);
+
+  g_ptr_array_unref (nodes);
+
+  return node;
+}
+
+static void
+parse_declarations_sync (GskCssParser *parser)
+{
+  const GskCssToken *token;
+
+  for (token = gsk_css_parser_get_token (parser);
+       !gsk_css_token_is (token, GSK_CSS_TOKEN_EOF);
+       token = gsk_css_parser_get_token (parser))
+    {
+      if (gsk_css_token_is (token, GSK_CSS_TOKEN_SEMICOLON) ||
+          gsk_css_token_is (token, GSK_CSS_TOKEN_OPEN_CURLY))
+        {
+          gsk_css_parser_skip (parser);
+          break;
+        }
+      gsk_css_parser_skip (parser);
+    }
+}
+
+static guint
+parse_declarations (GskCssParser      *parser,
+                    const Declaration *declarations,
+                    guint              n_declarations)
+{
+  guint parsed = 0;
+  guint i;
+  const GskCssToken *token;
+
+  g_assert (n_declarations < 8 * sizeof (guint));
+
+  for (token = gsk_css_parser_get_token (parser);
+       !gsk_css_token_is (token, GSK_CSS_TOKEN_EOF);
+       token = gsk_css_parser_get_token (parser))
+    {
+      for (i = 0; i < n_declarations; i++)
+        {
+          if (gsk_css_token_is_ident (token, declarations[i].name))
             {
-              /* Transform name */
-              expect (p, GSK_CSS_TOKEN_IDENT);
-
-              if (lookahead (p, 1)->type == GSK_CSS_TOKEN_OPEN_CURLY) /* Start of child node */
-                break;
-
-              if (gsk_css_token_is_ident (p->cur, "translate"))
+              gsk_css_parser_consume_token (parser);
+              token = gsk_css_parser_get_token (parser);
+              if (!gsk_css_token_is (token, GSK_CSS_TOKEN_COLON))
                 {
-                  double offset[2];
-                  skip (p);
-                  parse_tuple (p, offset);
-                  transform = gsk_transform_translate (transform,
-                                                       &(graphene_point_t) { offset[0], offset[1] });
-
+                  gsk_css_parser_error_syntax (parser, "Expected ':' after variable declaration");
+                  parse_declarations_sync (parser);
                 }
               else
                 {
-                  g_error ("Unknown transform type: %s", gsk_css_token_to_string (p->cur));
+                  gsk_css_parser_consume_token (parser);
+                  if (parsed & (1 << i))
+                    gsk_css_parser_warn_syntax (parser, "Variable \"%s\" defined multiple times", declarations[i].name);
+                  if (declarations[i].parse_func (parser, declarations[i].result))
+                    parsed |= (1 << i);
+                  else
+                    parse_declarations_sync (parser);
                 }
+              break;
             }
         }
-
-      child = parse_node (p);
-
-      expect_skip (p, GSK_CSS_TOKEN_CLOSE_CURLY);
-      result = gsk_transform_node_new (child, transform);
-
-      gsk_transform_unref (transform);
-      gsk_render_node_unref (child);
+      if (i == n_declarations)
+        {
+          if (gsk_css_token_is (token, GSK_CSS_TOKEN_IDENT))
+            gsk_css_parser_error_syntax (parser, "No variable named \"%s\"", token->string.string);
+          else
+            gsk_css_parser_error_syntax (parser, "Expected a variable name");
+          parse_declarations_sync (parser);
+        }
     }
-  else if (gsk_css_token_is_ident (p->cur, "color_matrix"))
+
+  return parsed;
+}
+
+static GskRenderNode *
+parse_color_node (GskCssParser *parser)
+{
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  GdkRGBA color = { 0, 0, 0, 0 };
+  const Declaration declarations[] = {
+    { "bounds", parse_rect, &bounds },
+    { "color", parse_color, &color },
+  };
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+
+  return gsk_color_node_new (&color, &bounds);
+}
+
+static GskRenderNode *
+parse_linear_gradient_node (GskCssParser *parser)
+{
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  graphene_point_t start = GRAPHENE_POINT_INIT (0, 0);
+  graphene_point_t end = GRAPHENE_POINT_INIT (0, 0);
+  GArray *stops = NULL;
+  const Declaration declarations[] = {
+    { "bounds", parse_rect, &bounds },
+    { "start", parse_point, &start },
+    { "end", parse_point, &end },
+    { "stops", parse_stops, &stops },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (stops == NULL)
     {
-      double offset_values[4];
-      graphene_matrix_t matrix;
-      graphene_vec4_t offset;
-      GskRenderNode *child;
-
-      skip (p);
-      expect_skip (p, GSK_CSS_TOKEN_OPEN_CURLY);
-
-      parse_matrix_param (p, "matrix", &matrix);
-      parse_double4_param (p, "offset", offset_values);
-
-      graphene_vec4_init (&offset,
-                          offset_values[0],
-                          offset_values[1],
-                          offset_values[2],
-                          offset_values[3]);
-
-      child = parse_node (p);
-
-      expect_skip (p, GSK_CSS_TOKEN_CLOSE_CURLY);
-      result = gsk_color_matrix_node_new (child, &matrix, &offset);
-
-      gsk_render_node_unref (child);
+      gsk_css_parser_error_syntax (parser, "No color stops given");
+      return NULL;
     }
-  else if (gsk_css_token_is_ident (p->cur, "texture"))
-    {
-      G_GNUC_UNUSED guchar *texture_data;
-      gsize texture_data_len;
-      GdkTexture *texture;
-      double bounds[4];
 
-      skip (p);
-      expect_skip (p, GSK_CSS_TOKEN_OPEN_CURLY);
+  result = gsk_linear_gradient_node_new (&bounds, &start, &end, (GskColorStop *) stops->data, stops->len);
 
-      parse_double4_param (p, "bounds", bounds);
-
-      expect_skip (p, GSK_CSS_TOKEN_IDENT);
-      expect_skip (p, GSK_CSS_TOKEN_COLON);
-      expect (p, GSK_CSS_TOKEN_STRING);
-
-      texture_data = g_base64_decode (p->cur->string.string, &texture_data_len);
-      guchar data[] = {1, 0, 0, 1, 0, 0,
-                       0, 0, 1, 0, 0, 1};
-      GBytes *b = g_bytes_new_static (data, 12);
-
-      /* TODO: :( */
-      texture = gdk_memory_texture_new (2, 2, GDK_MEMORY_R8G8B8,
-                                        b, 6);
-
-      expect_skip (p, GSK_CSS_TOKEN_STRING);
-
-      expect_skip (p, GSK_CSS_TOKEN_CLOSE_CURLY);
-      result = gsk_texture_node_new (texture,
-                                     &GRAPHENE_RECT_INIT (
-                                       bounds[0], bounds[1],
-                                       bounds[2], bounds[3]
-                                     ));
-    }
-  else if (gsk_css_token_is_ident (p->cur, "inset_shadow"))
-    {
-      GskRoundedRect outline;
-      double color[4];
-      float dx, dy, spread, blur_radius;
-
-      skip (p);
-      expect_skip (p, GSK_CSS_TOKEN_OPEN_CURLY);
-      parse_rounded_rect_param (p, "outline", &outline);
-
-      parse_double4_param (p, "color", color);
-      dx = parse_float_param (p, "dx");
-      dy = parse_float_param (p, "dy");
-      spread = parse_float_param (p, "spread");
-      blur_radius = parse_float_param (p, "blur_radius");
-
-      expect_skip (p, GSK_CSS_TOKEN_CLOSE_CURLY);
-      result = gsk_inset_shadow_node_new (&outline,
-                                          &(GdkRGBA) { color[0], color[1], color[2], color[3] },
-                                          dx, dy,
-                                          spread,
-                                          blur_radius);
-    }
-  else if (gsk_css_token_is_ident (p->cur, "border"))
-    {
-      GskRoundedRect outline;
-      double widths[4];
-      double colors[4][4];
-
-      skip (p);
-      expect_skip (p, GSK_CSS_TOKEN_OPEN_CURLY);
-
-      parse_rounded_rect_param (p, "outline", &outline);
-      parse_double4_param (p, "widths", widths);
-
-      expect_skip_ident (p, "colors");
-      expect_skip (p, GSK_CSS_TOKEN_COLON);
-
-      parse_double4 (p, colors[0]);
-      parse_double4 (p, colors[1]);
-      parse_double4 (p, colors[2]);
-      parse_double4 (p, colors[3]);
-
-      expect_skip (p, GSK_CSS_TOKEN_CLOSE_CURLY);
-      result = gsk_border_node_new (&outline,
-                                    (float[4]) { widths[0], widths[1], widths[2], widths[3] },
-                                    (GdkRGBA[4]) {
-                                      (GdkRGBA) { colors[0][0], colors[0][1], colors[0][2], colors[0][3] },
-                                      (GdkRGBA) { colors[1][0], colors[1][1], colors[1][2], colors[1][3] },
-                                      (GdkRGBA) { colors[2][0], colors[2][1], colors[2][2], colors[2][3] },
-                                      (GdkRGBA) { colors[3][0], colors[3][1], colors[3][2], colors[3][3] },
-                                    });
-    }
-  else if (gsk_css_token_is_ident (p->cur, "text"))
-    {
-      skip (p);
-      expect_skip (p, GSK_CSS_TOKEN_OPEN_CURLY);
-
-      expect_skip (p, GSK_CSS_TOKEN_CLOSE_CURLY);
-
-      result = gsk_color_node_new (
-                                   &(GdkRGBA) { 0, 1, 0, 1 },
-                                   &GRAPHENE_RECT_INIT (0, 0, 0, 0));
-    }
-  else
-    {
-      g_error ("Unknown render node type: %s", gsk_css_token_to_string (p->cur));
-    }
+  g_array_free (stops, TRUE);
 
   return result;
+}
+
+static GskRenderNode *
+parse_inset_shadow_node (GskCssParser *parser)
+{
+  GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
+  GdkRGBA color = { 0, 0, 0, 0 };
+  double dx, dy, blur, spread;
+  const Declaration declarations[] = {
+    { "outline", parse_rounded_rect, &outline },
+    { "color", parse_color, &color },
+    { "dx", parse_double, &dx },
+    { "dy", parse_double, &dy },
+    { "spread", parse_double, &spread },
+    { "blur", parse_double, &blur }
+  };
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+
+  return gsk_inset_shadow_node_new (&outline, &color, dx, dy, spread, blur);
+}
+
+static GskRenderNode *
+parse_outset_shadow_node (GskCssParser *parser)
+{
+  GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
+  GdkRGBA color = { 0, 0, 0, 0 };
+  double dx, dy, blur, spread;
+  const Declaration declarations[] = {
+    { "outline", parse_rounded_rect, &outline },
+    { "color", parse_color, &color },
+    { "dx", parse_double, &dx },
+    { "dy", parse_double, &dy },
+    { "spread", parse_double, &spread },
+    { "blur", parse_double, &blur }
+  };
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+
+  return gsk_outset_shadow_node_new (&outline, &color, dx, dy, spread, blur);
+}
+
+static GskRenderNode *
+parse_opacity_node (GskCssParser *parser)
+{
+  GskRenderNode *child = NULL;
+  double opacity = 1.0;
+  const Declaration declarations[] = {
+    { "opacity", parse_double, &opacity },
+    { "child", parse_node, &child },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (child == NULL)
+    {
+      gsk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
+      return NULL;
+    }
+
+  result = gsk_opacity_node_new (child, opacity);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static GskRenderNode *
+parse_cross_fade_node (GskCssParser *parser)
+{
+  GskRenderNode *start = NULL;
+  GskRenderNode *end = NULL;
+  double progress = 0.5;
+  const Declaration declarations[] = {
+    { "progress", parse_double, &progress },
+    { "start", parse_node, &start },
+    { "end", parse_node, &end },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (start == NULL || end == NULL)
+    {
+      if (start == NULL)
+        gsk_css_parser_error_syntax (parser, "Missing \"start\" property definition");
+      if (end == NULL)
+        gsk_css_parser_error_syntax (parser, "Missing \"end\" property definition");
+      g_clear_pointer (&start, gsk_render_node_unref);
+      g_clear_pointer (&end, gsk_render_node_unref);
+      return NULL;
+    }
+
+  result = gsk_cross_fade_node_new (start, end, progress);
+
+  gsk_render_node_unref (start);
+  gsk_render_node_unref (end);
+
+  return result;
+}
+
+static GskRenderNode *
+parse_clip_node (GskCssParser *parser)
+{
+  graphene_rect_t clip = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  GskRenderNode *child = NULL;
+  const Declaration declarations[] = {
+    { "clip", parse_rect, &clip },
+    { "child", parse_node, &child },
+  };
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (child == NULL)
+    {
+      gsk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
+      return NULL;
+    }
+
+  return gsk_clip_node_new (child, &clip);
+}
+
+static GskRenderNode *
+parse_rounded_clip_node (GskCssParser *parser)
+{
+  GskRoundedRect clip = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
+  GskRenderNode *child = NULL;
+  const Declaration declarations[] = {
+    { "clip", parse_rounded_rect, &clip },
+    { "child", parse_node, &child },
+  };
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (child == NULL)
+    {
+      gsk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
+      return NULL;
+    }
+
+  return gsk_rounded_clip_node_new (child, &clip);
+}
+
+static GskRenderNode *
+parse_debug_node (GskCssParser *parser)
+{
+  char *message = NULL;
+  GskRenderNode *child = NULL;
+  const Declaration declarations[] = {
+    { "message", parse_string, &message},
+    { "child", parse_node, &child },
+  };
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (child == NULL)
+    {
+      gsk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
+      return NULL;
+    }
+
+  return gsk_debug_node_new (child, message);
+}
+
+static gboolean
+parse_node (GskCssParser *parser,
+            gpointer      out_node)
+{
+  static struct {
+    const char *name;
+    GskRenderNode * (* func) (GskCssParser *);
+  } node_parsers[] = {
+    { "container", parse_container_node },
+    { "color", parse_color_node },
+#if 0
+    { "cairo", parse_cairo_node },
+#endif
+    { "linear-gradient", parse_linear_gradient_node },
+#if 0
+    { "border", parse_border_node },
+    { "texture", parse_texture_node },
+#endif
+    { "inset-shadow", parse_inset_shadow_node },
+    { "outset-shadow", parse_outset_shadow_node },
+#if 0
+    { "transform", parse_transform_node },
+#endif
+    { "opacity", parse_opacity_node },
+#if 0
+    { "color-matrix", parse_color-matrix_node },
+    { "repeat", parse_repeat_node },
+#endif
+    { "clip", parse_clip_node },
+    { "rounded-clip", parse_rounded_clip_node },
+#if 0
+    { "shadow", parse_shadow_node },
+    { "blend", parse_blend_node },
+#endif
+    { "cross-fade", parse_cross_fade_node },
+#if 0
+    { "text", parse_text_node },
+    { "blur", parse_blur_node },
+#endif
+    { "debug", parse_debug_node }
+  };
+  const GskCssToken *token;
+  guint i;
+  
+  token = gsk_css_parser_get_token (parser);
+  if (!gsk_css_token_is (token, GSK_CSS_TOKEN_IDENT))
+    {
+      gsk_css_parser_error_syntax (parser, "Expected a node name");
+      return FALSE;
+    }
+
+  for (i = 0; i < G_N_ELEMENTS (node_parsers); i++)
+    {
+      if (gsk_css_token_is_ident (token, node_parsers[i].name))
+        {
+          GskRenderNode *node;
+
+          gsk_css_parser_consume_token (parser);
+          token = gsk_css_parser_get_token (parser);
+          if (!gsk_css_token_is (token, GSK_CSS_TOKEN_OPEN_CURLY))
+            {
+              gsk_css_parser_error_syntax (parser, "Expected '{' after node name");
+              return FALSE;
+            }
+          gsk_css_parser_start_block (parser);
+          node = node_parsers[i].func (parser);
+          if (node)
+            {
+              token = gsk_css_parser_get_token (parser);
+              if (!gsk_css_token_is (token, GSK_CSS_TOKEN_EOF))
+                gsk_css_parser_error_syntax (parser, "Expected '}' at end of node definition");
+              g_clear_pointer ((GskRenderNode **) out_node, gsk_render_node_unref);
+              *(GskRenderNode **) out_node = node;
+            }
+          gsk_css_parser_end_block (parser);
+
+          return node != NULL;
+        }
+    }
+
+  gsk_css_parser_error_value (parser, "\"%s\" is not a valid node name", token->string.string);
+  return FALSE;
+}
+
+static void
+gsk_render_node_parser_error (GskCssParser         *parser,
+                              const GskCssLocation *location,
+                              const GskCssToken    *token,
+                              const GError         *error,
+                              gpointer              user_data)
+{
+  g_print ("ERROR: %zu:%zu: %s\n",
+           location->lines, location->line_chars,
+           error->message);
 }
 
 /**
@@ -672,16 +845,15 @@ GskRenderNode *
 gsk_render_node_deserialize_from_bytes (GBytes *bytes)
 {
   GskRenderNode *root = NULL;
-  GskCssToken *tokens;
-  int n_tokens;
-  Parser parser;
+  GskCssParser *parser;
 
-  tokens = tokenize (bytes, &n_tokens);
+  parser = gsk_css_parser_new (gsk_render_node_parser_error,
+                               NULL,
+                               NULL);
+  gsk_css_parser_add_bytes (parser, bytes);
+  root = parse_container_node (parser);
 
-  parser_init (&parser, tokens, n_tokens);
-  root = parse_node (&parser);
-
-  g_free (tokens);
+  gsk_css_parser_unref (parser);
 
   return root;
 }
