@@ -4,6 +4,7 @@ gtk_css_public_sources = files([
 ])
 
 gtk_css_private_sources = files([
+  'gtkcssparser.c',
   'gtkcsstokenizer.c',
 ])
 
