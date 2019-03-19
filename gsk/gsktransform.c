@@ -1695,6 +1695,7 @@ gsk_transform_parser_parse (GtkCssParser  *parser,
   if (gtk_css_token_is_ident (token, "none"))
     {
       gtk_css_parser_consume_token (parser);
+
       *out_transform = NULL;
       return TRUE;
     }
@@ -1902,6 +1903,7 @@ gsk_transform_parse (const char    *string,
       result = FALSE;
     }
   gtk_css_parser_unref (parser);
+
   g_bytes_unref (bytes);
 
   return result; 
