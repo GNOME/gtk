@@ -1,8 +1,8 @@
-outset_shadow {
-  outline = (100, 100, 200, 200)
-  color = (0, 0, 0, 1)
-  dx = 0
-  dy = 0
-  spread = 0
-  blur_radius = 40
+outset-shadow {
+  outline: 100 100 200 200;
+  color: black;
+  dx: 0;
+  dy: 0;
+  spread: 0;
+  blur: 40;
 }

@@ -1,9 +1,9 @@
-rounded_clip {
-  clip = (0, 0, 50, 100) 25
-  linear_gradient {
-    bounds = (0, 0, 50, 100)
-    start = (0, 0)
-    end = (0, 100)
-    stops = (0, (1, 0, 0, 1)) (1, (0, 0, 1, 1))
+rounded-clip {
+  clip: 0 0 50 100 / 25;
+  child: linear-gradient {
+    bounds: 0 0 50 100;
+    start: 0 0;
+    end: 0 100;
+    stops: 0 red, 1 blue;
   }
 }
