@@ -695,6 +695,8 @@ gtk_popup_class_init (GtkPopupClass *klass)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0, "activate-default", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0, "activate-default", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
+
+  gtk_widget_class_set_css_name (widget_class, "popover");
 }
 
 GtkWidget *
