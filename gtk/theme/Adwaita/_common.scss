@@ -32,7 +32,7 @@ flowboxchild:focus(visible) {
   outline-style: solid;
   outline-offset: -2px;
   outline-width: 2px;
-  -gtk-outline-radius: $button-radius - 2;
+  -gtk-outline-radius: $button-radius;
 }
 
 
@@ -956,6 +956,7 @@ toolbar.inline-toolbar toolbutton:backdrop {
 %linked_middle {
   border-radius: 0;
   border-right-style: none;
+  -gtk-outline-radius: 0;
 }
 
 %linked_left {
@@ -964,6 +965,7 @@ toolbar.inline-toolbar toolbutton:backdrop {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-right-style: none;
+    -gtk-outline-radius: $button_radius 0 0 $button_radius;
 }
 
 %linked_right {
@@ -972,6 +974,7 @@ toolbar.inline-toolbar toolbutton:backdrop {
     border-top-right-radius: $button_radius;
     border-bottom-right-radius: $button_radius;
     border-right-style: solid;
+    -gtk-outline-radius: 0 $button_radius $button_radius 0;
 }
 
 // 1st/last child are at text start/end
@@ -2702,6 +2705,8 @@ switch {
   background-color: $dark_fill;
   text-shadow: 0 1px transparentize(black, 0.9);
 
+  &:dir(ltr),
+  &:dir(rtl) { -gtk-outline-radius: 9999px; } /* specificity bump not to be overriden by %linked */
   &:checked {
     color: $selected_fg_color;
     border-color: $selected_borders_color;
