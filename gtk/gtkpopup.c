@@ -233,18 +233,6 @@ gtk_popup_realize (GtkWidget *widget)
   GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
   GdkRectangle parent_rect;
 
-  if (_gtk_widget_get_alloc_needed (widget))
-    {
-      GdkRectangle allocation;
-
-      allocation.x = 0;
-      allocation.y = 0;
-      allocation.width = 20; // FIXME
-      allocation.height = 20;
-      gtk_widget_size_allocate (widget, &allocation, -1);
-      gtk_widget_queue_resize (widget);
-    }
-
   gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
 
   priv->surface = gdk_surface_new_popup (priv->display, &parent_rect);
@@ -427,11 +415,7 @@ gtk_popup_size_allocate (GtkWidget *widget,
   GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
 
   if (priv->surface)
-    {
-      // FIXME why is this needed ?
-      gdk_surface_move_resize (priv->surface, 0, 0, width, height);
-      gtk_popup_move_resize (popup);
-    }
+    gtk_popup_move_resize (popup);
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   gtk_widget_size_allocate (child, &(GtkAllocation) { 0, 0, width, height }, baseline);
