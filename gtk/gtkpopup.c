@@ -333,8 +333,6 @@ gtk_popup_map (GtkWidget *widget)
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child != NULL && gtk_widget_get_visible (child))
     gtk_widget_map (child);
-
-  gdk_surface_focus (priv->surface, gtk_get_current_event_time ());
 }
 
 static void
