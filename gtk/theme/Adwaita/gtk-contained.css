@@ -606,11 +606,11 @@ searchbar > revealer > box { margin: -6px; padding: 6px; }
 
 .titlebar:not(headerbar) .subtitle, headerbar .subtitle { font-size: smaller; padding-left: 12px; padding-right: 12px; }
 
-.titlebar:not(headerbar) stackswitcher button:checked, .titlebar:not(headerbar) button.toggle:checked, headerbar stackswitcher button:checked, headerbar button.toggle:checked { background: image(#cfcac4); border-color: #c6bfb9; border-top-color: #bab3ab; }
+not(.selection-mode) .titlebar:not(headerbar) stackswitcher button:checked, not(.selection-mode) .titlebar:not(headerbar) button.toggle:checked, not(.selection-mode) headerbar stackswitcher button:checked, not(.selection-mode) headerbar button.toggle:checked { background: image(#cfcac4); border-color: #c6bfb9; border-top-color: #bab3ab; }
 
-.titlebar:not(headerbar) stackswitcher button:checked:backdrop, .titlebar:not(headerbar) button.toggle:checked:backdrop, headerbar stackswitcher button:checked:backdrop, headerbar button.toggle:checked:backdrop { border-color: #d5d0cc; background-image: image(#e4e4e0); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+not(.selection-mode) .titlebar:not(headerbar) stackswitcher button:checked:backdrop, not(.selection-mode) .titlebar:not(headerbar) button.toggle:checked:backdrop, not(.selection-mode) headerbar stackswitcher button:checked:backdrop, not(.selection-mode) headerbar button.toggle:checked:backdrop { border-color: #d5d0cc; background-image: image(#e4e4e0); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.titlebar:not(headerbar) stackswitcher button:checked:backdrop label, .titlebar:not(headerbar) stackswitcher button:checked:backdrop, .titlebar:not(headerbar) button.toggle:checked:backdrop label, .titlebar:not(headerbar) button.toggle:checked:backdrop, headerbar stackswitcher button:checked:backdrop label, headerbar stackswitcher button:checked:backdrop, headerbar button.toggle:checked:backdrop label, headerbar button.toggle:checked:backdrop { color: #929595; }
+not(.selection-mode) .titlebar:not(headerbar) stackswitcher button:checked:backdrop label, not(.selection-mode) .titlebar:not(headerbar) stackswitcher button:checked:backdrop, not(.selection-mode) .titlebar:not(headerbar) button.toggle:checked:backdrop label, not(.selection-mode) .titlebar:not(headerbar) button.toggle:checked:backdrop, not(.selection-mode) headerbar stackswitcher button:checked:backdrop label, not(.selection-mode) headerbar stackswitcher button:checked:backdrop, not(.selection-mode) headerbar button.toggle:checked:backdrop label, not(.selection-mode) headerbar button.toggle:checked:backdrop { color: #929595; }
 
 .selection-mode .titlebar:not(headerbar), .selection-mode.titlebar:not(headerbar), .selection-mode headerbar, headerbar.selection-mode { color: #ffffff; border-color: #185fb4; text-shadow: 0 -1px rgba(0, 0, 0, 0.5); background: #3584e4 linear-gradient(to top, #2c7fe3, #3987e5); box-shadow: inset 0 1px rgba(134, 181, 239, 0.9); }
 

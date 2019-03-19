@@ -1535,14 +1535,16 @@ headerbar {
   }
 
   /* Darken switchbuttons for headerbars. issue #1588 */
-  stackswitcher button:checked,
-  button.toggle:checked {
+  not(.selection-mode) & {
+    stackswitcher button:checked,
+    button.toggle:checked {
 
-    background: if($variant == 'light', image(darken($bg_color, 17%)), image(darken($bg_color, 9%)));
-    border-color: darken($borders_color, 3%);
-    border-top-color: darken($borders_color, 8%);
-    &:backdrop {
-      @include button(backdrop-active);
+      background: if($variant == 'light', image(darken($bg_color, 17%)), image(darken($bg_color, 9%)));
+      border-color: darken($borders_color, 3%);
+      border-top-color: darken($borders_color, 8%);
+      &:backdrop {
+        @include button(backdrop-active);
+      }
     }
   }
 
