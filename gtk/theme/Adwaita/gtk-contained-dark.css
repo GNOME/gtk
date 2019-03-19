@@ -1,6 +1,6 @@
 * { padding: 0; -gtk-secondary-caret-color: #15539e; }
 
-button:focus(visible), checkbutton:focus(visible), radiobutton:focus(visible), switch:focus(visible), scale:focus(visible), label:focus(visible), row:focus(visible), flowboxchild:focus(visible) { outline-color: alpha(currentColor,0.3); outline-style: dashed; outline-offset: -3px; outline-width: 1px; -gtk-outline-radius: 3px; }
+button:focus(visible), checkbutton:focus(visible), radiobutton:focus(visible), switch:focus(visible), scale:focus(visible), label:focus(visible), row:focus(visible), flowboxchild:focus(visible) { outline-color: #15539e; outline-style: solid; outline-offset: -2px; outline-width: 2px; -gtk-outline-radius: 3px; }
 
 /*************** Base States * */
 .background { color: #eeeeec; background-color: #353535; }

@@ -28,10 +28,10 @@ flowboxchild:focus(visible) {
   // to the adwaita engine: using real CSS properties is faster,
   // and we don't use any outlines for now.
 
-  outline-color: gtkalpha(currentColor, 0.3);
-  outline-style: dashed;
-  outline-offset: -3px;
-  outline-width: 1px;
+  outline-color: $selected_bg_color;
+  outline-style: solid;
+  outline-offset: -2px;
+  outline-width: 2px;
   -gtk-outline-radius: $button-radius - 2;
 }
 
