@@ -1418,6 +1418,7 @@ synth_crossing (GtkWidget       *widget,
 
   if (gdk_event_get_event_type (source) == GDK_FOCUS_CHANGE)
     {
+g_print ("focus %s: %s\n", enter ? "in" : "out", G_OBJECT_TYPE_NAME (widget));
       event = gdk_event_new (GDK_FOCUS_CHANGE);
       event->focus_change.in = enter;
       event->focus_change.mode = crossing_mode;
@@ -1521,7 +1522,7 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
           if (widget != ancestor || widget == old_target)
             synth_crossing (widget, GTK_WIDGET (toplevel), FALSE,
                             old_target, new_target, event, notify_type, mode);
-          if (widget == ancestor)
+          if (widget == ancestor || widget == GTK_WIDGET (toplevel))
             break;
           widget = gtk_widget_get_parent (widget);
         }
@@ -1536,7 +1537,7 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
       while (widget)
         {
           widgets = g_slist_prepend (widgets, widget);
-          if (widget == ancestor)
+          if (widget == ancestor || widget == GTK_WIDGET (toplevel))
             break;
           widget = gtk_widget_get_parent (widget);
         }
