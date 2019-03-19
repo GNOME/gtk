@@ -52,6 +52,7 @@ struct _GtkPopupClass
 
   void     (* activate_focus)   (GtkPopup *popup);
   void     (* activate_default) (GtkPopup *popup);
+  void     (* close)            (GtkPopup *popup);
 };
 
 GDK_AVAILABLE_IN_ALL
