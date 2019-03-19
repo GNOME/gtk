@@ -30,6 +30,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkmnemonichash.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtkmain.h"
 #include "gdk/gdkeventsprivate.h"
 #include "gtkpointerfocusprivate.h"
@@ -42,6 +43,12 @@ typedef struct {
   GdkSurface *surface;
   GdkSurfaceState state;
   GtkWidget *relative_to;
+  GdkGravity parent_anchor;
+  GdkGravity surface_anchor;
+  GdkAnchorHints anchor_hints;
+  int anchor_offset_x;
+  int anchor_offset_y;
+
   GtkWidget *focus_widget;
   gboolean active;
   GtkWidget *default_widget;
@@ -58,6 +65,17 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
+enum {
+  PROP_PARENT_ANCHOR = 1,
+  PROP_SURFACE_ANCHOR,
+  PROP_ANCHOR_HINTS,
+  PROP_ANCHOR_OFFSET_X,
+  PROP_ANCHOR_OFFSET_Y,
+  NUM_PROPERTIES
+};
+
+static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
+ 
 static void gtk_popup_root_interface_init (GtkRootInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkPopup, gtk_popup, GTK_TYPE_BIN,
@@ -113,10 +131,11 @@ gtk_popup_move_resize (GtkPopup *popup)
   gtk_widget_get_surface_allocation (priv->relative_to, &rect);
   gdk_surface_move_to_rect (priv->surface,
                             &rect,
-                            GDK_GRAVITY_SOUTH,
-                            GDK_GRAVITY_NORTH,
-                            GDK_ANCHOR_FLIP_Y,
-                            0, 10);
+                            priv->parent_anchor,
+                            priv->surface_anchor,
+                            priv->anchor_hints,
+                            priv->anchor_offset_x,
+                            priv->anchor_offset_y);
 }
 
 static void
@@ -190,9 +209,16 @@ surface_size_changed (GtkWindow *window,
 static void
 gtk_popup_init (GtkPopup *popup)
 {
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
   GtkEventController *controller;
 
   gtk_widget_set_has_surface (GTK_WIDGET (popup), TRUE);
+
+  priv->parent_anchor = GDK_GRAVITY_SOUTH;
+  priv->surface_anchor = GDK_GRAVITY_NORTH;
+  priv->anchor_hints = GDK_ANCHOR_FLIP_Y;
+  priv->anchor_offset_x = 0;
+  priv->anchor_offset_y = 0;
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect_swapped (controller, "focus-in", G_CALLBACK (gtk_popup_focus_in), popup);
@@ -297,7 +323,7 @@ gtk_popup_map (GtkWidget *widget)
   GtkPopup *popup = GTK_POPUP (widget);
   GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
   GtkWidget *child;
-  GdkRectangle parent_rect;
+  GdkRectangle rect;
 
   gdk_seat_grab (gdk_display_get_default_seat (priv->display),
                  priv->surface,
@@ -305,13 +331,14 @@ gtk_popup_map (GtkWidget *widget)
                  TRUE,
                  NULL, NULL, grab_prepare_func, NULL);
 
-  gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
+  gtk_widget_get_surface_allocation (priv->relative_to, &rect);
   gdk_surface_move_to_rect (priv->surface,
-                            &parent_rect,
-                            GDK_GRAVITY_SOUTH,
-                            GDK_GRAVITY_NORTH,
-                            GDK_ANCHOR_FLIP_Y,
-                            0, 10);
+                            &rect,
+                            priv->parent_anchor,
+                            priv->surface_anchor,
+                            priv->anchor_hints,
+                            priv->anchor_offset_x,
+                            priv->anchor_offset_y);
 
   GTK_WIDGET_CLASS (gtk_popup_parent_class)->map (widget);
 
@@ -423,15 +450,58 @@ gtk_popup_set_property (GObject       *object,
                          GParamSpec   *pspec)
 {
   GtkPopup *popup = GTK_POPUP (object);
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
 
   switch (prop_id)
     {
-    case 1 + GTK_ROOT_PROP_FOCUS_WIDGET:
+    case PROP_PARENT_ANCHOR:
+      if (priv->parent_anchor != g_value_get_enum (value))
+        {
+          priv->parent_anchor = g_value_get_enum (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
+
+    case PROP_SURFACE_ANCHOR:
+      if (priv->surface_anchor != g_value_get_enum (value))
+        {
+          priv->surface_anchor = g_value_get_enum (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
+
+    case PROP_ANCHOR_HINTS:
+      if (priv->anchor_hints != g_value_get_flags (value))
+        {
+          priv->anchor_hints = g_value_get_flags (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
+
+    case PROP_ANCHOR_OFFSET_X:
+      if (priv->anchor_offset_x != g_value_get_int (value))
+        {
+          priv->anchor_offset_x = g_value_get_int (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
+
+    case PROP_ANCHOR_OFFSET_Y:
+      if (priv->anchor_offset_y != g_value_get_int (value))
+        {
+          priv->anchor_offset_y = g_value_get_int (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
+
+    case NUM_PROPERTIES + GTK_ROOT_PROP_FOCUS_WIDGET:
       gtk_popup_set_focus (popup, g_value_get_object (value));
       break;
-    case 1 + GTK_ROOT_PROP_DEFAULT_WIDGET:
+
+    case NUM_PROPERTIES + GTK_ROOT_PROP_DEFAULT_WIDGET:
       gtk_popup_set_default (popup, g_value_get_object (value));
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -449,12 +519,34 @@ gtk_popup_get_property (GObject      *object,
 
   switch (prop_id)
     {
-    case 1 + GTK_ROOT_PROP_FOCUS_WIDGET:
+    case PROP_PARENT_ANCHOR:
+      g_value_set_enum (value, priv->parent_anchor);
+      break;
+
+    case PROP_SURFACE_ANCHOR:
+      g_value_set_enum (value, priv->surface_anchor);
+      break;
+
+    case PROP_ANCHOR_HINTS:
+      g_value_set_flags (value, priv->anchor_hints);
+      break;
+
+    case PROP_ANCHOR_OFFSET_X:
+      g_value_set_enum (value, priv->anchor_offset_x);
+      break;
+
+    case PROP_ANCHOR_OFFSET_Y:
+      g_value_set_enum (value, priv->anchor_offset_y);
+      break;
+
+    case NUM_PROPERTIES + GTK_ROOT_PROP_FOCUS_WIDGET:
       g_value_set_object (value, priv->focus_widget);
       break;
-    case 1 + GTK_ROOT_PROP_DEFAULT_WIDGET:
+
+    case NUM_PROPERTIES + GTK_ROOT_PROP_DEFAULT_WIDGET:
       g_value_set_object (value, priv->default_widget);
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -522,7 +614,42 @@ gtk_popup_class_init (GtkPopupClass *klass)
   klass->activate_focus = gtk_popup_activate_focus;
   klass->close = gtk_popup_close;
 
-  gtk_root_install_properties (object_class, 1);
+  props[PROP_PARENT_ANCHOR] =
+    g_param_spec_enum ("parent-anchor",
+                       "Parent Anchor",
+                       "Where the reference point in the parent widget is located",
+                       GDK_TYPE_GRAVITY,
+                       GDK_GRAVITY_SOUTH,
+                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+  props[PROP_SURFACE_ANCHOR] =
+    g_param_spec_enum ("surface-anchor",
+                       "Surface Anchor",
+                       "Where the reference point of the surface is located",
+                       GDK_TYPE_GRAVITY,
+                       GDK_GRAVITY_NORTH,
+                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+  props[PROP_ANCHOR_HINTS] =
+    g_param_spec_flags ("anchor-hints",
+                       "Anchor Hints",
+                       "Hints that influence the placement of the surface",
+                       GDK_TYPE_ANCHOR_HINTS,
+                       GDK_ANCHOR_FLIP_Y,
+                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+  props[PROP_ANCHOR_OFFSET_X] =
+    g_param_spec_int ("anchor-offset-x",
+                      "Anchor Offset X",
+                      "X offset of the anchor point",
+                      G_MININT, G_MAXINT, 0,
+                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+  props[PROP_ANCHOR_OFFSET_Y] =
+    g_param_spec_int ("anchor-offset-y",
+                      "Anchor Offset Y",
+                      "Y offset of the anchor point",
+                      G_MININT, G_MAXINT, 0,
+                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
+  gtk_root_install_properties (object_class, NUM_PROPERTIES);
 
   signals[ACTIVATE_FOCUS] =
     g_signal_new (I_("activate-focus"),
