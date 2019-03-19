@@ -40,10 +40,6 @@ test('nodes (cairo)', test_render_nodes,
 
 # Interesting render nodes proven to be rendered 'correctly' by the GL renderer.
 gl_tests = [
-  ['outset shadow simple',         'outset_shadow_simple'],
-  ['outset shadow offset x',       'outset_shadow_offsetx'],
-  ['outset shadow offset y',       'outset_shadow_offsety'],
-  ['outset shadow offset both',    'outset_shadow_offset_both'],
   ['outset shadow rounded1',       'outset_shadow_rounded1'],
   ['outset shadow rounded2',       'outset_shadow_rounded2'],
   ['outset shadow rounded top',    'outset_shadow_rounded_top'],
@@ -51,7 +47,6 @@ gl_tests = [
   ['outset shadow blurred small',  'outset_shadow_blurred_small'],
   ['outset shadow blurred offset', 'outset_shadow_blurred_offset'],
   ['Crossfade simple',             'cross_fade'],
-  ['Clipped rounded clip',         'clipped_rounded_clip'],
   ['gradient simple',              'gradient_simple'],
   ['gradient clipped',             'gradient_clipped'],
   ['offscreen opacity',            'opacity_clip'],
@@ -70,6 +65,37 @@ foreach gl_test : gl_tests
               'GSK_RENDERER=opengl'
             ],
        suite: 'gsk')
+endforeach
+
+compare_render_tests = [
+  'clipped_rounded_clip',
+  'opacity_clip',
+  'outset_shadow_simple',
+  'outset_shadow_offset_both',
+  'outset_shadow_offset_x',
+  'outset_shadow_offset_y',
+]
+
+renderers = [
+  'opengl',
+  'cairo',
+]
+
+foreach renderer : renderers
+  foreach test : compare_render_tests
+    test(renderer + ' ' + test, compare_render,
+         args: [join_paths(meson.current_source_dir(), 'compare', test + '.node'),
+                join_paths(meson.current_source_dir(), 'compare', test + '.png')],
+         env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+                'GSETTINGS_BACKEND=memory',
+                'GTK_CSD=1',
+                'G_ENABLE_DIAGNOSTIC=0',
+                'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+                'GSK_RENDERER=' + renderer
+              ],
+       suite: [ 'gsk', 'gsk-compare', 'gsk-' + renderer, 'gsk-compare-' + renderer ])
+  endforeach
 endforeach
 
 node_parser_tests = [
