@@ -42,6 +42,7 @@
 #include "gdkprivate-wayland.h"
 #include "gdkglcontext-wayland.h"
 #include "gdkwaylandmonitor.h"
+#include "gdk-private.h"
 #include "pointer-gestures-unstable-v1-client-protocol.h"
 #include "tablet-unstable-v2-client-protocol.h"
 #include "xdg-shell-unstable-v6-client-protocol.h"
@@ -805,19 +806,9 @@ gdk_wayland_display_make_default (GdkDisplay *display)
   g_free (display_wayland->startup_notification_id);
   display_wayland->startup_notification_id = NULL;
 
-  startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-  if (startup_id && *startup_id != '\0')
-    {
-      if (!g_utf8_validate (startup_id, -1, NULL))
-        g_warning ("DESKTOP_STARTUP_ID contains invalid UTF-8");
-      else
-        display_wayland->startup_notification_id = g_strdup (startup_id);
-
-      /* Clear the environment variable so it won't be inherited by
-       * child processes and confuse things.
-       */
-      g_unsetenv ("DESKTOP_STARTUP_ID");
-    }
+  startup_id = gdk_get_desktop_startup_id ();
+  if (startup_id)
+    display_wayland->startup_notification_id = g_strdup (startup_id);
 }
 
 static gboolean

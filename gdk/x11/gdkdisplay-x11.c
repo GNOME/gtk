@@ -2229,19 +2229,9 @@ gdk_x11_display_make_default (GdkDisplay *display)
   g_free (display_x11->startup_notification_id);
   display_x11->startup_notification_id = NULL;
 
-  startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-  if (startup_id && *startup_id != '\0')
-    {
-      if (!g_utf8_validate (startup_id, -1, NULL))
-        g_warning ("DESKTOP_STARTUP_ID contains invalid UTF-8");
-      else
-        gdk_x11_display_set_startup_notification_id (display, startup_id);
-
-      /* Clear the environment variable so it won't be inherited by
-       * child processes and confuse things.
-       */
-      g_unsetenv ("DESKTOP_STARTUP_ID");
-    }
+  startup_id = gdk_get_desktop_startup_id ();
+  if (startup_id)
+    gdk_x11_display_set_startup_notification_id (display, startup_id);
 }
 
 static void
