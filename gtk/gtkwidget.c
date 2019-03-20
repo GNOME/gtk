@@ -8101,7 +8101,8 @@ gtk_widget_dispose (GObject *object)
   while (priv->paintables)
     gtk_widget_paintable_set_widget (priv->paintables->data, NULL);
 
-  gtk_widget_set_layout_manager (widget, NULL);
+  if (priv->layout_manager != NULL)
+    gtk_layout_manager_set_widget (priv->layout_manager, NULL);
   g_clear_object (&priv->layout_manager);
 
   priv->visible = FALSE;
@@ -13785,8 +13786,6 @@ gtk_widget_get_height (GtkWidget *widget)
  *
  * Sets the layout manager delegate instance that provides an implementation
  * for measuring and allocating the children of @widget.
- *
- * The @widget acquires a reference to the given @layout_manager.
  */
 void
 gtk_widget_set_layout_manager (GtkWidget        *widget,
@@ -13798,15 +13797,16 @@ gtk_widget_set_layout_manager (GtkWidget        *widget,
   g_return_if_fail (layout_manager == NULL || GTK_IS_LAYOUT_MANAGER (layout_manager));
   g_return_if_fail (layout_manager == NULL || gtk_layout_manager_get_widget (layout_manager) == NULL);
 
-  if (g_set_object (&priv->layout_manager, layout_manager))
-    {
-      if (priv->layout_manager != NULL)
-        gtk_layout_manager_set_widget (priv->layout_manager, widget);
+  if (priv->layout_manager == layout_manager)
+    return;
 
-      gtk_widget_queue_resize (widget);
+  priv->layout_manager = layout_manager;
+  if (priv->layout_manager != NULL)
+    gtk_layout_manager_set_widget (priv->layout_manager, widget);
 
-      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_LAYOUT_MANAGER]);
-    }
+  gtk_widget_queue_resize (widget);
+
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_LAYOUT_MANAGER]);
 }
 
 /**
