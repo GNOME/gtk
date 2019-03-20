@@ -440,6 +440,9 @@ GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_surface_new_popup            (GdkDisplay    *display,
                                                  const GdkRectangle *position);
 GDK_AVAILABLE_IN_ALL
+GdkSurface *   gdk_surface_new_popup_full       (GdkDisplay    *display,
+                                                 GdkSurface    *parent);
+GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display);
 GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_surface_new_child            (GdkSurface     *parent,
