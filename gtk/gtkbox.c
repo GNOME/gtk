@@ -191,13 +191,13 @@ gtk_box_set_property (GObject      *object,
       }
       break;
     case PROP_SPACING:
-      gtk_box_layout_set_spacing (GTK_BOX_LAYOUT (box_layout), g_value_get_int (value));
+      gtk_box_set_spacing (box, g_value_get_int (value));
       break;
     case PROP_BASELINE_POSITION:
-      gtk_box_layout_set_baseline_position (GTK_BOX_LAYOUT (box_layout), g_value_get_enum (value));
+      gtk_box_set_baseline_position (box, g_value_get_enum (value));
       break;
     case PROP_HOMOGENEOUS:
-      gtk_box_layout_set_homogeneous (GTK_BOX_LAYOUT (box_layout), g_value_get_boolean (value));
+      gtk_box_set_homogeneous (box, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -387,13 +387,17 @@ void
 gtk_box_set_homogeneous (GtkBox  *box,
 			 gboolean homogeneous)
 {
-  GtkLayoutManager *box_layout;
+  GtkBoxLayout *box_layout;
 
   g_return_if_fail (GTK_IS_BOX (box));
 
-  box_layout = gtk_widget_get_layout_manager (GTK_WIDGET (box));
-  gtk_box_layout_set_homogeneous (GTK_BOX_LAYOUT (box_layout), homogeneous);
+  homogeneous = !!homogeneous;
 
+  box_layout = GTK_BOX_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (box)));
+  if (homogeneous == gtk_box_layout_get_homogeneous (box_layout))
+    return;
+
+  gtk_box_layout_set_homogeneous (box_layout, homogeneous);
   g_object_notify_by_pspec (G_OBJECT (box), props[PROP_HOMOGENEOUS]);
 }
 
@@ -430,13 +434,15 @@ void
 gtk_box_set_spacing (GtkBox *box,
 		     gint    spacing)
 {
-  GtkLayoutManager *box_layout;
+  GtkBoxLayout *box_layout;
 
   g_return_if_fail (GTK_IS_BOX (box));
 
-  box_layout = gtk_widget_get_layout_manager (GTK_WIDGET (box));
-  gtk_box_layout_set_spacing (GTK_BOX_LAYOUT (box_layout), spacing);
+  box_layout = GTK_BOX_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (box)));
+  if (spacing == gtk_box_layout_get_spacing (box_layout))
+    return;
 
+  gtk_box_layout_set_spacing (box_layout, spacing);
   g_object_notify_by_pspec (G_OBJECT (box), props[PROP_SPACING]);
 }
 
@@ -476,13 +482,15 @@ void
 gtk_box_set_baseline_position (GtkBox             *box,
 			       GtkBaselinePosition position)
 {
-  GtkLayoutManager *box_layout;
+  GtkBoxLayout *box_layout;
 
   g_return_if_fail (GTK_IS_BOX (box));
 
-  box_layout = gtk_widget_get_layout_manager (GTK_WIDGET (box));
-  gtk_box_layout_set_baseline_position (GTK_BOX_LAYOUT (box_layout), position);
+  box_layout = GTK_BOX_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (box)));
+  if (position == gtk_box_layout_get_baseline_position (box_layout))
+    return;
 
+  gtk_box_layout_set_baseline_position (box_layout, position);
   g_object_notify_by_pspec (G_OBJECT (box), props[PROP_BASELINE_POSITION]);
 }
 
