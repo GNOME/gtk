@@ -235,9 +235,7 @@ gtk_popup_realize (GtkWidget *widget)
 
   gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
 
-  priv->surface = gdk_surface_new_popup (priv->display, &parent_rect);
-  gdk_surface_set_transient_for (priv->surface, gtk_widget_get_surface (priv->relative_to));
-  gdk_surface_set_type_hint (priv->surface, GDK_SURFACE_TYPE_HINT_POPUP_MENU);
+  priv->surface = gdk_surface_new_popup_full (priv->display, gtk_widget_get_surface (priv->relative_to));
 
   gtk_widget_set_surface (widget, priv->surface);
   g_signal_connect_swapped (priv->surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
