@@ -1,5 +1,5 @@
 /* gtklayoutmanager.h: Layout manager base class
- * Copyright 2018  The GNOME Foundation
+ * Copyright 2019  The GNOME Foundation
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <gsk/gsk.h>
 #include <gtk/gtktypes.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtklayoutchild.h>
@@ -38,6 +39,8 @@ G_DECLARE_DERIVABLE_TYPE (GtkLayoutManager, gtk_layout_manager, GTK, LAYOUT_MANA
  *   sizes of the widget using the layout manager for a given orientation
  * @allocate: a virtual function, used to allocate the size of the widget
  *   using the layout manager
+ * @create_layout_child: a virtual function, used to create a #GtkLayoutChild
+ *   meta object for the layout properties
  *
  * The `GtkLayoutManagerClass` structure contains only private data, and
  * should only be accessed through the provided API, or when subclassing
@@ -68,7 +71,8 @@ struct _GtkLayoutManagerClass
                                               int               baseline);
 
   GtkLayoutChild *   (* create_layout_child) (GtkLayoutManager *manager,
-                                              GtkWidget        *widget);
+                                              GtkWidget        *widget,
+                                              GtkWidget        *for_child);
 
   /*< private >*/
   gpointer _padding[16];
@@ -90,8 +94,7 @@ void                    gtk_layout_manager_allocate             (GtkLayoutManage
                                                                  int               height,
                                                                  int               baseline);
 GDK_AVAILABLE_IN_ALL
-GtkSizeRequestMode      gtk_layout_manager_get_request_mode     (GtkLayoutManager *manager,
-                                                                 GtkWidget        *widget);
+GtkSizeRequestMode      gtk_layout_manager_get_request_mode     (GtkLayoutManager *manager);
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget *             gtk_layout_manager_get_widget           (GtkLayoutManager *manager);
@@ -101,6 +104,6 @@ void                    gtk_layout_manager_layout_changed       (GtkLayoutManage
 
 GDK_AVAILABLE_IN_ALL
 GtkLayoutChild *        gtk_layout_manager_get_layout_child     (GtkLayoutManager *manager,
-                                                                 GtkWidget        *widget);
+                                                                 GtkWidget        *child);
 
 G_END_DECLS
