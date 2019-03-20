@@ -28,7 +28,7 @@
 #include <unistd.h>
 #endif
 
-#include "gdk/gdkconstructor.h"
+#include "gdk/gdk-private.h"
 
 #include "gtkapplicationprivate.h"
 #include "gtkclipboardprivate.h"
@@ -167,21 +167,6 @@ struct _GtkApplicationPrivate
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
-
-#ifdef G_HAS_CONSTRUCTORS
-#ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
-#pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(stash_desktop_startup_id)
-#endif
-G_DEFINE_CONSTRUCTOR(stash_desktop_startup_id)
-#endif
-
-static const char *desktop_startup_id = NULL;
-
-static void
-stash_desktop_startup_id (void)
-{
-  desktop_startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-}
 
 static gboolean
 gtk_application_focus_in_event_cb (GtkWindow      *window,
@@ -362,7 +347,9 @@ gtk_application_add_platform_data (GApplication    *application,
    *
    * So we do all the things... which currently is just one thing.
    */
-  if (desktop_startup_id && g_utf8_validate (desktop_startup_id, -1, NULL))
+  const gchar *desktop_startup_id =
+    GDK_PRIVATE_CALL (gdk_get_desktop_startup_id) ();
+  if (desktop_startup_id)
     g_variant_builder_add (builder, "{sv}", "desktop-startup-id",
                            g_variant_new_string (desktop_startup_id));
 }
@@ -394,9 +381,8 @@ gtk_application_init (GtkApplication *application)
 
   application->priv->accels = gtk_application_accels_new ();
 
-#ifndef G_HAS_CONSTRUCTORS
-  stash_desktop_startup_id ();
-#endif
+  /* getenv now at the latest */
+  GDK_PRIVATE_CALL (gdk_get_desktop_startup_id) ();
 }
 
 static void

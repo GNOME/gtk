@@ -17,6 +17,8 @@ gdk__private__ (void)
     gdk_display_set_rendering_mode,
     gdk_display_get_debug_updates,
     gdk_display_set_debug_updates,
+    gdk_get_desktop_startup_id,
+    gdk_get_desktop_autostart_id,
   };
 
   return &table;
