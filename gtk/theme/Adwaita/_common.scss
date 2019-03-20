@@ -1577,7 +1577,9 @@ headerbar {
       &:hover { @include button(hover, $selected_bg_color, $selected_fg_color); }
 
       &:active,
-      &:checked { @include button(active, $selected_bg_color, $selected_fg_color); }
+      &:checked,
+      &.toggle:checked,
+      &.toggle:active { @include button(active, $selected_bg_color, $selected_fg_color); }
 
       &:backdrop {
         &.flat, & {
