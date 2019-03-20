@@ -9,7 +9,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.         See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -303,7 +303,7 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
        child = _gtk_widget_get_next_sibling (child))
     {
       if (_gtk_widget_get_visible (child))
-	{
+        {
           gtk_widget_measure (child,
                               self->orientation,
                               -1,
@@ -311,8 +311,8 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
                               NULL, NULL);
 
           children_minimum_size += sizes[i].minimum_size;
-	  i += 1;
-	}
+          i += 1;
+        }
     }
 
   if (self->homogeneous)
@@ -335,10 +335,10 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
        * and is available for expanding children.
        */
       if (nexpand_children > 0)
-	{
+        {
           size_given_to_child = extra_space / nexpand_children;
           n_extra_widgets = extra_space % nexpand_children;
-	}
+        }
       else
         {
           size_given_to_child = 0;
@@ -410,22 +410,22 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
       computed_minimum = MAX (computed_minimum, computed_minimum_below + computed_minimum_above);
       computed_natural = MAX (computed_natural, computed_natural_below + computed_natural_above);
       switch (self->baseline_position)
-	{
-	case GTK_BASELINE_POSITION_TOP:
-	  computed_minimum_baseline = computed_minimum_above;
-	  computed_natural_baseline = computed_natural_above;
-	  break;
-	case GTK_BASELINE_POSITION_CENTER:
-	  computed_minimum_baseline = computed_minimum_above + MAX((computed_minimum - (computed_minimum_above + computed_minimum_below)) / 2, 0);
-	  computed_natural_baseline = computed_natural_above + MAX((computed_natural - (computed_natural_above + computed_natural_below)) / 2, 0);
-	  break;
-	case GTK_BASELINE_POSITION_BOTTOM:
-	  computed_minimum_baseline = computed_minimum - computed_minimum_below;
-	  computed_natural_baseline = computed_natural - computed_natural_below;
-	  break;
+        {
+        case GTK_BASELINE_POSITION_TOP:
+          computed_minimum_baseline = computed_minimum_above;
+          computed_natural_baseline = computed_natural_above;
+          break;
+        case GTK_BASELINE_POSITION_CENTER:
+          computed_minimum_baseline = computed_minimum_above + MAX((computed_minimum - (computed_minimum_above + computed_minimum_below)) / 2, 0);
+          computed_natural_baseline = computed_natural_above + MAX((computed_natural - (computed_natural_above + computed_natural_below)) / 2, 0);
+          break;
+        case GTK_BASELINE_POSITION_BOTTOM:
+          computed_minimum_baseline = computed_minimum - computed_minimum_below;
+          computed_natural_baseline = computed_natural - computed_natural_below;
+          break;
         default:
           break;
-	}
+        }
     }
 
   if (minimum != NULL)
@@ -515,7 +515,7 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
        child = _gtk_widget_get_next_sibling (child))
     {
       if (!_gtk_widget_get_visible (child))
-	continue;
+        continue;
 
       gtk_widget_measure (child,
                           self->orientation,
@@ -550,10 +550,10 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
        * and is available for expanding children.
        */
       if (nexpand_children > 0)
-	{
+        {
           size_given_to_child = extra_space / nexpand_children;
           n_extra_widgets = extra_space % nexpand_children;
-	}
+        }
       else
         {
           size_given_to_child = 0;
@@ -634,22 +634,22 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
   if (baseline == -1 && have_baseline)
     {
       /* TODO: This is purely based on the minimum baseline, when things fit we should
-	 use the natural one? */
+         use the natural one? */
 
       switch (self->baseline_position)
-	{
-	case GTK_BASELINE_POSITION_TOP:
-	  baseline = minimum_above;
-	  break;
-	case GTK_BASELINE_POSITION_CENTER:
-	  baseline = minimum_above + (height - (minimum_above + minimum_below)) / 2;
-	  break;
-	case GTK_BASELINE_POSITION_BOTTOM:
-	  baseline = height - minimum_below;
-	  break;
+        {
+        case GTK_BASELINE_POSITION_TOP:
+          baseline = minimum_above;
+          break;
+        case GTK_BASELINE_POSITION_CENTER:
+          baseline = minimum_above + (height - (minimum_above + minimum_below)) / 2;
+          break;
+        case GTK_BASELINE_POSITION_BOTTOM:
+          baseline = height - minimum_below;
+          break;
         default:
           break;
-	}
+        }
     }
 
   /* Allocate child positions. */
@@ -846,7 +846,7 @@ gtk_box_layout_get_spacing (GtkBoxLayout *box_layout)
  */
 void
 gtk_box_layout_set_baseline_position (GtkBoxLayout        *box_layout,
-			              GtkBaselinePosition  position)
+                                      GtkBaselinePosition  position)
 {
   g_return_if_fail (GTK_IS_BOX_LAYOUT (box_layout));
 
