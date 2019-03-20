@@ -6913,6 +6913,8 @@ do_focus_change (GtkWidget *widget,
   GdkSeat *seat;
   GdkDevice *device;
   GdkEvent *event;
+  GtkRoot *root;
+  GtkStateFlags flags;
 
   seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
   device = gdk_seat_get_keyboard (seat);
@@ -6928,6 +6930,16 @@ do_focus_change (GtkWidget *widget,
   event->focus_change.in = in;
   event->focus_change.mode = GDK_CROSSING_STATE_CHANGED;
   event->focus_change.detail = GDK_NOTIFY_ANCESTOR;
+
+  flags = GTK_STATE_FLAG_FOCUSED;
+  root = gtk_widget_get_root (widget);
+  if (!GTK_IS_WINDOW (root) || gtk_window_get_focus_visible (GTK_WINDOW (root)))
+    flags |= GTK_STATE_FLAG_FOCUS_VISIBLE;
+
+  if (in)
+    gtk_widget_set_state_flags (widget, flags, FALSE);
+  else
+    gtk_widget_unset_state_flags (widget, flags);
 
   gtk_widget_set_has_focus (widget, in);
   gtk_widget_event (widget, event);
