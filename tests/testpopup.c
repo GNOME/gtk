@@ -31,7 +31,7 @@ add_content (GtkWidget *parent)
 
   gtk_widget_grab_default (button);
 
-  return entry;
+  return label;
 }
 
 static GtkWidget *
