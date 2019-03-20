@@ -61,7 +61,7 @@
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
 #include "gtkimage.h"
-#include "gtklegacylayoutprivate.h"
+#include "gtkcustomlayout.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkprogresstrackerprivate.h"
@@ -641,11 +641,10 @@ gtk_switch_init (GtkSwitch *self)
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
   priv->pan_gesture = gesture;
 
-  layout = gtk_legacy_layout_new (NULL,
+  layout = gtk_custom_layout_new (NULL,
                                   gtk_switch_measure,
                                   gtk_switch_allocate);
   gtk_widget_set_layout_manager (GTK_WIDGET (self), layout);
-  g_object_unref (layout);
 
   priv->on_image = gtk_image_new_from_icon_name ("switch-on-symbolic");
   gtk_widget_set_parent (priv->on_image, GTK_WIDGET (self));

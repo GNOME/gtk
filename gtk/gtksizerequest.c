@@ -565,7 +565,7 @@ gtk_widget_get_request_mode (GtkWidget *widget)
       GtkLayoutManager *layout_manager = gtk_widget_get_layout_manager (widget);
 
       if (layout_manager != NULL)
-        cache->request_mode = gtk_layout_manager_get_request_mode (layout_manager, widget);
+        cache->request_mode = gtk_layout_manager_get_request_mode (layout_manager);
       else
         cache->request_mode = GTK_WIDGET_GET_CLASS (widget)->get_request_mode (widget);
 
