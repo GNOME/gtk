@@ -2002,7 +2002,7 @@ keyboard_handle_leave (void               *data,
 
   GDK_DISPLAY_NOTE (seat->display, EVENTS,
             g_message ("focus out, seat %p surface %p",
-                       seat, seat->keyboard_focus));
+                       seat, event->any.surface));
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 }
@@ -2127,10 +2127,11 @@ deliver_key_event (GdkWaylandSeat *seat,
   _gdk_wayland_display_deliver_event (seat->display, event);
 
   GDK_DISPLAY_NOTE (seat->display, EVENTS,
-            g_message ("keyboard %s event%s, code %d, sym %d, "
+            g_message ("keyboard %s event%s, surface %p, code %d, sym %d, "
                        "mods 0x%x",
                        (state ? "press" : "release"),
                        (from_key_repeat ? " (repeat)" : ""),
+                       event->any.surface,
                        event->key.hardware_keycode, event->key.keyval,
                        event->key.state));
 
