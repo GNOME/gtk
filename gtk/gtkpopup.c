@@ -197,6 +197,12 @@ surface_state_changed (GtkWidget *widget)
 
   if (changed_mask & GDK_SURFACE_STATE_FOCUSED)
     ensure_state_flag_backdrop (widget);
+
+  if (changed_mask & GDK_SURFACE_STATE_WITHDRAWN)
+    {
+      if (priv->state & GDK_SURFACE_STATE_WITHDRAWN)
+        gtk_widget_hide (widget);
+    }
 }
 
 static void
