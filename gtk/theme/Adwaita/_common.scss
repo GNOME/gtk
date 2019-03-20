@@ -38,7 +38,7 @@ $window_radius: $button_radius + 3;
   outline-style: dashed;
   outline-offset: -3px;
   outline-width: 1px;
-  -gtk-outline-radius: 2px;
+  -gtk-outline-radius: $button-radius - 2;
 
   -gtk-secondary-caret-color: $selected_bg_color
 }
