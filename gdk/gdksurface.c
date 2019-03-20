@@ -837,6 +837,42 @@ gdk_surface_new_popup (GdkDisplay         *display,
 }
 
 /**
+ * gdk_surface_new_popup_full: (constructor)
+ * @display: the display to create the surface on
+ * @parent: the parent surface to attach the surface to
+ *
+ * Create a new popup surface.
+ * The surface will be attached to @parent and can
+ * be positioned relative to it using
+ * gdk_surface_move_to_rect().
+ *
+ * Returns: (transfer full): a new #GdkSurface
+ */
+GdkSurface *
+gdk_surface_new_popup_full (GdkDisplay *display,
+                            GdkSurface *parent)
+{
+  GdkSurface *surface;
+  GdkSurfaceAttr attr;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (parent), NULL);
+
+  attr.wclass = GDK_INPUT_OUTPUT;
+  attr.x = 0;
+  attr.y = 0;
+  attr.width = 100;
+  attr.height = 100;
+  attr.surface_type = GDK_SURFACE_TEMP;
+
+  surface = gdk_surface_new (display, NULL, &attr);
+  gdk_surface_set_transient_for (surface, parent);
+  gdk_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_MENU);
+
+  return surface;
+}
+
+/**
  * gdk_surface_new_temp: (constructor)
  * @display: the display to create the surface on
  *
