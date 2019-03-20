@@ -1,8 +1,18 @@
 /* gtkbinlayout.c: Layout manager for bin-like widgets
- *
  * Copyright 2019  GNOME Foundation
  *
- * SPDX-License-Identifier: LGPL 2.1+
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
@@ -43,23 +53,22 @@ gtk_bin_layout_measure (GtkLayoutManager *layout_manager,
 {
   GtkWidget *child;
 
-  child = _gtk_widget_get_first_child (widget);
-  while (child != NULL)
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
     {
-      GtkWidget *next = _gtk_widget_get_next_sibling (child);
-
       if (gtk_widget_get_visible (child))
         {
           int child_min = 0;
           int child_nat = 0;
 
-          gtk_widget_measure (child, orientation, for_size, &child_min, &child_nat, NULL, NULL);
+          gtk_widget_measure (child, orientation, for_size,
+                              &child_min, &child_nat,
+                              NULL, NULL);
 
           *minimum = MAX (*minimum, child_min);
           *natural = MAX (*natural, child_nat);
         }
-
-      child = next;
     }
 }
 
@@ -72,19 +81,12 @@ gtk_bin_layout_allocate (GtkLayoutManager *layout_manager,
 {
   GtkWidget *child;
 
-  child = _gtk_widget_get_first_child (widget);
-  while (child != NULL)
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
     {
-      GtkWidget *next = _gtk_widget_get_next_sibling (child);
-
       if (child && gtk_widget_get_visible (child))
-        gtk_widget_size_allocate (child,
-                                  &(GtkAllocation) {
-                                    0, 0,
-                                    width, height
-                                  }, baseline);
-
-      child = next;
+        gtk_widget_allocate (child, width, height, baseline, NULL);
     }
 }
 static void

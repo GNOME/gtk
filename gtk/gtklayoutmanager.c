@@ -54,6 +54,9 @@
 
 typedef struct {
   GtkWidget *widget;
+
+  /* HashTable<Widget, LayoutChild> */
+  GHashTable *layout_children;
 } GtkLayoutManagerPrivate;
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkLayoutManager, gtk_layout_manager, G_TYPE_OBJECT)
@@ -200,7 +203,7 @@ gtk_layout_manager_measure (GtkLayoutManager *manager,
  * @widget: the #GtkWidget using @manager
  * @width: the new width of the @widget
  * @height: the new height of the @widget
- * @baseline: the baseline position of the @widget
+ * @baseline: the baseline position of the @widget, or -1
  *
  * This function assigns the given @width, @height, and @baseline to
  * a @widget, and computes the position and sizes of the children of
@@ -217,6 +220,7 @@ gtk_layout_manager_allocate (GtkLayoutManager *manager,
 
   g_return_if_fail (GTK_IS_LAYOUT_MANAGER (manager));
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (baseline >= -1);
 
   klass = GTK_LAYOUT_MANAGER_GET_CLASS (manager);
 
@@ -226,24 +230,22 @@ gtk_layout_manager_allocate (GtkLayoutManager *manager,
 /**
  * gtk_layout_manager_get_request_mode:
  * @manager: a #GtkLayoutManager
- * @widget: the #GtkWidget using @manager
  *
  * Retrieves the request mode of @manager.
  *
  * Returns: a #GtkSizeRequestMode
  */
 GtkSizeRequestMode
-gtk_layout_manager_get_request_mode (GtkLayoutManager *manager,
-                                     GtkWidget        *widget)
+gtk_layout_manager_get_request_mode (GtkLayoutManager *manager)
 {
+  GtkLayoutManagerPrivate *priv = gtk_layout_manager_get_instance_private (manager);
   GtkLayoutManagerClass *klass;
 
   g_return_val_if_fail (GTK_IS_LAYOUT_MANAGER (manager), GTK_SIZE_REQUEST_CONSTANT_SIZE);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_SIZE_REQUEST_CONSTANT_SIZE);
 
   klass = GTK_LAYOUT_MANAGER_GET_CLASS (manager);
 
-  return klass->get_request_mode (manager, widget);
+  return klass->get_request_mode (manager, priv->widget);
 }
 
 /**
@@ -284,32 +286,51 @@ gtk_layout_manager_layout_changed (GtkLayoutManager *manager)
     gtk_widget_queue_resize (priv->widget);
 }
 
+static void
+remove_layout_child (GtkWidget        *widget,
+                     GtkWidget        *old_parent,
+                     GtkLayoutManager *self)
+{
+  GtkLayoutManagerPrivate *priv = gtk_layout_manager_get_instance_private (self);
+
+  if (priv->layout_children != NULL)
+    {
+      g_hash_table_remove (priv->layout_children, widget);
+      if (g_hash_table_size (priv->layout_children) == 0)
+        g_clear_pointer (&priv->layout_children, g_hash_table_unref);
+    }
+
+  g_signal_handlers_disconnect_by_func (widget, remove_layout_child, self);
+}
+
 /**
  * gtk_layout_manager_get_layout_child:
  * @manager: a #GtkLayoutManager
- * @widget: a #GtkWidget
+ * @child: a #GtkWidget
  *
  * Retrieves a #GtkLayoutChild instance for the #GtkLayoutManager, creating
- * one if necessary
+ * one if necessary.
+ *
+ * The @child widget must be a child of the widget using @manager.
  *
  * The #GtkLayoutChild instance is owned by the #GtkLayoutManager, and is
- * guaranteed to exist as long as @widget is a child of the #GtkWidget using
+ * guaranteed to exist as long as @child is a child of the #GtkWidget using
  * the given #GtkLayoutManager.
  *
  * Returns: (transfer none): a #GtkLayoutChild
  */
 GtkLayoutChild *
 gtk_layout_manager_get_layout_child (GtkLayoutManager *manager,
-                                     GtkWidget        *widget)
+                                     GtkWidget        *child)
 {
   GtkLayoutManagerPrivate *priv = gtk_layout_manager_get_instance_private (manager);
   GtkLayoutChild *res;
   GtkWidget *parent;
 
   g_return_val_if_fail (GTK_IS_LAYOUT_MANAGER (manager), NULL);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
 
-  parent = gtk_widget_get_parent (widget);
+  parent = gtk_widget_get_parent (child);
   g_return_val_if_fail (parent != NULL, NULL);
 
   if (priv->widget != parent)
@@ -317,7 +338,7 @@ gtk_layout_manager_get_layout_child (GtkLayoutManager *manager,
       g_critical ("The parent %s %p of the widget %s %p does not "
                   "use the given layout manager of type %s %p",
                   gtk_widget_get_name (parent), parent,
-                  gtk_widget_get_name (widget), widget,
+                  gtk_widget_get_name (child), child,
                   G_OBJECT_TYPE_NAME (manager), manager);
       return NULL;
     }
@@ -330,10 +351,14 @@ gtk_layout_manager_get_layout_child (GtkLayoutManager *manager,
       return NULL;
     }
 
-  /* We store the LayoutChild into the Widget, so that the LayoutChild
-   * instance goes away once the Widget goes away
-   */
-  res = g_object_get_qdata (G_OBJECT (widget), quark_layout_child);
+  if (priv->layout_children == NULL)
+    {
+      priv->layout_children = g_hash_table_new_full (NULL, NULL,
+                                                     NULL,
+                                                     (GDestroyNotify) g_object_unref);
+    }
+
+  res = g_hash_table_lookup (priv->layout_children, child);
   if (res != NULL)
     {
       /* If the LayoutChild instance is stale, and refers to another
@@ -345,13 +370,12 @@ gtk_layout_manager_get_layout_child (GtkLayoutManager *manager,
         return res;
     }
 
-  res = GTK_LAYOUT_MANAGER_GET_CLASS (manager)->create_layout_child (manager, widget);
+  res = GTK_LAYOUT_MANAGER_GET_CLASS (manager)->create_layout_child (manager, parent, child);
   g_assert (res != NULL);
   g_assert (g_type_is_a (G_OBJECT_TYPE (res), GTK_TYPE_LAYOUT_CHILD));
 
-  g_object_set_qdata_full (G_OBJECT (widget), quark_layout_child,
-                           res,
-                           g_object_unref);
+  g_hash_table_insert (priv->layout_children, child, res);
+  g_signal_connect (child, "parent-set", G_CALLBACK (remove_layout_child), manager);
 
   return res;
 }

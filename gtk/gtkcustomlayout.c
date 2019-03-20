@@ -1,37 +1,37 @@
-/*< private >
- * SECTION:gtklegacylayout
- * @Title: GtkLegacyLayout
- * @Short_description: A legacy layout manager
+/**
+ * SECTION:gtkcustomlayout
+ * @Title: GtkCustomLayout
+ * @Short_description: A convenience layout manager
  *
- * #GtkLegacyLayout is a convenience type meant to be used as a transition
+ * #GtkCustomLayout is a convenience type meant to be used as a transition
  * mechanism between #GtkContainers implementing a layout policy, and
  * #GtkLayoutManager classes.
  *
- * A #GtkLegacyLayout uses closures matching to the old #GtkWidget virtual
+ * A #GtkCustomLayout uses closures matching to the old #GtkWidget virtual
  * functions for size negotiation, to ease the porting towards the
  * corresponding #GtkLayoutManager virtual functions.
  */
 
 #include "config.h"
 
-#include "gtklegacylayoutprivate.h"
+#include "gtkcustomlayout.h"
 
-struct _GtkLegacyLayout
+struct _GtkCustomLayout
 {
   GtkLayoutManager parent_instance;
 
-  GtkLegacyRequestModeFunc request_mode_func;
-  GtkLegacyMeasureFunc measure_func;
-  GtkLegacyAllocateFunc allocate_func;
+  GtkCustomRequestModeFunc request_mode_func;
+  GtkCustomMeasureFunc measure_func;
+  GtkCustomAllocateFunc allocate_func;
 };
 
-G_DEFINE_TYPE (GtkLegacyLayout, gtk_legacy_layout, GTK_TYPE_LAYOUT_MANAGER)
+G_DEFINE_TYPE (GtkCustomLayout, gtk_custom_layout, GTK_TYPE_LAYOUT_MANAGER)
 
 static GtkSizeRequestMode
-gtk_legacy_layout_get_request_mode (GtkLayoutManager *manager,
+gtk_custom_layout_get_request_mode (GtkLayoutManager *manager,
                                     GtkWidget        *widget)
 {
-  GtkLegacyLayout *self = GTK_LEGACY_LAYOUT (manager);
+  GtkCustomLayout *self = GTK_CUSTOM_LAYOUT (manager);
 
   if (self->request_mode_func != NULL)
     return self->request_mode_func (widget);
@@ -40,7 +40,7 @@ gtk_legacy_layout_get_request_mode (GtkLayoutManager *manager,
 }
 
 static void
-gtk_legacy_layout_measure (GtkLayoutManager *manager,
+gtk_custom_layout_measure (GtkLayoutManager *manager,
                            GtkWidget        *widget,
                            GtkOrientation    orientation,
                            int               for_size,
@@ -49,14 +49,13 @@ gtk_legacy_layout_measure (GtkLayoutManager *manager,
                            int              *minimum_baseline_p,
                            int              *natural_baseline_p)
 {
-  GtkLegacyLayout *self = GTK_LEGACY_LAYOUT (manager);
+  GtkCustomLayout *self = GTK_CUSTOM_LAYOUT (manager);
   int minimum = 0, natural = 0;
   int minimum_baseline = -1, natural_baseline = -1;
 
-  if (self->measure_func != NULL)
-    self->measure_func (widget, orientation, for_size,
-                        &minimum, &natural,
-                        &minimum_baseline, &natural_baseline);
+  self->measure_func (widget, orientation, for_size,
+                      &minimum, &natural,
+                      &minimum_baseline, &natural_baseline);
 
   if (minimum_p != NULL)
     *minimum_p = minimum;
@@ -70,41 +69,40 @@ gtk_legacy_layout_measure (GtkLayoutManager *manager,
 }
 
 static void
-gtk_legacy_layout_allocate (GtkLayoutManager *manager,
+gtk_custom_layout_allocate (GtkLayoutManager *manager,
                             GtkWidget        *widget,
                             int               width,
                             int               height,
                             int               baseline)
 {
-  GtkLegacyLayout *self = GTK_LEGACY_LAYOUT (manager);
+  GtkCustomLayout *self = GTK_CUSTOM_LAYOUT (manager);
 
-  if (self->allocate_func != NULL)
-    self->allocate_func (widget, width, height, baseline);
+  self->allocate_func (widget, width, height, baseline);
 }
 
 static void
-gtk_legacy_layout_class_init (GtkLegacyLayoutClass *klass)
+gtk_custom_layout_class_init (GtkCustomLayoutClass *klass)
 {
   GtkLayoutManagerClass *layout_class = GTK_LAYOUT_MANAGER_CLASS (klass);
 
-  layout_class->get_request_mode = gtk_legacy_layout_get_request_mode;
-  layout_class->measure = gtk_legacy_layout_measure;
-  layout_class->allocate = gtk_legacy_layout_allocate;
+  layout_class->get_request_mode = gtk_custom_layout_get_request_mode;
+  layout_class->measure = gtk_custom_layout_measure;
+  layout_class->allocate = gtk_custom_layout_allocate;
 }
 
 static void
-gtk_legacy_layout_init (GtkLegacyLayout *self)
+gtk_custom_layout_init (GtkCustomLayout *self)
 {
 }
 
-/*< private >
- * gtk_legacy_layout_new:
+/**
+ * gtk_custom_layout_new:
  * @request_mode: (nullable): a function to retrieve
- *   the #GtkSizeRequestMode of the widget using the layout
- * @measure: (nullable): a fucntion to measure the widget
- *   using the layout
- * @allocate: (nullable): a function to allocate the children
- *   of the widget using the layout
+ *   the #GtkSizeRequestMode of the widget using the layout; the
+ *   default request mode is %GTK_SIZE_REQUEST_CONSTANT_SIZE
+ * @measure: a function to measure the widget using the layout manager
+ * @allocate:  a function to allocate the children of the widget using
+ *   the layout manager
  *
  * Creates a new legacy layout manager.
  *
@@ -112,14 +110,17 @@ gtk_legacy_layout_init (GtkLegacyLayout *self)
  * virtual functions, and are meant to be used during the transition
  * from layout containers to layout manager delegates.
  *
- * Returns: (transfer full): the newly created #GtkLegacyLayout
+ * Returns: (transfer full): the newly created #GtkCustomLayout
  */
 GtkLayoutManager *
-gtk_legacy_layout_new (GtkLegacyRequestModeFunc request_mode,
-                       GtkLegacyMeasureFunc measure,
-                       GtkLegacyAllocateFunc allocate)
+gtk_custom_layout_new (GtkCustomRequestModeFunc request_mode,
+                       GtkCustomMeasureFunc measure,
+                       GtkCustomAllocateFunc allocate)
 {
-  GtkLegacyLayout *self = g_object_new (GTK_TYPE_LEGACY_LAYOUT, NULL);
+  GtkCustomLayout *self = g_object_new (GTK_TYPE_CUSTOM_LAYOUT, NULL);
+
+  g_return_val_if_fail (measure != NULL, NULL);
+  g_return_val_if_fail (allocate != NULL, NULL);
 
   self->request_mode_func = request_mode;
   self->measure_func = measure;
