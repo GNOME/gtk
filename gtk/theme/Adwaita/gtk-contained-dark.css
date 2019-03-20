@@ -680,7 +680,7 @@ searchbar > revealer > box { margin: -6px; padding: 6px; }
 
 headerbar entry, headerbar spinbutton, headerbar separator:not(.sidebar), headerbar button { margin-top: 6px; margin-bottom: 6px; }
 
-headerbar switch { margin-top: 9px; margin-bottom: 9px; }
+headerbar switch { margin-top: 10px; margin-bottom: 10px; }
 
 headerbar.titlebar headerbar:not(.titlebar) { background: none; box-shadow: none; }
 
