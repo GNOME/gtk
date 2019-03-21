@@ -30,6 +30,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkmnemonichash.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtkmain.h"
 #include "gdk/gdkeventsprivate.h"
 #include "gtkpointerfocusprivate.h"
@@ -40,23 +41,40 @@ typedef struct {
   GdkDisplay *display;
   GskRenderer *renderer;
   GdkSurface *surface;
-  GdkSurfaceState state;
-  GtkWidget *relative_to;
   GtkWidget *focus_widget;
   gboolean active;
   GtkWidget *default_widget;
   GtkMnemonicHash *mnemonic_hash;
   GList *foci;
+
+  GdkSurfaceState state;
+  GtkWidget *relative_to;
+  GdkRectangle pointing_to;
+  gboolean has_pointing_to;
+  GtkPositionType position;
+  gboolean modal;
+  gboolean has_grab;
 } GtkPopupPrivate;
 
 enum {
   ACTIVATE_FOCUS,
   ACTIVATE_DEFAULT,
   CLOSE,
+  CLOSED,
   LAST_SIGNAL
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
+
+enum {
+  PROP_RELATIVE_TO = 1,
+  PROP_POINTING_TO,
+  PROP_POSITION,
+  PROP_MODAL,
+  NUM_PROPERTIES
+};
+
+static GParamSpec *properties[NUM_PROPERTIES] = { NULL };
 
 static void gtk_popup_root_interface_init (GtkRootInterface *iface);
 
@@ -102,21 +120,70 @@ gtk_popup_root_get_surface_transform (GtkRoot *root,
 }
 
 static void
-gtk_popup_move_resize (GtkPopup *popup)
+move_to_rect (GtkPopup *popup)
 {
   GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
   GdkRectangle rect;
+  GdkGravity parent_anchor;
+  GdkGravity surface_anchor;
+  GdkAnchorHints anchor_hints;
+
+  gtk_widget_get_surface_allocation (priv->relative_to, &rect);
+  if (priv->has_pointing_to)
+    {
+      rect.x += priv->pointing_to.x;
+      rect.y += priv->pointing_to.y;
+      rect.width = priv->pointing_to.width;
+      rect.height = priv->pointing_to.height;
+    }
+
+  switch (priv->position)
+    {
+    case GTK_POS_LEFT:
+      parent_anchor = GDK_GRAVITY_WEST;
+      surface_anchor = GDK_GRAVITY_EAST;
+      anchor_hints = GDK_ANCHOR_FLIP_X;
+      break;
+
+    case GTK_POS_RIGHT:
+      parent_anchor = GDK_GRAVITY_EAST;
+      surface_anchor = GDK_GRAVITY_WEST;
+      anchor_hints = GDK_ANCHOR_FLIP_X;
+      break;
+
+    case GTK_POS_TOP:
+      parent_anchor = GDK_GRAVITY_NORTH;
+      surface_anchor = GDK_GRAVITY_SOUTH;
+      anchor_hints = GDK_ANCHOR_FLIP_Y;
+      break;
+
+    case GTK_POS_BOTTOM:
+      parent_anchor = GDK_GRAVITY_SOUTH;
+      surface_anchor = GDK_GRAVITY_NORTH;
+      anchor_hints = GDK_ANCHOR_FLIP_Y;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  gdk_surface_move_to_rect (priv->surface,
+                            &rect,
+                            parent_anchor,
+                            surface_anchor,
+                            anchor_hints,
+                            0, 0);
+}
+
+static void
+gtk_popup_move_resize (GtkPopup *popup)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
   GtkRequisition req;
  
   gtk_widget_get_preferred_size (GTK_WIDGET (popup), NULL, &req);
   gdk_surface_resize (priv->surface, req.width, req.height);
-  gtk_widget_get_surface_allocation (priv->relative_to, &rect);
-  gdk_surface_move_to_rect (priv->surface,
-                            &rect,
-                            GDK_GRAVITY_SOUTH,
-                            GDK_GRAVITY_NORTH,
-                            GDK_ANCHOR_FLIP_Y,
-                            0, 10);
+  move_to_rect (popup);
 }
 
 static void
@@ -196,9 +263,13 @@ surface_size_changed (GtkWindow *window,
 static void
 gtk_popup_init (GtkPopup *popup)
 {
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
   GtkEventController *controller;
 
   gtk_widget_set_has_surface (GTK_WIDGET (popup), TRUE);
+
+  priv->position = GTK_POS_TOP;
+  priv->modal = TRUE;
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect_swapped (controller, "focus-in", G_CALLBACK (gtk_popup_focus_in), popup);
@@ -273,6 +344,7 @@ gtk_popup_hide (GtkWidget *widget)
 {
   _gtk_widget_set_visible_flag (widget, FALSE);
   gtk_widget_unmap (widget);
+  g_signal_emit (widget, signals[CLOSED], 0);
 }
 
 static void
@@ -291,19 +363,18 @@ gtk_popup_map (GtkWidget *widget)
   GtkWidget *child;
   GdkRectangle parent_rect;
 
-  gdk_seat_grab (gdk_display_get_default_seat (priv->display),
-                 priv->surface,
-                 GDK_SEAT_CAPABILITY_ALL,
-                 TRUE,
-                 NULL, NULL, grab_prepare_func, NULL);
+  if (priv->modal)
+    {
+      gdk_seat_grab (gdk_display_get_default_seat (priv->display),
+                     priv->surface,
+                     GDK_SEAT_CAPABILITY_ALL,
+                     TRUE,
+                     NULL, NULL, grab_prepare_func, NULL);
+      priv->has_grab = TRUE;
+    }
 
   gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
-  gdk_surface_move_to_rect (priv->surface,
-                            &parent_rect,
-                            GDK_GRAVITY_SOUTH,
-                            GDK_GRAVITY_NORTH,
-                            GDK_ANCHOR_FLIP_Y,
-                            0, 10);
+  move_to_rect (popup);
 
   GTK_WIDGET_CLASS (gtk_popup_parent_class)->map (widget);
 
@@ -322,7 +393,11 @@ gtk_popup_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_popup_parent_class)->unmap (widget);
 
   gdk_surface_hide (priv->surface);
-  gdk_seat_ungrab (gdk_display_get_default_seat (priv->display));
+  if (priv->has_grab)
+    {
+      gdk_seat_ungrab (gdk_display_get_default_seat (priv->display));
+      priv->has_grab = FALSE;
+    }
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child != NULL)
@@ -412,12 +487,30 @@ gtk_popup_set_property (GObject       *object,
 
   switch (prop_id)
     {
-    case 1 + GTK_ROOT_PROP_FOCUS_WIDGET:
+    case PROP_RELATIVE_TO:
+      gtk_popup_set_relative_to (popup, g_value_get_object (value));
+      break;
+
+    case PROP_POINTING_TO:
+      gtk_popup_set_pointing_to (popup, g_value_get_boxed (value));
+      break;
+
+    case PROP_POSITION:
+      gtk_popup_set_position (popup, g_value_get_enum (value));
+      break;
+
+    case PROP_MODAL:
+      gtk_popup_set_modal (popup, g_value_get_boolean (value));
+      break;
+
+    case NUM_PROPERTIES + GTK_ROOT_PROP_FOCUS_WIDGET:
       gtk_popup_set_focus (popup, g_value_get_object (value));
       break;
-    case 1 + GTK_ROOT_PROP_DEFAULT_WIDGET:
+
+    case NUM_PROPERTIES + GTK_ROOT_PROP_DEFAULT_WIDGET:
       gtk_popup_set_default (popup, g_value_get_object (value));
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -435,12 +528,30 @@ gtk_popup_get_property (GObject      *object,
 
   switch (prop_id)
     {
-    case 1 + GTK_ROOT_PROP_FOCUS_WIDGET:
+    case PROP_RELATIVE_TO:
+      g_value_set_object (value, priv->relative_to);
+      break;
+
+    case PROP_POINTING_TO:
+      g_value_set_boxed (value, &priv->pointing_to);
+      break;
+
+    case PROP_POSITION:
+      g_value_set_enum (value, priv->position);
+      break;
+
+    case PROP_MODAL:
+      g_value_set_boolean (value, priv->modal);
+      break;
+
+    case NUM_PROPERTIES + GTK_ROOT_PROP_FOCUS_WIDGET:
       g_value_set_object (value, priv->focus_widget);
       break;
-    case 1 + GTK_ROOT_PROP_DEFAULT_WIDGET:
+
+    case NUM_PROPERTIES + GTK_ROOT_PROP_DEFAULT_WIDGET:
       g_value_set_object (value, priv->default_widget);
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -508,7 +619,36 @@ gtk_popup_class_init (GtkPopupClass *klass)
   klass->activate_focus = gtk_popup_activate_focus;
   klass->close = gtk_popup_close;
 
-  gtk_root_install_properties (object_class, 1);
+  properties[PROP_RELATIVE_TO] =
+      g_param_spec_object ("relative-to",
+                           P_("Relative to"),
+                           P_("Widget the bubble window points to"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE);
+
+  properties[PROP_POINTING_TO] =
+      g_param_spec_boxed ("pointing-to",
+                          P_("Pointing to"),
+                          P_("Rectangle the bubble window points to"),
+                          GDK_TYPE_RECTANGLE,
+                          GTK_PARAM_READWRITE);
+
+  properties[PROP_POSITION] =
+      g_param_spec_enum ("position",
+                         P_("Position"),
+                         P_("Position to place the bubble window"),
+                         GTK_TYPE_POSITION_TYPE, GTK_POS_TOP,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_MODAL] =
+      g_param_spec_boolean ("modal",
+                            P_("Modal"),
+                            P_("Whether the popover is modal"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
+  gtk_root_install_properties (object_class, NUM_PROPERTIES);
 
   signals[ACTIVATE_FOCUS] =
     g_signal_new (I_("activate-focus"),
@@ -535,6 +675,16 @@ gtk_popup_class_init (GtkPopupClass *klass)
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkPopupClass, close),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  0);
+
+  signals[CLOSED] =
+    g_signal_new (I_("closed"),
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkPopupClass, closed),
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE,
@@ -575,18 +725,6 @@ size_changed (GtkWidget *widget,
 
   if (priv->surface)
     gtk_popup_move_resize (popup);
-}
-
-void
-gtk_popup_set_relative_to (GtkPopup  *popup,
-                           GtkWidget *relative_to)
-{
-  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
-  
-  priv->relative_to = relative_to;
-  g_signal_connect (priv->relative_to, "size-allocate", G_CALLBACK (size_changed), popup);
-  priv->display = gtk_widget_get_display (relative_to);
-  gtk_widget_set_parent (GTK_WIDGET (popup), relative_to);
 }
 
 static void
@@ -1044,5 +1182,119 @@ gtk_popup_root_interface_init (GtkRootInterface *iface)
   iface->lookup_effective_pointer_focus = gtk_popup_root_lookup_effective_pointer_focus;
   iface->set_pointer_focus_grab = gtk_popup_root_set_pointer_focus_grab;
   iface->maybe_update_cursor = gtk_popup_root_maybe_update_cursor;
+}
+
+void
+gtk_popup_set_relative_to (GtkPopup  *popup,
+                           GtkWidget *relative_to)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+  
+  g_return_if_fail (GTK_IS_POPUP (popup));
+
+  priv->relative_to = relative_to;
+  g_signal_connect (priv->relative_to, "size-allocate", G_CALLBACK (size_changed), popup);
+  priv->display = gtk_widget_get_display (relative_to);
+  gtk_widget_set_parent (GTK_WIDGET (popup), relative_to);
+
+  g_object_notify_by_pspec (G_OBJECT (popup), properties[PROP_RELATIVE_TO]);
+}
+
+GtkWidget *
+gtk_popup_get_relative_to (GtkPopup *popup)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+
+  g_return_val_if_fail (GTK_IS_POPUP (popup), NULL);
+
+  return priv->relative_to;
+}
+
+void
+gtk_popup_set_pointing_to (GtkPopup           *popup,
+                           const GdkRectangle *rect)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+
+  g_return_if_fail (GTK_IS_POPUP (popup));
+
+  if (rect)
+    {
+      priv->pointing_to = *rect;
+      priv->has_pointing_to = TRUE;
+    }
+  else
+    priv->has_pointing_to = FALSE;
+
+  g_object_notify_by_pspec (G_OBJECT (popup), properties[PROP_POINTING_TO]);
+}
+
+gboolean
+gtk_popup_get_pointing_to (GtkPopup     *popup,
+                           GdkRectangle *rect)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+
+  g_return_val_if_fail (GTK_IS_POPUP (popup), FALSE);
+  g_return_val_if_fail (rect != NULL, FALSE);
+
+  if (priv->has_pointing_to)
+    *rect = priv->pointing_to;
+
+  return priv->has_pointing_to;
+}
+
+void
+gtk_popup_set_position (GtkPopup        *popup,
+                        GtkPositionType  position)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+
+  g_return_if_fail (GTK_IS_POPUP (popup));
+
+  if (priv->position == position)
+    return;
+
+  priv->position = position;
+
+  g_object_notify_by_pspec (G_OBJECT (popup), properties[PROP_POSITION]);
+}
+
+GtkPositionType
+gtk_popup_get_position (GtkPopup *popup)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+
+  g_return_val_if_fail (GTK_IS_POPUP (popup), GTK_POS_TOP);
+
+  return priv->position;
+}
+
+void
+gtk_popup_set_modal (GtkPopup *popup,
+                     gboolean  modal)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+
+  g_return_if_fail (GTK_IS_POPUP (popup));
+
+  modal = modal != FALSE;
+
+  if (priv->modal == modal)
+    return;
+
+  priv->modal = modal;
+
+  g_object_notify_by_pspec (G_OBJECT (popup), properties[PROP_MODAL]);
+}
+
+gboolean
+gtk_popup_get_modal (GtkPopup *popup)
+{
+  GtkPopupPrivate *priv = gtk_popup_get_instance_private (popup);
+
+  g_return_val_if_fail (GTK_IS_POPUP (popup), FALSE);
+
+  return priv->modal;
 }
 
