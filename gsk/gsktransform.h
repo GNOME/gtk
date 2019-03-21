@@ -46,6 +46,9 @@ void                    gsk_transform_print                     (GskTransform   
 GDK_AVAILABLE_IN_ALL
 char *                  gsk_transform_to_string                 (GskTransform                   *self);
 GDK_AVAILABLE_IN_ALL
+gboolean                gsk_transform_parse                     (const char                     *string,
+                                                                 GskTransform                  **out_transform);
+GDK_AVAILABLE_IN_ALL
 void                    gsk_transform_to_matrix                 (GskTransform                   *self,
                                                                  graphene_matrix_t              *out_matrix);
 GDK_AVAILABLE_IN_ALL
