@@ -469,7 +469,7 @@ gdk_quartz_display_get_monitor_at_window (GdkDisplay *display,
   }
   if (!monitor)
     {
-      GdkRectangle rect = cgrect_to_gdkrect ([nswindow frame]);
+      GdkRectangle rect = cgrect_to_gdkrect (NSRectToCGRect ([nswindow frame]));
       monitor = gdk_display_get_monitor_at_point (display,
                                                  rect.x + rect.width/2,
                                                  rect.y + rect.height /2);

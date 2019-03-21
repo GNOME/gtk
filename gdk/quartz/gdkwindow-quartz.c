@@ -2183,7 +2183,14 @@ _gdk_quartz_window_set_collection_behavior (NSWindow *nswindow,
                                             GdkWindowTypeHint hint)
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1070
-     if (gdk_quartz_osx_version() >= GDK_OSX_LION)
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= 10110
+#define GDK_QUARTZ_ALLOWS_TILING NSWindowCollectionBehaviorFullScreenAllowsTiling
+#define GDK_QUARTZ_DISALLOWS_TILING NSWindowCollectionBehaviorFullScreenDisallowsTiling
+#else
+#define GDK_QUARTZ_ALLOWS_TILING 1 << 11
+#define GDK_QUARTZ_DISALLOWS_TILING 1 << 12
+#endif
+  if (gdk_quartz_osx_version() >= GDK_OSX_LION)
     {
       /* Fullscreen Collection Behavior */
       NSWindowCollectionBehavior behavior = [nswindow collectionBehavior];
@@ -2192,20 +2199,22 @@ _gdk_quartz_window_set_collection_behavior (NSWindow *nswindow,
         case GDK_WINDOW_TYPE_HINT_NORMAL:
         case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
           behavior &= ~(NSWindowCollectionBehaviorFullScreenAuxiliary &
-                        NSWindowCollectionBehaviorFullScreenDisallowsTiling);
+                        GDK_QUARTZ_DISALLOWS_TILING);
           behavior |= (NSWindowCollectionBehaviorFullScreenPrimary |
-                       NSWindowCollectionBehaviorFullScreenAllowsTiling);
+                       GDK_QUARTZ_ALLOWS_TILING);
 
           break;
         default:
           behavior &= ~(NSWindowCollectionBehaviorFullScreenPrimary &
-                        NSWindowCollectionBehaviorFullScreenAllowsTiling);
+                        GDK_QUARTZ_ALLOWS_TILING);
           behavior |= (NSWindowCollectionBehaviorFullScreenAuxiliary |
-                       NSWindowCollectionBehaviorFullScreenDisallowsTiling);
+                       GDK_QUARTZ_DISALLOWS_TILING);
           break;
         }
       [nswindow setCollectionBehavior:behavior];
     }
+#undef GDK_QUARTZ_ALLOWS_TILING
+#undef GDK_QUARTZ_DISALLOWS_TILING
 #endif
 }
 
