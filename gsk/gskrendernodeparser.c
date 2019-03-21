@@ -1,28 +1,29 @@
 
 #include "gskrendernodeparserprivate.h"
 
-#include "gskcssparserprivate.h"
+#include <gtk/css/gtkcss.h>
+#include "gtk/css/gtkcssparserprivate.h"
 #include "gskroundedrectprivate.h"
 #include "gskrendernodeprivate.h"
-#include "gsktransform.h"
+#include "gsktransformprivate.h"
 
 typedef struct _Declaration Declaration;
 
 struct _Declaration
 {
   const char *name;
-  gboolean (* parse_func) (GskCssParser *parser, gpointer result);
+  gboolean (* parse_func) (GtkCssParser *parser, gpointer result);
   gpointer result;
 };
 
 static gboolean
-parse_color_channel_value (GskCssParser *parser,
+parse_color_channel_value (GtkCssParser *parser,
                            double       *value,
                            gboolean      is_percentage)
 {
   if (is_percentage)
     {
-      if (!gsk_css_parser_consume_percentage (parser, value))
+      if (!gtk_css_parser_consume_percentage (parser, value))
         return FALSE;
 
       *value = CLAMP (*value, 0.0, 100.0) / 100.0;
@@ -30,7 +31,7 @@ parse_color_channel_value (GskCssParser *parser,
     }
   else
     {
-      if (!gsk_css_parser_consume_number (parser, value))
+      if (!gtk_css_parser_consume_number (parser, value))
         return FALSE;
 
       *value = CLAMP (*value, 0.0, 255.0) / 255.0;
@@ -39,7 +40,7 @@ parse_color_channel_value (GskCssParser *parser,
 }
 
 static guint
-parse_color_channel (GskCssParser *parser,
+parse_color_channel (GtkCssParser *parser,
                      guint         arg,
                      gpointer      data)
 {
@@ -48,7 +49,7 @@ parse_color_channel (GskCssParser *parser,
   if (arg == 0)
     {
       /* We abuse rgba->alpha to store if we use percentages or numbers */
-      if (gsk_css_token_is (gsk_css_parser_get_token (parser), GSK_CSS_TOKEN_PERCENTAGE))
+      if (gtk_css_token_is (gtk_css_parser_get_token (parser), GTK_CSS_TOKEN_PERCENTAGE))
         rgba->alpha = 1.0;
       else
         rgba->alpha = 0.0;
@@ -68,7 +69,7 @@ parse_color_channel (GskCssParser *parser,
     }
   else if (arg == 3)
     {
-      if (!gsk_css_parser_consume_number (parser, &rgba->alpha))
+      if (!gtk_css_parser_consume_number (parser, &rgba->alpha))
         return FALSE;
 
       rgba->alpha = CLAMP (rgba->alpha, 0.0, 1.0);
@@ -102,26 +103,26 @@ rgba_init_chars (GdkRGBA    *rgba,
 }
 
 static gboolean
-gsk_rgba_parse (GskCssParser *parser,
+gsk_rgba_parse (GtkCssParser *parser,
                 GdkRGBA      *rgba)
 {
-  const GskCssToken *token;
+  const GtkCssToken *token;
 
-  token = gsk_css_parser_get_token (parser);
-  if (gsk_css_token_is_function (token, "rgb"))
+  token = gtk_css_parser_get_token (parser);
+  if (gtk_css_token_is_function (token, "rgb"))
     {
-      if (!gsk_css_parser_consume_function (parser, 3, 3, parse_color_channel, rgba))
+      if (!gtk_css_parser_consume_function (parser, 3, 3, parse_color_channel, rgba))
         return FALSE;
 
       rgba->alpha = 1.0;
       return TRUE;
     }
-  else if (gsk_css_token_is_function (token, "rgba"))
+  else if (gtk_css_token_is_function (token, "rgba"))
     {
-      return gsk_css_parser_consume_function (parser, 4, 4, parse_color_channel, rgba);
+      return gtk_css_parser_consume_function (parser, 4, 4, parse_color_channel, rgba);
     }
-  else if (gsk_css_token_is (token, GSK_CSS_TOKEN_HASH_ID) ||
-           gsk_css_token_is (token, GSK_CSS_TOKEN_HASH_UNRESTRICTED))
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_ID) ||
+           gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_UNRESTRICTED))
     {
       const char *s = token->string.string;
 
@@ -151,12 +152,12 @@ gsk_rgba_parse (GskCssParser *parser,
             break;
         }
 
-      gsk_css_parser_error_value (parser, "Hash code is not a valid hex color.");
+      gtk_css_parser_error_value (parser, "Hash code is not a valid hex color.");
       return FALSE;
     }
-  else if (gsk_css_token_is (token, GSK_CSS_TOKEN_IDENT))
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
     {
-      if (gsk_css_token_is_ident (token, "transparent"))
+      if (gtk_css_token_is_ident (token, "transparent"))
         {
           rgba = &(GdkRGBA) { 0, 0, 0, 0 };
         }
@@ -166,51 +167,51 @@ gsk_rgba_parse (GskCssParser *parser,
         }
       else
         {
-          gsk_css_parser_error_value (parser, "\"%s\" is not a known color name.", token->string.string);
+          gtk_css_parser_error_value (parser, "\"%s\" is not a known color name.", token->string.string);
           return FALSE;
         }
 
-      gsk_css_parser_consume_token (parser);
+      gtk_css_parser_consume_token (parser);
       return TRUE;
     }
   else
     {
-      gsk_css_parser_error_syntax (parser, "Expected a valid color.");
+      gtk_css_parser_error_syntax (parser, "Expected a valid color.");
       return FALSE;
     }
 }
 
 static gboolean
-parse_semicolon (GskCssParser *parser)
+parse_semicolon (GtkCssParser *parser)
 {
-  const GskCssToken *token;
+  const GtkCssToken *token;
 
-  token = gsk_css_parser_get_token (parser);
-  if (gsk_css_token_is (token, GSK_CSS_TOKEN_EOF))
+  token = gtk_css_parser_get_token (parser);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
     {
-      gsk_css_parser_warn_syntax (parser, "No ';' at end of block");
+      gtk_css_parser_warn_syntax (parser, "No ';' at end of block");
       return TRUE;
     }
-  else if (!gsk_css_token_is (token, GSK_CSS_TOKEN_SEMICOLON))
+  else if (!gtk_css_token_is (token, GTK_CSS_TOKEN_SEMICOLON))
     {
-      gsk_css_parser_error_syntax (parser, "Expected ';' at end of statement");
+      gtk_css_parser_error_syntax (parser, "Expected ';' at end of statement");
       return FALSE;
     }
 
-  gsk_css_parser_consume_token (parser);
+  gtk_css_parser_consume_token (parser);
   return TRUE;
 }
 
 static gboolean
-parse_rect_without_semicolon (GskCssParser    *parser,
+parse_rect_without_semicolon (GtkCssParser    *parser,
                               graphene_rect_t *out_rect)
 {
   double numbers[4];
   
-  if (!gsk_css_parser_consume_number (parser, &numbers[0]) ||
-      !gsk_css_parser_consume_number (parser, &numbers[1]) ||
-      !gsk_css_parser_consume_number (parser, &numbers[2]) ||
-      !gsk_css_parser_consume_number (parser, &numbers[3]))
+  if (!gtk_css_parser_consume_number (parser, &numbers[0]) ||
+      !gtk_css_parser_consume_number (parser, &numbers[1]) ||
+      !gtk_css_parser_consume_number (parser, &numbers[2]) ||
+      !gtk_css_parser_consume_number (parser, &numbers[3]))
     return FALSE;
 
   graphene_rect_init (out_rect, numbers[0], numbers[1], numbers[2], numbers[3]);
@@ -219,7 +220,7 @@ parse_rect_without_semicolon (GskCssParser    *parser,
 }
 
 static gboolean
-parse_rect (GskCssParser *parser,
+parse_rect (GtkCssParser *parser,
             gpointer      out_rect)
 {
   graphene_rect_t r;
@@ -233,10 +234,10 @@ parse_rect (GskCssParser *parser,
 }
 
 static gboolean
-parse_rounded_rect (GskCssParser *parser,
+parse_rounded_rect (GtkCssParser *parser,
                     gpointer      out_rect)
 {
-  const GskCssToken *token;
+  const GtkCssToken *token;
   graphene_rect_t r;
   graphene_size_t corners[4];
   double d;
@@ -245,30 +246,30 @@ parse_rounded_rect (GskCssParser *parser,
   if (!parse_rect_without_semicolon (parser, &r))
     return FALSE;
 
-  token = gsk_css_parser_get_token (parser);
-  if (!gsk_css_token_is_delim (token, '/'))
+  token = gtk_css_parser_get_token (parser);
+  if (!gtk_css_token_is_delim (token, '/'))
     {
       if (!parse_semicolon (parser))
         return FALSE;
       gsk_rounded_rect_init_from_rect (out_rect, &r, 0);
       return TRUE;
     }
-  gsk_css_parser_consume_token (parser);
+  gtk_css_parser_consume_token (parser);
 
   for (i = 0; i < 4; i++)
     {
-      token = gsk_css_parser_get_token (parser);
-      if (gsk_css_token_is (token, GSK_CSS_TOKEN_SEMICOLON) ||
-          gsk_css_token_is (token, GSK_CSS_TOKEN_EOF))
+      token = gtk_css_parser_get_token (parser);
+      if (gtk_css_token_is (token, GTK_CSS_TOKEN_SEMICOLON) ||
+          gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
         break;
-      if (!gsk_css_parser_consume_number (parser, &d))
+      if (!gtk_css_parser_consume_number (parser, &d))
         return FALSE;
       corners[i].width = d;
     }
 
   if (i == 0)
     {
-      gsk_css_parser_error_syntax (parser, "Expected a number");
+      gtk_css_parser_error_syntax (parser, "Expected a number");
       return FALSE;
     }
 
@@ -278,25 +279,25 @@ parse_rounded_rect (GskCssParser *parser,
   for (; i < 4; i++)
     corners[i].width = corners[(i - 1) >> 1].width;
 
-  token = gsk_css_parser_get_token (parser);
-  if (gsk_css_token_is_delim (token, '/'))
+  token = gtk_css_parser_get_token (parser);
+  if (gtk_css_token_is_delim (token, '/'))
     {
-      gsk_css_parser_consume_token (parser);
+      gtk_css_parser_consume_token (parser);
 
       for (i = 0; i < 4; i++)
         {
-          token = gsk_css_parser_get_token (parser);
-          if (gsk_css_token_is (token, GSK_CSS_TOKEN_SEMICOLON) ||
-              gsk_css_token_is (token, GSK_CSS_TOKEN_EOF))
+          token = gtk_css_parser_get_token (parser);
+          if (gtk_css_token_is (token, GTK_CSS_TOKEN_SEMICOLON) ||
+              gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
             break;
-          if (!gsk_css_parser_consume_number (parser, &d))
+          if (!gtk_css_parser_consume_number (parser, &d))
             return FALSE;
           corners[i].height = d;
         }
 
       if (i == 0)
         {
-          gsk_css_parser_error_syntax (parser, "Expected a number");
+          gtk_css_parser_error_syntax (parser, "Expected a number");
           return FALSE;
         }
 
@@ -318,7 +319,7 @@ parse_rounded_rect (GskCssParser *parser,
 }
 
 static gboolean
-parse_color (GskCssParser *parser,
+parse_color (GtkCssParser *parser,
              gpointer      out_color)
 {
   GdkRGBA color;
@@ -333,12 +334,12 @@ parse_color (GskCssParser *parser,
 }
 
 static gboolean
-parse_double (GskCssParser *parser,
+parse_double (GtkCssParser *parser,
               gpointer      out_double)
 {
   double d;
 
-  if (!gsk_css_parser_consume_number (parser, &d) ||
+  if (!gtk_css_parser_consume_number (parser, &d) ||
       !parse_semicolon (parser))
     return FALSE;
 
@@ -348,13 +349,13 @@ parse_double (GskCssParser *parser,
 }
 
 static gboolean
-parse_point (GskCssParser *parser,
+parse_point (GtkCssParser *parser,
              gpointer      out_point)
 {
   double x, y;
 
-  if (!gsk_css_parser_consume_number (parser, &x) ||
-      !gsk_css_parser_consume_number (parser, &y) ||
+  if (!gtk_css_parser_consume_number (parser, &x) ||
+      !gtk_css_parser_consume_number (parser, &y) ||
       !parse_semicolon (parser))
     return FALSE;
 
@@ -364,18 +365,37 @@ parse_point (GskCssParser *parser,
 }
 
 static gboolean
-parse_string (GskCssParser *parser,
+parse_transform (GtkCssParser *parser,
+                 gpointer      out_transform)
+{
+  GskTransform *transform;
+
+  if (!gsk_transform_parser_parse (parser, &transform) ||
+      !parse_semicolon (parser))
+    {
+      gsk_transform_unref (transform);
+      return FALSE;
+    }
+
+  gsk_transform_unref (*(GskTransform **) out_transform);
+  *(GskTransform **) out_transform = transform;
+
+  return TRUE;
+}
+
+static gboolean
+parse_string (GtkCssParser *parser,
               gpointer      out_string)
 {
-  const GskCssToken *token;
+  const GtkCssToken *token;
   char *s;
 
-  token = gsk_css_parser_get_token (parser);
-  if (!gsk_css_token_is (token, GSK_CSS_TOKEN_STRING))
+  token = gtk_css_parser_get_token (parser);
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_STRING))
     return FALSE;
 
   s = g_strdup (token->string.string);
-  gsk_css_parser_consume_token (parser);
+  gtk_css_parser_consume_token (parser);
 
   if (!parse_semicolon (parser))
     {
@@ -390,25 +410,28 @@ parse_string (GskCssParser *parser,
 }
 
 static gboolean
-parse_stops (GskCssParser *parser,
+parse_stops (GtkCssParser *parser,
              gpointer      out_stops)
 {
   GArray *stops;
   GskColorStop stop;
 
+
   stops = g_array_new (FALSE, FALSE, sizeof (GskColorStop));
 
   do
     {
-      if (!gsk_css_parser_consume_number (parser, &stop.offset) ||
+      gtk_css_parser_skip (parser);
+
+      if (!gtk_css_parser_consume_number (parser, &stop.offset) ||
           !gsk_rgba_parse (parser, &stop.color))
         { /* do nothing */ }
       else if (stops->len == 0 && stop.offset < 0)
-        gsk_css_parser_error_value (parser, "Color stop offset must be >= 0");
+        gtk_css_parser_error_value (parser, "Color stop offset must be >= 0");
       else if (stops->len > 0 && stop.offset < g_array_index (stops, GskColorStop, stops->len - 1).offset)
-        gsk_css_parser_error_value (parser, "Color stop offset must be >= previous value");
+        gtk_css_parser_error_value (parser, "Color stop offset must be >= previous value");
       else if (stop.offset > 1)
-        gsk_css_parser_error_value (parser, "Color stop offset must be <= 1");
+        gtk_css_parser_error_value (parser, "Color stop offset must be <= 1");
       else
         {
           g_array_append_val (stops, stop);
@@ -418,11 +441,11 @@ parse_stops (GskCssParser *parser,
       g_array_free (stops, TRUE);
       return FALSE;
     }
-  while (gsk_css_parser_consume_if (parser, GSK_CSS_TOKEN_COMMA));
+  while (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA));
 
   if (stops->len < 2)
     {
-      gsk_css_parser_error_value (parser, "At least 2 color stops need to be specified");
+      gtk_css_parser_error_value (parser, "At least 2 color stops need to be specified");
       g_array_free (stops, TRUE);
       return FALSE;
     }
@@ -435,20 +458,20 @@ parse_stops (GskCssParser *parser,
 }
 
 static gboolean
-parse_node (GskCssParser *parser, gpointer out_node);
+parse_node (GtkCssParser *parser, gpointer out_node);
 
 static GskRenderNode *
-parse_container_node (GskCssParser *parser)
+parse_container_node (GtkCssParser *parser)
 {
   GskRenderNode *node;
   GPtrArray *nodes;
-  const GskCssToken *token;
+  const GtkCssToken *token;
   
   nodes = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
 
-  for (token = gsk_css_parser_get_token (parser);
-       !gsk_css_token_is (token, GSK_CSS_TOKEN_EOF);
-       token = gsk_css_parser_get_token (parser))
+  for (token = gtk_css_parser_get_token (parser);
+       !gtk_css_token_is (token, GTK_CSS_TOKEN_EOF);
+       token = gtk_css_parser_get_token (parser))
     {
       node = NULL;
       if (parse_node (parser, &node))
@@ -457,8 +480,8 @@ parse_container_node (GskCssParser *parser)
         }
       else
         {
-          gsk_css_parser_skip_until (parser, GSK_CSS_TOKEN_OPEN_CURLY);
-          gsk_css_parser_skip (parser);
+          gtk_css_parser_skip_until (parser, GTK_CSS_TOKEN_OPEN_CURLY);
+          gtk_css_parser_skip (parser);
         }
     }
 
@@ -470,55 +493,55 @@ parse_container_node (GskCssParser *parser)
 }
 
 static void
-parse_declarations_sync (GskCssParser *parser)
+parse_declarations_sync (GtkCssParser *parser)
 {
-  const GskCssToken *token;
+  const GtkCssToken *token;
 
-  for (token = gsk_css_parser_get_token (parser);
-       !gsk_css_token_is (token, GSK_CSS_TOKEN_EOF);
-       token = gsk_css_parser_get_token (parser))
+  for (token = gtk_css_parser_get_token (parser);
+       !gtk_css_token_is (token, GTK_CSS_TOKEN_EOF);
+       token = gtk_css_parser_get_token (parser))
     {
-      if (gsk_css_token_is (token, GSK_CSS_TOKEN_SEMICOLON) ||
-          gsk_css_token_is (token, GSK_CSS_TOKEN_OPEN_CURLY))
+      if (gtk_css_token_is (token, GTK_CSS_TOKEN_SEMICOLON) ||
+          gtk_css_token_is (token, GTK_CSS_TOKEN_OPEN_CURLY))
         {
-          gsk_css_parser_skip (parser);
+          gtk_css_parser_skip (parser);
           break;
         }
-      gsk_css_parser_skip (parser);
+      gtk_css_parser_skip (parser);
     }
 }
 
 static guint
-parse_declarations (GskCssParser      *parser,
+parse_declarations (GtkCssParser      *parser,
                     const Declaration *declarations,
                     guint              n_declarations)
 {
   guint parsed = 0;
   guint i;
-  const GskCssToken *token;
+  const GtkCssToken *token;
 
   g_assert (n_declarations < 8 * sizeof (guint));
 
-  for (token = gsk_css_parser_get_token (parser);
-       !gsk_css_token_is (token, GSK_CSS_TOKEN_EOF);
-       token = gsk_css_parser_get_token (parser))
+  for (token = gtk_css_parser_get_token (parser);
+       !gtk_css_token_is (token, GTK_CSS_TOKEN_EOF);
+       token = gtk_css_parser_get_token (parser))
     {
       for (i = 0; i < n_declarations; i++)
         {
-          if (gsk_css_token_is_ident (token, declarations[i].name))
+          if (gtk_css_token_is_ident (token, declarations[i].name))
             {
-              gsk_css_parser_consume_token (parser);
-              token = gsk_css_parser_get_token (parser);
-              if (!gsk_css_token_is (token, GSK_CSS_TOKEN_COLON))
+              gtk_css_parser_consume_token (parser);
+              token = gtk_css_parser_get_token (parser);
+              if (!gtk_css_token_is (token, GTK_CSS_TOKEN_COLON))
                 {
-                  gsk_css_parser_error_syntax (parser, "Expected ':' after variable declaration");
+                  gtk_css_parser_error_syntax (parser, "Expected ':' after variable declaration");
                   parse_declarations_sync (parser);
                 }
               else
                 {
-                  gsk_css_parser_consume_token (parser);
+                  gtk_css_parser_consume_token (parser);
                   if (parsed & (1 << i))
-                    gsk_css_parser_warn_syntax (parser, "Variable \"%s\" defined multiple times", declarations[i].name);
+                    gtk_css_parser_warn_syntax (parser, "Variable \"%s\" defined multiple times", declarations[i].name);
                   if (declarations[i].parse_func (parser, declarations[i].result))
                     parsed |= (1 << i);
                   else
@@ -529,10 +552,10 @@ parse_declarations (GskCssParser      *parser,
         }
       if (i == n_declarations)
         {
-          if (gsk_css_token_is (token, GSK_CSS_TOKEN_IDENT))
-            gsk_css_parser_error_syntax (parser, "No variable named \"%s\"", token->string.string);
+          if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+            gtk_css_parser_error_syntax (parser, "No variable named \"%s\"", token->string.string);
           else
-            gsk_css_parser_error_syntax (parser, "Expected a variable name");
+            gtk_css_parser_error_syntax (parser, "Expected a variable name");
           parse_declarations_sync (parser);
         }
     }
@@ -541,7 +564,7 @@ parse_declarations (GskCssParser      *parser,
 }
 
 static GskRenderNode *
-parse_color_node (GskCssParser *parser)
+parse_color_node (GtkCssParser *parser)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
   GdkRGBA color = { 0, 0, 0, 0 };
@@ -556,7 +579,7 @@ parse_color_node (GskCssParser *parser)
 }
 
 static GskRenderNode *
-parse_linear_gradient_node (GskCssParser *parser)
+parse_linear_gradient_node (GtkCssParser *parser)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
   graphene_point_t start = GRAPHENE_POINT_INIT (0, 0);
@@ -573,7 +596,7 @@ parse_linear_gradient_node (GskCssParser *parser)
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (stops == NULL)
     {
-      gsk_css_parser_error_syntax (parser, "No color stops given");
+      gtk_css_parser_error_syntax (parser, "No color stops given");
       return NULL;
     }
 
@@ -585,7 +608,7 @@ parse_linear_gradient_node (GskCssParser *parser)
 }
 
 static GskRenderNode *
-parse_inset_shadow_node (GskCssParser *parser)
+parse_inset_shadow_node (GtkCssParser *parser)
 {
   GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
   GdkRGBA color = { 0, 0, 0, 0 };
@@ -605,7 +628,7 @@ parse_inset_shadow_node (GskCssParser *parser)
 }
 
 static GskRenderNode *
-parse_outset_shadow_node (GskCssParser *parser)
+parse_outset_shadow_node (GtkCssParser *parser)
 {
   GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
   GdkRGBA color = { 0, 0, 0, 0 };
@@ -625,7 +648,37 @@ parse_outset_shadow_node (GskCssParser *parser)
 }
 
 static GskRenderNode *
-parse_opacity_node (GskCssParser *parser)
+parse_transform_node (GtkCssParser *parser)
+{
+  GskRenderNode *child = NULL;
+  GskTransform *transform = NULL;
+  const Declaration declarations[] = {
+    { "transform", parse_transform, &transform },
+    { "child", parse_node, &child },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (child == NULL)
+    {
+      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
+      gsk_transform_unref (transform);
+      return NULL;
+    }
+  /* This is very much cheating, isn't it? */
+  if (transform == NULL)
+    transform = gsk_transform_new ();
+
+  result = gsk_transform_node_new (child, transform);
+
+  gsk_render_node_unref (child);
+  gsk_transform_unref (transform);
+
+  return result;
+}
+
+static GskRenderNode *
+parse_opacity_node (GtkCssParser *parser)
 {
   GskRenderNode *child = NULL;
   double opacity = 1.0;
@@ -638,7 +691,7 @@ parse_opacity_node (GskCssParser *parser)
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
     {
-      gsk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
+      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
       return NULL;
     }
 
@@ -650,7 +703,7 @@ parse_opacity_node (GskCssParser *parser)
 }
 
 static GskRenderNode *
-parse_cross_fade_node (GskCssParser *parser)
+parse_cross_fade_node (GtkCssParser *parser)
 {
   GskRenderNode *start = NULL;
   GskRenderNode *end = NULL;
@@ -666,9 +719,9 @@ parse_cross_fade_node (GskCssParser *parser)
   if (start == NULL || end == NULL)
     {
       if (start == NULL)
-        gsk_css_parser_error_syntax (parser, "Missing \"start\" property definition");
+        gtk_css_parser_error_syntax (parser, "Missing \"start\" property definition");
       if (end == NULL)
-        gsk_css_parser_error_syntax (parser, "Missing \"end\" property definition");
+        gtk_css_parser_error_syntax (parser, "Missing \"end\" property definition");
       g_clear_pointer (&start, gsk_render_node_unref);
       g_clear_pointer (&end, gsk_render_node_unref);
       return NULL;
@@ -683,7 +736,7 @@ parse_cross_fade_node (GskCssParser *parser)
 }
 
 static GskRenderNode *
-parse_clip_node (GskCssParser *parser)
+parse_clip_node (GtkCssParser *parser)
 {
   graphene_rect_t clip = GRAPHENE_RECT_INIT (0, 0, 0, 0);
   GskRenderNode *child = NULL;
@@ -695,7 +748,7 @@ parse_clip_node (GskCssParser *parser)
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
     {
-      gsk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
+      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
       return NULL;
     }
 
@@ -703,7 +756,7 @@ parse_clip_node (GskCssParser *parser)
 }
 
 static GskRenderNode *
-parse_rounded_clip_node (GskCssParser *parser)
+parse_rounded_clip_node (GtkCssParser *parser)
 {
   GskRoundedRect clip = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
   GskRenderNode *child = NULL;
@@ -715,7 +768,7 @@ parse_rounded_clip_node (GskCssParser *parser)
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
     {
-      gsk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
+      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
       return NULL;
     }
 
@@ -723,7 +776,7 @@ parse_rounded_clip_node (GskCssParser *parser)
 }
 
 static GskRenderNode *
-parse_debug_node (GskCssParser *parser)
+parse_debug_node (GtkCssParser *parser)
 {
   char *message = NULL;
   GskRenderNode *child = NULL;
@@ -735,7 +788,7 @@ parse_debug_node (GskCssParser *parser)
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
     {
-      gsk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
+      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
       return NULL;
     }
 
@@ -743,12 +796,12 @@ parse_debug_node (GskCssParser *parser)
 }
 
 static gboolean
-parse_node (GskCssParser *parser,
+parse_node (GtkCssParser *parser,
             gpointer      out_node)
 {
   static struct {
     const char *name;
-    GskRenderNode * (* func) (GskCssParser *);
+    GskRenderNode * (* func) (GtkCssParser *);
   } node_parsers[] = {
     { "container", parse_container_node },
     { "color", parse_color_node },
@@ -762,9 +815,7 @@ parse_node (GskCssParser *parser,
 #endif
     { "inset-shadow", parse_inset_shadow_node },
     { "outset-shadow", parse_outset_shadow_node },
-#if 0
     { "transform", parse_transform_node },
-#endif
     { "opacity", parse_opacity_node },
 #if 0
     { "color-matrix", parse_color-matrix_node },
@@ -783,58 +834,58 @@ parse_node (GskCssParser *parser,
 #endif
     { "debug", parse_debug_node }
   };
-  const GskCssToken *token;
+  const GtkCssToken *token;
   guint i;
   
-  token = gsk_css_parser_get_token (parser);
-  if (!gsk_css_token_is (token, GSK_CSS_TOKEN_IDENT))
+  token = gtk_css_parser_get_token (parser);
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
     {
-      gsk_css_parser_error_syntax (parser, "Expected a node name");
+      gtk_css_parser_error_syntax (parser, "Expected a node name");
       return FALSE;
     }
 
   for (i = 0; i < G_N_ELEMENTS (node_parsers); i++)
     {
-      if (gsk_css_token_is_ident (token, node_parsers[i].name))
+      if (gtk_css_token_is_ident (token, node_parsers[i].name))
         {
           GskRenderNode *node;
 
-          gsk_css_parser_consume_token (parser);
-          token = gsk_css_parser_get_token (parser);
-          if (!gsk_css_token_is (token, GSK_CSS_TOKEN_OPEN_CURLY))
+          gtk_css_parser_consume_token (parser);
+          token = gtk_css_parser_get_token (parser);
+          if (!gtk_css_token_is (token, GTK_CSS_TOKEN_OPEN_CURLY))
             {
-              gsk_css_parser_error_syntax (parser, "Expected '{' after node name");
+              gtk_css_parser_error_syntax (parser, "Expected '{' after node name");
               return FALSE;
             }
-          gsk_css_parser_start_block (parser);
+          gtk_css_parser_start_block (parser);
           node = node_parsers[i].func (parser);
           if (node)
             {
-              token = gsk_css_parser_get_token (parser);
-              if (!gsk_css_token_is (token, GSK_CSS_TOKEN_EOF))
-                gsk_css_parser_error_syntax (parser, "Expected '}' at end of node definition");
+              token = gtk_css_parser_get_token (parser);
+              if (!gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+                gtk_css_parser_error_syntax (parser, "Expected '}' at end of node definition");
               g_clear_pointer ((GskRenderNode **) out_node, gsk_render_node_unref);
               *(GskRenderNode **) out_node = node;
             }
-          gsk_css_parser_end_block (parser);
+          gtk_css_parser_end_block (parser);
 
           return node != NULL;
         }
     }
 
-  gsk_css_parser_error_value (parser, "\"%s\" is not a valid node name", token->string.string);
+  gtk_css_parser_error_value (parser, "\"%s\" is not a valid node name", token->string.string);
   return FALSE;
 }
 
 static void
-gsk_render_node_parser_error (GskCssParser         *parser,
-                              const GskCssLocation *location,
-                              const GskCssToken    *token,
+gsk_render_node_parser_error (GtkCssParser         *parser,
+                              const GtkCssLocation *start,
+                              const GtkCssLocation *end,
                               const GError         *error,
                               gpointer              user_data)
 {
   g_print ("ERROR: %zu:%zu: %s\n",
-           location->lines, location->line_chars,
+           start->lines, start->line_chars,
            error->message);
 }
 
@@ -845,15 +896,12 @@ GskRenderNode *
 gsk_render_node_deserialize_from_bytes (GBytes *bytes)
 {
   GskRenderNode *root = NULL;
-  GskCssParser *parser;
+  GtkCssParser *parser;
 
-  parser = gsk_css_parser_new (gsk_render_node_parser_error,
-                               NULL,
-                               NULL);
-  gsk_css_parser_add_bytes (parser, bytes);
+  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, gsk_render_node_parser_error, NULL, NULL);
   root = parse_container_node (parser);
 
-  gsk_css_parser_unref (parser);
+  gtk_css_parser_unref (parser);
 
   return root;
 }
