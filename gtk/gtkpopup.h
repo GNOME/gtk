@@ -53,6 +53,10 @@ struct _GtkPopupClass
   void     (* activate_focus)   (GtkPopup *popup);
   void     (* activate_default) (GtkPopup *popup);
   void     (* close)            (GtkPopup *popup);
+
+  /* signals */
+
+  void     (* closed)           (GtkPopup *popup);
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -64,6 +68,26 @@ GtkWidget *     gtk_popup_new      (void);
 GDK_AVAILABLE_IN_ALL
 void            gtk_popup_set_relative_to (GtkPopup   *popup,
                                            GtkWidget  *relative_to);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *     gtk_popup_get_relative_to (GtkPopup   *popup);
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_popup_set_pointing_to (GtkPopup           *popup,
+                                           const GdkRectangle *rect);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_popup_get_pointing_to (GtkPopup           *popup,
+                                           GdkRectangle       *rect);
+GDK_AVAILABLE_IN_ALL
+void            gtk_popup_set_position    (GtkPopup           *popup,
+                                           GtkPositionType     position);
+GDK_AVAILABLE_IN_ALL
+GtkPositionType gtk_popup_get_position    (GtkPopup           *popup);
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_popup_set_modal       (GtkPopup           *popup,
+                                           gboolean            modal);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_popup_get_modal       (GtkPopup           *popup);
 
 GDK_AVAILABLE_IN_ALL
 GListModel *    gtk_popup_get_popups (void);
