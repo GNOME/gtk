@@ -1255,6 +1255,15 @@ connect_text_signals (GtkEntry *entry)
 }
 
 static void
+disconnect_text_signals (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  g_signal_handlers_disconnect_by_func (priv->text, activate_cb, entry);
+  g_signal_handlers_disconnect_by_func (priv->text, notify_cb, entry);
+}
+
+static void
 gtk_entry_init (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
@@ -1278,7 +1287,10 @@ gtk_entry_dispose (GObject *object)
   gtk_entry_set_completion (entry, NULL);
 
   if (priv->text)
-    gtk_editable_finish_delegate (GTK_EDITABLE (entry));
+    {
+      disconnect_text_signals (entry);
+      gtk_editable_finish_delegate (GTK_EDITABLE (entry));
+    }
   g_clear_pointer (&priv->text, gtk_widget_unparent);
 
   gtk_entry_set_icon_from_paintable (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
