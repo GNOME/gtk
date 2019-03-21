@@ -1341,7 +1341,7 @@ rewrite_event_for_grabs (GdkEvent *event)
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
       if (grab_surface != event->any.surface &&
-          GTK_IS_POPUP (grab_widget))
+          GTK_IS_POPOVER (grab_widget))
         {
           gtk_widget_hide (grab_widget);
           return NULL;
