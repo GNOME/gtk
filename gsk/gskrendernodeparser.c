@@ -4,7 +4,7 @@
 #include "gskcssparserprivate.h"
 #include "gskroundedrectprivate.h"
 #include "gskrendernodeprivate.h"
-#include "gsktransform.h"
+#include "gsktransformprivate.h"
 
 typedef struct _Declaration Declaration;
 
@@ -364,6 +364,25 @@ parse_point (GskCssParser *parser,
 }
 
 static gboolean
+parse_transform (GskCssParser *parser,
+                 gpointer      out_transform)
+{
+  GskTransform *transform;
+
+  if (!gsk_transform_parse (parser, &transform) ||
+      !parse_semicolon (parser))
+    {
+      gsk_transform_unref (transform);
+      return FALSE;
+    }
+
+  gsk_transform_unref (*(GskTransform **) out_transform);
+  *(GskTransform **) out_transform = transform;
+
+  return TRUE;
+}
+
+static gboolean
 parse_string (GskCssParser *parser,
               gpointer      out_string)
 {
@@ -625,6 +644,36 @@ parse_outset_shadow_node (GskCssParser *parser)
 }
 
 static GskRenderNode *
+parse_transform_node (GskCssParser *parser)
+{
+  GskRenderNode *child = NULL;
+  GskTransform *transform = NULL;
+  const Declaration declarations[] = {
+    { "transform", parse_transform, &transform },
+    { "child", parse_node, &child },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (child == NULL)
+    {
+      gsk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
+      gsk_transform_unref (transform);
+      return NULL;
+    }
+  /* This is very much cheating, isn't it? */
+  if (transform == NULL)
+    transform = gsk_transform_new ();
+
+  result = gsk_transform_node_new (child, transform);
+
+  gsk_render_node_unref (child);
+  gsk_transform_unref (transform);
+
+  return result;
+}
+
+static GskRenderNode *
 parse_opacity_node (GskCssParser *parser)
 {
   GskRenderNode *child = NULL;
@@ -762,9 +811,7 @@ parse_node (GskCssParser *parser,
 #endif
     { "inset-shadow", parse_inset_shadow_node },
     { "outset-shadow", parse_outset_shadow_node },
-#if 0
     { "transform", parse_transform_node },
-#endif
     { "opacity", parse_opacity_node },
 #if 0
     { "color-matrix", parse_color-matrix_node },

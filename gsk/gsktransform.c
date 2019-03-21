@@ -1264,8 +1264,8 @@ gsk_transform_unref (GskTransform *self)
  * @self: (allow-none): a #GskTransform
  * @string:  The string to print into
  *
- * Converts @self into a string representation suitable for printing that
- * can later be parsed with gsk_transform_parse().
+ * Converts @self into a human-readable string representation suitable
+ * for printing that can later be parsed with gsk_transform_from_string().
  **/
 void
 gsk_transform_print (GskTransform *self,
@@ -1650,4 +1650,255 @@ gsk_transform_transform_bounds (GskTransform          *self,
       }
       break;
     }
+}
+
+static guint
+gsk_transform_parse_float (GskCssParser *parser,
+                           guint         n,
+                           gpointer      data)
+{
+  float *f = data;
+  double d;
+
+  if (!gsk_css_parser_consume_number (parser, &d))
+    return 0;
+
+  f[n] = d;
+  return 1;
+}
+
+static guint
+gsk_transform_parse_scale (GskCssParser *parser,
+                           guint         n,
+                           gpointer      data)
+{
+  float *f = data;
+  double d;
+
+  if (!gsk_css_parser_consume_number (parser, &d))
+    return 0;
+
+  f[n] = d;
+  f[1] = d;
+  return 1;
+}
+
+gboolean
+gsk_transform_parse (GskCssParser  *parser,
+                     GskTransform **out_transform)
+{
+  const GskCssToken *token;
+  GskTransform *transform = NULL;
+  float f[16] = { 0, };
+
+  token = gsk_css_parser_get_token (parser);
+  if (gsk_css_token_is_ident (token, "none"))
+    {
+      gsk_css_parser_consume_token (parser);
+      *out_transform = NULL;
+      return TRUE;
+    }
+
+  while (TRUE)
+    {
+      if (gsk_css_token_is_function (token, "matrix"))
+        {
+          graphene_matrix_t matrix;
+          if (!gsk_css_parser_consume_function (parser, 6, 6, gsk_transform_parse_float, f))
+            goto fail;
+
+          graphene_matrix_init_from_2d (&matrix, f[0], f[1], f[2], f[3], f[4], f[5]);
+          transform = gsk_transform_matrix_with_category (transform,
+                                                          &matrix,
+                                                          GSK_TRANSFORM_CATEGORY_2D);
+        }
+      else if (gsk_css_token_is_function (token, "matrix3d"))
+        {
+          graphene_matrix_t matrix;
+          if (!gsk_css_parser_consume_function (parser, 16, 16, gsk_transform_parse_float, f))
+            goto fail;
+
+          graphene_matrix_init_from_float (&matrix, f);
+          transform = gsk_transform_matrix (transform, &matrix);
+        }
+      else if (gsk_css_token_is_function (token, "perspective"))
+        {
+          if (!gsk_css_parser_consume_function (parser, 1, 1, gsk_transform_parse_float, f))
+            goto fail;
+
+          transform = gsk_transform_perspective (transform, f[0]);
+        }
+      else if (gsk_css_token_is_function (token, "rotate") ||
+               gsk_css_token_is_function (token, "rotateZ"))
+        {
+          if (!gsk_css_parser_consume_function (parser, 1, 1, gsk_transform_parse_float, f))
+            goto fail;
+
+          transform = gsk_transform_rotate (transform, f[0]);
+        }
+      else if (gsk_css_token_is_function (token, "rotate3d"))
+        {
+          graphene_vec3_t axis;
+
+          if (!gsk_css_parser_consume_function (parser, 4, 4, gsk_transform_parse_float, f))
+            goto fail;
+
+          graphene_vec3_init (&axis, f[0], f[1], f[2]);
+          transform = gsk_transform_rotate_3d (transform, f[3], &axis);
+        }
+      else if (gsk_css_token_is_function (token, "rotateX"))
+        {
+          if (!gsk_css_parser_consume_function (parser, 1, 1, gsk_transform_parse_float, f))
+            goto fail;
+
+          transform = gsk_transform_rotate_3d (transform, f[0], graphene_vec3_x_axis ());
+        }
+      else if (gsk_css_token_is_function (token, "rotateY"))
+        {
+          if (!gsk_css_parser_consume_function (parser, 1, 1, gsk_transform_parse_float, f))
+            goto fail;
+
+          transform = gsk_transform_rotate_3d (transform, f[0], graphene_vec3_y_axis ());
+        }
+      else if (gsk_css_token_is_function (token, "scale"))
+        {
+          if (!gsk_css_parser_consume_function (parser, 1, 2, gsk_transform_parse_scale, f))
+            goto fail;
+
+          transform = gsk_transform_scale (transform, f[0], f[1]);
+        }
+      else if (gsk_css_token_is_function (token, "scale3d"))
+        {
+          if (!gsk_css_parser_consume_function (parser, 3, 3, gsk_transform_parse_float, f))
+            goto fail;
+
+          transform = gsk_transform_scale_3d (transform, f[0], f[1], f[2]);
+        }
+      else if (gsk_css_token_is_function (token, "scaleX"))
+        {
+          if (!gsk_css_parser_consume_function (parser, 1, 1, gsk_transform_parse_float, f))
+            goto fail;
+
+          transform = gsk_transform_scale (transform, f[0], 1.f);
+        }
+      else if (gsk_css_token_is_function (token, "scaleY"))
+        {
+          if (!gsk_css_parser_consume_function (parser, 1, 1, gsk_transform_parse_float, f))
+            goto fail;
+
+          transform = gsk_transform_scale (transform, 1.f, f[0]);
+        }
+      else if (gsk_css_token_is_function (token, "scaleZ"))
+        {
+          if (!gsk_css_parser_consume_function (parser, 1, 1, gsk_transform_parse_float, f))
+            goto fail;
+
+          transform = gsk_transform_scale_3d (transform, 1.f, 1.f, f[0]);
+        }
+      else if (gsk_css_token_is_function (token, "translate"))
+        {
+          f[1] = 0.f;
+          if (!gsk_css_parser_consume_function (parser, 1, 2, gsk_transform_parse_float, f))
+            goto fail;
+
+          transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (f[0], f[1]));
+        }
+      else if (gsk_css_token_is_function (token, "translate3d"))
+        {
+          if (!gsk_css_parser_consume_function (parser, 3, 3, gsk_transform_parse_float, f))
+            goto fail;
+
+          transform = gsk_transform_translate_3d (transform, &GRAPHENE_POINT3D_INIT (f[0], f[1], f[2]));
+        }
+      else if (gsk_css_token_is_function (token, "translateX"))
+        {
+          if (!gsk_css_parser_consume_function (parser, 1, 1, gsk_transform_parse_float, f))
+            goto fail;
+
+          transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (f[0], 0.f));
+        }
+      else if (gsk_css_token_is_function (token, "translateY"))
+        {
+          if (!gsk_css_parser_consume_function (parser, 1, 1, gsk_transform_parse_float, f))
+            goto fail;
+
+          transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (0.f, f[0]));
+        }
+      else if (gsk_css_token_is_function (token, "translateZ"))
+        {
+          if (!gsk_css_parser_consume_function (parser, 1, 1, gsk_transform_parse_float, f))
+            goto fail;
+
+          transform = gsk_transform_translate_3d (transform, &GRAPHENE_POINT3D_INIT (0.f, 0.f, f[0]));
+        }
+#if 0
+      /* FIXME: add these */
+      else if (gsk_css_token_is_function (token, "skew"))
+        {
+        }
+      else if (gsk_css_token_is_function (token, "skewX"))
+        {
+        }
+      else if (gsk_css_token_is_function (token, "skewY"))
+        {
+        }
+#endif
+      else
+        {
+          break;
+        }
+
+      token = gsk_css_parser_get_token (parser);
+    }
+
+  if (transform == NULL)
+    {
+      gsk_css_parser_error_syntax (parser, "Expected a transform");
+      goto fail;
+    }
+
+  *out_transform = transform;
+  return TRUE;
+
+fail:
+  gsk_transform_unref (transform);
+  *out_transform = NULL;
+  return FALSE;
+}
+
+/**
+ * gsk_transform_from_string:
+ * @string: the string to parse
+ * @out_transform: (out): The location to put the transform in
+ *
+ * Parses the given @string into a transform and puts it in
+ * @out_transform. Strings printed via gsk_transform_to_string()
+ * can be read in again successfully using this function.
+ *
+ * If @string does not describe a valid transform, %FALSE is
+ * returned and %NULL is put in @out_transform.
+ *
+ * Returns: %TRUE if @string described a valid transform.
+ **/
+gboolean
+gsk_transform_from_string (const char *string,
+                           GskTransform **out_transform)
+{
+  GskCssParser *parser;
+  GBytes *bytes;
+  gboolean result;
+
+  g_return_val_if_fail (string != NULL, FALSE);
+  g_return_val_if_fail (out_transform != NULL, FALSE);
+
+  bytes = g_bytes_new_static (string, strlen (string));
+  parser = gsk_css_parser_new (NULL, NULL, NULL);
+  gsk_css_parser_add_bytes (parser, bytes);
+
+  result = gsk_transform_parse (parser, out_transform);
+
+  gsk_css_parser_unref (parser);
+  g_bytes_unref (bytes);
+
+  return result; 
 }
