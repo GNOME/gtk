@@ -66,6 +66,7 @@ foreach gl_test : gl_tests
 endforeach
 
 compare_render_tests = [
+  'clip-coordinates-3d',
   'clipped_rounded_clip',
   'opacity_clip',
   'outset_shadow_offset_both',
@@ -76,24 +77,27 @@ compare_render_tests = [
 ]
 
 renderers = [
-  'opengl',
-  'cairo',
+  # name      exclude term
+  [ 'opengl', ''    ],
+  [ 'cairo',  '-3d' ],
 ]
 
 foreach renderer : renderers
   foreach test : compare_render_tests
-    test(renderer + ' ' + test, compare_render,
-         args: [join_paths(meson.current_source_dir(), 'compare', test + '.node'),
-                join_paths(meson.current_source_dir(), 'compare', test + '.png')],
-         env: [ 'GIO_USE_VOLUME_MONITOR=unix',
-                'GSETTINGS_BACKEND=memory',
-                'GTK_CSD=1',
-                'G_ENABLE_DIAGNOSTIC=0',
-                'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-                'GSK_RENDERER=' + renderer
-              ],
-       suite: [ 'gsk', 'gsk-compare', 'gsk-' + renderer, 'gsk-compare-' + renderer ])
+    if (renderer[1] == '' or not test.contains(renderer[1]))
+      test(renderer[0] + ' ' + test, compare_render,
+           args: [join_paths(meson.current_source_dir(), 'compare', test + '.node'),
+                  join_paths(meson.current_source_dir(), 'compare', test + '.png')],
+           env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+                  'GSETTINGS_BACKEND=memory',
+                  'GTK_CSD=1',
+                  'G_ENABLE_DIAGNOSTIC=0',
+                  'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+                  'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+                  'GSK_RENDERER=' + renderer[0]
+                ],
+         suite: [ 'gsk', 'gsk-compare', 'gsk-' + renderer[0], 'gsk-compare-' + renderer[0] ])
+    endif
   endforeach
 endforeach
 
