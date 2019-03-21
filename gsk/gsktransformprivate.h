@@ -23,14 +23,20 @@
 
 #include "gsktransform.h"
 
-#include <gsk/gsk.h>
 #include "gsk/gskrendernodeprivate.h"
+
+#include <gtk/css/gtkcss.h>
+#include "gtk/css/gtkcssparserprivate.h"
 
 G_BEGIN_DECLS
 
 GskTransform *          gsk_transform_matrix_with_category      (GskTransform           *next,
                                                                  const graphene_matrix_t*matrix,
                                                                  GskTransformCategory    category);
+
+gboolean                gsk_transform_parser_parse              (GtkCssParser           *parser,
+                                                                 GskTransform          **out_transform);
+
 
 G_END_DECLS
 
