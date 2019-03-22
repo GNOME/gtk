@@ -1258,9 +1258,9 @@ gdk_device_grab (GdkDevice        *device,
   g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_GRAB_FAILED);
   g_return_val_if_fail (gdk_surface_get_display (surface) == gdk_device_get_display (device), GDK_GRAB_FAILED);
 
-  native = gdk_surface_get_toplevel (surface);
+  native = surface;
 
-  if (native == NULL || GDK_SURFACE_DESTROYED (native))
+  if (GDK_SURFACE_DESTROYED (native))
     return GDK_GRAB_NOT_VIEWABLE;
 
   res = GDK_DEVICE_GET_CLASS (device)->grab (device,
