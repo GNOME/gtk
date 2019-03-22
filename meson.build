@@ -754,8 +754,8 @@ endif
 #  subdir('docs/reference')
 #endif
 
-# Keep this in sync with post-install.sh expected arguments
-meson.add_install_script('build-aux/meson/post-install.sh',
+# Keep this in sync with post-install.py expected arguments
+meson.add_install_script('build-aux/meson/post-install.py',
                          gtk_api_version,
                          gtk_binary_version,
                          gtk_libdir,
