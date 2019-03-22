@@ -160,6 +160,7 @@ struct _GtkEntryPrivate
 
   GtkWidget     *text;
   GtkWidget     *progress_widget;
+  GtkWidget     *emoji_chooser;
 
   guint         show_emoji_icon         : 1;
   guint         editing_canceled        : 1; /* Only used by GtkCellRendererText */
@@ -1292,6 +1293,8 @@ gtk_entry_dispose (GObject *object)
       gtk_editable_finish_delegate (GTK_EDITABLE (entry));
     }
   g_clear_pointer (&priv->text, gtk_widget_unparent);
+
+  g_clear_pointer (&priv->emoji_chooser, gtk_widget_unparent);
 
   gtk_entry_set_icon_from_paintable (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
