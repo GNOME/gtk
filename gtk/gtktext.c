@@ -156,6 +156,7 @@ struct _GtkTextPrivate
 
   char         *im_module;
 
+  GtkWidget     *emoji_completion;
   GtkTextHandle *text_handle;
   GtkWidget     *selection_bubble;
   guint          selection_bubble_timeout_id;
@@ -1785,8 +1786,11 @@ gtk_text_dispose (GObject *object)
       priv->buffer = NULL;
     }
 
+  g_clear_pointer (&priv->emoji_completion, gtk_widget_unparent);
+
   keymap = gdk_display_get_keymap (gtk_widget_get_display (GTK_WIDGET (object)));
   g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, self);
+
   G_OBJECT_CLASS (gtk_text_parent_class)->dispose (object);
 }
 
@@ -6652,10 +6656,9 @@ set_enable_emoji_completion (GtkText  *self,
   priv->enable_emoji_completion = value;
 
   if (priv->enable_emoji_completion)
-    g_object_set_data (G_OBJECT (self), "emoji-completion-popup",
-                       gtk_emoji_completion_new (self));
+    priv->emoji_completion = gtk_emoji_completion_new (self);
   else
-    g_object_set_data (G_OBJECT (self), "emoji-completion-popup", NULL);
+    g_clear_pointer (&priv->emoji_completion, gtk_widget_unparent);
 
   g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_ENABLE_EMOJI_COMPLETION]);
 }
