@@ -238,7 +238,7 @@ parse_declaration (GtkCssKeyframes *keyframes,
   property = _gtk_style_property_lookup (name);
   if (property == NULL)
     {
-      /* should be GTK_CSS_PROVIDER_ERROR_NAME */
+      /* should be GTK_CSS_PARSER_ERROR_NAME */
       _gtk_css_parser_error (parser, "No property named '%s'", name);
       g_free (name);
       return FALSE;

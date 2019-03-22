@@ -27,7 +27,10 @@
 
 #define __GTK_H_INSIDE__
 
+#include <gtk/css/gtkcss.h>
 #include <gdk/gdk.h>
+#include <gsk/gsk.h>
+
 #include <gtk/gtkaboutdialog.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkaccellabel.h>

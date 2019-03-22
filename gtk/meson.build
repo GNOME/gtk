@@ -841,7 +841,7 @@ typefuncs = custom_target('gtktypefuncs.inc',
                             gtk_public_headers +
                             gtk_deprecated_headers +
                             [ gtktypebuiltins_h, ] +
-                            [ gdkenum_h, gskenum_h, ],
+                            [ gtk_css_enum_h, gdkenum_h, gskenum_h, ],
                           command: [
                             find_program('gentypefuncs.py'),
                             '@OUTPUT@',
@@ -993,8 +993,8 @@ libgtk = shared_library('gtk-4',
                         sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
                         c_args: gtk_cargs + common_cflags,
                         include_directories: [confinc, gdkinc, gskinc, gtkinc],
-                        dependencies: gtk_deps + [libgdk_dep, libgsk_dep],
-                        link_with: [libgdk, libgsk, ],
+                        dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
+                        link_with: [libgtk_css, libgdk, libgsk, ],
                         link_args: common_ldflags,
                         install: true)
 
@@ -1119,7 +1119,7 @@ endif
 
 libgtk_dep = declare_dependency(sources: gtk_dep_sources,
                                 include_directories: [confinc, gtkinc],
-                                dependencies: gtk_deps + [libgdk_dep, libgsk_dep],
+                                dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
                                 link_with: libgtk,
                                 link_args: common_ldflags)
 
