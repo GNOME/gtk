@@ -310,15 +310,15 @@ gsk_matrix_transform_apply_affine (GskTransform *transform,
       break;
 
     case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
-      *out_dx += *out_scale_x * graphene_matrix_get_value (&self->matrix, 3, 0);
-      *out_dy += *out_scale_y * graphene_matrix_get_value (&self->matrix, 3, 1);
-      *out_scale_x *= graphene_matrix_get_value (&self->matrix, 0, 0);
-      *out_scale_y *= graphene_matrix_get_value (&self->matrix, 1, 1);
+      *out_dx += *out_scale_x * graphene_matrix_get_x_translation (&self->matrix);
+      *out_dy += *out_scale_y * graphene_matrix_get_y_translation (&self->matrix);
+      *out_scale_x *= graphene_matrix_get_x_scale (&self->matrix);
+      *out_scale_y *= graphene_matrix_get_y_scale (&self->matrix);
       break;
 
     case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      *out_dx += *out_scale_x * graphene_matrix_get_value (&self->matrix, 3, 0);
-      *out_dy += *out_scale_y * graphene_matrix_get_value (&self->matrix, 3, 1);
+      *out_dx += *out_scale_x * graphene_matrix_get_x_translation (&self->matrix);
+      *out_dy += *out_scale_y * graphene_matrix_get_y_translation (&self->matrix);
       break;
 
     case GSK_TRANSFORM_CATEGORY_IDENTITY:
@@ -345,8 +345,8 @@ gsk_matrix_transform_apply_translate (GskTransform *transform,
       break;
 
     case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      *out_dx += graphene_matrix_get_value (&self->matrix, 3, 0);
-      *out_dy += graphene_matrix_get_value (&self->matrix, 3, 1);
+      *out_dx += graphene_matrix_get_x_translation (&self->matrix);
+      *out_dy += graphene_matrix_get_y_translation (&self->matrix);
       break;
 
     case GSK_TRANSFORM_CATEGORY_IDENTITY:
