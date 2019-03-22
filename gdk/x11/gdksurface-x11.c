@@ -870,7 +870,6 @@ _gdk_x11_display_create_surface_impl (GdkDisplay    *display,
         }
       break;
 
-    case GDK_SURFACE_CHILD:
     default:
       g_assert_not_reached ();
       break;
@@ -969,7 +968,6 @@ _gdk_x11_display_create_surface_impl (GdkDisplay    *display,
       setup_toplevel_window (surface, x11_screen);
       break;
 
-    case GDK_SURFACE_CHILD:
     default:
       break;
     }
@@ -1319,7 +1317,6 @@ gdk_surface_x11_hide (GdkSurface *surface)
       gdk_surface_x11_withdraw (surface);
       return;
       
-    case GDK_SURFACE_CHILD:
     default:
       break;
     }
@@ -1525,7 +1522,6 @@ gdk_x11_surface_move_to_current_desktop (GdkSurface *surface)
   GdkToplevelX11 *toplevel;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_CHILD);
 
   toplevel = _gdk_x11_surface_get_toplevel (surface);
 
@@ -1881,8 +1877,6 @@ gdk_x11_surface_set_skip_taskbar_hint (GdkSurface *surface,
 {
   GdkToplevelX11 *toplevel;
   
-  g_return_if_fail (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_CHILD);
-  
   if (GDK_SURFACE_DESTROYED (surface) ||
       !SURFACE_IS_TOPLEVEL (surface))
     return;
@@ -1910,8 +1904,6 @@ gdk_x11_surface_set_skip_pager_hint (GdkSurface *surface,
 {
   GdkToplevelX11 *toplevel;
     
-  g_return_if_fail (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_CHILD);
-  
   if (GDK_SURFACE_DESTROYED (surface) ||
       !SURFACE_IS_TOPLEVEL (surface))
     return;
@@ -1939,8 +1931,6 @@ gdk_x11_surface_set_urgency_hint (GdkSurface *surface,
 {
   GdkToplevelX11 *toplevel;
     
-  g_return_if_fail (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_CHILD);
-  
   if (GDK_SURFACE_DESTROYED (surface) ||
       !SURFACE_IS_TOPLEVEL (surface))
     return;
@@ -3416,7 +3406,6 @@ gdk_x11_surface_set_group (GdkSurface *surface,
   GdkToplevelX11 *toplevel;
   
   g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_CHILD);
   g_return_if_fail (leader == NULL || GDK_IS_SURFACE (leader));
 
   if (GDK_SURFACE_DESTROYED (surface) ||
