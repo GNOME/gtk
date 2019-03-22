@@ -277,6 +277,10 @@ decode_nodes (BroadwayClient *client,
     size = NODE_SIZE_RECT;
     n_children = 1;
     break;
+  case BROADWAY_NODE_TRANSLATE:
+    size = NODE_SIZE_POINT;
+    n_children = 1;
+    break;
   case BROADWAY_NODE_LINEAR_GRADIENT:
     size = NODE_SIZE_RECT + 2 * NODE_SIZE_POINT;
     n_stops = data[*pos + size++];

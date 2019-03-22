@@ -400,6 +400,11 @@ function px(x) {
     return x + "px";
 }
 
+function set_point_style (div, point) {
+    div.style["left"] = px(point.x);
+    div.style["top"] = px(point.y);
+}
+
 function set_rect_style (div, rect) {
     div.style["left"] = px(rect.x);
     div.style["top"] = px(rect.y);
@@ -568,6 +573,17 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
 
 
     /* Bin nodes */
+
+    case 13:  // TRANSLATE
+        {
+            var point = this.decode_point();
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            set_point_style(div, point);
+            this.insertNode(div, -1, oldChildren[0]);
+            newNode = div;
+        }
+        break;
 
     case 10:  // CLIP
         {
