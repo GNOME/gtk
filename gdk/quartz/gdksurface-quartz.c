@@ -62,7 +62,7 @@ static FullscreenSavedGeometry *get_fullscreen_geometry (GdkSurface *window);
 static void update_toplevel_order (void);
 static void clear_toplevel_order  (void);
 
-#define SURFACE_IS_TOPLEVEL(window)      (GDK_SURFACE_TYPE (window) != GDK_SURFACE_CHILD)
+#define SURFACE_IS_TOPLEVEL(window)      TRUE
 
 /*
  * GdkQuartzSurface
@@ -824,29 +824,6 @@ _gdk_quartz_display_create_surface_impl (GdkDisplay    *display,
 	[impl->view setGdkSurface:window];
 	[impl->toplevel setContentView:impl->view];
 	[impl->view release];
-      }
-      break;
-
-    case GDK_SURFACE_CHILD:
-      {
-	GdkSurfaceImplQuartz *parent_impl = GDK_SURFACE_IMPL_QUARTZ (window->parent->impl);
-
-	if (!window->input_only)
-	  {
-	    NSRect frame_rect = NSMakeRect (window->x + window->parent->abs_x,
-                                            window->y + window->parent->abs_y,
-                                            window->width,
-                                            window->height);
-	
-	    impl->view = [[GdkQuartzView alloc] initWithFrame:frame_rect];
-	    
-	    [impl->view setGdkSurface:window];
-
-	    /* GdkSurfaces should be hidden by default */
-	    [impl->view setHidden:YES];
-	    [parent_impl->view addSubview:impl->view];
-	    [impl->view release];
-	  }
       }
       break;
 
