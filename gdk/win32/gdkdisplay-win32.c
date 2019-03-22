@@ -38,6 +38,8 @@
 
 #include <dwmapi.h>
 
+#include "gdkwin32langnotification.h"
+
 static int debug_indent = 0;
 
 /**
@@ -536,6 +538,7 @@ _gdk_win32_display_open (const gchar *display_name)
                                       NULL);
   _gdk_device_manager->display = _gdk_display;
 
+  _gdk_win32_lang_notification_init ();
   _gdk_drag_init ();
   _gdk_drop_init ();
 
@@ -701,6 +704,7 @@ gdk_win32_display_finalize (GObject *object)
 
   _gdk_win32_display_finalize_cursors (display_win32);
   _gdk_win32_dnd_exit ();
+  _gdk_win32_lang_notification_exit ();
 
   g_ptr_array_free (display_win32->monitors, TRUE);
 
