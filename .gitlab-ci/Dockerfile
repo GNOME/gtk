@@ -1,4 +1,4 @@
-FROM fedora:28
+FROM fedora:29
 
 RUN dnf -y install \
     adwaita-icon-theme \
@@ -42,12 +42,17 @@ RUN dnf -y install \
     mesa-libEGL-devel \
     mesa-libwayland-egl-devel \
     meson \
+    ninja-build \
     pango-devel \
+    python3 \
+    python3-pip \
+    python3-wheel \
     redhat-rpm-config \
     vulkan-devel \
     wayland-devel \
     wayland-protocols-devel \
-    xorg-x11-server-Xvfb
+    xorg-x11-server-Xvfb \
+    && dnf clean all
 
 ARG HOST_USER_ID=5555
 ENV HOST_USER_ID ${HOST_USER_ID}
