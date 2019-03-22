@@ -39,7 +39,7 @@
 #define GRIP_HEIGHT 15
 #define GDK_LION_RESIZE 5
 
-#define SURFACE_IS_TOPLEVEL(window)      (GDK_SURFACE_TYPE (window) != GDK_SURFACE_CHILD)
+#define SURFACE_IS_TOPLEVEL(window)      TRUE
 
 /* This is the window corresponding to the key window */
 static GdkSurface   *current_keyboard_window;

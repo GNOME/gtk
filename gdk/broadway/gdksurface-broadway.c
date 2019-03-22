@@ -46,8 +46,7 @@
 /* Forward declarations */
 static void        gdk_surface_impl_broadway_finalize   (GObject            *object);
 
-#define SURFACE_IS_TOPLEVEL(surface) \
-  (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_CHILD)
+#define SURFACE_IS_TOPLEVEL(surface)  TRUE
 
 struct _GdkBroadwaySurface {
   GdkSurface parent;
