@@ -1232,6 +1232,9 @@ gdk_broadway_surface_begin_resize_drag (GdkSurface     *surface,
 
   mv_resize = get_move_resize_data (gdk_surface_get_display (surface), TRUE);
 
+  if (mv_resize->moveresize_surface != NULL)
+    return; /* already a drag operation in progress */
+
   mv_resize->is_resize = TRUE;
   mv_resize->moveresize_button = button;
   mv_resize->resize_edge = edge;
@@ -1270,7 +1273,12 @@ gdk_broadway_surface_begin_move_drag (GdkSurface *surface,
   if (impl->maximized)
     return;
 
+  g_print ("gdk_broadway_surface_begin_move_drag\n");
+
   mv_resize = get_move_resize_data (gdk_surface_get_display (surface), TRUE);
+
+  if (mv_resize->moveresize_surface != NULL)
+    return; /* already a drag operation in progress */
 
   mv_resize->is_resize = FALSE;
   mv_resize->moveresize_button = button;
