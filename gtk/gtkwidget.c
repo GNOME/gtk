@@ -8608,29 +8608,6 @@ synth_crossing (GtkWidget       *widget,
  * @mode: the #GdkCrossingMode to place on the synthesized events.
  *
  * Generate crossing event(s) on widget state (sensitivity) or GTK+ grab change.
- *
- * The real pointer window is the window that most recently received an enter notify
- * event.  Windows that don’t select for crossing events can’t become the real
- * pointer window.  The real pointer widget that owns the real pointer window.  The
- * effective pointer window is the same as the real pointer window unless the real
- * pointer widget is either insensitive or there is a grab on a widget that is not
- * an ancestor of the real pointer widget (in which case the effective pointer
- * window should be the root window).
- *
- * When the effective pointer window is the same as the real pointer window, we
- * receive crossing events from the windowing system.  When the effective pointer
- * window changes to become different from the real pointer window we synthesize
- * crossing events, attempting to follow X protocol rules:
- *
- * When the root window becomes the effective pointer window:
- *   - leave notify on real pointer window, detail Ancestor
- *   - leave notify on all of its ancestors, detail Virtual
- *   - enter notify on root window, detail Inferior
- *
- * When the root window ceases to be the effective pointer window:
- *   - leave notify on root window, detail Inferior
- *   - enter notify on all ancestors of real pointer window, detail Virtual
- *   - enter notify on real pointer window, detail Ancestor
  */
 void
 _gtk_widget_synthesize_crossing (GtkWidget       *from,
@@ -8662,132 +8639,23 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
     ;
   else if (from_surface != NULL && to_surface == NULL)
     {
-      GList *from_ancestors = NULL, *list;
-      GdkSurface *from_ancestor = from_surface;
-
-      while (from_ancestor != NULL)
-	{
-	  from_ancestor = gdk_surface_get_parent (from_ancestor);
-          if (from_ancestor == NULL)
-            break;
-          from_ancestors = g_list_prepend (from_ancestors, from_ancestor);
-	}
-
       synth_crossing (from, GDK_LEAVE_NOTIFY, from_surface,
 		      device, mode, GDK_NOTIFY_ANCESTOR);
-      for (list = g_list_last (from_ancestors); list; list = list->prev)
-	{
-	  synth_crossing (NULL, GDK_LEAVE_NOTIFY, (GdkSurface *) list->data,
-			  device, mode, GDK_NOTIFY_VIRTUAL);
-	}
-
-      /* XXX: enter/inferior on root window? */
-
-      g_list_free (from_ancestors);
     }
   else if (from_surface == NULL && to_surface != NULL)
     {
-      GList *to_ancestors = NULL, *list;
-      GdkSurface *to_ancestor = to_surface;
-
-      while (to_ancestor != NULL)
-	{
-	  to_ancestor = gdk_surface_get_parent (to_ancestor);
-	  if (to_ancestor == NULL)
-            break;
-          to_ancestors = g_list_prepend (to_ancestors, to_ancestor);
-        }
-
-      /* XXX: leave/inferior on root window? */
-
-      for (list = to_ancestors; list; list = list->next)
-	{
-	  synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkSurface *) list->data,
-			  device, mode, GDK_NOTIFY_VIRTUAL);
-	}
       synth_crossing (to, GDK_ENTER_NOTIFY, to_surface,
 		      device, mode, GDK_NOTIFY_ANCESTOR);
-
-      g_list_free (to_ancestors);
     }
   else if (from_surface == to_surface)
     ;
   else
     {
-      GList *from_ancestors = NULL, *to_ancestors = NULL, *list;
-      GdkSurface *from_ancestor = from_surface, *to_ancestor = to_surface;
+      synth_crossing (from, GDK_LEAVE_NOTIFY, from_surface,
+                      device, mode, GDK_NOTIFY_NONLINEAR);
 
-      while (from_ancestor != NULL || to_ancestor != NULL)
-	{
-	  if (from_ancestor != NULL)
-	    {
-	      from_ancestor = gdk_surface_get_parent (from_ancestor);
-	      if (from_ancestor == to_surface)
-		break;
-              if (from_ancestor)
-	        from_ancestors = g_list_prepend (from_ancestors, from_ancestor);
-	    }
-	  if (to_ancestor != NULL)
-	    {
-	      to_ancestor = gdk_surface_get_parent (to_ancestor);
-	      if (to_ancestor == from_surface)
-		break;
-              if (to_ancestor)
-	        to_ancestors = g_list_prepend (to_ancestors, to_ancestor);
-	    }
-	}
-      if (to_ancestor == from_surface)
-	{
-	  if (mode != GDK_CROSSING_GTK_UNGRAB)
-	    synth_crossing (from, GDK_LEAVE_NOTIFY, from_surface,
-			    device, mode, GDK_NOTIFY_INFERIOR);
-	  for (list = to_ancestors; list; list = list->next)
-	    synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkSurface *) list->data,
-			    device, mode, GDK_NOTIFY_VIRTUAL);
-	  synth_crossing (to, GDK_ENTER_NOTIFY, to_surface,
-			  device, mode, GDK_NOTIFY_ANCESTOR);
-	}
-      else if (from_ancestor == to_surface)
-	{
-	  synth_crossing (from, GDK_LEAVE_NOTIFY, from_surface,
-			  device, mode, GDK_NOTIFY_ANCESTOR);
-	  for (list = g_list_last (from_ancestors); list; list = list->prev)
-	    {
-	      synth_crossing (NULL, GDK_LEAVE_NOTIFY, (GdkSurface *) list->data,
-			      device, mode, GDK_NOTIFY_VIRTUAL);
-	    }
-	  if (mode != GDK_CROSSING_GTK_GRAB)
-	    synth_crossing (to, GDK_ENTER_NOTIFY, to_surface,
-			    device, mode, GDK_NOTIFY_INFERIOR);
-	}
-      else
-	{
-	  while (from_ancestors != NULL && to_ancestors != NULL
-		 && from_ancestors->data == to_ancestors->data)
-	    {
-	      from_ancestors = g_list_delete_link (from_ancestors,
-						   from_ancestors);
-	      to_ancestors = g_list_delete_link (to_ancestors, to_ancestors);
-	    }
-
-	  synth_crossing (from, GDK_LEAVE_NOTIFY, from_surface,
-			  device, mode, GDK_NOTIFY_NONLINEAR);
-
-	  for (list = g_list_last (from_ancestors); list; list = list->prev)
-	    {
-	      synth_crossing (NULL, GDK_LEAVE_NOTIFY, (GdkSurface *) list->data,
-			      device, mode, GDK_NOTIFY_NONLINEAR_VIRTUAL);
-	    }
-	  for (list = to_ancestors; list; list = list->next)
-	    {
-	      synth_crossing (NULL, GDK_ENTER_NOTIFY, (GdkSurface *) list->data,
-			      device, mode, GDK_NOTIFY_NONLINEAR_VIRTUAL);
-	    }
-	  synth_crossing (to, GDK_ENTER_NOTIFY, to_surface,
-			  device, mode, GDK_NOTIFY_NONLINEAR);
-	}
-      g_list_free (from_ancestors);
-      g_list_free (to_ancestors);
+      synth_crossing (to, GDK_ENTER_NOTIFY, to_surface,
+                      device, mode, GDK_NOTIFY_NONLINEAR);
     }
 }
 
