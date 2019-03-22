@@ -128,6 +128,27 @@ function getButtonMask (button) {
     return 0;
 }
 
+function Texture(id, data) {
+    var blob = new Blob([data],{type: "image/png"});
+    this.url = window.URL.createObjectURL(blob);
+    this.refcount = 1;
+    this.id = id;
+    textures[id] = this;
+}
+
+Texture.prototype.ref = function() {
+    this.refcount += 1;
+    return this;
+}
+
+Texture.prototype.unref = function() {
+    this.refcount -= 1;
+    if (this.refcount == 0) {
+        window.URL.revokeObjectURL(this.url);
+        delete textures[this.id];
+    }
+}
+
 function sendConfigureNotify(surface)
 {
     sendInput("w", [surface.id, surface.x, surface.y, surface.width, surface.height]);
@@ -499,8 +520,11 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
             image.height = rect.height;
             image.style["position"] = "absolute";
             set_rect_style(image, rect);
-            var texture_url = textures[texture_id];
-            image.src = texture_url;
+            var texture = textures[texture_id];
+            image.src = texture.url;
+            texture.ref();
+            // Unref blob url when loaded
+            image.onload = function() { texture.unref(); };
             newNode = image;
         }
         break;
@@ -789,16 +813,12 @@ function cmdSurfaceSetNodes(id, node_data)
 
 function cmdUploadTexture(id, data)
 {
-    var blob = new Blob([data],{type: "image/png"});
-    var url = window.URL.createObjectURL(blob);
-    textures[id] = url;
+    new Texture (id, data); // Stores a ref in textures
 }
 
 function cmdReleaseTexture(id)
 {
-    var url = textures[id];
-    window.URL.revokeObjectURL(url);
-    delete textures[id];
+    textures[id].unref();
 }
 
 function cmdGrabPointer(id, ownerEvents)
