@@ -49,8 +49,7 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
-#define SURFACE_IS_TOPLEVEL(surface) \
-  (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_CHILD)
+#define SURFACE_IS_TOPLEVEL(surface)  TRUE
 
 #define MAX_WL_BUFFER_SIZE (4083) /* 4096 minus header, string argument length and NUL byte */
 
@@ -585,7 +584,6 @@ _gdk_wayland_display_create_surface_impl (GdkDisplay     *display,
       gdk_surface_set_title (surface, get_default_title ());
       break;
 
-    case GDK_SURFACE_CHILD:
     default:
       break;
     }
