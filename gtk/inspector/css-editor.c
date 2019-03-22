@@ -36,6 +36,7 @@
 #include "gtktooltip.h"
 #include "gtktextiter.h"
 
+#include "gtk/css/gtkcss.h"
 
 struct _GtkInspectorCssEditorPrivate
 {
@@ -269,7 +270,7 @@ show_parsing_error (GtkCssProvider        *provider,
                                           gtk_css_section_get_end_line (section),
                                           gtk_css_section_get_end_position (section));
 
-  if (g_error_matches (error, GTK_CSS_PROVIDER_ERROR, GTK_CSS_PROVIDER_ERROR_DEPRECATED))
+  if (error->domain == GTK_CSS_PARSER_WARNING)
     tag_name = "warning";
   else
     tag_name = "error";

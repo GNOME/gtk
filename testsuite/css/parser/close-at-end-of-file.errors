@@ -1,1 +1,1 @@
-close-at-end-of-file.css:3: error: GTK_CSS_PROVIDER_ERROR_SYNTAX
+close-at-end-of-file.css:3: error: GTK_CSS_PARSER_ERROR_SYNTAX

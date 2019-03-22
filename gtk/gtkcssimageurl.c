@@ -65,8 +65,8 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
 
           uri = g_file_get_uri (url->file);
           g_set_error (error,
-                       GTK_CSS_PROVIDER_ERROR,
-                       GTK_CSS_PROVIDER_ERROR_FAILED,
+                       GTK_CSS_PARSER_ERROR,
+                       GTK_CSS_PARSER_ERROR_FAILED,
                        "Error loading image '%s': %s", uri, local_error->message);
           g_free (uri);
        }

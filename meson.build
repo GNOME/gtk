@@ -793,6 +793,7 @@ if graphene_has_sse2 or graphene_has_gcc
 
 endif
 
+subdir('gtk/css')
 subdir('gdk')
 subdir('gsk')
 subdir('gtk')
