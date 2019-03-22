@@ -20,6 +20,8 @@
 
 #include <gtk/gtkcssprovider.h>
 
+#include <gtk/css/gtkcss.h>
+
 G_BEGIN_DECLS
 
 typedef struct _GtkCssParser GtkCssParser;

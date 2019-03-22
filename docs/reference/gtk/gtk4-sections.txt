@@ -5086,8 +5086,9 @@ gtk_css_provider_load_from_path
 gtk_css_provider_load_from_resource
 gtk_css_provider_new
 gtk_css_provider_to_string
-GTK_CSS_PROVIDER_ERROR
-GtkCssProviderError
+GTK_CSS_PARSER_ERROR
+GtkCssParserError
+GtkCssParserWarning
 <SUBSECTION>
 GtkCssSection
 GtkCssSectionType
