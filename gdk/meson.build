@@ -345,7 +345,7 @@ if build_gir
                                      extra_args: gir_args + [
                                        '-DGDK_COMPILATION',
                                      ])
-    gdk_dep_sources += gdk_x11_gir
+    gdk_dep_sources += gdk_win32_gir
   endif
 endif
 
