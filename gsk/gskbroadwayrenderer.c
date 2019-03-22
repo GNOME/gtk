@@ -13,6 +13,8 @@ struct _GskBroadwayRenderer
 {
   GskRenderer parent_instance;
   GdkBroadwayDrawContext *draw_context;
+  GHashTable *fallback_cache;
+  guint32 frame_nr;
 };
 
 struct _GskBroadwayRendererClass
@@ -177,287 +179,20 @@ add_string (GArray *nodes, const char *str)
     add_uint32 (nodes, v);
 }
 
-static gboolean
-float_is_int32 (float f)
-{
-  gint32 i = (gint32)f;
-  float f2 = (float)i;
-  return f2 == f;
-}
-
-static GHashTable *gsk_broadway_node_cache;
-
 typedef struct {
-  GdkTexture *texture;
   GskRenderNode *node;
+  GdkTexture *texture;
   float off_x;
   float off_y;
-} NodeCacheElement;
+  int used_in_frame;
+} FallbackCacheElement;
 
 static void
-node_cache_element_free (NodeCacheElement *element)
+fallback_cache_element_free (FallbackCacheElement *element)
 {
   gsk_render_node_unref (element->node);
+  g_object_unref (element->texture);
   g_free (element);
-}
-
-static guint
-glyph_info_hash (const PangoGlyphInfo *info)
-{
-  return info->glyph ^
-    info->geometry.width << 6 ^
-    info->geometry.x_offset << 12 ^
-    info->geometry.y_offset << 18 ^
-    info->attr.is_cluster_start << 30;
-}
-
-static gboolean
-glyph_info_equal (const PangoGlyphInfo *a,
-                  const PangoGlyphInfo *b)
-{
-  return
-    a->glyph == b->glyph &&
-    a->geometry.width == b->geometry.width &&
-    a->geometry.x_offset == b->geometry.x_offset &&
-    a->geometry.y_offset == b->geometry.y_offset &&
-    a->attr.is_cluster_start == b->attr.is_cluster_start;
- }
-
-static guint
-hash_matrix (const graphene_matrix_t *matrix)
-{
-  float m[16];
-  guint h = 0;
-  int i;
-
-  graphene_matrix_to_float (matrix, m);
-  for (i = 0; i < 16; i++)
-    h ^= (guint) m[i];
-
-  return h;
-}
-
-static gboolean
-matrix_equal (const graphene_matrix_t *a,
-              const graphene_matrix_t *b)
-{
-  float ma[16];
-  float mb[16];
-  int i;
-
-  graphene_matrix_to_float (a, ma);
-  graphene_matrix_to_float (b, mb);
-  for (i = 0; i < 16; i++)
-    {
-      if (ma[i] != mb[i])
-        return FALSE;
-    }
-
-  return TRUE;
-}
-
-static guint
-hash_vec4 (const graphene_vec4_t *vec4)
-{
-  float v[4];
-  guint h = 0;
-  int i;
-
-  graphene_vec4_to_float (vec4, v);
-  for (i = 0; i < 4; i++)
-    h ^= (guint) v[i];
-
-  return h;
-}
-
-static gboolean
-vec4_equal (const graphene_vec4_t *a,
-            const graphene_vec4_t *b)
-{
-  float va[4];
-  float vb[4];
-  int i;
-
-  graphene_vec4_to_float (a, va);
-  graphene_vec4_to_float (b, vb);
-  for (i = 0; i < 4; i++)
-    {
-      if (va[i] != vb[i])
-        return FALSE;
-    }
-
-  return TRUE;
-}
-
-static guint
-node_cache_hash (GskRenderNode *node)
-{
-  GskRenderNodeType type;
-  guint h;
-
-  type = gsk_render_node_get_node_type (node);
-  h = type << 28;
-  if (type == GSK_TEXT_NODE &&
-      float_is_int32 (gsk_text_node_get_x (node)) &&
-      float_is_int32 (gsk_text_node_get_y (node)))
-    {
-      guint i;
-      const PangoFont *font = gsk_text_node_peek_font (node);
-      guint n_glyphs = gsk_text_node_get_num_glyphs (node);
-      const PangoGlyphInfo *infos = gsk_text_node_peek_glyphs (node);
-      const GdkRGBA *color = gsk_text_node_peek_color (node);
-
-      h ^= g_direct_hash (font) ^ n_glyphs << 16 ^ gdk_rgba_hash (color);
-      for (i = 0; i < n_glyphs; i++)
-        h ^= glyph_info_hash (&infos[i]);
-
-      return h;
-    }
-
-  if (type == GSK_COLOR_MATRIX_NODE &&
-      gsk_render_node_get_node_type (gsk_color_matrix_node_get_child (node)) == GSK_TEXTURE_NODE)
-    {
-      const graphene_matrix_t *matrix = gsk_color_matrix_node_peek_color_matrix (node);
-      const graphene_vec4_t *offset = gsk_color_matrix_node_peek_color_offset (node);
-      GskRenderNode *child = gsk_color_matrix_node_get_child (node);
-      GdkTexture *texture = gsk_texture_node_get_texture (child);
-
-      h ^= g_direct_hash (texture) ^ hash_matrix (matrix) ^ hash_vec4 (offset);
-
-      return h;
-    }
-
-  return 0;
-}
-
-static gboolean
-node_cache_equal (GskRenderNode *a,
-                  GskRenderNode *b)
-{
-  GskRenderNodeType type;
-
-  type = gsk_render_node_get_node_type (a);
-  if (type != gsk_render_node_get_node_type (b))
-    return FALSE;
-
-  if (type == GSK_TEXT_NODE &&
-      float_is_int32 (gsk_text_node_get_x (a)) &&
-      float_is_int32 (gsk_text_node_get_y (a)) &&
-      float_is_int32 (gsk_text_node_get_x (b)) &&
-      float_is_int32 (gsk_text_node_get_y (b)))
-    {
-      const PangoFont *a_font = gsk_text_node_peek_font (a);
-      guint a_n_glyphs = gsk_text_node_get_num_glyphs (a);
-      const PangoGlyphInfo *a_infos = gsk_text_node_peek_glyphs (a);
-      const GdkRGBA *a_color = gsk_text_node_peek_color (a);
-      const PangoFont *b_font = gsk_text_node_peek_font (b);
-      guint b_n_glyphs = gsk_text_node_get_num_glyphs (b);
-      const PangoGlyphInfo *b_infos = gsk_text_node_peek_glyphs (b);
-      const GdkRGBA *b_color = gsk_text_node_peek_color (a);
-      guint i;
-
-      if (a_font != b_font)
-        return FALSE;
-
-      if (a_n_glyphs != b_n_glyphs)
-        return FALSE;
-
-      for (i = 0; i < a_n_glyphs; i++)
-        {
-          if (!glyph_info_equal (&a_infos[i], &b_infos[i]))
-            return FALSE;
-        }
-
-      if (!gdk_rgba_equal (a_color, b_color))
-        return FALSE;
-
-      return TRUE;
-    }
-
-  if (type == GSK_COLOR_MATRIX_NODE &&
-      gsk_render_node_get_node_type (gsk_color_matrix_node_get_child (a)) == GSK_TEXTURE_NODE &&
-      gsk_render_node_get_node_type (gsk_color_matrix_node_get_child (b)) == GSK_TEXTURE_NODE)
-    {
-      const graphene_matrix_t *a_matrix = gsk_color_matrix_node_peek_color_matrix (a);
-      const graphene_vec4_t *a_offset = gsk_color_matrix_node_peek_color_offset (a);
-      GskRenderNode *a_child = gsk_color_matrix_node_get_child (a);
-      GdkTexture *a_texture = gsk_texture_node_get_texture (a_child);
-      const graphene_matrix_t *b_matrix = gsk_color_matrix_node_peek_color_matrix (b);
-      const graphene_vec4_t *b_offset = gsk_color_matrix_node_peek_color_offset (b);
-      GskRenderNode *b_child = gsk_color_matrix_node_get_child (b);
-      GdkTexture *b_texture = gsk_texture_node_get_texture (b_child);
-
-      if (a_texture != b_texture)
-        return FALSE;
-
-      if (!matrix_equal (a_matrix, b_matrix))
-        return FALSE;
-
-      if (!vec4_equal (a_offset, b_offset))
-        return FALSE;
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static GdkTexture *
-node_cache_lookup (GskRenderNode *node,
-                   float *off_x, float *off_y)
-{
-  NodeCacheElement *hit;
-
-  if (gsk_broadway_node_cache == NULL)
-    gsk_broadway_node_cache = g_hash_table_new_full ((GHashFunc)node_cache_hash,
-                                                     (GEqualFunc)node_cache_equal,
-                                                     NULL,
-                                                     (GDestroyNotify)node_cache_element_free);
-
-  hit = g_hash_table_lookup (gsk_broadway_node_cache, node);
-  if (hit)
-    {
-      *off_x = hit->off_x;
-      *off_y = hit->off_y;
-      return g_object_ref (hit->texture);
-    }
-
-  return NULL;
-}
-
-static void
-cached_texture_gone (gpointer data,
-                     GObject *where_the_object_was)
-{
-  NodeCacheElement *element = data;
-  g_hash_table_remove (gsk_broadway_node_cache, element->node);
-}
-
-static void
-node_cache_store (GskRenderNode *node,
-                  GdkTexture *texture,
-                  float off_x,
-                  float off_y)
-{
-  GskRenderNodeType type;
-
-  type = gsk_render_node_get_node_type (node);
-  if ((type == GSK_TEXT_NODE &&
-       float_is_int32 (gsk_text_node_get_x (node)) &&
-       float_is_int32 (gsk_text_node_get_y (node))) ||
-      (type == GSK_COLOR_MATRIX_NODE &&
-       gsk_render_node_get_node_type (gsk_color_matrix_node_get_child (node)) == GSK_TEXTURE_NODE))
-    {
-      NodeCacheElement *element = g_new0 (NodeCacheElement, 1);
-      element->texture = texture;
-      element->node = gsk_render_node_ref (node);
-      element->off_x = off_x;
-      element->off_y = off_y;
-      g_object_weak_ref (G_OBJECT (texture), cached_texture_gone, element);
-      g_hash_table_insert (gsk_broadway_node_cache, element->node, element);
-
-      return;
-    }
 }
 
 static GdkTexture *
@@ -499,6 +234,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
                                 float offset_y)
 {
   GdkDisplay *display = gdk_surface_get_display (gsk_renderer_get_surface (renderer));
+  GskBroadwayRenderer *self = GSK_BROADWAY_RENDERER (renderer);
 
   switch (gsk_render_node_get_node_type (node))
     {
@@ -733,18 +469,32 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
   {
     GdkTexture *texture;
     guint32 texture_id;
+    FallbackCacheElement *hit;
     float t_off_x = 0, t_off_y = 0;
 
-    texture = node_cache_lookup (node, &t_off_x, &t_off_y);
-
-    if (!texture)
+    hit = g_hash_table_lookup (self->fallback_cache, node);
+    if (hit)
       {
+        texture = g_object_ref (hit->texture);
+        t_off_x = hit->off_x;
+        t_off_y = hit->off_y;
+        hit->used_in_frame = self->frame_nr;
+      }
+    else
+      {
+        FallbackCacheElement *element;
+
         texture = node_texture_fallback (node, &t_off_x, &t_off_y);
-#if 0
+#if 1
         g_print ("Fallback %p for %s\n", texture, node->node_class->type_name);
 #endif
-
-        node_cache_store (node, texture, t_off_x, t_off_y);
+        element = g_new0 (FallbackCacheElement, 1);
+        element->texture = g_object_ref (texture);
+        element->node = gsk_render_node_ref (node);
+        element->off_x = t_off_x;
+        element->off_y = t_off_y;
+        element->used_in_frame = self->frame_nr;
+        g_hash_table_insert (self->fallback_cache, element->node, element);
       }
 
     g_ptr_array_add (node_textures, texture); /* Transfers ownership to node_textures */
@@ -758,6 +508,18 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
   }
 }
 
+static gboolean
+clean_old_fallbacks (gpointer  key,
+                     gpointer  value,
+                     gpointer  user_data)
+{
+  GskBroadwayRenderer *self = GSK_BROADWAY_RENDERER (user_data);
+  FallbackCacheElement *element = value;
+
+  /* Remove cached fallbacks not used for 5 frames */
+  return self->frame_nr - element->used_in_frame > 5;
+}
+
 static void
 gsk_broadway_renderer_render (GskRenderer          *renderer,
                               GskRenderNode        *root,
@@ -765,9 +527,13 @@ gsk_broadway_renderer_render (GskRenderer          *renderer,
 {
   GskBroadwayRenderer *self = GSK_BROADWAY_RENDERER (renderer);
 
+  self->frame_nr++;
+
   gdk_draw_context_begin_frame (GDK_DRAW_CONTEXT (self->draw_context), update_area);
   gsk_broadway_renderer_add_node (renderer, self->draw_context->nodes, self->draw_context->node_textures, root, 0, 0);
   gdk_draw_context_end_frame (GDK_DRAW_CONTEXT (self->draw_context));
+
+  g_hash_table_foreach_remove (self->fallback_cache, clean_old_fallbacks, renderer);
 }
 
 static void
@@ -784,4 +550,8 @@ gsk_broadway_renderer_class_init (GskBroadwayRendererClass *klass)
 static void
 gsk_broadway_renderer_init (GskBroadwayRenderer *self)
 {
+  self->fallback_cache = g_hash_table_new_full ((GHashFunc)g_direct_hash,
+                                                (GEqualFunc)g_direct_equal,
+                                                NULL,
+                                                (GDestroyNotify)fallback_cache_element_free);
 }
