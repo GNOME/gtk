@@ -491,11 +491,7 @@ gtk_scale_button_dispose (GObject *object)
   GtkScaleButton *button = GTK_SCALE_BUTTON (object);
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
 
-  if (priv->dock)
-    {
-      gtk_widget_destroy (priv->dock);
-      priv->dock = NULL;
-    }
+  g_clear_pointer (&priv->dock, gtk_widget_unparent);
 
   if (priv->click_id != 0)
     {
