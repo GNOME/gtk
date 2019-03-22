@@ -387,6 +387,55 @@ SwapNodes.prototype.decode_color_stops = function() {
     return stops;
 }
 
+function utf8_to_string(array) {
+    var out, i, len, c;
+    var char2, char3;
+
+    out = "";
+    len = array.length;
+    i = 0;
+    while(i < len) {
+    c = array[i++];
+    switch(c >> 4)
+        {
+        case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+            // 0xxxxxxx
+            out += String.fromCharCode(c);
+            break;
+        case 12: case 13:
+            // 110x xxxx   10xx xxxx
+            char2 = array[i++];
+            out += String.fromCharCode(((c & 0x1F) << 6) | (char2 & 0x3F));
+            break;
+        case 14:
+            // 1110 xxxx  10xx xxxx  10xx xxxx
+            char2 = array[i++];
+            char3 = array[i++];
+            out += String.fromCharCode(((c & 0x0F) << 12) |
+                                       ((char2 & 0x3F) << 6) |
+                                       ((char3 & 0x3F) << 0));
+            break;
+        }
+    }
+
+    return out;
+}
+
+SwapNodes.prototype.decode_string = function() {
+    var len = this.decode_uint32();
+    var utf8 = new Array();
+    var b;
+    for (var i = 0; i < len; i++) {
+        if (i % 4 == 0) {
+            b = this.decode_uint32();
+        }
+        utf8[i] = b & 0xff;
+        b = b >> 8;
+    }
+
+    return utf8_to_string (utf8);
+}
+
 function args() {
     var argsLength = arguments.length;
     var strings = [];
@@ -640,6 +689,16 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
             div.style["top"] = px(0);
             div.style["filter"] = filters;
 
+            this.insertNode(div, -1, oldChildren[0]);
+            newNode = div;
+        }
+        break;
+
+    case 14:  // DEBUG
+        {
+            var str = this.decode_string();
+            var div = document.createElement('div');
+            div.setAttribute('debug', str);
             this.insertNode(div, -1, oldChildren[0]);
             newNode = div;
         }

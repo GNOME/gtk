@@ -238,7 +238,7 @@ decode_nodes (BroadwayClient *client,
 {
   BroadwayNode *node;
   guint32 type;
-  guint32 i, n_stops, n_shadows;
+  guint32 i, n_stops, n_shadows, n_chars;
   guint32 size, n_children;
   gint32 texture_offset;
   guint32 hash;
@@ -294,6 +294,11 @@ decode_nodes (BroadwayClient *client,
     break;
   case BROADWAY_NODE_OPACITY:
     size = NODE_SIZE_FLOAT;
+    n_children = 1;
+    break;
+  case BROADWAY_NODE_DEBUG:
+    n_chars = data[*pos];
+    size = 1 + (n_chars + 3) / 4;
     n_children = 1;
     break;
   default:

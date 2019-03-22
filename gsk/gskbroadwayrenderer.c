@@ -147,6 +147,31 @@ add_color_stop (GArray *nodes, const GskColorStop *stop)
   add_rgba (nodes, &stop->color);
 }
 
+static void
+add_string (GArray *nodes, const char *str)
+{
+  guint32 len = strlen(str);
+  guint32 v, c;
+
+  add_uint32 (nodes, len);
+
+  v = 0;
+  c = 0;
+  while (*str != 0)
+    {
+      v |= (*str++) << 8*c++;
+      if (c == 4)
+        {
+          add_uint32 (nodes, v);
+          v = 0;
+          c = 0;
+        }
+    }
+
+  if (c != 0)
+    add_uint32 (nodes, v);
+}
+
 static gboolean
 float_is_int32 (float f)
 {
@@ -664,6 +689,16 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
       }
       return;
 
+    case GSK_DEBUG_NODE:
+      {
+        const char *message = gsk_debug_node_get_message (node);
+        add_uint32 (nodes, BROADWAY_NODE_DEBUG);
+        add_string (nodes, message);
+        gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
+                                        gsk_debug_node_get_child (node), offset_x, offset_y);
+      }
+      return;
+
       /* Generic nodes */
 
     case GSK_CONTAINER_NODE:
@@ -677,11 +712,6 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
           gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
                                           gsk_container_node_get_child (node, i), offset_x, offset_y);
       }
-      return;
-
-    case GSK_DEBUG_NODE:
-      gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
-                                      gsk_debug_node_get_child (node), offset_x, offset_y);
       return;
 
     case GSK_COLOR_MATRIX_NODE:
