@@ -299,18 +299,21 @@ function cmdLowerSurface(id)
 
 function SwapNodes(node_data, div) {
     this.node_data = node_data;
-    this.node_data_signed = new Int32Array(node_data);
     this.data_pos = 0;
     this.div = div;
     this.outstanding = 1;
 }
 
 SwapNodes.prototype.decode_uint32 = function() {
-    return this.node_data[this.data_pos++];
+    var v = this.node_data.getUint32(this.data_pos, true);
+    this.data_pos += 4;
+    return v;
 }
 
 SwapNodes.prototype.decode_int32 = function() {
-    return this.node_data_signed[this.data_pos++];
+    var v = this.node_data.getInt32(this.data_pos, true);
+    this.data_pos += 4;
+    return v;
 }
 
 SwapNodes.prototype.decode_color = function() {
@@ -778,8 +781,8 @@ function cmdSurfaceSetNodes(id, node_data)
 
     var swap = new SwapNodes (node_data, div);
     swap.insertNode(div, 0, div.firstChild);
-    if (swap.data_pos != node_data.length)
-        alert ("Did not consume entire array (len " + node_data.length + " end " + end + ")");
+    if (swap.data_pos != node_data.byteLength)
+        alert ("Did not consume entire array (len " + node_data.byteLength + ")");
 }
 
 function cmdUploadTexture(id, data)
@@ -903,11 +906,7 @@ function handleCommands(cmd)
 
         case 'n': // Set nodes
             id = cmd.get_16();
-            var len = cmd.get_32();
-            var node_data = new Uint32Array(len);
-            for (var i = 0; i < len; i++)
-                node_data[i] = cmd.get_32();
-
+            var node_data = cmd.get_nodes ();
             cmdSurfaceSetNodes(id, node_data);
             break;
 
@@ -947,42 +946,40 @@ function handleOutstanding()
 
 function BinCommands(message) {
     this.arraybuffer = message;
-    this.u8 = new Uint8Array(message);
-    this.length = this.u8.length;
+    this.dataview = new DataView(message);
+    this.length = this.arraybuffer.byteLength;
     this.pos = 0;
 }
 
 BinCommands.prototype.get_char = function() {
-    return String.fromCharCode(this.u8[this.pos++]);
+    return String.fromCharCode(this.dataview.getUint8(this.pos++));
 };
 BinCommands.prototype.get_bool = function() {
-    return this.u8[this.pos++] != 0;
+    return this.dataview.getUint8(this.pos++) != 0;
 };
 BinCommands.prototype.get_flags = function() {
-    return this.u8[this.pos++];
+    return this.dataview.getUint8(this.pos++);
 }
 BinCommands.prototype.get_16 = function() {
-    var v =
-        this.u8[this.pos] +
-        (this.u8[this.pos+1] << 8);
+    var v = this.dataview.getUint16(this.pos, true);
     this.pos = this.pos + 2;
     return v;
 };
 BinCommands.prototype.get_16s = function() {
-    var v = this.get_16 ();
-    if (v > 32767)
-        return v - 65536;
-    else
-        return v;
+    var v = this.dataview.getInt16(this.pos, true);
+    this.pos = this.pos + 2;
+    return v;
 };
 BinCommands.prototype.get_32 = function() {
-    var v =
-        this.u8[this.pos] +
-        (this.u8[this.pos+1] << 8) +
-        (this.u8[this.pos+2] << 16) +
-        (this.u8[this.pos+3] << 24);
+    var v = this.dataview.getUint32(this.pos, true);
     this.pos = this.pos + 4;
     return v;
+};
+BinCommands.prototype.get_nodes = function() {
+    var len = this.get_32();
+    var node_data = new DataView(this.arraybuffer, this.pos, len * 4);
+    this.pos = this.pos + len * 4;
+    return node_data;
 };
 BinCommands.prototype.get_data = function() {
     var size = this.get_32();
