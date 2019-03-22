@@ -42,8 +42,7 @@ typedef struct _GskTransformClass GskTransformClass;
 struct _GskTransform
 {
   const GskTransformClass *transform_class;
-  
-  volatile int ref_count;
+
   GskTransformCategory category;
   GskTransform *next;
 };
@@ -113,10 +112,9 @@ gsk_transform_alloc (const GskTransformClass *transform_class,
 
   g_return_val_if_fail (transform_class != NULL, NULL);
 
-  self = g_malloc0 (transform_class->struct_size);
+  self = g_atomic_rc_box_alloc0 (transform_class->struct_size);
 
   self->transform_class = transform_class;
-  self->ref_count = 1;
   self->category = next ? MIN (category, next->category) : category;
   self->next = gsk_transform_is_identity (next) ? NULL : next;
 
@@ -1217,8 +1215,6 @@ gsk_transform_finalize (GskTransform *self)
   self->transform_class->finalize (self);
 
   gsk_transform_unref (self->next);
-
-  g_free (self);
 }
 
 /**
@@ -1235,9 +1231,7 @@ gsk_transform_ref (GskTransform *self)
   if (self == NULL)
     return NULL;
 
-  g_atomic_int_inc (&self->ref_count);
-
-  return self;
+  return g_atomic_rc_box_acquire (self);
 }
 
 /**
@@ -1255,8 +1249,7 @@ gsk_transform_unref (GskTransform *self)
   if (self == NULL)
     return;
 
-  if (g_atomic_int_dec_and_test (&self->ref_count))
-    gsk_transform_finalize (self);
+  g_atomic_rc_box_release_full (self, (GDestroyNotify) gsk_transform_finalize);
 }
 
 /**
