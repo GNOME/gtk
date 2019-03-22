@@ -42,7 +42,6 @@ typedef struct _GdkGeometry          GdkGeometry;
 /**
  * GdkSurfaceType:
  * @GDK_SURFACE_TOPLEVEL: toplevel window (used to implement #GtkWindow)
- * @GDK_SURFACE_CHILD: child surface (used to implement e.g. #GtkEntry)
  * @GDK_SURFACE_TEMP: override redirect temporary surface (used to implement #GtkMenu)
  *
  * Describes the kind of surface.
@@ -50,7 +49,6 @@ typedef struct _GdkGeometry          GdkGeometry;
 typedef enum
 {
   GDK_SURFACE_TOPLEVEL,
-  GDK_SURFACE_CHILD,
   GDK_SURFACE_TEMP
 } GdkSurfaceType;
 
@@ -444,9 +442,6 @@ GdkSurface *   gdk_surface_new_popup_full       (GdkDisplay    *display,
                                                  GdkSurface    *parent);
 GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display);
-GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_new_child            (GdkSurface     *parent,
-                                                 const GdkRectangle *position);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_destroy               (GdkSurface     *surface);
@@ -545,8 +540,6 @@ GdkSurfaceState gdk_surface_get_state (GdkSurface *surface);
 /* GdkSurface */
 
 GDK_AVAILABLE_IN_ALL
-gboolean      gdk_surface_has_native         (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
 void              gdk_surface_set_type_hint (GdkSurface        *surface,
                                              GdkSurfaceTypeHint hint);
 GDK_AVAILABLE_IN_ALL
@@ -639,16 +632,6 @@ GdkSurface *   gdk_surface_get_device_position (GdkSurface      *surface,
                                                 double          *x,
                                                 double          *y,
                                                 GdkModifierType *mask);
-GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_get_parent      (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_get_toplevel    (GdkSurface       *surface);
-
-GDK_AVAILABLE_IN_ALL
-GList *       gdk_surface_get_children   (GdkSurface      *surface);
-GDK_AVAILABLE_IN_ALL
-GList *       gdk_surface_peek_children   (GdkSurface       *surface);
-
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_icon_list   (GdkSurface       *surface,
                                            GList           *surfaces);
