@@ -398,6 +398,8 @@ gtk_places_view_destroy (GtkWidget *widget)
   g_cancellable_cancel (priv->cancellable);
   g_cancellable_cancel (priv->networks_fetching_cancellable);
 
+  g_clear_pointer (&priv->server_adresses_popover, gtk_widget_unparent);
+
   GTK_WIDGET_CLASS (gtk_places_view_parent_class)->destroy (widget);
 }
 
