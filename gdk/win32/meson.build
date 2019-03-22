@@ -47,6 +47,7 @@ install_headers(gdk_win32_public_headers, subdir: 'gtk-3.0/gdk/win32')
 install_headers('gdkwin32.h', subdir: 'gtk-3.0/gdk')
 
 gdk_win32_deps = [ # FIXME
+    pangowin32_dep
 ]
 
 libgdk_win32 = static_library('gdk-win32',
