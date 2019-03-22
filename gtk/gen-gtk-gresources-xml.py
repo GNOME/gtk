@@ -46,11 +46,6 @@ xml += '\n'
 for f in get_files('theme/HighContrast/assets', '.svg'):
   xml += '    <file>theme/HighContrast/assets/{0}</file>\n'.format(f)
 
-xml += '''
-    <file>theme/win32/gtk-win32-base.css</file>
-    <file>theme/win32/gtk.css</file>
-'''
-
 for f in get_files('gesture', '.symbolic.png'):
   xml += '    <file alias=\'icons/64x64/actions/{0}\'>gesture/{0}</file>\n'.format(f)
 

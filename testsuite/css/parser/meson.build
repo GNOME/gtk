@@ -157,8 +157,6 @@ test_data = [
   'background-shorthand-single.ref.css',
   'background-size.css',
   'background-size.ref.css',
-  'background-win32-color-is-no-error.css',
-  'background-win32-color-is-no-error.ref.css',
   'border-color.css',
   'border-color-currentcolor.css',
   'border-color-currentcolor.ref.css',

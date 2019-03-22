@@ -546,7 +546,7 @@ checkbutton:indeterminate {
       GTK adds several additional ways to specify colors.
     </para>
 
-<literallayout><code>〈gtk color〉 = 〈symbolic color〉 | 〈color expression〉 | 〈win32 color〉</code>
+<literallayout><code>〈gtk color〉 = 〈symbolic color〉 | 〈color expression〉</code>
 </literallayout>
 
     <para>
@@ -592,13 +592,6 @@ checkbutton:indeterminate {
 
 <literallayout><code>〈color expression〉 = lighter( 〈color〉 ) | darker( 〈color〉 ) | shade( 〈color〉, 〈number〉 ) |</code>
 <code>                     alpha( 〈color〉, 〈number〉 ) | mix( 〈color〉, 〈color〉, 〈number〉 )</code>
-</literallayout>
-
-    <para>
-      On Windows, GTK allows to refer to system colors, as follows:
-    </para>
-
-<literallayout><code>〈win32 color〉 = -gtk-win32-color( 〈name〉, 〈integer〉 )</code>
 </literallayout>
 
   </refsect2>
@@ -737,7 +730,7 @@ label {
       GTK extends the CSS syntax for images and also uses it for specifying icons.
     </para>
 
-<literallayout><code>〈gtk image〉 = 〈themed icon〉 | 〈scaled image〉 | 〈recolored image〉 | 〈win32 theme part〉</code>
+<literallayout><code>〈gtk image〉 = 〈themed icon〉 | 〈scaled image〉 | 〈recolored image〉</code>
 </literallayout>
 
     <para>
@@ -815,13 +808,6 @@ arrow {
 }
 ]]></programlisting>
     </example>
-    <para>
-      On Windows, GTK allows to refer to system theme parts as images, as follows:
-    </para>
-
-<literallayout><code>〈win32 theme part〉 = -gtk-win32-theme-part( 〈name〉, 〈integer〉 〈integer〉</code>
-<code>                                              [ , [ over( 〈integer〉 〈integer〉 [ , 〈alpha value〉 ]? ) | margins( 〈integer〉{1,4} ) ] ]* )</code>
-</literallayout>
 
   </refsect2>
 

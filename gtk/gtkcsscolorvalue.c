@@ -23,8 +23,6 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkhslaprivate.h"
 #include "gtkstylepropertyprivate.h"
-#include "gtkwin32drawprivate.h"
-#include "gtkwin32themeprivate.h"
 
 #include "gtkprivate.h"
 
@@ -34,7 +32,6 @@ typedef enum {
   COLOR_TYPE_SHADE,
   COLOR_TYPE_ALPHA,
   COLOR_TYPE_MIX,
-  COLOR_TYPE_WIN32,
   COLOR_TYPE_CURRENT_COLOR
 } ColorType;
 
@@ -60,12 +57,6 @@ struct _GtkCssValue
       GtkCssValue *color2;
       gdouble factor;
     } mix;
-
-    struct
-    {
-      GtkWin32Theme *theme;
-      gint id;
-    } win32;
   } sym_col;
 };
 
@@ -89,9 +80,6 @@ gtk_css_value_color_free (GtkCssValue *color)
     case COLOR_TYPE_MIX:
       _gtk_css_value_unref (color->sym_col.mix.color1);
       _gtk_css_value_unref (color->sym_col.mix.color2);
-      break;
-    case COLOR_TYPE_WIN32:
-      gtk_win32_theme_unref (color->sym_col.win32.theme);
       break;
     case COLOR_TYPE_LITERAL:
     case COLOR_TYPE_CURRENT_COLOR:
@@ -241,18 +229,6 @@ _gtk_css_color_value_resolve (GtkCssValue      *color,
       }
 
       break;
-    case COLOR_TYPE_WIN32:
-      {
-	GdkRGBA res;
-
-        gtk_win32_theme_get_color (color->sym_col.win32.theme,
-			           color->sym_col.win32.id,
-				   &res);
-
-	value = _gtk_css_rgba_value_new_from_rgba (&res);
-      }
-
-      break;
     case COLOR_TYPE_CURRENT_COLOR:
       if (current)
         {
@@ -350,9 +326,6 @@ gtk_css_value_color_equal (const GtkCssValue *value1,
                                    value2->sym_col.mix.color1) &&
              _gtk_css_value_equal (value1->sym_col.mix.color2,
                                    value2->sym_col.mix.color2);
-    case COLOR_TYPE_WIN32:
-      return gtk_win32_theme_equal (value1->sym_col.win32.theme, value2->sym_col.win32.theme) &&
-             value1->sym_col.win32.id == value2->sym_col.win32.id;
     case COLOR_TYPE_CURRENT_COLOR:
       return TRUE;
     default:
@@ -418,20 +391,6 @@ gtk_css_value_color_print (const GtkCssValue *value,
         g_string_append (string, ", ");
         g_ascii_dtostr (factor, sizeof (factor), value->sym_col.mix.factor);
         g_string_append (string, factor);
-        g_string_append (string, ")");
-      }
-      break;
-    case COLOR_TYPE_WIN32:
-      {
-        const char *name;
-        g_string_append (string, GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME"(");
-        gtk_win32_theme_print (value->sym_col.win32.theme, string);
-        g_string_append (string, ", ");
-        name = gtk_win32_get_sys_color_name_for_id (value->sym_col.win32.id);
-        if (name)
-          g_string_append (string, name);
-        else
-          g_string_append_printf (string, "%d", value->sym_col.win32.id);
         g_string_append (string, ")");
       }
       break;
@@ -543,38 +502,6 @@ _gtk_css_color_value_new_mix (GtkCssValue *color1,
   return value;
 }
 
-static GtkCssValue *
-gtk_css_color_value_new_win32_for_theme (GtkWin32Theme *theme,
-                                         gint           id)
-{
-  GtkCssValue *value;
-
-  gtk_internal_return_val_if_fail (theme != NULL, NULL);
-
-  value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
-  value->type = COLOR_TYPE_WIN32;
-  value->sym_col.win32.theme = gtk_win32_theme_ref (theme);
-  value->sym_col.win32.id = id;
-
-  return value;
-}
-
-GtkCssValue *
-_gtk_css_color_value_new_win32 (const gchar *theme_class,
-                                gint         id)
-{
-  GtkWin32Theme *theme;
-  GtkCssValue *value;
-
-  gtk_internal_return_val_if_fail (theme_class != NULL, NULL);
-
-  theme = gtk_win32_theme_lookup (theme_class);
-  value = gtk_css_color_value_new_win32_for_theme (theme, id);
-  gtk_win32_theme_unref (theme);
-
-  return value;
-}
-
 GtkCssValue *
 _gtk_css_color_value_new_current_color (void)
 {
@@ -590,53 +517,8 @@ typedef enum {
   COLOR_DARKER,
   COLOR_SHADE,
   COLOR_ALPHA,
-  COLOR_MIX,
-  COLOR_WIN32
+  COLOR_MIX
 } ColorParseType;
-
-static GtkCssValue *
-gtk_css_color_parse_win32 (GtkCssParser *parser)
-{
-  GtkCssValue *color;
-  GtkWin32Theme *theme;
-  char *name;
-  int id;
-
-  theme = gtk_win32_theme_parse (parser);
-  if (theme == NULL)
-    return NULL;
-
-  if (! _gtk_css_parser_try (parser, ",", TRUE))
-    {
-      gtk_win32_theme_unref (theme);
-      _gtk_css_parser_error (parser,
-			     "Expected ','");
-      return NULL;
-    }
-
-  name = _gtk_css_parser_try_ident (parser, TRUE);
-  if (name)
-    {
-      id = gtk_win32_get_sys_color_id_for_name (name);
-      if (id == -1)
-        {
-          _gtk_css_parser_error (parser, "'%s' is not a win32 color name.", name);
-          g_free (name);
-          return NULL;
-        }
-      g_free (name);
-    }
-  else if (!_gtk_css_parser_try_int (parser, &id))
-    {
-      gtk_win32_theme_unref (theme);
-      _gtk_css_parser_error (parser, "Expected a valid integer value");
-      return NULL;
-    }
-
-  color = gtk_css_color_value_new_win32_for_theme (theme, id);
-  gtk_win32_theme_unref (theme);
-  return color;
-}
 
 static GtkCssValue *
 _gtk_css_color_value_parse_function (GtkCssParser   *parser,
@@ -704,12 +586,6 @@ _gtk_css_color_value_parse_function (GtkCssParser   *parser,
       
       value = _gtk_css_color_value_new_literal (&rgba);
     }
-  else if (color == COLOR_WIN32)
-    {
-      value = gtk_css_color_parse_win32 (parser);
-      if (value == NULL)
-	return NULL;
-    }
   else
     {
       child1 = _gtk_css_color_value_parse (parser);
@@ -775,7 +651,6 @@ _gtk_css_color_value_parse_function (GtkCssParser   *parser,
           break;
         case COLOR_RGB:
         case COLOR_RGBA:
-        case COLOR_WIN32:
         default:
           g_assert_not_reached ();
           value = NULL;
@@ -802,8 +677,7 @@ _gtk_css_color_value_parse (GtkCssParser *parser)
   GtkCssValue *value;
   GdkRGBA rgba;
   guint color;
-  const char *names[] = {"rgba", "rgb",  "lighter", "darker", "shade", "alpha", "mix",
-			 GTK_WIN32_THEME_SYMBOLIC_COLOR_NAME};
+  const char *names[] = {"rgba", "rgb",  "lighter", "darker", "shade", "alpha", "mix"};
   char *name;
 
   if (_gtk_css_parser_try (parser, "currentColor", TRUE))

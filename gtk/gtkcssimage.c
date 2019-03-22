@@ -33,7 +33,6 @@
 #include "gtk/gtkcssimagescaledprivate.h"
 #include "gtk/gtkcssimagerecolorprivate.h"
 #include "gtk/gtkcssimagefallbackprivate.h"
-#include "gtk/gtkcssimagewin32private.h"
 
 G_DEFINE_ABSTRACT_TYPE (GtkCssImage, _gtk_css_image, G_TYPE_OBJECT)
 
@@ -499,7 +498,6 @@ gtk_css_image_get_parser_type (GtkCssParser *parser)
     { "-gtk-icontheme", _gtk_css_image_icon_theme_get_type },
     { "-gtk-scaled", _gtk_css_image_scaled_get_type },
     { "-gtk-recolor", _gtk_css_image_recolor_get_type },
-    { "-gtk-win32-theme-part", _gtk_css_image_win32_get_type },
     { "linear-gradient", _gtk_css_image_linear_get_type },
     { "repeating-linear-gradient", _gtk_css_image_linear_get_type },
     { "radial-gradient", _gtk_css_image_radial_get_type },

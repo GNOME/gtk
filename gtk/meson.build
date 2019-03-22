@@ -65,7 +65,6 @@ gtk_private_sources = files([
   'gtkcssimagescaled.c',
   'gtkcssimageurl.c',
   'gtkcssimagevalue.c',
-  'gtkcssimagewin32.c',
   'gtkcssinheritvalue.c',
   'gtkcssinitialvalue.c',
   'gtkcsskeyframes.c',
@@ -99,7 +98,6 @@ gtk_private_sources = files([
   'gtkcssunsetvalue.c',
   'gtkcssvalue.c',
   'gtkcsswidgetnode.c',
-  'gtkcsswin32sizevalue.c',
   'gtkfilechooserembed.c',
   'gtkfilechooserentry.c',
   'gtkfilechoosererrorstack.c',
@@ -144,9 +142,6 @@ gtk_private_sources = files([
   'gtktextbtree.c',
   'gtktrashmonitor.c',
   'gtktreedatalist.c',
-  'gtkwin32draw.c',
-  'gtkwin32theme.c',
-  'gtkwin32theme.c',
 ])
 
 # List of files that contain public API, and should be introspected

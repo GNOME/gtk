@@ -65,20 +65,6 @@ We use <literallayout> for syntax productions, and each line is put in a <code>
       not quite the same as the CSS definition of rem.
     </para>
 
-    <para>
-      Whereever a number is allowed, GTK also accepts a Windows-specific
-      theme size:
-    </para>
-
-<literallayout>
-<code>〈win32 theme size〉 = 〈win32 size〉 | 〈win32 part size〉</code>
-<code>〈win32 size〉 = -gtk-win32-size ( 〈theme name〉, 〈metric id〉 )</code>
-<code>〈win32 part size〉 = [ -gtk-win32-part-width | -gtk-win32-part-height |</code>
-<code>                      -gtk-win32-part-border-top | -gtk-win32-part-border-right |</code>
-<code>                      -gtk-win32-part-border-bottom | -gtk-win32-part-border-left ]</code>
-<code>                    ( 〈theme name〉 , 〈integer〉 , 〈integer〉 )</code>
-</literallayout>
-
 <literallayout><code>〈calc expression〉 = calc( 〈calc sum〉 )</code>
 <code>〈calc sum〉 = 〈calc product〉 [ [ + | - ] 〈calc product〉 ]*</code>
 <code>〈calc product〉 = 〈calc value〉 [ * 〈calc value〉 | / 〈number〉 ]*</code>

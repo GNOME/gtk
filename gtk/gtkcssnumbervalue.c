@@ -21,7 +21,6 @@
 
 #include "gtkcsscalcvalueprivate.h"
 #include "gtkcssdimensionvalueprivate.h"
-#include "gtkcsswin32sizevalueprivate.h"
 #include "gtkprivate.h"
 
 struct _GtkCssValue {
@@ -131,14 +130,7 @@ gboolean
 gtk_css_number_value_can_parse (GtkCssParser *parser)
 {
   return _gtk_css_parser_has_number (parser)
-      || _gtk_css_parser_has_prefix (parser, "calc")
-      || _gtk_css_parser_has_prefix (parser, "-gtk-win32-size")
-      || _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-width")
-      || _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-height")
-      || _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-top")
-      || _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-left")
-      || _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-bottom")
-      || _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-right");
+      || _gtk_css_parser_has_prefix (parser, "calc");
 }
 
 GtkCssValue *
@@ -147,14 +139,6 @@ _gtk_css_number_value_parse (GtkCssParser           *parser,
 {
   if (_gtk_css_parser_has_prefix (parser, "calc"))
     return gtk_css_calc_value_parse (parser, flags);
-  if (_gtk_css_parser_has_prefix (parser, "-gtk-win32-size") ||
-      _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-width") ||
-      _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-height") ||
-      _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-top") ||
-      _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-left") ||
-      _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-bottom") ||
-      _gtk_css_parser_has_prefix (parser, "-gtk-win32-part-border-right"))
-    return gtk_css_win32_size_value_parse (parser, flags);
 
   return gtk_css_dimension_value_parse (parser, flags);
 }
