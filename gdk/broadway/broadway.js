@@ -316,6 +316,12 @@ SwapNodes.prototype.decode_int32 = function() {
     return v;
 }
 
+SwapNodes.prototype.decode_float = function() {
+    var v = this.node_data.getFloat32(this.data_pos, true);
+    this.data_pos += 4;
+    return v;
+}
+
 SwapNodes.prototype.decode_color = function() {
     var rgba = this.decode_uint32();
     var a = (rgba >> 24) & 0xff;
@@ -328,10 +334,6 @@ SwapNodes.prototype.decode_color = function() {
     else
         c = "rgba(" + r + "," + g + "," + b + "," + (a / 255.0) + ")";
     return c;
-}
-
-SwapNodes.prototype.decode_float = function() {
-    return this.decode_int32() / 256.0;
 }
 
 SwapNodes.prototype.decode_size = function() {
