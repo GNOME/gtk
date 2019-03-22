@@ -600,23 +600,12 @@ _gtk_gesture_cancel_all (GtkGesture *gesture)
 
 static gboolean
 gesture_within_surface (GtkGesture *gesture,
-                        GdkSurface  *parent)
+                        GdkSurface  *surface)
 {
-  GdkSurface *surface;
   GtkWidget *widget;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  surface = gtk_widget_get_surface (widget);
-
-  while (surface)
-    {
-      if (surface == parent)
-        return TRUE;
-
-      surface = gdk_surface_get_parent (surface);
-    }
-
-  return FALSE;
+  return surface == gtk_widget_get_surface (widget);
 }
 
 static gboolean
