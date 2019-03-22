@@ -498,7 +498,6 @@ RegisterGdkClass (GdkSurfaceType wtype, GdkSurfaceTypeHint wtype_hint)
         }
       break;
 
-    case GDK_SURFACE_CHILD:
     default:
       g_assert_not_reached ();
       break;
@@ -611,7 +610,6 @@ _gdk_win32_display_create_surface_impl (GdkDisplay    *display,
       break;
 
 
-    case GDK_SURFACE_CHILD:
     default:
       g_assert_not_reached ();
     }
@@ -1187,10 +1185,6 @@ gdk_win32_surface_move (GdkSurface *window,
   if (window->state & GDK_SURFACE_STATE_FULLSCREEN)
     return;
 
-  /* Don't check GDK_SURFACE_TYPE (window) == GDK_SURFACE_CHILD.
-   * Foreign windows (another app's windows) might be children of our
-   * windows! Especially in the case of gtkplug/socket.
-   */
   if (GetAncestor (GDK_SURFACE_HWND (window), GA_PARENT) != GetDesktopWindow ())
     {
       _gdk_surface_move_resize_child (window, x, y, window->width, window->height);

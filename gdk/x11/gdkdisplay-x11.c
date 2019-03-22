@@ -931,13 +931,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 			   xevent->xconfigure.border_width,
 			   xevent->xconfigure.above,
 			   xevent->xconfigure.override_redirect,
-			   !surface
-			   ? " (discarding)"
-			   : surface->surface_type == GDK_SURFACE_CHILD
-			   ? " (discarding child)"
-			   : xevent->xconfigure.event != xevent->xconfigure.window
-			   ? " (discarding substructure)"
-			   : ""));
+			   !surface ? " (discarding)" : ""));
       if (_gdk_x11_display_is_root_window (display, xevent->xconfigure.window))
         {
 	  _gdk_x11_screen_size_changed (x11_screen, xevent);
@@ -953,8 +947,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 #endif
 
     if (!surface ||
-	  xevent->xconfigure.event != xevent->xconfigure.window ||
-          GDK_SURFACE_TYPE (surface) == GDK_SURFACE_CHILD)
+	  xevent->xconfigure.event != xevent->xconfigure.window)
 	return_val = FALSE;
       else
 	{

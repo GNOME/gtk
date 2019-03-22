@@ -220,7 +220,7 @@ gdk_surface_init (GdkSurface *surface)
 {
   /* 0-initialization is good for all other fields. */
 
-  surface->surface_type = GDK_SURFACE_CHILD;
+  surface->surface_type = GDK_SURFACE_TOPLEVEL;
 
   surface->state = GDK_SURFACE_STATE_WITHDRAWN;
   surface->fullscreen_mode = GDK_FULLSCREEN_ON_CURRENT_MONITOR;
@@ -708,16 +708,7 @@ gdk_surface_new (GdkDisplay    *display,
   surface->alpha = 255;
 
   if (attributes->wclass == GDK_INPUT_ONLY)
-    {
-      /* Backwards compatiblity - we've always ignored
-       * attributes->surface_type for input-only surfaces
-       * before
-       */
-      if (parent == NULL)
-        surface->surface_type = GDK_SURFACE_TEMP;
-      else
-        surface->surface_type = GDK_SURFACE_CHILD;
-    }
+    surface->surface_type = GDK_SURFACE_TEMP;
   else
     surface->surface_type = attributes->surface_type;
 
@@ -728,8 +719,6 @@ gdk_surface_new (GdkDisplay    *display,
     case GDK_SURFACE_TEMP:
       if (parent != NULL)
         g_warning (G_STRLOC "Toplevel surfaces must be created without a parent");
-      break;
-    case GDK_SURFACE_CHILD:
       break;
     default:
       g_warning (G_STRLOC "cannot make surfaces of type %d", surface->surface_type);
@@ -900,33 +889,6 @@ gdk_surface_new_temp (GdkDisplay *display)
   return gdk_surface_new (display, NULL, &attr);
 }
 
-/**
- * gdk_surface_new_child: (constructor)
- * @parent: the parent surface
- * @position: placement of the surface inside @parent
- *
- * Creates a new client-side child surface.
- *
- * Returns: (transfer full): the new #GdkSurface
- **/
-GdkSurface *
-gdk_surface_new_child (GdkSurface          *parent,
-                       const GdkRectangle *position)
-{
-  GdkSurfaceAttr attr;
-
-  g_return_val_if_fail (GDK_IS_SURFACE (parent), NULL);
-
-  attr.wclass = GDK_INPUT_OUTPUT;
-  attr.x = position->x;
-  attr.y = position->y;
-  attr.width = position->width;
-  attr.height = position->height;
-  attr.surface_type = GDK_SURFACE_CHILD;
-
-  return gdk_surface_new (gdk_surface_get_display (parent), parent, &attr);
-}
-
 static void
 update_pointer_info_foreach (GdkDisplay           *display,
                              GdkDevice            *device,
@@ -994,7 +956,6 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
       break;
 
     case GDK_SURFACE_TOPLEVEL:
-    case GDK_SURFACE_CHILD:
     case GDK_SURFACE_TEMP:
       if (surface->parent)
         {
@@ -1159,22 +1120,6 @@ gdk_surface_is_destroyed (GdkSurface *surface)
 }
 
 /**
- * gdk_surface_has_native:
- * @surface: a #GdkSurface
- *
- * Checks whether the surface has a native surface or not.
- *
- * Returns: %TRUE if the @surface has a native surface, %FALSE otherwise.
- */
-gboolean
-gdk_surface_has_native (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-
-  return surface->parent == NULL || surface->parent->impl != surface->impl;
-}
-
-/**
  * gdk_surface_get_position:
  * @surface: a #GdkSurface
  * @x: (out) (allow-none): X coordinate of surface
@@ -1200,101 +1145,6 @@ gdk_surface_get_position (GdkSurface *surface,
     *x = surface->x;
   if (y)
     *y = surface->y;
-}
-
-/**
- * gdk_surface_get_parent:
- * @surface: a #GdkSurface
- *
- * Obtains the parent of @surface, as known to GDK. Does not query the
- * X server; thus this returns the parent as passed to gdk_surface_new(),
- * not the actual parent. This should never matter unless you’re using
- * Xlib calls mixed with GDK calls on the X11 platform. It may also
- * matter for toplevel windows, because the window manager may choose
- * to reparent them.
- *
- * Returns: (transfer none): parent of @surface
- **/
-GdkSurface*
-gdk_surface_get_parent (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
-
-  return surface->parent;
-}
-
-/**
- * gdk_surface_get_toplevel:
- * @surface: a #GdkSurface
- *
- * Gets the toplevel surface that’s an ancestor of @surface.
- *
- * Any surface type but %GDK_SURFACE_CHILD is considered a
- * toplevel surface, as is a %GDK_SURFACE_CHILD surface that
- * has a root surface as parent.
- *
- * Returns: (transfer none): the toplevel surface containing @surface
- **/
-GdkSurface *
-gdk_surface_get_toplevel (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
-
-  while (surface->surface_type == GDK_SURFACE_CHILD)
-    {
-      if (gdk_surface_is_toplevel (surface))
-        break;
-      surface = surface->parent;
-    }
-
-  return surface;
-}
-
-/**
- * gdk_surface_get_children:
- * @surface: a #GdkSurface
- *
- * Gets the list of children of @surface known to GDK.
- * This function only returns children created via GDK,
- * so for example it’s useless when used with the root window;
- * it only returns surfaces an application created itself.
- *
- * The returned list must be freed, but the elements in the
- * list need not be.
- *
- * Returns: (transfer container) (element-type GdkSurface):
- *     list of child surfaces inside @surface
- **/
-GList*
-gdk_surface_get_children (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return NULL;
-
-  return g_list_copy (surface->children);
-}
-
-/**
- * gdk_surface_peek_children:
- * @surface: a #GdkSurface
- *
- * Like gdk_surface_get_children(), but does not copy the list of
- * children, so the list does not need to be freed.
- *
- * Returns: (transfer none) (element-type GdkSurface):
- *     a reference to the list of child surfaces in @surface
- **/
-GList *
-gdk_surface_peek_children (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
-
-  if (GDK_SURFACE_DESTROYED (surface))
-    return NULL;
-
-  return surface->children;
 }
 
 /**
@@ -1627,11 +1477,7 @@ gdk_surface_remove_update_surface (GdkSurface *surface)
 static gboolean
 gdk_surface_is_toplevel_frozen (GdkSurface *surface)
 {
-  GdkSurface *toplevel;
-
-  toplevel = gdk_surface_get_toplevel (surface);
-
-  return toplevel->update_and_descendants_freeze_count > 0;
+  return surface->update_and_descendants_freeze_count > 0;
 }
 
 static void
@@ -1943,7 +1789,6 @@ void
 gdk_surface_freeze_toplevel_updates (GdkSurface *surface)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (surface->surface_type != GDK_SURFACE_CHILD);
 
   surface->update_and_descendants_freeze_count++;
   _gdk_frame_clock_freeze (gdk_surface_get_frame_clock (surface));
@@ -1953,7 +1798,6 @@ void
 gdk_surface_thaw_toplevel_updates (GdkSurface *surface)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (surface->surface_type != GDK_SURFACE_CHILD);
   g_return_if_fail (surface->update_and_descendants_freeze_count > 0);
 
   surface->update_and_descendants_freeze_count--;
@@ -3811,8 +3655,7 @@ gdk_surface_print (GdkSurface *surface,
 #endif
     }
 
-  if (surface->surface_type != GDK_SURFACE_CHILD)
-    g_print (" %s", surface_types[surface->surface_type]);
+  g_print (" %s", surface_types[surface->surface_type]);
 
   if (surface->input_only)
     g_print (" input-only");
@@ -4950,13 +4793,9 @@ gdk_surface_set_frame_clock (GdkSurface     *surface,
 GdkFrameClock*
 gdk_surface_get_frame_clock (GdkSurface *surface)
 {
-  GdkSurface *toplevel;
-
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
 
-  toplevel = gdk_surface_get_toplevel (surface);
-
-  return toplevel->frame_clock;
+  return surface->frame_clock;
 }
 
 /**
@@ -5194,7 +5033,6 @@ gdk_surface_set_state (GdkSurface      *surface,
     case GDK_SURFACE_TEMP: /* ? */
       g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
       break;
-    case GDK_SURFACE_CHILD:
     default:
       break;
     }
