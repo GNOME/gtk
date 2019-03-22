@@ -142,12 +142,6 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
                                 GFile          *file,
                                 const char     *data);
 
-GQuark
-gtk_css_provider_error_quark (void)
-{
-  return g_quark_from_static_string ("gtk-css-provider-error-quark");
-}
-
 G_DEFINE_TYPE_EXTENDED (GtkCssProvider, gtk_css_provider, G_TYPE_OBJECT, 0,
                         G_ADD_PRIVATE (GtkCssProvider)
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
@@ -720,8 +714,8 @@ gtk_css_provider_invalid_token (GtkCssProvider *provider,
 {
   gtk_css_provider_error (provider,
                           scanner,
-                          GTK_CSS_PROVIDER_ERROR,
-                          GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                          GTK_CSS_PARSER_ERROR,
+                          GTK_CSS_PARSER_ERROR_SYNTAX,
                           "expected %s", expected);
 }
 
@@ -818,8 +812,8 @@ parse_import (GtkCssScanner *scanner)
        char *path = g_file_get_path (file);
        gtk_css_provider_error (scanner->provider,
                                scanner,
-                               GTK_CSS_PROVIDER_ERROR,
-                               GTK_CSS_PROVIDER_ERROR_IMPORT,
+                               GTK_CSS_PARSER_ERROR,
+                               GTK_CSS_PARSER_ERROR_IMPORT,
                                "Loading '%s' would recurse",
                                path);
        g_free (path);
@@ -860,8 +854,8 @@ parse_color_definition (GtkCssScanner *scanner)
     {
       gtk_css_provider_error_literal (scanner->provider,
                                       scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      GTK_CSS_PARSER_ERROR,
+                                      GTK_CSS_PARSER_ERROR_SYNTAX,
                                       "Not a valid color name");
       _gtk_css_parser_resync (scanner->parser, TRUE, 0);
       gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_COLOR_DEFINITION);
@@ -883,8 +877,8 @@ parse_color_definition (GtkCssScanner *scanner)
       _gtk_css_value_unref (color);
       gtk_css_provider_error_literal (scanner->provider,
                                       scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      GTK_CSS_PARSER_ERROR,
+                                      GTK_CSS_PARSER_ERROR_SYNTAX,
                                       "Missing semicolon at end of color definition");
       _gtk_css_parser_resync (scanner->parser, TRUE, 0);
 
@@ -918,8 +912,8 @@ parse_keyframes (GtkCssScanner *scanner)
     {
       gtk_css_provider_error_literal (scanner->provider,
                                       scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      GTK_CSS_PARSER_ERROR,
+                                      GTK_CSS_PARSER_ERROR_SYNTAX,
                                       "Expected name for keyframes");
       _gtk_css_parser_resync (scanner->parser, TRUE, 0);
       goto exit;
@@ -929,8 +923,8 @@ parse_keyframes (GtkCssScanner *scanner)
     {
       gtk_css_provider_error_literal (scanner->provider,
                                       scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      GTK_CSS_PARSER_ERROR,
+                                      GTK_CSS_PARSER_ERROR_SYNTAX,
                                       "Expected '{' for keyframes");
       _gtk_css_parser_resync (scanner->parser, TRUE, 0);
       g_free (name);
@@ -951,8 +945,8 @@ parse_keyframes (GtkCssScanner *scanner)
     {
       gtk_css_provider_error_literal (scanner->provider,
                                       scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      GTK_CSS_PARSER_ERROR,
+                                      GTK_CSS_PARSER_ERROR_SYNTAX,
                                       "expected '}' after declarations");
       if (!_gtk_css_parser_is_eof (scanner->parser))
         _gtk_css_parser_resync (scanner->parser, FALSE, 0);
@@ -978,8 +972,8 @@ parse_at_keyword (GtkCssScanner *scanner)
     {
       gtk_css_provider_error_literal (scanner->provider,
                                       scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      GTK_CSS_PARSER_ERROR,
+                                      GTK_CSS_PARSER_ERROR_SYNTAX,
                                       "unknown @ rule");
       _gtk_css_parser_resync (scanner->parser, TRUE, 0);
     }
@@ -1061,8 +1055,8 @@ parse_declaration (GtkCssScanner *scanner,
         {
           gtk_css_provider_error (scanner->provider,
                                   scanner,
-                                  GTK_CSS_PROVIDER_ERROR,
-                                  GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                  GTK_CSS_PARSER_ERROR,
+                                  GTK_CSS_PARSER_ERROR_SYNTAX,
                                   "Junk at end of value for %s", property->name);
           _gtk_css_parser_resync (scanner->parser, TRUE, '}');
           gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
@@ -1111,8 +1105,8 @@ check_for_semicolon:
         {
           gtk_css_provider_error_literal (scanner->provider,
                                           scanner,
-                                          GTK_CSS_PROVIDER_ERROR,
-                                          GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                          GTK_CSS_PARSER_ERROR,
+                                          GTK_CSS_PARSER_ERROR_SYNTAX,
                                           "Expected semicolon");
           _gtk_css_parser_resync (scanner->parser, TRUE, '}');
         }
@@ -1149,8 +1143,8 @@ parse_ruleset (GtkCssScanner *scanner)
     {
       gtk_css_provider_error_literal (scanner->provider,
                                       scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      GTK_CSS_PARSER_ERROR,
+                                      GTK_CSS_PARSER_ERROR_SYNTAX,
                                       "expected '{' after selectors");
       _gtk_css_parser_resync (scanner->parser, FALSE, 0);
       g_slist_free_full (selectors, (GDestroyNotify) _gtk_css_selector_free);
@@ -1164,8 +1158,8 @@ parse_ruleset (GtkCssScanner *scanner)
     {
       gtk_css_provider_error_literal (scanner->provider,
                                       scanner,
-                                      GTK_CSS_PROVIDER_ERROR,
-                                      GTK_CSS_PROVIDER_ERROR_SYNTAX,
+                                      GTK_CSS_PARSER_ERROR,
+                                      GTK_CSS_PARSER_ERROR_SYNTAX,
                                       "expected '}' after declarations");
       if (!_gtk_css_parser_is_eof (scanner->parser))
         {
@@ -1298,8 +1292,8 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
 
           gtk_css_provider_error (css_provider,
                                   scanner,
-                                  GTK_CSS_PROVIDER_ERROR,
-                                  GTK_CSS_PROVIDER_ERROR_IMPORT,
+                                  GTK_CSS_PARSER_ERROR,
+                                  GTK_CSS_PARSER_ERROR_IMPORT,
                                   "Failed to import: %s",
                                   load_error->message);
 

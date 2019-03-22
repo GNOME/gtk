@@ -194,8 +194,8 @@ _gtk_css_parser_error (GtkCssParser *parser,
   va_list args;
 
   va_start (args, format);
-  error = g_error_new_valist (GTK_CSS_PROVIDER_ERROR,
-                              GTK_CSS_PROVIDER_ERROR_SYNTAX,
+  error = g_error_new_valist (GTK_CSS_PARSER_ERROR,
+                              GTK_CSS_PARSER_ERROR_SYNTAX,
                               format, args);
   va_end (args);
 
