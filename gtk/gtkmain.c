@@ -1403,6 +1403,42 @@ get_virtual_notify_type (GdkNotifyType notify_type)
     }
 }
 
+/* Determine from crossing mode details whether the ultimate
+ * target is us or a descendant. Keep this code in sync with
+ * gtkeventcontrollerkey.c:update_focus
+ */
+static gboolean
+is_or_contains (gboolean      enter,
+                GdkNotifyType detail)
+{
+  gboolean is = FALSE;
+  gboolean contains = FALSE;
+
+  switch (detail)
+    {
+    case GDK_NOTIFY_VIRTUAL:
+    case GDK_NOTIFY_NONLINEAR_VIRTUAL:
+      is = FALSE;
+      contains = enter;
+      break;
+    case GDK_NOTIFY_ANCESTOR:
+    case GDK_NOTIFY_NONLINEAR:
+      is = enter;
+      contains = FALSE;
+      break;
+    case GDK_NOTIFY_INFERIOR:
+      is = enter;
+      contains = !enter;
+      break;
+    case GDK_NOTIFY_UNKNOWN:
+    default:
+      g_warning ("Unknown focus change detail");
+      return;
+    }
+
+  return is || contains;
+}
+
 static void
 synth_crossing (GtkWidget       *widget,
                 GtkWidget       *toplevel,
@@ -1451,7 +1487,7 @@ synth_crossing (GtkWidget       *widget,
   if (event->any.surface)
     g_object_ref (event->any.surface);
 
-  if (enter)
+  if (is_or_contains (enter, notify_type))
     gtk_widget_set_state_flags (widget, flags, FALSE);
   else
     gtk_widget_unset_state_flags (widget, flags);
