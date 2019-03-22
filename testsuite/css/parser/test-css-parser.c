@@ -150,8 +150,8 @@ parsing_error_cb (GtkCssProvider *provider,
                           basename, gtk_css_section_get_end_line (section) + 1);
   g_free (basename);
 
-  if (error->domain == GTK_CSS_PROVIDER_ERROR)
-      append_error_value (errors, GTK_TYPE_CSS_PROVIDER_ERROR, error->code);
+  if (error->domain == GTK_CSS_PARSER_ERROR)
+      append_error_value (errors, GTK_TYPE_CSS_PARSER_ERROR, error->code);
   else
     g_string_append_printf (errors, 
                             "%s %u\n",
