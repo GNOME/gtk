@@ -214,7 +214,6 @@ gdk_surface_move
 gdk_surface_resize
 gdk_surface_move_resize
 gdk_surface_move_to_rect
-gdk_surface_has_native
 gdk_surface_raise
 gdk_surface_lower
 gdk_surface_restack
@@ -269,10 +268,6 @@ gdk_surface_get_root_coords
 gdk_surface_get_device_position
 GdkModifierType
 GdkModifierIntent
-gdk_surface_get_parent
-gdk_surface_get_toplevel
-gdk_surface_get_children
-gdk_surface_peek_children
 gdk_surface_set_icon_name
 gdk_surface_set_transient_for
 gdk_surface_set_startup_id
