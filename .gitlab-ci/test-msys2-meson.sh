@@ -13,8 +13,6 @@ pacman --noconfirm -Suy
 
 # Install the required packages
 pacman --noconfirm -S --needed \
-    base-devel \
-    git \
     mingw-w64-$MSYS2_ARCH-toolchain \
     mingw-w64-$MSYS2_ARCH-ccache \
     mingw-w64-$MSYS2_ARCH-pkg-config \
@@ -28,18 +26,19 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-libepoxy \
     mingw-w64-$MSYS2_ARCH-pango \
     mingw-w64-$MSYS2_ARCH-shared-mime-info \
+    mingw-w64-$MSYS2_ARCH-meson \
+    mingw-w64-$MSYS2_ARCH-ninja \
     mingw-w64-$MSYS2_ARCH-gtk-doc
 
 mkdir -p _ccache
 export CCACHE_BASEDIR="$(pwd)"
 export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
-export CC="ccache gcc"
 
 # Build
 ccache --zero-stats
 ccache --show-stats
 
-./autogen.sh
-make -j4
+meson _build
+ninja -C _build
 
 ccache --show-stats
