@@ -281,13 +281,16 @@ _gtk_css_parser_skip_whitespace (GtkCssParser *parser)
 }
 
 gboolean
-gtk_css_parser_try_len (GtkCssParser *parser,
-                        const char   *string,
-                        gsize         string_len,
-                        gboolean      skip_whitespace)
+_gtk_css_parser_try (GtkCssParser *parser,
+                     const char   *string,
+                     gboolean      skip_whitespace)
 {
+  gsize string_len;
+
   g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), FALSE);
   g_return_val_if_fail (string != NULL, FALSE);
+
+  string_len = strlen (string);
 
   if (g_ascii_strncasecmp (parser->data, string, string_len) != 0)
     return FALSE;
@@ -550,33 +553,6 @@ _gtk_css_parser_try_int (GtkCssParser *parser,
   if (errno)
     return FALSE;
   if (result > G_MAXINT || result < G_MININT)
-    return FALSE;
-  if (parser->data == end)
-    return FALSE;
-
-  parser->data = end;
-  *value = result;
-
-  _gtk_css_parser_skip_whitespace (parser);
-
-  return TRUE;
-}
-
-gboolean
-_gtk_css_parser_try_uint (GtkCssParser *parser,
-                          guint        *value)
-{
-  guint64 result;
-  char *end;
-
-  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), FALSE);
-  g_return_val_if_fail (value != NULL, FALSE);
-
-  errno = 0;
-  result = g_ascii_strtoull (parser->data, &end, 10);
-  if (errno)
-    return FALSE;
-  if (result > G_MAXUINT)
     return FALSE;
   if (parser->data == end)
     return FALSE;

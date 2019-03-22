@@ -254,7 +254,7 @@ gtk_css_ease_value_parse_cubic_bezier (GtkCssParser *parser)
 static GtkCssValue *
 gtk_css_ease_value_parse_steps (GtkCssParser *parser)
 {
-  guint n_steps;
+  int n_steps;
   gboolean start;
 
   if (!_gtk_css_parser_try (parser, "(", TRUE))
@@ -263,9 +263,14 @@ gtk_css_ease_value_parse_steps (GtkCssParser *parser)
       return NULL;
     }
 
-  if (!_gtk_css_parser_try_uint (parser, &n_steps))
+  if (!_gtk_css_parser_try_int (parser, &n_steps))
     {
       _gtk_css_parser_error (parser, "Expected number of steps");
+      return NULL;
+    }
+  else if (n_steps < 1)
+    {
+      _gtk_css_parser_error (parser, "Number of steps must be > 0");
       return NULL;
     }
 
