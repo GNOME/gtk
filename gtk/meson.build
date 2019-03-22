@@ -894,6 +894,7 @@ endif
 
 # Library
 libgtk = shared_library('gtk-3',
+                        library_version: gtk_library_version,
                         soversion: gtk_soversion,
                         sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
                         c_args: gtk_cargs + common_cflags,
