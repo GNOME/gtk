@@ -4,6 +4,7 @@
 #include "broadway/gdkprivate-broadway.h"
 
 #include "gskdebugprivate.h"
+#include "gsktransformprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gdk/gdktextureprivate.h"
@@ -104,10 +105,16 @@ add_float (GArray *nodes, float f)
 }
 
 static void
+add_xy (GArray *nodes, float x, float y, float offset_x, float offset_y)
+{
+  add_float (nodes, x - offset_x);
+  add_float (nodes, y - offset_y);
+}
+
+static void
 add_point (GArray *nodes, const graphene_point_t *point, float offset_x, float offset_y)
 {
-  add_float (nodes, point->x - offset_x);
-  add_float (nodes, point->y - offset_y);
+  add_xy (nodes, point->x, point->y, offset_x, offset_y);
 }
 
 static void
@@ -633,6 +640,30 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
       }
       return;
 
+    case GSK_TRANSFORM_NODE:
+      {
+        GskTransform *transform = gsk_transform_node_get_transform (node);
+        GskTransformCategory category = gsk_transform_get_category (transform);
+        float dx, dy;
+
+        if (category >= GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
+          {
+            gsk_transform_to_translate (transform, &dx, &dy);
+            add_uint32 (nodes, BROADWAY_NODE_TRANSLATE);
+            add_xy (nodes, dx, dy, offset_x, offset_y);
+            gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
+                                            gsk_transform_node_get_child (node),
+                                            0, 0);
+          }
+        else
+          {
+            /* Fallback to texture for now */
+            break;
+          }
+
+      }
+      return;
+
       /* Generic nodes */
 
     case GSK_CONTAINER_NODE:
@@ -656,7 +687,6 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
     case GSK_COLOR_MATRIX_NODE:
     case GSK_TEXT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
-    case GSK_TRANSFORM_NODE:
     case GSK_REPEAT_NODE:
     case GSK_BLEND_NODE:
     case GSK_CROSS_FADE_NODE:
