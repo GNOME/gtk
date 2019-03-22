@@ -1418,7 +1418,6 @@ synth_crossing (GtkWidget       *widget,
 
   if (gdk_event_get_event_type (source) == GDK_FOCUS_CHANGE)
     {
-g_print ("focus %s: %s\n", enter ? "in" : "out", G_OBJECT_TYPE_NAME (widget));
       event = gdk_event_new (GDK_FOCUS_CHANGE);
       event->focus_change.in = enter;
       event->focus_change.mode = crossing_mode;
