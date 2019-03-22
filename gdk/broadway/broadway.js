@@ -154,7 +154,6 @@ function sendConfigureNotify(surface)
     sendInput("w", [surface.id, surface.x, surface.y, surface.width, surface.height]);
 }
 
-var positionIndex = 0;
 function cmdCreateSurface(id, x, y, width, height, isTemp)
 {
     var surface = { id: id, x: x, y:y, width: width, height: height, isTemp: isTemp };
@@ -166,8 +165,6 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     var div = document.createElement('div');
     div.surface = surface;
     surface.div = div;
-
-    document.body.appendChild(div);
 
     div.style["position"] = "absolute";
     div.style["left"] = surface.x + "px";
@@ -181,54 +178,8 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     stackingOrder.push(surface);
 
     sendConfigureNotify(surface);
-}
 
-function cmdShowSurface(id)
-{
-    var surface = surfaces[id];
-
-    if (surface.visible)
-        return;
-    surface.visible = true;
-
-    var xOffset = surface.x;
-    var yOffset = surface.y;
-
-    surface.div.style["left"] = xOffset + "px";
-    surface.div.style["top"] = yOffset + "px";
-    surface.div.style["visibility"] = "visible";
-
-    restackSurfaces();
-}
-
-function cmdHideSurface(id)
-{
-    if (grab.surface == id)
-        doUngrab();
-
-    var surface = surfaces[id];
-    if (!surface.visible)
-        return;
-    surface.visible = false;
-
-    surface.div.style["visibility"] = "hidden";
-}
-
-function cmdSetTransientFor(id, parentId)
-{
-    var surface = surfaces[id];
-
-    if (surface.transientParent == parentId)
-        return;
-
-    surface.transientParent = parentId;
-    if (parentId != 0 && surfaces[parentId]) {
-        moveToHelper(surface, stackingOrder.indexOf(surfaces[parentId])+1);
-    }
-
-    if (surface.visible) {
-        restackSurfaces();
-    }
+    return div;
 }
 
 function restackSurfaces() {
@@ -253,53 +204,9 @@ function moveToHelper(surface, position) {
     }
 }
 
-function cmdDeleteSurface(id)
-{
-    if (grab.surface == id)
-        doUngrab();
-
-    var surface = surfaces[id];
-    var i = stackingOrder.indexOf(surface);
-    if (i >= 0)
-        stackingOrder.splice(i, 1);
-    var div = surface.div;
-    div.parentNode.removeChild(div);
-    delete surfaces[id];
-}
-
 function cmdRoundtrip(id, tag)
 {
     sendInput("F", [id, tag]);
-}
-
-function cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h)
-{
-    var surface = surfaces[id];
-    if (has_pos) {
-        surface.positioned = true;
-        surface.x = x;
-        surface.y = y;
-    }
-
-    if (has_size) {
-        surface.width = w;
-        surface.height = h;
-
-        surface.div.style["width"] = surface.width + "px";
-        surface.div.style["height"] = surface.height + "px";
-    }
-
-    if (surface.visible) {
-        if (has_pos) {
-            var xOffset = surface.x;
-            var yOffset = surface.y;
-
-            surface.div.style["left"] = xOffset + "px";
-            surface.div.style["top"] = yOffset + "px";
-        }
-    }
-
-    sendConfigureNotify(surface);
 }
 
 function cmdRaiseSurface(id)
@@ -307,43 +214,41 @@ function cmdRaiseSurface(id)
     var surface = surfaces[id];
 
     moveToHelper(surface);
-    restackSurfaces();
 }
 
 function cmdLowerSurface(id)
 {
     var surface = surfaces[id];
-
     moveToHelper(surface, 0);
-    restackSurfaces();
 }
 
-function SwapNodes(node_data, div) {
+function TransformNodes(node_data, div, display_commands) {
     this.node_data = node_data;
+    this.display_commands = display_commands;
     this.data_pos = 0;
     this.div = div;
     this.outstanding = 1;
 }
 
-SwapNodes.prototype.decode_uint32 = function() {
+TransformNodes.prototype.decode_uint32 = function() {
     var v = this.node_data.getUint32(this.data_pos, true);
     this.data_pos += 4;
     return v;
 }
 
-SwapNodes.prototype.decode_int32 = function() {
+TransformNodes.prototype.decode_int32 = function() {
     var v = this.node_data.getInt32(this.data_pos, true);
     this.data_pos += 4;
     return v;
 }
 
-SwapNodes.prototype.decode_float = function() {
+TransformNodes.prototype.decode_float = function() {
     var v = this.node_data.getFloat32(this.data_pos, true);
     this.data_pos += 4;
     return v;
 }
 
-SwapNodes.prototype.decode_color = function() {
+TransformNodes.prototype.decode_color = function() {
     var rgba = this.decode_uint32();
     var a = (rgba >> 24) & 0xff;
     var r = (rgba >> 16) & 0xff;
@@ -357,21 +262,21 @@ SwapNodes.prototype.decode_color = function() {
     return c;
 }
 
-SwapNodes.prototype.decode_size = function() {
+TransformNodes.prototype.decode_size = function() {
     var s = new Object();
     s.width = this.decode_float ();
     s.height = this.decode_float ();
     return s;
 }
 
-SwapNodes.prototype.decode_point = function() {
+TransformNodes.prototype.decode_point = function() {
     var p = new Object();
     p.x = this.decode_float ();
     p.y = this.decode_float ();
     return p;
 }
 
-SwapNodes.prototype.decode_rect = function() {
+TransformNodes.prototype.decode_rect = function() {
     var r = new Object();
     r.x = this.decode_float ();
     r.y = this.decode_float ();
@@ -380,7 +285,7 @@ SwapNodes.prototype.decode_rect = function() {
     return r;
 }
 
-SwapNodes.prototype.decode_irect = function() {
+TransformNodes.prototype.decode_irect = function() {
     var r = new Object();
     r.x = this.decode_int32 ();
     r.y = this.decode_int32 ();
@@ -389,7 +294,7 @@ SwapNodes.prototype.decode_irect = function() {
     return r;
 }
 
-SwapNodes.prototype.decode_rounded_rect = function() {
+TransformNodes.prototype.decode_rounded_rect = function() {
     var r = new Object();
     r.bounds = this.decode_rect();
     r.sizes = [];
@@ -398,14 +303,14 @@ SwapNodes.prototype.decode_rounded_rect = function() {
     return r;
 }
 
-SwapNodes.prototype.decode_color_stop = function() {
+TransformNodes.prototype.decode_color_stop = function() {
     var s = new Object();
     s.offset = this.decode_float ();
     s.color = this.decode_color ();
     return s;
 }
 
-SwapNodes.prototype.decode_color_stops = function() {
+TransformNodes.prototype.decode_color_stops = function() {
     var stops = [];
     var len = this.decode_uint32();
     for (var i = 0; i < len; i++)
@@ -447,7 +352,7 @@ function utf8_to_string(array) {
     return out;
 }
 
-SwapNodes.prototype.decode_string = function() {
+TransformNodes.prototype.decode_string = function() {
     var len = this.decode_uint32();
     var utf8 = new Array();
     var b;
@@ -495,7 +400,7 @@ function set_rrect_style (div, rrect) {
     div.style["border-bottom-left-radius"] = args(px(rrect.sizes[3].width), px(rrect.sizes[3].height));
 }
 
-SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
+TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
 {
     var type = this.decode_uint32();
     var newNode = null;
@@ -790,36 +695,20 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
 
     if (newNode) {
         if (posInParent >= 0 && parent.children[posInParent])
-            parent.replaceChild(newNode, parent.children[posInParent]);
+            this.display_commands.push([DISPLAY_OP_REPLACE_CHILD, parent, newNode, parent.children[posInParent]]);
         else
-            parent.appendChild(newNode);
+            this.display_commands.push([DISPLAY_OP_APPEND_CHILD, parent, newNode]);
     }
 }
 
-function cmdSurfaceSetNodes(id, node_data)
+TransformNodes.prototype.execute = function(display_commands)
 {
-    var surface = surfaces[id];
-    surface.node_data = node_data;
-
-    var div = surface.div;
-
-    /* We use a secondary div so that we can remove all previous children in one go */
-
-    var swap = new SwapNodes (node_data, div);
-    swap.insertNode(div, 0, div.firstChild);
-    if (swap.data_pos != node_data.byteLength)
-        alert ("Did not consume entire array (len " + node_data.byteLength + ")");
+    var div = this.div;
+    this.insertNode(div, 0, div.firstChild, display_commands);
+    if (this.data_pos != this.node_data.byteLength)
+        alert ("Did not consume entire array (len " + this.node_data.byteLength + ")");
 }
 
-function cmdUploadTexture(id, data)
-{
-    new Texture (id, data); // Stores a ref in textures
-}
-
-function cmdReleaseTexture(id)
-{
-    textures[id].unref();
-}
 
 function cmdGrabPointer(id, ownerEvents)
 {
@@ -834,6 +723,65 @@ function cmdUngrabPointer()
         doUngrab();
 }
 
+const DISPLAY_OP_REPLACE_CHILD = 0;
+const DISPLAY_OP_APPEND_CHILD = 1;
+const DISPLAY_OP_APPEND_ROOT = 2;
+const DISPLAY_OP_SHOW_SURFACE = 3;
+const DISPLAY_OP_HIDE_SURFACE = 4;
+const DISPLAY_OP_DELETE_NODE = 5;
+const DISPLAY_OP_MOVE_NODE = 6;
+const DISPLAY_OP_RESIZE_NODE = 7;
+
+function handleDisplayCommands(display_commands)
+{
+    var div;
+    var len = display_commands.length;
+    for (var i = 0; i < len; i++) {
+        var cmd = display_commands[i];
+
+        switch (cmd[0]) {
+        case DISPLAY_OP_REPLACE_CHILD:
+            cmd[1].replaceChild(cmd[2], cmd[3]);
+            break;
+        case DISPLAY_OP_APPEND_CHILD:
+            cmd[1].appendChild(cmd[2]);
+            break;
+        case DISPLAY_OP_APPEND_ROOT:
+            document.body.appendChild(cmd[1]);
+            break;
+        case DISPLAY_OP_SHOW_SURFACE:
+            div = cmd[1];
+            var xOffset = cmd[2];
+            var yOffset = cmd[3];
+            div.style["left"] = xOffset + "px";
+            div.style["top"] = yOffset + "px";
+            div.style["visibility"] = "visible";
+            break;
+        case DISPLAY_OP_HIDE_SURFACE:
+            div = cmd[1];
+            div.style["visibility"] = "hidden";
+            break;
+        case DISPLAY_OP_DELETE_NODE:
+            div = cmd[1];
+            div.parentNode.removeChild(div);
+            break;
+        case DISPLAY_OP_MOVE_NODE:
+            div = cmd[1];
+            div.style["left"] = cmd[2] + "px";
+            div.style["top"] = cmd[3] + "px";
+            break;
+        case DISPLAY_OP_RESIZE_NODE:
+            div = cmd[1];
+            div.style["width"] = cmd[2] + "px";
+            div.style["height"] = cmd[3] + "px";
+            break;
+
+        default:
+            alert("Unknown display op " + command);
+        }
+    }
+}
+
 var active = false;
 function handleCommands(cmd)
 {
@@ -842,8 +790,11 @@ function handleCommands(cmd)
         active = true;
     }
 
+    var display_commands = new Array();
+    var need_restack = false;
+
     while (cmd.pos < cmd.length) {
-        var id, x, y, w, h, q;
+        var id, x, y, w, h, q, surface;
         var command = cmd.get_char();
         lastSerial = cmd.get_32();
         switch (command) {
@@ -859,28 +810,58 @@ function handleCommands(cmd)
             w = cmd.get_16();
             h = cmd.get_16();
             var isTemp = cmd.get_bool();
-            cmdCreateSurface(id, x, y, w, h, isTemp);
+            var div = cmdCreateSurface(id, x, y, w, h, isTemp);
+            display_commands.push([DISPLAY_OP_APPEND_ROOT, div]);
+            need_restack = true;
             break;
 
         case 'S': // Show a surface
             id = cmd.get_16();
-            cmdShowSurface(id);
-            break;
+            surface = surfaces[id];
+            if (!surface.visible) {
+                surface.visible = true;
+                display_commands.push([DISPLAY_OP_SHOW_SURFACE, surface.div, surface.x, surface.y]);
+                need_restack = true;
+            }
+           break;
 
         case 'H': // Hide a surface
             id = cmd.get_16();
-            cmdHideSurface(id);
+            if (grab.surface == id)
+                doUngrab();
+            surface = surfaces[id];
+            if (surface.visible) {
+                display_commands.push([DISPLAY_OP_HIDE_SURFACE, surface.div]);
+            }
             break;
 
         case 'p': // Set transient parent
             id = cmd.get_16();
             var parentId = cmd.get_16();
-            cmdSetTransientFor(id, parentId);
+            surface = surfaces[id];
+            if (surface.transientParent !== parentId) {
+                surface.transientParent = parentId;
+                if (parentId != 0 && surfaces[parentId]) {
+                    moveToHelper(surface, stackingOrder.indexOf(surfaces[parentId])+1);
+                }
+                need_restack = true;
+            }
             break;
 
         case 'd': // Delete surface
             id = cmd.get_16();
-            cmdDeleteSurface(id);
+
+            if (grab.surface == id)
+                doUngrab();
+
+            surface = surfaces[id];
+            var i = stackingOrder.indexOf(surface);
+            if (i >= 0)
+                stackingOrder.splice(i, 1);
+            var div = surface.div;
+
+            display_commands.push([DISPLAY_OP_DELETE_NODE, div]);
+            delete surfaces[id];
             break;
 
         case 'F': // RoundTrip
@@ -893,43 +874,51 @@ function handleCommands(cmd)
             id = cmd.get_16();
             var ops = cmd.get_flags();
             var has_pos = ops & 1;
-            if (has_pos) {
-                x = cmd.get_16s();
-                y = cmd.get_16s();
-            }
             var has_size = ops & 2;
-            if (has_size) {
-                w = cmd.get_16();
-                h = cmd.get_16();
+            surface = surfaces[id];
+            if (has_pos) {
+                surface.positioned = true;
+                surface.x = cmd.get_16s();;
+                surface.y = cmd.get_16s();;
+                display_commands.push([DISPLAY_OP_MOVE_NODE, surface.div, surface.x, surface.y]);
             }
-            cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h);
+            if (has_size) {
+                surface.width = cmd.get_16();
+                surface.height = cmd.get_16();;
+                display_commands.push([DISPLAY_OP_RESIZE_NODE, surface.div, surface.width, surface.height]);
+
+            }
             break;
 
         case 'r': // Raise a surface
             id = cmd.get_16();
             cmdRaiseSurface(id);
+            need_restack = true;
             break;
 
         case 'R': // Lower a surface
             id = cmd.get_16();
             cmdLowerSurface(id);
+            need_restack = true;
             break;
 
         case 't': // Upload texture
             id = cmd.get_32();
             var data = cmd.get_data();
-            cmdUploadTexture(id, data);
+            var texure = new Texture (id, data); // Stores a ref in textures
             break;
 
         case 'T': // Release texture
             id = cmd.get_32();
-            cmdReleaseTexture(id);
+            textures[id].unref();
             break;
 
         case 'n': // Set nodes
             id = cmd.get_16();
             var node_data = cmd.get_nodes ();
-            cmdSurfaceSetNodes(id, node_data);
+            surface = surfaces[id];
+            var transform_nodes = new TransformNodes (node_data, surface.div, display_commands);
+            transform_nodes.execute();
             break;
 
         case 'g': // Grab
@@ -952,6 +941,12 @@ function handleCommands(cmd)
             alert("Unknown op " + command);
         }
     }
+
+    if (need_restack)
+        restackSurfaces();
+
+    handleDisplayCommands(display_commands);
+
     return true;
 }
 
