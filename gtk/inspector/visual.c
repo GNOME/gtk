@@ -30,6 +30,7 @@
 #include "gtkscale.h"
 #include "gtkwindow.h"
 #include "gtkcssproviderprivate.h"
+#include "gtkversion.h"
 
 #include "fallback-c89.c"
 
@@ -312,16 +313,41 @@ fill_gtk (const gchar *path,
   if (!dir)
     return;
 
+#if (GTK_MINOR_VERSION % 2)
+#define MINOR (GTK_MINOR_VERSION + 1)
+#else
+#define MINOR GTK_MINOR_VERSION
+#endif
+
+  /* Keep this in sync with _gtk_css_find_theme_dir() in gtkcssprovider.c */
   while ((dir_entry = g_dir_read_name (dir)))
     {
-      gchar *filename = g_build_filename (path, dir_entry, "gtk-3.0", "gtk.css", NULL);
+      gint i;
+      gboolean found = FALSE;
 
-      if (g_file_test (filename, G_FILE_TEST_IS_REGULAR) &&
-          !g_hash_table_contains (t, dir_entry))
-        g_hash_table_add (t, g_strdup (dir_entry));
+      for (i = MINOR; !found && i >= 0; i = i - 2)
+        {
+          gchar *filename, *subsubdir;
 
-      g_free (filename);
+          if (i < 14)
+            i = 0;
+
+          subsubdir = g_strdup_printf ("gtk-3.%d", i);
+          filename = g_build_filename (path, dir_entry, subsubdir, "gtk.css", NULL);
+          g_free (subsubdir);
+
+          if (g_file_test (filename, G_FILE_TEST_IS_REGULAR) &&
+              !g_hash_table_contains (t, dir_entry))
+            {
+              found = TRUE;
+              g_hash_table_add (t, g_strdup (dir_entry));
+            }
+
+          g_free (filename);
+        }
     }
+
+#undef MINOR
 
   g_dir_close (dir);
 }
