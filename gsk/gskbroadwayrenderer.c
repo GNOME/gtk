@@ -72,10 +72,23 @@ gsk_broadway_renderer_render_texture (GskRenderer           *renderer,
   return texture;
 }
 
+/* uint32 is sent in native endianness, and then converted to little endian in broadwayd when sending to browser */
 static void
 add_uint32 (GArray *nodes, guint32 v)
 {
   g_array_append_val (nodes, v);
+}
+
+static void
+add_float (GArray *nodes, float f)
+{
+  union {
+    float f;
+    guint32 i;
+  } u;
+
+  u.f = f;
+  g_array_append_val (nodes, u.i);
 }
 
 static guint32
@@ -94,14 +107,6 @@ add_rgba (GArray *nodes, const GdkRGBA *rgba)
 {
   guint32 c = rgba_to_uint32 (rgba);
   g_array_append_val (nodes, c);
-}
-
-static void
-add_float (GArray *nodes, float f)
-{
-  gint32 i = (gint32) (f * 256.0f);
-  guint u = (guint32) i;
-  g_array_append_val (nodes, u);
 }
 
 static void
