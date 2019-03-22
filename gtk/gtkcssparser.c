@@ -202,23 +202,6 @@ _gtk_css_parser_error (GtkCssParser *parser,
   _gtk_css_parser_take_error (parser, error);
 }
 
-void
-_gtk_css_parser_error_full (GtkCssParser        *parser,
-                            GtkCssProviderError  code,
-                            const char          *format,
-                            ...)
-{
-  GError *error;
-
-  va_list args;
-
-  va_start (args, format);
-  error = g_error_new_valist (GTK_CSS_PROVIDER_ERROR,
-                              code, format, args);
-  va_end (args);
-
-  _gtk_css_parser_take_error (parser, error);
-}
 static gboolean
 gtk_css_parser_new_line (GtkCssParser *parser)
 {
@@ -758,71 +741,6 @@ gtk_css_dimension_value_parse (GtkCssParser           *parser,
   return gtk_css_dimension_value_new (value, unit);
 }
 
-/* XXX: we should introduce GtkCssLenght that deals with
- * different kind of units */
-gboolean
-_gtk_css_parser_try_length (GtkCssParser *parser,
-                            int          *value)
-{
-  if (!_gtk_css_parser_try_int (parser, value))
-    return FALSE;
-
-  /* FIXME: _try_uint skips spaces while the
-   * spec forbids them
-   */
-  _gtk_css_parser_try (parser, "px", TRUE);
-
-  return TRUE;
-}
-
-gboolean
-_gtk_css_parser_try_enum (GtkCssParser *parser,
-			  GType         enum_type,
-			  int          *value)
-{
-  GEnumClass *enum_class;
-  gboolean result;
-  const char *start;
-  char *str;
-
-  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), FALSE);
-  g_return_val_if_fail (value != NULL, FALSE);
-
-  result = FALSE;
-
-  enum_class = g_type_class_ref (enum_type);
-
-  start = parser->data;
-
-  str = _gtk_css_parser_try_ident (parser, TRUE);
-  if (str == NULL)
-    return FALSE;
-
-  if (enum_class->n_values)
-    {
-      GEnumValue *enum_value;
-
-      for (enum_value = enum_class->values; enum_value->value_name; enum_value++)
-	{
-	  if (enum_value->value_nick &&
-	      g_ascii_strcasecmp (str, enum_value->value_nick) == 0)
-	    {
-	      *value = enum_value->value;
-	      result = TRUE;
-	      break;
-	    }
-	}
-    }
-
-  g_free (str);
-  g_type_class_unref (enum_class);
-
-  if (!result)
-    parser->data = start;
-
-  return result;
-}
-
 gboolean
 _gtk_css_parser_try_hash_color (GtkCssParser *parser,
                                 GdkRGBA      *rgba)
@@ -1015,36 +933,6 @@ gtk_css_parser_resync_internal (GtkCssParser *parser,
         break;
       }
   } while (*parser->data);
-}
-
-char *
-_gtk_css_parser_read_value (GtkCssParser *parser)
-{
-  const char *start;
-  char *result;
-
-  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), NULL);
-
-  start = parser->data;
-
-  /* This needs to be done better */
-  gtk_css_parser_resync_internal (parser, TRUE, FALSE, '}');
-
-  result = g_strndup (start, parser->data - start);
-  if (result)
-    {
-      g_strchomp (result);
-      if (result[0] == 0)
-        {
-          g_free (result);
-          result = NULL;
-        }
-    }
-
-  if (result == NULL)
-    _gtk_css_parser_error (parser, "Expected a property value");
-
-  return result;
 }
 
 void
