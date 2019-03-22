@@ -735,7 +735,7 @@ gsk_rotate_transform_equal (GskTransform *first_transform,
   GskRotateTransform *first = (GskRotateTransform *) first_transform;
   GskRotateTransform *second = (GskRotateTransform *) second_transform;
 
-  return first->angle == second->angle;
+  return G_APPROX_VALUE (first->angle, second->angle, 0.01f);
 }
 
 static void
@@ -837,8 +837,8 @@ gsk_rotate3d_transform_equal (GskTransform *first_transform,
   GskRotate3dTransform *first = (GskRotate3dTransform *) first_transform;
   GskRotate3dTransform *second = (GskRotate3dTransform *) second_transform;
 
-  return first->angle == second->angle
-         && graphene_vec3_equal (&first->axis, &second->axis);
+  return G_APPROX_VALUE (first->angle, second->angle, 0.01f) &&
+         graphene_vec3_equal (&first->axis, &second->axis);
 }
 
 static void
@@ -996,9 +996,9 @@ gsk_scale_transform_equal (GskTransform *first_transform,
   GskScaleTransform *first = (GskScaleTransform *) first_transform;
   GskScaleTransform *second = (GskScaleTransform *) second_transform;
 
-  return first->factor_x == second->factor_x
-         && first->factor_y == second->factor_y
-         && first->factor_z == second->factor_z;
+  return G_APPROX_VALUE (first->factor_x, second->factor_x, 0.01f) &&
+         G_APPROX_VALUE (first->factor_y, second->factor_y, 0.01f) &&
+         G_APPROX_VALUE (first->factor_z, second->factor_z, 0.01f);
 }
 
 static void
@@ -1150,7 +1150,7 @@ gsk_perspective_transform_equal (GskTransform *first_transform,
   GskPerspectiveTransform *first = (GskPerspectiveTransform *) first_transform;
   GskPerspectiveTransform *second = (GskPerspectiveTransform *) second_transform;
 
-  return first->depth == second->depth;
+  return G_APPROX_VALUE (first->depth, second->depth, 0.001f);
 }
 
 static void
