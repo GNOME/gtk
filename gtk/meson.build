@@ -819,6 +819,7 @@ gtk_deps = [
   platform_gio_dep,
   pangocairo_dep,
   pango_dep,
+  fribidi_dep,
   cairogobj_dep,
   cairo_dep,
   fontconfig_dep,
