@@ -562,6 +562,12 @@ else
   endif
 endif
 
+if os_win32
+  if cc.has_header_symbol('windows.h', 'IPrintDialogCallback')
+    cdata.set('HAVE_IPRINTDIALOGCALLBACK', 1)
+  endif
+endif
+
 if os_unix
   cdata.set('HAVE_GIO_UNIX', giounix_dep.found())
 endif
