@@ -419,8 +419,10 @@ gsk_matrix_transform_equal (GskTransform *first_transform,
   GskMatrixTransform *first = (GskMatrixTransform *) first_transform;
   GskMatrixTransform *second = (GskMatrixTransform *) second_transform;
 
-  /* Crude, but better than just returning FALSE */
-  return memcmp (&first->matrix, &second->matrix, sizeof (graphene_matrix_t)) == 0;
+  if (graphene_matrix_equal_fast (&first->matrix, &second->matrix))
+    return TRUE;
+
+  return graphene_matrix_equal (&first->matrix, &second->matrix);
 }
 
 static const GskTransformClass GSK_TRANSFORM_TRANSFORM_CLASS =
