@@ -478,6 +478,8 @@ script_sort_func (GtkTreeModel *model,
   return ret;
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 static void
 update_script_combo (void)
 {
@@ -594,6 +596,8 @@ update_script_combo (void)
   else
     gtk_combo_box_set_active_iter (GTK_COMBO_BOX (script_lang), 0);
 }
+
+#pragma GCC diagnostic pop
 
 static void
 update_features (void)
