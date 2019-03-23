@@ -141,7 +141,6 @@ struct _GdkSurface
 
   GdkSurfaceImpl *impl; /* window-system-specific delegate object */
 
-  GdkSurface *parent;
   GdkSurface *transient_for;
 
   gpointer widget;
