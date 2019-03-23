@@ -5874,7 +5874,7 @@ gtk_label_move_cursor (GtkLabel       *label,
                       GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (label));
 
                       if (root)
-                        gtk_widget_child_focus (root, count > 0 ? GTK_DIR_RIGHT : GTK_DIR_LEFT);
+                        gtk_widget_child_focus (GTK_WIDGET (root), count > 0 ? GTK_DIR_RIGHT : GTK_DIR_LEFT);
                     }
                 }
               else
@@ -6161,7 +6161,7 @@ gtk_label_activate_link (GtkLabel    *label,
   GError *error = NULL;
 
   if (!GTK_IS_WINDOW (toplevel))
-    return;
+    return FALSE;
 
   if (!gtk_show_uri_on_window (GTK_WINDOW (toplevel), uri, timestamp, &error))
     {
