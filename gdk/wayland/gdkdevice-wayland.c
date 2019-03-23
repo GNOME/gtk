@@ -591,12 +591,10 @@ gdk_wayland_device_query_state (GdkDevice        *device,
                                 GdkModifierType  *mask)
 {
   GdkWaylandPointerData *pointer;
-  GList *children;
+  GList *children = NULL;
 
   if (surface == NULL)
     children = gdk_wayland_display_get_toplevel_surfaces (gdk_device_get_display (device));
-  else
-    children = surface->children;
 
   pointer = GDK_WAYLAND_DEVICE (device)->pointer;
 
