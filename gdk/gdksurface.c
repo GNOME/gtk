@@ -126,8 +126,6 @@ static void gdk_surface_get_property (GObject      *object,
                                       GValue       *value,
                                       GParamSpec   *pspec);
 
-static void recompute_visible_regions   (GdkSurface *private,
-                                         gboolean recalculate_children);
 static void update_cursor               (GdkDisplay *display,
                                          GdkDevice  *device);
 
@@ -189,7 +187,6 @@ gdk_surface_init (GdkSurface *surface)
   surface->fullscreen_mode = GDK_FULLSCREEN_ON_CURRENT_MONITOR;
   surface->width = 1;
   surface->height = 1;
-  surface->children_list_node.data = surface;
 
   surface->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                  NULL, g_object_unref);
@@ -509,115 +506,6 @@ _gdk_surface_has_impl (GdkSurface *surface)
   return gdk_surface_has_impl (surface);
 }
 
-static void
-remove_child_area (GdkSurface *surface,
-                   gboolean for_input,
-                   cairo_region_t *region)
-{
-  GdkSurface *child;
-  cairo_region_t *child_region;
-  GdkRectangle r;
-  GList *l;
-
-  for (l = surface->children; l; l = l->next)
-    {
-      child = l->data;
-
-      /* If region is empty already, no need to do
-         anything potentially costly */
-      if (cairo_region_is_empty (region))
-        break;
-
-      if (!GDK_SURFACE_IS_MAPPED (child) || child->input_only)
-        continue;
-
-      r.x = child->x;
-      r.y = child->y;
-      r.width = child->width;
-      r.height = child->height;
-
-      /* Bail early if child totally outside region */
-      if (cairo_region_contains_rectangle (region, &r) == CAIRO_REGION_OVERLAP_OUT)
-        continue;
-
-      child_region = cairo_region_create_rectangle (&r);
-
-      if (for_input)
-        {
-          if (child->input_shape)
-            cairo_region_intersect (child_region, child->input_shape);
-        }
-
-      cairo_region_subtract (region, child_region);
-      cairo_region_destroy (child_region);
-    }
-}
-
-static void
-recompute_visible_regions_internal (GdkSurface *private,
-                                    gboolean   recalculate_clip,
-                                    gboolean   recalculate_children)
-{
-  GList *l;
-  GdkSurface *child;
-  gboolean abs_pos_changed;
-  int old_abs_x, old_abs_y;
-
-  old_abs_x = private->abs_x;
-  old_abs_y = private->abs_y;
-
-  /* Update absolute position */
-  if (gdk_surface_has_impl (private))
-    {
-      private->abs_x = 0;
-      private->abs_y = 0;
-    }
-
-  abs_pos_changed =
-    private->abs_x != old_abs_x ||
-    private->abs_y != old_abs_y;
-
-  /* Update all children, recursively */
-  if ((abs_pos_changed || recalculate_children))
-    {
-      for (l = private->children; l; l = l->next)
-        {
-          child = l->data;
-          /* Only recalculate clip if the the clip region changed, otherwise
-           * there is no way the child clip region could change (its has not e.g. moved)
-           * Except if recalculate_children is set to force child updates
-           */
-          recompute_visible_regions_internal (child,
-                                              recalculate_clip && recalculate_children,
-                                              FALSE);
-        }
-    }
-}
-
-/* Call this when private has changed in one or more of these ways:
- *  size changed
- *  surface moved
- *  new surface added
- *  stacking order of surface changed
- *  child deleted
- *
- * It will recalculate abs_x/y and the clip regions
- *
- * Unless the surface didn’t change stacking order or size/pos, pass in TRUE
- * for recalculate_siblings. (Mostly used internally for the recursion)
- *
- * If a child surface was removed (and you can’t use that child for
- * recompute_visible_regions), pass in TRUE for recalculate_children on the parent
- */
-static void
-recompute_visible_regions (GdkSurface *private,
-                           gboolean recalculate_children)
-{
-  recompute_visible_regions_internal (private,
-                                      TRUE,
-                                      recalculate_children);
-}
-
 void
 _gdk_surface_update_size (GdkSurface *surface)
 {
@@ -625,8 +513,6 @@ _gdk_surface_update_size (GdkSurface *surface)
 
   for (l = surface->draw_contexts; l; l = l->next)
     gdk_draw_context_surface_resized (l->data);
-
-  recompute_visible_regions (surface, FALSE);
 }
 
 static GdkSurface *
@@ -669,8 +555,6 @@ gdk_surface_new (GdkDisplay     *display,
   attributes.height = height;
   gdk_display_create_surface_impl (display, surface, NULL, &attributes);
   surface->impl_surface = surface;
-
-  recompute_visible_regions (surface, FALSE);
 
   g_signal_connect (display, "seat-removed", G_CALLBACK (seat_removed_cb), surface);
 
@@ -816,9 +700,7 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
                                 gboolean   foreign_destroy)
 {
   GdkSurfaceImplClass *impl_class;
-  GdkSurface *temp_surface;
   GdkDisplay *display;
-  GList *tmp;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -847,22 +729,6 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
         {
           g_object_run_dispose (G_OBJECT (surface->frame_clock));
           gdk_surface_set_frame_clock (surface, NULL);
-        }
-
-      tmp = surface->children;
-      surface->children = NULL;
-      /* No need to free children list, its all made up of in-struct nodes */
-
-      while (tmp)
-        {
-          temp_surface = tmp->data;
-          tmp = tmp->next;
-
-          if (temp_surface)
-            _gdk_surface_destroy_hierarchy (temp_surface,
-                                           TRUE,
-                                           recursing_native || gdk_surface_has_impl (surface),
-                                           foreign_destroy);
         }
 
       _gdk_surface_clear_update_area (surface);
@@ -1756,24 +1622,10 @@ static gboolean
 set_viewable (GdkSurface *w,
               gboolean val)
 {
-  GdkSurface *child;
-  GList *l;
-
   if (w->viewable == val)
     return FALSE;
 
   w->viewable = val;
-
-  if (val)
-    recompute_visible_regions (w, FALSE);
-
-  for (l = w->children; l != NULL; l = l->next)
-    {
-      child = l->data;
-
-      if (GDK_SURFACE_IS_MAPPED (child))
-        set_viewable (child, val);
-    }
 
   return FALSE;
 }
@@ -1831,8 +1683,6 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
 
   if (!was_mapped)
     {
-      recompute_visible_regions (surface, FALSE);
-
       if (gdk_surface_is_viewable (surface))
         gdk_surface_invalidate_rect (surface, NULL);
     }
@@ -2057,8 +1907,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
       impl_class->hide (surface);
     }
-
-  recompute_visible_regions (surface, FALSE);
 }
 
 static void
@@ -2070,16 +1918,9 @@ gdk_surface_move_resize_toplevel (GdkSurface *surface,
                                   gint       height)
 {
   GdkSurfaceImplClass *impl_class;
-  gboolean is_resize;
-
-  is_resize = (width != -1) || (height != -1);
 
   impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
   impl_class->move_resize (surface, with_move, x, y, width, height);
-
-  /* Avoid recomputing for pure toplevel moves, for performance reasons */
-  if (is_resize)
-    recompute_visible_regions (surface, FALSE);
 }
 
 
@@ -2673,7 +2514,6 @@ do_child_input_shapes (GdkSurface *surface,
   r.height = surface->height;
 
   region = cairo_region_create_rectangle (&r);
-  remove_child_area (surface, TRUE, region);
 
   if (merge && surface->input_shape)
     cairo_region_subtract (region, surface->input_shape);
@@ -2874,162 +2714,6 @@ update_cursor (GdkDisplay *display,
     cursor = cursor_surface->cursor;
 
   GDK_DEVICE_GET_CLASS (device)->set_surface_cursor (device, pointer_surface, cursor);
-}
-
-static gboolean
-point_in_surface (GdkSurface *surface,
-                  gdouble    x,
-                  gdouble    y)
-{
-  return
-    x >= 0 && x < surface->width &&
-    y >= 0 && y < surface->height &&
-    (surface->input_shape == NULL ||
-     cairo_region_contains_point (surface->input_shape,
-                          x, y));
-}
-
-/* Same as point_in_surface, except it also takes pass_through and its
-   interaction with child surfaces into account */
-static gboolean
-point_in_input_surface (GdkSurface *surface,
-                        gdouble    x,
-                        gdouble    y,
-                        GdkSurface **input_surface,
-                        gdouble   *input_surface_x,
-                        gdouble   *input_surface_y)
-{
-  GdkSurface *sub;
-  double child_x, child_y;
-  GList *l;
-
-  if (!point_in_surface (surface, x, y))
-    return FALSE;
-
-  if (!surface->pass_through)
-    {
-      if (input_surface)
-        {
-          *input_surface = surface;
-          *input_surface_x = x;
-          *input_surface_y = y;
-        }
-      return TRUE;
-    }
-
-  /* For pass-through, must be over a child input surface */
-
-  /* Children is ordered in reverse stack order, i.e. first is topmost */
-  for (l = surface->children; l != NULL; l = l->next)
-    {
-      sub = l->data;
-
-      if (!GDK_SURFACE_IS_MAPPED (sub))
-        continue;
-
-      gdk_surface_coords_from_parent ((GdkSurface *)sub,
-                                     x, y,
-                                     &child_x, &child_y);
-      if (point_in_input_surface (sub, child_x, child_y,
-                                 input_surface, input_surface_x, input_surface_y))
-        {
-          if (input_surface)
-            gdk_surface_coords_to_parent (sub,
-                                         *input_surface_x,
-                                         *input_surface_y,
-                                         input_surface_x,
-                                         input_surface_y);
-          return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
-GdkSurface *
-_gdk_surface_find_child_at (GdkSurface *surface,
-                            double     x,
-                            double     y)
-{
-  GdkSurface *sub;
-  double child_x, child_y;
-  GList *l;
-
-  if (point_in_surface (surface, x, y))
-    {
-      /* Children is ordered in reverse stack order, i.e. first is topmost */
-      for (l = surface->children; l != NULL; l = l->next)
-        {
-          sub = l->data;
-
-          if (!GDK_SURFACE_IS_MAPPED (sub))
-            continue;
-
-          gdk_surface_coords_from_parent ((GdkSurface *)sub,
-                                         x, y,
-                                         &child_x, &child_y);
-          if (point_in_input_surface (sub, child_x, child_y,
-                                     NULL, NULL, NULL))
-            return (GdkSurface *)sub;
-        }
-    }
-
-  return NULL;
-}
-
-GdkSurface *
-_gdk_surface_find_descendant_at (GdkSurface *surface,
-                                 gdouble    x,
-                                 gdouble    y,
-                                 gdouble   *found_x,
-                                 gdouble   *found_y)
-{
-  GdkSurface *sub, *input_surface;
-  gdouble child_x, child_y;
-  GList *l;
-  gboolean found;
-
-  if (point_in_surface (surface, x, y))
-    {
-      do
-        {
-          found = FALSE;
-          /* Children is ordered in reverse stack order, i.e. first is topmost */
-          for (l = surface->children; l != NULL; l = l->next)
-            {
-              sub = l->data;
-
-              if (!GDK_SURFACE_IS_MAPPED (sub))
-                continue;
-
-              gdk_surface_coords_from_parent ((GdkSurface *)sub,
-                                             x, y,
-                                             &child_x, &child_y);
-              if (point_in_input_surface (sub, child_x, child_y,
-                                         &input_surface, &child_x, &child_y))
-                {
-                  x = child_x;
-                  y = child_y;
-                  surface = input_surface;
-                  found = TRUE;
-                  break;
-                }
-            }
-        }
-      while (found);
-    }
-  else
-    {
-      /* Not in surface at all */
-      surface = NULL;
-    }
-
-  if (found_x)
-    *found_x = x;
-  if (found_y)
-    *found_y = y;
-
-  return surface;
 }
 
 /**
@@ -4147,13 +3831,7 @@ gdk_surface_set_opacity (GdkSurface *surface,
   if (surface->destroyed)
     return;
 
-  if (gdk_surface_has_impl (surface))
-    GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_opacity (surface, opacity);
-  else
-    {
-      recompute_visible_regions (surface, FALSE);
-      gdk_surface_invalidate_rect (surface, NULL);
-    }
+  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_opacity (surface, opacity);
 }
 
 /* This function is called when the XWindow is really gone.
