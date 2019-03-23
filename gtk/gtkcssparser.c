@@ -461,11 +461,57 @@ _gtk_css_parser_try_ident (GtkCssParser *parser,
 }
 
 gboolean
-_gtk_css_parser_is_string (GtkCssParser *parser)
+gtk_css_parser_has_token (GtkCssParser    *parser,
+                          GtkCssTokenType  type)
 {
   g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), FALSE);
 
-  return *parser->data == '"' || *parser->data == '\'';
+  switch (type)
+  {
+    case GTK_CSS_TOKEN_STRING:
+      return *parser->data == '"' || *parser->data == '\'';
+
+    default:
+    case GTK_CSS_TOKEN_IDENT:
+    case GTK_CSS_TOKEN_FUNCTION:
+    case GTK_CSS_TOKEN_AT_KEYWORD:
+    case GTK_CSS_TOKEN_HASH_UNRESTRICTED:
+    case GTK_CSS_TOKEN_HASH_ID:
+    case GTK_CSS_TOKEN_URL:
+    case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_DIMENSION:
+    case GTK_CSS_TOKEN_EOF:
+    case GTK_CSS_TOKEN_WHITESPACE:
+    case GTK_CSS_TOKEN_OPEN_PARENS:
+    case GTK_CSS_TOKEN_CLOSE_PARENS:
+    case GTK_CSS_TOKEN_OPEN_SQUARE:
+    case GTK_CSS_TOKEN_CLOSE_SQUARE:
+    case GTK_CSS_TOKEN_OPEN_CURLY:
+    case GTK_CSS_TOKEN_CLOSE_CURLY:
+    case GTK_CSS_TOKEN_COMMA:
+    case GTK_CSS_TOKEN_COLON:
+    case GTK_CSS_TOKEN_SEMICOLON:
+    case GTK_CSS_TOKEN_CDC:
+    case GTK_CSS_TOKEN_CDO:
+    case GTK_CSS_TOKEN_DELIM:
+    case GTK_CSS_TOKEN_SIGNED_INTEGER:
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER:
+    case GTK_CSS_TOKEN_SIGNED_NUMBER:
+    case GTK_CSS_TOKEN_SIGNLESS_NUMBER:
+    case GTK_CSS_TOKEN_PERCENTAGE:
+    case GTK_CSS_TOKEN_INCLUDE_MATCH:
+    case GTK_CSS_TOKEN_DASH_MATCH:
+    case GTK_CSS_TOKEN_PREFIX_MATCH:
+    case GTK_CSS_TOKEN_SUFFIX_MATCH:
+    case GTK_CSS_TOKEN_SUBSTRING_MATCH:
+    case GTK_CSS_TOKEN_COLUMN:
+    case GTK_CSS_TOKEN_BAD_STRING:
+    case GTK_CSS_TOKEN_BAD_URL:
+    case GTK_CSS_TOKEN_COMMENT:
+      g_assert_not_reached ();
+      return FALSE;
+    }
 }
 
 char *
@@ -838,7 +884,7 @@ gtk_css_parser_resync_internal (GtkCssParser *parser,
     if (gtk_css_parser_new_line (parser))
       continue;
 
-    if (_gtk_css_parser_is_string (parser))
+    if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
       {
         /* Hrm, this emits errors, and i suspect it shouldn't... */
         char *free_me = _gtk_css_parser_read_string (parser);
