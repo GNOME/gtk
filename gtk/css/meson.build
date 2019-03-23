@@ -1,4 +1,5 @@
 gtk_css_public_sources = files([
+  'gtkcsslocation.c',
   'gtkcsserror.c',
 ])
 
@@ -9,6 +10,7 @@ gtk_css_private_sources = files([
 gtk_css_public_headers = files([
   'gtkcssenums.h',
   'gtkcsserror.h',
+  'gtkcsslocation.h',
 ])
 
 install_headers(gtk_css_public_headers, 'gtkcss.h', subdir: 'gtk-4.0/gtk/css')

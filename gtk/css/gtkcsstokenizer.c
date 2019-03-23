@@ -19,9 +19,9 @@
 
 #include "gtkcsstokenizerprivate.h"
 
-/* for error enum */
 #include "gtkcssenums.h"
 #include "gtkcsserror.h"
+#include "gtkcsslocationprivate.h"
 
 #include <math.h>
 #include <string.h>
@@ -36,34 +36,6 @@ struct _GtkCssTokenizer
 
   GtkCssLocation         position;
 };
-
-static void
-gtk_css_location_init (GtkCssLocation *location)
-{
-  memset (location, 0, sizeof (GtkCssLocation));
-}
-
-static void
-gtk_css_location_advance (GtkCssLocation *location,
-                          gsize           bytes,
-                          gsize           chars)
-{
-  location->bytes += bytes;
-  location->chars += chars;
-  location->line_bytes += bytes;
-  location->line_chars += chars;
-}
-
-static void
-gtk_css_location_advance_newline (GtkCssLocation *location,
-                                  gboolean        is_windows)
-{
-  gtk_css_location_advance (location, is_windows ? 2 : 1, is_windows ? 2 : 1);
-
-  location->lines++;
-  location->line_bytes = 0;
-  location->line_chars = 0;
-}
 
 void
 gtk_css_token_clear (GtkCssToken *token)
