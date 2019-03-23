@@ -1,5 +1,5 @@
-/* GTK - The GIMP Toolkit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+/* GSK - The GIMP Toolkit
+ * Copyright (C) 2011 Benjamin Otte <otte@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,26 +15,29 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
- * file for a list of people on the GTK+ Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
- */
+#ifndef __GTK_CSS_LOCATION_H__
+#define __GTK_CSS_LOCATION_H__
 
-#ifndef __GTK_CSS_H__
-#define __GTK_CSS_H__
-
-#define __GTK_CSS_H_INSIDE__
+#if !defined (__GTK_CSS_H_INSIDE__) && !defined (GTK_CSS_COMPILATION)
+#error "Only <gtk/css/gtkcss.h> can be included directly."
+#endif
 
 #include <glib.h>
-#include <gdk/gdkversionmacros.h>
 
-#include <gtk/css/gtkcssenums.h>
-#include <gtk/css/gtkcssenumtypes.h>
-#include <gtk/css/gtkcsserror.h>
-#include <gtk/css/gtkcsslocation.h>
+G_BEGIN_DECLS
 
-#undef __GTK_CSS_H_INSIDE__
+typedef struct _GtkCssLocation GtkCssLocation;
 
-#endif /* __GTK_CSS_H__ */
+struct _GtkCssLocation
+{
+  gsize                  bytes;
+  gsize                  chars;
+  gsize                  lines;
+  gsize                  line_bytes;
+  gsize                  line_chars;
+};
+
+
+G_END_DECLS
+
+#endif /* __GTK_CSS_LOCATION_H__ */
