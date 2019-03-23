@@ -307,13 +307,6 @@ void _gdk_windowing_got_event                (GdkDisplay       *display,
 
 #define GDK_SURFACE_IS_MAPPED(surface) (((surface)->state & GDK_SURFACE_STATE_WITHDRAWN) == 0)
 
-GdkSurface * _gdk_surface_find_child_at (GdkSurface *surface,
-                                         double x, double y);
-GdkSurface * _gdk_surface_find_descendant_at (GdkSurface *toplevel,
-                                              double x, double y,
-                                              double *found_x,
-                                              double *found_y);
-
 GdkEvent * _gdk_make_event (GdkSurface    *surface,
                             GdkEventType  type,
                             GdkEvent     *event_in_queue,
