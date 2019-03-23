@@ -569,14 +569,8 @@ recompute_visible_regions_internal (GdkSurface *private,
   /* Update absolute position */
   if (gdk_surface_has_impl (private))
     {
-      /* Native surfaces and toplevel subsurfaces start here */
       private->abs_x = 0;
       private->abs_y = 0;
-    }
-  else
-    {
-      private->abs_x = private->parent->abs_x + private->x;
-      private->abs_y = private->parent->abs_y + private->y;
     }
 
   abs_pos_changed =
@@ -649,8 +643,6 @@ gdk_surface_new (GdkDisplay     *display,
   GdkSurfaceAttr attributes;
 
   surface = _gdk_display_create_surface (display);
-
-  surface->parent = NULL;
 
   surface->accept_focus = TRUE;
   surface->focus_on_map = TRUE;
@@ -843,15 +835,6 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
     case GDK_SURFACE_TOPLEVEL:
     case GDK_SURFACE_TEMP:
-      if (surface->parent)
-        {
-          if (surface->parent->children)
-            surface->parent->children = g_list_remove_link (surface->parent->children, &surface->children_list_node);
-
-          if (!recursing && GDK_SURFACE_IS_MAPPED (surface))
-            recompute_visible_regions (surface, FALSE);
-        }
-
       if (surface->gl_paint_context)
         {
           /* Make sure to destroy if current */
@@ -895,7 +878,6 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
         }
 
       surface->state |= GDK_SURFACE_STATE_WITHDRAWN;
-      surface->parent = NULL;
       surface->destroyed = TRUE;
 
       surface_remove_from_pointer_info (surface, display);
@@ -1241,29 +1223,10 @@ gdk_surface_create_vulkan_context (GdkSurface  *surface,
  */
 static GSList *update_surfaces = NULL;
 
-static inline gboolean
-gdk_surface_is_ancestor (GdkSurface *surface,
-                         GdkSurface *ancestor)
-{
-  while (surface)
-    {
-      GdkSurface *parent = surface->parent;
-
-      if (parent == ancestor)
-        return TRUE;
-
-      surface = parent;
-    }
-
-  return FALSE;
-}
-
 static void
 gdk_surface_add_update_surface (GdkSurface *surface)
 {
   GSList *tmp;
-  GSList *prev = NULL;
-  gboolean has_ancestor_in_list = FALSE;
 
   /*  Check whether "surface" is already in "update_surfaces" list.
    *  It could be added during execution of gtk_widget_destroy() when
@@ -1274,72 +1237,6 @@ gdk_surface_add_update_surface (GdkSurface *surface)
   if (tmp != NULL)
     return;
 
-  for (tmp = update_surfaces; tmp; tmp = tmp->next)
-    {
-      GdkSurface *parent = surface->parent;
-
-      /*  check if tmp is an ancestor of "surface"; if it is, set a
-       *  flag indicating that all following surfaces are either
-       *  children of "surface" or from a differen hierarchy
-       */
-      if (!has_ancestor_in_list && gdk_surface_is_ancestor (surface, tmp->data))
-        has_ancestor_in_list = TRUE;
-
-      /* insert in reverse stacking order when adding around siblings,
-       * so processing updates properly paints over lower stacked surfaces
-       */
-      if (parent == GDK_SURFACE (tmp->data)->parent)
-        {
-          if (parent != NULL)
-            {
-              gint index = g_list_index (parent->children, surface);
-              for (; tmp && parent == GDK_SURFACE (tmp->data)->parent; tmp = tmp->next)
-                {
-                  gint sibling_index = g_list_index (parent->children, tmp->data);
-                  if (index > sibling_index)
-                    break;
-                  prev = tmp;
-                }
-            }
-          /* here, tmp got advanced past all lower stacked siblings */
-          tmp = g_slist_prepend (tmp, g_object_ref (surface));
-          if (prev)
-            prev->next = tmp;
-          else
-            update_surfaces = tmp;
-          return;
-        }
-
-      /*  if "surface" has an ancestor in the list and tmp is one of
-       *  "surface's" children, insert "surface" before tmp
-       */
-      if (has_ancestor_in_list && gdk_surface_is_ancestor (tmp->data, surface))
-        {
-          tmp = g_slist_prepend (tmp, g_object_ref (surface));
-
-          if (prev)
-            prev->next = tmp;
-          else
-            update_surfaces = tmp;
-          return;
-        }
-
-      /*  if we're at the end of the list and had an ancestor it it,
-       *  append to the list
-       */
-      if (! tmp->next && has_ancestor_in_list)
-        {
-          tmp = g_slist_append (tmp, g_object_ref (surface));
-          return;
-        }
-
-      prev = tmp;
-    }
-
-  /*  if all above checks failed ("surface" is from a different
-   *  hierarchy than what is already in the list) or the list is
-   *  empty, prepend
-   */
   update_surfaces = g_slist_prepend (update_surfaces, g_object_ref (surface));
 }
 
@@ -1539,9 +1436,6 @@ gdk_surface_queue_expose (GdkSurface *surface)
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  while (!gdk_surface_has_impl (surface))
-    surface = surface->parent;
-
   region = cairo_region_create ();
   impl_surface_add_update_area (surface, region);
   cairo_region_destroy (region);
@@ -1578,28 +1472,13 @@ gdk_surface_invalidate_region (GdkSurface          *surface,
 
   r.x = 0;
   r.y = 0;
+  r.width = surface->width;
+  r.height = surface->height;
 
   visible_region = cairo_region_copy (region);
 
-  while (surface != NULL &&
-         !cairo_region_is_empty (visible_region))
-    {
-      r.width = surface->width;
-      r.height = surface->height;
-      cairo_region_intersect_rectangle (visible_region, &r);
-
-      if (gdk_surface_has_impl (surface))
-        {
-          impl_surface_add_update_area (surface, visible_region);
-          break;
-        }
-      else
-        {
-          cairo_region_translate (visible_region,
-                                  surface->x, surface->y);
-          surface = surface->parent;
-        }
-    }
+  cairo_region_intersect_rectangle (visible_region, &r);
+  impl_surface_add_update_area (surface, visible_region);
 
   cairo_region_destroy (visible_region);
 }
@@ -1863,27 +1742,13 @@ gdk_surface_get_device_position (GdkSurface       *surface,
   return NULL;
 }
 
-static gboolean
+static void
 gdk_surface_raise_internal (GdkSurface *surface)
 {
-  GdkSurface *parent = surface->parent;
   GdkSurfaceImplClass *impl_class;
-  gboolean did_raise = FALSE;
-
-  if (parent && parent->children->data != surface)
-    {
-      parent->children = g_list_remove_link (parent->children, &surface->children_list_node);
-      parent->children = g_list_concat (&surface->children_list_node, parent->children);
-      did_raise = TRUE;
-    }
 
   impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-
-  /* Just do native raise for toplevels */
-  if (gdk_surface_has_impl (surface))
-      impl_class->raise (surface);
-
-  return did_raise;
+  impl_class->raise (surface);
 }
 
 /* Returns TRUE If the native surface was mapped or unmapped */
@@ -1924,7 +1789,7 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
 {
   GdkSurfaceImplClass *impl_class;
   gboolean was_mapped, was_viewable;
-  gboolean did_show, did_raise = FALSE;
+  gboolean did_show;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -1935,10 +1800,7 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
   was_viewable = surface->viewable;
 
   if (raise)
-    {
-      /* Keep children in (reverse) stacking order */
-      did_raise = gdk_surface_raise_internal (surface);
-    }
+    gdk_surface_raise_internal (surface);
 
   if (gdk_surface_has_impl (surface))
     {
@@ -1967,7 +1829,7 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
       impl_class->show (surface, !did_show ? was_mapped : TRUE);
     }
 
-  if (!was_mapped || did_raise)
+  if (!was_mapped)
     {
       recompute_visible_regions (surface, FALSE);
 
@@ -2020,20 +1882,10 @@ gdk_surface_raise (GdkSurface *surface)
 static void
 gdk_surface_lower_internal (GdkSurface *surface)
 {
-  GdkSurface *parent = surface->parent;
   GdkSurfaceImplClass *impl_class;
 
-  if (parent)
-    {
-      parent->children = g_list_remove_link (parent->children, &surface->children_list_node);
-      parent->children = g_list_concat (parent->children, &surface->children_list_node);
-    }
-
   impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-
-  /* Just do native lower for toplevels */
-  if (gdk_surface_has_impl (surface))
-    impl_class->lower (surface);
+  impl_class->lower (surface);
 }
 
 /**
@@ -2382,12 +2234,13 @@ gdk_surface_set_cursor_internal (GdkSurface *surface,
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  g_assert (gdk_surface_get_display (surface) == gdk_device_get_display (device));
-
   display = gdk_surface_get_display (surface);
+
+  g_assert (display == gdk_device_get_display (device));
+
   pointer_info = _gdk_display_get_pointer_info (display, device);
 
-  if (_gdk_surface_event_parent_of (surface, pointer_info->surface_under_pointer))
+  if (surface == pointer_info->surface_under_pointer)
     update_cursor (display, device);
 }
 
@@ -2569,41 +2422,15 @@ gdk_surface_get_geometry (GdkSurface *surface,
                           gint      *width,
                           gint      *height)
 {
-  GdkSurface *parent;
   GdkSurfaceImplClass *impl_class;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (!GDK_SURFACE_DESTROYED (surface))
-    {
-      if (gdk_surface_has_impl (surface))
-        {
-          impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-          impl_class->get_geometry (surface, x, y,
-                                    width, height);
-          /* This reports the position wrt to the native parent, we need to convert
-             it to be relative to the client side parent */
-          parent = surface->parent;
-          if (parent && !gdk_surface_has_impl (parent))
-            {
-              if (x)
-                *x -= parent->abs_x;
-              if (y)
-                *y -= parent->abs_y;
-            }
-        }
-      else
-        {
-          if (x)
-            *x = surface->x;
-          if (y)
-            *y = surface->y;
-          if (width)
-            *width = surface->width;
-          if (height)
-            *height = surface->height;
-        }
-    }
+  if (GDK_SURFACE_DESTROYED (surface))
+    return;
+
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
+  impl_class->get_geometry (surface, x, y, width, height);
 }
 
 /**
@@ -3014,43 +2841,11 @@ gdk_surface_is_input_only (GdkSurface *surface)
   return surface->input_only;
 }
 
-/* Gets the toplevel for a surface as used for events,
-   i.e. including offscreen parents going up to the native
-   toplevel */
-static GdkSurface *
-get_event_toplevel (GdkSurface *surface)
-{
-  GdkSurface *parent;
-
-  while ((parent = surface->parent) != NULL)
-    surface = parent;
-
-  return surface;
-}
-
-gboolean
-_gdk_surface_event_parent_of (GdkSurface *parent,
-                              GdkSurface *child)
-{
-  GdkSurface *w;
-
-  w = child;
-  while (w != NULL)
-    {
-      if (w == parent)
-        return TRUE;
-
-      w = w->parent;
-    }
-
-  return FALSE;
-}
-
 static void
 update_cursor (GdkDisplay *display,
                GdkDevice  *device)
 {
-  GdkSurface *cursor_surface, *parent, *toplevel;
+  GdkSurface *cursor_surface;
   GdkSurface *pointer_surface;
   GdkPointerSurfaceInfo *pointer_info;
   GdkDeviceGrabInfo *grab;
@@ -3062,10 +2857,7 @@ update_cursor (GdkDisplay *display,
   /* We ignore the serials here and just pick the last grab
      we've sent, as that would shortly be used anyway. */
   grab = _gdk_display_get_last_device_grab (display, device);
-  if (/* have grab */
-      grab != NULL &&
-      /* the pointer is not in a descendant of the grab surface */
-      !_gdk_surface_event_parent_of (grab->surface, pointer_surface))
+  if (grab != NULL)
     {
       /* use the cursor from the grab surface */
       cursor_surface = grab->surface;
@@ -3076,22 +2868,12 @@ update_cursor (GdkDisplay *display,
       cursor_surface = pointer_surface;
     }
 
-  /* Find the first surface with the cursor actually set, as
-     the cursor is inherited from the parent */
-  while (cursor_surface->cursor == NULL &&
-         !g_hash_table_contains (cursor_surface->device_cursor, device) &&
-         (parent = cursor_surface->parent) != NULL)
-    cursor_surface = parent;
-
   cursor = g_hash_table_lookup (cursor_surface->device_cursor, device);
 
   if (!cursor)
     cursor = cursor_surface->cursor;
 
-  /* Set all cursors on toplevel, otherwise its tricky to keep track of
-   * which native surface has what cursor set. */
-  toplevel = get_event_toplevel (pointer_surface);
-  GDK_DEVICE_GET_CLASS (device)->set_surface_cursor (device, toplevel, cursor);
+  GDK_DEVICE_GET_CLASS (device)->set_surface_cursor (device, pointer_surface, cursor);
 }
 
 static gboolean
@@ -3262,23 +3044,16 @@ void
 gdk_surface_beep (GdkSurface *surface)
 {
   GdkDisplay *display;
-  GdkSurface *toplevel;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  toplevel = get_event_toplevel (surface);
+  if (GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->beep (surface))
+    return;
+
   display = gdk_surface_get_display (surface);
-
-  if (toplevel)
-    {
-      if (GDK_SURFACE_IMPL_GET_CLASS (toplevel->impl)->beep (toplevel))
-        return;
-    }
-
-  /* If surfaces fail to beep, we beep the display. */
   gdk_display_beep (display);
 }
 
