@@ -519,7 +519,6 @@ gdk_wayland_surface_update_scale (GdkSurface *surface)
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   guint32 scale;
   GSList *l;
-  GList *children, *c;
 
   if (display_wayland->compositor_version < WL_SURFACE_HAS_BUFFER_SCALE)
     {
@@ -536,14 +535,6 @@ gdk_wayland_surface_update_scale (GdkSurface *surface)
 
   /* Notify app that scale changed */
   gdk_wayland_surface_maybe_configure (surface, surface->width, surface->height, scale);
-
-  children = gdk_surface_get_children (surface);
-  for (c = children; c; c = c->next)
-    {
-      GdkSurface *child = c->data;
-      gdk_wayland_surface_update_scale (child);
-    }
-  g_list_free (children);
 }
 
 static void gdk_wayland_surface_create_surface (GdkSurface *surface);
@@ -1707,19 +1698,6 @@ get_real_parent_and_translate (GdkSurface *surface,
   GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
   GdkSurface *parent = impl->transient_for;
 
-  while (parent)
-    {
-      GdkSurface *effective_parent = gdk_surface_get_parent (parent);
-
-      if (gdk_surface_has_native (parent) && !effective_parent)
-        break;
-
-      *x += parent->x;
-      *y += parent->y;
-
-      parent = effective_parent;
-    }
-
   return parent;
 }
 
@@ -2457,7 +2435,7 @@ gdk_wayland_surface_map (GdkSurface *surface)
             }
 
           if (transient_for)
-            transient_for = get_popup_parent (gdk_surface_get_toplevel (transient_for));
+            transient_for = get_popup_parent (transient_for);
 
           /* If the position was not explicitly set, start the popup at the
            * position of the device that holds the grab.
@@ -2473,7 +2451,7 @@ gdk_wayland_surface_map (GdkSurface *surface)
         }
       else
         {
-          transient_for = gdk_surface_get_toplevel (impl->transient_for);
+          transient_for = impl->transient_for;
           transient_for = get_popup_parent (transient_for);
         }
 
