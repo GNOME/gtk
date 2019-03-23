@@ -5131,6 +5131,7 @@ GTK_CSS_PARSER_ERROR
 GtkCssParserError
 GtkCssParserWarning
 <SUBSECTION>
+GtkCssLocation
 GtkCssSection
 GtkCssSectionType
 gtk_css_section_get_end_line

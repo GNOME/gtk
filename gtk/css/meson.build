@@ -1,4 +1,5 @@
 gtk_css_public_sources = files([
+  'gtkcsslocation.c',
   'gtkcsserror.c',
 ])
 
