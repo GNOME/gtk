@@ -227,7 +227,7 @@ set_sync_counter(Display     *display,
 void
 gdk_x11_surface_pre_damage (GdkSurface *surface)
 {
-  GdkSurface *toplevel_surface = gdk_surface_get_toplevel (surface);
+  GdkSurface *toplevel_surface = surface;
   GdkSurfaceImplX11 *impl;
 
   if (!toplevel_surface || !SURFACE_IS_TOPLEVEL (toplevel_surface))
