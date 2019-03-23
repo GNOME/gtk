@@ -37,6 +37,7 @@
 #include "gtkmenusectionbox.h"
 #include "gdk/gdkeventsprivate.h"
 #include "gtkpointerfocusprivate.h"
+#include "gtkcssnodeprivate.h"
 
 static GListStore *popover_list = NULL;
 
@@ -1306,6 +1307,8 @@ gtk_popover_set_relative_to (GtkPopover  *popover,
     {
       g_signal_connect (priv->relative_to, "size-allocate", G_CALLBACK (size_changed), popover);
       priv->display = gtk_widget_get_display (relative_to);
+      gtk_css_node_set_parent (gtk_widget_get_css_node (GTK_WIDGET (popover)),
+                               gtk_widget_get_css_node (relative_to));
       gtk_widget_set_parent (GTK_WIDGET (popover), relative_to);
     }
 
