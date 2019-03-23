@@ -1183,7 +1183,7 @@ set_user_time (GdkEvent *event)
   GdkSurface *surface;
   guint32 time;
 
-  surface = gdk_surface_get_toplevel (event->any.surface);
+  surface = event->any.surface;
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   time = gdk_event_get_time (event);
@@ -1250,24 +1250,6 @@ translate_axes (GdkDevice       *device,
 }
 
 static gboolean
-is_parent_of (GdkSurface *parent,
-              GdkSurface *child)
-{
-  GdkSurface *w;
-
-  w = child;
-  while (w != NULL)
-    {
-      if (w == parent)
-        return TRUE;
-
-      w = gdk_surface_get_parent (w);
-    }
-
-  return FALSE;
-}
-
-static gboolean
 get_event_surface (GdkEventTranslator *translator,
                   XIEvent            *ev,
                   GdkSurface         **surface_p)
@@ -1308,9 +1290,7 @@ get_event_surface (GdkEventTranslator *translator,
             serial = _gdk_display_get_next_serial (display);
             info = _gdk_display_has_device_grab (display, device, serial);
 
-            if (info &&
-                (!is_parent_of (info->surface, surface) ||
-                 !info->owner_events))
+            if (info && !info->owner_events)
               {
                 /* Report key event against grab surface */
                 surface = info->surface;
