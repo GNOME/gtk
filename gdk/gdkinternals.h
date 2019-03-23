@@ -319,8 +319,6 @@ GdkEvent * _gdk_make_event (GdkSurface    *surface,
                             GdkEventType  type,
                             GdkEvent     *event_in_queue,
                             gboolean      before_event);
-gboolean _gdk_surface_event_parent_of (GdkSurface *parent,
-                                       GdkSurface *child);
 
 void _gdk_synthesize_crossing_events (GdkDisplay                 *display,
                                       GdkSurface                  *src,
