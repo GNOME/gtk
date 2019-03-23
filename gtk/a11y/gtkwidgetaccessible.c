@@ -533,9 +533,6 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
                                    gint           *height,
                                    AtkCoordType    coord_type)
 {
-  GdkSurface *surface;
-  gint x_surface, y_surface;
-  gint x_toplevel, y_toplevel;
   GtkWidget *widget;
   GtkAllocation allocation;
 
@@ -557,25 +554,11 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
     {
       *x = allocation.x;
       *y = allocation.y;
-      surface = gtk_widget_get_parent_surface (widget);
     }
   else
     {
       *x = 0;
       *y = 0;
-      surface = gtk_widget_get_surface (widget);
-    }
-  gdk_surface_get_origin (surface, &x_surface, &y_surface);
-  *x += x_surface;
-  *y += y_surface;
-
-  if (coord_type == ATK_XY_WINDOW)
-    {
-      surface = gdk_surface_get_toplevel (gtk_widget_get_surface (widget));
-      gdk_surface_get_origin (surface, &x_toplevel, &y_toplevel);
-
-      *x -= x_toplevel;
-      *y -= y_toplevel;
     }
 }
 
@@ -625,38 +608,6 @@ gtk_widget_accessible_set_extents (AtkComponent *component,
                                    gint          height,
                                    AtkCoordType  coord_type)
 {
-  GtkWidget *widget;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
-  if (widget == NULL)
-    return FALSE;
-
-  if (!gtk_widget_is_toplevel (widget))
-    return FALSE;
-
-  if (coord_type == ATK_XY_WINDOW)
-    {
-      gint x_current, y_current;
-      GdkSurface *surface = gtk_widget_get_surface (widget);
-
-      gdk_surface_get_origin (surface, &x_current, &y_current);
-      x_current += x;
-      y_current += y;
-      if (x_current < 0 || y_current < 0)
-        return FALSE;
-      else
-        {
-          gtk_window_move (GTK_WINDOW (widget), x_current, y_current);
-          gtk_widget_set_size_request (widget, width, height);
-          return TRUE;
-        }
-    }
-  else if (coord_type == ATK_XY_SCREEN)
-    {
-      gtk_window_move (GTK_WINDOW (widget), x, y);
-      gtk_widget_set_size_request (widget, width, height);
-      return TRUE;
-    }
   return FALSE;
 }
 
@@ -666,36 +617,6 @@ gtk_widget_accessible_set_position (AtkComponent *component,
                                     gint          y,
                                     AtkCoordType  coord_type)
 {
-  GtkWidget *widget;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
-  if (widget == NULL)
-    return FALSE;
-
-  if (gtk_widget_is_toplevel (widget))
-    {
-      if (coord_type == ATK_XY_WINDOW)
-        {
-          gint x_current, y_current;
-          GdkSurface *surface = gtk_widget_get_surface (widget);
-
-          gdk_surface_get_origin (surface, &x_current, &y_current);
-          x_current += x;
-          y_current += y;
-          if (x_current < 0 || y_current < 0)
-            return FALSE;
-          else
-            {
-              gtk_window_move (GTK_WINDOW (widget), x_current, y_current);
-              return TRUE;
-            }
-        }
-      else if (coord_type == ATK_XY_SCREEN)
-        {
-          gtk_window_move (GTK_WINDOW (widget), x, y);
-          return TRUE;
-        }
-    }
   return FALSE;
 }
 
@@ -704,19 +625,7 @@ gtk_widget_accessible_set_size (AtkComponent *component,
                                 gint          width,
                                 gint          height)
 {
-  GtkWidget *widget;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
-  if (widget == NULL)
-    return FALSE;
-
-  if (gtk_widget_is_toplevel (widget))
-    {
-      gtk_widget_set_size_request (widget, width, height);
-      return TRUE;
-    }
-  else
-   return FALSE;
+  return FALSE;
 }
 
 static void
