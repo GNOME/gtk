@@ -278,9 +278,6 @@ cairo_region_t *gdk_cairo_region_from_clip       (cairo_t         *cr);
  * Interfaces used by windowing code *
  *************************************/
 
-GdkSurface* gdk_surface_new               (GdkDisplay     *display,
-                                           GdkSurface      *parent,
-                                           GdkSurfaceAttr  *attributes);
 void       _gdk_surface_destroy           (GdkSurface      *surface,
                                            gboolean        foreign_destroy);
 void       gdk_surface_invalidate_rect    (GdkSurface           *surface,
