@@ -420,8 +420,6 @@ gtk_text_accessible_get_character_extents (AtkText      *text,
   PangoRectangle char_rect;
   gchar *entry_text;
   gint index, x_layout, y_layout;
-  GdkSurface *surface;
-  gint x_surface, y_surface;
   GtkAllocation allocation;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
@@ -440,22 +438,10 @@ gtk_text_accessible_get_character_extents (AtkText      *text,
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  surface = gtk_widget_get_surface (widget);
-  gdk_surface_get_origin (surface, &x_surface, &y_surface);
-
-  *x = x_surface + allocation.x + x_layout + char_rect.x;
-  *y = y_surface + allocation.y + y_layout + char_rect.y;
+  *x = allocation.x + x_layout + char_rect.x;
+  *y = allocation.y + y_layout + char_rect.y;
   *width = char_rect.width;
   *height = char_rect.height;
-
-  if (coords == ATK_XY_WINDOW)
-    {
-      surface = gdk_surface_get_toplevel (surface);
-      gdk_surface_get_origin (surface, &x_surface, &y_surface);
-
-      *x -= x_surface;
-      *y -= y_surface;
-    }
 }
 
 static gint
@@ -468,9 +454,7 @@ gtk_text_accessible_get_offset_at_point (AtkText      *atk_text,
   GtkText *entry;
   gchar *text;
   gint index, x_layout, y_layout;
-  gint x_surface, y_surface;
   gint x_local, y_local;
-  GdkSurface *surface;
   glong offset;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_text));
@@ -481,20 +465,9 @@ gtk_text_accessible_get_offset_at_point (AtkText      *atk_text,
 
   gtk_text_get_layout_offsets (entry, &x_layout, &y_layout);
 
-  surface = gtk_widget_get_surface (widget);
-  gdk_surface_get_origin (surface, &x_surface, &y_surface);
+  x_local = x - x_layout;
+  y_local = y - y_layout;
 
-  x_local = x - x_layout - x_surface;
-  y_local = y - y_layout - y_surface;
-
-  if (coords == ATK_XY_WINDOW)
-    {
-      surface = gdk_surface_get_toplevel (surface);
-      gdk_surface_get_origin (surface, &x_surface, &y_surface);
-
-      x_local += x_surface;
-      y_local += y_surface;
-    }
   if (!pango_layout_xy_to_index (gtk_text_get_layout (entry),
                                  x_local * PANGO_SCALE,
                                  y_local * PANGO_SCALE,
