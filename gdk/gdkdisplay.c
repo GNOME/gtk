@@ -845,9 +845,7 @@ _gdk_display_end_device_grab (GdkDisplay *display,
     return FALSE;
 
   grab = l->data;
-  if (grab &&
-      (if_child == NULL ||
-       _gdk_surface_event_parent_of (if_child, grab->surface)))
+  if (grab && (if_child == NULL || if_child == grab->surface))
     {
       grab->serial_end = serial;
       grab->implicit_ungrab = implicit;

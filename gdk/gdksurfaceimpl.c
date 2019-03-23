@@ -173,28 +173,6 @@ maybe_flip_position (gint      bounds_pos,
   return primary;
 }
 
-static GdkSurface *
-traverse_to_toplevel (GdkSurface *surface,
-                      gint       x,
-                      gint       y,
-                      gint      *toplevel_x,
-                      gint      *toplevel_y)
-{
-  GdkSurface *parent;
-  gdouble xf = x;
-  gdouble yf = y;
-
-  while ((parent = surface->parent) != NULL)
-    {
-      gdk_surface_coords_to_parent (surface, xf, yf, &xf, &yf);
-      surface = parent;
-    }
-
-  *toplevel_x = (gint) xf;
-  *toplevel_y = (gint) yf;
-  return surface;
-}
-
 static void
 gdk_surface_impl_move_to_rect (GdkSurface          *surface,
                               const GdkRectangle *rect,
@@ -219,11 +197,7 @@ gdk_surface_impl_move_to_rect (GdkSurface          *surface,
    * because not all backends will be able to get root coordinates for
    * non-toplevel surfaces.
    */
-  transient_for_toplevel = traverse_to_toplevel (surface->transient_for,
-                                                 root_rect.x,
-                                                 root_rect.y,
-                                                 &root_rect.x,
-                                                 &root_rect.y);
+  transient_for_toplevel = surface->transient_for;
 
   gdk_surface_get_root_coords (transient_for_toplevel,
                               root_rect.x,
