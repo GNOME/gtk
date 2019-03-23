@@ -533,9 +533,6 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
                                    gint           *height,
                                    AtkCoordType    coord_type)
 {
-  GdkSurface *surface;
-  gint x_surface, y_surface;
-  gint x_toplevel, y_toplevel;
   GtkWidget *widget;
   GtkAllocation allocation;
 
@@ -557,25 +554,11 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
     {
       *x = allocation.x;
       *y = allocation.y;
-      surface = gtk_widget_get_surface (gtk_widget_get_parent (widget));
     }
   else
     {
       *x = 0;
       *y = 0;
-      surface = gtk_widget_get_surface (widget);
-    }
-  gdk_surface_get_origin (surface, &x_surface, &y_surface);
-  *x += x_surface;
-  *y += y_surface;
-
-  if (coord_type == ATK_XY_WINDOW)
-    {
-      surface = gdk_surface_get_toplevel (gtk_widget_get_surface (widget));
-      gdk_surface_get_origin (surface, &x_toplevel, &y_toplevel);
-
-      *x -= x_toplevel;
-      *y -= y_toplevel;
     }
 }
 
@@ -625,7 +608,7 @@ gtk_widget_accessible_set_extents (AtkComponent *component,
                                    gint          height,
                                    AtkCoordType  coord_type)
 {
-   return FALSE;
+  return FALSE;
 }
 
 static gboolean
@@ -634,7 +617,7 @@ gtk_widget_accessible_set_position (AtkComponent *component,
                                     gint          y,
                                     AtkCoordType  coord_type)
 {
-   return FALSE;
+  return FALSE;
 }
 
 static gboolean
@@ -642,7 +625,7 @@ gtk_widget_accessible_set_size (AtkComponent *component,
                                 gint          width,
                                 gint          height)
 {
-   return FALSE;
+  return FALSE;
 }
 
 static void
