@@ -999,8 +999,6 @@ gtk_label_accessible_get_character_extents (AtkText      *text,
   PangoRectangle char_rect;
   const gchar *label_text;
   gint index, x_layout, y_layout;
-  GdkSurface *surface;
-  gint x_surface, y_surface;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
@@ -1014,22 +1012,10 @@ gtk_label_accessible_get_character_extents (AtkText      *text,
   pango_layout_index_to_pos (gtk_label_get_layout (label), index, &char_rect);
   pango_extents_to_pixels (&char_rect, NULL);
 
-  surface = gtk_widget_get_surface (widget);
-  gdk_surface_get_origin (surface, &x_surface, &y_surface);
-
-  *x = x_surface + x_layout + char_rect.x;
-  *y = y_surface + y_layout + char_rect.y;
+  *x = x_layout + char_rect.x;
+  *y = y_layout + char_rect.y;
   *width = char_rect.width;
   *height = char_rect.height;
-
-  if (coords == ATK_XY_WINDOW)
-    {
-      surface = gdk_surface_get_toplevel (surface);
-      gdk_surface_get_origin (surface, &x_surface, &y_surface);
-
-      *x -= x_surface;
-      *y -= y_surface;
-    }
 }
 
 static gint
@@ -1042,9 +1028,7 @@ gtk_label_accessible_get_offset_at_point (AtkText      *atk_text,
   GtkLabel *label;
   const gchar *text;
   gint index, x_layout, y_layout;
-  gint x_surface, y_surface;
   gint x_local, y_local;
-  GdkSurface *surface;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_text));
   if (widget == NULL)
@@ -1054,20 +1038,8 @@ gtk_label_accessible_get_offset_at_point (AtkText      *atk_text,
 
   gtk_label_get_layout_offsets (label, &x_layout, &y_layout);
 
-  surface = gtk_widget_get_surface (widget);
-  gdk_surface_get_origin (surface, &x_surface, &y_surface);
-
-  x_local = x - x_layout - x_surface;
-  y_local = y - y_layout - y_surface;
-
-  if (coords == ATK_XY_WINDOW)
-    {
-      surface = gdk_surface_get_toplevel (surface);
-      gdk_surface_get_origin (surface, &x_surface, &y_surface);
-
-      x_local += x_surface;
-      y_local += y_surface;
-    }
+  x_local = x - x_layout;
+  y_local = y - y_layout;
 
   if (!pango_layout_xy_to_index (gtk_label_get_layout (label),
                                  x_local * PANGO_SCALE,
