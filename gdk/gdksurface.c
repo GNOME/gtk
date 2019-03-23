@@ -4868,27 +4868,23 @@ gdk_surface_set_functions (GdkSurface    *surface,
  * @edge: the edge or corner from which the drag is started
  * @device: the device used for the operation
  * @button: the button being used to drag, or 0 for a keyboard-initiated drag
- * @root_x: root window X coordinate of mouse click that began the drag
- * @root_y: root window Y coordinate of mouse click that began the drag
+ * @x: surface X coordinate of mouse click that began the drag
+ * @y: surface Y coordinate of mouse click that began the drag
  * @timestamp: timestamp of mouse click that began the drag (use gdk_event_get_time())
  *
  * Begins a surface resize operation (for a toplevel surface).
- * You might use this function to implement a “window resize grip,” for
- * example; in fact #GtkStatusbar uses it. The function works best
- * with window managers that support the
- * [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec)
- * but has a fallback implementation for other window managers.
+ * You might use this function to implement a “window resize grip,”
  */
 void
 gdk_surface_begin_resize_drag_for_device (GdkSurface     *surface,
                                           GdkSurfaceEdge  edge,
-                                          GdkDevice     *device,
-                                          gint           button,
-                                          gint           root_x,
-                                          gint           root_y,
-                                          guint32        timestamp)
+                                          GdkDevice      *device,
+                                          gint            button,
+                                          gint            x,
+                                          gint            y,
+                                          guint32         timestamp)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->begin_resize_drag (surface, edge, device, button, root_x, root_y, timestamp);
+  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->begin_resize_drag (surface, edge, device, button, x, y, timestamp);
 }
 
 /**
@@ -4896,8 +4892,8 @@ gdk_surface_begin_resize_drag_for_device (GdkSurface     *surface,
  * @surface: a toplevel #GdkSurface
  * @edge: the edge or corner from which the drag is started
  * @button: the button being used to drag, or 0 for a keyboard-initiated drag
- * @root_x: root window X coordinate of mouse click that began the drag
- * @root_y: root window Y coordinate of mouse click that began the drag
+ * @x: surface X coordinate of mouse click that began the drag
+ * @y: surface Y coordinate of mouse click that began the drag
  * @timestamp: timestamp of mouse click that began the drag (use gdk_event_get_time())
  *
  * Begins a surface resize operation (for a toplevel surface).
@@ -4909,10 +4905,10 @@ gdk_surface_begin_resize_drag_for_device (GdkSurface     *surface,
 void
 gdk_surface_begin_resize_drag (GdkSurface     *surface,
                                GdkSurfaceEdge  edge,
-                               gint           button,
-                               gint           root_x,
-                               gint           root_y,
-                               guint32        timestamp)
+                               gint            button,
+                               gint            x,
+                               gint            y,
+                               guint32         timestamp)
 {
   GdkDisplay *display;
   GdkDevice *device;
@@ -4920,7 +4916,7 @@ gdk_surface_begin_resize_drag (GdkSurface     *surface,
   display = gdk_surface_get_display (surface);
   device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
   gdk_surface_begin_resize_drag_for_device (surface, edge,
-                                           device, button, root_x, root_y, timestamp);
+                                            device, button, x, y, timestamp);
 }
 
 /**
@@ -4928,34 +4924,30 @@ gdk_surface_begin_resize_drag (GdkSurface     *surface,
  * @surface: a toplevel #GdkSurface
  * @device: the device used for the operation
  * @button: the button being used to drag, or 0 for a keyboard-initiated drag
- * @root_x: root window X coordinate of mouse click that began the drag
- * @root_y: root window Y coordinate of mouse click that began the drag
+ * @x: surface X coordinate of mouse click that began the drag
+ * @y: surface Y coordinate of mouse click that began the drag
  * @timestamp: timestamp of mouse click that began the drag
  *
  * Begins a surface move operation (for a toplevel surface).
- * You might use this function to implement a “window move grip,” for
- * example. The function works best with window managers that support the
- * [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec)
- * but has a fallback implementation for other window managers.
  */
 void
 gdk_surface_begin_move_drag_for_device (GdkSurface *surface,
-                                        GdkDevice *device,
-                                        gint       button,
-                                        gint       root_x,
-                                        gint       root_y,
-                                        guint32    timestamp)
+                                        GdkDevice  *device,
+                                        gint        button,
+                                        gint        x,
+                                        gint        y,
+                                        guint32     timestamp)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->begin_move_drag (surface,
-                                                             device, button, root_x, root_y, timestamp);
+                                                               device, button, x, y, timestamp);
 }
 
 /**
  * gdk_surface_begin_move_drag:
  * @surface: a toplevel #GdkSurface
  * @button: the button being used to drag, or 0 for a keyboard-initiated drag
- * @root_x: root window X coordinate of mouse click that began the drag
- * @root_y: root window Y coordinate of mouse click that began the drag
+ * @x: surface X coordinate of mouse click that began the drag
+ * @y: surface Y coordinate of mouse click that began the drag
  * @timestamp: timestamp of mouse click that began the drag
  *
  * Begins a surface move operation (for a toplevel surface).
@@ -4967,8 +4959,8 @@ gdk_surface_begin_move_drag_for_device (GdkSurface *surface,
 void
 gdk_surface_begin_move_drag (GdkSurface *surface,
                              gint       button,
-                             gint       root_x,
-                             gint       root_y,
+                             gint       x,
+                             gint       y,
                              guint32    timestamp)
 {
   GdkDisplay *display;
@@ -4976,7 +4968,7 @@ gdk_surface_begin_move_drag (GdkSurface *surface,
 
   display = gdk_surface_get_display (surface);
   device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
-  gdk_surface_begin_move_drag_for_device (surface, device, button, root_x, root_y, timestamp);
+  gdk_surface_begin_move_drag_for_device (surface, device, button, x, y, timestamp);
 }
 
 /**

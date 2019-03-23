@@ -4293,12 +4293,12 @@ emulate_resize_drag (GdkSurface     *surface,
 }
 
 static void
-emulate_move_drag (GdkSurface     *surface,
-                   GdkDevice     *device,
-                   gint           button,
-                   gint           root_x,
-                   gint           root_y,
-                   guint32        timestamp)
+emulate_move_drag (GdkSurface *surface,
+                   GdkDevice  *device,
+                   gint        button,
+                   gint        root_x,
+                   gint        root_y,
+                   guint32     timestamp)
 {
   MoveResizeData *mv_resize = get_move_resize_data (GDK_SURFACE_DISPLAY (surface), TRUE);
 
@@ -4338,16 +4338,20 @@ _should_perform_ewmh_drag (GdkSurface *surface,
 
 static void
 gdk_x11_surface_begin_resize_drag (GdkSurface     *surface,
-                                  GdkSurfaceEdge  edge,
-                                  GdkDevice     *device,
-                                  gint           button,
-                                  gint           root_x,
-                                  gint           root_y,
-                                  guint32        timestamp)
+                                   GdkSurfaceEdge  edge,
+                                   GdkDevice      *device,
+                                   gint            button,
+                                   gint            x,
+                                   gint            y,
+                                   guint32         timestamp)
 {
+  int root_x, root_y;
+
   if (GDK_SURFACE_DESTROYED (surface) ||
       !SURFACE_IS_TOPLEVEL (surface))
     return;
+
+  gdk_surface_x11_get_root_coords (surface, x, y, &root_x, &root_y);
 
   /* Avoid EWMH for touch devices */
   if (_should_perform_ewmh_drag (surface, device))
@@ -4358,12 +4362,13 @@ gdk_x11_surface_begin_resize_drag (GdkSurface     *surface,
 
 static void
 gdk_x11_surface_begin_move_drag (GdkSurface *surface,
-                                GdkDevice *device,
-				gint       button,
-				gint       root_x,
-				gint       root_y,
-				guint32    timestamp)
+                                 GdkDevice  *device,
+                                 gint        button,
+                                 gint        x,
+                                 gint        y,
+                                 guint32     timestamp)
 {
+  int root_x, root_y;
   gint direction;
 
   if (GDK_SURFACE_DESTROYED (surface) || !SURFACE_IS_TOPLEVEL (surface))
@@ -4373,6 +4378,8 @@ gdk_x11_surface_begin_move_drag (GdkSurface *surface,
     direction = _NET_WM_MOVERESIZE_MOVE_KEYBOARD;
   else
     direction = _NET_WM_MOVERESIZE_MOVE;
+
+  gdk_surface_x11_get_root_coords (surface, x, y, &root_x, &root_y);
 
   /* Avoid EWMH for touch devices */
   if (_should_perform_ewmh_drag (surface, device))
