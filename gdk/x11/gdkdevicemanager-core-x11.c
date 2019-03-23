@@ -258,17 +258,14 @@ static void
 set_user_time (GdkSurface *surface,
                GdkEvent  *event)
 {
-  g_return_if_fail (event != NULL);
-
-  surface = gdk_surface_get_toplevel (event->any.surface);
   g_return_if_fail (GDK_IS_SURFACE (surface));
+  g_return_if_fail (event != NULL);
 
   /* If an event doesn't have a valid timestamp, we shouldn't use it
    * to update the latest user interaction time.
    */
   if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
-    gdk_x11_surface_set_user_time (gdk_surface_get_toplevel (surface),
-                                  gdk_event_get_time (event));
+    gdk_x11_surface_set_user_time (surface, gdk_event_get_time (event));
 }
 
 static GdkCrossingMode
@@ -309,24 +306,6 @@ translate_notify_type (int detail)
     }
 }
 
-static gboolean
-is_parent_of (GdkSurface *parent,
-              GdkSurface *child)
-{
-  GdkSurface *w;
-
-  w = child;
-  while (w != NULL)
-    {
-      if (w == parent)
-        return TRUE;
-
-      w = gdk_surface_get_parent (w);
-    }
-
-  return FALSE;
-}
-
 static GdkSurface *
 get_event_surface (GdkEventTranslator *translator,
                   const XEvent       *xevent)
@@ -347,9 +326,7 @@ get_event_surface (GdkEventTranslator *translator,
       info = _gdk_display_has_device_grab (display,
                                            GDK_X11_DEVICE_MANAGER_CORE (translator)->core_keyboard,
                                            serial);
-      if (info &&
-          (!is_parent_of (info->surface, surface) ||
-           !info->owner_events))
+      if (info && !info->owner_events)
         {
           /* Report key event against grab surface */
           surface = info->surface;
