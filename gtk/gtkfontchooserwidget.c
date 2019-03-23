@@ -1798,7 +1798,7 @@ find_affected_text (hb_tag_t   feature_tag,
   chars = g_string_new ("");
 
   hb_ot_layout_table_find_script (hb_face, HB_OT_TAG_GSUB, script_tag, &script_index);
-  hb_ot_layout_script_find_language (hb_face, HB_OT_TAG_GSUB, script_index, lang_tag, &lang_index);
+  hb_ot_layout_script_select_language (hb_face, HB_OT_TAG_GSUB, script_index, 1, &lang_tag, &lang_index);
   if (hb_ot_layout_language_find_feature (hb_face, HB_OT_TAG_GSUB, script_index, lang_index, feature_tag, &feature_index))
     {
       unsigned int lookup_indexes[32];
@@ -2166,7 +2166,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
       for (i = 0; i < 2; i++)
         {
           hb_ot_layout_table_find_script (hb_face, table[i], script_tag, &script_index);
-          hb_ot_layout_script_find_language (hb_face, table[i], script_index, lang_tag, &lang_index);
+          hb_ot_layout_script_select_language (hb_face, table[i], script_index, 1, &lang_tag, &lang_index);
           count = G_N_ELEMENTS (features);
           hb_ot_layout_language_get_feature_tags (hb_face,
                                                   table[i],
