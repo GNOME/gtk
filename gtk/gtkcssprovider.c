@@ -782,7 +782,7 @@ parse_import (GtkCssScanner *scanner)
       return FALSE;
     }
 
-  if (_gtk_css_parser_is_string (scanner->parser))
+  if (gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_STRING))
     {
       char *uri;
 
