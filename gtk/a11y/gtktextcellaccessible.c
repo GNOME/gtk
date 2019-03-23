@@ -489,7 +489,6 @@ get_origins (GtkWidget *widget,
 
   surface = gtk_widget_get_surface (widget);
   gdk_surface_get_origin (surface, x_surface, y_surface);
-  surface = gdk_surface_get_toplevel (gtk_widget_get_surface (widget));
   gdk_surface_get_origin (surface, x_toplevel, y_toplevel);
 
   if (GTK_IS_TREE_VIEW (widget))
