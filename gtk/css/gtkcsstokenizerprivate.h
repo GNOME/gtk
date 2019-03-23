@@ -20,6 +20,8 @@
 
 #include <glib.h>
 
+#include <gtk/css/gtkcsslocation.h>
+
 G_BEGIN_DECLS
 
 typedef enum {
@@ -70,7 +72,6 @@ typedef enum {
 
 typedef union _GtkCssToken GtkCssToken;
 typedef struct _GtkCssTokenizer GtkCssTokenizer;
-typedef struct _GtkCssLocation GtkCssLocation;
 
 typedef struct _GtkCssStringToken GtkCssStringToken;
 typedef struct _GtkCssDelimToken GtkCssDelimToken;
@@ -104,15 +105,6 @@ union _GtkCssToken {
   GtkCssDelimToken delim;
   GtkCssNumberToken number;
   GtkCssDimensionToken dimension;
-};
-
-struct _GtkCssLocation
-{
-  gsize                  bytes;
-  gsize                  chars;
-  gsize                  lines;
-  gsize                  line_bytes;
-  gsize                  line_chars;
 };
 
 void                    gtk_css_token_clear                     (GtkCssToken            *token);
