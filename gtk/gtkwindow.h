@@ -355,14 +355,14 @@ GDK_AVAILABLE_IN_ALL
 void gtk_window_begin_resize_drag (GtkWindow     *window,
                                    GdkSurfaceEdge  edge,
                                    gint           button,
-                                   gint           root_x,
-                                   gint           root_y,
+                                   gint           x,
+                                   gint           y,
                                    guint32        timestamp);
 GDK_AVAILABLE_IN_ALL
 void gtk_window_begin_move_drag   (GtkWindow     *window,
                                    gint           button,
-                                   gint           root_x,
-                                   gint           root_y,
+                                   gint           x,
+                                   gint           y,
                                    guint32        timestamp);
 
 /* Set initial default size of the window (does not constrain user
