@@ -560,19 +560,9 @@ set_ic_client_surface (GtkIMContextXIM *context_xim,
 
   if (context_xim->client_surface)
     {
-      GdkSurface *native;
-
       context_xim->im_info = get_im (context_xim->client_surface, context_xim->locale);
       context_xim->im_info->ics = g_slist_prepend (context_xim->im_info->ics, context_xim);
-
-      for (native = client_surface; native; native = gdk_surface_get_parent (native))
-        {
-          if (gdk_surface_has_native (native))
-            {
-              context_xim->client_surface_xid = gdk_x11_surface_get_xid (native);
-              break;
-            }
-        }
+      context_xim->client_surface_xid = gdk_x11_surface_get_xid (client_surface);
     }
 
   update_client_widget (context_xim);
@@ -641,7 +631,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   if (event_type == GDK_KEY_RELEASE && !context_xim->filter_key_release)
     return FALSE;
 
-  window = gdk_surface_get_toplevel (gdk_event_get_surface ((GdkEvent *) event));
+  window = gdk_event_get_surface ((GdkEvent *) event);
 
   xevent.type = (event_type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
   xevent.serial = 0;		/* hope it doesn't matter */
