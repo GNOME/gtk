@@ -13026,10 +13026,6 @@ gtk_widget_render (GtkWidget            *widget,
   if (!GTK_IS_NATIVE (widget))
     return;
 
-  /* We only render double buffered on native windows */
-  if (!gdk_surface_has_native (surface))
-    return;
-
   renderer = gtk_native_get_renderer (GTK_NATIVE (widget));
   if (renderer == NULL)
     return;
