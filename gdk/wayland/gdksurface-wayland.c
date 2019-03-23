@@ -2850,6 +2850,8 @@ gdk_wayland_surface_destroy (GdkSurface *surface,
                              gboolean    recursing,
                              gboolean    foreign_destroy)
 {
+  GdkWaylandDisplay *display;
+
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   /* Wayland surfaces can't be externally destroyed; we may possibly
@@ -2859,11 +2861,8 @@ gdk_wayland_surface_destroy (GdkSurface *surface,
 
   gdk_wayland_surface_hide_surface (surface);
 
-  if (surface->parent == NULL)
-    {
-      GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-      display->toplevels = g_list_remove (display->toplevels, surface);
-    }
+  display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+  display->toplevels = g_list_remove (display->toplevels, surface);
 }
 
 static void
