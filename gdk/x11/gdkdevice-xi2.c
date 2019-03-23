@@ -77,9 +77,6 @@ static void gdk_x11_device_xi2_get_state (GdkDevice       *device,
 static void gdk_x11_device_xi2_set_surface_cursor (GdkDevice *device,
                                                   GdkSurface *surface,
                                                   GdkCursor *cursor);
-static void gdk_x11_device_xi2_warp (GdkDevice *device,
-                                     gdouble    x,
-                                     gdouble    y);
 static void gdk_x11_device_xi2_query_state (GdkDevice        *device,
                                             GdkSurface        *surface,
                                             GdkSurface       **child_surface,
@@ -123,7 +120,6 @@ gdk_x11_device_xi2_class_init (GdkX11DeviceXI2Class *klass)
 
   device_class->get_state = gdk_x11_device_xi2_get_state;
   device_class->set_surface_cursor = gdk_x11_device_xi2_set_surface_cursor;
-  device_class->warp = gdk_x11_device_xi2_warp;
   device_class->query_state = gdk_x11_device_xi2_query_state;
   device_class->grab = gdk_x11_device_xi2_grab;
   device_class->ungrab = gdk_x11_device_xi2_ungrab;
@@ -290,24 +286,6 @@ gdk_x11_device_xi2_set_surface_cursor (GdkDevice *device,
     XIUndefineCursor (GDK_SURFACE_XDISPLAY (surface),
                       device_xi2->device_id,
                       GDK_SURFACE_XID (surface));
-}
-
-static void
-gdk_x11_device_xi2_warp (GdkDevice *device,
-                         gdouble    x,
-                         gdouble    y)
-{
-  GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
-  GdkDisplay *display = gdk_device_get_display (device);
-  GdkX11Screen *screen = GDK_X11_DISPLAY (display)->screen;
-  Window dest = GDK_DISPLAY_XROOTWIN (display);
-
-  XIWarpPointer (GDK_SCREEN_XDISPLAY (screen),
-                 device_xi2->device_id,
-                 None, dest,
-                 0, 0, 0, 0,
-                 round (x * screen->surface_scale),
-                 round (y * screen->surface_scale));
 }
 
 static void

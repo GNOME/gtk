@@ -1425,34 +1425,6 @@ gdk_device_ungrab (GdkDevice  *device,
   GDK_DEVICE_GET_CLASS (device)->ungrab (device, time_);
 }
 
-/**
- * gdk_device_warp:
- * @device: the device to warp.
- * @x: the X coordinate of the destination.
- * @y: the Y coordinate of the destination.
- *
- * Warps @device in @display to the point @x,@y,
- * unless the device is confined to a surface by a grab,
- * in which case it will be moved
- * as far as allowed by the grab. Warping the pointer
- * creates events as if the user had moved the mouse
- * instantaneously to the destination.
- *
- * Note that the pointer should normally be under the
- * control of the user. This function was added to cover
- * some rare use cases like keyboard navigation support
- * for the color picker in the #GtkColorSelectionDialog.
- **/
-void
-gdk_device_warp (GdkDevice  *device,
-                 gint        x,
-                 gint        y)
-{
-  g_return_if_fail (GDK_IS_DEVICE (device));
-
-  GDK_DEVICE_GET_CLASS (device)->warp (device, x, y);
-}
-
 /* Private API */
 void
 _gdk_device_reset_axes (GdkDevice *device)

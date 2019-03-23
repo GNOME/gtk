@@ -86,9 +86,6 @@ struct _GdkDeviceClass
                               GdkSurface *surface,
                               GdkCursor *cursor);
 
-  void (* warp)              (GdkDevice  *device,
-                              gdouble     x,
-                              gdouble     y);
   void (* query_state)       (GdkDevice       *device,
                               GdkSurface       *surface,
                               GdkSurface      **child_surface,

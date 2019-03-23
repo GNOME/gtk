@@ -237,11 +237,6 @@ void          gdk_device_ungrab      (GdkDevice        *device,
                                       guint32           time_);
 
 GDK_AVAILABLE_IN_ALL
-void          gdk_device_warp        (GdkDevice        *device,
-                                      gint              x,
-                                      gint              y);
-
-GDK_AVAILABLE_IN_ALL
 GdkSurface *gdk_device_get_last_event_surface (GdkDevice *device);
 
 GDK_AVAILABLE_IN_ALL

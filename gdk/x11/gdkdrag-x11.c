@@ -41,6 +41,7 @@
 #include "gdkselectioninputstream-x11.h"
 #include "gdkselectionoutputstream-x11.h"
 
+#include <math.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
@@ -2342,9 +2343,22 @@ gdk_dnd_handle_key_event (GdkDrag           *drag,
 
   if (dx != 0 || dy != 0)
     {
+      GdkDisplay *display;
+      Display *xdisplay;
+      GdkX11Screen *screen;
+      Window dest;
+
       x11_drag->last_x += dx;
       x11_drag->last_y += dy;
-      gdk_device_warp (pointer, x11_drag->last_x, x11_drag->last_y);
+
+      display = gdk_event_get_display ((GdkEvent *)event);
+      xdisplay = GDK_DISPLAY_XDISPLAY (display);
+      screen = GDK_X11_DISPLAY (display)->screen;
+      dest = GDK_SCREEN_XROOTWIN (screen);
+
+      XWarpPointer (xdisplay, None, dest, 0, 0, 0, 0,
+                   round (x11_drag->last_x * screen->surface_scale),
+                   round (x11_drag->last_y * screen->surface_scale));
     }
 
   gdk_drag_update (drag, x11_drag->last_x, x11_drag->last_y, state,
