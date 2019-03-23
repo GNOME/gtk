@@ -1454,7 +1454,7 @@ is_or_contains (gboolean      enter,
     case GDK_NOTIFY_UNKNOWN:
     default:
       g_warning ("Unknown focus change detail");
-      return;
+      break;
     }
 
   return is || contains;
