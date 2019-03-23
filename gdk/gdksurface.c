@@ -128,7 +128,6 @@ static void gdk_surface_get_property (GObject      *object,
 
 static void recompute_visible_regions   (GdkSurface *private,
                                          gboolean recalculate_children);
-static void gdk_surface_invalidate_in_parent (GdkSurface *private);
 static void update_cursor               (GdkDisplay *display,
                                          GdkDevice  *device);
 
@@ -178,42 +177,6 @@ print_region (cairo_region_t *region)
   return g_string_free (s, FALSE);
 }
 #endif
-
-static GList *
-list_insert_link_before (GList *list,
-                         GList *sibling,
-                         GList *link)
-{
-  if (list == NULL || sibling == list)
-    {
-      link->prev = NULL;
-      link->next = list;
-      if (list)
-        list->prev = link;
-      return link;
-    }
-  else if (sibling == NULL)
-    {
-      GList *last = g_list_last (list);
-
-      last->next = link;
-      link->prev = last;
-      link->next = NULL;
-
-      return list;
-    }
-  else
-    {
-      link->next = sibling;
-      link->prev = sibling->prev;
-      sibling->prev = link;
-
-      if (link->prev)
-        link->prev->next = link;
-
-      return list;
-    }
-}
 
 static void
 gdk_surface_init (GdkSurface *surface)
@@ -538,12 +501,6 @@ static gboolean
 gdk_surface_has_impl (GdkSurface *surface)
 {
   return surface->impl_surface == surface;
-}
-
-static gboolean
-gdk_surface_is_toplevel (GdkSurface *surface)
-{
-  return surface->parent == NULL;
 }
 
 gboolean
@@ -891,12 +848,8 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
           if (surface->parent->children)
             surface->parent->children = g_list_remove_link (surface->parent->children, &surface->children_list_node);
 
-          if (!recursing &&
-              GDK_SURFACE_IS_MAPPED (surface))
-            {
-              recompute_visible_regions (surface, FALSE);
-              gdk_surface_invalidate_in_parent (surface);
-            }
+          if (!recursing && GDK_SURFACE_IS_MAPPED (surface))
+            recompute_visible_regions (surface, FALSE);
         }
 
       if (surface->gl_paint_context)
@@ -1960,19 +1913,10 @@ set_viewable (GdkSurface *w,
   return FALSE;
 }
 
-/* Returns TRUE If the native surface was mapped or unmapped */
 gboolean
 _gdk_surface_update_viewable (GdkSurface *surface)
 {
-  gboolean viewable;
-
-  if (gdk_surface_is_toplevel (surface) ||
-      surface->parent->viewable)
-    viewable = GDK_SURFACE_IS_MAPPED (surface);
-  else
-    viewable = FALSE;
-
-  return set_viewable (surface, viewable);
+  return set_viewable (surface, GDK_SURFACE_IS_MAPPED (surface));
 }
 
 static void
@@ -2065,21 +2009,12 @@ gdk_surface_show_unraised (GdkSurface *surface)
 void
 gdk_surface_raise (GdkSurface *surface)
 {
-  gboolean did_raise;
-
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (surface->destroyed)
     return;
 
-  /* Keep children in (reverse) stacking order */
-  did_raise = gdk_surface_raise_internal (surface);
-
-  if (did_raise &&
-      !gdk_surface_is_toplevel (surface) &&
-      gdk_surface_is_viewable (surface) &&
-      !surface->input_only)
-    gdk_surface_invalidate_rect (surface, NULL);
+  gdk_surface_raise_internal (surface);
 }
 
 static void
@@ -2100,29 +2035,6 @@ gdk_surface_lower_internal (GdkSurface *surface)
   if (gdk_surface_has_impl (surface))
     impl_class->lower (surface);
 }
-
-static void
-gdk_surface_invalidate_in_parent (GdkSurface *private)
-{
-  GdkRectangle r, child;
-
-  if (gdk_surface_is_toplevel (private))
-    return;
-
-  /* get the visible rectangle of the parent */
-  r.x = r.y = 0;
-  r.width = private->parent->width;
-  r.height = private->parent->height;
-
-  child.x = private->x;
-  child.y = private->y;
-  child.width = private->width;
-  child.height = private->height;
-  gdk_rectangle_intersect (&r, &child, &r);
-
-  gdk_surface_invalidate_rect (private->parent, &r);
-}
-
 
 /**
  * gdk_surface_lower:
@@ -2149,8 +2061,6 @@ gdk_surface_lower (GdkSurface *surface)
 
   /* Keep children in (reverse) stacking order */
   gdk_surface_lower_internal (surface);
-
-  gdk_surface_invalidate_in_parent (surface);
 }
 
 /**
@@ -2176,8 +2086,6 @@ gdk_surface_restack (GdkSurface     *surface,
                      gboolean       above)
 {
   GdkSurfaceImplClass *impl_class;
-  GdkSurface *parent;
-  GList *sibling_link;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (sibling == NULL || GDK_IS_SURFACE (sibling));
@@ -2194,34 +2102,8 @@ gdk_surface_restack (GdkSurface     *surface,
       return;
     }
 
-  if (gdk_surface_is_toplevel (surface))
-    {
-      g_return_if_fail (gdk_surface_is_toplevel (sibling));
-      impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-      impl_class->restack_toplevel (surface, sibling, above);
-      return;
-    }
-
-  parent = surface->parent;
-  if (parent)
-    {
-      sibling_link = g_list_find (parent->children, sibling);
-      g_return_if_fail (sibling_link != NULL);
-      if (sibling_link == NULL)
-        return;
-
-      parent->children = g_list_remove_link (parent->children, &surface->children_list_node);
-      if (above)
-        parent->children = list_insert_link_before (parent->children,
-                                                    sibling_link,
-                                                    &surface->children_list_node);
-      else
-        parent->children = list_insert_link_before (parent->children,
-                                                    sibling_link->next,
-                                                    &surface->children_list_node);
-    }
-
-  gdk_surface_invalidate_in_parent (surface);
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
+  impl_class->restack_toplevel (surface, sibling, above);
 }
 
 
@@ -2325,10 +2207,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
   recompute_visible_regions (surface, FALSE);
-
-  /* Invalidate the rect */
-  if (was_mapped)
-    gdk_surface_invalidate_in_parent (surface);
 }
 
 static void
@@ -2361,85 +2239,12 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
                                   gint       width,
                                   gint       height)
 {
-  cairo_region_t *old_region, *new_region;
-  gboolean expose;
-
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (surface->destroyed)
     return;
 
-  if (gdk_surface_is_toplevel (surface))
-    {
-      gdk_surface_move_resize_toplevel (surface, with_move, x, y, width, height);
-      return;
-    }
-
-  if (width == 0)
-    width = 1;
-  if (height == 0)
-    height = 1;
-
-  /* Bail early if no change */
-  if (surface->width == width &&
-      surface->height == height &&
-      (!with_move ||
-       (surface->x == x &&
-        surface->y == y)))
-    return;
-
-  /* Handle child surfaces */
-
-  expose = FALSE;
-  old_region = NULL;
-
-  if (gdk_surface_is_viewable (surface) &&
-      !surface->input_only)
-    {
-      GdkRectangle r;
-
-      expose = TRUE;
-
-      r.x = surface->x;
-      r.y = surface->y;
-      r.width = surface->width;
-      r.height = surface->height;
-
-      old_region = cairo_region_create_rectangle (&r);
-    }
-
-  /* Set the new position and size */
-  if (with_move)
-    {
-      surface->x = x;
-      surface->y = y;
-    }
-  if (!(width < 0 && height < 0))
-    {
-      surface->width = width;
-      surface->height = height;
-    }
-
-  recompute_visible_regions (surface, FALSE);
-
-  if (expose)
-    {
-      GdkRectangle r;
-
-      r.x = surface->x;
-      r.y = surface->y;
-      r.width = surface->width;
-      r.height = surface->height;
-
-      new_region = cairo_region_create_rectangle (&r);
-
-      cairo_region_union (new_region, old_region);
-
-      gdk_surface_invalidate_region (surface->parent, new_region);
-
-      cairo_region_destroy (old_region);
-      cairo_region_destroy (new_region);
-    }
+  gdk_surface_move_resize_toplevel (surface, with_move, x, y, width, height);
 }
 
 
@@ -4667,7 +4472,6 @@ gdk_surface_set_frame_clock (GdkSurface     *surface,
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (clock == NULL || GDK_IS_FRAME_CLOCK (clock));
-  g_return_if_fail (clock == NULL || gdk_surface_is_toplevel (surface));
 
   if (clock == surface->frame_clock)
     return;
