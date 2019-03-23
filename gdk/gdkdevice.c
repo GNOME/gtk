@@ -601,13 +601,6 @@ gdk_device_get_surface_at_position (GdkDevice *device,
 
   surface = _gdk_device_surface_at_position (device, &tmp_x, &tmp_y, NULL, FALSE);
 
-  /* This might need corrections, as the native surface returned
-     may contain client side children */
-  if (surface)
-    surface = _gdk_surface_find_descendant_at (surface,
-                                             tmp_x, tmp_y,
-                                             &tmp_x, &tmp_y);
-
   if (win_x)
     *win_x = tmp_x;
   if (win_y)
