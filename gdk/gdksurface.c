@@ -678,86 +678,48 @@ _gdk_surface_update_size (GdkSurface *surface)
   recompute_visible_regions (surface, FALSE);
 }
 
-GdkSurface*
-gdk_surface_new (GdkDisplay    *display,
-                 GdkSurface     *parent,
-                 GdkSurfaceAttr *attributes)
+static GdkSurface *
+gdk_surface_new (GdkDisplay     *display,
+                 gboolean        input_only,
+                 GdkSurfaceType  surface_type,
+                 int             x,
+                 int             y,
+                 int             width,
+                 int             height)
 {
   GdkSurface *surface;
-  gboolean native;
-
-  g_return_val_if_fail (attributes != NULL, NULL);
-
-  if (parent != NULL && GDK_SURFACE_DESTROYED (parent))
-    {
-      g_warning ("gdk_surface_new(): parent is destroyed");
-      return NULL;
-    }
+  GdkFrameClock *frame_clock;
+  GdkSurfaceAttr attributes;
 
   surface = _gdk_display_create_surface (display);
 
-  surface->parent = parent;
+  surface->parent = NULL;
 
   surface->accept_focus = TRUE;
   surface->focus_on_map = TRUE;
-
-  surface->x = attributes->x;
-  surface->y = attributes->y;
-  surface->width = (attributes->width > 1) ? (attributes->width) : (1);
-  surface->height = (attributes->height > 1) ? (attributes->height) : (1);
   surface->alpha = 255;
 
-  if (attributes->wclass == GDK_INPUT_ONLY)
-    surface->surface_type = GDK_SURFACE_TEMP;
-  else
-    surface->surface_type = attributes->surface_type;
+  surface->x = x;
+  surface->y = y;
+  surface->width = width;
+  surface->height = height;
+  surface->input_only = input_only;
+  surface->surface_type = surface_type;
 
-  /* Sanity checks */
-  switch (surface->surface_type)
-    {
-    case GDK_SURFACE_TOPLEVEL:
-    case GDK_SURFACE_TEMP:
-      if (parent != NULL)
-        g_warning (G_STRLOC "Toplevel surfaces must be created without a parent");
-      break;
-    default:
-      g_warning (G_STRLOC "cannot make surfaces of type %d", surface->surface_type);
-      return NULL;
-    }
+  g_warn_if_fail (!surface->input_only || surface->surface_type == GDK_SURFACE_TEMP);
 
-  if (attributes->wclass == GDK_INPUT_OUTPUT)
-    {
-      surface->input_only = FALSE;
-    }
-  else
-    {
-      surface->input_only = TRUE;
-    }
+  frame_clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE, NULL);
+  gdk_surface_set_frame_clock (surface, frame_clock);
+  g_object_unref (frame_clock);
 
-  native = FALSE;
-
-  if (surface->parent != NULL)
-    surface->parent->children = g_list_concat (&surface->children_list_node, surface->parent->children);
-  else
-    {
-      GdkFrameClock *frame_clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE, NULL);
-      gdk_surface_set_frame_clock (surface, frame_clock);
-      g_object_unref (frame_clock);
-
-      native = TRUE; /* Always use native surfaces for toplevels */
-    }
-
-  if (native)
-    {
-      /* Create the impl */
-      gdk_display_create_surface_impl (display, surface, parent, attributes);
-      surface->impl_surface = surface;
-    }
-  else
-    {
-      surface->impl_surface = g_object_ref (surface->parent->impl_surface);
-      surface->impl = g_object_ref (surface->impl_surface->impl);
-    }
+  attributes.wclass = input_only ? GDK_INPUT_ONLY : GDK_INPUT_OUTPUT;
+  attributes.surface_type = surface_type;
+  attributes.x = x;
+  attributes.y = y;
+  attributes.width = width;
+  attributes.height = height;
+  gdk_display_create_surface_impl (display, surface, NULL, &attributes);
+  surface->impl_surface = surface;
 
   recompute_visible_regions (surface, FALSE);
 
@@ -782,18 +744,9 @@ gdk_surface_new_toplevel (GdkDisplay *display,
                           gint        width,
                           gint        height)
 {
-  GdkSurfaceAttr attr;
-
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  attr.wclass = GDK_INPUT_OUTPUT;
-  attr.x = 0;
-  attr.y = 0;
-  attr.width = width;
-  attr.height = height;
-  attr.surface_type = GDK_SURFACE_TOPLEVEL;
-
-  return gdk_surface_new (display, NULL, &attr);
+  return gdk_surface_new (display, FALSE, GDK_SURFACE_TOPLEVEL, 0, 0, width, height);
 }
 
 /**
@@ -810,19 +763,12 @@ GdkSurface *
 gdk_surface_new_popup (GdkDisplay         *display,
                        const GdkRectangle *position)
 {
-  GdkSurfaceAttr attr;
-
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (position != NULL, NULL);
 
-  attr.wclass = GDK_INPUT_OUTPUT;
-  attr.x = position->x;
-  attr.y = position->y;
-  attr.width = position->width;
-  attr.height = position->height;
-  attr.surface_type = GDK_SURFACE_TEMP;
-
-  return gdk_surface_new (display, NULL, &attr);
+  return gdk_surface_new (display, FALSE, GDK_SURFACE_TEMP,
+                          position->x, position->y,
+                          position->width, position->height);
 }
 
 /**
@@ -842,19 +788,11 @@ gdk_surface_new_popup_full (GdkDisplay *display,
                             GdkSurface *parent)
 {
   GdkSurface *surface;
-  GdkSurfaceAttr attr;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (GDK_IS_SURFACE (parent), NULL);
 
-  attr.wclass = GDK_INPUT_OUTPUT;
-  attr.x = 0;
-  attr.y = 0;
-  attr.width = 100;
-  attr.height = 100;
-  attr.surface_type = GDK_SURFACE_TEMP;
-
-  surface = gdk_surface_new (display, NULL, &attr);
+  surface = gdk_surface_new (display, FALSE, GDK_SURFACE_TEMP, 0, 0, 100, 100);
   gdk_surface_set_transient_for (surface, parent);
   gdk_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_MENU);
 
@@ -875,18 +813,9 @@ gdk_surface_new_popup_full (GdkDisplay *display,
 GdkSurface *
 gdk_surface_new_temp (GdkDisplay *display)
 {
-  GdkSurfaceAttr attr;
-
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  attr.wclass = GDK_INPUT_ONLY;
-  attr.x = -100;
-  attr.y = -100;
-  attr.width = 10;
-  attr.height = 10;
-  attr.surface_type = GDK_SURFACE_TEMP;
-
-  return gdk_surface_new (display, NULL, &attr);
+  return gdk_surface_new (display, TRUE, GDK_SURFACE_TEMP, -100, -100, 10, 10);
 }
 
 static void
