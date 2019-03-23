@@ -1145,22 +1145,6 @@ gdk_surface_schedule_update (GdkSurface *surface)
 }
 
 static void
-gdk_surface_process_updates_recurse (GdkSurface *surface,
-                                     cairo_region_t *expose_region)
-{
-  gboolean handled;
-
-  if (surface->destroyed)
-    return;
-
-  /* Paint the surface before the children, clipped to the surface region */
-  g_signal_emit (surface, signals[RENDER], 0, expose_region, &handled);
-}
-
-/* Process and remove any invalid area on the native surface by creating
- * expose events for the surface and all non-native descendants.
- */
-static void
 gdk_surface_process_updates_internal (GdkSurface *surface)
 {
   /* Ensure the surface lives while updating it */
@@ -1182,10 +1166,11 @@ gdk_surface_process_updates_internal (GdkSurface *surface)
       if (gdk_surface_is_viewable (surface))
         {
           cairo_region_t *expose_region;
+          gboolean handled;
 
           expose_region = cairo_region_copy (surface->active_update_area);
 
-          gdk_surface_process_updates_recurse (surface, expose_region);
+          g_signal_emit (surface, signals[RENDER], 0, expose_region, &handled);
 
           cairo_region_destroy (expose_region);
         }
