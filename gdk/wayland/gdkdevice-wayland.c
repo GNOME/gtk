@@ -731,7 +731,7 @@ device_maybe_emit_grab_crossing (GdkDevice  *device,
                                  guint32     time)
 {
   GdkSurface *native = gdk_wayland_device_get_focus (device);
-  GdkSurface *focus = gdk_surface_get_toplevel (window);
+  GdkSurface *focus = window;
 
   if (focus != native)
     device_emit_grab_crossing (device, focus, window, GDK_CROSSING_GRAB, time);
@@ -4630,7 +4630,7 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
   GdkSurface *native;
   GList *l;
 
-  native = gdk_surface_get_toplevel (surface);
+  native = surface;
 
   if (native == NULL || GDK_SURFACE_DESTROYED (native))
     return GDK_GRAB_NOT_VIEWABLE;
