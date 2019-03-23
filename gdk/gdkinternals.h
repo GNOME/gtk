@@ -153,9 +153,6 @@ struct _GdkSurface
 
   guint8 resize_count;
 
-  GList *children;
-  GList children_list_node;
-
   GdkGLContext *gl_paint_context;
 
   cairo_region_t *update_area;
