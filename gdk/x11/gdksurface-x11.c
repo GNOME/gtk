@@ -858,23 +858,6 @@ _gdk_x11_display_create_surface_impl (GdkDisplay    *display,
 
   impl->override_redirect = FALSE;
 
-  /* Sanity checks */
-  switch (surface->surface_type)
-    {
-    case GDK_SURFACE_TOPLEVEL:
-    case GDK_SURFACE_TEMP:
-      if (surface->parent)
-        {
-          /* The common code warns for this case */
-          xparent = GDK_SCREEN_XROOTWIN (x11_screen);
-        }
-      break;
-
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-
   if (!surface->input_only)
     {
       class = InputOutput;
@@ -932,16 +915,8 @@ _gdk_x11_display_create_surface_impl (GdkDisplay    *display,
   impl->unscaled_width = surface->width * impl->surface_scale;
   impl->unscaled_height = surface->height * impl->surface_scale;
 
-  if (surface->parent)
-    {
-      abs_x = surface->parent->abs_x;
-      abs_y = surface->parent->abs_y;
-    }
-  else
-    {
-      abs_x = 0;
-      abs_y = 0;
-    }
+  abs_x = 0;
+  abs_y = 0;
 
   impl->xid = XCreateWindow (xdisplay, xparent,
                              (surface->x + abs_x) * impl->surface_scale,
@@ -2389,9 +2364,6 @@ gdk_x11_surface_get_frame_extents (GdkSurface    *surface,
   rect->y = 0;
   rect->width = 1;
   rect->height = 1;
-
-  while (surface->parent && (surface->parent)->parent)
-    surface = surface->parent;
 
   impl = GDK_SURFACE_IMPL_X11 (surface->impl);
 
