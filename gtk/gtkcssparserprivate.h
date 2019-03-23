@@ -21,6 +21,7 @@
 #include <gtk/gtkcssprovider.h>
 
 #include <gtk/css/gtkcss.h>
+#include "gtk/css/gtkcsstokenizerprivate.h"
 
 G_BEGIN_DECLS
 
@@ -53,7 +54,8 @@ gboolean        _gtk_css_parser_begins_with       (GtkCssParser          *parser
                                                    char                   c);
 gboolean        _gtk_css_parser_has_prefix        (GtkCssParser          *parser,
                                                    const char            *prefix);
-gboolean        _gtk_css_parser_is_string         (GtkCssParser          *parser);
+gboolean        gtk_css_parser_has_token          (GtkCssParser          *parser,
+                                                   GtkCssTokenType        token_type);
 
 /* IMPORTANT:
  * _try_foo() functions do not modify the data pointer if they fail, nor do they
