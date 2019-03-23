@@ -1480,16 +1480,15 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
     default:
       if (!priv->maximized)
         {
-          gdouble x_root, y_root;
-
+          double x, y;
           gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
-          gdk_event_get_root_coords (event, &x_root, &y_root);
+          gdk_event_get_coords (event, &x, &y);
           gdk_surface_begin_resize_drag_for_device (_gtk_widget_get_surface (widget),
 						    (GdkSurfaceEdge) region,
 						    gdk_event_get_device ((GdkEvent *) event),
 						    GDK_BUTTON_PRIMARY,
-						    x_root, y_root,
+						    x, y,
 						    gdk_event_get_time (event));
 
           gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
@@ -1595,13 +1594,11 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
       gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
       gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
-      gdk_surface_get_root_coords (_gtk_widget_get_surface (GTK_WIDGET (window)),
-				   start_x, start_y, &x_root, &y_root);
 
       gdk_surface_begin_move_drag_for_device (_gtk_widget_get_surface (GTK_WIDGET (window)),
 					      gtk_gesture_get_device (GTK_GESTURE (gesture)),
 					      gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)),
-					      x_root, y_root,
+					      (int)start_x, (int)start_y,
 					      gtk_get_current_event_time ());
 
       gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
@@ -9233,24 +9230,20 @@ gtk_window_get_gravity (GtkWindow *window)
  * @window: a #GtkWindow
  * @button: mouse button that initiated the drag
  * @edge: position of the resize control
- * @root_x: X position where the user clicked to initiate the drag, in root window coordinates
- * @root_y: Y position where the user clicked to initiate the drag
+ * @x: X position where the user clicked to initiate the drag, in window coordinates
+ * @y: Y position where the user clicked to initiate the drag
  * @timestamp: timestamp from the click event that initiated the drag
  *
  * Starts resizing a window. This function is used if an application
- * has window resizing controls. When GDK can support it, the resize
- * will be done using the standard mechanism for the
- * [window manager][gtk-X11-arch] or windowing
- * system. Otherwise, GDK will try to emulate window resizing,
- * potentially not all that well, depending on the windowing system.
+ * has window resizing controls.
  */
 void
-gtk_window_begin_resize_drag  (GtkWindow     *window,
-                               GdkSurfaceEdge  edge,
-                               gint           button,
-                               gint           root_x,
-                               gint           root_y,
-                               guint32        timestamp)
+gtk_window_begin_resize_drag (GtkWindow      *window,
+                              GdkSurfaceEdge  edge,
+                              gint            button,
+                              gint            x,
+                              gint            y,
+                              guint32         timestamp)
 {
   GtkWidget *widget;
   GdkSurface *toplevel;
@@ -9261,33 +9254,26 @@ gtk_window_begin_resize_drag  (GtkWindow     *window,
 
   toplevel = _gtk_widget_get_surface (widget);
 
-  gdk_surface_begin_resize_drag (toplevel,
-                                edge, button,
-                                root_x, root_y,
-                                timestamp);
+  gdk_surface_begin_resize_drag (toplevel, edge, button, x, y, timestamp);
 }
 
 /**
  * gtk_window_begin_move_drag:
  * @window: a #GtkWindow
  * @button: mouse button that initiated the drag
- * @root_x: X position where the user clicked to initiate the drag, in root window coordinates
- * @root_y: Y position where the user clicked to initiate the drag
+ * @x: X position where the user clicked to initiate the drag, in window coordinates
+ * @y: Y position where the user clicked to initiate the drag
  * @timestamp: timestamp from the click event that initiated the drag
  *
  * Starts moving a window. This function is used if an application has
- * window movement grips. When GDK can support it, the window movement
- * will be done using the standard mechanism for the
- * [window manager][gtk-X11-arch] or windowing
- * system. Otherwise, GDK will try to emulate window movement,
- * potentially not all that well, depending on the windowing system.
+ * window movement grips.
  */
 void
-gtk_window_begin_move_drag  (GtkWindow *window,
-                             gint       button,
-                             gint       root_x,
-                             gint       root_y,
-                             guint32    timestamp)
+gtk_window_begin_move_drag (GtkWindow *window,
+                            gint       button,
+                            gint       x,
+                            gint       y,
+                            guint32    timestamp)
 {
   GtkWidget *widget;
   GdkSurface *toplevel;
@@ -9298,10 +9284,7 @@ gtk_window_begin_move_drag  (GtkWindow *window,
 
   toplevel = _gtk_widget_get_surface (widget);
 
-  gdk_surface_begin_move_drag (toplevel,
-                              button,
-                              root_x, root_y,
-                              timestamp);
+  gdk_surface_begin_move_drag (toplevel, button, x, y, timestamp);
 }
 
 /**

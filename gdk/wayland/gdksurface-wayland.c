@@ -3531,8 +3531,8 @@ gdk_wayland_surface_begin_resize_drag (GdkSurface     *surface,
                                        GdkSurfaceEdge  edge,
                                        GdkDevice      *device,
                                        gint            button,
-                                       gint            root_x,
-                                       gint            root_y,
+                                       gint            x,
+                                       gint            y,
                                        guint32         timestamp)
 {
   GdkSurfaceImplWayland *impl;
@@ -3621,8 +3621,8 @@ static void
 gdk_wayland_surface_begin_move_drag (GdkSurface *surface,
                                      GdkDevice  *device,
                                      gint        button,
-                                     gint        root_x,
-                                     gint        root_y,
+                                     gint        x,
+                                     gint        y,
                                      guint32     timestamp)
 {
   GdkSurfaceImplWayland *impl;
