@@ -449,34 +449,18 @@ gtk_text_view_accessible_get_offset_at_point (AtkText      *text,
 {
   GtkTextView *view;
   GtkTextIter iter;
-  gint x_widget, y_widget, x_surface, y_surface, buff_x, buff_y;
+  gint buff_x, buff_y;
   GtkWidget *widget;
-  GdkSurface *surface;
   GdkRectangle rect;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     return -1;
 
-  view = GTK_TEXT_VIEW (widget);
-  surface = gtk_widget_get_surface (widget);
-  gdk_surface_get_origin (surface, &x_widget, &y_widget);
-
-  if (coords == ATK_XY_SCREEN)
-    {
-      x = x - x_widget;
-      y = y - y_widget;
-    }
-  else if (coords == ATK_XY_WINDOW)
-    {
-      surface = gdk_surface_get_toplevel (surface);
-      gdk_surface_get_origin (surface, &x_surface, &y_surface);
-
-      x = x - x_widget + x_surface;
-      y = y - y_widget + y_surface;
-    }
-  else
+  if (coords != ATK_XY_WINDOW)
     return -1;
+
+  view = GTK_TEXT_VIEW (widget);
 
   gtk_text_view_window_to_buffer_coords (view, GTK_TEXT_WINDOW_WIDGET,
                                          x, y, &buff_x, &buff_y);
@@ -511,8 +495,6 @@ gtk_text_view_accessible_get_character_extents (AtkText      *text,
   GtkTextIter iter;
   GtkWidget *widget;
   GdkRectangle rectangle;
-  GdkSurface *surface;
-  gint x_widget, y_widget, x_surface, y_surface;
 
   *x = 0;
   *y = 0;
@@ -528,30 +510,12 @@ gtk_text_view_accessible_get_character_extents (AtkText      *text,
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
   gtk_text_view_get_iter_location (view, &iter, &rectangle);
 
-  surface = gtk_widget_get_surface (widget);
-  if (surface == NULL)
-    return;
-
-  gdk_surface_get_origin (surface, &x_widget, &y_widget);
-
   *height = rectangle.height;
   *width = rectangle.width;
 
   gtk_text_view_buffer_to_surface_coords (view, GTK_TEXT_WINDOW_WIDGET,
     rectangle.x, rectangle.y, x, y);
-  if (coords == ATK_XY_WINDOW)
-    {
-      surface = gdk_surface_get_toplevel (surface);
-      gdk_surface_get_origin (surface, &x_surface, &y_surface);
-      *x += x_widget - x_surface;
-      *y += y_widget - y_surface;
-    }
-  else if (coords == ATK_XY_SCREEN)
-    {
-      *x += x_widget;
-      *y += y_widget;
-    }
-  else
+  if (coords != ATK_XY_WINDOW)
     {
       *x = 0;
       *y = 0;
