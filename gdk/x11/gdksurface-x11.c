@@ -4475,13 +4475,6 @@ gdk_x11_get_server_time (GdkSurface *surface)
 XID
 gdk_x11_surface_get_xid (GdkSurface *surface)
 {
-  if (!GDK_SURFACE_IS_X11 (surface) ||
-      !_gdk_surface_has_impl (surface))
-    {
-      g_warning (G_STRLOC " drawable is not a native X11 window");
-      return None;
-    }
-  
   return GDK_SURFACE_IMPL_X11 (surface->impl)->xid;
 }
 
@@ -4512,13 +4505,6 @@ void
 gdk_x11_surface_set_frame_sync_enabled (GdkSurface *surface,
                                        gboolean   frame_sync_enabled)
 {
-  if (!GDK_SURFACE_IS_X11 (surface) ||
-      !_gdk_surface_has_impl (surface))
-    {
-      g_warning (G_STRLOC " drawable is not a native X11 window");
-      return;
-    }
-
   GDK_SURFACE_IMPL_X11 (surface->impl)->frame_sync_enabled = FALSE;
 }
 
