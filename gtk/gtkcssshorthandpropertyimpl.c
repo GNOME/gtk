@@ -51,9 +51,9 @@ static gboolean
 value_is_done_parsing (GtkCssParser *parser)
 {
   return _gtk_css_parser_is_eof (parser) ||
-         _gtk_css_parser_begins_with (parser, ',') ||
-         _gtk_css_parser_begins_with (parser, ';') ||
-         _gtk_css_parser_begins_with (parser, '}');
+         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA) ||
+         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SEMICOLON) ||
+         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_CLOSE_CURLY);
 }
 
 static gboolean
@@ -617,7 +617,7 @@ parse_one_transition (GtkCssShorthandProperty  *shorthand,
     {
       /* the image part */
       if (values[2] == NULL &&
-          gtk_css_number_value_can_parse (parser) && !_gtk_css_parser_begins_with (parser, '-'))
+          gtk_css_number_value_can_parse (parser))
         {
           GtkCssValue *number = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_TIME);
 
