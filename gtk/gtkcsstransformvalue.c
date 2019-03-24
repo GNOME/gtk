@@ -1179,7 +1179,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
         return NULL;
       }
     g_array_append_val (array, transform);
-  } while (!_gtk_css_parser_begins_with (parser, ';'));
+  } while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SEMICOLON));
 
   value = gtk_css_transform_value_alloc (array->len);
   memcpy (value->transforms, array->data, sizeof (GtkCssTransform) * array->len);
