@@ -680,10 +680,10 @@ _gtk_css_color_value_parse (GtkCssParser *parser)
   const char *names[] = {"rgba", "rgb",  "lighter", "darker", "shade", "alpha", "mix"};
   char *name;
 
-  if (_gtk_css_parser_try (parser, "currentColor", TRUE))
+  if (gtk_css_parser_try_ident (parser, "currentColor"))
     return _gtk_css_color_value_new_current_color ();
 
-  if (_gtk_css_parser_try (parser, "transparent", TRUE))
+  if (gtk_css_parser_try_ident (parser, "transparent"))
     {
       GdkRGBA transparent = { 0, 0, 0, 0 };
       

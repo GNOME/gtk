@@ -230,7 +230,7 @@ gtk_css_font_features_value_parse (GtkCssParser *parser)
   char *name;
   int num;
 
-  if (_gtk_css_parser_try (parser, "normal", TRUE))
+  if (gtk_css_parser_try_ident (parser, "normal"))
     return gtk_css_font_features_value_new_default ();
 
   result = gtk_css_font_features_value_new_empty ();
@@ -252,9 +252,9 @@ gtk_css_font_features_value_parse (GtkCssParser *parser)
         return NULL;
       }
 
-    if (_gtk_css_parser_try (parser, "on", TRUE))
+    if (gtk_css_parser_try_ident (parser, "on"))
       val = _gtk_css_number_value_new (1.0, GTK_CSS_NUMBER);
-    else if (_gtk_css_parser_try (parser, "off", TRUE))
+    else if (gtk_css_parser_try_ident (parser, "off"))
       val = _gtk_css_number_value_new (0.0, GTK_CSS_NUMBER);
     else if (_gtk_css_parser_try_int (parser, &num))
       val = _gtk_css_number_value_new ((double)num, GTK_CSS_NUMBER);
