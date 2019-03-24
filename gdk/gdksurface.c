@@ -482,28 +482,10 @@ gdk_surface_get_property (GObject    *object,
     }
 }
 
-static GdkSurface *
+GdkSurface *
 gdk_surface_get_impl_surface (GdkSurface *surface)
 {
   return surface->impl_surface;
-}
-
-GdkSurface *
-_gdk_surface_get_impl_surface (GdkSurface *surface)
-{
-  return gdk_surface_get_impl_surface (surface);
-}
-
-static gboolean
-gdk_surface_has_impl (GdkSurface *surface)
-{
-  return surface->impl_surface == surface;
-}
-
-gboolean
-_gdk_surface_has_impl (GdkSurface *surface)
-{
-  return gdk_surface_has_impl (surface);
 }
 
 void
@@ -734,14 +716,7 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
       _gdk_surface_clear_update_area (surface);
 
       impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-
-      if (gdk_surface_has_impl (surface))
-        impl_class->destroy (surface, recursing_native, foreign_destroy);
-      else
-        {
-          /* hide to make sure we repaint and break grabs */
-          gdk_surface_hide (surface);
-        }
+      impl_class->destroy (surface, recursing_native, foreign_destroy);
 
       surface->state |= GDK_SURFACE_STATE_WITHDRAWN;
       surface->destroyed = TRUE;
@@ -1368,12 +1343,9 @@ _gdk_surface_clear_update_area (GdkSurface *surface)
 void
 gdk_surface_freeze_updates (GdkSurface *surface)
 {
-  GdkSurface *impl_surface;
-
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  impl_surface = gdk_surface_get_impl_surface (surface);
-  impl_surface->update_freeze_count++;
+  surface->impl_surface->update_freeze_count++;
 }
 
 /**
@@ -1394,7 +1366,7 @@ gdk_surface_thaw_updates (GdkSurface *surface)
   g_return_if_fail (impl_surface->update_freeze_count > 0);
 
   if (--impl_surface->update_freeze_count == 0)
-    gdk_surface_schedule_update (GDK_SURFACE (impl_surface));
+    gdk_surface_schedule_update (impl_surface);
 }
 
 void
@@ -1639,32 +1611,13 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
   if (raise)
     gdk_surface_raise_internal (surface);
 
-  if (gdk_surface_has_impl (surface))
-    {
-      if (!was_mapped)
-        gdk_synthesize_surface_state (surface,
-                                     GDK_SURFACE_STATE_WITHDRAWN,
-                                     0);
-    }
-  else
-    {
-      surface->state = 0;
-      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
-      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
-    }
+  if (!was_mapped)
+    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
 
   did_show = _gdk_surface_update_viewable (surface);
 
-  /* If it was already viewable the backend show op won't be called, call it
-     again to ensure things happen right if the mapped tracking was not right
-     for e.g. a foreign surface.
-     Dunno if this is strictly needed but its what happened pre-csw.
-     Also show if not done by gdk_surface_update_viewable. */
-  if (gdk_surface_has_impl (surface) && (was_viewable || !did_show))
-    {
-      impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-      impl_class->show (surface, !did_show ? was_mapped : TRUE);
-    }
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
+  impl_class->show (surface, !did_show ? was_mapped : TRUE);
 
   if (!was_mapped)
     {
@@ -1836,20 +1789,8 @@ gdk_surface_hide (GdkSurface *surface)
 
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
 
-  if (gdk_surface_has_impl (surface))
-    {
-
-      if (GDK_SURFACE_IS_MAPPED (surface))
-        gdk_synthesize_surface_state (surface,
-                                     0,
-                                     GDK_SURFACE_STATE_WITHDRAWN);
-    }
-  else if (was_mapped)
-    {
-      surface->state = GDK_SURFACE_STATE_WITHDRAWN;
-      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
-      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
-    }
+  if (GDK_SURFACE_IS_MAPPED (surface))
+    gdk_synthesize_surface_state (surface, 0, GDK_SURFACE_STATE_WITHDRAWN);
 
   if (was_mapped)
     {
@@ -1886,12 +1827,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   did_hide = _gdk_surface_update_viewable (surface);
 
-  /* Hide foreign surface as those are not handled by update_viewable. */
-  if (gdk_surface_has_impl (surface) && (!did_hide))
-    {
-      impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-      impl_class->hide (surface);
-    }
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
+  impl_class->hide (surface);
 }
 
 static void
@@ -2479,11 +2416,8 @@ gdk_surface_input_shape_combine_region (GdkSurface       *surface,
   else
     surface->input_shape = NULL;
 
-  if (gdk_surface_has_impl (surface))
-    {
-      impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-      impl_class->input_shape_combine_region (surface, surface->input_shape, 0, 0);
-    }
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
+  impl_class->input_shape_combine_region (surface, surface->input_shape, 0, 0);
 }
 
 static void
@@ -2826,12 +2760,9 @@ gdk_surface_print (GdkSurface *surface,
            surface->width, surface->height
            );
 
-  if (gdk_surface_has_impl (surface))
-    {
 #ifdef GDK_WINDOWING_X11
-      g_print (" impl(0x%lx)", gdk_x11_surface_get_xid (window));
+  g_print (" impl(0x%lx)", gdk_x11_surface_get_xid (window));
 #endif
-    }
 
   g_print (" %s", surface_types[surface->surface_type]);
 
