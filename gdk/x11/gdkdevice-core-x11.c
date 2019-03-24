@@ -103,22 +103,6 @@ gdk_x11_device_core_init (GdkX11DeviceCore *device_core)
 }
 
 static gboolean
-impl_coord_in_surface (GdkSurface *surface,
-		      int        impl_x,
-		      int        impl_y)
-{
-  if (impl_x < surface->abs_x ||
-      impl_x >= surface->abs_x + surface->width)
-    return FALSE;
-
-  if (impl_y < surface->abs_y ||
-      impl_y >= surface->abs_y + surface->height)
-    return FALSE;
-
-  return TRUE;
-}
-
-static gboolean
 gdk_x11_device_core_get_history (GdkDevice      *device,
                                  GdkSurface      *surface,
                                  guint32         start,
@@ -145,15 +129,10 @@ gdk_x11_device_core_get_history (GdkDevice      *device,
 
   for (i = 0, j = 0; i < tmp_n_events; i++)
     {
-      if (impl_coord_in_surface (surface,
-                                xcoords[i].x / impl->surface_scale,
-                                xcoords[i].y / impl->surface_scale))
-        {
-          coords[j]->time = xcoords[i].time;
-          coords[j]->axes[0] = (double)xcoords[i].x / impl->surface_scale - surface->abs_x;
-          coords[j]->axes[1] = (double)xcoords[i].y / impl->surface_scale - surface->abs_y;
-          j++;
-        }
+      coords[j]->time = xcoords[i].time;
+      coords[j]->axes[0] = (double)xcoords[i].x / impl->surface_scale;
+      coords[j]->axes[1] = (double)xcoords[i].y / impl->surface_scale;
+      j++;
     }
 
   XFree (xcoords);
