@@ -1049,8 +1049,8 @@ parse_declaration (GtkCssScanner *scanner,
           return;
         }
 
-      if (!_gtk_css_parser_begins_with (scanner->parser, ';') &&
-          !_gtk_css_parser_begins_with (scanner->parser, '}') &&
+      if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_SEMICOLON) &&
+          !gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_CLOSE_CURLY) &&
           !_gtk_css_parser_is_eof (scanner->parser))
         {
           gtk_css_provider_error (scanner->provider,
@@ -1100,7 +1100,7 @@ check_for_semicolon:
 
   if (!_gtk_css_parser_try (scanner->parser, ";", TRUE))
     {
-      if (!_gtk_css_parser_begins_with (scanner->parser, '}') &&
+      if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_CLOSE_CURLY) &&
           !_gtk_css_parser_is_eof (scanner->parser))
         {
           gtk_css_provider_error_literal (scanner->provider,
@@ -1118,7 +1118,7 @@ parse_declarations (GtkCssScanner *scanner,
                     GtkCssRuleset *ruleset)
 {
   while (!_gtk_css_parser_is_eof (scanner->parser) &&
-         !_gtk_css_parser_begins_with (scanner->parser, '}'))
+         !gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_CLOSE_CURLY))
     {
       parse_declaration (scanner, ruleset);
     }
@@ -1178,7 +1178,7 @@ parse_ruleset (GtkCssScanner *scanner)
 static void
 parse_statement (GtkCssScanner *scanner)
 {
-  if (_gtk_css_parser_begins_with (scanner->parser, '@'))
+  if (gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_AT_KEYWORD))
     parse_at_keyword (scanner);
   else
     parse_ruleset (scanner);
