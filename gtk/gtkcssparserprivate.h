@@ -83,6 +83,14 @@ gboolean        _gtk_css_parser_try_double        (GtkCssParser          *parser
 gboolean        _gtk_css_parser_try_hash_color    (GtkCssParser          *parser,
                                                    GdkRGBA               *rgba);
 
+gboolean        gtk_css_parser_consume_number     (GtkCssParser          *self,
+                                                   double                *number);
+gboolean        gtk_css_parser_consume_function   (GtkCssParser          *self,
+                                                   guint                  min_args,
+                                                   guint                  max_args,
+                                                   guint (* parse_func) (GtkCssParser *, guint, gpointer),
+                                                   gpointer               data);
+
 gboolean        _gtk_css_parser_has_number        (GtkCssParser          *parser);
 char *          _gtk_css_parser_read_string       (GtkCssParser          *parser);
 GFile *         _gtk_css_parser_read_url          (GtkCssParser          *parser);
