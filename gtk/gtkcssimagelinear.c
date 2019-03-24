@@ -272,11 +272,11 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
       return FALSE;
     }
 
-  if (_gtk_css_parser_try (parser, "to", TRUE))
+  if (gtk_css_parser_try_ident (parser, "to"))
     {
       for (i = 0; i < 2; i++)
         {
-          if (_gtk_css_parser_try (parser, "left", TRUE))
+          if (gtk_css_parser_try_ident (parser, "left"))
             {
               if (linear->side & ((1 << GTK_CSS_LEFT) | (1 << GTK_CSS_RIGHT)))
                 {
@@ -285,7 +285,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
                 }
               linear->side |= (1 << GTK_CSS_LEFT);
             }
-          else if (_gtk_css_parser_try (parser, "right", TRUE))
+          else if (gtk_css_parser_try_ident (parser, "right"))
             {
               if (linear->side & ((1 << GTK_CSS_LEFT) | (1 << GTK_CSS_RIGHT)))
                 {
@@ -294,7 +294,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
                 }
               linear->side |= (1 << GTK_CSS_RIGHT);
             }
-          else if (_gtk_css_parser_try (parser, "top", TRUE))
+          else if (gtk_css_parser_try_ident (parser, "top"))
             {
               if (linear->side & ((1 << GTK_CSS_TOP) | (1 << GTK_CSS_BOTTOM)))
                 {
@@ -303,7 +303,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
                 }
               linear->side |= (1 << GTK_CSS_TOP);
             }
-          else if (_gtk_css_parser_try (parser, "bottom", TRUE))
+          else if (gtk_css_parser_try_ident (parser, "bottom"))
             {
               if (linear->side & ((1 << GTK_CSS_TOP) | (1 << GTK_CSS_BOTTOM)))
                 {

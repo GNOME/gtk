@@ -228,7 +228,7 @@ gtk_css_font_variations_value_parse (GtkCssParser *parser)
   GtkCssValue *result, *coord;
   char *name;
 
-  if (_gtk_css_parser_try (parser, "normal", TRUE))
+  if (gtk_css_parser_try_ident (parser, "normal"))
     return gtk_css_font_variations_value_new_default ();
 
   result = gtk_css_font_variations_value_new_empty ();
