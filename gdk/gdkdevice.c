@@ -1663,7 +1663,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
       else
         scale = 1;
 
-      offset = - surface_root_x - surface->abs_x;
+      offset = - surface_root_x;
     }
   else
     {
@@ -1672,7 +1672,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
       else
         scale = 1;
 
-      offset = - surface_root_y - surface->abs_y;
+      offset = - surface_root_y;
     }
 
   if (axis_value)
