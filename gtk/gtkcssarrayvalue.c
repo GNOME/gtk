@@ -421,7 +421,7 @@ _gtk_css_array_value_parse (GtkCssParser *parser,
       }
 
     g_ptr_array_add (values, value);
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   result = _gtk_css_array_value_new_from_array ((GtkCssValue **) values->pdata, values->len);
   g_ptr_array_free (values, TRUE);
