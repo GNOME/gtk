@@ -188,7 +188,6 @@ struct _GdkSurface
 
   guint update_and_descendants_freeze_count;
 
-  gint abs_x, abs_y; /* Absolute offset in impl */
   gint width, height;
   gint shadow_top;
   gint shadow_left;
