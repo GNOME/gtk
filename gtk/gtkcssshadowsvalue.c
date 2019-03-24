@@ -256,7 +256,7 @@ _gtk_css_shadows_value_parse (GtkCssParser *parser,
       }
 
     g_ptr_array_add (values, value);
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   result = gtk_css_shadows_value_new ((GtkCssValue **) values->pdata, values->len);
   g_ptr_array_free (values, TRUE);
