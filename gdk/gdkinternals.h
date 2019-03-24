@@ -325,8 +325,7 @@ void _gdk_display_set_surface_under_pointer (GdkDisplay *display,
                                              GdkDevice  *device,
                                              GdkSurface  *surface);
 
-gboolean    _gdk_surface_has_impl (GdkSurface *surface);
-GdkSurface * _gdk_surface_get_impl_surface (GdkSurface *surface);
+GdkSurface * gdk_surface_get_impl_surface (GdkSurface *surface);
 
 void gdk_surface_destroy_notify       (GdkSurface *surface);
 
