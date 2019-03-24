@@ -1021,7 +1021,7 @@ parse_declaration (GtkCssScanner *scanner,
 
   property = _gtk_style_property_lookup (name);
 
-  if (!_gtk_css_parser_try (scanner->parser, ":", TRUE))
+  if (!gtk_css_parser_try_token (scanner->parser, GTK_CSS_TOKEN_COLON))
     {
       gtk_css_provider_invalid_token (scanner->provider, scanner, "':'");
       _gtk_css_parser_resync (scanner->parser, TRUE, '}');

@@ -67,6 +67,8 @@ gboolean        gtk_css_parser_has_function       (GtkCssParser          *parser
  */
 gboolean        gtk_css_parser_try_ident          (GtkCssParser          *parser,
                                                    const char            *ident);
+gboolean        gtk_css_parser_try_token          (GtkCssParser          *parser,
+                                                   GtkCssTokenType        token_type);
 gboolean        _gtk_css_parser_try               (GtkCssParser          *parser,
                                                    const char            *string,
                                                    gboolean               skip_whitespace);

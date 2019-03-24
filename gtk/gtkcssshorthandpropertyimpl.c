@@ -595,7 +595,7 @@ parse_background (GtkCssShorthandProperty  *shorthand,
           g_ptr_array_add (arrays[i], step_values[i]);
           step_values[i] = NULL;
         }
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   for (i = 0; i < 6; i++)
     {
@@ -699,7 +699,7 @@ parse_transition (GtkCssShorthandProperty  *shorthand,
           g_ptr_array_add (arrays[i], step_values[i]);
           step_values[i] = NULL;
         }
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   for (i = 0; i < 4; i++)
     {
@@ -816,7 +816,7 @@ parse_animation (GtkCssShorthandProperty  *shorthand,
           g_ptr_array_add (arrays[i], step_values[i]);
           step_values[i] = NULL;
         }
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   for (i = 0; i < 7; i++)
     {
