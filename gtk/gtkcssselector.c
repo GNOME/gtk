@@ -1264,8 +1264,8 @@ _gtk_css_selector_parse (GtkCssParser *parser)
 
   while ((selector = parse_simple_selector (parser, selector)) &&
          !_gtk_css_parser_is_eof (parser) &&
-         !_gtk_css_parser_begins_with (parser, ',') &&
-         !_gtk_css_parser_begins_with (parser, '{'))
+         !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA) &&
+         !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_OPEN_CURLY))
     {
       if (_gtk_css_parser_try (parser, "+", TRUE))
         selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_ADJACENT, selector);
