@@ -315,6 +315,82 @@ gtk_css_parser_try_ident (GtkCssParser *parser,
   return TRUE;
 }
 
+gboolean
+gtk_css_parser_try_token (GtkCssParser    *parser,
+                          GtkCssTokenType  type)
+{
+  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), FALSE);
+
+  switch (type)
+  {
+    case GTK_CSS_TOKEN_OPEN_CURLY:
+      if (*parser->data != '{')
+        return FALSE;
+      parser->data += 1;
+      _gtk_css_parser_skip_whitespace (parser);
+      return TRUE;
+
+    case GTK_CSS_TOKEN_CLOSE_CURLY:
+      if (*parser->data != '}')
+        return FALSE;
+      parser->data += 1;
+      _gtk_css_parser_skip_whitespace (parser);
+      return TRUE;
+
+    case GTK_CSS_TOKEN_COMMA:
+      if (*parser->data != ',')
+        return FALSE;
+      parser->data += 1;
+      _gtk_css_parser_skip_whitespace (parser);
+      return TRUE;
+
+    case GTK_CSS_TOKEN_SEMICOLON:
+      if (*parser->data != ';')
+        return FALSE;
+      parser->data += 1;
+      _gtk_css_parser_skip_whitespace (parser);
+      return TRUE;
+
+    default:
+    case GTK_CSS_TOKEN_STRING:
+    case GTK_CSS_TOKEN_AT_KEYWORD:
+    case GTK_CSS_TOKEN_IDENT:
+    case GTK_CSS_TOKEN_FUNCTION:
+    case GTK_CSS_TOKEN_HASH_UNRESTRICTED:
+    case GTK_CSS_TOKEN_HASH_ID:
+    case GTK_CSS_TOKEN_URL:
+    case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_DIMENSION:
+    case GTK_CSS_TOKEN_EOF:
+    case GTK_CSS_TOKEN_WHITESPACE:
+    case GTK_CSS_TOKEN_OPEN_PARENS:
+    case GTK_CSS_TOKEN_CLOSE_PARENS:
+    case GTK_CSS_TOKEN_OPEN_SQUARE:
+    case GTK_CSS_TOKEN_CLOSE_SQUARE:
+    case GTK_CSS_TOKEN_COLON:
+    case GTK_CSS_TOKEN_CDC:
+    case GTK_CSS_TOKEN_CDO:
+    case GTK_CSS_TOKEN_DELIM:
+    case GTK_CSS_TOKEN_SIGNED_INTEGER:
+    case GTK_CSS_TOKEN_SIGNLESS_INTEGER:
+    case GTK_CSS_TOKEN_SIGNED_NUMBER:
+    case GTK_CSS_TOKEN_SIGNLESS_NUMBER:
+    case GTK_CSS_TOKEN_PERCENTAGE:
+    case GTK_CSS_TOKEN_INCLUDE_MATCH:
+    case GTK_CSS_TOKEN_DASH_MATCH:
+    case GTK_CSS_TOKEN_PREFIX_MATCH:
+    case GTK_CSS_TOKEN_SUFFIX_MATCH:
+    case GTK_CSS_TOKEN_SUBSTRING_MATCH:
+    case GTK_CSS_TOKEN_COLUMN:
+    case GTK_CSS_TOKEN_BAD_STRING:
+    case GTK_CSS_TOKEN_BAD_URL:
+    case GTK_CSS_TOKEN_COMMENT:
+      g_assert_not_reached ();
+      return FALSE;
+    }
+}
+
 static guint
 get_xdigit (char c)
 {

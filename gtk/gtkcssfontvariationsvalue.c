@@ -260,7 +260,7 @@ gtk_css_font_variations_value_parse (GtkCssParser *parser)
 
     gtk_css_font_variations_value_add_axis (result, name, coord);
     g_free (name);
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   return result;
 }
