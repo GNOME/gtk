@@ -195,7 +195,7 @@ position_value_parse (GtkCssParser *parser, gboolean try)
 
   for (first = 0; names[first].name != NULL; first++)
     {
-      if (_gtk_css_parser_try (parser, names[first].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, names[first].name))
         {
           if (names[first].horizontal)
             {
@@ -232,7 +232,7 @@ position_value_parse (GtkCssParser *parser, gboolean try)
 
   for (second = 0; names[second].name != NULL; second++)
     {
-      if (_gtk_css_parser_try (parser, names[second].name, TRUE))
+      if (gtk_css_parser_try_ident (parser, names[second].name))
         {
 	  *missing = _gtk_css_number_value_new (names[second].percentage, GTK_CSS_PERCENT);
           break;

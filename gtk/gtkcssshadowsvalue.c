@@ -240,7 +240,7 @@ _gtk_css_shadows_value_parse (GtkCssParser *parser,
   GtkCssValue *value, *result;
   GPtrArray *values;
 
-  if (_gtk_css_parser_try (parser, "none", TRUE))
+  if (gtk_css_parser_try_ident (parser, "none"))
     return _gtk_css_shadows_value_new_none ();
 
   values = g_ptr_array_new ();
