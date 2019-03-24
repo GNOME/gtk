@@ -257,7 +257,7 @@ parse_declaration (GtkCssKeyframes *keyframes,
     return FALSE;
 
   if (!_gtk_css_parser_try (parser, ";", TRUE) &&
-      !_gtk_css_parser_begins_with (parser, '}'))
+      !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_CLOSE_CURLY))
     {
       _gtk_css_parser_error (parser, "Junk at end of value");
       _gtk_css_value_unref (value);
@@ -333,7 +333,7 @@ _gtk_css_keyframes_parse (GtkCssParser *parser)
 
   keyframes = gtk_css_keyframes_new ();
 
-  while (!_gtk_css_parser_begins_with (parser, '}'))
+  while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_CLOSE_CURLY))
     {
       if (_gtk_css_parser_try (parser, "from", TRUE))
         progress = 0;
