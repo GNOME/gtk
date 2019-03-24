@@ -188,7 +188,7 @@ _gtk_css_ease_value_new_steps (guint n_steps,
 static const struct {
   const char *name;
   guint is_bezier :1;
-  guint needs_custom :1;
+  guint is_function :1;
   double values[4];
 } parser_values[] = {
   { "linear",       TRUE,  FALSE, { 0.0,  0.0, 1.0,  1.0 } },
@@ -224,7 +224,7 @@ gtk_css_ease_value_parse_cubic_bezier (GtkCssParser *parser)
 
   for (i = 0; i < 4; i++)
     {
-      if (!_gtk_css_parser_try (parser, i ? "," : "(", TRUE))
+      if (!_gtk_css_parser_try (parser, i ? "," : "cubic-bezier(", TRUE))
         {
           _gtk_css_parser_error (parser, "Expected '%s'", i ? "," : "(");
           return NULL;
@@ -257,7 +257,7 @@ gtk_css_ease_value_parse_steps (GtkCssParser *parser)
   int n_steps;
   gboolean start;
 
-  if (!_gtk_css_parser_try (parser, "(", TRUE))
+  if (!_gtk_css_parser_try (parser, "steps(", TRUE))
     {
       _gtk_css_parser_error (parser, "Expected '('");
       return NULL;
@@ -276,9 +276,9 @@ gtk_css_ease_value_parse_steps (GtkCssParser *parser)
 
   if (_gtk_css_parser_try (parser, ",", TRUE))
     {
-      if (_gtk_css_parser_try (parser, "start", TRUE))
+      if (gtk_css_parser_try_ident (parser, "start"))
         start = TRUE;
-      else if (_gtk_css_parser_try (parser, "end", TRUE))
+      else if (gtk_css_parser_try_ident (parser, "end"))
         start = FALSE;
       else
         {
@@ -307,26 +307,29 @@ _gtk_css_ease_value_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (parser_values); i++)
     {
-      if (_gtk_css_parser_try (parser, parser_values[i].name, FALSE))
+      if (parser_values[i].is_function)
         {
-          if (parser_values[i].needs_custom)
+          if (gtk_css_parser_has_function (parser, parser_values[i].name))
             {
               if (parser_values[i].is_bezier)
                 return gtk_css_ease_value_parse_cubic_bezier (parser);
               else
                 return gtk_css_ease_value_parse_steps (parser);
             }
-
-          _gtk_css_parser_skip_whitespace (parser);
-
-          if (parser_values[i].is_bezier)
-            return _gtk_css_ease_value_new_cubic_bezier (parser_values[i].values[0],
-                                                         parser_values[i].values[1],
-                                                         parser_values[i].values[2],
-                                                         parser_values[i].values[3]);
-          else
-            return _gtk_css_ease_value_new_steps (parser_values[i].values[0],
-                                                  parser_values[i].values[1] != 0.0);
+        }
+      else
+        {
+          if (gtk_css_parser_try_ident (parser, parser_values[i].name))
+            {
+              if (parser_values[i].is_bezier)
+                return _gtk_css_ease_value_new_cubic_bezier (parser_values[i].values[0],
+                                                             parser_values[i].values[1],
+                                                             parser_values[i].values[2],
+                                                             parser_values[i].values[3]);
+              else
+                return _gtk_css_ease_value_new_steps (parser_values[i].values[0],
+                                                      parser_values[i].values[1] != 0.0);
+            }
         }
     }
 
