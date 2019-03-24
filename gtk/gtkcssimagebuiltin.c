@@ -457,7 +457,7 @@ static gboolean
 gtk_css_image_builtin_parse (GtkCssImage  *image,
                              GtkCssParser *parser)
 {
-  if (!_gtk_css_parser_try (parser, "builtin", TRUE))
+  if (!gtk_css_parser_try_ident (parser, "builtin"))
     {
       _gtk_css_parser_error (parser, "Expected 'builtin'");
       return FALSE;

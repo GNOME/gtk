@@ -266,7 +266,7 @@ parse_border_image (GtkCssShorthandProperty  *shorthand,
         {
           GtkCssImage *image;
 
-          if (_gtk_css_parser_try (parser, "none", TRUE))
+          if (gtk_css_parser_try_ident (parser, "none"))
             image = NULL;
           else
             {
@@ -418,9 +418,9 @@ parse_border (GtkCssShorthandProperty  *shorthand,
 static GtkCssValue *
 _gtk_css_font_variant_value_try_parse (GtkCssParser *parser)
 {
-  if (_gtk_css_parser_try (parser, "normal", TRUE))
+  if (gtk_css_parser_try_ident (parser, "normal"))
     return _gtk_css_ident_value_new ("normal");
-  else if (_gtk_css_parser_try (parser, "small-caps", TRUE))
+  else if (gtk_css_parser_try_ident (parser, "small-caps"))
     return _gtk_css_ident_value_new ("small-caps");
   return NULL;
 }
@@ -485,7 +485,7 @@ parse_one_background (GtkCssShorthandProperty  *shorthand,
         {
           GtkCssImage *image;
 
-          if (_gtk_css_parser_try (parser, "none", TRUE))
+          if (gtk_css_parser_try_ident (parser, "none"))
             image = NULL;
           else
             {
@@ -717,7 +717,7 @@ parse_one_animation (GtkCssShorthandProperty  *shorthand,
 {
   do
     {
-      if (values[1] == NULL && _gtk_css_parser_try (parser, "infinite", TRUE))
+      if (values[1] == NULL && gtk_css_parser_try_ident (parser, "infinite"))
         {
           values[1] = _gtk_css_number_value_new (HUGE_VAL, GTK_CSS_NUMBER);
         }
@@ -870,11 +870,11 @@ parse_font_variant (GtkCssShorthandProperty  *shorthand,
                     GtkCssValue             **values,
                     GtkCssParser             *parser)
 {
-  if (_gtk_css_parser_try (parser, "normal", TRUE))
+  if (gtk_css_parser_try_ident (parser, "normal"))
     {
       /* all initial values */
     }
-  else if (_gtk_css_parser_try (parser, "none", TRUE))
+  else if (gtk_css_parser_try_ident (parser, "none"))
     {
       /* all initial values, except for font-variant-ligatures */
       values[0] = _gtk_css_font_variant_ligature_value_new (GTK_CSS_FONT_VARIANT_LIGATURE_NONE);

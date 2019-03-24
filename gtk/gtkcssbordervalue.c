@@ -178,11 +178,11 @@ _gtk_css_border_value_parse (GtkCssParser           *parser,
   result = _gtk_css_border_value_new (NULL, NULL, NULL, NULL);
 
   if (allow_fill)
-    result->fill = _gtk_css_parser_try (parser, "fill", TRUE);
+    result->fill = gtk_css_parser_try_ident (parser, "fill");
 
   for (i = 0; i < 4; i++)
     {
-      if (allow_auto && _gtk_css_parser_try (parser, "auto", TRUE))
+      if (allow_auto && gtk_css_parser_try_ident (parser, "auto"))
         continue;
 
       if (!gtk_css_number_value_can_parse (parser))
@@ -204,7 +204,7 @@ _gtk_css_border_value_parse (GtkCssParser           *parser,
     }
 
   if (allow_fill && !result->fill)
-    result->fill = _gtk_css_parser_try (parser, "fill", TRUE);
+    result->fill = gtk_css_parser_try_ident (parser, "fill");
 
   for (; i < 4; i++)
     {
