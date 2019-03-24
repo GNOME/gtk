@@ -263,7 +263,7 @@ gtk_css_font_features_value_parse (GtkCssParser *parser)
 
     gtk_css_font_features_value_add_feature (result, name, val);
     g_free (name);
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   return result;
 }
