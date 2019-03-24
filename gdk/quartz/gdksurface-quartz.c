@@ -1505,11 +1505,8 @@ gdk_surface_quartz_get_root_coords (GdkSurface *window,
 
   while (window != toplevel)
     {
-      if (_gdk_surface_has_impl ((GdkSurface *)window))
-        {
-          tmp_x += window->x;
-          tmp_y += window->y;
-        }
+      tmp_x += window->x;
+      tmp_y += window->y;
 
       window = window->parent;
     }
