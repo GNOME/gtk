@@ -293,6 +293,28 @@ _gtk_css_parser_try (GtkCssParser *parser,
   return TRUE;
 }
 
+gboolean
+gtk_css_parser_try_ident (GtkCssParser *parser,
+                          const char   *ident)
+{
+  gsize len;
+
+  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), FALSE);
+  g_return_val_if_fail (ident != NULL, FALSE);
+
+  len = strlen (ident);
+
+  if (g_ascii_strncasecmp (parser->data, ident, len) != 0 ||
+      parser->data[len] == '(')
+    return FALSE;
+
+  parser->data += len;
+
+  _gtk_css_parser_skip_whitespace (parser);
+
+  return TRUE;
+}
+
 static guint
 get_xdigit (char c)
 {
@@ -524,6 +546,21 @@ gtk_css_parser_has_token (GtkCssParser    *parser,
       g_assert_not_reached ();
       return FALSE;
     }
+}
+
+gboolean
+gtk_css_parser_has_function (GtkCssParser    *parser,
+                             const char      *name)
+{
+  gsize len;
+
+  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), FALSE);
+  g_return_val_if_fail (name != NULL, FALSE);
+
+  len = strlen (name);
+
+  return g_ascii_strncasecmp (parser->data, name, len) == 0 &&
+         parser->data[len] == '(';
 }
 
 char *
