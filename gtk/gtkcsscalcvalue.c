@@ -361,7 +361,7 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
   if (result == NULL)
     return NULL;
 
-  while (_gtk_css_parser_begins_with (parser, '*') || _gtk_css_parser_begins_with (parser, '/'))
+  while (TRUE)
     {
       if (actual_flags != GTK_CSS_PARSE_NUMBER && !is_number (result))
         actual_flags = GTK_CSS_PARSE_NUMBER;
@@ -391,8 +391,7 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
         }
       else
         {
-          g_assert_not_reached ();
-          goto fail;
+          break;
         }
     }
 
@@ -419,7 +418,7 @@ gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
   if (result == NULL)
     return NULL;
 
-  while (_gtk_css_parser_begins_with (parser, '+') || _gtk_css_parser_begins_with (parser, '-'))
+  while (TRUE)
     {
       GtkCssValue *next, *temp;
 
@@ -439,8 +438,7 @@ gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
         }
       else
         {
-          g_assert_not_reached ();
-          goto fail;
+          break;
         }
 
       temp = gtk_css_number_value_add (result, next);
