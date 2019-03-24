@@ -2847,7 +2847,6 @@ gdk_surface_wayland_input_shape_combine_region (GdkSurface           *surface,
 
 static void
 gdk_wayland_surface_destroy (GdkSurface *surface,
-                             gboolean    recursing,
                              gboolean    foreign_destroy)
 {
   GdkWaylandDisplay *display;
