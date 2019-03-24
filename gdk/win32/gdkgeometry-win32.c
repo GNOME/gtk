@@ -130,9 +130,7 @@ _gdk_win32_surface_tmp_unset_bg (GdkSurface *window,
   if (window->input_only || window->destroyed || !GDK_SURFACE_IS_MAPPED (window))
     return;
 
-  if (_gdk_surface_has_impl (window) &&
-      GDK_SURFACE_IS_WIN32 (window))
-    tmp_unset_bg (window);
+  tmp_unset_bg (window);
 
   if (recurse)
     {
@@ -162,11 +160,7 @@ _gdk_win32_surface_tmp_reset_bg (GdkSurface *window,
   if (window->input_only || window->destroyed || !GDK_SURFACE_IS_MAPPED (window))
     return;
 
-  if (_gdk_surface_has_impl (window) &&
-      GDK_SURFACE_IS_WIN32 (window))
-    {
-      tmp_reset_bg (window);
-    }
+  tmp_reset_bg (window);
 
   if (recurse)
     {
