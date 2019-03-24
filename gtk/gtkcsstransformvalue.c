@@ -826,332 +826,102 @@ gtk_css_transform_value_is_none (const GtkCssValue *value)
   return value->n_transforms == 0;
 }
 
-static gboolean
-gtk_css_transform_parse (GtkCssTransform *transform,
-                         GtkCssParser    *parser)
+static guint
+gtk_css_transform_parse_float (GtkCssParser *parser,
+                               guint         n,
+                               gpointer      data)
 {
-  if (_gtk_css_parser_try (parser, "matrix(", TRUE))
-    {
-      double xx, xy, x0, yx, yy, y0;
-      transform->type = GTK_CSS_TRANSFORM_MATRIX;
+  float *f = data;
+  double d;
 
-      /* FIXME: Improve error handling here */
-      if (!_gtk_css_parser_try_double (parser, &xx)
-          || !_gtk_css_parser_try (parser, ",", TRUE)
-          || !_gtk_css_parser_try_double (parser, &xy)
-          || !_gtk_css_parser_try (parser, ",", TRUE)
-          || !_gtk_css_parser_try_double (parser, &x0)
-          || !_gtk_css_parser_try (parser, ",", TRUE)
-          || !_gtk_css_parser_try_double (parser, &yx)
-          || !_gtk_css_parser_try (parser, ",", TRUE)
-          || !_gtk_css_parser_try_double (parser, &yy)
-          || !_gtk_css_parser_try (parser, ",", TRUE)
-          || !_gtk_css_parser_try_double (parser, &y0))
-        {
-          _gtk_css_parser_error (parser, "invalid syntax for matrix()");
-          return FALSE;
-        }
-      graphene_matrix_init_from_2d (&transform->matrix.matrix, 
-                                    xx, yx, xy, yy, x0, y0);
-    }
-  else if (_gtk_css_parser_try (parser, "matrix3d(", TRUE))
-    {
-      float f[16];
-      double d;
-      guint i;
+  if (!gtk_css_parser_consume_number (parser, &d))
+    return 0;
 
-      transform->type = GTK_CSS_TRANSFORM_MATRIX;
+  f[n] = d;
+  return 1;
+}
 
-      for (i = 0; i < 16; i++)
-        {
-          if (!_gtk_css_parser_try_double (parser, &d))
-            break;
-          f[i] = d;
+static guint
+gtk_css_transform_parse_length (GtkCssParser *parser,
+                                guint         n,
+                                gpointer      data)
+{
+  GtkCssValue **values = data;
 
-          if (i < 15 && !_gtk_css_parser_try (parser, ",", TRUE))
-            break;
-        }
+  values[n] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
+  if (values[n] == NULL)
+    return 0;
 
-      if (i < 16)
-        {
-          /* FIXME: Improve error handling here */
-          _gtk_css_parser_error (parser, "invalid syntax for matrix3d()");
-          return FALSE;
-        }
-      graphene_matrix_init_from_float (&transform->matrix.matrix, f);
-    }
-  else if (_gtk_css_parser_try (parser, "translate(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_TRANSLATE;
+  return 1;
+}
 
-      transform->translate.x = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
-      if (transform->translate.x == NULL)
-        return FALSE;
+static guint
+gtk_css_transform_parse_angle (GtkCssParser *parser,
+                               guint         n,
+                               gpointer      data)
+{
+  GtkCssValue **values = data;
 
-      if (_gtk_css_parser_try (parser, ",", TRUE))
-        {
-          transform->translate.y = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
-          if (transform->translate.y == NULL)
-            {
-              _gtk_css_value_unref (transform->translate.x);
-              return FALSE;
-            }
-        }
-      else
-        {
-          transform->translate.y = _gtk_css_number_value_new (0, GTK_CSS_PX);
-        }
-      transform->translate.z = _gtk_css_number_value_new (0, GTK_CSS_PX);
-    }
-  else if (_gtk_css_parser_try (parser, "translateX(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_TRANSLATE;
+  values[n] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
+  if (values[n] == NULL)
+    return 0;
 
-      transform->translate.x = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
-      if (transform->translate.x == NULL)
-        return FALSE;
-      
-      transform->translate.y = _gtk_css_number_value_new (0, GTK_CSS_PX);
-      transform->translate.z = _gtk_css_number_value_new (0, GTK_CSS_PX);
-    }
-  else if (_gtk_css_parser_try (parser, "translateY(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_TRANSLATE;
+  return 1;
+}
 
-      transform->translate.y = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
-      if (transform->translate.y == NULL)
-        return FALSE;
-      
-      transform->translate.x = _gtk_css_number_value_new (0, GTK_CSS_PX);
-      transform->translate.z = _gtk_css_number_value_new (0, GTK_CSS_PX);
-    }
-  else if (_gtk_css_parser_try (parser, "translateZ(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_TRANSLATE;
+static guint
+gtk_css_transform_parse_number (GtkCssParser *parser,
+                                guint         n,
+                                gpointer      data)
+{
+  GtkCssValue **values = data;
 
-      transform->translate.z = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
-      if (transform->translate.z == NULL)
-        return FALSE;
-      
-      transform->translate.x = _gtk_css_number_value_new (0, GTK_CSS_PX);
-      transform->translate.y = _gtk_css_number_value_new (0, GTK_CSS_PX);
-    }
-  else if (_gtk_css_parser_try (parser, "translate3d(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_TRANSLATE;
+  values[n] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
+  if (values[n] == NULL)
+    return 0;
 
-      transform->translate.x = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
-      if (transform->translate.x != NULL)
-        {
-          transform->translate.y = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
-          if (transform->translate.y != NULL)
-            {
-              transform->translate.z = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
-              if (transform->translate.z != NULL)
-                goto out;
-            }
-          _gtk_css_value_unref (transform->translate.y);
-        }
-      
-      _gtk_css_value_unref (transform->translate.x);
-      return FALSE;
-    }
-  else if (_gtk_css_parser_try (parser, "scale(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_SCALE;
+  return 1;
+}
 
-      transform->scale.x = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
-      if (transform->scale.x == NULL)
-        return FALSE;
+static guint
+gtk_css_transform_parse_rotate3d (GtkCssParser *parser,
+                                  guint         n,
+                                  gpointer      data)
+{
+  GtkCssTransform *transform = data;
 
-      if (_gtk_css_parser_try (parser, ",", TRUE))
-        {
-          transform->scale.y = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
-          if (transform->scale.y == NULL)
-            {
-              _gtk_css_value_unref (transform->scale.x);
-              return FALSE;
-            }
-        }
-      else
-        {
-          transform->scale.y = _gtk_css_value_ref (transform->scale.x);
-        }
-      transform->scale.z = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
-    }
-  else if (_gtk_css_parser_try (parser, "scaleX(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_SCALE;
-
-      transform->scale.x = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
-      if (transform->scale.x == NULL)
-        return FALSE;
-      
-      transform->scale.y = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
-      transform->scale.z = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
-    }
-  else if (_gtk_css_parser_try (parser, "scaleY(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_SCALE;
-
-      transform->scale.y = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
-      if (transform->scale.y == NULL)
-        return FALSE;
-      
-      transform->scale.x = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
-      transform->scale.z = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
-    }
-  else if (_gtk_css_parser_try (parser, "scaleZ(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_SCALE;
-
-      transform->scale.z = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
-      if (transform->scale.z == NULL)
-        return FALSE;
-      
-      transform->scale.x = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
-      transform->scale.y = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
-    }
-  else if (_gtk_css_parser_try (parser, "scale3d(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_SCALE;
-
-      transform->scale.x = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
-      if (transform->scale.x != NULL)
-        {
-          transform->scale.y = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
-          if (transform->scale.y != NULL)
-            {
-              transform->scale.z = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
-              if (transform->scale.z != NULL)
-                goto out;
-            }
-          _gtk_css_value_unref (transform->scale.y);
-        }
-      
-      _gtk_css_value_unref (transform->scale.x);
-      return FALSE;
-    }
-  else if (_gtk_css_parser_try (parser, "rotate(", TRUE) || 
-           _gtk_css_parser_try (parser, "rotateZ(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_ROTATE;
-
-      transform->rotate.angle = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
-      if (transform->rotate.angle == NULL)
-        return FALSE;
-      transform->rotate.x = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
-      transform->rotate.y = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
-      transform->rotate.z = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
-    }
-  else if (_gtk_css_parser_try (parser, "rotateX(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_ROTATE;
-
-      transform->rotate.angle = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
-      if (transform->rotate.angle == NULL)
-        return FALSE;
-      transform->rotate.x = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
-      transform->rotate.y = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
-      transform->rotate.z = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
-    }
-  else if (_gtk_css_parser_try (parser, "rotateY(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_ROTATE;
-
-      transform->rotate.angle = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
-      if (transform->rotate.angle == NULL)
-        return FALSE;
-      transform->rotate.x = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
-      transform->rotate.y = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
-      transform->rotate.z = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
-    }
-  else if (_gtk_css_parser_try (parser, "rotate3d(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_ROTATE;
-
+  switch (n)
+  {
+    case 0:
       transform->rotate.x = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
-      if (transform->rotate.x != NULL)
-        {
-          transform->rotate.y = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
-          if (transform->rotate.y != NULL)
-            {
-              transform->rotate.z = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
-              if (transform->rotate.z != NULL)
-                {
-                  transform->rotate.angle = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
-                  if (transform->rotate.angle != NULL)
-                    goto out;
-                }
-              _gtk_css_value_unref (transform->rotate.z);
-            }
-          _gtk_css_value_unref (transform->rotate.y);
-        }
-      _gtk_css_value_unref (transform->rotate.x);
-      
-      return FALSE;
-    }
-  else if (_gtk_css_parser_try (parser, "skew(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_SKEW;
+      if (transform->rotate.x == NULL)
+        return 0;
+      break;
 
-      transform->skew.x = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
-      if (transform->skew.x == NULL)
-        return FALSE;
+    case 1:
+      transform->rotate.y = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
+      if (transform->rotate.y == NULL)
+        return 0;
+      break;
 
-      if (_gtk_css_parser_try (parser, ",", TRUE))
-        {
-          transform->skew.y = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
-          if (transform->skew.y == NULL)
-            {
-              _gtk_css_value_unref (transform->skew.x);
-              return FALSE;
-            }
-        }
-      else
-        {
-          transform->skew.y = _gtk_css_number_value_new (0, GTK_CSS_DEG);
-        }
-    }
-  else if (_gtk_css_parser_try (parser, "skewX(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_SKEW_X;
+    case 2:
+      transform->rotate.z = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
+      if (transform->rotate.z == NULL)
+        return 0;
+      break;
 
-      transform->skew_x.skew = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
-      if (transform->skew_x.skew == NULL)
-        return FALSE;
-    }
-  else if (_gtk_css_parser_try (parser, "skewY(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_SKEW_Y;
+    case 3:
+      transform->rotate.angle = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
+      if (transform->rotate.angle == NULL)
+        return 0;
+      break;
 
-      transform->skew_y.skew = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
-      if (transform->skew_y.skew == NULL)
-        return FALSE;
-    }
-  else if (_gtk_css_parser_try (parser, "perspective(", TRUE))
-    {
-      transform->type = GTK_CSS_TRANSFORM_PERSPECTIVE;
+    default:
+      g_assert_not_reached();
+      return 0;
+  }
 
-      transform->perspective.depth = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
-      if (transform->perspective.depth == NULL)
-        return FALSE;
-    }
-  else
-    {
-      _gtk_css_parser_error (parser, "unknown syntax for transform");
-      return FALSE;
-    }
-
-out:
-  if (!_gtk_css_parser_try (parser, ")", TRUE))
-    {
-      gtk_css_transform_clear (transform);
-      _gtk_css_parser_error (parser, "Expected closing ')'");
-      return FALSE;
-    }
-
-  return TRUE;
+  return 1;
 }
 
 GtkCssValue *
@@ -1161,25 +931,254 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
   GArray *array;
   guint i;
 
-  if (_gtk_css_parser_try (parser, "none", TRUE))
+  if (gtk_css_parser_try_ident (parser, "none"))
     return _gtk_css_transform_value_new_none ();
 
   array = g_array_new (FALSE, FALSE, sizeof (GtkCssTransform));
 
-  do {
-    GtkCssTransform transform;
+  while (TRUE)
+    {
+      GtkCssTransform transform;
 
-    if (!gtk_css_transform_parse (&transform, parser))
-      {
-        for (i = 0; i < array->len; i++)
-          {
-            gtk_css_transform_clear (&g_array_index (array, GtkCssTransform, i));
-          }
-        g_array_free (array, TRUE);
-        return NULL;
-      }
-    g_array_append_val (array, transform);
-  } while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SEMICOLON));
+      if (gtk_css_parser_has_function (parser, "matrix"))
+        {
+          float f[6];
+
+          if (!gtk_css_parser_consume_function (parser, 6, 6, gtk_css_transform_parse_float, f))
+            goto fail;
+
+          transform.type = GTK_CSS_TRANSFORM_MATRIX;
+          graphene_matrix_init_from_2d (&transform.matrix.matrix, f[0], f[1], f[2], f[3], f[4], f[5]);
+        }
+      else if (gtk_css_parser_has_function (parser, "matrix3d"))
+        {
+          float f[16];
+
+          if (!gtk_css_parser_consume_function (parser, 16, 16, gtk_css_transform_parse_float, f))
+            goto fail;
+
+          transform.type = GTK_CSS_TRANSFORM_MATRIX;
+          graphene_matrix_init_from_float (&transform.matrix.matrix, f);
+        }
+      else if (gtk_css_parser_has_function (parser, "perspective"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_transform_parse_length, &transform.perspective.depth))
+            goto fail;
+
+          transform.type = GTK_CSS_TRANSFORM_PERSPECTIVE;
+        }
+      else if (gtk_css_parser_has_function (parser, "rotate") ||
+               gtk_css_parser_has_function (parser, "rotateZ"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_transform_parse_angle, &transform.rotate.angle))
+            goto fail;
+
+          transform.type = GTK_CSS_TRANSFORM_ROTATE;
+          transform.rotate.x = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+          transform.rotate.y = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+          transform.rotate.z = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+        }
+      else if (gtk_css_parser_has_function (parser, "rotate3d"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 4, 4, gtk_css_transform_parse_rotate3d, &transform))
+            {
+              g_clear_pointer (&transform.rotate.x, gtk_css_value_unref);
+              g_clear_pointer (&transform.rotate.y, gtk_css_value_unref);
+              g_clear_pointer (&transform.rotate.z, gtk_css_value_unref);
+              g_clear_pointer (&transform.rotate.angle, gtk_css_value_unref);
+              goto fail;
+            }
+
+          transform.type = GTK_CSS_TRANSFORM_ROTATE;
+        }
+      else if (gtk_css_parser_has_function (parser, "rotateX"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_transform_parse_angle, &transform.rotate.angle))
+            goto fail;
+
+          transform.type = GTK_CSS_TRANSFORM_ROTATE;
+          transform.rotate.x = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+          transform.rotate.y = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+          transform.rotate.z = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+        }
+      else if (gtk_css_parser_has_function (parser, "rotateY"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_transform_parse_angle, &transform.rotate.angle))
+            goto fail;
+
+          transform.type = GTK_CSS_TRANSFORM_ROTATE;
+          transform.rotate.x = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+          transform.rotate.y = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+          transform.rotate.z = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+        }
+      else if (gtk_css_parser_has_function (parser, "scale"))
+        {
+          GtkCssValue *values[2] = { NULL, NULL };
+
+          if (!gtk_css_parser_consume_function (parser, 1, 2, gtk_css_transform_parse_number, values))
+            {
+              g_clear_pointer (&values[0], gtk_css_value_unref);
+              g_clear_pointer (&values[1], gtk_css_value_unref);
+              goto fail;
+            }
+
+          transform.type = GTK_CSS_TRANSFORM_SCALE;
+          transform.scale.x = values[0];
+          if (values[1])
+            transform.scale.y = values[1];
+          else
+            transform.scale.y = gtk_css_value_ref (values[0]);
+          transform.scale.z = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+        }
+      else if (gtk_css_parser_has_function (parser, "scale3d"))
+        {
+          GtkCssValue *values[3] = { NULL, NULL };
+
+          if (!gtk_css_parser_consume_function (parser, 3, 3, gtk_css_transform_parse_number, values))
+            {
+              g_clear_pointer (&values[0], gtk_css_value_unref);
+              g_clear_pointer (&values[1], gtk_css_value_unref);
+              g_clear_pointer (&values[2], gtk_css_value_unref);
+              goto fail;
+            }
+
+          transform.type = GTK_CSS_TRANSFORM_SCALE;
+          transform.scale.x = values[0];
+          transform.scale.y = values[1];
+          transform.scale.z = values[2];
+        }
+      else if (gtk_css_parser_has_function (parser, "scaleX"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_transform_parse_number, &transform.scale.x))
+            goto fail;
+
+          transform.type = GTK_CSS_TRANSFORM_SCALE;
+          transform.scale.y = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+          transform.scale.z = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+        }
+      else if (gtk_css_parser_has_function (parser, "scaleY"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_transform_parse_number, &transform.scale.y))
+            goto fail;
+
+          transform.type = GTK_CSS_TRANSFORM_SCALE;
+          transform.scale.x = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+          transform.scale.z = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+        }
+      else if (gtk_css_parser_has_function (parser, "scaleZ"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_transform_parse_number, &transform.scale.z))
+            goto fail;
+
+          transform.type = GTK_CSS_TRANSFORM_SCALE;
+          transform.scale.x = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+          transform.scale.y = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+        }
+      else if (gtk_css_parser_has_function (parser, "skew"))
+        {
+          GtkCssValue *values[2] = { NULL, NULL };
+
+          if (!gtk_css_parser_consume_function (parser, 2, 2, gtk_css_transform_parse_angle, values))
+            {
+              g_clear_pointer (&values[0], gtk_css_value_unref);
+              g_clear_pointer (&values[1], gtk_css_value_unref);
+              goto fail;
+            }
+
+          transform.type = GTK_CSS_TRANSFORM_SKEW;
+          transform.skew.x = values[0];
+          transform.skew.y = values[1];
+        }
+      else if (gtk_css_parser_has_function (parser, "skewX"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_transform_parse_angle, &transform.skew_x.skew))
+            goto fail;
+
+          transform.type = GTK_CSS_TRANSFORM_SKEW_X;
+        }
+      else if (gtk_css_parser_has_function (parser, "skewY"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_transform_parse_angle, &transform.skew_y.skew))
+            goto fail;
+
+          transform.type = GTK_CSS_TRANSFORM_SKEW_Y;
+        }
+      else if (gtk_css_parser_has_function (parser, "translate"))
+        {
+          GtkCssValue *values[2] = { NULL, NULL };
+
+          if (!gtk_css_parser_consume_function (parser, 1, 2, gtk_css_transform_parse_length, values))
+            {
+              g_clear_pointer (&values[0], gtk_css_value_unref);
+              g_clear_pointer (&values[1], gtk_css_value_unref);
+              goto fail;
+            }
+
+          transform.type = GTK_CSS_TRANSFORM_TRANSLATE;
+          transform.translate.x = values[0];
+          if (values[1])
+            transform.translate.y = values[1];
+          else
+            transform.translate.y = _gtk_css_number_value_new (0, GTK_CSS_PX);
+          transform.translate.z = _gtk_css_number_value_new (0, GTK_CSS_PX);
+        }
+      else if (gtk_css_parser_has_function (parser, "translate3d"))
+        {
+          GtkCssValue *values[3] = { NULL, NULL };
+
+          if (!gtk_css_parser_consume_function (parser, 3, 3, gtk_css_transform_parse_length, values))
+            {
+              g_clear_pointer (&values[0], gtk_css_value_unref);
+              g_clear_pointer (&values[1], gtk_css_value_unref);
+              g_clear_pointer (&values[2], gtk_css_value_unref);
+              goto fail;
+            }
+
+          transform.type = GTK_CSS_TRANSFORM_TRANSLATE;
+          transform.translate.x = values[0];
+          transform.translate.y = values[1];
+          transform.translate.z = values[2];
+        }
+      else if (gtk_css_parser_has_function (parser, "translateX"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_transform_parse_length, &transform.translate.x))
+            goto fail;
+
+          transform.type = GTK_CSS_TRANSFORM_TRANSLATE;
+          transform.translate.y = _gtk_css_number_value_new (0, GTK_CSS_PX);
+          transform.translate.z = _gtk_css_number_value_new (0, GTK_CSS_PX);
+        }
+      else if (gtk_css_parser_has_function (parser, "translateY"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_transform_parse_length, &transform.translate.y))
+            goto fail;
+
+          transform.type = GTK_CSS_TRANSFORM_TRANSLATE;
+          transform.translate.x = _gtk_css_number_value_new (0, GTK_CSS_PX);
+          transform.translate.z = _gtk_css_number_value_new (0, GTK_CSS_PX);
+        }
+      else if (gtk_css_parser_has_function (parser, "translateZ"))
+        {
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gtk_css_transform_parse_length, &transform.translate.z))
+            goto fail;
+
+          transform.type = GTK_CSS_TRANSFORM_TRANSLATE;
+          transform.translate.x = _gtk_css_number_value_new (0, GTK_CSS_PX);
+          transform.translate.y = _gtk_css_number_value_new (0, GTK_CSS_PX);
+        }
+      else
+        {
+          break;
+        }
+
+      g_array_append_val (array, transform);
+    }
+
+  if (array->len == 0)
+    {
+      _gtk_css_parser_error (parser, "Expected a transform");
+      goto fail;
+    }
 
   value = gtk_css_transform_value_alloc (array->len);
   memcpy (value->transforms, array->data, sizeof (GtkCssTransform) * array->len);
@@ -1187,6 +1186,14 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
   g_array_free (array, TRUE);
 
   return value;
+
+fail:
+  for (i = 0; i < array->len; i++)
+    {
+      gtk_css_transform_clear (&g_array_index (array, GtkCssTransform, i));
+    }
+  g_array_free (array, TRUE);
+  return NULL;
 }
 
 GskTransform *
