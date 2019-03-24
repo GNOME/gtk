@@ -636,8 +636,6 @@ surface_remove_from_pointer_info (GdkSurface  *surface,
 /**
  * _gdk_surface_destroy_hierarchy:
  * @surface: a #GdkSurface
- * @recursing: If %TRUE, then this is being called because a parent
- *            was destroyed.
  * @recursing_native: If %TRUE, then this is being called because a native parent
  *            was destroyed. This generally means that the call to the
  *            windowing system to destroy the surface can be omitted, since
@@ -653,8 +651,6 @@ surface_remove_from_pointer_info (GdkSurface  *surface,
  **/
 static void
 _gdk_surface_destroy_hierarchy (GdkSurface *surface,
-                                gboolean   recursing,
-                                gboolean   recursing_native,
                                 gboolean   foreign_destroy)
 {
   GdkSurfaceImplClass *impl_class;
@@ -667,42 +663,32 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   display = gdk_surface_get_display (surface);
 
-  switch (surface->surface_type)
+  if (surface->gl_paint_context)
     {
-    default:
-      g_assert_not_reached ();
-      break;
-
-    case GDK_SURFACE_TOPLEVEL:
-    case GDK_SURFACE_TEMP:
-      if (surface->gl_paint_context)
-        {
-          /* Make sure to destroy if current */
-          g_object_run_dispose (G_OBJECT (surface->gl_paint_context));
-          g_object_unref (surface->gl_paint_context);
-          surface->gl_paint_context = NULL;
-        }
-
-      if (surface->frame_clock)
-        {
-          g_object_run_dispose (G_OBJECT (surface->frame_clock));
-          gdk_surface_set_frame_clock (surface, NULL);
-        }
-
-      _gdk_surface_clear_update_area (surface);
-
-      impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-      impl_class->destroy (surface, recursing_native, foreign_destroy);
-
-      surface->state |= GDK_SURFACE_STATE_WITHDRAWN;
-      surface->destroyed = TRUE;
-
-      surface_remove_from_pointer_info (surface, display);
-
-      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
-      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
-      break;
+      /* Make sure to destroy if current */
+      g_object_run_dispose (G_OBJECT (surface->gl_paint_context));
+      g_object_unref (surface->gl_paint_context);
+      surface->gl_paint_context = NULL;
     }
+
+  if (surface->frame_clock)
+    {
+      g_object_run_dispose (G_OBJECT (surface->frame_clock));
+      gdk_surface_set_frame_clock (surface, NULL);
+    }
+
+  _gdk_surface_clear_update_area (surface);
+
+  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
+  impl_class->destroy (surface, foreign_destroy);
+
+  surface->state |= GDK_SURFACE_STATE_WITHDRAWN;
+  surface->destroyed = TRUE;
+
+  surface_remove_from_pointer_info (surface, display);
+
+  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
+  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
 }
 
 /**
@@ -720,7 +706,7 @@ void
 _gdk_surface_destroy (GdkSurface *surface,
                       gboolean   foreign_destroy)
 {
-  _gdk_surface_destroy_hierarchy (surface, FALSE, FALSE, foreign_destroy);
+  _gdk_surface_destroy_hierarchy (surface, foreign_destroy);
 }
 
 /**
@@ -738,7 +724,7 @@ _gdk_surface_destroy (GdkSurface *surface,
 void
 gdk_surface_destroy (GdkSurface *surface)
 {
-  _gdk_surface_destroy_hierarchy (surface, FALSE, FALSE, FALSE);
+  _gdk_surface_destroy_hierarchy (surface, FALSE);
   g_object_unref (surface);
 }
 

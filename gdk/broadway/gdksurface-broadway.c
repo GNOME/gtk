@@ -258,7 +258,6 @@ gdk_surface_broadway_ref_cairo_surface (GdkSurface *surface)
 
 static void
 _gdk_broadway_surface_destroy (GdkSurface *surface,
-                               gboolean   recursing,
                                gboolean   foreign_destroy)
 {
   GdkSurfaceImplBroadway *impl;
