@@ -371,7 +371,6 @@ color_picked (GObject      *source,
   color = gtk_color_picker_pick_finish (picker, res, &error);
   if (color == NULL)
     {
-      g_warning ("Picking color failed: %s", error->message);
       g_error_free (error);
     }
   else
