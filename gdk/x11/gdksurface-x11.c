@@ -992,8 +992,7 @@ gdk_toplevel_x11_free_contents (GdkDisplay *display,
 
 static void
 gdk_x11_surface_destroy (GdkSurface *surface,
-                        gboolean   recursing,
-                        gboolean   foreign_destroy)
+                         gboolean    foreign_destroy)
 {
   GdkSurfaceImplX11 *impl = GDK_SURFACE_IMPL_X11 (surface->impl);
   GdkToplevelX11 *toplevel;
@@ -1013,7 +1012,7 @@ gdk_x11_surface_destroy (GdkSurface *surface,
       impl->cairo_surface = NULL;
     }
 
-  if (!recursing && !foreign_destroy)
+  if (!foreign_destroy)
     XDestroyWindow (GDK_SURFACE_XDISPLAY (surface), GDK_SURFACE_XID (surface));
 }
 
