@@ -61,9 +61,7 @@
  *
  * A #GdkSurface is a (usually) rectangular region on the screen.
  * It’s a low-level object, used to implement high-level objects such as
- * #GtkWidget and #GtkWindow on the GTK level. A #GtkWindow is a toplevel
- * surface, the thing a user might think of as a “window” with a titlebar
- * and so on; a #GtkWindow may contain many sub-GdkSurfaces.
+ * #GtkWindow on the GTK level.
  */
 
 /**
@@ -71,28 +69,6 @@
  *
  * The GdkSurface struct contains only private fields and
  * should not be accessed directly.
- */
-
-/* Historically a GdkSurface always matches a platform native window,
- * be it a toplevel window or a child window. In this setup the
- * GdkSurface (and other GdkDrawables) were platform independent classes,
- * and the actual platform specific implementation was in a delegate
- * object available as “impl” in the surface object.
- *
- * With the addition of client side windows this changes a bit. The
- * application-visible GdkSurface object behaves as it did before, but
- * such surfaces now don't a corresponding native window. Instead subwindows
- * surfaces are “client side”, i.e. emulated by the gdk code such
- * that clipping, drawing, moving, events etc work as expected.
- *
- * GdkSurfaces have a pointer to the “impl surface” they are in, i.e.
- * the topmost GdkSurface which have the same “impl” value. This is stored
- * in impl_surface, which is different from the surface itself only for client
- * side surfaces.
- * All GdkSurfaces (native or not) track the position of the surface in the parent
- * (x, y), the size of the surface (width, height), the position of the surface
- * with respect to the impl surface (abs_x, abs_y). We also track the clip
- * region of the surface wrt parent surfaces, in surface-relative coordinates (clip_region).
  */
 
 enum {
@@ -1555,6 +1531,7 @@ gdk_surface_get_device_position (GdkSurface       *surface,
                                                                 device,
                                                                 &tmp_x, &tmp_y,
                                                                 &tmp_mask);
+
   if (x)
     *x = tmp_x;
   if (y)
@@ -1597,7 +1574,7 @@ static void
 gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
 {
   GdkSurfaceImplClass *impl_class;
-  gboolean was_mapped, was_viewable;
+  gboolean was_mapped;
   gboolean did_show;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
@@ -1606,7 +1583,6 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
     return;
 
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
-  was_viewable = surface->viewable;
 
   if (raise)
     gdk_surface_raise_internal (surface);
@@ -1780,7 +1756,7 @@ void
 gdk_surface_hide (GdkSurface *surface)
 {
   GdkSurfaceImplClass *impl_class;
-  gboolean was_mapped, did_hide;
+  gboolean was_mapped;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -1824,8 +1800,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
       g_list_free (devices);
     }
-
-  did_hide = _gdk_surface_update_viewable (surface);
 
   impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
   impl_class->hide (surface);
@@ -2259,9 +2233,9 @@ gdk_surface_get_origin (GdkSurface *surface,
   g_return_val_if_fail (GDK_IS_SURFACE (surface), 0);
 
   gdk_surface_get_root_coords (surface,
-                              0, 0,
-                              x ? x : &dummy_x,
-                              y ? y : &dummy_y);
+                               0, 0,
+                               x ? x : &dummy_x,
+                               y ? y : &dummy_y);
 
   return TRUE;
 }
@@ -2299,9 +2273,7 @@ gdk_surface_get_root_coords (GdkSurface *surface,
   
   impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
   impl_class->get_root_coords (surface->impl_surface,
-                               x + surface->abs_x,
-                               y + surface->abs_y,
-                               root_x, root_y);
+                               x, y, root_x, root_y);
 }
 
 /**
@@ -2771,9 +2743,6 @@ gdk_surface_print (GdkSurface *surface,
 
   if (!gdk_surface_is_visible ((GdkSurface *)surface))
     g_print (" hidden");
-
-  g_print (" abs[%d,%d]",
-           surface->abs_x, surface->abs_y);
 
   if (surface->alpha != 255)
     g_print (" alpha[%d]",
