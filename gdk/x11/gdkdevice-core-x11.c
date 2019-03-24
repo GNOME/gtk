@@ -133,7 +133,7 @@ gdk_x11_device_core_get_history (GdkDevice      *device,
   int tmp_n_events;
   int i, j;
 
-  impl_surface = _gdk_surface_get_impl_surface (surface);
+  impl_surface = gdk_surface_get_impl_surface (surface);
   impl =  GDK_SURFACE_IMPL_X11 (impl_surface->impl);
   xcoords = XGetMotionEvents (GDK_SURFACE_XDISPLAY (surface),
                               GDK_SURFACE_XID (impl_surface),
@@ -315,7 +315,7 @@ gdk_x11_device_core_grab (GdkDevice    *device,
   xwindow = GDK_SURFACE_XID (surface);
 
   if (confine_to)
-    confine_to = _gdk_surface_get_impl_surface (confine_to);
+    confine_to = gdk_surface_get_impl_surface (confine_to);
 
   if (!confine_to || GDK_SURFACE_DESTROYED (confine_to))
     xconfine_to = None;
