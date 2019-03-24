@@ -322,7 +322,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
           return FALSE;
         }
 
-      if (!_gtk_css_parser_try (parser, ",", TRUE))
+      if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA))
         {
           _gtk_css_parser_error (parser, "Expected a comma");
           return FALSE;
@@ -334,7 +334,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
       if (linear->angle == NULL)
         return FALSE;
 
-      if (!_gtk_css_parser_try (parser, ",", TRUE))
+      if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA))
         {
           _gtk_css_parser_error (parser, "Expected a comma");
           return FALSE;
@@ -368,7 +368,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
 
     g_array_append_val (linear->stops, stop);
 
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   if (linear->stops->len < 2)
     {
