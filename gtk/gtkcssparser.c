@@ -337,6 +337,20 @@ gtk_css_parser_try_token (GtkCssParser    *parser,
       _gtk_css_parser_skip_whitespace (parser);
       return TRUE;
 
+    case GTK_CSS_TOKEN_OPEN_PARENS:
+      if (*parser->data != '(')
+        return FALSE;
+      parser->data += 1;
+      _gtk_css_parser_skip_whitespace (parser);
+      return TRUE;
+
+    case GTK_CSS_TOKEN_CLOSE_PARENS:
+      if (*parser->data != ')')
+        return FALSE;
+      parser->data += 1;
+      _gtk_css_parser_skip_whitespace (parser);
+      return TRUE;
+
     case GTK_CSS_TOKEN_COMMA:
       if (*parser->data != ',')
         return FALSE;
@@ -371,8 +385,6 @@ gtk_css_parser_try_token (GtkCssParser    *parser,
     case GTK_CSS_TOKEN_DIMENSION:
     case GTK_CSS_TOKEN_EOF:
     case GTK_CSS_TOKEN_WHITESPACE:
-    case GTK_CSS_TOKEN_OPEN_PARENS:
-    case GTK_CSS_TOKEN_CLOSE_PARENS:
     case GTK_CSS_TOKEN_OPEN_SQUARE:
     case GTK_CSS_TOKEN_CLOSE_SQUARE:
     case GTK_CSS_TOKEN_CDC:
@@ -768,6 +780,17 @@ _gtk_css_parser_try_double (GtkCssParser *parser,
 }
 
 gboolean
+gtk_css_parser_consume_number (GtkCssParser *self,
+                               double       *number)
+{
+  if (_gtk_css_parser_try_double (self, number))
+    return TRUE;
+  
+  _gtk_css_parser_error (self, "Expected a number");
+  return FALSE;
+}
+
+gboolean
 _gtk_css_parser_has_number (GtkCssParser *parser)
 {
   char c;
@@ -1141,5 +1164,62 @@ _gtk_css_print_string (GString    *str,
 
 out:
   g_string_append_c (str, '"');
+}
+
+gboolean
+gtk_css_parser_consume_function (GtkCssParser *self,
+                                 guint         min_args,
+                                 guint         max_args,
+                                 guint (* parse_func) (GtkCssParser *, guint, gpointer),
+                                 gpointer      data)
+{
+  gboolean result = FALSE;
+  char *function_name;
+  guint arg;
+
+  function_name = _gtk_css_parser_try_ident (self, FALSE);
+  g_return_val_if_fail (function_name != NULL, FALSE);
+  g_return_val_if_fail (_gtk_css_parser_try (self, "(", TRUE), FALSE);
+
+  arg = 0;
+  while (TRUE)
+    {
+      guint parse_args = parse_func (self, arg, data);
+      if (parse_args == 0)
+        break;
+      arg += parse_args;
+      if (gtk_css_parser_try_token (self, GTK_CSS_TOKEN_CLOSE_PARENS))
+        {
+          if (arg < min_args)
+            {
+              _gtk_css_parser_error (self, "%s() requires at least %u arguments", function_name, min_args);
+              break;
+            }
+          else
+            {
+              result = TRUE;
+              break;
+            }
+        }
+      else if (gtk_css_parser_try_token (self, GTK_CSS_TOKEN_COMMA))
+        {
+          if (arg >= max_args)
+            {
+              _gtk_css_parser_error (self, "Expected ')' at end of %s()", function_name);
+              break;
+            }
+
+          continue;
+        }
+      else
+        {
+          _gtk_css_parser_error (self, "Unexpected data at end of %s() argument", function_name);
+          break;
+        }
+    }
+
+  g_free (function_name);
+
+  return result;
 }
 
