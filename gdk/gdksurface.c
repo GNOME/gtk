@@ -4079,20 +4079,7 @@ gdk_surface_set_state (GdkSurface      *surface,
 
   _gdk_surface_update_viewable (surface);
 
-  /* We only really send the event to toplevels, since
-   * all the surface states don't apply to non-toplevels.
-   * Non-toplevels do use the GDK_SURFACE_STATE_WITHDRAWN flag
-   * internally so we needed to update surface->state.
-   */
-  switch (surface->surface_type)
-    {
-    case GDK_SURFACE_TOPLEVEL:
-    case GDK_SURFACE_TEMP: /* ? */
-      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
-      break;
-    default:
-      break;
-    }
+  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
 
   if (was_mapped != mapped)
     g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
