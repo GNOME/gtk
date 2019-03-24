@@ -335,9 +335,9 @@ _gtk_css_keyframes_parse (GtkCssParser *parser)
 
   while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_CLOSE_CURLY))
     {
-      if (_gtk_css_parser_try (parser, "from", TRUE))
+      if (gtk_css_parser_try_ident (parser, "from"))
         progress = 0;
-      else if (_gtk_css_parser_try (parser, "to", TRUE))
+      else if (gtk_css_parser_try_ident (parser, "to"))
         progress = 1;
       else if (_gtk_css_parser_try_double (parser, &progress) &&
                _gtk_css_parser_try (parser, "%", TRUE))

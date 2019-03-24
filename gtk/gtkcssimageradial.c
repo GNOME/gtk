@@ -264,12 +264,12 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
 
   do {
     found_one = FALSE;
-    if (!has_shape && _gtk_css_parser_try (parser, "circle", TRUE))
+    if (!has_shape && gtk_css_parser_try_ident (parser, "circle"))
       {
         radial->circle = TRUE;
         found_one = has_shape = TRUE;
       }
-    else if (!has_shape && _gtk_css_parser_try (parser, "ellipse", TRUE))
+    else if (!has_shape && gtk_css_parser_try_ident (parser, "ellipse"))
       {
         radial->circle = FALSE;
         found_one = has_shape = TRUE;

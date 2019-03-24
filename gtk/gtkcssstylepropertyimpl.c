@@ -650,7 +650,7 @@ css_image_value_parse (GtkCssStyleProperty *property,
 {
   GtkCssImage *image;
 
-  if (_gtk_css_parser_try (parser, "none", TRUE))
+  if (gtk_css_parser_try_ident (parser, "none"))
     image = NULL;
   else
     {
@@ -666,7 +666,7 @@ static GtkCssValue *
 css_image_value_parse_with_builtin (GtkCssStyleProperty *property,
                                     GtkCssParser        *parser)
 {
-  if (_gtk_css_parser_try (parser, "builtin", TRUE))
+  if (gtk_css_parser_try_ident (parser, "builtin"))
     return _gtk_css_image_value_new (gtk_css_image_builtin_new ());
 
   return css_image_value_parse (property, parser);
@@ -817,7 +817,7 @@ transition_timing_function_parse (GtkCssStyleProperty *property,
 static GtkCssValue *
 iteration_count_parse_one (GtkCssParser *parser)
 {
-  if (_gtk_css_parser_try (parser, "infinite", TRUE))
+  if (gtk_css_parser_try_ident (parser, "infinite"))
     return _gtk_css_number_value_new (HUGE_VAL, GTK_CSS_NUMBER);
 
   return _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_POSITIVE_ONLY);
