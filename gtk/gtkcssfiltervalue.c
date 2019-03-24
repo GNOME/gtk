@@ -846,7 +846,7 @@ gtk_css_filter_value_parse (GtkCssParser *parser)
         return NULL;
       }
     g_array_append_val (array, filter);
-  } while (!_gtk_css_parser_begins_with (parser, ';'));
+  } while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SEMICOLON));
 
   value = gtk_css_filter_value_alloc (array->len);
   memcpy (value->filters, array->data, sizeof (GtkCssFilter) * array->len);

@@ -99,15 +99,6 @@ _gtk_css_parser_is_eof (GtkCssParser *parser)
 }
 
 gboolean
-_gtk_css_parser_begins_with (GtkCssParser *parser,
-                             char          c)
-{
-  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), TRUE);
-
-  return *parser->data == c;
-}
-
-gboolean
 _gtk_css_parser_has_prefix (GtkCssParser *parser,
                             const char   *prefix)
 {
@@ -471,10 +462,24 @@ gtk_css_parser_has_token (GtkCssParser    *parser,
     case GTK_CSS_TOKEN_STRING:
       return *parser->data == '"' || *parser->data == '\'';
 
+    case GTK_CSS_TOKEN_OPEN_CURLY:
+      return *parser->data == '{';
+
+    case GTK_CSS_TOKEN_CLOSE_CURLY:
+      return *parser->data == '}';
+
+    case GTK_CSS_TOKEN_COMMA:
+      return *parser->data == ',';
+
+    case GTK_CSS_TOKEN_SEMICOLON:
+      return *parser->data == ';';
+
+    case GTK_CSS_TOKEN_AT_KEYWORD:
+      return *parser->data == '@';
+
     default:
     case GTK_CSS_TOKEN_IDENT:
     case GTK_CSS_TOKEN_FUNCTION:
-    case GTK_CSS_TOKEN_AT_KEYWORD:
     case GTK_CSS_TOKEN_HASH_UNRESTRICTED:
     case GTK_CSS_TOKEN_HASH_ID:
     case GTK_CSS_TOKEN_URL:
@@ -487,11 +492,7 @@ gtk_css_parser_has_token (GtkCssParser    *parser,
     case GTK_CSS_TOKEN_CLOSE_PARENS:
     case GTK_CSS_TOKEN_OPEN_SQUARE:
     case GTK_CSS_TOKEN_CLOSE_SQUARE:
-    case GTK_CSS_TOKEN_OPEN_CURLY:
-    case GTK_CSS_TOKEN_CLOSE_CURLY:
-    case GTK_CSS_TOKEN_COMMA:
     case GTK_CSS_TOKEN_COLON:
-    case GTK_CSS_TOKEN_SEMICOLON:
     case GTK_CSS_TOKEN_CDC:
     case GTK_CSS_TOKEN_CDO:
     case GTK_CSS_TOKEN_DELIM:
