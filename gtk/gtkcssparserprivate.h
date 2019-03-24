@@ -54,6 +54,8 @@ gboolean        _gtk_css_parser_has_prefix        (GtkCssParser          *parser
                                                    const char            *prefix);
 gboolean        gtk_css_parser_has_token          (GtkCssParser          *parser,
                                                    GtkCssTokenType        token_type);
+gboolean        gtk_css_parser_has_function       (GtkCssParser          *parser,
+                                                   const char            *name);
 
 /* IMPORTANT:
  * _try_foo() functions do not modify the data pointer if they fail, nor do they
@@ -63,6 +65,8 @@ gboolean        gtk_css_parser_has_token          (GtkCssParser          *parser
  * however is fine to call if you don’t know yet if the token is a foo or a bar,
  * you can _try_bar() if try_foo() failed.
  */
+gboolean        gtk_css_parser_try_ident          (GtkCssParser          *parser,
+                                                   const char            *ident);
 gboolean        _gtk_css_parser_try               (GtkCssParser          *parser,
                                                    const char            *string,
                                                    gboolean               skip_whitespace);
