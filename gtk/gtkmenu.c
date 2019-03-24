@@ -5268,14 +5268,14 @@ gtk_menu_position (GtkMenu  *menu,
                                          !!(anchor_hints & GDK_ANCHOR_RESIZE_X),
                                          !!(anchor_hints & GDK_ANCHOR_RESIZE_Y));
 
+  if (!gtk_widget_get_visible (priv->toplevel))
+    gtk_window_set_type_hint (GTK_WINDOW (priv->toplevel), priv->menu_type_hint);
+
   /* Realize so we have the proper width and height to figure out
    * the right place to popup the menu.
    */
   gtk_widget_realize (priv->toplevel);
   gtk_window_move_resize (GTK_WINDOW (priv->toplevel));
-
-  if (!gtk_widget_get_visible (priv->toplevel))
-    gtk_window_set_type_hint (GTK_WINDOW (priv->toplevel), priv->menu_type_hint);
 
   if (text_direction == GTK_TEXT_DIR_NONE)
     text_direction = gtk_widget_get_direction (GTK_WIDGET (menu));
