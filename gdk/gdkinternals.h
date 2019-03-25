@@ -347,6 +347,12 @@ void gdk_surface_get_root_coords (GdkSurface *surface,
                                   gint       *root_x,
                                   gint       *root_y);
 
+void gdk_surface_get_geometry (GdkSurface *surface,
+                               gint       *x,
+                               gint       *y,
+                               gint       *width,
+                               gint       *height);
+
 
 G_END_DECLS
 
