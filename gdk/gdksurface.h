@@ -597,12 +597,6 @@ gint          gdk_surface_get_origin     (GdkSurface      *surface,
                                           gint            *x,
                                           gint            *y);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_get_root_coords (GdkSurface     *surface,
-                                           gint             x,
-                                           gint             y,
-                                           gint            *root_x,
-                                           gint            *root_y);
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_get_root_origin (GdkSurface     *surface,
                                            gint            *x,
                                            gint            *y);
