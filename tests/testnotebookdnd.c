@@ -79,7 +79,6 @@ window_creation_function (GtkNotebook *source_notebook,
   gtk_container_add (GTK_CONTAINER (window), notebook);
 
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
-  gtk_window_move (GTK_WINDOW (window), x, y);
   gtk_widget_show (window);
 
   return GTK_NOTEBOOK (notebook);

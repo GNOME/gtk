@@ -207,10 +207,6 @@ main(int argc, char **argv)
   monitor = gdk_display_get_primary_monitor (display);
   gdk_monitor_get_geometry (monitor, &monitor_bounds);
 
-  gtk_window_move (GTK_WINDOW (window),
-                   monitor_bounds.x + (monitor_bounds.width - window_width) / 2,
-                   monitor_bounds.y + (monitor_bounds.height - window_height) / 2);
-
   gtk_widget_show (window);
 
   gtk_main ();
