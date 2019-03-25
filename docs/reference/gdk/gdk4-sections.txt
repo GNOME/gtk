@@ -264,7 +264,6 @@ gdk_surface_get_position
 gdk_surface_get_root_origin
 gdk_surface_get_frame_extents
 gdk_surface_get_origin
-gdk_surface_get_root_coords
 gdk_surface_get_device_position
 GdkModifierType
 GdkModifierIntent
