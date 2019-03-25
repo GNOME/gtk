@@ -330,7 +330,6 @@ enum {
   PROP_FOCUS_ON_MAP,
   PROP_DECORATED,
   PROP_DELETABLE,
-  PROP_GRAVITY,
   PROP_TRANSIENT_FOR,
   PROP_ATTACHED_TO,
   PROP_APPLICATION,
@@ -1038,19 +1037,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWindow:gravity:
-   *
-   * The window gravity of the window.
-   */
-  window_props[PROP_GRAVITY] =
-      g_param_spec_enum ("gravity",
-                         P_("Gravity"),
-                         P_("The window gravity of the window"),
-                         GDK_TYPE_GRAVITY,
-                         GDK_GRAVITY_NORTH_WEST,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GtkWindow:transient-for:
    *
    * The transient parent of the window. See gtk_window_set_transient_for() for
@@ -1479,15 +1465,15 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
     default:
       if (!priv->maximized)
         {
-          double x, y;
+          double tx, ty;
           gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
-          gdk_event_get_coords (event, &x, &y);
+          gdk_event_get_coords (event, &tx, &ty);
           gdk_surface_begin_resize_drag_for_device (_gtk_widget_get_surface (widget),
 						    (GdkSurfaceEdge) region,
 						    gdk_event_get_device ((GdkEvent *) event),
 						    GDK_BUTTON_PRIMARY,
-						    x, y,
+						    tx, ty,
 						    gdk_event_get_time (event));
 
           gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
@@ -1563,7 +1549,6 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
     {
       GdkEventSequence *sequence;
       gdouble start_x, start_y;
-      gint x_root, y_root;
 
       sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
@@ -2048,9 +2033,6 @@ gtk_window_set_property (GObject      *object,
     case PROP_DELETABLE:
       gtk_window_set_deletable (window, g_value_get_boolean (value));
       break;
-    case PROP_GRAVITY:
-      gtk_window_set_gravity (window, g_value_get_enum (value));
-      break;
     case PROP_TRANSIENT_FOR:
       gtk_window_set_transient_for (window, g_value_get_object (value));
       break;
@@ -2165,9 +2147,6 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_DELETABLE:
       g_value_set_boolean (value, gtk_window_get_deletable (window));
-      break;
-    case PROP_GRAVITY:
-      g_value_set_enum (value, gtk_window_get_gravity (window));
       break;
     case PROP_TRANSIENT_FOR:
       g_value_set_object (value, gtk_window_get_transient_for (window));
@@ -5063,91 +5042,6 @@ gtk_window_get_size (GtkWindow *window,
     *width = w;
   if (height)
     *height = h;
-}
-
-static void
-gtk_window_translate_csd_pos (GtkWindow *window,
-                              gint      *root_x,
-                              gint      *root_y,
-                              gint       apply)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (priv->type != GTK_WINDOW_TOPLEVEL)
-    return;
-
-  if (priv->decorated &&
-      !priv->fullscreen)
-    {
-      GtkBorder window_border = { 0 };
-      gint title_height = 0;
-      gint dx;
-      gint dy;
-
-      get_shadow_width (window, &window_border);
-      if (priv->title_box != NULL &&
-          gtk_widget_get_visible (priv->title_box) &&
-          gtk_widget_get_child_visible (priv->title_box))
-        {
-          gint minimum_height;
-
-          gtk_widget_measure (priv->title_box, GTK_ORIENTATION_VERTICAL, -1,
-                              &minimum_height, &title_height,
-                              NULL, NULL);
-        }
-
-      switch (priv->gravity)
-        {
-        case GDK_GRAVITY_NORTH:
-        case GDK_GRAVITY_CENTER:
-        case GDK_GRAVITY_SOUTH:
-          dx = (window_border.left + window_border.right) / 2;
-          break;
-
-        case GDK_GRAVITY_NORTH_WEST:
-        case GDK_GRAVITY_WEST:
-        case GDK_GRAVITY_SOUTH_WEST:
-        case GDK_GRAVITY_SOUTH_EAST:
-        case GDK_GRAVITY_EAST:
-        case GDK_GRAVITY_NORTH_EAST:
-          dx = window_border.left;
-          break;
-
-        default:
-          dx = 0;
-          break;
-        }
-
-      switch (priv->gravity)
-        {
-        case GDK_GRAVITY_WEST:
-        case GDK_GRAVITY_CENTER:
-        case GDK_GRAVITY_EAST:
-          dy = (window_border.top + title_height + window_border.bottom) / 2;
-          break;
-
-        case GDK_GRAVITY_NORTH_WEST:
-        case GDK_GRAVITY_NORTH:
-        case GDK_GRAVITY_NORTH_EAST:
-          dy = window_border.top;
-          break;
-
-        case GDK_GRAVITY_SOUTH_WEST:
-        case GDK_GRAVITY_SOUTH:
-        case GDK_GRAVITY_SOUTH_EAST:
-          dy = window_border.top + title_height;
-          break;
-
-        default:
-          dy = 0;
-          break;
-        }
-
-      if (root_x)
-        *root_x = *root_x + (dx * apply);
-      if (root_y)
-        *root_y = *root_y + (dy * apply);
-    }
 }
 
 static void
@@ -8900,57 +8794,6 @@ gtk_window_get_resizable (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
   return priv->resizable;
-}
-
-/**
- * gtk_window_set_gravity:
- * @window: a #GtkWindow
- * @gravity: window gravity
- *
- * Window gravity defines the meaning of coordinates passed to
- * gtk_window_move(). See gtk_window_move() and #GdkGravity for
- * more details.
- *
- * The default window gravity is #GDK_GRAVITY_NORTH_WEST which will
- * typically “do what you mean.”
- *
- **/
-void
-gtk_window_set_gravity (GtkWindow *window,
-			GdkGravity gravity)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  if (gravity != priv->gravity)
-    {
-      priv->gravity = gravity;
-
-      /* gtk_window_move_resize() will adapt gravity
-       */
-      gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
-
-      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_GRAVITY]);
-    }
-}
-
-/**
- * gtk_window_get_gravity:
- * @window: a #GtkWindow
- *
- * Gets the value set by gtk_window_set_gravity().
- *
- * Returns: (transfer none): window gravity
- **/
-GdkGravity
-gtk_window_get_gravity (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), 0);
-
-  return priv->gravity;
 }
 
 /**
