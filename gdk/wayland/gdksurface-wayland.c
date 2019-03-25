@@ -2465,8 +2465,13 @@ gdk_wayland_surface_map (GdkSurface *surface)
            * position of the device that holds the grab.
            */
           if (impl->position_method == POSITION_METHOD_NONE && grab_device)
-            gdk_surface_get_device_position (transient_for, grab_device,
-                                            &surface->x, &surface->y, NULL);
+            {
+              double px, py;
+              gdk_surface_get_device_position_double (transient_for, grab_device,
+                                                      &px, &py, NULL);
+              surface->x = round (px);
+              surface->y = round (py);
+            }
         }
       else
         {
