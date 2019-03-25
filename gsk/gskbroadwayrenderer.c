@@ -485,7 +485,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
         FallbackCacheElement *element;
 
         texture = node_texture_fallback (node, &t_off_x, &t_off_y);
-#if 1
+#if 0
         g_print ("Fallback %p for %s\n", texture, node->node_class->type_name);
 #endif
         element = g_new0 (FallbackCacheElement, 1);
