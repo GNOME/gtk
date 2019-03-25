@@ -3007,32 +3007,6 @@ gdk_surface_set_transient_for (GdkSurface *surface,
 }
 
 /**
- * gdk_surface_get_root_origin:
- * @surface: a toplevel #GdkSurface
- * @x: (out): return location for X position of surface frame
- * @y: (out): return location for Y position of surface frame
- *
- * Obtains the top-left corner of the window manager frame in root
- * surface coordinates.
- *
- **/
-void
-gdk_surface_get_root_origin (GdkSurface *surface,
-                             gint      *x,
-                             gint      *y)
-{
-  GdkRectangle rect;
-
-  gdk_surface_get_frame_extents (surface, &rect);
-
-  if (x)
-    *x = rect.x;
-
-  if (y)
-    *y = rect.y;
-}
-
-/**
  * gdk_surface_get_frame_extents:
  * @surface: a toplevel #GdkSurface
  * @rect: (out): rectangle to fill with bounding box of the surface frame

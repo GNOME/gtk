@@ -597,10 +597,6 @@ gint          gdk_surface_get_origin     (GdkSurface      *surface,
                                           gint            *x,
                                           gint            *y);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_get_root_origin (GdkSurface     *surface,
-                                           gint            *x,
-                                           gint            *y);
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_get_frame_extents (GdkSurface     *surface,
                                              GdkRectangle  *rect);
 
