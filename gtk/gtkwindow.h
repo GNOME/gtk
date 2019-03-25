@@ -384,14 +384,6 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_window_get_size         (GtkWindow   *window,
                                       gint        *width,
                                       gint        *height);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_move             (GtkWindow   *window,
-                                      gint         x,
-                                      gint         y);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_get_position     (GtkWindow   *window,
-                                      gint        *root_x,
-                                      gint        *root_y);
 
 GDK_AVAILABLE_IN_ALL
 GtkWindowGroup *gtk_window_get_group (GtkWindow   *window);
