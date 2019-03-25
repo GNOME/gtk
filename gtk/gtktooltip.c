@@ -634,9 +634,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
        * far away from the pointer position.
        */
       effective_toplevel = _gtk_widget_get_surface (toplevel);
-      gdk_surface_get_device_position_double (effective_toplevel,
-                                              device,
-                                              &px, &py, NULL);
+      gdk_surface_get_device_position (effective_toplevel, device, &px, &py, NULL);
       pointer_x = round (px);
       pointer_y = round (py);
 
@@ -697,7 +695,7 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 
     device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
-    gdk_surface_get_device_position_double (surface, device, &px, &py, NULL);
+    gdk_surface_get_device_position (surface, device, &px, &py, NULL);
     x = round (px);
     y = round (py);
 

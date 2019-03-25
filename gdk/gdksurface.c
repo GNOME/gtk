@@ -2039,56 +2039,50 @@ if (geometry->max_aspect * height < width)
 }
 
 /**
-* gdk_surface_get_device_position_double:
-* @surface: a #GdkSurface.
-* @device: pointer #GdkDevice to query to.
-* @x: (out) (allow-none): return location for the X coordinate of @device, or %NULL.
-* @y: (out) (allow-none): return location for the Y coordinate of @device, or %NULL.
-* @mask: (out) (allow-none): return location for the modifier mask, or %NULL.
-*
-* Obtains the current device position in doubles and modifier state.
-* The position is given in coordinates relative to the upper left
-* corner of @surface.
-*
-* Returns: (nullable) (transfer none): The surface underneath @device
-* (as with gdk_device_get_surface_at_position()), or %NULL if the
-* surface is not known to GDK.
-**/
+ * gdk_surface_get_device_position:
+ * @surface: a #GdkSurface.
+ * @device: pointer #GdkDevice to query to.
+ * @x: (out) (allow-none): return location for the X coordinate of @device, or %NULL.
+ * @y: (out) (allow-none): return location for the Y coordinate of @device, or %NULL.
+ * @mask: (out) (allow-none): return location for the modifier mask, or %NULL.
+ *
+ * Obtains the current device position in doubles and modifier state.
+ * The position is given in coordinates relative to the upper left
+ * corner of @surface.
+ *
+ * Returns: (nullable) (transfer none): The surface underneath @device
+ * (as with gdk_device_get_surface_at_position()), or %NULL if the
+ * surface is not known to GDK.
+ **/
 GdkSurface *
-gdk_surface_get_device_position_double (GdkSurface       *surface,
-				GdkDevice       *device,
-				double          *x,
-				double          *y,
-				GdkModifierType *mask)
+gdk_surface_get_device_position (GdkSurface       *surface,
+                                 GdkDevice       *device,
+                                 double          *x,
+                                 double          *y,
+                                 GdkModifierType *mask)
 {
-gdouble tmp_x, tmp_y;
-GdkModifierType tmp_mask;
-gboolean normal_child;
+  gdouble tmp_x, tmp_y;
+  GdkModifierType tmp_mask;
 
-g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
-g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
 
-tmp_x = tmp_y = 0;
-tmp_mask = 0;
-normal_child = GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->get_device_state (surface,
-								     device,
-								     &tmp_x, &tmp_y,
-								     &tmp_mask);
-/* We got the coords on the impl, convert to the surface */
-tmp_x -= surface->abs_x;
-tmp_y -= surface->abs_y;
+  tmp_x = tmp_y = 0;
+  tmp_mask = 0;
+  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->get_device_state (surface,
+                                                                device,
+                                                                &tmp_x, &tmp_y,
+                                                                &tmp_mask);
 
-if (x)
-*x = tmp_x;
-if (y)
-*y = tmp_y;
-if (mask)
-*mask = tmp_mask;
+  if (x)
+    *x = tmp_x;
+  if (y)
+    *y = tmp_y;
+  if (mask)
+    *mask = tmp_mask;
 
-if (normal_child)
-return _gdk_surface_find_child_at (surface, tmp_x, tmp_y);
-return NULL;
+  return NULL;
 }
 
 static gboolean

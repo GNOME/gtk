@@ -2467,8 +2467,8 @@ gdk_wayland_surface_map (GdkSurface *surface)
           if (impl->position_method == POSITION_METHOD_NONE && grab_device)
             {
               double px, py;
-              gdk_surface_get_device_position_double (transient_for, grab_device,
-                                                      &px, &py, NULL);
+              gdk_surface_get_device_position (transient_for, grab_device,
+                                               &px, &py, NULL);
               surface->x = round (px);
               surface->y = round (py);
             }

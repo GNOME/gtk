@@ -8645,11 +8645,11 @@ synth_crossing (GtkWidget       *widget,
   gdk_device_get_position_double (device,
                                   &event->crossing.x_root,
                                   &event->crossing.y_root);
-  gdk_surface_get_device_position_double (surface,
-                                         device,
-                                         &event->crossing.x,
-                                         &event->crossing.y,
-                                         NULL);
+  gdk_surface_get_device_position (surface,
+                                   device,
+                                   &event->crossing.x,
+                                   &event->crossing.y,
+                                   NULL);
   event->crossing.mode = mode;
   event->crossing.detail = detail;
   event->crossing.focus = FALSE;
