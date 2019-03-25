@@ -19,12 +19,16 @@ typedef struct _BroadwayServerClass BroadwayServerClass;
 #define BROADWAY_SERVER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), BROADWAY_TYPE_SERVER, BroadwayServerClass))
 
 typedef struct _BroadwayNode BroadwayNode;
+typedef struct _BroadwayTexture BroadwayTexture;
 
 struct _BroadwayNode {
+  grefcount refcount;
   guint32 type;
+  guint32 id;
   guint32 hash; /* deep hash */
   guint32 n_children;
   BroadwayNode **children;
+  guint32 texture_id;
   guint32 n_data;
   guint32 data[1];
 };
@@ -99,9 +103,11 @@ void                broadway_server_release_texture           (BroadwayServer  *
                                                                guint32          id);
 cairo_surface_t   * broadway_server_create_surface            (int              width,
                                                                int              height);
-void                broadway_server_surface_set_nodes         (BroadwayServer  *server,
+void                broadway_server_surface_update_nodes      (BroadwayServer  *server,
                                                                gint             id,
-                                                               BroadwayNode    *root);
+                                                               guint32          data[],
+                                                               int              len,
+                                                               GHashTable      *client_texture_map);
 gboolean            broadway_server_surface_move_resize       (BroadwayServer  *server,
                                                                gint             id,
                                                                gboolean         with_move,

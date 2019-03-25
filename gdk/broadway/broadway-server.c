@@ -35,7 +35,6 @@
 #include <string.h>
 #endif
 
-
 typedef struct {
   int id;
   guint32 tag;
@@ -126,23 +125,56 @@ struct BroadwaySurface {
   gint32 transient_for;
   guint32 texture;
   BroadwayNode *nodes;
+  GHashTable *node_lookup;
+};
+
+struct _BroadwayTexture {
+  grefcount refcount;
+  guint32 id;
+  GBytes *bytes;
 };
 
 static void broadway_server_resync_surfaces (BroadwayServer *server);
 static void send_outstanding_roundtrips (BroadwayServer *server);
+
+static void broadway_server_ref_texture (BroadwayServer   *server,
+                                         guint32           id);
 
 static GType broadway_server_get_type (void);
 
 G_DEFINE_TYPE (BroadwayServer, broadway_server, G_TYPE_OBJECT)
 
 static void
-broadway_node_free (BroadwayNode *node)
+broadway_texture_free (BroadwayTexture *texture)
+{
+  g_bytes_unref (texture->bytes);
+  g_free (texture);
+}
+
+static void
+broadway_node_unref (BroadwayServer *server,
+                     BroadwayNode *node)
 {
   int i;
-  for (i = 0; i < node->n_children; i++)
-    broadway_node_free (node->children[i]);
 
-  g_free (node);
+  if (g_ref_count_dec (&node->refcount))
+    {
+      for (i = 0; i < node->n_children; i++)
+        broadway_node_unref (server, node->children[i]);
+
+      if (node->texture_id)
+        broadway_server_release_texture (server, node->texture_id);
+
+      g_free (node);
+    }
+}
+
+static BroadwayNode *
+broadway_node_ref (BroadwayNode *node)
+{
+  g_ref_count_inc (&node->refcount);
+
+  return node;
 }
 
 gboolean
@@ -204,7 +236,7 @@ broadway_server_init (BroadwayServer *server)
   server->surface_id_hash = g_hash_table_new (NULL, NULL);
   server->id_counter = 0;
   server->textures = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL,
-                                            (GDestroyNotify)g_bytes_unref);
+                                            (GDestroyNotify)broadway_texture_free);
 
   root = g_new0 (BroadwaySurface, 1);
   root->id = server->id_counter++;
@@ -241,10 +273,12 @@ broadway_server_class_init (BroadwayServerClass * class)
 }
 
 static void
-broadway_surface_free (BroadwaySurface *surface)
+broadway_surface_free (BroadwayServer *server,
+                       BroadwaySurface *surface)
 {
   if (surface->nodes)
-    broadway_node_free (surface->nodes);
+    broadway_node_unref (server, surface->nodes);
+  g_hash_table_unref (surface->node_lookup);
   g_free (surface);
 }
 
@@ -1477,7 +1511,7 @@ broadway_server_destroy_surface (BroadwayServer *server,
       server->surfaces = g_list_remove (server->surfaces, surface);
       g_hash_table_remove (server->surface_id_hash,
                            GINT_TO_POINTER (id));
-      broadway_surface_free (surface);
+      broadway_surface_free (server, surface);
     }
 }
 
@@ -1605,17 +1639,169 @@ broadway_server_has_client (BroadwayServer *server)
   return server->output != NULL;
 }
 
+#define NODE_SIZE_COLOR 1
+#define NODE_SIZE_FLOAT 1
+#define NODE_SIZE_POINT 2
+#define NODE_SIZE_SIZE 2
+#define NODE_SIZE_RECT (NODE_SIZE_POINT + NODE_SIZE_SIZE)
+#define NODE_SIZE_RRECT (NODE_SIZE_RECT + 4 * NODE_SIZE_SIZE)
+#define NODE_SIZE_COLOR_STOP (NODE_SIZE_FLOAT + NODE_SIZE_COLOR)
+#define NODE_SIZE_SHADOW (NODE_SIZE_COLOR + 3 * NODE_SIZE_FLOAT)
+
+static guint32
+rotl (guint32 value, int shift)
+{
+  if ((shift &= 32 - 1) == 0)
+    return value;
+  return (value << shift) | (value >> (32 - shift));
+}
+
+static BroadwayNode *
+decode_nodes (BroadwayServer *server,
+              BroadwaySurface *surface,
+              int len,
+              guint32 data[],
+              GHashTable  *client_texture_map,
+              int *pos)
+{
+  BroadwayNode *node;
+  guint32 type, id;
+  guint32 i, n_stops, n_shadows, n_chars;
+  guint32 size, n_children;
+  gint32 texture_offset;
+  guint32 hash;
+
+  g_assert (*pos < len);
+
+  size = 0;
+  n_children = 0;
+  texture_offset = -1;
+
+  type = data[(*pos)++];
+  id = data[(*pos)++];
+  switch (type) {
+  case BROADWAY_NODE_REUSE:
+    node = g_hash_table_lookup (surface->node_lookup, GINT_TO_POINTER(id));
+    g_assert (node != NULL);
+    return broadway_node_ref (node);
+    break;
+  case BROADWAY_NODE_COLOR:
+    size = NODE_SIZE_RECT + NODE_SIZE_COLOR;
+    break;
+  case BROADWAY_NODE_BORDER:
+    size = NODE_SIZE_RRECT + 4 * NODE_SIZE_FLOAT + 4 * NODE_SIZE_COLOR;
+    break;
+  case BROADWAY_NODE_INSET_SHADOW:
+  case BROADWAY_NODE_OUTSET_SHADOW:
+    size = NODE_SIZE_RRECT + NODE_SIZE_COLOR + 4 * NODE_SIZE_FLOAT;
+    break;
+  case BROADWAY_NODE_TEXTURE:
+    texture_offset = 4;
+    size = 5;
+    break;
+  case BROADWAY_NODE_CONTAINER:
+    size = 1;
+    n_children = data[*pos];
+    break;
+  case BROADWAY_NODE_ROUNDED_CLIP:
+    size = NODE_SIZE_RRECT;
+    n_children = 1;
+    break;
+  case BROADWAY_NODE_CLIP:
+    size = NODE_SIZE_RECT;
+    n_children = 1;
+    break;
+  case BROADWAY_NODE_TRANSLATE:
+    size = NODE_SIZE_POINT;
+    n_children = 1;
+    break;
+  case BROADWAY_NODE_LINEAR_GRADIENT:
+    size = NODE_SIZE_RECT + 2 * NODE_SIZE_POINT;
+    n_stops = data[*pos + size++];
+    size += n_stops * NODE_SIZE_COLOR_STOP;
+    break;
+  case BROADWAY_NODE_SHADOW:
+    size = 1;
+    n_shadows = data[*pos];
+    size += n_shadows * NODE_SIZE_SHADOW;
+    n_children = 1;
+    break;
+  case BROADWAY_NODE_OPACITY:
+    size = NODE_SIZE_FLOAT;
+    n_children = 1;
+    break;
+  case BROADWAY_NODE_DEBUG:
+    n_chars = data[*pos];
+    size = 1 + (n_chars + 3) / 4;
+    n_children = 1;
+    break;
+  default:
+    g_assert_not_reached ();
+  }
+
+  node = g_malloc (sizeof(BroadwayNode) + (size - 1) * sizeof(guint32) + n_children * sizeof (BroadwayNode *));
+  g_ref_count_init (&node->refcount);
+  node->type = type;
+  node->id = id;
+  node->texture_id = 0;
+  node->n_children = n_children;
+  node->children = (BroadwayNode **)((char *)node + sizeof(BroadwayNode) + (size - 1) * sizeof(guint32));
+  node->n_data = size;
+  for (i = 0; i < size; i++)
+    {
+      node->data[i] = data[(*pos)++];
+      if (i == texture_offset)
+        {
+          node->texture_id = GPOINTER_TO_INT (g_hash_table_lookup (client_texture_map, GINT_TO_POINTER (node->data[i])));
+          broadway_server_ref_texture (server, node->texture_id);
+          node->data[i] = node->texture_id;
+        }
+    }
+
+  for (i = 0; i < n_children; i++)
+    node->children[i] = decode_nodes (server, surface, len, data, client_texture_map, pos);
+
+  hash = node->type << 16;
+
+  for (i = 0; i < size; i++)
+    hash ^= rotl (node->data[i], i);
+
+  for (i = 0; i < n_children; i++)
+    hash ^= rotl (node->children[i]->hash, i);
+
+  node->hash = hash;
+
+  return node;
+}
+
+static void
+init_node_lookup (BroadwaySurface *surface,
+                  BroadwayNode *node)
+{
+  int i;
+
+  g_hash_table_insert (surface->node_lookup, GINT_TO_POINTER(node->id), node);
+  for (i = 0; i < node->n_children; i++)
+    init_node_lookup (surface, node->children[i]);
+}
+
 /* passes ownership of nodes */
 void
-broadway_server_surface_set_nodes (BroadwayServer   *server,
-                                   gint              id,
-                                   BroadwayNode     *root)
+broadway_server_surface_update_nodes (BroadwayServer   *server,
+                                      gint              id,
+                                      guint32          data[],
+                                      int              len,
+                                      GHashTable      *client_texture_map)
 {
   BroadwaySurface *surface;
+  int pos = 0;
+  BroadwayNode *root;
 
   surface = broadway_server_lookup_surface (server, id);
   if (surface == NULL)
     return;
+
+  root = decode_nodes (server, surface, len, data, client_texture_map, &pos);
 
   if (server->output != NULL)
     broadway_output_surface_set_nodes (server->output, surface->id,
@@ -1623,35 +1809,62 @@ broadway_server_surface_set_nodes (BroadwayServer   *server,
                                        surface->nodes);
 
   if (surface->nodes)
-    broadway_node_free (surface->nodes);
+    broadway_node_unref (server, surface->nodes);
+
   surface->nodes = root;
+
+  g_hash_table_remove_all (surface->node_lookup);
+
+  init_node_lookup (surface, surface->nodes);
 }
 
 guint32
 broadway_server_upload_texture (BroadwayServer   *server,
-                                GBytes           *texture)
+                                GBytes           *bytes)
 {
-  guint32 id;
+  BroadwayTexture *texture;
 
-  id = ++server->next_texture_id;
+  texture = g_new0 (BroadwayTexture, 1);
+  g_ref_count_init (&texture->refcount);
+  texture->id = ++server->next_texture_id;
+  texture->bytes = g_bytes_ref (bytes);
+
   g_hash_table_replace (server->textures,
-                        GINT_TO_POINTER (id),
-                        g_bytes_ref (texture));
+                        GINT_TO_POINTER (texture->id),
+                        texture);
 
   if (server->output)
-    broadway_output_upload_texture (server->output, id, texture);
+    broadway_output_upload_texture (server->output, texture->id, texture->bytes);
 
-  return id;
+  return texture->id;
+}
+
+static void
+broadway_server_ref_texture (BroadwayServer   *server,
+                             guint32           id)
+{
+  BroadwayTexture *texture;
+
+  texture = g_hash_table_lookup (server->textures, GINT_TO_POINTER (id));
+  if (texture)
+    g_ref_count_inc (&texture->refcount);
 }
 
 void
 broadway_server_release_texture (BroadwayServer   *server,
                                  guint32           id)
 {
-  g_hash_table_remove (server->textures, GINT_TO_POINTER (id));
+  BroadwayTexture *texture;
 
-  if (server->output)
-    broadway_output_release_texture (server->output, id);
+  texture = g_hash_table_lookup (server->textures, GINT_TO_POINTER (id));
+
+  if (texture && g_ref_count_dec (&texture->refcount))
+    {
+      g_hash_table_remove (server->textures, GINT_TO_POINTER (id));
+
+      if (server->output)
+        broadway_output_release_texture (server->output, id);
+    }
 }
 
 gboolean
@@ -1801,6 +2014,7 @@ broadway_server_new_surface (BroadwayServer *server,
   surface->width = width;
   surface->height = height;
   surface->is_temp = is_temp;
+  surface->node_lookup = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   g_hash_table_insert (server->surface_id_hash,
                        GINT_TO_POINTER (surface->id),
@@ -1835,9 +2049,12 @@ broadway_server_resync_surfaces (BroadwayServer *server)
   /* First upload all textures */
   g_hash_table_iter_init (&iter, server->textures);
   while (g_hash_table_iter_next (&iter, &key, &value))
-    broadway_output_upload_texture (server->output,
-                                    GPOINTER_TO_INT (key),
-                                    (GBytes *)value);
+    {
+      BroadwayTexture *texture = value;
+      broadway_output_upload_texture (server->output,
+                                      GPOINTER_TO_INT (key),
+                                      texture->bytes);
+    }
 
   /* Then create all surfaces */
   for (l = server->surfaces; l != NULL; l = l->next)
