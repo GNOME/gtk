@@ -10,6 +10,7 @@ gdk_win32_sources = files(
   'gdkevents-win32.c',
   'gdkgeometry-win32.c',
   'gdkglcontext-win32.c',
+  'gdkwin32langnotification.c',
   'gdkglobals-win32.c',
   'gdkkeys-win32.c',
   'gdkmain-win32.c',
