@@ -37,3 +37,7 @@ option('build-examples', type: 'boolean', value: 'true',
   description : 'Build examples')
 option('build-tests', type: 'boolean', value: 'true',
   description : 'Build tests')
+
+# input modules
+option('builtin_immodules', type: 'string',
+       value: '', description: 'Build specified immodules into GTK so/DLL (comma-separated list), "all", "none" or "backend"')

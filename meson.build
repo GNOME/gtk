@@ -130,6 +130,9 @@ gtk_applicationsdir = join_paths(gtk_datadir, 'applications')
 gtk_schemasdir = join_paths(gtk_datadir, 'glib-2.0/schemas')
 gtk_appdatadir = join_paths(gtk_datadir, 'metainfo')
 
+# multipress: is mplocaledir defined somewhere?
+gtk_mplocaledir = join_paths(gtk_prefix, get_option('localedir'))
+
 cc = meson.get_compiler('c')
 
 cdata = configuration_data()
@@ -599,6 +602,84 @@ if win32_enabled
     )
 
 endif
+
+# IMModules stuff-unfortunately we need to put items here
+# as they can be built as modules or built directly into GTK
+builtin_all_immodules = false
+
+builtin_modules_opt = get_option('builtin_immodules')
+builtin_immodules = []
+
+if builtin_modules_opt == ''
+  if cc.get_id() == 'msvc'
+  # Current MSVC projects build all immodules directly into GTK by default
+    message('IMModules are built into GTK for MSVC builds by default')
+    builtin_immodules = ['all']
+  else
+    builtin_immodules = ['none']
+  endif
+else
+  builtin_immodules = builtin_modules_opt.split(',')
+endif
+
+if builtin_immodules.contains('none')
+  builtin_immodules = []
+elif builtin_immodules.contains('all')
+  builtin_all_immodules = true
+elif builtin_immodules.contains('backend')
+  builtin_immodules += backend_immodules
+endif
+
+# Unfortunately it seems that we need to include the input module sources here, and build
+# them in $(buildrootdir) if we are to build them included in GTK...
+# Make sure the source listings are the same as in modules/input/Makefile.am
+immodule_srcdir = 'modules/input/'
+immodules = [
+  [ 'am-et', [ immodule_srcdir + 'imam-et.c' ] ],
+  [ 'cedilla', [ immodule_srcdir + 'imcedilla.c' ] ],
+  [ 'cyrillic-translit', [ immodule_srcdir + 'imcyrillic-translit.c' ] ],
+  [ 'inuktitut', [ immodule_srcdir + 'iminuktitut.c' ] ],
+  [ 'ipa', [ immodule_srcdir + 'imipa.c' ] ],
+  [ 'multipress', [ immodule_srcdir + 'gtkimcontextmultipress.c', immodule_srcdir + 'immultipress.c' ], true,
+                    ['-DMULTIPRESS_LOCALEDIR="\"@0@\""'.format(gtk_mplocaledir),
+                     '-DMULTIPRESS_CONFDIR="\"@0@/gtk-3.0\""'.format(gtk_sysconfdir)] ],
+  [ 'thai', [ immodule_srcdir + 'thai-charprop.c', immodule_srcdir + 'gtkimcontextthai.c', immodule_srcdir + 'imthai.c' ] ],
+  [ 'ti-er', [ immodule_srcdir + 'imti-er.c' ] ],
+  [ 'ti-et', [ immodule_srcdir + 'imti-et.c' ] ],
+  [ 'viqr', [ immodule_srcdir + 'imviqr.c' ] ],
+  [ 'broadway', [ immodule_srcdir + 'imbroadway.c' ], broadway_enabled ],
+  [ 'ime', [ immodule_srcdir + 'gtkimcontextime.c', immodule_srcdir + 'imime.c' ], win32_enabled ],
+  # anything below this line is untested!
+  [ 'quartz', [ immodule_srcdir + 'imquartz.c' ], quartz_enabled, '-xobjective-c' ],
+  [ 'wayland', [ immodule_srcdir + immodule_srcdir + 'imwayland.c', immodule_srcdir + 'text-input-unstable-v3-protocol.c' ], wayland_enabled ],
+  [ 'waylandgtk', [ immodule_srcdir + 'imwaylandgtk.c', immodule_srcdir + 'gtk-text-input-protocol.c' ], wayland_enabled ],
+  [ 'xim', [ immodule_srcdir + 'gtkimcontextxim.c', immodule_srcdir + 'imxim.c' ], x11_enabled ],
+]
+
+gtk_included_im_cflags = []
+gtk_included_im_deps = []
+immodules_cflags = [ '-DGTK_COMPILATION' ]
+included_immodules_cflags = immodules_cflags
+
+foreach l: immodules
+  name = l[0]
+  sources = l[1]
+  cond = l.get(2, true)
+  cflags = l.get(3, [])
+
+  if cond and (builtin_immodules.contains(name) or builtin_all_immodules)
+    cflag_for_included_immodule = ['-DINCLUDE_IM_@0@'.format(name)]
+    gtk_included_im_cflags += cflag_for_included_immodule
+    included_immodules_cflags += immodules_cflags + cflag_for_included_immodule + cflags
+
+    mod = static_library('staticimmodule-@0@'.format(name),
+                         sources,
+                         c_args: common_cflags + included_immodules_cflags,
+                         include_directories: [confinc, gtkinc])
+
+    gtk_included_im_deps += declare_dependency(link_with: mod)
+  endif
+endforeach
 
 # Check for bind_textdomain_codeset, including -lintl if GLib brings it in by
 # doing the same check as glib. We can't check that by linking to glib because
