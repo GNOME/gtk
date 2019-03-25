@@ -722,6 +722,7 @@ build_gir = get_option('introspection')
 subdir('gdk')
 subdir('gtk')
 subdir('modules')
+subdir('libgail-util')
 if get_option('demos')
   subdir('demos')
 endif
