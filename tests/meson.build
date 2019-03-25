@@ -89,7 +89,6 @@ gtk_tests = [
   ['testtreesort'],
   ['testverticalcells'],
   ['treestoretest'],
-  ['testxinerama'],
   ['testgrouping'],
   ['testtooltips'],
   ['testexpand'],

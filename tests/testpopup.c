@@ -17,16 +17,6 @@ place_popup (GtkEventControllerMotion *motion,
              gdouble                   y,
              GtkWidget                *popup)
 {
-  gint width, height, win_x, win_y;
-  GtkWidget *widget;
-
-  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
-
-  gtk_window_get_size (GTK_WINDOW (popup), &width, &height);
-  gtk_window_get_position (GTK_WINDOW (widget), &win_x, &win_y);
-  gtk_window_move (GTK_WINDOW (popup),
-                   (int) win_x + x - width / 2,
-                   (int) win_y + y - height / 2);
 }
 
 static gboolean
