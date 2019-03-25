@@ -1,3 +1,22 @@
+// Protocol stuff
+
+const BROADWAY_NODE_TEXTURE = 0;
+const BROADWAY_NODE_CONTAINER = 1;
+const BROADWAY_NODE_COLOR = 2;
+const BROADWAY_NODE_BORDER = 3;
+const BROADWAY_NODE_OUTSET_SHADOW = 4;
+const BROADWAY_NODE_INSET_SHADOW = 5;
+const BROADWAY_NODE_ROUNDED_CLIP = 6;
+const BROADWAY_NODE_LINEAR_GRADIENT = 7;
+const BROADWAY_NODE_SHADOW = 8;
+const BROADWAY_NODE_OPACITY = 9;
+const BROADWAY_NODE_CLIP = 10;
+const BROADWAY_NODE_KEEP_ALL = 11;
+const BROADWAY_NODE_KEEP_THIS = 12;
+const BROADWAY_NODE_TRANSLATE = 13;
+const BROADWAY_NODE_DEBUG = 14;
+const BROADWAY_NODE_REUSE = 15;
+
 /* Helper functions for debugging */
 var logDiv = null;
 function log(str) {
@@ -416,7 +435,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
     {
         /* Leaf nodes */
 
-        case 0:  // TEXTURE
+        case BROADWAY_NODE_TEXTURE:
         {
             var rect = this.decode_rect();
             var texture_id = this.decode_uint32();
@@ -434,7 +453,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 2:  // COLOR
+    case BROADWAY_NODE_COLOR:
         {
             var rect = this.decode_rect();
             var c = this.decode_color ();
@@ -446,7 +465,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 3:  // BORDER
+    case BROADWAY_NODE_BORDER:
         {
             var rrect = this.decode_rounded_rect();
             var border_widths = [];
@@ -474,7 +493,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 4:  // OUTSET_SHADOW
+    case BROADWAY_NODE_OUTSET_SHADOW:
         {
             var rrect = this.decode_rounded_rect();
             var color = this.decode_color();
@@ -491,7 +510,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 5:  // INSET_SHADOW
+    case BROADWAY_NODE_INSET_SHADOW:
         {
             var rrect = this.decode_rounded_rect();
             var color = this.decode_color();
@@ -509,7 +528,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         break;
 
 
-    case 7:  // LINEAR_GRADIENT
+    case BROADWAY_NODE_LINEAR_GRADIENT:
         {
             var rect = this.decode_rect();
             var start = this.decode_point ();
@@ -557,7 +576,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
 
     /* Bin nodes */
 
-    case 13:  // TRANSLATE
+    case BROADWAY_NODE_TRANSLATE:
         {
             var point = this.decode_point();
             var div = document.createElement('div');
@@ -568,7 +587,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 10:  // CLIP
+    case BROADWAY_NODE_CLIP:
         {
             var rect = this.decode_rect();
             var div = document.createElement('div');
@@ -580,7 +599,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 6:  // ROUNDED_CLIP
+    case BROADWAY_NODE_ROUNDED_CLIP:
         {
             var rrect = this.decode_rounded_rect();
             var div = document.createElement('div');
@@ -592,7 +611,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 9:  // OPACITY
+    case BROADWAY_NODE_OPACITY:
         {
             var opacity = this.decode_float();
             var div = document.createElement('div');
@@ -606,7 +625,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 8:  // SHADOW
+    case BROADWAY_NODE_SHADOW:
         {
             var len = this.decode_uint32();
             var filters = "";
@@ -640,7 +659,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
 
    /* Generic nodes */
 
-    case 1: // CONTAINER
+    case BROADWAY_NODE_CONTAINER:
         {
             var div = document.createElement('div');
             var len = this.decode_uint32();
@@ -651,7 +670,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 11:  // KEEP_ALL
+    case BROADWAY_NODE_KEEP_ALL:
         {
             if (!oldNode)
                 alert("KEEP_ALL with no oldNode");
@@ -663,7 +682,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 12:  // KEEP_THIS
+    case BROADWAY_NODE_KEEP_THIS:
         {
             if (!oldNode)
                 alert("KEEP_THIS with no oldNode ");
