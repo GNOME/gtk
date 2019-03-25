@@ -113,14 +113,6 @@ gdk_device_virtual_set_surface_cursor (GdkDevice  *device,
 }
 
 static void
-gdk_device_virtual_warp (GdkDevice *device,
-			 gdouble   x,
-			 gdouble   y)
-{
-  SetCursorPos (x - _gdk_offset_x, y - _gdk_offset_y);
-}
-
-static void
 gdk_device_virtual_query_state (GdkDevice        *device,
 				GdkSurface        *window,
 				GdkSurface       **child_window,
@@ -198,7 +190,6 @@ gdk_device_virtual_class_init (GdkDeviceVirtualClass *klass)
   device_class->get_history = gdk_device_virtual_get_history;
   device_class->get_state = gdk_device_virtual_get_state;
   device_class->set_surface_cursor = gdk_device_virtual_set_surface_cursor;
-  device_class->warp = gdk_device_virtual_warp;
   device_class->query_state = gdk_device_virtual_query_state;
   device_class->grab = gdk_device_virtual_grab;
   device_class->ungrab = gdk_device_virtual_ungrab;
