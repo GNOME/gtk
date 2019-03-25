@@ -4688,8 +4688,6 @@ gtk_window_activate_focus
 gtk_window_activate_default
 gtk_window_set_modal
 gtk_window_set_default_size
-gtk_window_set_gravity
-gtk_window_get_gravity
 gtk_window_set_hide_on_close
 gtk_window_get_hide_on_close
 GtkWindowPosition
