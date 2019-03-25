@@ -47,7 +47,7 @@ gdk_device_win32_get_state (GdkDevice       *device,
 {
   double x, y;
 
-  gdk_surface_get_device_position_double (window, device, &x, &y, mask);
+  gdk_surface_get_device_position (window, device, &x, &y, mask);
 
   if (axes)
     {

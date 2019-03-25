@@ -52,8 +52,8 @@ find_widget_at_pointer (GdkDevice *device)
     {
       double x, y;
 
-      gdk_surface_get_device_position_double (gtk_widget_get_surface (widget),
-                                             device, &x, &y, NULL);
+      gdk_surface_get_device_position (gtk_widget_get_surface (widget),
+                                       device, &x, &y, NULL);
 
       widget = gtk_widget_pick (widget, x, y);
     }
