@@ -265,7 +265,6 @@ gdk_surface_set_skip_taskbar_hint
 gdk_surface_set_skip_pager_hint
 gdk_surface_set_urgency_hint
 gdk_surface_get_position
-gdk_surface_get_root_origin
 gdk_surface_get_frame_extents
 gdk_surface_get_origin
 gdk_surface_get_device_position
