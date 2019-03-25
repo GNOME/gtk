@@ -640,12 +640,6 @@ GDK_AVAILABLE_IN_ALL
 gint          gdk_surface_get_scale_factor  (GdkSurface     *surface);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_get_device_position (GdkSurface       *surface,
-                                                GdkDevice       *device,
-                                                gint            *x,
-                                                gint            *y,
-                                                GdkModifierType *mask);
-GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_surface_get_device_position_double (GdkSurface       *surface,
                                                        GdkDevice       *device,
                                                        gdouble         *x,
