@@ -126,30 +126,31 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
     gtk_snapshot_pop (snapshot);
 }
 
+static guint
+gtk_css_image_icon_theme_parse_arg (GtkCssParser *parser,
+                                    guint         arg,
+                                    gpointer      data)
+{
+  GtkCssImageIconTheme *icon_theme = data;
+
+  icon_theme->name = _gtk_css_parser_read_string (parser);
+  if (icon_theme->name == NULL)
+    return 0;
+
+  return 1;
+}
 
 static gboolean
 gtk_css_image_icon_theme_parse (GtkCssImage  *image,
                                 GtkCssParser *parser)
 {
-  GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
-
-  if (!_gtk_css_parser_try (parser, "-gtk-icontheme(", TRUE))
+  if (!gtk_css_parser_has_function (parser, "-gtk-icontheme"))
     {
       _gtk_css_parser_error (parser, "Expected '-gtk-icontheme('");
       return FALSE;
     }
 
-  icon_theme->name = _gtk_css_parser_read_string (parser);
-  if (icon_theme->name == NULL)
-    return FALSE;
-
-  if (!_gtk_css_parser_try (parser, ")", TRUE))
-    {
-      _gtk_css_parser_error (parser, "Missing closing bracket at end of '-gtk-icontheme'");
-      return FALSE;
-    }
-
-  return TRUE;
+  return gtk_css_parser_consume_function (parser, 1, 1, gtk_css_image_icon_theme_parse_arg, image);
 }
 
 static void
