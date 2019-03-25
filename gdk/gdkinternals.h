@@ -333,6 +333,13 @@ void gdk_synthesize_surface_state (GdkSurface     *surface,
                                    GdkSurfaceState unset_flags,
                                    GdkSurfaceState set_flags);
 
+void gdk_surface_get_root_coords (GdkSurface *surface,
+                                  gint        x,
+                                  gint        y,
+                                  gint       *root_x,
+                                  gint       *root_y);
+
+
 G_END_DECLS
 
 #endif /* __GDK_INTERNALS_H__ */
