@@ -13795,39 +13795,6 @@ gtk_tree_view_search_position_func (GtkTreeView *tree_view,
 				    GtkWidget   *search_window,
 				    gpointer     user_data)
 {
-  gint x, y;
-  GtkAllocation allocation;
-  GdkDisplay *display;
-  GdkMonitor *monitor;
-  GdkRectangle workarea;
-  GdkSurface *tree_surface = gtk_widget_get_surface (GTK_WIDGET (tree_view));
-  GtkRequisition requisition;
-
-  gtk_widget_realize (search_window);
-
-  display = gtk_widget_get_display (GTK_WIDGET (tree_view));
-  monitor = gdk_display_get_monitor_at_surface (display, tree_surface);
-  monitor = gdk_display_get_monitor (display, 0);
-  gdk_monitor_get_workarea (monitor, &workarea);
-
-  gtk_widget_get_allocation (GTK_WIDGET (tree_view), &allocation);
-  gtk_widget_get_preferred_size (search_window, &requisition, NULL);
-
-  if (allocation.x + allocation.width > workarea.x + workarea.width)
-    x = workarea.x + workarea.width - requisition.width;
-  else if (allocation.x + allocation.width - requisition.width < workarea.x)
-    x = workarea.x;
-  else
-    x = allocation.x + allocation.width - requisition.width;
-
-  if (allocation.y + allocation.height + requisition.height > workarea.y + workarea.height)
-    y = workarea.y + workarea.height - requisition.height;
-  else if (allocation.y + allocation.height < workarea.y) /* isn't really possible ... */
-    y = workarea.y;
-  else
-    y = allocation.y + allocation.height;
-
-  gtk_window_move (GTK_WINDOW (search_window), x, y);
 }
 
 static void
