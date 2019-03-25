@@ -30,7 +30,6 @@ AM_CPPFLAGS =						\
 	-I$(top_srcdir)/gdk				\
 	$(GMODULE_CFLAGS)				\
 	$(GTK_DEBUG_FLAGS)				\
-	$(GDK_HIDDEN_VISIBILITY_CFLAGS)			\
 	$(GTK_DEP_CFLAGS)				\
 	$(INCLUDED_IMMODULE_DEFINE)
 
@@ -1106,7 +1105,6 @@ gtk_use_quartz_private_h_sources = 	\
 	gtkquartz.h
 if USE_QUARTZ
 gtk_c_sources += $(gtk_use_quartz_c_sources)
-libgtk_3_la_CFLAGS = "-xobjective-c"
 gtk_private_h_sources += $(gtk_use_quartz_private_h_sources)
 endif
 
@@ -1472,9 +1470,14 @@ gtkunixprintinclude_HEADERS = $(gtk_unix_print_public_h_sources)
 
 nodist_libgtk_3_la_SOURCES = $(nodist_gtk_c_sources)
 libgtk_3_la_SOURCES = $(gtk_c_sources)
+libgtk_3_la_CFLAGS = $(AM_CFLAGS) $(GDK_HIDDEN_VISIBILITY_CFLAGS)
 libgtk_3_la_LDFLAGS = $(libtool_opts)
 libgtk_3_la_LIBADD = $(libadd)
 libgtk_3_la_DEPENDENCIES = $(deps)
+
+if USE_QUARTZ
+libgtk_3_la_CFLAGS += "-xobjective-c"
+endif
 
 if USE_WIN32
 libgtk_3_la_LIBADD += -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32
