@@ -5337,14 +5337,6 @@ resizable_callback (GtkWidget *widget,
 }
 
 static void
-gravity_selected (GtkWidget *widget,
-                  gpointer   data)
-{
-  gtk_window_set_gravity (GTK_WINDOW (g_object_get_data (data, "target")),
-                          gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) + GDK_GRAVITY_NORTH_WEST);
-}
-
-static void
 pos_selected (GtkWidget *widget,
               gpointer   data)
 {
@@ -5496,37 +5488,6 @@ window_controls (GtkWidget *window)
   g_signal_connect (om,
 		    "changed",
 		    G_CALLBACK (pos_selected),
-		    control_window);
-
-  gtk_container_add (GTK_CONTAINER (vbox), om);
-
-  om = gtk_combo_box_text_new ();
-  i = 0;
-  while (i < 10)
-    {
-      static gchar *names[] = {
-        "GDK_GRAVITY_NORTH_WEST",
-        "GDK_GRAVITY_NORTH",
-        "GDK_GRAVITY_NORTH_EAST",
-        "GDK_GRAVITY_WEST",
-        "GDK_GRAVITY_CENTER",
-        "GDK_GRAVITY_EAST",
-        "GDK_GRAVITY_SOUTH_WEST",
-        "GDK_GRAVITY_SOUTH",
-        "GDK_GRAVITY_SOUTH_EAST",
-        "GDK_GRAVITY_STATIC",
-        NULL
-      };
-
-      g_assert (names[i]);
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (om), names[i]);
-
-      ++i;
-    }
-
-  g_signal_connect (om,
-		    "changed",
-		    G_CALLBACK (gravity_selected),
 		    control_window);
 
   gtk_container_add (GTK_CONTAINER (vbox), om);
