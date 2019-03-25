@@ -1453,7 +1453,7 @@ gdk_surface_constrain_size (GdkGeometry    *geometry,
 }
 
 /**
- * gdk_surface_get_device_position_double:
+ * gdk_surface_get_device_position:
  * @surface: a #GdkSurface.
  * @device: pointer #GdkDevice to query to.
  * @x: (out) (allow-none): return location for the X coordinate of @device, or %NULL.
@@ -1469,11 +1469,11 @@ gdk_surface_constrain_size (GdkGeometry    *geometry,
  * surface is not known to GDK.
  **/
 GdkSurface *
-gdk_surface_get_device_position_double (GdkSurface       *surface,
-                                        GdkDevice       *device,
-                                        double          *x,
-                                        double          *y,
-                                        GdkModifierType *mask)
+gdk_surface_get_device_position (GdkSurface       *surface,
+                                 GdkDevice       *device,
+                                 double          *x,
+                                 double          *y,
+                                 GdkModifierType *mask)
 {
   gdouble tmp_x, tmp_y;
   GdkModifierType tmp_mask;

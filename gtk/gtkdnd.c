@@ -891,10 +891,10 @@ gtk_drag_begin_internal (GtkWidget          *widget,
 
   root = gtk_widget_get_root (widget);
   gtk_widget_translate_coordinates (widget, GTK_WIDGET (root), x, y, &x, &y);
-  gdk_surface_get_device_position_double (gtk_widget_get_surface (GTK_WIDGET (root)),
-                                          device,
-                                          &px, &py,
-                                          NULL);
+  gdk_surface_get_device_position (gtk_widget_get_surface (GTK_WIDGET (root)),
+                                   device,
+                                   &px, &py,
+                                   NULL);
   dx = round (px) - x;
   dy = round (py) - y;
 

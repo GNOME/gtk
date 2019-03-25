@@ -125,7 +125,7 @@ gdk_quartz_device_core_get_state (GdkDevice       *device,
 {
   gdouble x_pos, y_pos;
 
-  gdk_surface_get_device_position_double (window, device, &x_pos, &y_pos, mask);
+  gdk_surface_get_device_position (window, device, &x_pos, &y_pos, mask);
 
   if (axes)
     {

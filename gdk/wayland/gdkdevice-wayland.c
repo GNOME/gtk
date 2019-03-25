@@ -321,7 +321,7 @@ gdk_wayland_device_get_state (GdkDevice       *device,
 {
   gdouble x, y;
 
-  gdk_surface_get_device_position_double (surface, device, &x, &y, mask);
+  gdk_surface_get_device_position (surface, device, &x, &y, mask);
 
   if (axes)
     {
@@ -612,9 +612,9 @@ emulate_crossing (GdkSurface       *surface,
   gdk_event_set_device (event, device);
   gdk_event_set_source_device (event, device);
 
-  gdk_surface_get_device_position_double (surface, device,
-                                         &event->crossing.x, &event->crossing.y,
-                                         &event->crossing.state);
+  gdk_surface_get_device_position (surface, device,
+                                   &event->crossing.x, &event->crossing.y,
+                                   &event->crossing.state);
   event->crossing.x_root = event->crossing.x;
   event->crossing.y_root = event->crossing.y;
 
