@@ -5,4 +5,4 @@
   print_backends = []
 #endif
 
-#subdir('input')
+subdir('input')
