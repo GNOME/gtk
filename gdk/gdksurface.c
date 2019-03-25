@@ -1499,43 +1499,6 @@ gdk_surface_get_device_position_double (GdkSurface       *surface,
   return NULL;
 }
 
-/**
- * gdk_surface_get_device_position:
- * @surface: a #GdkSurface.
- * @device: pointer #GdkDevice to query to.
- * @x: (out) (allow-none): return location for the X coordinate of @device, or %NULL.
- * @y: (out) (allow-none): return location for the Y coordinate of @device, or %NULL.
- * @mask: (out) (allow-none): return location for the modifier mask, or %NULL.
- *
- * Obtains the current device position and modifier state.
- * The position is given in coordinates relative to the upper left
- * corner of @surface.
- *
- * Use gdk_surface_get_device_position_double() if you need subpixel precision.
- *
- * Returns: (nullable) (transfer none): The surface underneath @device
- * (as with gdk_device_get_surface_at_position()), or %NULL if the
- * surface is not known to GDK.
- **/
-GdkSurface *
-gdk_surface_get_device_position (GdkSurface       *surface,
-                                 GdkDevice       *device,
-                                 gint            *x,
-                                 gint            *y,
-                                 GdkModifierType *mask)
-{
-  gdouble tmp_x, tmp_y;
-
-  surface = gdk_surface_get_device_position_double (surface, device,
-                                                  &tmp_x, &tmp_y, mask);
-  if (x)
-    *x = round (tmp_x);
-  if (y)
-    *y = round (tmp_y);
-
-  return surface;
-}
-
 static void
 gdk_surface_raise_internal (GdkSurface *surface)
 {
