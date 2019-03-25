@@ -684,8 +684,6 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
   tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
 
   {
-    gint tx, ty;
-
     surface = tooltip->last_surface;
 
     if (!GDK_IS_SURFACE (surface))
@@ -695,7 +693,6 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 
     gdk_surface_get_device_position (surface, device, &x, &y, NULL);
 
-    gdk_surface_get_root_coords (surface, x, y, &tx, &ty);
     tooltip_widget = _gtk_widget_find_at_coords (surface, x, y, &x, &y);
   }
 
