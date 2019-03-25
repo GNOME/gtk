@@ -283,10 +283,6 @@ gdk_surface_set_support_multidevice
 gdk_surface_get_device_cursor
 gdk_surface_set_device_cursor
 
-<SUBSECTION>
-gdk_surface_coords_from_parent
-gdk_surface_coords_to_parent
-
 <SUBSECTION Standard>
 GDK_SURFACE
 GDK_SURFACE_GET_CLASS
