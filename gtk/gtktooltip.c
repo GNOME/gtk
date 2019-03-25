@@ -618,6 +618,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
       const int max_x_distance = 32;
       /* Max 48x48 icon + default padding */
       const int max_anchor_rect_height = 48 + 8;
+      double px, py;
       int pointer_x, pointer_y;
 
       /*
@@ -633,9 +634,11 @@ gtk_tooltip_position (GtkTooltip *tooltip,
        * far away from the pointer position.
        */
       effective_toplevel = _gtk_widget_get_surface (toplevel);
-      gdk_surface_get_device_position (effective_toplevel,
-                                       device,
-                                       &pointer_x, &pointer_y, NULL);
+      gdk_surface_get_device_position_double (effective_toplevel,
+                                              device,
+                                              &px, &py, NULL);
+      pointer_x = round (px);
+      pointer_y = round (py);
 
       if (anchor_rect.height > max_anchor_rect_height)
         {
@@ -674,6 +677,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 static void
 gtk_tooltip_show_tooltip (GdkDisplay *display)
 {
+  double px, py;
   gint x, y;
   GdkSurface *surface;
   GtkWidget *tooltip_widget;
@@ -693,7 +697,9 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 
     device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
 
-    gdk_surface_get_device_position (surface, device, &x, &y, NULL);
+    gdk_surface_get_device_position_double (surface, device, &px, &py, NULL);
+    x = round (px);
+    y = round (py);
 
     gdk_surface_get_root_coords (surface, x, y, &tx, &ty);
     tooltip_widget = _gtk_widget_find_at_coords (surface, x, y, &x, &y);

@@ -886,6 +886,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   GtkDragSourceInfo *info;
   GtkWidget *toplevel;
   GdkDrag *drag;
+  double px, py;
   int dx, dy;
   GtkDragContent *content;
 
@@ -893,14 +894,13 @@ gtk_drag_begin_internal (GtkWidget          *widget,
     device = gdk_device_get_associated_device (device);
 
   toplevel = gtk_widget_get_toplevel (widget);
-  gtk_widget_translate_coordinates (widget, toplevel,
-                                    x, y, &x, &y);
+  gtk_widget_translate_coordinates (widget, toplevel, x, y, &x, &y);
   gdk_surface_get_device_position (gtk_widget_get_surface (toplevel),
-                                  device,
-                                  &dx, &dy,
-                                  NULL);
-  dx -= x;
-  dy -= y;
+                                   device,
+                                   &px, &py,
+                                   NULL);
+  dx = round (px) - x;
+  dy = round (py) - y;
 
   content = g_object_new (GTK_TYPE_DRAG_CONTENT, NULL);
   content->widget = g_object_ref (widget);
