@@ -597,20 +597,14 @@ GDK_AVAILABLE_IN_ALL
 int           gdk_surface_get_width       (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
 int           gdk_surface_get_height      (GdkSurface       *surface);
-GDK_DEPRECATED
+GDK_AVAILABLE_IN_ALL
 void          gdk_surface_get_position   (GdkSurface      *surface,
                                           gint            *x,
                                           gint            *y);
-GDK_DEPRECATED
+GDK_AVAILABLE_IN_ALL
 gint          gdk_surface_get_origin     (GdkSurface      *surface,
                                           gint            *x,
                                           gint            *y);
-GDK_DEPRECATED
-void          gdk_surface_get_root_coords (GdkSurface     *surface,
-                                           gint             x,
-                                           gint             y,
-                                           gint            *root_x,
-                                           gint            *root_y);
 GDK_DEPRECATED
 void          gdk_surface_get_root_origin (GdkSurface     *surface,
                                            gint            *x,
