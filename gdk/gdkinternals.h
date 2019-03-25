@@ -341,6 +341,11 @@ GdkGrabStatus gdk_device_grab (GdkDevice        *device,
                                guint32           time_);
 void gdk_device_ungrab        (GdkDevice        *device,
                                guint32           time_);
+void gdk_surface_get_root_coords (GdkSurface *surface,
+                                  gint        x,
+                                  gint        y,
+                                  gint       *root_x,
+                                  gint       *root_y);
 
 
 G_END_DECLS
