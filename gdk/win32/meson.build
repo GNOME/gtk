@@ -19,6 +19,7 @@ gdk_win32_sources = files(
   'gdkselection-win32.c',
   'gdktestutils-win32.c',
   'gdkwin32id.c',
+  'gdkwin32langnotification.c',
   'gdkwindow-win32.c',
 )
 
