@@ -189,9 +189,6 @@ main(int argc, char **argv)
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   frame_stats_ensure (GTK_WINDOW (window));
 
-  gtk_window_set_keep_above (GTK_WINDOW (window), TRUE);
-  gtk_window_set_gravity (GTK_WINDOW (window), GDK_GRAVITY_CENTER);
-
   da = gtk_drawing_area_new ();
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (da), on_draw, NULL, NULL);
   gtk_container_add (GTK_CONTAINER (window), da);
