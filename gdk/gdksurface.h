@@ -579,12 +579,6 @@ GDK_AVAILABLE_IN_ALL
 GdkCursor    *gdk_surface_get_device_cursor (GdkSurface     *surface,
                                              GdkDevice     *device);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_get_geometry   (GdkSurface      *surface,
-                                          gint            *x,
-                                          gint            *y,
-                                          gint            *width,
-                                          gint            *height);
-GDK_AVAILABLE_IN_ALL
 int           gdk_surface_get_width       (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
 int           gdk_surface_get_height      (GdkSurface       *surface);
