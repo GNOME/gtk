@@ -603,19 +603,6 @@ void          gdk_surface_get_root_coords (GdkSurface     *surface,
                                            gint            *root_x,
                                            gint            *root_y);
 GDK_AVAILABLE_IN_ALL
-void       gdk_surface_coords_to_parent   (GdkSurface       *surface,
-                                           gdouble          x,
-                                           gdouble          y,
-                                           gdouble         *parent_x,
-                                           gdouble         *parent_y);
-GDK_AVAILABLE_IN_ALL
-void       gdk_surface_coords_from_parent (GdkSurface       *surface,
-                                           gdouble          parent_x,
-                                           gdouble          parent_y,
-                                           gdouble         *x,
-                                           gdouble         *y);
-
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_get_root_origin (GdkSurface     *surface,
                                            gint            *x,
                                            gint            *y);
