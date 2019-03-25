@@ -4556,13 +4556,14 @@ gdk_x11_surface_set_opaque_region (GdkSurface      *surface,
 
 static gboolean
 gdk_x11_surface_show_window_menu (GdkSurface *surface,
-                                 GdkEvent  *event)
+                                  GdkEvent   *event)
 {
   GdkSurfaceImplX11 *impl = GDK_SURFACE_IMPL_X11 (surface->impl);
   GdkDisplay *display = GDK_SURFACE_DISPLAY (surface);
   GdkDevice *device;
   int device_id;
-  double x_root, y_root;
+  double x, y;
+  int x_root, y_root;
   XClientMessageEvent xclient = { 0 };
 
   switch ((guint) event->any.type)
@@ -4578,7 +4579,8 @@ gdk_x11_surface_show_window_menu (GdkSurface *surface,
                                             g_intern_static_string ("_GTK_SHOW_WINDOW_MENU")))
     return FALSE;
 
-  gdk_event_get_root_coords (event, &x_root, &y_root);
+  gdk_event_get_coords (event, &x, &y);
+  gdk_surface_x11_get_root_coords (surface, x, y, &x_root, &y_root);
   device = gdk_event_get_device (event);
   g_object_get (G_OBJECT (device),
                 "device-id", &device_id,
