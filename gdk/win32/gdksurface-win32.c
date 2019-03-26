@@ -4112,7 +4112,7 @@ setup_drag_move_resize_context (GdkSurface                   *window,
            * the titlebar is, if any.
            */
           root_y = wy + wheight / 2;
-          gdk_device_warp (device, root_x, root_y);
+          SetCursorPos (root_x - _gdk_offset_x, root_y - _gdk_offset_y);
         }
     }
 
