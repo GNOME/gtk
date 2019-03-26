@@ -380,7 +380,7 @@ gdk_broadway_display_ensure_texture (GdkDisplay *display,
       data = g_new0 (BroadwayTextureData, 1);
       data->id = id;
       data->display = g_object_ref (display);
-      g_object_set_data_full (G_OBJECT (texture), "broadway-data", data, (GDestroyNotify)broadway_texture_data_free);
+     g_object_set_data_full (G_OBJECT (texture), "broadway-data", data, (GDestroyNotify)broadway_texture_data_free);
     }
 
   return data->id;

@@ -4,6 +4,7 @@
 #include "broadway/gdkprivate-broadway.h"
 
 #include "gskdebugprivate.h"
+#include "gsktransformprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gdk/gdktextureprivate.h"
@@ -12,6 +13,16 @@ struct _GskBroadwayRenderer
 {
   GskRenderer parent_instance;
   GdkBroadwayDrawContext *draw_context;
+  guint32 next_node_id;
+
+  /* Set during rendering */
+  GArray *nodes;              /* Owned by draw_contex */
+  GPtrArray *node_textures;   /* Owned by draw_contex */
+  GHashTable *node_lookup;
+
+  /* Kept from last frame */
+  GHashTable *last_node_lookup;
+  GskRenderNode *last_root; /* Owning refs to the things in last_node_lookup */
 };
 
 struct _GskBroadwayRendererClass
@@ -71,10 +82,23 @@ gsk_broadway_renderer_render_texture (GskRenderer           *renderer,
   return texture;
 }
 
+/* uint32 is sent in native endianness, and then converted to little endian in broadwayd when sending to browser */
 static void
 add_uint32 (GArray *nodes, guint32 v)
 {
   g_array_append_val (nodes, v);
+}
+
+static void
+add_float (GArray *nodes, float f)
+{
+  union {
+    float f;
+    guint32 i;
+  } u;
+
+  u.f = f;
+  g_array_append_val (nodes, u.i);
 }
 
 static guint32
@@ -96,18 +120,16 @@ add_rgba (GArray *nodes, const GdkRGBA *rgba)
 }
 
 static void
-add_float (GArray *nodes, float f)
+add_xy (GArray *nodes, float x, float y, float offset_x, float offset_y)
 {
-  gint32 i = (gint32) (f * 256.0f);
-  guint u = (guint32) i;
-  g_array_append_val (nodes, u);
+  add_float (nodes, x - offset_x);
+  add_float (nodes, y - offset_y);
 }
 
 static void
 add_point (GArray *nodes, const graphene_point_t *point, float offset_x, float offset_y)
 {
-  add_float (nodes, point->x - offset_x);
-  add_float (nodes, point->y - offset_y);
+  add_xy (nodes, point->x, point->y, offset_x, offset_y);
 }
 
 static void
@@ -140,313 +162,157 @@ add_color_stop (GArray *nodes, const GskColorStop *stop)
   add_rgba (nodes, &stop->color);
 }
 
-static gboolean
-float_is_int32 (float f)
-{
-  gint32 i = (gint32)f;
-  float f2 = (float)i;
-  return f2 == f;
-}
-
-static GHashTable *gsk_broadway_node_cache;
-
-typedef struct {
-  GdkTexture *texture;
-  GskRenderNode *node;
-  float off_x;
-  float off_y;
-} NodeCacheElement;
-
 static void
-node_cache_element_free (NodeCacheElement *element)
+add_string (GArray *nodes, const char *str)
 {
-  gsk_render_node_unref (element->node);
-  g_free (element);
-}
+  guint32 len = strlen(str);
+  guint32 v, c;
 
-static guint
-glyph_info_hash (const PangoGlyphInfo *info)
-{
-  return info->glyph ^
-    info->geometry.width << 6 ^
-    info->geometry.x_offset << 12 ^
-    info->geometry.y_offset << 18 ^
-    info->attr.is_cluster_start << 30;
-}
+  add_uint32 (nodes, len);
 
-static gboolean
-glyph_info_equal (const PangoGlyphInfo *a,
-                  const PangoGlyphInfo *b)
-{
-  return
-    a->glyph == b->glyph &&
-    a->geometry.width == b->geometry.width &&
-    a->geometry.x_offset == b->geometry.x_offset &&
-    a->geometry.y_offset == b->geometry.y_offset &&
-    a->attr.is_cluster_start == b->attr.is_cluster_start;
- }
-
-static guint
-hash_matrix (const graphene_matrix_t *matrix)
-{
-  float m[16];
-  guint h = 0;
-  int i;
-
-  graphene_matrix_to_float (matrix, m);
-  for (i = 0; i < 16; i++)
-    h ^= (guint) m[i];
-
-  return h;
-}
-
-static gboolean
-matrix_equal (const graphene_matrix_t *a,
-              const graphene_matrix_t *b)
-{
-  float ma[16];
-  float mb[16];
-  int i;
-
-  graphene_matrix_to_float (a, ma);
-  graphene_matrix_to_float (b, mb);
-  for (i = 0; i < 16; i++)
+  v = 0;
+  c = 0;
+  while (*str != 0)
     {
-      if (ma[i] != mb[i])
-        return FALSE;
-    }
-
-  return TRUE;
-}
-
-static guint
-hash_vec4 (const graphene_vec4_t *vec4)
-{
-  float v[4];
-  guint h = 0;
-  int i;
-
-  graphene_vec4_to_float (vec4, v);
-  for (i = 0; i < 4; i++)
-    h ^= (guint) v[i];
-
-  return h;
-}
-
-static gboolean
-vec4_equal (const graphene_vec4_t *a,
-            const graphene_vec4_t *b)
-{
-  float va[4];
-  float vb[4];
-  int i;
-
-  graphene_vec4_to_float (a, va);
-  graphene_vec4_to_float (b, vb);
-  for (i = 0; i < 4; i++)
-    {
-      if (va[i] != vb[i])
-        return FALSE;
-    }
-
-  return TRUE;
-}
-
-static guint
-node_cache_hash (GskRenderNode *node)
-{
-  GskRenderNodeType type;
-  guint h;
-
-  type = gsk_render_node_get_node_type (node);
-  h = type << 28;
-  if (type == GSK_TEXT_NODE &&
-      float_is_int32 (gsk_text_node_get_x (node)) &&
-      float_is_int32 (gsk_text_node_get_y (node)))
-    {
-      guint i;
-      const PangoFont *font = gsk_text_node_peek_font (node);
-      guint n_glyphs = gsk_text_node_get_num_glyphs (node);
-      const PangoGlyphInfo *infos = gsk_text_node_peek_glyphs (node);
-      const GdkRGBA *color = gsk_text_node_peek_color (node);
-
-      h ^= g_direct_hash (font) ^ n_glyphs << 16 ^ gdk_rgba_hash (color);
-      for (i = 0; i < n_glyphs; i++)
-        h ^= glyph_info_hash (&infos[i]);
-
-      return h;
-    }
-
-  if (type == GSK_COLOR_MATRIX_NODE &&
-      gsk_render_node_get_node_type (gsk_color_matrix_node_get_child (node)) == GSK_TEXTURE_NODE)
-    {
-      const graphene_matrix_t *matrix = gsk_color_matrix_node_peek_color_matrix (node);
-      const graphene_vec4_t *offset = gsk_color_matrix_node_peek_color_offset (node);
-      GskRenderNode *child = gsk_color_matrix_node_get_child (node);
-      GdkTexture *texture = gsk_texture_node_get_texture (child);
-
-      h ^= g_direct_hash (texture) ^ hash_matrix (matrix) ^ hash_vec4 (offset);
-
-      return h;
-    }
-
-  return 0;
-}
-
-static gboolean
-node_cache_equal (GskRenderNode *a,
-                  GskRenderNode *b)
-{
-  GskRenderNodeType type;
-
-  type = gsk_render_node_get_node_type (a);
-  if (type != gsk_render_node_get_node_type (b))
-    return FALSE;
-
-  if (type == GSK_TEXT_NODE &&
-      float_is_int32 (gsk_text_node_get_x (a)) &&
-      float_is_int32 (gsk_text_node_get_y (a)) &&
-      float_is_int32 (gsk_text_node_get_x (b)) &&
-      float_is_int32 (gsk_text_node_get_y (b)))
-    {
-      const PangoFont *a_font = gsk_text_node_peek_font (a);
-      guint a_n_glyphs = gsk_text_node_get_num_glyphs (a);
-      const PangoGlyphInfo *a_infos = gsk_text_node_peek_glyphs (a);
-      const GdkRGBA *a_color = gsk_text_node_peek_color (a);
-      const PangoFont *b_font = gsk_text_node_peek_font (b);
-      guint b_n_glyphs = gsk_text_node_get_num_glyphs (b);
-      const PangoGlyphInfo *b_infos = gsk_text_node_peek_glyphs (b);
-      const GdkRGBA *b_color = gsk_text_node_peek_color (a);
-      guint i;
-
-      if (a_font != b_font)
-        return FALSE;
-
-      if (a_n_glyphs != b_n_glyphs)
-        return FALSE;
-
-      for (i = 0; i < a_n_glyphs; i++)
+      v |= (*str++) << 8*c++;
+      if (c == 4)
         {
-          if (!glyph_info_equal (&a_infos[i], &b_infos[i]))
-            return FALSE;
+          add_uint32 (nodes, v);
+          v = 0;
+          c = 0;
         }
-
-      if (!gdk_rgba_equal (a_color, b_color))
-        return FALSE;
-
-      return TRUE;
     }
 
-  if (type == GSK_COLOR_MATRIX_NODE &&
-      gsk_render_node_get_node_type (gsk_color_matrix_node_get_child (a)) == GSK_TEXTURE_NODE &&
-      gsk_render_node_get_node_type (gsk_color_matrix_node_get_child (b)) == GSK_TEXTURE_NODE)
-    {
-      const graphene_matrix_t *a_matrix = gsk_color_matrix_node_peek_color_matrix (a);
-      const graphene_vec4_t *a_offset = gsk_color_matrix_node_peek_color_offset (a);
-      GskRenderNode *a_child = gsk_color_matrix_node_get_child (a);
-      GdkTexture *a_texture = gsk_texture_node_get_texture (a_child);
-      const graphene_matrix_t *b_matrix = gsk_color_matrix_node_peek_color_matrix (b);
-      const graphene_vec4_t *b_offset = gsk_color_matrix_node_peek_color_offset (b);
-      GskRenderNode *b_child = gsk_color_matrix_node_get_child (b);
-      GdkTexture *b_texture = gsk_texture_node_get_texture (b_child);
-
-      if (a_texture != b_texture)
-        return FALSE;
-
-      if (!matrix_equal (a_matrix, b_matrix))
-        return FALSE;
-
-      if (!vec4_equal (a_offset, b_offset))
-        return FALSE;
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static GdkTexture *
-node_cache_lookup (GskRenderNode *node,
-                   float *off_x, float *off_y)
-{
-  NodeCacheElement *hit;
-
-  if (gsk_broadway_node_cache == NULL)
-    gsk_broadway_node_cache = g_hash_table_new_full ((GHashFunc)node_cache_hash,
-                                                     (GEqualFunc)node_cache_equal,
-                                                     NULL,
-                                                     (GDestroyNotify)node_cache_element_free);
-
-  hit = g_hash_table_lookup (gsk_broadway_node_cache, node);
-  if (hit)
-    {
-      *off_x = hit->off_x;
-      *off_y = hit->off_y;
-      return g_object_ref (hit->texture);
-    }
-
-  return NULL;
+  if (c != 0)
+    add_uint32 (nodes, v);
 }
 
 static void
-cached_texture_gone (gpointer data,
-                     GObject *where_the_object_was)
-{
-  NodeCacheElement *element = data;
-  g_hash_table_remove (gsk_broadway_node_cache, element->node);
-}
+collect_reused_child_nodes (GskRenderer *renderer,
+                            GskRenderNode *node);
 
 static void
-node_cache_store (GskRenderNode *node,
-                  GdkTexture *texture,
-                  float off_x,
-                  float off_y)
+collect_reused_node (GskRenderer *renderer,
+                     GskRenderNode *node)
 {
-  GskRenderNodeType type;
+  GskBroadwayRenderer *self = GSK_BROADWAY_RENDERER (renderer);
+  guint32 old_id;
 
-  type = gsk_render_node_get_node_type (node);
-  if ((type == GSK_TEXT_NODE &&
-       float_is_int32 (gsk_text_node_get_x (node)) &&
-       float_is_int32 (gsk_text_node_get_y (node))) ||
-      (type == GSK_COLOR_MATRIX_NODE &&
-       gsk_render_node_get_node_type (gsk_color_matrix_node_get_child (node)) == GSK_TEXTURE_NODE))
+  if (self->last_node_lookup &&
+      (old_id = GPOINTER_TO_INT(g_hash_table_lookup (self->last_node_lookup, node))) != 0)
     {
-      NodeCacheElement *element = g_new0 (NodeCacheElement, 1);
-      element->texture = texture;
-      element->node = gsk_render_node_ref (node);
-      element->off_x = off_x;
-      element->off_y = off_y;
-      g_object_weak_ref (G_OBJECT (texture), cached_texture_gone, element);
-      g_hash_table_insert (gsk_broadway_node_cache, element->node, element);
+      g_hash_table_insert (self->node_lookup, node, GINT_TO_POINTER (old_id));
+      collect_reused_child_nodes (renderer, node);
+    }
+}
 
+
+static void
+collect_reused_child_nodes (GskRenderer *renderer,
+                            GskRenderNode *node)
+{
+  guint i;
+
+  switch (gsk_render_node_get_node_type (node))
+    {
+    case GSK_NOT_A_RENDER_NODE:
+      g_assert_not_reached ();
       return;
+
+      /* Leaf nodes */
+
+    case GSK_TEXTURE_NODE:
+    case GSK_CAIRO_NODE:
+    case GSK_COLOR_NODE:
+    case GSK_BORDER_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
+    case GSK_INSET_SHADOW_NODE:
+    case GSK_LINEAR_GRADIENT_NODE:
+
+      /* Fallbacks (=> leaf for now */
+    case GSK_COLOR_MATRIX_NODE:
+    case GSK_TEXT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_REPEAT_NODE:
+    case GSK_BLEND_NODE:
+    case GSK_CROSS_FADE_NODE:
+    case GSK_BLUR_NODE:
+
+    default:
+
+      break;
+
+      /* Bin nodes */
+
+    case GSK_SHADOW_NODE:
+      collect_reused_node (renderer,
+                           gsk_shadow_node_get_child (node));
+      break;
+
+    case GSK_OPACITY_NODE:
+      collect_reused_node (renderer,
+                           gsk_opacity_node_get_child (node));
+      break;
+
+    case GSK_ROUNDED_CLIP_NODE:
+      collect_reused_node (renderer,
+                           gsk_rounded_clip_node_get_child (node));
+      break;
+
+    case GSK_CLIP_NODE:
+      collect_reused_node (renderer,
+                           gsk_clip_node_get_child (node));
+      break;
+
+    case GSK_TRANSFORM_NODE:
+      collect_reused_node (renderer,
+                           gsk_transform_node_get_child (node));
+      break;
+
+    case GSK_DEBUG_NODE:
+      collect_reused_node (renderer,
+                           gsk_debug_node_get_child (node));
+      break;
+
+      /* Generic nodes */
+
+    case GSK_CONTAINER_NODE:
+      for (i = 0; i < gsk_container_node_get_n_children (node); i++)
+        collect_reused_node (renderer,
+                             gsk_container_node_get_child (node, i));
+      break;
+
+      break; /* Fallback */
     }
 }
 
-static GdkTexture *
-node_texture_fallback (GskRenderNode *node,
-                       float *off_x,
-                       float *off_y)
+static gboolean
+add_new_node (GskRenderer *renderer,
+              GskRenderNode *node,
+              BroadwayNodeType type)
 {
-  cairo_surface_t *surface;
-  cairo_t *cr;
-  int x = floorf (node->bounds.origin.x);
-  int y = floorf (node->bounds.origin.y);
-  int width = ceil (node->bounds.origin.x + node->bounds.size.width) - x;
-  int height = ceil (node->bounds.origin.y + node->bounds.size.height) - y;
-  GdkTexture *texture;
+  GskBroadwayRenderer *self = GSK_BROADWAY_RENDERER (renderer);
+  guint32 id, old_id;
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
-  cr = cairo_create (surface);
-  cairo_translate (cr, -x, -y);
-  gsk_render_node_draw (node, cr);
-  cairo_destroy (cr);
+  if (self->last_node_lookup &&
+      (old_id = GPOINTER_TO_INT (g_hash_table_lookup (self->last_node_lookup, node))) != 0)
+    {
+      add_uint32 (self->nodes, BROADWAY_NODE_REUSE);
+      add_uint32 (self->nodes, old_id);
 
-  texture = gdk_texture_new_for_surface (surface);
-  *off_x =  x - node->bounds.origin.x;
-  *off_y =  y - node->bounds.origin.y;
+      g_hash_table_insert (self->node_lookup, node, GINT_TO_POINTER(old_id));
+      collect_reused_child_nodes (renderer, node);
 
-  return texture;
+      return FALSE;
+    }
+
+  id = ++self->next_node_id;
+  g_hash_table_insert (self->node_lookup, node, GINT_TO_POINTER(id));
+
+  add_uint32 (self->nodes, type);
+  add_uint32 (self->nodes, id);
+
+  return TRUE;
 }
 
 /* Note: This tracks the offset so that we can convert
@@ -455,13 +321,13 @@ node_texture_fallback (GskRenderNode *node,
    which is good for re-using subtrees. */
 static void
 gsk_broadway_renderer_add_node (GskRenderer *renderer,
-                                GArray *nodes,
-                                GPtrArray *node_textures,
                                 GskRenderNode *node,
                                 float offset_x,
                                 float offset_y)
 {
   GdkDisplay *display = gdk_surface_get_display (gsk_renderer_get_surface (renderer));
+  GskBroadwayRenderer *self = GSK_BROADWAY_RENDERER (renderer);
+  GArray *nodes = self->nodes;
 
   switch (gsk_render_node_get_node_type (node))
     {
@@ -472,191 +338,223 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
     /* Leaf nodes */
 
     case GSK_TEXTURE_NODE:
-      {
-        GdkTexture *texture = gsk_texture_node_get_texture (node);
-        guint32 texture_id;
+      if (add_new_node (renderer, node, BROADWAY_NODE_TEXTURE))
+        {
+          GdkTexture *texture = gsk_texture_node_get_texture (node);
+          guint32 texture_id;
 
-        g_ptr_array_add (node_textures, g_object_ref (texture)); /* Transfers ownership to node_textures */
-        texture_id = gdk_broadway_display_ensure_texture (display, texture);
+          /* No need to add to self->node_textures here, the node will keep it alive until end of frame. */
 
-        add_uint32 (nodes, BROADWAY_NODE_TEXTURE);
-        add_rect (nodes, &node->bounds, offset_x, offset_y);
-        add_uint32 (nodes, texture_id);
-      }
+          texture_id = gdk_broadway_display_ensure_texture (display, texture);
+
+          add_rect (nodes, &node->bounds, offset_x, offset_y);
+          add_uint32 (nodes, texture_id);
+        }
       return;
 
     case GSK_CAIRO_NODE:
-      {
-        cairo_surface_t *surface = (cairo_surface_t *)gsk_cairo_node_peek_surface (node);
-        cairo_surface_t *image_surface = NULL;
-        GdkTexture *texture;
-        guint32 texture_id;
+      if (add_new_node (renderer, node, BROADWAY_NODE_TEXTURE))
+        {
+          cairo_surface_t *surface = (cairo_surface_t *)gsk_cairo_node_peek_surface (node);
+          cairo_surface_t *image_surface = NULL;
+          GdkTexture *texture;
+          guint32 texture_id;
 
-        if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE)
-          image_surface = cairo_surface_reference (surface);
-        else
-          {
-            cairo_t *cr;
-            image_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                        ceilf (node->bounds.size.width),
-                                                        ceilf (node->bounds.size.height));
-            cr = cairo_create (image_surface);
-            cairo_set_source_surface (cr, surface, 0, 0);
-            cairo_rectangle (cr, 0, 0, node->bounds.size.width, node->bounds.size.height);
-            cairo_fill (cr);
-            cairo_destroy (cr);
-          }
+          if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE)
+            image_surface = cairo_surface_reference (surface);
+          else
+            {
+              cairo_t *cr;
+              image_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                                          ceilf (node->bounds.size.width),
+                                                          ceilf (node->bounds.size.height));
+              cr = cairo_create (image_surface);
+              cairo_set_source_surface (cr, surface, 0, 0);
+              cairo_rectangle (cr, 0, 0, node->bounds.size.width, node->bounds.size.height);
+              cairo_fill (cr);
+              cairo_destroy (cr);
+            }
 
-        texture = gdk_texture_new_for_surface (image_surface);
-        g_ptr_array_add (node_textures, g_object_ref (texture)); /* Transfers ownership to node_textures */
-        texture_id = gdk_broadway_display_ensure_texture (display, texture);
+          texture = gdk_texture_new_for_surface (image_surface);
+          g_ptr_array_add (self->node_textures, g_object_ref (texture)); /* Transfers ownership to node_textures */
+          texture_id = gdk_broadway_display_ensure_texture (display, texture);
 
-        add_uint32 (nodes, BROADWAY_NODE_TEXTURE);
-        add_rect (nodes, &node->bounds, offset_x, offset_y);
-        add_uint32 (nodes, texture_id);
+          add_rect (nodes, &node->bounds, offset_x, offset_y);
+          add_uint32 (nodes, texture_id);
 
-        cairo_surface_destroy (image_surface);
-      }
+          cairo_surface_destroy (image_surface);
+        }
       return;
 
     case GSK_COLOR_NODE:
-      {
-        add_uint32 (nodes, BROADWAY_NODE_COLOR);
-        add_rect (nodes, &node->bounds, offset_x, offset_y);
-        add_rgba (nodes, gsk_color_node_peek_color (node));
-      }
+      if (add_new_node (renderer, node, BROADWAY_NODE_COLOR))
+        {
+          add_rect (nodes, &node->bounds, offset_x, offset_y);
+          add_rgba (nodes, gsk_color_node_peek_color (node));
+        }
       return;
 
     case GSK_BORDER_NODE:
-      {
-        int i;
-        add_uint32 (nodes, BROADWAY_NODE_BORDER);
-        add_rounded_rect (nodes, gsk_border_node_peek_outline (node), offset_x, offset_y);
-        for (i = 0; i < 4; i++)
-          add_float (nodes, gsk_border_node_peek_widths (node)[i]);
-        for (i = 0; i < 4; i++)
-          add_rgba (nodes, &gsk_border_node_peek_colors (node)[i]);
-      }
+      if (add_new_node (renderer, node, BROADWAY_NODE_BORDER))
+        {
+          int i;
+          add_rounded_rect (nodes, gsk_border_node_peek_outline (node), offset_x, offset_y);
+          for (i = 0; i < 4; i++)
+            add_float (nodes, gsk_border_node_peek_widths (node)[i]);
+          for (i = 0; i < 4; i++)
+            add_rgba (nodes, &gsk_border_node_peek_colors (node)[i]);
+        }
       return;
 
     case GSK_OUTSET_SHADOW_NODE:
-      {
-        add_uint32 (nodes, BROADWAY_NODE_OUTSET_SHADOW);
-        add_rounded_rect (nodes, gsk_outset_shadow_node_peek_outline (node), offset_x, offset_y);
-        add_rgba (nodes, gsk_outset_shadow_node_peek_color (node));
-        add_float (nodes, gsk_outset_shadow_node_get_dx (node));
-        add_float (nodes, gsk_outset_shadow_node_get_dy (node));
-        add_float (nodes, gsk_outset_shadow_node_get_spread (node));
-        add_float (nodes, gsk_outset_shadow_node_get_blur_radius (node));
-      }
+      if (add_new_node (renderer, node, BROADWAY_NODE_OUTSET_SHADOW))
+        {
+          add_rounded_rect (nodes, gsk_outset_shadow_node_peek_outline (node), offset_x, offset_y);
+          add_rgba (nodes, gsk_outset_shadow_node_peek_color (node));
+          add_float (nodes, gsk_outset_shadow_node_get_dx (node));
+          add_float (nodes, gsk_outset_shadow_node_get_dy (node));
+          add_float (nodes, gsk_outset_shadow_node_get_spread (node));
+          add_float (nodes, gsk_outset_shadow_node_get_blur_radius (node));
+        }
       return;
 
     case GSK_INSET_SHADOW_NODE:
-      {
-        add_uint32 (nodes, BROADWAY_NODE_INSET_SHADOW);
-        add_rounded_rect (nodes, gsk_inset_shadow_node_peek_outline (node), offset_x, offset_y);
-        add_rgba (nodes, gsk_inset_shadow_node_peek_color (node));
-        add_float (nodes, gsk_inset_shadow_node_get_dx (node));
-        add_float (nodes, gsk_inset_shadow_node_get_dy (node));
-        add_float (nodes, gsk_inset_shadow_node_get_spread (node));
-        add_float (nodes, gsk_inset_shadow_node_get_blur_radius (node));
-      }
+      if (add_new_node (renderer, node, BROADWAY_NODE_INSET_SHADOW))
+        {
+          add_rounded_rect (nodes, gsk_inset_shadow_node_peek_outline (node), offset_x, offset_y);
+          add_rgba (nodes, gsk_inset_shadow_node_peek_color (node));
+          add_float (nodes, gsk_inset_shadow_node_get_dx (node));
+          add_float (nodes, gsk_inset_shadow_node_get_dy (node));
+          add_float (nodes, gsk_inset_shadow_node_get_spread (node));
+          add_float (nodes, gsk_inset_shadow_node_get_blur_radius (node));
+        }
       return;
 
     case GSK_LINEAR_GRADIENT_NODE:
-      {
-        guint i, n;
+      if (add_new_node (renderer, node, BROADWAY_NODE_LINEAR_GRADIENT))
+        {
+          guint i, n;
 
-        add_uint32 (nodes, BROADWAY_NODE_LINEAR_GRADIENT);
-        add_rect (nodes, &node->bounds, offset_x, offset_y);
-        add_point (nodes, gsk_linear_gradient_node_peek_start (node), offset_x, offset_y);
-        add_point (nodes, gsk_linear_gradient_node_peek_end (node), offset_x, offset_y);
-        n = gsk_linear_gradient_node_get_n_color_stops (node);
-        add_uint32 (nodes, n);
-        for (i = 0; i < n; i++)
-          add_color_stop (nodes, &gsk_linear_gradient_node_peek_color_stops (node)[i]);
-      }
+          add_rect (nodes, &node->bounds, offset_x, offset_y);
+          add_point (nodes, gsk_linear_gradient_node_peek_start (node), offset_x, offset_y);
+          add_point (nodes, gsk_linear_gradient_node_peek_end (node), offset_x, offset_y);
+          n = gsk_linear_gradient_node_get_n_color_stops (node);
+          add_uint32 (nodes, n);
+          for (i = 0; i < n; i++)
+            add_color_stop (nodes, &gsk_linear_gradient_node_peek_color_stops (node)[i]);
+        }
       return;
 
       /* Bin nodes */
 
     case GSK_SHADOW_NODE:
-      {
-        gsize i, n_shadows = gsk_shadow_node_get_n_shadows (node);
-        add_uint32 (nodes, BROADWAY_NODE_SHADOW);
-        add_uint32 (nodes, n_shadows);
-        for (i = 0; i < n_shadows; i++)
-          {
-            const GskShadow *shadow = gsk_shadow_node_peek_shadow (node, i);
-            add_rgba (nodes, &shadow->color);
-            add_float (nodes, shadow->dx);
-            add_float (nodes, shadow->dy);
-            add_float (nodes, shadow->radius);
-          }
-        gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
-                                        gsk_shadow_node_get_child (node),
-                                        offset_x, offset_y);
-      }
+      if (add_new_node (renderer, node, BROADWAY_NODE_SHADOW))
+        {
+          gsize i, n_shadows = gsk_shadow_node_get_n_shadows (node);
+
+          add_uint32 (nodes, n_shadows);
+          for (i = 0; i < n_shadows; i++)
+            {
+              const GskShadow *shadow = gsk_shadow_node_peek_shadow (node, i);
+              add_rgba (nodes, &shadow->color);
+              add_float (nodes, shadow->dx);
+              add_float (nodes, shadow->dy);
+              add_float (nodes, shadow->radius);
+            }
+          gsk_broadway_renderer_add_node (renderer,
+                                          gsk_shadow_node_get_child (node),
+                                          offset_x, offset_y);
+        }
       return;
 
     case GSK_OPACITY_NODE:
-      {
-        add_uint32 (nodes, BROADWAY_NODE_OPACITY);
-        add_float (nodes, gsk_opacity_node_get_opacity (node));
-        gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
-                                        gsk_opacity_node_get_child (node),
-                                        offset_x, offset_y);
-      }
+      if (add_new_node (renderer, node, BROADWAY_NODE_OPACITY))
+        {
+          add_float (nodes, gsk_opacity_node_get_opacity (node));
+          gsk_broadway_renderer_add_node (renderer,
+                                          gsk_opacity_node_get_child (node),
+                                          offset_x, offset_y);
+        }
       return;
 
     case GSK_ROUNDED_CLIP_NODE:
-      {
-        const GskRoundedRect *rclip = gsk_rounded_clip_node_peek_clip (node);
-        add_uint32 (nodes, BROADWAY_NODE_ROUNDED_CLIP);
-        add_rounded_rect (nodes, rclip, offset_x, offset_y);
-        gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
-                                        gsk_rounded_clip_node_get_child (node),
-                                        rclip->bounds.origin.x,
-                                        rclip->bounds.origin.y);
-      }
+      if (add_new_node (renderer, node, BROADWAY_NODE_ROUNDED_CLIP))
+        {
+          const GskRoundedRect *rclip = gsk_rounded_clip_node_peek_clip (node);
+
+          add_rounded_rect (nodes, rclip, offset_x, offset_y);
+          gsk_broadway_renderer_add_node (renderer,
+                                          gsk_rounded_clip_node_get_child (node),
+                                          rclip->bounds.origin.x,
+                                          rclip->bounds.origin.y);
+        }
       return;
 
     case GSK_CLIP_NODE:
+      if (add_new_node (renderer, node, BROADWAY_NODE_CLIP))
+        {
+          const graphene_rect_t *clip = gsk_clip_node_peek_clip (node);
+
+          add_rect (nodes, clip, offset_x, offset_y);
+          gsk_broadway_renderer_add_node (renderer,
+                                          gsk_clip_node_get_child (node),
+                                          clip->origin.x,
+                                          clip->origin.y);
+        }
+      return;
+
+    case GSK_TRANSFORM_NODE:
       {
-        const graphene_rect_t *clip = gsk_clip_node_peek_clip (node);
-        add_uint32 (nodes, BROADWAY_NODE_CLIP);
-        add_rect (nodes, clip, offset_x, offset_y);
-        gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
-                                        gsk_clip_node_get_child (node),
-                                        clip->origin.x,
-                                        clip->origin.y);
+        GskTransform *transform = gsk_transform_node_get_transform (node);
+        GskTransformCategory category = gsk_transform_get_category (transform);
+
+        if (category >= GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
+          {
+            if (add_new_node (renderer, node, BROADWAY_NODE_TRANSLATE)) {
+              float dx, dy;
+              gsk_transform_to_translate (transform, &dx, &dy);
+
+              add_xy (nodes, dx, dy, offset_x, offset_y);
+              gsk_broadway_renderer_add_node (renderer,
+                                              gsk_transform_node_get_child (node),
+                                              0, 0);
+            }
+          }
+        else
+          {
+            /* Fallback to texture for now */
+            break;
+          }
       }
+      return;
+
+    case GSK_DEBUG_NODE:
+      if (add_new_node (renderer, node, BROADWAY_NODE_DEBUG))
+        {
+          const char *message = gsk_debug_node_get_message (node);
+          add_string (nodes, message);
+          gsk_broadway_renderer_add_node (renderer,
+                                          gsk_debug_node_get_child (node), offset_x, offset_y);
+        }
       return;
 
       /* Generic nodes */
 
     case GSK_CONTAINER_NODE:
-      {
-        guint i;
+      if (add_new_node (renderer, node, BROADWAY_NODE_CONTAINER))
+        {
+          guint i;
 
-        add_uint32 (nodes, BROADWAY_NODE_CONTAINER);
-        add_uint32 (nodes, gsk_container_node_get_n_children (node));
-
-        for (i = 0; i < gsk_container_node_get_n_children (node); i++)
-          gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
-                                          gsk_container_node_get_child (node, i), offset_x, offset_y);
-      }
-      return;
-
-    case GSK_DEBUG_NODE:
-      gsk_broadway_renderer_add_node (renderer, nodes, node_textures,
-                                      gsk_debug_node_get_child (node), offset_x, offset_y);
+          add_uint32 (nodes, gsk_container_node_get_n_children (node));
+          for (i = 0; i < gsk_container_node_get_n_children (node); i++)
+            gsk_broadway_renderer_add_node (renderer,
+                                            gsk_container_node_get_child (node, i), offset_x, offset_y);
+        }
       return;
 
     case GSK_COLOR_MATRIX_NODE:
     case GSK_TEXT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
-    case GSK_TRANSFORM_NODE:
     case GSK_REPEAT_NODE:
     case GSK_BLEND_NODE:
     case GSK_CROSS_FADE_NODE:
@@ -665,32 +563,33 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
       break; /* Fallback */
     }
 
-  {
-    GdkTexture *texture;
-    guint32 texture_id;
-    float t_off_x = 0, t_off_y = 0;
+  if (add_new_node (renderer, node, BROADWAY_NODE_TEXTURE))
+    {
+      GdkTexture *texture;
+      cairo_surface_t *surface;
+      cairo_t *cr;
+      guint32 texture_id;
+      int x = floorf (node->bounds.origin.x);
+      int y = floorf (node->bounds.origin.y);
+      int width = ceil (node->bounds.origin.x + node->bounds.size.width) - x;
+      int height = ceil (node->bounds.origin.y + node->bounds.size.height) - y;
 
-    texture = node_cache_lookup (node, &t_off_x, &t_off_y);
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+      cr = cairo_create (surface);
+      cairo_translate (cr, -x, -y);
+      gsk_render_node_draw (node, cr);
+      cairo_destroy (cr);
 
-    if (!texture)
-      {
-        texture = node_texture_fallback (node, &t_off_x, &t_off_y);
-#if 0
-        g_print ("Fallback %p for %s\n", texture, node->node_class->type_name);
-#endif
+      texture = gdk_texture_new_for_surface (surface);
+      g_ptr_array_add (self->node_textures, texture); /* Transfers ownership to node_textures */
 
-        node_cache_store (node, texture, t_off_x, t_off_y);
-      }
-
-    g_ptr_array_add (node_textures, texture); /* Transfers ownership to node_textures */
-    texture_id = gdk_broadway_display_ensure_texture (display, texture);
-    add_uint32 (nodes, BROADWAY_NODE_TEXTURE);
-    add_float (nodes, node->bounds.origin.x + t_off_x - offset_x);
-    add_float (nodes, node->bounds.origin.y + t_off_y - offset_y);
-    add_float (nodes, gdk_texture_get_width (texture));
-    add_float (nodes, gdk_texture_get_height (texture));
-    add_uint32 (nodes, texture_id);
-  }
+      texture_id = gdk_broadway_display_ensure_texture (display, texture);
+      add_float (nodes, x - offset_x);
+      add_float (nodes, y - offset_y);
+      add_float (nodes, gdk_texture_get_width (texture));
+      add_float (nodes, gdk_texture_get_height (texture));
+      add_uint32 (nodes, texture_id);
+    }
 }
 
 static void
@@ -700,9 +599,40 @@ gsk_broadway_renderer_render (GskRenderer          *renderer,
 {
   GskBroadwayRenderer *self = GSK_BROADWAY_RENDERER (renderer);
 
+  self->node_lookup = g_hash_table_new (g_direct_hash, g_direct_equal);
+
   gdk_draw_context_begin_frame (GDK_DRAW_CONTEXT (self->draw_context), update_area);
-  gsk_broadway_renderer_add_node (renderer, self->draw_context->nodes, self->draw_context->node_textures, root, 0, 0);
+
+  /* These are owned by the draw context between begin and end, but
+     cache them here for easier access during the render */
+  self->nodes = self->draw_context->nodes;
+  self->node_textures = self->draw_context->node_textures;
+
+  gsk_broadway_renderer_add_node (renderer, root, 0, 0);
+
+  self->nodes = NULL;
+  self->node_textures = NULL;
+
   gdk_draw_context_end_frame (GDK_DRAW_CONTEXT (self->draw_context));
+
+  if (self->last_node_lookup)
+    g_hash_table_unref (self->last_node_lookup);
+  self->last_node_lookup = self->node_lookup;
+  self->node_lookup = NULL;
+
+  if (self->last_root)
+    gsk_render_node_unref (self->last_root);
+  self->last_root = gsk_render_node_ref (root);
+
+  if (self->next_node_id > G_MAXUINT32 / 2)
+    {
+      /* We're "near" a wrap of the ids, lets avoid reusing any of
+       * these nodes next frame, then we can reset the id counter
+       * without risk of any old nodes sticking around and conflicting. */
+
+      g_hash_table_remove_all (self->last_node_lookup);
+      self->next_node_id = 0;
+    }
 }
 
 static void

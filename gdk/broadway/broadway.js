@@ -1,3 +1,94 @@
+// Protocol stuff
+
+const BROADWAY_NODE_TEXTURE = 0;
+const BROADWAY_NODE_CONTAINER = 1;
+const BROADWAY_NODE_COLOR = 2;
+const BROADWAY_NODE_BORDER = 3;
+const BROADWAY_NODE_OUTSET_SHADOW = 4;
+const BROADWAY_NODE_INSET_SHADOW = 5;
+const BROADWAY_NODE_ROUNDED_CLIP = 6;
+const BROADWAY_NODE_LINEAR_GRADIENT = 7;
+const BROADWAY_NODE_SHADOW = 8;
+const BROADWAY_NODE_OPACITY = 9;
+const BROADWAY_NODE_CLIP = 10;
+const BROADWAY_NODE_KEEP_ALL = 11;
+const BROADWAY_NODE_KEEP_THIS = 12;
+const BROADWAY_NODE_TRANSLATE = 13;
+const BROADWAY_NODE_DEBUG = 14;
+const BROADWAY_NODE_REUSE = 15;
+
+const BROADWAY_OP_GRAB_POINTER = 'g';
+const BROADWAY_OP_UNGRAB_POINTER = 'u';
+const BROADWAY_OP_NEW_SURFACE = 's';
+const BROADWAY_OP_SHOW_SURFACE = 'S';
+const BROADWAY_OP_HIDE_SURFACE = 'H';
+const BROADWAY_OP_RAISE_SURFACE = 'r';
+const BROADWAY_OP_LOWER_SURFACE = 'R';
+const BROADWAY_OP_DESTROY_SURFACE = 'd';
+const BROADWAY_OP_MOVE_RESIZE = 'm';
+const BROADWAY_OP_SET_TRANSIENT_FOR = 'p';
+const BROADWAY_OP_PUT_RGB = 'i';
+const BROADWAY_OP_REQUEST_AUTH = 'l';
+const BROADWAY_OP_AUTH_OK = 'L';
+const BROADWAY_OP_DISCONNECTED = 'D';
+const BROADWAY_OP_SURFACE_UPDATE = 'b';
+const BROADWAY_OP_SET_SHOW_KEYBOARD = 'k';
+const BROADWAY_OP_UPLOAD_TEXTURE = 't';
+const BROADWAY_OP_RELEASE_TEXTURE = 'T';
+const BROADWAY_OP_SET_NODES = 'n';
+const BROADWAY_OP_ROUNDTRIP = 'F';
+
+const BROADWAY_EVENT_ENTER = 'e';
+const BROADWAY_EVENT_LEAVE = 'l';
+const BROADWAY_EVENT_POINTER_MOVE = 'm';
+const BROADWAY_EVENT_BUTTON_PRESS = 'b';
+const BROADWAY_EVENT_BUTTON_RELEASE = 'B';
+const BROADWAY_EVENT_TOUCH = 't';
+const BROADWAY_EVENT_SCROLL = 's';
+const BROADWAY_EVENT_KEY_PRESS = 'k';
+const BROADWAY_EVENT_KEY_RELEASE = 'K';
+const BROADWAY_EVENT_GRAB_NOTIFY = 'g';
+const BROADWAY_EVENT_UNGRAB_NOTIFY = 'u';
+const BROADWAY_EVENT_CONFIGURE_NOTIFY = 'w';
+const BROADWAY_EVENT_SCREEN_SIZE_CHANGED = 'd';
+const BROADWAY_EVENT_FOCUS = 'f';
+const BROADWAY_EVENT_ROUNDTRIP_NOTIFY = 'F';
+
+const DISPLAY_OP_REPLACE_CHILD = 0;
+const DISPLAY_OP_APPEND_CHILD = 1;
+const DISPLAY_OP_APPEND_ROOT = 2;
+const DISPLAY_OP_SHOW_SURFACE = 3;
+const DISPLAY_OP_HIDE_SURFACE = 4;
+const DISPLAY_OP_DELETE_NODE = 5;
+const DISPLAY_OP_MOVE_NODE = 6;
+const DISPLAY_OP_RESIZE_NODE = 7;
+const DISPLAY_OP_RESTACK_SURFACES = 8;
+const DISPLAY_OP_DELETE_SURFACE = 9;
+
+// GdkCrossingMode
+const GDK_CROSSING_NORMAL = 0;
+const GDK_CROSSING_GRAB = 1;
+const GDK_CROSSING_UNGRAB = 2;
+
+// GdkModifierType
+const GDK_SHIFT_MASK = 1 << 0;
+const GDK_LOCK_MASK     = 1 << 1;
+const GDK_CONTROL_MASK  = 1 << 2;
+const GDK_MOD1_MASK     = 1 << 3;
+const GDK_MOD2_MASK     = 1 << 4;
+const GDK_MOD3_MASK     = 1 << 5;
+const GDK_MOD4_MASK     = 1 << 6;
+const GDK_MOD5_MASK     = 1 << 7;
+const GDK_BUTTON1_MASK  = 1 << 8;
+const GDK_BUTTON2_MASK  = 1 << 9;
+const GDK_BUTTON3_MASK  = 1 << 10;
+const GDK_BUTTON4_MASK  = 1 << 11;
+const GDK_BUTTON5_MASK  = 1 << 12;
+const GDK_SUPER_MASK    = 1 << 26;
+const GDK_HYPER_MASK    = 1 << 27;
+const GDK_META_MASK     = 1 << 28;
+const GDK_RELEASE_MASK  = 1 << 30;
+
 /* Helper functions for debugging */
 var logDiv = null;
 function log(str) {
@@ -84,35 +175,13 @@ var surfaces = {};
 var textures = {};
 var stackingOrder = [];
 var outstandingCommands = new Array();
+var outstandingDisplayCommands = null;
 var inputSocket = null;
 var debugDecoding = false;
 var fakeInput = null;
 var showKeyboard = false;
 var showKeyboardChanged = false;
 var firstTouchDownId = null;
-
-var GDK_CROSSING_NORMAL = 0;
-var GDK_CROSSING_GRAB = 1;
-var GDK_CROSSING_UNGRAB = 2;
-
-// GdkModifierType
-var GDK_SHIFT_MASK = 1 << 0;
-var GDK_LOCK_MASK     = 1 << 1;
-var GDK_CONTROL_MASK  = 1 << 2;
-var GDK_MOD1_MASK     = 1 << 3;
-var GDK_MOD2_MASK     = 1 << 4;
-var GDK_MOD3_MASK     = 1 << 5;
-var GDK_MOD4_MASK     = 1 << 6;
-var GDK_MOD5_MASK     = 1 << 7;
-var GDK_BUTTON1_MASK  = 1 << 8;
-var GDK_BUTTON2_MASK  = 1 << 9;
-var GDK_BUTTON3_MASK  = 1 << 10;
-var GDK_BUTTON4_MASK  = 1 << 11;
-var GDK_BUTTON5_MASK  = 1 << 12;
-var GDK_SUPER_MASK    = 1 << 26;
-var GDK_HYPER_MASK    = 1 << 27;
-var GDK_META_MASK     = 1 << 28;
-var GDK_RELEASE_MASK  = 1 << 30;
 
 function getButtonMask (button) {
     if (button == 1)
@@ -128,12 +197,36 @@ function getButtonMask (button) {
     return 0;
 }
 
-function sendConfigureNotify(surface)
-{
-    sendInput("w", [surface.id, surface.x, surface.y, surface.width, surface.height]);
+function Texture(id, data) {
+    var blob = new Blob([data],{type: "image/png"});
+    this.url = window.URL.createObjectURL(blob);
+    this.refcount = 1;
+    this.id = id;
+
+    var image = new Image();
+    image.src = this.url;
+    this.image = image;
+    textures[id] = this;
 }
 
-var positionIndex = 0;
+Texture.prototype.ref = function() {
+    this.refcount += 1;
+    return this;
+}
+
+Texture.prototype.unref = function() {
+    this.refcount -= 1;
+    if (this.refcount == 0) {
+        window.URL.revokeObjectURL(this.url);
+        delete textures[this.id];
+    }
+}
+
+function sendConfigureNotify(surface)
+{
+    sendInput(BROADWAY_EVENT_CONFIGURE_NOTIFY, [surface.id, surface.x, surface.y, surface.width, surface.height]);
+}
+
 function cmdCreateSurface(id, x, y, width, height, isTemp)
 {
     var surface = { id: id, x: x, y:y, width: width, height: height, isTemp: isTemp };
@@ -145,8 +238,6 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     var div = document.createElement('div');
     div.surface = surface;
     surface.div = div;
-
-    document.body.appendChild(div);
 
     div.style["position"] = "absolute";
     div.style["left"] = surface.x + "px";
@@ -160,54 +251,8 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     stackingOrder.push(surface);
 
     sendConfigureNotify(surface);
-}
 
-function cmdShowSurface(id)
-{
-    var surface = surfaces[id];
-
-    if (surface.visible)
-        return;
-    surface.visible = true;
-
-    var xOffset = surface.x;
-    var yOffset = surface.y;
-
-    surface.div.style["left"] = xOffset + "px";
-    surface.div.style["top"] = yOffset + "px";
-    surface.div.style["visibility"] = "visible";
-
-    restackSurfaces();
-}
-
-function cmdHideSurface(id)
-{
-    if (grab.surface == id)
-        doUngrab();
-
-    var surface = surfaces[id];
-    if (!surface.visible)
-        return;
-    surface.visible = false;
-
-    surface.div.style["visibility"] = "hidden";
-}
-
-function cmdSetTransientFor(id, parentId)
-{
-    var surface = surfaces[id];
-
-    if (surface.transientParent == parentId)
-        return;
-
-    surface.transientParent = parentId;
-    if (parentId != 0 && surfaces[parentId]) {
-        moveToHelper(surface, stackingOrder.indexOf(surfaces[parentId])+1);
-    }
-
-    if (surface.visible) {
-        restackSurfaces();
-    }
+    return div;
 }
 
 function restackSurfaces() {
@@ -232,88 +277,52 @@ function moveToHelper(surface, position) {
     }
 }
 
-function cmdDeleteSurface(id)
-{
-    if (grab.surface == id)
-        doUngrab();
-
-    var surface = surfaces[id];
-    var i = stackingOrder.indexOf(surface);
-    if (i >= 0)
-        stackingOrder.splice(i, 1);
-    var div = surface.div;
-    div.parentNode.removeChild(div);
-    delete surfaces[id];
-}
-
 function cmdRoundtrip(id, tag)
 {
-    sendInput("F", [id, tag]);
-}
-
-function cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h)
-{
-    var surface = surfaces[id];
-    if (has_pos) {
-        surface.positioned = true;
-        surface.x = x;
-        surface.y = y;
-    }
-
-    if (has_size) {
-        surface.width = w;
-        surface.height = h;
-
-        surface.div.style["width"] = surface.width + "px";
-        surface.div.style["height"] = surface.height + "px";
-    }
-
-    if (surface.visible) {
-        if (has_pos) {
-            var xOffset = surface.x;
-            var yOffset = surface.y;
-
-            surface.div.style["left"] = xOffset + "px";
-            surface.div.style["top"] = yOffset + "px";
-        }
-    }
-
-    sendConfigureNotify(surface);
+    sendInput(BROADWAY_EVENT_ROUNDTRIP_NOTIFY, [id, tag]);
 }
 
 function cmdRaiseSurface(id)
 {
     var surface = surfaces[id];
-
-    moveToHelper(surface);
-    restackSurfaces();
+    if (surface)
+        moveToHelper(surface);
 }
 
 function cmdLowerSurface(id)
 {
     var surface = surfaces[id];
-
-    moveToHelper(surface, 0);
-    restackSurfaces();
+    if (surface)
+        moveToHelper(surface, 0);
 }
 
-function SwapNodes(node_data, div) {
+function TransformNodes(node_data, div, display_commands) {
     this.node_data = node_data;
-    this.node_data_signed = new Int32Array(node_data);
+    this.display_commands = display_commands;
     this.data_pos = 0;
     this.div = div;
     this.outstanding = 1;
 }
 
-SwapNodes.prototype.decode_uint32 = function() {
-    return this.node_data[this.data_pos++];
+TransformNodes.prototype.decode_uint32 = function() {
+    var v = this.node_data.getUint32(this.data_pos, true);
+    this.data_pos += 4;
+    return v;
 }
 
-SwapNodes.prototype.decode_int32 = function() {
-    return this.node_data_signed[this.data_pos++];
+TransformNodes.prototype.decode_int32 = function() {
+    var v = this.node_data.getInt32(this.data_pos, true);
+    this.data_pos += 4;
+    return v;
 }
 
-SwapNodes.prototype.decode_color = function() {
+TransformNodes.prototype.decode_float = function() {
+    var v = this.node_data.getFloat32(this.data_pos, true);
+    this.data_pos += 4;
+    return v;
+}
+
+TransformNodes.prototype.decode_color = function() {
     var rgba = this.decode_uint32();
     var a = (rgba >> 24) & 0xff;
     var r = (rgba >> 16) & 0xff;
@@ -327,25 +336,21 @@ SwapNodes.prototype.decode_color = function() {
     return c;
 }
 
-SwapNodes.prototype.decode_float = function() {
-    return this.decode_int32() / 256.0;
-}
-
-SwapNodes.prototype.decode_size = function() {
+TransformNodes.prototype.decode_size = function() {
     var s = new Object();
     s.width = this.decode_float ();
     s.height = this.decode_float ();
     return s;
 }
 
-SwapNodes.prototype.decode_point = function() {
+TransformNodes.prototype.decode_point = function() {
     var p = new Object();
     p.x = this.decode_float ();
     p.y = this.decode_float ();
     return p;
 }
 
-SwapNodes.prototype.decode_rect = function() {
+TransformNodes.prototype.decode_rect = function() {
     var r = new Object();
     r.x = this.decode_float ();
     r.y = this.decode_float ();
@@ -354,7 +359,7 @@ SwapNodes.prototype.decode_rect = function() {
     return r;
 }
 
-SwapNodes.prototype.decode_irect = function() {
+TransformNodes.prototype.decode_irect = function() {
     var r = new Object();
     r.x = this.decode_int32 ();
     r.y = this.decode_int32 ();
@@ -363,7 +368,7 @@ SwapNodes.prototype.decode_irect = function() {
     return r;
 }
 
-SwapNodes.prototype.decode_rounded_rect = function() {
+TransformNodes.prototype.decode_rounded_rect = function() {
     var r = new Object();
     r.bounds = this.decode_rect();
     r.sizes = [];
@@ -372,19 +377,68 @@ SwapNodes.prototype.decode_rounded_rect = function() {
     return r;
 }
 
-SwapNodes.prototype.decode_color_stop = function() {
+TransformNodes.prototype.decode_color_stop = function() {
     var s = new Object();
     s.offset = this.decode_float ();
     s.color = this.decode_color ();
     return s;
 }
 
-SwapNodes.prototype.decode_color_stops = function() {
+TransformNodes.prototype.decode_color_stops = function() {
     var stops = [];
     var len = this.decode_uint32();
     for (var i = 0; i < len; i++)
         stops[i] = this.decode_color_stop();
     return stops;
+}
+
+function utf8_to_string(array) {
+    var out, i, len, c;
+    var char2, char3;
+
+    out = "";
+    len = array.length;
+    i = 0;
+    while(i < len) {
+    c = array[i++];
+    switch(c >> 4)
+        {
+        case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+            // 0xxxxxxx
+            out += String.fromCharCode(c);
+            break;
+        case 12: case 13:
+            // 110x xxxx   10xx xxxx
+            char2 = array[i++];
+            out += String.fromCharCode(((c & 0x1F) << 6) | (char2 & 0x3F));
+            break;
+        case 14:
+            // 1110 xxxx  10xx xxxx  10xx xxxx
+            char2 = array[i++];
+            char3 = array[i++];
+            out += String.fromCharCode(((c & 0x0F) << 12) |
+                                       ((char2 & 0x3F) << 6) |
+                                       ((char3 & 0x3F) << 0));
+            break;
+        }
+    }
+
+    return out;
+}
+
+TransformNodes.prototype.decode_string = function() {
+    var len = this.decode_uint32();
+    var utf8 = new Array();
+    var b;
+    for (var i = 0; i < len; i++) {
+        if (i % 4 == 0) {
+            b = this.decode_uint32();
+        }
+        utf8[i] = b & 0xff;
+        b = b >> 8;
+    }
+
+    return utf8_to_string (utf8);
 }
 
 function args() {
@@ -398,6 +452,11 @@ function args() {
 
 function px(x) {
     return x + "px";
+}
+
+function set_point_style (div, point) {
+    div.style["left"] = px(point.x);
+    div.style["top"] = px(point.y);
 }
 
 function set_rect_style (div, rect) {
@@ -415,7 +474,7 @@ function set_rrect_style (div, rrect) {
     div.style["border-bottom-left-radius"] = args(px(rrect.sizes[3].width), px(rrect.sizes[3].height));
 }
 
-SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
+TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
 {
     var type = this.decode_uint32();
     var newNode = null;
@@ -431,7 +490,7 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
     {
         /* Leaf nodes */
 
-        case 0:  // TEXTURE
+        case BROADWAY_NODE_TEXTURE:
         {
             var rect = this.decode_rect();
             var texture_id = this.decode_uint32();
@@ -440,13 +499,15 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
             image.height = rect.height;
             image.style["position"] = "absolute";
             set_rect_style(image, rect);
-            var texture_url = textures[texture_id];
-            image.src = texture_url;
+            var texture = textures[texture_id].ref();
+            image.src = texture.url;
+            // Unref blob url when loaded
+            image.onload = function() { texture.unref(); };
             newNode = image;
         }
         break;
 
-    case 2:  // COLOR
+    case BROADWAY_NODE_COLOR:
         {
             var rect = this.decode_rect();
             var c = this.decode_color ();
@@ -458,7 +519,7 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 3:  // BORDER
+    case BROADWAY_NODE_BORDER:
         {
             var rrect = this.decode_rounded_rect();
             var border_widths = [];
@@ -486,7 +547,7 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 4:  // OUTSET_SHADOW
+    case BROADWAY_NODE_OUTSET_SHADOW:
         {
             var rrect = this.decode_rounded_rect();
             var color = this.decode_color();
@@ -503,7 +564,7 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 5:  // INSET_SHADOW
+    case BROADWAY_NODE_INSET_SHADOW:
         {
             var rrect = this.decode_rounded_rect();
             var color = this.decode_color();
@@ -521,7 +582,7 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         break;
 
 
-    case 7:  // LINEAR_GRADIENT
+    case BROADWAY_NODE_LINEAR_GRADIENT:
         {
             var rect = this.decode_rect();
             var start = this.decode_point ();
@@ -569,7 +630,18 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
 
     /* Bin nodes */
 
-    case 10:  // CLIP
+    case BROADWAY_NODE_TRANSLATE:
+        {
+            var point = this.decode_point();
+            var div = document.createElement('div');
+            div.style["position"] = "absolute";
+            set_point_style(div, point);
+            this.insertNode(div, -1, oldChildren[0]);
+            newNode = div;
+        }
+        break;
+
+    case BROADWAY_NODE_CLIP:
         {
             var rect = this.decode_rect();
             var div = document.createElement('div');
@@ -581,7 +653,7 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 6:  // ROUNDED_CLIP
+    case BROADWAY_NODE_ROUNDED_CLIP:
         {
             var rrect = this.decode_rounded_rect();
             var div = document.createElement('div');
@@ -593,7 +665,7 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 9:  // OPACITY
+    case BROADWAY_NODE_OPACITY:
         {
             var opacity = this.decode_float();
             var div = document.createElement('div');
@@ -607,7 +679,7 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 8:  // SHADOW
+    case BROADWAY_NODE_SHADOW:
         {
             var len = this.decode_uint32();
             var filters = "";
@@ -629,9 +701,19 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
+    case 14:  // DEBUG
+        {
+            var str = this.decode_string();
+            var div = document.createElement('div');
+            div.setAttribute('debug', str);
+            this.insertNode(div, -1, oldChildren[0]);
+            newNode = div;
+        }
+        break;
+
    /* Generic nodes */
 
-    case 1: // CONTAINER
+    case BROADWAY_NODE_CONTAINER:
         {
             var div = document.createElement('div');
             var len = this.decode_uint32();
@@ -642,7 +724,7 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 11:  // KEEP_ALL
+    case BROADWAY_NODE_KEEP_ALL:
         {
             if (!oldNode)
                 alert("KEEP_ALL with no oldNode");
@@ -654,7 +736,7 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         }
         break;
 
-    case 12:  // KEEP_THIS
+    case BROADWAY_NODE_KEEP_THIS:
         {
             if (!oldNode)
                 alert("KEEP_THIS with no oldNode ");
@@ -686,168 +768,248 @@ SwapNodes.prototype.insertNode = function(parent, posInParent, oldNode)
 
     if (newNode) {
         if (posInParent >= 0 && parent.children[posInParent])
-            parent.replaceChild(newNode, parent.children[posInParent]);
+            this.display_commands.push([DISPLAY_OP_REPLACE_CHILD, parent, newNode, parent.children[posInParent]]);
         else
-            parent.appendChild(newNode);
+            this.display_commands.push([DISPLAY_OP_APPEND_CHILD, parent, newNode]);
     }
 }
 
-function cmdSurfaceSetNodes(id, node_data)
+TransformNodes.prototype.execute = function(display_commands)
 {
-    var surface = surfaces[id];
-    surface.node_data = node_data;
-
-    var div = surface.div;
-
-    /* We use a secondary div so that we can remove all previous children in one go */
-
-    var swap = new SwapNodes (node_data, div);
-    swap.insertNode(div, 0, div.firstChild);
-    if (swap.data_pos != node_data.length)
-        alert ("Did not consume entire array (len " + node_data.length + " end " + end + ")");
+    var div = this.div;
+    this.insertNode(div, 0, div.firstChild, display_commands);
+    if (this.data_pos != this.node_data.byteLength)
+        alert ("Did not consume entire array (len " + this.node_data.byteLength + ")");
 }
 
-function cmdUploadTexture(id, data)
-{
-    var blob = new Blob([data],{type: "image/png"});
-    var url = window.URL.createObjectURL(blob);
-    textures[id] = url;
-}
-
-function cmdReleaseTexture(id)
-{
-    var url = textures[id];
-    window.URL.revokeObjectURL(url);
-    delete textures[id];
-}
 
 function cmdGrabPointer(id, ownerEvents)
 {
     doGrab(id, ownerEvents, false);
-    sendInput ("g", []);
+    sendInput (BROADWAY_EVENT_GRAB_NOTIFY, []);
 }
 
 function cmdUngrabPointer()
 {
-    sendInput ("u", []);
+    sendInput (BROADWAY_EVENT_UNGRAB_NOTIFY, []);
     if (grab.surface)
         doUngrab();
 }
 
-var active = false;
-function handleCommands(cmd)
+function handleDisplayCommands(display_commands)
 {
-    if (!active) {
-        start();
-        active = true;
-    }
+    var div;
+    var len = display_commands.length;
+    for (var i = 0; i < len; i++) {
+        var cmd = display_commands[i];
 
-    while (cmd.pos < cmd.length) {
-        var id, x, y, w, h, q;
+        switch (cmd[0]) {
+        case DISPLAY_OP_REPLACE_CHILD:
+            cmd[1].replaceChild(cmd[2], cmd[3]);
+            break;
+        case DISPLAY_OP_APPEND_CHILD:
+            cmd[1].appendChild(cmd[2]);
+            break;
+        case DISPLAY_OP_APPEND_ROOT:
+            document.body.appendChild(cmd[1]);
+            break;
+        case DISPLAY_OP_SHOW_SURFACE:
+            div = cmd[1];
+            var xOffset = cmd[2];
+            var yOffset = cmd[3];
+            div.style["left"] = xOffset + "px";
+            div.style["top"] = yOffset + "px";
+            div.style["visibility"] = "visible";
+            break;
+        case DISPLAY_OP_HIDE_SURFACE:
+            div = cmd[1];
+            div.style["visibility"] = "hidden";
+            break;
+        case DISPLAY_OP_DELETE_NODE:
+            div = cmd[1];
+            div.parentNode.removeChild(div);
+            break;
+        case DISPLAY_OP_MOVE_NODE:
+            div = cmd[1];
+            div.style["left"] = cmd[2] + "px";
+            div.style["top"] = cmd[3] + "px";
+            break;
+        case DISPLAY_OP_RESIZE_NODE:
+            div = cmd[1];
+            div.style["width"] = cmd[2] + "px";
+            div.style["height"] = cmd[3] + "px";
+            break;
+
+        case DISPLAY_OP_RESTACK_SURFACES:
+            restackSurfaces();
+            break;
+        case DISPLAY_OP_DELETE_SURFACE:
+            var id = cmd[1];
+            delete surfaces[id];
+            break;
+
+        default:
+            alert("Unknown display op " + command);
+        }
+    }
+}
+
+function handleCommands(cmd, display_commands, new_textures, modified_trees)
+{
+    var res = true;
+    var need_restack = false;
+
+    while (res && cmd.pos < cmd.length) {
+        var id, x, y, w, h, q, surface;
+        var saved_pos = cmd.pos;
         var command = cmd.get_char();
         lastSerial = cmd.get_32();
         switch (command) {
-        case 'D':
+        case BROADWAY_OP_DISCONNECTED:
             alert ("disconnected");
             inputSocket = null;
             break;
 
-        case 's': // create new surface
+        case BROADWAY_OP_NEW_SURFACE:
             id = cmd.get_16();
             x = cmd.get_16s();
             y = cmd.get_16s();
             w = cmd.get_16();
             h = cmd.get_16();
             var isTemp = cmd.get_bool();
-            cmdCreateSurface(id, x, y, w, h, isTemp);
+            var div = cmdCreateSurface(id, x, y, w, h, isTemp);
+            display_commands.push([DISPLAY_OP_APPEND_ROOT, div]);
+            need_restack = true;
             break;
 
-        case 'S': // Show a surface
+        case BROADWAY_OP_SHOW_SURFACE:
             id = cmd.get_16();
-            cmdShowSurface(id);
-            break;
+            surface = surfaces[id];
+            if (!surface.visible) {
+                surface.visible = true;
+                display_commands.push([DISPLAY_OP_SHOW_SURFACE, surface.div, surface.x, surface.y]);
+                need_restack = true;
+            }
+           break;
 
-        case 'H': // Hide a surface
+        case BROADWAY_OP_HIDE_SURFACE:
             id = cmd.get_16();
-            cmdHideSurface(id);
+            if (grab.surface == id)
+                doUngrab();
+            surface = surfaces[id];
+            if (surface.visible) {
+                display_commands.push([DISPLAY_OP_HIDE_SURFACE, surface.div]);
+            }
             break;
 
-        case 'p': // Set transient parent
+        case BROADWAY_OP_SET_TRANSIENT_FOR:
             id = cmd.get_16();
             var parentId = cmd.get_16();
-            cmdSetTransientFor(id, parentId);
+            surface = surfaces[id];
+            if (surface.transientParent !== parentId) {
+                surface.transientParent = parentId;
+                if (parentId != 0 && surfaces[parentId]) {
+                    moveToHelper(surface, stackingOrder.indexOf(surfaces[parentId])+1);
+                }
+                need_restack = true;
+            }
             break;
 
-        case 'd': // Delete surface
+        case BROADWAY_OP_DESTROY_SURFACE:
             id = cmd.get_16();
-            cmdDeleteSurface(id);
+
+            if (grab.surface == id)
+                doUngrab();
+
+            surface = surfaces[id];
+            var i = stackingOrder.indexOf(surface);
+            if (i >= 0)
+                stackingOrder.splice(i, 1);
+            var div = surface.div;
+
+            display_commands.push([DISPLAY_OP_DELETE_NODE, div]);
+            // We need to delay this until its really deleted because we can still get events to it
+            display_commands.push([DISPLAY_OP_DELETE_SURFACE, id]);
             break;
 
-        case 'F': // RoundTrip
+        case BROADWAY_OP_ROUNDTRIP:
             id = cmd.get_16();
             var tag = cmd.get_32();
             cmdRoundtrip(id, tag);
             break;
 
-        case 'm': // Move a surface
+        case BROADWAY_OP_MOVE_RESIZE:
             id = cmd.get_16();
             var ops = cmd.get_flags();
             var has_pos = ops & 1;
-            if (has_pos) {
-                x = cmd.get_16s();
-                y = cmd.get_16s();
-            }
             var has_size = ops & 2;
-            if (has_size) {
-                w = cmd.get_16();
-                h = cmd.get_16();
+            surface = surfaces[id];
+            if (has_pos) {
+                surface.positioned = true;
+                surface.x = cmd.get_16s();;
+                surface.y = cmd.get_16s();;
+                display_commands.push([DISPLAY_OP_MOVE_NODE, surface.div, surface.x, surface.y]);
             }
-            cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h);
+            if (has_size) {
+                surface.width = cmd.get_16();
+                surface.height = cmd.get_16();;
+                display_commands.push([DISPLAY_OP_RESIZE_NODE, surface.div, surface.width, surface.height]);
+
+            }
             break;
 
-        case 'r': // Raise a surface
+        case BROADWAY_OP_RAISE_SURFACE:
             id = cmd.get_16();
             cmdRaiseSurface(id);
+            need_restack = true;
             break;
 
-        case 'R': // Lower a surface
+        case BROADWAY_OP_LOWER_SURFACE:
             id = cmd.get_16();
             cmdLowerSurface(id);
+            need_restack = true;
             break;
 
-        case 't': // Upload texture
+        case BROADWAY_OP_UPLOAD_TEXTURE:
             id = cmd.get_32();
             var data = cmd.get_data();
-            cmdUploadTexture(id, data);
+            var texture = new Texture (id, data); // Stores a ref in global textures array
+            new_textures.push(texture);
             break;
 
-        case 'T': // Release texture
+        case BROADWAY_OP_RELEASE_TEXTURE:
             id = cmd.get_32();
-            cmdReleaseTexture(id);
+            textures[id].unref();
             break;
 
-        case 'n': // Set nodes
+        case BROADWAY_OP_SET_NODES:
             id = cmd.get_16();
-            var len = cmd.get_32();
-            var node_data = new Uint32Array(len);
-            for (var i = 0; i < len; i++)
-                node_data[i] = cmd.get_32();
+            if (id in modified_trees) {
+                // Can't modify the same dom tree in the same loop, bail out and do the first one
+                cmd.pos = saved_pos;
+                res = false;
+            } else {
+                modified_trees[id] = true;
 
-            cmdSurfaceSetNodes(id, node_data);
+                var node_data = cmd.get_nodes ();
+                surface = surfaces[id];
+                var transform_nodes = new TransformNodes (node_data, surface.div, display_commands);
+                transform_nodes.execute();
+            }
             break;
 
-        case 'g': // Grab
+        case BROADWAY_OP_GRAB_POINTER:
             id = cmd.get_16();
             var ownerEvents = cmd.get_bool ();
 
             cmdGrabPointer(id, ownerEvents);
             break;
 
-        case 'u': // Ungrab
+        case BROADWAY_OP_UNGRAB_POINTER:
             cmdUngrabPointer();
             break;
 
-        case 'k': // show keyboard
+        case BROADWAY_OP_SET_SHOW_KEYBOARD:
             showKeyboard = cmd.get_16() != 0;
             showKeyboardChanged = true;
             break;
@@ -856,58 +1018,114 @@ function handleCommands(cmd)
             alert("Unknown op " + command);
         }
     }
-    return true;
+
+    if (need_restack)
+        display_commands.push([DISPLAY_OP_RESTACK_SURFACES]);
+
+    return res;
 }
 
+function handleOutstandingDisplayCommands()
+{
+    if (outstandingDisplayCommands) {
+        window.requestAnimationFrame(
+            function () {
+                handleDisplayCommands(outstandingDisplayCommands);
+                outstandingDisplayCommands = null;
+
+                if (outstandingCommands.length > 0)
+                    setTimeout(handleOutstanding);
+            });
+    } else {
+        if (outstandingCommands.length > 0)
+            handleOutstanding ();
+    }
+}
+
+/* Mode of operation.
+ * We run all outstandingCommands, until either we run out of things
+ * to process, or we update the dom nodes of the same surface twice.
+ * Then we wait for all textures to load, and then we request am
+ * animation frame and apply the display changes. Then we loop back and
+ * handle outstanding commands again.
+ *
+ * The reason for stopping if we update the same tree twice is that
+ * the delta operations generally assume that the previous dom tree
+ * is in pristine condition.
+ */
 function handleOutstanding()
 {
+    var display_commands = new Array();
+    var new_textures = new Array();
+    var modified_trees = {};
+
+    if (outstandingDisplayCommands != null)
+        return;
+
     while (outstandingCommands.length > 0) {
         var cmd = outstandingCommands.shift();
-        if (!handleCommands(cmd)) {
+        if (!handleCommands(cmd, display_commands, new_textures, modified_trees)) {
             outstandingCommands.unshift(cmd);
-            return;
+            break;
         }
     }
+
+    if (display_commands.length > 0)
+        outstandingDisplayCommands = display_commands;
+
+    if (new_textures.length > 0) {
+        var n_textures = new_textures.length;
+        for (var i = 0; i < new_textures.length; i++) {
+            var t = new_textures[i];
+            t.image.onload = function() {
+                n_textures -= 1;
+                if (n_textures == 0) {
+                    handleOutstandingDisplayCommands();
+                }
+            };
+        }
+    } else {
+        handleOutstandingDisplayCommands();
+    }
+
 }
 
 function BinCommands(message) {
     this.arraybuffer = message;
-    this.u8 = new Uint8Array(message);
-    this.length = this.u8.length;
+    this.dataview = new DataView(message);
+    this.length = this.arraybuffer.byteLength;
     this.pos = 0;
 }
 
 BinCommands.prototype.get_char = function() {
-    return String.fromCharCode(this.u8[this.pos++]);
+    return String.fromCharCode(this.dataview.getUint8(this.pos++));
 };
 BinCommands.prototype.get_bool = function() {
-    return this.u8[this.pos++] != 0;
+    return this.dataview.getUint8(this.pos++) != 0;
 };
 BinCommands.prototype.get_flags = function() {
-    return this.u8[this.pos++];
+    return this.dataview.getUint8(this.pos++);
 }
 BinCommands.prototype.get_16 = function() {
-    var v =
-        this.u8[this.pos] +
-        (this.u8[this.pos+1] << 8);
+    var v = this.dataview.getUint16(this.pos, true);
     this.pos = this.pos + 2;
     return v;
 };
 BinCommands.prototype.get_16s = function() {
-    var v = this.get_16 ();
-    if (v > 32767)
-        return v - 65536;
-    else
-        return v;
+    var v = this.dataview.getInt16(this.pos, true);
+    this.pos = this.pos + 2;
+    return v;
 };
 BinCommands.prototype.get_32 = function() {
-    var v =
-        this.u8[this.pos] +
-        (this.u8[this.pos+1] << 8) +
-        (this.u8[this.pos+2] << 16) +
-        (this.u8[this.pos+3] << 24);
+    var v = this.dataview.getUint32(this.pos, true);
     this.pos = this.pos + 4;
     return v;
+};
+BinCommands.prototype.get_nodes = function() {
+    var len = this.get_32();
+    var node_data = new DataView(this.arraybuffer, this.pos, len * 4);
+    this.pos = this.pos + len * 4;
+    return node_data;
 };
 BinCommands.prototype.get_data = function() {
     var size = this.get_32();
@@ -916,8 +1134,14 @@ BinCommands.prototype.get_data = function() {
     return data;
 };
 
+var active = false;
 function handleMessage(message)
 {
+    if (!active) {
+        start();
+        active = true;
+    }
+
     var cmd = new BinCommands(message);
     outstandingCommands.push(cmd);
     if (outstandingCommands.length == 1) {
@@ -1016,7 +1240,7 @@ function onMouseMove (ev) {
     var id = getSurfaceId(ev);
     id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
-    sendInput ("m", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+    sendInput (BROADWAY_EVENT_POINTER_MOVE, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
 }
 
 function onMouseOver (ev) {
@@ -1028,7 +1252,7 @@ function onMouseOver (ev) {
     var pos = getPositionsFromEvent(ev, id);
     surfaceWithMouse = id;
     if (surfaceWithMouse != 0) {
-        sendInput ("e", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+        sendInput (BROADWAY_EVENT_ENTER, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
     }
 }
 
@@ -1040,7 +1264,7 @@ function onMouseOut (ev) {
     var pos = getPositionsFromEvent(ev, id);
 
     if (id != 0) {
-        sendInput ("l", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+        sendInput (BROADWAY_EVENT_LEAVE, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
     }
     realSurfaceWithMouse = 0;
     surfaceWithMouse = 0;
@@ -1052,10 +1276,10 @@ function doGrab(id, ownerEvents, implicit) {
     if (surfaceWithMouse != id) {
         if (surfaceWithMouse != 0) {
             pos = getPositionsFromAbsCoord(lastX, lastY, surfaceWithMouse);
-            sendInput ("l", [realSurfaceWithMouse, surfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
+            sendInput (BROADWAY_EVENT_LEAVE, [realSurfaceWithMouse, surfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
         }
         pos = getPositionsFromAbsCoord(lastX, lastY, id);
-        sendInput ("e", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
+        sendInput (BROADWAY_EVENT_ENTER, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
         surfaceWithMouse = id;
     }
 
@@ -1069,11 +1293,11 @@ function doUngrab() {
     if (realSurfaceWithMouse != surfaceWithMouse) {
         if (surfaceWithMouse != 0) {
             pos = getPositionsFromAbsCoord(lastX, lastY, surfaceWithMouse);
-            sendInput ("l", [realSurfaceWithMouse, surfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
+            sendInput (BROADWAY_EVENT_LEAVE, [realSurfaceWithMouse, surfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
         }
         if (realSurfaceWithMouse != 0) {
             pos = getPositionsFromAbsCoord(lastX, lastY, realSurfaceWithMouse);
-            sendInput ("e", [realSurfaceWithMouse, realSurfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
+            sendInput (BROADWAY_EVENT_ENTER, [realSurfaceWithMouse, realSurfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
         }
         surfaceWithMouse = realSurfaceWithMouse;
     }
@@ -1090,7 +1314,7 @@ function onMouseDown (ev) {
     var pos = getPositionsFromEvent(ev, id);
     if (grab.surface == null)
         doGrab (id, false, true);
-    sendInput ("b", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
+    sendInput (BROADWAY_EVENT_BUTTON_PRESS, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
     return false;
 }
 
@@ -1102,7 +1326,7 @@ function onMouseUp (ev) {
     id = getEffectiveEventTarget (evId);
     var pos = getPositionsFromEvent(ev, id);
 
-    sendInput ("B", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
+    sendInput (BROADWAY_EVENT_BUTTON_RELEASE, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
 
     if (grab.surface != null && grab.implicit)
         doUngrab();
@@ -2583,7 +2807,7 @@ function handleKeyDown(e) {
         // browser behaviors or it has no corresponding keyPress
         // event, then send it immediately
         if (!ignoreKeyEvent(ev))
-            sendInput("k", [keysym, lastState]);
+            sendInput(BROADWAY_EVENT_KEY_PRESS, [keysym, lastState]);
         suppress = true;
     }
 
@@ -2628,7 +2852,7 @@ function handleKeyPress(e) {
 
     // Send the translated keysym
     if (keysym > 0)
-        sendInput ("k", [keysym, lastState]);
+        sendInput (BROADWAY_EVENT_KEY_PRESS, [keysym, lastState]);
 
     // Stop keypress events just in case
     return cancelEvent(ev);
@@ -2647,7 +2871,7 @@ function handleKeyUp(e) {
     }
 
     if (keysym > 0)
-        sendInput ("K", [keysym, lastState]);
+        sendInput (BROADWAY_EVENT_KEY_RELEASE, [keysym, lastState]);
     return cancelEvent(ev);
 }
 
@@ -2691,7 +2915,7 @@ function onMouseWheel(ev)
     var dir = 0;
     if (offset > 0)
         dir = 1;
-    sendInput ("s", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, dir]);
+    sendInput (BROADWAY_EVENT_SCROLL, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, dir]);
 
     return cancelEvent(ev);
 }
@@ -2716,17 +2940,17 @@ function onTouchStart(ev) {
 
             if (realSurfaceWithMouse != origId || id != surfaceWithMouse) {
                 if (id != 0) {
-                    sendInput ("l", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+                    sendInput (BROADWAY_EVENT_LEAVE, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
                 }
 
                 surfaceWithMouse = id;
                 realSurfaceWithMouse = origId;
 
-                sendInput ("e", [origId, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+                sendInput (BROADWAY_EVENT_ENTER, [origId, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
             }
         }
 
-        sendInput ("t", [0, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+        sendInput (BROADWAY_EVENT_TOUCH, [0, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
     }
 }
 
@@ -2748,7 +2972,7 @@ function onTouchMove(ev) {
             isEmulated = 1;
         }
 
-        sendInput ("t", [1, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+        sendInput (BROADWAY_EVENT_TOUCH, [1, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
     }
 }
 
@@ -2771,7 +2995,7 @@ function onTouchEnd(ev) {
             firstTouchDownId = null;
         }
 
-        sendInput ("t", [2, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+        sendInput (BROADWAY_EVENT_TOUCH, [2, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
     }
 }
 
@@ -2809,9 +3033,9 @@ function start()
         var w, h;
         w = window.innerWidth;
         h = window.innerHeight;
-        sendInput ("d", [w, h]);
+        sendInput (BROADWAY_EVENT_SCREEN_SIZE_CHANGED, [w, h]);
     };
-    sendInput ("d", [w, h]);
+    sendInput (BROADWAY_EVENT_SCREEN_SIZE_CHANGED, [w, h]);
 }
 
 function connect()
