@@ -30,4 +30,5 @@ xvfb-run -a -s "-screen 0 1024x768x24" \
         --print-errorlogs \
         --suite=gtk \
         --no-suite=gtk:gsk \
+        --no-suite=gtk:reftests \
         --no-suite=gtk:a11y
