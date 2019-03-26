@@ -1953,19 +1953,6 @@ gdk_surface_win32_get_device_state (GdkSurface       *window,
   return (child != NULL);
 }
 
-void
-gdk_display_warp_device (GdkDisplay *display,
-                         GdkDevice  *device,
-                         gint        x,
-                         gint        y)
-{
-  g_return_if_fail (display == gdk_display_get_default ());
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (display == gdk_device_get_display (device));
-
-  GDK_DEVICE_GET_CLASS (device)->warp (device, x, y);
-}
-
 static void
 gdk_win32_surface_set_accept_focus (GdkSurface *window,
 			     gboolean accept_focus)
