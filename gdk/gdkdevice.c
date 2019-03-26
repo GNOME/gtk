@@ -568,7 +568,7 @@ gdk_device_get_position (GdkDevice *device,
 }
 
 /**
- * gdk_device_get_surface_at_position_double:
+ * gdk_device_get_surface_at_position:
  * @device: pointer #GdkDevice to query info to.
  * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
  *         relative to the surface origin, or %NULL.
@@ -587,9 +587,9 @@ gdk_device_get_position (GdkDevice *device,
  *   device position, or %NULL.
  **/
 GdkSurface *
-gdk_device_get_surface_at_position_double (GdkDevice  *device,
-                                          gdouble    *win_x,
-                                          gdouble    *win_y)
+gdk_device_get_surface_at_position (GdkDevice *device,
+                                    double    *win_x,
+                                    double    *win_y)
 {
   gdouble tmp_x, tmp_y;
   GdkSurface *surface;

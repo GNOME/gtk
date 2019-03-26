@@ -43,7 +43,7 @@ find_widget_at_pointer (GdkDevice *device)
   GtkWidget *widget = NULL;
   GdkSurface *pointer_surface;
 
-  pointer_surface = gdk_device_get_surface_at_position_double (device, NULL, NULL);
+  pointer_surface = gdk_device_get_surface_at_position (device, NULL, NULL);
 
   if (pointer_surface)
     widget = gtk_root_get_for_surface (pointer_surface);
