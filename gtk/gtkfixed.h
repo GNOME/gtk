@@ -62,20 +62,24 @@ struct _GtkFixedClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType      gtk_fixed_get_type          (void) G_GNUC_CONST;
+GType      gtk_fixed_get_type           (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_fixed_new               (void);
+GtkWidget* gtk_fixed_new                (void);
 GDK_AVAILABLE_IN_ALL
-void       gtk_fixed_put               (GtkFixed       *fixed,
-                                        GtkWidget      *widget,
-                                        gint            x,
-                                        gint            y);
+void       gtk_fixed_put                (GtkFixed  *fixed,
+                                         GtkWidget *widget,
+                                         gint       x,
+                                         gint       y);
 GDK_AVAILABLE_IN_ALL
-void       gtk_fixed_move              (GtkFixed       *fixed,
-                                        GtkWidget      *widget,
-                                        gint            x,
-                                        gint            y);
-
+void       gtk_fixed_move               (GtkFixed  *fixed,
+                                         GtkWidget *widget,
+                                         gint       x,
+                                         gint       y);
+GDK_AVAILABLE_IN_ALL
+void       gtk_fixed_get_child_position (GtkFixed  *fixed,
+                                         GtkWidget *widget,
+                                         gint      *x,
+                                         gint      *y);
 
 G_END_DECLS
 
