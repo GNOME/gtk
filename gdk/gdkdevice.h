@@ -173,9 +173,9 @@ GdkSurface *
                                   gint              *win_x,
                                   gint              *win_y);
 GDK_AVAILABLE_IN_ALL
-void     gdk_device_get_position_double (GdkDevice         *device,
-                                         gdouble           *x,
-                                         gdouble           *y);
+void     gdk_device_get_position (GdkDevice *device,
+                                  double    *x,
+                                  double    *y);
 GDK_AVAILABLE_IN_ALL
 GdkSurface *
          gdk_device_get_surface_at_position_double

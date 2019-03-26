@@ -2098,7 +2098,7 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
 
   precache_target_list (drag);
 
-  gdk_device_get_position_double (device, &px, &py);
+  gdk_device_get_position (device, &px, &py);
   x_root = round (px) + dx;
   y_root = round (py) + dy;
 
