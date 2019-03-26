@@ -2077,6 +2077,7 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
   GdkX11Drag *x11_drag;
   GdkDrag *drag;
   GdkDisplay *display;
+  double px, py;
   int x_root, y_root;
   Atom xselection;
   GdkSurface *ipc_surface;
@@ -2097,9 +2098,9 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
 
   precache_target_list (drag);
 
-  gdk_device_get_position (device, &x_root, &y_root);
-  x_root += dx;
-  y_root += dy;
+  gdk_device_get_position_double (device, &px, &py);
+  x_root = round (px) + dx;
+  y_root = round (py) + dy;
 
   x11_drag->start_x = x_root;
   x11_drag->start_y = y_root;
