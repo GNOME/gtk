@@ -62,6 +62,8 @@ const DISPLAY_OP_HIDE_SURFACE = 4;
 const DISPLAY_OP_DELETE_NODE = 5;
 const DISPLAY_OP_MOVE_NODE = 6;
 const DISPLAY_OP_RESIZE_NODE = 7;
+const DISPLAY_OP_RESTACK_SURFACES = 8;
+const DISPLAY_OP_DELETE_SURFACE = 9;
 
 // GdkCrossingMode
 const GDK_CROSSING_NORMAL = 0;
@@ -173,6 +175,7 @@ var surfaces = {};
 var textures = {};
 var stackingOrder = [];
 var outstandingCommands = new Array();
+var outstandingDisplayCommands = null;
 var inputSocket = null;
 var debugDecoding = false;
 var fakeInput = null;
@@ -199,6 +202,10 @@ function Texture(id, data) {
     this.url = window.URL.createObjectURL(blob);
     this.refcount = 1;
     this.id = id;
+
+    var image = new Image();
+    image.src = this.url;
+    this.image = image;
     textures[id] = this;
 }
 
@@ -278,14 +285,15 @@ function cmdRoundtrip(id, tag)
 function cmdRaiseSurface(id)
 {
     var surface = surfaces[id];
-
-    moveToHelper(surface);
+    if (surface)
+        moveToHelper(surface);
 }
 
 function cmdLowerSurface(id)
 {
     var surface = surfaces[id];
-    moveToHelper(surface, 0);
+    if (surface)
+        moveToHelper(surface, 0);
 }
 
 function TransformNodes(node_data, div, display_commands) {
@@ -491,9 +499,8 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
             image.height = rect.height;
             image.style["position"] = "absolute";
             set_rect_style(image, rect);
-            var texture = textures[texture_id];
+            var texture = textures[texture_id].ref();
             image.src = texture.url;
-            texture.ref();
             // Unref blob url when loaded
             image.onload = function() { texture.unref(); };
             newNode = image;
@@ -833,25 +840,28 @@ function handleDisplayCommands(display_commands)
             div.style["height"] = cmd[3] + "px";
             break;
 
+        case DISPLAY_OP_RESTACK_SURFACES:
+            restackSurfaces();
+            break;
+        case DISPLAY_OP_DELETE_SURFACE:
+            var id = cmd[1];
+            delete surfaces[id];
+            break;
+
         default:
             alert("Unknown display op " + command);
         }
     }
 }
 
-var active = false;
-function handleCommands(cmd)
+function handleCommands(cmd, display_commands, new_textures, modified_trees)
 {
-    if (!active) {
-        start();
-        active = true;
-    }
-
-    var display_commands = new Array();
+    var res = true;
     var need_restack = false;
 
-    while (cmd.pos < cmd.length) {
+    while (res && cmd.pos < cmd.length) {
         var id, x, y, w, h, q, surface;
+        var saved_pos = cmd.pos;
         var command = cmd.get_char();
         lastSerial = cmd.get_32();
         switch (command) {
@@ -918,7 +928,8 @@ function handleCommands(cmd)
             var div = surface.div;
 
             display_commands.push([DISPLAY_OP_DELETE_NODE, div]);
-            delete surfaces[id];
+            // We need to delay this until its really deleted because we can still get events to it
+            display_commands.push([DISPLAY_OP_DELETE_SURFACE, id]);
             break;
 
         case BROADWAY_OP_ROUNDTRIP:
@@ -962,7 +973,8 @@ function handleCommands(cmd)
         case BROADWAY_OP_UPLOAD_TEXTURE:
             id = cmd.get_32();
             var data = cmd.get_data();
-            var texure = new Texture (id, data); // Stores a ref in textures
+            var texture = new Texture (id, data); // Stores a ref in global textures array
+            new_textures.push(texture);
             break;
 
         case BROADWAY_OP_RELEASE_TEXTURE:
@@ -972,10 +984,18 @@ function handleCommands(cmd)
 
         case BROADWAY_OP_SET_NODES:
             id = cmd.get_16();
-            var node_data = cmd.get_nodes ();
-            surface = surfaces[id];
-            var transform_nodes = new TransformNodes (node_data, surface.div, display_commands);
-            transform_nodes.execute();
+            if (id in modified_trees) {
+                // Can't modify the same dom tree in the same loop, bail out and do the first one
+                cmd.pos = saved_pos;
+                res = false;
+            } else {
+                modified_trees[id] = true;
+
+                var node_data = cmd.get_nodes ();
+                surface = surfaces[id];
+                var transform_nodes = new TransformNodes (node_data, surface.div, display_commands);
+                transform_nodes.execute();
+            }
             break;
 
         case BROADWAY_OP_GRAB_POINTER:
@@ -1000,22 +1020,74 @@ function handleCommands(cmd)
     }
 
     if (need_restack)
-        restackSurfaces();
+        display_commands.push([DISPLAY_OP_RESTACK_SURFACES]);
 
-    handleDisplayCommands(display_commands);
-
-    return true;
+    return res;
 }
 
+function handleOutstandingDisplayCommands()
+{
+    if (outstandingDisplayCommands) {
+        window.requestAnimationFrame(
+            function () {
+                handleDisplayCommands(outstandingDisplayCommands);
+                outstandingDisplayCommands = null;
+
+                if (outstandingCommands.length > 0)
+                    setTimeout(handleOutstanding);
+            });
+    } else {
+        if (outstandingCommands.length > 0)
+            handleOutstanding ();
+    }
+}
+
+/* Mode of operation.
+ * We run all outstandingCommands, until either we run out of things
+ * to process, or we update the dom nodes of the same surface twice.
+ * Then we wait for all textures to load, and then we request am
+ * animation frame and apply the display changes. Then we loop back and
+ * handle outstanding commands again.
+ *
+ * The reason for stopping if we update the same tree twice is that
+ * the delta operations generally assume that the previous dom tree
+ * is in pristine condition.
+ */
 function handleOutstanding()
 {
+    var display_commands = new Array();
+    var new_textures = new Array();
+    var modified_trees = {};
+
+    if (outstandingDisplayCommands != null)
+        return;
+
     while (outstandingCommands.length > 0) {
         var cmd = outstandingCommands.shift();
-        if (!handleCommands(cmd)) {
+        if (!handleCommands(cmd, display_commands, new_textures, modified_trees)) {
             outstandingCommands.unshift(cmd);
-            return;
+            break;
         }
     }
+
+    if (display_commands.length > 0)
+        outstandingDisplayCommands = display_commands;
+
+    if (new_textures.length > 0) {
+        var n_textures = new_textures.length;
+        for (var i = 0; i < new_textures.length; i++) {
+            var t = new_textures[i];
+            t.image.onload = function() {
+                n_textures -= 1;
+                if (n_textures == 0) {
+                    handleOutstandingDisplayCommands();
+                }
+            };
+        }
+    } else {
+        handleOutstandingDisplayCommands();
+    }
+
 }
 
 function BinCommands(message) {
@@ -1062,8 +1134,14 @@ BinCommands.prototype.get_data = function() {
     return data;
 };
 
+var active = false;
 function handleMessage(message)
 {
+    if (!active) {
+        start();
+        active = true;
+    }
+
     var cmd = new BinCommands(message);
     outstandingCommands.push(cmd);
     if (outstandingCommands.length == 1) {
