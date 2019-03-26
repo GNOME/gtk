@@ -610,43 +610,6 @@ gdk_device_get_surface_at_position_double (GdkDevice  *device,
 }
 
 /**
- * gdk_device_get_surface_at_position:
- * @device: pointer #GdkDevice to query info to.
- * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
- *         relative to the surface origin, or %NULL.
- * @win_y: (out) (allow-none): return location for the Y coordinate of the device location,
- *         relative to the surface origin, or %NULL.
- *
- * Obtains the surface underneath @device, returning the location of the device in @win_x and @win_y. Returns
- * %NULL if the surface tree under @device is not known to GDK (for example, belongs to another application).
- *
- * As a slave device coordinates are those of its master pointer, This
- * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them, see gdk_device_grab().
- *
- * Returns: (nullable) (transfer none): the #GdkSurface under the
- * device position, or %NULL.
- **/
-GdkSurface *
-gdk_device_get_surface_at_position (GdkDevice  *device,
-                                   gint       *win_x,
-                                   gint       *win_y)
-{
-  gdouble tmp_x, tmp_y;
-  GdkSurface *surface;
-
-  surface =
-    gdk_device_get_surface_at_position_double (device, &tmp_x, &tmp_y);
-
-  if (win_x)
-    *win_x = round (tmp_x);
-  if (win_y)
-    *win_y = round (tmp_y);
-
-  return surface;
-}
-
-/**
  * gdk_device_get_history: (skip)
  * @device: a #GdkDevice
  * @surface: the surface with respect to which which the event coordinates will be reported
