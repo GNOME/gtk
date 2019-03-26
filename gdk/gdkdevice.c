@@ -568,32 +568,6 @@ gdk_device_get_position_double (GdkDevice        *device,
 }
 
 /**
- * gdk_device_get_position:
- * @device: pointer device to query status about.
- * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
- * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
- *
- * Gets the current location of @device. As a slave device
- * coordinates are those of its master pointer, This function
- * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them, see gdk_device_grab().
- **/
-void
-gdk_device_get_position (GdkDevice *device,
-                         gint      *x,
-                         gint      *y)
-{
-  gdouble tmp_x, tmp_y;
-
-  gdk_device_get_position_double (device, &tmp_x, &tmp_y);
-  if (x)
-    *x = round (tmp_x);
-  if (y)
-    *y = round (tmp_y);
-}
-
-
-/**
  * gdk_device_get_surface_at_position_double:
  * @device: pointer #GdkDevice to query info to.
  * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
