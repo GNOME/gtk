@@ -75,7 +75,11 @@ void       gtk_fixed_move              (GtkFixed       *fixed,
                                         GtkWidget      *widget,
                                         gint            x,
                                         gint            y);
-
+GDK_AVAILABLE_IN_ALL
+void       gtk_fixed_get_position      (GtkFixed       *fixed,
+                                        GtkWidget      *widget,
+                                        gint           *x,
+                                        gint           *y);
 
 G_END_DECLS
 
