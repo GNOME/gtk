@@ -89,7 +89,6 @@ gtk_tests = [
   ['testtreesort'],
   ['testverticalcells'],
   ['treestoretest'],
-  ['testxinerama'],
   ['testgrouping'],
   ['testtooltips'],
   ['testexpand'],
@@ -130,6 +129,7 @@ gtk_tests = [
   ['testoutsetshadowdrawing'],
   ['testblur'],
   ['testtexture'],
+  ['testwindowdrag'],
 ]
 
 if os_unix

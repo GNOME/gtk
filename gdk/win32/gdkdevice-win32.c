@@ -45,14 +45,14 @@ gdk_device_win32_get_state (GdkDevice       *device,
                             gdouble         *axes,
                             GdkModifierType *mask)
 {
-  gint x_int, y_int;
+  double x, y;
 
-  gdk_surface_get_device_position (window, device, &x_int, &y_int, mask);
+  gdk_surface_get_device_position (window, device, &x, &y, mask);
 
   if (axes)
     {
-      axes[0] = x_int;
-      axes[1] = y_int;
+      axes[0] = round (x);
+      axes[1] = round (y);
     }
 }
 

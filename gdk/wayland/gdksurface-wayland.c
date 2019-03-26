@@ -2447,8 +2447,7 @@ gdk_wayland_surface_map (GdkSurface *surface)
                     GDK_SURFACE_IMPL_WAYLAND (attached_grab_surface->impl);
                   grab_device = gdk_seat_get_pointer (attached_impl->grab_input_seat);
                   transient_for =
-                    gdk_device_get_surface_at_position (grab_device,
-                                                       NULL, NULL);
+                    gdk_device_get_surface_at_position (grab_device, NULL, NULL);
                 }
             }
           else
@@ -2465,8 +2464,13 @@ gdk_wayland_surface_map (GdkSurface *surface)
            * position of the device that holds the grab.
            */
           if (impl->position_method == POSITION_METHOD_NONE && grab_device)
-            gdk_surface_get_device_position (transient_for, grab_device,
-                                            &surface->x, &surface->y, NULL);
+            {
+              double px, py;
+              gdk_surface_get_device_position (transient_for, grab_device,
+                                               &px, &py, NULL);
+              surface->x = round (px);
+              surface->y = round (py);
+            }
         }
       else
         {
@@ -3556,8 +3560,8 @@ gdk_wayland_surface_begin_resize_drag (GdkSurface     *surface,
                                        GdkSurfaceEdge  edge,
                                        GdkDevice      *device,
                                        gint            button,
-                                       gint            root_x,
-                                       gint            root_y,
+                                       gint            x,
+                                       gint            y,
                                        guint32         timestamp)
 {
   GdkSurfaceImplWayland *impl;
@@ -3646,8 +3650,8 @@ static void
 gdk_wayland_surface_begin_move_drag (GdkSurface *surface,
                                      GdkDevice  *device,
                                      gint        button,
-                                     gint        root_x,
-                                     gint        root_y,
+                                     gint        x,
+                                     gint        y,
                                      guint32     timestamp)
 {
   GdkSurfaceImplWayland *impl;

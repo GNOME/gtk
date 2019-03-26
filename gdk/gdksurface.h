@@ -640,17 +640,11 @@ GDK_AVAILABLE_IN_ALL
 gint          gdk_surface_get_scale_factor  (GdkSurface     *surface);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_get_device_position (GdkSurface       *surface,
+GdkSurface *   gdk_surface_get_device_position (GdkSurface      *surface,
                                                 GdkDevice       *device,
-                                                gint            *x,
-                                                gint            *y,
+                                                double          *x,
+                                                double          *y,
                                                 GdkModifierType *mask);
-GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_get_device_position_double (GdkSurface       *surface,
-                                                       GdkDevice       *device,
-                                                       gdouble         *x,
-                                                       gdouble         *y,
-                                                       GdkModifierType *mask);
 GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_surface_get_parent      (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
@@ -731,31 +725,31 @@ void          gdk_surface_register_dnd    (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
 void gdk_surface_begin_resize_drag            (GdkSurface     *surface,
                                                GdkSurfaceEdge  edge,
-                                               gint           button,
-                                               gint           root_x,
-                                               gint           root_y,
-                                               guint32        timestamp);
+                                               gint            button,
+                                               gint            x,
+                                               gint            y,
+                                               guint32         timestamp);
 GDK_AVAILABLE_IN_ALL
 void gdk_surface_begin_resize_drag_for_device (GdkSurface     *surface,
                                                GdkSurfaceEdge  edge,
-                                               GdkDevice     *device,
-                                               gint           button,
-                                               gint           root_x,
-                                               gint           root_y,
-                                               guint32        timestamp);
+                                               GdkDevice      *device,
+                                               gint            button,
+                                               gint            x,
+                                               gint            y,
+                                               guint32         timestamp);
 GDK_AVAILABLE_IN_ALL
 void gdk_surface_begin_move_drag              (GdkSurface     *surface,
-                                               gint           button,
-                                               gint           root_x,
-                                               gint           root_y,
-                                               guint32        timestamp);
+                                               gint            button,
+                                               gint            x,
+                                               gint            y,
+                                               guint32         timestamp);
 GDK_AVAILABLE_IN_ALL
 void gdk_surface_begin_move_drag_for_device   (GdkSurface     *surface,
-                                               GdkDevice     *device,
-                                               gint           button,
-                                               gint           root_x,
-                                               gint           root_y,
-                                               guint32        timestamp);
+                                               GdkDevice      *device,
+                                               gint            button,
+                                               gint            x,
+                                               gint            y,
+                                               guint32         timestamp);
 
 /* Interface for dirty-region queueing */
 GDK_AVAILABLE_IN_ALL

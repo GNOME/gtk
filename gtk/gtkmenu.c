@@ -1823,7 +1823,12 @@ gtk_menu_popup_at_pointer (GtkMenu        *menu,
             device = gdk_device_get_associated_device (device);
 
           if (device)
-            gdk_surface_get_device_position (rect_surface, device, &rect.x, &rect.y, NULL);
+            {
+              double px, py;
+              gdk_surface_get_device_position (rect_surface, device, &px, &py, NULL);
+              rect.x = round (px);
+              rect.y = round (py);
+            }
         }
     }
   else

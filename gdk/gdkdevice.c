@@ -529,7 +529,7 @@ gdk_device_get_state (GdkDevice       *device,
 }
 
 /**
- * gdk_device_get_position_double:
+ * gdk_device_get_position:
  * @device: pointer device to query status about.
  * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
  * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
@@ -540,9 +540,9 @@ gdk_device_get_state (GdkDevice       *device,
  * unless there is an ongoing grab on them. See gdk_device_grab().
  **/
 void
-gdk_device_get_position_double (GdkDevice        *device,
-                                gdouble          *x,
-                                gdouble          *y)
+gdk_device_get_position (GdkDevice *device,
+                         double    *x,
+                         double    *y)
 {
   GdkDisplay *display;
   gdouble tmp_x, tmp_y;
@@ -568,33 +568,7 @@ gdk_device_get_position_double (GdkDevice        *device,
 }
 
 /**
- * gdk_device_get_position:
- * @device: pointer device to query status about.
- * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
- * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
- *
- * Gets the current location of @device. As a slave device
- * coordinates are those of its master pointer, This function
- * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them, see gdk_device_grab().
- **/
-void
-gdk_device_get_position (GdkDevice *device,
-                         gint      *x,
-                         gint      *y)
-{
-  gdouble tmp_x, tmp_y;
-
-  gdk_device_get_position_double (device, &tmp_x, &tmp_y);
-  if (x)
-    *x = round (tmp_x);
-  if (y)
-    *y = round (tmp_y);
-}
-
-
-/**
- * gdk_device_get_surface_at_position_double:
+ * gdk_device_get_surface_at_position:
  * @device: pointer #GdkDevice to query info to.
  * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
  *         relative to the surface origin, or %NULL.
@@ -613,9 +587,9 @@ gdk_device_get_position (GdkDevice *device,
  *   device position, or %NULL.
  **/
 GdkSurface *
-gdk_device_get_surface_at_position_double (GdkDevice  *device,
-                                          gdouble    *win_x,
-                                          gdouble    *win_y)
+gdk_device_get_surface_at_position (GdkDevice *device,
+                                    double    *win_x,
+                                    double    *win_y)
 {
   gdouble tmp_x, tmp_y;
   GdkSurface *surface;
@@ -638,43 +612,6 @@ gdk_device_get_surface_at_position_double (GdkDevice  *device,
     *win_x = tmp_x;
   if (win_y)
     *win_y = tmp_y;
-
-  return surface;
-}
-
-/**
- * gdk_device_get_surface_at_position:
- * @device: pointer #GdkDevice to query info to.
- * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
- *         relative to the surface origin, or %NULL.
- * @win_y: (out) (allow-none): return location for the Y coordinate of the device location,
- *         relative to the surface origin, or %NULL.
- *
- * Obtains the surface underneath @device, returning the location of the device in @win_x and @win_y. Returns
- * %NULL if the surface tree under @device is not known to GDK (for example, belongs to another application).
- *
- * As a slave device coordinates are those of its master pointer, This
- * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them, see gdk_device_grab().
- *
- * Returns: (nullable) (transfer none): the #GdkSurface under the
- * device position, or %NULL.
- **/
-GdkSurface *
-gdk_device_get_surface_at_position (GdkDevice  *device,
-                                   gint       *win_x,
-                                   gint       *win_y)
-{
-  gdouble tmp_x, tmp_y;
-  GdkSurface *surface;
-
-  surface =
-    gdk_device_get_surface_at_position_double (device, &tmp_x, &tmp_y);
-
-  if (win_x)
-    *win_x = round (tmp_x);
-  if (win_y)
-    *win_y = round (tmp_y);
 
   return surface;
 }

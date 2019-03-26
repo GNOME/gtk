@@ -5253,14 +5253,8 @@ size_allocate_callback (GtkWidget     *widget,
 {
   GtkWidget *label = data;
   gchar *msg;
-  gint x, y;
 
-  gtk_window_get_position (GTK_WINDOW (widget), &x, &y);
-
-  msg = g_strdup_printf ("size: %d x %d\n"
-                         "position: %d, %d",
-                         allocation->width, allocation->height,
-                         x, y);
+  msg = g_strdup_printf ("size: %d x %d\n", allocation->width, allocation->height);
 
   gtk_label_set_text (GTK_LABEL (label), msg);
 
@@ -5334,45 +5328,12 @@ set_size_request_callback (GtkWidget *widget,
 }
 
 static void
-set_location_callback (GtkWidget *widget,
-                       gpointer   data)
-{
-  gint x, y;
-  
-  get_ints (data, &x, &y);
-
-  gtk_window_move (g_object_get_data (data, "target"), x, y);
-}
-
-static void
-move_to_position_callback (GtkWidget *widget,
-                           gpointer   data)
-{
-  gint x, y;
-  GtkWindow *window;
-
-  window = g_object_get_data (data, "target");
-  
-  gtk_window_get_position (window, &x, &y);
-
-  gtk_window_move (window, x, y);
-}
-
-static void
 resizable_callback (GtkWidget *widget,
                      gpointer   data)
 {
   g_object_set (g_object_get_data (data, "target"),
                 "resizable", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)),
                 NULL);
-}
-
-static void
-gravity_selected (GtkWidget *widget,
-                  gpointer   data)
-{
-  gtk_window_set_gravity (GTK_WINDOW (g_object_get_data (data, "target")),
-                          gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) + GDK_GRAVITY_NORTH_WEST);
 }
 
 static void
@@ -5478,20 +5439,6 @@ window_controls (GtkWidget *window)
                     control_window);
   gtk_container_add (GTK_CONTAINER (vbox), button);
 
-  button = gtk_button_new_with_label ("Move");
-  g_signal_connect (button,
-		    "clicked",
-		    G_CALLBACK (set_location_callback),
-		    control_window);
-  gtk_container_add (GTK_CONTAINER (vbox), button);
-
-  button = gtk_button_new_with_label ("Move to current position");
-  g_signal_connect (button,
-		    "clicked",
-		    G_CALLBACK (move_to_position_callback),
-		    control_window);
-  gtk_container_add (GTK_CONTAINER (vbox), button);
-
   button = gtk_check_button_new_with_label ("Allow resize");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
   g_signal_connect (button,
@@ -5541,37 +5488,6 @@ window_controls (GtkWidget *window)
   g_signal_connect (om,
 		    "changed",
 		    G_CALLBACK (pos_selected),
-		    control_window);
-
-  gtk_container_add (GTK_CONTAINER (vbox), om);
-
-  om = gtk_combo_box_text_new ();
-  i = 0;
-  while (i < 10)
-    {
-      static gchar *names[] = {
-        "GDK_GRAVITY_NORTH_WEST",
-        "GDK_GRAVITY_NORTH",
-        "GDK_GRAVITY_NORTH_EAST",
-        "GDK_GRAVITY_WEST",
-        "GDK_GRAVITY_CENTER",
-        "GDK_GRAVITY_EAST",
-        "GDK_GRAVITY_SOUTH_WEST",
-        "GDK_GRAVITY_SOUTH",
-        "GDK_GRAVITY_SOUTH_EAST",
-        "GDK_GRAVITY_STATIC",
-        NULL
-      };
-
-      g_assert (names[i]);
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (om), names[i]);
-
-      ++i;
-    }
-
-  g_signal_connect (om,
-		    "changed",
-		    G_CALLBACK (gravity_selected),
 		    control_window);
 
   gtk_container_add (GTK_CONTAINER (vbox), om);
@@ -6613,7 +6529,6 @@ create_main_window (void)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_name (window, "main_window");
-  gtk_window_move (GTK_WINDOW (window), 50, 20);
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 400);
 
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);

@@ -245,12 +245,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_window_get_resizable            (GtkWindow           *window);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_gravity              (GtkWindow           *window,
-                                                GdkGravity           gravity);
-GDK_AVAILABLE_IN_ALL
-GdkGravity gtk_window_get_gravity              (GtkWindow           *window);
-
-GDK_AVAILABLE_IN_ALL
 void	   gtk_window_set_display              (GtkWindow	    *window,
 						GdkDisplay          *display);
 
@@ -355,14 +349,14 @@ GDK_AVAILABLE_IN_ALL
 void gtk_window_begin_resize_drag (GtkWindow     *window,
                                    GdkSurfaceEdge  edge,
                                    gint           button,
-                                   gint           root_x,
-                                   gint           root_y,
+                                   gint           x,
+                                   gint           y,
                                    guint32        timestamp);
 GDK_AVAILABLE_IN_ALL
 void gtk_window_begin_move_drag   (GtkWindow     *window,
                                    gint           button,
-                                   gint           root_x,
-                                   gint           root_y,
+                                   gint           x,
+                                   gint           y,
                                    guint32        timestamp);
 
 /* Set initial default size of the window (does not constrain user
@@ -384,14 +378,6 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_window_get_size         (GtkWindow   *window,
                                       gint        *width,
                                       gint        *height);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_move             (GtkWindow   *window,
-                                      gint         x,
-                                      gint         y);
-GDK_AVAILABLE_IN_ALL
-void     gtk_window_get_position     (GtkWindow   *window,
-                                      gint        *root_x,
-                                      gint        *root_y);
 
 GDK_AVAILABLE_IN_ALL
 GtkWindowGroup *gtk_window_get_group (GtkWindow   *window);

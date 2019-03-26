@@ -330,7 +330,6 @@ enum {
   PROP_FOCUS_ON_MAP,
   PROP_DECORATED,
   PROP_DELETABLE,
-  PROP_GRAVITY,
   PROP_TRANSIENT_FOR,
   PROP_ATTACHED_TO,
   PROP_APPLICATION,
@@ -1038,20 +1037,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWindow:gravity:
-   *
-   * The window gravity of the window. See gtk_window_move() and #GdkGravity for
-   * more details about window gravity.
-   */
-  window_props[PROP_GRAVITY] =
-      g_param_spec_enum ("gravity",
-                         P_("Gravity"),
-                         P_("The window gravity of the window"),
-                         GDK_TYPE_GRAVITY,
-                         GDK_GRAVITY_NORTH_WEST,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GtkWindow:transient-for:
    *
    * The transient parent of the window. See gtk_window_set_transient_for() for
@@ -1480,16 +1465,15 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
     default:
       if (!priv->maximized)
         {
-          gdouble x_root, y_root;
-
+          double tx, ty;
           gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
-          gdk_event_get_root_coords (event, &x_root, &y_root);
+          gdk_event_get_coords (event, &tx, &ty);
           gdk_surface_begin_resize_drag_for_device (_gtk_widget_get_surface (widget),
 						    (GdkSurfaceEdge) region,
 						    gdk_event_get_device ((GdkEvent *) event),
 						    GDK_BUTTON_PRIMARY,
-						    x_root, y_root,
+						    tx, ty,
 						    gdk_event_get_time (event));
 
           gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
@@ -1565,7 +1549,6 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
     {
       GdkEventSequence *sequence;
       gdouble start_x, start_y;
-      gint x_root, y_root;
 
       sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
@@ -1595,13 +1578,11 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
       gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
       gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
-      gdk_surface_get_root_coords (_gtk_widget_get_surface (GTK_WIDGET (window)),
-				   start_x, start_y, &x_root, &y_root);
 
       gdk_surface_begin_move_drag_for_device (_gtk_widget_get_surface (GTK_WIDGET (window)),
 					      gtk_gesture_get_device (GTK_GESTURE (gesture)),
 					      gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)),
-					      x_root, y_root,
+					      (int)start_x, (int)start_y,
 					      gtk_get_current_event_time ());
 
       gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
@@ -2052,9 +2033,6 @@ gtk_window_set_property (GObject      *object,
     case PROP_DELETABLE:
       gtk_window_set_deletable (window, g_value_get_boolean (value));
       break;
-    case PROP_GRAVITY:
-      gtk_window_set_gravity (window, g_value_get_enum (value));
-      break;
     case PROP_TRANSIENT_FOR:
       gtk_window_set_transient_for (window, g_value_get_object (value));
       break;
@@ -2166,9 +2144,6 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_DELETABLE:
       g_value_set_boolean (value, gtk_window_get_deletable (window));
-      break;
-    case PROP_GRAVITY:
-      g_value_set_enum (value, gtk_window_get_gravity (window));
       break;
     case PROP_TRANSIENT_FOR:
       g_value_set_object (value, gtk_window_get_transient_for (window));
@@ -4965,362 +4940,6 @@ gtk_window_get_size (GtkWindow *window,
 }
 
 static void
-gtk_window_translate_csd_pos (GtkWindow *window,
-                              gint      *root_x,
-                              gint      *root_y,
-                              gint       apply)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (priv->type != GTK_WINDOW_TOPLEVEL)
-    return;
-
-  if (priv->decorated &&
-      !priv->fullscreen)
-    {
-      GtkBorder window_border = { 0 };
-      gint title_height = 0;
-      gint dx;
-      gint dy;
-
-      get_shadow_width (window, &window_border);
-      if (priv->title_box != NULL &&
-          gtk_widget_get_visible (priv->title_box) &&
-          gtk_widget_get_child_visible (priv->title_box))
-        {
-          gint minimum_height;
-
-          gtk_widget_measure (priv->title_box, GTK_ORIENTATION_VERTICAL, -1,
-                              &minimum_height, &title_height,
-                              NULL, NULL);
-        }
-
-      switch (priv->gravity)
-        {
-        case GDK_GRAVITY_NORTH:
-        case GDK_GRAVITY_CENTER:
-        case GDK_GRAVITY_SOUTH:
-          dx = (window_border.left + window_border.right) / 2;
-          break;
-
-        case GDK_GRAVITY_NORTH_WEST:
-        case GDK_GRAVITY_WEST:
-        case GDK_GRAVITY_SOUTH_WEST:
-        case GDK_GRAVITY_SOUTH_EAST:
-        case GDK_GRAVITY_EAST:
-        case GDK_GRAVITY_NORTH_EAST:
-          dx = window_border.left;
-          break;
-
-        default:
-          dx = 0;
-          break;
-        }
-
-      switch (priv->gravity)
-        {
-        case GDK_GRAVITY_WEST:
-        case GDK_GRAVITY_CENTER:
-        case GDK_GRAVITY_EAST:
-          dy = (window_border.top + title_height + window_border.bottom) / 2;
-          break;
-
-        case GDK_GRAVITY_NORTH_WEST:
-        case GDK_GRAVITY_NORTH:
-        case GDK_GRAVITY_NORTH_EAST:
-          dy = window_border.top;
-          break;
-
-        case GDK_GRAVITY_SOUTH_WEST:
-        case GDK_GRAVITY_SOUTH:
-        case GDK_GRAVITY_SOUTH_EAST:
-          dy = window_border.top + title_height;
-          break;
-
-        default:
-          dy = 0;
-          break;
-        }
-
-      if (root_x)
-        *root_x = *root_x + (dx * apply);
-      if (root_y)
-        *root_y = *root_y + (dy * apply);
-    }
-}
-
-/**
- * gtk_window_move:
- * @window: a #GtkWindow
- * @x: X coordinate to move window to
- * @y: Y coordinate to move window to
- *
- * Asks the [window manager][gtk-X11-arch] to move
- * @window to the given position.  Window managers are free to ignore
- * this; most window managers ignore requests for initial window
- * positions (instead using a user-defined placement algorithm) and
- * honor requests after the window has already been shown.
- *
- * Note: the position is the position of the gravity-determined
- * reference point for the window. The gravity determines two things:
- * first, the location of the reference point in root window
- * coordinates; and second, which point on the window is positioned at
- * the reference point.
- *
- * By default the gravity is #GDK_GRAVITY_NORTH_WEST, so the reference
- * point is simply the @x, @y supplied to gtk_window_move(). The
- * top-left corner of the window decorations (aka window frame or
- * border) will be placed at @x, @y.  Therefore, to position a window
- * at the top left of the screen, you want to use the default gravity
- * (which is #GDK_GRAVITY_NORTH_WEST) and move the window to 0,0.
- *
- * To position a window at the bottom right corner of the screen, you
- * would set #GDK_GRAVITY_SOUTH_EAST, which means that the reference
- * point is at @x + the window width and @y + the window height, and
- * the bottom-right corner of the window border will be placed at that
- * reference point. So, to place a window in the bottom right corner
- * you would first set gravity to south east, then write:
- * `gtk_window_move (window, gdk_screen_width () - window_width,
- * gdk_screen_height () - window_height)` (note that this
- * example does not take multi-head scenarios into account).
- *
- * The [Extended Window Manager Hints Specification](http://www.freedesktop.org/Standards/wm-spec)
- * has a nice table of gravities in the “implementation notes” section.
- *
- * The gtk_window_get_position() documentation may also be relevant.
- */
-void
-gtk_window_move (GtkWindow *window,
-                 gint       x,
-                 gint       y)
-{
-  GtkWindowGeometryInfo *info;
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  widget = GTK_WIDGET (window);
-
-  info = gtk_window_get_geometry_info (window, TRUE);  
-  gtk_window_translate_csd_pos (window, &x, &y, EXCLUDE_CSD_SIZE);
-
-  if (_gtk_widget_get_mapped (widget))
-    {
-      GtkAllocation allocation;
-
-      gtk_widget_get_allocation (widget, &allocation);
-
-      /* we have now sent a request with this position
-       * with currently-active constraints, so toggle flag.
-       */
-      info->position_constraints_changed = FALSE;
-
-      /* we only constrain if mapped - if not mapped,
-       * then gtk_window_compute_configure_request()
-       * will apply the constraints later, and we
-       * don't want to lose information about
-       * what position the user set before then.
-       * i.e. if you do a move() then turn off POS_CENTER
-       * then show the window, your move() will work.
-       */
-      gtk_window_constrain_position (window,
-                                     allocation.width, allocation.height,
-                                     &x, &y);
-
-      /* Note that this request doesn't go through our standard request
-       * framework, e.g. doesn't increment configure_request_count,
-       * doesn't set info->last, etc.; that's because
-       * we don't save the info needed to arrive at this same request
-       * again.
-       *
-       * To gtk_window_move_resize(), this will end up looking exactly
-       * the same as the position being changed by the window
-       * manager.
-       */
-      gdk_surface_move (_gtk_widget_get_surface (GTK_WIDGET (window)), x, y);
-    }
-  else
-    {
-      /* Save this position to apply on mapping */
-      gtk_widget_queue_resize (widget);
-      info->initial_x = x;
-      info->initial_y = y;
-      info->initial_pos_set = TRUE;
-    }
-}
-
-/**
- * gtk_window_get_position:
- * @window: a #GtkWindow
- * @root_x: (out) (optional): return location for X coordinate of
- *     gravity-determined reference point, or %NULL
- * @root_y: (out) (optional): return location for Y coordinate of
- *     gravity-determined reference point, or %NULL
- *
- * This function returns the position you need to pass to
- * gtk_window_move() to keep @window in its current position.
- * This means that the meaning of the returned value varies with
- * window gravity. See gtk_window_move() for more details.
- *
- * The reliability of this function depends on the windowing system
- * currently in use. Some windowing systems, such as Wayland, do not
- * support a global coordinate system, and thus the position of the
- * window will always be (0, 0). Others, like X11, do not have a reliable
- * way to obtain the geometry of the decorations of a window if they are
- * provided by the window manager. Additionally, on X11, window manager
- * have been known to mismanage window gravity, which result in windows
- * moving even if you use the coordinates of the current position as
- * returned by this function.
- *
- * If you haven’t changed the window gravity, its gravity will be
- * #GDK_GRAVITY_NORTH_WEST. This means that gtk_window_get_position()
- * gets the position of the top-left corner of the window manager
- * frame for the window. gtk_window_move() sets the position of this
- * same top-left corner.
- *
- * If a window has gravity #GDK_GRAVITY_STATIC the window manager
- * frame is not relevant, and thus gtk_window_get_position() will
- * always produce accurate results. However you can’t use static
- * gravity to do things like place a window in a corner of the screen,
- * because static gravity ignores the window manager decorations.
- *
- * Ideally, this function should return appropriate values if the
- * window has client side decorations, assuming that the windowing
- * system supports global coordinates.
- *
- * In practice, saving the window position should not be left to
- * applications, as they lack enough knowledge of the windowing
- * system and the window manager state to effectively do so. The
- * appropriate way to implement saving the window position is to
- * use a platform-specific protocol, wherever that is available.
- */
-void
-gtk_window_get_position (GtkWindow *window,
-                         gint      *root_x,
-                         gint      *root_y)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *widget;
-  GdkSurface *surface;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  widget = GTK_WIDGET (window);
-  surface = _gtk_widget_get_surface (widget);
-
-  if (priv->gravity == GDK_GRAVITY_STATIC)
-    {
-      if (_gtk_widget_get_mapped (widget))
-        {
-          /* This does a server round-trip, which is sort of wrong;
-           * but a server round-trip is inevitable for
-           * gdk_surface_get_frame_extents() in the usual
-           * NorthWestGravity case below, so not sure what else to
-           * do. We should likely be consistent about whether we get
-           * the client-side info or the server-side info.
-           */
-          gdk_surface_get_origin (surface, root_x, root_y);
-        }
-      else
-        {
-          GdkRectangle configure_request;
-          
-          gtk_window_compute_configure_request (window,
-                                                &configure_request,
-                                                NULL, NULL);
-          
-          *root_x = configure_request.x;
-          *root_y = configure_request.y;
-        }
-      gtk_window_translate_csd_pos (window, root_x, root_y, INCLUDE_CSD_SIZE);
-    }
-  else
-    {
-      GdkRectangle frame_extents;
-      
-      gint x, y;
-      gint w, h;
-      
-      if (_gtk_widget_get_mapped (widget))
-        {
-          gdk_surface_get_frame_extents (surface, &frame_extents);
-          x = frame_extents.x;
-          y = frame_extents.y;
-          gtk_window_get_size (window, &w, &h);
-          /* gtk_window_get_size() will have already taken into account
-           * the padding added by the CSD shadow and title bar, so we need
-           * to revert it here, otherwise we'll end up counting it twice...
-           */
-          gtk_window_update_csd_size (window, &w, &h, INCLUDE_CSD_SIZE);
-        }
-      else
-        {
-          /* We just say the frame has 0 size on all sides.
-           * Not sure what else to do.
-           */
-          gtk_window_compute_configure_request (window,
-                                                &frame_extents,
-                                                NULL, NULL);
-          x = frame_extents.x;
-          y = frame_extents.y;
-          w = frame_extents.width;
-          h = frame_extents.height;
-        }
-      
-      gtk_window_translate_csd_pos (window, &x, &y, INCLUDE_CSD_SIZE);
-      switch (priv->gravity)
-        {
-        case GDK_GRAVITY_NORTH:
-        case GDK_GRAVITY_CENTER:
-        case GDK_GRAVITY_SOUTH:
-          /* Find center of frame. */
-          x += frame_extents.width / 2;
-          /* Center client window on that point. */
-          x -= w / 2;
-          break;
-
-        case GDK_GRAVITY_SOUTH_EAST:
-        case GDK_GRAVITY_EAST:
-        case GDK_GRAVITY_NORTH_EAST:
-          /* Find right edge of frame */
-          x += frame_extents.width;
-          /* Align left edge of client at that point. */
-          x -= w;
-          break;
-        default:
-          break;
-        }
-
-      switch (priv->gravity)
-        {
-        case GDK_GRAVITY_WEST:
-        case GDK_GRAVITY_CENTER:
-        case GDK_GRAVITY_EAST:
-          /* Find center of frame. */
-          y += frame_extents.height / 2;
-          /* Center client window there. */
-          y -= h / 2;
-          break;
-        case GDK_GRAVITY_SOUTH_WEST:
-        case GDK_GRAVITY_SOUTH:
-        case GDK_GRAVITY_SOUTH_EAST:
-          /* Find south edge of frame */
-          y += frame_extents.height;
-          /* Place bottom edge of client there */
-          y -= h;
-          break;
-        default:
-          break;
-        }
-      
-      if (root_x)
-        *root_x = x;
-      if (root_y)
-        *root_y = y;
-    }
-}
-
-static void
 gtk_window_destroy (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
@@ -7642,13 +7261,13 @@ static GdkMonitor *
 get_monitor_containing_pointer (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  gint px, py;
+  double px, py;
   GdkDevice *pointer;
 
   pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (priv->display));
   gdk_device_get_position (pointer, &px, &py);
 
-  return gdk_display_get_monitor_at_point (priv->display, px, py);
+  return gdk_display_get_monitor_at_point (priv->display, round (px), round (py));
 }
 
 static void
@@ -7809,15 +7428,15 @@ gtk_window_compute_configure_request (GtkWindow    *window,
             GdkRectangle area;
             GdkDevice *pointer;
             GdkMonitor *monitor;
-            gint px, py;
+            double px, py;
 
             pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (priv->display));
 
             gdk_device_get_position (pointer, &px, &py);
-            monitor = gdk_display_get_monitor_at_point (priv->display, px, py);
+            monitor = gdk_display_get_monitor_at_point (priv->display, round (px), round (py));
 
-            x = px - w / 2;
-            y = py - h / 2;
+            x = round (px) - w / 2;
+            y = round (py) - h / 2;
 
             /* Clamp onto current monitor, ignoring _NET_WM_STRUT and
              * WM decorations.
@@ -9071,79 +8690,24 @@ gtk_window_get_resizable (GtkWindow *window)
 }
 
 /**
- * gtk_window_set_gravity:
- * @window: a #GtkWindow
- * @gravity: window gravity
- *
- * Window gravity defines the meaning of coordinates passed to
- * gtk_window_move(). See gtk_window_move() and #GdkGravity for
- * more details.
- *
- * The default window gravity is #GDK_GRAVITY_NORTH_WEST which will
- * typically “do what you mean.”
- *
- **/
-void
-gtk_window_set_gravity (GtkWindow *window,
-			GdkGravity gravity)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  if (gravity != priv->gravity)
-    {
-      priv->gravity = gravity;
-
-      /* gtk_window_move_resize() will adapt gravity
-       */
-      gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
-
-      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_GRAVITY]);
-    }
-}
-
-/**
- * gtk_window_get_gravity:
- * @window: a #GtkWindow
- *
- * Gets the value set by gtk_window_set_gravity().
- *
- * Returns: (transfer none): window gravity
- **/
-GdkGravity
-gtk_window_get_gravity (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), 0);
-
-  return priv->gravity;
-}
-
-/**
  * gtk_window_begin_resize_drag:
  * @window: a #GtkWindow
  * @button: mouse button that initiated the drag
  * @edge: position of the resize control
- * @root_x: X position where the user clicked to initiate the drag, in root window coordinates
- * @root_y: Y position where the user clicked to initiate the drag
+ * @x: X position where the user clicked to initiate the drag, in window coordinates
+ * @y: Y position where the user clicked to initiate the drag
  * @timestamp: timestamp from the click event that initiated the drag
  *
  * Starts resizing a window. This function is used if an application
- * has window resizing controls. When GDK can support it, the resize
- * will be done using the standard mechanism for the
- * [window manager][gtk-X11-arch] or windowing
- * system. Otherwise, GDK will try to emulate window resizing,
- * potentially not all that well, depending on the windowing system.
+ * has window resizing controls.
  */
 void
-gtk_window_begin_resize_drag  (GtkWindow     *window,
-                               GdkSurfaceEdge  edge,
-                               gint           button,
-                               gint           root_x,
-                               gint           root_y,
-                               guint32        timestamp)
+gtk_window_begin_resize_drag (GtkWindow      *window,
+                              GdkSurfaceEdge  edge,
+                              gint            button,
+                              gint            x,
+                              gint            y,
+                              guint32         timestamp)
 {
   GtkWidget *widget;
   GdkSurface *toplevel;
@@ -9154,33 +8718,26 @@ gtk_window_begin_resize_drag  (GtkWindow     *window,
 
   toplevel = _gtk_widget_get_surface (widget);
 
-  gdk_surface_begin_resize_drag (toplevel,
-                                edge, button,
-                                root_x, root_y,
-                                timestamp);
+  gdk_surface_begin_resize_drag (toplevel, edge, button, x, y, timestamp);
 }
 
 /**
  * gtk_window_begin_move_drag:
  * @window: a #GtkWindow
  * @button: mouse button that initiated the drag
- * @root_x: X position where the user clicked to initiate the drag, in root window coordinates
- * @root_y: Y position where the user clicked to initiate the drag
+ * @x: X position where the user clicked to initiate the drag, in window coordinates
+ * @y: Y position where the user clicked to initiate the drag
  * @timestamp: timestamp from the click event that initiated the drag
  *
  * Starts moving a window. This function is used if an application has
- * window movement grips. When GDK can support it, the window movement
- * will be done using the standard mechanism for the
- * [window manager][gtk-X11-arch] or windowing
- * system. Otherwise, GDK will try to emulate window movement,
- * potentially not all that well, depending on the windowing system.
+ * window movement grips.
  */
 void
-gtk_window_begin_move_drag  (GtkWindow *window,
-                             gint       button,
-                             gint       root_x,
-                             gint       root_y,
-                             guint32    timestamp)
+gtk_window_begin_move_drag (GtkWindow *window,
+                            gint       button,
+                            gint       x,
+                            gint       y,
+                            guint32    timestamp)
 {
   GtkWidget *widget;
   GdkSurface *toplevel;
@@ -9191,10 +8748,7 @@ gtk_window_begin_move_drag  (GtkWindow *window,
 
   toplevel = _gtk_widget_get_surface (widget);
 
-  gdk_surface_begin_move_drag (toplevel,
-                              button,
-                              root_x, root_y,
-                              timestamp);
+  gdk_surface_begin_move_drag (toplevel, button, x, y, timestamp);
 }
 
 /**

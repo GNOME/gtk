@@ -888,7 +888,7 @@ gdk_input_other_event (GdkDisplay *display,
   PACKET packet;
   gint root_x, root_y;
   gint num_axes;
-  gint x, y;
+  double x, y;
   guint translated_buttons, button_diff, button_mask;
   /* Translation from tablet button state to GDK button state for
    * buttons 1-3 - swap button 2 and 3.
@@ -908,7 +908,7 @@ gdk_input_other_event (GdkDisplay *display,
     g_object_ref (window);
 
   GDK_NOTE (EVENTS_OR_INPUT,
-	    g_print ("gdk_input_other_event: window=%p %+d%+d\n",
+	    g_print ("gdk_input_other_event: window=%p %+g%+g\n",
                window ? GDK_SURFACE_HWND (window) : NULL, x, y));
 
   if (msg->message == WT_PACKET || msg->message == WT_CSRCHANGE)

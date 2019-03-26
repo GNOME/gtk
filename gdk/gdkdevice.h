@@ -167,25 +167,13 @@ void     gdk_device_get_state    (GdkDevice         *device,
                                   gdouble           *axes,
                                   GdkModifierType   *mask);
 GDK_AVAILABLE_IN_ALL
-void     gdk_device_get_position (GdkDevice         *device,
-                                  gint              *x,
-                                  gint              *y);
+void     gdk_device_get_position (GdkDevice *device,
+                                  double    *x,
+                                  double    *y);
 GDK_AVAILABLE_IN_ALL
-GdkSurface *
-         gdk_device_get_surface_at_position
-                                 (GdkDevice         *device,
-                                  gint              *win_x,
-                                  gint              *win_y);
-GDK_AVAILABLE_IN_ALL
-void     gdk_device_get_position_double (GdkDevice         *device,
-                                         gdouble           *x,
-                                         gdouble           *y);
-GDK_AVAILABLE_IN_ALL
-GdkSurface *
-         gdk_device_get_surface_at_position_double
-                                 (GdkDevice         *device,
-                                  gdouble           *win_x,
-                                  gdouble           *win_y);
+GdkSurface * gdk_device_get_surface_at_position (GdkDevice *device,
+                                                 double    *win_x,
+                                                 double    *win_y);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_device_get_history  (GdkDevice         *device,
                                   GdkSurface         *surface,

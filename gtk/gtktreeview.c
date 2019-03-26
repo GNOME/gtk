@@ -6717,57 +6717,6 @@ remove_info (GtkTreeView *tree_view)
   g_object_set_data (G_OBJECT (tree_view), I_("gtk-tree-view-drag-info"), NULL);
 }
 
-#if 0
-static gint
-drag_scan_timeout (gpointer data)
-{
-  GtkTreeView *tree_view;
-  gint x, y;
-  GdkModifierType state;
-  GtkTreePath *path = NULL;
-  GtkTreeViewColumn *column = NULL;
-  GdkRectangle visible_rect;
-  GdkSeat *seat;
-
-  tree_view = GTK_TREE_VIEW (data);
-
-  seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (tree_view)));
-  gdk_surface_get_device_position (tree_view->priv->bin_window,
-				   gdk_seat_get_pointer (seat),
-				   &x, &y, &state);
-
-  gtk_tree_view_get_visible_rect (tree_view, &visible_rect);
-
-  /* See if we are near the edge. */
-  if ((x - visible_rect.x) < SCROLL_EDGE_SIZE ||
-      (visible_rect.x + visible_rect.width - x) < SCROLL_EDGE_SIZE ||
-      (y - visible_rect.y) < SCROLL_EDGE_SIZE ||
-      (visible_rect.y + visible_rect.height - y) < SCROLL_EDGE_SIZE)
-    {
-      gtk_tree_view_get_path_at_pos (tree_view,
-                                     tree_view->priv->bin_window,
-                                     x, y,
-                                     &path,
-                                     &column,
-                                     NULL,
-                                     NULL);
-
-      if (path != NULL)
-        {
-          gtk_tree_view_scroll_to_cell (tree_view,
-                                        path,
-                                        column,
-					TRUE,
-                                        0.5, 0.5);
-
-          gtk_tree_path_free (path);
-        }
-    }
-
-  return TRUE;
-}
-#endif /* 0 */
-
 static void
 add_scroll_timeout (GtkTreeView *tree_view)
 {
@@ -13795,39 +13744,6 @@ gtk_tree_view_search_position_func (GtkTreeView *tree_view,
 				    GtkWidget   *search_window,
 				    gpointer     user_data)
 {
-  gint x, y;
-  GtkAllocation allocation;
-  GdkDisplay *display;
-  GdkMonitor *monitor;
-  GdkRectangle workarea;
-  GdkSurface *tree_surface = gtk_widget_get_surface (GTK_WIDGET (tree_view));
-  GtkRequisition requisition;
-
-  gtk_widget_realize (search_window);
-
-  display = gtk_widget_get_display (GTK_WIDGET (tree_view));
-  monitor = gdk_display_get_monitor_at_surface (display, tree_surface);
-  monitor = gdk_display_get_monitor (display, 0);
-  gdk_monitor_get_workarea (monitor, &workarea);
-
-  gtk_widget_get_allocation (GTK_WIDGET (tree_view), &allocation);
-  gtk_widget_get_preferred_size (search_window, &requisition, NULL);
-
-  if (allocation.x + allocation.width > workarea.x + workarea.width)
-    x = workarea.x + workarea.width - requisition.width;
-  else if (allocation.x + allocation.width - requisition.width < workarea.x)
-    x = workarea.x;
-  else
-    x = allocation.x + allocation.width - requisition.width;
-
-  if (allocation.y + allocation.height + requisition.height > workarea.y + workarea.height)
-    y = workarea.y + workarea.height - requisition.height;
-  else if (allocation.y + allocation.height < workarea.y) /* isn't really possible ... */
-    y = workarea.y;
-  else
-    y = allocation.y + allocation.height;
-
-  gtk_window_move (GTK_WINDOW (search_window), x, y);
 }
 
 static void

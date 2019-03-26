@@ -150,11 +150,8 @@ see for example <link
 linkend="gtk-window-iconify">gtk_window_iconify()</link> or <link
 linkend="gtk-window-maximize">gtk_window_maximize()</link> or <link
 linkend="gtk-window-set-decorated">gtk_window_set_decorated()</link>.
-Keep in mind that <link
-linkend="gtk-window-move">gtk_window_move()</link> and window sizing
-are ultimately controlled by the window manager as well and most
-window managers <emphasis>will</emphasis> ignore certain requests from
-time to time, in the interests of good user interface.
+Keep in mind that most window managers <emphasis>will</emphasis> ignore
+certain requests from time to time, in the interests of good user interface.
 </para>
 
 <!--
