@@ -154,6 +154,7 @@ gtk_fixed_put (GtkFixed  *fixed,
 {
   GtkFixedPrivate *priv = gtk_fixed_get_instance_private (fixed);
   GtkFixedLayoutChild *child_info;
+  GskTransform *transform = NULL;
 
   g_return_if_fail (GTK_IS_FIXED (fixed));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -162,7 +163,10 @@ gtk_fixed_put (GtkFixed  *fixed,
   gtk_widget_set_parent (widget, GTK_WIDGET (fixed));
 
   child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout, widget));
-  gtk_fixed_layout_child_set_position (child_info, &GRAPHENE_POINT_INIT (x, y));
+
+  transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (x, y));
+  gtk_fixed_layout_child_set_position (child_info, transform);
+  gsk_transform_unref (transform);
 }
 
 /**
@@ -183,19 +187,21 @@ gtk_fixed_get_child_position (GtkFixed  *fixed,
 {
   GtkFixedPrivate *priv = gtk_fixed_get_instance_private (fixed);
   GtkFixedLayoutChild *child_info;
-  graphene_point_t pos;
+  float pos_x = 0.f, pos_y = 0.f;
+  GskTransform *transform;
 
   g_return_if_fail (GTK_IS_FIXED (fixed));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (fixed));
 
   child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout, widget));
-  gtk_fixed_layout_child_get_position (child_info, &pos);
+  transform = gtk_fixed_layout_child_get_position (child_info);
+  gsk_transform_to_translate (transform, &pos_x, &pos_y);
 
   if (x != NULL)
-    *x = floorf (pos.x);
+    *x = floorf (pos_x);
   if (y != NULL)
-    *y = floorf (pos.y);
+    *y = floorf (pos_y);
 }
 
 /**
@@ -215,13 +221,17 @@ gtk_fixed_move (GtkFixed  *fixed,
 {
   GtkFixedPrivate *priv = gtk_fixed_get_instance_private (fixed);
   GtkFixedLayoutChild *child_info;
+  GskTransform *transform = NULL;
 
   g_return_if_fail (GTK_IS_FIXED (fixed));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (fixed));
 
   child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout,  widget));
-  gtk_fixed_layout_child_set_position (child_info, &GRAPHENE_POINT_INIT (x, y));
+
+  transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (x, y));
+  gtk_fixed_layout_child_set_position (child_info, transform);
+  gsk_transform_unref (transform);
 }
 
 static void

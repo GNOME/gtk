@@ -77,7 +77,7 @@ struct _GtkFixedLayoutChild
 {
   GtkLayoutChild parent_instance;
 
-  graphene_point_t position;
+  GskTransform *position;
 };
 
 enum
@@ -132,18 +132,29 @@ gtk_fixed_layout_child_get_property (GObject    *gobject,
 }
 
 static void
+gtk_fixed_layout_child_finalize (GObject *gobject)
+{
+  GtkFixedLayoutChild *self = GTK_FIXED_LAYOUT_CHILD (gobject);
+
+  gsk_transform_unref (self->position);
+
+  G_OBJECT_CLASS (gtk_fixed_layout_child_parent_class)->finalize (gobject);
+}
+
+static void
 gtk_fixed_layout_child_class_init (GtkFixedLayoutChildClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->set_property = gtk_fixed_layout_child_set_property;
   gobject_class->get_property = gtk_fixed_layout_child_get_property;
+  gobject_class->finalize = gtk_fixed_layout_child_finalize;
 
   child_props[PROP_CHILD_POSITION] =
     g_param_spec_boxed ("position",
                         P_("Position"),
                         P_("The position of a child of a fixed layout"),
-                        GRAPHENE_TYPE_POINT,
+                        GSK_TYPE_TRANSFORM,
                         G_PARAM_READWRITE |
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_EXPLICIT_NOTIFY);
@@ -159,23 +170,19 @@ gtk_fixed_layout_child_init (GtkFixedLayoutChild *self)
 /**
  * gtk_fixed_layout_child_set_position:
  * @child: a #GtkFixedLayoutChild
- * @position: the position of the child
+ * @position: a #GskTransform
  *
- * Sets the position of the child of a #GtkFixedLayout.
+ * Sets the transformation of the child of a #GtkFixedLayout.
  */
 void
-gtk_fixed_layout_child_set_position (GtkFixedLayoutChild    *child,
-                                     const graphene_point_t *position)
+gtk_fixed_layout_child_set_position (GtkFixedLayoutChild *child,
+                                     GskTransform        *position)
 {
   GtkLayoutManager *layout;
 
   g_return_if_fail (GTK_IS_FIXED_LAYOUT_CHILD (child));
-  g_return_if_fail (position != NULL);
 
-  if (graphene_point_equal (&child->position, position))
-    return;
-
-  child->position = *position;
+  child->position = gsk_transform_transform (child->position, position);
 
   layout = gtk_layout_child_get_layout_manager (GTK_LAYOUT_CHILD (child));
   gtk_layout_manager_layout_changed (layout);
@@ -186,18 +193,17 @@ gtk_fixed_layout_child_set_position (GtkFixedLayoutChild    *child,
 /**
  * gtk_fixed_layout_child_get_position:
  * @child: a #GtkFixedLayoutChild
- * @position: (out caller-allocates): the position of the child
  *
- * Retrieves the position of the child of a #GtkFixedLayout.
+ * Retrieves the transformation of the child of a #GtkFixedLayout.
+ *
+ * Returns: (transfer none) (nullable): a #GskTransform
  */
-void
-gtk_fixed_layout_child_get_position (GtkFixedLayoutChild *child,
-                                     graphene_point_t    *position)
+GskTransform *
+gtk_fixed_layout_child_get_position (GtkFixedLayoutChild *child)
 {
-  g_return_if_fail (GTK_IS_FIXED_LAYOUT_CHILD (child));
-  g_return_if_fail (position != NULL);
+  g_return_val_if_fail (GTK_IS_FIXED_LAYOUT_CHILD (child), NULL);
 
-  *position = child->position;
+  return child->position;
 }
 
 G_DEFINE_TYPE (GtkFixedLayout, gtk_fixed_layout, GTK_TYPE_LAYOUT_MANAGER)
@@ -221,25 +227,38 @@ gtk_fixed_layout_measure (GtkLayoutManager *layout_manager,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      int child_min = 0;
-      int child_nat = 0;
+      int child_min = 0, child_nat = 0;
+      int child_min_opp = 0, child_nat_opp = 0;
+      graphene_rect_t min_rect, nat_rect;
 
       if (!gtk_widget_get_visible (child))
         continue;
 
       child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout_manager, child));
 
-      gtk_widget_measure (child, orientation, -1, &child_min, &child_nat, NULL, NULL);
+      gtk_widget_measure (child, orientation, -1,
+                          &child_min, &child_nat,
+                          NULL, NULL);
+      gtk_widget_measure (child, OPPOSITE_ORIENTATION (orientation), -1,
+                          &child_min_opp, &child_nat_opp,
+                          NULL, NULL);
+
+      gsk_transform_transform_bounds (child_info->position,
+                                      &GRAPHENE_RECT_INIT (0.f, 0.f, child_min, child_min_opp),
+                                      &min_rect);
+      gsk_transform_transform_bounds (child_info->position,
+                                      &GRAPHENE_RECT_INIT (0.f, 0.f, child_nat, child_nat_opp),
+                                      &nat_rect);
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          minimum_size = MAX (minimum_size, child_info->position.x + child_min);
-          natural_size = MAX (natural_size, child_info->position.x + child_nat);
+          minimum_size = MAX (minimum_size, min_rect.origin.x + min_rect.size.width);
+          natural_size = MAX (natural_size, nat_rect.origin.x + nat_rect.size.width);
         }
       else
         {
-          minimum_size = MAX (minimum_size, child_info->position.y + child_min);
-          natural_size = MAX (natural_size, child_info->position.y + child_nat);
+          minimum_size = MAX (minimum_size, min_rect.origin.y + min_rect.size.height);
+          natural_size = MAX (natural_size, nat_rect.origin.y + nat_rect.size.height);
         }
     }
 
@@ -271,13 +290,11 @@ gtk_fixed_layout_allocate (GtkLayoutManager *layout_manager,
       child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout_manager, child));
       gtk_widget_get_preferred_size (child, &child_req, NULL);
 
-      gtk_widget_size_allocate (child,
-                                &(GtkAllocation) {
-                                  .x = child_info->position.x,
-                                  .y = child_info->position.y,
-                                  .width = child_req.width,
-                                  .height = child_req.height,
-                                }, -1);
+      gtk_widget_allocate (child,
+                           child_req.width,
+                           child_req.height,
+                           -1,
+                           child_info->position);
     }
 }
 
