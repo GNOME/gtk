@@ -78,6 +78,7 @@ gtk/gtkbin.c
 gtk/gtkbindings.c
 gtk/gtkbookmarksmanager.c
 gtk/gtkbox.c
+gtk/gtkboxlayout.c
 gtk/gtkbuildable.c
 gtk/gtkbuilder.c
 gtk/gtkbuilder-menus.c
