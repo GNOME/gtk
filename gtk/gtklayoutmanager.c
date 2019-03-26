@@ -66,8 +66,6 @@ static GtkSizeRequestMode
 gtk_layout_manager_real_get_request_mode (GtkLayoutManager *manager,
                                           GtkWidget        *widget)
 {
-  LAYOUT_MANAGER_WARN_NOT_IMPLEMENTED (manager, get_request_mode);
-
   return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
 
