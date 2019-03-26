@@ -317,12 +317,18 @@ static gint
 gtk_text_accessible_get_caret_offset (AtkText *text)
 {
   GtkWidget *widget;
+  gboolean result;
+  int cursor_position;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
-    return 0;
+    return -1;
 
-  return gtk_editable_get_position (GTK_EDITABLE (widget));
+  result = gtk_editable_get_selection_bounds (GTK_EDITABLE (widget), NULL, &cursor_position);
+  if (!result)
+    return -1;
+
+  return cursor_position;
 }
 
 static gboolean

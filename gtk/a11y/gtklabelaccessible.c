@@ -822,7 +822,11 @@ gtk_label_accessible_get_caret_offset (AtkText *text)
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
-    return 0;
+    return -1;
+
+  /* Non-selectable labels cannot have a caret. */
+  if (!gtk_label_get_selectable (GTK_LABEL (widget)))
+    return -1;
 
   return _gtk_label_get_cursor_position (GTK_LABEL (widget));
 }
