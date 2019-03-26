@@ -1273,8 +1273,6 @@ gdk_broadway_surface_begin_move_drag (GdkSurface *surface,
   if (impl->maximized)
     return;
 
-  g_print ("gdk_broadway_surface_begin_move_drag\n");
-
   mv_resize = get_move_resize_data (gdk_surface_get_display (surface), TRUE);
 
   if (mv_resize->moveresize_surface != NULL)
