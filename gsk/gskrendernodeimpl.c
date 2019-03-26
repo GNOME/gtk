@@ -4318,10 +4318,10 @@ gsk_cross_fade_node_draw (GskRenderNode *node,
 {
   GskCrossFadeNode *self = (GskCrossFadeNode *) node;
 
-  cairo_push_group (cr);
+  cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
   gsk_render_node_draw (self->start, cr);
 
-  cairo_push_group (cr);
+  cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
   gsk_render_node_draw (self->end, cr);
 
   cairo_pop_group_to_source (cr);
