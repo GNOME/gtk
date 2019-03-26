@@ -3209,6 +3209,9 @@ gtk_widget_unparent (GtkWidget *widget)
   if (old_parent->priv->children_observer)
     gtk_list_list_model_item_removed (old_parent->priv->children_observer, old_prev_sibling);
 
+  if (old_parent->priv->layout_manager)
+    gtk_layout_manager_remove_layout_child (old_parent->priv->layout_manager, widget);
+
   /* Now that the parent pointer is nullified and the unroot vfunc already
    * called, go ahead and unset the parent window, if we are unparenting
    * an embedded GtkWindow the window will become toplevel again and root
