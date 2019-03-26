@@ -284,8 +284,8 @@ gtk_layout_manager_layout_changed (GtkLayoutManager *manager)
 }
 
 static void
-remove_layout_child (GtkWidget        *widget,
-                     GtkWidget        *old_parent,
+remove_layout_child (GtkWidget *widget,
+                     GParamSpec *pspec,
                      GtkLayoutManager *self)
 {
   GtkLayoutManagerPrivate *priv = gtk_layout_manager_get_instance_private (self);
@@ -372,7 +372,7 @@ gtk_layout_manager_get_layout_child (GtkLayoutManager *manager,
   g_assert (g_type_is_a (G_OBJECT_TYPE (res), GTK_TYPE_LAYOUT_CHILD));
 
   g_hash_table_insert (priv->layout_children, child, res);
-  g_signal_connect (child, "parent-set", G_CALLBACK (remove_layout_child), manager);
+  g_signal_connect (child, "notify::parent", G_CALLBACK (remove_layout_child), manager);
 
   return res;
 }
