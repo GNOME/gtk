@@ -48,6 +48,7 @@
 #include "gtkgesturesingle.h"
 #include "gtkgestureswipe.h"
 #include "gtkintl.h"
+#include "gtklayoutmanagerprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
@@ -278,6 +279,35 @@
  *   <child internal-child="accessible">
  *     <object class="AtkObject" id="a11y-button1">
  *       <property name="accessible-name">Clickable Button</property>
+ *     </object>
+ *   </child>
+ * </object>
+ * ]|
+ *
+ * If the parent widget uses a #GtkLayoutManager, #GtkWidget supports a
+ * custom <layout> element, used to define layout properties:
+ *
+ * |[
+ * <object class="MyGrid" id="grid1">
+ *   <child>
+ *     <object class="GtkLabel" id="label1">
+ *       <property name="label">Description</property>
+ *       <layout>
+ *         <property name="left-attach">0</property>
+ *         <property name="top-attach">0</property>
+ *         <property name="row-span">1</property>
+ *         <property name="col-span">1</property>
+ *       </layout>
+ *     </object>
+ *   </child>
+ *   <child>
+ *     <object class="GtkEntry" id="description_entry">
+ *       <layout>
+ *         <property name="left-attach">1</property>
+ *         <property name="top-attach">0</property>
+ *         <property name="row-span">1</property>
+ *         <property name="col-span">1</property>
+ *       </layout>
  *     </object>
  *   </child>
  * </object>
@@ -542,6 +572,7 @@ enum {
   PROP_EXPAND,
   PROP_SCALE_FACTOR,
   PROP_CSS_NAME,
+  PROP_LAYOUT_MANAGER,
   NUM_PROPERTIES
 };
 
@@ -1401,6 +1432,19 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                            P_("The name of this widget in the CSS tree"),
                            NULL,
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+
+  /**
+   * GtkWidget:layout-manager:
+   *
+   * The #GtkLayoutManager instance to use to compute the preferred size
+   * of the widget, and allocate its children.
+   */
+  widget_props[PROP_LAYOUT_MANAGER] =
+    g_param_spec_object ("layout-manager",
+                         P_("Layout Manager"),
+                         P_("The layout manager used to layout children of the widget"),
+                         GTK_TYPE_LAYOUT_MANAGER,
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, widget_props);
 
@@ -2350,6 +2394,9 @@ gtk_widget_set_property (GObject         *object,
       else
         gtk_css_node_set_name (priv->cssnode, GTK_WIDGET_GET_CLASS (widget)->priv->css_name);
       break;
+    case PROP_LAYOUT_MANAGER:
+      gtk_widget_set_layout_manager (widget, g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2498,6 +2545,9 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_CSS_NAME:
       g_value_set_string (value, gtk_css_node_get_name (priv->cssnode));
+      break;
+    case PROP_LAYOUT_MANAGER:
+      g_value_set_object (value, gtk_widget_get_layout_manager (widget));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -4346,16 +4396,26 @@ gtk_widget_allocate (GtkWidget    *widget,
   priv->height = adjusted.height;
   priv->baseline = baseline;
 
-  if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
-    g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0,
-                   priv->width,
-                   priv->height,
-                   baseline);
+  if (priv->layout_manager != NULL)
+    {
+      gtk_layout_manager_allocate (priv->layout_manager, widget,
+                                   priv->width,
+                                   priv->height,
+                                   baseline);
+    }
   else
-    GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget,
-                                                  priv->width,
-                                                  priv->height,
-                                                  baseline);
+    {
+      if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
+        g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0,
+                       priv->width,
+                       priv->height,
+                       baseline);
+      else
+        GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget,
+                                                      priv->width,
+                                                      priv->height,
+                                                      baseline);
+    }
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
 #ifdef G_ENABLE_DEBUG
@@ -8041,6 +8101,10 @@ gtk_widget_dispose (GObject *object)
   while (priv->paintables)
     gtk_widget_paintable_set_widget (priv->paintables->data, NULL);
 
+  if (priv->layout_manager != NULL)
+    gtk_layout_manager_set_widget (priv->layout_manager, NULL);
+  g_clear_object (&priv->layout_manager);
+
   priv->visible = FALSE;
   if (_gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
@@ -9997,6 +10061,134 @@ static const GMarkupParser style_parser =
     style_start_element,
   };
 
+typedef struct
+{
+  char *name;
+  GString *value;
+  char *context;
+  gboolean translatable;
+} LayoutPropertyInfo;
+
+typedef struct
+{
+  GObject *object;
+  GtkBuilder *builder;
+
+  LayoutPropertyInfo *cur_property;
+
+  /* SList<LayoutPropertyInfo> */
+  GSList *properties;
+} LayoutParserData;
+
+static void
+layout_property_info_free (gpointer data)
+{
+  LayoutPropertyInfo *pinfo = data;
+
+  if (pinfo == NULL)
+    return;
+
+  g_free (pinfo->name);
+  g_free (pinfo->context);
+  g_string_free (pinfo->value, TRUE);
+}
+
+static void
+layout_start_element (GMarkupParseContext  *context,
+                      const gchar          *element_name,
+                      const gchar         **names,
+                      const gchar         **values,
+                      gpointer              user_data,
+                      GError              **error)
+{
+  LayoutParserData *layout_data = user_data;
+
+  if (strcmp (element_name, "property") == 0)
+    {
+      const char *name = NULL;
+      const char *ctx = NULL;
+      gboolean translatable = FALSE;
+      LayoutPropertyInfo *pinfo;
+
+      if (!_gtk_builder_check_parent (layout_data->builder, context, "layout", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "name", &name,
+                                        G_MARKUP_COLLECT_BOOLEAN | G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "context", &ctx,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (layout_data->builder, context, error);
+          return;
+        }
+
+      pinfo = g_new0 (LayoutPropertyInfo, 1);
+      pinfo->name = g_strdup (name);
+      pinfo->translatable = translatable;
+      pinfo->context = g_strdup (ctx);
+      pinfo->value = g_string_new (NULL);
+
+      layout_data->cur_property = pinfo;
+    }
+  else
+    {
+      _gtk_builder_error_unhandled_tag (layout_data->builder, context,
+                                        "GtkWidget", element_name,
+                                        error);
+    }
+}
+
+static void
+layout_text (GMarkupParseContext  *context,
+             const gchar          *text,
+             gsize                 text_len,
+             gpointer              user_data,
+             GError              **error)
+{
+  LayoutParserData *layout_data = user_data;
+
+  if (layout_data->cur_property != NULL)
+    g_string_append_len (layout_data->cur_property->value, text, text_len);
+}
+
+static void
+layout_end_element (GMarkupParseContext  *context,
+                    const char           *element_name,
+                    gpointer              user_data,
+                    GError              **error)
+{
+  LayoutParserData *layout_data = user_data;
+
+  if (layout_data->cur_property != NULL)
+    {
+      LayoutPropertyInfo *pinfo = g_steal_pointer (&layout_data->cur_property);
+
+      /* Translate the string, if needed */
+      if (pinfo->value->len != 0 && pinfo->translatable)
+        {
+          const char *translated;
+          const char *domain;
+
+          domain = gtk_builder_get_translation_domain (layout_data->builder);
+
+          translated = _gtk_builder_parser_translate (domain, pinfo->context, pinfo->value->str);
+
+          g_string_assign (pinfo->value, translated);
+        }
+
+      /* We assign all properties at the end of the `layout` section */
+      layout_data->properties = g_slist_prepend (layout_data->properties, pinfo);
+    }
+}
+
+static const GMarkupParser layout_parser =
+  {
+    layout_start_element,
+    layout_end_element,
+    layout_text,
+  };
+
 static gboolean
 gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
                                        GtkBuilder       *builder,
@@ -10045,6 +10237,20 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
       return TRUE;
     }
 
+  if (strcmp (tagname, "layout") == 0)
+    {
+      LayoutParserData *data;
+
+      data = g_slice_new0 (LayoutParserData);
+      data->builder = builder;
+      data->object = (GObject *) g_object_ref (buildable);
+
+      *parser = layout_parser;
+      *parser_data = data;
+
+      return TRUE;
+    }
+
   return FALSE;
 }
 
@@ -10084,6 +10290,72 @@ _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
   g_object_unref (accel_data->object);
   g_free (accel_data->signal);
   g_slice_free (AccelGroupParserData, accel_data);
+}
+
+static void
+gtk_widget_buildable_finish_layout_properties (GtkWidget *widget,
+                                               GtkWidget *parent,
+                                               gpointer   data)
+{
+  LayoutParserData *layout_data = data;
+  GtkLayoutManager *layout_manager;
+  GtkLayoutChild *layout_child;
+  GObject *gobject;
+  GObjectClass *gobject_class;
+  GSList *layout_properties, *l;
+
+  layout_manager = gtk_widget_get_layout_manager (parent);
+  if (layout_manager == NULL)
+    return;
+
+  layout_child = gtk_layout_manager_get_layout_child (layout_manager, widget);
+  if (layout_child == NULL)
+    return;
+
+  gobject = G_OBJECT (layout_child);
+  gobject_class = G_OBJECT_GET_CLASS (layout_child);
+
+  layout_properties = g_slist_reverse (layout_data->properties);
+  layout_data->properties = NULL;
+
+  for (l = layout_properties; l != NULL; l = l->next)
+    {
+      LayoutPropertyInfo *pinfo = l->data;
+      GParamSpec *pspec;
+      GValue value = G_VALUE_INIT;
+      GError *error = NULL;
+
+      pspec = g_object_class_find_property (gobject_class, pinfo->name);
+      if (pspec == NULL)
+        {
+          g_warning ("Unable to find layout property “%s” for children "
+                     "of layout managers of type “%s”",
+                     pinfo->name,
+                     G_OBJECT_TYPE_NAME (layout_manager));
+          continue;
+        }
+
+      gtk_builder_value_from_string (layout_data->builder,
+                                     pspec,
+                                     pinfo->value->str,
+                                     &value,
+                                     &error);
+      if (error != NULL)
+        {
+          g_warning ("Failed to set property “%s.%s” to “%s”: %s",
+                     G_OBJECT_TYPE_NAME (layout_child),
+                     pinfo->name,
+                     pinfo->value->str,
+                     error->message);
+          g_error_free (error);
+          continue;
+        }
+
+      g_object_set_property (gobject, pinfo->name, &value);
+      g_value_unset (&value);
+    }
+
+  g_slist_free_full (layout_properties, layout_property_info_free);
 }
 
 static void
@@ -10182,6 +10454,19 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 
       g_slist_free_full (style_data->classes, g_free);
       g_slice_free (StyleParserData, style_data);
+    }
+  else if (strcmp (tagname, "layout") == 0)
+    {
+      LayoutParserData *layout_data = (LayoutParserData *) user_data;
+      GtkWidget *parent = _gtk_widget_get_parent (GTK_WIDGET (buildable));
+
+      if (parent != NULL)
+        gtk_widget_buildable_finish_layout_properties (GTK_WIDGET (buildable),
+                                                       parent,
+                                                       layout_data);
+
+      g_object_unref (layout_data->object);
+      g_slice_free (LayoutParserData, layout_data);
     }
 }
 
@@ -13360,4 +13645,52 @@ gtk_widget_get_height (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
   return priv->height;
+}
+
+/**
+ * gtk_widget_set_layout_manager:
+ * @widget: a #GtkWidget
+ * @layout_manager: (nullable) (transfer full): a #GtkLayoutManager
+ *
+ * Sets the layout manager delegate instance that provides an implementation
+ * for measuring and allocating the children of @widget.
+ */
+void
+gtk_widget_set_layout_manager (GtkWidget        *widget,
+                               GtkLayoutManager *layout_manager)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (layout_manager == NULL || GTK_IS_LAYOUT_MANAGER (layout_manager));
+  g_return_if_fail (layout_manager == NULL || gtk_layout_manager_get_widget (layout_manager) == NULL);
+
+  if (priv->layout_manager == layout_manager)
+    return;
+
+  priv->layout_manager = layout_manager;
+  if (priv->layout_manager != NULL)
+    gtk_layout_manager_set_widget (priv->layout_manager, widget);
+
+  gtk_widget_queue_resize (widget);
+
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_LAYOUT_MANAGER]);
+}
+
+/**
+ * gtk_widget_get_layout_manager:
+ * @widget: a #GtkWidget
+ *
+ * Retrieves the layout manager set using gtk_widget_set_layout_manager().
+ *
+ * Returns: (transfer none) (nullable): a #GtkLayoutManager
+ */
+GtkLayoutManager *
+gtk_widget_get_layout_manager (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return priv->layout_manager;
 }

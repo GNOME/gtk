@@ -4590,6 +4590,8 @@ gtk_widget_get_first_child
 gtk_widget_get_last_child
 gtk_widget_insert_before
 gtk_widget_insert_after
+gtk_widget_set_layout_manager
+gtk_widget_get_layout_manager
 
 <SUBSECTION>
 gtk_widget_get_path
@@ -7151,4 +7153,52 @@ GtkRoot
 gtk_root_get_for_surface
 <SUBSECTION Private>
 gtk_root_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtklayoutmanager</FILE>
+GtkLayoutManager
+GtkLayoutManagerClass
+
+gtk_layout_manager_measure
+gtk_layout_manager_allocate
+gtk_layout_manager_get_request_mode
+gtk_layout_manager_get_widget
+gtk_layout_manager_get_layout_child
+gtk_layout_manager_layout_changed
+
+<SUBSECTION Standard>
+GTK_TYPE_LAYOUT_MANAGER
+gtk_layout_manager_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtklayoutchild</FILE>
+GtkLayoutChild
+GtkLayoutChildClass
+
+gtk_layout_child_get_layout_manager
+gtk_layout_child_get_child_widget
+
+<SUBSECTION Standard>
+GTK_TYPE_LAYOUT_CHILD
+gtk_layout_child_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkboxlayout</FILE>
+GtkBoxLayout
+GtkBoxLayoutClass
+
+gtk_box_layout_new
+gtk_box_layout_set_homogeneous
+gtk_box_layout_get_homogeneous
+gtk_box_layout_set_spacing
+gtk_box_layout_get_spacing
+gtk_box_layout_set_baseline_position
+gtk_box_layout_get_baseline_position
+
+<SUBSECTION Standard>
+GTK_TYPE_BOX_LAYOUT
+gtk_box_layout_get_type
 </SECTION>

@@ -45,8 +45,10 @@
 #include <gtk/gtkaspectframe.h>
 #include <gtk/gtkassistant.h>
 #include <gtk/gtkbin.h>
+#include <gtk/gtkbinlayout.h>
 #include <gtk/gtkbindings.h>
 #include <gtk/gtkborder.h>
+#include <gtk/gtkboxlayout.h>
 #include <gtk/gtkbox.h>
 #include <gtk/gtkbuildable.h>
 #include <gtk/gtkbuilder.h>
@@ -80,6 +82,7 @@
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkcssprovider.h>
 #include <gtk/gtkcsssection.h>
+#include <gtk/gtkcustomlayout.h>
 #include <gtk/gtkdebug.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkdnd.h>
@@ -134,6 +137,8 @@
 #include <gtk/gtkinfobar.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklayout.h>
+#include <gtk/gtklayoutmanager.h>
+#include <gtk/gtklayoutchild.h>
 #include <gtk/gtklevelbar.h>
 #include <gtk/gtklinkbutton.h>
 #include <gtk/gtklistbox.h>
