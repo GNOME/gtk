@@ -529,7 +529,7 @@ gdk_device_get_state (GdkDevice       *device,
 }
 
 /**
- * gdk_device_get_position_double:
+ * gdk_device_get_position:
  * @device: pointer device to query status about.
  * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
  * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
@@ -540,9 +540,9 @@ gdk_device_get_state (GdkDevice       *device,
  * unless there is an ongoing grab on them. See gdk_device_grab().
  **/
 void
-gdk_device_get_position_double (GdkDevice        *device,
-                                gdouble          *x,
-                                gdouble          *y)
+gdk_device_get_position (GdkDevice *device,
+                         double    *x,
+                         double    *y)
 {
   GdkDisplay *display;
   gdouble tmp_x, tmp_y;

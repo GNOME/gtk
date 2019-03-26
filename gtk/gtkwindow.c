@@ -7372,7 +7372,7 @@ get_monitor_containing_pointer (GtkWindow *window)
   GdkDevice *pointer;
 
   pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (priv->display));
-  gdk_device_get_position_double (pointer, &px, &py);
+  gdk_device_get_position (pointer, &px, &py);
 
   return gdk_display_get_monitor_at_point (priv->display, round (px), round (py));
 }
@@ -7539,7 +7539,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
             pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (priv->display));
 
-            gdk_device_get_position_double (pointer, &px, &py);
+            gdk_device_get_position (pointer, &px, &py);
             monitor = gdk_display_get_monitor_at_point (priv->display, round (px), round (py));
 
             x = round (px) - w / 2;

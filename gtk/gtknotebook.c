@@ -3139,7 +3139,7 @@ gtk_notebook_drag_end (GtkWidget      *widget,
       GtkNotebook *dest_notebook = NULL;
       double x, y;
 
-      gdk_device_get_position_double (gdk_drag_get_device (drag), &x, &y);
+      gdk_device_get_position (gdk_drag_get_device (drag), &x, &y);
       g_signal_emit (notebook, notebook_signals[CREATE_WINDOW], 0,
                      priv->detached_tab->child, round (x), round (y), &dest_notebook);
 
@@ -3188,7 +3188,7 @@ gtk_notebook_drag_failed (GtkWidget      *widget,
       GtkNotebook *dest_notebook = NULL;
       double x, y;
 
-      gdk_device_get_position_double (gdk_drag_get_device (drag), &x, &y);
+      gdk_device_get_position (gdk_drag_get_device (drag), &x, &y);
 
       g_signal_emit (notebook, notebook_signals[CREATE_WINDOW], 0,
                      priv->detached_tab->child, round (x), round (y), &dest_notebook);
