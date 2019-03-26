@@ -2423,15 +2423,14 @@ gdk_wayland_surface_map (GdkSurface *surface)
                     GDK_SURFACE_IMPL_WAYLAND (attached_grab_surface->impl);
                   grab_device = gdk_seat_get_pointer (attached_impl->grab_input_seat);
                   transient_for =
-                    gdk_device_get_surface_at_position (grab_device,
-                                                       NULL, NULL);
+                    gdk_device_get_surface_at_position_double (grab_device, NULL, NULL);
                 }
             }
           else
             {
               grab_device = gdk_seat_get_pointer (impl->grab_input_seat);
               transient_for =
-                gdk_device_get_surface_at_position (grab_device, NULL, NULL);
+                gdk_device_get_surface_at_position_double (grab_device, NULL, NULL);
             }
 
           if (transient_for)
