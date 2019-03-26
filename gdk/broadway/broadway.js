@@ -17,6 +17,76 @@ const BROADWAY_NODE_TRANSLATE = 13;
 const BROADWAY_NODE_DEBUG = 14;
 const BROADWAY_NODE_REUSE = 15;
 
+const BROADWAY_OP_GRAB_POINTER = 'g';
+const BROADWAY_OP_UNGRAB_POINTER = 'u';
+const BROADWAY_OP_NEW_SURFACE = 's';
+const BROADWAY_OP_SHOW_SURFACE = 'S';
+const BROADWAY_OP_HIDE_SURFACE = 'H';
+const BROADWAY_OP_RAISE_SURFACE = 'r';
+const BROADWAY_OP_LOWER_SURFACE = 'R';
+const BROADWAY_OP_DESTROY_SURFACE = 'd';
+const BROADWAY_OP_MOVE_RESIZE = 'm';
+const BROADWAY_OP_SET_TRANSIENT_FOR = 'p';
+const BROADWAY_OP_PUT_RGB = 'i';
+const BROADWAY_OP_REQUEST_AUTH = 'l';
+const BROADWAY_OP_AUTH_OK = 'L';
+const BROADWAY_OP_DISCONNECTED = 'D';
+const BROADWAY_OP_SURFACE_UPDATE = 'b';
+const BROADWAY_OP_SET_SHOW_KEYBOARD = 'k';
+const BROADWAY_OP_UPLOAD_TEXTURE = 't';
+const BROADWAY_OP_RELEASE_TEXTURE = 'T';
+const BROADWAY_OP_SET_NODES = 'n';
+const BROADWAY_OP_ROUNDTRIP = 'F';
+
+const BROADWAY_EVENT_ENTER = 'e';
+const BROADWAY_EVENT_LEAVE = 'l';
+const BROADWAY_EVENT_POINTER_MOVE = 'm';
+const BROADWAY_EVENT_BUTTON_PRESS = 'b';
+const BROADWAY_EVENT_BUTTON_RELEASE = 'B';
+const BROADWAY_EVENT_TOUCH = 't';
+const BROADWAY_EVENT_SCROLL = 's';
+const BROADWAY_EVENT_KEY_PRESS = 'k';
+const BROADWAY_EVENT_KEY_RELEASE = 'K';
+const BROADWAY_EVENT_GRAB_NOTIFY = 'g';
+const BROADWAY_EVENT_UNGRAB_NOTIFY = 'u';
+const BROADWAY_EVENT_CONFIGURE_NOTIFY = 'w';
+const BROADWAY_EVENT_SCREEN_SIZE_CHANGED = 'd';
+const BROADWAY_EVENT_FOCUS = 'f';
+const BROADWAY_EVENT_ROUNDTRIP_NOTIFY = 'F';
+
+const DISPLAY_OP_REPLACE_CHILD = 0;
+const DISPLAY_OP_APPEND_CHILD = 1;
+const DISPLAY_OP_APPEND_ROOT = 2;
+const DISPLAY_OP_SHOW_SURFACE = 3;
+const DISPLAY_OP_HIDE_SURFACE = 4;
+const DISPLAY_OP_DELETE_NODE = 5;
+const DISPLAY_OP_MOVE_NODE = 6;
+const DISPLAY_OP_RESIZE_NODE = 7;
+
+// GdkCrossingMode
+const GDK_CROSSING_NORMAL = 0;
+const GDK_CROSSING_GRAB = 1;
+const GDK_CROSSING_UNGRAB = 2;
+
+// GdkModifierType
+const GDK_SHIFT_MASK = 1 << 0;
+const GDK_LOCK_MASK     = 1 << 1;
+const GDK_CONTROL_MASK  = 1 << 2;
+const GDK_MOD1_MASK     = 1 << 3;
+const GDK_MOD2_MASK     = 1 << 4;
+const GDK_MOD3_MASK     = 1 << 5;
+const GDK_MOD4_MASK     = 1 << 6;
+const GDK_MOD5_MASK     = 1 << 7;
+const GDK_BUTTON1_MASK  = 1 << 8;
+const GDK_BUTTON2_MASK  = 1 << 9;
+const GDK_BUTTON3_MASK  = 1 << 10;
+const GDK_BUTTON4_MASK  = 1 << 11;
+const GDK_BUTTON5_MASK  = 1 << 12;
+const GDK_SUPER_MASK    = 1 << 26;
+const GDK_HYPER_MASK    = 1 << 27;
+const GDK_META_MASK     = 1 << 28;
+const GDK_RELEASE_MASK  = 1 << 30;
+
 /* Helper functions for debugging */
 var logDiv = null;
 function log(str) {
@@ -110,29 +180,6 @@ var showKeyboard = false;
 var showKeyboardChanged = false;
 var firstTouchDownId = null;
 
-var GDK_CROSSING_NORMAL = 0;
-var GDK_CROSSING_GRAB = 1;
-var GDK_CROSSING_UNGRAB = 2;
-
-// GdkModifierType
-var GDK_SHIFT_MASK = 1 << 0;
-var GDK_LOCK_MASK     = 1 << 1;
-var GDK_CONTROL_MASK  = 1 << 2;
-var GDK_MOD1_MASK     = 1 << 3;
-var GDK_MOD2_MASK     = 1 << 4;
-var GDK_MOD3_MASK     = 1 << 5;
-var GDK_MOD4_MASK     = 1 << 6;
-var GDK_MOD5_MASK     = 1 << 7;
-var GDK_BUTTON1_MASK  = 1 << 8;
-var GDK_BUTTON2_MASK  = 1 << 9;
-var GDK_BUTTON3_MASK  = 1 << 10;
-var GDK_BUTTON4_MASK  = 1 << 11;
-var GDK_BUTTON5_MASK  = 1 << 12;
-var GDK_SUPER_MASK    = 1 << 26;
-var GDK_HYPER_MASK    = 1 << 27;
-var GDK_META_MASK     = 1 << 28;
-var GDK_RELEASE_MASK  = 1 << 30;
-
 function getButtonMask (button) {
     if (button == 1)
         return GDK_BUTTON1_MASK;
@@ -170,7 +217,7 @@ Texture.prototype.unref = function() {
 
 function sendConfigureNotify(surface)
 {
-    sendInput("w", [surface.id, surface.x, surface.y, surface.width, surface.height]);
+    sendInput(BROADWAY_EVENT_CONFIGURE_NOTIFY, [surface.id, surface.x, surface.y, surface.width, surface.height]);
 }
 
 function cmdCreateSurface(id, x, y, width, height, isTemp)
@@ -225,7 +272,7 @@ function moveToHelper(surface, position) {
 
 function cmdRoundtrip(id, tag)
 {
-    sendInput("F", [id, tag]);
+    sendInput(BROADWAY_EVENT_ROUNDTRIP_NOTIFY, [id, tag]);
 }
 
 function cmdRaiseSurface(id)
@@ -732,24 +779,15 @@ TransformNodes.prototype.execute = function(display_commands)
 function cmdGrabPointer(id, ownerEvents)
 {
     doGrab(id, ownerEvents, false);
-    sendInput ("g", []);
+    sendInput (BROADWAY_EVENT_GRAB_NOTIFY, []);
 }
 
 function cmdUngrabPointer()
 {
-    sendInput ("u", []);
+    sendInput (BROADWAY_EVENT_UNGRAB_NOTIFY, []);
     if (grab.surface)
         doUngrab();
 }
-
-const DISPLAY_OP_REPLACE_CHILD = 0;
-const DISPLAY_OP_APPEND_CHILD = 1;
-const DISPLAY_OP_APPEND_ROOT = 2;
-const DISPLAY_OP_SHOW_SURFACE = 3;
-const DISPLAY_OP_HIDE_SURFACE = 4;
-const DISPLAY_OP_DELETE_NODE = 5;
-const DISPLAY_OP_MOVE_NODE = 6;
-const DISPLAY_OP_RESIZE_NODE = 7;
 
 function handleDisplayCommands(display_commands)
 {
@@ -817,12 +855,12 @@ function handleCommands(cmd)
         var command = cmd.get_char();
         lastSerial = cmd.get_32();
         switch (command) {
-        case 'D':
+        case BROADWAY_OP_DISCONNECTED:
             alert ("disconnected");
             inputSocket = null;
             break;
 
-        case 's': // create new surface
+        case BROADWAY_OP_NEW_SURFACE:
             id = cmd.get_16();
             x = cmd.get_16s();
             y = cmd.get_16s();
@@ -834,7 +872,7 @@ function handleCommands(cmd)
             need_restack = true;
             break;
 
-        case 'S': // Show a surface
+        case BROADWAY_OP_SHOW_SURFACE:
             id = cmd.get_16();
             surface = surfaces[id];
             if (!surface.visible) {
@@ -844,7 +882,7 @@ function handleCommands(cmd)
             }
            break;
 
-        case 'H': // Hide a surface
+        case BROADWAY_OP_HIDE_SURFACE:
             id = cmd.get_16();
             if (grab.surface == id)
                 doUngrab();
@@ -854,7 +892,7 @@ function handleCommands(cmd)
             }
             break;
 
-        case 'p': // Set transient parent
+        case BROADWAY_OP_SET_TRANSIENT_FOR:
             id = cmd.get_16();
             var parentId = cmd.get_16();
             surface = surfaces[id];
@@ -867,7 +905,7 @@ function handleCommands(cmd)
             }
             break;
 
-        case 'd': // Delete surface
+        case BROADWAY_OP_DESTROY_SURFACE:
             id = cmd.get_16();
 
             if (grab.surface == id)
@@ -883,13 +921,13 @@ function handleCommands(cmd)
             delete surfaces[id];
             break;
 
-        case 'F': // RoundTrip
+        case BROADWAY_OP_ROUNDTRIP:
             id = cmd.get_16();
             var tag = cmd.get_32();
             cmdRoundtrip(id, tag);
             break;
 
-        case 'm': // Move a surface
+        case BROADWAY_OP_MOVE_RESIZE:
             id = cmd.get_16();
             var ops = cmd.get_flags();
             var has_pos = ops & 1;
@@ -909,30 +947,30 @@ function handleCommands(cmd)
             }
             break;
 
-        case 'r': // Raise a surface
+        case BROADWAY_OP_RAISE_SURFACE:
             id = cmd.get_16();
             cmdRaiseSurface(id);
             need_restack = true;
             break;
 
-        case 'R': // Lower a surface
+        case BROADWAY_OP_LOWER_SURFACE:
             id = cmd.get_16();
             cmdLowerSurface(id);
             need_restack = true;
             break;
 
-        case 't': // Upload texture
+        case BROADWAY_OP_UPLOAD_TEXTURE:
             id = cmd.get_32();
             var data = cmd.get_data();
             var texure = new Texture (id, data); // Stores a ref in textures
             break;
 
-        case 'T': // Release texture
+        case BROADWAY_OP_RELEASE_TEXTURE:
             id = cmd.get_32();
             textures[id].unref();
             break;
 
-        case 'n': // Set nodes
+        case BROADWAY_OP_SET_NODES:
             id = cmd.get_16();
             var node_data = cmd.get_nodes ();
             surface = surfaces[id];
@@ -940,18 +978,18 @@ function handleCommands(cmd)
             transform_nodes.execute();
             break;
 
-        case 'g': // Grab
+        case BROADWAY_OP_GRAB_POINTER:
             id = cmd.get_16();
             var ownerEvents = cmd.get_bool ();
 
             cmdGrabPointer(id, ownerEvents);
             break;
 
-        case 'u': // Ungrab
+        case BROADWAY_OP_UNGRAB_POINTER:
             cmdUngrabPointer();
             break;
 
-        case 'k': // show keyboard
+        case BROADWAY_OP_SET_SHOW_KEYBOARD:
             showKeyboard = cmd.get_16() != 0;
             showKeyboardChanged = true;
             break;
@@ -1124,7 +1162,7 @@ function onMouseMove (ev) {
     var id = getSurfaceId(ev);
     id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
-    sendInput ("m", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+    sendInput (BROADWAY_EVENT_POINTER_MOVE, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
 }
 
 function onMouseOver (ev) {
@@ -1136,7 +1174,7 @@ function onMouseOver (ev) {
     var pos = getPositionsFromEvent(ev, id);
     surfaceWithMouse = id;
     if (surfaceWithMouse != 0) {
-        sendInput ("e", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+        sendInput (BROADWAY_EVENT_ENTER, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
     }
 }
 
@@ -1148,7 +1186,7 @@ function onMouseOut (ev) {
     var pos = getPositionsFromEvent(ev, id);
 
     if (id != 0) {
-        sendInput ("l", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+        sendInput (BROADWAY_EVENT_LEAVE, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
     }
     realSurfaceWithMouse = 0;
     surfaceWithMouse = 0;
@@ -1160,10 +1198,10 @@ function doGrab(id, ownerEvents, implicit) {
     if (surfaceWithMouse != id) {
         if (surfaceWithMouse != 0) {
             pos = getPositionsFromAbsCoord(lastX, lastY, surfaceWithMouse);
-            sendInput ("l", [realSurfaceWithMouse, surfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
+            sendInput (BROADWAY_EVENT_LEAVE, [realSurfaceWithMouse, surfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
         }
         pos = getPositionsFromAbsCoord(lastX, lastY, id);
-        sendInput ("e", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
+        sendInput (BROADWAY_EVENT_ENTER, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_GRAB]);
         surfaceWithMouse = id;
     }
 
@@ -1177,11 +1215,11 @@ function doUngrab() {
     if (realSurfaceWithMouse != surfaceWithMouse) {
         if (surfaceWithMouse != 0) {
             pos = getPositionsFromAbsCoord(lastX, lastY, surfaceWithMouse);
-            sendInput ("l", [realSurfaceWithMouse, surfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
+            sendInput (BROADWAY_EVENT_LEAVE, [realSurfaceWithMouse, surfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
         }
         if (realSurfaceWithMouse != 0) {
             pos = getPositionsFromAbsCoord(lastX, lastY, realSurfaceWithMouse);
-            sendInput ("e", [realSurfaceWithMouse, realSurfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
+            sendInput (BROADWAY_EVENT_ENTER, [realSurfaceWithMouse, realSurfaceWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_UNGRAB]);
         }
         surfaceWithMouse = realSurfaceWithMouse;
     }
@@ -1198,7 +1236,7 @@ function onMouseDown (ev) {
     var pos = getPositionsFromEvent(ev, id);
     if (grab.surface == null)
         doGrab (id, false, true);
-    sendInput ("b", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
+    sendInput (BROADWAY_EVENT_BUTTON_PRESS, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
     return false;
 }
 
@@ -1210,7 +1248,7 @@ function onMouseUp (ev) {
     id = getEffectiveEventTarget (evId);
     var pos = getPositionsFromEvent(ev, id);
 
-    sendInput ("B", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
+    sendInput (BROADWAY_EVENT_BUTTON_RELEASE, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
 
     if (grab.surface != null && grab.implicit)
         doUngrab();
@@ -2691,7 +2729,7 @@ function handleKeyDown(e) {
         // browser behaviors or it has no corresponding keyPress
         // event, then send it immediately
         if (!ignoreKeyEvent(ev))
-            sendInput("k", [keysym, lastState]);
+            sendInput(BROADWAY_EVENT_KEY_PRESS, [keysym, lastState]);
         suppress = true;
     }
 
@@ -2736,7 +2774,7 @@ function handleKeyPress(e) {
 
     // Send the translated keysym
     if (keysym > 0)
-        sendInput ("k", [keysym, lastState]);
+        sendInput (BROADWAY_EVENT_KEY_PRESS, [keysym, lastState]);
 
     // Stop keypress events just in case
     return cancelEvent(ev);
@@ -2755,7 +2793,7 @@ function handleKeyUp(e) {
     }
 
     if (keysym > 0)
-        sendInput ("K", [keysym, lastState]);
+        sendInput (BROADWAY_EVENT_KEY_RELEASE, [keysym, lastState]);
     return cancelEvent(ev);
 }
 
@@ -2799,7 +2837,7 @@ function onMouseWheel(ev)
     var dir = 0;
     if (offset > 0)
         dir = 1;
-    sendInput ("s", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, dir]);
+    sendInput (BROADWAY_EVENT_SCROLL, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, dir]);
 
     return cancelEvent(ev);
 }
@@ -2824,17 +2862,17 @@ function onTouchStart(ev) {
 
             if (realSurfaceWithMouse != origId || id != surfaceWithMouse) {
                 if (id != 0) {
-                    sendInput ("l", [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+                    sendInput (BROADWAY_EVENT_LEAVE, [realSurfaceWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
                 }
 
                 surfaceWithMouse = id;
                 realSurfaceWithMouse = origId;
 
-                sendInput ("e", [origId, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+                sendInput (BROADWAY_EVENT_ENTER, [origId, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
             }
         }
 
-        sendInput ("t", [0, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+        sendInput (BROADWAY_EVENT_TOUCH, [0, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
     }
 }
 
@@ -2856,7 +2894,7 @@ function onTouchMove(ev) {
             isEmulated = 1;
         }
 
-        sendInput ("t", [1, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+        sendInput (BROADWAY_EVENT_TOUCH, [1, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
     }
 }
 
@@ -2879,7 +2917,7 @@ function onTouchEnd(ev) {
             firstTouchDownId = null;
         }
 
-        sendInput ("t", [2, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+        sendInput (BROADWAY_EVENT_TOUCH, [2, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
     }
 }
 
@@ -2917,9 +2955,9 @@ function start()
         var w, h;
         w = window.innerWidth;
         h = window.innerHeight;
-        sendInput ("d", [w, h]);
+        sendInput (BROADWAY_EVENT_SCREEN_SIZE_CHANGED, [w, h]);
     };
-    sendInput ("d", [w, h]);
+    sendInput (BROADWAY_EVENT_SCREEN_SIZE_CHANGED, [w, h]);
 }
 
 function connect()
