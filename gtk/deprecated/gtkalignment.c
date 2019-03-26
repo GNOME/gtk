@@ -297,7 +297,6 @@ gtk_alignment_init (GtkAlignment *alignment)
   priv = alignment->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (alignment), FALSE);
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (alignment), FALSE);
 
   priv->xalign = 0.5;
   priv->yalign = 0.5;

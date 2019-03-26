@@ -1896,11 +1896,6 @@ gtk_paned_init (GtkPaned *paned)
   gtk_widget_set_has_window (GTK_WIDGET (paned), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (paned), TRUE);
 
-  /* We only need to redraw when the handle position moves, which is
-   * independent of the overall allocation of the GtkPaned
-   */
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (paned), FALSE);
-
   paned->priv = gtk_paned_get_instance_private (paned);
   priv = paned->priv;
 

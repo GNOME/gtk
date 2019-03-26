@@ -665,7 +665,6 @@ gtk_list_box_init (GtkListBox *box)
   GtkCssNode *widget_node;
 
   gtk_widget_set_has_window (widget, TRUE);
-  gtk_widget_set_redraw_on_allocate (widget, TRUE);
   priv->selection_mode = GTK_SELECTION_SINGLE;
   priv->activate_single_click = TRUE;
 
@@ -3934,7 +3933,6 @@ static void
 gtk_list_box_row_init (GtkListBoxRow *row)
 {
   gtk_widget_set_can_focus (GTK_WIDGET (row), TRUE);
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (row), TRUE);
 
   ROW_PRIV (row)->activatable = TRUE;
   ROW_PRIV (row)->selectable = TRUE;

@@ -507,7 +507,6 @@ gtk_table_init (GtkTable *table)
   priv = table->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (table), FALSE);
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (table), FALSE);
 
   priv->children = NULL;
   priv->rows = NULL;

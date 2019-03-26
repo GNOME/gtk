@@ -144,7 +144,6 @@ gtk_revealer_init (GtkRevealer *revealer)
   priv->target_pos = 0.0;
 
   gtk_widget_set_has_window ((GtkWidget*) revealer, TRUE);
-  gtk_widget_set_redraw_on_allocate ((GtkWidget*) revealer, FALSE);
 }
 
 static void

@@ -640,7 +640,6 @@ static void
 gtk_flow_box_child_init (GtkFlowBoxChild *child)
 {
   gtk_widget_set_can_focus (GTK_WIDGET (child), TRUE);
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (child), TRUE);
 
   CHILD_PRIV (child)->gadget = gtk_css_custom_gadget_new_for_node (gtk_widget_get_css_node (GTK_WIDGET (child)),
                                                      GTK_WIDGET (child),
@@ -4106,7 +4105,6 @@ gtk_flow_box_init (GtkFlowBox *box)
   GtkCssNode *widget_node;
 
   gtk_widget_set_has_window (GTK_WIDGET (box), TRUE);
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (box), TRUE);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->selection_mode = GTK_SELECTION_SINGLE;

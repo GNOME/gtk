@@ -402,8 +402,6 @@ gtk_tool_item_group_init (GtkToolItemGroup *group)
   GtkToolItemGroupPrivate* priv;
   GtkCssNode *widget_node;
 
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (group), FALSE);
-
   group->priv = priv = gtk_tool_item_group_get_instance_private (group);
 
   priv->children = NULL;
