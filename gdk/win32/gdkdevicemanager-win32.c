@@ -902,7 +902,7 @@ gdk_input_other_event (GdkDisplay *display,
     }
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
-  window = gdk_device_get_surface_at_position_double (device_manager->core_pointer, &x, &y);
+  window = gdk_device_get_surface_at_position (device_manager->core_pointer, &x, &y);
 
   if (window)
     g_object_ref (window);

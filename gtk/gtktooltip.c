@@ -394,7 +394,7 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
 
   /* Trigger logic as if the mouse moved */
   device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
-  surface = gdk_device_get_surface_at_position_double (device, &x, &y);
+  surface = gdk_device_get_surface_at_position (device, &x, &y);
   if (!surface)
     return;
 
