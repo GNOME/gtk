@@ -167,10 +167,6 @@ void     gdk_device_get_state    (GdkDevice         *device,
                                   gdouble           *axes,
                                   GdkModifierType   *mask);
 GDK_AVAILABLE_IN_ALL
-void     gdk_device_get_position (GdkDevice         *device,
-                                  gint              *x,
-                                  gint              *y);
-GDK_AVAILABLE_IN_ALL
 GdkSurface *
          gdk_device_get_surface_at_position
                                  (GdkDevice         *device,
