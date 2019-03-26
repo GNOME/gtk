@@ -196,7 +196,7 @@ edit_label_done (GtkWidget *entry, gpointer data)
   GtkWidget *label;
   int x, y;
 
-  gtk_container_child_get (GTK_CONTAINER (fixed), entry, "x", &x, "y", &y, NULL);
+  gtk_fixed_get_position (GTK_FIXED (fixed), entry, &x, &y);
 
   label = GTK_WIDGET (g_object_get_data (G_OBJECT (entry), "label"));
   gtk_label_set_text (GTK_LABEL (label), gtk_editable_get_text (GTK_EDITABLE (entry)));
@@ -210,7 +210,7 @@ edit_cb (GtkWidget *child)
   GtkWidget *fixed = gtk_widget_get_parent (child);
   int x, y;
 
-  gtk_container_child_get (GTK_CONTAINER (fixed), child, "x", &x, "y", &y, NULL);
+  gtk_fixed_get_position (GTK_FIXED (fixed), child, &x, &y);
 
   if (GTK_IS_LABEL (child))
     {
