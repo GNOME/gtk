@@ -3137,11 +3137,11 @@ gtk_notebook_drag_end (GtkWidget      *widget,
   if (priv->rootwindow_drop)
     {
       GtkNotebook *dest_notebook = NULL;
-      gint x, y;
+      double x, y;
 
-      gdk_device_get_position (gdk_drag_get_device (drag), &x, &y);
+      gdk_device_get_position_double (gdk_drag_get_device (drag), &x, &y);
       g_signal_emit (notebook, notebook_signals[CREATE_WINDOW], 0,
-                     priv->detached_tab->child, x, y, &dest_notebook);
+                     priv->detached_tab->child, round (x), round (y), &dest_notebook);
 
       if (dest_notebook)
         do_detach_tab (notebook, dest_notebook, priv->detached_tab->child);
@@ -3186,12 +3186,12 @@ gtk_notebook_drag_failed (GtkWidget      *widget,
   if (result == GTK_DRAG_RESULT_NO_TARGET)
     {
       GtkNotebook *dest_notebook = NULL;
-      gint x, y;
+      double x, y;
 
-      gdk_device_get_position (gdk_drag_get_device (drag), &x, &y);
+      gdk_device_get_position_double (gdk_drag_get_device (drag), &x, &y);
 
       g_signal_emit (notebook, notebook_signals[CREATE_WINDOW], 0,
-                     priv->detached_tab->child, x, y, &dest_notebook);
+                     priv->detached_tab->child, round (x), round (y), &dest_notebook);
 
       if (dest_notebook)
         do_detach_tab (notebook, dest_notebook, priv->detached_tab->child);

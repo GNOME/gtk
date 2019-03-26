@@ -7261,13 +7261,13 @@ static GdkMonitor *
 get_monitor_containing_pointer (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  gint px, py;
+  double px, py;
   GdkDevice *pointer;
 
   pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (priv->display));
-  gdk_device_get_position (pointer, &px, &py);
+  gdk_device_get_position_double (pointer, &px, &py);
 
-  return gdk_display_get_monitor_at_point (priv->display, px, py);
+  return gdk_display_get_monitor_at_point (priv->display, round (px), round (py));
 }
 
 static void
@@ -7428,15 +7428,15 @@ gtk_window_compute_configure_request (GtkWindow    *window,
             GdkRectangle area;
             GdkDevice *pointer;
             GdkMonitor *monitor;
-            gint px, py;
+            double px, py;
 
             pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (priv->display));
 
-            gdk_device_get_position (pointer, &px, &py);
-            monitor = gdk_display_get_monitor_at_point (priv->display, px, py);
+            gdk_device_get_position_double (pointer, &px, &py);
+            monitor = gdk_display_get_monitor_at_point (priv->display, round (px), round (py));
 
-            x = px - w / 2;
-            y = py - h / 2;
+            x = round (px) - w / 2;
+            y = round (py) - h / 2;
 
             /* Clamp onto current monitor, ignoring _NET_WM_STRUT and
              * WM decorations.
