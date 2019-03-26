@@ -71,7 +71,7 @@ find_toplevel_at_pointer (GdkDisplay *display)
   GdkSurface *pointer_window;
   GtkWidget *widget = NULL;
 
-  pointer_window = gdk_device_get_surface_at_position (gtk_get_current_event_device (), NULL, NULL);
+  pointer_window = gdk_device_get_surface_at_position_double (gtk_get_current_event_device (), NULL, NULL);
 
   if (pointer_window)
     widget = GTK_WIDGET (gtk_root_get_for_surface (pointer_window));

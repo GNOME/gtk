@@ -382,7 +382,7 @@ void
 gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
 {
   GdkDisplay *display;
-  gint x, y;
+  double x, y;
   GdkSurface *surface;
   GdkDevice *device;
   GtkWidget *toplevel;
@@ -394,7 +394,7 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
 
   /* Trigger logic as if the mouse moved */
   device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
-  surface = gdk_device_get_surface_at_position (device, &x, &y);
+  surface = gdk_device_get_surface_at_position_double (device, &x, &y);
   if (!surface)
     return;
 
@@ -403,7 +403,7 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
   if (gtk_widget_get_surface (toplevel) != surface)
     return;
 
-  gtk_widget_translate_coordinates (toplevel, widget, x, y, &dx, &dy);
+  gtk_widget_translate_coordinates (toplevel, widget, round (x), round (y), &dx, &dy);
 
   gtk_tooltip_handle_event_internal (GDK_MOTION_NOTIFY, surface, widget, dx, dy);
 }
