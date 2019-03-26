@@ -45,13 +45,13 @@ clienthtml_h = custom_target('clienthtml.h',
 )
 
 broadwayjs_h = custom_target('broadwayjs.h',
-  input : ['broadway.js'],
+  input : ['broadway.js', 'rawinflate.min.js'],
   output : 'broadwayjs.h',
   command : [
     gen_c_array,
     '--array-name=broadway_js',
     '--output=@OUTPUT@',
-    '@INPUT0@',
+    '@INPUT0@','@INPUT1@',
   ],
 )
 
