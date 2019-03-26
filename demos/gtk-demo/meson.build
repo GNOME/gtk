@@ -120,3 +120,17 @@ gtkapplicationdemo = executable(
   include_directories : confinc,
   install: true
 )
+
+gtk_settings_schemas = [
+  'org.gtk.Settings.FileChooser.gschema.xml',
+  'org.gtk.Settings.ColorChooser.gschema.xml',
+  'org.gtk.Settings.EmojiChooser.gschema.xml',
+  'org.gtk.Settings.Debug.gschema.xml',
+]
+
+foreach s: [ '16', '22', '24', '32', '48', '256', '512']
+  icon_destdir = join_paths(gtk_datadir, 'icons', 'hicolor', '@0@x@0@'.format(s), 'apps')
+  icons = [join_paths('data', '@0@x@0@'.format(s), 'gtk3-demo.png'),
+           join_paths('data', '@0@x@0@'.format(s), 'gtk3-demo-symbolic.symbolic.png')]
+  install_data(icons, install_dir: icon_destdir)
+endforeach
