@@ -412,7 +412,7 @@ gtk_text_view_accessible_get_caret_offset (AtkText *text)
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
-    return 0;
+    return -1;
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
   return get_insert_offset (buffer);

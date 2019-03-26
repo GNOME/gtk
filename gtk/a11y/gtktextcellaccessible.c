@@ -198,6 +198,7 @@ static void
 gtk_text_cell_accessible_init (GtkTextCellAccessible *text_cell)
 {
   text_cell->priv = gtk_text_cell_accessible_get_instance_private (text_cell);
+  text_cell->priv->caret_pos = -1;
 }
 
 static gchar *
