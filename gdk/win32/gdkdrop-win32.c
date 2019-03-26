@@ -1090,7 +1090,6 @@ static void
 gdk_win32_drop_finish (GdkDrop       *drop,
                        GdkDragAction  action)
 {
-  GdkDrag *drag;
   GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (drop);
 
   g_return_if_fail (drop != NULL);
@@ -1103,12 +1102,6 @@ gdk_win32_drop_finish (GdkDrop       *drop,
 
   if (drop_win32->protocol == GDK_DRAG_PROTO_OLE2)
     return;
-/* FIXME: remove?
-  drag = gdk_drop_get_drag (drop);
-
-  if (drag != NULL)
-    _gdk_win32_local_drag_drop_response (drag, action);
-*/
 }
 
 #if 0

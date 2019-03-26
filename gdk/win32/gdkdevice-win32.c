@@ -63,13 +63,6 @@ gdk_device_win32_set_surface_cursor (GdkDevice *device,
 {
 }
 
-static void
-gdk_device_win32_warp (GdkDevice *device,
-                       gdouble    x,
-                       gdouble    y)
-{
-}
-
 static GdkModifierType
 get_current_mask (void)
 {
@@ -286,7 +279,6 @@ gdk_device_win32_class_init (GdkDeviceWin32Class *klass)
   device_class->get_history = gdk_device_win32_get_history;
   device_class->get_state = gdk_device_win32_get_state;
   device_class->set_surface_cursor = gdk_device_win32_set_surface_cursor;
-  device_class->warp = gdk_device_win32_warp;
   device_class->query_state = gdk_device_win32_query_state;
   device_class->grab = gdk_device_win32_grab;
   device_class->ungrab = gdk_device_win32_ungrab;
