@@ -80,6 +80,7 @@
               <object class="GtkLabel" id="b">
                 <property name="visible">True</property>
                 <property name="label">B</property>
+                <property name="hexpand">True</property>
               </object>
             </child>
             <child>
