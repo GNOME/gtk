@@ -220,6 +220,7 @@ struct _GtkTextPrivate
   guint         cursor_handle_dragged   : 1;
   guint         selection_handle_dragged : 1;
   guint         populate_all            : 1;
+  guint         propagate_text_width    : 1;
 };
 
 struct _GtkTextPasswordHint
@@ -263,6 +264,7 @@ enum {
   PROP_POPULATE_ALL,
   PROP_TABS,
   PROP_ENABLE_EMOJI_COMPLETION,
+  PROP_PROPAGATE_TEXT_WIDTH,
   NUM_PROPERTIES
 };
 
@@ -893,6 +895,13 @@ gtk_text_class_init (GtkTextClass *class)
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  text_props[PROP_PROPAGATE_TEXT_WIDTH] =
+      g_param_spec_boolean ("propagate-text-width",
+                            P_("Propagate text width"),
+                            P_("Whether the entry should grow and shrink with the content"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, text_props);
 
   gtk_editable_install_properties (gobject_class, NUM_PROPERTIES);
@@ -1510,6 +1519,15 @@ gtk_text_set_property (GObject      *object,
       set_enable_emoji_completion (self, g_value_get_boolean (value));
       break;
 
+    case PROP_PROPAGATE_TEXT_WIDTH:
+      if (priv->propagate_text_width != g_value_get_boolean (value))
+        {
+          priv->propagate_text_width = g_value_get_boolean (value);
+          gtk_widget_queue_resize (GTK_WIDGET (self));
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1623,6 +1641,10 @@ gtk_text_get_property (GObject    *object,
 
     case PROP_ENABLE_EMOJI_COMPLETION:
       g_value_set_boolean (value, priv->enable_emoji_completion);
+      break;
+
+    case PROP_PROPAGATE_TEXT_WIDTH:
+      g_value_set_boolean (value, priv->propagate_text_width);
       break;
 
     default:
@@ -2076,6 +2098,17 @@ gtk_text_measure (GtkWidget      *widget,
         nat = NAT_ENTRY_WIDTH;
       else
         nat = char_pixels * priv->max_width_chars;
+
+      if (priv->propagate_text_width)
+        {
+          PangoLayout *layout;
+          int act;
+
+          layout = gtk_text_ensure_layout (self, TRUE);
+          pango_layout_get_pixel_size (layout, &act, NULL);
+
+          nat = MIN (act, nat);
+        }
 
       nat = MAX (min, nat);
 
@@ -3015,6 +3048,7 @@ gtk_text_insert_text (GtkText    *self,
                       int         length,
                       int        *position)
 {
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   int n_inserted;
   int n_chars;
 
@@ -3036,6 +3070,8 @@ gtk_text_insert_text (GtkText    *self,
   *position += n_inserted;
 
   update_placeholder_visibility (self);
+  if (priv->propagate_text_width)
+    gtk_widget_queue_resize (GTK_WIDGET (self));
 }
 
 static void
@@ -3043,12 +3079,16 @@ gtk_text_delete_text (GtkText *self,
                       int      start_pos,
                       int      end_pos)
 {
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
   begin_change (self);
 
   gtk_entry_buffer_delete_text (get_buffer (self), start_pos, end_pos - start_pos);
 
   end_change (self);
   update_placeholder_visibility (self);
+  if (priv->propagate_text_width)
+    gtk_widget_queue_resize (GTK_WIDGET (self));
 }
 
 static void
