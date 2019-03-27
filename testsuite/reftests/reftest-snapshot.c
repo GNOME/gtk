@@ -81,21 +81,48 @@ reftest_uninhibit_snapshot (void)
 }
 
 static void
-check_for_draw (GdkPaintable *paintable,
-                gpointer      unused)
+draw_paintable (GdkPaintable *paintable,
+                gpointer      out_surface)
 {
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (paintable,
+                          snapshot,
+                          gdk_paintable_get_intrinsic_width (paintable),
+                          gdk_paintable_get_intrinsic_height (paintable));
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  /* If the window literally draws nothing, we assume it hasn't been mapped yet and as such
+   * the invalidations were only side effects of resizes.
+   */
+  if (node == NULL)
+    return;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        gdk_paintable_get_intrinsic_width (paintable),
+                                        gdk_paintable_get_intrinsic_height (paintable));
+
+  cr = cairo_create (surface);
+  gsk_render_node_draw (node, cr);
+  cairo_destroy (cr);
+  gsk_render_node_unref (node);
+
   reftest_uninhibit_snapshot ();
-  g_signal_handlers_disconnect_by_func (paintable, check_for_draw, NULL);
+  g_signal_handlers_disconnect_by_func (paintable, draw_paintable, out_surface);
+
+  *(cairo_surface_t **) out_surface = surface;
 }
 
 static cairo_surface_t *
 snapshot_widget (GtkWidget *widget)
 {
-  GtkSnapshot *snapshot;
   GdkPaintable *paintable;
-  GskRenderNode *node;
   cairo_surface_t *surface;
-  cairo_t *cr;
 
   g_assert (gtk_widget_get_realized (widget));
 
@@ -108,27 +135,11 @@ snapshot_widget (GtkWidget *widget)
    */
   reftest_inhibit_snapshot ();
   paintable = gtk_widget_paintable_new (widget);
-  g_signal_connect (paintable, "invalidate-contents", G_CALLBACK (check_for_draw), NULL);
+  g_signal_connect (paintable, "invalidate-contents", G_CALLBACK (draw_paintable), &surface);
   g_main_loop_run (loop);
 
-  surface = gdk_surface_create_similar_surface (gtk_widget_get_surface (widget),
-                                               CAIRO_CONTENT_COLOR,
-                                               gtk_widget_get_allocated_width (widget),
-                                               gtk_widget_get_allocated_height (widget));
-
-  cr = cairo_create (surface);
-
-  snapshot = gtk_snapshot_new ();
-  gdk_paintable_snapshot (paintable,
-                          snapshot,
-                          gtk_widget_get_allocated_width (widget),
-                          gtk_widget_get_allocated_height (widget));
-  g_object_unref (paintable);
-  node = gtk_snapshot_free_to_node (snapshot);
-  gsk_render_node_draw (node, cr);
-
-  cairo_destroy (cr);
   g_main_loop_unref (loop);
+  g_object_unref (paintable);
   gtk_widget_destroy (widget);
 
   return surface;
