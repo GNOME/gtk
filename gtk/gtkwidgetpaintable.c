@@ -191,11 +191,23 @@ gtk_widget_paintable_get_property (GObject    *object,
 }
 
 static void
+gtk_widget_paintable_unset_widget (GtkWidgetPaintable *self)
+{
+  if (self->widget == NULL)
+    return;
+
+  self->widget->priv->paintables = g_slist_remove (self->widget->priv->paintables,
+                                                   self);
+
+  self->widget = NULL;
+}
+
+static void
 gtk_widget_paintable_dispose (GObject *object)
 {
   GtkWidgetPaintable *self = GTK_WIDGET_PAINTABLE (object);
 
-  gtk_widget_paintable_set_widget (self, NULL);
+  gtk_widget_paintable_unset_widget (self);
 
   G_OBJECT_CLASS (gtk_widget_paintable_parent_class)->dispose (object);
 }
@@ -311,11 +323,7 @@ gtk_widget_paintable_set_widget (GtkWidgetPaintable *self,
   if (self->widget == widget)
     return;
 
-  if (self->widget)
-    {
-      self->widget->priv->paintables = g_slist_remove (self->widget->priv->paintables,
-                                                       self);
-    }
+  gtk_widget_paintable_unset_widget (self);
 
   /* We do not ref the widget to not cause ref cycles when a widget
    * is told to observe itself or one of its parent.
