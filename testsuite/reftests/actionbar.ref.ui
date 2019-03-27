@@ -3,16 +3,23 @@
     <property name="type">popup</property>
     <child>
       <object class="GtkBox">
-        <property name="spacing">6</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
         <child>
-          <object class="GtkButton">
-            <property name="label">1</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton">
-            <property name="label">2</property>
-          </object>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkButton">
+                <property name="visible">True</property>
+                <property name="label">1</property>
+              </object>         
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="visible">True</property>
+                <property name="label">2</property>
+              </object>         
+            </child>
+          </object>         
         </child>
         <child>
           <object class="GtkButton">
@@ -20,14 +27,20 @@
           </object>
         </child>
         <child>
-          <object class="GtkButton">
-            <property name="label">1</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton">
-            <property name="label">2</property>
-          </object>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkButton">
+                <property name="visible">True</property>
+                <property name="label">2</property>
+              </object>         
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="visible">True</property>
+                <property name="label">1</property>
+              </object>         
+            </child>
+          </object>         
         </child>
       </object>
     </child>
