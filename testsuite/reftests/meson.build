@@ -3,15 +3,16 @@ libgtkreftestprivate = static_library('gtkreftestprivate',
   'reftest-compare.c', 'reftest-module.c', 'reftest-snapshot.c',
   dependencies : libgtk_dep)
 
-libreftest = static_library('gtkreftest',
-  'expand-expander.c',
-  'frame-inhibitor.c',
-  'letter-spacing.c',
-  'set-default-direction.c',
-  'statusbar-remove-all.c',
-  'textview-border-windows.c',
-  'textview-tags.c',
-  'animation-direction.c',
+libreftest = shared_module('reftest',
+  [ 'expand-expander.c',
+    'frame-inhibitor.c',
+    'letter-spacing.c',
+    'set-default-direction.c',
+    'statusbar-remove-all.c',
+    'textview-border-windows.c',
+    'textview-tags.c',
+    'animation-direction.c',
+  ],
   dependencies : libgtk_dep)
 
 tcdata = configuration_data()
@@ -428,13 +429,13 @@ foreach testname : testdata
        args: [ '--tap', '-k', '--verbose', join_paths(meson.current_source_dir(), testname) ],
        env: [ 'GIO_USE_VOLUME_MONITOR=unix',
               'GSETTINGS_BACKEND=memory',
-              'GSETTINGS_SCHEMA_DIR=@@'.format(gtk_schema_build_dir),
+              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
               'GTK_CSD=1',
               'G_ENABLE_DIAGNOSTIC=0',
               'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
               'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
               'GSK_RENDERER=opengl',
-              'REFTEST_MODULE_DIR=@@'.format(meson.current_build_dir()),
+              'REFTEST_MODULE_DIR=@0@'.format(meson.current_build_dir()),
             ],
        suite: 'reftest')
 endforeach
