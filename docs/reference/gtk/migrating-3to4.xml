@@ -293,7 +293,10 @@
       <title>Stop using gdk_pointer_warp()</title>
       <para>
         Warping the pointer is disorienting and unfriendly to users.
-        GTK 4 does not support it.
+        GTK 4 does not support it. In special circumstances (such as when
+        implementing remote connection UIs) it can be necessary to
+        warp the pointer; in this case, use platform APIs such as XWarpPointer
+        directly.
       </para>
     </section>
 
