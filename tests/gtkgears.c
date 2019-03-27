@@ -652,7 +652,7 @@ gtk_gears_render (GtkGLArea    *area,
 }
 
 static const char vertex_shader_gl[] =
-"#version 150\n"
+"#version 330\n"
 "\n"
 "in vec3 position;\n"
 "in vec3 normal;\n"
@@ -682,13 +682,15 @@ static const char vertex_shader_gl[] =
 "}";
 
 static const char fragment_shader_gl[] =
-"#version 150\n"
+"#version 330\n"
 "\n"
 "smooth in vec4 Color;\n"
 "\n"
+"out vec4 vertexColor;\n"
+"\n"
 "void main(void)\n"
 "{\n"
-"    gl_FragColor = Color;\n"
+"    vertexColor = Color;\n"
 "}";
 
 static const char vertex_shader_gles[] =
