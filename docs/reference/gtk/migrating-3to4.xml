@@ -340,11 +340,21 @@
     </section>
 
     <section>
-      <title>Adapt to GtkHeaderBar API changes</title>
+      <title>Adapt to GtkHeaderBar and GtkActionBar API changes</title>
       <para>
         The gtk_header_bar_set_show_close_button() function has been renamed to
         the more accurate name gtk_header_bar_set_show_title_buttons(). The corresponding
         getter and the property itself have also been renamed.
+      </para>
+      <para>
+        The ::pack-type child properties of GtkHeaderBar and GtkActionBar have
+        been removed. If you need to programmatically place children, use the
+        pack_start() and pack_end() APIs. In ui files, use the type attribute
+        on the child element.
+      </para>
+      <para>
+        gtk4-builder-tool can help with this conversion, with the --3to4 option
+        of the simplify command.
       </para>
     </section>
 

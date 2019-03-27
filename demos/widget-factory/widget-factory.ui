@@ -411,15 +411,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
             <property name="stack">toplevel_stack</property>
           </object>
         </child>
-        <child>
+        <child type="end">
           <object class="GtkMenuButton" id="gear_menu_button">
             <property name="valign">center</property>
             <property name="menu-model">gear_menu</property>
             <property name="icon-name">open-menu-symbolic</property>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
+          <packing/>
         </child>
       </object>
     </child>
@@ -1588,16 +1586,14 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="halign">center</property>
                                           </object>
                                         </child>
-                                        <child>
+                                        <child type="end">
                                           <object class="GtkMenuButton">
                                             <property name="menu-model">dinner_menu</property>
                                             <property name="halign">center</property>
                                             <property name="valign">center</property>
                                             <property name="icon-name">emblem-system-symbolic</property>
                                           </object>
-                                          <packing>
-                                            <property name="pack-type">end</property>
-                                          </packing>
+                                          <packing/>
                                         </child>
                                       </object>
                                     </child>

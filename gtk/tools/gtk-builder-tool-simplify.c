@@ -324,10 +324,24 @@ value_is_default (MyParserData *data,
 }
 
 static const char *
+get_attribute_value (Element *element,
+                     const char *name)
+{
+  int i;
+
+  for (i = 0; element->attribute_names[i]; i++)
+    {
+      if (g_str_equal (element->attribute_names[i], name))
+        return element->attribute_values[i];
+    }
+
+  return NULL;
+}
+
+static const char *
 get_class_name (Element *element)
 {
   Element *parent = element->parent;
-  int i;
 
   if (g_str_equal (element->element_name, "object"))
     parent = element;
@@ -337,19 +351,11 @@ get_class_name (Element *element)
 
   if (g_str_equal (parent->element_name, "object"))
     {
-      for (i = 0; parent->attribute_names[i]; i++)
-        {
-          if (g_str_equal (parent->attribute_names[i], "class"))
-            return parent->attribute_values[i];
-        }
+      return get_attribute_value (parent, "class");
     }
   else if (g_str_equal (parent->element_name, "template"))
     {
-      for (i = 0; parent->attribute_names[i]; i++)
-        {
-          if (g_str_equal (parent->attribute_names[i], "parent"))
-            return parent->attribute_values[i];
-        }
+      return get_attribute_value (parent, "parent");
     }
 
   return NULL;
@@ -420,6 +426,11 @@ property_can_be_omitted (Element      *element,
         property_name = (const gchar *)element->attribute_values[i];
     }
 
+  if ((strcmp (class_name, "GtkActionBar") == 0 ||
+       strcmp (class_name, "GtkHeaderBar") == 0) &&
+       strcmp (property_name, "pack-type") == 0)
+    return FALSE; /* keep, will be rewritten */
+
   if (translatable)
     return FALSE;
 
@@ -460,8 +471,8 @@ property_has_been_removed (Element      *element,
     { "GtkActionBar", "position", 1 },
     { "GtkButtonBox", "secondary", 1 },
     { "GtkButtonBox", "non-homogeneous", 1 },
-    { "GtkBox", "pack-type", 1 },
     { "GtkBox", "position", 1 },
+    { "GtkBox", "pack-type", 1 },
     { "GtkHeaderBar", "position", 1 },
     { "GtkPopoverMenu", "position", 1 },
     { "GtkMenu", "left-attach", 1 },
@@ -645,7 +656,7 @@ has_attribute (Element    *elt,
   for (i = 0; elt->attribute_names[i]; i++)
     {
       if (strcmp (elt->attribute_names[i], name) == 0 &&
-          strcmp (elt->attribute_values[i], value) == 0)
+          (value == NULL || strcmp (elt->attribute_values[i], value) == 0))
         return TRUE;
     }
 
@@ -756,6 +767,76 @@ rewrite_notebook (Element      *element,
   element->children = new_children;
 }
 
+static void
+rewrite_pack_type_child (Element *element,
+                         MyParserData *data)
+{
+  Element *pack_type = NULL;
+  GList *l, *ll;
+
+  if (!g_str_equal (element->element_name, "child"))
+    return;
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *elt = l->data;
+
+      if (g_str_equal (elt->element_name, "packing"))
+        {
+          for (ll = elt->children; ll; ll = ll->next)
+            {
+              Element *elt2 = ll->data;
+
+              if (g_str_equal (elt2->element_name, "property") &&
+                  has_attribute (elt2, "name", "pack-type"))
+                {
+                  pack_type = elt2;
+                  elt->children = g_list_remove (elt->children, pack_type);
+                  break;
+                }
+            }
+        }
+    }
+
+  if (pack_type)
+    {
+      char **attnames = g_new0 (char *, g_strv_length (element->attribute_names) + 2);
+      char **attvalues = g_new0 (char *, g_strv_length (element->attribute_names) + 2);
+      int i;
+
+      for (i = 0; element->attribute_names[i]; i++)
+        {
+          attnames[i] = g_strdup (element->attribute_names[i]);
+          attvalues[i] = g_strdup (element->attribute_values[i]);
+        }
+
+      attnames[i] = g_strdup ("type");
+      attvalues[i] = g_strdup (pack_type->data);
+
+      g_strfreev (element->attribute_names);
+      g_strfreev (element->attribute_values);
+
+      element->attribute_names = attnames;
+      element->attribute_values = attvalues;
+
+      free_element (pack_type);
+    }
+}
+
+static void
+rewrite_pack_type (Element *element,
+                   MyParserData *data)
+{
+  GList *l;
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *elt = l->data;
+      if (g_str_equal (elt->element_name, "child"))
+        rewrite_pack_type_child (elt, data); 
+    }
+}
+
 static gboolean
 simplify_element (Element      *element,
                   MyParserData *data)
@@ -806,6 +887,11 @@ simplify_element (Element      *element,
           g_str_equal (get_class_name (element), "GtkNotebook"))
         rewrite_notebook (element, data);
           
+      if (g_str_equal (element->element_name, "object") &&
+          (g_str_equal (get_class_name (element), "GtkActionBar") ||
+           g_str_equal (get_class_name (element), "GtkHeaderBar")))
+        rewrite_pack_type (element, data);
+
       if (g_str_equal (element->element_name, "property") &&
           property_has_been_removed (element, data))
         return TRUE;

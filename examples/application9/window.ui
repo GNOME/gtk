@@ -24,25 +24,21 @@
                 <property name="stack">stack</property>
               </object>
             </child>
-            <child>
+            <child type="end">
               <object class="GtkToggleButton" id="search">
                 <property name="sensitive">0</property>
                 <property name="icon-name">edit-find-symbolic</property>
               </object>
-              <packing>
-                <property name="pack-type">end</property>
-              </packing>
+              <packing/>
             </child>
-            <child>
+            <child type="end">
               <object class="GtkMenuButton" id="gears">
                 <property name="direction">none</property>
                 <style>
                   <class name="image-button"/>
                 </style>
               </object>
-              <packing>
-                <property name="pack-type">end</property>
-              </packing>
+              <packing/>
             </child>
           </object>
         </child>

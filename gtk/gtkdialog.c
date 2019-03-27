@@ -344,29 +344,6 @@ add_response_data (GtkDialog *dialog,
 }
 
 static void
-apply_response_for_header_bar (GtkDialog *dialog,
-                               GtkWidget *child,
-                               gint       response_id)
-{
-  GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
-  GtkPackType pack;
-
-  g_assert (gtk_widget_get_parent (child) == priv->headerbar);
-
-  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_HELP)
-    pack = GTK_PACK_START;
-  else
-    pack = GTK_PACK_END;
-
-  gtk_container_child_set (GTK_CONTAINER (priv->headerbar), child,
-                           "pack-type", pack,
-                           NULL);
-
-  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_CLOSE)
-    gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (priv->headerbar), FALSE);
-}
-
-static void
 add_to_header_bar (GtkDialog *dialog,
                    GtkWidget *child,
                    gint       response_id)
@@ -374,10 +351,16 @@ add_to_header_bar (GtkDialog *dialog,
   GtkDialogPrivate *priv = gtk_dialog_get_instance_private (dialog);
 
   gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (priv->headerbar), child);
-  gtk_size_group_add_widget (priv->size_group, child);
-  apply_response_for_header_bar (dialog, child, response_id);
 
+  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_HELP)
+    gtk_header_bar_pack_start (GTK_HEADER_BAR (priv->headerbar), child);
+  else
+    gtk_header_bar_pack_end (GTK_HEADER_BAR (priv->headerbar), child);
+
+  gtk_size_group_add_widget (priv->size_group, child);
+
+  if (response_id == GTK_RESPONSE_CANCEL || response_id == GTK_RESPONSE_CLOSE)
+    gtk_header_bar_set_show_title_buttons (GTK_HEADER_BAR (priv->headerbar), FALSE);
 }
 
 static void
@@ -1536,7 +1519,12 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
       else if (gtk_widget_get_parent (GTK_WIDGET (object)) == priv->headerbar)
         {
           if (is_action)
-            apply_response_for_header_bar (dialog, GTK_WIDGET (object), ad->response_id);
+            {
+              g_object_ref (object);
+              gtk_container_remove (GTK_CONTAINER (priv->headerbar), GTK_WIDGET (object));
+              add_to_header_bar (dialog, GTK_WIDGET (object), ad->response_id);
+              g_object_unref (object);
+            }
         }
 
       if (item->is_default)

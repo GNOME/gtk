@@ -35,7 +35,7 @@
             </child>
           </object>
         </child>
-        <child>
+        <child type="end">
           <object class="GtkToggleButton" id="search">
             <style>
               <class name="image-button"/>
@@ -46,9 +46,7 @@
               </object>
             </child>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
+          <packing/>
         </child>
       </object>
     </child>
