@@ -146,13 +146,8 @@ void       gtk_window_set_title                (GtkWindow           *window,
 GDK_AVAILABLE_IN_ALL
 const gchar * gtk_window_get_title             (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_role                 (GtkWindow           *window,
-                                                const gchar         *role);
-GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_startup_id           (GtkWindow           *window,
                                                 const gchar         *startup_id);
-GDK_AVAILABLE_IN_ALL
-const gchar * gtk_window_get_role              (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_add_accel_group          (GtkWindow           *window,
 						GtkAccelGroup	    *accel_group);
