@@ -204,7 +204,6 @@ typedef struct
 
   gchar   *startup_id;
   gchar   *title;
-  gchar   *wm_role;
 
   guint    keys_changed_handler;
 
@@ -312,7 +311,6 @@ enum {
 
   /* Normal Props */
   PROP_TITLE,
-  PROP_ROLE,
   PROP_RESIZABLE,
   PROP_MODAL,
   PROP_WIN_POS,
@@ -827,13 +825,6 @@ gtk_window_class_init (GtkWindowClass *klass)
       g_param_spec_string ("title",
                            P_("Window Title"),
                            P_("The title of the window"),
-                           NULL,
-                           GTK_PARAM_READWRITE);
-
-  window_props[PROP_ROLE] =
-      g_param_spec_string ("role",
-                           P_("Window Role"),
-                           P_("Unique identifier for the window to be used when restoring a session"),
                            NULL,
                            GTK_PARAM_READWRITE);
 
@@ -1824,7 +1815,6 @@ gtk_window_init (GtkWindow *window)
   gtk_widget_set_has_surface (widget, TRUE);
 
   priv->title = NULL;
-  priv->wm_role = NULL;
   priv->geometry_info = NULL;
   priv->type = GTK_WINDOW_TOPLEVEL;
   priv->focus_widget = NULL;
@@ -1966,9 +1956,6 @@ gtk_window_set_property (GObject      *object,
     case PROP_TITLE:
       gtk_window_set_title (window, g_value_get_string (value));
       break;
-    case PROP_ROLE:
-      gtk_window_set_role (window, g_value_get_string (value));
-      break;
     case PROP_STARTUP_ID:
       gtk_window_set_startup_id (window, g_value_get_string (value));
       break;
@@ -2071,9 +2058,6 @@ gtk_window_get_property (GObject      *object,
       GtkWindowGeometryInfo *info;
     case PROP_TYPE:
       g_value_set_enum (value, priv->type);
-      break;
-    case PROP_ROLE:
-      g_value_set_string (value, priv->wm_role);
       break;
     case PROP_TITLE:
       g_value_set_string (value, priv->title);
@@ -2526,47 +2510,6 @@ gtk_window_get_title (GtkWindow *window)
 }
 
 /**
- * gtk_window_set_role:
- * @window: a #GtkWindow
- * @role: unique identifier for the window to be used when restoring a session
- *
- * This function is only useful on X11, not with other GTK+ targets.
- * 
- * In combination with the window title, the window role allows a
- * [window manager][gtk-X11-arch] to identify "the
- * same" window when an application is restarted. So for example you
- * might set the “toolbox” role on your app’s toolbox window, so that
- * when the user restarts their session, the window manager can put
- * the toolbox back in the same place.
- *
- * If a window already has a unique title, you don’t need to set the
- * role, since the WM can use the title to identify the window when
- * restoring the session.
- * 
- **/
-void
-gtk_window_set_role (GtkWindow   *window,
-                     const gchar *role)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *widget;
-  char *new_role;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  widget = GTK_WIDGET (window);
-
-  new_role = g_strdup (role);
-  g_free (priv->wm_role);
-  priv->wm_role = new_role;
-
-  if (_gtk_widget_get_realized (widget))
-    gdk_surface_set_role (_gtk_widget_get_surface (widget), priv->wm_role);
-
-  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ROLE]);
-}
-
-/**
  * gtk_window_set_startup_id:
  * @window: a #GtkWindow
  * @startup_id: a string with startup-notification identifier
@@ -2624,26 +2567,6 @@ gtk_window_set_startup_id (GtkWindow   *window,
     }
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_STARTUP_ID]);
-}
-
-/**
- * gtk_window_get_role:
- * @window: a #GtkWindow
- *
- * Returns the role of the window. See gtk_window_set_role() for
- * further explanation.
- *
- * Returns: (nullable): the role of the window if set, or %NULL. The
- * returned is owned by the widget and must not be modified or freed.
- **/
-const gchar *
-gtk_window_get_role (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
-
-  return priv->wm_role;
 }
 
 /**
@@ -5020,7 +4943,6 @@ gtk_window_finalize (GObject *object)
   GtkMnemonicHash *mnemonic_hash;
 
   g_free (priv->title);
-  g_free (priv->wm_role);
   gtk_window_release_application (window);
 
   mnemonic_hash = gtk_window_get_mnemonic_hash (window, FALSE);
@@ -5949,9 +5871,6 @@ gtk_window_realize (GtkWidget *widget)
 
   if (priv->title)
     gdk_surface_set_title (surface, priv->title);
-
-  if (priv->wm_role)
-    gdk_surface_set_role (surface, priv->wm_role);
 
   if (!priv->decorated || priv->client_decorated)
     gdk_surface_set_decorations (surface, 0);
