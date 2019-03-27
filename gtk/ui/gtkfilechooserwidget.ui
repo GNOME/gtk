@@ -144,7 +144,7 @@
                                             </child>
                                             <child>
                                               <object class="GtkGestureLongPress">
-                                                <property name="touch-only">True</property>
+                                                <property name="touch-only">1</property>
                                                 <signal name="pressed" handler="long_press_cb" swapped="no"/>
                                               </object>
                                             </child>
@@ -258,7 +258,7 @@
                                 <property name="name">other_locations</property>
                                 <property name="child">
                                   <object class="GtkPlacesView" id="places_view">
-                                    <property name="local-only" bind-source="GtkFileChooserWidget" bind-property="local-only" bind-flags="default|sync-create"></property>
+                                    <property name="local-only" bind-source="GtkFileChooserWidget" bind-property="local-only" bind-flags="default|sync-create"/>
                                     <signal name="open-location" handler="places_sidebar_open_location_cb" swapped="no"/>
                                     <signal name="show-error-message" handler="places_sidebar_show_error_message_cb" swapped="no"/>
                                   </object>
@@ -348,7 +348,7 @@
                 <property name="spacing">12</property>
               </object>
             </child>
-            <child>
+            <child type="end">
               <object class="GtkBox" id="filter_combo_hbox">
                 <child>
                   <object class="GtkComboBoxText" id="filter_combo">
@@ -361,9 +361,7 @@
                   </object>
                 </child>
               </object>
-              <packing>
-                <property name="pack-type">end</property>
-              </packing>
+              <packing/>
             </child>
           </object>
         </child>

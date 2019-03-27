@@ -261,7 +261,7 @@
             </attributes>
           </object>
         </child>
-        <child>
+        <child type="end">
           <object class="GtkButton" id="connect_button">
             <property name="label" translatable="yes">Con_nect</property>
             <property name="use-underline">1</property>
@@ -271,11 +271,9 @@
             <property name="valign">center</property>
             <signal name="clicked" handler="on_connect_button_clicked" object="GtkPlacesView" swapped="yes"/>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
+          <packing/>
         </child>
-        <child>
+        <child type="end">
           <object class="GtkBox">
             <property name="hexpand">1</property>
             <child>
@@ -311,9 +309,7 @@
               <class name="linked"/>
             </style>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
+          <packing/>
         </child>
       </object>
     </child>
