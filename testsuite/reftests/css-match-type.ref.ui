@@ -5,10 +5,10 @@
     <property name="can_focus">False</property>
     <property name="type">popup</property>
     <child>
-      <object class="GtkImage" id="image1">
+      <object class="GtkPicture">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="pixbuf">green-20x20.png</property>
+        <property name="paintable">green-20x20.png</property>
       </object>
     </child>
   </object>
