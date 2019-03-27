@@ -21,6 +21,7 @@
 
 #include <windowsx.h>
 #include <objbase.h>
+#include <math.h>
 
 #include "gdkdevice-win32.h"
 #include "gdkwin32.h"
