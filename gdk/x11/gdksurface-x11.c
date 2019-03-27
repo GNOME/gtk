@@ -2232,27 +2232,6 @@ gdk_x11_surface_set_title (GdkSurface   *surface,
 }
 
 static void
-gdk_x11_surface_set_role (GdkSurface   *surface,
-			 const gchar *role)
-{
-  GdkDisplay *display;
-
-  display = gdk_surface_get_display (surface);
-
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
-    return;
-
-  if (role)
-    XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_SURFACE_XID (surface),
-                     gdk_x11_get_xatom_by_name_for_display (display, "WM_WINDOW_ROLE"),
-                     XA_STRING, 8, PropModeReplace, (guchar *)role, strlen (role));
-  else
-    XDeleteProperty (GDK_DISPLAY_XDISPLAY (display), GDK_SURFACE_XID (surface),
-                     gdk_x11_get_xatom_by_name_for_display (display, "WM_WINDOW_ROLE"));
-}
-
-static void
 gdk_x11_surface_set_startup_id (GdkSurface   *surface,
 			       const gchar *startup_id)
 {
@@ -4684,7 +4663,6 @@ gdk_surface_impl_x11_class_init (GdkSurfaceImplX11Class *klass)
   impl_class->set_urgency_hint = gdk_x11_surface_set_urgency_hint;
   impl_class->set_geometry_hints = gdk_x11_surface_set_geometry_hints;
   impl_class->set_title = gdk_x11_surface_set_title;
-  impl_class->set_role = gdk_x11_surface_set_role;
   impl_class->set_startup_id = gdk_x11_surface_set_startup_id;
   impl_class->set_transient_for = gdk_x11_surface_set_transient_for;
   impl_class->get_frame_extents = gdk_x11_surface_get_frame_extents;
