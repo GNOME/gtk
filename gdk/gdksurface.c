@@ -4231,32 +4231,6 @@ gdk_surface_set_title (GdkSurface   *surface,
 }
 
 /**
- * gdk_surface_set_role:
- * @surface: a toplevel #GdkSurface
- * @role: a string indicating its role
- *
- * When using GTK, typically you should use gtk_window_set_role() instead
- * of this low-level function.
- *
- * The window manager and session manager use a surface’s role to
- * distinguish it from other kinds of surface in the same application.
- * When an application is restarted after being saved in a previous
- * session, all surfaces with the same title and role are treated as
- * interchangeable.  So if you have two surfaces with the same title
- * that should be distinguished for session management purposes, you
- * should set the role on those surfaces. It doesn’t matter what string
- * you use for the role, as long as you have a different role for each
- * non-interchangeable kind of surface.
- *
- **/
-void
-gdk_surface_set_role (GdkSurface   *surface,
-                      const gchar *role)
-{
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_role (surface, role);
-}
-
-/**
  * gdk_surface_set_startup_id:
  * @surface: a toplevel #GdkSurface
  * @startup_id: a string with startup-notification identifier
