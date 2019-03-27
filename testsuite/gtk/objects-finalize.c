@@ -72,6 +72,11 @@ test_finalize_object (gconstpointer data)
                              NULL);
       g_object_unref (list_store);
     }
+  else if (g_type_is_a (test_type, GTK_TYPE_LAYOUT_CHILD))
+    {
+      g_test_skip ("Skipping GtkLayoutChild type");
+      return;
+    }
   else
     object = g_object_new (test_type, NULL);
   g_assert (G_IS_OBJECT (object));

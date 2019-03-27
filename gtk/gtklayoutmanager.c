@@ -66,8 +66,6 @@ static GtkSizeRequestMode
 gtk_layout_manager_real_get_request_mode (GtkLayoutManager *manager,
                                           GtkWidget        *widget)
 {
-  LAYOUT_MANAGER_WARN_NOT_IMPLEMENTED (manager, get_request_mode);
-
   return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
 
@@ -285,12 +283,19 @@ gtk_layout_manager_layout_changed (GtkLayoutManager *manager)
     gtk_widget_queue_resize (priv->widget);
 }
 
-static void
-remove_layout_child (GtkWidget        *widget,
-                     GtkWidget        *old_parent,
-                     GtkLayoutManager *self)
+/*< private >
+ * gtk_layout_manager_remove_layout_child:
+ * @manager: a #GtkLayoutManager
+ * @widget: a #GtkWidget
+ *
+ * Removes the #GtkLayoutChild associated with @widget from the
+ * given #GtkLayoutManager, if any is set.
+ */
+void
+gtk_layout_manager_remove_layout_child (GtkLayoutManager *manager,
+                                        GtkWidget        *widget)
 {
-  GtkLayoutManagerPrivate *priv = gtk_layout_manager_get_instance_private (self);
+  GtkLayoutManagerPrivate *priv = gtk_layout_manager_get_instance_private (manager);
 
   if (priv->layout_children != NULL)
     {
@@ -298,8 +303,6 @@ remove_layout_child (GtkWidget        *widget,
       if (g_hash_table_size (priv->layout_children) == 0)
         g_clear_pointer (&priv->layout_children, g_hash_table_unref);
     }
-
-  g_signal_handlers_disconnect_by_func (widget, remove_layout_child, self);
 }
 
 /**
@@ -374,7 +377,6 @@ gtk_layout_manager_get_layout_child (GtkLayoutManager *manager,
   g_assert (g_type_is_a (G_OBJECT_TYPE (res), GTK_TYPE_LAYOUT_CHILD));
 
   g_hash_table_insert (priv->layout_children, child, res);
-  g_signal_connect (child, "parent-set", G_CALLBACK (remove_layout_child), manager);
 
   return res;
 }
