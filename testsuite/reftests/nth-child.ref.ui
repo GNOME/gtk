@@ -16,9 +16,6 @@
             <property name="label" translatable="yes">1</property>
             <property name="name">ref1</property>
           </object>
-          <packing>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label2">
@@ -27,9 +24,6 @@
             <property name="label" translatable="yes">2</property>
             <property name="name">ref2</property>
           </object>
-          <packing>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label8">
@@ -38,9 +32,6 @@
             <property name="label" translatable="yes">3</property>
             <property name="name">ref3</property>
           </object>
-          <packing>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label3">
@@ -49,9 +40,6 @@
             <property name="label" translatable="yes">4 = 2 * 2</property>
             <property name="name">ref4</property>
           </object>
-          <packing>
-            <property name="top-attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label9">
@@ -60,9 +48,6 @@
             <property name="label" translatable="yes">5</property>
             <property name="name">ref5</property>
           </object>
-          <packing>
-            <property name="top-attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label10">
@@ -71,9 +56,6 @@
             <property name="label" translatable="yes">6 = 2 * 3</property>
             <property name="name">ref6</property>
           </object>
-          <packing>
-            <property name="top-attach">5</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label11">
@@ -82,9 +64,6 @@
             <property name="label" translatable="yes">7</property>
             <property name="name">ref7</property>
           </object>
-          <packing>
-            <property name="top-attach">6</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label4">
@@ -93,9 +72,6 @@
             <property name="label" translatable="yes">8 = 2 * 2 * 2</property>
             <property name="name">ref8</property>
           </object>
-          <packing>
-            <property name="top-attach">7</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label12">
@@ -104,9 +80,6 @@
             <property name="label" translatable="yes">9 = 3 * 3</property>
             <property name="name">ref9</property>
           </object>
-          <packing>
-            <property name="top-attach">8</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label5">
@@ -115,9 +88,6 @@
             <property name="label" translatable="yes">10 = 2 * 5</property>
             <property name="name">ref10</property>
           </object>
-          <packing>
-            <property name="top-attach">9</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label14">
@@ -126,9 +96,6 @@
             <property name="label" translatable="yes">11</property>
             <property name="name">ref11</property>
           </object>
-          <packing>
-            <property name="top-attach">10</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label13">
@@ -137,9 +104,6 @@
             <property name="label" translatable="yes">12 = 2 * 2 * 3</property>
             <property name="name">ref12</property>
           </object>
-          <packing>
-            <property name="top-attach">11</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label7">
@@ -148,9 +112,6 @@
             <property name="label" translatable="yes">13</property>
             <property name="name">ref13</property>
           </object>
-          <packing>
-            <property name="top-attach">12</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label15">
@@ -159,9 +120,6 @@
             <property name="label" translatable="yes">14 = 2 * 7</property>
             <property name="name">ref14</property>
           </object>
-          <packing>
-            <property name="top-attach">13</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label16">
@@ -170,9 +128,6 @@
             <property name="label" translatable="yes">15 = 3 * 5</property>
             <property name="name">ref15</property>
           </object>
-          <packing>
-            <property name="top-attach">14</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label17">
@@ -181,9 +136,6 @@
             <property name="label" translatable="yes">16 = 2 * 2 * 2 * 2</property>
             <property name="name">ref16</property>
           </object>
-          <packing>
-            <property name="top-attach">15</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label6">
@@ -192,9 +144,6 @@
             <property name="label" translatable="yes">17</property>
             <property name="name">ref17</property>
           </object>
-          <packing>
-            <property name="top-attach">16</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label18">
@@ -203,9 +152,6 @@
             <property name="label" translatable="yes">18 = 2 * 3 * 3</property>
             <property name="name">ref18</property>
           </object>
-          <packing>
-            <property name="top-attach">17</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label19">
@@ -214,9 +160,6 @@
             <property name="label" translatable="yes">19</property>
             <property name="name">ref19</property>
           </object>
-          <packing>
-            <property name="top-attach">18</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label21">
@@ -225,9 +168,6 @@
             <property name="label" translatable="yes">20 = 2 * 2 * 5</property>
             <property name="name">ref20</property>
           </object>
-          <packing>
-            <property name="top-attach">19</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label20">
@@ -236,9 +176,6 @@
             <property name="label" translatable="yes">21 = 3 * 7</property>
             <property name="name">ref21</property>
           </object>
-          <packing>
-            <property name="top-attach">20</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label22">
@@ -247,9 +184,6 @@
             <property name="label" translatable="yes">22 = 2 * 11</property>
             <property name="name">ref22</property>
           </object>
-          <packing>
-            <property name="top-attach">21</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label23">
@@ -258,9 +192,6 @@
             <property name="label" translatable="yes">23</property>
             <property name="name">ref23</property>
           </object>
-          <packing>
-            <property name="top-attach">22</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label24">
@@ -269,9 +200,6 @@
             <property name="label" translatable="yes">24 = 2 * 2 * 2 * 3</property>
             <property name="name">ref24</property>
           </object>
-          <packing>
-            <property name="top-attach">23</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label25">
@@ -280,9 +208,6 @@
             <property name="label" translatable="yes">25 = 5 * 5</property>
             <property name="name">ref25</property>
           </object>
-          <packing>
-            <property name="top-attach">24</property>
-          </packing>
         </child>
       </object>
     </child>
