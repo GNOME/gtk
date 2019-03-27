@@ -1627,18 +1627,6 @@ gdk_win32_surface_set_title (GdkSurface   *window,
 }
 
 static void
-gdk_win32_surface_set_role (GdkSurface   *window,
-		     const gchar *role)
-{
-  g_return_if_fail (GDK_IS_SURFACE (window));
-
-  GDK_NOTE (MISC, g_print ("gdk_surface_set_role: %p: %s\n",
-			   GDK_SURFACE_HWND (window),
-			   (role ? role : "NULL")));
-  /* XXX */
-}
-
-static void
 gdk_win32_surface_set_transient_for (GdkSurface *window,
 			      GdkSurface *parent)
 {
@@ -5328,7 +5316,6 @@ gdk_surface_impl_win32_class_init (GdkSurfaceImplWin32Class *klass)
   impl_class->set_urgency_hint = gdk_win32_surface_set_urgency_hint;
   impl_class->set_geometry_hints = gdk_win32_surface_set_geometry_hints;
   impl_class->set_title = gdk_win32_surface_set_title;
-  impl_class->set_role = gdk_win32_surface_set_role;
   //impl_class->set_startup_id = gdk_x11_surface_set_startup_id;
   impl_class->set_transient_for = gdk_win32_surface_set_transient_for;
   impl_class->get_frame_extents = gdk_win32_surface_get_frame_extents;
