@@ -290,6 +290,25 @@
     </section>
 
     <section>
+      <title>Stop using gdk_pointer_warp()</title>
+      <para>
+        Warping the pointer is disorienting and unfriendly to users.
+        GTK 4 does not support it.
+      </para>
+    </section>
+
+    <section>
+      <title>Adapt to coordinate api changes</title>
+      <para>
+        A number of coordinate apis in GTK 3 had _double variants: 
+        gdk_device_get_position(), gdk_device_get_surface_at_position(),
+        gdk_surface_get_device_position(). These have been changed to use
+        doubles, and the _double variants have been removed. Update your
+        code accordingly.
+      </para>
+    </section>
+
+    <section>
       <title>Adapt to GdkKeymap API changes</title>
       <para>
         The way to get a keymap has changed slightly. gdk_keymap_get_for_display() has
