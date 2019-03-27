@@ -136,8 +136,6 @@ struct _GdkSurfaceImplClass
                                          GdkSurfaceHints     geom_mask);
   void         (* set_title)            (GdkSurface   *surface,
                                          const gchar *title);
-  void         (* set_role)             (GdkSurface   *surface,
-                                         const gchar *role);
   void         (* set_startup_id)       (GdkSurface   *surface,
                                          const gchar *startup_id);
   void         (* set_transient_for)    (GdkSurface *surface,

@@ -570,9 +570,6 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_title         (GdkSurface   *surface,
                                              const gchar  *title);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_role          (GdkSurface     *surface,
-                                             const gchar   *role);
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_startup_id    (GdkSurface     *surface,
                                              const gchar   *startup_id);
 GDK_AVAILABLE_IN_ALL
