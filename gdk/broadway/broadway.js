@@ -755,7 +755,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
 
             /* Remove children that are after the new length */
             for (i = oldChildren.length - 1; i > len - 1; i--)
-                oldNode.removeChild(oldChildren[i]);
+                this.display_commands.push([DISPLAY_OP_DELETE_NODE, oldChildren[i]]);
 
             /* NOTE: No need to modify the parent, we're keeping this node as is */
             newNode = null;
