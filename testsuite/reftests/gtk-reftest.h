@@ -21,8 +21,8 @@
 G_BEGIN_DECLS
 
 /* reftest-snapshot.c */
-void reftest_inhibit_snapshot   (void);
-void reftest_uninhibit_snapshot (void);
+extern void reftest_inhibit_snapshot   (void);
+extern void reftest_uninhibit_snapshot (void);
 
 G_END_DECLS
 
