@@ -1,18 +1,6 @@
-test_env = environment()
-test_env.set('G_TEST_SRCDIR', meson.current_source_dir())
-test_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
-test_env.set('REFTEST_MODULE_DIR', meson.current_build_dir())
-test_env.set('GTK_IM_MODULE', 'gtk-im-context-simple')
-test_env.set('GSETTINGS_BACKEND', 'memory')
-test_env.set('GSETTINGS_SCHEMA_DIR', gtk_schema_build_dir)
-test_env.set('G_ENABLE_DIAGNOSTIC', '0')
-
-gtk_reftest_cargs = ['-DGDK_DISABLE_DEPRECATED', '-DGTK_DISABLE_DEPRECATED']
-
 # FIXME: $(no_undefined) ?
 libgtkreftestprivate = static_library('gtkreftestprivate',
   'reftest-compare.c', 'reftest-module.c', 'reftest-snapshot.c',
-  c_args : gtk_reftest_cargs,
   dependencies : libgtk_dep)
 
 libreftest = static_library('gtkreftest',
@@ -24,7 +12,6 @@ libreftest = static_library('gtkreftest',
   'textview-border-windows.c',
   'textview-tags.c',
   'animation-direction.c',
-  c_args : gtk_reftest_cargs,
   dependencies : libgtk_dep)
 
 tcdata = configuration_data()
@@ -38,11 +25,8 @@ tcdata.set('libexecdir', join_paths(get_option('prefix'), get_option('libexecdir
 #endforeach
 
 gtk_reftest = executable('gtk-reftest', 'gtk-reftest.c',
-  c_args : gtk_reftest_cargs,
   link_with : [libgtkreftestprivate, libreftest],
   dependencies : libgtk_dep)
-
-test('gtk-reftest', gtk_reftest, env : test_env)
 
 # Installed data (TODO)
 
@@ -435,4 +419,23 @@ testdata = [
   'window-show-contents-on-map.ref.ui',
   'window-show-contents-on-map.ui',
 ]
+
+foreach testname : testdata
+  if not testname.endswith('.ui') or testname.endswith('.ref.ui')
+    continue
+  endif
+  test('reftest ' + testname, gtk_reftest,
+       args: [ '--tap', '-k', '--verbose', join_paths(meson.current_source_dir(), testname) ],
+       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+              'GSETTINGS_BACKEND=memory',
+              'GSETTINGS_SCHEMA_DIR=@@'.format(gtk_schema_build_dir),
+              'GTK_CSD=1',
+              'G_ENABLE_DIAGNOSTIC=0',
+              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+              'GSK_RENDERER=opengl',
+              'REFTEST_MODULE_DIR=@@'.format(meson.current_build_dir()),
+            ],
+       suite: 'reftest')
+endforeach
 
