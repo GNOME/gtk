@@ -1642,6 +1642,7 @@ broadway_server_has_client (BroadwayServer *server)
 #define NODE_SIZE_COLOR 1
 #define NODE_SIZE_FLOAT 1
 #define NODE_SIZE_POINT 2
+#define NODE_SIZE_MATRIX 16
 #define NODE_SIZE_SIZE 2
 #define NODE_SIZE_RECT (NODE_SIZE_POINT + NODE_SIZE_SIZE)
 #define NODE_SIZE_RRECT (NODE_SIZE_RECT + 4 * NODE_SIZE_SIZE)
@@ -1670,6 +1671,7 @@ decode_nodes (BroadwayServer *server,
   guint32 size, n_children;
   gint32 texture_offset;
   guint32 hash;
+  guint32 transform_type;
 
   g_assert (*pos < len);
 
@@ -1711,8 +1713,16 @@ decode_nodes (BroadwayServer *server,
     size = NODE_SIZE_RECT;
     n_children = 1;
     break;
-  case BROADWAY_NODE_TRANSLATE:
-    size = NODE_SIZE_POINT;
+  case BROADWAY_NODE_TRANSFORM:
+    transform_type = data[(*pos)];
+    size = 1;
+    if (transform_type == 0) {
+      size += NODE_SIZE_POINT;
+    } else if (transform_type == 1) {
+      size += NODE_SIZE_MATRIX;
+    } else {
+      g_assert_not_reached();
+    }
     n_children = 1;
     break;
   case BROADWAY_NODE_LINEAR_GRADIENT:

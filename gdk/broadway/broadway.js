@@ -13,7 +13,7 @@ const BROADWAY_NODE_OPACITY = 9;
 const BROADWAY_NODE_CLIP = 10;
 const BROADWAY_NODE_KEEP_ALL = 11;
 const BROADWAY_NODE_KEEP_THIS = 12;
-const BROADWAY_NODE_TRANSLATE = 13;
+const BROADWAY_NODE_TRANSFORM = 13;
 const BROADWAY_NODE_DEBUG = 14;
 const BROADWAY_NODE_REUSE = 15;
 
@@ -630,12 +630,32 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
 
     /* Bin nodes */
 
-    case BROADWAY_NODE_TRANSLATE:
+    case BROADWAY_NODE_TRANSFORM:
         {
-            var point = this.decode_point();
+            var transform_type = this.decode_uint32();
+            var transform_string;
+
+            if (transform_type == 0) {
+                var point = this.decode_point();
+                transform_string = "translate(" + px(point.x) + "," + px(point.y) + ")";
+            } else if (transform_type == 1) {
+                var m = new Array();
+                for (var i = 0; i < 16; i++) {
+                    m[i] = this.decode_float ();
+                }
+
+                transform_string =
+                    "matrix3d(" +
+                    m[0] + "," + m[1] + "," + m[2] + "," + m[3]+ "," +
+                    m[4] + "," + m[5] + "," + m[6] + "," + m[7] + "," +
+                    m[8] + "," + m[9] + "," + m[10] + "," + m[11] + "," +
+                    m[12] + "," + m[13] + "," + m[14] + "," + m[15] + ")";
+            }
+
             var div = document.createElement('div');
-            div.style["position"] = "absolute";
-            set_point_style(div, point);
+            div.style["transform"] = transform_string;
+            div.style["transform-origin"] = "0px 0px";
+
             this.insertNode(div, -1, oldChildren[0]);
             newNode = div;
         }
@@ -755,7 +775,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
 
             /* Remove children that are after the new length */
             for (i = oldChildren.length - 1; i > len - 1; i--)
-                oldNode.removeChild(oldChildren[i]);
+                this.display_commands.push([DISPLAY_OP_DELETE_NODE, oldChildren[i]]);
 
             /* NOTE: No need to modify the parent, we're keeping this node as is */
             newNode = null;
