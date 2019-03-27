@@ -156,6 +156,17 @@ add_rounded_rect (GArray *nodes, const GskRoundedRect *rrect, float offset_x, fl
 }
 
 static void
+add_matrix (GArray *nodes, graphene_matrix_t *matrix)
+{
+  float matrix_floats[16];
+  int i;
+
+  graphene_matrix_to_float (matrix, matrix_floats);
+  for (i = 0; i < 16; i++)
+    add_float (nodes, matrix_floats[i]);
+}
+
+static void
 add_color_stop (GArray *nodes, const GskColorStop *stop)
 {
   add_float (nodes, stop->offset);
@@ -508,23 +519,30 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
         GskTransform *transform = gsk_transform_node_get_transform (node);
         GskTransformCategory category = gsk_transform_get_category (transform);
 
-        if (category >= GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
-          {
-            if (add_new_node (renderer, node, BROADWAY_NODE_TRANSLATE)) {
+        if (add_new_node (renderer, node, BROADWAY_NODE_TRANSFORM)) {
+          if (category >= GSK_TRANSFORM_CATEGORY_2D_TRANSLATE)
+            {
               float dx, dy;
               gsk_transform_to_translate (transform, &dx, &dy);
 
-              add_xy (nodes, dx, dy, offset_x, offset_y);
+              add_uint32 (nodes, 0); // Translate
+              add_xy (nodes, dx, dy, 0, 0);
               gsk_broadway_renderer_add_node (renderer,
                                               gsk_transform_node_get_child (node),
                                               0, 0);
             }
-          }
-        else
-          {
-            /* Fallback to texture for now */
-            break;
-          }
+          else
+            {
+              graphene_matrix_t matrix;
+
+              gsk_transform_to_matrix (transform, &matrix);
+              add_uint32 (nodes, 1); // General transform
+              add_matrix (nodes, &matrix);
+              gsk_broadway_renderer_add_node (renderer,
+                                              gsk_transform_node_get_child (node),
+                                              0, 0);
+            }
+        }
       }
       return;
 
