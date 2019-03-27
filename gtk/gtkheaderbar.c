@@ -119,11 +119,6 @@ enum {
   LAST_PROP
 };
 
-enum {
-  CHILD_PROP_0,
-  CHILD_PROP_PACK_TYPE
-};
-
 static GParamSpec *header_bar_props[LAST_PROP] = { NULL, };
 
 static void gtk_header_bar_buildable_init (GtkBuildableIface *iface);
@@ -1537,12 +1532,9 @@ gtk_header_bar_pack (GtkHeaderBar *bar,
 
   priv->children = g_list_append (priv->children, child);
 
-  gtk_widget_freeze_child_notify (widget);
   gtk_header_bar_reorder_css_node (bar, GTK_PACK_START, widget);
   gtk_widget_set_parent (widget, GTK_WIDGET (bar));
   g_signal_connect (widget, "notify::visible", G_CALLBACK (notify_child_cb), bar);
-  gtk_widget_child_notify (widget, "pack-type");
-  gtk_widget_thaw_child_notify (widget);
 
   _gtk_header_bar_update_separator_visibility (bar);
 }
@@ -1638,69 +1630,6 @@ gtk_header_bar_child_type (GtkContainer *container)
   return GTK_TYPE_WIDGET;
 }
 
-static void
-gtk_header_bar_get_child_property (GtkContainer *container,
-                                   GtkWidget    *widget,
-                                   guint         property_id,
-                                   GValue       *value,
-                                   GParamSpec   *pspec)
-{
-  GtkHeaderBar *bar = GTK_HEADER_BAR (container);
-  GList *l;
-  Child *child;
-
-  l = find_child_link (bar, widget, NULL);
-  if (l == NULL)
-    {
-      g_param_value_set_default (pspec, value);
-      return;
-    }
-
-  child = l->data;
-
-  switch (property_id)
-    {
-    case CHILD_PROP_PACK_TYPE:
-      g_value_set_enum (value, child->pack_type);
-      break;
-
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_header_bar_set_child_property (GtkContainer *container,
-                                   GtkWidget    *widget,
-                                   guint         property_id,
-                                   const GValue *value,
-                                   GParamSpec   *pspec)
-{
-  GtkHeaderBar *bar = GTK_HEADER_BAR (container);
-  GList *l;
-  Child *child;
-
-  l = find_child_link (bar, widget, NULL);
-  if (l == NULL)
-    return;
-
-  child = l->data;
-
-  switch (property_id)
-    {
-    case CHILD_PROP_PACK_TYPE:
-      child->pack_type = g_value_get_enum (value);
-      _gtk_header_bar_update_separator_visibility (bar);
-      gtk_widget_queue_resize (widget);
-      break;
-
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      break;
-    }
-}
-
 static void surface_state_changed (GtkWidget *widget);
 
 static void
@@ -1786,16 +1715,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   container_class->remove = gtk_header_bar_remove;
   container_class->forall = gtk_header_bar_forall;
   container_class->child_type = gtk_header_bar_child_type;
-  container_class->set_child_property = gtk_header_bar_set_child_property;
-  container_class->get_child_property = gtk_header_bar_get_child_property;
-
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_PACK_TYPE,
-                                              g_param_spec_enum ("pack-type",
-                                                                 P_("Pack type"),
-                                                                 P_("A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"),
-                                                                 GTK_TYPE_PACK_TYPE, GTK_PACK_START,
-                                                                 GTK_PARAM_READWRITE));
 
   header_bar_props[PROP_TITLE] =
       g_param_spec_string ("title",
@@ -1923,8 +1842,12 @@ gtk_header_bar_buildable_add_child (GtkBuildable *buildable,
                                     GObject      *child,
                                     const gchar  *type)
 {
-  if (type && strcmp (type, "title") == 0)
+  if (g_strcmp0 (type, "title") == 0)
     gtk_header_bar_set_custom_title (GTK_HEADER_BAR (buildable), GTK_WIDGET (child));
+  else if (g_strcmp0 (type, "start") == 0)
+    gtk_header_bar_pack_start (GTK_HEADER_BAR (buildable), GTK_WIDGET (child));
+  else if (g_strcmp0 (type, "end") == 0)
+    gtk_header_bar_pack_end (GTK_HEADER_BAR (buildable), GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
