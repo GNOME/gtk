@@ -384,3 +384,23 @@ gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,
   stack = gtk_bin_get_child (GTK_BIN (popover));
   gtk_stack_set_visible_child_name (GTK_STACK (stack), name);
 }
+
+/**
+ * gtk_popover_menu_add_submenu:
+ * @popover: a #GtkPopoverMenu
+ * @submenu: a widget to add as submenu
+ * @name: the name for the submenu
+ *
+ * Adds a submenu to the popover menu.
+ */
+void
+gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
+                              GtkWidget      *submenu,
+                              const char     *name)
+{
+  GtkWidget *stack;
+
+  stack = gtk_bin_get_child (GTK_BIN (object));
+
+  gtk_stack_add_named (GTK_STACK (stack), submenu, name);
+} 
