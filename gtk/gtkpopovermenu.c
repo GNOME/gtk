@@ -35,10 +35,13 @@
  * In this respect, GtkPopoverMenu is more flexible than popovers
  * that are created from a #GMenuModel with gtk_popover_new_from_model().
  *
- * To add a child as a submenu, set the #GtkPopoverMenu:submenu
- * child property to the name of the submenu. To let the user open
- * this submenu, add a #GtkModelButton whose #GtkModelButton:menu-name
- * property is set to the name you've given to the submenu.
+ * To add a child as a submenu, use gtk_popover_menu_add_submenu().
+ * To let the user open this submenu, add a #GtkModelButton whose
+ * #GtkModelButton:menu-name property is set to the name you've given
+ * to the submenu.
+ *
+ * To add a named submenu in a ui file, set the #GtkWidget:name property
+ * of the widget that you are adding as a child of the popover menu.
  *
  * By convention, the first child of a submenu should be a #GtkModelButton
  * to switch back to the parent menu. Such a button should use the
@@ -75,6 +78,7 @@
  *     <object class="GtkBox">
  *       <property name="visible">True</property>
  *       <property name="margin">10</property>
+ *       <property name="name">more</property>
  *       <child>
  *         <object class="GtkModelButton">
  *           <property name="visible">True</property>
@@ -90,9 +94,6 @@
  *         </object>
  *       </child>
  *     </object>
- *     <packing>
- *       <property name="submenu">more</property>
- *     </packing>
  *   </child>
  * </object>
  * ]|
@@ -112,10 +113,6 @@ struct _GtkPopoverMenu
 
 enum {
   PROP_VISIBLE_SUBMENU = 1
-};
-
-enum {
-  CHILD_PROP_SUBMENU = 1,
 };
 
 G_DEFINE_TYPE (GtkPopoverMenu, gtk_popover_menu, GTK_TYPE_POPOVER)
@@ -176,12 +173,14 @@ gtk_popover_menu_add (GtkContainer *container,
     {
       const char *name;
 
-      if (gtk_stack_get_child_by_name (GTK_STACK (stack), "main"))
+      if (gtk_widget_get_name (child))
+        name = gtk_widget_get_name (child);
+      else if (gtk_stack_get_child_by_name (GTK_STACK (stack), "main"))
         name = "submenu";
       else
         name = "main";
 
-      gtk_stack_add_named (GTK_STACK (stack), child, name);
+      gtk_popover_menu_add_submenu (GTK_POPOVER_MENU (container), child, name);
     }
 }
 
@@ -197,66 +196,6 @@ gtk_popover_menu_remove (GtkContainer *container,
     GTK_CONTAINER_CLASS (gtk_popover_menu_parent_class)->remove (container, child);
   else
     gtk_container_remove (GTK_CONTAINER (stack), child);
-}
-
-static void
-gtk_popover_menu_get_child_property (GtkContainer *container,
-                                     GtkWidget    *child,
-                                     guint         property_id,
-                                     GValue       *value,
-                                     GParamSpec   *pspec)
-{
-  GtkWidget *stack;
-
-  stack = gtk_bin_get_child (GTK_BIN (container));
-
-  if (child == stack)
-    return;
-
-  switch (property_id)
-    {
-    case CHILD_PROP_SUBMENU:
-      {
-        gchar *name;
-        gtk_container_child_get (GTK_CONTAINER (stack), child, "name", &name, NULL);
-        g_value_set_string (value, name);
-      }
-      break;
-
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec); 
-      break;
-    }
-}
-
-static void
-gtk_popover_menu_set_child_property (GtkContainer *container,
-                                     GtkWidget    *child,
-                                     guint         property_id,
-                                     const GValue *value,
-                                     GParamSpec   *pspec)
-{
-  GtkWidget *stack;
-
-  stack = gtk_bin_get_child (GTK_BIN (container));
-
-  if (child == stack)
-    return;
-
-  switch (property_id)
-    {
-    case CHILD_PROP_SUBMENU:
-      {
-        const gchar *name;
-        name = g_value_get_string (value);
-        gtk_container_child_set (GTK_CONTAINER (stack), child, "name", name, NULL);
-      }
-      break;
-
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec); 
-      break;
-    }
 }
 
 static void
@@ -318,8 +257,6 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
 
   container_class->add = gtk_popover_menu_add;
   container_class->remove = gtk_popover_menu_remove;
-  container_class->set_child_property = gtk_popover_menu_set_child_property;
-  container_class->get_child_property = gtk_popover_menu_get_child_property;
 
   g_object_class_install_property (object_class,
                                    PROP_VISIBLE_SUBMENU,
@@ -328,21 +265,6 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                                         P_("The name of the visible submenu"),
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-
-  /**
-   * GtkPopoverMenu:submenu:
-   *
-   * The submenu child property specifies the name of the submenu
-   * If it is %NULL or "main", the child is used as the main menu,
-   * which is shown initially when the popover is mapped.
-   */
-  gtk_container_class_install_child_property (container_class,
-                                              CHILD_PROP_SUBMENU,
-                                              g_param_spec_string ("submenu",
-                                                                   P_("Submenu"),
-                                                                   P_("The name of the submenu"),
-                                                                   NULL,
-                                                                   G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }
 
 /**
@@ -400,7 +322,7 @@ gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
 {
   GtkWidget *stack;
 
-  stack = gtk_bin_get_child (GTK_BIN (object));
+  stack = gtk_bin_get_child (GTK_BIN (popover));
 
   gtk_stack_add_named (GTK_STACK (stack), submenu, name);
 } 
