@@ -10478,6 +10478,8 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
                                                        parent,
                                                        layout_data);
 
+      /* Free the unapplied properties, if any */
+      g_slist_free_full (layout_data->properties, layout_property_info_free);
       g_object_unref (layout_data->object);
       g_slice_free (LayoutParserData, layout_data);
     }
