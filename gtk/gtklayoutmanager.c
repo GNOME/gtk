@@ -32,6 +32,43 @@
  * Each #GtkWidget can only have a #GtkLayoutManager instance associated to it
  * at any given time; it is possible, though, to replace the layout manager
  * instance using gtk_widget_set_layout_manager().
+ *
+ * ## Layout properties
+ *
+ * A layout manager can expose properties for controlling the layout of
+ * each child, by creating an object type derived from #GtkLayoutChild
+ * and installing the properties on it as normal GObject properties.
+ *
+ * Each #GtkLayoutChild instance storing the layout properties for a
+ * specific child is created through the gtk_layout_manager_get_layout_child()
+ * method; a #GtkLayoutManager controls the creation of its #GtkLayoutChild
+ * instances by overriding the GtkLayoutManagerClass.create_layout_child()
+ * virtual function. The typical implementation should look like:
+ *
+ * |[<!-- language="C" -->
+ * static GtkLayoutChild *
+ * create_layout_child (GtkLayoutManager *manager,
+ *                      GtkWidget        *container,
+ *                      GtkWidget        *child)
+ * {
+ *   return g_object_new (your_layout_child_get_type (),
+ *                        "layout-manager", manager,
+ *                        "child-widget", child,
+ *                        NULL);
+ * }
+ * ]|
+ *
+ * The #GtkLayoutChild:layout-manager and #GtkLayoutChild:child-widget properties
+ * on the newly created #GtkLayoutChild instance are mandatory. The
+ * #GtkLayoutManager will cache the newly created #GtkLayoutChild instance until
+ * the widget is removed from its parent, or the parent removes the layout
+ * manager.
+ *
+ * Each #GtkLayoutManager instance creating a #GtkLayoutChild should use
+ * gtk_layout_manager_get_layout_child() every time it needs to query the
+ * layout properties; each #GtkLayoutChild instance should call
+ * gtk_layout_manager_layout_changed() every time a property is updated, in
+ * order to queue a new size measuring and allocation.
  */
 
 #include "config.h"
