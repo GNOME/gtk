@@ -25,13 +25,15 @@ struct _BroadwayNode {
   grefcount refcount;
   guint32 type;
   guint32 id;
+  guint32 output_id;
   guint32 hash; /* deep hash */
   guint32 n_children;
   BroadwayNode **children;
   guint32 texture_id;
 
   /* Scratch stuff used during diff */
-  gboolean used;
+  gboolean reused;
+  gboolean consumed;
 
   guint32 n_data;
   guint32 data[1];
@@ -41,8 +43,10 @@ gboolean            broadway_node_equal                       (BroadwayNode    *
                                                                BroadwayNode    *b);
 gboolean            broadway_node_deep_equal                  (BroadwayNode    *a,
                                                                BroadwayNode    *b);
-void                broadway_node_mark_deep_used              (BroadwayNode    *node,
-                                                               gboolean         used);
+void                broadway_node_mark_deep_reused            (BroadwayNode    *node,
+                                                               gboolean         reused);
+void                broadway_node_mark_deep_consumed          (BroadwayNode    *node,
+                                                               gboolean         consumed);
 void                broadway_node_add_to_lookup               (BroadwayNode    *node,
                                                                GHashTable      *node_lookup);
 BroadwayServer     *broadway_server_new                       (char            *address,

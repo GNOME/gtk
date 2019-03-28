@@ -15,8 +15,9 @@ const BROADWAY_NODE_TRANSFORM = 11;
 const BROADWAY_NODE_DEBUG = 12;
 const BROADWAY_NODE_REUSE = 13;
 
-const BROADWAY_NODE_OP_APPEND_NODE = 0;
+const BROADWAY_NODE_OP_INSERT_NODE = 0;
 const BROADWAY_NODE_OP_REMOVE_NODE = 1;
+const BROADWAY_NODE_OP_MOVE_AFTER_CHILD = 2;
 
 const BROADWAY_OP_GRAB_POINTER = 'g';
 const BROADWAY_OP_UNGRAB_POINTER = 'u';
@@ -236,7 +237,7 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     surface.transientParent = 0;
     surface.visible = false;
     surface.imageData = null;
-    surface.old_nodes = {};
+    surface.nodes = {};
 
     var div = document.createElement('div');
     div.surface = surface;
@@ -299,14 +300,13 @@ function cmdLowerSurface(id)
         moveToHelper(surface, 0);
 }
 
-function TransformNodes(node_data, div, old_nodes, display_commands) {
+function TransformNodes(node_data, div, nodes, display_commands) {
     this.node_data = node_data;
     this.display_commands = display_commands;
     this.data_pos = 0;
     this.div = div;
     this.outstanding = 1;
-    this.old_nodes = old_nodes;
-    this.new_nodes = {};
+    this.nodes = nodes;
 }
 
 TransformNodes.prototype.decode_uint32 = function() {
@@ -479,16 +479,21 @@ function set_rrect_style (div, rrect) {
     div.style["border-bottom-left-radius"] = args(px(rrect.sizes[3].width), px(rrect.sizes[3].height));
 }
 
-function addOldIds(node, node_map) {
-    node_map[node.node_id] = node;
-
-    var child = node.firstChild;
-    while (child) {
-        addOldIds(child, node_map);
-        child = child.nextSibling;
-    }
+TransformNodes.prototype.createDiv = function(id)
+{
+    var div = document.createElement('div');
+    div.node_id = id;
+    this.nodes[id] = div;
+    return div;
 }
 
+TransformNodes.prototype.createImage = function(id)
+{
+    var image = new Image();
+    image.node_id = id;
+    this.nodes[id] = image;
+    return image;
+}
 
 TransformNodes.prototype.insertNode = function(parent, previousSibling, is_toplevel)
 {
@@ -502,7 +507,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
         /* Reuse divs from last frame */
         case BROADWAY_NODE_REUSE:
         {
-            oldNode = this.old_nodes[id];
+            oldNode = this.nodes[id];
         }
         break;
         /* Leaf nodes */
@@ -511,7 +516,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
         {
             var rect = this.decode_rect();
             var texture_id = this.decode_uint32();
-            var image = new Image();
+            var image = this.createImage(id);
             image.width = rect.width;
             image.height = rect.height;
             image.style["position"] = "absolute";
@@ -528,7 +533,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
         {
             var rect = this.decode_rect();
             var c = this.decode_color ();
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             set_rect_style(div, rect);
             div.style["background-color"] = c;
@@ -546,7 +551,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
             for (var i = 0; i < 4; i++)
                 border_colors[i] = this.decode_color();
 
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             rrect.bounds.width -= border_widths[1] + border_widths[3];
             rrect.bounds.height -= border_widths[0] + border_widths[2];
@@ -573,7 +578,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
             var spread = this.decode_float();
             var blur = this.decode_float();
 
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             set_rrect_style(div, rrect);
             div.style["box-shadow"] = args(px(dx), px(dy), px(blur), px(spread), color);
@@ -590,7 +595,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
             var spread = this.decode_float();
             var blur = this.decode_float();
 
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             set_rrect_style(div, rrect);
             div.style["box-shadow"] = args("inset", px(dx), px(dy), px(blur), px(spread), color);
@@ -605,7 +610,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
             var start = this.decode_point ();
             var end = this.decode_point ();
             var stops = this.decode_color_stops ();
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             set_rect_style(div, rect);
 
@@ -669,7 +674,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
                     m[12] + "," + m[13] + "," + m[14] + "," + m[15] + ")";
             }
 
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["transform"] = transform_string;
             div.style["transform-origin"] = "0px 0px";
 
@@ -681,7 +686,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
     case BROADWAY_NODE_CLIP:
         {
             var rect = this.decode_rect();
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             set_rect_style(div, rect);
             div.style["overflow"] = "hidden";
@@ -693,7 +698,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
     case BROADWAY_NODE_ROUNDED_CLIP:
         {
             var rrect = this.decode_rounded_rect();
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             set_rrect_style(div, rrect);
             div.style["overflow"] = "hidden";
@@ -705,7 +710,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
     case BROADWAY_NODE_OPACITY:
         {
             var opacity = this.decode_float();
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             div.style["left"] = px(0);
             div.style["top"] = px(0);
@@ -727,7 +732,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
                 var blur = this.decode_float();
                 filters = filters + "drop-shadow(" + args (px(dx), px(dy), px(blur), color) + ")";
             }
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             div.style["left"] = px(0);
             div.style["top"] = px(0);
@@ -741,7 +746,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
     case 14:  // DEBUG
         {
             var str = this.decode_string();
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.setAttribute('debug', str);
             this.insertNode(div, null, false);
             newNode = div;
@@ -752,7 +757,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
 
     case BROADWAY_NODE_CONTAINER:
         {
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             var len = this.decode_uint32();
             var lastChild = null;
             for (var i = 0; i < len; i++) {
@@ -767,15 +772,12 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
     }
 
     if (newNode) {
-        newNode.node_id = id;
-        this.new_nodes[id] = newNode;
         if (is_toplevel)
-            this.display_commands.push([DISPLAY_OP_APPEND_CHILD, parent, newNode]);
-        else // Here it is safe to display directly because we have not added the toplevel to the document yet
+            this.display_commands.push([DISPLAY_OP_INSERT_AFTER_CHILD, parent, previousSibling, newNode]);
+        else // It is safe to display directly because we have not added the toplevel to the document yet
             parent.appendChild(newNode);
         return newNode;
     } else if (oldNode) {
-        addOldIds(oldNode, this.new_nodes);
         // This must be delayed until display ops, because it will remove from the old parent
         this.display_commands.push([DISPLAY_OP_INSERT_AFTER_CHILD, parent, previousSibling, oldNode]);
         return oldNode;
@@ -788,21 +790,47 @@ TransformNodes.prototype.execute = function(display_commands)
 
     while (this.data_pos < this.node_data.byteLength) {
         var op = this.decode_uint32();
+        var parentId, parent;
 
         switch (op) {
-        case BROADWAY_NODE_OP_APPEND_NODE:
-            var parentId = this.decode_uint32();
-            var parent;
+        case BROADWAY_NODE_OP_INSERT_NODE:
+            parentId = this.decode_uint32();
             if (parentId == 0)
                 parent = root;
-            else
-                parent = this.old_nodes[parentId];
-            this.insertNode(parent, null, true);
+            else {
+                parent = this.nodes[parentId];
+                if (parent == null)
+                    console.log("Wanted to insert into parent " + parentId + " but it is unknown");
+            }
+
+            var previousChildId = this.decode_uint32();
+            var previousChild = null;
+            if (previousChildId != 0)
+                previousChild = this.nodes[previousChildId];
+            this.insertNode(parent, previousChild, true);
             break;
         case BROADWAY_NODE_OP_REMOVE_NODE:
             var removeId = this.decode_uint32();
-            var remove = this.old_nodes[removeId];
+            var remove = this.nodes[removeId];
+            delete this.nodes[removeId];
+            if (remove == null)
+                console.log("Wanted to delete node " + removeId + " but it is unknown");
+
             this.display_commands.push([DISPLAY_OP_DELETE_NODE, remove]);
+            break;
+        case BROADWAY_NODE_OP_MOVE_AFTER_CHILD:
+            parentId = this.decode_uint32();
+            if (parentId == 0)
+                parent = root;
+            else
+                parent = this.nodes[parentId];
+            var previousChildId = this.decode_uint32();
+            var previousChild = null;
+            if (previousChildId != 0)
+                previousChild = this.nodes[previousChildId];
+            var toMoveId = this.decode_uint32();
+            var toMove = this.nodes[toMoveId];
+            this.display_commands.push([DISPLAY_OP_INSERT_AFTER_CHILD, parent, previousChild, toMove]);
             break;
         }
     }
@@ -1028,9 +1056,8 @@ function handleCommands(cmd, display_commands, new_textures, modified_trees)
 
                 var node_data = cmd.get_nodes ();
                 surface = surfaces[id];
-                var transform_nodes = new TransformNodes (node_data, surface.div, surface.old_nodes, display_commands);
+                var transform_nodes = new TransformNodes (node_data, surface.div, surface.nodes, display_commands);
                 transform_nodes.execute();
-                surface.old_nodes = transform_nodes.new_nodes;
             }
             break;
 

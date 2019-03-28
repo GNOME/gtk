@@ -183,10 +183,6 @@ broadway_node_equal (BroadwayNode     *a,
 {
   int i;
 
-  // Early fast return for reused nodes
-  if (a == b)
-    return TRUE;
-
   if (a->type != b->type)
     return FALSE;
 
@@ -211,10 +207,6 @@ broadway_node_deep_equal (BroadwayNode     *a,
 {
   int i;
 
-  // Early fast return for reused nodes
-  if (a == b)
-    return TRUE;
-
   if (a->hash != b->hash)
     return FALSE;
 
@@ -233,12 +225,21 @@ broadway_node_deep_equal (BroadwayNode     *a,
 
 
 void
-broadway_node_mark_deep_used (BroadwayNode    *node,
-                              gboolean         used)
+broadway_node_mark_deep_reused (BroadwayNode    *node,
+                                gboolean         reused)
 {
-  node->used = used;
+  node->reused = reused;
   for (int i = 0; i < node->n_children; i++)
-    broadway_node_mark_deep_used (node->children[i], used);
+    broadway_node_mark_deep_reused (node->children[i], reused);
+}
+
+void
+broadway_node_mark_deep_consumed (BroadwayNode    *node,
+                                  gboolean         consumed)
+{
+  node->consumed = consumed;
+  for (int i = 0; i < node->n_children; i++)
+    broadway_node_mark_deep_consumed (node->children[i], consumed);
 }
 
 void
@@ -1779,6 +1780,7 @@ decode_nodes (BroadwayServer *server,
   g_ref_count_init (&node->refcount);
   node->type = type;
   node->id = id;
+  node->output_id = id;
   node->texture_id = 0;
   node->n_children = n_children;
   node->children = (BroadwayNode **)((char *)node + sizeof(BroadwayNode) + (size - 1) * sizeof(guint32));
