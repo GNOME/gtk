@@ -39,6 +39,7 @@ G_DECLARE_DERIVABLE_TYPE (GtkLayoutManager, gtk_layout_manager, GTK, LAYOUT_MANA
  *   sizes of the widget using the layout manager for a given orientation
  * @allocate: a virtual function, used to allocate the size of the widget
  *   using the layout manager
+ * @layout_child_type: the type of #GtkLayoutChild used by this layout manager
  * @create_layout_child: a virtual function, used to create a #GtkLayoutChild
  *   meta object for the layout properties
  *
@@ -69,6 +70,8 @@ struct _GtkLayoutManagerClass
                                               int               width,
                                               int               height,
                                               int               baseline);
+
+  GType              layout_child_type;
 
   GtkLayoutChild *   (* create_layout_child) (GtkLayoutManager *manager,
                                               GtkWidget        *widget,
