@@ -289,6 +289,7 @@ gtk_public_sources = files([
   'gtknotebook.c',
   'gtkorientable.c',
   'gtkoverlay.c',
+  'gtkoverlaylayout.c',
   'gtkpadcontroller.c',
   'gtkpagesetup.c',
   'gtkpaned.c',
