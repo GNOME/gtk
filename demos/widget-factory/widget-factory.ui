@@ -417,7 +417,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
             <property name="menu-model">gear_menu</property>
             <property name="icon-name">open-menu-symbolic</property>
           </object>
-          <packing/>
         </child>
       </object>
     </child>
@@ -1593,7 +1592,6 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="valign">center</property>
                                             <property name="icon-name">emblem-system-symbolic</property>
                                           </object>
-                                          <packing/>
                                         </child>
                                       </object>
                                     </child>
@@ -2844,6 +2842,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child>
                                   <object class="GtkToolItem">
+                                    <property name="expand-item">1</property>
                                     <child>
                                       <object class="GtkScale">
                                         <property name="draw-value">0</property>
@@ -2851,9 +2850,6 @@ microphone-sensitivity-medium-symbolic</property>
                                       </object>
                                     </child>
                                   </object>
-                                  <packing>
-                                    <property name="expand">1</property>
-                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkToolItem">
