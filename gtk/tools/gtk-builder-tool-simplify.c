@@ -200,6 +200,8 @@ keep_for_rewrite (const char *class_name,
     { "GtkToolbar", "homogeneous", 1 },
     { "GtkPaned", "resize", 1 },
     { "GtkPaned", "shrink", 1 },
+    { "GtkOverlay", "measure", 1 },
+    { "GtkOverlay", "clip-overlay", 1 },
   };
   gboolean found;
   gint k;
@@ -253,6 +255,7 @@ is_container_element (Element *element)
    */
   const char *names[] = {
     "packing",
+    "layout",
     "cell-packing",
     "attributes",
     "action-widgets",
@@ -1068,6 +1071,46 @@ rewrite_paned (Element *element,
     rewrite_paned_child (element, data, child2, "child2");
 }
 
+static void
+rewrite_layout_props (Element *element,
+                      MyParserData *data)
+{
+  GList *l, *ll;
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *child = l->data;
+
+      if (g_str_equal (child->element_name, "child"))
+        {
+          Element *object = NULL;
+          Element *packing = NULL;
+
+          for (ll = child->children; ll; ll = ll->next)
+            {
+              Element *elt2 = ll->data;
+
+              if (g_str_equal (elt2->element_name, "object"))
+                object = elt2;
+
+              if (g_str_equal (elt2->element_name, "packing"))
+                packing = elt2;
+            }
+
+          if (object && packing)
+            {
+              child->children = g_list_remove (child->children, packing);
+
+              g_free (packing->element_name);
+              packing->element_name = g_strdup ("layout");
+
+              packing->parent = object;
+              object->children = g_list_append (object->children, packing);
+            }
+        }
+    }
+}
+
 static gboolean
 simplify_element (Element      *element,
                   MyParserData *data)
@@ -1138,6 +1181,10 @@ simplify_element (Element      *element,
       if (g_str_equal (element->element_name, "object") &&
           g_str_equal (get_class_name (element), "GtkPaned"))
         rewrite_paned (element, data);
+
+      if (g_str_equal (element->element_name, "object") &&
+          g_str_equal (get_class_name (element), "GtkOverlay"))
+        rewrite_layout_props (element, data);
 
       if (g_str_equal (element->element_name, "property") &&
           property_has_been_removed (element, data))
