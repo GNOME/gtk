@@ -4735,7 +4735,6 @@ gtk_window_set_urgency_hint
 gtk_window_set_accept_focus
 gtk_window_set_focus_on_map
 gtk_window_set_startup_id
-gtk_window_set_role
 gtk_window_get_decorated
 gtk_window_get_deletable
 gtk_window_get_default_icon_name
@@ -4744,7 +4743,6 @@ gtk_window_get_destroy_with_parent
 gtk_window_get_icon_name
 gtk_window_get_mnemonic_modifier
 gtk_window_get_modal
-gtk_window_get_role
 gtk_window_get_size
 gtk_window_get_title
 gtk_window_get_transient_for

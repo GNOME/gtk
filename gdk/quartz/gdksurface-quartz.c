@@ -1740,17 +1740,6 @@ gdk_quartz_surface_set_title (GdkSurface   *window,
 }
 
 static void
-gdk_quartz_surface_set_role (GdkSurface   *window,
-                            const gchar *role)
-{
-  if (GDK_SURFACE_DESTROYED (window) ||
-      SURFACE_IS_TOPLEVEL (window))
-    return;
-
-  /* FIXME: Implement */
-}
-
-static void
 gdk_quartz_surface_set_startup_id (GdkSurface   *window,
                                   const gchar *startup_id)
 {
@@ -2754,7 +2743,6 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->set_urgency_hint = gdk_quartz_surface_set_urgency_hint;
   impl_class->set_geometry_hints = gdk_quartz_surface_set_geometry_hints;
   impl_class->set_title = gdk_quartz_surface_set_title;
-  impl_class->set_role = gdk_quartz_surface_set_role;
   impl_class->set_startup_id = gdk_quartz_surface_set_startup_id;
   impl_class->set_transient_for = gdk_quartz_surface_set_transient_for;
   impl_class->get_frame_extents = gdk_quartz_surface_get_frame_extents;

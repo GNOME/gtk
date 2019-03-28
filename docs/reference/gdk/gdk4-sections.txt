@@ -279,7 +279,6 @@ gdk_surface_get_children
 gdk_surface_peek_children
 gdk_surface_set_icon_name
 gdk_surface_set_transient_for
-gdk_surface_set_role
 gdk_surface_set_startup_id
 gdk_surface_set_group
 gdk_surface_get_group

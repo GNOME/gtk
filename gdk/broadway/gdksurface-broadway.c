@@ -502,12 +502,6 @@ gdk_broadway_surface_set_title (GdkSurface   *surface,
 }
 
 static void
-gdk_broadway_surface_set_role (GdkSurface   *surface,
-                               const gchar *role)
-{
-}
-
-static void
 gdk_broadway_surface_set_startup_id (GdkSurface   *surface,
                                      const gchar *startup_id)
 {
@@ -1358,7 +1352,6 @@ gdk_surface_impl_broadway_class_init (GdkSurfaceImplBroadwayClass *klass)
   impl_class->set_urgency_hint = gdk_broadway_surface_set_urgency_hint;
   impl_class->set_geometry_hints = gdk_broadway_surface_set_geometry_hints;
   impl_class->set_title = gdk_broadway_surface_set_title;
-  impl_class->set_role = gdk_broadway_surface_set_role;
   impl_class->set_startup_id = gdk_broadway_surface_set_startup_id;
   impl_class->set_transient_for = gdk_broadway_surface_set_transient_for;
   impl_class->get_frame_extents = gdk_broadway_surface_get_frame_extents;
