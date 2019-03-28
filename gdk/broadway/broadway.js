@@ -18,6 +18,8 @@ const BROADWAY_NODE_REUSE = 13;
 const BROADWAY_NODE_OP_INSERT_NODE = 0;
 const BROADWAY_NODE_OP_REMOVE_NODE = 1;
 const BROADWAY_NODE_OP_MOVE_AFTER_CHILD = 2;
+const BROADWAY_NODE_OP_PATCH_TEXTURE = 3;
+const BROADWAY_NODE_OP_PATCH_TRANSFORM = 4;
 
 const BROADWAY_OP_GRAB_POINTER = 'g';
 const BROADWAY_OP_UNGRAB_POINTER = 'u';
@@ -67,6 +69,8 @@ const DISPLAY_OP_MOVE_NODE = 7;
 const DISPLAY_OP_RESIZE_NODE = 8;
 const DISPLAY_OP_RESTACK_SURFACES = 9;
 const DISPLAY_OP_DELETE_SURFACE = 10;
+const DISPLAY_OP_CHANGE_TEXTURE = 11;
+const DISPLAY_OP_CHANGE_TRANSFORM = 12;
 
 // GdkCrossingMode
 const GDK_CROSSING_NORMAL = 0;
@@ -446,6 +450,28 @@ TransformNodes.prototype.decode_string = function() {
     return utf8_to_string (utf8);
 }
 
+TransformNodes.prototype.decode_transform = function() {
+    var transform_type = this.decode_uint32();
+
+    if (transform_type == 0) {
+        var point = this.decode_point();
+        return "translate(" + px(point.x) + "," + px(point.y) + ")";
+    } else if (transform_type == 1) {
+        var m = new Array();
+        for (var i = 0; i < 16; i++) {
+            m[i] = this.decode_float ();
+        }
+
+        return "matrix3d(" +
+            m[0] + "," + m[1] + "," + m[2] + "," + m[3]+ "," +
+            m[4] + "," + m[5] + "," + m[6] + "," + m[7] + "," +
+            m[8] + "," + m[9] + "," + m[10] + "," + m[11] + "," +
+            m[12] + "," + m[13] + "," + m[14] + "," + m[15] + ")";
+    } else {
+        alert("Unexpected transform type " + transform_type);
+    }
+}
+
 function args() {
     var argsLength = arguments.length;
     var strings = [];
@@ -654,25 +680,7 @@ TransformNodes.prototype.insertNode = function(parent, previousSibling, is_tople
 
     case BROADWAY_NODE_TRANSFORM:
         {
-            var transform_type = this.decode_uint32();
-            var transform_string;
-
-            if (transform_type == 0) {
-                var point = this.decode_point();
-                transform_string = "translate(" + px(point.x) + "," + px(point.y) + ")";
-            } else if (transform_type == 1) {
-                var m = new Array();
-                for (var i = 0; i < 16; i++) {
-                    m[i] = this.decode_float ();
-                }
-
-                transform_string =
-                    "matrix3d(" +
-                    m[0] + "," + m[1] + "," + m[2] + "," + m[3]+ "," +
-                    m[4] + "," + m[5] + "," + m[6] + "," + m[7] + "," +
-                    m[8] + "," + m[9] + "," + m[10] + "," + m[11] + "," +
-                    m[12] + "," + m[13] + "," + m[14] + "," + m[15] + ")";
-            }
+            var transform_string = this.decode_transform();
 
             var div = this.createDiv(id);
             div.style["transform"] = transform_string;
@@ -832,7 +840,21 @@ TransformNodes.prototype.execute = function(display_commands)
             var toMove = this.nodes[toMoveId];
             this.display_commands.push([DISPLAY_OP_INSERT_AFTER_CHILD, parent, previousChild, toMove]);
             break;
+        case BROADWAY_NODE_OP_PATCH_TEXTURE:
+            var textureNodeId = this.decode_uint32();
+            var textureNode = this.nodes[textureNodeId];
+            var textureId = this.decode_uint32();
+            var texture = textures[textureId].ref();
+            this.display_commands.push([DISPLAY_OP_CHANGE_TEXTURE, textureNode, texture]);
+            break;
+        case BROADWAY_NODE_OP_PATCH_TRANSFORM:
+            var transformNodeId = this.decode_uint32();
+            var transformNode = this.nodes[transformNodeId];
+            var transformString = this.decode_transform();
+            this.display_commands.push([DISPLAY_OP_CHANGE_TRANSFORM, transformNode, transformString]);
+            break;
         }
+
     }
 }
 
@@ -909,7 +931,21 @@ function handleDisplayCommands(display_commands)
             var id = cmd[1];
             delete surfaces[id];
             break;
-
+        case DISPLAY_OP_CHANGE_TEXTURE:
+            var image = cmd[1];
+            var texture = cmd[2];
+            // We need a new closure here to have a separate copy of "template" for each iteration...
+            function a_block(t) {
+                image.src = t.url;
+                // Unref blob url when loaded
+                image.onload = function() { t.unref(); };
+            }(texture);
+            break;
+        case DISPLAY_OP_CHANGE_TRANSFORM:
+            var div = cmd[1];
+            var transform_string = cmd[2];
+            div.style["transform"] = transform_string;
+            break;
         default:
             alert("Unknown display op " + command);
         }

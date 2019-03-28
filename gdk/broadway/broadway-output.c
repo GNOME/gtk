@@ -387,6 +387,58 @@ append_node (BroadwayOutput *output,
   append_node_depth--;
 }
 
+static gboolean
+should_reuse_node (BroadwayOutput *output,
+                   BroadwayNode   *node,
+                   BroadwayNode   *old_node)
+{
+  int i;
+  guint32 new_texture;
+
+  if (old_node->reused)
+    return FALSE;
+
+  if (node->type != old_node->type)
+    return FALSE;
+
+  if (broadway_node_equal (node, old_node))
+    return TRUE;
+
+  switch (node->type) {
+  case BROADWAY_NODE_TRANSFORM:
+#ifdef DEBUG_NODE_SENDING
+   g_print ("Patching transform node %d/%d\n",
+            old_node->id, old_node->output_id);
+#endif
+    append_uint32 (output, BROADWAY_NODE_OP_PATCH_TRANSFORM);
+    append_uint32 (output, old_node->output_id);
+    for (i = 0; i < node->n_data; i++)
+      append_uint32 (output, node->data[i]);
+    return TRUE;
+
+  case BROADWAY_NODE_TEXTURE:
+    /* Check that the size, etc is the same */
+    for (i = 0; i < 4; i++)
+      if (node->data[i] != old_node->data[i])
+        return FALSE;
+
+    new_texture = node->data[4];
+
+#ifdef DEBUG_NODE_SENDING
+   g_print ("Patching texture node %d/%d to tx=%d\n",
+            old_node->id, old_node->output_id,
+            new_texture);
+#endif
+    append_uint32 (output, BROADWAY_NODE_OP_PATCH_TEXTURE);
+    append_uint32 (output, old_node->output_id);
+    append_uint32 (output, new_texture);
+    return TRUE;
+    break;
+  default:
+    return FALSE;
+  }
+}
+
 
 static BroadwayNode *
 append_node_ops (BroadwayOutput *output,
@@ -441,7 +493,7 @@ append_node_ops (BroadwayOutput *output,
    * Except we avoid this for reused node as those make more sense to reuse deeply.
    */
 
-  if (old_node && broadway_node_equal (node, old_node) && !old_node->reused)
+  if (old_node && should_reuse_node (output, node, old_node))
     {
       int old_i = 0;
       BroadwayNode *last_child = NULL;
