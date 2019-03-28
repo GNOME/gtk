@@ -976,6 +976,7 @@ function handleCommands(cmd, display_commands, new_textures, modified_trees)
                 display_commands.push([DISPLAY_OP_RESIZE_NODE, surface.div, surface.width, surface.height]);
 
             }
+            sendConfigureNotify(surface);
             break;
 
         case BROADWAY_OP_RAISE_SURFACE:
