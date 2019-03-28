@@ -38,7 +38,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkOverlay         GtkOverlay;
 typedef struct _GtkOverlayClass    GtkOverlayClass;
-typedef struct _GtkOverlayPrivate  GtkOverlayPrivate;
 
 struct _GtkOverlay
 {
