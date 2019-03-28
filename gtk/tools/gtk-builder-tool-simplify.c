@@ -196,6 +196,8 @@ keep_for_rewrite (const char *class_name,
     { "GtkActionBar", "pack-type", 1 },
     { "GtkHeaderBar", "pack-type", 1 },
     { "GtkPopoverMenu", "submenu", 1 },
+    { "GtkToolbar", "expand", 1 },
+    { "GtkToolbar", "homogeneous", 1 },
   };
   gboolean found;
   gint k;
@@ -876,11 +878,13 @@ rewrite_pack_type (Element *element,
 }
 
 static void
-rewrite_popover_menu_child (Element *element,
-                            MyParserData *data)
+rewrite_child_prop_to_prop_child (Element *element,
+                                  MyParserData *data,
+                                  const char *child_prop,
+                                  const char *prop)
 {
-  Element *submenu = NULL;
   Element *object = NULL;
+  Element *replaced = NULL;
   GList *l, *ll;
 
   if (!g_str_equal (element->element_name, "child"))
@@ -900,10 +904,10 @@ rewrite_popover_menu_child (Element *element,
               Element *elt2 = ll->data;
 
               if (g_str_equal (elt2->element_name, "property") &&
-                  has_attribute (elt2, "name", "submenu"))
+                  has_attribute (elt2, "name", child_prop))
                 {
-                  submenu = elt2;
-                  elt->children = g_list_remove (elt->children, submenu);
+                  replaced = elt2;
+                  elt->children = g_list_remove (elt->children, replaced);
                   if (elt->children == NULL)
                     {
                       element->children = g_list_remove (element->children, elt);
@@ -914,11 +918,11 @@ rewrite_popover_menu_child (Element *element,
             }
         }
 
-      if (submenu)
+      if (replaced)
         break;
     }
 
-  if (submenu)
+  if (replaced)
     {
       Element *elt;
 
@@ -928,17 +932,19 @@ rewrite_popover_menu_child (Element *element,
       elt->attribute_names = g_new0 (char *, 2);
       elt->attribute_names[0] = g_strdup ("name");
       elt->attribute_values = g_new0 (char *, 2);
-      elt->attribute_values[0] = g_strdup ("name");
-      elt->data = g_strdup (submenu->data);
+      elt->attribute_values[0] = g_strdup (prop);
+      elt->data = g_strdup (replaced->data);
 
       object->children = g_list_prepend (object->children, elt);
 
-      free_element (submenu);
+      free_element (replaced);
     }
 }
 static void
-rewrite_popover_menu (Element *element,
-                      MyParserData *data)
+rewrite_child_prop_to_prop (Element *element,
+                            MyParserData *data,
+                            const char *child_prop,
+                            const char *prop)
 {
   GList *l;
 
@@ -946,7 +952,7 @@ rewrite_popover_menu (Element *element,
     {
       Element *elt = l->data;
       if (g_str_equal (elt->element_name, "child"))
-        rewrite_popover_menu_child (elt, data); 
+        rewrite_child_prop_to_prop_child (elt, data, child_prop, prop); 
     }
 }
 
@@ -1007,7 +1013,15 @@ simplify_element (Element      *element,
 
       if (g_str_equal (element->element_name, "object") &&
           g_str_equal (get_class_name (element), "GtkPopoverMenu"))
-        rewrite_popover_menu (element, data);
+        rewrite_child_prop_to_prop (element, data, "submenu", "name");
+
+      if (g_str_equal (element->element_name, "object") &&
+          g_str_equal (get_class_name (element), "GtkToolbar"))
+        rewrite_child_prop_to_prop (element, data, "expand", "expand-item");
+
+      if (g_str_equal (element->element_name, "object") &&
+          g_str_equal (get_class_name (element), "GtkToolbar"))
+        rewrite_child_prop_to_prop (element, data, "homogeneous", "homogeneous");
 
       if (g_str_equal (element->element_name, "property") &&
           property_has_been_removed (element, data))
