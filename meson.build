@@ -652,10 +652,10 @@ immodules = [
   [ 'viqr', [ immodule_srcdir + 'imviqr.c' ] ],
   [ 'broadway', [ immodule_srcdir + 'imbroadway.c' ], broadway_enabled ],
   [ 'ime', [ immodule_srcdir + 'gtkimcontextime.c', immodule_srcdir + 'imime.c' ], win32_enabled ],
-  # anything below this line is untested!
   [ 'quartz', [ immodule_srcdir + 'imquartz.c' ], quartz_enabled, '-xobjective-c' ],
-  [ 'wayland', [ immodule_srcdir + immodule_srcdir + 'imwayland.c', immodule_srcdir + 'text-input-unstable-v3-protocol.c' ], wayland_enabled ],
-  [ 'waylandgtk', [ immodule_srcdir + 'imwaylandgtk.c', immodule_srcdir + 'gtk-text-input-protocol.c' ], wayland_enabled ],
+  # FIXME: needs to be ported from gtk4
+  # [ 'wayland', [ immodule_srcdir + 'imwayland.c', immodule_srcdir + 'text-input-unstable-v3-protocol.c' ], wayland_enabled ],
+  # [ 'waylandgtk', [ immodule_srcdir + 'imwaylandgtk.c', immodule_srcdir + 'gtk-text-input-protocol.c' ], wayland_enabled ],
   [ 'xim', [ immodule_srcdir + 'gtkimcontextxim.c', immodule_srcdir + 'imxim.c' ], x11_enabled ],
 ]
 
