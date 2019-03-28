@@ -119,7 +119,6 @@
                 <property name="can-focus">1</property>
                 <property name="hexpand">1</property>
                 <property name="active">1</property>
-                <property name="draw-indicator">1</property>
                 <child>
                   <object class="GtkBox" id="box1">
                     <property name="spacing">6</property>
@@ -146,7 +145,6 @@
                 <property name="can-focus">1</property>
                 <property name="hexpand">1</property>
                 <property name="active">1</property>
-                <property name="draw-indicator">1</property>
                 <property name="group">portrait_radio</property>
                 <child>
                   <object class="GtkBox" id="box2">
@@ -174,7 +172,6 @@
                 <property name="can-focus">1</property>
                 <property name="hexpand">1</property>
                 <property name="active">1</property>
-                <property name="draw-indicator">1</property>
                 <property name="group">portrait_radio</property>
                 <child>
                   <object class="GtkBox" id="box3">
@@ -201,7 +198,6 @@
               <object class="GtkRadioButton" id="reverse_landscape_radio">
                 <property name="can-focus">1</property>
                 <property name="hexpand">1</property>
-                <property name="draw-indicator">1</property>
                 <property name="group">portrait_radio</property>
                 <child>
                   <object class="GtkBox" id="box4">

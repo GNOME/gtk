@@ -271,7 +271,6 @@
             <property name="valign">center</property>
             <signal name="clicked" handler="on_connect_button_clicked" object="GtkPlacesView" swapped="yes"/>
           </object>
-          <packing/>
         </child>
         <child type="end">
           <object class="GtkBox">
@@ -309,7 +308,6 @@
               <class name="linked"/>
             </style>
           </object>
-          <packing/>
         </child>
       </object>
     </child>

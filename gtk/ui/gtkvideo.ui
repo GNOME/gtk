@@ -15,10 +15,10 @@
             <property name="valign">center</property>
             <property name="icon-name">media-playback-start-symbolic</property>
             <property name="icon-size">large</property>
+            <layout>
+              <property name="measure">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="measure">1</property>
-          </packing>
         </child>
         <child type="overlay">
           <object class="GtkRevealer" id="controls_revealer">
@@ -31,10 +31,10 @@
                 </style>
               </object>
             </child>
+            <layout>
+              <property name="measure">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="measure">1</property>
-          </packing>
         </child>
       </object>
     </child>

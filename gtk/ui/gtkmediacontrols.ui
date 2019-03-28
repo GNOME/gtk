@@ -35,10 +35,10 @@
             <child>
               <object class="GtkScale" id="seek_scale">
                 <property name="adjustment">time_adjustment</property>
-                <property name="can_focus">True</property>
-                <property name="draw_value">False</property>
-                <property name="restrict-to-fill-level">False</property>
-                <property name="hexpand">True</property>
+                <property name="can_focus">1</property>
+                <property name="draw_value">0</property>
+                <property name="restrict-to-fill-level">0</property>
+                <property name="hexpand">1</property>
               </object>
             </child>
             <child>
