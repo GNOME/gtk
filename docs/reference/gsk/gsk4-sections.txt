@@ -67,11 +67,7 @@ gsk_container_node_get_n_children
 gsk_container_node_get_child
 gsk_transform_node_new
 gsk_transform_node_get_child
-gsk_transform_node_peek_transform
-gsk_offset_node_new
-gsk_offset_node_get_child
-gsk_offset_node_get_x_offset
-gsk_offset_node_get_y_offset
+gsk_transform_node_get_transform
 gsk_opacity_node_new
 gsk_opacity_node_get_child
 gsk_opacity_node_get_opacity
@@ -147,7 +143,6 @@ gsk_rounded_rect_intersects_rect
 
 <SECTION>
 <FILE>GskTransform</FILE>
-<TITLE>3D transformations</TITLE>
 GskTransform
 gsk_transform_ref
 gsk_transform_unref
