@@ -29,6 +29,8 @@ typedef enum { /* Sync changes with broadway.js */
   BROADWAY_NODE_OP_INSERT_NODE = 0,
   BROADWAY_NODE_OP_REMOVE_NODE = 1,
   BROADWAY_NODE_OP_MOVE_AFTER_CHILD = 2,
+  BROADWAY_NODE_OP_PATCH_TEXTURE = 3,
+  BROADWAY_NODE_OP_PATCH_TRANSFORM = 4,
 } BroadwayNodeOpType;
 
 static const char *broadway_node_type_names[] G_GNUC_UNUSED =  {
