@@ -424,6 +424,7 @@ gtk_selection_model_select_range
 gtk_selection_model_unselect_range
 gtk_selection_model_select_all
 gtk_selection_model_unselect_all
+gtk_selection_model_query_range
 <SUBSECTION>
 gtk_selection_model_selection_changed
 <SUBSECTION Standard>
@@ -1297,6 +1298,8 @@ gtk_file_filter_get_type
 <TITLE>GtkFilterListModel</TITLE>
 GtkFilterListModel
 gtk_filter_list_model_new
+gtk_filter_list_model_new_for_type
+gtk_filter_list_model_set_model
 gtk_filter_list_model_get_model
 gtk_filter_list_model_set_filter_func
 gtk_filter_list_model_has_filter
@@ -1386,6 +1389,7 @@ gtk_font_chooser_set_font
 gtk_font_chooser_get_font_desc
 gtk_font_chooser_set_font_desc
 gtk_font_chooser_get_font_features
+gtk_font_chooser_get_language
 gtk_font_chooser_set_language
 gtk_font_chooser_get_preview_text
 gtk_font_chooser_set_preview_text
@@ -4378,6 +4382,8 @@ gtk_snapshot_push_clip
 gtk_snapshot_push_rounded_clip
 gtk_snapshot_push_cross_fade
 gtk_snapshot_push_blend
+gtk_snapshot_push_blur
+gtk_snapshot_push_shadow
 gtk_snapshot_push_debug
 gtk_snapshot_pop
 gtk_snapshot_save
@@ -4406,6 +4412,8 @@ gtk_snapshot_render_frame
 gtk_snapshot_render_focus
 gtk_snapshot_render_layout
 gtk_snapshot_render_insertion_cursor
+<SUBSECTION Private>
+gtk_snapshot_get_type
 </SECTION>
 
 <SECTION>
@@ -4496,7 +4504,6 @@ gtk_widget_get_cursor
 gtk_widget_set_cursor
 gtk_widget_set_cursor_from_name
 gtk_widget_mnemonic_activate
-gtk_widget_send_focus_change
 gtk_widget_class_set_accessible_type
 gtk_widget_class_set_accessible_role
 gtk_widget_get_accessible
@@ -6212,6 +6219,10 @@ gtk_color_chooser_get_use_alpha
 gtk_color_chooser_set_use_alpha
 gtk_color_chooser_add_palette
 
+<SUBSECTION>
+gtk_hsv_to_rgb
+gtk_rgb_to_hsv
+
 <SUBSECTION Standard>
 GTK_TYPE_COLOR_CHOOSER
 GTK_COLOR_CHOOSER
@@ -6329,6 +6340,7 @@ gtk_stack_add_named
 gtk_stack_add_titled
 gtk_stack_get_child_by_name
 gtk_stack_get_page
+gtk_stack_get_pages
 gtk_stack_page_get_child
 gtk_stack_set_visible_child
 gtk_stack_get_visible_child
@@ -6359,6 +6371,7 @@ GTK_STACK_GET_CLASS
 
 <SUBSECTION Private>
 gtk_stack_get_type
+gtk_stack_page_get_type
 </SECTION>
 
 <SECTION>
@@ -7146,6 +7159,12 @@ gtk_media_stream_get_type
 <TITLE>GtkRoot</TITLE>
 GtkRoot
 gtk_root_get_for_surface
+gtk_root_get_focus
+gtk_root_set_focus
+
+<SUBSECTION>
+gtk_root_install_properties
+
 <SUBSECTION Private>
 gtk_root_get_type
 </SECTION>
@@ -7183,7 +7202,6 @@ gtk_layout_child_get_type
 <SECTION>
 <FILE>gtkboxlayout</FILE>
 GtkBoxLayout
-GtkBoxLayoutClass
 
 gtk_box_layout_new
 gtk_box_layout_set_homogeneous
