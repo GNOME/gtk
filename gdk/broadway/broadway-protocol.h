@@ -41,8 +41,9 @@ static const char *broadway_node_type_names[] G_GNUC_UNUSED =  {
   "CLIP",
   "KEEP_ALL",
   "KEEP_THIS",
-  "TRANSLATE",
+  "TRANSFORM",
   "DEBUG",
+  "REUSE",
 };
 
 typedef enum {
