@@ -198,6 +198,8 @@ keep_for_rewrite (const char *class_name,
     { "GtkPopoverMenu", "submenu", 1 },
     { "GtkToolbar", "expand", 1 },
     { "GtkToolbar", "homogeneous", 1 },
+    { "GtkPaned", "resize", 1 },
+    { "GtkPaned", "shrink", 1 },
   };
   gboolean found;
   gint k;
@@ -940,6 +942,7 @@ rewrite_child_prop_to_prop_child (Element *element,
       free_element (replaced);
     }
 }
+
 static void
 rewrite_child_prop_to_prop (Element *element,
                             MyParserData *data,
@@ -954,6 +957,115 @@ rewrite_child_prop_to_prop (Element *element,
       if (g_str_equal (elt->element_name, "child"))
         rewrite_child_prop_to_prop_child (elt, data, child_prop, prop); 
     }
+}
+
+static void
+rewrite_paned_child (Element *element,
+                     MyParserData *data,
+                     Element *child,
+                     const char *suffix)
+{
+  Element *resize = NULL;
+  Element *shrink = NULL;
+  GList *l, *ll;
+
+  for (l = child->children; l; l = l->next)
+    {
+      Element *elt = l->data;
+
+      if (g_str_equal (elt->element_name, "packing"))
+        {
+          for (ll = elt->children; ll; ll = ll->next)
+            {
+              Element *elt2 = ll->data;
+
+              if (g_str_equal (elt2->element_name, "property") &&
+                  has_attribute (elt2, "name", "resize"))
+                resize = elt2;
+              if (g_str_equal (elt2->element_name, "property") &&
+                  has_attribute (elt2, "name", "shrink"))
+                shrink = elt2;
+            }
+          if (resize)
+            elt->children = g_list_remove (elt->children, resize);
+          if (shrink)
+            elt->children = g_list_remove (elt->children, shrink);
+          if (elt->children == NULL)
+            {
+              child->children = g_list_remove (child->children, elt);
+              free_element (elt);
+            }
+        }
+
+      if (resize || shrink)
+        break;
+    }
+
+  if (resize)
+    {
+      Element *elt;
+
+      elt = g_new0 (Element, 1);
+      elt->parent = element;
+      elt->element_name = g_strdup ("property");
+      elt->attribute_names = g_new0 (char *, 2);
+      elt->attribute_names[0] = g_strdup ("name");
+      elt->attribute_values = g_new0 (char *, 2);
+      elt->attribute_values[0] = g_strconcat ("resize-", suffix, NULL);
+      elt->data = g_strdup (resize->data);
+
+      element->children = g_list_prepend (element->children, elt);
+
+      free_element (resize);
+    }
+
+  if (shrink)
+    {
+      Element *elt;
+
+      elt = g_new0 (Element, 1);
+      elt->parent = element;
+      elt->element_name = g_strdup ("property");
+      elt->attribute_names = g_new0 (char *, 2);
+      elt->attribute_names[0] = g_strdup ("name");
+      elt->attribute_values = g_new0 (char *, 2);
+      elt->attribute_values[0] = g_strconcat ("shrink-", suffix, NULL);
+      elt->data = g_strdup (shrink->data);
+
+      element->children = g_list_prepend (element->children, elt);
+
+      free_element (shrink);
+    }
+}
+
+static void
+rewrite_paned (Element *element,
+               MyParserData *data)
+{
+  Element *child1 = NULL;
+  Element *child2 = NULL;
+  GList *l;
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *elt = l->data;
+
+      if (g_str_equal (elt->element_name, "child"))
+        {
+          if (child1 == NULL)
+            child1 = elt;
+          else if (child2 == NULL)
+            child2 = elt;
+          else
+            break;
+        }
+    }
+
+  if (child1)
+    rewrite_paned_child (element, data, child1, "child1");
+
+  if (child2)
+    rewrite_paned_child (element, data, child2, "child2");
 }
 
 static gboolean
@@ -1022,6 +1134,10 @@ simplify_element (Element      *element,
       if (g_str_equal (element->element_name, "object") &&
           g_str_equal (get_class_name (element), "GtkToolbar"))
         rewrite_child_prop_to_prop (element, data, "homogeneous", "homogeneous");
+
+      if (g_str_equal (element->element_name, "object") &&
+          g_str_equal (get_class_name (element), "GtkPaned"))
+        rewrite_paned (element, data);
 
       if (g_str_equal (element->element_name, "property") &&
           property_has_been_removed (element, data))
