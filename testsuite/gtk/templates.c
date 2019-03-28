@@ -353,7 +353,8 @@ main (int argc, char **argv)
 
   /* g_test_build_filename must be called after gtk_test_init */
   schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
-  g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
+  if (g_getenv ("GTK_TEST_MESON") == NULL)
+    g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
 
   /* This environment variable cooperates with gtk_widget_destroy()
    * to assert that all automated compoenents are properly finalized
