@@ -54,7 +54,7 @@ GtkWidget * gtk_popover_menu_new      (void);
 
 GDK_AVAILABLE_IN_ALL
 void        gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
-                                          GtkWidget      *menu,
+                                          GtkWidget      *submenu,
                                           const char     *name);
 GDK_AVAILABLE_IN_ALL
 void        gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,
