@@ -9,6 +9,9 @@
             <property name="vexpand">1</property>
             <child>
               <object class="GtkPaned" id="browse_widgets_hpaned">
+                <property name="shrink-child2">0</property>
+                <property name="shrink-child1">0</property>
+                <property name="resize-child1">0</property>
                 <property name="vexpand">1</property>
                 <child>
                   <object class="GtkPlacesSidebar" id="places_sidebar">
@@ -22,10 +25,6 @@
                     <signal name="show-error-message" handler="places_sidebar_show_error_message_cb" swapped="no"/>
                     <signal name="show-other-locations-with-flags" handler="places_sidebar_show_other_locations_with_flags_cb" swapped="no"/>
                   </object>
-                  <packing>
-                    <property name="resize">0</property>
-                    <property name="shrink">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkBox">
@@ -332,9 +331,6 @@
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="shrink">0</property>
-                  </packing>
                 </child>
               </object>
             </child>
@@ -361,7 +357,6 @@
                   </object>
                 </child>
               </object>
-              <packing/>
             </child>
           </object>
         </child>
