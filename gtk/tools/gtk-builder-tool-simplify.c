@@ -137,6 +137,12 @@ canonical_boolean_value (MyParserData *data,
   return b ? "1" : "0";
 }
 
+typedef enum {
+  PROP_KIND_OBJECT,
+  PROP_KIND_PACKING,
+  PROP_KIND_CELL_PACKING,
+} PropKind;
+
 /* A number of properties unfortunately can't be omitted even
  * if they are nominally set to their default value. In many
  * cases, this is due to subclasses not overriding the default
@@ -144,23 +150,23 @@ canonical_boolean_value (MyParserData *data,
  */
 static gboolean
 needs_explicit_setting (GParamSpec *pspec,
-                        gboolean    packing)
+                        PropKind    kind)
 {
   struct _Prop {
     const char *class;
     const char *property;
-    gboolean packing;
+    PropKind kind;
   } props[] = {
-    { "GtkAboutDialog", "program-name", 0 },
-    { "GtkCalendar", "year", 0 },
-    { "GtkCalendar", "month", 0 },
-    { "GtkCalendar", "day", 0 },
-    { "GtkPlacesSidebar", "show-desktop", 0 },
-    { "GtkRadioButton", "draw-indicator", 0 },
-    { "GtkGrid", "left-attach", 1 },
-    { "GtkGrid", "top-attach", 1 },
-    { "GtkWidget", "hexpand", 0 },
-    { "GtkWidget", "vexpand", 0 },
+    { "GtkAboutDialog", "program-name", PROP_KIND_OBJECT },
+    { "GtkCalendar", "year", PROP_KIND_OBJECT },
+    { "GtkCalendar", "month", PROP_KIND_OBJECT },
+    { "GtkCalendar", "day", PROP_KIND_OBJECT },
+    { "GtkPlacesSidebar", "show-desktop", PROP_KIND_OBJECT },
+    { "GtkRadioButton", "draw-indicator", PROP_KIND_OBJECT },
+    { "GtkGrid", "left-attach", PROP_KIND_PACKING },
+    { "GtkGrid", "top-attach", PROP_KIND_PACKING },
+    { "GtkWidget", "hexpand", PROP_KIND_OBJECT },
+    { "GtkWidget", "vexpand", PROP_KIND_OBJECT },
   };
   gboolean found;
   gint k;
@@ -173,7 +179,7 @@ needs_explicit_setting (GParamSpec *pspec,
     {
       if (strcmp (class_name, props[k].class) == 0 &&
           strcmp (pspec->name, props[k].property) == 0 &&
-          packing == props[k].packing)
+          kind == props[k].kind)
         {
           found = TRUE;
           break;
@@ -186,22 +192,22 @@ needs_explicit_setting (GParamSpec *pspec,
 static gboolean
 keep_for_rewrite (const char *class_name,
                   const char *prop_name,
-                  gboolean    packing)
+                  PropKind kind)
 {
   struct _Prop {
     const char *class;
     const char *property;
-    gboolean packing;
+    PropKind kind;
   } props[] = {
-    { "GtkActionBar", "pack-type", 1 },
-    { "GtkHeaderBar", "pack-type", 1 },
-    { "GtkPopoverMenu", "submenu", 1 },
-    { "GtkToolbar", "expand", 1 },
-    { "GtkToolbar", "homogeneous", 1 },
-    { "GtkPaned", "resize", 1 },
-    { "GtkPaned", "shrink", 1 },
-    { "GtkOverlay", "measure", 1 },
-    { "GtkOverlay", "clip-overlay", 1 },
+    { "GtkActionBar", "pack-type", PROP_KIND_PACKING },
+    { "GtkHeaderBar", "pack-type", PROP_KIND_PACKING },
+    { "GtkPopoverMenu", "submenu", PROP_KIND_PACKING },
+    { "GtkToolbar", "expand", PROP_KIND_PACKING },
+    { "GtkToolbar", "homogeneous", PROP_KIND_PACKING },
+    { "GtkPaned", "resize", PROP_KIND_PACKING },
+    { "GtkPaned", "shrink", PROP_KIND_PACKING },
+    { "GtkOverlay", "measure", PROP_KIND_PACKING },
+    { "GtkOverlay", "clip-overlay", PROP_KIND_PACKING },
   };
   gboolean found;
   gint k;
@@ -211,7 +217,7 @@ keep_for_rewrite (const char *class_name,
     {
       if (strcmp (class_name, props[k].class) == 0 &&
           strcmp (prop_name, props[k].property) == 0 &&
-          packing == props[k].packing)
+          kind == props[k].kind)
         {
           found = TRUE;
           break;
@@ -298,8 +304,7 @@ static GParamSpec *
 get_property_pspec (MyParserData *data,
                     const gchar  *class_name,
                     const gchar  *property_name,
-                    gboolean      packing,
-                    gboolean      cell_packing)
+                    PropKind      kind)
 {
   GType type;
   GObjectClass *class;
@@ -317,19 +322,27 @@ get_property_pspec (MyParserData *data,
   class = g_type_class_ref (type);
   canonical_name = g_strdup (property_name);
   canonicalize_key (canonical_name);
-  if (packing)
-    pspec = gtk_container_class_find_child_property (class, canonical_name);
-  else if (cell_packing)
+  switch (kind)
     {
-      GObjectClass *cell_class;
+    case PROP_KIND_OBJECT:
+      pspec = g_object_class_find_property (class, canonical_name);
+      break;
+    case PROP_KIND_PACKING:
+      pspec = gtk_container_class_find_child_property (class, canonical_name);
+      break;
+    case PROP_KIND_CELL_PACKING:
+      {
+        GObjectClass *cell_class;
 
-      /* We're just assuming that the cell layout is using a GtkCellAreaBox. */
-      cell_class = g_type_class_ref (GTK_TYPE_CELL_AREA_BOX);
-      pspec = gtk_cell_area_class_find_cell_property (GTK_CELL_AREA_CLASS (cell_class), canonical_name);
-      g_type_class_unref (cell_class);
+        /* We're just assuming that the cell layout is using a GtkCellAreaBox. */
+        cell_class = g_type_class_ref (GTK_TYPE_CELL_AREA_BOX);
+        pspec = gtk_cell_area_class_find_cell_property (GTK_CELL_AREA_CLASS (cell_class), canonical_name);
+        g_type_class_unref (cell_class);
+      }
+      break;
+    default:
+      g_assert_not_reached ();
     }
-  else
-    pspec = g_object_class_find_property (class, canonical_name);
   g_free (canonical_name);
   g_type_class_unref (class);
 
@@ -422,13 +435,15 @@ property_is_boolean (Element      *element,
                      MyParserData *data)
 {
   GParamSpec *pspec;
-  gboolean packing = FALSE;
   const char *class_name;
   const char *property_name;
   int i;
+  PropKind kind;
 
   if (g_str_equal (element->parent->element_name, "packing"))
-    packing = TRUE;
+    kind = PROP_KIND_PACKING;
+  else
+    kind = PROP_KIND_OBJECT;
 
   class_name = get_class_name (element);
   property_name = "";
@@ -439,7 +454,7 @@ property_is_boolean (Element      *element,
         property_name = (const gchar *)element->attribute_values[i];
     }
 
-  pspec = get_property_pspec (data, class_name, property_name, packing, FALSE);
+  pspec = get_property_pspec (data, class_name, property_name, kind);
   if (pspec)
     return G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_BOOLEAN;
 
@@ -456,14 +471,15 @@ property_can_be_omitted (Element      *element,
   const char *class_name;
   const char *property_name;
   const char *value_string;
-  gboolean packing = FALSE;
-  gboolean cell_packing = FALSE;
   GParamSpec *pspec;
+  PropKind kind;
 
   if (g_str_equal (element->parent->element_name, "packing"))
-    packing = TRUE;
+    kind = PROP_KIND_PACKING;
   if (g_str_equal (element->parent->element_name, "cell-packing"))
-    cell_packing = TRUE;
+    kind = PROP_KIND_CELL_PACKING;
+  else
+    kind = PROP_KIND_OBJECT;
 
   class_name = get_class_name (element);
   property_name = "";
@@ -482,7 +498,7 @@ property_can_be_omitted (Element      *element,
         property_name = (const gchar *)element->attribute_values[i];
     }
 
-  if (keep_for_rewrite (class_name, property_name, packing))
+  if (keep_for_rewrite (class_name, property_name, kind))
     return FALSE; /* keep, will be rewritten */
 
   if (translatable)
@@ -491,20 +507,22 @@ property_can_be_omitted (Element      *element,
   if (bound)
     return FALSE;
 
-  pspec = get_property_pspec (data, class_name, property_name, packing, cell_packing);
+  pspec = get_property_pspec (data, class_name, property_name, kind);
 
   if (pspec == NULL)
     {
-      if (packing)
-        g_printerr (_("%s: Packing property %s::%s not found\n"), data->input_filename, class_name, property_name);
-      else if (cell_packing)
-        g_printerr (_("%s: Cell property %s::%s not found\n"), data->input_filename, class_name, property_name);
-      else
-        g_printerr (_("%s: Property %s::%s not found\n"), data->input_filename, class_name, property_name);
+      const char *kind_str[] = {
+        "",
+        "Packing ",
+        "Cell "
+      };
+     
+      g_printerr (_("%s: %sproperty %s::%s not found\n"),
+                  kind_str[kind], data->input_filename, class_name, property_name);
       return FALSE;
     }
 
-  if (needs_explicit_setting (pspec, packing))
+  if (needs_explicit_setting (pspec, kind))
     return FALSE;
 
   return value_is_default (data, pspec, value_string);
@@ -516,30 +534,32 @@ property_has_been_removed (Element      *element,
 {
   const gchar *class_name;
   const gchar *property_name;
-  gboolean packing = FALSE;
   struct _Prop {
     const char *class;
     const char *property;
-    gboolean packing;
+    PropKind kind;
   } props[] = {
-    { "GtkActionBar", "position", 1 },
-    { "GtkButtonBox", "secondary", 1 },
-    { "GtkButtonBox", "non-homogeneous", 1 },
-    { "GtkBox", "position", 1 },
-    { "GtkBox", "pack-type", 1 },
-    { "GtkHeaderBar", "position", 1 },
-    { "GtkPopoverMenu", "position", 1 },
-    { "GtkMenu", "left-attach", 1 },
-    { "GtkMenu", "right-attach", 1 },
-    { "GtkMenu", "top-attach", 1 },
-    { "GtkMenu", "bottom-attach", 1 }
+    { "GtkActionBar", "position", PROP_KIND_PACKING },
+    { "GtkButtonBox", "secondary", PROP_KIND_PACKING },
+    { "GtkButtonBox", "non-homogeneous", PROP_KIND_PACKING },
+    { "GtkBox", "position", PROP_KIND_PACKING },
+    { "GtkBox", "pack-type", PROP_KIND_PACKING },
+    { "GtkHeaderBar", "position", PROP_KIND_PACKING },
+    { "GtkPopoverMenu", "position",PROP_KIND_PACKING },
+    { "GtkMenu", "left-attach", PROP_KIND_PACKING },
+    { "GtkMenu", "right-attach", PROP_KIND_PACKING },
+    { "GtkMenu", "top-attach", PROP_KIND_PACKING },
+    { "GtkMenu", "bottom-attach", PROP_KIND_PACKING }
   };
   gchar *canonical_name;
   gboolean found;
   gint i, k;
+  PropKind kind;
 
   if (g_str_equal (element->parent->element_name, "packing"))
-    packing = TRUE;
+    kind = PROP_KIND_PACKING;
+  else
+    kind = PROP_KIND_OBJECT;
 
   class_name = get_class_name (element);
   property_name = "";
@@ -558,7 +578,7 @@ property_has_been_removed (Element      *element,
     {
       if (strcmp (class_name, props[k].class) == 0 &&
           strcmp (canonical_name, props[k].property) == 0 &&
-          packing == props[k].packing)
+          kind == props[k].kind)
         {
           found = TRUE;
           break;
