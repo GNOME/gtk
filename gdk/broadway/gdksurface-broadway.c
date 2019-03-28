@@ -1208,8 +1208,8 @@ gdk_broadway_surface_begin_resize_drag (GdkSurface     *surface,
                                         GdkSurfaceEdge  edge,
                                         GdkDevice     *device,
                                         gint           button,
-                                        gint           root_x,
-                                        gint           root_y,
+                                        gint           x,
+                                        gint           y,
                                         guint32        timestamp)
 {
   MoveResizeData *mv_resize;
@@ -1232,8 +1232,8 @@ gdk_broadway_surface_begin_resize_drag (GdkSurface     *surface,
   mv_resize->is_resize = TRUE;
   mv_resize->moveresize_button = button;
   mv_resize->resize_edge = edge;
-  mv_resize->moveresize_x = root_x;
-  mv_resize->moveresize_y = root_y;
+  mv_resize->moveresize_x = x  + impl->wrapper->x;
+  mv_resize->moveresize_y = y + impl->wrapper->y;
   mv_resize->moveresize_surface = g_object_ref (surface);
 
   mv_resize->moveresize_orig_width = gdk_surface_get_width (surface);
@@ -1251,8 +1251,8 @@ static void
 gdk_broadway_surface_begin_move_drag (GdkSurface *surface,
                                       GdkDevice *device,
                                       gint       button,
-                                      gint       root_x,
-                                      gint       root_y,
+                                      gint       x,
+                                      gint       y,
                                       guint32    timestamp)
 {
   MoveResizeData *mv_resize;
@@ -1274,8 +1274,8 @@ gdk_broadway_surface_begin_move_drag (GdkSurface *surface,
 
   mv_resize->is_resize = FALSE;
   mv_resize->moveresize_button = button;
-  mv_resize->moveresize_x = root_x;
-  mv_resize->moveresize_y = root_y;
+  mv_resize->moveresize_x = x + impl->wrapper->x;
+  mv_resize->moveresize_y = y + impl->wrapper->y;
   mv_resize->moveresize_surface = g_object_ref (surface);
 
   mv_resize->moveresize_orig_width = gdk_surface_get_width (surface);
