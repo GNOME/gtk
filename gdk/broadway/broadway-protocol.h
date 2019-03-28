@@ -20,12 +20,15 @@ typedef enum { /* Sync changes with broadway.js */
   BROADWAY_NODE_SHADOW = 8,
   BROADWAY_NODE_OPACITY = 9,
   BROADWAY_NODE_CLIP = 10,
-  BROADWAY_NODE_KEEP_ALL = 11,
-  BROADWAY_NODE_KEEP_THIS = 12,
-  BROADWAY_NODE_TRANSFORM = 13,
-  BROADWAY_NODE_DEBUG = 14,
-  BROADWAY_NODE_REUSE = 15,
+  BROADWAY_NODE_TRANSFORM = 11,
+  BROADWAY_NODE_DEBUG = 12,
+  BROADWAY_NODE_REUSE = 13,
 } BroadwayNodeType;
+
+typedef enum { /* Sync changes with broadway.js */
+  BROADWAY_NODE_OP_APPEND_NODE = 0,
+  BROADWAY_NODE_OP_REMOVE_NODE = 1,
+} BroadwayNodeOpType;
 
 static const char *broadway_node_type_names[] G_GNUC_UNUSED =  {
   "TEXTURE",
@@ -39,8 +42,6 @@ static const char *broadway_node_type_names[] G_GNUC_UNUSED =  {
   "SHADOW",
   "OPACITY",
   "CLIP",
-  "KEEP_ALL",
-  "KEEP_THIS",
   "TRANSFORM",
   "DEBUG",
   "REUSE",
