@@ -722,7 +722,9 @@ gtk_text_layout_get_lines (GtkTextLayout *layout,
   GSList *retval;
 
   g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), NULL);
-  g_return_val_if_fail (bottom_y > top_y, NULL);
+
+  if (top_y <= bottom_y)
+    return NULL;
 
   retval = NULL;
 
