@@ -152,6 +152,7 @@ gtk/gtkfilesystem.c
 gtk/gtkfilesystemmodel.c
 gtk/gtkfilterlistmodel.c
 gtk/gtkfixed.c
+gtk/gtkfixedlayout.c
 gtk/gtkflattenlistmodel.c
 gtk/gtkflowbox.c
 gtk/gtkfontbutton.c
