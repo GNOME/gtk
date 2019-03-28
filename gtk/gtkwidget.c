@@ -10134,6 +10134,16 @@ layout_start_element (GMarkupParseContext  *context,
 
       layout_data->cur_property = pinfo;
     }
+  else if (strcmp (element_name, "layout") == 0)
+    {
+      if (!_gtk_builder_check_parent (layout_data->builder, context, "object", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (layout_data->builder, context, error);
+    }
   else
     {
       _gtk_builder_error_unhandled_tag (layout_data->builder, context,
