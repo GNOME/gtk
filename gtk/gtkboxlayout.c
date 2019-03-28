@@ -69,7 +69,7 @@ enum {
   /* From GtkOrientable */
   PROP_ORIENTATION,
 
-  N_PROPS = PROP_ORIENTATION
+  N_PROPS
 };
 
 static GParamSpec *box_layout_props[N_PROPS];
