@@ -8,6 +8,7 @@
 #include "broadway-output.h"
 
 //#define DEBUG_NODE_SENDING
+//#define DEBUG_NODE_SENDING_REMOVE
 
 /************************************************************************
  *                Basic I/O primitives                                  *
@@ -317,9 +318,9 @@ static void
 append_type (BroadwayOutput *output, guint32 type, BroadwayNode *node)
 {
 #ifdef DEBUG_NODE_SENDING
-  g_print ("%*s%s", append_node_depth*2, "", broadway_node_type_names[type]);
+  g_print ("%*s%s(%d/%d)", append_node_depth*2, "", broadway_node_type_names[type], node->id, node->output_id);
   if (type == BROADWAY_NODE_TEXTURE)
-    g_print (" %u", node->data[4]);
+    g_print (" tx=%u", node->data[4]);
   g_print ("\n");
 #endif
 
@@ -367,13 +368,14 @@ append_node (BroadwayOutput *output,
   reused_node = lookup_old_node (old_node_lookup, node->id);
   if (reused_node)
     {
+      broadway_node_mark_deep_consumed (reused_node, TRUE);
       append_type (output, BROADWAY_NODE_REUSE, node);
-      append_uint32 (output, node->id);
+      append_uint32 (output, node->output_id);
     }
   else
     {
       append_type (output, node->type, node);
-      append_uint32 (output, node->id);
+      append_uint32 (output, node->output_id);
       for (i = 0; i < node->n_data; i++)
         append_uint32 (output, node->data[i]);
       for (i = 0; i < node->n_children; i++)
@@ -386,35 +388,129 @@ append_node (BroadwayOutput *output,
 }
 
 
-static void
+static BroadwayNode *
 append_node_ops (BroadwayOutput *output,
                  BroadwayNode   *node,
+                 BroadwayNode   *parent,
+                 BroadwayNode   *previous_sibling,
                  BroadwayNode   *old_node,
                  GHashTable     *old_node_lookup)
 {
-  GPtrArray *to_remove = g_ptr_array_new ();
+  BroadwayNode *reused_node;
   guint32 i;
 
-  if (old_node != NULL)
-    g_ptr_array_add (to_remove, old_node);
+  /* Maybe can be reused from the last tree. */
+  reused_node = lookup_old_node (old_node_lookup, node->id);
+  if (reused_node)
+    {
+      g_assert (node == reused_node);
+      g_assert (reused_node->reused);
+      g_assert (!reused_node->consumed); /* Should only be once in the tree, and not consumed otherwise */
 
-   append_uint32 (output, BROADWAY_NODE_OP_APPEND_NODE);
-   append_uint32 (output, 0); /* Parent */
+      broadway_node_mark_deep_consumed (reused_node, TRUE);
+
+      if (node == old_node)
+        {
+          /* The node in the old tree at the current position is the same, so
+             we need to do nothing, just don't delete it (which we won't since
+             its marked used) */
+        }
+      else
+        {
+          /* We can reuse it, bu it comes from a different place or
+             order, if so we need to move it in place */
+#ifdef DEBUG_NODE_SENDING
+          g_print ("Move old node %d/%d to parent %d/%d after %d/%d\n",
+                   reused_node->id, reused_node->output_id,
+                   parent ? parent->id : 0,
+                   parent ? parent->output_id : 0,
+                   previous_sibling ? previous_sibling->id : 0,
+                   previous_sibling ? previous_sibling->output_id : 0);
+#endif
+          append_uint32 (output, BROADWAY_NODE_OP_MOVE_AFTER_CHILD);
+          append_uint32 (output, parent ? parent->output_id : 0);
+          append_uint32 (output, previous_sibling ? previous_sibling->output_id : 0);
+          append_uint32 (output, reused_node->output_id);
+        }
+
+      return reused_node;
+    }
+
+  /* If the next node in place is shallowly equal (but not necessarily
+   * deep equal) we reuse it and tweak its children as needed.
+   * Except we avoid this for reused node as those make more sense to reuse deeply.
+   */
+
+  if (old_node && broadway_node_equal (node, old_node) && !old_node->reused)
+    {
+      int old_i = 0;
+      BroadwayNode *last_child = NULL;
+
+      old_node->consumed = TRUE; // Don't reuse again
+
+      // We rewrite this new node as it now represents the old node in the browser
+      node->output_id = old_node->output_id;
+
+      /* However, we might need to rewrite then children of old_node */
+      for (i = 0; i < node->n_children; i++)
+        {
+          BroadwayNode *child = node->children[i];
+
+          /* Find the next (or first) non-consumed old child, if any */
+          while (old_i < old_node->n_children &&
+                 old_node->children[old_i]->consumed)
+            old_i++;
+
+          last_child =
+            append_node_ops (output,
+                             child,
+                             node, /* parent */
+                             last_child,
+                             (old_i < old_node->n_children) ? old_node->children[old_i] : NULL,
+                             old_node_lookup);
+        }
+
+      /* Remaining old nodes are either reused elsewhere, or end up marked not consumed so are deleted at the end */
+      return old_node;
+    }
+
+  /* Fallback to create a new tree */
+#ifdef DEBUG_NODE_SENDING
+   g_print ("Insert nodes in parent %d/%d, after sibling %d/%d\n",
+            parent ? parent->id : 0,
+            parent ? parent->output_id : 0,
+            previous_sibling ? previous_sibling->id : 0,
+            previous_sibling ? previous_sibling->output_id : 0);
+#endif
+   append_uint32 (output, BROADWAY_NODE_OP_INSERT_NODE);
+   append_uint32 (output, parent ? parent->output_id : 0);
+   append_uint32 (output, previous_sibling ? previous_sibling->output_id : 0);
 
    append_node(output, node, old_node_lookup);
 
-   for (i = 0; i < to_remove->len; i++)
-     {
-       BroadwayNode *removed_node = g_ptr_array_index (to_remove, i);
-       if (!removed_node->used)
-         {
-           // TODO: Use an array of nodes instead
-           append_uint32 (output, BROADWAY_NODE_OP_REMOVE_NODE);
-           append_uint32 (output, old_node->id);
-         }
-     }
-   g_ptr_array_unref (to_remove);
+   return node;
 }
+
+/* Remove non-consumed nodes */
+static void
+append_node_removes (BroadwayOutput *output,
+                     BroadwayNode   *node)
+{
+  // TODO: Use an array of nodes instead
+  if (!node->consumed)
+    {
+#ifdef DEBUG_NODE_SENDING_REMOVE
+          g_print ("Remove old node non-consumed node %d/%d\n",
+                   node->id, node->output_id);
+#endif
+      append_uint32 (output, BROADWAY_NODE_OP_REMOVE_NODE);
+      append_uint32 (output, node->output_id);
+    }
+
+  for (int i = 0; i < node->n_children; i++)
+    append_node_removes (output, node->children[i]);
+}
+
 
 
 void
@@ -426,14 +522,14 @@ broadway_output_surface_set_nodes (BroadwayOutput *output,
 {
   gsize size_pos, start, end;
 
-  /* Mark old nodes as unused, so we can use them once */
+
   if (old_root)
-    broadway_node_mark_deep_used (old_root, FALSE);
-  /* Mark new nodes as used, causing any shared nodes to be marked as
-     unused. This way we won't accidentally reuse them for something
-     else. However, this means that is safe to reuse nodes marked as
-     used for the specific case of where the id matches. */
-  broadway_node_mark_deep_used (root, TRUE);
+    {
+      broadway_node_mark_deep_consumed (old_root, FALSE);
+      broadway_node_mark_deep_reused (old_root, FALSE);
+      /* This will modify children of old_root if any are shared */
+      broadway_node_mark_deep_reused (root, TRUE);
+    }
 
   write_header (output, BROADWAY_OP_SET_NODES);
 
@@ -444,9 +540,11 @@ broadway_output_surface_set_nodes (BroadwayOutput *output,
 
   start = output->buf->len;
 #ifdef DEBUG_NODE_SENDING
-  g_print ("====== node tree for %d =======\n", id);
+  g_print ("====== node ops for surface %d =======\n", id);
 #endif
-  append_node_ops (output, root, old_root, old_node_lookup);
+  append_node_ops (output, root, NULL, NULL, old_root, old_node_lookup);
+  if (old_root)
+    append_node_removes (output, old_root);
   end = output->buf->len;
   patch_uint32 (output, (end - start) / 4, size_pos);
 }
