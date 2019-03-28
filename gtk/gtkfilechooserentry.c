@@ -260,6 +260,8 @@ match_func (GtkEntryCompletion *compl,
 
 static void
 chooser_entry_focus_out (GtkEventControllerKey *key_controller,
+                         GdkCrossingMode        mode,
+                         GdkNotifyType          detail,
                          GtkFileChooserEntry   *chooser_entry)
 {
   set_complete_on_load (chooser_entry, FALSE);
