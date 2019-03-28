@@ -76,7 +76,7 @@
  * to the toolbar, add an instance of #GtkToolButton.
  *
  * Toolbar items can be visually grouped by adding instances of
- * #GtkSeparatorToolItem to the toolbar. If the GtkToolbar child property
+ * #GtkSeparatorToolItem to the toolbar. If the GtkToolItem property
  * “expand” is #TRUE and the property #GtkSeparatorToolItem:draw is set to
  * #FALSE, the effect is to force all following items to the end of the toolbar.
  *
@@ -150,13 +150,6 @@ enum {
   PROP_TOOLTIPS,
 };
 
-/* Child properties */
-enum {
-  CHILD_PROP_0,
-  CHILD_PROP_EXPAND,
-  CHILD_PROP_HOMOGENEOUS
-};
-
 /* Signals */
 enum {
   ORIENTATION_CHANGED,
@@ -195,16 +188,6 @@ static void       gtk_toolbar_move_focus           (GtkWidget           *widget,
 						    GtkDirectionType     dir);
 static void       gtk_toolbar_display_changed      (GtkWidget           *widget,
 						    GdkDisplay          *previous_display);
-static void       gtk_toolbar_set_child_property   (GtkContainer        *container,
-						    GtkWidget           *child,
-						    guint                property_id,
-						    const GValue        *value,
-						    GParamSpec          *pspec);
-static void       gtk_toolbar_get_child_property   (GtkContainer        *container,
-						    GtkWidget           *child,
-						    guint                property_id,
-						    GValue              *value,
-						    GParamSpec          *pspec);
 static void       gtk_toolbar_finalize             (GObject             *object);
 static void       gtk_toolbar_dispose              (GObject             *object);
 static void       gtk_toolbar_add                  (GtkContainer        *container,
@@ -386,8 +369,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   container_class->remove = gtk_toolbar_remove;
   container_class->forall = gtk_toolbar_forall;
   container_class->child_type = gtk_toolbar_child_type;
-  container_class->get_child_property = gtk_toolbar_get_child_property;
-  container_class->set_child_property = gtk_toolbar_set_child_property;
 
   klass->orientation_changed = gtk_toolbar_orientation_changed;
   klass->style_changed = gtk_toolbar_real_style_changed;
@@ -493,23 +474,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 							 P_("If an arrow should be shown if the toolbar doesn’t fit"),
 							 TRUE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
-  /* child properties */
-  gtk_container_class_install_child_property (container_class,
-					      CHILD_PROP_EXPAND,
-					      g_param_spec_boolean ("expand", 
-								    P_("Expand"), 
-								    P_("Whether the item should receive extra space when the toolbar grows"),
-								    FALSE,
-								    GTK_PARAM_READWRITE));
-  
-  gtk_container_class_install_child_property (container_class,
-					      CHILD_PROP_HOMOGENEOUS,
-					      g_param_spec_boolean ("homogeneous", 
-								    P_("Homogeneous"), 
-								    P_("Whether the item should be the same size as other homogeneous items"),
-								    FALSE,
-								    GTK_PARAM_READWRITE));
 
   binding_set = gtk_binding_set_by_class (klass);
   
@@ -2000,54 +1964,6 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
   
   if (restart_sliding)
     gtk_toolbar_begin_sliding (toolbar);
-}
-
-static void
-gtk_toolbar_get_child_property (GtkContainer *container,
-				GtkWidget    *child,
-				guint         property_id,
-				GValue       *value,
-				GParamSpec   *pspec)
-{
-  GtkToolItem *item = GTK_TOOL_ITEM (child);
-  
-  switch (property_id)
-    {
-    case CHILD_PROP_HOMOGENEOUS:
-      g_value_set_boolean (value, gtk_tool_item_get_homogeneous (item));
-      break;
-      
-    case CHILD_PROP_EXPAND:
-      g_value_set_boolean (value, gtk_tool_item_get_expand (item));
-      break;
-      
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_toolbar_set_child_property (GtkContainer *container,
-				GtkWidget    *child,
-				guint         property_id,
-				const GValue *value,
-				GParamSpec   *pspec)
-{
-  switch (property_id)
-    {
-    case CHILD_PROP_HOMOGENEOUS:
-      gtk_tool_item_set_homogeneous (GTK_TOOL_ITEM (child), g_value_get_boolean (value));
-      break;
-      
-    case CHILD_PROP_EXPAND:
-      gtk_tool_item_set_expand (GTK_TOOL_ITEM (child), g_value_get_boolean (value));
-      break;
-      
-    default:
-      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
-      break;
-    }
 }
 
 static void
