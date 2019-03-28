@@ -617,6 +617,10 @@ add_cups_options (const gchar *key,
   gchar *new_value = NULL;
   gint i;
 
+#define UNSIGNED_FLOAT_REGEX "([0-9]+([.,][0-9]*)?|[.,][0-9]+)([e][+-]?[0-9]+)?"
+#define SIGNED_FLOAT_REGEX "[+-]?"UNSIGNED_FLOAT_REGEX
+#define SIGNED_INTEGER_REGEX "[+-]?([0-9]+)"
+
   if (!key || !value)
     return;
 
@@ -652,29 +656,33 @@ add_cups_options (const gchar *key,
 	    {
 	      /* Check syntax of the invalid choice to see whether
 		 it could be a custom value */
-	      char *p = NULL;
-	      int l1 = -1, l2 = -1;
-
-	      if (g_str_equal(key, "PageSize") || g_str_equal(key, "PageRegion"))
+	      if (g_str_equal (key, "PageSize") ||
+		  g_str_equal (key, "PageRegion"))
 		{
 		  /* Handle custom page sizes... */
-		  sscanf(value, "%*[0-9.,]%*[xX]%*[0-9.,]%n%m[cminftpCMINFTP]%n", &l1, &p, &l2);
-		  if (strlen(value) == l1 ||
-		      (p && l1 != l2 && strlen(value) == l2 &&
-		       (!strcasecmp(p, "cm") || !strcasecmp(p, "mm") ||
-			!strcasecmp(p, "m" ) || !strcasecmp(p, "in") ||
-			!strcasecmp(p, "ft") || !strcasecmp(p, "pt"))))
+		  if (g_regex_match_simple ("^" UNSIGNED_FLOAT_REGEX "x"
+					    UNSIGNED_FLOAT_REGEX
+					    "(cm|mm|m|in|ft|pt)?$",
+					    value, G_REGEX_CASELESS, 0))
 		    custom_value = TRUE;
-
-		  if (p)
-		    free(p);
+		  else
+		    {
+		      if (data->page_setup != NULL)
+			{
+			  custom_value = TRUE;
+			  new_value =
+			    g_strdup_printf ("Custom.%.2fx%.2fmm",
+					     gtk_paper_size_get_width (gtk_page_setup_get_paper_size (data->page_setup), GTK_UNIT_MM),
+					     gtk_paper_size_get_height (gtk_page_setup_get_paper_size (data->page_setup), GTK_UNIT_MM));
+			}
+		    }
 		}
 	      else
 		{
 		  /* Handle other custom options... */
 		  ppd_cparam_t  *cparam;
 
-		  cparam = (ppd_cparam_t *)cupsArrayFirst(coption->params);
+		  cparam = (ppd_cparam_t *) cupsArrayFirst (coption->params);
 		  if (cparam != NULL)
 		    {
 		      switch (cparam->type)
@@ -682,26 +690,24 @@ add_cups_options (const gchar *key,
 			case PPD_CUSTOM_CURVE :
 			case PPD_CUSTOM_INVCURVE :
 			case PPD_CUSTOM_REAL :
-			  sscanf(value, "%*[0-9.,+-]%n", &l1);
-			  if (strlen(value) == l1)
+			  if (g_regex_match_simple ("^" SIGNED_FLOAT_REGEX
+						    "$", value,
+						    G_REGEX_CASELESS, 0))
 			    custom_value = TRUE;
 			  break;
 
 			case PPD_CUSTOM_POINTS :
-			  sscanf(value, "%*[0-9.,+-]%n%m[cminftpCMINFTP]%n", &l1, &p, &l2);
-			  if (strlen(value) == l1 ||
-			      (p && l1 != l2 && strlen(value) == l2 &&
-			       (!strcasecmp(p, "cm") || !strcasecmp(p, "mm") ||
-				!strcasecmp(p, "m" ) || !strcasecmp(p, "in") ||
-				!strcasecmp(p, "ft") || !strcasecmp(p, "pt"))))
+			  if (g_regex_match_simple ("^" SIGNED_FLOAT_REGEX
+						    "(cm|mm|m|in|ft|pt)?$",
+						    value, G_REGEX_CASELESS,
+						    0))
 			    custom_value = TRUE;
-			  if (p)
-			    free(p);
 			  break;
 
 			case PPD_CUSTOM_INT :
-			  sscanf(value, "%*[0-9+-]%n", &l1);
-			  if (strlen(value) == l1)
+			  if (g_regex_match_simple ("^" SIGNED_INTEGER_REGEX
+						    "$", value,
+						    G_REGEX_CASELESS, 0))
 			    custom_value = TRUE;
 			  break;
 
@@ -710,6 +716,7 @@ add_cups_options (const gchar *key,
 			case PPD_CUSTOM_STRING :
 			  custom_value = TRUE;
 			  break;
+
 			default :
 			  custom_value = FALSE;
 			}
@@ -722,7 +729,8 @@ add_cups_options (const gchar *key,
   /* Add "Custom." prefix to custom values if not already added. */
   if (custom_value)
     {
-      new_value = g_strdup_printf ("Custom.%s", value);
+      if (new_value == NULL)
+	new_value = g_strdup_printf ("Custom.%s", value);
       gtk_cups_request_encode_option (request, key, new_value);
       g_free (new_value);
     }
