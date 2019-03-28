@@ -426,6 +426,7 @@ gtk_public_headers = files([
   'gtkbindings.h',
   'gtkborder.h',
   'gtkbox.h',
+  'gtkboxlayout.h',
   'gtkbuildable.h',
   'gtkbuilder.h',
   'gtkbutton.h',
