@@ -1265,8 +1265,15 @@ dump_element (Element *element,
 }
 
 static void
+write_xml_declaration (FILE *output)
+{
+  g_fprintf (output, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+}
+
+static void
 dump_tree (MyParserData *data)
 {
+  write_xml_declaration (data->output);
   dump_element (data->root, data->output, 0);
 }
 
