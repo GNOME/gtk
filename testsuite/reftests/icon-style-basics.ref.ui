@@ -790,13 +790,13 @@
       </object>
     </child>
   </object>
-  <object class="GThemedIcon" id="themedicon">
+  <object class="GThemedIcon" id="themedicon" type-func="g_themed_icon_get_type">
     <property name="names">edit-delete</property>
   </object>
   <object class="GThemedIcon" id="themediconsymbolic">
     <property name="names">edit-delete-symbolic</property>
   </object>
-  <object class="GEmblemedIcon" id="emblemedicon">
+  <object class="GEmblemedIcon" id="emblemedicon" type-func="g_emblemed_icon_get_type">
     <property name="gicon">themedicon</property>
   </object>
   <object class="GEmblemedIcon" id="emblemediconsymbolic">
