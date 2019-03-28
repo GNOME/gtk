@@ -314,6 +314,8 @@ gtk_fixed_layout_class_init (GtkFixedLayoutClass *klass)
 {
   GtkLayoutManagerClass *layout_class = GTK_LAYOUT_MANAGER_CLASS (klass);
 
+  layout_class->layout_child_type = GTK_TYPE_FIXED_LAYOUT_CHILD;
+
   layout_class->measure = gtk_fixed_layout_measure;
   layout_class->allocate = gtk_fixed_layout_allocate;
   layout_class->create_layout_child = gtk_fixed_layout_create_layout_child;

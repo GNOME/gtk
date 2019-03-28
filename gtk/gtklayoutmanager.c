@@ -97,8 +97,6 @@ typedef struct {
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkLayoutManager, gtk_layout_manager, G_TYPE_OBJECT)
 
-static GQuark quark_layout_child;
-
 static GtkSizeRequestMode
 gtk_layout_manager_real_get_request_mode (GtkLayoutManager *manager,
                                           GtkWidget        *widget)
@@ -141,14 +139,32 @@ gtk_layout_manager_real_allocate (GtkLayoutManager *manager,
   LAYOUT_MANAGER_WARN_NOT_IMPLEMENTED (manager, allocate);
 }
 
+static GtkLayoutChild *
+gtk_layout_manager_real_create_layout_child (GtkLayoutManager *manager,
+                                             GtkWidget        *widget,
+                                             GtkWidget        *child)
+{
+  GtkLayoutManagerClass *manager_class = GTK_LAYOUT_MANAGER_GET_CLASS (manager);
+
+  if (manager_class->layout_child_type == G_TYPE_INVALID)
+    {
+      LAYOUT_MANAGER_WARN_NOT_IMPLEMENTED (manager, create_layout_child);
+      return NULL;
+    }
+
+  return g_object_new (manager_class->layout_child_type,
+                       "layout-manager", manager,
+                       "child-widget", widget,
+                       NULL);
+}
+
 static void
 gtk_layout_manager_class_init (GtkLayoutManagerClass *klass)
 {
   klass->get_request_mode = gtk_layout_manager_real_get_request_mode;
   klass->measure = gtk_layout_manager_real_measure;
   klass->allocate = gtk_layout_manager_real_allocate;
-
-  quark_layout_child = g_quark_from_static_string ("-GtkLayoutManager-layout-child");
+  klass->create_layout_child = gtk_layout_manager_real_create_layout_child;
 }
 
 static void
@@ -382,14 +398,6 @@ gtk_layout_manager_get_layout_child (GtkLayoutManager *manager,
       return NULL;
     }
 
-  if (GTK_LAYOUT_MANAGER_GET_CLASS (manager)->create_layout_child == NULL)
-    {
-      g_critical ("The layout manager of type %s %p does not create "
-                  "GtkLayoutChild instances",
-                  G_OBJECT_TYPE_NAME (manager), manager);
-      return NULL;
-    }
-
   if (priv->layout_children == NULL)
     {
       priv->layout_children = g_hash_table_new_full (NULL, NULL,
@@ -410,9 +418,15 @@ gtk_layout_manager_get_layout_child (GtkLayoutManager *manager,
     }
 
   res = GTK_LAYOUT_MANAGER_GET_CLASS (manager)->create_layout_child (manager, parent, child);
-  g_assert (res != NULL);
-  g_assert (g_type_is_a (G_OBJECT_TYPE (res), GTK_TYPE_LAYOUT_CHILD));
+  if (res == NULL)
+    {
+      g_critical ("The layout manager of type %s %p does not create "
+                  "GtkLayoutChild instances",
+                  G_OBJECT_TYPE_NAME (manager), manager);
+      return NULL;
+    }
 
+  g_assert (g_type_is_a (G_OBJECT_TYPE (res), GTK_TYPE_LAYOUT_CHILD));
   g_hash_table_insert (priv->layout_children, child, res);
 
   return res;
