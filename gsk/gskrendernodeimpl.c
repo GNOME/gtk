@@ -3060,10 +3060,10 @@ gsk_color_matrix_node_draw (GskRenderNode *node,
           if (alpha > 0.0)
             {
               alpha = MIN (alpha, 1.0);
-              pixel_data[x] = (((guint32) (alpha * 255)) << 24) |
-                              (((guint32) (CLAMP (graphene_vec4_get_x (&pixel), 0, 1) * alpha * 255)) << 16) |
-                              (((guint32) (CLAMP (graphene_vec4_get_y (&pixel), 0, 1) * alpha * 255)) <<  8) |
-                               ((guint32) (CLAMP (graphene_vec4_get_z (&pixel), 0, 1) * alpha * 255));
+              pixel_data[x] = (((guint32) roundf (alpha * 255)) << 24) |
+                              (((guint32) roundf (CLAMP (graphene_vec4_get_x (&pixel), 0, 1) * alpha * 255)) << 16) |
+                              (((guint32) roundf (CLAMP (graphene_vec4_get_y (&pixel), 0, 1) * alpha * 255)) <<  8) |
+                               ((guint32) roundf (CLAMP (graphene_vec4_get_z (&pixel), 0, 1) * alpha * 255));
             }
           else
             {
