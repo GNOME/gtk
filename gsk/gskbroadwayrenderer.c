@@ -326,6 +326,145 @@ add_new_node (GskRenderer *renderer,
   return TRUE;
 }
 
+typedef struct ColorizedTexture {
+  GdkTexture *texture;
+  graphene_matrix_t color_matrix;
+  graphene_vec4_t color_offset;
+} ColorizedTexture;
+
+static void
+colorized_texture_free (ColorizedTexture *colorized)
+{
+  g_object_unref (colorized->texture);
+  g_free (colorized);
+}
+
+static ColorizedTexture *
+colorized_texture_new (GdkTexture *texture,
+                       const graphene_matrix_t *color_matrix,
+                       const graphene_vec4_t *color_offset)
+{
+  ColorizedTexture *colorized = g_new0 (ColorizedTexture, 1);
+  colorized->texture = g_object_ref (texture);
+  colorized->color_matrix = *color_matrix;
+  colorized->color_offset = *color_offset;
+  return colorized;
+}
+
+static void
+colorized_texture_free_list (GList *list)
+{
+  g_list_free_full (list, (GDestroyNotify)colorized_texture_free);
+}
+
+
+static gboolean
+matrix_equal (const graphene_matrix_t *a,
+              const graphene_matrix_t *b)
+{
+  for (int i = 0; i < 4; i ++)
+    {
+      graphene_vec4_t ra, rb;
+      graphene_matrix_get_row (a, i, &ra);
+      graphene_matrix_get_row (b, i, &rb);
+      if (!graphene_vec4_equal (&ra, &rb))
+        return FALSE;
+    }
+  return TRUE;
+}
+
+static GdkTexture *
+get_colorized_texture (GdkTexture *texture,
+                       const graphene_matrix_t *color_matrix,
+                       const graphene_vec4_t *color_offset)
+{
+  cairo_surface_t *surface = gdk_texture_download_surface (texture);
+  cairo_surface_t *image_surface;
+  graphene_vec4_t pixel;
+  guint32* pixel_data;
+  guchar *data;
+  gsize x, y, width, height, stride;
+  float alpha;
+  GdkTexture *colorized_texture;
+  GList *colorized_list, *l;
+  ColorizedTexture *colorized;
+
+  colorized_list = g_object_get_data (G_OBJECT (texture), "broadway-colorized");
+
+  for (l = colorized_list; l != NULL; l = l->next)
+    {
+      colorized = l->data;
+
+      if (graphene_vec4_equal (&colorized->color_offset, color_offset) &&
+          matrix_equal (&colorized->color_matrix, color_matrix))
+        return g_object_ref (colorized->texture);
+    }
+
+  image_surface = cairo_surface_map_to_image (surface, NULL);
+  data = cairo_image_surface_get_data (image_surface);
+  width = cairo_image_surface_get_width (image_surface);
+  height = cairo_image_surface_get_height (image_surface);
+  stride = cairo_image_surface_get_stride (image_surface);
+
+  for (y = 0; y < height; y++)
+    {
+      pixel_data = (guint32 *) data;
+      for (x = 0; x < width; x++)
+        {
+          alpha = ((pixel_data[x] >> 24) & 0xFF) / 255.0;
+
+          if (alpha == 0)
+            {
+              graphene_vec4_init (&pixel, 0.0, 0.0, 0.0, 0.0);
+            }
+          else
+            {
+              graphene_vec4_init (&pixel,
+                                  ((pixel_data[x] >> 16) & 0xFF) / (255.0 * alpha),
+                                  ((pixel_data[x] >>  8) & 0xFF) / (255.0 * alpha),
+                                  ( pixel_data[x]        & 0xFF) / (255.0 * alpha),
+                                  alpha);
+              graphene_matrix_transform_vec4 (color_matrix, &pixel, &pixel);
+            }
+
+          graphene_vec4_add (&pixel, color_offset, &pixel);
+
+          alpha = graphene_vec4_get_w (&pixel);
+          if (alpha > 0.0)
+            {
+              alpha = MIN (alpha, 1.0);
+              pixel_data[x] = (((guint32) (alpha * 255)) << 24) |
+                              (((guint32) (CLAMP (graphene_vec4_get_x (&pixel), 0, 1) * alpha * 255)) << 16) |
+                              (((guint32) (CLAMP (graphene_vec4_get_y (&pixel), 0, 1) * alpha * 255)) <<  8) |
+                               ((guint32) (CLAMP (graphene_vec4_get_z (&pixel), 0, 1) * alpha * 255));
+            }
+          else
+            {
+              pixel_data[x] = 0;
+            }
+        }
+      data += stride;
+    }
+
+  cairo_surface_mark_dirty (image_surface);
+  cairo_surface_unmap_image (surface, image_surface);
+
+  colorized_texture = gdk_texture_new_for_surface (surface);
+
+  colorized = colorized_texture_new (colorized_texture, color_matrix, color_offset);
+  if (colorized_list)
+    colorized_list = g_list_append (colorized_list, colorized);
+  else
+    {
+      colorized_list = g_list_append (NULL, colorized);
+      g_object_set_data_full (G_OBJECT (texture), "broadway-colorized",
+                              colorized_list, (GDestroyNotify)colorized_texture_free_list);
+    }
+
+  return colorized_texture;
+}
+
+
 /* Note: This tracks the offset so that we can convert
    the absolute coordinates of the GskRenderNodes to
    parent-relative which is what the dom uses, and
@@ -571,6 +710,27 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
       return;
 
     case GSK_COLOR_MATRIX_NODE:
+      {
+        GskRenderNode *child = gsk_color_matrix_node_get_child (node);
+        if (gsk_render_node_get_node_type (child) == GSK_TEXTURE_NODE)
+          {
+            const graphene_matrix_t *color_matrix = gsk_color_matrix_node_peek_color_matrix (node);
+            const graphene_vec4_t *color_offset = gsk_color_matrix_node_peek_color_offset (node);
+            GdkTexture *texture = gsk_texture_node_get_texture (child);
+            GdkTexture *colorized_texture = get_colorized_texture (texture, color_matrix, color_offset);
+            if (add_new_node (renderer, node, BROADWAY_NODE_TEXTURE))
+              {
+                guint32 texture_id = gdk_broadway_display_ensure_texture (display, colorized_texture);
+                add_rect (nodes, &child->bounds, offset_x, offset_y);
+                add_uint32 (nodes, texture_id);
+              }
+
+            return;
+          }
+      }
+      break;
+
+
     case GSK_TEXT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_REPEAT_NODE:
