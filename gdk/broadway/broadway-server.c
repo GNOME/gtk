@@ -183,6 +183,10 @@ broadway_node_equal (BroadwayNode     *a,
 {
   int i;
 
+  // Early fast return for reused nodes
+  if (a == b)
+    return TRUE;
+
   if (a->type != b->type)
     return FALSE;
 
@@ -207,6 +211,10 @@ broadway_node_deep_equal (BroadwayNode     *a,
 {
   int i;
 
+  // Early fast return for reused nodes
+  if (a == b)
+    return TRUE;
+
   if (a->hash != b->hash)
     return FALSE;
 
@@ -223,6 +231,24 @@ broadway_node_deep_equal (BroadwayNode     *a,
   return TRUE;
 }
 
+
+void
+broadway_node_mark_deep_used (BroadwayNode    *node,
+                              gboolean         used)
+{
+  node->used = used;
+  for (int i = 0; i < node->n_children; i++)
+    broadway_node_mark_deep_used (node->children[i], used);
+}
+
+void
+broadway_node_add_to_lookup (BroadwayNode    *node,
+                             GHashTable      *node_lookup)
+{
+  g_hash_table_insert (node_lookup, GINT_TO_POINTER(node->id), node);
+  for (int i = 0; i < node->n_children; i++)
+    broadway_node_add_to_lookup (node->children[i], node_lookup);
+}
 
 static void
 broadway_server_init (BroadwayServer *server)
@@ -1784,17 +1810,6 @@ decode_nodes (BroadwayServer *server,
   return node;
 }
 
-static void
-init_node_lookup (BroadwaySurface *surface,
-                  BroadwayNode *node)
-{
-  int i;
-
-  g_hash_table_insert (surface->node_lookup, GINT_TO_POINTER(node->id), node);
-  for (i = 0; i < node->n_children; i++)
-    init_node_lookup (surface, node->children[i]);
-}
-
 /* passes ownership of nodes */
 void
 broadway_server_surface_update_nodes (BroadwayServer   *server,
@@ -1816,7 +1831,8 @@ broadway_server_surface_update_nodes (BroadwayServer   *server,
   if (server->output != NULL)
     broadway_output_surface_set_nodes (server->output, surface->id,
                                        root,
-                                       surface->nodes);
+                                       surface->nodes,
+                                       surface->node_lookup);
 
   if (surface->nodes)
     broadway_node_unref (server, surface->nodes);
@@ -1824,8 +1840,7 @@ broadway_server_surface_update_nodes (BroadwayServer   *server,
   surface->nodes = root;
 
   g_hash_table_remove_all (surface->node_lookup);
-
-  init_node_lookup (surface, surface->nodes);
+  broadway_node_add_to_lookup (root, surface->node_lookup);
 }
 
 guint32
@@ -2097,7 +2112,8 @@ broadway_server_resync_surfaces (BroadwayServer *server)
 
       if (surface->nodes)
         broadway_output_surface_set_nodes (server->output, surface->id,
-                                           surface->nodes, NULL);
+                                           surface->nodes,
+                                           NULL, NULL);
 
       if (surface->visible)
         broadway_output_show_surface (server->output, surface->id);

@@ -11,11 +11,12 @@ const BROADWAY_NODE_LINEAR_GRADIENT = 7;
 const BROADWAY_NODE_SHADOW = 8;
 const BROADWAY_NODE_OPACITY = 9;
 const BROADWAY_NODE_CLIP = 10;
-const BROADWAY_NODE_KEEP_ALL = 11;
-const BROADWAY_NODE_KEEP_THIS = 12;
-const BROADWAY_NODE_TRANSFORM = 13;
-const BROADWAY_NODE_DEBUG = 14;
-const BROADWAY_NODE_REUSE = 15;
+const BROADWAY_NODE_TRANSFORM = 11;
+const BROADWAY_NODE_DEBUG = 12;
+const BROADWAY_NODE_REUSE = 13;
+
+const BROADWAY_NODE_OP_APPEND_NODE = 0;
+const BROADWAY_NODE_OP_REMOVE_NODE = 1;
 
 const BROADWAY_OP_GRAB_POINTER = 'g';
 const BROADWAY_OP_UNGRAB_POINTER = 'u';
@@ -56,14 +57,15 @@ const BROADWAY_EVENT_ROUNDTRIP_NOTIFY = 'F';
 
 const DISPLAY_OP_REPLACE_CHILD = 0;
 const DISPLAY_OP_APPEND_CHILD = 1;
-const DISPLAY_OP_APPEND_ROOT = 2;
-const DISPLAY_OP_SHOW_SURFACE = 3;
-const DISPLAY_OP_HIDE_SURFACE = 4;
-const DISPLAY_OP_DELETE_NODE = 5;
-const DISPLAY_OP_MOVE_NODE = 6;
-const DISPLAY_OP_RESIZE_NODE = 7;
-const DISPLAY_OP_RESTACK_SURFACES = 8;
-const DISPLAY_OP_DELETE_SURFACE = 9;
+const DISPLAY_OP_INSERT_AFTER_CHILD = 2;
+const DISPLAY_OP_APPEND_ROOT = 3;
+const DISPLAY_OP_SHOW_SURFACE = 4;
+const DISPLAY_OP_HIDE_SURFACE = 5;
+const DISPLAY_OP_DELETE_NODE = 6;
+const DISPLAY_OP_MOVE_NODE = 7;
+const DISPLAY_OP_RESIZE_NODE = 8;
+const DISPLAY_OP_RESTACK_SURFACES = 9;
+const DISPLAY_OP_DELETE_SURFACE = 10;
 
 // GdkCrossingMode
 const GDK_CROSSING_NORMAL = 0;
@@ -234,6 +236,7 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     surface.transientParent = 0;
     surface.visible = false;
     surface.imageData = null;
+    surface.old_nodes = {};
 
     var div = document.createElement('div');
     div.surface = surface;
@@ -296,12 +299,14 @@ function cmdLowerSurface(id)
         moveToHelper(surface, 0);
 }
 
-function TransformNodes(node_data, div, display_commands) {
+function TransformNodes(node_data, div, old_nodes, display_commands) {
     this.node_data = node_data;
     this.display_commands = display_commands;
     this.data_pos = 0;
     this.div = div;
     this.outstanding = 1;
+    this.old_nodes = old_nodes;
+    this.new_nodes = {};
 }
 
 TransformNodes.prototype.decode_uint32 = function() {
@@ -474,20 +479,32 @@ function set_rrect_style (div, rrect) {
     div.style["border-bottom-left-radius"] = args(px(rrect.sizes[3].width), px(rrect.sizes[3].height));
 }
 
-TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
+function addOldIds(node, node_map) {
+    node_map[node.node_id] = node;
+
+    var child = node.firstChild;
+    while (child) {
+        addOldIds(child, node_map);
+        child = child.nextSibling;
+    }
+}
+
+
+TransformNodes.prototype.insertNode = function(parent, previousSibling, is_toplevel)
 {
     var type = this.decode_uint32();
+    var id = this.decode_uint32();
     var newNode = null;
-
-    // We need to dup this because as we reuse children the original order is lost
-    var oldChildren = [];
-    if (oldNode) {
-        for (var i = 0; i < oldNode.children.length; i++)
-            oldChildren[i] = oldNode.children[i];
-    }
+    var oldNode = null;
 
     switch (type)
     {
+        /* Reuse divs from last frame */
+        case BROADWAY_NODE_REUSE:
+        {
+            oldNode = this.old_nodes[id];
+        }
+        break;
         /* Leaf nodes */
 
         case BROADWAY_NODE_TEXTURE:
@@ -656,7 +673,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
             div.style["transform"] = transform_string;
             div.style["transform-origin"] = "0px 0px";
 
-            this.insertNode(div, -1, oldChildren[0]);
+            this.insertNode(div, null, false);
             newNode = div;
         }
         break;
@@ -668,7 +685,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
             div.style["position"] = "absolute";
             set_rect_style(div, rect);
             div.style["overflow"] = "hidden";
-            this.insertNode(div, -1, oldChildren[0]);
+            this.insertNode(div, null, false);
             newNode = div;
         }
         break;
@@ -680,7 +697,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
             div.style["position"] = "absolute";
             set_rrect_style(div, rrect);
             div.style["overflow"] = "hidden";
-            this.insertNode(div, -1, oldChildren[0]);
+            this.insertNode(div, null, false);
             newNode = div;
         }
         break;
@@ -694,7 +711,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
             div.style["top"] = px(0);
             div.style["opacity"] = opacity;
 
-            this.insertNode(div, -1, oldChildren[0]);
+            this.insertNode(div, null, false);
             newNode = div;
         }
         break;
@@ -716,7 +733,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
             div.style["top"] = px(0);
             div.style["filter"] = filters;
 
-            this.insertNode(div, -1, oldChildren[0]);
+            this.insertNode(div, null, false);
             newNode = div;
         }
         break;
@@ -726,7 +743,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
             var str = this.decode_string();
             var div = document.createElement('div');
             div.setAttribute('debug', str);
-            this.insertNode(div, -1, oldChildren[0]);
+            this.insertNode(div, null, false);
             newNode = div;
         }
         break;
@@ -737,48 +754,11 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         {
             var div = document.createElement('div');
             var len = this.decode_uint32();
+            var lastChild = null;
             for (var i = 0; i < len; i++) {
-                this.insertNode(div, -1, oldChildren[i]);
+                lastChild = this.insertNode(div, lastChild, false);
             }
             newNode = div;
-        }
-        break;
-
-    case BROADWAY_NODE_KEEP_ALL:
-        {
-            if (!oldNode)
-                alert("KEEP_ALL with no oldNode");
-
-            if (oldNode.parentNode != parent)
-                newNode = oldNode;
-            else
-                newNode = null;
-        }
-        break;
-
-    case BROADWAY_NODE_KEEP_THIS:
-        {
-            if (!oldNode)
-                alert("KEEP_THIS with no oldNode ");
-
-            /* We only get keep-this if all parents were kept, check this */
-            if (oldNode.parentNode != parent)
-                alert("Got KEEP_THIS for non-kept parent");
-
-            var len = this.decode_uint32();
-            var i;
-
-            for (i = 0; i < len; i++) {
-                this.insertNode(oldNode, i,
-                                oldChildren[i]);
-            }
-
-            /* Remove children that are after the new length */
-            for (i = oldChildren.length - 1; i > len - 1; i--)
-                this.display_commands.push([DISPLAY_OP_DELETE_NODE, oldChildren[i]]);
-
-            /* NOTE: No need to modify the parent, we're keeping this node as is */
-            newNode = null;
         }
         break;
 
@@ -787,21 +767,46 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
     }
 
     if (newNode) {
-        if (posInParent >= 0 && parent.children[posInParent])
-            this.display_commands.push([DISPLAY_OP_REPLACE_CHILD, parent, newNode, parent.children[posInParent]]);
-        else
+        newNode.node_id = id;
+        this.new_nodes[id] = newNode;
+        if (is_toplevel)
             this.display_commands.push([DISPLAY_OP_APPEND_CHILD, parent, newNode]);
+        else // Here it is safe to display directly because we have not added the toplevel to the document yet
+            parent.appendChild(newNode);
+        return newNode;
+    } else if (oldNode) {
+        addOldIds(oldNode, this.new_nodes);
+        // This must be delayed until display ops, because it will remove from the old parent
+        this.display_commands.push([DISPLAY_OP_INSERT_AFTER_CHILD, parent, previousSibling, oldNode]);
+        return oldNode;
     }
 }
 
 TransformNodes.prototype.execute = function(display_commands)
 {
-    var div = this.div;
-    this.insertNode(div, 0, div.firstChild, display_commands);
-    if (this.data_pos != this.node_data.byteLength)
-        alert ("Did not consume entire array (len " + this.node_data.byteLength + ")");
-}
+    var root = this.div;
 
+    while (this.data_pos < this.node_data.byteLength) {
+        var op = this.decode_uint32();
+
+        switch (op) {
+        case BROADWAY_NODE_OP_APPEND_NODE:
+            var parentId = this.decode_uint32();
+            var parent;
+            if (parentId == 0)
+                parent = root;
+            else
+                parent = this.old_nodes[parentId];
+            this.insertNode(parent, null, true);
+            break;
+        case BROADWAY_NODE_OP_REMOVE_NODE:
+            var removeId = this.decode_uint32();
+            var remove = this.old_nodes[removeId];
+            this.display_commands.push([DISPLAY_OP_DELETE_NODE, remove]);
+            break;
+        }
+    }
+}
 
 function cmdGrabPointer(id, ownerEvents)
 {
@@ -818,7 +823,7 @@ function cmdUngrabPointer()
 
 function handleDisplayCommands(display_commands)
 {
-    var div;
+    var div, parent;
     var len = display_commands.length;
     for (var i = 0; i < len; i++) {
         var cmd = display_commands[i];
@@ -829,6 +834,15 @@ function handleDisplayCommands(display_commands)
             break;
         case DISPLAY_OP_APPEND_CHILD:
             cmd[1].appendChild(cmd[2]);
+            break;
+        case DISPLAY_OP_INSERT_AFTER_CHILD:
+            parent = cmd[1];
+            var afterThis = cmd[2];
+            div = cmd[3];
+            if (afterThis == null) // First
+                parent.insertBefore(div, parent.firstChild);
+            else
+                parent.insertBefore(div, afterThis.nextSibling);
             break;
         case DISPLAY_OP_APPEND_ROOT:
             document.body.appendChild(cmd[1]);
@@ -1014,8 +1028,9 @@ function handleCommands(cmd, display_commands, new_textures, modified_trees)
 
                 var node_data = cmd.get_nodes ();
                 surface = surfaces[id];
-                var transform_nodes = new TransformNodes (node_data, surface.div, display_commands);
+                var transform_nodes = new TransformNodes (node_data, surface.div, surface.old_nodes, display_commands);
                 transform_nodes.execute();
+                surface.old_nodes = transform_nodes.new_nodes;
             }
             break;
 

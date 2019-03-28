@@ -326,6 +326,16 @@ append_type (BroadwayOutput *output, guint32 type, BroadwayNode *node)
   append_uint32 (output, type);
 }
 
+static BroadwayNode *
+lookup_old_node (GHashTable *old_node_lookup,
+                 guint32 id)
+{
+  if (old_node_lookup)
+    return g_hash_table_lookup (old_node_lookup, GINT_TO_POINTER (id));
+
+  return NULL;
+}
+
 
 /***********************************
  * This outputs the tree to the client, while at the same time diffing
@@ -347,59 +357,83 @@ append_type (BroadwayOutput *output, guint32 type, BroadwayNode *node)
 static void
 append_node (BroadwayOutput *output,
              BroadwayNode   *node,
-             BroadwayNode   *old_node,
-             gboolean        all_parents_are_kept)
+             GHashTable     *old_node_lookup)
 {
   guint32 i;
+  BroadwayNode *reused_node;
 
   append_node_depth++;
 
-  if (old_node != NULL && broadway_node_equal (node, old_node))
+  reused_node = lookup_old_node (old_node_lookup, node->id);
+  if (reused_node)
     {
-      if (broadway_node_deep_equal (node, old_node))
-        {
-          append_type (output, BROADWAY_NODE_KEEP_ALL, node);
-          goto out;
-        }
-
-      if (all_parents_are_kept)
-        {
-          append_type (output, BROADWAY_NODE_KEEP_THIS, node);
-          append_uint32 (output, node->n_children);
-          for (i = 0; i < node->n_children; i++)
-            append_node (output, node->children[i],
-                         i < old_node->n_children ? old_node->children[i] : NULL,
-                         TRUE);
-
-          goto out;
-        }
+      append_type (output, BROADWAY_NODE_REUSE, node);
+      append_uint32 (output, node->id);
+    }
+  else
+    {
+      append_type (output, node->type, node);
+      append_uint32 (output, node->id);
+      for (i = 0; i < node->n_data; i++)
+        append_uint32 (output, node->data[i]);
+      for (i = 0; i < node->n_children; i++)
+        append_node (output,
+                     node->children[i],
+                     old_node_lookup);
     }
 
-  append_type (output, node->type, node);
-  for (i = 0; i < node->n_data; i++)
-    append_uint32 (output, node->data[i]);
-  for (i = 0; i < node->n_children; i++)
-    append_node (output,
-                 node->children[i],
-                 (old_node != NULL && i < old_node->n_children) ? old_node->children[i] : NULL,
-                 FALSE);
-
- out:
   append_node_depth--;
 }
+
+
+static void
+append_node_ops (BroadwayOutput *output,
+                 BroadwayNode   *node,
+                 BroadwayNode   *old_node,
+                 GHashTable     *old_node_lookup)
+{
+  GPtrArray *to_remove = g_ptr_array_new ();
+  guint32 i;
+
+  if (old_node != NULL)
+    g_ptr_array_add (to_remove, old_node);
+
+   append_uint32 (output, BROADWAY_NODE_OP_APPEND_NODE);
+   append_uint32 (output, 0); /* Parent */
+
+   append_node(output, node, old_node_lookup);
+
+   for (i = 0; i < to_remove->len; i++)
+     {
+       BroadwayNode *removed_node = g_ptr_array_index (to_remove, i);
+       if (!removed_node->used)
+         {
+           // TODO: Use an array of nodes instead
+           append_uint32 (output, BROADWAY_NODE_OP_REMOVE_NODE);
+           append_uint32 (output, old_node->id);
+         }
+     }
+   g_ptr_array_unref (to_remove);
+}
+
 
 void
 broadway_output_surface_set_nodes (BroadwayOutput *output,
                                    int             id,
                                    BroadwayNode   *root,
-                                   BroadwayNode   *old_root)
+                                   BroadwayNode   *old_root,
+                                   GHashTable     *old_node_lookup)
 {
   gsize size_pos, start, end;
 
-  /* Early return if nothing changed */
-  if (old_root != NULL &&
-      broadway_node_deep_equal (root, old_root))
-    return;
+  /* Mark old nodes as unused, so we can use them once */
+  if (old_root)
+    broadway_node_mark_deep_used (old_root, FALSE);
+  /* Mark new nodes as used, causing any shared nodes to be marked as
+     unused. This way we won't accidentally reuse them for something
+     else. However, this means that is safe to reuse nodes marked as
+     used for the specific case of where the id matches. */
+  broadway_node_mark_deep_used (root, TRUE);
 
   write_header (output, BROADWAY_OP_SET_NODES);
 
@@ -412,7 +446,7 @@ broadway_output_surface_set_nodes (BroadwayOutput *output,
 #ifdef DEBUG_NODE_SENDING
   g_print ("====== node tree for %d =======\n", id);
 #endif
-  append_node (output, root, old_root, TRUE);
+  append_node_ops (output, root, old_root, old_node_lookup);
   end = output->buf->len;
   patch_uint32 (output, (end - start) / 4, size_pos);
 }
