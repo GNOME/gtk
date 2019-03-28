@@ -16,9 +16,9 @@
             <property name="icon-name">media-playback-start-symbolic</property>
             <property name="icon-size">large</property>
           </object>
-          <packing>
+          <layout>
             <property name="measure">1</property>
-          </packing>
+          </layout>
         </child>
         <child type="overlay">
           <object class="GtkRevealer" id="controls_revealer">
@@ -32,9 +32,9 @@
               </object>
             </child>
           </object>
-          <packing>
+          <layout>
             <property name="measure">1</property>
-          </packing>
+          </layout>
         </child>
       </object>
     </child>
