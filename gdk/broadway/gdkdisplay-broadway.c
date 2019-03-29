@@ -386,6 +386,31 @@ gdk_broadway_display_ensure_texture (GdkDisplay *display,
   return data->id;
 }
 
+static gboolean
+flush_idle (gpointer data)
+{
+  GdkDisplay *display = data;
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  broadway_display->idle_flush_id = 0;
+  gdk_display_flush (display);
+
+  return FALSE;
+}
+
+void
+gdk_broadway_display_flush_in_idle (GdkDisplay *display)
+{
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
+
+  if (broadway_display->idle_flush_id == 0)
+    {
+      broadway_display->idle_flush_id = g_idle_add (flush_idle, g_object_ref (display));
+      g_source_set_name_by_id (broadway_display->idle_flush_id, "[gtk] flush_idle");
+    }
+}
+
+
 static void
 gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
 {

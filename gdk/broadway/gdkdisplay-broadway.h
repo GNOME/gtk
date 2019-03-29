@@ -56,6 +56,8 @@ struct _GdkBroadwayDisplay
   GdkMonitor *monitor;
 
   GHashTable *texture_cache;
+
+  guint idle_flush_id;
 };
 
 struct _GdkBroadwayDisplayClass
