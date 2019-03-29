@@ -93,6 +93,63 @@ const GDK_HYPER_MASK    = 1 << 27;
 const GDK_META_MASK     = 1 << 28;
 const GDK_RELEASE_MASK  = 1 << 30;
 
+
+var useDataUrls = window.location.search.includes("datauri");
+
+/* This base64code is based on https://github.com/beatgammit/base64-js/blob/master/index.js which is MIT licensed */
+
+var b64_lookup = [];
+var base64_code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+for (var i = 0, len = base64_code.length; i < len; ++i) {
+    b64_lookup[i] = base64_code[i];
+}
+
+function tripletToBase64 (num) {
+    return b64_lookup[num >> 18 & 0x3F] +
+        b64_lookup[num >> 12 & 0x3F] +
+        b64_lookup[num >> 6 & 0x3F] +
+        b64_lookup[num & 0x3F];
+}
+
+function encodeBase64Chunk (uint8, start, end) {
+    var tmp;
+    var output = [];
+    for (var i = start; i < end; i += 3) {
+        tmp =
+            ((uint8[i] << 16) & 0xFF0000) +
+            ((uint8[i + 1] << 8) & 0xFF00) +
+            (uint8[i + 2] & 0xFF);
+        output.push(tripletToBase64(tmp));
+    }
+    return output.join('');
+}
+
+function bytesToDataUri(uint8) {
+    var tmp;
+    var len = uint8.length;
+    var extraBytes = len % 3; // if we have 1 byte left, pad 2 bytes
+    var parts = [];
+    var maxChunkLength = 16383; // must be multiple of 3
+
+    parts.push("data:image/png;base64,");
+
+    // go through the array every three bytes, we'll deal with trailing stuff later
+    for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
+        parts.push(encodeBase64Chunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)));
+    }
+
+    // pad the end with zeros, but make sure to not forget the extra bytes
+    if (extraBytes === 1) {
+        tmp = uint8[len - 1];
+        parts.push(b64_lookup[tmp >> 2] + b64_lookup[(tmp << 4) & 0x3F] + '==');
+    } else if (extraBytes === 2) {
+        tmp = (uint8[len - 2] << 8) + uint8[len - 1];
+        parts.push(b64_lookup[tmp >> 10] + b64_lookup[(tmp >> 4) & 0x3F] + b64_lookup[(tmp << 2) & 0x3F] + '=');
+    }
+
+    return parts.join('');
+}
+
 /* Helper functions for debugging */
 var logDiv = null;
 function log(str) {
@@ -202,8 +259,15 @@ function getButtonMask (button) {
 }
 
 function Texture(id, data) {
-    var blob = new Blob([data],{type: "image/png"});
-    this.url = window.URL.createObjectURL(blob);
+    var url;
+    if (useDataUrls) {
+        url = bytesToDataUri(data);
+    } else {
+        var blob = new Blob([data],{type: "image/png"});
+        url = window.URL.createObjectURL(blob);
+    }
+
+    this.url = url;
     this.refcount = 1;
     this.id = id;
 
@@ -221,7 +285,9 @@ Texture.prototype.ref = function() {
 Texture.prototype.unref = function() {
     this.refcount -= 1;
     if (this.refcount == 0) {
-        window.URL.revokeObjectURL(this.url);
+        if (this.url.startsWith("blob")) {
+            window.URL.revokeObjectURL(this.url);
+        }
         delete textures[this.id];
     }
 }
