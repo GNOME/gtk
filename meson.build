@@ -714,8 +714,10 @@ if os_win32
   endif
 endif
 
+have_gio_unix = false
 if os_unix
-  cdata.set('HAVE_GIO_UNIX', giounix_dep.found())
+  have_gio_unix = giounix_dep.found()
+  cdata.set('HAVE_GIO_UNIX', have_gio_unix)
 endif
 
 cloudproviders_enabled = get_option('cloudproviders')
@@ -779,19 +781,36 @@ elif cc.get_id() == 'msvc' and cairogobj_dep.found()
 endif
 
 pkgconf.set('GDK_PACKAGES', gdk_packages)
-pkgconf.set('GTK_PACKAGES',
-            ' '.join([ 'atk', atk_req,
-                       'gio-2.0', glib_req ]))
+
+if have_gio_unix
+  gio_packages = ['gio-unix-2.0', glib_req]
+else
+  gio_packages = ['gio-2.0', glib_req]
+endif
+
+pkgconf.set('GDK_PRIVATE_PACKAGES',
+            ' '.join(gio_packages + x11_pkgs + wayland_pkgs + cairo_backends +
+                     ['epoxy', epoxy_req, 'fribidi', fribidi_req]))
+
+gtk_packages = ' '.join([
+    atk_dep.name(), atk_req,
+    cairo_dep.name(), cairo_req,
+    cairogobj_dep.name(), cairo_req,
+    pixbuf_dep.name(), gdk_pixbuf_req,
+    'gio-2.0', glib_req,
+])
+pkgconf.set('GTK_PACKAGES', gtk_packages)
 
 # Requires.private
 pc_gdk_extra_libs += cairo_libs
 
-gio_pkgname = os_unix ? 'gio-unix-2.0' : 'gio-2.0'
-pkgconf.set('GDK_PRIVATE_PACKAGES',
-            ' '.join([ gio_pkgname, glib_req,
-                       'epoxy', epoxy_req ] + x11_pkgs + wayland_pkgs + cairo_backends))
-pangoft2_pkgs = (wayland_enabled or x11_enabled) ? ['pangoft2'] : []
-pkgconf.set('GTK_PRIVATE_PACKAGES', ' '.join(atk_pkgs + pangoft2_pkgs))
+gtk_private_packages = atk_pkgs + wayland_pkgs + ['epoxy', epoxy_req, 'fribidi', fribidi_req]
+if wayland_enabled or x11_enabled
+  gtk_private_packages += ['pangoft2']
+endif
+gtk_private_packages += gio_packages
+
+pkgconf.set('GTK_PRIVATE_PACKAGES', ' '.join(gtk_private_packages))
 
 pkgconf.set('GDK_EXTRA_LIBS', ' '.join(pc_gdk_extra_libs))
 pkgconf.set('GSK_EXTRA_LIBS', '')
@@ -803,23 +822,27 @@ pkgconf.set('GTK_EXTRA_CFLAGS', '')
 
 pkg_install_dir = join_paths(get_option('libdir'), 'pkgconfig')
 
-pkgs = [ 'gtk+-3.0.pc' ]
+gtk_pcs = ['gtk+-3.0.pc']
+gdk_pcs = ['gdk-3.0.pc']
 
 pkg_targets = ''
 foreach backend: [ 'broadway', 'quartz', 'wayland', 'win32', 'x11', ]
   if get_variable('@0@_enabled'.format(backend))
-    pkgs += ['gtk+-@0@-3.0.pc'.format(backend)]
+    gtk_pcs += ['gtk+-@0@-3.0.pc'.format(backend)]
+    gdk_pcs += ['gdk-@0@-3.0.pc'.format(backend)]
     pkg_targets += ' ' + backend
   endif
 endforeach
 pkgconf.set('GDK_BACKENDS', pkg_targets.strip())
 
-configure_file(input: 'gdk-3.0.pc.in',
-               output: 'gdk-3.0.pc',
-               configuration: pkgconf,
-               install_dir: pkg_install_dir)
+foreach pkg: gdk_pcs
+  configure_file(input: 'gdk-3.0.pc.in',
+                 output: pkg,
+                 configuration: pkgconf,
+                 install_dir: pkg_install_dir)
+endforeach
 
-foreach pkg: pkgs
+foreach pkg: gtk_pcs
   configure_file(input: 'gtk+-3.0.pc.in',
                  output: pkg,
                  configuration: pkgconf,
