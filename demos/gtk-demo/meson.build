@@ -134,3 +134,10 @@ foreach s: [ '16', '22', '24', '32', '48', '256', '512']
            join_paths('data', '@0@x@0@'.format(s), 'gtk3-demo-symbolic.symbolic.png')]
   install_data(icons, install_dir: icon_destdir)
 endforeach
+
+# desktop file
+install_data('gtk3-demo.desktop', install_dir: gtk_applicationsdir)
+
+# GSettings
+install_data('org.gtk.Demo.gschema.xml', install_dir: gtk_schemasdir)
+gnome.compile_schemas(depend_files: files(['org.gtk.Demo.gschema.xml']))
