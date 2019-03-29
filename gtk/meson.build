@@ -955,6 +955,14 @@ if build_gir
     gtkversion,
   ]
 
+  gtk_gir_includes = [gdk_gir[0], 'Atk-1.0']
+  gtk_gir_extra_args = gir_args + ['-DGTK_COMPILATION',
+                                   '--c-include=gtk/gtk-a11y.h']
+  if x11_enabled
+    gtk_gir_includes += ['xlib-2.0']
+    gtk_gir_extra_args += ['--c-include=gtk/gtkx.h']
+  endif
+
   gtk_gir = gnome.generate_gir(libgtk,
                                sources: gtk_introspection_sources,
                                namespace: 'Gtk',
@@ -962,14 +970,11 @@ if build_gir
                                identifier_prefix: 'Gtk',
                                symbol_prefix: 'gtk',
                                export_packages: 'gtk+-3.0',
-                               includes: [ gdk_gir[0], 'Atk-1.0', ],
+                               includes: gtk_gir_includes,
                                header: 'gtk/gtk.h',
                                install: true,
                                dependencies: gdk_gir_dep,
-                               extra_args: gir_args + [
-                                 '-DGTK_COMPILATION',
-                                 '--c-include=gtk/gtk-a11y.h',
-                               ])
+                               extra_args: gtk_gir_extra_args)
   gtk_dep_sources += gtk_gir
 endif
 
