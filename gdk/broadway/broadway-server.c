@@ -703,12 +703,19 @@ parse_input_message (BroadwayInput *input, const unsigned char *message)
 
         if (rt->id == msg.roundtrip_notify.id &&
             rt->tag == msg.roundtrip_notify.tag)
-          {
-            server->outstanding_roundtrips = g_list_delete_link (server->outstanding_roundtrips, l);
-            g_free (rt);
-            break;
-          }
+          break;
       }
+
+    if (l == NULL)
+      g_warning ("Got unexpected rountrip reply for id %d, tag %d\n", msg.roundtrip_notify.id, msg.roundtrip_notify.tag);
+    else
+      {
+        BroadwayOutstandingRoundtrip *rt = l->data;
+
+        server->outstanding_roundtrips = g_list_delete_link (server->outstanding_roundtrips, l);
+        g_free (rt);
+      }
+
     break;
 
   case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
