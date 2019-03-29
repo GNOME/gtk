@@ -331,8 +331,7 @@ fribidi_dep    = dependency('fribidi', version: fribidi_req,
 
 # Require PangoFT2 if on X11 or wayland
 require_pangoft2 = wayland_enabled or x11_enabled
-pangoft_dep    = dependency('pangoft2', required: require_pangoft2,
-                            fallback : ['pango', 'libpangoft2_dep'])
+pangoft_dep    = dependency('pangoft2', required: false)
 
 if pangoft_dep.found()
   # Need at least 2.7.1 for FT_Get_Var_Design_Coordinates()
@@ -359,6 +358,10 @@ if pangoft_dep.found()
       endforeach
     endif
   endif
+endif
+
+if require_pangoft2
+  pangoft_dep    = dependency('pangoft2', fallback : ['pango', 'libpangoft2_dep'])
 endif
 
 if win32_enabled
