@@ -728,8 +728,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
             return;
           }
       }
-      break;
-
+      break; /* Fallback */
 
     case GSK_TEXT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
