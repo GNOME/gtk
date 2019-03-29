@@ -97,7 +97,7 @@ endif # have_vulkan
 
 if get_variable('broadway_enabled')
   gsk_private_sources += files([
-    'gskbroadwayrenderer.c',
+    'broadway/gskbroadwayrenderer.c',
   ])
 endif
 
