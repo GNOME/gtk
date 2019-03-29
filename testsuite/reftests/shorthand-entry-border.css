@@ -1,8 +1,6 @@
-* {
-  border-radius: 0;
-}
+@import "reset-to-defaults.css";
 
-GtkWidget {
+widget {
   border-right-width: 5px;
 }
 
