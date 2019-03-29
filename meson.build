@@ -294,6 +294,7 @@ endif
 confinc = include_directories('.')
 gdkinc = include_directories('gdk')
 gtkinc = include_directories('gtk')
+libgailutilinc = include_directories('libgail-util')
 testinc = include_directories('tests')
 
 # Dependencies
@@ -832,13 +833,12 @@ if os_unix
                  install_dir: pkg_install_dir)
 endif
 
-# TODO
 subdir('po')
 subdir('po-properties')
-#if get_option('documentation')
-#  subdir('docs/tools')
-#  subdir('docs/reference')
-#endif
+if get_option('documentation')
+  subdir('docs/tools')
+  subdir('docs/reference')
+endif
 
 # Keep this in sync with post-install.py expected arguments
 meson.add_install_script('build-aux/meson/post-install.py',
