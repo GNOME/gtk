@@ -24,3 +24,6 @@ widget_factory = executable(
   include_directories : confinc,
   install: true
 )
+
+# desktop file
+install_data('gtk3-widget-factory.desktop', install_dir: gtk_applicationsdir)
