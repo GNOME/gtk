@@ -6,11 +6,12 @@ if bash.found()
   test_env = environment()
 
   foreach t : ['simplify', 'settings']
-    configure_file(output: t,
-                   input: '@0@.in'.format(t),
-                   copy: true,
-                   install: get_option('install-tests'),
-                   install_dir: testexecdir)
+    if get_option('install-tests')
+      configure_file(output: t,
+                     input: '@0@.in'.format(t),
+                     copy: true,
+                     install_dir: testexecdir)
+    endif
     test(t, bash,
          args: t,
          workdir: meson.current_build_dir(),
@@ -35,7 +36,6 @@ if get_option('install-tests')
     configure_file(output: '@0@.test'.format(t),
                    input: 'tools.test.in',
                    configuration: test_conf,
-                   install: true,
                    install_dir: testdatadir)
   endforeach
 
