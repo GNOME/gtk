@@ -328,6 +328,8 @@ testdata = [
   'paned-undersized.css',
   'paned-undersized.ref.ui',
   'paned-undersized.ui',
+  'picture-load-invalid-file.ui',
+  'picture-load-invalid-file.ref.ui',
   'pseudoclass-on-box.css',
   'pseudoclass-on-box.ref.ui',
   'pseudoclass-on-box.ui',

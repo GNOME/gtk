@@ -604,6 +604,7 @@ load_scalable_with_loader (GFile *file,
 out2:
   g_bytes_unref (bytes);
 out1:
+  gdk_pixbuf_loader_close (loader, NULL);
   g_object_unref (loader);
 
   return result;
@@ -637,7 +638,7 @@ gtk_picture_set_file (GtkPicture *self,
 
   paintable = load_scalable_with_loader (file, gtk_widget_get_scale_factor (GTK_WIDGET (self)));
   gtk_picture_set_paintable (self, paintable);
-  g_object_unref (paintable);
+  g_clear_object (&paintable);
 
   g_object_thaw_notify (G_OBJECT (self));
 }
