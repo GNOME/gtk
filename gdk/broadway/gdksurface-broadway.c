@@ -73,39 +73,6 @@ G_DEFINE_TYPE (GdkSurfaceImplBroadway,
                gdk_surface_impl_broadway,
                GDK_TYPE_SURFACE_IMPL)
 
-static GdkDisplay *
-find_broadway_display (void)
-{
-  GdkDisplay *display;
-  GSList *list, *l;
-
-  display = NULL;
-
-  list = gdk_display_manager_list_displays (gdk_display_manager_get ());
-  for (l = list; l; l = l->next)
-    {
-      if (GDK_IS_BROADWAY_DISPLAY (l->data))
-        {
-          display = l->data;
-          break;
-        }
-    }
-  g_slist_free (list);
-
-  return display;
-}
-
-static guint flush_id = 0;
-
-static gboolean
-flush_idle (gpointer data)
-{
-  flush_id = 0;
-
-  gdk_display_flush (find_broadway_display ());
-
-  return FALSE;
-}
 
 /* We need to flush in an idle rather than AFTER_PAINT, as the clock
    is frozen during e.g. surface resizes so the paint will not happen
@@ -113,11 +80,7 @@ flush_idle (gpointer data)
 static void
 queue_flush (GdkSurface *surface)
 {
-  if (flush_id == 0)
-    {
-      flush_id = g_idle_add (flush_idle, NULL);
-      g_source_set_name_by_id (flush_id, "[gtk] flush_idle");
-    }
+  gdk_broadway_display_flush_in_idle (gdk_surface_get_display (surface));
 }
 
 static void
@@ -165,13 +128,32 @@ _gdk_broadway_roundtrip_notify (GdkSurface  *surface,
                                 guint32 tag,
                                 gboolean local_reply)
 {
+  GdkSurfaceImplBroadway *impl = GDK_SURFACE_IMPL_BROADWAY (surface->impl);
   GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
+  GdkFrameTimings *timings;
+
+  timings = gdk_frame_clock_get_timings (clock, impl->pending_frame_counter);
+  impl->pending_frame_counter = 0;
 
   /* If there is no remove web client, rate limit update to once a second */
   if (local_reply)
     g_timeout_add_seconds (1, (GSourceFunc)thaw_clock_cb, g_object_ref (clock));
   else
     _gdk_frame_clock_thaw (clock);
+
+  if (timings)
+    {
+      timings->refresh_interval = 33333; /* default to 1/30th of a second */
+      // This isn't quite right, since we've done a rountrip back too, can we do better?
+      timings->presentation_time = g_get_monotonic_time ();
+      timings->complete = TRUE;
+
+
+#ifdef G_ENABLE_DEBUG
+      if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+        _gdk_frame_clock_debug_print_timings (clock, timings);
+#endif
+    }
 }
 
 static void
@@ -182,6 +164,7 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   GdkSurfaceImplBroadway *impl = GDK_SURFACE_IMPL_BROADWAY (surface->impl);
   GdkBroadwayDisplay *broadway_display;
 
+  impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
   _gdk_frame_clock_freeze (gdk_surface_get_frame_clock (surface));
 
   broadway_display = GDK_BROADWAY_DISPLAY (display);
@@ -192,12 +175,38 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
 }
 
 static void
+on_frame_clock_before_paint (GdkFrameClock *clock,
+                             GdkSurface     *surface)
+{
+  GdkFrameTimings *timings = gdk_frame_clock_get_current_timings (clock);
+  gint64 presentation_time;
+  gint64 refresh_interval;
+
+  if (surface->update_freeze_count > 0)
+    return;
+
+  gdk_frame_clock_get_refresh_info (clock,
+                                    timings->frame_time,
+                                    &refresh_interval, &presentation_time);
+  if (presentation_time != 0)
+    {
+      timings->predicted_presentation_time = presentation_time + refresh_interval;
+    }
+  else
+    {
+      timings->predicted_presentation_time = timings->frame_time + refresh_interval / 2 + refresh_interval;
+    }
+}
+
+static void
 connect_frame_clock (GdkSurface *surface)
 {
   if (SURFACE_IS_TOPLEVEL (surface))
     {
       GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
 
+      g_signal_connect (frame_clock, "before-paint",
+                        G_CALLBACK (on_frame_clock_before_paint), surface);
       g_signal_connect (frame_clock, "after-paint",
                         G_CALLBACK (on_frame_clock_after_paint), surface);
     }
@@ -1208,8 +1217,8 @@ gdk_broadway_surface_begin_resize_drag (GdkSurface     *surface,
                                         GdkSurfaceEdge  edge,
                                         GdkDevice     *device,
                                         gint           button,
-                                        gint           root_x,
-                                        gint           root_y,
+                                        gint           x,
+                                        gint           y,
                                         guint32        timestamp)
 {
   MoveResizeData *mv_resize;
@@ -1232,8 +1241,8 @@ gdk_broadway_surface_begin_resize_drag (GdkSurface     *surface,
   mv_resize->is_resize = TRUE;
   mv_resize->moveresize_button = button;
   mv_resize->resize_edge = edge;
-  mv_resize->moveresize_x = root_x;
-  mv_resize->moveresize_y = root_y;
+  mv_resize->moveresize_x = x  + impl->wrapper->x;
+  mv_resize->moveresize_y = y + impl->wrapper->y;
   mv_resize->moveresize_surface = g_object_ref (surface);
 
   mv_resize->moveresize_orig_width = gdk_surface_get_width (surface);
@@ -1251,8 +1260,8 @@ static void
 gdk_broadway_surface_begin_move_drag (GdkSurface *surface,
                                       GdkDevice *device,
                                       gint       button,
-                                      gint       root_x,
-                                      gint       root_y,
+                                      gint       x,
+                                      gint       y,
                                       guint32    timestamp)
 {
   MoveResizeData *mv_resize;
@@ -1274,8 +1283,8 @@ gdk_broadway_surface_begin_move_drag (GdkSurface *surface,
 
   mv_resize->is_resize = FALSE;
   mv_resize->moveresize_button = button;
-  mv_resize->moveresize_x = root_x;
-  mv_resize->moveresize_y = root_y;
+  mv_resize->moveresize_x = x + impl->wrapper->x;
+  mv_resize->moveresize_y = y + impl->wrapper->y;
   mv_resize->moveresize_surface = g_object_ref (surface);
 
   mv_resize->moveresize_orig_width = gdk_surface_get_width (surface);

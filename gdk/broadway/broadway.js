@@ -11,59 +11,63 @@ const BROADWAY_NODE_LINEAR_GRADIENT = 7;
 const BROADWAY_NODE_SHADOW = 8;
 const BROADWAY_NODE_OPACITY = 9;
 const BROADWAY_NODE_CLIP = 10;
-const BROADWAY_NODE_KEEP_ALL = 11;
-const BROADWAY_NODE_KEEP_THIS = 12;
-const BROADWAY_NODE_TRANSFORM = 13;
-const BROADWAY_NODE_DEBUG = 14;
-const BROADWAY_NODE_REUSE = 15;
+const BROADWAY_NODE_TRANSFORM = 11;
+const BROADWAY_NODE_DEBUG = 12;
+const BROADWAY_NODE_REUSE = 13;
 
-const BROADWAY_OP_GRAB_POINTER = 'g';
-const BROADWAY_OP_UNGRAB_POINTER = 'u';
-const BROADWAY_OP_NEW_SURFACE = 's';
-const BROADWAY_OP_SHOW_SURFACE = 'S';
-const BROADWAY_OP_HIDE_SURFACE = 'H';
-const BROADWAY_OP_RAISE_SURFACE = 'r';
-const BROADWAY_OP_LOWER_SURFACE = 'R';
-const BROADWAY_OP_DESTROY_SURFACE = 'd';
-const BROADWAY_OP_MOVE_RESIZE = 'm';
-const BROADWAY_OP_SET_TRANSIENT_FOR = 'p';
-const BROADWAY_OP_PUT_RGB = 'i';
-const BROADWAY_OP_REQUEST_AUTH = 'l';
-const BROADWAY_OP_AUTH_OK = 'L';
-const BROADWAY_OP_DISCONNECTED = 'D';
-const BROADWAY_OP_SURFACE_UPDATE = 'b';
-const BROADWAY_OP_SET_SHOW_KEYBOARD = 'k';
-const BROADWAY_OP_UPLOAD_TEXTURE = 't';
-const BROADWAY_OP_RELEASE_TEXTURE = 'T';
-const BROADWAY_OP_SET_NODES = 'n';
-const BROADWAY_OP_ROUNDTRIP = 'F';
+const BROADWAY_NODE_OP_INSERT_NODE = 0;
+const BROADWAY_NODE_OP_REMOVE_NODE = 1;
+const BROADWAY_NODE_OP_MOVE_AFTER_CHILD = 2;
+const BROADWAY_NODE_OP_PATCH_TEXTURE = 3;
+const BROADWAY_NODE_OP_PATCH_TRANSFORM = 4;
 
-const BROADWAY_EVENT_ENTER = 'e';
-const BROADWAY_EVENT_LEAVE = 'l';
-const BROADWAY_EVENT_POINTER_MOVE = 'm';
-const BROADWAY_EVENT_BUTTON_PRESS = 'b';
-const BROADWAY_EVENT_BUTTON_RELEASE = 'B';
-const BROADWAY_EVENT_TOUCH = 't';
-const BROADWAY_EVENT_SCROLL = 's';
-const BROADWAY_EVENT_KEY_PRESS = 'k';
-const BROADWAY_EVENT_KEY_RELEASE = 'K';
-const BROADWAY_EVENT_GRAB_NOTIFY = 'g';
-const BROADWAY_EVENT_UNGRAB_NOTIFY = 'u';
-const BROADWAY_EVENT_CONFIGURE_NOTIFY = 'w';
-const BROADWAY_EVENT_SCREEN_SIZE_CHANGED = 'd';
-const BROADWAY_EVENT_FOCUS = 'f';
-const BROADWAY_EVENT_ROUNDTRIP_NOTIFY = 'F';
+const BROADWAY_OP_GRAB_POINTER = 0;
+const BROADWAY_OP_UNGRAB_POINTER = 1;
+const BROADWAY_OP_NEW_SURFACE = 2;
+const BROADWAY_OP_SHOW_SURFACE = 3;
+const BROADWAY_OP_HIDE_SURFACE = 4;
+const BROADWAY_OP_RAISE_SURFACE = 5;
+const BROADWAY_OP_LOWER_SURFACE = 6;
+const BROADWAY_OP_DESTROY_SURFACE = 7;
+const BROADWAY_OP_MOVE_RESIZE = 8;
+const BROADWAY_OP_SET_TRANSIENT_FOR = 9;
+const BROADWAY_OP_DISCONNECTED = 10;
+const BROADWAY_OP_SURFACE_UPDATE = 11;
+const BROADWAY_OP_SET_SHOW_KEYBOARD = 12;
+const BROADWAY_OP_UPLOAD_TEXTURE = 13;
+const BROADWAY_OP_RELEASE_TEXTURE = 14;
+const BROADWAY_OP_SET_NODES = 15;
+const BROADWAY_OP_ROUNDTRIP = 16;
+
+const BROADWAY_EVENT_ENTER = 0;
+const BROADWAY_EVENT_LEAVE = 1;
+const BROADWAY_EVENT_POINTER_MOVE = 2;
+const BROADWAY_EVENT_BUTTON_PRESS = 3;
+const BROADWAY_EVENT_BUTTON_RELEASE = 4;
+const BROADWAY_EVENT_TOUCH = 5;
+const BROADWAY_EVENT_SCROLL = 6;
+const BROADWAY_EVENT_KEY_PRESS = 7;
+const BROADWAY_EVENT_KEY_RELEASE = 8;
+const BROADWAY_EVENT_GRAB_NOTIFY = 9;
+const BROADWAY_EVENT_UNGRAB_NOTIFY = 10;
+const BROADWAY_EVENT_CONFIGURE_NOTIFY = 11;
+const BROADWAY_EVENT_SCREEN_SIZE_CHANGED = 12;
+const BROADWAY_EVENT_FOCUS = 13;
+const BROADWAY_EVENT_ROUNDTRIP_NOTIFY = 14;
 
 const DISPLAY_OP_REPLACE_CHILD = 0;
 const DISPLAY_OP_APPEND_CHILD = 1;
-const DISPLAY_OP_APPEND_ROOT = 2;
-const DISPLAY_OP_SHOW_SURFACE = 3;
-const DISPLAY_OP_HIDE_SURFACE = 4;
-const DISPLAY_OP_DELETE_NODE = 5;
-const DISPLAY_OP_MOVE_NODE = 6;
-const DISPLAY_OP_RESIZE_NODE = 7;
-const DISPLAY_OP_RESTACK_SURFACES = 8;
-const DISPLAY_OP_DELETE_SURFACE = 9;
+const DISPLAY_OP_INSERT_AFTER_CHILD = 2;
+const DISPLAY_OP_APPEND_ROOT = 3;
+const DISPLAY_OP_SHOW_SURFACE = 4;
+const DISPLAY_OP_HIDE_SURFACE = 5;
+const DISPLAY_OP_DELETE_NODE = 6;
+const DISPLAY_OP_MOVE_NODE = 7;
+const DISPLAY_OP_RESIZE_NODE = 8;
+const DISPLAY_OP_RESTACK_SURFACES = 9;
+const DISPLAY_OP_DELETE_SURFACE = 10;
+const DISPLAY_OP_CHANGE_TEXTURE = 11;
+const DISPLAY_OP_CHANGE_TRANSFORM = 12;
 
 // GdkCrossingMode
 const GDK_CROSSING_NORMAL = 0;
@@ -88,6 +92,63 @@ const GDK_SUPER_MASK    = 1 << 26;
 const GDK_HYPER_MASK    = 1 << 27;
 const GDK_META_MASK     = 1 << 28;
 const GDK_RELEASE_MASK  = 1 << 30;
+
+
+var useDataUrls = window.location.search.includes("datauri");
+
+/* This base64code is based on https://github.com/beatgammit/base64-js/blob/master/index.js which is MIT licensed */
+
+var b64_lookup = [];
+var base64_code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+for (var i = 0, len = base64_code.length; i < len; ++i) {
+    b64_lookup[i] = base64_code[i];
+}
+
+function tripletToBase64 (num) {
+    return b64_lookup[num >> 18 & 0x3F] +
+        b64_lookup[num >> 12 & 0x3F] +
+        b64_lookup[num >> 6 & 0x3F] +
+        b64_lookup[num & 0x3F];
+}
+
+function encodeBase64Chunk (uint8, start, end) {
+    var tmp;
+    var output = [];
+    for (var i = start; i < end; i += 3) {
+        tmp =
+            ((uint8[i] << 16) & 0xFF0000) +
+            ((uint8[i + 1] << 8) & 0xFF00) +
+            (uint8[i + 2] & 0xFF);
+        output.push(tripletToBase64(tmp));
+    }
+    return output.join('');
+}
+
+function bytesToDataUri(uint8) {
+    var tmp;
+    var len = uint8.length;
+    var extraBytes = len % 3; // if we have 1 byte left, pad 2 bytes
+    var parts = [];
+    var maxChunkLength = 16383; // must be multiple of 3
+
+    parts.push("data:image/png;base64,");
+
+    // go through the array every three bytes, we'll deal with trailing stuff later
+    for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
+        parts.push(encodeBase64Chunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)));
+    }
+
+    // pad the end with zeros, but make sure to not forget the extra bytes
+    if (extraBytes === 1) {
+        tmp = uint8[len - 1];
+        parts.push(b64_lookup[tmp >> 2] + b64_lookup[(tmp << 4) & 0x3F] + '==');
+    } else if (extraBytes === 2) {
+        tmp = (uint8[len - 2] << 8) + uint8[len - 1];
+        parts.push(b64_lookup[tmp >> 10] + b64_lookup[(tmp >> 4) & 0x3F] + b64_lookup[(tmp << 2) & 0x3F] + '=');
+    }
+
+    return parts.join('');
+}
 
 /* Helper functions for debugging */
 var logDiv = null;
@@ -198,8 +259,15 @@ function getButtonMask (button) {
 }
 
 function Texture(id, data) {
-    var blob = new Blob([data],{type: "image/png"});
-    this.url = window.URL.createObjectURL(blob);
+    var url;
+    if (useDataUrls) {
+        url = bytesToDataUri(data);
+    } else {
+        var blob = new Blob([data],{type: "image/png"});
+        url = window.URL.createObjectURL(blob);
+    }
+
+    this.url = url;
     this.refcount = 1;
     this.id = id;
 
@@ -217,7 +285,9 @@ Texture.prototype.ref = function() {
 Texture.prototype.unref = function() {
     this.refcount -= 1;
     if (this.refcount == 0) {
-        window.URL.revokeObjectURL(this.url);
+        if (this.url.startsWith("blob")) {
+            window.URL.revokeObjectURL(this.url);
+        }
         delete textures[this.id];
     }
 }
@@ -234,6 +304,7 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     surface.transientParent = 0;
     surface.visible = false;
     surface.imageData = null;
+    surface.nodes = {};
 
     var div = document.createElement('div');
     div.surface = surface;
@@ -296,12 +367,13 @@ function cmdLowerSurface(id)
         moveToHelper(surface, 0);
 }
 
-function TransformNodes(node_data, div, display_commands) {
+function TransformNodes(node_data, div, nodes, display_commands) {
     this.node_data = node_data;
     this.display_commands = display_commands;
     this.data_pos = 0;
     this.div = div;
     this.outstanding = 1;
+    this.nodes = nodes;
 }
 
 TransformNodes.prototype.decode_uint32 = function() {
@@ -441,6 +513,28 @@ TransformNodes.prototype.decode_string = function() {
     return utf8_to_string (utf8);
 }
 
+TransformNodes.prototype.decode_transform = function() {
+    var transform_type = this.decode_uint32();
+
+    if (transform_type == 0) {
+        var point = this.decode_point();
+        return "translate(" + px(point.x) + "," + px(point.y) + ")";
+    } else if (transform_type == 1) {
+        var m = new Array();
+        for (var i = 0; i < 16; i++) {
+            m[i] = this.decode_float ();
+        }
+
+        return "matrix3d(" +
+            m[0] + "," + m[1] + "," + m[2] + "," + m[3]+ "," +
+            m[4] + "," + m[5] + "," + m[6] + "," + m[7] + "," +
+            m[8] + "," + m[9] + "," + m[10] + "," + m[11] + "," +
+            m[12] + "," + m[13] + "," + m[14] + "," + m[15] + ")";
+    } else {
+        alert("Unexpected transform type " + transform_type);
+    }
+}
+
 function args() {
     var argsLength = arguments.length;
     var strings = [];
@@ -474,27 +568,44 @@ function set_rrect_style (div, rrect) {
     div.style["border-bottom-left-radius"] = args(px(rrect.sizes[3].width), px(rrect.sizes[3].height));
 }
 
-TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
+TransformNodes.prototype.createDiv = function(id)
+{
+    var div = document.createElement('div');
+    div.node_id = id;
+    this.nodes[id] = div;
+    return div;
+}
+
+TransformNodes.prototype.createImage = function(id)
+{
+    var image = new Image();
+    image.node_id = id;
+    this.nodes[id] = image;
+    return image;
+}
+
+TransformNodes.prototype.insertNode = function(parent, previousSibling, is_toplevel)
 {
     var type = this.decode_uint32();
+    var id = this.decode_uint32();
     var newNode = null;
-
-    // We need to dup this because as we reuse children the original order is lost
-    var oldChildren = [];
-    if (oldNode) {
-        for (var i = 0; i < oldNode.children.length; i++)
-            oldChildren[i] = oldNode.children[i];
-    }
+    var oldNode = null;
 
     switch (type)
     {
+        /* Reuse divs from last frame */
+        case BROADWAY_NODE_REUSE:
+        {
+            oldNode = this.nodes[id];
+        }
+        break;
         /* Leaf nodes */
 
         case BROADWAY_NODE_TEXTURE:
         {
             var rect = this.decode_rect();
             var texture_id = this.decode_uint32();
-            var image = new Image();
+            var image = this.createImage(id);
             image.width = rect.width;
             image.height = rect.height;
             image.style["position"] = "absolute";
@@ -511,7 +622,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
         {
             var rect = this.decode_rect();
             var c = this.decode_color ();
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             set_rect_style(div, rect);
             div.style["background-color"] = c;
@@ -529,7 +640,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
             for (var i = 0; i < 4; i++)
                 border_colors[i] = this.decode_color();
 
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             rrect.bounds.width -= border_widths[1] + border_widths[3];
             rrect.bounds.height -= border_widths[0] + border_widths[2];
@@ -556,7 +667,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
             var spread = this.decode_float();
             var blur = this.decode_float();
 
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             set_rrect_style(div, rrect);
             div.style["box-shadow"] = args(px(dx), px(dy), px(blur), px(spread), color);
@@ -573,7 +684,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
             var spread = this.decode_float();
             var blur = this.decode_float();
 
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             set_rrect_style(div, rrect);
             div.style["box-shadow"] = args("inset", px(dx), px(dy), px(blur), px(spread), color);
@@ -588,7 +699,7 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
             var start = this.decode_point ();
             var end = this.decode_point ();
             var stops = this.decode_color_stops ();
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             set_rect_style(div, rect);
 
@@ -632,31 +743,13 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
 
     case BROADWAY_NODE_TRANSFORM:
         {
-            var transform_type = this.decode_uint32();
-            var transform_string;
+            var transform_string = this.decode_transform();
 
-            if (transform_type == 0) {
-                var point = this.decode_point();
-                transform_string = "translate(" + px(point.x) + "," + px(point.y) + ")";
-            } else if (transform_type == 1) {
-                var m = new Array();
-                for (var i = 0; i < 16; i++) {
-                    m[i] = this.decode_float ();
-                }
-
-                transform_string =
-                    "matrix3d(" +
-                    m[0] + "," + m[1] + "," + m[2] + "," + m[3]+ "," +
-                    m[4] + "," + m[5] + "," + m[6] + "," + m[7] + "," +
-                    m[8] + "," + m[9] + "," + m[10] + "," + m[11] + "," +
-                    m[12] + "," + m[13] + "," + m[14] + "," + m[15] + ")";
-            }
-
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["transform"] = transform_string;
             div.style["transform-origin"] = "0px 0px";
 
-            this.insertNode(div, -1, oldChildren[0]);
+            this.insertNode(div, null, false);
             newNode = div;
         }
         break;
@@ -664,11 +757,11 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
     case BROADWAY_NODE_CLIP:
         {
             var rect = this.decode_rect();
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             set_rect_style(div, rect);
             div.style["overflow"] = "hidden";
-            this.insertNode(div, -1, oldChildren[0]);
+            this.insertNode(div, null, false);
             newNode = div;
         }
         break;
@@ -676,11 +769,11 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
     case BROADWAY_NODE_ROUNDED_CLIP:
         {
             var rrect = this.decode_rounded_rect();
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             set_rrect_style(div, rrect);
             div.style["overflow"] = "hidden";
-            this.insertNode(div, -1, oldChildren[0]);
+            this.insertNode(div, null, false);
             newNode = div;
         }
         break;
@@ -688,13 +781,13 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
     case BROADWAY_NODE_OPACITY:
         {
             var opacity = this.decode_float();
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             div.style["left"] = px(0);
             div.style["top"] = px(0);
             div.style["opacity"] = opacity;
 
-            this.insertNode(div, -1, oldChildren[0]);
+            this.insertNode(div, null, false);
             newNode = div;
         }
         break;
@@ -710,13 +803,13 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
                 var blur = this.decode_float();
                 filters = filters + "drop-shadow(" + args (px(dx), px(dy), px(blur), color) + ")";
             }
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.style["position"] = "absolute";
             div.style["left"] = px(0);
             div.style["top"] = px(0);
             div.style["filter"] = filters;
 
-            this.insertNode(div, -1, oldChildren[0]);
+            this.insertNode(div, null, false);
             newNode = div;
         }
         break;
@@ -724,9 +817,9 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
     case 14:  // DEBUG
         {
             var str = this.decode_string();
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             div.setAttribute('debug', str);
-            this.insertNode(div, -1, oldChildren[0]);
+            this.insertNode(div, null, false);
             newNode = div;
         }
         break;
@@ -735,50 +828,13 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
 
     case BROADWAY_NODE_CONTAINER:
         {
-            var div = document.createElement('div');
+            var div = this.createDiv(id);
             var len = this.decode_uint32();
+            var lastChild = null;
             for (var i = 0; i < len; i++) {
-                this.insertNode(div, -1, oldChildren[i]);
+                lastChild = this.insertNode(div, lastChild, false);
             }
             newNode = div;
-        }
-        break;
-
-    case BROADWAY_NODE_KEEP_ALL:
-        {
-            if (!oldNode)
-                alert("KEEP_ALL with no oldNode");
-
-            if (oldNode.parentNode != parent)
-                newNode = oldNode;
-            else
-                newNode = null;
-        }
-        break;
-
-    case BROADWAY_NODE_KEEP_THIS:
-        {
-            if (!oldNode)
-                alert("KEEP_THIS with no oldNode ");
-
-            /* We only get keep-this if all parents were kept, check this */
-            if (oldNode.parentNode != parent)
-                alert("Got KEEP_THIS for non-kept parent");
-
-            var len = this.decode_uint32();
-            var i;
-
-            for (i = 0; i < len; i++) {
-                this.insertNode(oldNode, i,
-                                oldChildren[i]);
-            }
-
-            /* Remove children that are after the new length */
-            for (i = oldChildren.length - 1; i > len - 1; i--)
-                this.display_commands.push([DISPLAY_OP_DELETE_NODE, oldChildren[i]]);
-
-            /* NOTE: No need to modify the parent, we're keeping this node as is */
-            newNode = null;
         }
         break;
 
@@ -787,21 +843,83 @@ TransformNodes.prototype.insertNode = function(parent, posInParent, oldNode)
     }
 
     if (newNode) {
-        if (posInParent >= 0 && parent.children[posInParent])
-            this.display_commands.push([DISPLAY_OP_REPLACE_CHILD, parent, newNode, parent.children[posInParent]]);
-        else
-            this.display_commands.push([DISPLAY_OP_APPEND_CHILD, parent, newNode]);
+        if (is_toplevel)
+            this.display_commands.push([DISPLAY_OP_INSERT_AFTER_CHILD, parent, previousSibling, newNode]);
+        else // It is safe to display directly because we have not added the toplevel to the document yet
+            parent.appendChild(newNode);
+        return newNode;
+    } else if (oldNode) {
+        // This must be delayed until display ops, because it will remove from the old parent
+        this.display_commands.push([DISPLAY_OP_INSERT_AFTER_CHILD, parent, previousSibling, oldNode]);
+        return oldNode;
     }
 }
 
 TransformNodes.prototype.execute = function(display_commands)
 {
-    var div = this.div;
-    this.insertNode(div, 0, div.firstChild, display_commands);
-    if (this.data_pos != this.node_data.byteLength)
-        alert ("Did not consume entire array (len " + this.node_data.byteLength + ")");
-}
+    var root = this.div;
 
+    while (this.data_pos < this.node_data.byteLength) {
+        var op = this.decode_uint32();
+        var parentId, parent;
+
+        switch (op) {
+        case BROADWAY_NODE_OP_INSERT_NODE:
+            parentId = this.decode_uint32();
+            if (parentId == 0)
+                parent = root;
+            else {
+                parent = this.nodes[parentId];
+                if (parent == null)
+                    console.log("Wanted to insert into parent " + parentId + " but it is unknown");
+            }
+
+            var previousChildId = this.decode_uint32();
+            var previousChild = null;
+            if (previousChildId != 0)
+                previousChild = this.nodes[previousChildId];
+            this.insertNode(parent, previousChild, true);
+            break;
+        case BROADWAY_NODE_OP_REMOVE_NODE:
+            var removeId = this.decode_uint32();
+            var remove = this.nodes[removeId];
+            delete this.nodes[removeId];
+            if (remove == null)
+                console.log("Wanted to delete node " + removeId + " but it is unknown");
+
+            this.display_commands.push([DISPLAY_OP_DELETE_NODE, remove]);
+            break;
+        case BROADWAY_NODE_OP_MOVE_AFTER_CHILD:
+            parentId = this.decode_uint32();
+            if (parentId == 0)
+                parent = root;
+            else
+                parent = this.nodes[parentId];
+            var previousChildId = this.decode_uint32();
+            var previousChild = null;
+            if (previousChildId != 0)
+                previousChild = this.nodes[previousChildId];
+            var toMoveId = this.decode_uint32();
+            var toMove = this.nodes[toMoveId];
+            this.display_commands.push([DISPLAY_OP_INSERT_AFTER_CHILD, parent, previousChild, toMove]);
+            break;
+        case BROADWAY_NODE_OP_PATCH_TEXTURE:
+            var textureNodeId = this.decode_uint32();
+            var textureNode = this.nodes[textureNodeId];
+            var textureId = this.decode_uint32();
+            var texture = textures[textureId].ref();
+            this.display_commands.push([DISPLAY_OP_CHANGE_TEXTURE, textureNode, texture]);
+            break;
+        case BROADWAY_NODE_OP_PATCH_TRANSFORM:
+            var transformNodeId = this.decode_uint32();
+            var transformNode = this.nodes[transformNodeId];
+            var transformString = this.decode_transform();
+            this.display_commands.push([DISPLAY_OP_CHANGE_TRANSFORM, transformNode, transformString]);
+            break;
+        }
+
+    }
+}
 
 function cmdGrabPointer(id, ownerEvents)
 {
@@ -818,7 +936,7 @@ function cmdUngrabPointer()
 
 function handleDisplayCommands(display_commands)
 {
-    var div;
+    var div, parent;
     var len = display_commands.length;
     for (var i = 0; i < len; i++) {
         var cmd = display_commands[i];
@@ -829,6 +947,15 @@ function handleDisplayCommands(display_commands)
             break;
         case DISPLAY_OP_APPEND_CHILD:
             cmd[1].appendChild(cmd[2]);
+            break;
+        case DISPLAY_OP_INSERT_AFTER_CHILD:
+            parent = cmd[1];
+            var afterThis = cmd[2];
+            div = cmd[3];
+            if (afterThis == null) // First
+                parent.insertBefore(div, parent.firstChild);
+            else
+                parent.insertBefore(div, afterThis.nextSibling);
             break;
         case DISPLAY_OP_APPEND_ROOT:
             document.body.appendChild(cmd[1]);
@@ -867,7 +994,21 @@ function handleDisplayCommands(display_commands)
             var id = cmd[1];
             delete surfaces[id];
             break;
-
+        case DISPLAY_OP_CHANGE_TEXTURE:
+            var image = cmd[1];
+            var texture = cmd[2];
+            // We need a new closure here to have a separate copy of "template" for each iteration...
+            function a_block(t) {
+                image.src = t.url;
+                // Unref blob url when loaded
+                image.onload = function() { t.unref(); };
+            }(texture);
+            break;
+        case DISPLAY_OP_CHANGE_TRANSFORM:
+            var div = cmd[1];
+            var transform_string = cmd[2];
+            div.style["transform"] = transform_string;
+            break;
         default:
             alert("Unknown display op " + command);
         }
@@ -882,7 +1023,7 @@ function handleCommands(cmd, display_commands, new_textures, modified_trees)
     while (res && cmd.pos < cmd.length) {
         var id, x, y, w, h, q, surface;
         var saved_pos = cmd.pos;
-        var command = cmd.get_char();
+        var command = cmd.get_uint8();
         lastSerial = cmd.get_32();
         switch (command) {
         case BROADWAY_OP_DISCONNECTED:
@@ -976,6 +1117,7 @@ function handleCommands(cmd, display_commands, new_textures, modified_trees)
                 display_commands.push([DISPLAY_OP_RESIZE_NODE, surface.div, surface.width, surface.height]);
 
             }
+            sendConfigureNotify(surface);
             break;
 
         case BROADWAY_OP_RAISE_SURFACE:
@@ -1013,7 +1155,7 @@ function handleCommands(cmd, display_commands, new_textures, modified_trees)
 
                 var node_data = cmd.get_nodes ();
                 surface = surfaces[id];
-                var transform_nodes = new TransformNodes (node_data, surface.div, display_commands);
+                var transform_nodes = new TransformNodes (node_data, surface.div, surface.nodes, display_commands);
                 transform_nodes.execute();
             }
             break;
@@ -1117,8 +1259,8 @@ function BinCommands(message) {
     this.pos = 0;
 }
 
-BinCommands.prototype.get_char = function() {
-    return String.fromCharCode(this.dataview.getUint8(this.pos++));
+BinCommands.prototype.get_uint8 = function() {
+    return this.dataview.getUint8(this.pos++);
 };
 BinCommands.prototype.get_bool = function() {
     return this.dataview.getUint8(this.pos++) != 0;
@@ -1185,7 +1327,7 @@ function sendInput(cmd, args)
     if (inputSocket == null)
         return;
 
-    var fullArgs = [cmd.charCodeAt(0), lastSerial, lastTimeStamp].concat(args);
+    var fullArgs = [cmd, lastSerial, lastTimeStamp].concat(args);
     var buffer = new ArrayBuffer(fullArgs.length * 4);
     var view = new DataView(buffer);
     fullArgs.forEach(function(arg, i) {

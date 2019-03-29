@@ -115,6 +115,7 @@ struct BroadwayInput {
 };
 
 struct BroadwaySurface {
+  guint32 owner;
   gint32 id;
   gint32 x;
   gint32 y;
@@ -223,6 +224,33 @@ broadway_node_deep_equal (BroadwayNode     *a,
   return TRUE;
 }
 
+
+void
+broadway_node_mark_deep_reused (BroadwayNode    *node,
+                                gboolean         reused)
+{
+  node->reused = reused;
+  for (int i = 0; i < node->n_children; i++)
+    broadway_node_mark_deep_reused (node->children[i], reused);
+}
+
+void
+broadway_node_mark_deep_consumed (BroadwayNode    *node,
+                                  gboolean         consumed)
+{
+  node->consumed = consumed;
+  for (int i = 0; i < node->n_children; i++)
+    broadway_node_mark_deep_consumed (node->children[i], consumed);
+}
+
+void
+broadway_node_add_to_lookup (BroadwayNode    *node,
+                             GHashTable      *node_lookup)
+{
+  g_hash_table_insert (node_lookup, GINT_TO_POINTER(node->id), node);
+  for (int i = 0; i < node->n_children; i++)
+    broadway_node_add_to_lookup (node->children[i], node_lookup);
+}
 
 static void
 broadway_server_init (BroadwayServer *server)
@@ -444,9 +472,46 @@ process_input_message (BroadwayServer *server,
                        BroadwayInputMsg *message)
 {
   gint32 client;
+  BroadwaySurface *surface;
 
   update_event_state (server, message);
-  client = -1;
+
+
+  switch (message->base.type) {
+  case BROADWAY_EVENT_ENTER:
+  case BROADWAY_EVENT_LEAVE:
+  case BROADWAY_EVENT_POINTER_MOVE:
+  case BROADWAY_EVENT_BUTTON_PRESS:
+  case BROADWAY_EVENT_BUTTON_RELEASE:
+  case BROADWAY_EVENT_SCROLL:
+  case BROADWAY_EVENT_GRAB_NOTIFY:
+  case BROADWAY_EVENT_UNGRAB_NOTIFY:
+    surface = broadway_server_lookup_surface (server, message->pointer.event_surface_id);
+    break;
+  case BROADWAY_EVENT_TOUCH:
+    surface = broadway_server_lookup_surface (server, message->touch.event_surface_id);
+    break;
+  case BROADWAY_EVENT_CONFIGURE_NOTIFY:
+    surface = broadway_server_lookup_surface (server, message->configure_notify.id);
+    break;
+  case BROADWAY_EVENT_ROUNDTRIP_NOTIFY:
+    surface = broadway_server_lookup_surface (server, message->roundtrip_notify.id);
+    break;
+  case BROADWAY_EVENT_KEY_PRESS:
+  case BROADWAY_EVENT_KEY_RELEASE:
+    /* TODO: Send to keys focused clients only... */
+  case BROADWAY_EVENT_FOCUS:
+  case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
+  default:
+    surface = NULL;
+    break;
+  }
+
+  if (surface)
+    client = surface->owner;
+  else
+    client = -1;
+
   if (is_pointer_event (message) &&
       server->pointer_grab_surface_id != -1)
     client = server->pointer_grab_client_id;
@@ -557,6 +622,7 @@ parse_input_message (BroadwayInput *input, const unsigned char *message)
 
   msg.base.type = ntohl (*p++);
   msg.base.serial = ntohl (*p++);
+
   time_ = ntohl (*p++);
 
   if (time_ == 0) {
@@ -638,12 +704,19 @@ parse_input_message (BroadwayInput *input, const unsigned char *message)
 
         if (rt->id == msg.roundtrip_notify.id &&
             rt->tag == msg.roundtrip_notify.tag)
-          {
-            server->outstanding_roundtrips = g_list_delete_link (server->outstanding_roundtrips, l);
-            g_free (rt);
-            break;
-          }
+          break;
       }
+
+    if (l == NULL)
+      g_warning ("Got unexpected rountrip reply for id %d, tag %d\n", msg.roundtrip_notify.id, msg.roundtrip_notify.tag);
+    else
+      {
+        BroadwayOutstandingRoundtrip *rt = l->data;
+
+        server->outstanding_roundtrips = g_list_delete_link (server->outstanding_roundtrips, l);
+        g_free (rt);
+      }
+
     break;
 
   case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
@@ -1753,6 +1826,7 @@ decode_nodes (BroadwayServer *server,
   g_ref_count_init (&node->refcount);
   node->type = type;
   node->id = id;
+  node->output_id = id;
   node->texture_id = 0;
   node->n_children = n_children;
   node->children = (BroadwayNode **)((char *)node + sizeof(BroadwayNode) + (size - 1) * sizeof(guint32));
@@ -1784,17 +1858,6 @@ decode_nodes (BroadwayServer *server,
   return node;
 }
 
-static void
-init_node_lookup (BroadwaySurface *surface,
-                  BroadwayNode *node)
-{
-  int i;
-
-  g_hash_table_insert (surface->node_lookup, GINT_TO_POINTER(node->id), node);
-  for (i = 0; i < node->n_children; i++)
-    init_node_lookup (surface, node->children[i]);
-}
-
 /* passes ownership of nodes */
 void
 broadway_server_surface_update_nodes (BroadwayServer   *server,
@@ -1816,7 +1879,8 @@ broadway_server_surface_update_nodes (BroadwayServer   *server,
   if (server->output != NULL)
     broadway_output_surface_set_nodes (server->output, surface->id,
                                        root,
-                                       surface->nodes);
+                                       surface->nodes,
+                                       surface->node_lookup);
 
   if (surface->nodes)
     broadway_node_unref (server, surface->nodes);
@@ -1824,8 +1888,7 @@ broadway_server_surface_update_nodes (BroadwayServer   *server,
   surface->nodes = root;
 
   g_hash_table_remove_all (surface->node_lookup);
-
-  init_node_lookup (surface, surface->nodes);
+  broadway_node_add_to_lookup (root, surface->node_lookup);
 }
 
 guint32
@@ -2003,6 +2066,7 @@ broadway_server_ungrab_pointer (BroadwayServer *server,
 
 guint32
 broadway_server_new_surface (BroadwayServer *server,
+                             guint32 client,
                              int x,
                              int y,
                              int width,
@@ -2012,6 +2076,7 @@ broadway_server_new_surface (BroadwayServer *server,
   BroadwaySurface *surface;
 
   surface = g_new0 (BroadwaySurface, 1);
+  surface->owner = client;
   surface->id = server->id_counter++;
   surface->x = x;
   surface->y = y;
@@ -2097,7 +2162,8 @@ broadway_server_resync_surfaces (BroadwayServer *server)
 
       if (surface->nodes)
         broadway_output_surface_set_nodes (server->output, surface->id,
-                                           surface->nodes, NULL);
+                                           surface->nodes,
+                                           NULL, NULL);
 
       if (surface->visible)
         broadway_output_show_surface (server->output, surface->id);

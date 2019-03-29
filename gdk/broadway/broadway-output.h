@@ -60,7 +60,8 @@ void            broadway_output_set_transient_for   (BroadwayOutput *output,
 void            broadway_output_surface_set_nodes   (BroadwayOutput *output,
                                                      int             id,
                                                      BroadwayNode   *root,
-                                                     BroadwayNode   *old_root);
+                                                     BroadwayNode   *old_root,
+                                                     GHashTable     *old_node_lookup);
 void            broadway_output_upload_texture      (BroadwayOutput *output,
                                                      guint32         id,
                                                      GBytes         *texture);
