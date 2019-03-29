@@ -76,6 +76,7 @@
               <object class="GtkLabel" id="b">
                 <property name="visible">True</property>
                 <property name="label">B</property>
+                <property name="vexpand">1</property>
               </object>
             </child>
             <child>
