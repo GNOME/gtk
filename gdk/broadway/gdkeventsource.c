@@ -160,14 +160,14 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
     break;
   case BROADWAY_EVENT_BUTTON_PRESS:
   case BROADWAY_EVENT_BUTTON_RELEASE:
-    if (message->base.type != 'b' &&
+    if (message->base.type != BROADWAY_EVENT_BUTTON_PRESS &&
         _gdk_broadway_moveresize_handle_event (display, message))
       break;
 
     surface = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_surface_id));
     if (surface)
       {
-        event = gdk_event_new (message->base.type == 'b' ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
+        event = gdk_event_new (message->base.type == BROADWAY_EVENT_BUTTON_PRESS ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
         event->any.surface = g_object_ref (surface);
         event->button.time = message->base.time;
         event->button.x = message->pointer.win_x;
@@ -262,7 +262,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
                                   GINT_TO_POINTER (message->key.surface_id));
     if (surface)
       {
-        event = gdk_event_new (message->base.type == 'k' ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
+        event = gdk_event_new (message->base.type == BROADWAY_EVENT_KEY_PRESS ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
         event->any.surface = g_object_ref (surface);
         event->key.time = message->base.time;
         event->key.keyval = message->key.key;

@@ -114,7 +114,7 @@ broadway_output_set_next_serial (BroadwayOutput *output,
  ************************************************************************/
 
 static void
-append_char (BroadwayOutput *output, char c)
+append_uint8 (BroadwayOutput *output, guint8 c)
 {
   g_string_append_c (output->buf, c);
 }
@@ -173,7 +173,7 @@ patch_uint32 (BroadwayOutput *output, guint32 v, gsize offset)
 static void
 write_header(BroadwayOutput *output, char op)
 {
-  append_char (output, op);
+  append_uint8 (output, op);
   append_uint32 (output, output->serial++);
 }
 

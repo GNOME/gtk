@@ -622,6 +622,7 @@ parse_input_message (BroadwayInput *input, const unsigned char *message)
 
   msg.base.type = ntohl (*p++);
   msg.base.serial = ntohl (*p++);
+
   time_ = ntohl (*p++);
 
   if (time_ == 0) {
