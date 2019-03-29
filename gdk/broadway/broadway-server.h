@@ -86,6 +86,7 @@ gint32              broadway_server_get_mouse_surface         (BroadwayServer  *
 void                broadway_server_set_show_keyboard         (BroadwayServer  *server,
                                                                gboolean         show);
 guint32             broadway_server_new_surface               (BroadwayServer  *server,
+                                                               guint32          client,
                                                                int              x,
                                                                int              y,
                                                                int              width,

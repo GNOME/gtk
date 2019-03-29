@@ -115,6 +115,7 @@ struct BroadwayInput {
 };
 
 struct BroadwaySurface {
+  guint32 owner;
   gint32 id;
   gint32 x;
   gint32 y;
@@ -471,9 +472,46 @@ process_input_message (BroadwayServer *server,
                        BroadwayInputMsg *message)
 {
   gint32 client;
+  BroadwaySurface *surface;
 
   update_event_state (server, message);
-  client = -1;
+
+
+  switch (message->base.type) {
+  case BROADWAY_EVENT_ENTER:
+  case BROADWAY_EVENT_LEAVE:
+  case BROADWAY_EVENT_POINTER_MOVE:
+  case BROADWAY_EVENT_BUTTON_PRESS:
+  case BROADWAY_EVENT_BUTTON_RELEASE:
+  case BROADWAY_EVENT_SCROLL:
+  case BROADWAY_EVENT_GRAB_NOTIFY:
+  case BROADWAY_EVENT_UNGRAB_NOTIFY:
+    surface = broadway_server_lookup_surface (server, message->pointer.event_surface_id);
+    break;
+  case BROADWAY_EVENT_TOUCH:
+    surface = broadway_server_lookup_surface (server, message->touch.event_surface_id);
+    break;
+  case BROADWAY_EVENT_CONFIGURE_NOTIFY:
+    surface = broadway_server_lookup_surface (server, message->configure_notify.id);
+    break;
+  case BROADWAY_EVENT_ROUNDTRIP_NOTIFY:
+    surface = broadway_server_lookup_surface (server, message->roundtrip_notify.id);
+    break;
+  case BROADWAY_EVENT_KEY_PRESS:
+  case BROADWAY_EVENT_KEY_RELEASE:
+    /* TODO: Send to keys focused clients only... */
+  case BROADWAY_EVENT_FOCUS:
+  case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
+  default:
+    surface = NULL;
+    break;
+  }
+
+  if (surface)
+    client = surface->owner;
+  else
+    client = -1;
+
   if (is_pointer_event (message) &&
       server->pointer_grab_surface_id != -1)
     client = server->pointer_grab_client_id;
@@ -2020,6 +2058,7 @@ broadway_server_ungrab_pointer (BroadwayServer *server,
 
 guint32
 broadway_server_new_surface (BroadwayServer *server,
+                             guint32 client,
                              int x,
                              int y,
                              int width,
@@ -2029,6 +2068,7 @@ broadway_server_new_surface (BroadwayServer *server,
   BroadwaySurface *surface;
 
   surface = g_new0 (BroadwaySurface, 1);
+  surface->owner = client;
   surface->id = server->id_counter++;
   surface->x = x;
   surface->y = y;
