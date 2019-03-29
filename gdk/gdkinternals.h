@@ -351,6 +351,17 @@ void gdk_synthesize_surface_state (GdkSurface     *surface,
                                    GdkSurfaceState unset_flags,
                                    GdkSurfaceState set_flags);
 
+GdkGrabStatus gdk_device_grab (GdkDevice        *device,
+                               GdkSurface        *surface,
+                               GdkGrabOwnership  grab_ownership,
+                               gboolean          owner_events,
+                               GdkEventMask      event_mask,
+                               GdkCursor        *cursor,
+                               guint32           time_);
+void gdk_device_ungrab        (GdkDevice        *device,
+                               guint32           time_);
+
+
 G_END_DECLS
 
 #endif /* __GDK_INTERNALS_H__ */

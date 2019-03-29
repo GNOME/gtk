@@ -356,16 +356,15 @@ struct _GdkGeometry
 
 /**
  * GdkSurfaceState:
- * @GDK_SURFACE_STATE_WITHDRAWN: the surface is not shown.
- * @GDK_SURFACE_STATE_ICONIFIED: the surface is minimized.
- * @GDK_SURFACE_STATE_MAXIMIZED: the surface is maximized.
- * @GDK_SURFACE_STATE_STICKY: the surface is sticky.
- * @GDK_SURFACE_STATE_FULLSCREEN: the surface is maximized without
- *   decorations.
- * @GDK_SURFACE_STATE_ABOVE: the surface is kept above other surfaces.
- * @GDK_SURFACE_STATE_BELOW: the surface is kept below other surfaces.
- * @GDK_SURFACE_STATE_FOCUSED: the surface is presented as focused (with active decorations).
- * @GDK_SURFACE_STATE_TILED: the surface is in a tiled state. Deprecated
+ * @GDK_SURFACE_STATE_WITHDRAWN: the surface is not shown
+ * @GDK_SURFACE_STATE_ICONIFIED: the surface is minimized
+ * @GDK_SURFACE_STATE_MAXIMIZED: the surface is maximized
+ * @GDK_SURFACE_STATE_STICKY: the surface is sticky
+ * @GDK_SURFACE_STATE_FULLSCREEN: the surface is maximized without decorations
+ * @GDK_SURFACE_STATE_ABOVE: the surface is kept above other surfaces
+ * @GDK_SURFACE_STATE_BELOW: the surface is kept below other surfaces
+ * @GDK_SURFACE_STATE_FOCUSED: the surface is presented as focused (with active decorations)
+ * @GDK_SURFACE_STATE_TILED: the surface is in a tiled state
  * @GDK_SURFACE_STATE_TOP_TILED: whether the top edge is tiled
  * @GDK_SURFACE_STATE_TOP_RESIZABLE: whether the top edge is resizable
  * @GDK_SURFACE_STATE_RIGHT_TILED: whether the right edge is tiled
@@ -376,6 +375,11 @@ struct _GdkGeometry
  * @GDK_SURFACE_STATE_LEFT_RESIZABLE: whether the left edge is resizable
  *
  * Specifies the state of a toplevel surface.
+ *
+ * On platforms that support information about individual edges, the %GDK_SURFACE_STATE_TILED
+ * state will be set whenever any of the individual tiled states is set. On platforms
+ * that lack that support, the tiled state will give an indication of tiledness without
+ * any of the per-edge states being set.
  */
 typedef enum
 {
