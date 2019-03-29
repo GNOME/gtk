@@ -174,7 +174,7 @@ _gdk_broadway_display_open (const gchar *display_name)
   if (display_name == NULL)
     display_name = g_getenv ("BROADWAY_DISPLAY");
 
-  broadway_display->server = _gdk_broadway_server_new (display_name, &error);
+  broadway_display->server = _gdk_broadway_server_new (display, display_name, &error);
   if (broadway_display->server == NULL)
     {
       g_printerr ("Unable to init Broadway server: %s\n", error->message);

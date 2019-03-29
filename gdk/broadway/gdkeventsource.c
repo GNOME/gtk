@@ -83,30 +83,14 @@ gdk_event_source_check (GSource *source)
 }
 
 void
-_gdk_broadway_events_got_input (BroadwayInputMsg *message)
+_gdk_broadway_events_got_input (GdkDisplay *display,
+                                BroadwayInputMsg *message)
 {
-  GdkDisplay *display;
   GdkBroadwayDisplay *display_broadway;
   GdkSeat *seat;
   GdkSurface *surface;
   GdkEvent *event = NULL;
   GList *node;
-  GSList *list, *d;
-
-  display = NULL;
-
-  list = gdk_display_manager_list_displays (gdk_display_manager_get ());
-  for (d = list; d; d = d->next)
-    {
-      if (GDK_IS_BROADWAY_DISPLAY (d->data))
-        {
-          display = d->data;
-          break;
-        }
-    }
-  g_slist_free (list);
-
-  g_assert (display != NULL);
 
   display_broadway = GDK_BROADWAY_DISPLAY (display);
   seat = gdk_display_get_default_seat (display);
