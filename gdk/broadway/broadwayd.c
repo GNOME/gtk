@@ -234,7 +234,7 @@ client_handle_request (BroadwayClient *client,
     {
     case BROADWAY_REQUEST_NEW_SURFACE:
       reply_new_surface.id =
-        broadway_server_new_surface (server,
+        broadway_server_new_surface (server, client->id,
                                      request->new_surface.x,
                                      request->new_surface.y,
                                      request->new_surface.width,
