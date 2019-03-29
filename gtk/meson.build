@@ -993,6 +993,13 @@ install_data(['gtk-keys.css.emacs'],
              install_dir:  join_paths(get_option('datadir'), 'themes/Emacs/gtk-3.0'),
              rename: ['gtk-keys.css'])
 
+# Data to install
+install_data('gtkbuilder.rng',
+             install_dir: join_paths(gtk_datadir, 'gtk-3.0'))
+
+install_data('gtkbuilder.loc', 'gtkbuilder.its',
+             install_dir: join_paths(gtk_datadir, 'gettext/its'))
+
 ####### Utils ######
 gtk_query_settings = executable(
   'gtk-query-settings',
