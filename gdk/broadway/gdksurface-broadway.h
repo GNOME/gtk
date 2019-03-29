@@ -61,6 +61,8 @@ struct _GdkSurfaceImplBroadway
   int pre_maximize_width;
   int pre_maximize_height;
 
+  gint64 pending_frame_counter;
+
   gboolean dirty;
   gboolean last_synced;
 
