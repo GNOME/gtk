@@ -410,6 +410,7 @@ gtk_revealer_real_size_allocate (GtkWidget *widget,
 
     case GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN:
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (0, height - child_height));
+      break;
 
     case GTK_REVEALER_TRANSITION_TYPE_SWING_LEFT:
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (width, height / 2));
