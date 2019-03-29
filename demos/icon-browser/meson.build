@@ -19,3 +19,6 @@ iconbrowser = executable(
   include_directories : confinc,
   install: true
 )
+
+# desktop file
+install_data('gtk3-icon-browser.desktop', install_dir: gtk_applicationsdir)
