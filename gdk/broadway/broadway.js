@@ -21,42 +21,39 @@ const BROADWAY_NODE_OP_MOVE_AFTER_CHILD = 2;
 const BROADWAY_NODE_OP_PATCH_TEXTURE = 3;
 const BROADWAY_NODE_OP_PATCH_TRANSFORM = 4;
 
-const BROADWAY_OP_GRAB_POINTER = 'g';
-const BROADWAY_OP_UNGRAB_POINTER = 'u';
-const BROADWAY_OP_NEW_SURFACE = 's';
-const BROADWAY_OP_SHOW_SURFACE = 'S';
-const BROADWAY_OP_HIDE_SURFACE = 'H';
-const BROADWAY_OP_RAISE_SURFACE = 'r';
-const BROADWAY_OP_LOWER_SURFACE = 'R';
-const BROADWAY_OP_DESTROY_SURFACE = 'd';
-const BROADWAY_OP_MOVE_RESIZE = 'm';
-const BROADWAY_OP_SET_TRANSIENT_FOR = 'p';
-const BROADWAY_OP_PUT_RGB = 'i';
-const BROADWAY_OP_REQUEST_AUTH = 'l';
-const BROADWAY_OP_AUTH_OK = 'L';
-const BROADWAY_OP_DISCONNECTED = 'D';
-const BROADWAY_OP_SURFACE_UPDATE = 'b';
-const BROADWAY_OP_SET_SHOW_KEYBOARD = 'k';
-const BROADWAY_OP_UPLOAD_TEXTURE = 't';
-const BROADWAY_OP_RELEASE_TEXTURE = 'T';
-const BROADWAY_OP_SET_NODES = 'n';
-const BROADWAY_OP_ROUNDTRIP = 'F';
+const BROADWAY_OP_GRAB_POINTER = 0;
+const BROADWAY_OP_UNGRAB_POINTER = 1;
+const BROADWAY_OP_NEW_SURFACE = 2;
+const BROADWAY_OP_SHOW_SURFACE = 3;
+const BROADWAY_OP_HIDE_SURFACE = 4;
+const BROADWAY_OP_RAISE_SURFACE = 5;
+const BROADWAY_OP_LOWER_SURFACE = 6;
+const BROADWAY_OP_DESTROY_SURFACE = 7;
+const BROADWAY_OP_MOVE_RESIZE = 8;
+const BROADWAY_OP_SET_TRANSIENT_FOR = 9;
+const BROADWAY_OP_DISCONNECTED = 10;
+const BROADWAY_OP_SURFACE_UPDATE = 11;
+const BROADWAY_OP_SET_SHOW_KEYBOARD = 12;
+const BROADWAY_OP_UPLOAD_TEXTURE = 13;
+const BROADWAY_OP_RELEASE_TEXTURE = 14;
+const BROADWAY_OP_SET_NODES = 15;
+const BROADWAY_OP_ROUNDTRIP = 16;
 
-const BROADWAY_EVENT_ENTER = 'e';
-const BROADWAY_EVENT_LEAVE = 'l';
-const BROADWAY_EVENT_POINTER_MOVE = 'm';
-const BROADWAY_EVENT_BUTTON_PRESS = 'b';
-const BROADWAY_EVENT_BUTTON_RELEASE = 'B';
-const BROADWAY_EVENT_TOUCH = 't';
-const BROADWAY_EVENT_SCROLL = 's';
-const BROADWAY_EVENT_KEY_PRESS = 'k';
-const BROADWAY_EVENT_KEY_RELEASE = 'K';
-const BROADWAY_EVENT_GRAB_NOTIFY = 'g';
-const BROADWAY_EVENT_UNGRAB_NOTIFY = 'u';
-const BROADWAY_EVENT_CONFIGURE_NOTIFY = 'w';
-const BROADWAY_EVENT_SCREEN_SIZE_CHANGED = 'd';
-const BROADWAY_EVENT_FOCUS = 'f';
-const BROADWAY_EVENT_ROUNDTRIP_NOTIFY = 'F';
+const BROADWAY_EVENT_ENTER = 0;
+const BROADWAY_EVENT_LEAVE = 1;
+const BROADWAY_EVENT_POINTER_MOVE = 2;
+const BROADWAY_EVENT_BUTTON_PRESS = 3;
+const BROADWAY_EVENT_BUTTON_RELEASE = 4;
+const BROADWAY_EVENT_TOUCH = 5;
+const BROADWAY_EVENT_SCROLL = 6;
+const BROADWAY_EVENT_KEY_PRESS = 7;
+const BROADWAY_EVENT_KEY_RELEASE = 8;
+const BROADWAY_EVENT_GRAB_NOTIFY = 9;
+const BROADWAY_EVENT_UNGRAB_NOTIFY = 10;
+const BROADWAY_EVENT_CONFIGURE_NOTIFY = 11;
+const BROADWAY_EVENT_SCREEN_SIZE_CHANGED = 12;
+const BROADWAY_EVENT_FOCUS = 13;
+const BROADWAY_EVENT_ROUNDTRIP_NOTIFY = 14;
 
 const DISPLAY_OP_REPLACE_CHILD = 0;
 const DISPLAY_OP_APPEND_CHILD = 1;
@@ -960,7 +957,7 @@ function handleCommands(cmd, display_commands, new_textures, modified_trees)
     while (res && cmd.pos < cmd.length) {
         var id, x, y, w, h, q, surface;
         var saved_pos = cmd.pos;
-        var command = cmd.get_char();
+        var command = cmd.get_uint8();
         lastSerial = cmd.get_32();
         switch (command) {
         case BROADWAY_OP_DISCONNECTED:
@@ -1196,8 +1193,8 @@ function BinCommands(message) {
     this.pos = 0;
 }
 
-BinCommands.prototype.get_char = function() {
-    return String.fromCharCode(this.dataview.getUint8(this.pos++));
+BinCommands.prototype.get_uint8 = function() {
+    return this.dataview.getUint8(this.pos++);
 };
 BinCommands.prototype.get_bool = function() {
     return this.dataview.getUint8(this.pos++) != 0;
@@ -1264,7 +1261,7 @@ function sendInput(cmd, args)
     if (inputSocket == null)
         return;
 
-    var fullArgs = [cmd.charCodeAt(0), lastSerial, lastTimeStamp].concat(args);
+    var fullArgs = [cmd, lastSerial, lastTimeStamp].concat(args);
     var buffer = new ArrayBuffer(fullArgs.length * 4);
     var view = new DataView(buffer);
     fullArgs.forEach(function(arg, i) {
