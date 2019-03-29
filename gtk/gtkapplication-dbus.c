@@ -96,6 +96,7 @@ client_proxy_signal (GDBusProxy  *proxy,
   if (g_str_equal (signal_name, "QueryEndSession"))
     {
       g_debug ("Received QueryEndSession");
+      g_signal_emit_by_name (dbus->impl.application, "query-end");
       send_quit_response (dbus, TRUE, NULL);
     }
   else if (g_str_equal (signal_name, "CancelEndSession"))
@@ -193,6 +194,13 @@ screensaver_signal_session (GDBusProxy     *proxy,
   gtk_application_set_screensaver_active (application, active);
 }
 
+enum {
+  UNKNOWN   = 0,
+  RUNNING   = 1,
+  QUERY_END = 2,
+  ENDING    = 3
+};
+
 static void
 screensaver_signal_portal (GDBusConnection *connection,
                            const char       *sender_name,
@@ -202,16 +210,44 @@ screensaver_signal_portal (GDBusConnection *connection,
                            GVariant         *parameters,
                            gpointer          data)
 {
-  GtkApplication   *application = data;
+  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *)data;
+  GtkApplication *application = data;
   gboolean active;
   GVariant *state;
+  guint32 session_state = UNKNOWN;
 
   if (!g_str_equal (signal_name, "StateChanged"))
     return;
 
   g_variant_get (parameters, "(o@a{sv})", NULL, &state);
   g_variant_lookup (state, "screensaver-active", "b", &active);
-  gtk_application_set_screensaver_active (application, active);
+  gtk_application_set_screensaver_active (dbus->impl.application, active);
+
+  g_variant_lookup (state, "session-state", "u", &session_state);
+  if (session_state != dbus->session_state)
+    {
+      dbus->session_state = session_state;
+
+      /* Note that we'll only ever get here if we get a session-state,
+       * in which case, the interface is new enough to have QueryEndResponse.
+       */
+      if (session_state == ENDING)
+        {
+          g_application_quit (G_APPLICATION (application));
+        }
+      else if (session_state == QUERY_END)
+        {
+          g_signal_emit_by_name (dbus->impl.application, "query-end");
+
+          g_dbus_proxy_call (dbus->inhibit_proxy,
+                             "QueryEndResponse",
+                             g_variant_new ("(o)", dbus->session_id),
+                             G_DBUS_CALL_FLAGS_NONE,
+                             G_MAXINT,
+                             NULL,
+                             NULL, NULL);
+        }
+    }
 }
 
 static void
@@ -455,7 +491,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
                                                   NULL,
                                                   G_DBUS_SIGNAL_FLAGS_NO_MATCH_RULE,
                                                   screensaver_signal_portal,
-                                                  impl->application,
+                                                  dbus,
                                                   NULL);
           g_variant_builder_init (&opt_builder, G_VARIANT_TYPE_VARDICT);
           g_variant_builder_add (&opt_builder, "{sv}",
