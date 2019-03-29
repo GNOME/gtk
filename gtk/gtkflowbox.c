@@ -297,6 +297,9 @@ gtk_flow_box_child_set_focus (GtkFlowBoxChild *child)
   gboolean modify;
   gboolean extend;
 
+  if (box == NULL)
+    return;
+
   get_current_selection_modifiers (GTK_WIDGET (box), &modify, &extend);
 
   if (modify)
