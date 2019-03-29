@@ -211,7 +211,10 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
             continue;
         }
       else
-        pos = _gtk_css_number_value_get (stop->offset, length) / length;
+        {
+          pos = _gtk_css_number_value_get (stop->offset, length) / length;
+          pos = CLAMP (pos, 0.0, 1.0);
+        }
 
       pos = MAX (pos, offset);
       step = (pos - offset) / (i - last);
