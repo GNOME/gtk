@@ -637,6 +637,8 @@ static void           text_window_size_allocate   (GtkTextWindow     *win,
                                                    GdkRectangle      *rect);
 static void           text_window_invalidate      (GtkTextWindow     *win);
 
+static gint           text_window_get_x           (GtkTextWindow     *win);
+static gint           text_window_get_y           (GtkTextWindow     *win);
 static gint           text_window_get_width       (GtkTextWindow     *win);
 static gint           text_window_get_height      (GtkTextWindow     *win);
 
@@ -5398,17 +5400,19 @@ paint_border_window (GtkTextView     *text_view,
                      GtkTextWindow   *text_window,
                      GtkStyleContext *context)
 {
-  gint w, h;
+  gint x, y, w, h;
 
   if (text_window == NULL)
     return;
 
+  x = text_window_get_x (text_window);
+  y = text_window_get_y (text_window);
   w = text_window_get_width (text_window);
   h = text_window_get_height (text_window);
 
   gtk_style_context_save_to_node (context, text_window->css_node);
 
-  gtk_snapshot_render_background (snapshot, context, 0, 0, w, h);
+  gtk_snapshot_render_background (snapshot, context, x, y, w, h);
 
   gtk_style_context_restore (context);
 }
@@ -8979,6 +8983,18 @@ static void
 text_window_invalidate (GtkTextWindow *win)
 {
   gtk_widget_queue_draw (win->widget);
+}
+
+static gint
+text_window_get_x (GtkTextWindow *win)
+{
+  return win->allocation.x;
+}
+
+static gint
+text_window_get_y (GtkTextWindow *win)
+{
+  return win->allocation.y;
 }
 
 static gint
