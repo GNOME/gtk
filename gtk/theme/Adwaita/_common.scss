@@ -272,7 +272,7 @@ entry {
     padding-left: 8px;
     padding-right: 8px;
     border: 1px solid;
-    border-radius: 3px;
+    border-radius: $button_radius;
     transition: all 200ms $ease-out-quad;
 
     @include entry(normal);
@@ -989,7 +989,7 @@ toolbar.inline-toolbar toolbutton:backdrop {
   }
 
   &:only-child {
-    border-radius: 3px;
+    border-radius: $button_radius;
     border-style: solid;
   }
 }
@@ -1003,18 +1003,18 @@ toolbar.inline-toolbar toolbutton:backdrop {
   @extend %linked_vertical_middle;
 
   &:first-child {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
+    border-top-left-radius: $button_radius;
+    border-top-right-radius: $button_radius;
   }
 
   &:last-child {
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: $button_radius;
+    border-bottom-right-radius: $button_radius;
     border-style: solid;
   }
 
   &:only-child {
-    border-radius: 3px;
+    border-radius: $button_radius;
     border-style: solid;
   }
 }
@@ -1224,9 +1224,9 @@ spinbutton {
         &:dir(rtl) { border-style: none solid none none; }
       }
 
-      &:dir(ltr):last-child { border-radius: 0 3px 3px 0; }
+      &:dir(ltr):last-child { border-radius: 0 $button_radius $button_radius 0; }
 
-      &:dir(rtl):first-child { border-radius: 3px 0 0 3px; }
+      &:dir(rtl):first-child { border-radius: $button_radius 0 0 $button_radius; }
     }
   }
 
@@ -1276,9 +1276,9 @@ spinbutton {
         box-shadow: none;
       }
 
-      &:dir(ltr):last-child { border-radius: 0 3px 3px 0; }
+      &:dir(ltr):last-child { border-radius: 0 $button_radius $button_radius 0; }
 
-      &:dir(rtl):first-child { border-radius: 3px 0 0 3px; }
+      &:dir(rtl):first-child { border-radius: $button_radius 0 0 $button_radius; }
     }
   }
 
@@ -1319,12 +1319,12 @@ spinbutton {
     }
 
     %top_button {
-      border-radius: 3px 3px 0 0;
+      border-radius: $button_radius $button_radius 0 0;
       border-style: solid solid none solid;
     }
 
     %bottom_button {
-      border-radius: 0 0 3px 3px;
+      border-radius: 0 0 $button_radius $button_radius;
       border-style: none solid solid solid;
     }
   }
