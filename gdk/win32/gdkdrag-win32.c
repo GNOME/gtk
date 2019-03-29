@@ -29,6 +29,7 @@
 
 #include <io.h>
 #include <fcntl.h>
+#include <math.h>
 
 /*
  * Support for OLE-2 drag and drop added at Archaeopteryx Software, 2001
