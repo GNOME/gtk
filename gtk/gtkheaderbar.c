@@ -884,12 +884,18 @@ gtk_header_bar_measure (GtkWidget      *widget,
                         int            *minimum_baseline,
                         int            *natural_baseline)
 {
+  int min, nat;
+  gtk_header_bar_get_size (widget, orientation, &min, &nat);
+
   if (for_size < 0)
-    gtk_header_bar_get_size (widget, orientation, minimum, natural);
+    *natural = nat;
   else if (orientation == GTK_ORIENTATION_HORIZONTAL)
     gtk_header_bar_compute_size_for_orientation (widget, for_size, minimum, natural);
   else
     gtk_header_bar_compute_size_for_opposing_orientation (widget, for_size, minimum, natural);
+
+  *minimum = MAX (*minimum, min);
+  *natural = MAX (*natural, min);
 }
 
 static void
