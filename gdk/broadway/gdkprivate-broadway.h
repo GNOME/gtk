@@ -41,6 +41,8 @@
 guint32 gdk_broadway_display_ensure_texture (GdkDisplay *display,
                                              GdkTexture *texture);
 
+void gdk_broadway_display_flush_in_idle (GdkDisplay *display);
+
 void gdk_broadway_surface_set_nodes (GdkSurface *surface,
                                      GArray *nodes,
                                      GPtrArray *node_textures);

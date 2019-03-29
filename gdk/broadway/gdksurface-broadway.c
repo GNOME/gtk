@@ -73,39 +73,6 @@ G_DEFINE_TYPE (GdkSurfaceImplBroadway,
                gdk_surface_impl_broadway,
                GDK_TYPE_SURFACE_IMPL)
 
-static GdkDisplay *
-find_broadway_display (void)
-{
-  GdkDisplay *display;
-  GSList *list, *l;
-
-  display = NULL;
-
-  list = gdk_display_manager_list_displays (gdk_display_manager_get ());
-  for (l = list; l; l = l->next)
-    {
-      if (GDK_IS_BROADWAY_DISPLAY (l->data))
-        {
-          display = l->data;
-          break;
-        }
-    }
-  g_slist_free (list);
-
-  return display;
-}
-
-static guint flush_id = 0;
-
-static gboolean
-flush_idle (gpointer data)
-{
-  flush_id = 0;
-
-  gdk_display_flush (find_broadway_display ());
-
-  return FALSE;
-}
 
 /* We need to flush in an idle rather than AFTER_PAINT, as the clock
    is frozen during e.g. surface resizes so the paint will not happen
@@ -113,11 +80,7 @@ flush_idle (gpointer data)
 static void
 queue_flush (GdkSurface *surface)
 {
-  if (flush_id == 0)
-    {
-      flush_id = g_idle_add (flush_idle, NULL);
-      g_source_set_name_by_id (flush_id, "[gtk] flush_idle");
-    }
+  gdk_broadway_display_flush_in_idle (gdk_surface_get_display (surface));
 }
 
 static void
