@@ -833,8 +833,8 @@ if os_unix
 endif
 
 # TODO
-#subdir('po')
-#subdir('po-properties')
+subdir('po')
+subdir('po-properties')
 #if get_option('documentation')
 #  subdir('docs/tools')
 #  subdir('docs/reference')
