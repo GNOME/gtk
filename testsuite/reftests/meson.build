@@ -1,5 +1,5 @@
 # FIXME: $(no_undefined) ?
-libgtkreftestprivate = static_library('gtkreftestprivate',
+libgtkreftestprivate = shared_library('gtkreftestprivate',
   'reftest-compare.c', 'reftest-module.c', 'reftest-snapshot.c',
   dependencies : libgtk_dep)
 
