@@ -16,6 +16,11 @@ foreach l: immodules
   if cond and not (builtin_immodules.contains(name) or builtin_all_immodules)
     immodules_cflags += cflags
 
+    if name == 'multipress'
+      install_data('im-multipress.conf',
+                   install_dir: join_paths(gtk_sysconfdir, 'gtk-3.0'))
+    endif
+
     shared_module('im-@0@'.format(name),
                   immod_sources,
                   c_args: common_cflags + immodules_cflags,
