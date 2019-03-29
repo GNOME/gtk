@@ -26,6 +26,7 @@
 #include "gdkwindowimpl.h"
 #include "gdkprivate-quartz.h"
 #include "gdkglcontext-quartz.h"
+#include "gdkquartzglcontext.h"
 #include "gdkquartzscreen.h"
 #include "gdkquartzcursor.h"
 
@@ -1323,6 +1324,9 @@ move_resize_window_internal (GdkWindow *window,
           cairo_region_destroy (old_region);
         }
     }
+
+  if (window->gl_paint_context != NULL)
+    [GDK_QUARTZ_GL_CONTEXT (window->gl_paint_context)->gl_context update];
 
   GDK_QUARTZ_RELEASE_POOL;
 }
@@ -3073,6 +3077,7 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->delete_property = _gdk_quartz_window_delete_property;
 
   impl_class->create_gl_context = gdk_quartz_window_create_gl_context;
+  impl_class->invalidate_for_new_frame = gdk_quartz_window_invalidate_for_new_frame;
 
   impl_quartz_class->get_context = gdk_window_impl_quartz_get_context;
   impl_quartz_class->release_context = gdk_window_impl_quartz_release_context;
