@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-04 17:36+0000\n"
-"PO-Revision-Date: 2019-03-10 19:38+0100\n"
+"POT-Creation-Date: 2019-03-30 19:05+0000\n"
+"PO-Revision-Date: 2019-03-30 21:07+0100\n"
 "Last-Translator: Florentina Mușat <florentina.musat.28 [at] gmail [dot] "
 "com>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
@@ -93,7 +93,7 @@ msgstr "Suportul GL dezactivat via GDK_DEBUG"
 
 #: gdk/gdkwindow.c:2840
 msgid "The current backend does not support OpenGL"
-msgstr ""
+msgstr "Suportul curent nu suportă OpenGL"
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -476,11 +476,12 @@ msgstr "Suspendare"
 #: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1177
 #: gdk/x11/gdkglcontext-x11.c:1277
 msgid "No GL implementation is available"
-msgstr ""
+msgstr "Nicio implementare GL nu este disponibilă"
 
-#: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:1070 gdk/win32/gdkglcontext-win32.c:1110
-#: gdk/x11/gdkglcontext-x11.c:720 gdk/x11/gdkglcontext-x11.c:770
+#: gdk/mir/gdkmirglcontext.c:89 gdk/quartz/gdkglcontext-quartz.c:132
+#: gdk/wayland/gdkglcontext-wayland.c:208 gdk/win32/gdkglcontext-win32.c:1070
+#: gdk/win32/gdkglcontext-win32.c:1110 gdk/x11/gdkglcontext-x11.c:720
+#: gdk/x11/gdkglcontext-x11.c:770
 msgid "Unable to create a GL context"
 msgstr "Nu s-a putut crea un context GL"
 
@@ -494,11 +495,13 @@ msgstr "Nu sunt configurații disponibile pentru formatul de pixel dat"
 
 #: gdk/mir/gdkmirwindowimpl.c:2234
 msgid "3.2 core GL profile is not available on EGL implementation"
-msgstr ""
+msgstr "Profilul nucleului GL 3.2 nu este disponibil pe o implementare EGL"
 
-#: gdk/quartz/gdkglcontext-quartz.c:37
-msgid "Not implemented on OS X"
-msgstr "Nu este implementat pe OS X"
+#: gdk/quartz/gdkglcontext-quartz.c:122
+#, fuzzy
+#| msgid "Unable to create a GL context"
+msgid "Unable to create a GL pixel format"
+msgstr "Nu s-a putut crea un context GL"
 
 #: gdk/wayland/gdkglcontext-wayland.c:476
 msgid "Core GL is not available on EGL implementation"
@@ -575,7 +578,7 @@ msgstr "Clic"
 #: gtk/a11y/gtkbuttonaccessible.c:330
 msgctxt "Action description"
 msgid "Clicks the button"
-msgstr ""
+msgstr "Apasă clic pe buton"
 
 #: gtk/a11y/gtkcellaccessible.c:257
 msgctxt "Action name"
@@ -597,11 +600,13 @@ msgstr "Activează"
 msgctxt "Action description"
 msgid "Expands or contracts the row in the tree view containing this cell"
 msgstr ""
+"Expandează sau pliază rândul în vizualizarea arborescentă ce conține această "
+"celulă"
 
 #: gtk/a11y/gtkcellaccessible.c:276
 msgctxt "Action description"
 msgid "Creates a widget in which the contents of the cell can be edited"
-msgstr ""
+msgstr "Creează un widget în care conținutul celulei poate fi editat"
 
 #: gtk/a11y/gtkcellaccessible.c:278
 msgctxt "Action description"
@@ -651,7 +656,7 @@ msgstr "Activează intrarea"
 #: gtk/a11y/gtkexpanderaccessible.c:290
 msgctxt "Action description"
 msgid "Activates the expander"
-msgstr ""
+msgstr "Activează expandatorul"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
@@ -1067,27 +1072,27 @@ msgstr "Meniu"
 #: gtk/a11y/gtkmenuitemaccessible.c:445
 msgctxt "Action description"
 msgid "Clicks the menuitem"
-msgstr ""
+msgstr "Apasă clic pe elementul de meniu"
 
 #: gtk/a11y/gtkscalebuttonaccessible.c:140
 msgctxt "Action description"
 msgid "Pops up the slider"
-msgstr ""
+msgstr "Deschide glisorul într-un dialog"
 
 #: gtk/a11y/gtkscalebuttonaccessible.c:142
 msgctxt "Action description"
 msgid "Dismisses the slider"
-msgstr ""
+msgstr "Închide glisorul"
 
 #: gtk/a11y/gtkscalebuttonaccessible.c:170
 msgctxt "Action name"
 msgid "Popup"
-msgstr ""
+msgstr "Deschide într-un dialog"
 
 #: gtk/a11y/gtkscalebuttonaccessible.c:172
 msgctxt "Action name"
 msgid "Dismiss"
-msgstr ""
+msgstr "Închide"
 
 #: gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
@@ -1101,7 +1106,7 @@ msgstr "Oferă un indiciu vizual al progresului"
 #: gtk/a11y/gtkswitchaccessible.c:98
 msgctxt "Action description"
 msgid "Toggles the switch"
-msgstr ""
+msgstr "Comută butonul"
 
 #: gtk/deprecated/gtkcolorsel.c:425
 msgid ""
@@ -1264,10 +1269,10 @@ msgstr ""
 #: gtk/gtkfilechoosernative.c:541 gtk/gtkfilechoosernative.c:633
 #: gtk/gtkfilechooserwidget.c:1475 gtk/gtkfilechooserwidget.c:6330
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
-#: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:196
+#: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:781 gtk/gtkprinteroptionwidget.c:545
-#: gtk/gtkprintunixdialog.c:673 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:12792 gtk/inspector/css-editor.c:201
+#: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
+#: gtk/gtkwindow.c:12780 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1310,13 +1315,13 @@ msgstr "_Dimensiune:"
 msgid "_Preview:"
 msgstr "_Previzualizare:"
 
-#: gtk/deprecated/gtkfontsel.c:1693 gtk/gtkpagesetupunixdialog.c:197
+#: gtk/deprecated/gtkfontsel.c:1693 gtk/gtkpagesetupunixdialog.c:198
 #: gtk/ui/gtkassistant.ui:50
 msgid "_Apply"
 msgstr "_Aplică"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:782 gtk/gtkwindow.c:12793
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:782 gtk/gtkwindow.c:12781
 msgid "_OK"
 msgstr "_OK"
 
@@ -1459,7 +1464,7 @@ msgstr "Gol"
 
 #: gtk/encodesymbolic.c:38
 msgid "Output to this directory instead of cwd"
-msgstr ""
+msgstr "Produce în acest director în loc de cwd"
 
 #: gtk/encodesymbolic.c:266
 #, c-format
@@ -1493,19 +1498,19 @@ msgstr "Licență personalizată"
 
 #: gtk/gtkaboutdialog.c:116
 msgid "GNU General Public License, version 2 or later"
-msgstr ""
+msgstr "Licența Publică Generală GNU, versiunea 2 sau ulterioară"
 
 #: gtk/gtkaboutdialog.c:117
 msgid "GNU General Public License, version 3 or later"
-msgstr ""
+msgstr "Licența Publică Generală GNU, versiunea 3 sau ulterioară"
 
 #: gtk/gtkaboutdialog.c:118
 msgid "GNU Lesser General Public License, version 2.1 or later"
-msgstr ""
+msgstr "GNU Lesser General Public License, versiunea 2.1 sau ulterioară"
 
 #: gtk/gtkaboutdialog.c:119
 msgid "GNU Lesser General Public License, version 3 or later"
-msgstr ""
+msgstr "GNU Lesser General Public License, versiunea 3 sau ulterioară"
 
 #: gtk/gtkaboutdialog.c:120
 msgid "BSD 2-Clause License"
@@ -1521,27 +1526,27 @@ msgstr "Licență artistică 2.0"
 
 #: gtk/gtkaboutdialog.c:123
 msgid "GNU General Public License, version 2 only"
-msgstr ""
+msgstr "Licența Publică Generală GNU, numai versiunea 2"
 
 #: gtk/gtkaboutdialog.c:124
 msgid "GNU General Public License, version 3 only"
-msgstr ""
+msgstr "Licența Publică Generală GNU, numai versiunea 3"
 
 #: gtk/gtkaboutdialog.c:125
 msgid "GNU Lesser General Public License, version 2.1 only"
-msgstr ""
+msgstr "GNU Lesser General Public License, doar versiunea 2.1"
 
 #: gtk/gtkaboutdialog.c:126
 msgid "GNU Lesser General Public License, version 3 only"
-msgstr ""
+msgstr "GNU Lesser General Public License, doar versiunea 3"
 
 #: gtk/gtkaboutdialog.c:127
 msgid "GNU Affero General Public License, version 3 or later"
-msgstr ""
+msgstr "GNU Affero General Public License, versiunea 3 sau ulterioară"
 
 #: gtk/gtkaboutdialog.c:128
 msgid "GNU Affero General Public License, version 3 only"
-msgstr ""
+msgstr "GNU Affero General Public License, numai versiunea 3"
 
 #: gtk/gtkaboutdialog.c:697
 msgid "C_redits"
@@ -1595,6 +1600,8 @@ msgid ""
 "This program comes with absolutely no warranty.\n"
 "See the <a href=\"%s\">%s</a> for details."
 msgstr ""
+"Acest program nu vine cu vreo garanție.\n"
+"Consultați <a href=\"%s\">%s</a> pentru detalii."
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -1767,7 +1774,7 @@ msgstr "Textul poate să apară doar înăuntrul <%s>"
 #: gtk/gtk-builder-tool.c:124
 #, c-format
 msgid "Packing property %s::%s not found\n"
-msgstr ""
+msgstr "Proprietatea de împachetare %s::%s nu a fost găsită\n"
 
 #: gtk/gtk-builder-tool.c:126
 #, c-format
@@ -1810,6 +1817,23 @@ msgid ""
 "\n"
 "Perform various tasks on GtkBuilder .ui files.\n"
 msgstr ""
+"Utilizare:\n"
+"  gtk-builder-tool [COMANDĂ] FIȘIER\n"
+"\n"
+"Comenzi:\n"
+"  validate           Validează fișierul\n"
+"  simplify [OPȚIUNI] Simplifică fișierul\n"
+"  enumerate          Listează toate obiectele numite\n"
+"  preview [OPȚIUNI]  Previzualizează fișierul\n"
+"\n"
+"Opțiuni de simplificare:\n"
+"  --replace          Înlocuiește fișierul\n"
+"\n"
+"Opțiuni de previzualizare:\n"
+"  --id=ID            Previzualizează numai obiectul numit\n"
+"  --css=FIȘIER         Utilizează stiluri din fișierul CSS\n"
+"\n"
+"Execută sarcini variate pe fișiere .ui GtkBuilde.\n"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1942,17 +1966,17 @@ msgstr "Culoare: %s"
 #: gtk/gtkcolorchooserwidget.c:446
 msgctxt "Color name"
 msgid "Light Scarlet Red"
-msgstr ""
+msgstr "Roșu stacojiu deschis"
 
 #: gtk/gtkcolorchooserwidget.c:447
 msgctxt "Color name"
 msgid "Scarlet Red"
-msgstr ""
+msgstr "Roșu stacojiu"
 
 #: gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
 msgid "Dark Scarlet Red"
-msgstr ""
+msgstr "Roșu stacojiu închis"
 
 #: gtk/gtkcolorchooserwidget.c:449
 msgctxt "Color name"
@@ -1967,7 +1991,7 @@ msgstr "Portocaliu"
 #: gtk/gtkcolorchooserwidget.c:451
 msgctxt "Color name"
 msgid "Dark Orange"
-msgstr ""
+msgstr "Portocaliu închis"
 
 #: gtk/gtkcolorchooserwidget.c:452
 msgctxt "Color name"
@@ -1997,37 +2021,37 @@ msgstr "Cameleon"
 #: gtk/gtkcolorchooserwidget.c:457
 msgctxt "Color name"
 msgid "Dark Chameleon"
-msgstr ""
+msgstr "Cameleon închis"
 
 #: gtk/gtkcolorchooserwidget.c:458
 msgctxt "Color name"
 msgid "Light Sky Blue"
-msgstr ""
+msgstr "Albastru cerului deschis"
 
 #: gtk/gtkcolorchooserwidget.c:459
 msgctxt "Color name"
 msgid "Sky Blue"
-msgstr ""
+msgstr "Albastru cerului"
 
 #: gtk/gtkcolorchooserwidget.c:460
 msgctxt "Color name"
 msgid "Dark Sky Blue"
-msgstr ""
+msgstr "Albastru cerului închis"
 
 #: gtk/gtkcolorchooserwidget.c:461
 msgctxt "Color name"
 msgid "Light Plum"
-msgstr ""
+msgstr "Pruniu deschis"
 
 #: gtk/gtkcolorchooserwidget.c:462
 msgctxt "Color name"
 msgid "Plum"
-msgstr ""
+msgstr "Pruniu"
 
 #: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Dark Plum"
-msgstr ""
+msgstr "Pruniu închis"
 
 #: gtk/gtkcolorchooserwidget.c:464
 msgctxt "Color name"
@@ -2087,12 +2111,12 @@ msgstr "Gri foarte închis"
 #: gtk/gtkcolorchooserwidget.c:488
 msgctxt "Color name"
 msgid "Darker Gray"
-msgstr ""
+msgstr "Gri mai închis"
 
 #: gtk/gtkcolorchooserwidget.c:489
 msgctxt "Color name"
 msgid "Dark Gray"
-msgstr ""
+msgstr "Gri închis"
 
 #: gtk/gtkcolorchooserwidget.c:490
 msgctxt "Color name"
@@ -2107,7 +2131,7 @@ msgstr "Gri deschis"
 #: gtk/gtkcolorchooserwidget.c:492
 msgctxt "Color name"
 msgid "Lighter Gray"
-msgstr ""
+msgstr "Gri mai deschis"
 
 #: gtk/gtkcolorchooserwidget.c:493
 msgctxt "Color name"
@@ -2167,15 +2191,15 @@ msgstr "default:mm"
 
 # LG: titlul unei ferestre de management de dimensiuni de hârtie
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3336
+#: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3337
 msgid "Manage Custom Sizes"
 msgstr "Gestionare dimensiuni personalizate"
 
-#: gtk/gtkcustompaperunixdialog.c:567 gtk/gtkpagesetupunixdialog.c:813
+#: gtk/gtkcustompaperunixdialog.c:567 gtk/gtkpagesetupunixdialog.c:814
 msgid "inch"
 msgstr "inch"
 
-#: gtk/gtkcustompaperunixdialog.c:569 gtk/gtkpagesetupunixdialog.c:811
+#: gtk/gtkcustompaperunixdialog.c:569 gtk/gtkpagesetupunixdialog.c:812
 msgid "mm"
 msgstr "mm"
 
@@ -2220,44 +2244,44 @@ msgstr "_Dreapta:"
 msgid "Paper Margins"
 msgstr "Margini hârtie"
 
-#: gtk/gtkentry.c:9583 gtk/gtklabel.c:6680 gtk/gtktextview.c:9493
+#: gtk/gtkentry.c:9583 gtk/gtklabel.c:6680 gtk/gtktextview.c:9490
 msgid "Cu_t"
 msgstr "_Taie"
 
-#: gtk/gtkentry.c:9587 gtk/gtklabel.c:6681 gtk/gtktextview.c:9497
+#: gtk/gtkentry.c:9587 gtk/gtklabel.c:6681 gtk/gtktextview.c:9494
 msgid "_Copy"
 msgstr "_Copiază"
 
-#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6682 gtk/gtktextview.c:9499
+#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6682 gtk/gtktextview.c:9496
 msgid "_Paste"
 msgstr "_Lipește"
 
 #: gtk/gtkentry.c:9594 gtk/gtkfilechooserwidget.c:1476
-#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6684 gtk/gtktextview.c:9502
+#: gtk/gtkfilechooserwidget.c:2276 gtk/gtklabel.c:6684 gtk/gtktextview.c:9499
 msgid "_Delete"
 msgstr "Șt_erge"
 
-#: gtk/gtkentry.c:9605 gtk/gtklabel.c:6693 gtk/gtktextview.c:9516
+#: gtk/gtkentry.c:9605 gtk/gtklabel.c:6693 gtk/gtktextview.c:9513
 msgid "Select _All"
 msgstr "Selectează tot"
 
-#: gtk/gtkentry.c:9615 gtk/gtktextview.c:9526
+#: gtk/gtkentry.c:9615 gtk/gtktextview.c:9523
 msgid "Insert _Emoji"
 msgstr "Introdu _emoji"
 
-#: gtk/gtkentry.c:9791 gtk/gtktextview.c:9746
+#: gtk/gtkentry.c:9791 gtk/gtktextview.c:9743
 msgid "Select all"
 msgstr "Selectează tot"
 
-#: gtk/gtkentry.c:9794 gtk/gtktextview.c:9749
+#: gtk/gtkentry.c:9794 gtk/gtktextview.c:9746
 msgid "Cut"
 msgstr "Taie"
 
-#: gtk/gtkentry.c:9797 gtk/gtktextview.c:9752
+#: gtk/gtkentry.c:9797 gtk/gtktextview.c:9749
 msgid "Copy"
 msgstr "Copiază"
 
-#: gtk/gtkentry.c:9800 gtk/gtktextview.c:9755
+#: gtk/gtkentry.c:9800 gtk/gtktextview.c:9752
 msgid "Paste"
 msgstr "Lipește"
 
@@ -2564,12 +2588,12 @@ msgstr "Home"
 msgid "Cannot change to folder because it is not local"
 msgstr "Nu se poate deschide dosarul deoarece nu este local"
 
-#: gtk/gtkfilechooserwidget.c:6323 gtk/gtkprintunixdialog.c:664
+#: gtk/gtkfilechooserwidget.c:6323 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Un fișier cu numele „%s” există deja.  Doriți să îl înlocuiți?"
 
-#: gtk/gtkfilechooserwidget.c:6326 gtk/gtkprintunixdialog.c:668
+#: gtk/gtkfilechooserwidget.c:6326 gtk/gtkprintunixdialog.c:669
 #, fuzzy, c-format
 #| msgid ""
 #| "The file already exists in \"%s\".  Replacing it will overwrite its "
@@ -2579,7 +2603,7 @@ msgid ""
 msgstr ""
 "Fișierul există deja în „%s”. Înlocuindu-l îi veți suprascrie conținutul."
 
-#: gtk/gtkfilechooserwidget.c:6331 gtk/gtkprintunixdialog.c:676
+#: gtk/gtkfilechooserwidget.c:6331 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
 msgstr "În_locuiește"
 
@@ -2631,7 +2655,7 @@ msgstr "Cursiv"
 
 #: gtk/gtkfontchooserwidget.c:1526
 msgid "Slant"
-msgstr ""
+msgstr "Înclinare"
 
 #: gtk/gtkfontchooserwidget.c:1527
 msgid "Optical Size"
@@ -2654,7 +2678,7 @@ msgstr "US Letter Plus"
 
 #: gtk/gtkfontchooserwidget.c:2113
 msgid "Number Case"
-msgstr ""
+msgstr "Grad numeric"
 
 #: gtk/gtkfontchooserwidget.c:2114
 msgid "Number Spacing"
@@ -2710,19 +2734,19 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Sistem (%s)"
 
-#: gtk/gtkinfobar.c:1152 gtk/gtkmessagedialog.c:385
+#: gtk/gtkinfobar.c:1150 gtk/gtkmessagedialog.c:385
 msgid "Information"
 msgstr "Informații"
 
-#: gtk/gtkinfobar.c:1156 gtk/gtkmessagedialog.c:389
+#: gtk/gtkinfobar.c:1154 gtk/gtkmessagedialog.c:389
 msgid "Question"
 msgstr "Întrebare"
 
-#: gtk/gtkinfobar.c:1160 gtk/gtkmessagedialog.c:393
+#: gtk/gtkinfobar.c:1158 gtk/gtkmessagedialog.c:393
 msgid "Warning"
 msgstr "Avertisment"
 
-#: gtk/gtkinfobar.c:1164 gtk/gtkmessagedialog.c:397
+#: gtk/gtkinfobar.c:1162 gtk/gtkmessagedialog.c:397
 msgid "Error"
 msgstr "Eroare"
 
@@ -2751,6 +2775,8 @@ msgid ""
 "Launch an application (specified by its desktop file name),\n"
 "optionally passing one or more URIs as arguments."
 msgstr ""
+"Lansează o aplicație (specificată prin numele de fișier desktop al ei),\n"
+"pasând opțional unul sau mai multe argumente ca URI-uri."
 
 #: gtk/gtk-launch.c:90
 #, c-format
@@ -2977,15 +3003,15 @@ msgstr "Pagina %u"
 msgid "Not a valid page setup file"
 msgstr "Fișier nevalid de opțiuni de pagină"
 
-#: gtk/gtkpagesetupunixdialog.c:210
+#: gtk/gtkpagesetupunixdialog.c:211
 msgid "Any Printer"
 msgstr "Orice imprimantă"
 
-#: gtk/gtkpagesetupunixdialog.c:210
+#: gtk/gtkpagesetupunixdialog.c:211
 msgid "For portable documents"
 msgstr "Pentru documente portabile"
 
-#: gtk/gtkpagesetupunixdialog.c:831
+#: gtk/gtkpagesetupunixdialog.c:832
 #, c-format
 msgid ""
 "Margins:\n"
@@ -3001,16 +3027,16 @@ msgstr ""
 " Jos: %s %s"
 
 # LG: titlul unei ferestre de management de dimensiuni de hârtie
-#: gtk/gtkpagesetupunixdialog.c:880 gtk/gtkprintunixdialog.c:3392
+#: gtk/gtkpagesetupunixdialog.c:881 gtk/gtkprintunixdialog.c:3393
 msgid "Manage Custom Sizes…"
 msgstr "Gestionare dimensiuni personalizate…"
 
-#: gtk/gtkpagesetupunixdialog.c:902 gtk/ui/gtkpagesetupunixdialog.ui:31
+#: gtk/gtkpagesetupunixdialog.c:903 gtk/ui/gtkpagesetupunixdialog.ui:31
 #: gtk/ui/gtkprintunixdialog.ui:854
 msgid "Page Setup"
 msgstr "Opțiuni pagină"
 
-#: gtk/gtkpathbar.c:1572
+#: gtk/gtkpathbar.c:1571
 msgid "File System Root"
 msgstr "Rădăcina sistemului de fișiere"
 
@@ -3107,7 +3133,7 @@ msgstr "_Stop"
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
 #: gtk/gtkplacessidebar.c:2335
 msgid "_Power On"
-msgstr ""
+msgstr "_Pornește"
 
 #: gtk/gtkplacessidebar.c:2336
 msgid "_Safely Remove Drive"
@@ -3435,7 +3461,7 @@ msgstr "Cel mai probabil motiv este că nu s-a putut crea un fișier temporar."
 
 #. window
 #: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:542
-#: gtk/gtkprintoperation-portal.c:611 gtk/gtkprintunixdialog.c:3414
+#: gtk/gtkprintoperation-portal.c:611 gtk/gtkprintunixdialog.c:3415
 msgid "Print"
 msgstr "Tipărire"
 
@@ -3494,19 +3520,19 @@ msgstr "Handle incorect pentru PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Eroare nespecificată"
 
-#: gtk/gtkprintunixdialog.c:745
+#: gtk/gtkprintunixdialog.c:746
 msgid "Pre_view"
 msgstr "Pre_vizualizează"
 
-#: gtk/gtkprintunixdialog.c:747
+#: gtk/gtkprintunixdialog.c:748
 msgid "_Print"
 msgstr "_Tipărește"
 
-#: gtk/gtkprintunixdialog.c:860
+#: gtk/gtkprintunixdialog.c:861
 msgid "Getting printer information failed"
 msgstr "Obținerea informațiilor despre imprimantă a eșuat"
 
-#: gtk/gtkprintunixdialog.c:2070
+#: gtk/gtkprintunixdialog.c:2071
 msgid "Getting printer information…"
 msgstr "Se obțin informațiile despre imprimantă…"
 
@@ -3516,63 +3542,63 @@ msgstr "Se obțin informațiile despre imprimantă…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3119
+#: gtk/gtkprintunixdialog.c:3120
 #: modules/printbackends/cups/gtkprintbackendcups.c:5441
 msgid "Left to right, top to bottom"
 msgstr "De la stânga la dreapta, de sus în jos"
 
-#: gtk/gtkprintunixdialog.c:3119
+#: gtk/gtkprintunixdialog.c:3120
 #: modules/printbackends/cups/gtkprintbackendcups.c:5441
 msgid "Left to right, bottom to top"
 msgstr "De la stânga la dreapta, de jos în sus"
 
-#: gtk/gtkprintunixdialog.c:3120
+#: gtk/gtkprintunixdialog.c:3121
 #: modules/printbackends/cups/gtkprintbackendcups.c:5442
 msgid "Right to left, top to bottom"
 msgstr "De la dreapta la stânga, de sus în jos"
 
-#: gtk/gtkprintunixdialog.c:3120
+#: gtk/gtkprintunixdialog.c:3121
 #: modules/printbackends/cups/gtkprintbackendcups.c:5442
 msgid "Right to left, bottom to top"
 msgstr "De la dreapta la stânga, de jos în sus"
 
-#: gtk/gtkprintunixdialog.c:3121
+#: gtk/gtkprintunixdialog.c:3122
 #: modules/printbackends/cups/gtkprintbackendcups.c:5443
 msgid "Top to bottom, left to right"
 msgstr "De sus în jos, de la stânga la dreapta"
 
-#: gtk/gtkprintunixdialog.c:3121
+#: gtk/gtkprintunixdialog.c:3122
 #: modules/printbackends/cups/gtkprintbackendcups.c:5443
 msgid "Top to bottom, right to left"
 msgstr "De sus în jos, de la dreapta la stânga"
 
-#: gtk/gtkprintunixdialog.c:3122
+#: gtk/gtkprintunixdialog.c:3123
 #: modules/printbackends/cups/gtkprintbackendcups.c:5444
 msgid "Bottom to top, left to right"
 msgstr "De jos în sus, de la stânga la dreapta"
 
-#: gtk/gtkprintunixdialog.c:3122
+#: gtk/gtkprintunixdialog.c:3123
 #: modules/printbackends/cups/gtkprintbackendcups.c:5444
 msgid "Bottom to top, right to left"
 msgstr "De jos în sus, de la dreapta la stânga"
 
-#: gtk/gtkprintunixdialog.c:3126 gtk/gtkprintunixdialog.c:3139
+#: gtk/gtkprintunixdialog.c:3127 gtk/gtkprintunixdialog.c:3140
 msgid "Page Ordering"
 msgstr "Ordonare pagini"
 
-#: gtk/gtkprintunixdialog.c:3155
+#: gtk/gtkprintunixdialog.c:3156
 msgid "Left to right"
 msgstr "De la stânga la dreapta"
 
-#: gtk/gtkprintunixdialog.c:3156
+#: gtk/gtkprintunixdialog.c:3157
 msgid "Right to left"
 msgstr "De la dreapta la stânga"
 
-#: gtk/gtkprintunixdialog.c:3168
+#: gtk/gtkprintunixdialog.c:3169
 msgid "Top to bottom"
 msgstr "De sus în jos"
 
-#: gtk/gtkprintunixdialog.c:3169
+#: gtk/gtkprintunixdialog.c:3170
 msgid "Bottom to top"
 msgstr "De jos în sus"
 
@@ -3949,12 +3975,12 @@ msgstr "Redimensionează"
 msgid "Always on Top"
 msgstr "Întotdeauna deasupra"
 
-#: gtk/gtkwindow.c:12780
+#: gtk/gtkwindow.c:12768
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Doriți să utilizați Inspector GTK+?"
 
-#: gtk/gtkwindow.c:12782
+#: gtk/gtkwindow.c:12770
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3962,7 +3988,7 @@ msgid ""
 "break or crash."
 msgstr ""
 
-#: gtk/gtkwindow.c:12787
+#: gtk/gtkwindow.c:12775
 msgid "Don't show this message again"
 msgstr "Nu arăta acest mesaj din nou"
 
@@ -4414,26 +4440,26 @@ msgstr "Cumulativ"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Activați statisticile cu GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/visual.c:406 gtk/inspector/visual.c:421
+#: gtk/inspector/visual.c:432 gtk/inspector/visual.c:447
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Tema este hardcodată de GTK_THEME"
 
-#: gtk/inspector/visual.c:631
+#: gtk/inspector/visual.c:657
 msgid "Backend does not support window scaling"
 msgstr ""
 
-#: gtk/inspector/visual.c:726
+#: gtk/inspector/visual.c:752
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Configurarea e hardcodată de GTK_TEST_TOUCHSCREEN"
 
-#: gtk/inspector/visual.c:791
+#: gtk/inspector/visual.c:817
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
 msgstr ""
 
-#: gtk/inspector/visual.c:805 gtk/inspector/visual.c:806
-#: gtk/inspector/visual.c:807
+#: gtk/inspector/visual.c:831 gtk/inspector/visual.c:832
+#: gtk/inspector/visual.c:833
 msgid "GL rendering is disabled"
 msgstr "Randarea GL este dezactivată"
 
@@ -8345,6 +8371,9 @@ msgstr "test-tipar.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Tipărește cu imprimanta de test"
+
+#~ msgid "Not implemented on OS X"
+#~ msgstr "Nu este implementat pe OS X"
 
 #~ msgctxt "switch"
 #~ msgid "ON"
