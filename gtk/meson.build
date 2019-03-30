@@ -630,6 +630,18 @@ gtk_semi_private_headers = files('gtktextlayout.h')
 gtk_public_headers = gtk_gir_public_headers + gtk_nogir_public_headers
 install_headers(gtk_public_headers + gtk_semi_private_headers, subdir: 'gtk-3.0/gtk')
 
+if os_unix
+  gtk_unix_print_headers = [
+    'gtkpagesetupunixdialog.h',
+    'gtkprintunixdialog.h',
+    'gtkprinter.h',
+    'gtkprintjob.h',
+    'gtkunixprint-autocleanups.h',
+    'gtkunixprint.h',
+  ]
+  install_headers(gtk_unix_print_headers, subdir: 'gtk-3.0/unix-print/gtk')
+endif
+
 gtk_unix_sources = files(
   'gtkcustompaperunixdialog.c',
   'gtkpagesetupunixdialog.c',
