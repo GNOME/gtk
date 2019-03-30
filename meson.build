@@ -835,6 +835,11 @@ foreach backend: [ 'broadway', 'quartz', 'wayland', 'win32', 'x11', ]
 endforeach
 pkgconf.set('GDK_BACKENDS', pkg_targets.strip())
 
+configure_file(input: 'gail-3.0.pc.in',
+               output: 'gail-3.0.pc',
+               configuration: pkgconf,
+               install_dir: pkg_install_dir)
+
 foreach pkg: gdk_pcs
   configure_file(input: 'gdk-3.0.pc.in',
                  output: pkg,
@@ -862,6 +867,8 @@ if get_option('documentation')
   subdir('docs/tools')
   subdir('docs/reference')
 endif
+
+install_data('m4macros/gtk-3.0.m4', install_dir: join_paths(get_option('datadir'), 'aclocal'))
 
 # Keep this in sync with post-install.py expected arguments
 meson.add_install_script('build-aux/meson/post-install.py',
