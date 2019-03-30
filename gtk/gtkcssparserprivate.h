@@ -31,6 +31,19 @@ typedef void (* GtkCssParserErrorFunc) (GtkCssParser *parser,
                                         const GError *error,
                                         gpointer      user_data);
 
+typedef struct _GtkCssParseOption GtkCssParseOption;
+
+struct _GtkCssParseOption
+{
+  gboolean (* can_parse)  (GtkCssParser *parser,
+                           gpointer      option_data,
+                           gpointer      user_data);
+  gboolean (* parse)      (GtkCssParser *parser,
+                           gpointer      option_data,
+                           gpointer      user_data);
+  gpointer data;
+};
+
 GtkCssParser *  _gtk_css_parser_new               (const char            *data,
                                                    GFile                 *file,
                                                    GtkCssParserErrorFunc  error_func,
@@ -90,6 +103,10 @@ gboolean        gtk_css_parser_consume_function   (GtkCssParser          *self,
                                                    guint                  max_args,
                                                    guint (* parse_func) (GtkCssParser *, guint, gpointer),
                                                    gpointer               data);
+gsize           gtk_css_parser_consume_any        (GtkCssParser          *parser,
+                                                   const GtkCssParseOption *options,
+                                                   gsize                  n_options,
+                                                   gpointer               user_data);
 
 gboolean        _gtk_css_parser_has_number        (GtkCssParser          *parser);
 char *          _gtk_css_parser_read_string       (GtkCssParser          *parser);
