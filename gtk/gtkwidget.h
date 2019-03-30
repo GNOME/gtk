@@ -168,8 +168,8 @@ struct _GtkWidget
  *   it prefers to be allocated in %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or
  *   %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT mode.
  *   %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH means the widget prefers to have
- *   #GtkWidgetClass.get_preferred_width() called and then
- *   #GtkWidgetClass.get_preferred_height_for_width().
+ *   #GtkWidgetClass.measure() called first to get the default width (passing
+ *   a for_size of -1), then again to get the height for said default width.
  *   %GTK_SIZE_REQUEST_CONSTANT_SIZE disables any height-for-width or
  *   width-for-height geometry management for said widget and is the
  *   default return.
