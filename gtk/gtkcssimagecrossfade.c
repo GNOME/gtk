@@ -31,6 +31,7 @@ typedef struct _CrossFadeEntry CrossFadeEntry;
 struct _CrossFadeEntry
 {
   double progress;
+  gboolean has_progress;
   GtkCssImage *image;
 };
 
@@ -45,16 +46,63 @@ cross_fade_entry_clear (gpointer data)
 }
 
 static void
+gtk_css_image_cross_fade_recalculate_progress (GtkCssImageCrossFade *self)
+{
+  double total_progress;
+  guint n_no_progress;
+  guint i;
+
+  total_progress = 0.0;
+  n_no_progress = 0;
+
+  for (i = 0; i < self->images->len; i++)
+    {
+      CrossFadeEntry *entry = &g_array_index (self->images, CrossFadeEntry, i);
+
+      if (entry->has_progress)
+        total_progress += entry->progress;
+      else
+        n_no_progress++;
+    }
+
+  if (n_no_progress)
+    {
+      double progress;
+      if (total_progress >= 1.0)
+        {
+          progress = 0.0;
+        }
+      else
+        {
+          progress = (1.0 - total_progress) / n_no_progress;
+          total_progress = 1.0;
+        }
+      for (i = 0; i < self->images->len; i++)
+        {
+          CrossFadeEntry *entry = &g_array_index (self->images, CrossFadeEntry, i);
+
+          if (!entry->has_progress)
+            entry->progress = progress;
+        }
+    }
+
+  self->total_progress = total_progress;
+}
+
+static void
 gtk_css_image_cross_fade_add (GtkCssImageCrossFade *self,
+                              gboolean              has_progress,
                               double                progress,
                               GtkCssImage          *image)
 {
   CrossFadeEntry entry;
 
+  entry.has_progress = has_progress;
   entry.progress = progress;
   entry.image = image;
   g_array_append_val (self->images, entry);
-  self->total_progress += progress;
+
+  gtk_css_image_cross_fade_recalculate_progress (self);
 }
 
 static GtkCssImageCrossFade *
@@ -179,6 +227,7 @@ gtk_css_image_cross_fade_get_dynamic_image (GtkCssImage *image,
       CrossFadeEntry *entry = &g_array_index (self->images, CrossFadeEntry, i);
 
       gtk_css_image_cross_fade_add (result,
+                                    entry->has_progress,
                                     entry->progress,
                                     gtk_css_image_get_dynamic_image (entry->image, monotonic_time));
     }
@@ -285,10 +334,10 @@ gtk_css_image_cross_fade_parse_arg (GtkCssParser *parser,
 
   g_assert (image != NULL);
 
-  /* XXX */
-  if (progress < 0)
-    progress = 1.0 - self->total_progress;
-  gtk_css_image_cross_fade_add (self, progress, image);
+  if (progress < 0.0)
+    gtk_css_image_cross_fade_add (self, FALSE, 0.0, image);
+  else
+    gtk_css_image_cross_fade_add (self, TRUE, progress, image);
 
   return 1;
 }
@@ -320,8 +369,9 @@ gtk_css_image_cross_fade_print (GtkCssImage *image,
       CrossFadeEntry *entry = &g_array_index (self->images, CrossFadeEntry, i);
 
       if (i > 0)
-        g_string_append_printf (string, ",");
-      g_string_append_printf (string, "%g%% ", entry->progress * 100.0);
+        g_string_append_printf (string, ", ");
+      if (entry->has_progress)
+        g_string_append_printf (string, "%g%% ", entry->progress * 100.0);
       _gtk_css_image_print (entry->image, string);
     }
 
@@ -346,6 +396,7 @@ gtk_css_image_cross_fade_compute (GtkCssImage      *image,
       CrossFadeEntry *entry = &g_array_index (self->images, CrossFadeEntry, i);
 
       gtk_css_image_cross_fade_add (result,
+                                    entry->has_progress,
                                     entry->progress,
                                     _gtk_css_image_compute (entry->image, property_id, provider, style, parent_style));
     }
@@ -402,9 +453,9 @@ _gtk_css_image_cross_fade_new (GtkCssImage *start,
   self = gtk_css_image_cross_fade_new_empty ();
 
   if (start)
-    gtk_css_image_cross_fade_add (self, 1.0 - progress, g_object_ref (start));
+    gtk_css_image_cross_fade_add (self, TRUE, 1.0 - progress, g_object_ref (start));
   if (end)
-    gtk_css_image_cross_fade_add (self, progress, g_object_ref (end));
+    gtk_css_image_cross_fade_add (self, TRUE, progress, g_object_ref (end));
 
   return GTK_CSS_IMAGE (self);
 }
