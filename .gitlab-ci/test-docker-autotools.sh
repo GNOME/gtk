@@ -8,5 +8,8 @@ export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 
 mkdir _build
 cd _build
-../autogen.sh --enable-cloudproviders
+../autogen.sh \
+    --enable-cloudproviders \
+    --enable-broadway-backend \
+    --enable-xinerama
 make -j8
