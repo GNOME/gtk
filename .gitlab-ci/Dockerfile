@@ -25,6 +25,7 @@ RUN dnf -y install \
     hicolor-icon-theme \
     itstool \
     json-glib-devel \
+    libcloudproviders-devel \
     libepoxy-devel \
     libmount-devel \
     librsvg2 \

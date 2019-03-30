@@ -721,9 +721,11 @@ if os_unix
 endif
 
 cloudproviders_enabled = get_option('cloudproviders')
+cloudproviders_packages = []
 if cloudproviders_enabled
-  cloudproviders_dep = dependency('cloudproviders', required: true)
+  cloudproviders_dep = dependency('cloudproviders', version: cloudproviders_req, required: true)
   if cloudproviders_dep.found()
+    cloudproviders_packages += ['cloudproviders', cloudproviders_req]
     cdata.set('HAVE_CLOUDPROVIDERS', cloudproviders_dep.found())
   else
     error('Cloudproviders support not found, but was explicitly requested.')
@@ -790,7 +792,8 @@ endif
 
 pkgconf.set('GDK_PRIVATE_PACKAGES',
             ' '.join(gio_packages + x11_pkgs + wayland_pkgs + cairo_backends +
-                     ['epoxy', epoxy_req, 'fribidi', fribidi_req]))
+                     ['epoxy', epoxy_req] + cloudproviders_packages +
+                     ['fribidi', fribidi_req]))
 
 gtk_packages = ' '.join([
     atk_dep.name(), atk_req,
