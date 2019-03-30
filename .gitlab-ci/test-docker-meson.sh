@@ -13,6 +13,8 @@ meson \
     -Dcloudproviders=true \
     -Ddocumentation=true \
     -Dman-pages=true \
+    -Dbroadway-backend=true \
+    -Dxinerama=yes \
     _build
 
 cd _build
