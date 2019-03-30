@@ -57,7 +57,7 @@ test_data = \
 	scale.ui		scale.nodes			\
 	$(NULL)
 
-EXTRA_DIST += $(test_in_files) $(test_data)
+EXTRA_DIST += $(test_in_files) $(test_data) meson.build
 
 if BUILDOPT_INSTALL_TESTS
 insttestdir=$(libexecdir)/installed-tests/$(PACKAGE)/css/nodes

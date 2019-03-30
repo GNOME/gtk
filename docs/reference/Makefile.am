@@ -5,4 +5,7 @@ SUBDIRS = gdk gtk libgail-util
 
 GITIGNOREFILES = */*.1
 
+EXTRA_DIST += \
+	meson.build
+
 -include $(top_srcdir)/git.mk

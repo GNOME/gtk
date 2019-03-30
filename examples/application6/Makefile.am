@@ -40,7 +40,8 @@ EXTRA_DIST = 					\
 	app-menu.ui 				\
 	prefs.ui 				\
 	exampleapp.gresource.xml 		\
-	org.gtk.exampleapp.gschema.xml
+	org.gtk.exampleapp.gschema.xml	\
+	meson.build
 
 CLEANFILES = 					\
 	gschemas.compiled

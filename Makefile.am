@@ -22,7 +22,13 @@ EXTRA_DIST +=			\
 	sanitize-la.sh		\
 	po/README.translators	\
 	po/po2tbl.sed.in	\
-	make-pot
+	make-pot	\
+	meson_options.txt	\
+	meson.build	\
+	po/meson.build	\
+	po-properties/meson.build	\
+	build-aux/meson/post-install.py	\
+	config.h.meson
 
 MAINTAINERCLEANFILES = \
 	$(GITIGNORE_MAINTAINERCLEANFILES_TOPLEVEL) \

@@ -31,6 +31,8 @@ noinst_PROGRAMS = \
 	search-bar				\
 	listbox-dnd
 
-EXTRA_DIST = builder.ui
+EXTRA_DIST = \
+	builder.ui \
+	meson.build
 
 -include $(top_srcdir)/git.mk

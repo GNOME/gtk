@@ -25,7 +25,9 @@ LDADD = \
 TEST_PROGS += api
 test_in_files += api.test.in
 
-EXTRA_DIST += $(test_in_files)
+EXTRA_DIST += \
+	$(test_in_files) \
+	meson.build
 
 if BUILDOPT_INSTALL_TESTS
 insttestdir=$(libexecdir)/installed-tests/$(PACKAGE)/css
