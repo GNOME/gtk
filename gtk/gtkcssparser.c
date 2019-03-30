@@ -1223,3 +1223,42 @@ gtk_css_parser_consume_function (GtkCssParser *self,
   return result;
 }
 
+gsize
+gtk_css_parser_consume_any (GtkCssParser            *parser,
+                            const GtkCssParseOption *options,
+                            gsize                    n_options,
+                            gpointer                 user_data)
+{
+  gsize result;
+  gsize i;
+
+  g_return_val_if_fail (parser != NULL, 0);
+  g_return_val_if_fail (options != NULL, 0);
+  g_return_val_if_fail (n_options < sizeof (gsize) * 8 - 1, 0);
+
+  result = 0;
+  while (result != (1 << n_options) - 1)
+    {
+      for (i = 0; i < n_options; i++)
+        {
+          if (result & (1 << i))
+            continue;
+          if (options[i].can_parse && !options[i].can_parse (parser, options[i].data, user_data))
+            continue;
+          if (!options[i].parse (parser, options[i].data, user_data))
+            return 0;
+          result |= 1 << i;
+          break;
+        }
+      if (i == n_options)
+        break;
+    }
+  if (result == 0)
+    {
+      _gtk_css_parser_error (parser, "No valid value given");
+      return result;
+    }
+
+  return result;
+}
+
