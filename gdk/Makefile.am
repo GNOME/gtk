@@ -243,8 +243,7 @@ if HAVE_INTROSPECTION
 introspection_files = 		\
 	$(filter-out gdkkeysyms-compat.h, $(gdk_h_sources))	\
 	$(gdk_c_sources)	\
-        gdkenumtypes.c		\
-        gdkenumtypes.h
+	$(gdk_built_sources)
 
 Gdk-3.0.gir: libgdk-3.la Makefile
 Gdk_3_0_gir_SCANNERFLAGS = 	\
