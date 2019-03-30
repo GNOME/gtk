@@ -31,7 +31,10 @@ EXTRA_DIST += 			\
 	makefile.msc		\
 	gdkenumtypes.c.template	\
 	gdkenumtypes.h.template	\
-	gdkversionmacros.h.in
+	gdkversionmacros.h.in	\
+	meson.build \
+	gen-gdk-gresources-xml.py \
+	gdkconfig.h.meson
 
 GDK_CFLAGS_DEFINES =	\
 	-DG_LOG_USE_STRUCTURED=1	\

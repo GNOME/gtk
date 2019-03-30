@@ -1,6 +1,9 @@
 include $(top_srcdir)/Makefile.decl
 
-EXTRA_DIST += gailutil.def
+EXTRA_DIST += \
+	gailutil.def \
+	meson.build
+
 if OS_WIN32
 export_symbols = -export-symbols $(srcdir)/gailutil.def
 gailutil.def: libgailutil-3.la
