@@ -112,6 +112,7 @@ gdk_h_sources =					\
 gdk_private_headers = 				\
 	gdk-private.h				\
 	gdkapplaunchcontextprivate.h		\
+	gdkconstructor.h		\
 	gdkcursorprivate.h			\
 	gdkdevicemanagerprivate.h		\
 	gdkdeviceprivate.h			\
