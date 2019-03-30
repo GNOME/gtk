@@ -25,9 +25,8 @@ gdk_broadway_public_headers = files(
   'gdkbroadwayvisual.h',
 )
 
-# Broadway backend headers aren't installed it seems
-#install_headers(gdk_broadway_public_headers, subdir: 'gtk-4.0/gdk/broadway/')
-#install_headers('gdkbroadway.h', subdir: 'gtk-4.0/gdk/')
+install_headers(gdk_broadway_public_headers, subdir: 'gtk-3.0/gdk/broadway/')
+install_headers('gdkbroadway.h', subdir: 'gtk-3.0/gdk/')
 
 gdk_broadway_deps = [shmlib]
 
