@@ -634,56 +634,67 @@ elif builtin_immodules.contains('backend')
   builtin_immodules += backend_immodules
 endif
 
+proto_sources = [
+  'text-input-unstable-v3',
+  'gtk-text-input',
+]
+proto_sources_outputs = []
+
+foreach proto_name: proto_sources
+  if wayland_enabled
+
+    wayland_scanner = find_program('wayland-scanner')
+    input_path = join_paths('modules', 'input', proto_name + '.xml')
+    sources = []
+    sources += custom_target('@0@ client header'.format(proto_name),
+                             input: input_path,
+                             output: '@0@-client-protocol.h'.format(proto_name),
+                             command: [
+                               wayland_scanner,
+                               'client-header',
+                               '@INPUT@', '@OUTPUT@',
+                            ])
+
+    sources += custom_target('@0@ source'.format(proto_name),
+                             input: input_path,
+                             output: '@0@-protocol.c'.format(proto_name),
+                             command: [
+                               wayland_scanner,
+                               'private-code',
+                               '@INPUT@', '@OUTPUT@',
+                             ])
+    proto_sources_outputs += [sources]
+  else
+    proto_sources_outputs += [[]]
+  endif
+endforeach
+
 # Unfortunately it seems that we need to include the input module sources here, and build
 # them in $(buildrootdir) if we are to build them included in GTK...
 # Make sure the source listings are the same as in modules/input/Makefile.am
 immodule_srcdir = 'modules/input/'
 immodules = [
-  [ 'am-et', [ immodule_srcdir + 'imam-et.c' ] ],
-  [ 'cedilla', [ immodule_srcdir + 'imcedilla.c' ] ],
-  [ 'cyrillic-translit', [ immodule_srcdir + 'imcyrillic-translit.c' ] ],
-  [ 'inuktitut', [ immodule_srcdir + 'iminuktitut.c' ] ],
-  [ 'ipa', [ immodule_srcdir + 'imipa.c' ] ],
-  [ 'multipress', [ immodule_srcdir + 'gtkimcontextmultipress.c', immodule_srcdir + 'immultipress.c' ], true,
+  [ 'am-et', files([ immodule_srcdir + 'imam-et.c' ]) ],
+  [ 'cedilla', files([ immodule_srcdir + 'imcedilla.c' ]) ],
+  [ 'cyrillic-translit', files([ immodule_srcdir + 'imcyrillic-translit.c' ]) ],
+  [ 'inuktitut', files([ immodule_srcdir + 'iminuktitut.c' ]) ],
+  [ 'ipa', files([ immodule_srcdir + 'imipa.c' ]) ],
+  [ 'multipress', files( [ immodule_srcdir + 'gtkimcontextmultipress.c', immodule_srcdir + 'immultipress.c' ]), true,
                     ['-DMULTIPRESS_LOCALEDIR="@0@"'.format(gtk_mplocaledir),
                      '-DMULTIPRESS_CONFDIR="@0@/gtk-3.0"'.format(gtk_sysconfdir)] ],
-  [ 'thai', [ immodule_srcdir + 'thai-charprop.c', immodule_srcdir + 'gtkimcontextthai.c', immodule_srcdir + 'imthai.c' ] ],
-  [ 'ti-er', [ immodule_srcdir + 'imti-er.c' ] ],
-  [ 'ti-et', [ immodule_srcdir + 'imti-et.c' ] ],
-  [ 'viqr', [ immodule_srcdir + 'imviqr.c' ] ],
-  [ 'broadway', [ immodule_srcdir + 'imbroadway.c' ], broadway_enabled ],
-  [ 'ime', [ immodule_srcdir + 'gtkimcontextime.c', immodule_srcdir + 'imime.c' ], win32_enabled ],
-  [ 'quartz', [ immodule_srcdir + 'imquartz.c' ], quartz_enabled, '-xobjective-c' ],
-  # FIXME: needs to be ported from gtk4
-  # [ 'wayland', [ immodule_srcdir + 'imwayland.c', immodule_srcdir + 'text-input-unstable-v3-protocol.c' ], wayland_enabled ],
-  # [ 'waylandgtk', [ immodule_srcdir + 'imwaylandgtk.c', immodule_srcdir + 'gtk-text-input-protocol.c' ], wayland_enabled ],
-  [ 'xim', [ immodule_srcdir + 'gtkimcontextxim.c', immodule_srcdir + 'imxim.c' ], x11_enabled ],
+  [ 'thai', files([ immodule_srcdir + 'thai-charprop.c', immodule_srcdir + 'gtkimcontextthai.c', immodule_srcdir + 'imthai.c' ]) ],
+  [ 'ti-er', files([ immodule_srcdir + 'imti-er.c' ]) ],
+  [ 'ti-et', files([ immodule_srcdir + 'imti-et.c' ]) ],
+  [ 'viqr', files([ immodule_srcdir + 'imviqr.c' ]) ],
+  [ 'broadway', files([ immodule_srcdir + 'imbroadway.c' ]), broadway_enabled ],
+  [ 'ime', files([ immodule_srcdir + 'gtkimcontextime.c', immodule_srcdir + 'imime.c' ]), win32_enabled ],
+  [ 'quartz', files([ immodule_srcdir + 'imquartz.c' ]), quartz_enabled, '-xobjective-c' ],
+  [ 'wayland', files([ immodule_srcdir + 'imwayland.c' ]) + proto_sources_outputs[0], wayland_enabled ],
+  [ 'waylandgtk', files([ immodule_srcdir + 'imwaylandgtk.c'])  + proto_sources_outputs[1], wayland_enabled ],
+  [ 'xim', files([ immodule_srcdir + 'gtkimcontextxim.c', immodule_srcdir + 'imxim.c' ]), x11_enabled ],
 ]
 
-gtk_included_im_cflags = []
-gtk_included_im_deps = []
-immodules_cflags = [ '-DGTK_COMPILATION' ]
-included_immodules_cflags = immodules_cflags
-
-foreach l: immodules
-  name = l[0]
-  sources = l[1]
-  cond = l.get(2, true)
-  cflags = l.get(3, [])
-
-  if cond and (builtin_immodules.contains(name) or builtin_all_immodules)
-    cflag_for_included_immodule = ['-DINCLUDE_IM_@0@'.format(name)]
-    gtk_included_im_cflags += cflag_for_included_immodule
-    included_immodules_cflags += immodules_cflags + cflag_for_included_immodule + cflags
-
-    mod = static_library('staticimmodule-@0@'.format(name),
-                         sources,
-                         c_args: common_cflags + included_immodules_cflags,
-                         include_directories: [confinc, gtkinc])
-
-    gtk_included_im_deps += declare_dependency(link_with: mod)
-  endif
-endforeach
+install_data(join_paths(immodule_srcdir, 'im-multipress.conf'), install_dir: join_paths(gtk_sysconfdir, 'gtk-3.0'))
 
 # Check for bind_textdomain_codeset, including -lintl if GLib brings it in by
 # doing the same check as glib. We can't check that by linking to glib because

@@ -940,11 +940,30 @@ if cc.has_header('langinfo.h')
   endforeach
 endif
 
+# Static immodules
+gtk_included_im_deps = []
+foreach l: immodules
+  name = l[0]
+  sources = l[1]
+  cond = l.get(2, true)
+  cflags = l.get(3, [])
+
+  if cond and (builtin_immodules.contains(name) or builtin_all_immodules)
+    mod = static_library('staticimmodule-@0@'.format(name),
+                         sources,
+                         dependencies: gtk_deps + [libgdk_dep] ,
+                         c_args: gtk_cargs + common_cflags + ['-DINCLUDE_IM_@0@'.format(name)] + cflags,
+                         include_directories: [confinc, gdkinc, gtkinc])
+
+    gtk_included_im_deps += declare_dependency(link_with: mod)
+  endif
+endforeach
+
 # Library
 libgtk = shared_library('gtk-3',
                         soversion: gtk_soversion,
                         sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h],
-                        c_args: gtk_cargs + common_cflags + gtk_included_im_cflags,
+                        c_args: gtk_cargs + common_cflags,
                         include_directories: [confinc, gdkinc, gtkinc],
                         dependencies: gtk_deps + [libgdk_dep] + gtk_included_im_deps,
                         link_with: libgdk,
