@@ -474,6 +474,9 @@ test_data = \
 
 EXTRA_DIST += $(test_in_files) $(test_data)
 
+EXTRA_DIST += \
+	meson.build
+
 if BUILDOPT_INSTALL_TESTS
 insttestdir=$(libexecdir)/installed-tests/$(PACKAGE)/css/parser
 insttest_PROGRAMS = $(TEST_PROGS)
@@ -488,7 +491,8 @@ test_files = $(test_in_files:.test.in=.test)
 $(test_files): %.test: %.test.in
 	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
 
-EXTRA_DIST += $(test_in_files)
+EXTRA_DIST += \
+	$(test_in_files)
 
 CLEANFILES += $(test_files)
 

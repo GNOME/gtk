@@ -108,6 +108,8 @@ EXTRA_DIST += $(broadway_built_sources)
 
 BUILT_SOURCES = $(broadway_built_sources)
 
+EXTRA_DIST += meson.build
+
 # ------------------- MSVC Build Items ----------------
 MSVCPROJS = gdk3-broadway broadwayd
 

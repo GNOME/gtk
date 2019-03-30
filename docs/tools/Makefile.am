@@ -20,6 +20,9 @@ LDADDS = \
 	$(GDK_DEP_LIBS)			\
 	-lm
 
+EXTRA_DIST += \
+	meson.build
+
 if USE_X11
 noinst_PROGRAMS = 		\
 	doc-shooter

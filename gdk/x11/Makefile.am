@@ -90,6 +90,7 @@ libgdkx11include_HEADERS = 	\
 # We need to include all these C files here since the conditionals
 # don't seem to be correctly expanded for the dist files.
 EXTRA_DIST += 			\
-	gdksettings.c
+	gdksettings.c	\
+	meson.build
 
 -include $(top_srcdir)/git.mk

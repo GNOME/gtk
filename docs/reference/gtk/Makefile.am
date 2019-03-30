@@ -543,7 +543,9 @@ endif
 
 MAINTAINERCLEANFILES = $(man_MANS) $(BUILT_SOURCES)
 
-EXTRA_DIST += $(man_MANS)
+EXTRA_DIST += \
+	$(man_MANS) \
+	meson.build
 
 if ENABLE_GTK_DOC
 TESTS_ENVIRONMENT = cd $(srcdir) && \

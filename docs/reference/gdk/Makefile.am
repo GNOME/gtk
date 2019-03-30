@@ -198,7 +198,9 @@ endif
 include $(top_srcdir)/gtk-doc.make
 
 # Other files to distribute
-EXTRA_DIST += version.xml.in
+EXTRA_DIST += \
+	version.xml.in \
+	meson.build
 
 if ENABLE_GTK_DOC
 TESTS_ENVIRONMENT = cd $(srcdir) && \

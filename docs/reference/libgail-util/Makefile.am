@@ -34,6 +34,8 @@ HTML_IMAGES =
 include $(top_srcdir)/gtk-doc.make
 
 # Other files to distribute
-EXTRA_DIST += version.xml.in
+EXTRA_DIST += \
+	version.xml.in \
+	meson.build
 
 -include $(top_srcdir)/git.mk
