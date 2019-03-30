@@ -230,59 +230,80 @@ gtk_css_image_cross_fade_snapshot (GtkCssImage *image,
 }
 
 static gboolean
+parse_progress (GtkCssParser *parser,
+                gpointer      option_data,
+                gpointer      user_data)
+{
+  double *progress = option_data;
+  GtkCssValue *number;
+  
+  number = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_PERCENT | GTK_CSS_POSITIVE_ONLY);
+  if (number == NULL)
+    return FALSE;
+  *progress = _gtk_css_number_value_get (number, 1);
+  _gtk_css_value_unref (number);
+
+  if (*progress > 1.0)
+    {
+      _gtk_css_parser_error (parser, "Percentages over 100%% are not allowed");
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+parse_image (GtkCssParser *parser,
+             gpointer      option_data,
+             gpointer      user_data)
+{
+  GtkCssImage **image = option_data;
+
+  *image = _gtk_css_image_new_parse (parser);
+  if (*image == NULL)
+    return FALSE;
+
+  return TRUE;
+}
+
+static guint
+gtk_css_image_cross_fade_parse_arg (GtkCssParser *parser,
+                                    guint         arg,
+                                    gpointer      data)
+{
+  GtkCssImageCrossFade *self = data;
+  double progress = -1.0;
+  GtkCssImage *image = NULL;
+  GtkCssParseOption options[] =
+    {
+      { (void *) gtk_css_number_value_can_parse, parse_progress, &progress },
+      { NULL, parse_image, &image },
+    };
+
+  if (!gtk_css_parser_consume_any (parser, options, G_N_ELEMENTS (options), self))
+    return 0;
+
+  g_assert (image != NULL);
+
+  /* XXX */
+  if (progress < 0)
+    progress = 1.0 - self->total_progress;
+  gtk_css_image_cross_fade_add (self, progress, image);
+
+  return 1;
+}
+
+static gboolean
 gtk_css_image_cross_fade_parse (GtkCssImage  *image,
                                 GtkCssParser *parser)
 {
-  GtkCssImageCrossFade *self = GTK_CSS_IMAGE_CROSS_FADE (image);
-  double progress;
-
-  if (!_gtk_css_parser_try (parser, "cross-fade(", TRUE))
+  if (!gtk_css_parser_has_function (parser, "cross-fade"))
     {
       _gtk_css_parser_error (parser, "Expected 'cross-fade('");
       return FALSE;
     }
 
-  if (gtk_css_number_value_can_parse (parser))
-    {
-      GtkCssValue *number;
-      
-      number = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_PERCENT | GTK_CSS_POSITIVE_ONLY);
-      if (number == NULL)
-        return FALSE;
-      progress = _gtk_css_number_value_get (number, 1);
-      _gtk_css_value_unref (number);
-
-      if (progress > 1.0)
-        {
-          _gtk_css_parser_error (parser, "Percentages over 100%% are not allowed");
-          return FALSE;
-        }
-    }
-  else
-    progress = 0.5;
-
-  image = _gtk_css_image_new_parse (parser);
-  if (image == NULL)
-    return FALSE;
-
-  gtk_css_image_cross_fade_add (self, progress, image);
-
-  if (_gtk_css_parser_try (parser, ",", TRUE))
-    {
-      /* XXX: allow parsing colors here */
-      image = _gtk_css_image_new_parse (parser);
-      if (image == NULL)
-        return FALSE;
-      gtk_css_image_cross_fade_add (self, 1.0 - progress, image);
-    }
-
-  if (!_gtk_css_parser_try (parser, ")", TRUE))
-    {
-      _gtk_css_parser_error (parser, "Missing closing bracket");
-      return FALSE;
-    }
-
-  return TRUE;
+  return gtk_css_parser_consume_function (parser, 1, G_MAXUINT, gtk_css_image_cross_fade_parse_arg, image);
 }
 
 static void
