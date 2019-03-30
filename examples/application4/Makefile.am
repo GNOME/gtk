@@ -27,6 +27,7 @@ resources.c: exampleapp.gresource.xml window.ui app-menu.ui
 EXTRA_DIST = 					\
 	window.ui 				\
 	app-menu.ui 				\
-	exampleapp.gresource.xml
+	exampleapp.gresource.xml	\
+	meson.build
 
 -include $(top_srcdir)/git.mk

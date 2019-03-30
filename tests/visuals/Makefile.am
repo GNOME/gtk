@@ -31,6 +31,7 @@ EXTRA_DIST = \
 	linked-buttons-vertical.ui \
 	osd-toolbars.ui \
 	primary-toolbar.ui \
-	suggested-action-buttons.ui
+	suggested-action-buttons.ui \
+	meson.build
 
 -include $(top_srcdir)/git.mk

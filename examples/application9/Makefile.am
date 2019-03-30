@@ -41,7 +41,8 @@ EXTRA_DIST = 					\
 	prefs.ui 				\
 	gears-menu.ui 				\
 	exampleapp.gresource.xml 		\
-	org.gtk.exampleapp.gschema.xml
+	org.gtk.exampleapp.gschema.xml	\
+	meson.build
 
 CLEANFILES = 					\
 	gschemas.compiled

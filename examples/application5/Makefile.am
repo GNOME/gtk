@@ -38,7 +38,8 @@ EXTRA_DIST = 					\
 	window.ui 				\
 	app-menu.ui 				\
 	exampleapp.gresource.xml 		\
-	org.gtk.exampleapp.gschema.xml
+	org.gtk.exampleapp.gschema.xml	\
+	meson.build
 
 CLEANFILES = 					\
 	gschemas.compiled

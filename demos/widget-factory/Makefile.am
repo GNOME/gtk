@@ -66,6 +66,7 @@ EXTRA_DIST += 				\
 	help-overlay.ui			\
 	widget-factory.gresource.xml	\
 	data/source.svg			\
-	data/symbolic-source.svg
+	data/symbolic-source.svg	\
+	meson.build
 
 -include $(top_srcdir)/git.mk

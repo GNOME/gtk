@@ -117,7 +117,9 @@ EXTRA_DIST += 				\
 	demo.gresource.xml		\
 	$(resource_files)		\
 	org.gtk.Demo.gschema.xml	\
-	demos.h.win32
+	demos.h.win32	\
+	meson.build	\
+	geninclude.py
 
 gsettings_SCHEMAS = \
 	org.gtk.Demo.gschema.xml
