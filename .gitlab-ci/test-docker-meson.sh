@@ -9,7 +9,12 @@ export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 export PATH="${HOME}/.local/bin:${PATH}"
 python3 -m pip install --user meson==0.49.2
 
-meson -Ddocumentation=true -Dman-pages=true _build
+meson \
+    -Dcloudproviders=true \
+    -Ddocumentation=true \
+    -Dman-pages=true \
+    _build
+
 cd _build
 ninja
 
