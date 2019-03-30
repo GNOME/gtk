@@ -573,6 +573,7 @@ EXTRA_DIST += 			\
 	mydialog.ui		\
 	mydialog2.ui		\
 	popover.ui		\
-	selectionmode.ui
+	selectionmode.ui	\
+	meson.build
 
 -include $(top_srcdir)/git.mk

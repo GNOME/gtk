@@ -107,6 +107,7 @@ endef
 EXTRA_DIST += 					\
 	protocol/gtk-primary-selection.xml	\
 	protocol/gtk-shell.xml			\
-	protocol/server-decoration.xml
+	protocol/server-decoration.xml	\
+	meson.build
 
 -include $(top_srcdir)/git.mk

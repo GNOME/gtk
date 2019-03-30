@@ -33,6 +33,9 @@ CLEANFILES = 			\
 	gdksurface.png		\
 	$(NULL)
 
+EXTRA_DIST += \
+	meson.build
+
 if BUILDOPT_INSTALL_TESTS
 insttestdir=$(libexecdir)/installed-tests/$(PACKAGE)
 insttest_PROGRAMS = $(TEST_PROGS)

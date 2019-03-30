@@ -1776,6 +1776,15 @@ EXTRA_DIST +=                   \
 	gtktypebuiltins.c.template \
 	gtktypebuiltins.h.template \
 	gtkprivatetypebuiltins.c.template \
-	gtkprivatetypebuiltins.h.template
+	gtkprivatetypebuiltins.h.template \
+	meson.build \
+	gen-gtk-gresources-xml.py \
+	gentypefuncs.py \
+	a11y/meson.build \
+	deprecated/meson.build \
+	inspector/meson.build \
+	theme/Adwaita/meson.build \
+	theme/HighContrast/meson.build
+
 
 -include $(top_srcdir)/git.mk

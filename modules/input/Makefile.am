@@ -307,7 +307,11 @@ BUILT_SOURCES = $(protocol_built_sources) $(protocol_built_sources_gtk)
 EXTRA_DIST += $(protocol_built_sources) $(protocol_built_sources_gtk)
 endif
 
-EXTRA_DIST += README.multipress
+EXTRA_DIST += \
+	README.multipress \
+	meson.build \
+	text-input-unstable-v3.xml \
+	gtk-text-input.xml
 
 CLEANFILES = immodules.cache
 
