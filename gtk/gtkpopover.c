@@ -1310,10 +1310,8 @@ gtk_popover_snapshot (GtkWidget   *widget,
   if (border.bottom > 0)
     {
       GdkRGBA border_color;
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_style_context_get_border_color (context, &border_color);
-G_GNUC_END_IGNORE_DEPRECATIONS
 
+      gtk_style_context_get (context, "border-color", &border_color, NULL);
       gtk_popover_apply_tail_path (popover, cr);
       gdk_cairo_set_source_rgba (cr, &border_color);
 

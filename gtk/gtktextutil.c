@@ -250,9 +250,7 @@ set_attributes_from_style (GtkStyleContext   *context,
   if (!values->appearance.fg_rgba)
     values->appearance.fg_rgba = gdk_rgba_copy (&black);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_style_context_get_background_color (context, values->appearance.bg_rgba);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  gtk_style_context_get (context, "background-color", values->appearance.bg_rgba, NULL);
   gtk_style_context_get_color (context, values->appearance.fg_rgba);
 
   if (values->font)
