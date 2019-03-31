@@ -91,14 +91,6 @@ _gtk_css_parser_free (GtkCssParser *parser)
 }
 
 gboolean
-_gtk_css_parser_is_eof (GtkCssParser *parser)
-{
-  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), TRUE);
-
-  return *parser->data == 0;
-}
-
-gboolean
 _gtk_css_parser_has_prefix (GtkCssParser *parser,
                             const char   *prefix)
 {
