@@ -18,6 +18,7 @@ if cc.get_id() == 'msvc'
 endif
 
 libgailutil = shared_library('gailutil-3',
+                             soversion: gtk_soversion,
                              sources: [gailutil_sources],
                              dependencies: libgtk_dep,
                              include_directories: [confinc, gtkinc],
