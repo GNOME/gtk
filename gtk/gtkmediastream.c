@@ -619,7 +619,7 @@ gtk_media_stream_set_playing (GtkMediaStream *self,
  *
  * Returns whether the streams playback is finished.
  *
- * Return: %TRUE if playback is finished
+ * Returns: %TRUE if playback is finished
  */
 gboolean
 gtk_media_stream_get_ended (GtkMediaStream *self)
@@ -637,7 +637,7 @@ gtk_media_stream_get_ended (GtkMediaStream *self)
  *
  * Returns the current presentation timestamp in microseconds.
  *
- * Return: the timestamp in microseconds
+ * Returns: the timestamp in microseconds
  */
 gint64
 gtk_media_stream_get_timestamp (GtkMediaStream *self)
