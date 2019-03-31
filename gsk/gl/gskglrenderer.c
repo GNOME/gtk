@@ -58,9 +58,10 @@
 
 typedef enum
 {
-  FORCE_OFFSCREEN = 1 << 0,
-  RESET_CLIP      = 1 << 1,
-  RESET_OPACITY   = 1 << 2
+  FORCE_OFFSCREEN  = 1 << 0,
+  RESET_CLIP       = 1 << 1,
+  RESET_OPACITY    = 1 << 2,
+  DUMP_FRAMEBUFFER = 1 << 3
 } OffscreenFlags;
 
 static void G_GNUC_UNUSED
@@ -2672,6 +2673,18 @@ add_offscreen_ops (GskGLRenderer         *self,
     prev_opacity = ops_set_opacity (builder, 1.0);
 
   gsk_gl_renderer_add_render_ops (self, child_node, builder);
+
+#ifdef G_ENABLE_DEBUG
+  if (G_UNLIKELY (flags & DUMP_FRAMEBUFFER))
+    {
+      static int k;
+      ops_dump_framebuffer (builder, g_strdup_printf ("%s_%p_%d.png",
+                                                      child_node->node_class->type_name,
+                                                      child_node,
+                                                      k ++),
+                            width, height);
+    }
+#endif
 
   if (flags & RESET_OPACITY)
     ops_set_opacity (builder, prev_opacity);
