@@ -216,16 +216,15 @@ gtk_css_palette_value_parse (GtkCssParser *parser)
   GtkCssValue *result, *color;
   char *ident;
 
-  if (_gtk_css_parser_try (parser, "default", TRUE))
+  if (gtk_css_parser_try_ident (parser, "default"))
     return gtk_css_palette_value_new_default ();
   
   result = gtk_css_palette_value_new_empty ();
 
   do {
-    ident = _gtk_css_parser_try_ident (parser, TRUE);
+    ident = gtk_css_parser_consume_ident (parser);
     if (ident == NULL)
       {
-        _gtk_css_parser_error (parser, "expected color name");
         _gtk_css_value_unref (result);
         return NULL;
       }
@@ -240,7 +239,7 @@ gtk_css_palette_value_parse (GtkCssParser *parser)
 
     gtk_css_palette_value_add_color (result, ident, color);
     g_free (ident);
-  } while (_gtk_css_parser_try (parser, ",", TRUE));
+  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   return result;
 }
