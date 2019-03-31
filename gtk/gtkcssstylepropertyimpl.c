@@ -245,10 +245,22 @@ static GtkCssValue *
 font_weight_parse (GtkCssStyleProperty *property,
                    GtkCssParser        *parser)
 {
-  GtkCssValue *value = _gtk_css_font_weight_value_try_parse (parser);
+  GtkCssValue *value;
   
+  value = gtk_css_font_weight_value_try_parse (parser);
   if (value == NULL)
-    _gtk_css_parser_error (parser, "unknown value for property");
+    {
+      value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_POSITIVE_ONLY);
+
+      if (value == NULL)
+        _gtk_css_parser_error (parser, "unknown value for property");
+      else if (_gtk_css_number_value_get (value, 100) < 1 || 
+               _gtk_css_number_value_get (value, 100) > 1000)
+        {
+          _gtk_css_parser_error (parser, "Font weight values must be between 1 and 1000");
+          g_clear_pointer (&value, gtk_css_value_unref);
+        }
+    }
 
   return value;
 }
@@ -259,7 +271,7 @@ font_weight_query (GtkCssStyleProperty *property,
                    GValue              *value)
 {
   g_value_init (value, PANGO_TYPE_WEIGHT);
-  g_value_set_enum (value, _gtk_css_font_weight_value_get (css_value));
+  g_value_set_enum (value, _gtk_css_number_value_get (css_value, 100));
 }
 
 static GtkCssValue *
@@ -1004,7 +1016,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_TEXT_SIZE,
                                           font_weight_parse,
                                           font_weight_query,
-                                          _gtk_css_font_weight_value_new (PANGO_WEIGHT_NORMAL));
+                                          _gtk_css_number_value_new (PANGO_WEIGHT_NORMAL, GTK_CSS_NUMBER));
   gtk_css_style_property_register        ("font-stretch",
                                           GTK_CSS_PROPERTY_FONT_STRETCH,
                                           PANGO_TYPE_STRETCH,
