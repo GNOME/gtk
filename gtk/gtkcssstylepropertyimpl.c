@@ -159,13 +159,15 @@ font_family_parse_one (GtkCssParser *parser)
 {
   char *name;
 
-  name = _gtk_css_parser_try_ident (parser, TRUE);
-  if (name)
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
     {
-      GString *string = g_string_new (name);
+      GString *string = g_string_new (NULL);
+
+      name = gtk_css_parser_consume_ident (parser);
       g_free (name);
-      while ((name = _gtk_css_parser_try_ident (parser, TRUE)))
+      while (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
         {
+          name = gtk_css_parser_consume_ident (parser);
           g_string_append_c (string, ' ');
           g_string_append (string, name);
           g_free (name);
