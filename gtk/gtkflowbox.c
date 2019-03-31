@@ -2382,9 +2382,7 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
           cairo_append_path (cr, path);
           cairo_path_destroy (path);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          gtk_style_context_get_border_color (context, &border_color);
-G_GNUC_END_IGNORE_DEPRECATIONS
+          gtk_style_context_get (context, "border-color", &border_color, NULL);
           gtk_style_context_get_border (context, &border);
 
           cairo_set_line_width (cr, border.left);

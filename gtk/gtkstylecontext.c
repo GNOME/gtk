@@ -1992,9 +1992,7 @@ _gtk_style_context_get_attributes (AtkAttributeSet *attributes,
   GdkRGBA color;
   gchar *value;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_style_context_get_background_color (context, &color);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  gtk_style_context_get (context, "background-color", &color, NULL);
   value = g_strdup_printf ("%u,%u,%u",
                            (guint) ceil (color.red * 65536 - color.red),
                            (guint) ceil (color.green * 65536 - color.green),

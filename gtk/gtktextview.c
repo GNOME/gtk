@@ -7310,9 +7310,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_style_context_get_background_color (context, values->appearance.bg_rgba);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  gtk_style_context_get (context, "background-color", values->appearance.bg_rgba, NULL);
   gtk_style_context_get_color (context, values->appearance.fg_rgba);
 
   if (values->font)
