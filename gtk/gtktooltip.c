@@ -603,6 +603,9 @@ gtk_tooltip_position (GtkTooltip *tooltip,
                 "gtk-cursor-theme-size", &cursor_size,
                 NULL);
 
+  if (cursor_size == 0)
+    cursor_size = 16;
+
   if (device)
     anchor_rect_padding = MAX (4, cursor_size - 32);
   else
