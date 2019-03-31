@@ -169,8 +169,7 @@ gdkconfig = configure_file(
   input  : 'gdkconfig.h.meson',
   output : 'gdkconfig.h',
   configuration : gdkconfig_cdata,
-  install_dir: join_paths(gtk_includedir, 'gtk-3.0/gdk'),
-  install : true)
+  install_dir: join_paths(gtk_includedir, 'gtk-3.0/gdk'))
 
 
 gdkversion_cdata = configuration_data()
