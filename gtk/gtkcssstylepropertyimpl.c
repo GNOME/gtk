@@ -479,7 +479,7 @@ parse_font_kerning (GtkCssStyleProperty *property,
 static gboolean
 value_is_done_parsing (GtkCssParser *parser)
 {
-  return _gtk_css_parser_is_eof (parser) ||
+  return gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
          gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA) ||
          gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SEMICOLON) ||
          gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_CLOSE_CURLY);
