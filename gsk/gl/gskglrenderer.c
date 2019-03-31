@@ -1215,13 +1215,14 @@ render_color_matrix_node (GskGLRenderer       *self,
   const float min_y = builder->dy + node->bounds.origin.y;
   const float max_x = min_x + node->bounds.size.width;
   const float max_y = min_y + node->bounds.size.height;
+  GskRenderNode *child = gsk_color_matrix_node_get_child (node);
   int texture_id;
   gboolean is_offscreen;
 
   /* Pass min_x/max_x/min_y/max_y without builder->dx/dy! */
   add_offscreen_ops (self, builder,
                      &node->bounds,
-                     gsk_color_matrix_node_get_child (node),
+                     child,
                      &texture_id, &is_offscreen,
                      RESET_CLIP | RESET_OPACITY);
 
