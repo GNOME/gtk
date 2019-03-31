@@ -312,7 +312,7 @@ parse_block (GtkCssKeyframes *keyframes,
       if (!parse_declaration (keyframes, k, parser))
         _gtk_css_parser_resync (parser, TRUE, '}');
 
-      if (_gtk_css_parser_is_eof (parser))
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
         {
           _gtk_css_parser_error (parser, "Expected closing '}' after keyframes block");
           return FALSE;

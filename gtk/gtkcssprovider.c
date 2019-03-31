@@ -948,7 +948,7 @@ parse_keyframes (GtkCssScanner *scanner)
                                       GTK_CSS_PARSER_ERROR,
                                       GTK_CSS_PARSER_ERROR_SYNTAX,
                                       "expected '}' after declarations");
-      if (!_gtk_css_parser_is_eof (scanner->parser))
+      if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
         _gtk_css_parser_resync (scanner->parser, FALSE, 0);
     }
 
@@ -1051,7 +1051,7 @@ parse_declaration (GtkCssScanner *scanner,
 
       if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_SEMICOLON) &&
           !gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_CLOSE_CURLY) &&
-          !_gtk_css_parser_is_eof (scanner->parser))
+          !gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
         {
           gtk_css_provider_error (scanner->provider,
                                   scanner,
@@ -1101,7 +1101,7 @@ check_for_semicolon:
   if (!_gtk_css_parser_try (scanner->parser, ";", TRUE))
     {
       if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_CLOSE_CURLY) &&
-          !_gtk_css_parser_is_eof (scanner->parser))
+          !gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
         {
           gtk_css_provider_error_literal (scanner->provider,
                                           scanner,
@@ -1117,7 +1117,7 @@ static void
 parse_declarations (GtkCssScanner *scanner,
                     GtkCssRuleset *ruleset)
 {
-  while (!_gtk_css_parser_is_eof (scanner->parser) &&
+  while (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF) &&
          !gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_CLOSE_CURLY))
     {
       parse_declaration (scanner, ruleset);
@@ -1161,7 +1161,7 @@ parse_ruleset (GtkCssScanner *scanner)
                                       GTK_CSS_PARSER_ERROR,
                                       GTK_CSS_PARSER_ERROR_SYNTAX,
                                       "expected '}' after declarations");
-      if (!_gtk_css_parser_is_eof (scanner->parser))
+      if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
         {
           _gtk_css_parser_resync (scanner->parser, FALSE, 0);
           g_slist_free_full (selectors, (GDestroyNotify) _gtk_css_selector_free);
@@ -1191,7 +1191,7 @@ parse_stylesheet (GtkCssScanner *scanner)
 
   _gtk_css_parser_skip_whitespace (scanner->parser);
 
-  while (!_gtk_css_parser_is_eof (scanner->parser))
+  while (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
     {
       if (_gtk_css_parser_try (scanner->parser, "<!--", TRUE) ||
           _gtk_css_parser_try (scanner->parser, "-->", TRUE))
