@@ -15,6 +15,7 @@ meson \
     -Dman-pages=true \
     -Dbroadway-backend=true \
     -Dxinerama=yes \
+    -Dprint-backends="file,lpr,test,cloudprint,cups" \
     _build
 
 cd _build

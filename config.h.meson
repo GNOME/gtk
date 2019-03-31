@@ -327,3 +327,5 @@
 #mesondefine HAVE_DEV_EVDEV_INPUT_H
 
 #mesondefine HAVE_TRUNC
+
+#mesondefine GTK_PRINT_BACKENDS

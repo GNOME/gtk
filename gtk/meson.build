@@ -5,8 +5,6 @@ subdir('inspector')
 gtk_cargs = [
   '-DGTK_COMPILATION',
   '-DG_LOG_DOMAIN="Gtk"',
-  # FIXME, support other backends
-  '-DGTK_PRINT_BACKENDS="file"',
   '-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED',
   '-DGTK_BINARY_VERSION="@0@"'.format(gtk_binary_version),
   '-DGTK_HOST="@0@"'.format(host_machine.system()),
