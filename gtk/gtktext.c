@@ -361,6 +361,7 @@ static void        gtk_text_insert_text          (GtkText    *self,
 static void        gtk_text_delete_text          (GtkText    *self,
                                                   int         start_pos,
                                                   int         end_pos);
+static void        gtk_text_delete_selection     (GtkText    *self);
 static void        gtk_text_set_selection_bounds (GtkText    *self,
                                                   int         start,
                                                   int         end);
@@ -3092,6 +3093,17 @@ gtk_text_delete_text (GtkText *self,
 }
 
 static void
+gtk_text_delete_selection (GtkText *self)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  int start_pos = MIN (priv->selection_bound, priv->current_pos);
+  int end_pos = MAX (priv->selection_bound, priv->current_pos);
+
+  gtk_text_delete_text (self, start_pos, end_pos);
+}
+
+static void
 gtk_text_set_selection_bounds (GtkText *self,
                                int      start,
                                int      end)
@@ -3560,7 +3572,7 @@ gtk_text_delete_from_cursor (GtkText       *self,
 
   if (priv->selection_bound != priv->current_pos)
     {
-      gtk_text_delete_text (self, priv->selection_bound, priv->current_pos);
+      gtk_text_delete_selection (self);
       return;
     }
   
@@ -3646,7 +3658,7 @@ gtk_text_backspace (GtkText *self)
 
   if (priv->selection_bound != priv->current_pos)
     {
-      gtk_text_delete_text (self, priv->selection_bound, priv->current_pos);
+      gtk_text_delete_selection (self);
       return;
     }
 
@@ -3737,7 +3749,7 @@ gtk_text_cut_clipboard (GtkText *self)
   if (priv->editable)
     {
       if (priv->selection_bound != priv->current_pos)
-        gtk_text_delete_text (self, priv->selection_bound, priv->current_pos);
+        gtk_text_delete_selection (self);
     }
   else
     {
@@ -3786,7 +3798,7 @@ gtk_text_delete_cb (GtkText *self)
   if (priv->editable)
     {
       if (priv->selection_bound != priv->current_pos)
-        gtk_text_delete_text (self, priv->selection_bound, priv->current_pos);
+        gtk_text_delete_selection (self);
     }
 }
 
@@ -3958,7 +3970,7 @@ gtk_text_enter_text (GtkText    *self,
   priv->need_im_reset = FALSE;
 
   if (priv->selection_bound != priv->current_pos)
-    gtk_text_delete_text (self, priv->selection_bound, priv->current_pos);
+    gtk_text_delete_selection (self);
   else
     {
       if (priv->overwrite_mode)
@@ -4988,7 +5000,7 @@ paste_received (GObject      *clipboard,
 
   begin_change (self);
   if (priv->selection_bound != priv->current_pos)
-    gtk_text_delete_text (self, priv->selection_bound, priv->current_pos);
+    gtk_text_delete_selection (self);
 
   pos = priv->current_pos;
   gtk_text_insert_text (self, text, length, &pos);
@@ -6106,8 +6118,8 @@ gtk_text_drag_data_received (GtkWidget        *widget,
         {
           /* Replacing selection */
           begin_change (self);
-          gtk_text_delete_text (self, priv->selection_bound, priv->current_pos);
-          pos = priv->selection_bound;
+          gtk_text_delete_selection (self);
+          pos = MIN (priv->selection_bound, priv->current_pos);
           gtk_text_insert_text (self, str, length, &pos);
           end_change (self);
         }
@@ -6150,7 +6162,7 @@ gtk_text_drag_data_delete (GtkWidget *widget,
 
   if (priv->editable &&
       priv->selection_bound != priv->current_pos)
-    gtk_text_delete_text (self, priv->selection_bound, priv->current_pos);
+    gtk_text_delete_selection (self);
 }
 
 /* We display the cursor when
