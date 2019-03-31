@@ -216,86 +216,93 @@ _gtk_css_ease_value_can_parse (GtkCssParser *parser)
   return FALSE;
 }
 
+static guint
+gtk_css_ease_value_parse_cubic_bezier_arg (GtkCssParser *parser,
+                                           guint         arg,
+                                           gpointer      data)
+{
+  double *values = data;
+
+  if (!gtk_css_parser_consume_number (parser, &values[arg]))
+    return 0;
+
+  if (arg % 2 == 0)
+    {
+      if (values[arg] < 0 || values[arg] > 1.0)
+        {
+          _gtk_css_parser_error (parser, "value %g out of range. Must be from 0.0 to 1.0", values[arg]);
+          return 0;
+        }
+    }
+
+  return 1;
+}
+
 static GtkCssValue *
 gtk_css_ease_value_parse_cubic_bezier (GtkCssParser *parser)
 {
   double values[4];
-  guint i;
 
-  for (i = 0; i < 4; i++)
-    {
-      if (!_gtk_css_parser_try (parser, i ? "," : "cubic-bezier(", TRUE))
-        {
-          _gtk_css_parser_error (parser, "Expected '%s'", i ? "," : "(");
-          return NULL;
-        }
-      if (!_gtk_css_parser_try_double (parser, &values[i]))
-        {
-          _gtk_css_parser_error (parser, "Expected a number");
-          return NULL;
-        }
-      if ((i == 0 || i == 2) &&
-          (values[i] < 0 || values[i] > 1.0))
-        {
-          _gtk_css_parser_error (parser, "value %g out of range. Must be from 0.0 to 1.0", values[i]);
-          return NULL;
-        }
-    }
-
-  if (!_gtk_css_parser_try (parser, ")", TRUE))
-    {
-      _gtk_css_parser_error (parser, "Missing closing ')' for cubic-bezier");
-      return NULL;
-    }
+  if (!gtk_css_parser_consume_function (parser, 4, 4, gtk_css_ease_value_parse_cubic_bezier_arg, values))
+    return NULL;
 
   return _gtk_css_ease_value_new_cubic_bezier (values[0], values[1], values[2], values[3]);
+}
+
+typedef struct 
+{
+  int n_steps;
+  gboolean start;
+} ParseStepsData;
+
+static guint
+gtk_css_ease_value_parse_steps_arg (GtkCssParser *parser,
+                                    guint         arg,
+                                    gpointer      data_)
+{
+  ParseStepsData *data = data_;
+
+  switch (arg)
+  {
+    case 0:
+      if (!_gtk_css_parser_try_int (parser, &data->n_steps))
+        {
+          _gtk_css_parser_error (parser, "Expected number of steps");
+          return 0;
+        }
+      else if (data->n_steps < 1)
+        {
+          _gtk_css_parser_error (parser, "Number of steps must be > 0");
+          return 0;
+        }
+      return 1;
+
+    case 1:
+      if (gtk_css_parser_try_ident (parser, "start"))
+        data->start = TRUE;
+      else if (gtk_css_parser_try_ident (parser, "end"))
+        data->start = FALSE;
+      else
+        {
+          _gtk_css_parser_error (parser, "Only allowed values are 'start' and 'end'");
+          return 0;
+        }
+      return 1;
+
+    default:
+      g_return_val_if_reached (0);
+  }
 }
 
 static GtkCssValue *
 gtk_css_ease_value_parse_steps (GtkCssParser *parser)
 {
-  int n_steps;
-  gboolean start;
+  ParseStepsData data = { 0, FALSE };  
 
-  if (!_gtk_css_parser_try (parser, "steps(", TRUE))
-    {
-      _gtk_css_parser_error (parser, "Expected '('");
-      return NULL;
-    }
+  if (!gtk_css_parser_consume_function (parser, 1, 2, gtk_css_ease_value_parse_steps_arg, &data))
+    return NULL;
 
-  if (!_gtk_css_parser_try_int (parser, &n_steps))
-    {
-      _gtk_css_parser_error (parser, "Expected number of steps");
-      return NULL;
-    }
-  else if (n_steps < 1)
-    {
-      _gtk_css_parser_error (parser, "Number of steps must be > 0");
-      return NULL;
-    }
-
-  if (_gtk_css_parser_try (parser, ",", TRUE))
-    {
-      if (gtk_css_parser_try_ident (parser, "start"))
-        start = TRUE;
-      else if (gtk_css_parser_try_ident (parser, "end"))
-        start = FALSE;
-      else
-        {
-          _gtk_css_parser_error (parser, "Only allowed values are 'start' and 'end'");
-          return NULL;
-        }
-    }
-  else
-    start = FALSE;
-
-  if (!_gtk_css_parser_try (parser, ")", TRUE))
-    {
-      _gtk_css_parser_error (parser, "Missing closing ')' for steps");
-      return NULL;
-    }
-
-  return _gtk_css_ease_value_new_steps (n_steps, start);
+  return _gtk_css_ease_value_new_steps (data.n_steps, data.start);
 }
 
 GtkCssValue *
