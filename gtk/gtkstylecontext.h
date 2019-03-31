@@ -1026,13 +1026,6 @@ gboolean gtk_style_context_lookup_color (GtkStyleContext *context,
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_color            (GtkStyleContext *context,
                                              GdkRGBA         *color);
-GDK_DEPRECATED_FOR(gtk_render_background)
-void gtk_style_context_get_background_color (GtkStyleContext *context,
-                                             GdkRGBA         *color);
-GDK_DEPRECATED_FOR(gtk_render_frame)
-void gtk_style_context_get_border_color     (GtkStyleContext *context,
-                                             GdkRGBA         *color);
-
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_border           (GtkStyleContext *context,
                                              GtkBorder       *border);
