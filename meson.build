@@ -615,8 +615,9 @@ builtin_modules_opt = get_option('builtin_immodules')
 builtin_immodules = []
 
 if builtin_modules_opt == ''
-  if cc.get_id() == 'msvc'
-  # Current MSVC projects build all immodules directly into GTK by default
+  if os_win32
+    # Current MSVC projects build all immodules directly into GTK by default,
+    # as does the mingw autotools build
     message('IMModules are built into GTK for MSVC builds by default')
     builtin_immodules = ['all']
   else
