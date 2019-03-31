@@ -450,7 +450,33 @@ parse_font (GtkCssShorthandProperty  *shorthand,
 
       if (values[3] == NULL)
         {
-          values[3] = _gtk_css_font_weight_value_try_parse (parser);
+          values[3] = gtk_css_font_weight_value_try_parse (parser);
+          if (values[3] == NULL && gtk_css_number_value_can_parse (parser))
+            {
+              /* This needs to check for font-size, too */
+              GtkCssValue *num = _gtk_css_number_value_parse (parser,
+                                                              GTK_CSS_PARSE_NUMBER |
+                                                              GTK_CSS_PARSE_LENGTH |
+                                                              GTK_CSS_PARSE_PERCENT |
+                                                              GTK_CSS_POSITIVE_ONLY);
+              if (num == NULL)
+                return FALSE;
+
+              if (gtk_css_number_value_get_dimension (num) != GTK_CSS_DIMENSION_NUMBER)
+                {
+                  values[5] = num;
+                  goto have_font_size;
+                }
+
+              values[3] = num;
+              if (_gtk_css_number_value_get (values[3], 100) < 1 || 
+                  _gtk_css_number_value_get (values[3], 100) > 1000)
+                {
+                  _gtk_css_parser_error (parser, "Font weight values must be between 1 and 1000");
+                  g_clear_pointer (&values[3], gtk_css_value_unref);
+                }
+              return FALSE;
+            }
           parsed_one = parsed_one || values[3] != NULL;
         }
 
@@ -464,6 +490,7 @@ parse_font (GtkCssShorthandProperty  *shorthand,
 
   values[5] = gtk_css_font_size_value_parse (parser);
 
+have_font_size:
   values[0] = gtk_css_font_family_value_parse (parser);
 
   return values[0] != NULL && values[5] != NULL;
@@ -1119,7 +1146,7 @@ pack_font_description (GtkCssShorthandProperty *shorthand,
 
   v = (* query_func) (GTK_CSS_PROPERTY_FONT_WEIGHT, query_data);
   if (v)
-    pango_font_description_set_weight (description, _gtk_css_font_weight_value_get (v));
+    pango_font_description_set_weight (description, _gtk_css_number_value_get (v, 100));
 
   v = (* query_func) (GTK_CSS_PROPERTY_FONT_STRETCH, query_data);
   if (v)
