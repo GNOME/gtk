@@ -14,7 +14,7 @@ if get_option('documentation')
     version_conf.set('GTK_VERSION', meson.project_version())
 
     src_dir_conf = configuration_data()
-    src_dir_conf.set('SRC_DIR', meson.source_root())
+    src_dir_conf.set('abs_top_srcdir', meson.source_root())
 endif
 
 subdir('gdk')
