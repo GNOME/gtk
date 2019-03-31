@@ -351,7 +351,7 @@ struct _GtkWidget
  *   based on natural size.
  * @style_updated: Signal emitted when the GtkStyleContext of a widget
  *   is changed.
- * @touch_event:
+ * @touch_event: Signal emitted when a touch event happens
  * @get_preferred_height_and_baseline_for_width:
  * @adjust_baseline_request:
  * @adjust_baseline_allocation:
