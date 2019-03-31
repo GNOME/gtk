@@ -96,6 +96,7 @@ gboolean        _gtk_css_parser_try_double        (GtkCssParser          *parser
 gboolean        _gtk_css_parser_try_hash_color    (GtkCssParser          *parser,
                                                    GdkRGBA               *rgba);
 
+char *          gtk_css_parser_consume_ident      (GtkCssParser          *self);
 gboolean        gtk_css_parser_consume_number     (GtkCssParser          *self,
                                                    double                *number);
 gboolean        gtk_css_parser_consume_function   (GtkCssParser          *self,
