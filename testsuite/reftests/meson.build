@@ -408,21 +408,20 @@ testdata = [
 ]
 
 foreach testname : testdata
-  if not testname.endswith('.ui') or testname.endswith('.ref.ui')
-    continue
+  if testname.endswith('.ui') and not testname.endswith('.ref.ui')
+    test('reftest ' + testname, gtk_reftest,
+         args: [ '--tap', '-k', '--verbose', join_paths(meson.current_source_dir(), testname) ],
+         env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+                'GSETTINGS_BACKEND=memory',
+                'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
+                'GTK_CSD=1',
+                'G_ENABLE_DIAGNOSTIC=0',
+                'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+                'GSK_RENDERER=opengl',
+                'REFTEST_MODULE_DIR=@0@'.format(meson.current_build_dir()),
+              ],
+         suite: 'reftest')
   endif
-  test('reftest ' + testname, gtk_reftest,
-       args: [ '--tap', '-k', '--verbose', join_paths(meson.current_source_dir(), testname) ],
-       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
-              'GSETTINGS_BACKEND=memory',
-              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
-              'GTK_CSD=1',
-              'G_ENABLE_DIAGNOSTIC=0',
-              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-              'GSK_RENDERER=opengl',
-              'REFTEST_MODULE_DIR=@0@'.format(meson.current_build_dir()),
-            ],
-       suite: 'reftest')
 endforeach
 
