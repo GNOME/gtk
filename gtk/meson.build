@@ -939,6 +939,8 @@ if cc.has_header('langinfo.h')
   endforeach
 endif
 
+gtk_dep_sources = [gtkversion, gtktypebuiltins_h]
+
 # Static immodules
 gtk_included_im_deps = []
 foreach l: immodules
@@ -949,7 +951,7 @@ foreach l: immodules
 
   if cond and (builtin_immodules.contains(name) or builtin_all_immodules)
     mod = static_library('staticimmodule-@0@'.format(name),
-                         sources,
+                         sources + gtk_dep_sources,
                          dependencies: gtk_deps + [libgdk_dep] ,
                          c_args: gtk_cargs + common_cflags + ['-DINCLUDE_IM_@0@'.format(name)] + cflags,
                          include_directories: [confinc, gdkinc, gtkinc])
@@ -970,7 +972,6 @@ libgtk = shared_library('gtk-3',
                         darwin_versions : gtk_osxversions,
                         install: true)
 
-gtk_dep_sources = [gtkversion, gtktypebuiltins_h]
 # Introspection
 if build_gir
   gir_args = ['--quiet']
