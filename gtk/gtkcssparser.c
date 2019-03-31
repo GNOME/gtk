@@ -91,14 +91,6 @@ _gtk_css_parser_free (GtkCssParser *parser)
 }
 
 gboolean
-_gtk_css_parser_is_eof (GtkCssParser *parser)
-{
-  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), TRUE);
-
-  return *parser->data == 0;
-}
-
-gboolean
 _gtk_css_parser_has_prefix (GtkCssParser *parser,
                             const char   *prefix)
 {
@@ -602,6 +594,9 @@ gtk_css_parser_has_token (GtkCssParser    *parser,
     case GTK_CSS_TOKEN_AT_KEYWORD:
       return *parser->data == '@';
 
+    case GTK_CSS_TOKEN_EOF:
+      return *parser->data == 0;
+
     default:
     case GTK_CSS_TOKEN_IDENT:
     case GTK_CSS_TOKEN_FUNCTION:
@@ -611,7 +606,6 @@ gtk_css_parser_has_token (GtkCssParser    *parser,
     case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
     case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
     case GTK_CSS_TOKEN_DIMENSION:
-    case GTK_CSS_TOKEN_EOF:
     case GTK_CSS_TOKEN_WHITESPACE:
     case GTK_CSS_TOKEN_OPEN_SQUARE:
     case GTK_CSS_TOKEN_CLOSE_SQUARE:
