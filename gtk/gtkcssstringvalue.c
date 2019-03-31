@@ -200,7 +200,7 @@ _gtk_css_ident_value_try_parse (GtkCssParser *parser)
 
   g_return_val_if_fail (parser != NULL, NULL);
 
-  ident = _gtk_css_parser_try_ident (parser, TRUE);
+  ident = gtk_css_parser_consume_ident (parser);
   if (ident == NULL)
     return NULL;
   
