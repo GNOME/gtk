@@ -439,8 +439,6 @@ expand_content_files = [
   'tree_widget.sgml',
 ]
 
-configure_file(input: 'version.xml.in', output: 'version.xml', configuration: version_conf)
-
 types_conf = configuration_data()
 if os_win32
   types_conf.set('DISABLE_ON_W32', '%')
@@ -454,38 +452,43 @@ else
   types_conf.set('DISABLE_ON_QUARTZ', '')
 endif
 
-gnome.gtkdoc('gtk3',
-             mode: 'none',
-             main_xml: 'gtk-docs.sgml',
-             src_dir: [
-               gtkinc,
-            ],
-             dependencies: libgtk_dep,
-             gobject_typesfile: configure_file(
-               input: 'gtk3.types.in',
-               output: 'gtk3.types',
-               configuration: types_conf,
-             ),
-             scan_args: [
-               '--ignore-decorators=_GDK_EXTERN|G_GNUC_WARN_UNUSED_RESULT',
-               '--ignore-headers=' + ' '.join(private_headers),
-             ],
-             mkdb_args: [
-               '--default-includes=gtk/gtk.h',
-             ],
-             fixxref_args: [
-               '--html-dir=@0@'.format(docpath),
-               '--extra-dir=@0@'.format(join_paths(glib_docpath, 'glib')),
-               '--extra-dir=@0@'.format(join_paths(glib_docpath, 'gobject')),
-               '--extra-dir=@0@'.format(join_paths(glib_docpath, 'gio')),
-               '--extra-dir=@0@'.format(cairo_docpath),
-               '--extra-dir=@0@'.format(gdkpixbuf_docpath),
-               '--extra-dir=../gdk',
-             ],
-             content_files: content_files,
-             expand_content_files: expand_content_files,
-             html_assets: images,
-             install: true)
+if get_option('documentation')
+
+    configure_file(input: 'version.xml.in', output: 'version.xml', configuration: version_conf)
+
+    gnome.gtkdoc('gtk3',
+                 mode: 'none',
+                 main_xml: 'gtk-docs.sgml',
+                 src_dir: [
+                   gtkinc,
+                ],
+                 dependencies: libgtk_dep,
+                 gobject_typesfile: configure_file(
+                   input: 'gtk3.types.in',
+                   output: 'gtk3.types',
+                   configuration: types_conf,
+                 ),
+                 scan_args: [
+                   '--ignore-decorators=_GDK_EXTERN|G_GNUC_WARN_UNUSED_RESULT',
+                   '--ignore-headers=' + ' '.join(private_headers),
+                 ],
+                 mkdb_args: [
+                   '--default-includes=gtk/gtk.h',
+                 ],
+                 fixxref_args: [
+                   '--html-dir=@0@'.format(docpath),
+                   '--extra-dir=@0@'.format(join_paths(glib_docpath, 'glib')),
+                   '--extra-dir=@0@'.format(join_paths(glib_docpath, 'gobject')),
+                   '--extra-dir=@0@'.format(join_paths(glib_docpath, 'gio')),
+                   '--extra-dir=@0@'.format(cairo_docpath),
+                   '--extra-dir=@0@'.format(gdkpixbuf_docpath),
+                   '--extra-dir=../gdk',
+                 ],
+                 content_files: content_files,
+                 expand_content_files: expand_content_files,
+                 html_assets: images,
+                 install: true)
+endif
 
 xsltproc = find_program('xsltproc', required: false)
 if get_option('man-pages') and not xsltproc.found()
