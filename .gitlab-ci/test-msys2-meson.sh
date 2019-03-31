@@ -39,7 +39,10 @@ export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 ccache --zero-stats
 ccache --show-stats
 
-meson _build
+meson \
+    -Dman-pages=true \
+    _build
+
 ninja -C _build
 
 ccache --show-stats

@@ -877,10 +877,8 @@ endif
 
 subdir('po')
 subdir('po-properties')
-if get_option('documentation')
-  subdir('docs/tools')
-  subdir('docs/reference')
-endif
+subdir('docs/tools')
+subdir('docs/reference')
 
 install_data('m4macros/gtk-3.0.m4', install_dir: join_paths(get_option('datadir'), 'aclocal'))
 
@@ -903,6 +901,7 @@ summary = [
   '    Colord support: @0@'.format(get_option('colord')),
   '     Introspection: @0@'.format(get_option('introspection')),
   '     Documentation: @0@'.format(get_option('documentation')),
+  '         Man pages: @0@'.format(get_option('man-pages')),
   '       Build tests: @0@'.format(get_option('build-tests')),
   '             Demos: @0@'.format(get_option('demos')),
   '          Examples: @0@'.format(get_option('build-examples')),
