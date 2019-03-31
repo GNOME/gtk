@@ -580,11 +580,9 @@ render_para (GtkTextRenderer    *text_renderer,
   selection_node = gtk_text_view_get_selection_node ((GtkTextView*)text_renderer->widget);
   gtk_style_context_save_to_node (context, selection_node);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_style_context_get_background_color (context, &selection);
-G_GNUC_END_IGNORE_DEPRECATIONS
+  gtk_style_context_get (context, "background-color", &selection, NULL);
 
- gtk_style_context_restore (context);
+  gtk_style_context_restore (context);
 
   do
     {
@@ -775,9 +773,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                 {
                   GdkRGBA color;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-                  gtk_style_context_get_background_color (context, &color);
-G_GNUC_END_IGNORE_DEPRECATIONS
+                  gtk_style_context_get (context, "background-color", &color, NULL);
 
                   gdk_cairo_set_source_rgba (cr, &color);
 
