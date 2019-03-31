@@ -2027,6 +2027,7 @@ docs/reference/gdk/version.xml
 docs/reference/gtk/Makefile
 docs/reference/gtk/gtk3.types
 docs/reference/gtk/version.xml
+docs/reference/gtk/getting_started.xml
 docs/reference/libgail-util/Makefile
 docs/reference/libgail-util/version.xml
 docs/tools/Makefile
