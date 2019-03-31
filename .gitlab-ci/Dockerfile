@@ -50,6 +50,7 @@ RUN dnf -y install \
     python3-wheel \
     redhat-rpm-config \
     rest-devel \
+    sassc \
     vulkan-devel \
     wayland-devel \
     wayland-protocols-devel \
