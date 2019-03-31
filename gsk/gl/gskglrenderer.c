@@ -848,23 +848,23 @@ render_transform_node (GskGLRenderer   *self,
     case GSK_TRANSFORM_CATEGORY_2D:
     default:
       {
-        const float min_x = child->bounds.origin.x;
-        const float min_y = child->bounds.origin.y;
-        const float max_x = min_x + child->bounds.size.width;
-        const float max_y = min_y + child->bounds.size.height;
-        int texture_id;
-        gboolean is_offscreen;
         graphene_matrix_t mat;
-
-        gsk_transform_to_matrix (node_transform, &mat);
-        ops_push_modelview (builder, &mat, category);
 
         if (node_supports_transform (child))
           {
+            gsk_transform_to_matrix (node_transform, &mat);
+            ops_push_modelview (builder, &mat, category);
             gsk_gl_renderer_add_render_ops (self, child, builder);
+            ops_pop_modelview (builder);
           }
         else
           {
+            const float min_x = child->bounds.origin.x;
+            const float min_y = child->bounds.origin.y;
+            const float max_x = min_x + child->bounds.size.width;
+            const float max_y = min_y + child->bounds.size.height;
+            int texture_id;
+            gboolean is_offscreen;
             /* For non-trivial transforms, we draw everything on a texture and then
              * draw the texture transformed. */
             /* TODO: We should compute a modelview containing only the "non-trivial"
@@ -876,6 +876,9 @@ render_transform_node (GskGLRenderer   *self,
                                child,
                                &texture_id, &is_offscreen,
                                RESET_CLIP | RESET_OPACITY);
+
+            gsk_transform_to_matrix (node_transform, &mat);
+            ops_push_modelview (builder, &mat, category);
             ops_set_texture (builder, texture_id);
             ops_set_program (builder, &self->blit_program);
 
@@ -907,9 +910,9 @@ render_transform_node (GskGLRenderer   *self,
 
                 ops_draw (builder, onscreen_vertex_data);
               }
-          }
 
-        ops_pop_modelview (builder);
+            ops_pop_modelview (builder);
+          }
       }
     }
 }
