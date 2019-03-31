@@ -450,7 +450,21 @@ parse_font (GtkCssShorthandProperty  *shorthand,
 
       if (values[3] == NULL)
         {
-          values[3] = _gtk_css_font_weight_value_try_parse (parser);
+          values[3] = gtk_css_font_weight_value_try_parse (parser);
+          if (values[3] == NULL && gtk_css_number_value_can_parse (parser))
+            {
+              values[3] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_POSITIVE_ONLY);
+
+              if (values[3] == NULL)
+                _gtk_css_parser_error (parser, "unknown value for property");
+              else if (_gtk_css_number_value_get (values[3], 100) < 1 || 
+                       _gtk_css_number_value_get (values[3], 100) > 1000)
+                {
+                  _gtk_css_parser_error (parser, "Font weight values must be between 1 and 1000");
+                  g_clear_pointer (&values[3], gtk_css_value_unref);
+                }
+              return FALSE;
+            }
           parsed_one = parsed_one || values[3] != NULL;
         }
 
@@ -1119,7 +1133,7 @@ pack_font_description (GtkCssShorthandProperty *shorthand,
 
   v = (* query_func) (GTK_CSS_PROPERTY_FONT_WEIGHT, query_data);
   if (v)
-    pango_font_description_set_weight (description, _gtk_css_font_weight_value_get (v));
+    pango_font_description_set_weight (description, _gtk_css_number_value_get (v, 100));
 
   v = (* query_func) (GTK_CSS_PROPERTY_FONT_STRETCH, query_data);
   if (v)
