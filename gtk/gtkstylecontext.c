@@ -1432,67 +1432,6 @@ gtk_style_context_get_color (GtkStyleContext *context,
 }
 
 /**
- * gtk_style_context_get_background_color:
- * @context: a #GtkStyleContext
- * @color: (out): return value for the background color
- *
- * Gets the background color for a given state.
- *
- * This function is far less useful than it seems, and it should not be used in
- * newly written code. CSS has no concept of "background color", as a background
- * can be an image, or a gradient, or any other pattern including solid colors.
- *
- * The only reason why you would call gtk_style_context_get_background_color() is
- * to use the returned value to draw the background with it; the correct way to
- * achieve this result is to use gtk_render_background() instead, along with CSS
- * style classes to modify the color to be rendered.
- *
- * Deprecated: 3.16: Use gtk_render_background() instead.
- **/
-void
-gtk_style_context_get_background_color (GtkStyleContext *context,
-                                        GdkRGBA         *color)
-{
-  GdkRGBA *c;
-
-  g_return_if_fail (color != NULL);
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-  gtk_style_context_get (context,
-                         "background-color", &c,
-                         NULL);
-
-  *color = *c;
-  gdk_rgba_free (c);
-}
-
-/**
- * gtk_style_context_get_border_color:
- * @context: a #GtkStyleContext
- * @color: (out): return value for the border color
- *
- * Gets the border color for a given state.
- *
- * Deprecated: 3.16: Use gtk_render_frame() instead.
- **/
-void
-gtk_style_context_get_border_color (GtkStyleContext *context,
-                                    GdkRGBA         *color)
-{
-  GdkRGBA *c;
-
-  g_return_if_fail (color != NULL);
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-
-  gtk_style_context_get (context,
-                         "border-color", &c,
-                         NULL);
-
-  *color = *c;
-  gdk_rgba_free (c);
-}
-
-/**
  * gtk_style_context_get_border:
  * @context: a #GtkStyleContext
  * @border: (out): return value for the border settings
