@@ -502,6 +502,9 @@ gtk_event_controller_key_forward (GtkEventControllerKey *controller,
 				  GTK_PHASE_BUBBLE))
     return TRUE;
 
+  if (gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *)controller->current_event))
+    return TRUE;
+
   return FALSE;
 }
 
