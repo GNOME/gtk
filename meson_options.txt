@@ -17,8 +17,8 @@ option('cloudproviders', type: 'boolean', value: false,
   description : 'Enable the cloudproviders support')
 
 # Print backends
-option('print-backends', type : 'string', value : 'cups,file',
-  description : 'Build the specified print backends (comma-separated list, "all", or "none")')
+option('print-backends', type : 'string', value : 'auto',
+  description : 'Build the specified print backends (comma-separated list, any of "cloudprint,cups,file,lpr,papi,test" or "auto")')
 option('colord', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Build colord support for the CUPS printing backend')
 

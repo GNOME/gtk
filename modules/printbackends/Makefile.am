@@ -20,4 +20,7 @@ endif
 
 DIST_SUBDIRS = cloudprint cups file lpr test papi
 
+EXTRA_DIST += \
+	meson.build
+
 -include $(top_srcdir)/git.mk
