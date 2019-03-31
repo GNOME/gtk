@@ -179,6 +179,7 @@ gdkversion_cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
 gdkversion_cdata.set('GTK_API_VERSION', gtk_api_version)
 gdkversion_cdata.set('GTK_BINARY_VERSION', gtk_binary_version)
 gdkversion_cdata.set('GTK_VERSION', meson.project_version())
+gdkversion_cdata.set('LT_CURRENT_MINUS_AGE', gtk_soversion)
 
 gdkversionmacros = configure_file(
   input  : 'gdkversionmacros.h.in',
