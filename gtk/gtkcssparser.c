@@ -779,6 +779,18 @@ _gtk_css_parser_try_double (GtkCssParser *parser,
   return TRUE;
 }
 
+char *
+gtk_css_parser_consume_ident (GtkCssParser *self)
+{
+  char *result;
+
+  result = _gtk_css_parser_try_ident (self, TRUE);
+  if (result == NULL)
+    _gtk_css_parser_error (self, "Expected an identifier");
+
+  return result;
+}
+
 gboolean
 gtk_css_parser_consume_number (GtkCssParser *self,
                                double       *number)
