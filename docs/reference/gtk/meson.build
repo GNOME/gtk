@@ -383,12 +383,8 @@ content_files = [
   'broadway.xml',
   'broadwayd.xml',
   'building.sgml',
-  'compiling.sgml',
   'css-overview.xml',
   'css-properties.xml',
-  'drawing-model.xml',
-  'getting_started.xml',
-  'glossary.xml',
   'gtk3-demo-application.xml',
   'gtk3-demo.xml',
   'gtk3-icon-browser.xml',
@@ -399,22 +395,11 @@ content_files = [
   'gtk-query-immodules-3.0.xml',
   'gtk-query-settings.xml',
   'gtk-update-icon-cache.xml',
-  'input-handling.xml',
-  'migrating-2to3.xml',
-  'migrating-3xtoy.xml',
-  'migrating-checklist.sgml',
-  'migrating-GtkGrid.xml',
-  'migrating-GtkStyleContext.xml',
-  'migrating-smclient-GtkApplication.xml',
-  'migrating-unique-GtkApplication.xml',
   'mir.xml',
   'osx.sgml',
   'overview.xml',
-  'question_index.sgml',
   'resources.sgml',
   'running.sgml',
-  'text_widget.sgml',
-  'tree_widget.sgml',
   'visual_index.xml',
   'wayland.xml',
   'windows.sgml',
@@ -424,7 +409,7 @@ content_files = [
 expand_content_files = [
   'compiling.sgml',
   'drawing-model.xml',
-  'getting_started.xml',
+  join_paths(meson.current_build_dir(), 'getting_started.xml'),
   'glossary.xml',
   'input-handling.xml',
   'migrating-2to3.xml',
@@ -438,6 +423,8 @@ expand_content_files = [
   'text_widget.sgml',
   'tree_widget.sgml',
 ]
+
+content_files += expand_content_files
 
 types_conf = configuration_data()
 if os_win32
@@ -461,6 +448,7 @@ endif
 if get_option('documentation')
 
     configure_file(input: 'version.xml.in', output: 'version.xml', configuration: version_conf)
+    configure_file(input: 'getting_started.xml.in', output: 'getting_started.xml', configuration: src_dir_conf)
 
     gnome.gtkdoc('gtk3',
                  mode: 'none',
