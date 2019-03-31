@@ -84,7 +84,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
 
   data = g_new0 (GtkCssValue *, shorthand->subproperties->len);
 
-  if (_gtk_css_parser_try (parser, "initial", TRUE))
+  if (gtk_css_parser_try_ident (parser, "initial"))
     {
       /* the initial value can be explicitly specified with the
        * ‘initial’ keyword which all properties accept.
@@ -94,7 +94,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
           data[i] = _gtk_css_initial_value_new ();
         }
     }
-  else if (_gtk_css_parser_try (parser, "inherit", TRUE))
+  else if (gtk_css_parser_try_ident (parser, "inherit"))
     {
       /* All properties accept the ‘inherit’ value which
        * explicitly specifies that the value will be determined
@@ -107,7 +107,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
           data[i] = _gtk_css_inherit_value_new ();
         }
     }
-  else if (_gtk_css_parser_try (parser, "unset", TRUE))
+  else if (gtk_css_parser_try_ident (parser, "unset"))
     {
       /* If the cascaded value of a property is the unset keyword,
        * then if it is an inherited property, this is treated as
