@@ -452,6 +452,12 @@ else
   types_conf.set('DISABLE_ON_QUARTZ', '')
 endif
 
+if x11_enabled
+  types_conf.set('ENABLE_ON_X11', '')
+else
+  types_conf.set('ENABLE_ON_X11', '%')
+endif
+
 if get_option('documentation')
 
     configure_file(input: 'version.xml.in', output: 'version.xml', configuration: version_conf)
