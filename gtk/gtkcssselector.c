@@ -1250,7 +1250,7 @@ parse_simple_selector (GtkCssParser   *parser,
 
       parsed_something = TRUE;
     }
-  while (selector && !_gtk_css_parser_is_eof (parser));
+  while (selector && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF));
 
   _gtk_css_parser_skip_whitespace (parser);
 
@@ -1263,7 +1263,7 @@ _gtk_css_selector_parse (GtkCssParser *parser)
   GtkCssSelector *selector = NULL;
 
   while ((selector = parse_simple_selector (parser, selector)) &&
-         !_gtk_css_parser_is_eof (parser) &&
+         !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) &&
          !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA) &&
          !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_OPEN_CURLY))
     {
