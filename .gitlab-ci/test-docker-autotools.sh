@@ -11,5 +11,6 @@ cd _build
 ../autogen.sh \
     --enable-cloudproviders \
     --enable-broadway-backend \
-    --enable-xinerama
+    --enable-xinerama \
+    --enable-gtk-doc
 make -j8
