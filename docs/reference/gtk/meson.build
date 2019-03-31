@@ -514,10 +514,13 @@ if get_option('man-pages') and xsltproc.found()
     [ 'gtk3-demo-application', '1', ],
     [ 'gtk3-widget-factory', '1', ],
     [ 'gtk3-icon-browser', '1', ],
-    [ 'broadwayd', '1', ],
     [ 'gtk-builder-tool', '1', ],
     [ 'gtk-query-settings', '1', ],
   ]
+
+  if broadway_enabled
+    man_files += [[ 'broadwayd', '1', ]]
+  endif
 
   foreach man: man_files
     man_name = man.get(0)
