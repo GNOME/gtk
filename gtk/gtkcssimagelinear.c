@@ -254,23 +254,42 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
     }
 }
 
-
-static gboolean
-gtk_css_image_linear_parse (GtkCssImage  *image,
-                            GtkCssParser *parser)
+static guint
+gtk_css_image_linear_parse_color_stop (GtkCssImageLinear *self,
+                                       GtkCssParser      *parser)
 {
-  GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
-  guint i;
+  GtkCssImageLinearColorStop stop;
 
-  if (_gtk_css_parser_try (parser, "repeating-linear-gradient(", TRUE))
-    linear->repeating = TRUE;
-  else if (_gtk_css_parser_try (parser, "linear-gradient(", TRUE))
-    linear->repeating = FALSE;
+  stop.color = _gtk_css_color_value_parse (parser);
+  if (stop.color == NULL)
+    return 0;
+
+  if (gtk_css_number_value_can_parse (parser))
+    {
+      stop.offset = _gtk_css_number_value_parse (parser,
+                                                 GTK_CSS_PARSE_PERCENT
+                                                 | GTK_CSS_PARSE_LENGTH);
+      if (stop.offset == NULL)
+        {
+          _gtk_css_value_unref (stop.color);
+          return 0;
+        }
+    }
   else
     {
-      _gtk_css_parser_error (parser, "Not a linear gradient");
-      return FALSE;
+      stop.offset = NULL;
     }
+
+  g_array_append_val (self->stops, stop);
+
+  return 1;
+}
+
+static guint
+gtk_css_image_linear_parse_first_arg (GtkCssImageLinear *linear,
+                                      GtkCssParser      *parser)
+{
+  guint i;
 
   if (gtk_css_parser_try_ident (parser, "to"))
     {
@@ -281,7 +300,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
               if (linear->side & ((1 << GTK_CSS_LEFT) | (1 << GTK_CSS_RIGHT)))
                 {
                   _gtk_css_parser_error (parser, "Expected 'top', 'bottom' or comma");
-                  return FALSE;
+                  return 0;
                 }
               linear->side |= (1 << GTK_CSS_LEFT);
             }
@@ -290,7 +309,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
               if (linear->side & ((1 << GTK_CSS_LEFT) | (1 << GTK_CSS_RIGHT)))
                 {
                   _gtk_css_parser_error (parser, "Expected 'top', 'bottom' or comma");
-                  return FALSE;
+                  return 0;
                 }
               linear->side |= (1 << GTK_CSS_RIGHT);
             }
@@ -299,7 +318,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
               if (linear->side & ((1 << GTK_CSS_TOP) | (1 << GTK_CSS_BOTTOM)))
                 {
                   _gtk_css_parser_error (parser, "Expected 'left', 'right' or comma");
-                  return FALSE;
+                  return 0;
                 }
               linear->side |= (1 << GTK_CSS_TOP);
             }
@@ -308,7 +327,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
               if (linear->side & ((1 << GTK_CSS_TOP) | (1 << GTK_CSS_BOTTOM)))
                 {
                   _gtk_css_parser_error (parser, "Expected 'left', 'right' or comma");
-                  return FALSE;
+                  return 0;
                 }
               linear->side |= (1 << GTK_CSS_BOTTOM);
             }
@@ -319,71 +338,60 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
       if (linear->side == 0)
         {
           _gtk_css_parser_error (parser, "Expected side that gradient should go to");
-          return FALSE;
+          return 0;
         }
 
-      if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA))
-        {
-          _gtk_css_parser_error (parser, "Expected a comma");
-          return FALSE;
-        }
+      return 1;
     }
   else if (gtk_css_number_value_can_parse (parser))
     {
       linear->angle = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
       if (linear->angle == NULL)
-        return FALSE;
-
-      if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA))
-        {
-          _gtk_css_parser_error (parser, "Expected a comma");
-          return FALSE;
-        }
+        return 0;
+      
+      return 1;
     }
   else
-    linear->side = 1 << GTK_CSS_BOTTOM;
-
-  do {
-    GtkCssImageLinearColorStop stop;
-
-    stop.color = _gtk_css_color_value_parse (parser);
-    if (stop.color == NULL)
-      return FALSE;
-
-    if (gtk_css_number_value_can_parse (parser))
-      {
-        stop.offset = _gtk_css_number_value_parse (parser,
-                                                   GTK_CSS_PARSE_PERCENT
-                                                   | GTK_CSS_PARSE_LENGTH);
-        if (stop.offset == NULL)
-          {
-            _gtk_css_value_unref (stop.color);
-            return FALSE;
-          }
-      }
-    else
-      {
-        stop.offset = NULL;
-      }
-
-    g_array_append_val (linear->stops, stop);
-
-  } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
-
-  if (linear->stops->len < 2)
     {
-      _gtk_css_parser_error (parser, "%s() needs at least 2 color stops.",
-                             linear->repeating ? "repeating-linear-gradient" : "linear-gradient");
+      linear->side = 1 << GTK_CSS_BOTTOM;
+      if (!gtk_css_image_linear_parse_color_stop (linear, parser))
+        return 0;
+
+      return 2;
+    }
+}
+
+static guint
+gtk_css_image_linear_parse_arg (GtkCssParser *parser,
+                                guint         arg,
+                                gpointer      data)
+{
+  GtkCssImageLinear *self = data;
+
+  if (arg == 0)
+    return gtk_css_image_linear_parse_first_arg (self, parser);
+  else
+    return gtk_css_image_linear_parse_color_stop (self, parser);
+
+}
+
+static gboolean
+gtk_css_image_linear_parse (GtkCssImage  *image,
+                            GtkCssParser *parser)
+{
+  GtkCssImageLinear *self = GTK_CSS_IMAGE_LINEAR (image);
+
+  if (gtk_css_parser_has_function (parser, "repeating-linear-gradient"))
+    self->repeating = TRUE;
+  else if (gtk_css_parser_has_function (parser, "linear-gradient"))
+    self->repeating = FALSE;
+  else
+    {
+      _gtk_css_parser_error (parser, "Not a linear gradient");
       return FALSE;
     }
 
-  if (!_gtk_css_parser_try (parser, ")", TRUE))
-    {
-      _gtk_css_parser_error (parser, "Missing closing bracket at end of linear gradient");
-      return FALSE;
-    }
-
-  return TRUE;
+  return gtk_css_parser_consume_function (parser, 3, G_MAXUINT, gtk_css_image_linear_parse_arg, self);
 }
 
 static void
