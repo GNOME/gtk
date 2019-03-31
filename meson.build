@@ -78,7 +78,7 @@ gtk_binary_version = '3.0.0'
 
 gtk_binary_age = 100 * gtk_minor_version + gtk_micro_version
 
-gtk_soversion = '0.@0@.@1@'.format(gtk_binary_age - gtk_interface_age, gtk_interface_age)
+gtk_soversion = '0'
 gtk_osxversions = [(100 * gtk_minor_version) + 1, '@0@.@1@.0'.format((100 * gtk_minor_version) + 1, gtk_micro_version)]
 
 gtk_api_version = '@0@.0'.format(gtk_major_version)

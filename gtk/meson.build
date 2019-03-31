@@ -798,6 +798,7 @@ gtkversion_cdata.set('GTK_API_VERSION', gtk_api_version)
 gtkversion_cdata.set('GTK_BINARY_VERSION', gtk_binary_version)
 gtkversion_cdata.set('GTK_VERSION', meson.project_version())
 gtkversion_cdata.set('EXE_MANIFEST_ARCHITECTURE', '*')
+gtkversion_cdata.set('LT_CURRENT_MINUS_AGE', gtk_soversion)
 
 gtkversion = configure_file(input: 'gtkversion.h.in',
                             output: 'gtkversion.h',
