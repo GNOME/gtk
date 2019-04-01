@@ -970,7 +970,7 @@ gtk_settings_schemas = [
   'org.gtk.Settings.FileChooser.gschema.xml',
   'org.gtk.Settings.ColorChooser.gschema.xml',
   'org.gtk.Settings.EmojiChooser.gschema.xml',
-  'org.gtk.Settings.Debug.gschema.xml',
+  'org.gtk.Settings.Debug4.gschema.xml',
 ]
 install_data(gtk_settings_schemas, install_dir: gtk_schemasdir)
 gnome.compile_schemas(depend_files: files(gtk_settings_schemas),
