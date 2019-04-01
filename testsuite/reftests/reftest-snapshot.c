@@ -64,13 +64,13 @@ quit_when_idle (gpointer loop)
 static gint inhibit_count;
 static GMainLoop *loop;
 
-void
+G_MODULE_EXPORT void
 reftest_inhibit_snapshot (void)
 {
   inhibit_count++;
 }
 
-void
+G_MODULE_EXPORT void
 reftest_uninhibit_snapshot (void)
 {
   g_assert (inhibit_count > 0);

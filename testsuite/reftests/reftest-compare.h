@@ -22,6 +22,7 @@
 
 G_BEGIN_DECLS
 
+G_MODULE_EXPORT
 cairo_surface_t *       reftest_compare_surfaces        (cairo_surface_t        *surface1,
                                                          cairo_surface_t        *surface2);
 
