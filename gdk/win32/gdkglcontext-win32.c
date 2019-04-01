@@ -1184,16 +1184,16 @@ _gdk_win32_display_make_gl_context_current (GdkDisplay *display,
 
   if (context == NULL)
     {
-      if (!gdk_gl_context_get_use_es (context))
-        wglMakeCurrent(NULL, NULL);
-
 #ifdef GDK_WIN32_ENABLE_EGL
-      else
+      if (display_win32->egl_disp != EGL_NO_DISPLAY)
         eglMakeCurrent(display_win32->egl_disp,
                        EGL_NO_SURFACE, 
                        EGL_NO_SURFACE, 
                        EGL_NO_CONTEXT);
+      else
 #endif
+        wglMakeCurrent(NULL, NULL);
+
       return TRUE;
     }
 
