@@ -569,7 +569,7 @@ render_para (GtkTextRenderer    *text_renderer,
   int byte_offset = 0;
   PangoLayoutIter *iter;
   int screen_width;
-  GdkRGBA selection;
+  GdkRGBA *selection;
   gboolean first = TRUE;
   GtkCssNode *selection_node;
 
@@ -627,7 +627,7 @@ render_para (GtkTextRenderer    *text_renderer,
           cairo_t *cr = text_renderer->cr;
 
           cairo_save (cr);
-          gdk_cairo_set_source_rgba (cr, &selection);
+          gdk_cairo_set_source_rgba (cr, selection);
           cairo_rectangle (cr, 
                            line_display->left_margin, selection_y,
                            screen_width, selection_height);
@@ -683,7 +683,7 @@ render_para (GtkTextRenderer    *text_renderer,
               cairo_clip (cr);
               cairo_region_destroy (clip_region);
 
-              gdk_cairo_set_source_rgba (cr, &selection);
+              gdk_cairo_set_source_rgba (cr, selection);
               cairo_rectangle (cr,
                                PANGO_PIXELS (line_rect.x),
                                selection_y,
@@ -706,7 +706,7 @@ render_para (GtkTextRenderer    *text_renderer,
                 {
                   cairo_save (cr);
 
-                  gdk_cairo_set_source_rgba (cr, &selection);
+                  gdk_cairo_set_source_rgba (cr, selection);
                   cairo_rectangle (cr,
                                    line_display->left_margin,
                                    selection_y,
@@ -730,7 +730,7 @@ render_para (GtkTextRenderer    *text_renderer,
 
                   cairo_save (cr);
 
-                  gdk_cairo_set_source_rgba (cr, &selection);
+                  gdk_cairo_set_source_rgba (cr, selection);
                   cairo_rectangle (cr,
                                    PANGO_PIXELS (line_rect.x) + PANGO_PIXELS (line_rect.width),
                                    selection_y,
@@ -771,11 +771,11 @@ render_para (GtkTextRenderer    *text_renderer,
               /* draw text under the cursor if any */
               if (!line_display->cursor_at_line_end)
                 {
-                  GdkRGBA color;
+                  GdkRGBA *color;
 
                   gtk_style_context_get (context, "background-color", &color, NULL);
 
-                  gdk_cairo_set_source_rgba (cr, &color);
+                  gdk_cairo_set_source_rgba (cr, color);
 
 		  text_renderer_set_state (text_renderer, CURSOR);
 
@@ -783,6 +783,7 @@ render_para (GtkTextRenderer    *text_renderer,
 						   line,
 						   line_rect.x,
 						   baseline);
+                  gdk_rgba_free (color);
                 }
 
               cairo_restore (cr);
@@ -793,6 +794,7 @@ render_para (GtkTextRenderer    *text_renderer,
     }
   while (pango_layout_iter_next_line (iter));
 
+  gdk_rgba_free (selection);
   pango_layout_iter_free (iter);
 }
 

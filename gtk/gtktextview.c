@@ -7302,6 +7302,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 {
   GtkStyleContext *context;
   const GdkRGBA black = { 0, };
+  GdkRGBA *bg;
 
   if (!values->appearance.bg_rgba)
     values->appearance.bg_rgba = gdk_rgba_copy (&black);
@@ -7310,7 +7311,9 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
 
-  gtk_style_context_get (context, "background-color", values->appearance.bg_rgba, NULL);
+  gtk_style_context_get (context, "background-color", &bg, NULL);
+  *values->appearance.bg_rgba = *bg;
+  gdk_rgba_free (bg);
   gtk_style_context_get_color (context, values->appearance.fg_rgba);
 
   if (values->font)

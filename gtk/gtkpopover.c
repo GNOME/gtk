@@ -1309,14 +1309,15 @@ gtk_popover_snapshot (GtkWidget   *widget,
   /* Render the border of the arrow tip */
   if (border.bottom > 0)
     {
-      GdkRGBA border_color;
+      GdkRGBA *border_color;
 
       gtk_style_context_get (context, "border-color", &border_color, NULL);
       gtk_popover_apply_tail_path (popover, cr);
-      gdk_cairo_set_source_rgba (cr, &border_color);
+      gdk_cairo_set_source_rgba (cr, border_color);
 
       cairo_set_line_width (cr, border.bottom + 1);
       cairo_stroke (cr);
+      gdk_rgba_free (border_color);
     }
 
   cairo_restore (cr);

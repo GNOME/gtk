@@ -1928,16 +1928,18 @@ AtkAttributeSet *
 _gtk_style_context_get_attributes (AtkAttributeSet *attributes,
                                    GtkStyleContext *context)
 {
+  GdkRGBA *bg; 
   GdkRGBA color;
   gchar *value;
 
-  gtk_style_context_get (context, "background-color", &color, NULL);
+  gtk_style_context_get (context, "background-color", &bg, NULL);
   value = g_strdup_printf ("%u,%u,%u",
-                           (guint) ceil (color.red * 65536 - color.red),
-                           (guint) ceil (color.green * 65536 - color.green),
-                           (guint) ceil (color.blue * 65536 - color.blue));
+                           (guint) ceil (bg->red * 65536 - bg->red),
+                           (guint) ceil (bg->green * 65536 - bg->green),
+                           (guint) ceil (bg->blue * 65536 - bg->blue));
   attributes = add_attribute (attributes, ATK_TEXT_ATTR_BG_COLOR, value);
   g_free (value);
+  gdk_rgba_free (bg);
 
   gtk_style_context_get_color (context, &color);
   value = g_strdup_printf ("%u,%u,%u",

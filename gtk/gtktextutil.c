@@ -244,13 +244,17 @@ set_attributes_from_style (GtkStyleContext   *context,
                            GtkTextAttributes *values)
 {
   const GdkRGBA black = { 0, };
+  GdkRGBA *bg;
 
   if (!values->appearance.bg_rgba)
     values->appearance.bg_rgba = gdk_rgba_copy (&black);
   if (!values->appearance.fg_rgba)
     values->appearance.fg_rgba = gdk_rgba_copy (&black);
 
-  gtk_style_context_get (context, "background-color", values->appearance.bg_rgba, NULL);
+  
+  gtk_style_context_get (context, "background-color", &bg, NULL);
+  *values->appearance.bg_rgba = *bg;
+  gdk_rgba_free (bg);
   gtk_style_context_get_color (context, values->appearance.fg_rgba);
 
   if (values->font)

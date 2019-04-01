@@ -2362,7 +2362,7 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
         {
           cairo_path_t *path;
           GtkBorder border;
-          GdkRGBA border_color;
+          GdkRGBA *border_color;
 
           if (vertical)
             path_from_vertical_line_rects (cr, (GdkRectangle *)lines->data, lines->len);
@@ -2386,8 +2386,9 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
           gtk_style_context_get_border (context, &border);
 
           cairo_set_line_width (cr, border.left);
-          gdk_cairo_set_source_rgba (cr, &border_color);
+          gdk_cairo_set_source_rgba (cr, border_color);
           cairo_stroke (cr);
+          gdk_rgba_free (border_color);
         }
       g_array_free (lines, TRUE);
 
