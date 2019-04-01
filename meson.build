@@ -149,6 +149,14 @@ cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
 cdata.set('GTK_BINARY_AGE', gtk_binary_age)
 cdata.set('GTK_INTERFACE_AGE', gtk_interface_age)
 
+cdata.set_quoted('PACKAGE_URL', '')
+cdata.set_quoted('PACKAGE_NAME', 'gtk+')
+cdata.set_quoted('PACKAGE_TARNAME', 'gtk+')
+cdata.set_quoted('PACKAGE_STRING', 'gtk+ @0@'.format(meson.project_version()))
+cdata.set_quoted('PACKAGE_BUGREPORT', 'http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B')
+
+cdata.set('ENABLE_NLS', 1)
+
 check_headers = [
   'crt/externs.h',
   'dlfcn.h',
@@ -200,6 +208,7 @@ check_functions = [
   'exp2',
   'sincos',
   'trunc',
+  'localtime_r',
 ]
 
 foreach func : check_functions
@@ -208,8 +217,8 @@ foreach func : check_functions
   endif
 endforeach
 
-cdata.set('HAVE_DECL_ISINF', cc.has_header_symbol('math.h', 'isinf'))
-cdata.set('HAVE_DECL_ISNAN', cc.has_header_symbol('math.h', 'isnan'))
+cdata.set('HAVE_DECL_ISINF', cc.has_header_symbol('math.h', 'isinf') ? 1 : false)
+cdata.set('HAVE_DECL_ISNAN', cc.has_header_symbol('math.h', 'isnan') ? 1 : false)
 
 # Disable deprecation checks for all libraries we depend on on stable branches.
 # This is so newer versions of those libraries don't cause more warnings with
@@ -271,8 +280,10 @@ common_cflags = cc.get_supported_arguments(test_cflags)
 if get_option('default_library') != 'static'
   if os_win32
     cdata.set('DLL_EXPORT', true)
-    cdata.set('_GDK_EXTERN', '__declspec(dllexport) extern')
-    if cc.get_id() != 'msvc'
+    if cc.get_id() == 'msvc'
+      cdata.set('_GDK_EXTERN', '__declspec(dllexport) extern')
+    else
+      cdata.set('_GDK_EXTERN', '__attribute__((visibility("default"))) __declspec(dllexport) extern')
       common_cflags += ['-fvisibility=hidden']
     endif
   else
@@ -411,7 +422,7 @@ endif
 if iso_codes_dep.found()
   cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_pkgconfig_variable('prefix'))
 else
-  cdata.set_quoted('ISO_CODES_PREFIX', '/usr')
+  cdata.set_quoted('ISO_CODES_PREFIX', get_option('prefix'))
 endif
 
 backend_immodules = []
@@ -462,8 +473,8 @@ endif
 
 cairo_libs = []
 
-cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
-cdata.set('HAVE_PANGOFT', pangoft_dep.found())
+cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found() ? 1 : false)
+cdata.set('HAVE_PANGOFT', pangoft_dep.found() ? 1 : false)
 
 atk_pkgs = ['atk']
 
@@ -518,10 +529,10 @@ if x11_enabled
 
   atk_pkgs += ['atk-bridge-2.0']
 
-  cdata.set('HAVE_XDAMAGE', xdamage_dep.found())
-  cdata.set('HAVE_XCURSOR', xcursor_dep.found())
-  cdata.set('HAVE_XCOMPOSITE', xcomposite_dep.found())
-  cdata.set('HAVE_XFIXES', xfixes_dep.found())
+  cdata.set('HAVE_XDAMAGE', xdamage_dep.found() ? 1 : false)
+  cdata.set('HAVE_XCURSOR', xcursor_dep.found() ? 1 : false)
+  cdata.set('HAVE_XCOMPOSITE', xcomposite_dep.found() ? 1 : false)
+  cdata.set('HAVE_XFIXES', xfixes_dep.found() ? 1 : false)
 
   if cc.has_function('XkbQueryExtension', dependencies: x11_dep,
                      prefix : '#include <X11/XKBlib.h>')
@@ -558,14 +569,15 @@ if x11_enabled
     xinerama_dep = dependency('xinerama', required: want_xinerama)
     if xinerama_dep.found() and cc.has_header_symbol('X11/extensions/Xinerama.h', 'XineramaQueryExtension', dependencies: xinerama_dep)
       cdata.set('HAVE_XFREE_XINERAMA', 1)
+      cdata.set('HAVE_XINERAMA', 1)
       x11_pkgs += ['xinerama']
     endif
   else
     xinerama_dep = []
   endif
 
-  cdata.set('HAVE_RANDR', xrandr_dep.found())
-  cdata.set('HAVE_RANDR15', xrandr15_dep.found())
+  cdata.set('HAVE_RANDR', xrandr_dep.found() ? 1 : false)
+  cdata.set('HAVE_RANDR15', xrandr15_dep.found() ? 1 : false)
 endif
 
 if broadway_enabled
@@ -724,12 +736,31 @@ if os_win32
   if cc.has_header_symbol('windows.h', 'IPrintDialogCallback')
     cdata.set('HAVE_IPRINTDIALOGCALLBACK', 1)
   endif
+
+  dvot_size = cc.sizeof('DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY', prefix : '''
+    #define _WIN32_WINNT 0x601
+    #include <windows.h>
+  ''')
+  cdata.set('SIZEOF_DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY', dvot_size)
+
+  getdevprop_code = '''
+    #define _WIN32_WINNT 0x0600
+    #include <windows.h>
+    #include <devpropdef.h>
+    #include <setupapi.h>
+
+    int main(int argc, char *argv[]) {
+      return SetupDiGetDevicePropertyW(NULL, NULL, NULL, NULL, NULL, 0, NULL, 0);
+    }
+  '''
+  result = cc.links(getdevprop_code, args: ['-lsetupapi'], name: 'has SetupDiGetDevicePropertyW')
+  cdata.set('HAVE_SETUP_DI_GET_DEVICE_PROPERTY_W', result ? 1 : false)
 endif
 
 have_gio_unix = false
 if os_unix
   have_gio_unix = giounix_dep.found()
-  cdata.set('HAVE_GIO_UNIX', have_gio_unix)
+  cdata.set('HAVE_GIO_UNIX', have_gio_unix ? 1 : false)
 endif
 
 cloudproviders_enabled = get_option('cloudproviders')
@@ -738,7 +769,7 @@ if cloudproviders_enabled
   cloudproviders_dep = dependency('cloudproviders', version: cloudproviders_req, required: true)
   if cloudproviders_dep.found()
     cloudproviders_packages += ['cloudproviders', cloudproviders_req]
-    cdata.set('HAVE_CLOUDPROVIDERS', cloudproviders_dep.found())
+    cdata.set('HAVE_CLOUDPROVIDERS', cloudproviders_dep.found() ? 1 : false)
   else
     error('Cloudproviders support not found, but was explicitly requested.')
   endif
