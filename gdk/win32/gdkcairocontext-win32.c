@@ -31,7 +31,7 @@
 
 G_DEFINE_TYPE (GdkWin32CairoContext, gdk_win32_cairo_context, GDK_TYPE_CAIRO_CONTEXT)
 
-static void
+void
 gdk_win32_surface_get_queued_window_rect (GdkSurface *surface,
                                           gint        scale,
                                           RECT       *return_window_rect)
@@ -53,7 +53,7 @@ gdk_win32_surface_get_queued_window_rect (GdkSurface *surface,
   *return_window_rect = window_rect;
 }
 
-static void
+void
 gdk_win32_surface_apply_queued_move_resize (GdkSurface *surface,
                                             RECT        window_rect)
 {
