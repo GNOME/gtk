@@ -75,10 +75,12 @@
 
 #include "gtkfixed.h"
 
+#include "gtkadjustment.h"
 #include "gtkcontainerprivate.h"
 #include "gtkfixedlayout.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkscrollable.h"
 #include "gtkwidgetprivate.h"
 
 static void gtk_fixed_add           (GtkContainer     *container,
@@ -92,19 +94,252 @@ static GType gtk_fixed_child_type   (GtkContainer     *container);
 
 typedef struct {
   GtkLayoutManager *layout;
+
+  GtkAdjustment *hadjustment;
+  GtkAdjustment *vadjustment;
+
+  /* GtkScrollablePolicy needs to be checked when
+   * driving the scrollable adjustment values */
+  GtkScrollablePolicy hscroll_policy;
+  GtkScrollablePolicy vscroll_policy;
 } GtkFixedPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkFixed, gtk_fixed, GTK_TYPE_CONTAINER)
+enum {
+   PROP_0,
+
+   /* GtkFixed properties */
+
+   N_PROPERTIES,
+
+   /* GtkScrollable properties */
+   PROP_HADJUSTMENT = N_PROPERTIES,
+   PROP_VADJUSTMENT,
+   PROP_HSCROLL_POLICY,
+   PROP_VSCROLL_POLICY
+};
+
+G_DEFINE_TYPE_WITH_CODE (GtkFixed, gtk_fixed, GTK_TYPE_CONTAINER,
+                         G_ADD_PRIVATE (GtkFixed)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
+
+static void
+gtk_fixed_adjustment_changed (GtkFixed *self)
+{
+  GtkFixedPrivate *priv = gtk_fixed_get_instance_private (self);
+  double scroll_x = 0;
+  double scroll_y = 0;
+  GskTransform *transform;
+
+  if (priv->hadjustment)
+    scroll_x = gtk_adjustment_get_value (priv->hadjustment) * -1.0;
+
+  if (priv->vadjustment)
+    scroll_y = gtk_adjustment_get_value (priv->vadjustment) * -1.0;
+
+  transform = NULL;
+  transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (scroll_x, scroll_y));
+  gtk_fixed_layout_set_child_transform (GTK_FIXED_LAYOUT (priv->layout), transform);
+  gsk_transform_unref (transform);
+}
+
+static void
+gtk_fixed_set_adjustment_values (GtkFixed       *self,
+                                 GtkOrientation  orientation,
+                                 GtkAdjustment  *adjustment)
+{
+  GtkAllocation allocation;
+  double old_value;
+  double new_value;
+  double size;
+
+  gtk_widget_get_allocation (GTK_WIDGET (self), &allocation);
+
+  old_value = gtk_adjustment_get_value (adjustment);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    size = MAX (allocation.width, gtk_adjustment_get_upper (adjustment));
+  else
+    size = MAX (allocation.height, gtk_adjustment_get_upper (adjustment));
+
+  g_object_set (adjustment,
+                "lower", 0.0,
+                "upper", size,
+                "page-size", size,
+                "step-increment", size * 0.1,
+                "page-increment", size * 0.9,
+                NULL);
+
+  new_value = MAX (old_value, 0);
+  if (!G_APPROX_VALUE (new_value, old_value, 0.001))
+    gtk_adjustment_set_value (adjustment, new_value);
+}
+
+static void
+gtk_fixed_finalize (GObject *gobject)
+{
+  GtkFixed *self = GTK_FIXED (gobject);
+  GtkFixedPrivate *priv = gtk_fixed_get_instance_private (self);
+
+  g_clear_object (&priv->hadjustment);
+  g_clear_object (&priv->vadjustment);
+
+  G_OBJECT_CLASS (gtk_fixed_parent_class)->finalize (gobject);
+}
+
+static void
+gtk_fixed_set_hadjustment (GtkFixed      *self,
+                           GtkAdjustment *adjustment)
+{
+  GtkFixedPrivate *priv = gtk_fixed_get_instance_private (self);
+
+  if (adjustment && priv->hadjustment == adjustment)
+    return;
+
+  if (priv->hadjustment != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (priv->hadjustment,
+                                            gtk_fixed_adjustment_changed,
+                                            self);
+      g_object_unref (priv->hadjustment);
+    }
+
+  if (adjustment == NULL)
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+  g_signal_connect_swapped (adjustment, "value-changed",
+                            G_CALLBACK (gtk_fixed_adjustment_changed),
+                            self);
+  priv->hadjustment = g_object_ref_sink (adjustment);
+  gtk_fixed_set_adjustment_values (self, GTK_ORIENTATION_HORIZONTAL, priv->hadjustment);
+
+  g_object_notify (G_OBJECT (self), "hadjustment");
+}
+
+static void
+gtk_fixed_set_vadjustment (GtkFixed     *self,
+                            GtkAdjustment *adjustment)
+{
+  GtkFixedPrivate *priv = gtk_fixed_get_instance_private (self);
+
+  if (adjustment && priv->vadjustment == adjustment)
+    return;
+
+  if (priv->vadjustment != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (priv->vadjustment,
+                                            gtk_fixed_adjustment_changed,
+                                            self);
+      g_object_unref (priv->vadjustment);
+    }
+
+  if (adjustment == NULL)
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+  g_signal_connect_swapped (adjustment, "value-changed",
+                            G_CALLBACK (gtk_fixed_adjustment_changed),
+                            self);
+  priv->vadjustment = g_object_ref_sink (adjustment);
+  gtk_fixed_set_adjustment_values (self, GTK_ORIENTATION_VERTICAL, priv->vadjustment);
+
+  g_object_notify (G_OBJECT (self), "vadjustment");
+}
+
+static void
+gtk_fixed_get_property (GObject     *gobject,
+                        guint        prop_id,
+                        GValue      *value,
+                        GParamSpec  *pspec)
+{
+  GtkFixed *self = GTK_FIXED (gobject);
+  GtkFixedPrivate *priv = gtk_fixed_get_instance_private (self);
+
+  switch (prop_id)
+    {
+    case PROP_HADJUSTMENT:
+      g_value_set_object (value, priv->hadjustment);
+      break;
+
+    case PROP_VADJUSTMENT:
+      g_value_set_object (value, priv->vadjustment);
+      break;
+
+    case PROP_HSCROLL_POLICY:
+      g_value_set_enum (value, priv->hscroll_policy);
+      break;
+
+    case PROP_VSCROLL_POLICY:
+      g_value_set_enum (value, priv->vscroll_policy);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_fixed_set_property (GObject      *gobject,
+                        guint         prop_id,
+                        const GValue *value,
+                        GParamSpec   *pspec)
+{
+  GtkFixed *self = GTK_FIXED (gobject);
+  GtkFixedPrivate *priv = gtk_fixed_get_instance_private (self);
+
+  switch (prop_id)
+    {
+    case PROP_HADJUSTMENT:
+      gtk_fixed_set_hadjustment (self, g_value_get_object (value));
+      break;
+
+    case PROP_VADJUSTMENT:
+      gtk_fixed_set_vadjustment (self, g_value_get_object (value));
+      break;
+
+    case PROP_HSCROLL_POLICY:
+      if (priv->hscroll_policy != g_value_get_enum (value))
+        {
+          priv->hscroll_policy = g_value_get_enum (value);
+          gtk_widget_queue_resize (GTK_WIDGET (self));
+          g_object_notify_by_pspec (gobject, pspec);
+        }
+      break;
+
+    case PROP_VSCROLL_POLICY:
+      if (priv->vscroll_policy != g_value_get_enum (value))
+        {
+          priv->vscroll_policy = g_value_get_enum (value);
+          gtk_widget_queue_resize (GTK_WIDGET (self));
+          g_object_notify_by_pspec (gobject, pspec);
+        }
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      break;
+    }
+}
 
 static void
 gtk_fixed_class_init (GtkFixedClass *klass)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+
+  gobject_class->set_property = gtk_fixed_set_property;
+  gobject_class->get_property = gtk_fixed_get_property;
+  gobject_class->finalize = gtk_fixed_finalize;
 
   container_class->add = gtk_fixed_add;
   container_class->remove = gtk_fixed_remove;
   container_class->forall = gtk_fixed_forall;
   container_class->child_type = gtk_fixed_child_type;
+
+  /* Scrollable interface */
+  g_object_class_override_property (gobject_class, PROP_HADJUSTMENT, "hadjustment");
+  g_object_class_override_property (gobject_class, PROP_VADJUSTMENT, "vadjustment");
+  g_object_class_override_property (gobject_class, PROP_HSCROLL_POLICY, "hscroll-policy");
+  g_object_class_override_property (gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 }
 
 static GType
@@ -121,6 +356,7 @@ gtk_fixed_init (GtkFixed *self)
   gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 
   priv->layout = gtk_fixed_layout_new ();
+  gtk_fixed_layout_set_minimum_size (GTK_FIXED_LAYOUT (priv->layout), -1, -1);
   gtk_widget_set_layout_manager (GTK_WIDGET (self), priv->layout);
 }
 
