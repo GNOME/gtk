@@ -4478,6 +4478,12 @@ gdk_wayland_window_show_window_menu (GdkWindow *window,
   seat = gdk_wayland_device_get_wl_seat (GDK_DEVICE (device));
   gdk_event_get_coords (event, &x, &y);
 
+  while (gdk_window_get_window_type (window) != GDK_WINDOW_TOPLEVEL)
+    {
+      gdk_window_coords_to_parent (window, x, y, &x, &y);
+      window = gdk_window_get_effective_parent (window);
+    }
+
   serial = _gdk_wayland_device_get_implicit_grab_serial (device, event);
 
   switch (display_wayland->shell_variant)
