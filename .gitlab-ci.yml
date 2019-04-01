@@ -60,7 +60,7 @@ flatpak:demo:
 
 flatpak:widget-factory:
   variables:
-    APPID: org.gtk.WidgetFactory
+    APPID: org.gtk.WidgetFactory4
   <<: *flatpak-defaults
 
 pages:

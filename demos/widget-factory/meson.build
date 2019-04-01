@@ -13,7 +13,7 @@ executable('gtk4-widget-factory',
            install: true)
 
 # desktop file
-install_data('org.gtk.WidgetFactory.desktop', install_dir: gtk_applicationsdir)
+install_data('org.gtk.WidgetFactory4.desktop', install_dir: gtk_applicationsdir)
 
 # icons
 icontheme_dir = join_paths(gtk_datadir, 'icons/hicolor')
@@ -25,4 +25,4 @@ foreach size: ['scalable', 'symbolic']
 endforeach
 
 # appdata
-install_data('org.gtk.WidgetFactory.appdata.xml', install_dir: gtk_appdatadir)
+install_data('org.gtk.WidgetFactory4.appdata.xml', install_dir: gtk_appdatadir)

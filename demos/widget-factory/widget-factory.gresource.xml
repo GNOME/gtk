@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/gtk/WidgetFactory">
+  <gresource prefix="/org/gtk/WidgetFactory4">
     <file preprocess="xml-stripblanks">widget-factory.ui</file>
   </gresource>
-  <gresource prefix="/org/gtk/WidgetFactory">
+  <gresource prefix="/org/gtk/WidgetFactory4">
     <file>widget-factory.css</file>
   </gresource>
-  <gresource prefix="/org/gtk/WidgetFactory/gtk">
+  <gresource prefix="/org/gtk/WidgetFactory4/gtk">
     <file preprocess="xml-stripblanks">help-overlay.ui</file>
   </gresource>
-  <gresource prefix="/org/gtk/WidgetFactory">
+  <gresource prefix="/org/gtk/WidgetFactory4">
     <file>icons/16x16/actions/document-new.png</file>
     <file>icons/16x16/actions/document-save.png</file>
     <file>icons/16x16/actions/edit-find.png</file>

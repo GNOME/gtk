@@ -1,5 +1,5 @@
 {
-    "app-id": "org.gtk.WidgetFactory",
+    "app-id": "org.gtk.WidgetFactory4",
     "runtime": "org.gnome.Platform",
     "runtime-version": "master",
     "sdk": "org.gnome.Sdk",

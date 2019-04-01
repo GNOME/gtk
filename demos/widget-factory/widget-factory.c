@@ -232,7 +232,7 @@ activate_about (GSimpleAction *action,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK themes and widgets",
                          "authors", authors,
-                         "logo-icon-name", "org.gtk.WidgetFactory",
+                         "logo-icon-name", "org.gtk.WidgetFactory4",
                          "title", "About GTK Widget Factory",
                          "system-information", s->str,
                          NULL);
@@ -1657,13 +1657,13 @@ activate (GApplication *app)
   g_type_ensure (my_text_view_get_type ());
 
   provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_resource (provider, "/org/gtk/WidgetFactory/widget-factory.css");
+  gtk_css_provider_load_from_resource (provider, "/org/gtk/WidgetFactory4/widget-factory.css");
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                               GTK_STYLE_PROVIDER (provider),
                                               GTK_STYLE_PROVIDER_PRIORITY_USER);
   g_object_unref (provider);
 
-  builder = gtk_builder_new_from_resource ("/org/gtk/WidgetFactory/widget-factory.ui");
+  builder = gtk_builder_new_from_resource ("/org/gtk/WidgetFactory4/widget-factory.ui");
   gtk_builder_add_callback_symbol (builder, "on_entry_icon_release", (GCallback)on_entry_icon_release);
   gtk_builder_add_callback_symbol (builder, "on_scale_button_value_changed", (GCallback)on_scale_button_value_changed);
   gtk_builder_add_callback_symbol (builder, "on_scale_button_query_tooltip", (GCallback)on_scale_button_query_tooltip);
@@ -1944,7 +1944,7 @@ main (int argc, char *argv[])
   };
   gint status;
 
-  app = gtk_application_new ("org.gtk.WidgetFactory", G_APPLICATION_NON_UNIQUE);
+  app = gtk_application_new ("org.gtk.WidgetFactory4", G_APPLICATION_NON_UNIQUE);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
