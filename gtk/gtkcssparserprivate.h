@@ -62,10 +62,10 @@ GFile *         _gtk_css_parser_get_file          (GtkCssParser          *parser
 GFile *         _gtk_css_parser_get_file_for_path (GtkCssParser          *parser,
                                                    const char            *path);
 
-gboolean        _gtk_css_parser_has_prefix        (GtkCssParser          *parser,
-                                                   const char            *prefix);
 gboolean        gtk_css_parser_has_token          (GtkCssParser          *parser,
                                                    GtkCssTokenType        token_type);
+gboolean        gtk_css_parser_has_ident          (GtkCssParser          *parser,
+                                                   const char            *name);
 gboolean        gtk_css_parser_has_function       (GtkCssParser          *parser,
                                                    const char            *name);
 
