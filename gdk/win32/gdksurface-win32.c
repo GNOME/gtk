@@ -3865,8 +3865,8 @@ setup_drag_move_resize_context (GdkSurface                   *window,
                                 GdkSurfaceEdge                edge,
                                 GdkDevice                   *device,
                                 gint                         button,
-                                gint                         root_x,
-                                gint                         root_y,
+                                gint                         x,
+                                gint                         y,
                                 guint32                      timestamp)
 {
   RECT rect;
@@ -3874,6 +3874,9 @@ setup_drag_move_resize_context (GdkSurface                   *window,
   GdkSurface *pointer_window;
   GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
   gboolean maximized = gdk_surface_get_state (window) & GDK_SURFACE_STATE_MAXIMIZED;
+  gint root_x, root_y;
+
+  gdk_win32_surface_get_root_coords (window, x, y, &root_x, &root_y);
 
   /* Before we drag, we need to undo any maximization or snapping.
    * AeroSnap behaviour:
@@ -4507,8 +4510,8 @@ gdk_win32_surface_begin_resize_drag (GdkSurface     *window,
                                     GdkSurfaceEdge  edge,
                                     GdkDevice     *device,
                                     gint           button,
-                                    gint           root_x,
-                                    gint           root_y,
+                                    gint           x,
+                                    gint           y,
                                     guint32        timestamp)
 {
   GdkSurfaceImplWin32 *impl;
@@ -4536,15 +4539,15 @@ gdk_win32_surface_begin_resize_drag (GdkSurface     *window,
 
   setup_drag_move_resize_context (window, &impl->drag_move_resize_context,
                                   GDK_WIN32_DRAGOP_RESIZE, edge, device,
-                                  button, root_x, root_y, timestamp);
+                                  button, x, y, timestamp);
 }
 
 static void
 gdk_win32_surface_begin_move_drag (GdkSurface *window,
                                   GdkDevice *device,
                                   gint       button,
-                                  gint       root_x,
-                                  gint       root_y,
+                                  gint       x,
+                                  gint       y,
                                   guint32    timestamp)
 {
   GdkSurfaceImplWin32 *impl;
@@ -4571,7 +4574,7 @@ gdk_win32_surface_begin_move_drag (GdkSurface *window,
 
   setup_drag_move_resize_context (window, &impl->drag_move_resize_context,
                                   GDK_WIN32_DRAGOP_MOVE, GDK_SURFACE_EDGE_NORTH_WEST,
-                                  device, button, root_x, root_y, timestamp);
+                                  device, button, x, y, timestamp);
 }
 
 
