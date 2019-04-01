@@ -316,7 +316,7 @@ static GtkCssValue *
 gtk_css_calc_value_parse_value (GtkCssParser           *parser,
                                 GtkCssNumberParseFlags  flags)
 {
-  if (_gtk_css_parser_has_prefix (parser, "calc"))
+  if (gtk_css_parser_has_function (parser, "calc"))
     {
       _gtk_css_parser_error (parser, "Nested calc() expressions are not allowed.");
       return NULL;
