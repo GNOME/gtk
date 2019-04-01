@@ -509,7 +509,7 @@ gtk_css_image_get_parser_type (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (image_types); i++)
     {
-      if (_gtk_css_parser_has_prefix (parser, image_types[i].prefix))
+      if (gtk_css_parser_has_function (parser, image_types[i].prefix))
         return image_types[i].type_func ();
     }
 
