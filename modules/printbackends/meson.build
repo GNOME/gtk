@@ -98,7 +98,7 @@ if enabled_print_backends.contains('cups')
   if enable_colord != 'no'
     want_colord = enable_colord == 'yes'
     colord_dep = dependency('colord', version: '>= 0.1.9', required: want_colord)
-    cdata.set('HAVE_COLORD', colord_dep.found())
+    cdata.set('HAVE_COLORD', colord_dep.found() ? 1 : false)
   else
     cups_colord_dep = []
   endif
