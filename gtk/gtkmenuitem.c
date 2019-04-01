@@ -1128,6 +1128,7 @@ gtk_menu_item_enter (GtkEventController *controller,
   GtkMenuItem *menu_item = GTK_MENU_ITEM (user_data);
   GtkWidget *menu_shell;
   GdkEvent *event;
+  gboolean is_focus, contains_focus;
 
   event = gtk_get_current_event (); /* FIXME controller event */
 
@@ -1142,8 +1143,14 @@ gtk_menu_item_enter (GtkEventController *controller,
 
   menu_shell = gtk_widget_get_parent (GTK_WIDGET (menu_item));
 
+  g_object_get (controller,
+                "is-pointer-focus", &is_focus,
+                "contains-pointer-focus", &contains_focus,
+                NULL);
+
   if (GTK_IS_MENU_SHELL (menu_shell) &&
-      GTK_MENU_SHELL (menu_shell)->priv->active)
+      GTK_MENU_SHELL (menu_shell)->priv->active &&
+      (is_focus || contains_focus))
     gtk_menu_shell_select_item (GTK_MENU_SHELL (menu_shell), GTK_WIDGET (menu_item));
 }
 
@@ -1155,8 +1162,16 @@ gtk_menu_item_leave (GtkEventController *controller,
 {
   GtkMenuItem *menu_item = GTK_MENU_ITEM (user_data);
   GtkWidget *menu_shell = gtk_widget_get_parent (GTK_WIDGET (menu_item));
+  gboolean is_focus, contains_focus;
 
-  if (GTK_IS_MENU_SHELL (menu_shell) && !menu_item->priv->submenu)
+  g_object_get (controller,
+                "is-pointer-focus", &is_focus,
+                "contains-pointer-focus", &contains_focus,
+                NULL);
+
+  if (GTK_IS_MENU_SHELL (menu_shell) &&
+      !menu_item->priv->submenu &&
+      !(is_focus || contains_focus))
     gtk_menu_shell_deselect (GTK_MENU_SHELL (menu_shell));
 }
 
