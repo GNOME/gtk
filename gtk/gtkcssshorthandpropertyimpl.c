@@ -261,7 +261,7 @@ parse_border_image (GtkCssShorthandProperty  *shorthand,
   do
     {
       if (values[0] == NULL &&
-          (_gtk_css_parser_has_prefix (parser, "none") ||
+          (gtk_css_parser_has_ident (parser, "none") ||
            _gtk_css_image_can_parse (parser)))
         {
           GtkCssImage *image;
@@ -494,7 +494,7 @@ parse_one_background (GtkCssShorthandProperty  *shorthand,
     {
       /* the image part */
       if (values[0] == NULL &&
-          (_gtk_css_parser_has_prefix (parser, "none") ||
+          (gtk_css_parser_has_ident (parser, "none") ||
            _gtk_css_image_can_parse (parser)))
         {
           GtkCssImage *image;

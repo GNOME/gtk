@@ -90,15 +90,6 @@ _gtk_css_parser_free (GtkCssParser *parser)
   g_slice_free (GtkCssParser, parser);
 }
 
-gboolean
-_gtk_css_parser_has_prefix (GtkCssParser *parser,
-                            const char   *prefix)
-{
-  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), FALSE);
-
-  return g_ascii_strncasecmp (parser->data, prefix, strlen (prefix)) == 0;
-}
-
 guint
 _gtk_css_parser_get_line (GtkCssParser *parser)
 {
@@ -629,6 +620,21 @@ gtk_css_parser_has_token (GtkCssParser    *parser,
       g_assert_not_reached ();
       return FALSE;
     }
+}
+
+gboolean
+gtk_css_parser_has_ident (GtkCssParser *parser,
+                          const char   *ident)
+{
+  gsize len;
+
+  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), FALSE);
+  g_return_val_if_fail (ident != NULL, FALSE);
+
+  len = strlen (ident);
+
+  return g_ascii_strncasecmp (parser->data, ident, len) == 0 &&
+         parser->data[len] != '(';
 }
 
 gboolean
