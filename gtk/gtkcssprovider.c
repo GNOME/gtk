@@ -776,7 +776,7 @@ parse_import (GtkCssScanner *scanner)
 
   gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_IMPORT);
 
-  if (!_gtk_css_parser_try (scanner->parser, "@import", TRUE))
+  if (!gtk_css_parser_try_at_keyword (scanner->parser, "import"))
     {
       gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_IMPORT);
       return FALSE;
@@ -843,7 +843,7 @@ parse_color_definition (GtkCssScanner *scanner)
 
   gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_COLOR_DEFINITION);
 
-  if (!_gtk_css_parser_try (scanner->parser, "@define-color", TRUE))
+  if (!gtk_css_parser_try_at_keyword (scanner->parser, "define-color"))
     {
       gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_COLOR_DEFINITION);
       return FALSE;
@@ -901,7 +901,7 @@ parse_keyframes (GtkCssScanner *scanner)
 
   gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_KEYFRAMES);
 
-  if (!_gtk_css_parser_try (scanner->parser, "@keyframes", TRUE))
+  if (!gtk_css_parser_try_at_keyword (scanner->parser, "keyframes"))
     {
       gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_KEYFRAMES);
       return FALSE;
