@@ -1453,6 +1453,8 @@ gtktypefuncs.inc: stamp-gtktypebuiltins.h stamp-gtkprivatetypebuiltins.h $(top_s
 	&& cp xgen-gtf $@ && rm -f xgen-gtf
 $(srcdir)/gtktestutils.c: gtktypefuncs.inc
 
+CLEANFILES += gtktypefuncs.inc
+
 # target platform:
 lib_LTLIBRARIES = libgtk-3.la
 
