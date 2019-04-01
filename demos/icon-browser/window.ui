@@ -95,6 +95,7 @@
                       <object class="GtkCellRendererText" id="text_cell">
                         <property name="xpad">10</property>
                         <property name="ypad">10</property>
+                        <property name="xalign">0.5</property>
                       </object>
                     </child>
                   </object>
