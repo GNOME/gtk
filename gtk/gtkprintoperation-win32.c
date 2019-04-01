@@ -71,6 +71,7 @@ typedef struct {
 } GtkPrintOperationWin32;
 
 static void win32_poll_status (GtkPrintOperation *op);
+static GtkPageSetup *create_page_setup (GtkPrintOperation *op);
 
 static const GUID myIID_IPrintDialogCallback  = {0x5852a2c3,0x6530,0x11d1,{0xb6,0xa3,0x0,0x0,0xf8,0x75,0x7b,0xf9}};
 
@@ -416,6 +417,19 @@ paper_size_to_win32 (GtkPaperSize *paper_size)
     return DMPAPER_LETTER_PLUS;
 
   return 0;
+}
+
+static gboolean
+page_setup_is_equal (GtkPageSetup *a,
+                     GtkPageSetup *b)
+{
+  return
+    gtk_paper_size_is_equal (gtk_page_setup_get_paper_size (a),
+                             gtk_page_setup_get_paper_size (b)) &&
+    gtk_page_setup_get_top_margin (a, GTK_UNIT_MM) == gtk_page_setup_get_top_margin (b, GTK_UNIT_MM) &&
+    gtk_page_setup_get_bottom_margin (a, GTK_UNIT_MM) == gtk_page_setup_get_bottom_margin (b, GTK_UNIT_MM) &&
+    gtk_page_setup_get_left_margin (a, GTK_UNIT_MM) == gtk_page_setup_get_left_margin (b, GTK_UNIT_MM) &&
+    gtk_page_setup_get_right_margin (a, GTK_UNIT_MM) == gtk_page_setup_get_right_margin (b, GTK_UNIT_MM);
 }
 
 static gchar*
@@ -902,6 +916,8 @@ dialog_to_print_settings (GtkPrintOperation *op,
 {
   guint i;
   GtkPrintSettings *settings;
+  GtkPageSetup *default_page_setup;
+  GtkPageSetup *page_setup;
 
   settings = gtk_print_settings_new ();
 
@@ -935,8 +951,18 @@ dialog_to_print_settings (GtkPrintOperation *op,
 
   if (printdlgex->hDevMode != NULL)
     devmode_to_settings (settings, printdlgex->hDevMode);
-  
+
   gtk_print_operation_set_print_settings (op, settings);
+
+  /* Uses op->print_settings internally, which we just set above */
+  page_setup = create_page_setup (op);
+  default_page_setup = gtk_print_operation_get_default_page_setup (op);
+
+  if (default_page_setup == NULL ||
+      !page_setup_is_equal (default_page_setup, page_setup))
+    gtk_print_operation_set_default_page_setup (op, page_setup);
+
+  g_object_unref (page_setup);
 }
 
 static HANDLE
