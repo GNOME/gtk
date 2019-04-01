@@ -270,7 +270,7 @@
     <file>demotaggedentry.c</file>
     <file>demotaggedentry.h</file>
   </gresource>
-  <gresource prefix="/org/gtk/Demo">
+  <gresource prefix="/org/gtk/Demo4">
     <file>icons/16x16/actions/application-exit.png</file>
     <file>icons/16x16/actions/document-new.png</file>
     <file>icons/16x16/actions/document-open.png</file>

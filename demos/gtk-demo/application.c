@@ -212,7 +212,7 @@ activate_about (GSimpleAction *action,
                          "comments", "Program to demonstrate GTK functions.",
                          "authors", authors,
                          "documenters", documentors,
-                         "logo-icon-name", "org.gtk.Demo",
+                         "logo-icon-name", "org.gtk.Demo4",
                          "title", "About GTK Code Demos",
                          NULL);
 }
@@ -370,7 +370,7 @@ demo_application_init (DemoApplication *app)
   GSettings *settings;
   GAction *action;
 
-  settings = g_settings_new ("org.gtk.Demo");
+  settings = g_settings_new ("org.gtk.Demo4");
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
@@ -397,7 +397,7 @@ demo_application_window_store_state (DemoApplicationWindow *win)
 {
   GSettings *settings;
 
-  settings = g_settings_new ("org.gtk.Demo");
+  settings = g_settings_new ("org.gtk.Demo4");
   g_settings_set (settings, "window-size", "(ii)", win->width, win->height);
   g_settings_set_boolean (settings, "maximized", win->maximized);
   g_settings_set_boolean (settings, "fullscreen", win->fullscreen);
@@ -409,7 +409,7 @@ demo_application_window_load_state (DemoApplicationWindow *win)
 {
   GSettings *settings;
 
-  settings = g_settings_new ("org.gtk.Demo");
+  settings = g_settings_new ("org.gtk.Demo4");
   g_settings_get (settings, "window-size", "(ii)", &win->width, &win->height);
   win->maximized = g_settings_get_boolean (settings, "maximized");
   win->fullscreen = g_settings_get_boolean (settings, "fullscreen");
@@ -541,7 +541,7 @@ main (int argc, char *argv[])
   GtkApplication *app;
 
   app = GTK_APPLICATION (g_object_new (demo_application_get_type (),
-                                       "application-id", "org.gtk.Demo2",
+                                       "application-id", "org.gtk.Demo4.App",
                                        "flags", G_APPLICATION_HANDLES_OPEN,
                                        NULL));
 

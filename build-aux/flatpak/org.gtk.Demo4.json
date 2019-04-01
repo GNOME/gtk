@@ -1,5 +1,5 @@
 {
-    "app-id": "org.gtk.Demo",
+    "app-id": "org.gtk.Demo4",
     "runtime": "org.gnome.Platform",
     "runtime-version": "master",
     "sdk": "org.gnome.Sdk",
