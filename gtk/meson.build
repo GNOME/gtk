@@ -9,10 +9,10 @@ gtk_cargs = [
   '-DGTK_BINARY_VERSION="@0@"'.format(gtk_binary_version),
   '-DGTK_HOST="@0@"'.format(host_machine.system()),
   '-DGTK_DATA_PREFIX="@0@"'.format(gtk_prefix),
-	'-DGTK_LIBDIR="@0@"'.format(gtk_libdir),
-	'-DGTK_LOCALEDIR="@0@"'.format(gtk_localedir),
-	'-DGTK_DATADIR="@0@"'.format(gtk_datadir),
-	'-DGTK_SYSCONFDIR="@0@"'.format(gtk_sysconfdir),
+  '-DGTK_LIBDIR="@0@"'.format(gtk_libdir),
+  '-DGTK_LOCALEDIR="@0@"'.format(gtk_localedir),
+  '-DGTK_DATADIR="@0@"'.format(gtk_datadir),
+  '-DGTK_SYSCONFDIR="@0@"'.format(gtk_sysconfdir),
 ]
 
 # List of sources to build the library from
@@ -830,6 +830,8 @@ gtk_deps = [
   platform_gio_dep,
   pangocairo_dep,
   pango_dep,
+  pangoft_dep,
+  harfbuzz_dep,
   fribidi_dep,
   cairogobj_dep,
   cairo_dep,
@@ -935,7 +937,7 @@ if cc.has_header('langinfo.h')
                      '_NL_PAPER_HEIGHT',
                      '_NL_PAPER_WIDTH',
                      '_NL_TIME_FIRST_WEEKDAY', ]
-    cdata.set('HAVE_' + nl_enum, cc.has_header_symbol('langinfo.h', nl_enum))
+    cdata.set('HAVE_' + nl_enum, cc.has_header_symbol('langinfo.h', nl_enum) ? 1 : false)
   endforeach
 endif
 
