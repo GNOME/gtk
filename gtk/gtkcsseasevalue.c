@@ -209,8 +209,16 @@ _gtk_css_ease_value_can_parse (GtkCssParser *parser)
 
   for (i = 0; i < G_N_ELEMENTS (parser_values); i++)
     {
-      if (_gtk_css_parser_has_prefix (parser, parser_values[i].name))
-        return TRUE;
+      if (parser_values[i].is_function)
+        {
+          if (gtk_css_parser_has_function (parser, parser_values[i].name))
+            return TRUE;
+        }
+      else
+        {
+          if (gtk_css_parser_has_ident (parser, parser_values[i].name))
+            return TRUE;
+        }
     }
 
   return FALSE;
