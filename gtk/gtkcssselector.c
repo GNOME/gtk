@@ -1036,7 +1036,7 @@ parse_selector_pseudo_class_nth_child (GtkCssParser   *parser,
             }
           a *= multiplier;
         }
-      else if (_gtk_css_parser_has_prefix (parser, "n"))
+      else if (gtk_css_parser_has_ident (parser, "n"))
         {
           a = multiplier;
         }
