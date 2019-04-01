@@ -1386,11 +1386,11 @@ key_press_cb (GtkEventController *controller,
 }
 
 static gboolean
-widget_key_press_cb (GtkEventController *controller,
-                     guint               keyval,
-                     guint               keycode,
-                     GdkModifierType     state,
-                     gpointer            data)
+widget_key_press_cb (GtkEventControllerKey *controller,
+                     guint                  keyval,
+                     guint                  keycode,
+                     GdkModifierType        state,
+                     gpointer               data)
 {
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
@@ -1409,8 +1409,10 @@ widget_key_press_cb (GtkEventController *controller,
           handled = TRUE;
         }
     }
-  else if (gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), (GdkEvent *) event))
+  else
     {
+      gtk_event_controller_key_forward (controller, priv->search_entry);
+
       if (priv->operation_mode != OPERATION_MODE_SEARCH)
         operation_mode_set (impl, OPERATION_MODE_SEARCH);
 
@@ -8502,6 +8504,8 @@ post_process_ui (GtkFileChooserWidget *impl)
   gtk_popover_set_relative_to (GTK_POPOVER (impl->priv->rename_file_popover), impl->priv->browse_files_tree_view);
 
   add_actions (impl);
+
+  gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (impl->priv->search_entry), impl->priv->search_entry);
 }
 
 void
