@@ -71,6 +71,11 @@
 struct _GtkFixedLayout
 {
   GtkLayoutManager parent_instance;
+
+  int min_width;
+  int min_height;
+
+  GskTransform *child_transform;
 };
 
 struct _GtkFixedLayoutChild
@@ -229,7 +234,8 @@ gtk_fixed_layout_measure (GtkLayoutManager *layout_manager,
     {
       int child_min = 0, child_nat = 0;
       int child_min_opp = 0, child_nat_opp = 0;
-      graphene_rect_t min_rect, nat_rect;
+      graphene_rect_t nat_rect;
+      GskTransform *transform = NULL;
 
       if (!gtk_widget_get_visible (child))
         continue;
@@ -243,23 +249,16 @@ gtk_fixed_layout_measure (GtkLayoutManager *layout_manager,
                           &child_min_opp, &child_nat_opp,
                           NULL, NULL);
 
-      gsk_transform_transform_bounds (child_info->position,
-                                      &GRAPHENE_RECT_INIT (0.f, 0.f, child_min, child_min_opp),
-                                      &min_rect);
-      gsk_transform_transform_bounds (child_info->position,
+      transform = gsk_transform_transform (transform, child_info->position);
+      gsk_transform_transform_bounds (transform,
                                       &GRAPHENE_RECT_INIT (0.f, 0.f, child_nat, child_nat_opp),
                                       &nat_rect);
+      gsk_transform_unref (transform);
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        {
-          minimum_size = MAX (minimum_size, min_rect.origin.x + min_rect.size.width);
-          natural_size = MAX (natural_size, nat_rect.origin.x + nat_rect.size.width);
-        }
+        natural_size = MAX (natural_size, nat_rect.origin.x + nat_rect.size.width);
       else
-        {
-          minimum_size = MAX (minimum_size, min_rect.origin.y + min_rect.size.height);
-          natural_size = MAX (natural_size, nat_rect.origin.y + nat_rect.size.height);
-        }
+        natural_size = MAX (natural_size, nat_rect.origin.y + nat_rect.size.height);
     }
 
   if (minimum != NULL)
@@ -275,7 +274,9 @@ gtk_fixed_layout_allocate (GtkLayoutManager *layout_manager,
                            int               height,
                            int               baseline)
 {
+  GtkFixedLayout *self = GTK_FIXED_LAYOUT (layout_manager);
   GtkFixedLayoutChild *child_info;
+  GskTransform *transform;
   GtkWidget *child;
 
   for (child = _gtk_widget_get_first_child (widget);
@@ -290,11 +291,17 @@ gtk_fixed_layout_allocate (GtkLayoutManager *layout_manager,
       child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout_manager, child));
       gtk_widget_get_preferred_size (child, &child_req, NULL);
 
+      transform = NULL;
+      transform = gsk_transform_transform (transform, self->child_transform);
+      transform = gsk_transform_transform (transform, child_info->position);
+
       gtk_widget_allocate (child,
                            child_req.width,
                            child_req.height,
                            -1,
-                           child_info->position);
+                           transform);
+
+      gsk_transform_unref (transform);
     }
 }
 
@@ -328,4 +335,57 @@ GtkLayoutManager *
 gtk_fixed_layout_new (void)
 {
   return g_object_new (GTK_TYPE_FIXED_LAYOUT, NULL);
+}
+
+void
+gtk_fixed_layout_set_minimum_size (GtkFixedLayout *layout,
+                                   int             min_width,
+                                   int             min_height)
+{
+  g_return_if_fail (GTK_IS_FIXED_LAYOUT (layout));
+
+  if (layout->min_width != min_width)
+    layout->min_width = min_width;
+
+  if (layout->min_height != min_height)
+    layout->min_height = min_height;
+
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
+}
+
+void
+gtk_fixed_layout_get_minimum_size (GtkFixedLayout *layout,
+                                   int            *min_width,
+                                   int            *min_height)
+{
+  g_return_if_fail (GTK_IS_FIXED_LAYOUT (layout));
+
+  if (min_width != NULL)
+    *min_width = layout->min_width;
+
+  if (min_height != NULL)
+    *min_height = layout->min_height;
+}
+
+void
+gtk_fixed_layout_set_child_transform (GtkFixedLayout *layout,
+                                      GskTransform   *transform)
+{
+  g_return_if_fail (GTK_IS_FIXED_LAYOUT (layout));
+
+  if (layout->child_transform == transform)
+    return;
+
+  gsk_transform_unref (layout->child_transform);
+  layout->child_transform = gsk_transform_ref (transform);
+
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
+}
+
+GskTransform *
+gtk_fixed_layout_get_child_transform (GtkFixedLayout *layout)
+{
+  g_return_val_if_fail (GTK_IS_FIXED_LAYOUT (layout), NULL);
+
+  return layout->child_transform;
 }

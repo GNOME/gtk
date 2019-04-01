@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <gsk/gsk.h>
 #include <gtk/gtklayoutmanager.h>
 
 G_BEGIN_DECLS
@@ -34,6 +35,20 @@ G_DECLARE_FINAL_TYPE (GtkFixedLayout, gtk_fixed_layout, GTK, FIXED_LAYOUT, GtkLa
 
 GDK_AVAILABLE_IN_ALL
 GtkLayoutManager *      gtk_fixed_layout_new    (void);
+
+GDK_AVAILABLE_IN_ALL
+void                    gtk_fixed_layout_set_minimum_size       (GtkFixedLayout *layout,
+                                                                 int             min_width,
+                                                                 int             min_height);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_fixed_layout_get_minimum_size       (GtkFixedLayout *layout,
+                                                                 int            *min_width,
+                                                                 int            *min_height);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_fixed_layout_set_child_transform    (GtkFixedLayout *layout,
+                                                                 GskTransform   *transform);
+GDK_AVAILABLE_IN_ALL
+GskTransform *          gtk_fixed_layout_get_child_transform    (GtkFixedLayout *layout);
 
 /* GtkFixedLayoutChild */
 
