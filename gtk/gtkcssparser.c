@@ -277,6 +277,28 @@ _gtk_css_parser_try (GtkCssParser *parser,
 }
 
 gboolean
+gtk_css_parser_try_at_keyword (GtkCssParser *parser,
+                               const char   *keyword)
+{
+  gsize len;
+
+  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), FALSE);
+  g_return_val_if_fail (keyword != NULL, FALSE);
+
+  len = strlen (keyword);
+
+  if (parser->data[0] != '@' ||
+      g_ascii_strncasecmp (&parser->data[1], keyword, len) != 0)
+    return FALSE;
+
+  parser->data += len + 1;
+
+  _gtk_css_parser_skip_whitespace (parser);
+
+  return TRUE;
+}
+
+gboolean
 gtk_css_parser_try_ident (GtkCssParser *parser,
                           const char   *ident)
 {
