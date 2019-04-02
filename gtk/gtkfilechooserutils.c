@@ -455,7 +455,7 @@ _gtk_file_chooser_get_settings_for_widget (GtkWidget *widget)
 
   if (G_UNLIKELY (settings == NULL))
     {
-      settings = g_settings_new ("org.gtk.Settings.FileChooser");
+      settings = g_settings_new ("org.gtk.gtk4.Settings.FileChooser");
       g_settings_delay (settings);
 
       g_object_set_qdata_full (G_OBJECT (gtksettings),
