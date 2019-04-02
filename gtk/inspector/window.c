@@ -259,6 +259,14 @@ gtk_inspector_window_constructed (GObject *object)
 }
 
 static void
+gtk_inspector_window_dispose (GObject *object)
+{
+  g_object_set_data (G_OBJECT (gdk_display_get_default ()), "-gtk-inspector", NULL);
+
+  G_OBJECT_CLASS (gtk_inspector_window_parent_class)->dispose (object);
+}
+
+static void
 object_details_changed (GtkWidget          *combo,
                         GParamSpec         *pspec,
                         GtkInspectorWindow *iw)
@@ -284,6 +292,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = gtk_inspector_window_constructed;
+  object_class->dispose = gtk_inspector_window_dispose;
   widget_class->realize = gtk_inspector_window_realize;
 
   g_signal_new (g_intern_static_string ("event"),
