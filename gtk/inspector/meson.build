@@ -29,7 +29,6 @@ inspector_sources = files(
   'renderrecording.c',
   'resource-list.c',
   'selector.c',
-  'signals-list.c',
   'size-groups.c',
   'startrecording.c',
   'statistics.c',

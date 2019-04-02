@@ -42,7 +42,6 @@
 #include "recorder.h"
 #include "resource-list.h"
 #include "selector.h"
-#include "signals-list.h"
 #include "size-groups.h"
 #include "statistics.h"
 #include "visual.h"
@@ -79,7 +78,6 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_RECORDER);
   g_type_ensure (GTK_TYPE_INSPECTOR_RESOURCE_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_SELECTOR);
-  g_type_ensure (GTK_TYPE_INSPECTOR_SIGNALS_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_SIZE_GROUPS);
   g_type_ensure (GTK_TYPE_INSPECTOR_STATISTICS);
   g_type_ensure (GTK_TYPE_INSPECTOR_VISUAL);

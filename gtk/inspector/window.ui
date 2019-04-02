@@ -231,31 +231,6 @@
                                     </child>
                                     <child>
                                       <object class="GtkStackPage">
-                                        <property name="name">signals</property>
-                                        <property name="child">
-                                          <object class="GtkBox">
-                                            <property name="spacing">6</property>
-                                            <property name="margin">6</property>
-                                            <child>
-                                              <object class="GtkToggleButton" id="signals_trace_button">
-                                                <property name="relief">none</property>
-                                                <property name="tooltip-text" translatable="yes">Trace signal emissions on this object</property>
-                                                <property name="icon-name">media-record-symbolic</property>
-                                              </object>
-                                            </child>
-                                            <child>
-                                              <object class="GtkButton" id="signals_clear_button">
-                                                <property name="relief">none</property>
-                                                <property name="tooltip-text" translatable="yes">Clear log</property>
-                                                <property name="icon-name">edit-clear-symbolic</property>
-                                              </object>
-                                            </child>
-                                          </object>
-                                        </property>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="GtkStackPage">
                                         <property name="name">magnifier</property>
                                         <property name="child">
                                           <object class="GtkScale">
@@ -339,18 +314,6 @@
                                     <property name="child-properties">False</property>
                                     <property name="object-tree">object_tree</property>
                                     <property name="search-entry">prop_search_entry</property>
-                                  </object>
-                                </property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkStackPage">
-                                <property name="name">signals</property>
-                                <property name="title" translatable="yes">Signals</property>
-                                <property name="child">
-                                  <object class="GtkInspectorSignalsList" id="signals_list">
-                                    <property name="trace-button">signals_trace_button</property>
-                                    <property name="clear-button">signals_clear_button</property>
                                   </object>
                                 </property>
                               </object>
