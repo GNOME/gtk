@@ -22,6 +22,7 @@
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserwidgetprivate.h"
 
+#include "gtkaccessible.h"
 #include "gtkbindings.h"
 #include "gtkbutton.h"
 #include "gtkcelllayout.h"
@@ -8502,9 +8503,10 @@ static void
 post_process_ui (GtkFileChooserWidget *impl)
 {
   GtkTreeSelection *selection;
-  GtkCellRenderer  *cell;
-  GList            *cells;
-  GFile            *file;
+  GtkCellRenderer *cell;
+  AtkObject *atk_obj;
+  GList *cells;
+  GFile *file;
 
   /* Some qdata, qdata can't be set with GtkBuilder */
   g_object_set_data (G_OBJECT (impl->priv->browse_files_tree_view), "fmq-name", "file_list");
@@ -8558,6 +8560,10 @@ post_process_ui (GtkFileChooserWidget *impl)
    * that priv->icon_size be already setup.
    */
   set_icon_cell_renderer_fixed_size (impl);
+
+  atk_obj = gtk_widget_get_accessible (impl->priv->browse_new_folder_button);
+  if (GTK_IS_ACCESSIBLE (atk_obj))
+    atk_object_set_name (atk_obj, _("Create Folder"));
 
   gtk_popover_set_default_widget (GTK_POPOVER (impl->priv->new_folder_popover), impl->priv->new_folder_create_button);
   gtk_popover_set_default_widget (GTK_POPOVER (impl->priv->rename_file_popover), impl->priv->rename_file_rename_button);
