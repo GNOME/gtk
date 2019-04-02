@@ -331,8 +331,8 @@ gdk_clipboard_read_local_async (GdkClipboard        *clipboard,
 
 static GInputStream *
 gdk_clipboard_read_local_finish (GdkClipboard  *clipboard,
-                                 const char   **out_mime_type,
                                  GAsyncResult  *result,
+                                 const char   **out_mime_type,
                                  GError       **error)
 {
   g_return_val_if_fail (g_task_is_valid (result, clipboard), NULL);
@@ -673,9 +673,9 @@ gdk_clipboard_read_async (GdkClipboard        *clipboard,
 /**
  * gdk_clipboard_read_finish:
  * @clipboard: a #GdkClipboard
+ * @result: a #GAsyncResult
  * @out_mime_type: (out) (allow-none) (transfer none): pointer to store
  *     the chosen mime type in or %NULL
- * @result: a #GAsyncResult
  * @error: a #GError location to store the error occurring, or %NULL to 
  * ignore.
  *
@@ -685,8 +685,8 @@ gdk_clipboard_read_async (GdkClipboard        *clipboard,
  **/
 GInputStream *
 gdk_clipboard_read_finish (GdkClipboard  *clipboard,
-                           const char   **out_mime_type,
                            GAsyncResult  *result,
+                           const char   **out_mime_type,
                            GError       **error)
 {
   g_return_val_if_fail (GDK_IS_CLIPBOARD (clipboard), NULL);
@@ -696,11 +696,11 @@ gdk_clipboard_read_finish (GdkClipboard  *clipboard,
    * read was ongoing */
   if (g_async_result_is_tagged (result, gdk_clipboard_read_local_async))
     {
-      return gdk_clipboard_read_local_finish (clipboard, out_mime_type, result, error);
+      return gdk_clipboard_read_local_finish (clipboard, result, out_mime_type, error);
     }
   else
     {
-      return GDK_CLIPBOARD_GET_CLASS (clipboard)->read_finish (clipboard, out_mime_type, result, error);
+      return GDK_CLIPBOARD_GET_CLASS (clipboard)->read_finish (clipboard, result, out_mime_type, error);
     }
 }
 
@@ -733,7 +733,7 @@ gdk_clipboard_read_value_got_stream (GObject      *source,
   GTask *task = data;
   const char *mime_type;
 
-  stream = gdk_clipboard_read_finish (GDK_CLIPBOARD (source), &mime_type, result, &error);
+  stream = gdk_clipboard_read_finish (GDK_CLIPBOARD (source), result, &mime_type, &error);
   if (stream == NULL)
     {
       g_task_return_error (task, error);
