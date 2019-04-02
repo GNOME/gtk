@@ -51,8 +51,8 @@ struct _GdkDropClass {
                                                                  GAsyncReadyCallback     callback,
                                                                  gpointer                user_data);
   GInputStream *        (* read_finish)                         (GdkDrop                *self,
-                                                                 const char            **out_mime_type,
                                                                  GAsyncResult           *result,
+                                                                 const char            **out_mime_type,
                                                                  GError                **error);
 };
 

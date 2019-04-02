@@ -68,8 +68,8 @@ void                    gdk_drop_read_async             (GdkDrop                
                                                          gpointer                user_data);
 GDK_AVAILABLE_IN_ALL
 GInputStream *          gdk_drop_read_finish            (GdkDrop                *self,
-                                                         const char            **out_mime_type,
                                                          GAsyncResult           *result,
+                                                         const char            **out_mime_type,
                                                          GError                **error);
 GDK_AVAILABLE_IN_ALL
 void                    gdk_drop_read_value_async       (GdkDrop                *self,

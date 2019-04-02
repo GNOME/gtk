@@ -244,7 +244,7 @@ gtk_drag_get_data_got_stream (GObject      *source,
   GInputStream *input_stream;
   GOutputStream *output_stream;
 
-  input_stream = gdk_drop_read_finish (GDK_DROP (source), &data->mime_type, result, NULL);
+  input_stream = gdk_drop_read_finish (GDK_DROP (source), result, &data->mime_type, NULL);
   if (input_stream == NULL)
     {
       gtk_drag_get_data_finish (data, NULL, 0);
