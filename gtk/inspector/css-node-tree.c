@@ -408,6 +408,8 @@ void
 gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
                                         GObject                 *object)
 {
+  GtkWidget *stack;
+  GtkStackPage *page;
   GtkInspectorCssNodeTreePrivate *priv;
   GtkCssNode *node, *root;
   GtkTreePath *path;
@@ -417,13 +419,16 @@ gtk_inspector_css_node_tree_set_object (GtkInspectorCssNodeTree *cnt,
 
   priv = cnt->priv;
 
+  stack = gtk_widget_get_parent (GTK_WIDGET (cnt));
+  page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (cnt));
+
   if (!GTK_IS_WIDGET (object))
     {
-      gtk_widget_hide (GTK_WIDGET (cnt));
+      g_object_set (page, "visible", FALSE, NULL);
       return;
     }
 
-  gtk_widget_show (GTK_WIDGET (cnt));
+  g_object_set (page, "visible", TRUE, NULL);
 
   root = node = gtk_widget_get_css_node (GTK_WIDGET (object));
   while (gtk_css_node_get_parent (root))

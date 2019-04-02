@@ -28,6 +28,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkpopover.h"
 #include "gtklabel.h"
+#include "gtkstack.h"
 
 enum
 {
@@ -167,13 +168,14 @@ action_state_changed_cb (GActionGroup        *group,
 
 static void
 add_group (GtkInspectorActions *sl,
+           GtkStackPage        *page,
            GActionGroup        *group,
            const gchar         *prefix)
 {
   gint i;
   gchar **names;
 
-  gtk_widget_show (GTK_WIDGET (sl));
+  g_object_set (page, "visible", TRUE, NULL);
 
   g_signal_connect (group, "action-added", G_CALLBACK (action_added_cb), sl);
   g_signal_connect (group, "action-removed", G_CALLBACK (action_removed_cb), sl);
@@ -203,16 +205,22 @@ void
 gtk_inspector_actions_set_object (GtkInspectorActions *sl,
                                   GObject             *object)
 {
-  gtk_widget_hide (GTK_WIDGET (sl));
+  GtkWidget *stack;
+  GtkStackPage *page;
+
+  stack = gtk_widget_get_parent (GTK_WIDGET (sl));
+  page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (sl));
+
+  g_object_set (page, "visible", FALSE, NULL);
   g_hash_table_foreach (sl->priv->groups, disconnect_group, sl);
   g_hash_table_remove_all (sl->priv->groups);
   g_hash_table_remove_all (sl->priv->iters);
   gtk_list_store_clear (sl->priv->model);
   
   if (GTK_IS_APPLICATION (object))
-    add_group (sl, G_ACTION_GROUP (object), "app");
+    add_group (sl, page, G_ACTION_GROUP (object), "app");
   else if (GTK_IS_APPLICATION_WINDOW (object))
-    add_group (sl, G_ACTION_GROUP (object), "win");
+    add_group (sl, page, G_ACTION_GROUP (object), "win");
   else if (GTK_IS_WIDGET (object))
     {
       const gchar **prefixes;
@@ -225,7 +233,7 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
           for (i = 0; prefixes[i]; i++)
             {
               group = gtk_widget_get_action_group (GTK_WIDGET (object), prefixes[i]);
-              add_group (sl, group, prefixes[i]);
+              add_group (sl, page, group, prefixes[i]);
             }
           g_free (prefixes);
         }
