@@ -609,7 +609,7 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
   GtkAdjustment *adj;
   GtkText *text;
 
-  chooser->settings = g_settings_new ("org.gtk.Settings.EmojiChooser");
+  chooser->settings = g_settings_new ("org.gtk.gtk4.Settings.EmojiChooser");
 
   gtk_widget_init_template (GTK_WIDGET (chooser));
 

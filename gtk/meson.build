@@ -965,10 +965,10 @@ endif
 gtk_deps += libintl_dep
 
 gtk_settings_schemas = [
-  'org.gtk.Settings.FileChooser.gschema.xml',
-  'org.gtk.Settings.ColorChooser.gschema.xml',
-  'org.gtk.Settings.EmojiChooser.gschema.xml',
-  'org.gtk.Settings.Debug4.gschema.xml',
+  'org.gtk.gtk4.Settings.FileChooser.gschema.xml',
+  'org.gtk.gtk4.Settings.ColorChooser.gschema.xml',
+  'org.gtk.gtk4.Settings.EmojiChooser.gschema.xml',
+  'org.gtk.gtk4.Settings.Debug.gschema.xml',
 ]
 install_data(gtk_settings_schemas, install_dir: gtk_schemasdir)
 gnome.compile_schemas(depend_files: files(gtk_settings_schemas),
