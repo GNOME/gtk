@@ -20,7 +20,6 @@ inspector_sources = files(
   'magnifier.c',
   'menu.c',
   'misc-info.c',
-  'object-hierarchy.c',
   'object-tree.c',
   'prop-editor.c',
   'prop-list.c',

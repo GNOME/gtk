@@ -36,7 +36,6 @@
 #include "magnifier.h"
 #include "menu.h"
 #include "misc-info.h"
-#include "object-hierarchy.h"
 #include "object-tree.h"
 #include "prop-list.h"
 #include "recorder.h"
@@ -71,7 +70,6 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_MAGNIFIER);
   g_type_ensure (GTK_TYPE_INSPECTOR_MENU);
   g_type_ensure (GTK_TYPE_INSPECTOR_MISC_INFO);
-  g_type_ensure (GTK_TYPE_INSPECTOR_OBJECT_HIERARCHY);
   g_type_ensure (GTK_TYPE_INSPECTOR_OBJECT_TREE);
   g_type_ensure (GTK_TYPE_INSPECTOR_PROP_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_RECORDER);

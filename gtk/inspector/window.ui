@@ -333,15 +333,6 @@
                             </child>
                             <child>
                               <object class="GtkStackPage">
-                                <property name="name">hierarchy</property>
-                                <property name="title" translatable="yes">Class Hierarchy</property>
-                                <property name="child">
-                                  <object class="GtkInspectorObjectHierarchy" id="object_hierarchy"/>
-                                </property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkStackPage">
                                 <property name="name">css-nodes</property>
                                 <property name="title" translatable="yes">CSS Nodes</property>
                                 <property name="child">
