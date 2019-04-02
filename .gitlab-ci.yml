@@ -63,6 +63,11 @@ flatpak:widget-factory:
     APPID: org.gtk.WidgetFactory4
   <<: *flatpak-defaults
 
+flatpak:icon-browser:
+  variables:
+    APPID: org.gtk.IconBrowser4
+  <<: *flatpak-defaults
+
 pages:
   image: registry.gitlab.gnome.org/gnome/gtk/master:v3
   stage: deploy 
