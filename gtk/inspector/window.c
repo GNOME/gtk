@@ -32,12 +32,9 @@
 #include "controllers.h"
 #include "css-editor.h"
 #include "css-node-tree.h"
-#include "object-hierarchy.h"
 #include "object-tree.h"
-#include "selector.h"
 #include "size-groups.h"
 #include "data-list.h"
-#include "signals-list.h"
 #include "actions.h"
 #include "menu.h"
 #include "misc-info.h"
@@ -55,6 +52,7 @@
 #include "gtkstack.h"
 #include "gtktreeviewcolumn.h"
 #include "gtkwindowgroup.h"
+#include "gtkrevealer.h"
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
@@ -72,10 +70,6 @@ set_selected_object (GtkInspectorWindow *iw,
   gtk_label_set_label (GTK_LABEL (iw->object_title), title);
   g_free (title);
 
-  gtk_inspector_prop_list_set_object (GTK_INSPECTOR_PROP_LIST (iw->child_prop_list), selected);
-  gtk_inspector_signals_list_set_object (GTK_INSPECTOR_SIGNALS_LIST (iw->signals_list), selected);
-  gtk_inspector_object_hierarchy_set_object (GTK_INSPECTOR_OBJECT_HIERARCHY (iw->object_hierarchy), selected);
-  gtk_inspector_selector_set_object (GTK_INSPECTOR_SELECTOR (iw->selector), selected);
   gtk_inspector_misc_info_set_object (GTK_INSPECTOR_MISC_INFO (iw->misc_info), selected);
   gtk_inspector_css_node_tree_set_object (GTK_INSPECTOR_CSS_NODE_TREE (iw->widget_css_node_tree), selected);
   gtk_inspector_size_groups_set_object (GTK_INSPECTOR_SIZE_GROUPS (iw->size_groups), selected);
@@ -275,6 +269,22 @@ object_details_changed (GtkWidget          *combo,
 }
 
 static void
+toggle_sidebar (GtkWidget          *button,
+                GtkInspectorWindow *iw)
+{
+  if (gtk_revealer_get_child_revealed (GTK_REVEALER (iw->sidebar_revealer)))
+    {
+      gtk_revealer_set_reveal_child (GTK_REVEALER (iw->sidebar_revealer), FALSE);
+      gtk_button_set_icon_name (GTK_BUTTON (button), "go-next-symbolic");
+    }
+  else
+    {
+      gtk_revealer_set_reveal_child (GTK_REVEALER (iw->sidebar_revealer), TRUE);
+      gtk_button_set_icon_name (GTK_BUTTON (button), "go-previous-symbolic");
+    }
+}
+
+static void
 gtk_inspector_window_realize (GtkWidget *widget)
 {
   GskRenderer *renderer;
@@ -319,13 +329,9 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_details_button);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, select_object);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, prop_list);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, child_prop_list);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, signals_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, widget_css_node_tree);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, widget_recorder);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_hierarchy);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_title);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, selector);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, size_groups);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, data_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, actions);
@@ -333,6 +339,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, misc_info);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, controllers);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, magnifier);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, sidebar_revealer);
 
   gtk_widget_class_bind_template_callback (widget_class, gtk_inspector_on_inspect);
   gtk_widget_class_bind_template_callback (widget_class, on_object_activated);
@@ -341,6 +348,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, close_object_details);
   gtk_widget_class_bind_template_callback (widget_class, object_details_changed);
   gtk_widget_class_bind_template_callback (widget_class, notify_node);
+  gtk_widget_class_bind_template_callback (widget_class, toggle_sidebar);
 }
 
 static GdkDisplay *

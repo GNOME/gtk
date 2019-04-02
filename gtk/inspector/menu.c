@@ -23,6 +23,7 @@
 #include "gtktreestore.h"
 #include "gtkwidgetprivate.h"
 #include "gtklabel.h"
+#include "gtkstack.h"
 
 
 enum
@@ -49,11 +50,13 @@ gtk_inspector_menu_init (GtkInspectorMenu *sl)
 }
 
 static void add_menu (GtkInspectorMenu *sl,
+                      GtkStackPage     *page,
                       GMenuModel       *menu,
                       GtkTreeIter      *parent);
 
 static void
 add_item (GtkInspectorMenu *sl,
+          GtkStackPage     *page,
           GMenuModel       *menu,
           gint              idx,
           GtkTreeIter      *parent)
@@ -91,14 +94,14 @@ add_item (GtkInspectorMenu *sl,
         gtk_tree_store_set (sl->priv->model, &iter,
                             COLUMN_LABEL, _("Unnamed section"),
                             -1);
-      add_menu (sl, model, &iter);
+      add_menu (sl, page, model, &iter);
       g_object_unref (model);
     }
 
   model = g_menu_model_get_item_link (menu, idx, G_MENU_LINK_SUBMENU);
   if (model)
     {
-      add_menu (sl, model, &iter);
+      add_menu (sl, page, model, &iter);
       g_object_unref (model);
     }
 
@@ -110,28 +113,35 @@ add_item (GtkInspectorMenu *sl,
 
 static void
 add_menu (GtkInspectorMenu *sl,
+          GtkStackPage     *page,
           GMenuModel       *menu,
           GtkTreeIter      *parent)
 {
   gint n_items;
   gint i;
 
-  gtk_widget_show (GTK_WIDGET (sl));
+  g_object_set (page, "visible", TRUE, NULL);
 
   n_items = g_menu_model_get_n_items (menu);
   for (i = 0; i < n_items; i++)
-    add_item (sl, menu, i, parent);
+    add_item (sl, page, menu, i, parent);
 }
 
 void
 gtk_inspector_menu_set_object (GtkInspectorMenu *sl,
                                GObject          *object)
 {
-  gtk_widget_hide (GTK_WIDGET (sl));
+  GtkWidget *stack;
+  GtkStackPage *page;
+
+  stack = gtk_widget_get_parent (GTK_WIDGET (sl));
+  page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (sl));
+
+  g_object_set (page, "visible", FALSE, NULL);
   gtk_tree_store_clear (sl->priv->model);
   
   if (G_IS_MENU_MODEL (object))
-    add_menu (sl, G_MENU_MODEL (object), NULL);
+    add_menu (sl, page, G_MENU_MODEL (object), NULL);
 }
 
 static void

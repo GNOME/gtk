@@ -49,7 +49,6 @@ struct _GtkInspectorPropEditorPrivate
 {
   GObject *object;
   gchar *name;
-  gboolean is_child_property;
   GtkWidget *editor;
 };
 
@@ -71,31 +70,9 @@ static guint signals[N_SIGNALS] = { 0 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorPropEditor, gtk_inspector_prop_editor, GTK_TYPE_BOX);
 
-static gboolean
-is_child_property (GParamSpec *pspec)
-{
-  return g_param_spec_get_qdata (pspec, g_quark_from_string ("is-child-prop")) != NULL;
-}
-
-static GParamSpec *
-mark_child_property (GParamSpec *pspec)
-{
-  if (pspec)
-    g_param_spec_set_qdata (pspec, g_quark_from_string ("is-child-prop"), GINT_TO_POINTER (TRUE));
-  return pspec;
-}
-
 static GParamSpec *
 find_property (GtkInspectorPropEditor *editor)
 {
-  if (editor->priv->is_child_property)
-    {
-      GtkWidget *widget = GTK_WIDGET (editor->priv->object);
-      GtkWidget *parent = gtk_widget_get_parent (widget);
-
-      return mark_child_property (gtk_container_class_find_child_property (G_OBJECT_GET_CLASS (parent), editor->priv->name));
-    }
-
   return g_object_class_find_property (G_OBJECT_GET_CLASS (editor->priv->object), editor->priv->name);
 }
 
@@ -135,10 +112,7 @@ g_object_connect_property (GObject    *object,
   gchar *with_detail;
   DisconnectData *dd;
 
-  if (is_child_property (spec))
-    with_detail = g_strconcat ("child-notify::", spec->name, NULL);
-  else
-    with_detail = g_strconcat ("notify::", spec->name, NULL);
+  with_detail = g_strconcat ("notify::", spec->name, NULL);
 
   dd = g_new (DisconnectData, 1);
 
@@ -224,45 +198,19 @@ unblock_controller (GObject *controller)
 static void
 get_property_value (GObject *object, GParamSpec *pspec, GValue *value)
 {
-  if (is_child_property (pspec))
-    {
-      GtkWidget *widget = GTK_WIDGET (object);
-      GtkWidget *parent = gtk_widget_get_parent (widget);
-
-      gtk_container_child_get_property (GTK_CONTAINER (parent),
-                                        widget, pspec->name, value);
-    }
-  else
-    g_object_get_property (object, pspec->name, value);
+  g_object_get_property (object, pspec->name, value);
 }
 
 static void
 set_property_value (GObject *object, GParamSpec *pspec, GValue *value)
 {
-  if (is_child_property (pspec))
-    {
-      GtkWidget *widget = GTK_WIDGET (object);
-      GtkWidget *parent = gtk_widget_get_parent (widget);
-
-      gtk_container_child_set_property (GTK_CONTAINER (parent),
-                                        widget, pspec->name, value);
-    }
-  else
-    g_object_set_property (object, pspec->name, value);
+  g_object_set_property (object, pspec->name, value);
 }
 
 static void
 notify_property (GObject *object, GParamSpec *pspec)
 {
-  if (is_child_property (pspec))
-    {
-      GtkWidget *widget = GTK_WIDGET (object);
-      GtkWidget *parent = gtk_widget_get_parent (widget);
-
-      gtk_container_child_notify (GTK_CONTAINER (parent), widget, pspec->name);
-    }
-  else
-    g_object_notify (object, pspec->name);
+  g_object_notify (object, pspec->name);
 }
 
 static void
@@ -1766,10 +1714,6 @@ get_property (GObject    *object,
       g_value_set_string (value, r->priv->name);
       break;
 
-    case PROP_IS_CHILD_PROPERTY:
-      g_value_set_boolean (value, r->priv->is_child_property);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -1793,10 +1737,6 @@ set_property (GObject      *object,
     case PROP_NAME:
       g_free (r->priv->name);
       r->priv->name = g_value_dup_string (value);
-      break;
-
-    case PROP_IS_CHILD_PROPERTY:
-      r->priv->is_child_property = g_value_get_boolean (value);
       break;
 
     default:
@@ -1830,21 +1770,15 @@ gtk_inspector_prop_editor_class_init (GtkInspectorPropEditorClass *klass)
   g_object_class_install_property (object_class, PROP_NAME,
       g_param_spec_string ("name", "Name", "The property name",
                            NULL, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
-
-  g_object_class_install_property (object_class, PROP_IS_CHILD_PROPERTY,
-      g_param_spec_boolean ("is-child-property", "Child property", "Whether this is a child property",
-                            FALSE, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 }
 
 GtkWidget *
 gtk_inspector_prop_editor_new (GObject     *object,
-                               const gchar *name,
-                               gboolean     is_child_property)
+                               const gchar *name)
 {
   return g_object_new (GTK_TYPE_INSPECTOR_PROP_EDITOR,
                        "object", object,
                        "name", name,
-                       "is-child-property", is_child_property,
                        NULL);
 }
 

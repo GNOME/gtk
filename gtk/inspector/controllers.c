@@ -33,6 +33,7 @@
 #include "gtkscrolledwindow.h"
 #include "gtksortlistmodel.h"
 #include "gtkwidgetprivate.h"
+#include "gtkstack.h"
 
 enum
 {
@@ -204,13 +205,23 @@ void
 gtk_inspector_controllers_set_object (GtkInspectorControllers *sl,
                                       GObject                 *object)
 {
+  GtkWidget *stack;
+  GtkStackPage *page;
   GtkInspectorControllersPrivate *priv = sl->priv;
   GtkMapListModel *map_model;
   GtkFlattenListModel *flatten_model;
   GtkSortListModel *sort_model;
 
+  stack = gtk_widget_get_parent (GTK_WIDGET (sl));
+  page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (sl));
+
   if (!GTK_IS_WIDGET (object))
-    return;
+    {
+      g_object_set (page, "visible", FALSE, NULL);
+      return;
+    }
+
+  g_object_set (page, "visible", TRUE, NULL);
 
   priv->model = gtk_property_lookup_list_model_new (GTK_TYPE_WIDGET, "parent");
   gtk_property_lookup_list_model_set_object (priv->model, object);

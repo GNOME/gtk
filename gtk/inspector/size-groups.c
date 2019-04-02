@@ -31,6 +31,7 @@
 #include "gtkstylecontext.h"
 #include "gtkswitch.h"
 #include "gtkwidgetprivate.h"
+#include "gtkstack.h"
 
 
 typedef struct {
@@ -210,7 +211,6 @@ add_widget (GtkInspectorSizeGroups *sl,
   g_object_set (label, "margin", 10, NULL);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-  gtk_widget_show (label);
   gtk_container_add (GTK_CONTAINER (row), label);
   gtk_container_add (GTK_CONTAINER (listbox), row);
 }
@@ -266,18 +266,22 @@ gtk_inspector_size_groups_set_object (GtkInspectorSizeGroups *sl,
                                       GObject                *object)
 {
   GSList *groups, *l;
+  GtkWidget *stack;
+  GtkStackPage *page;
+
+  stack = gtk_widget_get_parent (GTK_WIDGET (sl));
+  page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (sl));
+
+  g_object_set (page, "visible", FALSE, NULL);
 
   clear_view (sl);
 
   if (!GTK_IS_WIDGET (object))
-    {
-      gtk_widget_hide (GTK_WIDGET (sl));
-      return;
-    }
+    return;
 
   groups = _gtk_widget_get_sizegroups (GTK_WIDGET (object));
   if (groups)
-    gtk_widget_show (GTK_WIDGET (sl));
+    g_object_set (page, "visible", TRUE, NULL);
   for (l = groups; l; l = l->next)
     {
       GtkSizeGroup *group = l->data;
