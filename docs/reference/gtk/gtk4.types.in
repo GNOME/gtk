@@ -16,7 +16,9 @@ gtk_aspect_frame_get_type
 gtk_assistant_get_type
 gtk_assistant_page_get_type
 gtk_bin_get_type
+gtk_bin_layout_get_type
 gtk_box_get_type
+gtk_box_layout_get_type
 gtk_builder_get_type
 gtk_buildable_get_type
 gtk_button_get_type
@@ -64,6 +66,7 @@ gtk_file_chooser_get_type
 gtk_file_chooser_widget_get_type
 gtk_file_filter_get_type
 gtk_fixed_get_type
+gtk_fixed_layout_get_type
 gtk_flow_box_get_type
 gtk_flow_box_child_get_type
 gtk_font_button_get_type
@@ -92,7 +95,8 @@ gtk_im_context_simple_get_type
 gtk_im_multicontext_get_type
 gtk_info_bar_get_type
 gtk_label_get_type
-gtk_layout_get_type
+gtk_layout_child_get_type
+gtk_layout_manager_get_type
 gtk_link_button_get_type
 gtk_list_store_get_type
 gtk_list_box_get_type
