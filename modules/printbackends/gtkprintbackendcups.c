@@ -638,76 +638,76 @@ add_cups_options (const gchar *key,
             }
 
           if (custom_values_enabled && !found)
-	    {
-	      /* Check syntax of the invalid choice to see whether
-		 it could be a custom value */
-	      if (g_str_equal (key, "PageSize") ||
-		  g_str_equal (key, "PageRegion"))
-		{
-		  /* Handle custom page sizes... */
-		  if (g_regex_match_simple ("^" UNSIGNED_FLOAT_REGEX "x"
-					    UNSIGNED_FLOAT_REGEX
-					    "(cm|mm|m|in|ft|pt)?$",
-					    value, G_REGEX_CASELESS, 0))
-		    custom_value = TRUE;
-		  else
-		    {
-		      if (data->page_setup != NULL)
-			{
-			  custom_value = TRUE;
-			  new_value =
-			    g_strdup_printf ("Custom.%.2fx%.2fmm",
-					     gtk_paper_size_get_width (gtk_page_setup_get_paper_size (data->page_setup), GTK_UNIT_MM),
-					     gtk_paper_size_get_height (gtk_page_setup_get_paper_size (data->page_setup), GTK_UNIT_MM));
-			}
-		    }
-		}
-	      else
-		{
-		  /* Handle other custom options... */
-		  ppd_cparam_t  *cparam;
+            {
+              /* Check syntax of the invalid choice to see whether
+                 it could be a custom value */
+              if (g_str_equal (key, "PageSize") ||
+                  g_str_equal (key, "PageRegion"))
+                {
+                  /* Handle custom page sizes... */
+                  if (g_regex_match_simple ("^" UNSIGNED_FLOAT_REGEX "x"
+                                            UNSIGNED_FLOAT_REGEX
+                                            "(cm|mm|m|in|ft|pt)?$",
+                                            value, G_REGEX_CASELESS, 0))
+                    custom_value = TRUE;
+                  else
+                    {
+                      if (data->page_setup != NULL)
+                        {
+                          custom_value = TRUE;
+                          new_value =
+                            g_strdup_printf ("Custom.%.2fx%.2fmm",
+                                             gtk_paper_size_get_width (gtk_page_setup_get_paper_size (data->page_setup), GTK_UNIT_MM),
+                                             gtk_paper_size_get_height (gtk_page_setup_get_paper_size (data->page_setup), GTK_UNIT_MM));
+                        }
+                    }
+                }
+              else
+                {
+                  /* Handle other custom options... */
+                  ppd_cparam_t  *cparam;
 
-		  cparam = (ppd_cparam_t *) cupsArrayFirst (coption->params);
-		  if (cparam != NULL)
-		    {
-		      switch (cparam->type)
-			{
-			case PPD_CUSTOM_CURVE :
-			case PPD_CUSTOM_INVCURVE :
-			case PPD_CUSTOM_REAL :
-			  if (g_regex_match_simple ("^" SIGNED_FLOAT_REGEX
-						    "$", value,
-						    G_REGEX_CASELESS, 0))
-			    custom_value = TRUE;
-			  break;
+                  cparam = (ppd_cparam_t *) cupsArrayFirst (coption->params);
+                  if (cparam != NULL)
+                    {
+                      switch (cparam->type)
+                        {
+                        case PPD_CUSTOM_CURVE :
+                        case PPD_CUSTOM_INVCURVE :
+                        case PPD_CUSTOM_REAL :
+                          if (g_regex_match_simple ("^" SIGNED_FLOAT_REGEX
+                                                    "$", value,
+                                                    G_REGEX_CASELESS, 0))
+                            custom_value = TRUE;
+                          break;
 
-			case PPD_CUSTOM_POINTS :
-			  if (g_regex_match_simple ("^" SIGNED_FLOAT_REGEX
-						    "(cm|mm|m|in|ft|pt)?$",
-						    value, G_REGEX_CASELESS,
-						    0))
-			    custom_value = TRUE;
-			  break;
+                        case PPD_CUSTOM_POINTS :
+                          if (g_regex_match_simple ("^" SIGNED_FLOAT_REGEX
+                                                    "(cm|mm|m|in|ft|pt)?$",
+                                                    value, G_REGEX_CASELESS,
+                                                    0))
+                            custom_value = TRUE;
+                          break;
 
-			case PPD_CUSTOM_INT :
-			  if (g_regex_match_simple ("^" SIGNED_INTEGER_REGEX
-						    "$", value,
-						    G_REGEX_CASELESS, 0))
-			    custom_value = TRUE;
-			  break;
+                        case PPD_CUSTOM_INT :
+                          if (g_regex_match_simple ("^" SIGNED_INTEGER_REGEX
+                                                    "$", value,
+                                                    G_REGEX_CASELESS, 0))
+                            custom_value = TRUE;
+                          break;
 
-			case PPD_CUSTOM_PASSCODE :
-			case PPD_CUSTOM_PASSWORD :
-			case PPD_CUSTOM_STRING :
-			  custom_value = TRUE;
-			  break;
+                        case PPD_CUSTOM_PASSCODE :
+                        case PPD_CUSTOM_PASSWORD :
+                        case PPD_CUSTOM_STRING :
+                          custom_value = TRUE;
+                          break;
 
-			default :
-			  custom_value = FALSE;
-			}
-		    }
-		}
-	    }
+                        default :
+                          custom_value = FALSE;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -715,7 +715,7 @@ add_cups_options (const gchar *key,
   if (custom_value)
     {
       if (new_value == NULL)
-	new_value = g_strdup_printf ("Custom.%s", value);
+        new_value = g_strdup_printf ("Custom.%s", value);
       gtk_cups_request_encode_option (request, key, new_value);
       g_free (new_value);
     }
