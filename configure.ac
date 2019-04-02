@@ -841,19 +841,6 @@ AC_CHECK_HEADERS(ftw.h,
                  AC_DEFINE(HAVE_FTW_H, 1,
                            [Define to 1 if ftw.h is available]))
 
-AC_MSG_CHECKING([for GNU ftw extensions])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#define _XOPEN_SOURCE 500
-                                     #define _GNU_SOURCE
-                                     #include <ftw.h>]],
-                                   [[int flags = FTW_ACTIONRETVAL;]])],
-                  [gtk_ok=yes],[gtk_ok=no])
-if test $gtk_ok = yes; then
-    AC_MSG_RESULT([yes])
-    AC_DEFINE(HAVE_GNU_FTW, 1, [Have GNU ftw])
-else
-    AC_MSG_RESULT([no])
-fi
-
 #
 # Disable deprecation checks for all libraries we depend on on stable branches.
 # This is so newer versions of those libraries don't cause more warnings with
