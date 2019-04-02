@@ -163,6 +163,7 @@
     <file>expander.c</file>
     <file>filtermodel.c</file>
     <file>fishbowl.c</file>
+    <file>fixed.c</file>
     <file>flowbox.c</file>
     <file>foreigndrawing.c</file>
     <file>font_features.c</file>
@@ -269,6 +270,9 @@
   <gresource prefix="/tagged_entry">
     <file>demotaggedentry.c</file>
     <file>demotaggedentry.h</file>
+  </gresource>
+  <gresource prefix="/fixed">
+    <file>fixed.css</file>
   </gresource>
   <gresource prefix="/org/gtk/Demo4">
     <file>icons/16x16/actions/application-exit.png</file>
