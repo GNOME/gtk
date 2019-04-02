@@ -53,8 +53,7 @@ G_BEGIN_DECLS
 
 GType      gtk_inspector_prop_editor_get_type (void);
 GtkWidget *gtk_inspector_prop_editor_new      (GObject     *object,
-                                               const gchar *name,
-                                               gboolean     is_child_property);
+                                               const gchar *name);
 
 gboolean   gtk_inspector_prop_editor_should_expand (GtkInspectorPropEditor *editor);
 

@@ -104,7 +104,7 @@ show_node_prop_editor (NodePropEditor *npe)
   popover = gtk_popover_new (GTK_WIDGET (npe->cnt->priv->node_tree));
   gtk_popover_set_pointing_to (GTK_POPOVER (popover), &npe->rect);
 
-  editor = gtk_inspector_prop_editor_new (G_OBJECT (npe->node), npe->prop_name, FALSE);
+  editor = gtk_inspector_prop_editor_new (G_OBJECT (npe->node), npe->prop_name);
   gtk_widget_show (editor);
 
   gtk_container_add (GTK_CONTAINER (popover), editor);
@@ -530,5 +530,4 @@ gtk_inspector_css_node_tree_get_node (GtkInspectorCssNodeTree *cnt)
   return priv->node;
 }
 
-// vim: set et sw=2 ts=2:
 // vim: set et sw=2 ts=2:

@@ -276,17 +276,6 @@
                                     </property>
                                   </object>
                                 </child>
-                                <child>
-                                  <object class="GtkStackPage">
-                                    <property name="name">child-prop-search</property>
-                                    <property name="child">
-                                      <object class="GtkSearchEntry" id="child_prop_search_entry">
-                                        <property name="margin">6</property>
-                                        <property name="max-width-chars">40</property>
-                                      </object>
-                                    </property>
-                                  </object>
-                                </child>
                               </object>
                             </child>
                           </object>
@@ -311,22 +300,8 @@
                                 <property name="title" translatable="yes">Properties</property>
                                 <property name="child">
                                   <object class="GtkInspectorPropList" id="prop_list">
-                                    <property name="child-properties">False</property>
                                     <property name="object-tree">object_tree</property>
                                     <property name="search-entry">prop_search_entry</property>
-                                  </object>
-                                </property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkStackPage">
-                                <property name="name">child-properties</property>
-                                <property name="title" translatable="yes">Child Properties</property>
-                                <property name="child">
-                                  <object class="GtkInspectorPropList" id="child_prop_list">
-                                    <property name="child-properties">True</property>
-                                    <property name="object-tree">object_tree</property>
-                                    <property name="search-entry">child_prop_search_entry</property>
                                   </object>
                                 </property>
                               </object>

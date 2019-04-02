@@ -54,7 +54,6 @@ enum
 {
   PROP_0,
   PROP_OBJECT_TREE,
-  PROP_CHILD_PROPERTIES,
   PROP_SEARCH_ENTRY
 };
 
@@ -65,7 +64,6 @@ struct _GtkInspectorPropListPrivate
   GHashTable *prop_iters;
   gulong notify_handler_id;
   GtkInspectorObjectTree *object_tree;
-  gboolean child_properties;
   GtkTreeViewColumn *name_column;
   GtkTreeViewColumn *attribute_column;
   GtkWidget *tree;
@@ -163,10 +161,6 @@ get_property (GObject    *object,
         g_value_take_object (value, pl->priv->object_tree);
         break;
 
-      case PROP_CHILD_PROPERTIES:
-        g_value_set_boolean (value, pl->priv->child_properties);
-        break;
-
       case PROP_SEARCH_ENTRY:
         g_value_take_object (value, pl->priv->search_entry);
         break;
@@ -189,10 +183,6 @@ set_property (GObject      *object,
     {
       case PROP_OBJECT_TREE:
         pl->priv->object_tree = g_value_get_object (value);
-        break;
-
-      case PROP_CHILD_PROPERTIES:
-        pl->priv->child_properties = g_value_get_boolean (value);
         break;
 
       case PROP_SEARCH_ENTRY:
@@ -242,7 +232,7 @@ row_activated (GtkTreeView *tv,
   popover = gtk_popover_new (GTK_WIDGET (tv));
   gtk_popover_set_pointing_to (GTK_POPOVER (popover), &rect);
 
-  editor = gtk_inspector_prop_editor_new (pl->priv->object, name, pl->priv->child_properties);
+  editor = gtk_inspector_prop_editor_new (pl->priv->object, name);
   gtk_widget_show (editor);
 
   gtk_container_add (GTK_CONTAINER (popover), editor);
@@ -303,9 +293,6 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   g_object_class_install_property (object_class, PROP_OBJECT_TREE,
       g_param_spec_object ("object-tree", "Object Tree", "Object tree",
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property (object_class, PROP_CHILD_PROPERTIES,
-      g_param_spec_boolean ("child-properties", "Child properties", "Child properties",
-                            FALSE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (object_class, PROP_SEARCH_ENTRY,
       g_param_spec_object ("search-entry", "Search Entry", "Search Entry",
@@ -433,17 +420,7 @@ gtk_inspector_prop_list_update_prop (GtkInspectorPropList *pl,
   gboolean writable;
 
   g_value_init (&gvalue, prop->value_type);
-  if (pl->priv->child_properties)
-    {
-      GtkWidget *parent;
-
-      parent = gtk_widget_get_parent (GTK_WIDGET (pl->priv->object));
-      gtk_container_child_get_property (GTK_CONTAINER (parent),
-                                        GTK_WIDGET (pl->priv->object),
-                                        prop->name, &gvalue);
-    }
-  else
-    g_object_get_property (pl->priv->object, prop->name, &gvalue);
+  g_object_get_property (pl->priv->object, prop->name, &gvalue);
 
   strdup_value_contents (&gvalue, &value, &type);
 
@@ -535,33 +512,8 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   gtk_editable_set_text (GTK_EDITABLE (pl->priv->search_entry), "");
   gtk_stack_set_visible_child_name (GTK_STACK (pl->priv->search_stack), "title");
 
-  if (pl->priv->child_properties)
-    {
-      GtkWidget *parent;
-
-      if (!GTK_IS_WIDGET (object))
-        {
-          gtk_widget_hide (GTK_WIDGET (pl));
-          return TRUE;
-        }
-
-      parent = gtk_widget_get_parent (GTK_WIDGET (object));
-      if (!parent || !GTK_IS_CONTAINER (parent))
-        {
-          gtk_widget_hide (GTK_WIDGET (pl));
-          return TRUE;
-        }
-
-      gtk_tree_view_column_set_visible (pl->priv->attribute_column, FALSE);
-
-      props = gtk_container_class_list_child_properties (G_OBJECT_GET_CLASS (parent), &num_properties);
-    }
-  else
-    {
-      gtk_tree_view_column_set_visible (pl->priv->attribute_column, GTK_IS_CELL_RENDERER (object));
-
-      props = g_object_class_list_properties (G_OBJECT_GET_CLASS (object), &num_properties);
-    }
+  gtk_tree_view_column_set_visible (pl->priv->attribute_column, GTK_IS_CELL_RENDERER (object));
+  props = g_object_class_list_properties (G_OBJECT_GET_CLASS (object), &num_properties);
 
   pl->priv->object = object;
 
@@ -585,10 +537,8 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
 
   /* Listen for updates */
   pl->priv->notify_handler_id =
-      g_signal_connect_object (object,
-                               pl->priv->child_properties ? "child-notify" : "notify",
-                               G_CALLBACK (gtk_inspector_prop_list_prop_changed_cb),
-                               pl, 0);
+      g_signal_connect_object (object, "notify",
+                               G_CALLBACK (gtk_inspector_prop_list_prop_changed_cb), pl, 0);
 
   gtk_widget_show (GTK_WIDGET (pl));
 
