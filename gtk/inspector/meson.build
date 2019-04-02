@@ -9,7 +9,6 @@ inspector_sources = files(
   'fpsoverlay.c',
   'general.c',
   'graphdata.c',
-  'gtkstackcombo.c',
   'gtktreemodelcssnode.c',
   'highlightoverlay.c',
   'init.c',

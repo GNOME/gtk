@@ -52,6 +52,7 @@
 #include "gtkstack.h"
 #include "gtktreeviewcolumn.h"
 #include "gtkwindowgroup.h"
+#include "gtkrevealer.h"
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
@@ -268,6 +269,22 @@ object_details_changed (GtkWidget          *combo,
 }
 
 static void
+toggle_sidebar (GtkWidget          *button,
+                GtkInspectorWindow *iw)
+{
+  if (gtk_revealer_get_child_revealed (GTK_REVEALER (iw->sidebar_revealer)))
+    {
+      gtk_revealer_set_reveal_child (GTK_REVEALER (iw->sidebar_revealer), FALSE);
+      gtk_button_set_icon_name (GTK_BUTTON (button), "go-next-symbolic");
+    }
+  else
+    {
+      gtk_revealer_set_reveal_child (GTK_REVEALER (iw->sidebar_revealer), TRUE);
+      gtk_button_set_icon_name (GTK_BUTTON (button), "go-previous-symbolic");
+    }
+}
+
+static void
 gtk_inspector_window_realize (GtkWidget *widget)
 {
   GskRenderer *renderer;
@@ -322,6 +339,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, misc_info);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, controllers);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, magnifier);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, sidebar_revealer);
 
   gtk_widget_class_bind_template_callback (widget_class, gtk_inspector_on_inspect);
   gtk_widget_class_bind_template_callback (widget_class, on_object_activated);
@@ -330,6 +348,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, close_object_details);
   gtk_widget_class_bind_template_callback (widget_class, object_details_changed);
   gtk_widget_class_bind_template_callback (widget_class, notify_node);
+  gtk_widget_class_bind_template_callback (widget_class, toggle_sidebar);
 }
 
 static GdkDisplay *
