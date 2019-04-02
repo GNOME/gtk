@@ -586,6 +586,7 @@ cups_print_cb (GtkPrintBackendCups *print_backend,
 
 typedef struct {
   GtkCupsRequest *request;
+  GtkPageSetup *page_setup;
   GtkPrinterCups *printer;
 } CupsOptionsData;
 
@@ -733,6 +734,7 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
   GtkPrinterCups *cups_printer;
   CupsPrintStreamData *ps;
   CupsOptionsData *options_data;
+  GtkPageSetup *page_setup;
   GtkCupsRequest *request = NULL;
   GtkPrintSettings *settings;
   const gchar *title;
@@ -838,10 +840,16 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
     g_free (title_truncated);
   }
 
+  g_object_get (job,
+                "page-setup", &page_setup,
+                NULL);
+
   options_data = g_new0 (CupsOptionsData, 1);
   options_data->request = request;
   options_data->printer = cups_printer;
+  options_data->page_setup = page_setup;
   gtk_print_settings_foreach (settings, add_cups_options, options_data);
+  g_clear_object (&page_setup);
   g_free (options_data);
 
   ps = g_new0 (CupsPrintStreamData, 1);
