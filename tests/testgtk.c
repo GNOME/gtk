@@ -5997,86 +5997,6 @@ create_mainloop (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
-void create_layout (GtkWidget *widget)
-{
-  GtkAdjustment *hadjustment, *vadjustment;
-  GtkLayout *layout;
-  static GtkWidget *window = NULL;
-  GtkWidget *layout_widget;
-  GtkWidget *scrolledwindow;
-  GtkWidget *button;
-
-  if (!window)
-    {
-      gchar buf[16];
-
-      gint i, j;
-      
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_display (GTK_WINDOW (window),
-			      gtk_widget_get_display (widget));
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
-
-      gtk_window_set_title (GTK_WINDOW (window), "Layout");
-      gtk_widget_set_size_request (window, 200, 200);
-
-      scrolledwindow = gtk_scrolled_window_new (NULL, NULL);
-      gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow),
-					   GTK_SHADOW_IN);
-      gtk_scrolled_window_set_placement (GTK_SCROLLED_WINDOW (scrolledwindow),
-					 GTK_CORNER_TOP_RIGHT);
-
-      gtk_container_add (GTK_CONTAINER (window), scrolledwindow);
-
-      layout_widget = gtk_layout_new (NULL, NULL);
-      layout = GTK_LAYOUT (layout_widget);
-      gtk_container_add (GTK_CONTAINER (scrolledwindow), layout_widget);
-
-      /* We set step sizes here since GtkLayout does not set
-       * them itself.
-       */
-      hadjustment = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (layout));
-      vadjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (layout));
-      gtk_adjustment_set_step_increment (hadjustment, 10.0);
-      gtk_adjustment_set_step_increment (vadjustment, 10.0);
-      gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (layout), hadjustment);
-      gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (layout), vadjustment);
-
-      gtk_layout_set_size (layout, 1600, 128000);
-
-      for (i=0 ; i < 16 ; i++)
-	for (j=0 ; j < 16 ; j++)
-	  {
-	    sprintf(buf, "Button %d, %d", i, j);
-	    if ((i + j) % 2)
-	      button = gtk_button_new_with_label (buf);
-	    else
-	      button = gtk_label_new (buf);
-
-	    gtk_layout_put (layout, button, j*100, i*100);
-	  }
-
-      for (i=16; i < 1280; i++)
-	{
-	  sprintf(buf, "Button %d, %d", i, 0);
-	  if (i % 2)
-	    button = gtk_button_new_with_label (buf);
-	  else
-	    button = gtk_label_new (buf);
-
-	  gtk_layout_put (layout, button, 0, i*100);
-	}
-    }
-
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
-  else
-    gtk_widget_destroy (window);
-}
-
 static void
 show_native (GtkWidget *button,
              GtkFileChooserNative *native)
@@ -6486,7 +6406,6 @@ struct {
   { "image", create_image },
   { "key lookup", create_key_lookup },
   { "labels", create_labels },
-  { "layout", create_layout },
   { "listbox", create_listbox },
   { "menus", create_menus },
   { "message dialog", create_message_dialog },
