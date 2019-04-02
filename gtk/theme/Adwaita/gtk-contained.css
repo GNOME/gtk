@@ -1139,10 +1139,6 @@ row:selected switch { box-shadow: none; border-color: #185fb4; }
 
 row:selected switch:backdrop { border-color: #185fb4; }
 
-row:selected switch slider:dir(rtl) { border-left-color: #cdc7c2; }
-
-row:selected switch slider:dir(ltr) { border-right-color: #cdc7c2; }
-
 row:selected switch slider:checked, row:selected switch slider { border-color: #185fb4; }
 
 /************************* Check and Radio items * */
