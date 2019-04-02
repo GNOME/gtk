@@ -9,10 +9,9 @@
     "finish-args": [
         "--device=dri",
         "--share=ipc",
-        "--socket=x11",
+        "--socket=fallback-x11",
         "--socket=wayland",
-        "--talk-name=org.gtk.vfs", "--talk-name=org.gtk.vfs.*",
-        "--talk-name=ca.desrt.conf", "--env=DCONF_USER_CONFIG_DIR=.config/dconf"
+        "--talk-name=org.gtk.vfs", "--talk-name=org.gtk.vfs.*"
     ],
     "cleanup": [
         "/include",
