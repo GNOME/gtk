@@ -68,6 +68,6 @@ IconBrowserApp *
 icon_browser_app_new (void)
 {
   return g_object_new (ICON_BROWSER_APP_TYPE,
-                       "application-id", "org.gtk.IconBrowser",
+                       "application-id", "org.gtk.IconBrowser4",
                        NULL);
 }

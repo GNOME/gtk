@@ -134,11 +134,11 @@ foreach size: ['scalable', 'symbolic']
 endforeach
 
 # desktop file
-install_data('org.gtk.Demo.desktop', install_dir: gtk_applicationsdir)
+install_data('org.gtk.Demo4.desktop', install_dir: gtk_applicationsdir)
 
 # GSettings
-install_data('org.gtk.Demo.gschema.xml', install_dir: gtk_schemasdir)
+install_data('org.gtk.Demo4.gschema.xml', install_dir: gtk_schemasdir)
 gnome.compile_schemas()
 
 # appdata
-install_data('org.gtk.Demo.appdata.xml', install_dir: gtk_appdatadir)
+install_data('org.gtk.Demo4.appdata.xml', install_dir: gtk_appdatadir)

@@ -55,12 +55,17 @@ msys2-mingw32:
 
 flatpak:demo:
   variables:
-    APPID: org.gtk.Demo
+    APPID: org.gtk.Demo4
   <<: *flatpak-defaults
 
 flatpak:widget-factory:
   variables:
-    APPID: org.gtk.WidgetFactory
+    APPID: org.gtk.WidgetFactory4
+  <<: *flatpak-defaults
+
+flatpak:icon-browser:
+  variables:
+    APPID: org.gtk.IconBrowser4
   <<: *flatpak-defaults
 
 pages:

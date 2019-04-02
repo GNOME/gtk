@@ -58,7 +58,7 @@ activate_about (GSimpleAction *action,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK widgets",
                          "authors", authors,
-                         "logo-icon-name", "org.gtk.Demo",
+                         "logo-icon-name", "org.gtk.Demo4",
                          "title", "About GTK Demo",
                          NULL);
 }
@@ -1212,7 +1212,7 @@ main (int argc, char **argv)
     }
   /* -- End of hack -- */
 
-  app = gtk_application_new ("org.gtk.Demo", G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_COMMAND_LINE);
+  app = gtk_application_new ("org.gtk.Demo4", G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_COMMAND_LINE);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),

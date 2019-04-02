@@ -1569,7 +1569,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="title">Logo</property>
                                             <property name="child">
                                               <object class="GtkImage" id="imageo">
-                                                <property name="icon-name">gtk3-widget-factory</property>
+                                                <property name="icon-name">org.gtk.WidgetFactory4</property>
                                                 <property name="pixel-size">256</property>
                                               </object>
                                             </property>

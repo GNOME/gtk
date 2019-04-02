@@ -19,7 +19,7 @@ if 'DESTDIR' not in os.environ:
                     os.path.join(gtk_datadir, 'glib-2.0', 'schemas')])
 
     print('Updating icon cache...')
-    subprocess.call(['gtk-update-icon-cache', '-q', '-t' ,'-f',
+    subprocess.call(['gtk4-update-icon-cache', '-q', '-t' ,'-f',
                     os.path.join(gtk_datadir, 'icons', 'hicolor')])
 
     print('Updating module cache for print backends...')

@@ -25,7 +25,7 @@
                   <object class="GtkImage">
                     <property name="margin-top">20</property>
                     <property name="margin-bottom">20</property>
-                    <property name="icon-name">org.gtk.Demo</property>
+                    <property name="icon-name">org.gtk.Demo4</property>
                   </object>
                 </property>
               </object>
