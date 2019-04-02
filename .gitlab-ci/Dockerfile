@@ -10,6 +10,7 @@ RUN dnf -y install \
     ccache \
     colord-devel \
     cups-devel \
+    dbus-x11 \
     fribidi-devel \
     gcc \
     gcc-c++ \
@@ -23,6 +24,7 @@ RUN dnf -y install \
     graphene-devel \
     gtk-doc \
     hicolor-icon-theme \
+    iso-codes \
     itstool \
     json-glib-devel \
     libcloudproviders-devel \
