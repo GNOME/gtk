@@ -10,7 +10,6 @@ export PATH="${HOME}/.local/bin:${PATH}"
 python3 -m pip install --user meson==0.49.2
 
 meson \
-    -Dcloudproviders=true \
     -Ddocumentation=true \
     -Dman-pages=true \
     -Dbroadway-backend=true \
