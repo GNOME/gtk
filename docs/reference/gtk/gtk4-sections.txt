@@ -1740,27 +1740,6 @@ GtkLabelSelectionInfo
 </SECTION>
 
 <SECTION>
-<FILE>gtklayout</FILE>
-<TITLE>GtkLayout</TITLE>
-GtkLayout
-gtk_layout_new
-gtk_layout_put
-gtk_layout_move
-gtk_layout_set_size
-gtk_layout_get_size
-<SUBSECTION Standard>
-GTK_LAYOUT
-GTK_IS_LAYOUT
-GTK_TYPE_LAYOUT
-GTK_LAYOUT_CLASS
-GTK_IS_LAYOUT_CLASS
-GTK_LAYOUT_GET_CLASS
-<SUBSECTION Private>
-GtkLayoutPrivate
-gtk_layout_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtklinkbutton</FILE>
 <TITLE>GtkLinkButton</TITLE>
 GtkLinkButton

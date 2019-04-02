@@ -137,7 +137,6 @@
 #include <gtk/gtkimmulticontext.h>
 #include <gtk/gtkinfobar.h>
 #include <gtk/gtklabel.h>
-#include <gtk/gtklayout.h>
 #include <gtk/gtklayoutmanager.h>
 #include <gtk/gtklayoutchild.h>
 #include <gtk/gtklevelbar.h>

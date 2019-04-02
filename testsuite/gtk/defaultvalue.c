@@ -273,11 +273,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 G_GNUC_END_IGNORE_DEPRECATIONS
 
-      if (g_type_is_a (type, GTK_TYPE_LAYOUT) &&
-	  (strcmp (pspec->name, "hadjustment") == 0 ||
-           strcmp (pspec->name, "vadjustment") == 0))
-	continue;
-
       if (g_type_is_a (type, GTK_TYPE_MESSAGE_DIALOG) &&
           (strcmp (pspec->name, "image") == 0 ||
            strcmp (pspec->name, "message-area") == 0))

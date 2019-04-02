@@ -66,9 +66,6 @@
  * If you know none of these things are an issue for your application,
  * and prefer the simplicity of #GtkFixed, by all means use the
  * widget. But you should be aware of the tradeoffs.
- *
- * See also #GtkLayout, which shares the ability to perform fixed positioning
- * of child widgets and additionally adds custom drawing and scrollability.
  */
 
 #include "config.h"
