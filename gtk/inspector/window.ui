@@ -342,15 +342,6 @@
                             </child>
                             <child>
                               <object class="GtkStackPage">
-                                <property name="name">selector</property>
-                                <property name="title" translatable="yes">CSS Selector</property>
-                                <property name="child">
-                                  <object class="GtkInspectorSelector" id="selector"/>
-                                </property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkStackPage">
                                 <property name="name">css-nodes</property>
                                 <property name="title" translatable="yes">CSS Nodes</property>
                                 <property name="child">
