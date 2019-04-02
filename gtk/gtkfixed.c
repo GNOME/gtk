@@ -27,7 +27,6 @@
  * @Short_description: A container which allows you to position
  * widgets at fixed coordinates
  * @Title: GtkFixed
- * @See_also: #GtkLayout
  *
  * The #GtkFixed widget is a container which can place child widgets
  * at fixed positions and with fixed sizes, given in pixels. #GtkFixed
@@ -52,7 +51,7 @@
  *
  * In addition, #GtkFixed does not pay attention to text direction and thus may
  * produce unwanted results if your app is run under right-to-left languages
- * such as Hebrew or Arabic. That is: normally GTK+ will order containers
+ * such as Hebrew or Arabic. That is: normally GTK will order containers
  * appropriately for the text direction, e.g. to put labels to the right of the
  * thing they label when using an RTL language, but it can’t do that with
  * #GtkFixed. So if you need to reorder widgets depending on the text direction,
@@ -142,7 +141,8 @@ gtk_fixed_new (void)
  * @x: the horizontal position to place the widget at.
  * @y: the vertical position to place the widget at.
  *
- * Adds a widget to a #GtkFixed container at the given position.
+ * Adds a widget to a #GtkFixed container and assigns a translation
+ * transformation to the given @x and @y coordinates to it.
  */
 void
 gtk_fixed_put (GtkFixed  *fixed,
@@ -174,8 +174,10 @@ gtk_fixed_put (GtkFixed  *fixed,
  * @x: (out): the horizontal position of the @widget
  * @y: (out): the vertical position of the @widget
  *
- * Retrieves the position of the given child #GtkWidget in the given
- * #GtkFixed container.
+ * Retrieves the translation transformation of the given child #GtkWidget
+ * in the given #GtkFixed container.
+ *
+ * See also: gtk_fixed_get_child_transform().
  */
 void
 gtk_fixed_get_child_position (GtkFixed  *fixed,
@@ -203,13 +205,66 @@ gtk_fixed_get_child_position (GtkFixed  *fixed,
 }
 
 /**
+ * gtk_fixed_set_child_transform:
+ * @fixed: a #GtkFixed
+ * @widget: a #GtkWidget, child of @fixed
+ * @transform: (nullable): the transformation assigned to @widget
+ *
+ * Sets the transformation for @widget.
+ *
+ * This is a convenience function that retrieves the #GtkFixedLayoutChild
+ * instance associated to @widget and calls gtk_fixed_layout_child_set_position().
+ */
+void
+gtk_fixed_set_child_transform (GtkFixed     *fixed,
+                               GtkWidget    *widget,
+                               GskTransform *transform)
+{
+  GtkFixedPrivate *priv = gtk_fixed_get_instance_private (fixed);
+  GtkFixedLayoutChild *child_info;
+
+  g_return_if_fail (GTK_IS_FIXED (fixed));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (fixed));
+
+  child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout, widget));
+  gtk_fixed_layout_child_set_position (child_info, transform);
+}
+
+/**
+ * gtk_fixed_get_child_transform:
+ * @fixed: a #GtkFixed
+ * @widget: a #GtkWidget, child of @fixed
+ *
+ * Retrieves the transformation for @widget set using
+ * gtk_fixed_set_child_transform().
+ *
+ * Returns: (transfer none) (nullable): a #GskTransform
+ */
+GskTransform *
+gtk_fixed_get_child_transform (GtkFixed  *fixed,
+                               GtkWidget *widget)
+{
+  GtkFixedPrivate *priv = gtk_fixed_get_instance_private (fixed);
+  GtkFixedLayoutChild *child_info;
+
+  g_return_val_if_fail (GTK_IS_FIXED (fixed), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (fixed), NULL);
+
+  child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout, widget));
+  return gtk_fixed_layout_child_get_position (child_info);
+}
+
+/**
  * gtk_fixed_move:
  * @fixed: a #GtkFixed.
  * @widget: the child widget.
  * @x: the horizontal position to move the widget to.
  * @y: the vertical position to move the widget to.
  *
- * Moves a child of a #GtkFixed container to the given position.
+ * Sets a translation transformation to the given @x and @y coordinates to
+ * the child @widget of the given #GtkFixed container.
  */
 void
 gtk_fixed_move (GtkFixed  *fixed,
