@@ -422,7 +422,7 @@
                     <child>
                       <object class="GtkStackPage">
                         <property name="name">general</property>
-                        <property name="title" translatable="yes">General</property>
+                        <property name="title" translatable="yes">Information</property>
                         <property name="child">
                           <object class="GtkInspectorGeneral"/>
                         </property>
@@ -431,7 +431,7 @@
                     <child>
                       <object class="GtkStackPage">
                         <property name="name">visual</property>
-                        <property name="title" translatable="yes">Visual</property>
+                        <property name="title" translatable="yes">Settings</property>
                         <property name="child">
                           <object class="GtkInspectorVisual"/>
                         </property>
