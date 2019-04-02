@@ -1503,37 +1503,6 @@ AC_SUBST(GTK_XIM_FLAGS)
 GDK_PIXBUF_LIBS=`$PKG_CONFIG --libs gdk-pixbuf-2.0`
 AC_SUBST(GDK_PIXBUF_LIBS)
 
-########################
-# Checks needed for gail
-########################
-
-old_LIBS="$LIBS"
-dnl Checks for inet libraries:
-AC_SEARCH_LIBS(gethostent, nsl)
-AC_SEARCH_LIBS(setsockopt, socket)
-AC_SEARCH_LIBS(connect, inet)
-
-dnl check for the sockaddr_un.sun_len member
-AC_CHECK_MEMBER([struct sockaddr_un.sun_len],
-		[struct_sockaddr_un_sun_len=true],
-		[struct_sockaddr_un_suin_len=false],
-		[#include <sys/types.h>
-		 #include <sys/un.h>]
-		)
-case $struct_sockaddr_un_sun_len in
-	true)
-		AC_DEFINE_UNQUOTED(HAVE_SOCKADDR_UN_SUN_LEN, 1,
-		                   [Have the sockaddr_un.sun_len member])
-		;;
-	*)
-		;;
-esac
-
-GAIL_INET_LIBS="$LIBS"
-AC_SUBST([GAIL_INET_LIBS])
-
-LIBS="$old_LIBS"
-
 ################################################################
 # Printing system checks
 ################################################################

@@ -154,9 +154,6 @@
 /* Define to 1 if sincos() is available */
 /* #undef HAVE_SINCOS */
 
-/* Have the sockaddr_un.sun_len member */
-/* #undef HAVE_SOCKADDR_UN_SUN_LEN */
-
 /* Define to 1 if solaris xinerama is available */
 /* #undef HAVE_SOLARIS_XINERAMA */
 
