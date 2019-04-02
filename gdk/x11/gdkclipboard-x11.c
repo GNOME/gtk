@@ -776,8 +776,8 @@ gdk_x11_clipboard_read_async (GdkClipboard        *clipboard,
 
 static GInputStream *
 gdk_x11_clipboard_read_finish (GdkClipboard  *clipboard,
-                               const char   **out_mime_type,
                                GAsyncResult  *result,
+                               const char   **out_mime_type,
                                GError       **error)
 {
   GTask *task;
