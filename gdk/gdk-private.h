@@ -31,6 +31,9 @@ gboolean         gdk_display_get_debug_updates (GdkDisplay *display);
 void             gdk_display_set_debug_updates (GdkDisplay *display,
                                                 gboolean    debug_updates);
 
+const gchar *   gdk_get_desktop_startup_id   (void);
+const gchar *   gdk_get_desktop_autostart_id (void);
+
 typedef struct {
   /* add all private functions here, initialize them in gdk-private.c */
   gboolean (* gdk_device_grab_info) (GdkDisplay  *display,
@@ -56,6 +59,9 @@ typedef struct {
   gboolean         (* gdk_display_get_debug_updates) (GdkDisplay *display);
   void             (* gdk_display_set_debug_updates) (GdkDisplay *display,
                                                       gboolean    debug_updates);
+
+  const gchar * (* gdk_get_desktop_startup_id)   (void);
+  const gchar * (* gdk_get_desktop_autostart_id) (void);
 } GdkPrivateVTable;
 
 GDK_AVAILABLE_IN_ALL
