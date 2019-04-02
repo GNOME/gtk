@@ -77,9 +77,6 @@
 /* Define if gio-unix is available */
 /* #undef HAVE_GIO_UNIX */
 
-/* Have GNU ftw */
-/* #undef HAVE_GNU_FTW */
-
 /* Define to 1 if you have the `httpGetAuthString' function. */
 /* #undef HAVE_HTTPGETAUTHSTRING */
 
