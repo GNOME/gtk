@@ -31,6 +31,7 @@ inspector_sources = files(
   'statistics.c',
   'strv-editor.c',
   'treewalk.c',
+  'type-info.c',
   'updatesoverlay.c',
   'visual.c',
   'window.c',
