@@ -78,7 +78,14 @@ gtk_binary_version = '3.0.0'
 
 gtk_binary_age = 100 * gtk_minor_version + gtk_micro_version
 
-gtk_soversion = '0'
+cc = meson.get_compiler('c')
+
+if cc.get_id() == 'msvc'
+  gtk_soversion = 'vs@0@'.format(cc.version().split('.')[0])
+else
+  gtk_soversion = '0'
+endif
+
 gtk_osxversions = [(100 * gtk_minor_version) + 1, '@0@.@1@.0'.format((100 * gtk_minor_version) + 1, gtk_micro_version)]
 
 gtk_api_version = '@0@.0'.format(gtk_major_version)
@@ -133,8 +140,6 @@ gtk_appdatadir = join_paths(gtk_datadir, 'metainfo')
 
 # multipress: is mplocaledir defined somewhere?
 gtk_mplocaledir = join_paths(gtk_prefix, get_option('localedir'))
-
-cc = meson.get_compiler('c')
 
 cdata = configuration_data()
 cdata.set_quoted('PACKAGE_VERSION', meson.project_version())
