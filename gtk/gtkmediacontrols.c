@@ -22,6 +22,7 @@
 #include "gtkmediacontrols.h"
 
 #include "gtkadjustment.h"
+#include "gtkbinlayout.h"
 #include "gtkbutton.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
@@ -167,39 +168,6 @@ play_button_clicked (GtkWidget        *button,
 }
 
 static void
-gtk_media_controls_measure (GtkWidget      *widget,
-                            GtkOrientation  orientation,
-                            int             for_size,
-                            int            *minimum,
-                            int            *natural,
-                            int            *minimum_baseline,
-                            int            *natural_baseline)
-{
-  GtkMediaControls *controls = GTK_MEDIA_CONTROLS (widget);
-
-  gtk_widget_measure (controls->box,
-                      orientation,
-                      for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_media_controls_size_allocate (GtkWidget *widget,
-                                  int        width,
-                                  int        height,
-                                  int        baseline)
-{
-  GtkMediaControls *controls = GTK_MEDIA_CONTROLS (widget);
-
-  gtk_widget_size_allocate (controls->box,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            }, baseline);
-}
-
-static void
 gtk_media_controls_dispose (GObject *object)
 {
   GtkMediaControls *controls = GTK_MEDIA_CONTROLS (object);
@@ -257,9 +225,6 @@ gtk_media_controls_class_init (GtkMediaControlsClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  widget_class->measure = gtk_media_controls_measure;
-  widget_class->size_allocate = gtk_media_controls_size_allocate;
-
   gobject_class->dispose = gtk_media_controls_dispose;
   gobject_class->get_property = gtk_media_controls_get_property;
   gobject_class->set_property = gtk_media_controls_set_property;
@@ -300,6 +265,7 @@ gtk_media_controls_init (GtkMediaControls *controls)
 {
   gtk_widget_init_template (GTK_WIDGET (controls));
   gtk_widget_set_has_surface (GTK_WIDGET (controls), FALSE);
+  gtk_widget_set_layout_manager (GTK_WIDGET (controls), gtk_bin_layout_new ());
 }
 
 /**
