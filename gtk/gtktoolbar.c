@@ -40,6 +40,7 @@
 #include "gtkbox.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkcustomlayout.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
@@ -124,6 +125,8 @@ struct _GtkToolbarPrivate
 
   GTimer          *timer;
 
+  GtkLayoutManager *layout_manager;
+
   gulong           settings_connection;
 
   gint             idle_id;
@@ -177,7 +180,7 @@ static void       gtk_toolbar_get_property         (GObject             *object,
 						    GParamSpec          *pspec);
 static void       gtk_toolbar_snapshot             (GtkWidget           *widget,
                                                     GtkSnapshot         *snapshot);
-static void       gtk_toolbar_size_allocate        (GtkWidget           *widget,
+static void       gtk_toolbar_allocate             (GtkWidget           *widget,
                                                     int                  width,
                                                     int                  height,
                                                     int                  baseline);
@@ -348,8 +351,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   gobject_class->dispose = gtk_toolbar_dispose;
   
   widget_class->snapshot = gtk_toolbar_snapshot;
-  widget_class->measure = gtk_toolbar_measure;
-  widget_class->size_allocate = gtk_toolbar_size_allocate;
   widget_class->style_updated = gtk_toolbar_style_updated;
   widget_class->focus = gtk_toolbar_focus;
 
@@ -558,6 +559,9 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_BUBBLE);
   g_signal_connect (gesture, "pressed", G_CALLBACK (gtk_toolbar_pressed_cb), toolbar);
   gtk_widget_add_controller (GTK_WIDGET (toolbar), GTK_EVENT_CONTROLLER (gesture));
+
+  priv->layout_manager = gtk_custom_layout_new (NULL, gtk_toolbar_measure, gtk_toolbar_allocate);
+  gtk_widget_set_layout_manager (GTK_WIDGET (toolbar), priv->layout_manager);
 }
 
 static void
@@ -1160,10 +1164,10 @@ rebuild_menu (GtkToolbar *toolbar)
 }
 
 static void
-gtk_toolbar_size_allocate (GtkWidget *widget,
-                           int        width,
-                           int        height,
-                           int        baseline)
+gtk_toolbar_allocate (GtkWidget *widget,
+                      int        width,
+                      int        height,
+                      int        baseline)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
