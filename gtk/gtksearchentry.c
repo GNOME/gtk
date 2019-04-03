@@ -82,6 +82,7 @@ enum {
   NEXT_MATCH,
   PREVIOUS_MATCH,
   STOP_SEARCH,
+  SEARCH_STARTED,
   LAST_SIGNAL
 };
 
@@ -420,6 +421,21 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                   NULL,
                   G_TYPE_NONE, 0);
 
+  /**
+   * GtkSearchEntry::search-started:
+   * @entry: the entry on which the signal was emitted
+   *
+   * The ::search-started signal gets emitted when the user initiated
+   * a search on the entry.
+   */
+  signals[SEARCH_STARTED] =
+    g_signal_new (I_("search-started"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST, 0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
   binding_set = gtk_binding_set_by_class (klass);
 
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_g, GDK_CONTROL_MASK,
@@ -654,7 +670,7 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
                             GtkWidget             *entry)
 {
   GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (GTK_SEARCH_ENTRY (entry));
-  gboolean handled;
+  gboolean handled, was_empty;
 
   if (gtk_search_entry_is_keynav (keyval, state) ||
       keyval == GDK_KEY_space ||
@@ -663,10 +679,19 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
 
   priv->content_changed = FALSE;
   priv->search_stopped = FALSE;
+  was_empty = (gtk_text_get_text_length (GTK_TEXT (priv->entry)) == 0);
 
   handled = gtk_event_controller_key_forward (controller, priv->entry);
 
-  return handled && priv->content_changed && !priv->search_stopped ? GDK_EVENT_STOP : GDK_EVENT_PROPAGATE;
+  if (handled && priv->content_changed && !priv->search_stopped)
+    {
+      if (was_empty)
+        g_signal_emit (entry, signals[SEARCH_STARTED], 0);
+
+      return GDK_EVENT_STOP;
+    }
+
+  return GDK_EVENT_PROPAGATE;
 }
 
 /**
