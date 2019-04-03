@@ -37,6 +37,7 @@
 #include "gtkcelleditable.h"
 #include "gtkcelllayout.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkcustomlayout.h"
 #include "gtkdebug.h"
 #include "gtkdnd.h"
 #include "gtkdndprivate.h"
@@ -164,6 +165,8 @@ struct _GtkEntryPrivate
   GtkWidget     *text;
   GtkWidget     *progress_widget;
 
+  GtkLayoutManager *layout_manager;
+
   guint         show_emoji_icon         : 1;
   guint         editing_canceled        : 1; /* Only used by GtkCellRendererText */
 };
@@ -264,10 +267,10 @@ static void   gtk_entry_dispose              (GObject          *object);
 
 /* GtkWidget methods
  */
-static void   gtk_entry_size_allocate        (GtkWidget        *widget,
+static void   gtk_entry_allocate             (GtkWidget        *widget,
                                               int               width,
                                               int               height,
-                                                int               baseline);
+                                              int               baseline);
 static void   gtk_entry_snapshot             (GtkWidget        *widget,
                                               GtkSnapshot      *snapshot);
 static gboolean gtk_entry_query_tooltip      (GtkWidget        *widget,
@@ -339,8 +342,6 @@ gtk_entry_class_init (GtkEntryClass *class)
   gobject_class->set_property = gtk_entry_set_property;
   gobject_class->get_property = gtk_entry_get_property;
 
-  widget_class->measure = gtk_entry_measure;
-  widget_class->size_allocate = gtk_entry_size_allocate;
   widget_class->snapshot = gtk_entry_snapshot;
   widget_class->query_tooltip = gtk_entry_query_tooltip;
   widget_class->direction_changed = gtk_entry_direction_changed;
@@ -1275,6 +1276,9 @@ gtk_entry_init (GtkEntry *entry)
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
   connect_text_signals (entry);
 
+  priv->layout_manager = gtk_custom_layout_new (NULL, gtk_entry_measure, gtk_entry_allocate);
+  gtk_widget_set_layout_manager (GTK_WIDGET (entry), priv->layout_manager);
+
   priv->editing_canceled = FALSE;
 }
 
@@ -1546,10 +1550,10 @@ gtk_entry_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_entry_size_allocate (GtkWidget *widget,
-                         int        width,
-                         int        height,
-                         int        baseline)
+gtk_entry_allocate (GtkWidget *widget,
+                    int        width,
+                    int        height,
+                    int        baseline)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
@@ -1612,9 +1616,6 @@ gtk_entry_size_allocate (GtkWidget *widget,
       gtk_widget_size_allocate (priv->progress_widget, &progress_alloc, -1);
     }
 
-  /* Do this here instead of gtk_entry_size_allocate() so it works
-   * inside spinbuttons, which don't chain up.
-   */
   if (gtk_widget_get_realized (widget))
     {
       GtkEntryCompletion *completion;
