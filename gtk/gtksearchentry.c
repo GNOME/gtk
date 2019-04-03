@@ -614,54 +614,6 @@ gtk_search_entry_is_keynav (guint           keyval,
   return FALSE;
 }
 
-/**
- * gtk_search_entry_handle_event:
- * @entry: a #GtkSearchEntry
- * @event: a key event
- *
- * This function should be called when the top-level window
- * which contains the search entry received a key event. If
- * the entry is part of a #GtkSearchBar, it is preferable
- * to call gtk_search_bar_handle_event() instead, which will
- * reveal the entry in addition to passing the event to this
- * function.
- *
- * If the key event is handled by the search entry and starts
- * or continues a search, %GDK_EVENT_STOP will be returned.
- * The caller should ensure that the entry is shown in this
- * case, and not propagate the event further.
- *
- * Returns: %GDK_EVENT_STOP if the key press event resulted
- *     in a search beginning or continuing, %GDK_EVENT_PROPAGATE
- *     otherwise.
- */
-gboolean
-gtk_search_entry_handle_event (GtkSearchEntry *entry,
-                               GdkEvent       *event)
-{
-  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
-  gboolean handled;
-  guint keyval, state;
-
-  if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
-    gtk_widget_realize (GTK_WIDGET (entry));
-
-  gdk_event_get_keyval (event, &keyval);
-  gdk_event_get_state (event, &state);
-
-  if (gtk_search_entry_is_keynav (keyval, state) ||
-      keyval == GDK_KEY_space ||
-      keyval == GDK_KEY_Menu)
-    return GDK_EVENT_PROPAGATE;
-
-  priv->content_changed = FALSE;
-  priv->search_stopped = FALSE;
-
-  handled = gtk_widget_event (GTK_WIDGET (entry), event);
-
-  return handled && priv->content_changed && !priv->search_stopped ? GDK_EVENT_STOP : GDK_EVENT_PROPAGATE;
-}
-
 static gboolean
 capture_widget_key_handled (GtkEventControllerKey *controller,
                             guint                  keyval,
