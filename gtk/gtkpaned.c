@@ -295,31 +295,6 @@ get_handle_area (GtkPaned        *paned,
   graphene_rect_inset (area, - extra, - extra);
 }
 
-static void
-gtk_paned_motion (GtkEventControllerMotion *motion,
-                  double                    x,
-                  double                    y,
-                  GtkPaned                 *paned)
-{
-  GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
-  graphene_rect_t handle_area;
-
-  get_handle_area (paned, &handle_area);
-
-  if (graphene_rect_contains_point (&handle_area, &(graphene_point_t){x, y}) ||
-      priv->panning)
-    {
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-        gtk_widget_set_cursor_from_name (GTK_WIDGET (paned), "col-resize");
-      else
-        gtk_widget_set_cursor_from_name (GTK_WIDGET (paned), "row-resize");
-    }
-  else
-    {
-      gtk_widget_set_cursor (GTK_WIDGET (paned), NULL);
-    }
-}
-
 static GtkWidget *
 gtk_paned_pick (GtkWidget *widget,
                 double     x,
@@ -835,11 +810,19 @@ gtk_paned_set_property (GObject        *object,
           _gtk_orientable_set_style_classes (GTK_ORIENTABLE (paned));
 
           if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-            gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
-                                             GTK_ORIENTATION_HORIZONTAL);
+            {
+              gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
+                                               GTK_ORIENTATION_HORIZONTAL);
+              gtk_widget_set_cursor_from_name (priv->handle_widget,
+                                               "col-resize");
+            }
           else
-            gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
-                                             GTK_ORIENTATION_VERTICAL);
+            {
+              gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
+                                               GTK_ORIENTATION_VERTICAL);
+              gtk_widget_set_cursor_from_name (priv->handle_widget,
+                                               "row-resize");
+            }
 
           gtk_widget_queue_resize (GTK_WIDGET (paned));
           g_object_notify_by_pspec (object, pspec);
@@ -1346,7 +1329,6 @@ static void
 gtk_paned_init (GtkPaned *paned)
 {
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
-  GtkEventController *controller;
   GtkGesture *gesture;
 
   gtk_widget_set_has_surface (GTK_WIDGET (paned), FALSE);
@@ -1390,15 +1372,12 @@ gtk_paned_init (GtkPaned *paned)
   gtk_widget_add_controller (GTK_WIDGET (paned), GTK_EVENT_CONTROLLER (gesture));
   priv->drag_gesture = gesture;
 
-  controller = gtk_event_controller_motion_new ();
-  g_signal_connect (controller, "motion", G_CALLBACK (gtk_paned_motion), paned);
-  gtk_widget_add_controller (GTK_WIDGET (paned), controller);
-
   priv->handle_widget = gtk_gizmo_new ("separator",
                                        NULL,
                                        NULL,
                                        gtk_paned_render_handle);
   gtk_widget_set_parent (priv->handle_widget, GTK_WIDGET (paned));
+  gtk_widget_set_cursor_from_name (priv->handle_widget, "col-resize");
 }
 
 static gboolean
