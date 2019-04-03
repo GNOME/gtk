@@ -81,56 +81,11 @@ search_close_clicked (GtkWidget            *button,
   gtk_stack_set_visible_child_name (GTK_STACK (pl->priv->search_stack), "title");
 }
 
-static gboolean
-key_pressed (GtkEventController   *controller,
-             guint                 keyval,
-             guint                 keycode,
-             GdkModifierType       state,
-             GtkInspectorPropList *pl)
-{
-  if (!gtk_widget_get_mapped (GTK_WIDGET (pl)))
-    return GDK_EVENT_PROPAGATE;
-
-  if (gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (pl->priv->search_entry),
-                                     gtk_get_current_event ()))
-    {
-      gtk_stack_set_visible_child (GTK_STACK (pl->priv->search_stack), pl->priv->search_entry);
-      return GDK_EVENT_STOP;
-    }
-
-  return GDK_EVENT_PROPAGATE;
-}
-
 static void
-destroy_controller (GtkEventController *controller)
+show_search_entry (GtkInspectorPropList *pl)
 {
-  gtk_widget_remove_controller (gtk_event_controller_get_widget (controller), controller);
-}
-
-static void
-root (GtkWidget *widget)
-{
-  GtkEventController *controller;
-  GtkWidget *toplevel;
-
-  GTK_WIDGET_CLASS (gtk_inspector_prop_list_parent_class)->root (widget);
-
-  toplevel = gtk_widget_get_toplevel (widget);
-  controller = gtk_event_controller_key_new ();
-  g_object_set_data_full (G_OBJECT (toplevel), "prop-controller", controller, (GDestroyNotify)destroy_controller);
-  g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), widget);
-  gtk_widget_add_controller (toplevel, controller);
-}
-
-static void
-unroot (GtkWidget *widget)
-{
-  GtkWidget *toplevel;
-
-  toplevel = gtk_widget_get_toplevel (widget);
-  g_object_set_data (G_OBJECT (toplevel), "prop-controller", NULL);
-
-  GTK_WIDGET_CLASS (gtk_inspector_prop_list_parent_class)->unroot (widget);
+  gtk_stack_set_visible_child (GTK_STACK (pl->priv->search_stack),
+                               pl->priv->search_entry);
 }
 
 static void
@@ -274,6 +229,11 @@ constructed (GObject *object)
 
   g_signal_connect (pl->priv->search_entry, "stop-search",
                     G_CALLBACK (search_close_clicked), pl);
+
+  gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (pl->priv->search_entry),
+                                           GTK_WIDGET (pl->priv->tree));
+  g_signal_connect_swapped (pl->priv->search_entry, "search-started",
+                            G_CALLBACK (show_search_entry), pl);
 }
 
 static void
@@ -286,9 +246,6 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   object_class->get_property = get_property;
   object_class->set_property = set_property;
   object_class->constructed = constructed;
-
-  widget_class->root = root;
-  widget_class->unroot = unroot;
 
   g_object_class_install_property (object_class, PROP_OBJECT_TREE,
       g_param_spec_object ("object-tree", "Object Tree", "Object tree",
