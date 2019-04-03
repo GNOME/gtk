@@ -672,7 +672,7 @@
         Since GtkScrolledWindow can deal with widgets that do not implement
         the GtkScrollable interface by automatically wrapping them into a
         GtkViewport, GtkLayout is redundant, and has been removed in favor
-        of the existing GtkFixed containter widget.
+        of the existing GtkFixed container widget.
       </para>
     </section>
   </section>
