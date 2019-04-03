@@ -1470,19 +1470,19 @@ msgstr "自定义许可证"
 
 #: gtk/gtkaboutdialog.c:116
 msgid "GNU General Public License, version 2 or later"
-msgstr "GNU 通用公共许可证，第 2 版以上"
+msgstr "GNU 通用公共许可证，第 2 版及后续版本"
 
 #: gtk/gtkaboutdialog.c:117
 msgid "GNU General Public License, version 3 or later"
-msgstr "GNU 通用公共许可证，第 3 版以上"
+msgstr "GNU 通用公共许可证，第 3 版及后续版本"
 
 #: gtk/gtkaboutdialog.c:118
 msgid "GNU Lesser General Public License, version 2.1 or later"
-msgstr "GNU 宽松通用公共许可证，2.1 版以上"
+msgstr "GNU 宽松通用公共许可证，2.1 版及后续版本"
 
 #: gtk/gtkaboutdialog.c:119
 msgid "GNU Lesser General Public License, version 3 or later"
-msgstr "GNU 宽松通用公共许可证，第 3 版以上"
+msgstr "GNU 宽松通用公共许可证，第 3 版及后续版本"
 
 #: gtk/gtkaboutdialog.c:120
 msgid "BSD 2-Clause License"
@@ -1514,7 +1514,7 @@ msgstr "GNU 宽松通用公共许可证，仅限第 3 版"
 
 #: gtk/gtkaboutdialog.c:127
 msgid "GNU Affero General Public License, version 3 or later"
-msgstr "GNU Affero 通用公共许可证，第 3 版及以上"
+msgstr "GNU Affero 通用公共许可证，第 3 版及后续版本"
 
 #: gtk/gtkaboutdialog.c:128
 msgid "GNU Affero General Public License, version 3 only"
