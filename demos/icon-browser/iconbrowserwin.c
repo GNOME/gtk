@@ -285,19 +285,6 @@ populate (IconBrowserWindow *win)
   g_strfreev (groups);
 }
 
-static gboolean
-key_event_cb (GtkEventController *controller,
-              guint               keyval,
-              guint               keycode,
-              GdkModifierType     state,
-              gpointer            data)
-{
-  IconBrowserWindow *win = data;
-
-  return gtk_search_bar_handle_event (GTK_SEARCH_BAR (win->searchbar),
-                                      gtk_get_current_event ());
-}
-
 static void
 copy_to_clipboard (GtkButton         *button,
                    IconBrowserWindow *win)
@@ -452,7 +439,6 @@ static void
 icon_browser_window_init (IconBrowserWindow *win)
 {
   GdkContentFormats *list;
-  GtkEventController *controller;
 
   gtk_widget_init_template (GTK_WIDGET (win));
 
@@ -479,12 +465,10 @@ icon_browser_window_init (IconBrowserWindow *win)
 
   g_signal_connect (win->searchbar, "notify::search-mode-enabled",
                     G_CALLBACK (search_mode_toggled), win);
+  gtk_search_bar_set_key_capture_widget (GTK_SEARCH_BAR (win->searchbar),
+                                         GTK_WIDGET (win));
 
   symbolic_toggled (GTK_TOGGLE_BUTTON (win->symbolic_radio), win);
-
-  controller = gtk_event_controller_key_new ();
-  g_signal_connect (controller, "key-pressed", G_CALLBACK (key_event_cb), win);
-  gtk_widget_add_controller (GTK_WIDGET (win), controller);
 
   populate (win);
 }

@@ -13887,7 +13887,7 @@ gtk_tree_view_search_key_pressed (GtkEventControllerKey *key,
                                   GdkModifierType        state,
                                   GtkTreeView           *tree_view)
 {
-  GtkWidget *widget = tree_view->priv->search_window;
+  GtkWidget *widget = tree_view->priv->search_entry;
   GdkModifierType default_accel;
   gboolean retval = FALSE;
 

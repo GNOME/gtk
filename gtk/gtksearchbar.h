@@ -93,10 +93,6 @@ void        gtk_search_bar_set_show_close_button (GtkSearchBar *bar,
                                                   gboolean      visible);
 
 GDK_AVAILABLE_IN_ALL
-gboolean    gtk_search_bar_handle_event    (GtkSearchBar *bar,
-                                            GdkEvent     *event);
-
-GDK_AVAILABLE_IN_ALL
 void        gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
                                                    GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL

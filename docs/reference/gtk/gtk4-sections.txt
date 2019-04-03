@@ -2493,7 +2493,6 @@ gtk_search_bar_get_search_mode
 gtk_search_bar_set_search_mode
 gtk_search_bar_get_show_close_button
 gtk_search_bar_set_show_close_button
-gtk_search_bar_handle_event
 gtk_search_bar_set_key_capture_widget
 gtk_search_bar_get_key_capture_widget
 <SUBSECTION Standard>
@@ -2512,7 +2511,6 @@ gtk_search_bar_get_type
 <TITLE>GtkSearchEntry</TITLE>
 GtkSearchEntry
 gtk_search_entry_new
-gtk_search_entry_handle_event
 gtk_search_entry_set_key_capture_widget
 gtk_search_entry_get_key_capture_widget
 <SUBSECTION Standard>
