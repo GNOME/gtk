@@ -112,6 +112,7 @@
 
 #include "gtkexpander.h"
 
+#include "gtkbinlayout.h"
 #include "gtkbox.h"
 #include "gtkbuildable.h"
 #include "gtkcontainerprivate.h"
@@ -155,6 +156,8 @@ struct _GtkExpanderPrivate
   GtkWidget        *arrow_widget;
   GtkWidget        *child;
 
+  GtkLayoutManager *layout_manager;
+
   guint             expand_timer;
 
   guint             expanded        : 1;
@@ -173,10 +176,6 @@ static void gtk_expander_get_property (GObject          *object,
                                        GParamSpec       *pspec);
 
 static void     gtk_expander_destroy        (GtkWidget        *widget);
-static void     gtk_expander_size_allocate  (GtkWidget        *widget,
-                                             int               width,
-                                             int               height,
-                                             int               baseline);
 static gboolean gtk_expander_focus          (GtkWidget        *widget,
                                              GtkDirectionType  direction);
 static gboolean gtk_expander_drag_motion    (GtkWidget        *widget,
@@ -201,15 +200,6 @@ static void gtk_expander_buildable_add_child      (GtkBuildable *buildable,
                                                    GObject      *child,
                                                    const gchar  *type);
 
-
-/* GtkWidget      */
-static void gtk_expander_measure (GtkWidget      *widget,
-                                  GtkOrientation  orientation,
-                                  int             for_size,
-                                  int            *minimum,
-                                  int            *natural,
-                                  int            *minimum_baseline,
-                                  int            *natural_baseline);
 
 /* Gestures */
 static void     gesture_multipress_released_cb (GtkGestureMultiPress *gesture,
@@ -252,11 +242,9 @@ gtk_expander_class_init (GtkExpanderClass *klass)
   gobject_class->get_property = gtk_expander_get_property;
 
   widget_class->destroy              = gtk_expander_destroy;
-  widget_class->size_allocate        = gtk_expander_size_allocate;
   widget_class->focus                = gtk_expander_focus;
   widget_class->drag_motion          = gtk_expander_drag_motion;
   widget_class->drag_leave           = gtk_expander_drag_leave;
-  widget_class->measure              = gtk_expander_measure;
 
   container_class->add    = gtk_expander_add;
   container_class->remove = gtk_expander_remove;
@@ -348,6 +336,9 @@ gtk_expander_init (GtkExpander *expander)
   priv->use_markup = FALSE;
   priv->expand_timer = 0;
   priv->resize_toplevel = 0;
+
+  priv->layout_manager = gtk_bin_layout_new ();
+  gtk_widget_set_layout_manager (GTK_WIDGET (expander), priv->layout_manager);
 
   priv->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_parent (priv->box, GTK_WIDGET (expander));
@@ -491,21 +482,6 @@ gtk_expander_destroy (GtkWidget *widget)
     }
 
   GTK_WIDGET_CLASS (gtk_expander_parent_class)->destroy (widget);
-}
-
-static void
-gtk_expander_size_allocate (GtkWidget *widget,
-                            int        width,
-                            int        height,
-                            int        baseline)
-{
-  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (GTK_EXPANDER (widget));
-
-  gtk_widget_size_allocate (priv->box,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            }, baseline);
 }
 
 static void
@@ -827,25 +803,6 @@ gtk_expander_activate (GtkExpander *expander)
   GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
 
   gtk_expander_set_expanded (expander, !priv->expanded);
-}
-
-static void
-gtk_expander_measure (GtkWidget      *widget,
-                      GtkOrientation  orientation,
-                      int             for_size,
-                      int            *minimum,
-                      int            *natural,
-                      int            *minimum_baseline,
-                      int            *natural_baseline)
-{
-  GtkExpander *expander = GTK_EXPANDER (widget);
-  GtkExpanderPrivate *priv = gtk_expander_get_instance_private (expander);
-
-  gtk_widget_measure (priv->box,
-                       orientation,
-                       for_size,
-                       minimum, natural,
-                       minimum_baseline, natural_baseline);
 }
 
 /**
