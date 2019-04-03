@@ -1318,11 +1318,11 @@ should_trigger_location_entry (GtkFileChooserWidget *impl,
  * pressed.
  */
 static gboolean
-key_press_cb (GtkEventController *controller,
-              guint               keyval,
-              guint               keycode,
-              GdkModifierType     state,
-              gpointer            data)
+key_press_cb (GtkEventControllerKey *controller,
+              guint                  keyval,
+              guint                  keycode,
+              GdkModifierType        state,
+              gpointer               data)
 {
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
@@ -1378,8 +1378,8 @@ key_press_cb (GtkEventController *controller,
   if (keyval == GDK_KEY_Escape &&
       priv->operation_mode == OPERATION_MODE_SEARCH)
     {
-      gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), (GdkEvent *)event);
-      return GDK_EVENT_STOP;
+      return gtk_event_controller_key_forward (controller,
+                                               gtk_search_entry_get_text_widget (GTK_SEARCH_ENTRY (priv->search_entry)));
     }
 
   return GDK_EVENT_PROPAGATE;
