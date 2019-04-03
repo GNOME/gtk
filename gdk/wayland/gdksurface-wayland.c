@@ -128,7 +128,6 @@ struct _GdkSurfaceImplWayland
 
   unsigned int initial_configure_received : 1;
   unsigned int mapped : 1;
-  unsigned int use_custom_surface : 1;
   unsigned int pending_commit : 1;
   unsigned int awaiting_frame : 1;
   GdkSurfaceTypeHint hint;
@@ -2413,7 +2412,7 @@ gdk_wayland_surface_map (GdkSurface *surface)
   if (!should_be_mapped (surface))
     return;
 
-  if (impl->mapped || impl->use_custom_surface)
+  if (impl->mapped)
     return;
 
   if (should_map_as_popup (surface))
@@ -4008,63 +4007,6 @@ gdk_wayland_surface_get_gtk_surface (GdkSurface *surface)
   g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (surface), NULL);
 
   return GDK_SURFACE_IMPL_WAYLAND (surface->impl)->display_server.gtk_surface;
-}
-
-/**
- * gdk_wayland_surface_set_use_custom_surface:
- * @surface: (type GdkWaylandSurface): a #GdkSurface
- *
- * Marks a #GdkSurface as a custom Wayland surface. The application is
- * expected to register the surface as some type of surface using
- * some Wayland interface.
- *
- * A good example would be writing a panel or on-screen-keyboard as an
- * out-of-process helper - as opposed to having those in the compositor
- * process. In this case the underlying surface isn’t an xdg_shell
- * surface and the panel or OSK client need to identify the wl_surface
- * as a panel or OSK to the compositor. The assumption is that the
- * compositor will expose a private interface to the special client
- * that lets the client identify the wl_surface as a panel or such.
- *
- * This function should be called before a #GdkSurface is shown. This is
- * best done by connecting to the #GtkWidget::realize signal:
- *
- * |[<!-- language="C" -->
- *   static void
- *   widget_realize_cb (GtkWidget *widget)
- *   {
- *     GdkSurface *surface;
- *     struct wl_surface *surface;
- *     struct input_panel_surface *ip_surface;
- *
- *     surface = gtk_widget_get_surface (widget);
- *     gdk_wayland_surface_set_custom_surface (surface);
- *
- *     surface = gdk_wayland_surface_get_wl_surface (surface);
- *     ip_surface = input_panel_get_input_panel_surface (input_panel, surface);
- *     input_panel_surface_set_panel (ip_surface);
- *   }
- *
- *   static void
- *   setup_window (GtkWindow *window)
- *   {
- *     g_signal_connect (window, "realize", G_CALLBACK (widget_realize_cb), NULL);
- *   }
- * ]|
- */
-void
-gdk_wayland_surface_set_use_custom_surface (GdkSurface *surface)
-{
-  GdkSurfaceImplWayland *impl;
-
-  g_return_if_fail (GDK_IS_WAYLAND_SURFACE (surface));
-
-  impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
-
-  if (!impl->display_server.wl_surface)
-    gdk_wayland_surface_create_surface (surface);
-
-  impl->use_custom_surface = TRUE;
 }
 
 static void
