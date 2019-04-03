@@ -21,6 +21,7 @@
 #include "misc-info.h"
 #include "window.h"
 #include "object-tree.h"
+#include "type-info.h"
 
 #include "gtktypebuiltins.h"
 #include "gtktreeview.h"
@@ -28,6 +29,7 @@
 #include "gtklabel.h"
 #include "gtkframe.h"
 #include "gtkbutton.h"
+#include "gtkmenubutton.h"
 #include "gtkwidgetprivate.h"
 
 
@@ -37,6 +39,8 @@ struct _GtkInspectorMiscInfoPrivate {
   GObject *object;
 
   GtkWidget *address;
+  GtkWidget *type;
+  GtkWidget *type_popover;
   GtkWidget *refcount_row;
   GtkWidget *refcount;
   GtkWidget *state_row;
@@ -260,10 +264,17 @@ update_info (gpointer data)
 {
   GtkInspectorMiscInfo *sl = data;
   gchar *tmp;
+  GType gtype;
 
   tmp = g_strdup_printf ("%p", sl->priv->object);
   gtk_label_set_text (GTK_LABEL (sl->priv->address), tmp);
   g_free (tmp);
+
+  gtype = G_TYPE_FROM_INSTANCE (sl->priv->object);
+
+  gtk_button_set_label (GTK_BUTTON (sl->priv->type), g_type_name (gtype));
+  gtk_inspector_type_popover_set_gtype (GTK_INSPECTOR_TYPE_POPOVER (sl->priv->type_popover),
+                                        gtype);
 
   if (G_IS_OBJECT (sl->priv->object))
     {
@@ -458,6 +469,11 @@ gtk_inspector_misc_info_init (GtkInspectorMiscInfo *sl)
 {
   sl->priv = gtk_inspector_misc_info_get_instance_private (sl);
   gtk_widget_init_template (GTK_WIDGET (sl));
+
+  sl->priv->type_popover = g_object_new (GTK_TYPE_INSPECTOR_TYPE_POPOVER, NULL);
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (sl->priv->type),
+                               sl->priv->type_popover);
+
 }
 
 static void
@@ -540,6 +556,7 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/misc-info.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, address);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, type);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, refcount_row);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, refcount);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, state_row);
