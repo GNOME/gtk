@@ -590,6 +590,10 @@ typedef struct {
   GtkPrinterCups *printer;
 } CupsOptionsData;
 
+#define UNSIGNED_FLOAT_REGEX "([0-9]+([.,][0-9]*)?|[.,][0-9]+)([e][+-]?[0-9]+)?"
+#define SIGNED_FLOAT_REGEX "[+-]?"UNSIGNED_FLOAT_REGEX
+#define SIGNED_INTEGER_REGEX "[+-]?([0-9]+)"
+
 static void
 add_cups_options (const gchar *key,
 		  const gchar *value,
@@ -601,10 +605,6 @@ add_cups_options (const gchar *key,
   gboolean custom_value = FALSE;
   gchar *new_value = NULL;
   gint i;
-
-#define UNSIGNED_FLOAT_REGEX "([0-9]+([.,][0-9]*)?|[.,][0-9]+)([e][+-]?[0-9]+)?"
-#define SIGNED_FLOAT_REGEX "[+-]?"UNSIGNED_FLOAT_REGEX
-#define SIGNED_INTEGER_REGEX "[+-]?([0-9]+)"
 
   if (!key || !value)
     return;
@@ -645,10 +645,7 @@ add_cups_options (const gchar *key,
                   g_str_equal (key, "PageRegion"))
                 {
                   /* Handle custom page sizes... */
-                  if (g_regex_match_simple ("^" UNSIGNED_FLOAT_REGEX "x"
-                                            UNSIGNED_FLOAT_REGEX
-                                            "(cm|mm|m|in|ft|pt)?$",
-                                            value, G_REGEX_CASELESS, 0))
+                  if (g_regex_match_simple ("^" UNSIGNED_FLOAT_REGEX "x" UNSIGNED_FLOAT_REGEX "(cm|mm|m|in|ft|pt)?$", value, G_REGEX_CASELESS, 0))
                     custom_value = TRUE;
                   else
                     {
@@ -675,24 +672,17 @@ add_cups_options (const gchar *key,
                         case PPD_CUSTOM_CURVE :
                         case PPD_CUSTOM_INVCURVE :
                         case PPD_CUSTOM_REAL :
-                          if (g_regex_match_simple ("^" SIGNED_FLOAT_REGEX
-                                                    "$", value,
-                                                    G_REGEX_CASELESS, 0))
+                          if (g_regex_match_simple ("^" SIGNED_FLOAT_REGEX "$", value, G_REGEX_CASELESS, 0))
                             custom_value = TRUE;
                           break;
 
                         case PPD_CUSTOM_POINTS :
-                          if (g_regex_match_simple ("^" SIGNED_FLOAT_REGEX
-                                                    "(cm|mm|m|in|ft|pt)?$",
-                                                    value, G_REGEX_CASELESS,
-                                                    0))
+                          if (g_regex_match_simple ("^" SIGNED_FLOAT_REGEX "(cm|mm|m|in|ft|pt)?$", value, G_REGEX_CASELESS, 0))
                             custom_value = TRUE;
                           break;
 
                         case PPD_CUSTOM_INT :
-                          if (g_regex_match_simple ("^" SIGNED_INTEGER_REGEX
-                                                    "$", value,
-                                                    G_REGEX_CASELESS, 0))
+                          if (g_regex_match_simple ("^" SIGNED_INTEGER_REGEX "$", value, G_REGEX_CASELESS, 0))
                             custom_value = TRUE;
                           break;
 
