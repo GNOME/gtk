@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <menu id="gear_menu">
     <section>
@@ -593,32 +594,32 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="label" translatable="yes">checkbutton</property>
                                     <property name="can-focus">1</property>
                                     <property name="active">1</property>
+                                    <layout>
+                                      <property name="left-attach">0</property>
+                                      <property name="top-attach">0</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="checkbutton2">
                                     <property name="label" translatable="yes">checkbutton</property>
                                     <property name="can-focus">1</property>
+                                    <layout>
+                                      <property name="left-attach">0</property>
+                                      <property name="top-attach">1</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">1</property>
-                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="checkbutton3">
                                     <property name="label" translatable="yes">checkbutton</property>
                                     <property name="inconsistent">1</property>
                                     <property name="can-focus">1</property>
+                                    <layout>
+                                      <property name="left-attach">0</property>
+                                      <property name="top-attach">2</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">2</property>
-                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="checkbutton4">
@@ -626,22 +627,22 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="sensitive">0</property>
                                     <property name="can-focus">1</property>
                                     <property name="active">1</property>
+                                    <layout>
+                                      <property name="left-attach">0</property>
+                                      <property name="top-attach">3</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">3</property>
-                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="checkbutton5">
                                     <property name="label" translatable="yes">checkbutton</property>
                                     <property name="sensitive">0</property>
                                     <property name="can-focus">1</property>
+                                    <layout>
+                                      <property name="left-attach">0</property>
+                                      <property name="top-attach">4</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">4</property>
-                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="checkbutton6">
@@ -649,22 +650,22 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="sensitive">0</property>
                                     <property name="inconsistent">1</property>
                                     <property name="can-focus">1</property>
+                                    <layout>
+                                      <property name="left-attach">0</property>
+                                      <property name="top-attach">5</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">0</property>
-                                    <property name="top-attach">5</property>
-                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="radiobutton1">
                                     <property name="label" translatable="yes">radiobutton</property>
                                     <property name="can-focus">1</property>
                                     <property name="active">1</property>
+                                    <layout>
+                                      <property name="left-attach">1</property>
+                                      <property name="top-attach">0</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="radiobutton2">
@@ -672,11 +673,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="can-focus">1</property>
                                     <property name="active">1</property>
                                     <property name="group">radiobutton1</property>
+                                    <layout>
+                                      <property name="left-attach">1</property>
+                                      <property name="top-attach">1</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">1</property>
-                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="radiobutton3">
@@ -685,11 +686,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="can-focus">1</property>
                                     <property name="active">1</property>
                                     <property name="group">radiobutton1</property>
+                                    <layout>
+                                      <property name="left-attach">1</property>
+                                      <property name="top-attach">2</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">2</property>
-                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="radiobutton4">
@@ -697,11 +698,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="sensitive">0</property>
                                     <property name="can-focus">1</property>
                                     <property name="active">1</property>
+                                    <layout>
+                                      <property name="left-attach">1</property>
+                                      <property name="top-attach">3</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">3</property>
-                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="radiobutton5">
@@ -710,11 +711,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="can-focus">1</property>
                                     <property name="active">1</property>
                                     <property name="group">radiobutton3</property>
+                                    <layout>
+                                      <property name="left-attach">1</property>
+                                      <property name="top-attach">4</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">4</property>
-                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkRadioButton" id="radiobutton6">
@@ -724,46 +725,47 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="can-focus">1</property>
                                     <property name="active">1</property>
                                     <property name="group">radiobutton3</property>
+                                    <layout>
+                                      <property name="left-attach">1</property>
+                                      <property name="top-attach">5</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">1</property>
-                                    <property name="top-attach">5</property>
-                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkSpinner" id="spinner1">
                                     <property name="active">1</property>
+                                    <layout>
+                                      <property name="left-attach">2</property>
+                                      <property name="top-attach">0</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">2</property>
-                                    <property name="top-attach">0</property>
-                                  </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkSpinner" id="spinner2"/>
-                                  <packing>
-                                    <property name="left-attach">2</property>
-                                    <property name="top-attach">1</property>
-                                  </packing>
+                                  <object class="GtkSpinner" id="spinner2">
+                                    <layout>
+                                      <property name="left-attach">2</property>
+                                      <property name="top-attach">1</property>
+                                    </layout>
+                                  </object>
                                 </child>
                                 <child>
                                   <object class="GtkSpinner" id="spinner3">
                                     <property name="active">1</property>
                                     <property name="sensitive">0</property>
+                                    <layout>
+                                      <property name="left-attach">2</property>
+                                      <property name="top-attach">3</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">2</property>
-                                    <property name="top-attach">3</property>
-                                  </packing>
                                 </child>
                                 <child>
                                   <object class="GtkSpinner" id="spinner4">
                                     <property name="sensitive">0</property>
+                                    <layout>
+                                      <property name="left-attach">2</property>
+                                      <property name="top-attach">4</property>
+                                    </layout>
                                   </object>
-                                  <packing>
-                                    <property name="left-attach">2</property>
-                                    <property name="top-attach">4</property>
-                                  </packing>
                                 </child>
                               </object>
                             </child>
@@ -1502,11 +1504,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                         <property name="valign">center</property>
                                         <property name="value">.5</property>
                                         <property name="halign">center</property>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">0</property>
+                                        </layout>
                                       </object>
-                                      <packing>
-                                        <property name="left-attach">0</property>
-                                        <property name="top-attach">0</property>
-                                      </packing>
                                     </child>
                                     <child>
                                       <object class="GtkScaleButton" id="mic-button">
@@ -1520,11 +1522,11 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="halign">center</property>
                                         <signal name="query-tooltip" handler="on_scale_button_query_tooltip" swapped="no"/>
                                         <signal name="value-changed" handler="on_scale_button_value_changed" swapped="no"/>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">1</property>
+                                        </layout>
                                       </object>
-                                      <packing>
-                                        <property name="left-attach">0</property>
-                                        <property name="top-attach">1</property>
-                                      </packing>
                                     </child>
                                   </object>
                                 </child>
@@ -3193,20 +3195,20 @@ bad things might happen.</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
+                <layout>
+                  <property name="left-attach">0</property>
+                  <property name="top-attach">0</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkEntry" id="details_entry">
                 <property name="valign">baseline</property>
+                <layout>
+                  <property name="left-attach">1</property>
+                  <property name="top-attach">0</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel">
@@ -3218,20 +3220,20 @@ bad things might happen.</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
+                <layout>
+                  <property name="left-attach">0</property>
+                  <property name="top-attach">1</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkEntry" id="more_details_entry">
                 <property name="valign">baseline</property>
+                <layout>
+                  <property name="left-attach">1</property>
+                  <property name="top-attach">1</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel">
@@ -3243,22 +3245,22 @@ bad things might happen.</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
+                <layout>
+                  <property name="left-attach">0</property>
+                  <property name="top-attach">2</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkScale" id="level_scale">
                 <property name="valign">baseline</property>
                 <property name="draw-value">0</property>
                 <property name="adjustment">adjustment1</property>
+                <layout>
+                  <property name="left-attach">1</property>
+                  <property name="top-attach">2</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel">
@@ -3270,21 +3272,21 @@ bad things might happen.</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
+                <layout>
+                  <property name="left-attach">0</property>
+                  <property name="top-attach">3</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
-              </packing>
             </child>
             <child>
               <object class="GtkSwitch" id="mode_switch">
                 <property name="halign">start</property>
                 <property name="valign">baseline</property>
+                <layout>
+                  <property name="left-attach">1</property>
+                  <property name="top-attach">3</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">3</property>
-              </packing>
             </child>
           </object>
         </child>
@@ -3342,11 +3344,11 @@ bad things might happen.</property>
             <accessibility>
               <relation type="label-for" target="open_popover_entry"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="description_label">
@@ -3356,11 +3358,11 @@ bad things might happen.</property>
             <accessibility>
               <relation type="label-for" target="open_popover_textview"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkScrolledWindow">
@@ -3377,11 +3379,11 @@ bad things might happen.</property>
                 </accessibility>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkEntry" id="open_popover_entry">
@@ -3389,11 +3391,11 @@ bad things might happen.</property>
             <accessibility>
               <relation type="labelled-by" target="title_label"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkButton" id="open_popover_button">
@@ -3405,11 +3407,11 @@ bad things might happen.</property>
             <style>
               <class name="suggested-action"/>
             </style>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
       </object>
     </child>

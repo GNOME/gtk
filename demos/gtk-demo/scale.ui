@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">4</property>
@@ -31,11 +32,11 @@
             <accessibility>
               <relation type="label-for" target="scale_plain"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkScale" id="scale_plain">
@@ -47,11 +48,11 @@
             <accessibility>
               <relation type="labelled-by" target="label_plain"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label_marks">
@@ -60,11 +61,11 @@
             <accessibility>
               <relation type="label-for" target="scale_marks"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkScale" id="scale_marks">
@@ -83,11 +84,11 @@
             <accessibility>
               <relation type="labelled-by" target="label_marks"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label_discrete">
@@ -96,11 +97,11 @@
             <accessibility>
               <relation type="label-for" target="scale_discrete"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkScale" id="scale_discrete">
@@ -120,11 +121,11 @@
               <mark value="3" position="bottom"/>
               <mark value="4" position="bottom"/>
             </marks>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
       </object>
     </child>
