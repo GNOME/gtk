@@ -10,11 +10,11 @@ export PATH="${HOME}/.local/bin:${PATH}"
 python3 -m pip install --user meson==0.49.2
 
 meson \
-    -Ddocumentation=true \
-    -Dman-pages=true \
-    -Dbroadway-backend=true \
+    -Dgtk_doc=true \
+    -Dman=true \
+    -Dbroadway_backend=true \
     -Dxinerama=yes \
-    -Dprint-backends="file,lpr,test,cloudprint,cups" \
+    -Dprint_backends="file,lpr,test,cloudprint,cups" \
     _build
 
 cd _build

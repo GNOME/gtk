@@ -1,4 +1,4 @@
-if get_option('documentation')
+if get_option('gtk_doc')
     configure_file(input: 'version.xml.in', output: 'version.xml', configuration: version_conf)
 
     gnome.gtkdoc('gail-libgail-util3',

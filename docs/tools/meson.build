@@ -1,4 +1,4 @@
-if x11_enabled and get_option('documentation')
+if x11_enabled
   doc_shooter_sources = [
     'shadow.c',
     'shooter.c',
