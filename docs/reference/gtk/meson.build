@@ -445,7 +445,7 @@ else
   types_conf.set('ENABLE_ON_X11', '%')
 endif
 
-if get_option('documentation')
+if get_option('gtk_doc')
 
     configure_file(input: 'version.xml.in', output: 'version.xml', configuration: version_conf)
     configure_file(input: 'getting_started.xml.in', output: 'getting_started.xml', configuration: src_dir_conf)
@@ -485,11 +485,11 @@ if get_option('documentation')
 endif
 
 xsltproc = find_program('xsltproc', required: false)
-if get_option('man-pages') and not xsltproc.found()
+if get_option('man') and not xsltproc.found()
   error('No xsltproc found, but man pages were explicitly enabled')
 endif
 
-if get_option('man-pages') and xsltproc.found()
+if get_option('man') and xsltproc.found()
   xlstproc_flags = [
     '--nonet',
     '--stringparam', 'man.output.quietly', '1',
