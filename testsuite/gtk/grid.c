@@ -31,12 +31,9 @@ test_attach (void)
 
   child = gtk_label_new ("a");
   gtk_grid_attach_next_to (g, child, NULL, GTK_POS_LEFT, 1, 1);
-  gtk_container_child_get (GTK_CONTAINER (g), child,
-                           "left-attach", &left,
-                           "top-attach", &top,
-                           "width", &width,
-                           "height", &height,
-                           NULL);
+  gtk_grid_query_child (g, child,
+                        &left, &top,
+                        &width, &height);
   g_assert_cmpint (left,   ==, -1);
   g_assert_cmpint (top,    ==, 0);
   g_assert_cmpint (width,  ==, 1);
@@ -45,12 +42,9 @@ test_attach (void)
   sibling = child;
   child = gtk_label_new ("b");
   gtk_grid_attach_next_to (g, child, sibling, GTK_POS_RIGHT, 2, 2);
-  gtk_container_child_get (GTK_CONTAINER (g), child,
-                           "left-attach", &left,
-                           "top-attach", &top,
-                           "width", &width,
-                           "height", &height,
-                           NULL);
+  gtk_grid_query_child (g, child,
+                        &left, &top,
+                        &width, &height);
   g_assert_cmpint (left,   ==, 0);
   g_assert_cmpint (top,    ==, 0);
   g_assert_cmpint (width,  ==, 2);
@@ -62,12 +56,9 @@ test_attach (void)
 
   child = gtk_label_new ("c");
   gtk_grid_attach_next_to (g, child, sibling, GTK_POS_BOTTOM, 3, 1);
-  gtk_container_child_get (GTK_CONTAINER (g), child,
-                           "left-attach", &left,
-                           "top-attach", &top,
-                           "width", &width,
-                           "height", &height,
-                           NULL);
+  gtk_grid_query_child (g, child,
+                        &left, &top,
+                        &width, &height);
   g_assert_cmpint (left,   ==, -1);
   g_assert_cmpint (top,    ==, 1);
   g_assert_cmpint (width,  ==, 3);
@@ -75,12 +66,9 @@ test_attach (void)
 
   child = gtk_label_new ("u");
   gtk_grid_attach_next_to (g, child, z, GTK_POS_LEFT, 2, 1);
-  gtk_container_child_get (GTK_CONTAINER (g), child,
-                           "left-attach", &left,
-                           "top-attach", &top,
-                           "width", &width,
-                           "height", &height,
-                           NULL);
+  gtk_grid_query_child (g, child,
+                        &left, &top,
+                        &width, &height);
   g_assert_cmpint (left,   ==, 2);
   g_assert_cmpint (top,    ==, 4);
   g_assert_cmpint (width,  ==, 2);
@@ -88,12 +76,9 @@ test_attach (void)
 
   child = gtk_label_new ("v");
   gtk_grid_attach_next_to (g, child, z, GTK_POS_RIGHT, 2, 1);
-  gtk_container_child_get (GTK_CONTAINER (g), child,
-                           "left-attach", &left,
-                           "top-attach", &top,
-                           "width", &width,
-                           "height", &height,
-                           NULL);
+  gtk_grid_query_child (g, child,
+                        &left, &top,
+                        &width, &height);
   g_assert_cmpint (left,   ==, 5);
   g_assert_cmpint (top,    ==, 4);
   g_assert_cmpint (width,  ==, 2);
@@ -101,12 +86,9 @@ test_attach (void)
 
   child = gtk_label_new ("x");
   gtk_grid_attach_next_to (g, child, z, GTK_POS_TOP, 1, 2);
-  gtk_container_child_get (GTK_CONTAINER (g), child,
-                           "left-attach", &left,
-                           "top-attach", &top,
-                           "width", &width,
-                           "height", &height,
-                           NULL);
+  gtk_grid_query_child (g, child,
+                        &left, &top,
+                        &width, &height);
   g_assert_cmpint (left,   ==, 4);
   g_assert_cmpint (top,    ==, 2);
   g_assert_cmpint (width,  ==, 1);
@@ -114,12 +96,9 @@ test_attach (void)
 
   child = gtk_label_new ("x");
   gtk_grid_attach_next_to (g, child, z, GTK_POS_TOP, 1, 2);
-  gtk_container_child_get (GTK_CONTAINER (g), child,
-                           "left-attach", &left,
-                           "top-attach", &top,
-                           "width", &width,
-                           "height", &height,
-                           NULL);
+  gtk_grid_query_child (g, child,
+                        &left, &top,
+                        &width, &height);
   g_assert_cmpint (left,   ==, 4);
   g_assert_cmpint (top,    ==, 2);
   g_assert_cmpint (width,  ==, 1);
@@ -127,12 +106,9 @@ test_attach (void)
 
   child = gtk_label_new ("y");
   gtk_grid_attach_next_to (g, child, z, GTK_POS_BOTTOM, 1, 2);
-  gtk_container_child_get (GTK_CONTAINER (g), child,
-                           "left-attach", &left,
-                           "top-attach", &top,
-                           "width", &width,
-                           "height", &height,
-                           NULL);
+  gtk_grid_query_child (g, child,
+                        &left, &top,
+                        &width, &height);
   g_assert_cmpint (left,   ==, 4);
   g_assert_cmpint (top,    ==, 5);
   g_assert_cmpint (width,  ==, 1);
@@ -145,12 +121,9 @@ test_attach (void)
 
   child  = gtk_label_new ("D");
   gtk_grid_attach_next_to (g, child, A, GTK_POS_RIGHT, 1, 3);
-  gtk_container_child_get (GTK_CONTAINER (g), child,
-                           "left-attach", &left,
-                           "top-attach", &top,
-                           "width", &width,
-                           "height", &height,
-                           NULL);
+  gtk_grid_query_child (g, child,
+                        &left, &top,
+                        &width, &height);
   g_assert_cmpint (left,   ==, 11);
   g_assert_cmpint (top,    ==, 10);
   g_assert_cmpint (width,  ==,  1);
@@ -170,12 +143,9 @@ test_add (void)
 
   child = gtk_label_new ("a");
   gtk_container_add (GTK_CONTAINER (g), child);
-  gtk_container_child_get (GTK_CONTAINER (g), child,
-                           "left-attach", &left,
-                           "top-attach", &top,
-                           "width", &width,
-                           "height", &height,
-                           NULL);
+  gtk_grid_query_child (g, child,
+                        &left, &top,
+                        &width, &height);
   g_assert_cmpint (left,   ==, 0);
   g_assert_cmpint (top,    ==, 0);
   g_assert_cmpint (width,  ==, 1);
@@ -183,12 +153,9 @@ test_add (void)
 
   child = gtk_label_new ("b");
   gtk_container_add (GTK_CONTAINER (g), child);
-  gtk_container_child_get (GTK_CONTAINER (g), child,
-                           "left-attach", &left,
-                           "top-attach", &top,
-                           "width", &width,
-                           "height", &height,
-                           NULL);
+  gtk_grid_query_child (g, child,
+                        &left, &top,
+                        &width, &height);
   g_assert_cmpint (left,   ==, 1);
   g_assert_cmpint (top,    ==, 0);
   g_assert_cmpint (width,  ==, 1);
@@ -196,12 +163,9 @@ test_add (void)
 
   child = gtk_label_new ("c");
   gtk_container_add (GTK_CONTAINER (g), child);
-  gtk_container_child_get (GTK_CONTAINER (g), child,
-                           "left-attach", &left,
-                           "top-attach", &top,
-                           "width", &width,
-                           "height", &height,
-                           NULL);
+  gtk_grid_query_child (g, child,
+                        &left, &top,
+                        &width, &height);
   g_assert_cmpint (left,   ==, 2);
   g_assert_cmpint (top,    ==, 0);
   g_assert_cmpint (width,  ==, 1);
@@ -211,12 +175,9 @@ test_add (void)
 
   child = gtk_label_new ("d");
   gtk_container_add (GTK_CONTAINER (g), child);
-  gtk_container_child_get (GTK_CONTAINER (g), child,
-                           "left-attach", &left,
-                           "top-attach", &top,
-                           "width", &width,
-                           "height", &height,
-                           NULL);
+  gtk_grid_query_child (g, child,
+                        &left, &top,
+                        &width, &height);
   g_assert_cmpint (left,   ==, 0);
   g_assert_cmpint (top,    ==, 1);
   g_assert_cmpint (width,  ==, 1);
