@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkWindow" id="window">
-    <property name="can_focus">False</property>
     <property name="type">popup</property>
     <child>
       <object class="GtkTextView" id="textview1">
         <property name="width_request">160</property>
         <property name="height_request">160</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
+        <property name="can_focus">1</property>
         <property name="wrap_mode">word</property>
         <signal name="map" handler="reftest:add_border_windows" swapped="no"/>
       </object>

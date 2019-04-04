@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkWindow" id="window1">
     <property name="height_request">500</property>
@@ -8,10 +9,8 @@
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkPaned" id="paned1">
-            <property name="shrink-child2">True</property>
-            <property name="resize-child2">True</property>
-            <property name="shrink-child1">False</property>
-            <property name="resize-child1">False</property>
+            <property name="shrink-child1">0</property>
+            <property name="resize-child1">0</property>
             <property name="can_focus">1</property>
             <property name="position_set">1</property>
             <child>
@@ -37,10 +36,8 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned2">
-            <property name="shrink-child2">True</property>
-            <property name="resize-child2">True</property>
-            <property name="shrink-child1">False</property>
-            <property name="resize-child1">False</property>
+            <property name="shrink-child1">0</property>
+            <property name="resize-child1">0</property>
             <property name="can_focus">1</property>
             <property name="position_set">1</property>
             <child>
@@ -67,10 +64,8 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned3">
-            <property name="shrink-child2">True</property>
-            <property name="resize-child2">True</property>
-            <property name="shrink-child1">False</property>
-            <property name="resize-child1">False</property>
+            <property name="shrink-child1">0</property>
+            <property name="resize-child1">0</property>
             <property name="can_focus">1</property>
             <property name="position_set">1</property>
             <child>
@@ -97,10 +92,8 @@
         </child>
         <child>
           <object class="GtkPaned" id="paned4">
-            <property name="shrink-child2">True</property>
-            <property name="resize-child2">True</property>
-            <property name="shrink-child1">False</property>
-            <property name="resize-child1">False</property>
+            <property name="shrink-child1">0</property>
+            <property name="resize-child1">0</property>
             <property name="can_focus">1</property>
             <property name="position_set">1</property>
             <child>

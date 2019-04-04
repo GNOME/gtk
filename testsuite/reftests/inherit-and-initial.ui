@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
@@ -272,49 +273,40 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
             </style>
             <child>
               <object class="GtkToolButton" id="toolbutton2">
+                <property name="homogeneous">1</property>
                 <property name="label" translatable="yes">Save</property>
                 <property name="use_underline">1</property>
                 <property name="icon_name">document-save</property>
               </object>
-              <packing>
-                <property name="homogeneous">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkToolButton" id="toolbutton1">
+                <property name="homogeneous">1</property>
                 <property name="label" translatable="yes">Open</property>
                 <property name="use_underline">1</property>
                 <property name="icon_name">document-open</property>
               </object>
-              <packing>
-                <property name="homogeneous">1</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkSeparatorToolItem" id="toolbutton3"/>
-              <packing>
+              <object class="GtkSeparatorToolItem" id="toolbutton3">
                 <property name="homogeneous">1</property>
-              </packing>
+              </object>
             </child>
             <child>
               <object class="GtkToolButton" id="toolbutton4">
+                <property name="homogeneous">1</property>
                 <property name="label" translatable="yes">Find</property>
                 <property name="use_underline">1</property>
                 <property name="icon_name">edit-find</property>
               </object>
-              <packing>
-                <property name="homogeneous">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkToolItem" id="toolbutton5">
+                <property name="homogeneous">1</property>
                 <child>
                   <placeholder/>
                 </child>
               </object>
-              <packing>
-                <property name="homogeneous">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkToolItem" id="toolbutton6">
@@ -408,32 +400,32 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="label" translatable="yes">checkbutton</property>
                         <property name="can_focus">1</property>
                         <property name="active">1</property>
+                        <layout>
+                          <property name="left_attach">0</property>
+                          <property name="top_attach">0</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton2">
                         <property name="label" translatable="yes">checkbutton</property>
                         <property name="can_focus">1</property>
+                        <layout>
+                          <property name="left_attach">0</property>
+                          <property name="top_attach">1</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton3">
                         <property name="label" translatable="yes">checkbutton</property>
                         <property name="inconsistent">1</property>
                         <property name="can_focus">1</property>
+                        <layout>
+                          <property name="left_attach">0</property>
+                          <property name="top_attach">2</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">2</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton4">
@@ -441,22 +433,22 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="sensitive">0</property>
                         <property name="can_focus">1</property>
                         <property name="active">1</property>
+                        <layout>
+                          <property name="left_attach">0</property>
+                          <property name="top_attach">3</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">3</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton5">
                         <property name="label" translatable="yes">checkbutton</property>
                         <property name="sensitive">0</property>
                         <property name="can_focus">1</property>
+                        <layout>
+                          <property name="left_attach">0</property>
+                          <property name="top_attach">4</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">4</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="checkbutton6">
@@ -464,22 +456,22 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="sensitive">0</property>
                         <property name="inconsistent">1</property>
                         <property name="can_focus">1</property>
+                        <layout>
+                          <property name="left_attach">0</property>
+                          <property name="top_attach">5</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">5</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobutton1">
                         <property name="label" translatable="yes">radiobutton</property>
                         <property name="can_focus">1</property>
                         <property name="active">1</property>
+                        <layout>
+                          <property name="left_attach">1</property>
+                          <property name="top_attach">0</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobutton2">
@@ -487,11 +479,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="can_focus">1</property>
                         <property name="active">1</property>
                         <property name="group">radiobutton1</property>
+                        <layout>
+                          <property name="left_attach">1</property>
+                          <property name="top_attach">1</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobutton3">
@@ -500,11 +492,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="can_focus">1</property>
                         <property name="active">1</property>
                         <property name="group">radiobutton1</property>
+                        <layout>
+                          <property name="left_attach">1</property>
+                          <property name="top_attach">2</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobutton4">
@@ -512,11 +504,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="sensitive">0</property>
                         <property name="can_focus">1</property>
                         <property name="active">1</property>
+                        <layout>
+                          <property name="left_attach">1</property>
+                          <property name="top_attach">3</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">3</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobutton5">
@@ -525,11 +517,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="can_focus">1</property>
                         <property name="active">1</property>
                         <property name="group">radiobutton3</property>
+                        <layout>
+                          <property name="left_attach">1</property>
+                          <property name="top_attach">4</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">4</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="radiobutton6">
@@ -539,27 +531,28 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="can_focus">1</property>
                         <property name="active">1</property>
                         <property name="group">radiobutton3</property>
+                        <layout>
+                          <property name="left_attach">1</property>
+                          <property name="top_attach">5</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">5</property>
-                      </packing>
                     </child>
                     <child>
-                      <object class="GtkSwitch" id="switch1"/>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">6</property>
-                      </packing>
+                      <object class="GtkSwitch" id="switch1">
+                        <layout>
+                          <property name="left_attach">0</property>
+                          <property name="top_attach">6</property>
+                        </layout>
+                      </object>
                     </child>
                     <child>
                       <object class="GtkSwitch" id="switch2">
                         <property name="sensitive">0</property>
+                        <layout>
+                          <property name="left_attach">1</property>
+                          <property name="top_attach">6</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">6</property>
-                      </packing>
                     </child>
                   </object>
                 </child>

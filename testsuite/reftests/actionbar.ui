@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkWindow" id="window1">
     <property name="type">popup</property>
@@ -7,13 +8,11 @@
           <object class="GtkButton">
             <property name="label">1</property>
           </object>
-          <packing/>
         </child>
         <child type="start">
           <object class="GtkButton">
             <property name="label">2</property>
           </object>
-          <packing/>
         </child>
         <child type="center">
           <object class="GtkButton">
@@ -24,13 +23,11 @@
           <object class="GtkButton">
             <property name="label">1</property>
           </object>
-          <packing/>
         </child>
         <child type="end">
           <object class="GtkButton">
             <property name="label">2</property>
           </object>
-          <packing/>
         </child>
       </object>
     </child>

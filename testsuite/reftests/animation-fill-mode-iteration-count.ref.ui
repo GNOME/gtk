@@ -1,75 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.19.0 -->
 <interface>
   <requires lib="gtk+" version="3.16"/>
   <object class="GtkWindow" id="window1">
-    <property name="can_focus">False</property>
     <child>
       <object class="GtkGrid" id="grid1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <child>
           <object class="GtkLabel" id="label1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">normal</property>
+            <layout>
+              <property name="left_attach">0</property>
+              <property name="top_attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">reverse</property>
+            <layout>
+              <property name="left_attach">0</property>
+              <property name="top_attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label3">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">alternate</property>
+            <layout>
+              <property name="left_attach">0</property>
+              <property name="top_attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label4">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">alternate-reverse</property>
+            <layout>
+              <property name="left_attach">0</property>
+              <property name="top_attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label12">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">--&gt;
 2⅕x</property>
+            <layout>
+              <property name="left_attach">12</property>
+              <property name="top_attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">12</property>
-            <property name="top_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box31">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -77,18 +61,16 @@
             <style>
               <class name="lightorange"/>
             </style>
+            <layout>
+              <property name="left_attach">12</property>
+              <property name="top_attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">12</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box32">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -96,18 +78,16 @@
             <style>
               <class name="darkorange"/>
             </style>
+            <layout>
+              <property name="left_attach">12</property>
+              <property name="top_attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">12</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box30">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -115,18 +95,16 @@
             <style>
               <class name="lightorange"/>
             </style>
+            <layout>
+              <property name="left_attach">12</property>
+              <property name="top_attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">12</property>
-            <property name="top_attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box29">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -134,18 +112,16 @@
             <style>
               <class name="darkorange"/>
             </style>
+            <layout>
+              <property name="left_attach">12</property>
+              <property name="top_attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">12</property>
-            <property name="top_attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box28">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -153,18 +129,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">11</property>
+              <property name="top_attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">11</property>
-            <property name="top_attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box27">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -172,18 +146,16 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">11</property>
+              <property name="top_attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">11</property>
-            <property name="top_attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box26">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -191,18 +163,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">11</property>
+              <property name="top_attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">11</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box18">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -210,42 +180,36 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">11</property>
+              <property name="top_attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">11</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label11">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">&lt;--
 2⅕x</property>
+            <layout>
+              <property name="left_attach">11</property>
+              <property name="top_attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">11</property>
-            <property name="top_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label10">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">--&gt;
 2x</property>
+            <layout>
+              <property name="left_attach">10</property>
+              <property name="top_attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">10</property>
-            <property name="top_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box25">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -253,18 +217,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">10</property>
+              <property name="top_attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">10</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box24">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -272,18 +234,16 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">10</property>
+              <property name="top_attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">10</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box23">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -291,18 +251,16 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">10</property>
+              <property name="top_attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">10</property>
-            <property name="top_attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box22">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -310,18 +268,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">10</property>
+              <property name="top_attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">10</property>
-            <property name="top_attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box21">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -329,18 +285,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">9</property>
+              <property name="top_attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">9</property>
-            <property name="top_attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box20">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -348,18 +302,16 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">9</property>
+              <property name="top_attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">9</property>
-            <property name="top_attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box19">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -367,18 +319,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">9</property>
+              <property name="top_attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">9</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box17">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -386,42 +336,36 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">9</property>
+              <property name="top_attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">9</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label9">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">&lt;--
 2x</property>
+            <layout>
+              <property name="left_attach">9</property>
+              <property name="top_attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">9</property>
-            <property name="top_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label8">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">--&gt;
 1⅕x</property>
+            <layout>
+              <property name="left_attach">8</property>
+              <property name="top_attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">8</property>
-            <property name="top_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box10">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -429,18 +373,16 @@
             <style>
               <class name="lightorange"/>
             </style>
+            <layout>
+              <property name="left_attach">8</property>
+              <property name="top_attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">8</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box16">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -448,18 +390,16 @@
             <style>
               <class name="darkorange"/>
             </style>
+            <layout>
+              <property name="left_attach">8</property>
+              <property name="top_attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">8</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box15">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -467,18 +407,16 @@
             <style>
               <class name="darkorange"/>
             </style>
+            <layout>
+              <property name="left_attach">8</property>
+              <property name="top_attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">8</property>
-            <property name="top_attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box14">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -486,30 +424,26 @@
             <style>
               <class name="lightorange"/>
             </style>
+            <layout>
+              <property name="left_attach">8</property>
+              <property name="top_attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">8</property>
-            <property name="top_attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label7">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">&lt;--
 1⅕x</property>
+            <layout>
+              <property name="left_attach">7</property>
+              <property name="top_attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">7</property>
-            <property name="top_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box9">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -517,18 +451,16 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">7</property>
+              <property name="top_attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">7</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box11">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -536,18 +468,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">7</property>
+              <property name="top_attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">7</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box12">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -555,18 +485,16 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">7</property>
+              <property name="top_attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">7</property>
-            <property name="top_attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box13">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -574,30 +502,26 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">7</property>
+              <property name="top_attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">7</property>
-            <property name="top_attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label6">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">--&gt;
 1x</property>
+            <layout>
+              <property name="left_attach">6</property>
+              <property name="top_attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">6</property>
-            <property name="top_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box5">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -605,18 +529,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">6</property>
+              <property name="top_attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">6</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box6">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -624,18 +546,16 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">6</property>
+              <property name="top_attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">6</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box7">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -643,18 +563,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">6</property>
+              <property name="top_attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">6</property>
-            <property name="top_attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box8">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -662,30 +580,26 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">6</property>
+              <property name="top_attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">6</property>
-            <property name="top_attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label5">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">&lt;--
 1x</property>
+            <layout>
+              <property name="left_attach">5</property>
+              <property name="top_attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">5</property>
-            <property name="top_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box1">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -693,18 +607,16 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">5</property>
+              <property name="top_attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">5</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box2">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -712,18 +624,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">5</property>
+              <property name="top_attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">5</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box3">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -731,18 +641,16 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">5</property>
+              <property name="top_attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">5</property>
-            <property name="top_attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box4">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -750,42 +658,36 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">5</property>
+              <property name="top_attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">5</property>
-            <property name="top_attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label13">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">&lt;--
 ⅕x</property>
+            <layout>
+              <property name="left_attach">3</property>
+              <property name="top_attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="top_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label14">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">--&gt;
 ⅕x</property>
+            <layout>
+              <property name="left_attach">4</property>
+              <property name="top_attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">4</property>
-            <property name="top_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box33">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -793,18 +695,16 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">3</property>
+              <property name="top_attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box34">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -812,18 +712,16 @@
             <style>
               <class name="lightorange"/>
             </style>
+            <layout>
+              <property name="left_attach">4</property>
+              <property name="top_attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">4</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box35">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -831,18 +729,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">3</property>
+              <property name="top_attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box36">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -850,18 +746,16 @@
             <style>
               <class name="darkorange"/>
             </style>
+            <layout>
+              <property name="left_attach">4</property>
+              <property name="top_attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">4</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box37">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -869,18 +763,16 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">3</property>
+              <property name="top_attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="top_attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box38">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -888,18 +780,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">3</property>
+              <property name="top_attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">3</property>
-            <property name="top_attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box39">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -907,18 +797,16 @@
             <style>
               <class name="lightorange"/>
             </style>
+            <layout>
+              <property name="left_attach">4</property>
+              <property name="top_attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">4</property>
-            <property name="top_attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box40">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -926,42 +814,36 @@
             <style>
               <class name="darkorange"/>
             </style>
+            <layout>
+              <property name="left_attach">4</property>
+              <property name="top_attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">4</property>
-            <property name="top_attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label15">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">&lt;--
 0x</property>
+            <layout>
+              <property name="left_attach">1</property>
+              <property name="top_attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label16">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">--&gt;
 0x</property>
+            <layout>
+              <property name="left_attach">2</property>
+              <property name="top_attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box41">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -969,18 +851,16 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">1</property>
+              <property name="top_attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box42">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -988,18 +868,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">1</property>
+              <property name="top_attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box43">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -1007,18 +885,16 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">1</property>
+              <property name="top_attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box44">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -1026,18 +902,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">1</property>
+              <property name="top_attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box45">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -1045,18 +919,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">2</property>
+              <property name="top_attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box46">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -1064,18 +936,16 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">2</property>
+              <property name="top_attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box47">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -1083,18 +953,16 @@
             <style>
               <class name="red"/>
             </style>
+            <layout>
+              <property name="left_attach">2</property>
+              <property name="top_attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box48">
             <property name="width_request">50</property>
             <property name="height_request">50</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
             <child>
               <placeholder/>
@@ -1102,11 +970,11 @@
             <style>
               <class name="yellow"/>
             </style>
+            <layout>
+              <property name="left_attach">2</property>
+              <property name="top_attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">2</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <placeholder/>
