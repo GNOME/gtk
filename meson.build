@@ -409,8 +409,10 @@ epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
 atk_dep        = dependency('atk', version: atk_req,
                             fallback : ['atk', 'libatk_dep'])
-harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false,
-                            fallback: ['harfbuzz', 'libharfbuzz_dep'])
+
+# Update once Meson can have deps declared in a declarative manner or can
+# find deps properly with CMake again
+harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 iso_codes_dep  = dependency('iso-codes', required: false)
 
@@ -422,6 +424,20 @@ if os_win32
 endif
 if os_unix
   platform_gio_dep = giounix_dep
+endif
+
+# Remove once Meson is fixed to find deps properly with CMake or
+# gains the ability to declare deps in a declarative manner
+# Fallback for HarfBuzz
+if cc.get_id() == 'msvc' and not harfbuzz_dep.found()
+  if cc.has_header('hb.h')
+    harfbuzz_dep = cc.find_library('harfbuzz', required : false)
+  endif
+endif
+
+if not harfbuzz_dep.found()
+  harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false,
+                              fallback: ['harfbuzz', 'libharfbuzz_dep'])
 endif
 
 if iso_codes_dep.found()
