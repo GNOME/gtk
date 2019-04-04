@@ -104,6 +104,7 @@ gtk/inspector/statistics.ui
 gtk/inspector/statistics.ui.h
 gtk/inspector/style-prop-list.ui
 gtk/inspector/style-prop-list.ui.h
+gtk/inspector/type-info.ui
 gtk/inspector/visual.ui
 gtk/inspector/visual.ui.h
 gtk/inspector/window.ui
