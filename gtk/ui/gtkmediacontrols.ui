@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <object class="GtkAdjustment" id="time_adjustment">
     <property name="upper">10</property>

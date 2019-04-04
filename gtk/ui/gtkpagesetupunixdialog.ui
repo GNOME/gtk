@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <object class="GtkListStore" id="custom_paper_list">
     <columns>
@@ -38,11 +39,11 @@
                 <property name="label" translatable="yes">_Format for:</property>
                 <property name="use-underline">1</property>
                 <property name="mnemonic-widget">printer_combo</property>
+                <layout>
+                  <property name="left-attach">0</property>
+                  <property name="top-attach">0</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkComboBox" id="printer_combo">
@@ -55,12 +56,12 @@
                     <attribute name="markup">0</attribute>
                   </attributes>
                 </child>
+                <layout>
+                  <property name="left-attach">1</property>
+                  <property name="top-attach">0</property>
+                  <property name="column-span">3</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-                <property name="width">3</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="paper_size_combo_label">
@@ -69,11 +70,11 @@
                 <property name="label" translatable="yes">_Paper size:</property>
                 <property name="use-underline">1</property>
                 <property name="mnemonic-widget">paper_size_combo</property>
+                <layout>
+                  <property name="left-attach">0</property>
+                  <property name="top-attach">1</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkComboBox" id="paper_size_combo">
@@ -83,23 +84,23 @@
                 <child>
                   <object class="GtkCellRendererText" id="paper_size_cell"/>
                 </child>
+                <layout>
+                  <property name="left-attach">1</property>
+                  <property name="top-attach">1</property>
+                  <property name="column-span">3</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-                <property name="width">3</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="paper_size_label">
                 <property name="halign">start</property>
                 <property name="valign">center</property>
+                <layout>
+                  <property name="left-attach">1</property>
+                  <property name="top-attach">2</property>
+                  <property name="column-span">3</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">2</property>
-                <property name="width">3</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel" id="orientation_label">
@@ -108,11 +109,11 @@
                 <property name="label" translatable="yes">_Orientation:</property>
                 <property name="use-underline">1</property>
                 <property name="mnemonic-widget">portrait_radio</property>
+                <layout>
+                  <property name="left-attach">0</property>
+                  <property name="top-attach">3</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
-              </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="portrait_radio">
@@ -134,11 +135,11 @@
                     </child>
                   </object>
                 </child>
+                <layout>
+                  <property name="left-attach">1</property>
+                  <property name="top-attach">3</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">3</property>
-              </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="reverse_portrait_radio">
@@ -161,11 +162,11 @@
                     </child>
                   </object>
                 </child>
+                <layout>
+                  <property name="left-attach">2</property>
+                  <property name="top-attach">3</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">3</property>
-              </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="landscape_radio">
@@ -188,11 +189,11 @@
                     </child>
                   </object>
                 </child>
+                <layout>
+                  <property name="left-attach">1</property>
+                  <property name="top-attach">4</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">4</property>
-              </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="reverse_landscape_radio">
@@ -214,11 +215,11 @@
                     </child>
                   </object>
                 </child>
+                <layout>
+                  <property name="left-attach">2</property>
+                  <property name="top-attach">4</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">2</property>
-                <property name="top-attach">4</property>
-              </packing>
             </child>
           </object>
         </child>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <object class="GtkAdjustment" id="adjustment">
     <property name="upper">1</property>
