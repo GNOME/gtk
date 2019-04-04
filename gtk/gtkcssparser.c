@@ -675,7 +675,7 @@ gtk_css_parser_has_function (GtkCssParser    *parser,
 }
 
 char *
-_gtk_css_parser_read_string (GtkCssParser *parser)
+gtk_css_parser_consume_string (GtkCssParser *parser)
 {
   GString *str;
   char quote;
@@ -1016,7 +1016,7 @@ _gtk_css_parser_read_url (GtkCssParser *parser)
           return NULL;
         }
 
-      path = _gtk_css_parser_read_string (parser);
+      path = gtk_css_parser_consume_string (parser);
       if (path == NULL)
         return NULL;
 
@@ -1070,7 +1070,7 @@ gtk_css_parser_resync_internal (GtkCssParser *parser,
     if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
       {
         /* Hrm, this emits errors, and i suspect it shouldn't... */
-        char *free_me = _gtk_css_parser_read_string (parser);
+        char *free_me = gtk_css_parser_consume_string (parser);
         g_free (free_me);
         continue;
       }

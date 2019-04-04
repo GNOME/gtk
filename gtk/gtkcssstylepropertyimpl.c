@@ -176,7 +176,7 @@ font_family_parse_one (GtkCssParser *parser)
     }
   else 
     {
-      name = _gtk_css_parser_read_string (parser);
+      name = gtk_css_parser_consume_string (parser);
       if (name == NULL)
         return NULL;
     }

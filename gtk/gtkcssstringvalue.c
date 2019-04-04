@@ -160,7 +160,7 @@ _gtk_css_string_value_parse (GtkCssParser *parser)
 
   g_return_val_if_fail (parser != NULL, NULL);
 
-  s = _gtk_css_parser_read_string (parser);
+  s = gtk_css_parser_consume_string (parser);
   if (s == NULL)
     return NULL;
   

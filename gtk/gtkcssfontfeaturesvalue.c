@@ -237,7 +237,7 @@ gtk_css_font_features_value_parse (GtkCssParser *parser)
 
   do {
     _gtk_css_parser_skip_whitespace (parser);
-    name = _gtk_css_parser_read_string (parser);
+    name = gtk_css_parser_consume_string (parser);
     if (name == NULL)
       {
         _gtk_css_value_unref (result);
