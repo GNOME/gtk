@@ -1075,3 +1075,41 @@ gtk_grid_get_baseline_row (GtkGrid *grid)
 
   return gtk_grid_layout_get_baseline_row (GTK_GRID_LAYOUT (priv->layout_manager));
 }
+
+/**
+ * gtk_grid_query_child:
+ * @grid: a #GtkGrid
+ * @child: a #GtkWidget child of @grid
+ * @left: (out): the column used to attach the left side of @child
+ * @top: (out): the row used to attach the top side of @child
+ * @width: (out): the number of columns @child spans
+ * @height: (out): the number of rows @child spans
+ *
+ * Queries the attach points and spans of @child inside the given #GtkGrid.
+ */
+void
+gtk_grid_query_child (GtkGrid   *grid,
+                      GtkWidget *child,
+                      gint      *left,
+                      gint      *top,
+                      gint      *width,
+                      gint      *height)
+{
+  GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
+  GtkGridLayoutChild *grid_child;
+
+  g_return_if_fail (GTK_IS_GRID (grid));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (_gtk_widget_get_parent (child) == (GtkWidget *) grid);
+
+  grid_child = GTK_GRID_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (priv->layout_manager, child));
+
+  if (left != NULL)
+    *left = gtk_grid_layout_child_get_left_attach (grid_child);
+  if (top != NULL)
+    *top = gtk_grid_layout_child_get_top_attach (grid_child);
+  if (width != NULL)
+    *width = gtk_grid_layout_child_get_column_span (grid_child);
+  if (height != NULL)
+    *height = gtk_grid_layout_child_get_row_span (grid_child);
+}
