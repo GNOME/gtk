@@ -81,7 +81,29 @@ gtk_binary_age = 100 * gtk_minor_version + gtk_micro_version
 cc = meson.get_compiler('c')
 
 if cc.get_id() == 'msvc'
-  gtk_soversion = 'vs@0@'.format(cc.version().split('.')[0])
+  vsver = 0
+  mscver = cc.version().split('.')[0].to_int()
+
+  # pre-Visual Studio 2015 (18.xx.xxxxx or earlier): just subtract 6 from major
+  # version of cc.version() to get the Visual Studio version
+  if mscver < 19
+    vsver = mscver - 6
+  else
+    # Visual Studio 2015 and later (19.xx.xxxxx or later): look at the minor version.
+    # If minor version < 10: Visual Studio 2015,
+    #    10 < minor version < 20: Visual Studio 2017,
+    #    20 < minor version: Visual Studio 2019
+    mscsubver = cc.version().split('.')[1].to_int()
+    if mscsubver < 10
+      vsver = 14
+    elif mscsubver < 20
+      vsver = 15
+    else
+      vsver = 16
+    endif
+  endif
+
+  gtk_soversion = 'vs@0@'.format(vsver)
 else
   gtk_soversion = '0'
 endif
