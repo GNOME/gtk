@@ -163,8 +163,6 @@ needs_explicit_setting (GParamSpec *pspec,
     { "GtkCalendar", "day", PROP_KIND_OBJECT },
     { "GtkPlacesSidebar", "show-desktop", PROP_KIND_OBJECT },
     { "GtkRadioButton", "draw-indicator", PROP_KIND_OBJECT },
-    { "GtkGrid", "left-attach", PROP_KIND_PACKING },
-    { "GtkGrid", "top-attach", PROP_KIND_PACKING },
     { "GtkWidget", "hexpand", PROP_KIND_OBJECT },
     { "GtkWidget", "vexpand", PROP_KIND_OBJECT },
   };
@@ -208,6 +206,10 @@ keep_for_rewrite (const char *class_name,
     { "GtkPaned", "shrink", PROP_KIND_PACKING },
     { "GtkOverlay", "measure", PROP_KIND_PACKING },
     { "GtkOverlay", "clip-overlay", PROP_KIND_PACKING },
+    { "GtkGrid", "left-attach", PROP_KIND_PACKING },
+    { "GtkGrid", "top-attach", PROP_KIND_PACKING },
+    { "GtkGrid", "width", PROP_KIND_PACKING },
+    { "GtkGrid", "height", PROP_KIND_PACKING },
   };
   gboolean found;
   gint k;
@@ -407,6 +409,24 @@ get_attribute_value (Element *element,
   return NULL;
 }
 
+static void
+set_attribute_value (Element *element,
+                     const char *name,
+                     const char *value)
+{
+  int i;
+
+  for (i = 0; element->attribute_names[i]; i++)
+    {
+      if (g_str_equal (element->attribute_names[i], name))
+        {
+          g_free (element->attribute_values[i]);
+          element->attribute_values[i] = g_strdup (value);
+          return;
+        }
+    }
+}
+
 static const char *
 get_class_name (Element *element)
 {
@@ -518,7 +538,7 @@ property_can_be_omitted (Element      *element,
       };
      
       g_printerr (_("%s: %sproperty %s::%s not found\n"),
-                  kind_str[kind], data->input_filename, class_name, property_name);
+                  data->input_filename, kind_str[kind], class_name, property_name);
       return FALSE;
     }
 
@@ -1131,6 +1151,90 @@ rewrite_layout_props (Element *element,
     }
 }
 
+static void
+rewrite_grid_layout_prop (Element *element,
+                          const char *attr_name,
+                          const char *old_value,
+                          const char *new_value)
+{
+  char *canonical_name;
+
+  canonical_name = g_strdup (old_value);
+  g_strdelimit (canonical_name, "_", '-');
+
+  if (g_str_equal (element->element_name, "property"))
+    {
+      if (has_attribute (element, attr_name, old_value) ||
+          has_attribute (element, attr_name, canonical_name))
+        {
+          set_attribute_value (element, attr_name, new_value);
+        }
+    }
+
+  g_free (canonical_name);
+}
+
+static void
+rewrite_grid_layout (Element *element,
+                     MyParserData *data)
+{
+  struct _Prop {
+    const char *attr_name;
+    const char *old_value;
+    const char *new_value;
+  } props[] = {
+    { "name", "width", "column-span", },
+    { "name", "height", "row-span", },
+  };
+  GList *l, *ll;
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *child = l->data;
+
+      if (g_str_equal (child->element_name, "child"))
+        {
+          Element *object = NULL;
+          Element *packing = NULL;
+
+          for (ll = child->children; ll; ll = ll->next)
+            {
+              Element *elt2 = ll->data;
+
+              if (g_str_equal (elt2->element_name, "object"))
+                object = elt2;
+
+              if (g_str_equal (elt2->element_name, "packing"))
+                packing = elt2;
+            }
+
+          if (object && packing)
+            {
+              int i;
+
+              child->children = g_list_remove (child->children, packing);
+
+              g_free (packing->element_name);
+              packing->element_name = g_strdup ("layout");
+
+              packing->parent = object;
+              object->children = g_list_append (object->children, packing);
+
+              for (ll = packing->children; ll; ll = ll->next)
+                {
+                  Element *elt = ll->data;
+
+                  for (i = 0; i < G_N_ELEMENTS (props); i++)
+                    rewrite_grid_layout_prop (elt,
+                                              props[i].attr_name,
+                                              props[i].old_value,
+                                              props[i].new_value);
+                }
+            }
+        }
+    }
+}
+
 static gboolean
 simplify_element (Element      *element,
                   MyParserData *data)
@@ -1204,6 +1308,14 @@ simplify_element (Element      *element,
 
       if (g_str_equal (element->element_name, "object") &&
           g_str_equal (get_class_name (element), "GtkOverlay"))
+        rewrite_layout_props (element, data);
+
+      if (g_str_equal (element->element_name, "object") &&
+          g_str_equal (get_class_name (element), "GtkGrid"))
+        rewrite_grid_layout (element, data);
+
+      if (g_str_equal (element->element_name, "object") &&
+          g_str_equal (get_class_name (element), "GtkFixed"))
         rewrite_layout_props (element, data);
 
       if (g_str_equal (element->element_name, "property") &&
