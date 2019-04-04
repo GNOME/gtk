@@ -133,7 +133,7 @@ gtk_css_image_icon_theme_parse_arg (GtkCssParser *parser,
 {
   GtkCssImageIconTheme *icon_theme = data;
 
-  icon_theme->name = _gtk_css_parser_read_string (parser);
+  icon_theme->name = gtk_css_parser_consume_string (parser);
   if (icon_theme->name == NULL)
     return 0;
 
