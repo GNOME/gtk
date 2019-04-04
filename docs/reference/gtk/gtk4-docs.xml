@@ -103,7 +103,11 @@
       <title>Layout Managers</title>
       <xi:include href="xml/gtklayoutmanager.xml" />
       <xi:include href="xml/gtklayoutchild.xml" />
+      <xi:include href="xml/gtkbinlayout.xml" />
       <xi:include href="xml/gtkboxlayout.xml" />
+      <xi:include href="xml/gtkcustomlayout.xml" />
+      <xi:include href="xml/gtkfixedlayout.xml" />
+      <xi:include href="xml/gtkgridlayout.xml" />
     </chapter>
 
     <chapter id="DisplayWidgets">
