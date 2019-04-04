@@ -150,7 +150,7 @@ gtk_css_icon_theme_value_parse (GtkCssParser *parser)
   GtkCssValue *result;
   char *s;
 
-  s = _gtk_css_parser_read_string (parser);
+  s = gtk_css_parser_consume_string (parser);
   if (s == NULL)
     return NULL;
 
