@@ -40,8 +40,8 @@ ccache --zero-stats
 ccache --show-stats
 
 meson \
-    -Dman-pages=true \
-    -Dbroadway-backend=true \
+    -Dman=true \
+    -Dbroadway_backend=true \
     _build
 
 ninja -C _build

@@ -17,11 +17,11 @@ foreach backend: all_print_backends
 endforeach
 
 print_strict_deps = true
-if get_option('print-backends') == 'auto'
+if get_option('print_backends') == 'auto'
   enabled_print_backends = auto_print_backends
   print_strict_deps = false
 else
-  wanted_print_backends = get_option('print-backends').split(',')
+  wanted_print_backends = get_option('print_backends').split(',')
   enabled_print_backends = []
   foreach backend: wanted_print_backends
     if backend != ''

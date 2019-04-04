@@ -112,11 +112,11 @@ gtk_osxversions = [(100 * gtk_minor_version) + 1, '@0@.@1@.0'.format((100 * gtk_
 
 gtk_api_version = '@0@.0'.format(gtk_major_version)
 
-x11_enabled            = get_option('x11-backend')
-wayland_enabled        = get_option('wayland-backend')
-broadway_enabled       = get_option('broadway-backend')
-quartz_enabled         = get_option('quartz-backend')
-win32_enabled          = get_option('win32-backend')
+x11_enabled            = get_option('x11_backend')
+wayland_enabled        = get_option('wayland_backend')
+broadway_enabled       = get_option('broadway_backend')
+quartz_enabled         = get_option('quartz_backend')
+win32_enabled          = get_option('win32_backend')
 
 os_unix   = false
 os_linux  = false
@@ -824,11 +824,11 @@ subdir('libgail-util')
 if get_option('demos')
   subdir('demos')
 endif
-if get_option('build-tests')
+if get_option('tests')
   subdir('tests')
   subdir('testsuite')
 endif
-if get_option('build-examples')
+if get_option('examples')
   subdir('examples')
 endif
 
@@ -975,11 +975,11 @@ summary = [
   '     Cloud support: @0@'.format(get_option('cloudproviders')),
   '    Colord support: @0@'.format(get_option('colord')),
   '     Introspection: @0@'.format(get_option('introspection')),
-  '     Documentation: @0@'.format(get_option('documentation')),
-  '         Man pages: @0@'.format(get_option('man-pages')),
-  '       Build tests: @0@'.format(get_option('build-tests')),
+  '     Documentation: @0@'.format(get_option('gtk_doc')),
+  '         Man pages: @0@'.format(get_option('man')),
+  '       Build tests: @0@'.format(get_option('tests')),
   '             Demos: @0@'.format(get_option('demos')),
-  '          Examples: @0@'.format(get_option('build-examples')),
+  '          Examples: @0@'.format(get_option('examples')),
   'Directories:',
   '            prefix: @0@'.format(gtk_prefix),
   '        includedir: @0@'.format(gtk_includedir),
