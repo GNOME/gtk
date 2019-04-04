@@ -786,7 +786,7 @@ parse_import (GtkCssScanner *scanner)
     {
       char *uri;
 
-      uri = _gtk_css_parser_read_string (scanner->parser);
+      uri = gtk_css_parser_consume_string (scanner->parser);
       file = _gtk_css_parser_get_file_for_path (scanner->parser, uri);
       g_free (uri);
     }
