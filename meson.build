@@ -476,8 +476,6 @@ foreach backend: [ ['cairo-xlib', cairo_req, x11_enabled],
           cairo_backends += cairo_backend
         endif
       endforeach
-    elif cc.get_id() == 'msvc' and cairo_dep.found()
-      cairo_backends += 'cairo-win32'
     endif
   endif
 endforeach
@@ -835,17 +833,20 @@ gdk_packages = ' '.join([ pango_pkgname, pango_req,
                        'pangocairo', pango_req,
                        'gdk-pixbuf-2.0', gdk_pixbuf_req ])
 
+cairo_packages = ''
+
 if cairo_pkg_found
-  gdk_packages += ' '.join([ ' cairo', cairo_req ])
+  cairo_packages += ' '.join([ ' cairo', cairo_req ])
 elif cc.get_id() == 'msvc' and cairo_dep.found()
-  gdk_packages += ' '.join([ ' -lcairo' ])
+  cairo_packages += ' '.join([ ' -lcairo' ])
 endif
 if cairogobj_pkg_found
-  gdk_packages += ' '.join([ ' cairo-gobject', cairo_req ])
+  cairo_packages += ' '.join([ ' cairo-gobject', cairo_req ])
 elif cc.get_id() == 'msvc' and cairogobj_dep.found()
-  gdk_packages += ' '.join([ ' -lcairo-gobject' ])
+  cairo_packages += ' '.join([ ' -lcairo-gobject' ])
 endif
 
+gdk_packages += cairo_packages
 pkgconf.set('GDK_PACKAGES', gdk_packages)
 
 if have_gio_unix
@@ -861,8 +862,7 @@ pkgconf.set('GDK_PRIVATE_PACKAGES',
 
 gtk_packages = ' '.join([
     atk_dep.name(), atk_req,
-    cairo_dep.name(), cairo_req,
-    cairogobj_dep.name(), cairo_req,
+    cairo_packages,
     pixbuf_dep.name(), gdk_pixbuf_req,
     'gio-2.0', glib_req,
 ])
