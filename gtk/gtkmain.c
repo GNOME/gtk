@@ -29,17 +29,17 @@
  * @See_also:See the GLib manual, especially #GMainLoop and signal-related
  *    functions such as g_signal_connect()
  *
- * Before using GTK+, you need to initialize it; initialization connects to the
+ * Before using GTK, you need to initialize it; initialization connects to the
  * window system display, and parses some standard command line arguments. The
- * gtk_init() macro initializes GTK+. gtk_init() exits the application if errors
+ * gtk_init() macro initializes GTK. gtk_init() exits the application if errors
  * occur; to avoid this, use gtk_init_check(). gtk_init_check() allows you to
- * recover from a failed GTK+ initialization - you might start up your
+ * recover from a failed GTK initialization - you might start up your
  * application in text mode instead.
  *
- * Like all GUI toolkits, GTK+ uses an event-driven programming model. When the
- * user is doing nothing, GTK+ sits in the “main loop” and
+ * Like all GUI toolkits, GTK uses an event-driven programming model. When the
+ * user is doing nothing, GTK sits in the “main loop” and
  * waits for input. If the user performs some action - say, a mouse click - then
- * the main loop “wakes up” and delivers an event to GTK+. GTK+ forwards the
+ * the main loop “wakes up” and delivers an event to GTK. GTK forwards the
  * event to one or more widgets.
  *
  * When widgets receive an event, they frequently emit one or more
@@ -50,10 +50,10 @@
  *
  * When your callbacks are invoked, you would typically take some action - for
  * example, when an Open button is clicked you might display a
- * #GtkFileChooserDialog. After a callback finishes, GTK+ will return to the
+ * #GtkFileChooserDialog. After a callback finishes, GTK will return to the
  * main loop and await more user input.
  *
- * ## Typical main() function for a GTK+ application
+ * ## Typical main() function for a GTK application
  *
  * |[<!-- language="C" -->
  * int
@@ -185,15 +185,15 @@ static const GDebugKey gtk_debug_keys[] = {
 /**
  * gtk_get_major_version:
  *
- * Returns the major version number of the GTK+ library.
- * (e.g. in GTK+ version 3.1.5 this is 3.)
+ * Returns the major version number of the GTK library.
+ * (e.g. in GTK version 3.1.5 this is 3.)
  *
- * This function is in the library, so it represents the GTK+ library
+ * This function is in the library, so it represents the GTK library
  * your code is running against. Contrast with the #GTK_MAJOR_VERSION
- * macro, which represents the major version of the GTK+ headers you
+ * macro, which represents the major version of the GTK headers you
  * have included when compiling your code.
  *
- * Returns: the major version number of the GTK+ library
+ * Returns: the major version number of the GTK library
  */
 guint
 gtk_get_major_version (void)
@@ -204,15 +204,15 @@ gtk_get_major_version (void)
 /**
  * gtk_get_minor_version:
  *
- * Returns the minor version number of the GTK+ library.
- * (e.g. in GTK+ version 3.1.5 this is 1.)
+ * Returns the minor version number of the GTK library.
+ * (e.g. in GTK version 3.1.5 this is 1.)
  *
- * This function is in the library, so it represents the GTK+ library
+ * This function is in the library, so it represents the GTK library
  * your code is are running against. Contrast with the
  * #GTK_MINOR_VERSION macro, which represents the minor version of the
- * GTK+ headers you have included when compiling your code.
+ * GTK headers you have included when compiling your code.
  *
- * Returns: the minor version number of the GTK+ library
+ * Returns: the minor version number of the GTK library
  */
 guint
 gtk_get_minor_version (void)
@@ -223,15 +223,15 @@ gtk_get_minor_version (void)
 /**
  * gtk_get_micro_version:
  *
- * Returns the micro version number of the GTK+ library.
- * (e.g. in GTK+ version 3.1.5 this is 5.)
+ * Returns the micro version number of the GTK library.
+ * (e.g. in GTK version 3.1.5 this is 5.)
  *
- * This function is in the library, so it represents the GTK+ library
+ * This function is in the library, so it represents the GTK library
  * your code is are running against. Contrast with the
  * #GTK_MICRO_VERSION macro, which represents the micro version of the
- * GTK+ headers you have included when compiling your code.
+ * GTK headers you have included when compiling your code.
  *
- * Returns: the micro version number of the GTK+ library
+ * Returns: the micro version number of the GTK library
  */
 guint
 gtk_get_micro_version (void)
@@ -243,11 +243,11 @@ gtk_get_micro_version (void)
  * gtk_get_binary_age:
  *
  * Returns the binary age as passed to `libtool`
- * when building the GTK+ library the process is running against.
+ * when building the GTK library the process is running against.
  * If `libtool` means nothing to you, don't
  * worry about it.
  *
- * Returns: the binary age of the GTK+ library
+ * Returns: the binary age of the GTK library
  */
 guint
 gtk_get_binary_age (void)
@@ -259,11 +259,11 @@ gtk_get_binary_age (void)
  * gtk_get_interface_age:
  *
  * Returns the interface age as passed to `libtool`
- * when building the GTK+ library the process is running against.
+ * when building the GTK library the process is running against.
  * If `libtool` means nothing to you, don't
  * worry about it.
  *
- * Returns: the interface age of the GTK+ library
+ * Returns: the interface age of the GTK library
  */
 guint
 gtk_get_interface_age (void)
@@ -277,12 +277,12 @@ gtk_get_interface_age (void)
  * @required_minor: the required minor version
  * @required_micro: the required micro version
  *
- * Checks that the GTK+ library in use is compatible with the
+ * Checks that the GTK library in use is compatible with the
  * given version. Generally you would pass in the constants
  * #GTK_MAJOR_VERSION, #GTK_MINOR_VERSION, #GTK_MICRO_VERSION
  * as the three arguments to this function; that produces
  * a check that the library in use is compatible with
- * the version of GTK+ the application or module was compiled
+ * the version of GTK the application or module was compiled
  * against.
  *
  * Compatibility is defined by two things: first the version
@@ -292,17 +292,17 @@ gtk_get_interface_age (void)
  * version @required_major.required_minor.@required_micro
  * (same major version.)
  *
- * This function is primarily for GTK+ modules; the module
+ * This function is primarily for GTK modules; the module
  * can call this function to check that it wasn’t loaded
- * into an incompatible version of GTK+. However, such a
+ * into an incompatible version of GTK. However, such a
  * check isn’t completely reliable, since the module may be
- * linked against an old version of GTK+ and calling the
+ * linked against an old version of GTK and calling the
  * old version of gtk_check_version(), but still get loaded
- * into an application using a newer version of GTK+.
+ * into an application using a newer version of GTK.
  *
- * Returns: (nullable): %NULL if the GTK+ library is compatible with the
+ * Returns: (nullable): %NULL if the GTK library is compatible with the
  *   given version, or a string describing the version mismatch.
- *   The returned string is owned by GTK+ and should not be modified
+ *   The returned string is owned by GTK and should not be modified
  *   or freed.
  */
 const gchar*
@@ -314,18 +314,18 @@ gtk_check_version (guint required_major,
   gint required_effective_micro = 100 * required_minor + required_micro;
 
   if (required_major > GTK_MAJOR_VERSION)
-    return "GTK+ version too old (major mismatch)";
+    return "GTK version too old (major mismatch)";
   if (required_major < GTK_MAJOR_VERSION)
-    return "GTK+ version too new (major mismatch)";
+    return "GTK version too new (major mismatch)";
   if (required_effective_micro < gtk_effective_micro - GTK_BINARY_AGE)
-    return "GTK+ version too new (micro mismatch)";
+    return "GTK version too new (micro mismatch)";
   if (required_effective_micro > gtk_effective_micro)
-    return "GTK+ version too old (micro mismatch)";
+    return "GTK version too old (micro mismatch)";
   return NULL;
 }
 
 /* This checks to see if the process is running suid or sgid
- * at the current time. If so, we don’t allow GTK+ to be initialized.
+ * at the current time. If so, we don’t allow GTK to be initialized.
  * This is meant to be a mild check - we only error out if we
  * can prove the programmer is doing something wrong, not if
  * they could be doing something wrong. For this reason, we
@@ -354,10 +354,10 @@ check_setugid (void)
       rgid != egid || rgid != sgid)
     {
       g_warning ("This process is currently running setuid or setgid.\n"
-                 "This is not a supported use of GTK+. You must create a helper\n"
+                 "This is not a supported use of GTK. You must create a helper\n"
                  "program instead. For further details, see:\n\n"
                  "    http://www.gtk.org/setuid.html\n\n"
-                 "Refusing to initialize GTK+.");
+                 "Refusing to initialize GTK.");
       exit (1);
     }
 #endif
@@ -598,7 +598,7 @@ do_pre_parse_initialization (void)
   pre_initialized = TRUE;
 
   if (_gtk_module_has_mixed_deps (NULL))
-    g_error ("GTK+ 2.x symbols detected. Using GTK+ 2.x and GTK+ 3 in the same process is not supported");
+    g_error ("GTK 2/3 symbols detected. Using GTK 2/3 and GTK 4 in the same process is not supported");
 
   gdk_pre_parse ();
 
@@ -726,12 +726,12 @@ gtk_set_display_debug_flags (GdkDisplay *display,
 /**
  * gtk_get_debug_flags:
  *
- * Returns the GTK+ debug flags.
+ * Returns the GTK debug flags.
  *
- * This function is intended for GTK+ modules that want
- * to adjust their debug output based on GTK+ debug flags.
+ * This function is intended for GTK modules that want
+ * to adjust their debug output based on GTK debug flags.
  *
- * Returns: the GTK+ debug flags.
+ * Returns: the GTK debug flags.
  */
 guint
 gtk_get_debug_flags (void)
@@ -742,7 +742,7 @@ gtk_get_debug_flags (void)
 /**
  * gtk_set_debug_flags:
  *
- * Sets the GTK+ debug flags.
+ * Sets the GTK debug flags.
  */
 void
 gtk_set_debug_flags (guint flags)
@@ -812,7 +812,7 @@ gtk_init_check (void)
 /**
  * gtk_init:
  *
- * Call this function before using any other GTK+ functions in your GUI
+ * Call this function before using any other GTK functions in your GUI
  * applications.  It will initialize everything needed to operate the
  * toolkit and parses some standard command line options.
  *
@@ -825,7 +825,7 @@ gtk_init_check (void)
  * your program to fall back to a textual interface you want to
  * call gtk_init_check() instead.
  *
- * GTK+ calls `signal (SIGPIPE, SIG_IGN)`
+ * GTK calls `signal (SIGPIPE, SIG_IGN)`
  * during initialization, to ignore SIGPIPE signals, since these are
  * almost never wanted in graphical applications. If you do need to
  * handle SIGPIPE for some reason, reset the handler after gtk_init(),
@@ -859,17 +859,17 @@ check_sizeof_GtkWindow (size_t sizeof_GtkWindow)
 {
   if (sizeof_GtkWindow != sizeof (GtkWindow))
     g_error ("Incompatible build!\n"
-             "The code using GTK+ thinks GtkWindow is of different\n"
-             "size than it actually is in this build of GTK+.\n"
+             "The code using GTK thinks GtkWindow is of different\n"
+             "size than it actually is in this build of GTK.\n"
              "On Windows, this probably means that you have compiled\n"
              "your code with gcc without the -mms-bitfields switch,\n"
              "or that you are using an unsupported compiler.");
 }
 
-/* In GTK+ 2.0 the GtkWindow struct actually is the same size in
+/* In GTK 2.0 the GtkWindow struct actually is the same size in
  * gcc-compiled code on Win32 whether compiled with -fnative-struct or
- * not. Unfortunately this wan’t noticed until after GTK+ 2.0.1. So,
- * from GTK+ 2.0.2 on, check some other struct, too, where the use of
+ * not. Unfortunately this wan’t noticed until after GTK 2.0.1. So,
+ * from GTK 2.0.2 on, check some other struct, too, where the use of
  * -fnative-struct still matters. GtkBox is one such.
  */
 static void
@@ -877,8 +877,8 @@ check_sizeof_GtkBox (size_t sizeof_GtkBox)
 {
   if (sizeof_GtkBox != sizeof (GtkBox))
     g_error ("Incompatible build!\n"
-             "The code using GTK+ thinks GtkBox is of different\n"
-             "size than it actually is in this build of GTK+.\n"
+             "The code using GTK thinks GtkBox is of different\n"
+             "size than it actually is in this build of GTK.\n"
              "On Windows, this probably means that you have compiled\n"
              "your code with gcc without the -mms-bitfields switch,\n"
              "or that you are using an unsupported compiler.");
@@ -910,7 +910,7 @@ gtk_init_check_abi_check (int num_checks, size_t sizeof_GtkWindow, size_t sizeof
 /**
  * gtk_is_initialized:
  *
- * Use this function to check if GTK+ has been initialized with gtk_init()
+ * Use this function to check if GTK has been initialized with gtk_init()
  * or gtk_init_check().
  *
  * Returns: the initialization status
@@ -924,9 +924,9 @@ gtk_is_initialized (void)
 /**
  * gtk_get_main_thread:
  *
- * Get the thread from which GTK+ was initialized.
+ * Get the thread from which GTK was initialized.
  *
- * Returns: (transfer none): The #GThread initialized for GTK+, must not be freed
+ * Returns: (transfer none): The #GThread initialized for GTK, must not be freed
  */
 GThread *
 gtk_get_main_thread (void)
@@ -945,13 +945,13 @@ gtk_get_main_thread (void)
  * setlocale() and will default to setting the %GTK_TEXT_DIR_LTR
  * direction otherwise. %GTK_TEXT_DIR_NONE will never be returned.
  *
- * GTK+ sets the default text direction according to the locale
+ * GTK sets the default text direction according to the locale
  * during gtk_init(), and you should normally use
  * gtk_widget_get_direction() or gtk_widget_get_default_direction()
  * to obtain the current direcion.
  *
  * This function is only needed rare cases when the locale is
- * changed after GTK+ has already been initialized. In this case,
+ * changed after GTK has already been initialized. In this case,
  * you can use it to update the default text direction as follows:
  *
  * |[<!-- language="C" -->
@@ -987,7 +987,7 @@ gtk_get_locale_direction (void)
  * Returns the #PangoLanguage for the default language currently in
  * effect. (Note that this can change over the life of an
  * application.) The default language is derived from the current
- * locale. It determines, for example, whether GTK+ uses the
+ * locale. It determines, for example, whether GTK uses the
  * right-to-left or left-to-right text direction.
  *
  * This function is equivalent to pango_language_get_default().
@@ -1166,7 +1166,7 @@ gtk_events_pending (void)
  *
  * Runs a single iteration of the mainloop.
  *
- * If no events are waiting to be processed GTK+ will block
+ * If no events are waiting to be processed GTK will block
  * until the next event is noticed. If you don’t want to block
  * look at gtk_main_iteration_do() or check if any events are
  * pending with gtk_events_pending() first.
@@ -1187,7 +1187,7 @@ gtk_main_iteration (void)
 
 /**
  * gtk_main_iteration_do:
- * @blocking: %TRUE if you want GTK+ to block if no events are pending
+ * @blocking: %TRUE if you want GTK to block if no events are pending
  *
  * Runs a single iteration of the mainloop.
  * If no events are available either return or block depending on
@@ -1774,7 +1774,7 @@ handle_pointing_event (GdkEvent *event)
  *
  * Processes a single GDK event.
  *
- * This is public only to allow filtering of events between GDK and GTK+.
+ * This is public only to allow filtering of events between GDK and GTK.
  * You will not usually need to call this function directly.
  *
  * While you should not call this function directly, you might want to
@@ -1895,7 +1895,7 @@ gtk_main_do_event (GdkEvent *event)
     grab_widget = target_widget;
 
   /* If the widget receiving events is actually blocked by another
-   * device GTK+ grab
+   * device GTK grab
    */
   if (device &&
       _gtk_window_group_widget_is_blocked_for_device (window_group, grab_widget, device))
@@ -2313,7 +2313,7 @@ gtk_grab_remove (GtkWidget *widget)
  * @device: a #GdkDevice to grab on.
  * @block_others: %TRUE to prevent other devices to interact with @widget.
  *
- * Adds a GTK+ grab on @device, so all the events on @device and its
+ * Adds a GTK grab on @device, so all the events on @device and its
  * associated pointer or keyboard (if any) are delivered to @widget.
  * If the @block_others parameter is %TRUE, any other devices will be
  * unable to interact with @widget during the grab.
@@ -2368,7 +2368,7 @@ gtk_device_grab_remove (GtkWidget *widget,
 /**
  * gtk_get_current_event:
  *
- * Obtains a reference of the event currently being processed by GTK+.
+ * Obtains a reference of the event currently being processed by GTK.
  *
  * For example, if you are handling a #GtkButton::clicked signal,
  * the current event will be the #GdkEventButton that triggered
@@ -2621,7 +2621,7 @@ gtk_propagate_event_internal (GtkWidget *widget,
  * if the event remains unhandled. This function will emit the event
  * through all the hierarchy of @widget through all propagation phases.
  *
- * Events received by GTK+ from GDK normally begin in gtk_main_do_event().
+ * Events received by GTK from GDK normally begin in gtk_main_do_event().
  * Depending on the type of event, existence of modal dialogs, grabs, etc.,
  * the event may be propagated; if so, this function is used.
  *
