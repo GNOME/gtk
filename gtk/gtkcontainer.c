@@ -109,15 +109,7 @@ enum {
   LAST_SIGNAL
 };
 
-#define PARAM_SPEC_PARAM_ID(pspec)              ((pspec)->param_id)
-#define PARAM_SPEC_SET_PARAM_ID(pspec, id)      ((pspec)->param_id = (id))
-
-
 /* --- prototypes --- */
-static void     gtk_container_base_class_init      (GtkContainerClass *klass);
-static void     gtk_container_base_class_finalize  (GtkContainerClass *klass);
-static void     gtk_container_class_init           (GtkContainerClass *klass);
-static void     gtk_container_init                 (GtkContainer      *container);
 static void     gtk_container_destroy              (GtkWidget         *widget);
 static void     gtk_container_add_unimplemented    (GtkContainer      *container,
                                                     GtkWidget         *widget);
@@ -138,88 +130,22 @@ static GtkWidgetPath * gtk_container_real_get_path_for_child (GtkContainer *cont
 
 /* GtkBuildable */
 static void gtk_container_buildable_init           (GtkBuildableIface *iface);
-static void gtk_container_buildable_add_child      (GtkBuildable *buildable,
-                                                    GtkBuilder   *builder,
-                                                    GObject      *child,
-                                                    const gchar  *type);
+static GtkBuildableIface    *parent_buildable_iface;
 
-/* --- variables --- */
 static GQuark                vadjustment_key_id;
 static GQuark                hadjustment_key_id;
 static guint                 container_signals[LAST_SIGNAL] = { 0 };
-static gint                  GtkContainer_private_offset;
-static GtkWidgetClass       *gtk_container_parent_class = NULL;
-static GtkBuildableIface    *parent_buildable_iface;
 
-
-/* --- functions --- */
-static inline gpointer
-gtk_container_get_instance_private (GtkContainer *self)
-{
-  return G_STRUCT_MEMBER_P (self, GtkContainer_private_offset);
-}
-
-GType
-gtk_container_get_type (void)
-{
-  static GType container_type = 0;
-
-  if (!container_type)
-    {
-      const GTypeInfo container_info =
-      {
-        sizeof (GtkContainerClass),
-        (GBaseInitFunc) gtk_container_base_class_init,
-        (GBaseFinalizeFunc) gtk_container_base_class_finalize,
-        (GClassInitFunc) gtk_container_class_init,
-        NULL        /* class_finalize */,
-        NULL        /* class_data */,
-        sizeof (GtkContainer),
-        0           /* n_preallocs */,
-        (GInstanceInitFunc) gtk_container_init,
-        NULL,       /* value_table */
-      };
-
-      const GInterfaceInfo buildable_info =
-      {
-        (GInterfaceInitFunc) gtk_container_buildable_init,
-        NULL,
-        NULL
-      };
-
-      container_type =
-        g_type_register_static (GTK_TYPE_WIDGET, I_("GtkContainer"),
-                                &container_info, G_TYPE_FLAG_ABSTRACT);
-
-      GtkContainer_private_offset =
-        g_type_add_instance_private (container_type, sizeof (GtkContainerPrivate));
-
-      g_type_add_interface_static (container_type,
-                                   GTK_TYPE_BUILDABLE,
-                                   &buildable_info);
-
-    }
-
-  return container_type;
-}
-
-static void
-gtk_container_base_class_init (GtkContainerClass *class)
-{
-}
-
-static void
-gtk_container_base_class_finalize (GtkContainerClass *class)
-{
-}
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkContainer, gtk_container, GTK_TYPE_WIDGET,
+                                  G_ADD_PRIVATE (GtkContainer)
+                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                         gtk_container_buildable_init))
 
 static void
 gtk_container_class_init (GtkContainerClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-
-  gtk_container_parent_class = g_type_class_peek_parent (class);
 
   vadjustment_key_id = g_quark_from_static_string ("gtk-vadjustment");
   hadjustment_key_id = g_quark_from_static_string ("gtk-hadjustment");
@@ -254,17 +180,7 @@ gtk_container_class_init (GtkContainerClass *class)
                   G_TYPE_NONE, 1,
                   GTK_TYPE_WIDGET);
 
-  if (GtkContainer_private_offset != 0)
-    g_type_class_adjust_private_offset (class, &GtkContainer_private_offset);
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_CONTAINER_ACCESSIBLE);
-}
-
-static void
-gtk_container_buildable_init (GtkBuildableIface *iface)
-{
-  parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->add_child = gtk_container_buildable_add_child;
 }
 
 static void
@@ -277,18 +193,21 @@ gtk_container_buildable_add_child (GtkBuildable  *buildable,
       _gtk_widget_get_parent (GTK_WIDGET (child)) == NULL)
     {
       if (type)
-        {
-          GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
-        }
+        GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
       else
-        {
-          gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
-        }
+        gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
     }
   else
     {
       parent_buildable_iface->add_child (buildable, builder, child, type);
     }
+}
+
+static void
+gtk_container_buildable_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->add_child = gtk_container_buildable_add_child;
 }
 
 /**
