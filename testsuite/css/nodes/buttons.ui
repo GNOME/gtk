@@ -31,6 +31,7 @@
           <object class="GtkRadioButton" id="button3">
             <property name="label" translatable="yes">Hello World!</property>
             <property name="can_focus">1</property>
+            <property name="active">1</property>
             <property name="receives_default">1</property>
             <layout>
               <property name="left_attach">2</property>
@@ -41,7 +42,6 @@
         <child>
           <object class="GtkRadioButton" id="button4">
             <property name="label" translatable="yes">Hello World!</property>
-            <property name="active">1</property>
             <property name="group">button3</property>
             <property name="can_focus">1</property>
             <property name="receives_default">1</property>
