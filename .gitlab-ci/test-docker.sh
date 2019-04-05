@@ -31,3 +31,13 @@ xvfb-run -a -s "-screen 0 1024x768x24" \
         --suite=gtk \
         --no-suite=gtk:gsk \
         --no-suite=gtk:a11y
+
+exit_code=$?
+
+$srcdir/.gitlab-ci/meson-junit-report.py \
+        --project-name=gtk \
+        --job-id="${CI_JOB_NAME}" \
+        --output=report.xml \
+        meson-logs/testlog.json
+
+exit $exit_code
