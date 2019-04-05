@@ -133,7 +133,6 @@ struct _GtkWidget
  * @activate_signal: The signal to emit when a widget of this class is
  *   activated, gtk_widget_activate() handles the emission.
  *   Implementation of this signal is optional.
- * @dispatch_child_properties_changed: Seldomly overidden.
  * @destroy: Signals that all holders of a reference to the widget
  *   should release the reference that they hold.
  * @show: Signal emitted when widget is shown
@@ -234,11 +233,6 @@ struct _GtkWidgetClass
 
   guint activate_signal;
 
-  /* seldomly overidden */
-  void (*dispatch_child_properties_changed) (GtkWidget   *widget,
-                                             guint        n_pspecs,
-                                             GParamSpec **pspecs);
-
   /* basics */
   void (* destroy)             (GtkWidget        *widget);
   void (* show)                (GtkWidget        *widget);
@@ -259,8 +253,6 @@ struct _GtkWidgetClass
                                 GtkTextDirection  previous_direction);
   void (* grab_notify)         (GtkWidget        *widget,
                                 gboolean          was_grabbed);
-  void (* child_notify)        (GtkWidget        *widget,
-                                GParamSpec       *child_property);
 
   /* size requests */
   GtkSizeRequestMode (* get_request_mode)               (GtkWidget      *widget);
@@ -460,14 +452,6 @@ gboolean   gtk_widget_event               (GtkWidget           *widget,
 
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_activate               (GtkWidget        *widget);
-
-GDK_AVAILABLE_IN_ALL
-void    gtk_widget_freeze_child_notify    (GtkWidget           *widget);
-GDK_AVAILABLE_IN_ALL
-void    gtk_widget_child_notify           (GtkWidget           *widget,
-                                           const gchar         *child_property);
-GDK_AVAILABLE_IN_ALL
-void    gtk_widget_thaw_child_notify      (GtkWidget           *widget);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_set_can_focus       (GtkWidget           *widget,

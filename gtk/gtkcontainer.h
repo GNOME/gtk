@@ -83,16 +83,6 @@ struct _GtkContainerClass
   void    (*set_focus_child)	(GtkContainer	 *container,
 				 GtkWidget	 *child);
   GType   (*child_type)		(GtkContainer	 *container);
-  void    (*set_child_property) (GtkContainer    *container,
-				 GtkWidget       *child,
-				 guint            property_id,
-				 const GValue    *value,
-				 GParamSpec      *pspec);
-  void    (*get_child_property) (GtkContainer    *container,
-                                 GtkWidget       *child,
-				 guint            property_id,
-				 GValue          *value,
-				 GParamSpec      *pspec);
   GtkWidgetPath * (*get_path_for_child) (GtkContainer *container,
                                          GtkWidget    *child);
 
@@ -144,81 +134,6 @@ GtkAdjustment *gtk_container_get_focus_hadjustment (GtkContainer *container);
 
 GDK_AVAILABLE_IN_ALL
 GType   gtk_container_child_type	   (GtkContainer     *container);
-
-
-GDK_AVAILABLE_IN_ALL
-void         gtk_container_class_install_child_property (GtkContainerClass *cclass,
-							 guint		    property_id,
-							 GParamSpec	   *pspec);
-GDK_AVAILABLE_IN_ALL
-void         gtk_container_class_install_child_properties (GtkContainerClass *cclass,
-                                                           guint              n_pspecs,
-                                                           GParamSpec       **pspecs);
-GDK_AVAILABLE_IN_ALL
-GParamSpec*  gtk_container_class_find_child_property	(GObjectClass	   *cclass,
-							 const gchar	   *property_name);
-GDK_AVAILABLE_IN_ALL
-GParamSpec** gtk_container_class_list_child_properties	(GObjectClass	   *cclass,
-							 guint		   *n_properties);
-GDK_AVAILABLE_IN_ALL
-void         gtk_container_add_with_properties		(GtkContainer	   *container,
-							 GtkWidget	   *widget,
-							 const gchar	   *first_prop_name,
-							 ...) G_GNUC_NULL_TERMINATED;
-GDK_AVAILABLE_IN_ALL
-void         gtk_container_child_set			(GtkContainer	   *container,
-							 GtkWidget	   *child,
-							 const gchar	   *first_prop_name,
-							 ...) G_GNUC_NULL_TERMINATED;
-GDK_AVAILABLE_IN_ALL
-void         gtk_container_child_get			(GtkContainer	   *container,
-							 GtkWidget	   *child,
-							 const gchar	   *first_prop_name,
-							 ...) G_GNUC_NULL_TERMINATED;
-GDK_AVAILABLE_IN_ALL
-void         gtk_container_child_set_valist		(GtkContainer	   *container,
-							 GtkWidget	   *child,
-							 const gchar	   *first_property_name,
-							 va_list	    var_args);
-GDK_AVAILABLE_IN_ALL
-void         gtk_container_child_get_valist		(GtkContainer	   *container,
-							 GtkWidget	   *child,
-							 const gchar	   *first_property_name,
-							 va_list	    var_args);
-GDK_AVAILABLE_IN_ALL
-void	     gtk_container_child_set_property		(GtkContainer	   *container,
-							 GtkWidget	   *child,
-							 const gchar	   *property_name,
-							 const GValue	   *value);
-GDK_AVAILABLE_IN_ALL
-void	     gtk_container_child_get_property		(GtkContainer	   *container,
-							 GtkWidget	   *child,
-							 const gchar	   *property_name,
-	                                                 GValue		   *value);
-
-GDK_AVAILABLE_IN_ALL
-void gtk_container_child_notify (GtkContainer *container,
-                                 GtkWidget    *child,
-                                 const gchar  *child_property);
-
-GDK_AVAILABLE_IN_ALL
-void gtk_container_child_notify_by_pspec (GtkContainer *container,
-                                          GtkWidget    *child,
-                                          GParamSpec   *pspec);
-
-/**
- * GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID:
- * @object: the #GObject on which set_child_property() or get_child_property()
- *  was called
- * @property_id: the numeric id of the property
- * @pspec: the #GParamSpec of the property
- *
- * This macro should be used to emit a standard warning about unexpected
- * properties in set_child_property() and get_child_property() implementations.
- */
-#define GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID(object, property_id, pspec) \
-    G_OBJECT_WARN_INVALID_PSPEC ((object), "child property", (property_id), (pspec))
-
 
 GDK_AVAILABLE_IN_ALL
 void    gtk_container_forall		     (GtkContainer *container,
