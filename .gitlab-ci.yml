@@ -57,20 +57,46 @@ msys2-mingw32:
   script:
     - bash -x ./.gitlab-ci/flatpak-build.sh "${APPID}"
 
-flatpak:demo:
+# Manual jobs, for branches and MRs
+.flatpak-manual:
+  <<: *flatpak-defaults
+  when: manual
+
+# Only build Flatpak bundles automatically on master
+.flatpak-master:
+  <<: *flatpak-defaults
+  only:
+    - master
+
+flatpak-manual:demo:
   variables:
     APPID: org.gtk.Demo4
-  <<: *flatpak-defaults
+  <<: *flatpak-manual
 
-flatpak:widget-factory:
+flatpak-master:demo:
+  variables:
+    APPID: org.gtk.Demo4
+  <<: *flatpak-master
+
+flatpak-manual:widget-factory:
   variables:
     APPID: org.gtk.WidgetFactory4
-  <<: *flatpak-defaults
+  <<: *flatpak-manual
 
-flatpak:icon-browser:
+flatpak-master:widget-factory:
+  variables:
+    APPID: org.gtk.WidgetFactory4
+  <<: *flatpak-master
+
+flatpak-manual:icon-browser:
   variables:
     APPID: org.gtk.IconBrowser4
-  <<: *flatpak-defaults
+  <<: *flatpak-manual
+
+flatpak-master:icon-browser:
+  variables:
+    APPID: org.gtk.IconBrowser4
+  <<: *flatpak-master
 
 pages:
   image: registry.gitlab.gnome.org/gnome/gtk/master:v3
