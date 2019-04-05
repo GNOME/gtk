@@ -65,8 +65,7 @@ typedef struct _GtkBuildableIface GtkBuildableIface;
  *  content below <child>. To handle an element, the implementation
  *  must fill in the @parser and @user_data and return %TRUE.
  *  #GtkWidget implements this to parse keyboard accelerators specified
- *  in <accelerator> elements. #GtkContainer implements it to map
- *  properties defined via <packing> elements to child properties.
+ *  in <accelerator> elements. 
  *  Note that @user_data must be freed in @custom_tag_end or @custom_finished.
  * @custom_tag_end: Called for the end tag of each custom element that is
  *  handled by the buildable (see @custom_tag_start).
