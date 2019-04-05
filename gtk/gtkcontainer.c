@@ -51,14 +51,14 @@
  * @Short_description: Base class for widgets which contain other widgets
  * @Title: GtkContainer
  *
- * A GTK+ user interface is constructed by nesting widgets inside widgets.
+ * A GTK user interface is constructed by nesting widgets inside widgets.
  * Container widgets are the inner nodes in the resulting tree of widgets:
  * they contain other widgets. So, for example, you might have a #GtkWindow
  * containing a #GtkFrame containing a #GtkLabel. If you wanted an image instead
  * of a textual label inside the frame, you might replace the #GtkLabel widget
  * with a #GtkImage widget.
  *
- * There are two major kinds of container widgets in GTK+. Both are subclasses
+ * There are two major kinds of container widgets in GTK. Both are subclasses
  * of the abstract GtkContainer base class.
  *
  * The first type of container widget has a single child widget and derives
@@ -81,6 +81,7 @@
  * If the GtkContainer implementation has internal children, they should be added
  * with gtk_widget_set_parent() on init() and removed with gtk_widget_unparent()
  * in the #GtkWidgetClass.destroy() implementation.
+ *
  * See more about implementing custom widgets at https://wiki.gnome.org/HowDoI/CustomWidgets
  */
 
@@ -98,15 +99,7 @@ enum {
   LAST_SIGNAL
 };
 
-#define PARAM_SPEC_PARAM_ID(pspec)              ((pspec)->param_id)
-#define PARAM_SPEC_SET_PARAM_ID(pspec, id)      ((pspec)->param_id = (id))
-
-
 /* --- prototypes --- */
-static void     gtk_container_base_class_init      (GtkContainerClass *klass);
-static void     gtk_container_base_class_finalize  (GtkContainerClass *klass);
-static void     gtk_container_class_init           (GtkContainerClass *klass);
-static void     gtk_container_init                 (GtkContainer      *container);
 static void     gtk_container_destroy              (GtkWidget         *widget);
 static void     gtk_container_add_unimplemented    (GtkContainer      *container,
                                                     GtkWidget         *widget);
@@ -117,7 +110,6 @@ static void     gtk_container_compute_expand       (GtkWidget         *widget,
                                                     gboolean          *vexpand_p);
 static void     gtk_container_real_set_focus_child (GtkContainer      *container,
                                                     GtkWidget         *widget);
-
 static void     gtk_container_children_callback    (GtkWidget         *widget,
                                                     gpointer           client_data);
 static GtkSizeRequestMode gtk_container_get_request_mode (GtkWidget   *widget);
@@ -127,88 +119,22 @@ static GtkWidgetPath * gtk_container_real_get_path_for_child (GtkContainer *cont
 
 /* GtkBuildable */
 static void gtk_container_buildable_init           (GtkBuildableIface *iface);
-static void gtk_container_buildable_add_child      (GtkBuildable *buildable,
-                                                    GtkBuilder   *builder,
-                                                    GObject      *child,
-                                                    const gchar  *type);
+static GtkBuildableIface    *parent_buildable_iface;
 
-/* --- variables --- */
 static GQuark                vadjustment_key_id;
 static GQuark                hadjustment_key_id;
 static guint                 container_signals[LAST_SIGNAL] = { 0 };
-static gint                  GtkContainer_private_offset;
-static GtkWidgetClass       *gtk_container_parent_class = NULL;
-static GtkBuildableIface    *parent_buildable_iface;
 
-
-/* --- functions --- */
-static inline gpointer
-gtk_container_get_instance_private (GtkContainer *self)
-{
-  return G_STRUCT_MEMBER_P (self, GtkContainer_private_offset);
-}
-
-GType
-gtk_container_get_type (void)
-{
-  static GType container_type = 0;
-
-  if (!container_type)
-    {
-      const GTypeInfo container_info =
-      {
-        sizeof (GtkContainerClass),
-        (GBaseInitFunc) gtk_container_base_class_init,
-        (GBaseFinalizeFunc) gtk_container_base_class_finalize,
-        (GClassInitFunc) gtk_container_class_init,
-        NULL        /* class_finalize */,
-        NULL        /* class_data */,
-        sizeof (GtkContainer),
-        0           /* n_preallocs */,
-        (GInstanceInitFunc) gtk_container_init,
-        NULL,       /* value_table */
-      };
-
-      const GInterfaceInfo buildable_info =
-      {
-        (GInterfaceInitFunc) gtk_container_buildable_init,
-        NULL,
-        NULL
-      };
-
-      container_type =
-        g_type_register_static (GTK_TYPE_WIDGET, I_("GtkContainer"),
-                                &container_info, G_TYPE_FLAG_ABSTRACT);
-
-      GtkContainer_private_offset =
-        g_type_add_instance_private (container_type, sizeof (GtkContainerPrivate));
-
-      g_type_add_interface_static (container_type,
-                                   GTK_TYPE_BUILDABLE,
-                                   &buildable_info);
-
-    }
-
-  return container_type;
-}
-
-static void
-gtk_container_base_class_init (GtkContainerClass *class)
-{
-}
-
-static void
-gtk_container_base_class_finalize (GtkContainerClass *class)
-{
-}
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkContainer, gtk_container, GTK_TYPE_WIDGET,
+                                  G_ADD_PRIVATE (GtkContainer)
+                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                         gtk_container_buildable_init))
 
 static void
 gtk_container_class_init (GtkContainerClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-
-  gtk_container_parent_class = g_type_class_peek_parent (class);
 
   vadjustment_key_id = g_quark_from_static_string ("gtk-vadjustment");
   hadjustment_key_id = g_quark_from_static_string ("gtk-hadjustment");
@@ -243,17 +169,7 @@ gtk_container_class_init (GtkContainerClass *class)
                   G_TYPE_NONE, 1,
                   GTK_TYPE_WIDGET);
 
-  if (GtkContainer_private_offset != 0)
-    g_type_class_adjust_private_offset (class, &GtkContainer_private_offset);
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_CONTAINER_ACCESSIBLE);
-}
-
-static void
-gtk_container_buildable_init (GtkBuildableIface *iface)
-{
-  parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->add_child = gtk_container_buildable_add_child;
 }
 
 static void
@@ -266,18 +182,21 @@ gtk_container_buildable_add_child (GtkBuildable  *buildable,
       _gtk_widget_get_parent (GTK_WIDGET (child)) == NULL)
     {
       if (type)
-        {
-          GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
-        }
+        GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
       else
-        {
-          gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
-        }
+        gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
     }
   else
     {
       parent_buildable_iface->add_child (buildable, builder, child, type);
     }
+}
+
+static void
+gtk_container_buildable_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->add_child = gtk_container_buildable_add_child;
 }
 
 /**
@@ -290,37 +209,31 @@ gtk_container_buildable_add_child (GtkBuildable  *buildable,
  * children can be added, e.g. for a #GtkPaned which already has two
  * children.
  *
- * Returns: a #GType.
+ * Returns: a #GType
  **/
 GType
 gtk_container_child_type (GtkContainer *container)
 {
-  GType slot;
-  GtkContainerClass *class;
-
   g_return_val_if_fail (GTK_IS_CONTAINER (container), 0);
 
-  class = GTK_CONTAINER_GET_CLASS (container);
-  if (class->child_type)
-    slot = class->child_type (container);
+  if (GTK_CONTAINER_GET_CLASS (container)->child_type)
+    return GTK_CONTAINER_GET_CLASS (container)->child_type (container);
   else
-    slot = G_TYPE_NONE;
-
-  return slot;
+    return G_TYPE_NONE;
 }
 
 static void
-gtk_container_add_unimplemented (GtkContainer     *container,
-                                 GtkWidget        *widget)
+gtk_container_add_unimplemented (GtkContainer *container,
+                                 GtkWidget    *widget)
 {
-  g_warning ("GtkContainerClass::add not implemented for '%s'", g_type_name (G_TYPE_FROM_INSTANCE (container)));
+  g_warning ("GtkContainerClass::add not implemented for '%s'", G_OBJECT_TYPE_NAME (container));
 }
 
 static void
-gtk_container_remove_unimplemented (GtkContainer     *container,
-                                    GtkWidget        *widget)
+gtk_container_remove_unimplemented (GtkContainer *container,
+                                    GtkWidget    *widget)
 {
-  g_warning ("GtkContainerClass::remove not implemented for '%s'", g_type_name (G_TYPE_FROM_INSTANCE (container)));
+  g_warning ("GtkContainerClass::remove not implemented for '%s'", G_OBJECT_TYPE_NAME (container));
 }
 
 static void
@@ -376,9 +289,9 @@ gtk_container_add (GtkContainer *container,
       g_warning ("Attempting to add a widget with type %s to a container of "
                  "type %s, but the widget is already inside a container of type %s, "
                  "please remove the widget from its existing container first." ,
-                 g_type_name (G_OBJECT_TYPE (widget)),
-                 g_type_name (G_OBJECT_TYPE (container)),
-                 g_type_name (G_OBJECT_TYPE (parent)));
+                 G_OBJECT_TYPE_NAME (widget),
+                 G_OBJECT_TYPE_NAME (container),
+                 G_OBJECT_TYPE_NAME (parent));
       return;
     }
 
@@ -584,9 +497,7 @@ gtk_container_forall (GtkContainer *container,
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (callback != NULL);
 
-  gtk_widget_forall (GTK_WIDGET (container),
-                     callback,
-                     callback_data);
+  gtk_widget_forall (GTK_WIDGET (container), callback, callback_data);
 }
 
 /**
@@ -612,15 +523,11 @@ gtk_container_foreach (GtkContainer *container,
                        GtkCallback   callback,
                        gpointer      callback_data)
 {
-  GtkContainerClass *class;
-
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (callback != NULL);
 
-  class = GTK_CONTAINER_GET_CLASS (container);
-
-  if (class->forall)
-    class->forall (container, callback, callback_data);
+  if (GTK_CONTAINER_GET_CLASS (container)->forall)
+    GTK_CONTAINER_GET_CLASS (container)->forall (container, callback, callback_data);
 }
 
 /**
@@ -746,10 +653,8 @@ gtk_container_real_get_path_for_child (GtkContainer *container,
                                        GtkWidget    *child)
 {
   GtkWidgetPath *path;
-  GtkWidget *widget = GTK_WIDGET (container);
 
-  path = _gtk_widget_create_path (widget);
-
+  path = _gtk_widget_create_path (GTK_WIDGET (container));
   gtk_widget_path_append_for_widget (path, child);
 
   return path;
