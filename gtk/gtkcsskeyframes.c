@@ -339,7 +339,7 @@ _gtk_css_keyframes_parse (GtkCssParser *parser)
         progress = 0;
       else if (gtk_css_parser_try_ident (parser, "to"))
         progress = 1;
-      else if (_gtk_css_parser_try_double (parser, &progress) &&
+      else if (gtk_css_parser_consume_number (parser, &progress) &&
                _gtk_css_parser_try (parser, "%", TRUE))
         {
           if (progress < 0 || progress > 100)
