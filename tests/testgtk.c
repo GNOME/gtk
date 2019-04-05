@@ -4025,17 +4025,15 @@ page_switch (GtkWidget *widget, gpointer *page, gint page_num)
 static void
 tab_fill (GtkToggleButton *button, GtkWidget *child)
 {
-  gtk_container_child_set (GTK_CONTAINER (sample_notebook), child,
-                           "tab-fill", gtk_toggle_button_get_active (button),
-                           NULL);
+  GtkNotebookPage *page = gtk_notebook_get_page (GTK_NOTEBOOK (sample_notebook), child);
+  g_object_set (page, "tab-fill", gtk_toggle_button_get_active (button), NULL);
 }
 
 static void
 tab_expand (GtkToggleButton *button, GtkWidget *child)
 {
-  gtk_container_child_set (GTK_CONTAINER (sample_notebook), child,
-                           "tab-expand", gtk_toggle_button_get_active (button),
-                           NULL);
+  GtkNotebookPage *page = gtk_notebook_get_page (GTK_NOTEBOOK (sample_notebook), child);
+  g_object_set (page, "tab-expand", gtk_toggle_button_get_active (button), NULL);
 }
 
 static void
@@ -4322,23 +4320,29 @@ create_notebook (GtkWidget *widget)
 void
 toggle_resize (GtkWidget *widget, GtkWidget *child)
 {
-  GtkContainer *container = GTK_CONTAINER (gtk_widget_get_parent (child));
-  GValue value = G_VALUE_INIT;
-  g_value_init (&value, G_TYPE_BOOLEAN);
-  gtk_container_child_get_property (container, child, "resize", &value);
-  g_value_set_boolean (&value, !g_value_get_boolean (&value));
-  gtk_container_child_set_property (container, child, "resize", &value);
+  GtkPaned *paned = GTK_PANED (gtk_widget_get_parent (child));
+  gboolean is_child1;
+  gboolean resize;
+  const char *prop;
+
+  is_child1 = (child == gtk_paned_get_child1 (paned));
+  prop = is_child1 ? "resize-child1" : "resize-child2";
+  g_object_get (paned, prop, &resize, NULL);
+  g_object_set (paned, prop, !resize, NULL);
 }
 
 void
 toggle_shrink (GtkWidget *widget, GtkWidget *child)
 {
-  GtkContainer *container = GTK_CONTAINER (gtk_widget_get_parent (child));
-  GValue value = G_VALUE_INIT;
-  g_value_init (&value, G_TYPE_BOOLEAN);
-  gtk_container_child_get_property (container, child, "shrink", &value);
-  g_value_set_boolean (&value, !g_value_get_boolean (&value));
-  gtk_container_child_set_property (container, child, "shrink", &value);
+  GtkPaned *paned = GTK_PANED (gtk_widget_get_parent (child));
+  gboolean is_child1;
+  gboolean resize;
+  const char *prop;
+
+  is_child1 = (child == gtk_paned_get_child1 (paned));
+  prop = is_child1 ? "shrink-child1" : "shrink-child2";
+  g_object_get (paned, prop, &resize, NULL);
+  g_object_set (paned, prop, !resize, NULL);
 }
 
 GtkWidget *
