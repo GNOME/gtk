@@ -686,6 +686,11 @@ static gboolean         gtk_widget_buildable_custom_tag_start   (GtkBuildable   
                                                                  const gchar      *tagname,
                                                                  GMarkupParser    *parser,
                                                                  gpointer         *data);
+static void             gtk_widget_buildable_custom_tag_end     (GtkBuildable     *buildable,
+                                                                 GtkBuilder       *builder,
+                                                                 GObject          *child,
+                                                                 const gchar      *tagname,
+                                                                 gpointer          data);
 static void             gtk_widget_buildable_custom_finished    (GtkBuildable     *buildable,
                                                                  GtkBuilder       *builder,
                                                                  GObject          *child,
@@ -2987,7 +2992,6 @@ void
 gtk_widget_unparent (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GObjectNotifyQueue *nqueue;
   GtkWidget *old_parent;
   GtkWidget *old_prev_sibling;
   GtkWidget *toplevel;
@@ -3002,7 +3006,6 @@ gtk_widget_unparent (GtkWidget *widget)
   gtk_widget_push_verify_invariants (widget);
 
   g_object_freeze_notify (G_OBJECT (widget));
-  nqueue = g_object_notify_queue_freeze (G_OBJECT (widget), _gtk_widget_child_property_notify_context);
 
   toplevel = _gtk_widget_get_toplevel (widget);
   if (_gtk_widget_is_toplevel (toplevel))
@@ -3091,9 +3094,6 @@ gtk_widget_unparent (GtkWidget *widget)
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_PARENT]);
   g_object_thaw_notify (G_OBJECT (widget));
-  if (!priv->parent)
-    g_object_notify_queue_clear (G_OBJECT (widget), nqueue);
-  g_object_notify_queue_thaw (G_OBJECT (widget), nqueue);
 
   gtk_widget_pop_verify_invariants (widget);
   g_object_unref (widget);
@@ -9469,6 +9469,7 @@ gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
   iface->set_buildable_property = gtk_widget_buildable_set_buildable_property;
   iface->parser_finished = gtk_widget_buildable_parser_finished;
   iface->custom_tag_start = gtk_widget_buildable_custom_tag_start;
+  iface->custom_tag_end = gtk_widget_buildable_custom_tag_end;
   iface->custom_finished = gtk_widget_buildable_custom_finished;
   iface->add_child = gtk_widget_buildable_add_child;
 }
@@ -10135,6 +10136,15 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
     }
 
   return FALSE;
+}
+
+static void
+gtk_widget_buildable_custom_tag_end (GtkBuildable  *buildable,
+                                     GtkBuilder    *builder,
+                                     GObject       *child,
+                                     const gchar   *tagname,
+                                     gpointer       data)
+{
 }
 
 void
