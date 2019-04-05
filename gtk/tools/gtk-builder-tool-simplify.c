@@ -241,6 +241,7 @@ is_pcdata_element (Element *element)
     "mime-type",
     "col",
     "item",
+    "mark",
     NULL,
   };
 
