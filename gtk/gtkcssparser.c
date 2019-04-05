@@ -321,6 +321,17 @@ gtk_css_parser_try_ident (GtkCssParser *parser,
 }
 
 gboolean
+gtk_css_parser_try_delim (GtkCssParser *parser,
+                          gunichar      delim)
+{
+  if (*parser->data != delim)
+    return FALSE;
+  parser->data += 1;
+  _gtk_css_parser_skip_whitespace (parser);
+  return TRUE;
+}
+
+gboolean
 gtk_css_parser_try_token (GtkCssParser    *parser,
                           GtkCssTokenType  type)
 {

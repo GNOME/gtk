@@ -79,6 +79,8 @@ gboolean        gtk_css_parser_has_function       (GtkCssParser          *parser
  */
 gboolean        gtk_css_parser_try_ident          (GtkCssParser          *parser,
                                                    const char            *ident);
+gboolean        gtk_css_parser_try_delim          (GtkCssParser          *parser,
+                                                   gunichar               delim);
 gboolean        gtk_css_parser_try_at_keyword     (GtkCssParser          *parser,
                                                    const char            *keyword);
 gboolean        gtk_css_parser_try_token          (GtkCssParser          *parser,
