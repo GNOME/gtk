@@ -1080,10 +1080,10 @@ gtk_grid_get_baseline_row (GtkGrid *grid)
  * gtk_grid_query_child:
  * @grid: a #GtkGrid
  * @child: a #GtkWidget child of @grid
- * @left: (out): the column used to attach the left side of @child
- * @top: (out): the row used to attach the top side of @child
- * @width: (out): the number of columns @child spans
- * @height: (out): the number of rows @child spans
+ * @left: (out) (optional): the column used to attach the left side of @child
+ * @top: (out) (optional): the row used to attach the top side of @child
+ * @width: (out) (optional): the number of columns @child spans
+ * @height: (out) (optiona): the number of rows @child spans
  *
  * Queries the attach points and spans of @child inside the given #GtkGrid.
  */
