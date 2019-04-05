@@ -56,10 +56,9 @@ typedef struct
   GtkWidget *object_center_stack;
   GtkWidget *object_title;
   GtkWidget *prop_list;
-  GtkWidget *child_prop_list;
+  GtkWidget *layout_prop_list;
   GtkWidget *selector;
   GtkWidget *signals_list;
-  GtkWidget *style_prop_list;
   GtkWidget *classes_list;
   GtkWidget *widget_css_node_tree;
   GtkWidget *widget_recorder;
