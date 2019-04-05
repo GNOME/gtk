@@ -548,11 +548,9 @@ _gtk_css_color_value_parse_function (GtkCssParser   *parser,
               return NULL;
             }
 
-          if (!_gtk_css_parser_try_double (parser, &tmp))
-            {
-              _gtk_css_parser_error (parser, "Invalid number for color value");
-              return NULL;
-            }
+          if (!gtk_css_parser_consume_number (parser, &tmp))
+            return NULL;
+
           if (_gtk_css_parser_try (parser, "%", TRUE))
             tmp /= 100.0;
           else
@@ -575,11 +573,8 @@ _gtk_css_color_value_parse_function (GtkCssParser   *parser,
               return NULL;
             }
 
-          if (!_gtk_css_parser_try_double (parser, &rgba.alpha))
-            {
-              _gtk_css_parser_error (parser, "Invalid number for alpha value");
-              return NULL;
-            }
+          if (!gtk_css_parser_consume_number (parser, &rgba.alpha))
+            return NULL;
         }
       else
         rgba.alpha = 1.0;
@@ -626,9 +621,8 @@ _gtk_css_color_value_parse_function (GtkCssParser   *parser,
               return NULL;
             }
 
-          if (!_gtk_css_parser_try_double (parser, &d))
+          if (!gtk_css_parser_consume_number (parser, &d))
             {
-              _gtk_css_parser_error (parser, "Expected number in color definition");
               _gtk_css_value_unref (child1);
               if (child2)
                 _gtk_css_value_unref (child2);
