@@ -295,6 +295,17 @@
                                         </property>
                                       </object>
                                     </child>
+                                    <child>
+                                      <object class="GtkStackPage">
+                                        <property name="name">layout-prop-search</property>
+                                        <property name="child">
+                                          <object class="GtkSearchEntry" id="layout_prop_search_entry">
+                                            <property name="margin">6</property>
+                                            <property name="max-width-chars">40</property>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -321,6 +332,18 @@
                                       <object class="GtkInspectorPropList" id="prop_list">
                                         <property name="object-tree">object_tree</property>
                                         <property name="search-entry">prop_search_entry</property>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkStackPage">
+                                    <property name="name">layout_properties</property>
+                                    <property name="title" translatable="yes">Layout</property>
+                                    <property name="child">
+                                      <object class="GtkInspectorPropList" id="layout_prop_list">
+                                        <property name="object-tree">object_tree</property>
+                                        <property name="search-entry">layout_prop_search_entry</property>
                                       </object>
                                     </property>
                                   </object>

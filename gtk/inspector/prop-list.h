@@ -53,6 +53,9 @@ G_BEGIN_DECLS
 GType      gtk_inspector_prop_list_get_type   (void);
 gboolean   gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
                                                GObject              *object);
+void gtk_inspector_prop_list_set_layout_child (GtkInspectorPropList *pl,
+                                               GObject              *object);
+
 
 G_END_DECLS
 

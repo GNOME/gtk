@@ -38,6 +38,7 @@
 #include "gtkmain.h"
 #include "gtkstack.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtklayoutmanager.h"
 
 enum
 {
@@ -500,6 +501,41 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   gtk_widget_show (GTK_WIDGET (pl));
 
   return TRUE;
+}
+
+void
+gtk_inspector_prop_list_set_layout_child (GtkInspectorPropList *pl,
+                                          GObject              *object)
+{
+  GtkWidget *stack;
+  GtkStackPage *page;
+  GtkWidget *parent;
+  GtkLayoutManager *layout_manager;
+  GtkLayoutChild *layout_child;
+
+  stack = gtk_widget_get_parent (GTK_WIDGET (pl));
+  page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (pl));
+  g_object_set (page, "visible", FALSE, NULL);
+
+  if (!GTK_IS_WIDGET (object))
+    return;
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (object));
+  if (!parent)
+    return;
+
+  layout_manager = gtk_widget_get_layout_manager (parent);
+  if (!layout_manager)
+    return;
+
+  layout_child = gtk_layout_manager_get_layout_child (layout_manager, GTK_WIDGET (object));
+  if (!layout_child)
+    return;
+
+  if (!gtk_inspector_prop_list_set_object (pl, G_OBJECT (layout_child)))
+    return;
+  
+  g_object_set (page, "visible", TRUE, NULL);
 }
 
 // vim: set et sw=2 ts=2:
