@@ -160,10 +160,12 @@ gtk_css_image_scaled_parse_arg (GtkCssParser *parser,
 
   child = _gtk_css_image_new_parse (parser);
   if (child == NULL)
-    return FALSE;
+    return 0;
 
-  if (!_gtk_css_parser_try_int (parser, &scale))
+  if (!gtk_css_parser_has_integer (parser))
     scale = arg > 0 ? g_array_index (data->scales, int, arg - 1) + 1 : 1;
+  else if (!gtk_css_parser_consume_integer (parser, &scale))
+    return 0;
 
   g_ptr_array_add (data->images, child);
   g_array_append_val (data->scales, scale);

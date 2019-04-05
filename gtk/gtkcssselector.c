@@ -1025,8 +1025,14 @@ parse_selector_pseudo_class_nth_child (GtkCssParser   *parser,
       else
         multiplier = 1;
 
-      if (_gtk_css_parser_try_int (parser, &a))
+      if (gtk_css_parser_has_integer (parser))
         {
+          if (!gtk_css_parser_consume_integer (parser, &a))
+            {
+              if (selector)
+                _gtk_css_selector_free (selector);
+              return NULL;
+            }
           if (a < 0)
             {
               _gtk_css_parser_error (parser, "Expected an integer");
@@ -1057,8 +1063,14 @@ parse_selector_pseudo_class_nth_child (GtkCssParser   *parser,
           else
             multiplier = 1;
 
-          if (_gtk_css_parser_try_int (parser, &b))
+          if (gtk_css_parser_has_integer (parser))
             {
+              if (!gtk_css_parser_consume_integer (parser, &b))
+                {
+                  if (selector)
+                    _gtk_css_selector_free (selector);
+                  return NULL;
+                }
               if (b < 0)
                 {
                   _gtk_css_parser_error (parser, "Expected an integer");

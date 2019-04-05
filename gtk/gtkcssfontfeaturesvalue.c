@@ -256,8 +256,19 @@ gtk_css_font_features_value_parse (GtkCssParser *parser)
       val = _gtk_css_number_value_new (1.0, GTK_CSS_NUMBER);
     else if (gtk_css_parser_try_ident (parser, "off"))
       val = _gtk_css_number_value_new (0.0, GTK_CSS_NUMBER);
-    else if (_gtk_css_parser_try_int (parser, &num))
-      val = _gtk_css_number_value_new ((double)num, GTK_CSS_NUMBER);
+    else if (gtk_css_parser_has_integer (parser))
+      {
+        if (gtk_css_parser_consume_integer (parser, &num))
+          {
+            val = _gtk_css_number_value_new ((double)num, GTK_CSS_NUMBER);
+          }
+        else
+          {
+            g_free (name);
+            _gtk_css_value_unref (result);
+            return NULL;
+          }
+      }
     else
       val = _gtk_css_number_value_new (1.0, GTK_CSS_NUMBER);
 

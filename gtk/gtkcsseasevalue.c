@@ -273,9 +273,8 @@ gtk_css_ease_value_parse_steps_arg (GtkCssParser *parser,
   switch (arg)
   {
     case 0:
-      if (!_gtk_css_parser_try_int (parser, &data->n_steps))
+      if (!gtk_css_parser_consume_integer (parser, &data->n_steps))
         {
-          _gtk_css_parser_error (parser, "Expected number of steps");
           return 0;
         }
       else if (data->n_steps < 1)
