@@ -92,8 +92,6 @@ char *          _gtk_css_parser_try_name          (GtkCssParser          *parser
                                                    gboolean               skip_whitespace);
 gboolean        _gtk_css_parser_try_int           (GtkCssParser          *parser,
                                                    int                   *value);
-gboolean        _gtk_css_parser_try_double        (GtkCssParser          *parser,
-                                                   gdouble               *value);
 gboolean        _gtk_css_parser_try_hash_color    (GtkCssParser          *parser,
                                                    GdkRGBA               *rgba);
 
