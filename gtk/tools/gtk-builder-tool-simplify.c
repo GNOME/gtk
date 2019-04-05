@@ -331,7 +331,7 @@ get_property_pspec (MyParserData *data,
       pspec = g_object_class_find_property (class, canonical_name);
       break;
     case PROP_KIND_PACKING:
-      pspec = gtk_container_class_find_child_property (class, canonical_name);
+      pspec = NULL;
       break;
     case PROP_KIND_CELL_PACKING:
       {

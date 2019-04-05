@@ -3378,6 +3378,7 @@ do_detach_tab (GtkNotebook *from,
   gboolean tab_expand, tab_fill, reorderable, detachable;
   GList *element;
   gint page_num;
+  GtkNotebookPage *page;
 
   menu_label = gtk_notebook_get_menu_label (from, child);
 
@@ -3391,13 +3392,13 @@ do_detach_tab (GtkNotebook *from,
 
   g_object_ref (child);
 
-  gtk_container_child_get (GTK_CONTAINER (from),
-                           child,
-                           "tab-expand", &tab_expand,
-                           "tab-fill", &tab_fill,
-                           "reorderable", &reorderable,
-                           "detachable", &detachable,
-                           NULL);
+  page = gtk_notebook_get_page (from, child);
+  g_object_get (page,
+                "tab-expand", &tab_expand,
+                "tab-fill", &tab_fill,
+                "reorderable", &reorderable,
+                "detachable", &detachable,
+                NULL);
 
   gtk_notebook_detach_tab (from, child);
 
@@ -3405,12 +3406,14 @@ do_detach_tab (GtkNotebook *from,
   page_num = g_list_position (to_priv->children, element);
   gtk_notebook_insert_page_menu (to, child, tab_label, menu_label, page_num);
 
-  gtk_container_child_set (GTK_CONTAINER (to), child,
-                           "tab-expand", tab_expand,
-                           "tab-fill", tab_fill,
-                           "reorderable", reorderable,
-                           "detachable", detachable,
-                           NULL);
+  page = gtk_notebook_get_page (to, child);
+  g_object_set (page,
+                "tab-expand", tab_expand,
+                "tab-fill", tab_fill,
+                "reorderable", reorderable,
+                "detachable", detachable,
+                NULL);
+
   if (child)
     g_object_unref (child);
 

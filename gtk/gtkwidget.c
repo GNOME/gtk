@@ -627,9 +627,6 @@ static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
 						  GtkTooltip        *tooltip);
 static void     gtk_widget_real_style_updated    (GtkWidget         *widget);
 
-static void	gtk_widget_dispatch_child_properties_changed	(GtkWidget        *object,
-								 guint             n_pspecs,
-								 GParamSpec      **pspecs);
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
 								 GtkDirectionType  direction);
 static void             gtk_widget_real_move_focus              (GtkWidget        *widget,
@@ -689,6 +686,11 @@ static gboolean         gtk_widget_buildable_custom_tag_start   (GtkBuildable   
                                                                  const gchar      *tagname,
                                                                  GMarkupParser    *parser,
                                                                  gpointer         *data);
+static void             gtk_widget_buildable_custom_tag_end     (GtkBuildable     *buildable,
+                                                                 GtkBuilder       *builder,
+                                                                 GObject          *child,
+                                                                 const gchar      *tagname,
+                                                                 gpointer          data);
 static void             gtk_widget_buildable_custom_finished    (GtkBuildable     *buildable,
                                                                  GtkBuilder       *builder,
                                                                  GObject          *child,
@@ -805,14 +807,6 @@ gtk_widget_base_class_init (gpointer g_class)
 }
 
 static void
-child_property_notify_dispatcher (GObject     *object,
-				  guint        n_pspecs,
-				  GParamSpec **pspecs)
-{
-  GTK_WIDGET_GET_CLASS (object)->dispatch_child_properties_changed (GTK_WIDGET (object), n_pspecs, pspecs);
-}
-
-static void
 gtk_widget_real_snapshot (GtkWidget   *widget,
                           GtkSnapshot *snapshot)
 {
@@ -924,7 +918,6 @@ gtk_widget_real_unroot (GtkWidget *widget)
 static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
-  static GObjectNotifyContext cpn_context = { 0, NULL, NULL };
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkBindingSet *binding_set;
 
@@ -946,11 +939,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_font_options = g_quark_from_static_string ("gtk-widget-font-options");
   quark_font_map = g_quark_from_static_string ("gtk-widget-font-map");
 
-  _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
-  cpn_context.quark_notify_queue = g_quark_from_static_string ("GtkWidget-child-property-notify-queue");
-  cpn_context.dispatcher = child_property_notify_dispatcher;
-  _gtk_widget_child_property_notify_context = &cpn_context;
-
   gobject_class->constructed = gtk_widget_constructed;
   gobject_class->dispose = gtk_widget_dispose;
   gobject_class->finalize = gtk_widget_finalize;
@@ -960,7 +948,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->destroy = gtk_widget_real_destroy;
 
   klass->activate_signal = 0;
-  klass->dispatch_child_properties_changed = gtk_widget_dispatch_child_properties_changed;
   klass->show = gtk_widget_real_show;
   klass->hide = gtk_widget_real_hide;
   klass->map = gtk_widget_real_map;
@@ -975,7 +962,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->state_flags_changed = gtk_widget_real_state_flags_changed;
   klass->direction_changed = gtk_widget_real_direction_changed;
   klass->grab_notify = gtk_widget_real_grab_notify;
-  klass->child_notify = NULL;
   klass->snapshot = gtk_widget_real_snapshot;
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_real_grab_focus;
@@ -1672,25 +1658,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_BOOLEAN);
-
-  /**
-   * GtkWidget::child-notify:
-   * @widget: the object which received the signal
-   * @child_property: the #GParamSpec of the changed child property
-   *
-   * The ::child-notify signal is emitted for each
-   * [child property][child-properties]  that has
-   * changed on an object. The signal's detail holds the property name.
-   */
-  widget_signals[CHILD_NOTIFY] =
-    g_signal_new (I_("child-notify"),
-		   G_TYPE_FROM_CLASS (gobject_class),
-		   G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE | G_SIGNAL_DETAILED | G_SIGNAL_NO_HOOKS,
-		   G_STRUCT_OFFSET (GtkWidgetClass, child_notify),
-		   NULL, NULL,
-		   g_cclosure_marshal_VOID__PARAM,
-		   G_TYPE_NONE, 1,
-		   G_TYPE_PARAM);
 
   /**
    * GtkWidget::mnemonic-activate:
@@ -2940,98 +2907,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
     priv->root = (GtkRoot *) widget;
 }
 
-
-static void
-gtk_widget_dispatch_child_properties_changed (GtkWidget   *widget,
-					      guint        n_pspecs,
-					      GParamSpec **pspecs)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkWidget *container = priv->parent;
-  guint i;
-
-  for (i = 0; widget->priv->parent == container && i < n_pspecs; i++)
-    g_signal_emit (widget, widget_signals[CHILD_NOTIFY], g_param_spec_get_name_quark (pspecs[i]), pspecs[i]);
-}
-
-/**
- * gtk_widget_freeze_child_notify:
- * @widget: a #GtkWidget
- *
- * Stops emission of #GtkWidget::child-notify signals on @widget. The
- * signals are queued until gtk_widget_thaw_child_notify() is called
- * on @widget.
- *
- * This is the analogue of g_object_freeze_notify() for child properties.
- **/
-void
-gtk_widget_freeze_child_notify (GtkWidget *widget)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (!G_OBJECT (widget)->ref_count)
-    return;
-
-  g_object_ref (widget);
-  g_object_notify_queue_freeze (G_OBJECT (widget), _gtk_widget_child_property_notify_context);
-  g_object_unref (widget);
-}
-
-/**
- * gtk_widget_child_notify:
- * @widget: a #GtkWidget
- * @child_property: the name of a child property installed on the
- *                  class of @widget’s parent
- *
- * Emits a #GtkWidget::child-notify signal for the
- * [child property][child-properties] @child_property
- * on @widget.
- *
- * This is the analogue of g_object_notify() for child properties.
- *
- * Also see gtk_container_child_notify().
- */
-void
-gtk_widget_child_notify (GtkWidget    *widget,
-                         const gchar  *child_property)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  if (priv->parent == NULL)
-    return;
-
-  gtk_container_child_notify (GTK_CONTAINER (priv->parent), widget, child_property);
-}
-
-/**
- * gtk_widget_thaw_child_notify:
- * @widget: a #GtkWidget
- *
- * Reverts the effect of a previous call to gtk_widget_freeze_child_notify().
- * This causes all queued #GtkWidget::child-notify signals on @widget to be
- * emitted.
- */
-void
-gtk_widget_thaw_child_notify (GtkWidget *widget)
-{
-  GObjectNotifyQueue *nqueue;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (!G_OBJECT (widget)->ref_count)
-    return;
-
-  g_object_ref (widget);
-  nqueue = g_object_notify_queue_from_object (G_OBJECT (widget), _gtk_widget_child_property_notify_context);
-  if (!nqueue || !nqueue->freeze_count)
-    g_warning (G_STRLOC ": child-property-changed notification for %s(%p) is not frozen",
-	       G_OBJECT_TYPE_NAME (widget), widget);
-  else
-    g_object_notify_queue_thaw (G_OBJECT (widget), nqueue);
-  g_object_unref (widget);
-}
-
-
 /**
  * gtk_widget_new:
  * @type: type ID of the widget to create
@@ -3117,7 +2992,6 @@ void
 gtk_widget_unparent (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GObjectNotifyQueue *nqueue;
   GtkWidget *old_parent;
   GtkWidget *old_prev_sibling;
   GtkWidget *toplevel;
@@ -3132,7 +3006,6 @@ gtk_widget_unparent (GtkWidget *widget)
   gtk_widget_push_verify_invariants (widget);
 
   g_object_freeze_notify (G_OBJECT (widget));
-  nqueue = g_object_notify_queue_freeze (G_OBJECT (widget), _gtk_widget_child_property_notify_context);
 
   toplevel = _gtk_widget_get_toplevel (widget);
   if (_gtk_widget_is_toplevel (toplevel))
@@ -3221,9 +3094,6 @@ gtk_widget_unparent (GtkWidget *widget)
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_PARENT]);
   g_object_thaw_notify (G_OBJECT (widget));
-  if (!priv->parent)
-    g_object_notify_queue_clear (G_OBJECT (widget), nqueue);
-  g_object_notify_queue_thaw (G_OBJECT (widget), nqueue);
 
   gtk_widget_pop_verify_invariants (widget);
   g_object_unref (widget);
@@ -9599,6 +9469,7 @@ gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
   iface->set_buildable_property = gtk_widget_buildable_set_buildable_property;
   iface->parser_finished = gtk_widget_buildable_parser_finished;
   iface->custom_tag_start = gtk_widget_buildable_custom_tag_start;
+  iface->custom_tag_end = gtk_widget_buildable_custom_tag_end;
   iface->custom_finished = gtk_widget_buildable_custom_finished;
   iface->add_child = gtk_widget_buildable_add_child;
 }
@@ -10265,6 +10136,15 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
     }
 
   return FALSE;
+}
+
+static void
+gtk_widget_buildable_custom_tag_end (GtkBuildable  *buildable,
+                                     GtkBuilder    *builder,
+                                     GObject       *child,
+                                     const gchar   *tagname,
+                                     gpointer       data)
+{
 }
 
 void
