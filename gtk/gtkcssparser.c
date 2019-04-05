@@ -671,6 +671,21 @@ gtk_css_parser_has_ident (GtkCssParser *parser,
 }
 
 gboolean
+gtk_css_parser_has_integer (GtkCssParser *parser)
+{
+  guint i;
+
+  i = 0;
+  if (parser->data[0] == '-')
+    i++;
+
+  if (parser->data[i] >= '0' && parser->data[i] <= '9')
+    return TRUE;
+
+  return FALSE;
+}
+
+gboolean
 gtk_css_parser_has_function (GtkCssParser    *parser,
                              const char      *name)
 {
@@ -752,8 +767,8 @@ gtk_css_parser_consume_string (GtkCssParser *parser)
 }
 
 gboolean
-_gtk_css_parser_try_int (GtkCssParser *parser,
-                         int          *value)
+gtk_css_parser_consume_integer (GtkCssParser *parser,
+                                int          *value)
 {
   gint64 result;
   char *end;
@@ -763,16 +778,16 @@ _gtk_css_parser_try_int (GtkCssParser *parser,
 
   /* strtoll parses a plus, but we are not allowed to */
   if (*parser->data == '+')
-    return FALSE;
+    goto fail;
 
   errno = 0;
   result = g_ascii_strtoll (parser->data, &end, 10);
   if (errno)
-    return FALSE;
+    goto fail;
   if (result > G_MAXINT || result < G_MININT)
-    return FALSE;
+    goto fail;
   if (parser->data == end)
-    return FALSE;
+    goto fail;
 
   parser->data = end;
   *value = result;
@@ -780,6 +795,10 @@ _gtk_css_parser_try_int (GtkCssParser *parser,
   _gtk_css_parser_skip_whitespace (parser);
 
   return TRUE;
+
+fail:
+  _gtk_css_parser_error (parser, "Expected an integer");
+  return FALSE;
 }
 
 gboolean
