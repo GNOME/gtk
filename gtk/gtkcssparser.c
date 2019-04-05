@@ -775,26 +775,28 @@ _gtk_css_parser_try_int (GtkCssParser *parser,
 }
 
 gboolean
-_gtk_css_parser_try_double (GtkCssParser *parser,
-                            gdouble      *value)
+gtk_css_parser_consume_number (GtkCssParser *self,
+                               double       *number)
 {
   gdouble result;
   char *end;
 
-  g_return_val_if_fail (GTK_IS_CSS_PARSER (parser), FALSE);
-  g_return_val_if_fail (value != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CSS_PARSER (self), FALSE);
+  g_return_val_if_fail (number != NULL, FALSE);
 
   errno = 0;
-  result = g_ascii_strtod (parser->data, &end);
-  if (errno)
-    return FALSE;
-  if (parser->data == end)
-    return FALSE;
+  result = g_ascii_strtod (self->data, &end);
+  if (errno ||
+      self->data == end)
+    {
+      _gtk_css_parser_error (self, "Expected a number");
+      return FALSE;
+    }
 
-  parser->data = end;
-  *value = result;
+  self->data = end;
+  *number = result;
 
-  _gtk_css_parser_skip_whitespace (parser);
+  _gtk_css_parser_skip_whitespace (self);
 
   return TRUE;
 }
@@ -809,17 +811,6 @@ gtk_css_parser_consume_ident (GtkCssParser *self)
     _gtk_css_parser_error (self, "Expected an identifier");
 
   return result;
-}
-
-gboolean
-gtk_css_parser_consume_number (GtkCssParser *self,
-                               double       *number)
-{
-  if (_gtk_css_parser_try_double (self, number))
-    return TRUE;
-  
-  _gtk_css_parser_error (self, "Expected a number");
-  return FALSE;
 }
 
 gboolean
