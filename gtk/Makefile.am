@@ -1781,6 +1781,7 @@ EXTRA_DIST +=                   \
 	gtkprivatetypebuiltins.h.template \
 	meson.build \
 	gen-gtk-gresources-xml.py \
+	gen-rc.py \
 	gentypefuncs.py \
 	a11y/meson.build \
 	deprecated/meson.build \
