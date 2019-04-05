@@ -172,6 +172,7 @@ gtk/gtkgestureswipe.c
 gtk/gtkgesturezoom.c
 gtk/gtkglarea.c
 gtk/gtkgrid.c
+gtk/gtkgridlayout.c
 gtk/gtkheaderbar.c
 gtk/gtkicontheme.c
 gtk/gtkiconview.c
