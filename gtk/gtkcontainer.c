@@ -27,18 +27,16 @@
 #include "gtkcontainerprivate.h"
 
 #include "gtkadjustment.h"
-#include "gtkassistant.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkintl.h"
-#include "gtkpopovermenu.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
 #include "gtksizerequest.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkwindowprivate.h"
+//#include "gtkwindowprivate.h"
 
 #include "a11y/gtkcontaineraccessibleprivate.h"
 
