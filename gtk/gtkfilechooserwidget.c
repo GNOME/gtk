@@ -53,7 +53,7 @@
 #include "gtkplacesviewprivate.h"
 #include "gtkprivate.h"
 #include "gtkrecentmanager.h"
-#include "gtksearchentry.h"
+#include "gtksearchentryprivate.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtksizegroup.h"
@@ -1379,7 +1379,7 @@ key_press_cb (GtkEventControllerKey *controller,
       priv->operation_mode == OPERATION_MODE_SEARCH)
     {
       return gtk_event_controller_key_forward (controller,
-                                               gtk_search_entry_get_text_widget (GTK_SEARCH_ENTRY (priv->search_entry)));
+                                               GTK_WIDGET (gtk_search_entry_get_text_widget (GTK_SEARCH_ENTRY (priv->search_entry))));
     }
 
   return GDK_EVENT_PROPAGATE;
