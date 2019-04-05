@@ -9266,7 +9266,7 @@ msgstr ""
 #   giny o no, per tant he deixat el nom del mètode en anglès.
 #: gtk/gtkwidget.c:1260
 msgid "No show all"
-msgstr "No «show_all»"
+msgstr "No «show all»"
 
 #: gtk/gtkwidget.c:1261
 msgid "Whether gtk_widget_show_all() should not affect this widget"
