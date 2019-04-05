@@ -137,6 +137,13 @@ void       gtk_grid_set_baseline_row       (GtkGrid         *grid,
 GDK_AVAILABLE_IN_ALL
 gint       gtk_grid_get_baseline_row       (GtkGrid         *grid);
 
+GDK_AVAILABLE_IN_ALL
+void       gtk_grid_query_child            (GtkGrid         *grid,
+                                            GtkWidget       *child,
+                                            gint            *left,
+                                            gint            *top,
+                                            gint            *width,
+                                            gint            *height);
 
 G_END_DECLS
 

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkListStore" id="liststore1">
     <columns>
@@ -48,7 +49,6 @@
             <property name="receives_default">1</property>
             <property name="use_underline">1</property>
           </object>
-          <packing/>
         </child>
       </object>
     </child>
@@ -74,11 +74,11 @@
                     <child>
                       <object class="GtkLabel" id="margin">
                         <property name="width_request">24</property>
+                        <layout>
+                          <property name="left_attach">0</property>
+                          <property name="top_attach">0</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">0</property>
-                        <property name="top_attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="password_entry">
@@ -88,12 +88,12 @@
                         <property name="activates_default">1</property>
                         <property name="placeholder_text" translatable="yes">optional</property>
                         <property name="input_purpose">password</property>
+                        <layout>
+                          <property name="left_attach">2</property>
+                          <property name="top_attach">2</property>
+                          <property name="column-span">2</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">2</property>
-                        <property name="width">2</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="name_entry">
@@ -102,12 +102,12 @@
                         <property name="margin_top">24</property>
                         <property name="activates_default">1</property>
                         <property name="completion">name_completion</property>
+                        <layout>
+                          <property name="left_attach">2</property>
+                          <property name="top_attach">1</property>
+                          <property name="column-span">2</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="width">2</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkButton" id="add_connection_button">
@@ -130,20 +130,20 @@
                             </child>
                           </object>
                         </child>
+                        <layout>
+                          <property name="left_attach">3</property>
+                          <property name="top_attach">0</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkComboBoxText" id="connection_combo">
                         <property name="hexpand">1</property>
+                        <layout>
+                          <property name="left_attach">2</property>
+                          <property name="top_attach">0</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="top_attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="connection_label">
@@ -151,11 +151,11 @@
                         <property name="label" translatable="yes">C_onnection</property>
                         <property name="use_underline">1</property>
                         <property name="mnemonic_widget">connection_combo</property>
+                        <layout>
+                          <property name="left_attach">1</property>
+                          <property name="top_attach">0</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="name_label">
@@ -164,11 +164,11 @@
                         <property name="label" translatable="yes">Room _Name</property>
                         <property name="use_underline">1</property>
                         <property name="mnemonic_widget">name_entry</property>
+                        <layout>
+                          <property name="left_attach">1</property>
+                          <property name="top_attach">1</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="password_label">
@@ -176,11 +176,11 @@
                         <property name="label" translatable="yes">_Password</property>
                         <property name="use_underline">1</property>
                         <property name="mnemonic_widget">password_entry</property>
+                        <layout>
+                          <property name="left_attach">1</property>
+                          <property name="top_attach">2</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="top_attach">2</property>
-                      </packing>
                     </child>
                   </object>
                 </property>

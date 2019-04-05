@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <template class="GtkFileChooserWidget" parent="GtkWidget">
     <child>
@@ -284,11 +285,11 @@
                                         <style>
                                           <class name="dim-label"/>
                                         </style>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">0</property>
+                                        </layout>
                                       </object>
-                                      <packing>
-                                        <property name="left-attach">0</property>
-                                        <property name="top-attach">0</property>
-                                      </packing>
                                     </child>
                                     <child>
                                       <object class="GtkLabel">
@@ -297,11 +298,11 @@
                                           <attribute name="weight" value="bold"></attribute>
                                           <attribute name="scale" value="1.44"></attribute>
                                         </attributes>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">1</property>
+                                        </layout>
                                       </object>
-                                      <packing>
-                                        <property name="left-attach">0</property>
-                                        <property name="top-attach">1</property>
-                                      </packing>
                                     </child>
                                     <child>
                                       <object class="GtkLabel">
@@ -309,11 +310,11 @@
                                         <style>
                                           <class name="dim-label"/>
                                         </style>
+                                        <layout>
+                                          <property name="left-attach">0</property>
+                                          <property name="top-attach">2</property>
+                                        </layout>
                                       </object>
-                                      <packing>
-                                        <property name="left-attach">0</property>
-                                        <property name="top-attach">2</property>
-                                      </packing>
                                     </child>
                                   </object>
                                 </property>
@@ -389,10 +390,10 @@
             <attributes>
               <attribute name="weight" value="bold"></attribute>
             </attributes>
+            <layout>
+              <property name="column-span">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="width">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkEntry" id="new_folder_name_entry">
@@ -400,11 +401,11 @@
             <property name="activates-default">1</property>
             <property name="hexpand">1</property>
             <signal name="changed" handler="new_folder_name_changed"/>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkButton" id="new_folder_create_button">
@@ -416,19 +417,20 @@
             <style>
               <class name="suggested-action"/>
             </style>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkFileChooserErrorStack" id="new_folder_error_stack"/>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
-            <property name="width">2</property>
-          </packing>
+          <object class="GtkFileChooserErrorStack" id="new_folder_error_stack">
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">2</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
         </child>
       </object>
     </child>
@@ -449,20 +451,20 @@
             <attributes>
               <attribute name="weight" value="bold"></attribute>
             </attributes>
+            <layout>
+              <property name="column-span">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="width">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkEntry" id="rename_file_name_entry">
             <property name="activates-default">1</property>
             <signal name="changed" handler="rename_file_name_changed"/>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkButton" id="rename_file_rename_button">
@@ -474,19 +476,20 @@
             <style>
               <class name="suggested-action"/>
             </style>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkFileChooserErrorStack" id="rename_file_error_stack"/>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
-            <property name="width">2</property>
-          </packing>
+          <object class="GtkFileChooserErrorStack" id="rename_file_error_stack">
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">2</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
         </child>
       </object>
     </child>

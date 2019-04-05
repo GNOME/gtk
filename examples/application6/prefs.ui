@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="ExampleAppPrefs" parent="GtkDialog">
     <property name="title" translatable="yes">Preferences</property>
@@ -16,18 +17,19 @@
                 <property name="use-underline">1</property>
                 <property name="mnemonic-widget">font</property>
                 <property name="xalign">1</property>
+                <layout>
+                  <property name="left-attach">0</property>
+                  <property name="top-attach">0</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkFontButton" id="font"/>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
+              <object class="GtkFontButton" id="font">
+                <layout>
+                  <property name="left-attach">1</property>
+                  <property name="top-attach">0</property>
+                </layout>
+              </object>
             </child>
             <child>
               <object class="GtkLabel" id="transitionlabel">
@@ -35,11 +37,11 @@
                 <property name="use-underline">1</property>
                 <property name="mnemonic-widget">transition</property>
                 <property name="xalign">1</property>
+                <layout>
+                  <property name="left-attach">0</property>
+                  <property name="top-attach">1</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkComboBoxText" id="transition">
@@ -48,11 +50,11 @@
                   <item translatable="yes" id="crossfade">Fade</item>
                   <item translatable="yes" id="slide-left-right">Slide</item>
                 </items>
+                <layout>
+                  <property name="left-attach">1</property>
+                  <property name="top-attach">1</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
             </child>
           </object>
         </child>

@@ -1,126 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.1 -->
 <interface>
   <requires lib="gtk+" version="3.12"/>
   <object class="GtkWindow" id="window1">
-    <property name="can_focus">False</property>
     <child>
       <object class="GtkGrid" id="grid1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <child>
           <object class="GtkLabel" id="label1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">Spinner</property>
+            <layout>
+              <property name="left_attach">0</property>
+              <property name="top_attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkSpinner" id="spinner1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
+            <layout>
+              <property name="left_attach">1</property>
+              <property name="top_attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">Check</property>
+            <layout>
+              <property name="left_attach">0</property>
+              <property name="top_attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label3">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">Option</property>
+            <layout>
+              <property name="left_attach">0</property>
+              <property name="top_attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label4">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">Arrow</property>
+            <layout>
+              <property name="left_attach">0</property>
+              <property name="top_attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label5">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes">Expander</property>
+            <layout>
+              <property name="left_attach">0</property>
+              <property name="top_attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="checkbutton1">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="draw_indicator">True</property>
+            <property name="can_focus">1</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
+            <layout>
+              <property name="left_attach">1</property>
+              <property name="top_attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkRadioButton" id="radiobutton1">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="active">True</property>
-            <property name="draw_indicator">True</property>
+            <property name="can_focus">1</property>
+            <property name="active">1</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
+            <layout>
+              <property name="left_attach">1</property>
+              <property name="top_attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkImage" id="arrow1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="icon_name">pan-down-symbolic</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
+            <layout>
+              <property name="left_attach">1</property>
+              <property name="top_attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkExpander" id="expander1">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="can_focus">1</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
             <child>
@@ -129,11 +104,11 @@
             <child type="label_item">
               <placeholder/>
             </child>
+            <layout>
+              <property name="left_attach">1</property>
+              <property name="top_attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">4</property>
-          </packing>
         </child>
       </object>
     </child>

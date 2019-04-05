@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <object class="GtkMenu" id="menu1">
     <child>
@@ -28,12 +29,12 @@
             <property name="margin-start">8</property>
             <property name="margin-end">8</property>
             <property name="icon-name">image-missing</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">0</property>
+              <property name="row-span">5</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-            <property name="height">5</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box1">
@@ -74,11 +75,11 @@
                 </style>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="content_label">
@@ -91,11 +92,11 @@
             <accessibility>
               <role type="static"/>
             </accessibility>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="resent_box">
@@ -118,11 +119,11 @@
                 <property name="uri">http://www.gtk.org</property>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="box3">
@@ -181,11 +182,11 @@
                 </child>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkRevealer" id="details_revealer">
@@ -250,11 +251,11 @@ FAVORITES</property>
                 </child>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">4</property>
-          </packing>
         </child>
       </object>
     </child>

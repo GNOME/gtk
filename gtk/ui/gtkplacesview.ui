@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <requires lib="gtk+" version="3.16"/>
   <object class="GtkListStore" id="completion_store">
@@ -65,11 +66,11 @@
                 <attributes>
                   <attribute name="weight" value="bold"></attribute>
                 </attributes>
+                <layout>
+                  <property name="left-attach">0</property>
+                  <property name="top-attach">0</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel">
@@ -78,11 +79,11 @@
                 <attributes>
                   <attribute name="weight" value="bold"></attribute>
                 </attributes>
+                <layout>
+                  <property name="left-attach">1</property>
+                  <property name="top-attach">0</property>
+                </layout>
               </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
             </child>
           </object>
         </child>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <template class="GtkEmojiChooser" parent="GtkPopover">
     <style>
@@ -309,11 +310,11 @@
                         <style>
                           <class name="dim-label"/>
                         </style>
+                        <layout>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">0</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel">
@@ -322,11 +323,11 @@
                           <attribute name="weight" value="bold"></attribute>
                           <attribute name="scale" value="1.44"></attribute>
                         </attributes>
+                        <layout>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">1</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel">
@@ -334,11 +335,11 @@
                         <style>
                           <class name="dim-label"/>
                         </style>
+                        <layout>
+                          <property name="left-attach">0</property>
+                          <property name="top-attach">2</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left-attach">0</property>
-                        <property name="top-attach">2</property>
-                      </packing>
                     </child>
                   </object>
                 </property>

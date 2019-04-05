@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkWindow" id="window1">
     <property name="title" translatable="yes">Stack</property>
@@ -7,11 +8,11 @@
           <object class="GtkStackSwitcher">
             <property name="stack">stack</property>
             <property name="halign">center</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkStack" id="stack">
@@ -57,11 +58,11 @@
                 </property>
               </object>
             </child>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
       </object>
     </child>

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <object class="GtkButton" id="down_slider_button">
     <property name="can-focus">1</property>
