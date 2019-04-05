@@ -155,7 +155,7 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
   for (; i < 4; i++)
     x[i] = _gtk_css_value_ref (x[(i - 1) >> 1]);
 
-  if (_gtk_css_parser_try (parser, "/", TRUE))
+  if (gtk_css_parser_try_delim (parser, '/'))
     {
       for (i = 0; i < 4; i++)
         {
@@ -293,7 +293,7 @@ parse_border_image (GtkCssShorthandProperty  *shorthand,
           if (values[1] == NULL)
             return FALSE;
 
-          if (_gtk_css_parser_try (parser, "/", TRUE))
+          if (gtk_css_parser_try_delim (parser, '/'))
             {
               values[2] = _gtk_css_border_value_parse (parser,
                                                        GTK_CSS_PARSE_PERCENT
@@ -516,7 +516,7 @@ parse_one_background (GtkCssShorthandProperty  *shorthand,
           values[1] = value;
           value = NULL;
 
-          if (_gtk_css_parser_try (parser, "/", TRUE) &&
+          if (gtk_css_parser_try_delim (parser, '/') &&
               (value = _gtk_css_bg_size_value_parse (parser)))
             {
               values[2] = value;
