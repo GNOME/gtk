@@ -224,6 +224,8 @@ puzzle_button_pressed (GtkGestureMultiPress *gesture,
                        double                y,
                        GtkWidget            *grid)
 {
+  GtkLayoutManager *layout_manager;
+  GtkLayoutChild *layout_child;
   GtkWidget *child;
   int l, t, i;
   int pos;
@@ -236,10 +238,12 @@ puzzle_button_pressed (GtkGestureMultiPress *gesture,
       return;
     }
 
-  gtk_container_child_get (GTK_CONTAINER (grid), child,
-                           "left-attach", &l,
-                           "top-attach", &t,
-                           NULL);
+  layout_manager = gtk_widget_get_layout_manager (grid);
+  layout_child = gtk_layout_manager_get_layout_child (layout_manager, child);
+  g_object_get (layout_child,
+                "left-attach", &l,
+                "top-attach", &t,
+                NULL);
 
   if (l == pos_x && t == pos_y)
     {
