@@ -1359,17 +1359,14 @@ add_option_to_extension_point (GtkPrinterOption *option,
 static gint
 grid_rows (GtkGrid *table)
 {
-  gint t0, t1, t, h;
+  gint t0, t1, l, t, w, h;
   GList *children, *c;
 
   children = gtk_container_get_children (GTK_CONTAINER (table));
   t0 = t1 = 0;
   for (c = children; c; c = c->next)
     {
-      gtk_container_child_get (GTK_CONTAINER (table), c->data,
-                               "top-attach", &t,
-                               "height", &h,
-                               NULL);
+      gtk_grid_query_child (table, c->data, &l, &t, &w, &h);
       if (c == children)
         {
           t0 = t;
