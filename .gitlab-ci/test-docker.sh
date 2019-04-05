@@ -24,6 +24,8 @@ cd _build
 ninja
 ccache --show-stats
 
+set +e
+
 xvfb-run -a -s "-screen 0 1024x768x24" \
     meson test \
         --timeout-multiplier 2 \
@@ -32,3 +34,15 @@ xvfb-run -a -s "-screen 0 1024x768x24" \
         --no-suite=gtk:gsk \
         --no-suite=gtk:reftest \
         --no-suite=gtk:a11y
+
+# Save the exit code
+exit_code=$?
+
+# We always want to run the report generator
+$srcdir/.gitlab-ci/meson-junit-report.py \
+        --project-name=gtk \
+        --job-id="${CI_JOB_NAME}" \
+        --output=report.xml \
+        meson-logs/testlog.json
+
+exit $exit_code
