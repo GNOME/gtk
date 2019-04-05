@@ -528,6 +528,9 @@ gtk_inspector_prop_list_set_layout_child (GtkInspectorPropList *pl,
   if (!layout_manager)
     return;
 
+  if (GTK_LAYOUT_MANAGER_GET_CLASS (layout_manager)->layout_child_type == G_TYPE_INVALID)
+    return;
+
   layout_child = gtk_layout_manager_get_layout_child (layout_manager, GTK_WIDGET (object));
   if (!layout_child)
     return;
