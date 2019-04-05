@@ -114,14 +114,6 @@ stop_search_cb (GtkWidget    *entry,
 }
 
 static void
-preedit_changed_cb (GtkEntry  *entry,
-                    GtkWidget *popup,
-                    gboolean  *preedit_changed)
-{
-  *preedit_changed = TRUE;
-}
-
-static void
 reveal_child_changed_cb (GObject      *object,
                          GParamSpec   *pspec,
                          GtkSearchBar *bar)
