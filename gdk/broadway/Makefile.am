@@ -108,7 +108,9 @@ EXTRA_DIST += $(broadway_built_sources)
 
 BUILT_SOURCES = $(broadway_built_sources)
 
-EXTRA_DIST += meson.build
+EXTRA_DIST += \
+	meson.build \
+	gen-c-array.py
 
 # ------------------- MSVC Build Items ----------------
 MSVCPROJS = gdk3-broadway broadwayd
