@@ -236,10 +236,7 @@ puzzle_button_pressed (GtkGestureMultiPress *gesture,
       return;
     }
 
-  gtk_container_child_get (GTK_CONTAINER (grid), child,
-                           "left-attach", &l,
-                           "top-attach", &t,
-                           NULL);
+  gtk_grid_query_child (GTK_GRID (grid), child, &l, &t, NULL, NULL);
 
   if (l == pos_x && t == pos_y)
     {
