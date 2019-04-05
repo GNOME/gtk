@@ -468,8 +468,6 @@ else
   cdata.set_quoted('ISO_CODES_PREFIX', get_option('prefix'))
 endif
 
-backend_immodules = []
-
 pc_gdk_extra_libs = []
 
 cairo_found_type = cairo_dep.type_name()
@@ -525,7 +523,6 @@ if wayland_enabled
   wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req)
   wlcursordep    = dependency('wayland-cursor', version: wayland_req)
   wlegldep       = dependency('wayland-egl')
-  backend_immodules += ['wayland']
 
   wayland_pkgs = [
     'wayland-client', wayland_req,
@@ -550,8 +547,6 @@ if x11_enabled
   xcomposite_dep = dependency('xcomposite', required: false)
   fontconfig_dep = dependency('fontconfig', fallback: ['fontconfig', 'fontconfig_dep'])
   atkbridge_dep  = dependency('atk-bridge-2.0', version: atk_req)
-
-  backend_immodules += ['xim']
 
   x11_pkgs = ['fontconfig', 'x11', 'xext', 'xi', 'xrandr']
 
@@ -623,12 +618,10 @@ endif
 
 if broadway_enabled
   pc_gdk_extra_libs += ['-lz']
-  backend_immodules += ['broadway']
 endif
 
 if quartz_enabled
   pc_gdk_extra_libs += ['-framework Cocoa', '-framework Carbon', '-framework CoreGraphics']
-  backend_immodules += ['quartz']
 endif
 
 extra_demo_ldflags = []
@@ -643,7 +636,6 @@ if win32_enabled
     pc_gdk_extra_libs += ['-Wl,-luuid']
   endif
   pc_gdk_extra_libs += ['-lwinmm', '-ldwmapi', '-lsetupapi', '-lcfgmgr32']
-  backend_immodules += ['ime']
 
 # Check whether libepoxy is built with EGL support on Windows
   win32_has_egl = cc.links(
@@ -662,30 +654,20 @@ endif
 
 # IMModules stuff-unfortunately we need to put items here
 # as they can be built as modules or built directly into GTK
-builtin_all_immodules = false
-
 builtin_modules_opt = get_option('builtin_immodules')
-builtin_immodules = []
-
-if builtin_modules_opt == ''
+if builtin_modules_opt == 'auto'
   if os_win32
     # Current MSVC projects build all immodules directly into GTK by default,
     # as does the mingw autotools build
     message('IMModules are built into GTK for MSVC builds by default')
-    builtin_immodules = ['all']
+    builtin_immodules = true
   else
-    builtin_immodules = ['none']
+    builtin_immodules = false
   endif
+elif builtin_modules_opt == 'yes'
+  builtin_immodules = true
 else
-  builtin_immodules = builtin_modules_opt.split(',')
-endif
-
-if builtin_immodules.contains('none')
-  builtin_immodules = []
-elif builtin_immodules.contains('all')
-  builtin_all_immodules = true
-elif builtin_immodules.contains('backend')
-  builtin_immodules += backend_immodules
+  builtin_immodules = false
 endif
 
 proto_sources = [

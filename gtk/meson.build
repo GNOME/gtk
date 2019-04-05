@@ -951,7 +951,7 @@ foreach l: immodules
   cond = l.get(2, true)
   cflags = l.get(3, [])
 
-  if cond and (builtin_immodules.contains(name) or builtin_all_immodules)
+  if cond and builtin_immodules
     mod = static_library('staticimmodule-@0@'.format(name),
                          sources + gtk_dep_sources,
                          dependencies: gtk_deps + [libgdk_dep] ,
