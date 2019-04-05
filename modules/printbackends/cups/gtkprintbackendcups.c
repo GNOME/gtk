@@ -602,8 +602,13 @@ cups_print_cb (GtkPrintBackendCups *print_backend,
 
 typedef struct {
   GtkCupsRequest *request;
+  GtkPageSetup *page_setup;
   GtkPrinterCups *printer;
 } CupsOptionsData;
+
+#define UNSIGNED_FLOAT_REGEX "([0-9]+([.,][0-9]*)?|[.,][0-9]+)([e][+-]?[0-9]+)?"
+#define SIGNED_FLOAT_REGEX "[+-]?"UNSIGNED_FLOAT_REGEX
+#define SIGNED_INTEGER_REGEX "[+-]?([0-9]+)"
 
 static void
 add_cups_options (const gchar *key,
@@ -628,7 +633,7 @@ add_cups_options (const gchar *key,
 
   key = key + strlen ("cups-");
 
-  if (printer && printer->ppd_file)
+  if (printer && printer->ppd_file && !g_str_has_prefix (value, "Custom."))
     {
       ppd_coption_t *coption;
       gboolean       found = FALSE;
@@ -649,14 +654,74 @@ add_cups_options (const gchar *key,
             }
 
           if (custom_values_enabled && !found)
-            custom_value = TRUE;
+            {
+              /* Check syntax of the invalid choice to see whether
+                 it could be a custom value */
+              if (g_str_equal (key, "PageSize") ||
+                  g_str_equal (key, "PageRegion"))
+                {
+                  /* Handle custom page sizes... */
+                  if (g_regex_match_simple ("^" UNSIGNED_FLOAT_REGEX "x" UNSIGNED_FLOAT_REGEX "(cm|mm|m|in|ft|pt)?$", value, G_REGEX_CASELESS, 0))
+                    custom_value = TRUE;
+                  else
+                    {
+                      if (data->page_setup != NULL)
+                        {
+                          custom_value = TRUE;
+                          new_value =
+                            g_strdup_printf ("Custom.%.2fx%.2fmm",
+                                             gtk_paper_size_get_width (gtk_page_setup_get_paper_size (data->page_setup), GTK_UNIT_MM),
+                                             gtk_paper_size_get_height (gtk_page_setup_get_paper_size (data->page_setup), GTK_UNIT_MM));
+                        }
+                    }
+                }
+              else
+                {
+                  /* Handle other custom options... */
+                  ppd_cparam_t  *cparam;
+
+                  cparam = (ppd_cparam_t *) cupsArrayFirst (coption->params);
+                  if (cparam != NULL)
+                    {
+                      switch (cparam->type)
+                        {
+                        case PPD_CUSTOM_CURVE :
+                        case PPD_CUSTOM_INVCURVE :
+                        case PPD_CUSTOM_REAL :
+                          if (g_regex_match_simple ("^" SIGNED_FLOAT_REGEX "$", value, G_REGEX_CASELESS, 0))
+                            custom_value = TRUE;
+                          break;
+
+                        case PPD_CUSTOM_POINTS :
+                          if (g_regex_match_simple ("^" SIGNED_FLOAT_REGEX "(cm|mm|m|in|ft|pt)?$", value, G_REGEX_CASELESS, 0))
+                            custom_value = TRUE;
+                          break;
+
+                        case PPD_CUSTOM_INT :
+                          if (g_regex_match_simple ("^" SIGNED_INTEGER_REGEX "$", value, G_REGEX_CASELESS, 0))
+                            custom_value = TRUE;
+                          break;
+
+                        case PPD_CUSTOM_PASSCODE :
+                        case PPD_CUSTOM_PASSWORD :
+                        case PPD_CUSTOM_STRING :
+                          custom_value = TRUE;
+                          break;
+
+                        default :
+                          custom_value = FALSE;
+                        }
+                    }
+                }
+            }
         }
     }
 
   /* Add "Custom." prefix to custom values if not already added. */
-  if (custom_value && !g_str_has_prefix (value, "Custom."))
+  if (custom_value)
     {
-      new_value = g_strdup_printf ("Custom.%s", value);
+      if (new_value == NULL)
+        new_value = g_strdup_printf ("Custom.%s", value);
       gtk_cups_request_encode_option (request, key, new_value);
       g_free (new_value);
     }
@@ -675,6 +740,7 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
   GtkPrinterCups *cups_printer;
   CupsPrintStreamData *ps;
   CupsOptionsData *options_data;
+  GtkPageSetup *page_setup;
   GtkCupsRequest *request = NULL;
   GtkPrintSettings *settings;
   const gchar *title;
@@ -780,10 +846,16 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
     g_free (title_truncated);
   }
 
+  g_object_get (job,
+                "page-setup", &page_setup,
+                NULL);
+
   options_data = g_new0 (CupsOptionsData, 1);
   options_data->request = request;
   options_data->printer = cups_printer;
+  options_data->page_setup = page_setup;
   gtk_print_settings_foreach (settings, add_cups_options, options_data);
+  g_clear_object (&page_setup);
   g_free (options_data);
 
   ps = g_new0 (CupsPrintStreamData, 1);
