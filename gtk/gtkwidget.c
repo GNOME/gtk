@@ -913,7 +913,6 @@ gtk_widget_real_unroot (GtkWidget *widget)
 static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
-  static GObjectNotifyContext cpn_context = { 0, NULL, NULL };
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkBindingSet *binding_set;
 
