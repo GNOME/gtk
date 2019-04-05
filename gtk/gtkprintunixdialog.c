@@ -93,18 +93,20 @@
  *   <child internal-child="notebook">
  *     <object class="GtkNotebook" id="notebook">
  *       <child>
- *         <object class="GtkLabel" id="tabcontent">
- *         <property name="label">Content on notebook tab</property>
- *         </object>
- *       </child>
- *       <child type="tab">
- *         <object class="GtkLabel" id="tablabel">
- *           <property name="label">Tab label</property>
- *         </object>
- *         <packing>
+ *         <object type="GtkNotebookPage">
  *           <property name="tab_expand">False</property>
  *           <property name="tab_fill">False</property>
- *         </packing>
+ *           <property name="tab">
+ *             <object class="GtkLabel" id="tablabel">
+ *               <property name="label">Tab label</property>
+ *             </object>
+ *           </property>
+ *           <property name="child">
+ *             <object class="GtkLabel" id="tabcontent">
+ *               <property name="label">Content on notebook tab</property>
+ *             </object>
+ *           </property>
+ *         </object>
  *       </child>
  *     </object>
  *   </child>
