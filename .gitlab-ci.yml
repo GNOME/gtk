@@ -17,11 +17,15 @@ fedora-x86_64:
   stage: build
   script:
     - bash -x ./.gitlab-ci/test-docker.sh
+    - python3 ./.gitlab-ci/meson-junit-report.py --project-name=gtk --job-id="${CI_JOB_NAME}" --output=_build/report.xml _build/meson-logs/testlog.json
   artifacts:
-    when: on_failure
+    reports:
+      junit:
+        - "${CI_PROJECT_DIR}/_build/report.xml" 
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - "${CI_PROJECT_DIR}/_build/report.xml"
   cache:
     key: "$CI_JOB_NAME"
     <<: *cache-paths
