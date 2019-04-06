@@ -735,9 +735,6 @@ static GQuark           quark_action_muxer = 0;
 static GQuark           quark_font_options = 0;
 static GQuark           quark_font_map = 0;
 
-GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
-GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
-
 /* --- functions --- */
 GType
 gtk_widget_get_type (void)
