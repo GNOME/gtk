@@ -119,8 +119,9 @@ set_initial_text (GtkInspectorCssEditor *ce)
 
   autosave_file = get_autosave_path ();
 
-  g_file_get_contents (autosave_file, &initial_text, &len, NULL);
-  if (!initial_text)
+  if (g_file_get_contents (autosave_file, &initial_text, &len, NULL))
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ce->priv->disable_button), TRUE);
+  else
     initial_text = g_strconcat ("/*\n",
                                 _("You can type here any CSS rule recognized by GTK."), "\n",
                                 _("You can temporarily disable this custom CSS by clicking on the “Pause” button above."), "\n\n",
