@@ -52,7 +52,11 @@ Overview of Changes in GTK+ 3.96.0
   just by GtkWindow. This work is incomplete
 
 * GtkWidgets can transform their children using projective linear
-  transformations. This functionality is also available in CSS.
+  transformations. This functionality is available in CSS and
+  as GskTransform argument to gtk_widget_allocate. GtkFixed is
+  a container that exposes this functionality. For examples of this,
+  see the swing transition of GtkRevealer, the rotate transitions
+  of GtkStack or the Fixed Layout example in gtk-demo.
 
 * GtkEntry functionality has been moved into a new GtkText widget,
   the GtkEditable interface has been expanded, and new a new
