@@ -398,6 +398,9 @@ get_inspector_display (void)
   if (!display)
     display = gdk_display_get_default ();
 
+  if (display == gdk_display_get_default ())
+    g_message ("Using default display for GtkInspector; expect some spillover");
+
   return display;
 }
 
