@@ -438,6 +438,9 @@ get_class_name (Element *element)
 
   if (g_str_equal (parent->element_name, "packing"))
     parent = parent->parent->parent; /* child - object */
+  else if (g_str_equal (parent->element_name, "layout"))
+    parent = parent->parent->parent->parent; /* object - child - object */
+
 
   if (g_str_equal (parent->element_name, "object"))
     {
