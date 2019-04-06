@@ -708,7 +708,7 @@ multi_press_pressed (GtkGestureMultiPress *gesture,
               gtk_widget_get_parent (menu_item) == GTK_WIDGET (menu_shell) &&
               menu_item != priv->active_menu_item)
             {
-              gtk_menu_shell_activate (menu_shell);
+              priv->active = TRUE;
 
               if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement == GTK_TOP_BOTTOM)
                 {
