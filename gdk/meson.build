@@ -224,7 +224,8 @@ endif
 # FIXME: might have to add '-xobjective-c' to c_args for quartz backend?
 libgdk = static_library('gdk',
   sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
-  dependencies: gdk_deps,
+  dependencies: gdk_deps + [libgtk_css_dep],
+  link_with: [libgtk_css, ],
   include_directories: [confinc, gdkx11_inc, wlinc],
   c_args: [
     '-DGDK_COMPILATION',
@@ -239,4 +240,4 @@ libgdk = static_library('gdk',
 libgdk_dep = declare_dependency(
   sources: ['gdk.h', gdkconfig, gdkenum_h],
   include_directories: [confinc, gdkx11_inc, wlinc],
-  dependencies: gdk_deps)
+  dependencies: gdk_deps + [libgtk_css_dep])
