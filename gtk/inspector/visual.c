@@ -919,12 +919,29 @@ gtk_inspector_visual_constructed (GObject *object)
 }
 
 static void
+gtk_inspector_visual_finalize (GObject *object)
+{
+  GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (object);
+  GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (vis)));
+
+  if (vis->priv->layout_overlay)
+    gtk_inspector_window_remove_overlay (iw, vis->priv->layout_overlay);
+  if (vis->priv->updates_overlay)
+    gtk_inspector_window_remove_overlay (iw, vis->priv->updates_overlay);
+  if (vis->priv->fps_overlay)
+    gtk_inspector_window_remove_overlay (iw, vis->priv->fps_overlay);
+
+  G_OBJECT_CLASS (gtk_inspector_visual_parent_class)->finalize (object);
+}
+
+static void
 gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = gtk_inspector_visual_constructed;
+  object_class->finalize = gtk_inspector_visual_finalize;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/visual.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, direction_combo);
