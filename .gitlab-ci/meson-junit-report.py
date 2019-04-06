@@ -19,11 +19,11 @@ aparser.add_argument('--branch', metavar='NAME',
                      default='master')
 aparser.add_argument('--output', metavar='FILE',
                      help='The output file, stdout by default',
-                     type=argparse.FileType('w'),
+                     type=argparse.FileType('w', encoding='UTF-8'),
                      default=sys.stdout)
 aparser.add_argument('infile', metavar='FILE',
                      help='The input testlog.json, stdin by default',
-                     type=argparse.FileType('r'),
+                     type=argparse.FileType('r', encoding='UTF-8'),
                      default=sys.stdin)
 
 args = aparser.parse_args()
