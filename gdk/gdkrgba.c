@@ -23,7 +23,9 @@
  */
 
 #include "config.h"
-#include "gdkrgba.h"
+
+#include "gdkrgbaprivate.h"
+
 #include <string.h>
 #include <errno.h>
 #include <math.h>
@@ -393,3 +395,183 @@ gdk_rgba_to_string (const GdkRGBA *rgba)
                               alpha);
     }
 }
+
+static gboolean
+parse_color_channel_value (GtkCssParser *parser,
+                           double       *value,
+                           gboolean      is_percentage)
+{
+  if (is_percentage)
+    {
+      if (!gtk_css_parser_consume_percentage (parser, value))
+        return FALSE;
+
+      *value = CLAMP (*value, 0.0, 100.0) / 100.0;
+      return TRUE;
+    }
+  else
+    {
+      if (!gtk_css_parser_consume_number (parser, value))
+        return FALSE;
+
+      *value = CLAMP (*value, 0.0, 255.0) / 255.0;
+      return TRUE;
+    }
+}
+
+static guint
+parse_color_channel (GtkCssParser *parser,
+                     guint         arg,
+                     gpointer      data)
+{
+  GdkRGBA *rgba = data;
+
+  if (arg == 0)
+    {
+      /* We abuse rgba->alpha to store if we use percentages or numbers */
+      if (gtk_css_token_is (gtk_css_parser_get_token (parser), GTK_CSS_TOKEN_PERCENTAGE))
+        rgba->alpha = 1.0;
+      else
+        rgba->alpha = 0.0;
+
+      if (!parse_color_channel_value (parser, &rgba->red, rgba->alpha != 0.0))
+        return 0;
+    }
+  else if (arg == 1)
+    {
+      if (!parse_color_channel_value (parser, &rgba->green, rgba->alpha != 0.0))
+        return 0;
+    }
+  else if (arg == 2)
+    {
+      if (!parse_color_channel_value (parser, &rgba->blue, rgba->alpha != 0.0))
+        return 0;
+    }
+  else if (arg == 3)
+    {
+      if (!gtk_css_parser_consume_number (parser, &rgba->alpha))
+        return FALSE;
+
+      rgba->alpha = CLAMP (rgba->alpha, 0.0, 1.0);
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
+
+  return 1;
+}
+
+static gboolean
+rgba_init_chars (GdkRGBA    *rgba,
+                 const char  s[8])
+{
+  guint i;
+
+  for (i = 0; i < 8; i++)
+    {
+      if (!g_ascii_isxdigit (s[i]))
+        return FALSE;
+    }
+
+  rgba->red =   (g_ascii_xdigit_value (s[0]) * 16 + g_ascii_xdigit_value (s[1])) / 255.0;
+  rgba->green = (g_ascii_xdigit_value (s[2]) * 16 + g_ascii_xdigit_value (s[3])) / 255.0;
+  rgba->blue =  (g_ascii_xdigit_value (s[4]) * 16 + g_ascii_xdigit_value (s[5])) / 255.0;
+  rgba->alpha = (g_ascii_xdigit_value (s[6]) * 16 + g_ascii_xdigit_value (s[7])) / 255.0;
+
+  return TRUE;
+}
+
+gboolean
+gdk_rgba_parser_parse (GtkCssParser *parser,
+                       GdkRGBA      *rgba)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_parser_get_token (parser);
+  if (gtk_css_token_is_function (token, "rgb"))
+    {
+      if (!gtk_css_parser_consume_function (parser, 3, 3, parse_color_channel, rgba))
+        return FALSE;
+
+      rgba->alpha = 1.0;
+      return TRUE;
+    }
+  else if (gtk_css_token_is_function (token, "rgba"))
+    {
+      return gtk_css_parser_consume_function (parser, 4, 4, parse_color_channel, rgba);
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_ID) ||
+           gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_UNRESTRICTED))
+    {
+      const char *s = token->string.string;
+
+      switch (strlen (s))
+        {
+          case 3:
+            if (!rgba_init_chars (rgba, (char[8]) {s[0], s[0], s[1], s[1], s[2], s[2], 'F', 'F' }))
+              {
+                gtk_css_parser_error_value (parser, "Hash code is not a valid hex color.");
+                return FALSE;
+              }
+            break;
+
+          case 4:
+            if (!rgba_init_chars (rgba, (char[8]) {s[0], s[0], s[1], s[1], s[2], s[2], s[3], s[3] }))
+              {
+                gtk_css_parser_error_value (parser, "Hash code is not a valid hex color.");
+                return FALSE;
+              }
+            break;
+
+          case 6:
+            if (!rgba_init_chars (rgba, (char[8]) {s[0], s[1], s[2], s[3], s[4], s[5], 'F', 'F' }))
+              {
+                gtk_css_parser_error_value (parser, "Hash code is not a valid hex color.");
+                return FALSE;
+              }
+            break;
+
+          case 8:
+            if (!rgba_init_chars (rgba, s))
+              {
+                gtk_css_parser_error_value (parser, "Hash code is not a valid hex color.");
+                return FALSE;
+              }
+            break;
+
+          default:
+            gtk_css_parser_error_value (parser, "Hash code is not a valid hex color.");
+            return FALSE;
+            break;
+        }
+
+      gtk_css_parser_consume_token (parser);
+      return TRUE;
+    }
+  else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+    {
+      if (gtk_css_token_is_ident (token, "transparent"))
+        {
+          rgba = &(GdkRGBA) { 0, 0, 0, 0 };
+        }
+      else if (gdk_rgba_parse (rgba, token->string.string))
+        {
+          /* everything's fine */
+        }
+      else
+        {
+          gtk_css_parser_error_value (parser, "\"%s\" is not a known color name.", token->string.string);
+          return FALSE;
+        }
+
+      gtk_css_parser_consume_token (parser);
+      return TRUE;
+    }
+  else
+    {
+      gtk_css_parser_error_syntax (parser, "Expected a valid color.");
+      return FALSE;
+    }
+}
+
