@@ -2953,6 +2953,9 @@ gtk_widget_root (GtkWidget *widget)
 
   priv->root = priv->parent->priv->root;
 
+  if (priv->context)
+    gtk_style_context_set_display (priv->context, gtk_root_get_display (priv->root));
+
   GTK_WIDGET_GET_CLASS (widget)->root (widget);
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_ROOT]);
@@ -2971,6 +2974,9 @@ gtk_widget_unroot (GtkWidget *widget)
   g_assert (!priv->realized);
 
   GTK_WIDGET_GET_CLASS (widget)->unroot (widget);
+
+  if (priv->context)
+    gtk_style_context_set_display (priv->context, gdk_display_get_default ());
 
   priv->root = NULL;
 
