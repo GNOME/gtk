@@ -104,17 +104,51 @@ query_tooltip_cb (GtkWidget             *widget,
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorCssEditor, gtk_inspector_css_editor, GTK_TYPE_BOX)
 
+static char *
+get_autosave_path (void)
+{
+  return g_build_filename (g_get_user_cache_dir (), "gtk-4.0", "inspector-css-autosave", NULL);
+}
+
 static void
 set_initial_text (GtkInspectorCssEditor *ce)
 {
-  gchar *initial_text;
-  initial_text = g_strconcat ("/*\n",
-                              _("You can type here any CSS rule recognized by GTK."), "\n",
-                              _("You can temporarily disable this custom CSS by clicking on the “Pause” button above."), "\n\n",
-                              _("Changes are applied instantly and globally, for the whole application."), "\n",
-                              "*/\n\n", NULL);
+  char *initial_text = NULL;
+  char *autosave_file = NULL;
+  gsize len;
+
+  autosave_file = get_autosave_path ();
+
+  g_file_get_contents (autosave_file, &initial_text, &len, NULL);
+  if (!initial_text)
+    initial_text = g_strconcat ("/*\n",
+                                _("You can type here any CSS rule recognized by GTK."), "\n",
+                                _("You can temporarily disable this custom CSS by clicking on the “Pause” button above."), "\n\n",
+                                _("Changes are applied instantly and globally, for the whole application."), "\n",
+                                "*/\n\n", NULL);
   gtk_text_buffer_set_text (GTK_TEXT_BUFFER (ce->priv->text), initial_text, -1);
   g_free (initial_text);
+  g_free (autosave_file);
+}
+
+static void
+autosave_contents (GtkInspectorCssEditor *ce)
+{
+  char *autosave_file = NULL;
+  char *dir = NULL;
+  char *contents;
+  GtkTextIter start, end;
+
+  gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (ce->priv->text), &start, &end);
+  contents = gtk_text_buffer_get_text (GTK_TEXT_BUFFER (ce->priv->text), &start, &end, TRUE);
+  autosave_file = get_autosave_path ();
+  dir = g_path_get_dirname (autosave_file);
+  g_mkdir_with_parents (dir, 600);
+  g_file_set_contents (autosave_file, contents, -1, NULL);
+
+  g_free (dir);
+  g_free (autosave_file);
+  g_free (contents);
 }
 
 static void
@@ -229,6 +263,7 @@ update_timeout (gpointer data)
 
   ce->priv->timeout = 0;
 
+  autosave_contents (ce);
   update_style (ce);
 
   return G_SOURCE_REMOVE;
