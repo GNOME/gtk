@@ -2557,7 +2557,7 @@ msgstr "No s'ha pogut llegir el contingut de la carpeta"
 
 #: gtk/gtkfilechooserwidget.c:4752 gtk/gtkfilechooserwidget.c:4800
 msgid "%H:%M"
-msgstr "%H:%M"
+msgstr "%-H:%M"
 
 #: gtk/gtkfilechooserwidget.c:4754 gtk/gtkfilechooserwidget.c:4802
 msgid "%l:%M %p"
@@ -2573,7 +2573,7 @@ msgstr "%-e %b"
 
 #: gtk/gtkfilechooserwidget.c:4770
 msgid "%-e %b %Y"
-msgstr "%-e %b %Y"
+msgstr "%-e %b de %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
