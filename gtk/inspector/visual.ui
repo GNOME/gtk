@@ -414,7 +414,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSwitch" id="updates_switch">
+                          <object class="GtkSwitch">
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="hexpand">1</property>
@@ -441,7 +441,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSwitch" id="baselines_switch">
+                          <object class="GtkSwitch">
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="hexpand">1</property>
@@ -468,7 +468,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSwitch" id="layout_switch">
+                          <object class="GtkSwitch">
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="hexpand">1</property>
@@ -506,6 +506,16 @@
                     </child>
                   </object>
                 </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkFrame" id="misc_frame">
+            <property name="halign">center</property>
+            <child>
+              <object class="GtkListBox" id="misc_box">
+                <property name="selection-mode">none</property>
                 <child>
                   <object class="GtkListBoxRow">
                     <property name="activatable">0</property>
@@ -526,46 +536,6 @@
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="hexpand">1</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkFrame" id="gl_frame">
-            <property name="halign">center</property>
-            <child>
-              <object class="GtkListBox" id="gl_box">
-                <property name="selection-mode">none</property>
-                <child>
-                  <object class="GtkListBoxRow">
-                    <property name="activatable">0</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="margin">10</property>
-                        <property name="spacing">40</property>
-                        <child>
-                          <object class="GtkLabel" id="gl_label">
-                            <property name="label" translatable="yes">GL Rendering</property>
-                            <property name="halign">start</property>
-                            <property name="valign">baseline</property>
-                            <property name="xalign">0.0</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkComboBoxText" id="gl_combo">
-                            <property name="halign">end</property>
-                            <property name="valign">baseline</property>
-                            <property name="hexpand">1</property>
-                            <items>
-                              <item translatable="yes" id="maybe">When Needed</item>
-                              <item translatable="yes" id="disable">Disabled</item>
-                            </items>
                           </object>
                         </child>
                       </object>
@@ -599,33 +569,6 @@
                     </child>
                   </object>
                 </child>
-                <child>
-                  <object class="GtkListBoxRow">
-                    <property name="activatable">0</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="margin">10</property>
-                        <property name="spacing">40</property>
-                        <child>
-                          <object class="GtkLabel" id="texture_rectangle_label">
-                            <property name="label" translatable="yes">Texture Rectangle Extension</property>
-                            <property name="halign">start</property>
-                            <property name="valign">baseline</property>
-                            <property name="xalign">0.0</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkSwitch" id="texture_rectangle_switch">
-                            <property name="halign">end</property>
-                            <property name="valign">baseline</property>
-                            <property name="hexpand">1</property>
-                            <signal name="notify::active" handler="texture_rectangle_activate"/>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
               </object>
             </child>
           </object>
@@ -648,9 +591,7 @@
       <widget name="baselines_label"/>
       <widget name="layout_label"/>
       <widget name="touchscreen_label"/>
-      <widget name="gl_label"/>
       <widget name="software_gl_label"/>
-      <widget name="texture_rectangle_label"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">
@@ -660,14 +601,13 @@
       <widget name="cursor_combo"/>
       <widget name="font_button"/>
       <widget name="direction_combo"/>
-      <widget name="gl_combo"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">
     <widgets>
       <widget name="visual_frame"/>
       <widget name="debug_frame"/>
-      <widget name="gl_frame"/>
+      <widget name="misc_frame"/>
     </widgets>
   </object>
 </interface>

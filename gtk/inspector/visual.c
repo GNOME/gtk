@@ -35,6 +35,7 @@
 #include "gtkswitch.h"
 #include "gtkscale.h"
 #include "gtkwindow.h"
+#include "gtklistbox.h"
 
 #include "fallback-c89.c"
 
@@ -69,14 +70,10 @@ struct _GtkInspectorVisualPrivate
   GtkAdjustment *cursor_size_adjustment;
 
   GtkWidget *debug_box;
-  GtkWidget *baselines_switch;
-  GtkWidget *layout_switch;
-  GtkWidget *touchscreen_switch;
 
-  GtkWidget *gl_box;
-  GtkWidget *gl_combo;
+  GtkWidget *misc_box;
+  GtkWidget *touchscreen_switch;
   GtkWidget *software_gl_switch;
-  GtkWidget *texture_rectangle_switch;
 
   GtkAdjustment *focus_adjustment;
 
@@ -330,19 +327,19 @@ layout_activate (GtkSwitch          *sw,
 
   if (draw_layout)
     {
-      if (priv->updates_overlay == NULL)
+      if (priv->layout_overlay == NULL)
         {
-          priv->updates_overlay = gtk_layout_overlay_new ();
-          gtk_inspector_window_add_overlay (iw, priv->updates_overlay);
-          g_object_unref (priv->updates_overlay);
+          priv->layout_overlay = gtk_layout_overlay_new ();
+          gtk_inspector_window_add_overlay (iw, priv->layout_overlay);
+          g_object_unref (priv->layout_overlay);
         }
     }
   else
     {
-      if (priv->updates_overlay != NULL)
+      if (priv->layout_overlay != NULL)
         {
-          gtk_inspector_window_remove_overlay (iw, priv->updates_overlay);
-          priv->updates_overlay = NULL;
+          gtk_inspector_window_remove_overlay (iw, priv->layout_overlay);
+          priv->layout_overlay = NULL;
         }
     }
 
@@ -461,9 +458,12 @@ init_theme (GtkInspectorVisual *vis)
 
   if (g_getenv ("GTK_THEME") != NULL)
     {
+      GtkWidget *row;
+
       /* theme is hardcoded, nothing we can do */
       gtk_widget_set_sensitive (vis->priv->theme_combo, FALSE);
-      gtk_widget_set_tooltip_text (vis->priv->theme_combo , _("Theme is hardcoded by GTK_THEME"));
+      row = gtk_widget_get_ancestor (vis->priv->theme_combo, GTK_TYPE_LIST_BOX_ROW);
+      gtk_widget_set_tooltip_text (row, _("Theme is hardcoded by GTK_THEME"));
     }
 }
 
@@ -476,9 +476,12 @@ init_dark (GtkInspectorVisual *vis)
 
   if (g_getenv ("GTK_THEME") != NULL)
     {
+      GtkWidget *row;
+
       /* theme is hardcoded, nothing we can do */
       gtk_widget_set_sensitive (vis->priv->dark_switch, FALSE);
-      gtk_widget_set_tooltip_text (vis->priv->dark_switch, _("Theme is hardcoded by GTK_THEME"));
+      row = gtk_widget_get_ancestor (vis->priv->theme_combo, GTK_TYPE_LIST_BOX_ROW);
+      gtk_widget_set_tooltip_text (row, _("Theme is hardcoded by GTK_THEME"));
     }
 }
 
@@ -683,10 +686,12 @@ init_scale (GtkInspectorVisual *vis)
   else
 #endif
     {
+      GtkWidget *row;
+
       gtk_adjustment_set_value (vis->priv->scale_adjustment, 1);
       gtk_widget_set_sensitive (vis->priv->hidpi_spin, FALSE);
-      gtk_widget_set_tooltip_text (vis->priv->hidpi_spin,
-                                   _("Backend does not support window scaling"));
+      row = gtk_widget_get_ancestor (vis->priv->hidpi_spin, GTK_TYPE_LIST_BOX_ROW);
+      gtk_widget_set_tooltip_text (row, _("Backend does not support window scaling"));
     }
 }
 
@@ -778,10 +783,13 @@ init_touchscreen (GtkInspectorVisual *vis)
 
   if (g_getenv ("GTK_TEST_TOUCHSCREEN") != 0)
     {
+      GtkWidget *row;
+
       /* hardcoded, nothing we can do */
       gtk_switch_set_active (GTK_SWITCH (vis->priv->touchscreen_switch), TRUE);
       gtk_widget_set_sensitive (vis->priv->touchscreen_switch, FALSE);
-      gtk_widget_set_tooltip_text (vis->priv->touchscreen_switch, _("Setting is hardcoded by GTK_TEST_TOUCHSCREEN"));
+      row = gtk_widget_get_ancestor (vis->priv->touchscreen_switch, GTK_TYPE_LIST_BOX_ROW);
+      gtk_widget_set_tooltip_text (row, _("Setting is hardcoded by GTK_TEST_TOUCHSCREEN"));
     }
 }
 
@@ -796,12 +804,12 @@ keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorVisual
     next = vis->priv->debug_box;
   else if (direction == GTK_DIR_DOWN &&
       widget == vis->priv->debug_box)
-    next = vis->priv->gl_box;
+    next = vis->priv->misc_box;
   else if (direction == GTK_DIR_UP &&
            widget == vis->priv->debug_box)
     next = vis->priv->visual_box;
   else if (direction == GTK_DIR_UP &&
-           widget == vis->priv->gl_box)
+           widget == vis->priv->misc_box)
     next = vis->priv->debug_box;
   else
     next = NULL;
@@ -836,23 +844,15 @@ init_gl (GtkInspectorVisual *vis)
 {
   GdkDebugFlags flags = gdk_display_get_debug_flags (gdk_display_get_default ());
 
-  if (flags & GDK_DEBUG_GL_DISABLE)
-    gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "disable");
-  else
-    gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "maybe");
-  gtk_widget_set_sensitive (vis->priv->gl_combo, FALSE);
-  gtk_widget_set_tooltip_text (vis->priv->gl_combo,
-                               _("Not settable at runtime.\nUse GDK_DEBUG=gl-disable instead"));
-
   gtk_switch_set_active (GTK_SWITCH (vis->priv->software_gl_switch), flags & GDK_DEBUG_GL_SOFTWARE);
-  gtk_switch_set_active (GTK_SWITCH (vis->priv->texture_rectangle_switch), flags & GDK_DEBUG_GL_TEXTURE_RECT);
 
   if (flags & GDK_DEBUG_GL_DISABLE)
     {
+      GtkWidget *row;
+
       gtk_widget_set_sensitive (vis->priv->software_gl_switch, FALSE);
-      gtk_widget_set_sensitive (vis->priv->texture_rectangle_switch, FALSE);
-      gtk_widget_set_tooltip_text (vis->priv->software_gl_switch, _("GL rendering is disabled"));
-      gtk_widget_set_tooltip_text (vis->priv->texture_rectangle_switch, _("GL rendering is disabled"));
+      row = gtk_widget_get_ancestor (vis->priv->software_gl_switch, GTK_TYPE_LIST_BOX_ROW);
+      gtk_widget_set_tooltip_text (row, _("GL rendering is disabled"));
     }
 }
 
@@ -874,12 +874,6 @@ static void
 software_gl_activate (GtkSwitch *sw)
 {
   update_gl_flag (sw, GDK_DEBUG_GL_SOFTWARE);
-}
-
-static void
-texture_rectangle_activate (GtkSwitch *sw)
-{
-  update_gl_flag (sw, GDK_DEBUG_GL_TEXTURE_RECT);
 }
 
 static void
@@ -915,7 +909,23 @@ gtk_inspector_visual_constructed (GObject *object)
 
    g_signal_connect (vis->priv->visual_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
    g_signal_connect (vis->priv->debug_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
-   g_signal_connect (vis->priv->gl_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
+   g_signal_connect (vis->priv->misc_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
+}
+
+static void
+gtk_inspector_visual_finalize (GObject *object)
+{
+  GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (object);
+  GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (vis)));
+
+  if (vis->priv->layout_overlay)
+    gtk_inspector_window_remove_overlay (iw, vis->priv->layout_overlay);
+  if (vis->priv->updates_overlay)
+    gtk_inspector_window_remove_overlay (iw, vis->priv->updates_overlay);
+  if (vis->priv->fps_overlay)
+    gtk_inspector_window_remove_overlay (iw, vis->priv->fps_overlay);
+
+  G_OBJECT_CLASS (gtk_inspector_visual_parent_class)->finalize (object);
 }
 
 static void
@@ -925,11 +935,10 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = gtk_inspector_visual_constructed;
+  object_class->finalize = gtk_inspector_visual_finalize;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/visual.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, direction_combo);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, baselines_switch);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, layout_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, theme_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, dark_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, cursor_combo);
@@ -945,10 +954,8 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, visual_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, debug_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, gl_box);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, gl_combo);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, misc_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, software_gl_switch);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, texture_rectangle_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_adjustment);
 
@@ -959,7 +966,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, layout_activate);
   gtk_widget_class_bind_template_callback (widget_class, widget_resize_activate);
   gtk_widget_class_bind_template_callback (widget_class, software_gl_activate);
-  gtk_widget_class_bind_template_callback (widget_class, texture_rectangle_activate);
 }
 
 // vim: set et sw=2 ts=2:
