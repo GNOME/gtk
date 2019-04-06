@@ -330,19 +330,19 @@ layout_activate (GtkSwitch          *sw,
 
   if (draw_layout)
     {
-      if (priv->updates_overlay == NULL)
+      if (priv->layout_overlay == NULL)
         {
-          priv->updates_overlay = gtk_layout_overlay_new ();
-          gtk_inspector_window_add_overlay (iw, priv->updates_overlay);
-          g_object_unref (priv->updates_overlay);
+          priv->layout_overlay = gtk_layout_overlay_new ();
+          gtk_inspector_window_add_overlay (iw, priv->layout_overlay);
+          g_object_unref (priv->layout_overlay);
         }
     }
   else
     {
-      if (priv->updates_overlay != NULL)
+      if (priv->layout_overlay != NULL)
         {
-          gtk_inspector_window_remove_overlay (iw, priv->updates_overlay);
-          priv->updates_overlay = NULL;
+          gtk_inspector_window_remove_overlay (iw, priv->layout_overlay);
+          priv->layout_overlay = NULL;
         }
     }
 
