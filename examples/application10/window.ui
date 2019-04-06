@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="ExampleAppWindow" parent="GtkApplicationWindow">
     <property name="title" translatable="yes">Example Application</property>
@@ -27,7 +28,6 @@
             <property name="sensitive">0</property>
             <property name="icon-name">edit-find-symbolic</property>
           </object>
-          <packing/>
         </child>
         <child type="end">
           <object class="GtkMenuButton" id="gears">
@@ -36,7 +36,6 @@
               <class name="image-button"/>
             </style>
           </object>
-          <packing/>
         </child>
       </object>
     </child>
