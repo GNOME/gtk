@@ -1040,6 +1040,12 @@ typedef enum {
   GTK_PLACES_OPEN_NEW_WINDOW = 1 << 2
 } GtkPlacesOpenFlags;
 
+/**
+ * GtkPickFlags:
+ * @GTK_PICK_ALL: Include insensitive widgets and widgets marked as "can't pick"
+ * 
+ * Flags that influence the behavior of gtk_widget_pick()
+ */
 typedef enum {
   GTK_PICK_ALL = 1 << 0
 } GtkPickFlags;
