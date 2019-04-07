@@ -10998,6 +10998,9 @@ gtk_widget_contains (GtkWidget  *widget,
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
+  if (!_gtk_widget_is_drawable (widget))
+    return FALSE;
+
   return GTK_WIDGET_GET_CLASS (widget)->contains (widget, x, y);
 }
 
