@@ -42,6 +42,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcssboxesprivate.h"
 
 #include "a11y/gtkpanedaccessible.h"
 
@@ -289,21 +290,24 @@ get_handle_area (GtkPaned        *paned,
   graphene_rect_inset (area, - extra, - extra);
 }
 
-static GtkWidget *
-gtk_paned_pick (GtkWidget *widget,
-                double     x,
-                double     y)
+static gboolean
+gtk_paned_handle_contains (GtkGizmo *handle,
+                           double    x,
+                           double    y)
 {
-  GtkPaned *paned = GTK_PANED (widget);
-  GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
-  graphene_rect_t handle_area;
+  GtkWidget *paned;
+  GtkCssBoxes boxes;
+  graphene_rect_t area;
 
-  get_handle_area (paned, &handle_area);
+  gtk_css_boxes_init (&boxes, GTK_WIDGET (handle));
 
-  if (graphene_rect_contains_point (&handle_area, &(graphene_point_t){x, y}))
-    return priv->handle_widget;
+  graphene_rect_init_from_rect (&area, gtk_css_boxes_get_border_rect (&boxes));
 
-  return GTK_WIDGET_CLASS (gtk_paned_parent_class)->pick (widget, x, y);
+  paned = gtk_widget_get_parent (GTK_WIDGET (handle));
+  if (!gtk_paned_get_wide_handle (GTK_PANED (paned)))
+    graphene_rect_inset (&area, - HANDLE_EXTRA_SIZE, - HANDLE_EXTRA_SIZE);
+
+  return graphene_rect_contains_point (&area, &GRAPHENE_POINT_INIT (x, y));
 }
 
 static void
@@ -328,7 +332,6 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->size_allocate = gtk_paned_size_allocate;
   widget_class->unrealize = gtk_paned_unrealize;
   widget_class->focus = gtk_paned_focus;
-  widget_class->pick = gtk_paned_pick;
 
   container_class->add = gtk_paned_add;
   container_class->remove = gtk_paned_remove;
@@ -1366,7 +1369,7 @@ gtk_paned_init (GtkPaned *paned)
   gtk_widget_add_controller (GTK_WIDGET (paned), GTK_EVENT_CONTROLLER (gesture));
   priv->drag_gesture = gesture;
 
-  priv->handle_widget = gtk_gizmo_new ("separator", NULL, NULL, gtk_paned_render_handle, NULL);
+  priv->handle_widget = gtk_gizmo_new ("separator", NULL, NULL, gtk_paned_render_handle, gtk_paned_handle_contains);
   gtk_widget_set_parent (priv->handle_widget, GTK_WIDGET (paned));
   gtk_widget_set_cursor_from_name (priv->handle_widget, "col-resize");
 }
