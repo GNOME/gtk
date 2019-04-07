@@ -162,9 +162,10 @@ void             gtk_window_maybe_revoke_implicit_grab (GtkWindow *window,
 void             gtk_window_maybe_update_cursor (GtkWindow *window,
                                                  GtkWidget *widget,
                                                  GdkDevice *device);
-GtkWidget *      gtk_window_pick_popover (GtkWindow *window,
-                                          double     x,
-                                          double     y);
+GtkWidget *      gtk_window_pick_popover (GtkWindow   *window,
+                                          double       x,
+                                          double       y,
+                                          GtkPickFlags flags);
 
 G_END_DECLS
 

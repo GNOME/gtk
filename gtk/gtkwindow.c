@@ -736,9 +736,10 @@ static void popover_get_rect (GtkWindowPopover      *popover,
                               cairo_rectangle_int_t *rect);
 
 GtkWidget *
-gtk_window_pick_popover (GtkWindow *window,
-                         double     x,
-                         double     y)
+gtk_window_pick_popover (GtkWindow    *window,
+                         double        x,
+                         double        y,
+                         GtkPickFlags  flags)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GList *popovers;
@@ -753,7 +754,7 @@ gtk_window_pick_popover (GtkWindow *window,
                                         x, y,
                                         &dest_x, &dest_y);
 
-      picked = gtk_widget_pick (popover->widget, dest_x, dest_y);
+      picked = gtk_widget_pick (popover->widget, dest_x, dest_y, flags);
       if (picked)
         return picked;
     }

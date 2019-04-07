@@ -11006,6 +11006,7 @@ gtk_widget_contains (GtkWidget  *widget,
  * @widget: the widget to query
  * @x: X coordinate to test, relative to @widget's origin
  * @y: Y coordinate to test, relative to @widget's origin
+ * @flags: Flags to influence what is picked
  *
  * Finds the descendant of @widget (including @widget itself) closest
  * to the screen at the point (@x, @y). The point must be given in
@@ -11024,19 +11025,25 @@ gtk_widget_contains (GtkWidget  *widget,
  *     coordinate or %NULL if none.
  **/
 GtkWidget *
-gtk_widget_pick (GtkWidget *widget,
-                 gdouble    x,
-                 gdouble    y)
+gtk_widget_pick (GtkWidget    *widget,
+                 gdouble       x,
+                 gdouble       y,
+                 GtkPickFlags  flags)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidget *child;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  if (!gtk_widget_get_can_pick (widget) ||
-      !_gtk_widget_is_sensitive (widget) ||
-      !_gtk_widget_is_drawable (widget))
+  if (!_gtk_widget_is_drawable (widget))
     return NULL;
+
+  if ((flags & GTK_PICK_ALL) == 0)
+    {
+      if (!gtk_widget_get_can_pick (widget) ||
+          !_gtk_widget_is_sensitive (widget))
+        return NULL;
+    }
 
   switch (priv->overflow)
     {
@@ -11061,7 +11068,7 @@ gtk_widget_pick (GtkWidget *widget,
     {
       GtkWidget *picked;
 
-      picked = gtk_window_pick_popover (GTK_WINDOW (widget), x, y);
+      picked = gtk_window_pick_popover (GTK_WINDOW (widget), x, y, flags);
       if (picked)
         return picked;
     }
@@ -11097,7 +11104,7 @@ gtk_widget_pick (GtkWidget *widget,
 
       graphene_point3d_interpolate (&p0, &p1, p0.z / (p0.z - p1.z), &res);
 
-      picked = gtk_widget_pick (child, res.x, res.y);
+      picked = gtk_widget_pick (child, res.x, res.y, flags);
       if (picked)
         return picked;
     }

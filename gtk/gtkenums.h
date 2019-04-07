@@ -1040,4 +1040,8 @@ typedef enum {
   GTK_PLACES_OPEN_NEW_WINDOW = 1 << 2
 } GtkPlacesOpenFlags;
 
+typedef enum {
+  GTK_PICK_ALL = 1 << 0
+} GtkPickFlags;
+
 #endif /* __GTK_ENUMS_H__ */

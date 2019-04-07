@@ -751,9 +751,10 @@ gboolean     gtk_widget_contains              (GtkWidget  *widget,
                                                gdouble     x,
                                                gdouble     y);
 GDK_AVAILABLE_IN_ALL
-GtkWidget *  gtk_widget_pick                  (GtkWidget  *widget,
-                                               gdouble     x,
-                                               gdouble     y);
+GtkWidget *  gtk_widget_pick                  (GtkWidget   *widget,
+                                               gdouble      x,
+                                               gdouble      y,
+                                               GtkPickFlags flags);
 
 GDK_AVAILABLE_IN_ALL
 void         gtk_widget_add_controller        (GtkWidget          *widget,
