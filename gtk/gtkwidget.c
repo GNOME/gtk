@@ -11034,17 +11034,10 @@ gtk_widget_get_allocation (GtkWidget     *widget,
  * @x: X coordinate to test, relative to @widget's origin
  * @y: Y coordinate to test, relative to @widget's origin
  *
- * Tests if the point at (@x, @y) is contained in @widget. Points
- * inside the widget will respond to mouse and touch events, points
- * outside will not.
+ * Tests if the point at (@x, @y) is contained in @widget.
  *
  * The coordinates for (@x, @y) must be in widget coordinates, so
  * (0, 0) is assumed to be the top left of @widget's content area.
- *
- * Pass-through widgets and insensitive widgets do never respond to
- * input and will therefor always return %FALSE here. See
- * gtk_widget_set_can_pick() and gtk_widget_set_sensitive() for
- * details about those functions.
  *
  * Returns: %TRUE if @widget contains (@x, @y).
  **/
@@ -11054,11 +11047,6 @@ gtk_widget_contains (GtkWidget  *widget,
                      gdouble     y)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  if (!gtk_widget_get_can_pick (widget) ||
-      !_gtk_widget_is_sensitive (widget) ||
-      !_gtk_widget_is_drawable (widget))
-    return FALSE;
 
   return GTK_WIDGET_GET_CLASS (widget)->contains (widget, x, y);
 }
