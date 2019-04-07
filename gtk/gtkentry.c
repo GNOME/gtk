@@ -3117,7 +3117,7 @@ gtk_entry_ensure_progress_widget (GtkEntry *entry)
   priv->progress_widget = g_object_new (GTK_TYPE_PROGRESS_BAR,
                                         "css-name", "progress",
                                         NULL);
-  gtk_widget_set_can_pick (priv->progress_widget, FALSE);
+  gtk_widget_set_event_target (priv->progress_widget, FALSE);
 
   gtk_widget_set_parent (priv->progress_widget, GTK_WIDGET (entry));
 

@@ -1042,12 +1042,17 @@ typedef enum {
 
 /**
  * GtkPickFlags:
- * @GTK_PICK_ALL: Include insensitive widgets and widgets marked as "can't pick"
+ * @GTK_PICK_SENSITIVE: Only return widgets that are sensitive
+ * @GTK_PICK_EVENT_TARGET: Only return widgets that can receive events
  * 
  * Flags that influence the behavior of gtk_widget_pick()
  */
 typedef enum {
-  GTK_PICK_ALL = 1 << 0
+  GTK_PICK_SENSITIVE    = 1 << 0,
+  GTK_PICK_EVENT_TARGET = 1 << 1
 } GtkPickFlags;
+
+#define GTK_PICK_DEFAULT (GTK_PICK_SENSITIVE|GTK_PICK_EVENT_TARGET)
+#define GTK_PICK_ALL 0
 
 #endif /* __GTK_ENUMS_H__ */

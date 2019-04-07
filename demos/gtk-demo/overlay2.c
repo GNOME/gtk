@@ -66,13 +66,13 @@ do_overlay2 (GtkWidget *do_widget)
 
       image = gtk_picture_new_for_resource ("/overlay2/decor1.png");
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), image);
-      gtk_widget_set_can_pick (image, FALSE);
+      gtk_widget_set_event_target (image, FALSE);
       gtk_widget_set_halign (image, GTK_ALIGN_START);
       gtk_widget_set_valign (image, GTK_ALIGN_START);
 
       image = gtk_picture_new_for_resource ("/overlay2/decor2.png");
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), image);
-      gtk_widget_set_can_pick (image, FALSE);
+      gtk_widget_set_event_target (image, FALSE);
       gtk_widget_set_halign (image, GTK_ALIGN_END);
       gtk_widget_set_valign (image, GTK_ALIGN_END);
 

@@ -469,10 +469,10 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_get_focus_on_click  (GtkWidget           *widget);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_set_can_pick        (GtkWidget           *widget,
-                                           gboolean             can_pick);
+void       gtk_widget_set_event_target    (GtkWidget           *widget,
+                                           gboolean             event_target);
 GDK_AVAILABLE_IN_ALL
-gboolean   gtk_widget_get_can_pick        (GtkWidget           *widget);
+gboolean   gtk_widget_get_event_target    (GtkWidget           *widget);
 
 
 GDK_AVAILABLE_IN_ALL

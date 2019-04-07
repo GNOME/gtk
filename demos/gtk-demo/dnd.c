@@ -243,7 +243,7 @@ pressed_cb (GtkGesture *gesture,
   GtkWidget *child;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  child = gtk_widget_pick (widget, x, y, 0);
+  child = gtk_widget_pick (widget, x, y, GTK_PICK_DEFAULT);
 
   if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_SECONDARY)
     {

@@ -434,7 +434,7 @@ _gtk_widget_find_at_coords (GdkSurface *surface,
   if (!event_widget)
     return NULL;
 
-  picked_widget = gtk_widget_pick (event_widget, surface_x, surface_y, GTK_PICK_ALL);
+  picked_widget = gtk_widget_pick (event_widget, surface_x, surface_y, GTK_PICK_EVENT_TARGET);
 
   if (picked_widget != NULL)
     gtk_widget_translate_coordinates (event_widget, picked_widget, surface_x, surface_y, widget_x, widget_y);

@@ -1865,7 +1865,7 @@ gtk_range_long_press_gesture_pressed (GtkGestureLongPress *gesture,
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   GtkWidget *mouse_location;
 
-  mouse_location = gtk_widget_pick (GTK_WIDGET (range), x, y, 0);
+  mouse_location = gtk_widget_pick (GTK_WIDGET (range), x, y, GTK_PICK_DEFAULT);
 
   if (mouse_location == priv->slider_widget && !priv->zoom)
     {

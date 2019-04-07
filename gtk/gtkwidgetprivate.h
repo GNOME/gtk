@@ -73,7 +73,7 @@ struct _GtkWidgetPrivate
   guint shadowed              : 1;
   guint child_visible         : 1;
   guint multidevice           : 1;
-  guint can_pick              : 1;
+  guint event_target          : 1;
 
   /* Queue-resize related flags */
   guint resize_needed         : 1; /* queue_resize() has been called but no get_preferred_size() yet */
