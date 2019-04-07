@@ -824,9 +824,8 @@ gtk_widget_real_contains (GtkWidget *widget,
 
   gtk_css_boxes_init (&boxes, widget);
 
-  /* XXX: This misses rounded rects */
-  return graphene_rect_contains_point (gtk_css_boxes_get_border_rect (&boxes),
-                                       &(graphene_point_t){x, y});
+  return gsk_rounded_rect_contains_point (gtk_css_boxes_get_border_box (&boxes),
+                                          &GRAPHENE_POINT_INIT (x, y));
 }
 
 static GtkWidget *
