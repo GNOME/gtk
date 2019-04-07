@@ -5472,15 +5472,21 @@ gtk_tree_view_motion_controller_leave (GtkEventControllerMotion *controller,
                                        GdkNotifyType             detail,
                                        GtkTreeView              *tree_view)
 {
+  gboolean is_focus, contains_focus;
+
   if (tree_view->priv->prelight_node)
     gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 
   tree_view->priv->event_last_x = -10000;
   tree_view->priv->event_last_y = -10000;
 
-  prelight_or_select (tree_view,
-		      NULL, NULL,
-		      -1000, -1000); /* coords not possibly over an arrow */
+  g_object_get (controller,
+                "is-pointer-focus", &is_focus,
+                "contains-pointer-focus", &contains_focus,
+                NULL);
+
+  if (!is_focus && !contains_focus)
+    prelight_or_select (tree_view, NULL, NULL, -1000, -1000); /* not possibly over an arrow */
 }
 
 static void
@@ -5489,10 +5495,18 @@ gtk_tree_view_key_controller_focus_out (GtkEventControllerKey *key,
                                         GdkNotifyType          detail,
                                         GtkTreeView           *tree_view)
 {
+  gboolean is_focus, contains_focus;
+
   gtk_widget_queue_draw (GTK_WIDGET (tree_view));
 
+  g_object_get (key,
+                "is-focus", &is_focus,
+                "contains-focus", &contains_focus,
+                NULL);
+
   /* destroy interactive search dialog */
-  if (tree_view->priv->search_window)
+  if (tree_view->priv->search_window &&
+      !is_focus && !contains_focus)
     gtk_tree_view_search_window_hide (tree_view->priv->search_window, tree_view,
                                       gtk_get_current_event_device ());
 }
