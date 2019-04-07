@@ -343,7 +343,6 @@ gboolean          gtk_widget_run_controllers               (GtkWidget           
                                                             const GdkEvent      *event,
                                                             GtkPropagationPhase  phase);
 
-
 /* inline getters */
 
 static inline GtkWidget *

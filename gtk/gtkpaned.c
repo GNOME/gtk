@@ -292,7 +292,8 @@ get_handle_area (GtkPaned        *paned,
 static GtkWidget *
 gtk_paned_pick (GtkWidget *widget,
                 double     x,
-                double     y)
+                double     y,
+                gboolean   reactive)
 {
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = gtk_paned_get_instance_private (paned);
@@ -303,7 +304,7 @@ gtk_paned_pick (GtkWidget *widget,
   if (graphene_rect_contains_point (&handle_area, &(graphene_point_t){x, y}))
     return priv->handle_widget;
 
-  return GTK_WIDGET_CLASS (gtk_paned_parent_class)->pick (widget, x, y);
+  return GTK_WIDGET_CLASS (gtk_paned_parent_class)->pick (widget, x, y, reactive);
 }
 
 static void

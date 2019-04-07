@@ -337,7 +337,8 @@ struct _GtkWidgetClass
 
   GtkWidget *  (* pick)                        (GtkWidget *widget,
                                                 gdouble    x,
-                                                gdouble    y);
+                                                gdouble    y,
+                                                gboolean   reactive);
 
   /*< private >*/
 
@@ -753,7 +754,8 @@ gboolean     gtk_widget_contains              (GtkWidget  *widget,
 GDK_AVAILABLE_IN_ALL
 GtkWidget *  gtk_widget_pick                  (GtkWidget  *widget,
                                                gdouble     x,
-                                               gdouble     y);
+                                               gdouble     y,
+                                               gboolean    reactive);
 
 GDK_AVAILABLE_IN_ALL
 void         gtk_widget_add_controller        (GtkWidget          *widget,

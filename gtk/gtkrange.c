@@ -1864,7 +1864,7 @@ gtk_range_long_press_gesture_pressed (GtkGestureLongPress *gesture,
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   GtkWidget *mouse_location;
 
-  mouse_location = gtk_widget_pick (GTK_WIDGET (range), x, y);
+  mouse_location = gtk_widget_pick (GTK_WIDGET (range), x, y, TRUE);
 
   if (mouse_location == priv->slider_widget && !priv->zoom)
     {
@@ -1908,7 +1908,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                 "gtk-primary-button-warps-slider", &primary_warps,
                 NULL);
 
-  mouse_location = gtk_widget_pick (widget, x, y);
+  mouse_location = gtk_widget_pick (widget, x, y, TRUE);
 
   /* For the purposes of this function, we ignore fill and highlight and
    * handle them like the trough */

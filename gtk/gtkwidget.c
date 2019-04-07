@@ -818,7 +818,8 @@ gtk_widget_real_snapshot (GtkWidget   *widget,
 static GtkWidget *
 gtk_widget_real_pick (GtkWidget *widget,
                       gdouble    x,
-                      gdouble    y)
+                      gdouble    y,
+                      gboolean   reactive)
 {
   GtkWidget *child;
 
@@ -853,7 +854,7 @@ gtk_widget_real_pick (GtkWidget *widget,
 
       graphene_point3d_interpolate (&p0, &p1, p0.z / (p0.z - p1.z), &res);
 
-      picked = gtk_widget_pick (child, res.x, res.y);
+      picked = gtk_widget_pick (child, res.x, res.y, reactive);
       if (picked)
         return picked;
     }
@@ -11049,6 +11050,7 @@ gtk_widget_contains (GtkWidget  *widget,
  * @widget: the widget to query
  * @x: X coordinate to test, relative to @widget's origin
  * @y: Y coordinate to test, relative to @widget's origin
+ * @reactive: whether to return only widgets that are sensitive and can be picked
  *
  * Finds the descendant of @widget (including @widget itself) closest
  * to the screen at the point (@x, @y). The point must be given in
@@ -11061,7 +11063,7 @@ gtk_widget_contains (GtkWidget  *widget,
  * Widgets are however free to customize their picking algorithm.
  *
  * This function is used on the toplevel to determine the widget below
- * the mouse cursor for purposes of hover hilighting and delivering events.
+ * the mouse cursor for purposes of hover highlighting and delivering events.
  *
  * Returns: (nullable) (transfer none): The widget descendant at the given
  *     coordinate or %NULL if none.
@@ -11069,16 +11071,22 @@ gtk_widget_contains (GtkWidget  *widget,
 GtkWidget *
 gtk_widget_pick (GtkWidget *widget,
                  gdouble    x,
-                 gdouble    y)
+                 gdouble    y,
+                 gboolean   reactive)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  if (!gtk_widget_get_can_pick (widget) ||
-      !_gtk_widget_is_sensitive (widget) ||
-      !_gtk_widget_is_drawable (widget))
+  if (!_gtk_widget_is_drawable (widget))
     return NULL;
+
+  if (reactive)
+    {
+      if (!gtk_widget_get_can_pick (widget) ||
+          !_gtk_widget_is_sensitive (widget))
+        return NULL;
+    }
 
   switch (priv->overflow)
     {
@@ -11099,7 +11107,7 @@ gtk_widget_pick (GtkWidget *widget,
       break;
     }
 
-  return GTK_WIDGET_GET_CLASS (widget)->pick (widget, x, y);
+  return GTK_WIDGET_GET_CLASS (widget)->pick (widget, x, y, reactive);
 }
 
 /**

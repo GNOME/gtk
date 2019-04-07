@@ -187,7 +187,7 @@ gtk_transform_tester_snapshot (GtkWidget   *widget,
           const float py = y;
           GtkWidget *picked;
 #if 1
-          picked = gtk_widget_pick (widget, px, py);
+          picked = gtk_widget_pick (widget, px, py, TRUE);
 #else
           {
             int dx, dy;
