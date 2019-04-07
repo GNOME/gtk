@@ -546,7 +546,7 @@ enum {
   PROP_CAN_FOCUS,
   PROP_HAS_FOCUS,
   PROP_IS_FOCUS,
-  PROP_CAN_PICK,
+  PROP_CAN_TARGET,
   PROP_FOCUS_ON_CLICK,
   PROP_CAN_DEFAULT,
   PROP_HAS_DEFAULT,
@@ -1012,9 +1012,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             FALSE,
                             GTK_PARAM_READWRITE);
 
-  widget_props[PROP_CAN_PICK] =
-      g_param_spec_boolean ("can-pick",
-                            P_("Can pick"),
+  widget_props[PROP_CAN_TARGET] =
+      g_param_spec_boolean ("can-target",
+                            P_("Can target"),
                             P_("Whether the widget can receive pointer events"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -2187,8 +2187,8 @@ gtk_widget_set_property (GObject         *object,
       if (g_value_get_boolean (value))
 	gtk_widget_grab_focus (widget);
       break;
-    case PROP_CAN_PICK:
-      gtk_widget_set_can_pick (widget, g_value_get_boolean (value));
+    case PROP_CAN_TARGET:
+      gtk_widget_set_can_target (widget, g_value_get_boolean (value));
       break;
     case PROP_FOCUS_ON_CLICK:
       gtk_widget_set_focus_on_click (widget, g_value_get_boolean (value));
@@ -2368,8 +2368,8 @@ gtk_widget_get_property (GObject         *object,
     case PROP_IS_FOCUS:
       g_value_set_boolean (value, gtk_widget_is_focus (widget));
       break;
-    case PROP_CAN_PICK:
-      g_value_set_boolean (value, gtk_widget_get_can_pick (widget));
+    case PROP_CAN_TARGET:
+      g_value_set_boolean (value, gtk_widget_get_can_target (widget));
       break;
     case PROP_FOCUS_ON_CLICK:
       g_value_set_boolean (value, gtk_widget_get_focus_on_click (widget));
@@ -2808,7 +2808,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 #ifdef G_ENABLE_DEBUG
   priv->highlight_resize = FALSE;
 #endif
-  priv->can_pick = TRUE;
+  priv->can_target = TRUE;
 
   switch (_gtk_widget_get_direction (widget))
     {
@@ -11041,12 +11041,13 @@ gtk_widget_pick (GtkWidget    *widget,
   if (!_gtk_widget_is_drawable (widget))
     return NULL;
 
-  if ((flags & GTK_PICK_ALL) == 0)
-    {
-      if (!gtk_widget_get_can_pick (widget) ||
-          !_gtk_widget_is_sensitive (widget))
-        return NULL;
-    }
+  if (!(flags & GTK_PICK_NON_TARGETABLE) &&
+      !gtk_widget_get_can_target (widget))
+    return NULL;
+
+  if (!(flags & GTK_PICK_INSENSITIVE) &&
+      !_gtk_widget_is_sensitive (widget))
+    return NULL;
 
   switch (priv->overflow)
     {
@@ -13462,31 +13463,30 @@ gtk_widget_get_cursor (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_can_pick:
+ * gtk_widget_set_can_target:
  * @widget: a #GtkWidget
- * @can_pick: whether this widget should be able to receive pointer events
+ * @can_target: whether this widget should be able to receive pointer events
  *
- * Sets whether @widget can be the target of pointer events and
- * can be returned by gtk_widget_pick().
+ * Sets whether @widget can be the target of pointer events.
  */
 void
-gtk_widget_set_can_pick (GtkWidget *widget,
-                         gboolean   can_pick)
+gtk_widget_set_can_target (GtkWidget *widget,
+                           gboolean   can_target)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  can_pick = !!can_pick;
+  can_target = !!can_target;
 
-  if (priv->can_pick == can_pick)
+  if (priv->can_target == can_target)
     return;
 
-  priv->can_pick = can_pick;
+  priv->can_target = can_target;
 
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CAN_PICK]);
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CAN_TARGET]);
 }
 
 /**
- * gtk_widget_get_can_pick:
+ * gtk_widget_get_can_target:
  * @widget: a #GtkWidget
  * 
  * Queries whether @widget can be the target of pointer events.
@@ -13494,11 +13494,11 @@ gtk_widget_set_can_pick (GtkWidget *widget,
  * Returns: %TRUE if @widget can receive pointer events
  */
 gboolean
-gtk_widget_get_can_pick (GtkWidget *widget)
+gtk_widget_get_can_target (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  return priv->can_pick;
+  return priv->can_target;
 }
 
 /**

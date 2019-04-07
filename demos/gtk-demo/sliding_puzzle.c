@@ -228,7 +228,7 @@ puzzle_button_pressed (GtkGestureMultiPress *gesture,
   int l, t, i;
   int pos;
 
-  child = gtk_widget_pick (grid, x, y, 0);
+  child = gtk_widget_pick (grid, x, y, GTK_PICK_DEFAULT);
 
   if (!child)
     {
