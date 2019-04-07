@@ -828,55 +828,6 @@ gtk_widget_real_contains (GtkWidget *widget,
                                           &GRAPHENE_POINT_INIT (x, y));
 }
 
-static GtkWidget *
-gtk_widget_real_pick (GtkWidget *widget,
-                      gdouble    x,
-                      gdouble    y)
-{
-  GtkWidget *child;
-
-  for (child = _gtk_widget_get_last_child (widget);
-       child;
-       child = _gtk_widget_get_prev_sibling (child))
-    {
-      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (child);
-      GskTransform *transform;
-      graphene_matrix_t inv;
-      GtkWidget *picked;
-      graphene_point3d_t p0, p1, res;
-
-      if (priv->transform)
-        {
-          transform = gsk_transform_invert (gsk_transform_ref (priv->transform));
-          if (transform == NULL)
-            continue;
-        }
-      else
-        {
-          transform = NULL;
-        }
-      gsk_transform_to_matrix (transform, &inv);
-      gsk_transform_unref (transform);
-      graphene_point3d_init (&p0, x, y, 0);
-      graphene_point3d_init (&p1, x, y, 1);
-      graphene_matrix_transform_point3d (&inv, &p0, &p0);
-      graphene_matrix_transform_point3d (&inv, &p1, &p1);
-      if (fabs (p0.z - p1.z) < 1.f / 4096)
-        continue;
-
-      graphene_point3d_interpolate (&p0, &p1, p0.z / (p0.z - p1.z), &res);
-
-      picked = gtk_widget_pick (child, res.x, res.y);
-      if (picked)
-        return picked;
-    }
-
-  if (!gtk_widget_contains (widget, x, y))
-    return NULL;
-
-  return widget;
-}
-
 static void
 gtk_widget_real_grab_notify (GtkWidget *widget,
                              gboolean   was_grabbed)
@@ -982,7 +933,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->get_accessible = gtk_widget_real_get_accessible;
 
   klass->contains = gtk_widget_real_contains;
-  klass->pick = gtk_widget_real_pick;
 
   widget_props[PROP_NAME] =
       g_param_spec_string ("name",
@@ -11079,6 +11029,7 @@ gtk_widget_pick (GtkWidget *widget,
                  gdouble    y)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkWidget *child;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
@@ -11115,7 +11066,46 @@ gtk_widget_pick (GtkWidget *widget,
         return picked;
     }
 
-  return GTK_WIDGET_GET_CLASS (widget)->pick (widget, x, y);
+  for (child = _gtk_widget_get_last_child (widget);
+       child;
+       child = _gtk_widget_get_prev_sibling (child))
+    {
+      GtkWidgetPrivate *child_priv = gtk_widget_get_instance_private (child);
+      GskTransform *transform;
+      graphene_matrix_t inv;
+      GtkWidget *picked;
+      graphene_point3d_t p0, p1, res;
+
+      if (child_priv->transform)
+        {
+          transform = gsk_transform_invert (gsk_transform_ref (child_priv->transform));
+          if (transform == NULL)
+            continue;
+        }
+      else
+        {
+          transform = NULL;
+        }
+      gsk_transform_to_matrix (transform, &inv);
+      gsk_transform_unref (transform);
+      graphene_point3d_init (&p0, x, y, 0);
+      graphene_point3d_init (&p1, x, y, 1);
+      graphene_matrix_transform_point3d (&inv, &p0, &p0);
+      graphene_matrix_transform_point3d (&inv, &p1, &p1);
+      if (fabs (p0.z - p1.z) < 1.f / 4096)
+        continue;
+
+      graphene_point3d_interpolate (&p0, &p1, p0.z / (p0.z - p1.z), &res);
+
+      picked = gtk_widget_pick (child, res.x, res.y);
+      if (picked)
+        return picked;
+    }
+
+  if (!gtk_widget_contains (widget, x, y))
+    return NULL;
+
+  return widget;
 }
 
 /**

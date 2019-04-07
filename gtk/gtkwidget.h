@@ -223,7 +223,6 @@ struct _GtkWidget
  *   is changed.
  * @snapshot: Vfunc for gtk_widget_snapshot().
  * @contains: Vfunc for gtk_widget_contains().
- * @pick: Vfunc for gtk_widget_pick().
  */
 struct _GtkWidgetClass
 {
@@ -337,9 +336,6 @@ struct _GtkWidgetClass
                                                 GtkSnapshot          *snapshot);
 
   gboolean     (* contains)                    (GtkWidget *widget,
-                                                gdouble    x,
-                                                gdouble    y);
-  GtkWidget *  (* pick)                        (GtkWidget *widget,
                                                 gdouble    x,
                                                 gdouble    y);
 
