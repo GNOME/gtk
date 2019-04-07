@@ -815,20 +815,6 @@ gtk_widget_real_snapshot (GtkWidget   *widget,
     gtk_widget_snapshot_child (widget, child, snapshot);
 }
 
-static gboolean
-gtk_widget_real_contains (GtkWidget *widget,
-                          gdouble    x,
-                          gdouble    y)
-{
-  GtkCssBoxes boxes;
-
-  gtk_css_boxes_init (&boxes, widget);
-
-  /* XXX: This misses rounded rects */
-  return graphene_rect_contains_point (gtk_css_boxes_get_border_rect (&boxes),
-                                       &(graphene_point_t){x, y});
-}
-
 static GtkWidget *
 gtk_widget_real_pick (GtkWidget *widget,
                       gdouble    x,
@@ -982,7 +968,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->priv->accessible_role = ATK_ROLE_INVALID;
   klass->get_accessible = gtk_widget_real_get_accessible;
 
-  klass->contains = gtk_widget_real_contains;
   klass->pick = gtk_widget_real_pick;
 
   widget_props[PROP_NAME] =
@@ -11042,11 +11027,6 @@ gtk_widget_get_allocation (GtkWidget     *widget,
  * The coordinates for (@x, @y) must be in widget coordinates, so
  * (0, 0) is assumed to be the top left of @widget's content area.
  *
- * Pass-through widgets and insensitive widgets do never respond to
- * input and will therefor always return %FALSE here. See
- * gtk_widget_set_can_pick() and gtk_widget_set_sensitive() for
- * details about those functions.
- *
  * Returns: %TRUE if @widget contains (@x, @y).
  **/
 gboolean
@@ -11054,14 +11034,14 @@ gtk_widget_contains (GtkWidget  *widget,
                      gdouble     x,
                      gdouble     y)
 {
+  GtkCssBoxes boxes;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  if (!gtk_widget_get_can_pick (widget) ||
-      !_gtk_widget_is_sensitive (widget) ||
-      !_gtk_widget_is_drawable (widget))
-    return FALSE;
+  gtk_css_boxes_init (&boxes, widget);
 
-  return GTK_WIDGET_GET_CLASS (widget)->contains (widget, x, y);
+  return gsk_rounded_rect_contains_point (gtk_css_boxes_get_border_box (&boxes),
+                                          &GRAPHENE_POINT_INIT (x, y));
 }
 
 /**

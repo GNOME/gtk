@@ -222,7 +222,6 @@ struct _GtkWidget
  * @style_updated: Signal emitted when the GtkStyleContext of a widget
  *   is changed.
  * @snapshot: Vfunc for gtk_widget_snapshot().
- * @contains: Vfunc for gtk_widget_contains().
  * @pick: Vfunc for gtk_widget_pick().
  */
 struct _GtkWidgetClass
@@ -336,9 +335,6 @@ struct _GtkWidgetClass
   void         (* snapshot)                    (GtkWidget            *widget,
                                                 GtkSnapshot          *snapshot);
 
-  gboolean     (* contains)                    (GtkWidget *widget,
-                                                gdouble    x,
-                                                gdouble    y);
   GtkWidget *  (* pick)                        (GtkWidget *widget,
                                                 gdouble    x,
                                                 gdouble    y);
