@@ -26,6 +26,7 @@
 #include "gtkbuildable.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkcustomlayout.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
@@ -894,10 +895,10 @@ gtk_header_bar_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_header_bar_size_allocate (GtkWidget *widget,
-                              int        widget_width,
-                              int        widget_height,
-                              int        baseline)
+gtk_header_bar_allocate (GtkWidget *widget,
+                         int        widget_width,
+                         int        widget_height,
+                         int        baseline)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (widget));
   GtkWidget *title_widget;
@@ -1711,8 +1712,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   object_class->set_property = gtk_header_bar_set_property;
 
   widget_class->destroy = gtk_header_bar_destroy;
-  widget_class->size_allocate = gtk_header_bar_size_allocate;
-  widget_class->measure = gtk_header_bar_measure;
   widget_class->realize = gtk_header_bar_realize;
   widget_class->unrealize = gtk_header_bar_unrealize;
   widget_class->root = gtk_header_bar_root;
@@ -1820,10 +1819,16 @@ static void
 gtk_header_bar_init (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv;
+  GtkLayoutManager *manager;
 
   priv = gtk_header_bar_get_instance_private (bar);
 
   gtk_widget_set_has_surface (GTK_WIDGET (bar), FALSE);
+
+  manager = gtk_custom_layout_new (NULL,
+                                   gtk_header_bar_measure,
+                                   gtk_header_bar_allocate);
+  gtk_widget_set_layout_manager (GTK_WIDGET (bar), manager);
 
   priv->title = NULL;
   priv->subtitle = NULL;
