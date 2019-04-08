@@ -29,6 +29,7 @@
 
 #include "gtksearchbar.h"
 
+#include "gtkbinlayout.h"
 #include "gtkbutton.h"
 #include "gtkcenterbox.h"
 #include "gtkentryprivate.h"
@@ -250,37 +251,6 @@ gtk_search_bar_dispose (GObject *object)
 }
 
 static void
-gtk_search_bar_measure (GtkWidget      *widget,
-                        GtkOrientation  orientation,
-                        int             for_size,
-                        int            *minimum,
-                        int            *natural,
-                        int            *minimum_baseline,
-                        int            *natural_baseline)
-{
-  GtkSearchBar *bar = GTK_SEARCH_BAR (widget);
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
-  gtk_widget_measure (priv->revealer, orientation, for_size, minimum, natural, minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_search_bar_size_allocate (GtkWidget *widget,
-                              int        width,
-                              int        height,
-                              int        baseline)
-{
-  GtkSearchBar *bar = GTK_SEARCH_BAR (widget);
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
-  gtk_widget_size_allocate (priv->revealer,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            }, baseline);
-}
-
-static void
 gtk_search_bar_class_init (GtkSearchBarClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -290,9 +260,6 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   object_class->dispose = gtk_search_bar_dispose;
   object_class->set_property = gtk_search_bar_set_property;
   object_class->get_property = gtk_search_bar_get_property;
-
-  widget_class->measure = gtk_search_bar_measure;
-  widget_class->size_allocate = gtk_search_bar_size_allocate;
 
   container_class->add = gtk_search_bar_add;
   container_class->remove = gtk_search_bar_remove;
@@ -330,6 +297,8 @@ static void
 gtk_search_bar_init (GtkSearchBar *bar)
 {
   GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
+
+  gtk_widget_set_layout_manager (GTK_WIDGET (bar), gtk_bin_layout_new ());
 
   priv->revealer = gtk_revealer_new ();
   gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), FALSE);
