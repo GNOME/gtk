@@ -391,6 +391,7 @@ create_icon_helper (
 
   icon_helper = gtk_icon_helper_new (gtk_style_context_get_node (gtk_widget_get_style_context (widget)),
                                      widget);
+  _gtk_icon_helper_set_use_fallback (icon_helper, TRUE);
   _gtk_icon_helper_set_force_scale_pixbuf (icon_helper, TRUE);
   _gtk_icon_helper_set_definition (icon_helper, priv->image_def);
 
