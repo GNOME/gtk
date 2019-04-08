@@ -680,25 +680,13 @@ button {
   }
 
   //inline-toolbar buttons
-  .inline-toolbar &, .inline-toolbar &:backdrop {
-    border-radius: 2px;
-    border-width: 1px;
-    @extend %linked;
-  }
+  .inline-toolbar & { @extend %linked; }
 
   .primary-toolbar & { -gtk-icon-shadow: none; } // tango icons don't need shadows
 
-  .linked > &,
-  .linked > &:hover,
-  .linked > &:active,
-  .linked > &:checked,
-  .linked > &:backdrop { @extend %linked; }
+  .linked:not(.vertical) > & { @extend %linked; }
 
-  .linked.vertical > &,
-  .linked.vertical > &:hover,
-  .linked.vertical > &:active,
-  .linked.vertical > &:checked,
-  .linked.vertical > &:backdrop { @extend %linked_vertical; }
+  .linked.vertical > & { @extend %linked_vertical; }
 }
 
 %needs_attention {
@@ -749,80 +737,45 @@ button {
 }
 
 // More inline toolbar buttons
-toolbar.inline-toolbar toolbutton,
-toolbar.inline-toolbar toolbutton:backdrop {
-  & > button.flat { @extend %linked_middle; }
-
-  &:first-child > button.flat { @extend %linked:first-child; }
-
-  &:last-child > button.flat { @extend %linked:last-child; }
-
-  &:only-child > button.flat { @extend %linked:only-child; }
+toolbar.inline-toolbar toolbutton {
+  &:not(:first-child) > button.flat { @extend %linked:not(:first-child); }
+  &:not(:last-child) > button.flat { @extend %linked:not(:last-child); }
 }
 
-%linked_middle {
-  border-radius: 0;
+%linked_not_left {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+%linked_not_right {
   border-right-style: none;
-}
-
-%linked_left {
-    border-top-left-radius: 3px;
-    border-bottom-left-radius: 3px;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-right-style: none;
-}
-
-%linked_right {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;
-    border-right-style: solid;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 // 1st/last child are at text start/end
 %linked {
-  @extend %linked_middle;
-
   &:dir(ltr) {
-    &:first-child { @extend %linked_left; }
-    &:last-child { @extend %linked_right; }
+    &:not(:first-child) { @extend %linked_not_left; }
+    &:not(:last-child) { @extend %linked_not_right; }
   }
 
   &:dir(rtl) {
-    &:first-child { @extend %linked_right; }
-    &:last-child { @extend %linked_left; }
+    &:not(:first-child) { @extend %linked_not_right; }
+    &:not(:last-child) { @extend %linked_not_left; }
   }
-
-  &:only-child {
-    border-radius: 3px;
-    border-style: solid;
-  }
-}
-
-%linked_vertical_middle {
-  border-style: solid solid none solid;
-  border-radius: 0;
 }
 
 %linked_vertical{
-  @extend %linked_vertical_middle;
-
-  &:first-child {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
+  &:not(:first-child) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
   }
 
-  &:last-child {
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-    border-style: solid;
-  }
-
-  &:only-child {
-    border-radius: 3px;
-    border-style: solid;
+  &:not(:last-child) {
+    border-bottom-style: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
 }
 
@@ -1087,13 +1040,15 @@ spinbutton {
     }
 
     %top_button {
-      border-radius: 3px 3px 0 0;
-      border-style: solid solid none solid;
+      border-bottom-style: none;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
     }
 
     %bottom_button {
-      border-radius: 0 0 3px 3px;
-      border-style: none solid solid solid;
+      border-top-style: none;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
     }
   }
 
@@ -1134,10 +1089,7 @@ combobox {
   }
 
   &.linked {
-    button:nth-child(2) {
-      &:dir(ltr) { @extend %linked:last-child; }
-      &:dir(rtl) { @extend %linked:first-child; }
-    }
+    button:nth-child(2) { @extend %linked:not(:first-child); }
   }
 
   &:drop(active) { // FIXME: untested
@@ -1147,23 +1099,19 @@ combobox {
   }
 }
 
-.linked > combobox > box > button.combo {
-  // the combo is a composite widget so the way we do button linking doesn't
-  // work, special case needed. See
-  // https://bugzilla.gnome.org/show_bug.cgi?id=733979
+// the combo is a composite widget so the way we do button linking doesn't
+// work, special case needed. See
+// https://bugzilla.gnome.org/show_bug.cgi?id=733979
 
-  &:dir(ltr),
-  &:dir(rtl) { @extend %linked_middle; } // specificity bump
+.linked:not(.vertical) > combobox {
+  &:not(:first-child) > box > button.combo { @extend %linked:not(:first-child); }
+  &:not(:last-child) > box > button.combo { @extend %linked:not(:last-child); }
 }
 
-.linked:not(.vertical) > combobox:first-child > box > button.combo { @extend %linked:first-child; }
-.linked:not(.vertical) > combobox:last-child > box > button.combo { @extend %linked:last-child; }
-.linked:not(.vertical) > combobox:only-child > box > button.combo { @extend %linked:only-child; }
-
-.linked.vertical > combobox > box > button.combo { @extend %linked_vertical_middle; }
-.linked.vertical > combobox:first-child > box > button.combo { @extend %linked_vertical:first-child;}
-.linked.vertical > combobox:last-child > box > button.combo { @extend %linked_vertical:last-child; }
-.linked.vertical > combobox:only-child > box > button.combo { @extend %linked_vertical:only-child; }
+.linked.vertical > combobox {
+  &:not(:first-child) > box > button.combo { @extend %linked_vertical:not(:first-child); }
+  &:not(:last-child) > box > button.combo { @extend %linked_vertical:not(:last-child); }
+}
 
 
 /************
