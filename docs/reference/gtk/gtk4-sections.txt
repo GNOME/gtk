@@ -893,6 +893,7 @@ gtk_text_get_attributes
 gtk_text_set_tabs
 gtk_text_get_tabs
 gtk_text_grab_focus_without_selecting
+gtk_text_add_to_context_menu
 <SUBSECTION Private>
 gtk_text_get_type
 </SECTION>
@@ -963,6 +964,7 @@ GtkInputHints
 gtk_entry_set_input_hints
 gtk_entry_get_input_hints
 gtk_entry_grab_focus_without_selecting
+gtk_entry_add_to_context_menu
 
 <SUBSECTION Standard>
 GTK_ENTRY

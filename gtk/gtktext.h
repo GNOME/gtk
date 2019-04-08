@@ -134,6 +134,10 @@ PangoTabArray * gtk_text_get_tabs                       (GtkText         *self);
 GDK_AVAILABLE_IN_ALL
 void            gtk_text_grab_focus_without_selecting   (GtkText         *self);
 
+GDK_AVAILABLE_IN_ALL
+void            gtk_text_add_to_context_menu            (GtkText         *self,
+                                                         GMenuModel      *model);
+
 G_END_DECLS
 
 #endif /* __GTK_TEXT_H__ */
