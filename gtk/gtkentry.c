@@ -326,6 +326,22 @@ gtk_entry_mnemonic_activate (GtkWidget *widget,
 }
 
 static void
+gtk_entry_notify (GObject    *object,
+                  GParamSpec *pspec)
+{
+  if (strcmp (pspec->name, "context-menu") == 0)
+    {
+      GtkEntry *entry = GTK_ENTRY (object);
+      GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+      GMenuModel *menu = gtk_widget_get_context_menu (GTK_WIDGET (entry));
+      gtk_widget_set_context_menu (priv->text, menu);
+    }
+
+  if (G_OBJECT_CLASS (gtk_entry_parent_class)->notify)
+    G_OBJECT_CLASS (gtk_entry_parent_class)->notify (object, pspec);
+}
+
+static void
 gtk_entry_class_init (GtkEntryClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
@@ -337,6 +353,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   gobject_class->finalize = gtk_entry_finalize;
   gobject_class->set_property = gtk_entry_set_property;
   gobject_class->get_property = gtk_entry_get_property;
+  gobject_class->notify = gtk_entry_notify;
 
   widget_class->measure = gtk_entry_measure;
   widget_class->size_allocate = gtk_entry_size_allocate;
@@ -1276,6 +1293,9 @@ gtk_entry_init (GtkEntry *entry)
   connect_text_signals (entry);
 
   priv->editing_canceled = FALSE;
+
+  gtk_widget_set_context_menu (GTK_WIDGET (entry),
+                               gtk_widget_get_context_menu (priv->text));
 }
 
 static void
@@ -3471,6 +3491,8 @@ set_show_emoji_icon (GtkEntry *entry,
                      gboolean  value)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  GActionGroup *actions;
+  GAction *action;
 
   if (priv->show_emoji_icon == value)
     return;
@@ -3512,6 +3534,12 @@ set_show_emoji_icon (GtkEntry *entry,
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_SHOW_EMOJI_ICON]);
   gtk_widget_queue_resize (GTK_WIDGET (entry));
+
+  actions = gtk_widget_get_action_group (priv->text, "context");
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "insert-emoji");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
+                               priv->show_emoji_icon ||
+                               (gtk_entry_get_input_hints (entry) & GTK_INPUT_HINT_NO_EMOJI) == 0);
 }
 
 GtkEventController *

@@ -34,9 +34,6 @@ typedef struct _GtkTextClass         GtkTextClass;
 /*<private>
  * GtkTextClass:
  * @parent_class: The parent class.
- * @populate_popup: Class handler for the #GtkText::populate-popup signal. If
- *   non-%NULL, this will be called to add additional entries to the context
- *   menu when it is displayed.
  * @activate: Class handler for the #GtkText::activate signal. The default
  *   implementation activates the gtk.activate-default action.
  * @move_cursor: Class handler for the #GtkText::move-cursor signal. The
@@ -69,10 +66,6 @@ typedef struct _GtkTextClass         GtkTextClass;
 struct _GtkTextClass
 {
   GtkWidgetClass parent_class;
-
-  /* Hook to customize right-click popup */
-  void (* populate_popup)     (GtkText         *self,
-                               GtkWidget       *popup);
 
   /* Action signals
    */
