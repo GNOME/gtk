@@ -1703,7 +1703,7 @@ handle_pointing_event (GdkEvent *event)
       target = gtk_window_lookup_pointer_focus_implicit_grab (toplevel, device, sequence);
 
       if (!target)
-        target = gtk_widget_pick (toplevel_widget, x, y);
+        target = gtk_widget_pick (toplevel_widget, x, y, GTK_PICK_DEFAULT);
 
       if (!target)
         target = toplevel_widget;
@@ -1742,7 +1742,7 @@ handle_pointing_event (GdkEvent *event)
       if (event->any.type == GDK_BUTTON_RELEASE)
         {
           GtkWidget *new_target;
-          new_target = gtk_widget_pick (GTK_WIDGET (toplevel), x, y);
+          new_target = gtk_widget_pick (GTK_WIDGET (toplevel), x, y, GTK_PICK_DEFAULT);
           if (new_target == NULL)
             new_target = GTK_WIDGET (toplevel);
           gtk_synthesize_crossing_events (GTK_ROOT (toplevel), target, new_target, event,

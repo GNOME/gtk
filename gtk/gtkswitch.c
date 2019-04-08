@@ -652,7 +652,7 @@ gtk_switch_init (GtkSwitch *self)
   priv->off_image = gtk_image_new_from_icon_name ("switch-off-symbolic");
   gtk_widget_set_parent (priv->off_image, GTK_WIDGET (self));
 
-  priv->slider = gtk_gizmo_new ("slider", NULL, NULL, NULL);
+  priv->slider = gtk_gizmo_new ("slider", NULL, NULL, NULL, NULL);
   gtk_widget_set_parent (priv->slider, GTK_WIDGET (self));
 }
 

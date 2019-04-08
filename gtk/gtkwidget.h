@@ -223,7 +223,6 @@ struct _GtkWidget
  *   is changed.
  * @snapshot: Vfunc for gtk_widget_snapshot().
  * @contains: Vfunc for gtk_widget_contains().
- * @pick: Vfunc for gtk_widget_pick().
  */
 struct _GtkWidgetClass
 {
@@ -337,9 +336,6 @@ struct _GtkWidgetClass
                                                 GtkSnapshot          *snapshot);
 
   gboolean     (* contains)                    (GtkWidget *widget,
-                                                gdouble    x,
-                                                gdouble    y);
-  GtkWidget *  (* pick)                        (GtkWidget *widget,
                                                 gdouble    x,
                                                 gdouble    y);
 
@@ -473,10 +469,10 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_get_focus_on_click  (GtkWidget           *widget);
 
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_set_can_pick        (GtkWidget           *widget,
-                                           gboolean             can_pick);
+void       gtk_widget_set_can_target      (GtkWidget           *widget,
+                                           gboolean             can_target);
 GDK_AVAILABLE_IN_ALL
-gboolean   gtk_widget_get_can_pick        (GtkWidget           *widget);
+gboolean   gtk_widget_get_can_target      (GtkWidget           *widget);
 
 
 GDK_AVAILABLE_IN_ALL
@@ -755,9 +751,10 @@ gboolean     gtk_widget_contains              (GtkWidget  *widget,
                                                gdouble     x,
                                                gdouble     y);
 GDK_AVAILABLE_IN_ALL
-GtkWidget *  gtk_widget_pick                  (GtkWidget  *widget,
-                                               gdouble     x,
-                                               gdouble     y);
+GtkWidget *  gtk_widget_pick                  (GtkWidget   *widget,
+                                               gdouble      x,
+                                               gdouble      y,
+                                               GtkPickFlags flags);
 
 GDK_AVAILABLE_IN_ALL
 void         gtk_widget_add_controller        (GtkWidget          *widget,

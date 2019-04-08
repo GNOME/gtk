@@ -1294,7 +1294,8 @@ gtk_notebook_init (GtkNotebook *notebook)
   priv->tabs_widget = gtk_gizmo_new ("tabs",
                                      gtk_notebook_measure_tabs,
                                      gtk_notebook_allocate_tabs,
-                                     gtk_notebook_snapshot_tabs);
+                                     gtk_notebook_snapshot_tabs,
+                                     NULL);
   gtk_widget_set_hexpand (priv->tabs_widget, TRUE);
   gtk_container_add (GTK_CONTAINER (priv->header_widget), priv->tabs_widget);
 
@@ -4044,7 +4045,7 @@ gtk_notebook_insert_notebook_page (GtkNotebook *notebook,
   else
   sibling = priv->arrow_widget[ARROW_RIGHT_AFTER];
 
-  page->tab_widget = gtk_gizmo_new ("tab", measure_tab, allocate_tab, NULL);
+  page->tab_widget = gtk_gizmo_new ("tab", measure_tab, allocate_tab, NULL, NULL);
   g_object_set_data (G_OBJECT (page->tab_widget), "notebook", notebook);
   gtk_widget_insert_before (page->tab_widget, priv->tabs_widget, sibling);
 

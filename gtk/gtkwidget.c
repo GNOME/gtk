@@ -546,7 +546,7 @@ enum {
   PROP_CAN_FOCUS,
   PROP_HAS_FOCUS,
   PROP_IS_FOCUS,
-  PROP_CAN_PICK,
+  PROP_CAN_TARGET,
   PROP_FOCUS_ON_CLICK,
   PROP_CAN_DEFAULT,
   PROP_HAS_DEFAULT,
@@ -824,58 +824,8 @@ gtk_widget_real_contains (GtkWidget *widget,
 
   gtk_css_boxes_init (&boxes, widget);
 
-  /* XXX: This misses rounded rects */
-  return graphene_rect_contains_point (gtk_css_boxes_get_border_rect (&boxes),
-                                       &(graphene_point_t){x, y});
-}
-
-static GtkWidget *
-gtk_widget_real_pick (GtkWidget *widget,
-                      gdouble    x,
-                      gdouble    y)
-{
-  GtkWidget *child;
-
-  for (child = _gtk_widget_get_last_child (widget);
-       child;
-       child = _gtk_widget_get_prev_sibling (child))
-    {
-      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (child);
-      GskTransform *transform;
-      graphene_matrix_t inv;
-      GtkWidget *picked;
-      graphene_point3d_t p0, p1, res;
-
-      if (priv->transform)
-        {
-          transform = gsk_transform_invert (gsk_transform_ref (priv->transform));
-          if (transform == NULL)
-            continue;
-        }
-      else
-        {
-          transform = NULL;
-        }
-      gsk_transform_to_matrix (transform, &inv);
-      gsk_transform_unref (transform);
-      graphene_point3d_init (&p0, x, y, 0);
-      graphene_point3d_init (&p1, x, y, 1);
-      graphene_matrix_transform_point3d (&inv, &p0, &p0);
-      graphene_matrix_transform_point3d (&inv, &p1, &p1);
-      if (fabs (p0.z - p1.z) < 1.f / 4096)
-        continue;
-
-      graphene_point3d_interpolate (&p0, &p1, p0.z / (p0.z - p1.z), &res);
-
-      picked = gtk_widget_pick (child, res.x, res.y);
-      if (picked)
-        return picked;
-    }
-
-  if (!gtk_widget_contains (widget, x, y))
-    return NULL;
-
-  return widget;
+  return gsk_rounded_rect_contains_point (gtk_css_boxes_get_border_box (&boxes),
+                                          &GRAPHENE_POINT_INIT (x, y));
 }
 
 static void
@@ -983,7 +933,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->get_accessible = gtk_widget_real_get_accessible;
 
   klass->contains = gtk_widget_real_contains;
-  klass->pick = gtk_widget_real_pick;
 
   widget_props[PROP_NAME] =
       g_param_spec_string ("name",
@@ -1063,9 +1012,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             FALSE,
                             GTK_PARAM_READWRITE);
 
-  widget_props[PROP_CAN_PICK] =
-      g_param_spec_boolean ("can-pick",
-                            P_("Can pick"),
+  widget_props[PROP_CAN_TARGET] =
+      g_param_spec_boolean ("can-target",
+                            P_("Can target"),
                             P_("Whether the widget can receive pointer events"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -2238,8 +2187,8 @@ gtk_widget_set_property (GObject         *object,
       if (g_value_get_boolean (value))
 	gtk_widget_grab_focus (widget);
       break;
-    case PROP_CAN_PICK:
-      gtk_widget_set_can_pick (widget, g_value_get_boolean (value));
+    case PROP_CAN_TARGET:
+      gtk_widget_set_can_target (widget, g_value_get_boolean (value));
       break;
     case PROP_FOCUS_ON_CLICK:
       gtk_widget_set_focus_on_click (widget, g_value_get_boolean (value));
@@ -2419,8 +2368,8 @@ gtk_widget_get_property (GObject         *object,
     case PROP_IS_FOCUS:
       g_value_set_boolean (value, gtk_widget_is_focus (widget));
       break;
-    case PROP_CAN_PICK:
-      g_value_set_boolean (value, gtk_widget_get_can_pick (widget));
+    case PROP_CAN_TARGET:
+      g_value_set_boolean (value, gtk_widget_get_can_target (widget));
       break;
     case PROP_FOCUS_ON_CLICK:
       g_value_set_boolean (value, gtk_widget_get_focus_on_click (widget));
@@ -2859,7 +2808,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 #ifdef G_ENABLE_DEBUG
   priv->highlight_resize = FALSE;
 #endif
-  priv->can_pick = TRUE;
+  priv->can_target = TRUE;
 
   switch (_gtk_widget_get_direction (widget))
     {
@@ -11035,17 +10984,10 @@ gtk_widget_get_allocation (GtkWidget     *widget,
  * @x: X coordinate to test, relative to @widget's origin
  * @y: Y coordinate to test, relative to @widget's origin
  *
- * Tests if the point at (@x, @y) is contained in @widget. Points
- * inside the widget will respond to mouse and touch events, points
- * outside will not.
+ * Tests if the point at (@x, @y) is contained in @widget.
  *
  * The coordinates for (@x, @y) must be in widget coordinates, so
  * (0, 0) is assumed to be the top left of @widget's content area.
- *
- * Pass-through widgets and insensitive widgets do never respond to
- * input and will therefor always return %FALSE here. See
- * gtk_widget_set_can_pick() and gtk_widget_set_sensitive() for
- * details about those functions.
  *
  * Returns: %TRUE if @widget contains (@x, @y).
  **/
@@ -11056,9 +10998,7 @@ gtk_widget_contains (GtkWidget  *widget,
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  if (!gtk_widget_get_can_pick (widget) ||
-      !_gtk_widget_is_sensitive (widget) ||
-      !_gtk_widget_is_drawable (widget))
+  if (!_gtk_widget_is_drawable (widget))
     return FALSE;
 
   return GTK_WIDGET_GET_CLASS (widget)->contains (widget, x, y);
@@ -11069,6 +11009,7 @@ gtk_widget_contains (GtkWidget  *widget,
  * @widget: the widget to query
  * @x: X coordinate to test, relative to @widget's origin
  * @y: Y coordinate to test, relative to @widget's origin
+ * @flags: Flags to influence what is picked
  *
  * Finds the descendant of @widget (including @widget itself) closest
  * to the screen at the point (@x, @y). The point must be given in
@@ -11087,17 +11028,25 @@ gtk_widget_contains (GtkWidget  *widget,
  *     coordinate or %NULL if none.
  **/
 GtkWidget *
-gtk_widget_pick (GtkWidget *widget,
-                 gdouble    x,
-                 gdouble    y)
+gtk_widget_pick (GtkWidget    *widget,
+                 gdouble       x,
+                 gdouble       y,
+                 GtkPickFlags  flags)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkWidget *child;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  if (!gtk_widget_get_can_pick (widget) ||
-      !_gtk_widget_is_sensitive (widget) ||
-      !_gtk_widget_is_drawable (widget))
+  if (!_gtk_widget_is_drawable (widget))
+    return NULL;
+
+  if (!(flags & GTK_PICK_NON_TARGETABLE) &&
+      !gtk_widget_get_can_target (widget))
+    return NULL;
+
+  if (!(flags & GTK_PICK_INSENSITIVE) &&
+      !_gtk_widget_is_sensitive (widget))
     return NULL;
 
   switch (priv->overflow)
@@ -11119,7 +11068,55 @@ gtk_widget_pick (GtkWidget *widget,
       break;
     }
 
-  return GTK_WIDGET_GET_CLASS (widget)->pick (widget, x, y);
+  if (GTK_IS_WINDOW (widget))
+    {
+      GtkWidget *picked;
+
+      picked = gtk_window_pick_popover (GTK_WINDOW (widget), x, y, flags);
+      if (picked)
+        return picked;
+    }
+
+  for (child = _gtk_widget_get_last_child (widget);
+       child;
+       child = _gtk_widget_get_prev_sibling (child))
+    {
+      GtkWidgetPrivate *child_priv = gtk_widget_get_instance_private (child);
+      GskTransform *transform;
+      graphene_matrix_t inv;
+      GtkWidget *picked;
+      graphene_point3d_t p0, p1, res;
+
+      if (child_priv->transform)
+        {
+          transform = gsk_transform_invert (gsk_transform_ref (child_priv->transform));
+          if (transform == NULL)
+            continue;
+        }
+      else
+        {
+          transform = NULL;
+        }
+      gsk_transform_to_matrix (transform, &inv);
+      gsk_transform_unref (transform);
+      graphene_point3d_init (&p0, x, y, 0);
+      graphene_point3d_init (&p1, x, y, 1);
+      graphene_matrix_transform_point3d (&inv, &p0, &p0);
+      graphene_matrix_transform_point3d (&inv, &p1, &p1);
+      if (fabs (p0.z - p1.z) < 1.f / 4096)
+        continue;
+
+      graphene_point3d_interpolate (&p0, &p1, p0.z / (p0.z - p1.z), &res);
+
+      picked = gtk_widget_pick (child, res.x, res.y, flags);
+      if (picked)
+        return picked;
+    }
+
+  if (!gtk_widget_contains (widget, x, y))
+    return NULL;
+
+  return widget;
 }
 
 /**
@@ -13466,31 +13463,30 @@ gtk_widget_get_cursor (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_can_pick:
+ * gtk_widget_set_can_target:
  * @widget: a #GtkWidget
- * @can_pick: whether this widget should be able to receive pointer events
+ * @can_target: whether this widget should be able to receive pointer events
  *
- * Sets whether @widget can be the target of pointer events and
- * can be returned by gtk_widget_pick().
+ * Sets whether @widget can be the target of pointer events.
  */
 void
-gtk_widget_set_can_pick (GtkWidget *widget,
-                         gboolean   can_pick)
+gtk_widget_set_can_target (GtkWidget *widget,
+                           gboolean   can_target)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  can_pick = !!can_pick;
+  can_target = !!can_target;
 
-  if (priv->can_pick == can_pick)
+  if (priv->can_target == can_target)
     return;
 
-  priv->can_pick = can_pick;
+  priv->can_target = can_target;
 
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CAN_PICK]);
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CAN_TARGET]);
 }
 
 /**
- * gtk_widget_get_can_pick:
+ * gtk_widget_get_can_target:
  * @widget: a #GtkWidget
  * 
  * Queries whether @widget can be the target of pointer events.
@@ -13498,11 +13494,11 @@ gtk_widget_set_can_pick (GtkWidget *widget,
  * Returns: %TRUE if @widget can receive pointer events
  */
 gboolean
-gtk_widget_get_can_pick (GtkWidget *widget)
+gtk_widget_get_can_target (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  return priv->can_pick;
+  return priv->can_target;
 }
 
 /**

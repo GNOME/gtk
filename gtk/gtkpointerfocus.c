@@ -135,7 +135,7 @@ gtk_pointer_focus_repick_target (GtkPointerFocus *focus)
 {
   GtkWidget *target;
 
-  target = gtk_widget_pick (GTK_WIDGET (focus->toplevel), focus->x, focus->y);
+  target = gtk_widget_pick (GTK_WIDGET (focus->toplevel), focus->x, focus->y, GTK_PICK_DEFAULT);
   if (target == NULL)
     target = GTK_WIDGET (focus->toplevel);
   gtk_pointer_focus_set_target (focus, target);

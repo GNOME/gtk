@@ -371,10 +371,7 @@ gtk_popover_init (GtkPopover *popover)
                            G_CALLBACK (node_style_changed_cb), popover, 0);
   g_object_unref (priv->arrow_node);
 
-  priv->contents_widget = gtk_gizmo_new ("contents",
-                                         measure_contents,
-                                         allocate_contents,
-                                         NULL);
+  priv->contents_widget = gtk_gizmo_new ("contents", measure_contents, allocate_contents, NULL, NULL);
 
   gtk_widget_set_parent (priv->contents_widget, widget);
 

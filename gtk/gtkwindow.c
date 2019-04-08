@@ -735,12 +735,12 @@ static void popover_get_rect (GtkWindowPopover      *popover,
                               GtkWindow             *window,
                               cairo_rectangle_int_t *rect);
 
-static GtkWidget *
-gtk_window_pick (GtkWidget *widget,
-                 gdouble    x,
-                 gdouble    y)
+GtkWidget *
+gtk_window_pick_popover (GtkWindow    *window,
+                         double        x,
+                         double        y,
+                         GtkPickFlags  flags)
 {
-  GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GList *popovers;
 
@@ -750,16 +750,16 @@ gtk_window_pick (GtkWidget *widget,
       int dest_x, dest_y;
       GtkWidget *picked;
 
-      gtk_widget_translate_coordinates (widget, popover->widget,
+      gtk_widget_translate_coordinates (GTK_WIDGET (window), popover->widget,
                                         x, y,
                                         &dest_x, &dest_y);
 
-      picked = gtk_widget_pick (popover->widget, dest_x, dest_y);
+      picked = gtk_widget_pick (popover->widget, dest_x, dest_y, flags);
       if (picked)
         return picked;
     }
 
-  return GTK_WIDGET_CLASS (gtk_window_parent_class)->pick (widget, x, y);
+  return NULL;
 }
 
 static void
@@ -801,7 +801,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->state_flags_changed = gtk_window_state_flags_changed;
   widget_class->style_updated = gtk_window_style_updated;
   widget_class->snapshot = gtk_window_snapshot;
-  widget_class->pick = gtk_window_pick;
 
   container_class->add = gtk_window_add;
   container_class->remove = gtk_window_remove;

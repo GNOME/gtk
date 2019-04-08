@@ -203,8 +203,7 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
       GtkStyleContext *context;
       GtkEventController *controller;
 
-      widget = gtk_gizmo_new (I_("cursor-handle"),
-                              NULL, NULL, snapshot_func);
+      widget = gtk_gizmo_new (I_("cursor-handle"), NULL, NULL, snapshot_func, NULL);
 
       gtk_widget_set_direction (widget, priv->windows[pos].dir);
 

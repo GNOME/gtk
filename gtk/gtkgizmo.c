@@ -46,6 +46,19 @@ gtk_gizmo_snapshot (GtkWidget   *widget,
     GTK_WIDGET_CLASS (gtk_gizmo_parent_class)->snapshot (widget, snapshot);
 }
 
+static gboolean
+gtk_gizmo_contains (GtkWidget *widget,
+                    double     x,
+                    double     y)
+{
+  GtkGizmo *self = GTK_GIZMO (widget);
+
+  if (self->contains_func)
+    return self->contains_func (self, x, y);
+  else
+    return GTK_WIDGET_CLASS (gtk_gizmo_parent_class)->contains (widget, x, y);
+}
+
 static void
 gtk_gizmo_finalize (GObject *object)
 {
@@ -76,6 +89,7 @@ gtk_gizmo_class_init (GtkGizmoClass *klass)
   widget_class->measure = gtk_gizmo_measure;
   widget_class->size_allocate = gtk_gizmo_size_allocate;
   widget_class->snapshot = gtk_gizmo_snapshot;
+  widget_class->contains = gtk_gizmo_contains;
 }
 
 static void
@@ -88,7 +102,8 @@ GtkWidget *
 gtk_gizmo_new (const char              *css_name,
                GtkGizmoMeasureFunc  measure_func,
                GtkGizmoAllocateFunc allocate_func,
-               GtkGizmoSnapshotFunc snapshot_func)
+               GtkGizmoSnapshotFunc snapshot_func,
+               GtkGizmoContainsFunc contains_func)
 {
   GtkGizmo *gizmo = GTK_GIZMO (g_object_new (GTK_TYPE_GIZMO,
                                              "css-name", css_name,
@@ -97,6 +112,7 @@ gtk_gizmo_new (const char              *css_name,
   gizmo->measure_func  = measure_func;
   gizmo->allocate_func = allocate_func;
   gizmo->snapshot_func = snapshot_func;
+  gizmo->contains_func = contains_func;
 
   return GTK_WIDGET (gizmo);
 }

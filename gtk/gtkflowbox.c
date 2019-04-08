@@ -3928,7 +3928,7 @@ gtk_flow_box_get_child_at_pos (GtkFlowBox *box,
                                gint        x,
                                gint        y)
 {
-  GtkWidget *child = gtk_widget_pick (GTK_WIDGET (box), x, y);
+  GtkWidget *child = gtk_widget_pick (GTK_WIDGET (box), x, y, GTK_PICK_DEFAULT);
 
   if (!child)
     return NULL;
