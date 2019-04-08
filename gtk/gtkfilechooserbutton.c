@@ -30,6 +30,7 @@
 #include <cairo-gobject.h>
 
 #include "gtkintl.h"
+#include "gtkbinlayout.h"
 #include "gtkbutton.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
@@ -340,41 +341,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkFileChooserButton, gtk_file_chooser_button, GTK_TYPE
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
                                                 gtk_file_chooser_button_file_chooser_iface_init))
 
-
-
-static void
-gtk_file_chooser_button_measure (GtkWidget       *widget,
-                                 GtkOrientation  orientation,
-                                 int             for_size,
-                                 int            *minimum,
-                                 int            *natural,
-                                 int            *minimum_baseline,
-                                 int            *natural_baseline)
-{
-  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
-  GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
-
-  gtk_widget_measure (priv->child, orientation, for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_file_chooser_button_size_allocate (GtkWidget *widget,
-                                       int        width,
-                                       int        height,
-                                       int        baseline)
-{
-  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
-  GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
-
-  gtk_widget_size_allocate (priv->child,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            }, baseline);
-}
-
 static void
 gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 {
@@ -398,8 +364,6 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   widget_class->display_changed = gtk_file_chooser_button_display_changed;
   widget_class->mnemonic_activate = gtk_file_chooser_button_mnemonic_activate;
   widget_class->state_flags_changed = gtk_file_chooser_button_state_flags_changed;
-  widget_class->measure = gtk_file_chooser_button_measure;
-  widget_class->size_allocate = gtk_file_chooser_button_size_allocate;
 
   /**
    * GtkFileChooserButton::file-set:
@@ -470,6 +434,8 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   GdkContentFormats *target_list;
 
   gtk_widget_set_has_surface (GTK_WIDGET (button), FALSE);
+
+  gtk_widget_set_layout_manager (GTK_WIDGET (button), gtk_bin_layout_new ());
 
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked", G_CALLBACK (button_clicked_cb), button);
