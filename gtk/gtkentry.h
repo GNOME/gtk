@@ -310,6 +310,12 @@ PangoTabArray  *gtk_entry_get_tabs                           (GtkEntry          
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_grab_focus_without_selecting        (GtkEntry             *entry);
 
+GDK_AVAILABLE_IN_ALL
+void           gtk_entry_set_extra_menu                      (GtkEntry             *entry,
+                                                              GMenuModel           *model);
+GDK_AVAILABLE_IN_ALL
+GMenuModel *   gtk_entry_get_extra_menu                      (GtkEntry             *entry);
+
 G_END_DECLS
 
 #endif /* __GTK_ENTRY_H__ */

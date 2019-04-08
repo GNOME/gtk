@@ -224,6 +224,7 @@ enum {
   PROP_ATTRIBUTES,
   PROP_POPULATE_ALL,
   PROP_TABS,
+  PROP_EXTRA_MENU,
   PROP_SHOW_EMOJI_ICON,
   PROP_ENABLE_EMOJI_COMPLETION,
   PROP_EDITING_CANCELED,
@@ -836,6 +837,19 @@ gtk_entry_class_init (GtkEntryClass *class)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkEntry:extra-menu:
+   *
+   * A menu model whose contents will be appended to
+   * the context menu.
+   */
+  entry_props[PROP_EXTRA_MENU] =
+      g_param_spec_object ("extra-menu",
+                           P_("Extra menu"),
+                           P_("Model menu to append to the context menu"),
+                           G_TYPE_MENU_MODEL,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   entry_props[PROP_ENABLE_EMOJI_COMPLETION] =
       g_param_spec_boolean ("enable-emoji-completion",
                             P_("Enable Emoji completion"),
@@ -1062,6 +1076,10 @@ gtk_entry_set_property (GObject         *object,
       set_show_emoji_icon (entry, g_value_get_boolean (value));
       break;
 
+    case PROP_EXTRA_MENU:
+      gtk_entry_set_extra_menu (entry, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1217,6 +1235,10 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_SHOW_EMOJI_ICON:
       g_value_set_boolean (value, priv->show_emoji_icon);
+      break;
+
+    case PROP_EXTRA_MENU:
+      g_value_set_object (value, gtk_entry_get_extra_menu (entry));
       break;
 
     default:
@@ -3471,6 +3493,8 @@ set_show_emoji_icon (GtkEntry *entry,
                      gboolean  value)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  GActionGroup *actions;
+  GAction *action;
 
   if (priv->show_emoji_icon == value)
     return;
@@ -3512,6 +3536,12 @@ set_show_emoji_icon (GtkEntry *entry,
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_SHOW_EMOJI_ICON]);
   gtk_widget_queue_resize (GTK_WIDGET (entry));
+
+  actions = gtk_widget_get_action_group (priv->text, "context");
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "insert-emoji");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
+                               priv->show_emoji_icon ||
+                               (gtk_entry_get_input_hints (entry) & GTK_INPUT_HINT_NO_EMOJI) == 0);
 }
 
 GtkEventController *
@@ -3528,4 +3558,43 @@ gtk_entry_get_text_widget (GtkEntry *entry)
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
   return GTK_TEXT (priv->text);
+}
+
+/**
+ * gtk_entry_set_extra_menu:
+ * @entry: a #GtkEntry
+ * @model: (allow-none): a #GMenuModel
+ *
+ * Sets a menu model to add when constructing
+ * the context menu for @entry.
+ */
+void
+gtk_entry_set_extra_menu (GtkEntry   *entry,
+                          GMenuModel *model)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  gtk_text_set_extra_menu (GTK_TEXT (priv->text), model);
+
+  g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_EXTRA_MENU]);
+}
+
+/**
+ * gtk_entry_get_extra_menu:
+ * @self: a #GtkText
+ *
+ * Gets the menu model set with gtk_entry_set_extra_menu().
+ *
+ * Returns: (transfer none): (nullable): the menu model
+ */
+GMenuModel *
+gtk_entry_get_extra_menu (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+
+  return gtk_text_get_extra_menu (GTK_TEXT (priv->text));
 }
