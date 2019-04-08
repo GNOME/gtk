@@ -38,7 +38,6 @@
 
 struct _GdkFrameClockIdlePrivate
 {
-  GTimer *timer;
   /* timer_base is used to avoid ever going backward */
   gint64 timer_base;
   gint64 frame_time;
