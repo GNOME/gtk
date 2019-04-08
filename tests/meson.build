@@ -116,7 +116,6 @@ gtk_tests = [
   ['gdkgears', ['gtkgears.c']],
   ['listmodel'],
   ['testpopup'],
-  ['testpopupat'],
   ['testgaction'],
   ['testwidgetfocus'],
   ['testwidgettransforms'],
