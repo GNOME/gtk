@@ -27,6 +27,7 @@
 #include "gtkviewport.h"
 
 #include "gtkadjustment.h"
+#include "gtkcustomlayout.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -94,7 +95,7 @@ static void gtk_viewport_get_property             (GObject         *object,
 						   GValue          *value,
 						   GParamSpec      *pspec);
 static void gtk_viewport_destroy                  (GtkWidget        *widget);
-static void gtk_viewport_size_allocate            (GtkWidget        *widget,
+static void gtk_viewport_allocate                 (GtkWidget        *widget,
                                                    int               width,
                                                    int               height,
                                                    int               baseline);
@@ -230,8 +231,6 @@ gtk_viewport_class_init (GtkViewportClass *class)
   gobject_class->get_property = gtk_viewport_get_property;
 
   widget_class->destroy = gtk_viewport_destroy;
-  widget_class->size_allocate = gtk_viewport_size_allocate;
-  widget_class->measure = gtk_viewport_measure;
   
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_VIEWPORT);
 
@@ -330,13 +329,19 @@ gtk_viewport_get_property (GObject         *object,
 static void
 gtk_viewport_init (GtkViewport *viewport)
 {
-  GtkWidget *widget;
   GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
+  GtkLayoutManager *manager;
+  GtkWidget *widget;
 
   widget = GTK_WIDGET (viewport);
 
   gtk_widget_set_has_surface (widget, FALSE);
   gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
+
+  manager = gtk_custom_layout_new (NULL,
+                                   gtk_viewport_measure,
+                                   gtk_viewport_allocate);
+  gtk_widget_set_layout_manager (widget, manager);
 
   priv->shadow_type = GTK_SHADOW_IN;
   priv->hadjustment = NULL;
@@ -485,10 +490,10 @@ gtk_viewport_get_shadow_type (GtkViewport *viewport)
 }
 
 static void
-gtk_viewport_size_allocate (GtkWidget *widget,
-                            int        width,
-                            int        height,
-                            int        baseline)
+gtk_viewport_allocate (GtkWidget *widget,
+                       int        width,
+                       int        height,
+                       int        baseline)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkViewportPrivate *priv = gtk_viewport_get_instance_private (viewport);
