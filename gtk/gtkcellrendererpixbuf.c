@@ -464,6 +464,7 @@ create_icon_helper (GtkCellRendererPixbuf *cellpixbuf,
   GtkIconHelper *helper;
 
   helper = gtk_icon_helper_new (gtk_style_context_get_node (gtk_widget_get_style_context (widget)), widget);
+  _gtk_icon_helper_set_use_fallback (helper, TRUE);
   _gtk_icon_helper_set_force_scale_pixbuf (helper, TRUE);
   _gtk_icon_helper_set_definition (helper, priv->image_def);
   if (gtk_image_definition_get_storage_type (priv->image_def) != GTK_IMAGE_PIXBUF)
