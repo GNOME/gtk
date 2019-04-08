@@ -30,6 +30,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcombobox.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkcustomlayout.h"
 #include "gtkdnd.h"
 #include "gtkdragdest.h"
 #include "gtkdragsource.h"
@@ -153,7 +154,7 @@ static void gtk_icon_view_measure (GtkWidget *widget,
                                    int            *natural,
                                    int            *minimum_baseline,
                                    int            *natural_baseline);
-static void             gtk_icon_view_size_allocate             (GtkWidget          *widget,
+static void             gtk_icon_view_allocate                  (GtkWidget          *widget,
                                                                  int                 width,
                                                                  int                 height,
                                                                  int                 baseline);
@@ -356,8 +357,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 
   widget_class->destroy = gtk_icon_view_destroy;
   widget_class->get_request_mode = gtk_icon_view_get_request_mode;
-  widget_class->measure = gtk_icon_view_measure;
-  widget_class->size_allocate = gtk_icon_view_size_allocate;
   widget_class->snapshot = gtk_icon_view_snapshot;
   widget_class->drag_begin = gtk_icon_view_drag_begin;
   widget_class->drag_end = gtk_icon_view_drag_end;
@@ -917,6 +916,7 @@ static void
 gtk_icon_view_init (GtkIconView *icon_view)
 {
   GtkEventController *controller;
+  GtkLayoutManager *layout;
   GtkGesture *gesture;
 
   icon_view->priv = gtk_icon_view_get_instance_private (icon_view);
@@ -977,6 +977,11 @@ gtk_icon_view_init (GtkIconView *icon_view)
   g_signal_connect (controller, "key-pressed", G_CALLBACK (gtk_icon_view_key_pressed),
                     icon_view);
   gtk_widget_add_controller (GTK_WIDGET (icon_view), controller);
+
+  layout = gtk_custom_layout_new (gtk_icon_view_get_request_mode,
+                                  gtk_icon_view_measure,
+                                  gtk_icon_view_allocate);
+  gtk_widget_set_layout_manager (GTK_WIDGET (icon_view), layout);
 }
 
 /* GObject methods */
@@ -1620,10 +1625,10 @@ gtk_icon_view_allocate_children (GtkIconView *icon_view)
 }
 
 static void
-gtk_icon_view_size_allocate (GtkWidget *widget,
-                             int        width,
-                             int        height,
-                             int        baseline)
+gtk_icon_view_allocate (GtkWidget *widget,
+                        int        width,
+                        int        height,
+                        int        baseline)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
 
