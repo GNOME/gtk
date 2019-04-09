@@ -299,7 +299,7 @@ gtk_css_image_linear_parse_first_arg (GtkCssImageLinear *linear,
             {
               if (linear->side & ((1 << GTK_CSS_LEFT) | (1 << GTK_CSS_RIGHT)))
                 {
-                  _gtk_css_parser_error (parser, "Expected 'top', 'bottom' or comma");
+                  gtk_css_parser_error_syntax (parser, "Expected 'top', 'bottom' or comma");
                   return 0;
                 }
               linear->side |= (1 << GTK_CSS_LEFT);
@@ -308,7 +308,7 @@ gtk_css_image_linear_parse_first_arg (GtkCssImageLinear *linear,
             {
               if (linear->side & ((1 << GTK_CSS_LEFT) | (1 << GTK_CSS_RIGHT)))
                 {
-                  _gtk_css_parser_error (parser, "Expected 'top', 'bottom' or comma");
+                  gtk_css_parser_error_syntax (parser, "Expected 'top', 'bottom' or comma");
                   return 0;
                 }
               linear->side |= (1 << GTK_CSS_RIGHT);
@@ -317,7 +317,7 @@ gtk_css_image_linear_parse_first_arg (GtkCssImageLinear *linear,
             {
               if (linear->side & ((1 << GTK_CSS_TOP) | (1 << GTK_CSS_BOTTOM)))
                 {
-                  _gtk_css_parser_error (parser, "Expected 'left', 'right' or comma");
+                  gtk_css_parser_error_syntax (parser, "Expected 'left', 'right' or comma");
                   return 0;
                 }
               linear->side |= (1 << GTK_CSS_TOP);
@@ -326,7 +326,7 @@ gtk_css_image_linear_parse_first_arg (GtkCssImageLinear *linear,
             {
               if (linear->side & ((1 << GTK_CSS_TOP) | (1 << GTK_CSS_BOTTOM)))
                 {
-                  _gtk_css_parser_error (parser, "Expected 'left', 'right' or comma");
+                  gtk_css_parser_error_syntax (parser, "Expected 'left', 'right' or comma");
                   return 0;
                 }
               linear->side |= (1 << GTK_CSS_BOTTOM);
@@ -337,7 +337,7 @@ gtk_css_image_linear_parse_first_arg (GtkCssImageLinear *linear,
 
       if (linear->side == 0)
         {
-          _gtk_css_parser_error (parser, "Expected side that gradient should go to");
+          gtk_css_parser_error_syntax (parser, "Expected side that gradient should go to");
           return 0;
         }
 
@@ -387,7 +387,7 @@ gtk_css_image_linear_parse (GtkCssImage  *image,
     self->repeating = FALSE;
   else
     {
-      _gtk_css_parser_error (parser, "Not a linear gradient");
+      gtk_css_parser_error_syntax (parser, "Not a linear gradient");
       return FALSE;
     }
 
