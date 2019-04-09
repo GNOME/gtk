@@ -245,12 +245,9 @@ gtk_css_image_recolor_parse_arg (GtkCssParser *parser,
   switch (arg)
   {
     case 0:
-      self->file = _gtk_css_parser_read_url (parser);
+      self->file = gtk_css_parser_consume_url (parser);
       if (self->file == NULL)
-        {
-          _gtk_css_parser_error (parser, "Expected a url here");
-          return 0;
-        }
+        return 0;
       return 1;
 
     case 1:
