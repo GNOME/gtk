@@ -784,11 +784,11 @@ parse_import (GtkCssScanner *scanner)
 
   if (gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_STRING))
     {
-      char *uri;
+      char *url;
 
-      uri = gtk_css_parser_consume_string (scanner->parser);
-      file = _gtk_css_parser_get_file_for_path (scanner->parser, uri);
-      g_free (uri);
+      url = gtk_css_parser_consume_string (scanner->parser);
+      file = gtk_css_parser_resolve_url (scanner->parser, url);
+      g_free (url);
     }
   else
     {
