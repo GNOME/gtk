@@ -243,7 +243,7 @@ gtk_css_font_variations_value_parse (GtkCssParser *parser)
 
     if (!is_valid_opentype_tag (name))
       {
-        _gtk_css_parser_error (parser, "Not a valid OpenType tag.");
+        gtk_css_parser_error_value (parser, "Not a valid OpenType tag.");
         g_free (name);
         _gtk_css_value_unref (result);
         return NULL;

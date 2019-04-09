@@ -20,25 +20,6 @@
 #include "gtkcssparserprivate.h"
 
 void
-_gtk_css_parser_error (GtkCssParser *parser,
-                       const char   *format,
-                       ...)
-{
-  GtkCssLocation location;
-  va_list args;
-  GError *error;
-
-  gtk_css_parser_get_location (parser, &location);
-  va_start (args, format);
-  error = g_error_new_valist (GTK_CSS_PARSER_ERROR,
-                              GTK_CSS_PARSER_ERROR_FAILED,
-                              format, args);
-  gtk_css_parser_emit_error (parser, &location, &location, error);
-  g_error_free (error);
-  va_end (args);
-}
-
-void
 _gtk_css_print_string (GString    *str,
                        const char *string)
 {
