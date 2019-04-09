@@ -359,13 +359,13 @@ gtk_css_image_radial_parse_first_arg (GtkCssImageRadial *radial,
     {
       if (radial->sizes[0] && radial->sizes[1])
         {
-          _gtk_css_parser_error (parser, "Circular gradient can only have one size");
+          gtk_css_parser_error_syntax (parser, "Circular gradient can only have one size");
           return 0;
         }
 
       if (radial->sizes[0] && gtk_css_number_value_has_percent (radial->sizes[0]))
         {
-          _gtk_css_parser_error (parser, "Circular gradient cannot have percentage as size");
+          gtk_css_parser_error_syntax (parser, "Circular gradient cannot have percentage as size");
           return 0;
         }
     }
@@ -411,7 +411,7 @@ gtk_css_image_radial_parse (GtkCssImage  *image,
     self->repeating = FALSE;
   else
     {
-      _gtk_css_parser_error (parser, "Not a radial gradient");
+      gtk_css_parser_error_syntax (parser, "Not a radial gradient");
       return FALSE;
     }
 

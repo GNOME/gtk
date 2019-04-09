@@ -76,7 +76,7 @@ parse_four_numbers (GtkCssShorthandProperty  *shorthand,
 
   if (i == 0)
     {
-      _gtk_css_parser_error (parser, "Expected a length");
+      gtk_css_parser_error_syntax (parser, "Expected a length");
       return FALSE;
     }
 
@@ -145,7 +145,7 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
 
   if (i == 0)
     {
-      _gtk_css_parser_error (parser, "Expected a number");
+      gtk_css_parser_error_syntax (parser, "Expected a number");
       goto fail;
     }
 
@@ -171,7 +171,7 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
 
       if (i == 0)
         {
-          _gtk_css_parser_error (parser, "Expected a number");
+          gtk_css_parser_error_syntax (parser, "Expected a number");
           goto fail;
         }
 
@@ -243,7 +243,7 @@ parse_border_style (GtkCssShorthandProperty  *shorthand,
 
   if (i == 0)
     {
-      _gtk_css_parser_error (parser, "Expected a border style");
+      gtk_css_parser_error_syntax (parser, "Expected a border style");
       return FALSE;
     }
 
@@ -472,10 +472,10 @@ parse_font (GtkCssShorthandProperty  *shorthand,
               if (_gtk_css_number_value_get (values[3], 100) < 1 || 
                   _gtk_css_number_value_get (values[3], 100) > 1000)
                 {
-                  _gtk_css_parser_error (parser, "Font weight values must be between 1 and 1000");
+                  gtk_css_parser_error_value (parser, "Font weight values must be between 1 and 1000");
                   g_clear_pointer (&values[3], gtk_css_value_unref);
+                  return FALSE;
                 }
-              return FALSE;
             }
           parsed_one = parsed_one || values[3] != NULL;
         }
@@ -489,11 +489,15 @@ parse_font (GtkCssShorthandProperty  *shorthand,
   while (parsed_one && !value_is_done_parsing (parser));
 
   values[5] = gtk_css_font_size_value_parse (parser);
+  if (values[5] == NULL)
+    return FALSE;
 
 have_font_size:
   values[0] = gtk_css_font_family_value_parse (parser);
+  if (values[0] == NULL)
+    return FALSE;
 
-  return values[0] != NULL && values[5] != NULL;
+  return TRUE;
 }
 
 static gboolean
@@ -930,13 +934,13 @@ parse_font_variant (GtkCssShorthandProperty  *shorthand,
         parsed_ligature = _gtk_css_font_variant_ligature_try_parse_one (parser, ligatures);
         if (parsed_ligature == 0 && ligatures != 0)
           {
-            _gtk_css_parser_error (parser, "Invalid combination of ligature values");
+            gtk_css_parser_error_value (parser, "Invalid combination of ligature values");
             return FALSE;
           }
         if (parsed_ligature == GTK_CSS_FONT_VARIANT_LIGATURE_NORMAL ||
             parsed_ligature == GTK_CSS_FONT_VARIANT_LIGATURE_NONE)
           {
-            _gtk_css_parser_error (parser, "Unexpected ligature value");
+            gtk_css_parser_error_value (parser, "Unexpected ligature value");
             return FALSE;
           }
         if (parsed_ligature != ligatures)
@@ -948,12 +952,12 @@ parse_font_variant (GtkCssShorthandProperty  *shorthand,
         parsed_numeric = _gtk_css_font_variant_numeric_try_parse_one (parser, numeric);
         if (parsed_numeric == 0 && numeric != 0)
           {
-            _gtk_css_parser_error (parser, "Invalid combination of numeric values");
+            gtk_css_parser_error_value (parser, "Invalid combination of numeric values");
             return FALSE;
           }
         if (parsed_numeric == GTK_CSS_FONT_VARIANT_NUMERIC_NORMAL)
           {
-            _gtk_css_parser_error (parser, "Unexpected numeric value");
+            gtk_css_parser_error_value (parser, "Unexpected numeric value");
             return FALSE;
           }
         if (parsed_numeric != numeric)
@@ -965,12 +969,12 @@ parse_font_variant (GtkCssShorthandProperty  *shorthand,
         parsed_east_asian = _gtk_css_font_variant_east_asian_try_parse_one (parser, east_asian);
         if (parsed_east_asian == 0 && east_asian != 0)
           {
-            _gtk_css_parser_error (parser, "Invalid combination of east asian values");
+            gtk_css_parser_error_value (parser, "Invalid combination of east asian values");
             return FALSE;
           }
         if (parsed_east_asian == GTK_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL)
           {
-            _gtk_css_parser_error (parser, "Unexpected east asian value");
+            gtk_css_parser_error_value (parser, "Unexpected east asian value");
             return FALSE;
           }
         if (parsed_east_asian != east_asian)
@@ -986,7 +990,7 @@ parse_font_variant (GtkCssShorthandProperty  *shorthand,
               {
                 if (_gtk_css_font_variant_position_value_get (values[1]) == GTK_CSS_FONT_VARIANT_POSITION_NORMAL)
                   {
-                    _gtk_css_parser_error (parser, "Unexpected position value");
+                    gtk_css_parser_error_value (parser, "Unexpected position value");
                     return FALSE;
                   }
                 goto found;
@@ -999,7 +1003,7 @@ parse_font_variant (GtkCssShorthandProperty  *shorthand,
               {
                 if (_gtk_css_font_variant_caps_value_get (values[2]) == GTK_CSS_FONT_VARIANT_CAPS_NORMAL)
                   {
-                    _gtk_css_parser_error (parser, "Unexpected caps value");
+                    gtk_css_parser_error_value (parser, "Unexpected caps value");
                     return FALSE;
                   }
                 goto found;
@@ -1013,14 +1017,14 @@ parse_font_variant (GtkCssShorthandProperty  *shorthand,
               {
                 if (_gtk_css_font_variant_alternate_value_get (values[4]) == GTK_CSS_FONT_VARIANT_ALTERNATE_NORMAL)
                   {
-                    _gtk_css_parser_error (parser, "Unexpected alternate value");
+                    gtk_css_parser_error_value (parser, "Unexpected alternate value");
                     return FALSE;
                   }
                 goto found;
               }
           }
 
-        _gtk_css_parser_error (parser, "Unknown value for property");
+        gtk_css_parser_error_value (parser, "Unknown value for property");
         return FALSE;
 
 found:
@@ -1034,7 +1038,7 @@ found:
           values[0] = _gtk_css_font_variant_ligature_value_new (ligatures);
           if (values[0] == NULL)
             {
-              _gtk_css_parser_error (parser, "Invalid combination of ligature values");
+              gtk_css_parser_error_value (parser, "Invalid combination of ligature values");
               return FALSE;
             }
         }
@@ -1044,7 +1048,7 @@ found:
           values[3] = _gtk_css_font_variant_numeric_value_new (numeric);
           if (values[3] == NULL)
             {
-              _gtk_css_parser_error (parser, "Invalid combination of numeric values");
+              gtk_css_parser_error_value (parser, "Invalid combination of numeric values");
               return FALSE;
             }
         }
@@ -1054,7 +1058,7 @@ found:
           values[5] = _gtk_css_font_variant_east_asian_value_new (east_asian);
           if (values[5] == NULL)
             {
-              _gtk_css_parser_error (parser, "Invalid combination of east asian values");
+              gtk_css_parser_error_value (parser, "Invalid combination of east asian values");
               return FALSE;
             }
         }
@@ -1068,7 +1072,7 @@ parse_all (GtkCssShorthandProperty  *shorthand,
            GtkCssValue             **values,
            GtkCssParser             *parser)
 {
-  _gtk_css_parser_error (parser, "The 'all' property can only be set to 'initial', 'inherit' or 'unset'");
+  gtk_css_parser_error_syntax (parser, "The 'all' property can only be set to 'initial', 'inherit' or 'unset'");
   return FALSE;
 }
 

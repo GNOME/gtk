@@ -238,7 +238,7 @@ gtk_css_ease_value_parse_cubic_bezier_arg (GtkCssParser *parser,
     {
       if (values[arg] < 0 || values[arg] > 1.0)
         {
-          _gtk_css_parser_error (parser, "value %g out of range. Must be from 0.0 to 1.0", values[arg]);
+          gtk_css_parser_error_value (parser, "value %g out of range. Must be from 0.0 to 1.0", values[arg]);
           return 0;
         }
     }
@@ -279,7 +279,7 @@ gtk_css_ease_value_parse_steps_arg (GtkCssParser *parser,
         }
       else if (data->n_steps < 1)
         {
-          _gtk_css_parser_error (parser, "Number of steps must be > 0");
+          gtk_css_parser_error_value (parser, "Number of steps must be > 0");
           return 0;
         }
       return 1;
@@ -291,7 +291,7 @@ gtk_css_ease_value_parse_steps_arg (GtkCssParser *parser,
         data->start = FALSE;
       else
         {
-          _gtk_css_parser_error (parser, "Only allowed values are 'start' and 'end'");
+          gtk_css_parser_error_syntax (parser, "Only allowed values are 'start' and 'end'");
           return 0;
         }
       return 1;
@@ -347,7 +347,7 @@ _gtk_css_ease_value_parse (GtkCssParser *parser)
         }
     }
 
-  _gtk_css_parser_error (parser, "Unknown value");
+  gtk_css_parser_error_syntax (parser, "Expected a valid ease value");
   return NULL;
 }
 

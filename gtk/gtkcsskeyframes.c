@@ -234,8 +234,7 @@ gtk_css_keyframes_parse_declaration (GtkCssKeyframes *keyframes,
   property = _gtk_style_property_lookup (name);
   if (property == NULL)
     {
-      /* should be GTK_CSS_PARSER_ERROR_NAME */
-      _gtk_css_parser_error (parser, "No property named '%s'", name);
+      gtk_css_parser_error_value (parser, "No property named '%s'", name);
       g_free (name);
       return FALSE;
     }
@@ -244,7 +243,7 @@ gtk_css_keyframes_parse_declaration (GtkCssKeyframes *keyframes,
 
   if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COLON))
     {
-      _gtk_css_parser_error (parser, "Expected a ':'");
+      gtk_css_parser_error_syntax (parser, "Expected a ':'");
       return FALSE;
     }
 
@@ -254,7 +253,7 @@ gtk_css_keyframes_parse_declaration (GtkCssKeyframes *keyframes,
 
   if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
     {
-      _gtk_css_parser_error (parser, "Junk at end of value");
+      gtk_css_parser_error_syntax (parser, "Junk at end of value");
       _gtk_css_value_unref (value);
       return FALSE;
     }
@@ -274,12 +273,12 @@ gtk_css_keyframes_parse_declaration (GtkCssKeyframes *keyframes,
         }
 
       if (!animatable)
-        _gtk_css_parser_error (parser, "shorthand '%s' cannot be animated", _gtk_style_property_get_name (property));
+        gtk_css_parser_error_value (parser, "shorthand '%s' cannot be animated", _gtk_style_property_get_name (property));
     }
   else if (GTK_IS_CSS_STYLE_PROPERTY (property))
     {
       if (!keyframes_set_value (keyframes, k, GTK_CSS_STYLE_PROPERTY (property), value))
-        _gtk_css_parser_error (parser, "Cannot animate property '%s'", _gtk_style_property_get_name (property));
+        gtk_css_parser_error_value (parser, "Cannot animate property '%s'", _gtk_style_property_get_name (property));
     }
   else
     {
