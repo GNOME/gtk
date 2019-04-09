@@ -352,21 +352,13 @@ gtk_css_parser_end_block (GtkCssParser *self)
 
   if (gtk_css_token_is (&self->token, GTK_CSS_TOKEN_EOF))
     {
-      gtk_css_parser_warn (self,
-                           GTK_CSS_PARSER_WARNING_SYNTAX,
-                           gtk_css_parser_get_block_location (self),
-                           gtk_css_parser_get_start_location (self),
-                           "Unterminated block at end of document");
+      gtk_css_parser_warn_syntax (self, "Unterminated block at end of document");
       g_array_set_size (self->blocks, self->blocks->len - 1);
     }
   else if (gtk_css_token_is (&self->token, block->inherited_end_token))
     {
       g_assert (block->end_token == GTK_CSS_TOKEN_SEMICOLON);
-      gtk_css_parser_warn (self,
-                           GTK_CSS_PARSER_WARNING_SYNTAX,
-                           gtk_css_parser_get_block_location (self),
-                           gtk_css_parser_get_start_location (self),
-                           "Expected ';' at end of block");
+      gtk_css_parser_warn_syntax (self, "Expected ';' at end of block");
       g_array_set_size (self->blocks, self->blocks->len - 1);
     }
   else
@@ -434,15 +426,13 @@ gtk_css_parser_skip_until (GtkCssParser    *self,
 }
 
 void
-gtk_css_parser_emit_error (GtkCssParser *self,
-                           const GError *error)
+gtk_css_parser_emit_error (GtkCssParser         *self,
+                           const GtkCssLocation *start,
+                           const GtkCssLocation *end,
+                           const GError         *error)
 {
   if (self->error_func)
-    self->error_func (self,
-                      &self->location,
-                      &self->location,
-                      error,
-                      self->user_data);
+    self->error_func (self, start, end, error, self->user_data);
 }
 
 void
@@ -457,7 +447,10 @@ gtk_css_parser_error_syntax (GtkCssParser *self,
   error = g_error_new_valist (GTK_CSS_PARSER_ERROR,
                               GTK_CSS_PARSER_ERROR_SYNTAX,
                               format, args);
-  gtk_css_parser_emit_error (self, error);
+  gtk_css_parser_emit_error (self,
+                             &self->location,
+                             gtk_css_tokenizer_get_location (self->tokenizer),
+                             error);
   g_error_free (error);
   va_end (args);
 }
@@ -474,7 +467,10 @@ gtk_css_parser_error_value (GtkCssParser *self,
   error = g_error_new_valist (GTK_CSS_PARSER_ERROR,
                               GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
                               format, args);
-  gtk_css_parser_emit_error (self, error);
+  gtk_css_parser_emit_error (self,
+                             &self->location,
+                             gtk_css_tokenizer_get_location (self->tokenizer),
+                             error);
   g_error_free (error);
   va_end (args);
 }
@@ -491,7 +487,10 @@ gtk_css_parser_warn_syntax (GtkCssParser *self,
   error = g_error_new_valist (GTK_CSS_PARSER_WARNING,
                               GTK_CSS_PARSER_WARNING_SYNTAX,
                               format, args);
-  gtk_css_parser_emit_error (self, error);
+  gtk_css_parser_emit_error (self,
+                             &self->location,
+                             gtk_css_tokenizer_get_location (self->tokenizer),
+                             error);
   g_error_free (error);
   va_end (args);
 }
@@ -864,7 +863,10 @@ gtk_css_parser_consume_url (GtkCssParser *self)
       GError *error = g_error_new (GTK_CSS_PARSER_ERROR,
                                    GTK_CSS_PARSER_ERROR_IMPORT,
                                    "Could not resolve \"%s\" to a valid URL", url);
-      gtk_css_parser_emit_error (self, error);
+      gtk_css_parser_emit_error (self,
+                                 &self->location,
+                                 gtk_css_tokenizer_get_location (self->tokenizer),
+                                 error);
       g_free (url);
       g_error_free (error);
       return NULL;
