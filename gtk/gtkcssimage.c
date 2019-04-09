@@ -513,6 +513,9 @@ gtk_css_image_get_parser_type (GtkCssParser *parser)
         return image_types[i].type_func ();
     }
 
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_URL))
+    return _gtk_css_image_url_get_type ();
+
   return G_TYPE_INVALID;
 }
 
