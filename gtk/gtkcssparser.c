@@ -1036,7 +1036,7 @@ _gtk_css_parser_try_hash_color (GtkCssParser *parser,
 }
 
 GFile *
-_gtk_css_parser_read_url (GtkCssParser *parser)
+gtk_css_parser_consume_url (GtkCssParser *parser)
 {
   gchar *path;
   GFile *file;
