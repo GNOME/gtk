@@ -198,7 +198,7 @@ _gtk_css_border_value_parse (GtkCssParser           *parser,
 
   if (i == 0)
     {
-      _gtk_css_parser_error (parser, "Expected a number");
+      gtk_css_parser_error_syntax (parser, "Expected a number");
       _gtk_css_value_unref (result);
       return NULL;
     }
