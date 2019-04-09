@@ -37,9 +37,6 @@
 
 struct _GdkFrameClockIdlePrivate
 {
-  GTimer *timer;
-  /* timer_base is used to avoid ever going backward */
-  gint64 timer_base;
   gint64 frame_time;
   gint64 min_next_frame_time;
   gint64 sleep_serial;
@@ -160,22 +157,12 @@ compute_frame_time (GdkFrameClockIdle *idle)
 {
   GdkFrameClockIdlePrivate *priv = idle->priv;
   gint64 computed_frame_time;
-  gint64 elapsed;
 
-  elapsed = g_get_monotonic_time () + priv->timer_base;
-  if (elapsed < priv->frame_time)
-    {
-      /* clock went backward. adapt to that by forevermore increasing
-       * timer_base.  For now, assume we've gone forward in time 1ms.
-       */
-      /* hmm. just fix GTimer? */
+  computed_frame_time = g_get_monotonic_time ();
+
+  /* ensure monotonicity of frame time */
+  if (computed_frame_time <= priv->frame_time)
       computed_frame_time = priv->frame_time + 1;
-      priv->timer_base += (priv->frame_time - elapsed) + 1;
-    }
-  else
-    {
-      computed_frame_time = elapsed;
-    }
 
   return computed_frame_time;
 }
