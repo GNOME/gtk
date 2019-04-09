@@ -294,7 +294,7 @@ parse_progress (GtkCssParser *parser,
 
   if (*progress > 1.0)
     {
-      _gtk_css_parser_error (parser, "Percentages over 100%% are not allowed");
+      gtk_css_parser_error_value (parser, "Percentages over 100%% are not allowed");
       return FALSE;
     }
 
@@ -348,7 +348,7 @@ gtk_css_image_cross_fade_parse (GtkCssImage  *image,
 {
   if (!gtk_css_parser_has_function (parser, "cross-fade"))
     {
-      _gtk_css_parser_error (parser, "Expected 'cross-fade('");
+      gtk_css_parser_error_syntax (parser, "Expected 'cross-fade('");
       return FALSE;
     }
 

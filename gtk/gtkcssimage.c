@@ -548,7 +548,7 @@ _gtk_css_image_new_parse (GtkCssParser *parser)
   image_type = gtk_css_image_get_parser_type (parser);
   if (image_type == G_TYPE_INVALID)
     {
-      _gtk_css_parser_error (parser, "Not a valid image");
+      gtk_css_parser_error_syntax (parser, "Not a valid image");
       return NULL;
     }
 
