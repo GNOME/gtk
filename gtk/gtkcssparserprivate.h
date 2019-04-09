@@ -59,8 +59,8 @@ void            _gtk_css_parser_error             (GtkCssParser          *parser
 guint           _gtk_css_parser_get_line          (GtkCssParser          *parser);
 guint           _gtk_css_parser_get_position      (GtkCssParser          *parser);
 GFile *         _gtk_css_parser_get_file          (GtkCssParser          *parser);
-GFile *         _gtk_css_parser_get_file_for_path (GtkCssParser          *parser,
-                                                   const char            *path);
+GFile *         gtk_css_parser_resolve_url        (GtkCssParser          *parser,
+                                                   const char            *url);
 
 gboolean        gtk_css_parser_has_token          (GtkCssParser          *parser,
                                                    GtkCssTokenType        token_type);
