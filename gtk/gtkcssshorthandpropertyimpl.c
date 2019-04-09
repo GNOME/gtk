@@ -636,56 +636,63 @@ parse_background (GtkCssShorthandProperty  *shorthand,
 }
 
 static gboolean
+has_transition_property (GtkCssParser *parser,
+                         gpointer      option_data,
+                         gpointer      user_data)
+{
+  return gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT);
+}
+
+static gboolean
+parse_transition_property (GtkCssParser *parser,
+                           gpointer      option_data,
+                           gpointer      user_data)
+{
+  GtkCssValue **value = option_data;
+
+  *value = _gtk_css_ident_value_try_parse (parser);
+  g_assert (*value);
+
+  return TRUE;
+}
+
+static gboolean
+parse_transition_time (GtkCssParser *parser,
+                       gpointer      option_data,
+                       gpointer      user_data)
+{
+  GtkCssValue **value = option_data;
+
+  *value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_TIME);
+
+  return *value != NULL;
+}
+
+static gboolean
+parse_transition_timing_function (GtkCssParser *parser,
+                                  gpointer      option_data,
+                                  gpointer      user_data)
+{
+  GtkCssValue **value = option_data;
+
+  *value = _gtk_css_ease_value_parse (parser);
+
+  return *value != NULL;
+}
+
+static gboolean
 parse_one_transition (GtkCssShorthandProperty  *shorthand,
                       GtkCssValue             **values,
                       GtkCssParser             *parser)
 {
-  do
-    {
-      /* the image part */
-      if (values[2] == NULL &&
-          gtk_css_number_value_can_parse (parser))
-        {
-          GtkCssValue *number = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_TIME);
+  const GtkCssParseOption options[] = {
+    { (void *) _gtk_css_ease_value_can_parse, parse_transition_timing_function, &values[3] },
+    { (void *) gtk_css_number_value_can_parse, parse_transition_time, &values[1] },
+    { (void *) gtk_css_number_value_can_parse, parse_transition_time, &values[2] },
+    { (void *) has_transition_property, parse_transition_property, &values[0] },
+  };
 
-          if (number == NULL)
-            return FALSE;
-
-          if (values[1] == NULL)
-            values[1] = number;
-          else
-            values[2] = number;
-        }
-      else if (values[3] == NULL &&
-               _gtk_css_ease_value_can_parse (parser))
-        {
-          values[3] = _gtk_css_ease_value_parse (parser);
-
-          if (values[3] == NULL)
-            return FALSE;
-        }
-      else if (values[0] == NULL)
-        {
-          values[0] = _gtk_css_ident_value_try_parse (parser);
-          if (values[0] == NULL)
-            {
-              _gtk_css_parser_error (parser, "Unknown value for property");
-              return FALSE;
-            }
-
-        }
-      else
-        {
-          /* We parsed everything and there's still stuff left?
-           * Pretend we didn't notice and let the normal code produce
-           * a 'junk at end of value' error
-           */
-          break;
-        }
-    }
-  while (!value_is_done_parsing (parser));
-
-  return TRUE;
+  return gtk_css_parser_consume_any (parser, options, G_N_ELEMENTS (options), NULL);
 }
 
 static gboolean
