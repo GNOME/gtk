@@ -1053,4 +1053,18 @@ typedef enum {
   GTK_PICK_NON_TARGETABLE = 1 << 1
 } GtkPickFlags;
 
+/**
+ * GtkConstraintRelation:
+ * @GTK_CONSTRAINT_RELATION_EQ: Equal
+ * @GTK_CONSTRAINT_RELATION_LE: Less than, or equal
+ * @GTK_CONSTRAINT_RELATION_GE: Greater than, or equal
+ *
+ * The relation between two terms of a constraint.
+ */
+typedef enum {
+  GTK_CONSTRAINT_RELATION_LE = -1,
+  GTK_CONSTRAINT_RELATION_EQ = 0,
+  GTK_CONSTRAINT_RELATION_GE = 1
+} GtkConstraintRelation;
+
 #endif /* __GTK_ENUMS_H__ */
