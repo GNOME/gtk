@@ -787,12 +787,17 @@ parse_import (GtkCssScanner *scanner)
       char *url;
 
       url = gtk_css_parser_consume_string (scanner->parser);
-      file = gtk_css_parser_resolve_url (scanner->parser, url);
-      g_free (url);
+      if (url)
+        {
+          file = gtk_css_parser_resolve_url (scanner->parser, url);
+          g_free (url);
+        }
+      else
+        file = NULL;
     }
   else
     {
-      file = _gtk_css_parser_read_url (scanner->parser);
+      file = gtk_css_parser_consume_url (scanner->parser);
     }
 
   if (file == NULL)

@@ -98,6 +98,7 @@ gboolean        _gtk_css_parser_try_hash_color    (GtkCssParser          *parser
 
 char *          gtk_css_parser_consume_ident      (GtkCssParser          *self);
 char *          gtk_css_parser_consume_string     (GtkCssParser          *self);
+GFile *         gtk_css_parser_consume_url        (GtkCssParser          *self);
 gboolean        gtk_css_parser_consume_number     (GtkCssParser          *self,
                                                    double                *number);
 gboolean        gtk_css_parser_consume_integer    (GtkCssParser          *parser,
@@ -113,7 +114,6 @@ gsize           gtk_css_parser_consume_any        (GtkCssParser          *parser
                                                    gpointer               user_data);
 
 gboolean        _gtk_css_parser_has_number        (GtkCssParser          *parser);
-GFile *         _gtk_css_parser_read_url          (GtkCssParser          *parser);
 
 void            _gtk_css_parser_skip_whitespace   (GtkCssParser          *parser);
 void            _gtk_css_parser_resync            (GtkCssParser          *parser,
