@@ -1,2 +1,2 @@
-property-name-errors.css:2: error: GTK_CSS_PARSER_ERROR_SYNTAX
-property-name-errors.css:3: error: GTK_CSS_PARSER_ERROR_SYNTAX
+property-name-errors.css:2: error: GTK_CSS_PARSER_ERROR_UNKNWON_VALUE
+property-name-errors.css:3: error: GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE
