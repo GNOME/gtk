@@ -82,6 +82,8 @@
 #include <gtk/gtkcolorutils.h>
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtkcomboboxtext.h>
+#include <gtk/gtkconstraintlayout.h>
+#include <gtk/gtkconstraint.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkcssprovider.h>
 #include <gtk/gtkcustomlayout.h>

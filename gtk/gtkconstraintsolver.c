@@ -354,37 +354,6 @@ gtk_constraint_solver_init (GtkConstraintSolver *self)
   self->auto_solve = TRUE;
 }
 
-/* Symbolic weight thresholds
- *
- * Constraint weights live on a continuum, but we use thresholds for simplicity's
- * sake, so we don't have to necessarily reason in terms of numeric values.
- *
- * The public API has a similar approach, where the symbolic constants are negative
- * values, and positive values are explicit weights. We map those values into
- * numeric values that the GtkConstraintSolver can plug into the linear equations
- * tableau.
- */
-#define GTK_CONSTRAINT_WEIGHT_REQUIRED  (make_weight (1000, 1000, 1000, 1))
-#define GTK_CONSTRAINT_WEIGHT_STRONG    (make_weight (   1,    0,    0, 1))
-#define GTK_CONSTRAINT_WEIGHT_MEDIUM    (make_weight (   0,    1,    0, 1))
-#define GTK_CONSTRAINT_WEIGHT_WEAK      (make_weight (   0,    0,    1, 1))
-
-G_GNUC_PURE
-static inline double
-make_weight (double a,
-             double b,
-             double c,
-             double w)
-{
-  double res = 0;
-
-  res += CLAMP (a * w, 0, 1000) * 1000000;
-  res += CLAMP (b * w, 0, 1000) * 1000;
-  res += CLAMP (c * w, 0, 1000);
-
-  return res;
-}
-
 static void
 gtk_constraint_ref_free (GtkConstraintRef *self)
 {
