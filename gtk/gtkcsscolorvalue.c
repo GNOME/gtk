@@ -574,6 +574,23 @@ parse_color_number (GtkCssParser *parser,
   }
 }
 
+gboolean
+gtk_css_color_value_can_parse (GtkCssParser *parser)
+{
+  /* This is way too generous, but meh... */
+  return gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_AT_KEYWORD)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_HASH_ID)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_HASH_UNRESTRICTED)
+      || gtk_css_parser_has_function (parser, "lighter")
+      || gtk_css_parser_has_function (parser, "darker")
+      || gtk_css_parser_has_function (parser, "shade")
+      || gtk_css_parser_has_function (parser, "alpha")
+      || gtk_css_parser_has_function (parser, "mix")
+      || gtk_css_parser_has_function (parser, "rgb")
+      || gtk_css_parser_has_function (parser, "rgba");
+}
+
 GtkCssValue *
 _gtk_css_color_value_parse (GtkCssParser *parser)
 {
