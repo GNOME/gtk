@@ -3,6 +3,8 @@
 
 #include "gtkroot.h"
 
+#include "gtkconstraintsolverprivate.h"
+
 G_BEGIN_DECLS
 
 /**
@@ -17,7 +19,11 @@ struct _GtkRootInterface
 
   /*< public >*/
   GdkDisplay * (* get_display)  (GtkRoot *self);
+
+  GtkConstraintSolver * (* get_constraint_solver) (GtkRoot *self);
 };
+
+GtkConstraintSolver *   gtk_root_get_constraint_solver  (GtkRoot *self);
 
 enum {
   GTK_ROOT_PROP_FOCUS_WIDGET,
