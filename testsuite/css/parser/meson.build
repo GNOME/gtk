@@ -383,6 +383,8 @@ test_data = [
   'selector.ref.css',
   'shadow.css',
   'shadow.ref.css',
+  'shadow-ordering.css',
+  'shadow-ordering.ref.css',
   'shorthand.css',
   'shorthand.ref.css',
   'simple.css',
