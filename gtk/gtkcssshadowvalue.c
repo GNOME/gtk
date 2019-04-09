@@ -266,10 +266,7 @@ _gtk_css_shadow_value_parse (GtkCssParser *parser,
       }
     else if (!inset && box_shadow_mode && gtk_css_parser_try_ident (parser, "inset"))
       {
-        if (values[HOFFSET] == NULL)
-          goto fail;
         inset = TRUE;
-        break;
       }
     else if (values[COLOR] == NULL)
       {
