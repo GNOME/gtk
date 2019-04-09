@@ -316,12 +316,6 @@ static GtkCssValue *
 gtk_css_calc_value_parse_value (GtkCssParser           *parser,
                                 GtkCssNumberParseFlags  flags)
 {
-  if (gtk_css_parser_has_function (parser, "calc"))
-    {
-      _gtk_css_parser_error (parser, "Nested calc() expressions are not allowed.");
-      return NULL;
-    }
-
   if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_OPEN_PARENS))
     {
       GtkCssValue *result;
@@ -336,7 +330,7 @@ gtk_css_calc_value_parse_value (GtkCssParser           *parser,
         }
 
       if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-        _gtk_css_parser_error (parser, "Expected closing ')' in calc() subterm");
+        gtk_css_parser_error_syntax (parser, "Expected closing ')' in calc() subterm");
 
       gtk_css_parser_end_block (parser);
 
@@ -402,7 +396,7 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
 
   if (is_number (result) && !(flags & GTK_CSS_PARSE_NUMBER))
     {
-      _gtk_css_parser_error (parser, "calc() product term has no units");
+      gtk_css_parser_error_syntax (parser, "calc() product term has no units");
       goto fail;
     }
 
@@ -491,7 +485,7 @@ gtk_css_calc_value_parse (GtkCssParser           *parser,
 
   if (!gtk_css_parser_has_function (parser, "calc"))
     {
-      _gtk_css_parser_error (parser, "Expected 'calc('");
+      gtk_css_parser_error_syntax (parser, "Expected 'calc('");
       return NULL;
     }
 

@@ -1176,7 +1176,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
 
   if (array->len == 0)
     {
-      _gtk_css_parser_error (parser, "Expected a transform");
+      gtk_css_parser_error_syntax (parser, "Expected a transform");
       goto fail;
     }
 

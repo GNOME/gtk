@@ -182,7 +182,7 @@ gtk_css_image_scaled_parse (GtkCssImage  *image,
 
   if (!gtk_css_parser_has_function (parser, "-gtk-scaled"))
     {
-      _gtk_css_parser_error (parser, "Expected '-gtk-scaled('");
+      gtk_css_parser_error_syntax (parser, "Expected '-gtk-scaled('");
       return FALSE;
     }
 
