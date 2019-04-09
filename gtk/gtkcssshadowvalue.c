@@ -201,103 +201,132 @@ _gtk_css_shadow_value_new_for_transition (GtkCssValue *target)
                                    _gtk_css_rgba_value_new_from_rgba (&transparent));
 }
 
+enum {
+  HOFFSET,
+  VOFFSET,
+  RADIUS,
+  SPREAD,
+  N_VALUES
+};
+
 static gboolean
-value_is_done_parsing (GtkCssParser *parser)
+has_inset (GtkCssParser *parser,
+           gpointer      option_data,
+           gpointer      box_shadow_mode)
 {
-  return gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF) ||
-         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA) ||
-         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SEMICOLON) ||
-         gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_CLOSE_CURLY);
+  return box_shadow_mode && gtk_css_parser_has_ident (parser, "inset");
+}
+
+static gboolean
+parse_inset (GtkCssParser *parser,
+             gpointer      option_data,
+             gpointer      box_shadow_mode)
+{
+  gboolean *inset = option_data;
+
+  if (!gtk_css_parser_try_ident (parser, "inset"))
+    {
+      g_assert_not_reached ();
+      return FALSE;
+    }
+
+  *inset = TRUE;
+
+  return TRUE;
+}
+
+static gboolean
+parse_lengths (GtkCssParser *parser,
+               gpointer      option_data,
+               gpointer      box_shadow_mode)
+{
+  GtkCssValue **values = option_data;
+
+  values[HOFFSET] = _gtk_css_number_value_parse (parser,
+                                                 GTK_CSS_PARSE_LENGTH);
+  if (values[HOFFSET] == NULL)
+    return FALSE;
+
+  values[VOFFSET] = _gtk_css_number_value_parse (parser,
+                                                 GTK_CSS_PARSE_LENGTH);
+  if (values[VOFFSET] == NULL)
+    return FALSE;
+
+  if (gtk_css_number_value_can_parse (parser))
+    {
+      values[RADIUS] = _gtk_css_number_value_parse (parser,
+                                                    GTK_CSS_PARSE_LENGTH
+                                                    | GTK_CSS_POSITIVE_ONLY);
+      if (values[RADIUS] == NULL)
+        return FALSE;
+    }
+  else
+    values[RADIUS] = _gtk_css_number_value_new (0.0, GTK_CSS_PX);
+
+  if (box_shadow_mode && gtk_css_number_value_can_parse (parser))
+    {
+      values[SPREAD] = _gtk_css_number_value_parse (parser,
+                                                    GTK_CSS_PARSE_LENGTH);
+      if (values[SPREAD] == NULL)
+        return FALSE;
+    }
+  else
+    values[SPREAD] = _gtk_css_number_value_new (0.0, GTK_CSS_PX);
+
+  return TRUE;
+}
+
+static gboolean
+parse_color (GtkCssParser *parser,
+             gpointer      option_data,
+             gpointer      box_shadow_mode)
+{
+  GtkCssValue **color = option_data;
+  
+  *color = _gtk_css_color_value_parse (parser);
+  if (*color == NULL)
+    return FALSE;
+
+  return TRUE;
 }
 
 GtkCssValue *
 _gtk_css_shadow_value_parse (GtkCssParser *parser,
                              gboolean      box_shadow_mode)
 {
-  enum {
-    HOFFSET,
-    VOFFSET,
-    RADIUS,
-    SPREAD,
-    COLOR,
-    N_VALUES
-  };
   GtkCssValue *values[N_VALUES] = { NULL, };
-  gboolean inset;
+  GtkCssValue *color = NULL;
+  gboolean inset = FALSE;
+  GtkCssParseOption options[] =
+    {
+      { (void *) gtk_css_number_value_can_parse, parse_lengths, values },
+      { has_inset, parse_inset, &inset },
+      { (void *) gtk_css_color_value_can_parse, parse_color, &color },
+    };
   guint i;
 
-  inset = FALSE;
+  if (!gtk_css_parser_consume_any (parser, options, G_N_ELEMENTS (options), GUINT_TO_POINTER (box_shadow_mode)))
+    goto fail;
 
-  do
-  {
-    if (values[HOFFSET] == NULL &&
-        gtk_css_number_value_can_parse (parser))
-      {
-        values[HOFFSET] = _gtk_css_number_value_parse (parser,
-                                                       GTK_CSS_PARSE_LENGTH);
-        if (values[HOFFSET] == NULL)
-          goto fail;
+  if (values[0] == NULL)
+    {
+      gtk_css_parser_error_syntax (parser, "Expected shadow value to contain a length");
+      goto fail;
+    }
 
-        values[VOFFSET] = _gtk_css_number_value_parse (parser,
-                                                       GTK_CSS_PARSE_LENGTH);
-        if (values[VOFFSET] == NULL)
-          goto fail;
-
-        if (gtk_css_number_value_can_parse (parser))
-          {
-            values[RADIUS] = _gtk_css_number_value_parse (parser,
-                                                          GTK_CSS_PARSE_LENGTH
-                                                          | GTK_CSS_POSITIVE_ONLY);
-            if (values[RADIUS] == NULL)
-              goto fail;
-          }
-        else
-          values[RADIUS] = _gtk_css_number_value_new (0.0, GTK_CSS_PX);
-
-        if (box_shadow_mode && gtk_css_number_value_can_parse (parser))
-          {
-            values[SPREAD] = _gtk_css_number_value_parse (parser,
-                                                          GTK_CSS_PARSE_LENGTH);
-            if (values[SPREAD] == NULL)
-              goto fail;
-          }
-        else
-          values[SPREAD] = _gtk_css_number_value_new (0.0, GTK_CSS_PX);
-      }
-    else if (!inset && box_shadow_mode && gtk_css_parser_try_ident (parser, "inset"))
-      {
-        inset = TRUE;
-      }
-    else if (values[COLOR] == NULL)
-      {
-        values[COLOR] = _gtk_css_color_value_parse (parser);
-
-        if (values[COLOR] == NULL)
-          goto fail;
-      }
-    else
-      {
-        /* We parsed everything and there's still stuff left?
-         * Pretend we didn't notice and let the normal code produce
-         * a 'junk at end of value' error */
-        goto fail;
-      }
-  }
-  while (values[HOFFSET] == NULL || !value_is_done_parsing (parser));
-
-  if (values[COLOR] == NULL)
-    values[COLOR] = _gtk_css_color_value_new_current_color ();
+  if (color == NULL)
+    color = _gtk_css_color_value_new_current_color ();
 
   return gtk_css_shadow_value_new (values[HOFFSET], values[VOFFSET],
                                    values[RADIUS], values[SPREAD],
-                                   inset, values[COLOR]);
+                                   inset, color);
 
 fail:
   for (i = 0; i < N_VALUES; i++)
     {
-      if (values[i])
-        _gtk_css_value_unref (values[i]);
+      g_clear_pointer (&values[i], gtk_css_value_unref);
     }
+  g_clear_pointer (&color, gtk_css_value_unref);
 
   return NULL;
 }

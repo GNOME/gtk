@@ -39,6 +39,7 @@ GtkCssValue *   _gtk_css_color_value_new_mix            (GtkCssValue    *color1,
                                                          gdouble         factor);
 GtkCssValue *   _gtk_css_color_value_new_current_color  (void);
 
+gboolean        gtk_css_color_value_can_parse           (GtkCssParser   *parser);
 GtkCssValue *   _gtk_css_color_value_parse              (GtkCssParser   *parser);
 
 GtkCssValue *   _gtk_css_color_value_resolve            (GtkCssValue      *color,
