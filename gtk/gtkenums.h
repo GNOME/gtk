@@ -1067,4 +1067,64 @@ typedef enum {
   GTK_CONSTRAINT_RELATION_GE = 1
 } GtkConstraintRelation;
 
+/**
+ * GtkConstraintStrength:
+ * @GTK_CONSTRAINT_STRENGTH_REQUIRED: The constraint is required towards solving the layout
+ * @GTK_CONSTRAINT_STRENGTH_STRONG: A strong constraint
+ * @GTK_CONSTRAINT_STRENGTH_MEDIUM: A medium constraint
+ * @GTK_CONSTRAINT_STRENGTH_WEAK: A weak constraint
+ *
+ * The strength of a constraint, expressed as a symbolic constant.
+ *
+ * The strength of a #GtkConstraint can be expressed with any positive
+ * integer; the values of this enumeration can be used for readability.
+ */
+typedef enum {
+  GTK_CONSTRAINT_STRENGTH_REQUIRED = 0,
+  GTK_CONSTRAINT_STRENGTH_STRONG = -1,
+  GTK_CONSTRAINT_STRENGTH_MEDIUM = -2,
+  GTK_CONSTRAINT_STRENGTH_WEAK = -3
+} GtkConstraintStrength;
+
+/**
+ * GtkConstraintAttribute:
+ * @GTK_CONSTRAINT_ATTRIBUTE_NONE: No attribute, used for constant
+ *   relations
+ * @GTK_CONSTRAINT_ATTRIBUTE_LEFT: The left edge of a widget, regardless of
+ *   text direction
+ * @GTK_CONSTRAINT_ATTRIBUTE_RIGHT: The right edge of a widget, regardless
+ *   of text direction
+ * @GTK_CONSTRAINT_ATTRIBUTE_TOP: The top edge of a widget
+ * @GTK_CONSTRAINT_ATTRIBUTE_BOTTOM: The bottom edge of a widget
+ * @GTK_CONSTRAINT_ATTRIBUTE_START: The leading edge of a widget, depending
+ *   on text direction; equivalent to %GTK_CONSTRAINT_ATTRIBUTE_LEFT for LTR
+ *   languages, and %GTK_CONSTRAINT_ATTRIBUTE_RIGHT for RTL ones
+ * @GTK_CONSTRAINT_ATTRIBUTE_END: The trailing edge of a widget, depending
+ *   on text direction; equivalent to %GTK_CONSTRAINT_ATTRIBUTE_RIGHT for LTR
+ *   languages, and %GTK_CONSTRAINT_ATTRIBUTE_LEFT for RTL ones
+ * @GTK_CONSTRAINT_ATTRIBUTE_WIDTH: The width of a widget
+ * @GTK_CONSTRAINT_ATTRIBUTE_HEIGHT: The height of a widget
+ * @GTK_CONSTRAINT_ATTRIBUTE_CENTER_X: The center of a widget, on the
+ *   horizontal axis
+ * @GTK_CONSTRAINT_ATTRIBUTE_CENTER_Y: The center of a widget, on the
+ *   vertical axis
+ * @GTK_CONSTRAINT_ATTRIBUTE_BASELINE: The baseline of a widget
+ *
+ * The widget attributes that can be used when creating a #GtkConstraint.
+ */
+typedef enum {
+  GTK_CONSTRAINT_ATTRIBUTE_NONE,
+  GTK_CONSTRAINT_ATTRIBUTE_LEFT,
+  GTK_CONSTRAINT_ATTRIBUTE_RIGHT,
+  GTK_CONSTRAINT_ATTRIBUTE_TOP,
+  GTK_CONSTRAINT_ATTRIBUTE_BOTTOM,
+  GTK_CONSTRAINT_ATTRIBUTE_START,
+  GTK_CONSTRAINT_ATTRIBUTE_END,
+  GTK_CONSTRAINT_ATTRIBUTE_WIDTH,
+  GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
+  GTK_CONSTRAINT_ATTRIBUTE_CENTER_X,
+  GTK_CONSTRAINT_ATTRIBUTE_CENTER_Y,
+  GTK_CONSTRAINT_ATTRIBUTE_BASELINE
+} GtkConstraintAttribute;
+
 #endif /* __GTK_ENUMS_H__ */
