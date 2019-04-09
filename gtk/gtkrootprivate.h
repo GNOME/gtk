@@ -5,6 +5,25 @@
 
 G_BEGIN_DECLS
 
+/*
+ * GtkRootIface:
+ *
+ * The list of functions that must be implemented for the #GtkRoot interface.
+ */
+struct _GtkRootInterface
+{
+  /*< private >*/
+  GTypeInterface g_iface;
+
+  /*< public >*/
+  GdkDisplay *          (* get_display)                 (GtkRoot                *self);
+  GskRenderer *         (* get_renderer)                (GtkRoot                *self);
+
+  void                  (* get_surface_transform)       (GtkRoot                *root,
+                                                         int                    *x,
+                                                         int                    *y);
+};
+
 GdkDisplay *            gtk_root_get_display            (GtkRoot                *root);
 GskRenderer *           gtk_root_get_renderer           (GtkRoot                *self);
 
