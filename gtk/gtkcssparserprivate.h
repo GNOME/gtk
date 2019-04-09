@@ -26,10 +26,6 @@
 
 G_BEGIN_DECLS
 
-void            _gtk_css_parser_error             (GtkCssParser          *parser,
-                                                   const char            *format,
-                                                    ...) G_GNUC_PRINTF (2, 3);
-
 /* XXX: Find better place to put it? */
 void            _gtk_css_print_string             (GString               *str,
                                                    const char            *string);

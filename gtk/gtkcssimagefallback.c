@@ -190,7 +190,7 @@ gtk_css_image_fallback_parse_arg (GtkCssParser *parser,
 
   if (data->color != NULL)
     {
-      _gtk_css_parser_error (parser, "The color must be the last parameter");
+      gtk_css_parser_error_syntax (parser, "The color must be the last parameter");
       return 0;
     }
   else if (_gtk_css_image_can_parse (parser))
@@ -221,7 +221,7 @@ gtk_css_image_fallback_parse (GtkCssImage  *image,
 
   if (!gtk_css_parser_has_function (parser, "image"))
     {
-      _gtk_css_parser_error (parser, "Expected 'image('");
+      gtk_css_parser_error_syntax (parser, "Expected 'image('");
       return FALSE;
     }
 
