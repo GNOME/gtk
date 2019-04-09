@@ -126,16 +126,26 @@ gtk_css_parser_get_base_file (GtkCssParser *parser)
 }
 
 GFile *
-_gtk_css_parser_get_file_for_path (GtkCssParser *parser,
-                                   const char   *path)
+gtk_css_parser_resolve_url (GtkCssParser *parser,
+                            const char   *url)
 {
   GFile *base, *file;
+  char *scheme;
 
   g_return_val_if_fail (parser != NULL, NULL);
-  g_return_val_if_fail (path != NULL, NULL);
+  g_return_val_if_fail (url != NULL, NULL);
+
+  scheme = g_uri_parse_scheme (url);
+  if (scheme != NULL)
+    {
+      file = g_file_new_for_uri (url);
+      g_free (scheme);
+      return file;
+    }
+  g_free (scheme);
 
   base = gtk_css_parser_get_base_file (parser);
-  file = g_file_resolve_relative_path (base, path);
+  file = g_file_resolve_relative_path (base, url);
   g_object_unref (base);
 
   return file;
@@ -1029,7 +1039,6 @@ GFile *
 _gtk_css_parser_read_url (GtkCssParser *parser)
 {
   gchar *path;
-  char *scheme;
   GFile *file;
 
   if (_gtk_css_parser_try (parser, "url", FALSE))
@@ -1050,15 +1059,6 @@ _gtk_css_parser_read_url (GtkCssParser *parser)
           g_free (path);
           return NULL;
         }
-
-      scheme = g_uri_parse_scheme (path);
-      if (scheme != NULL)
-	{
-	  file = g_file_new_for_uri (path);
-	  g_free (path);
-	  g_free (scheme);
-	  return file;
-	}
     }
   else
     {
@@ -1070,7 +1070,7 @@ _gtk_css_parser_read_url (GtkCssParser *parser)
         }
     }
 
-  file = _gtk_css_parser_get_file_for_path (parser, path);
+  file = gtk_css_parser_resolve_url (parser, path);
   g_free (path);
 
   return file;
