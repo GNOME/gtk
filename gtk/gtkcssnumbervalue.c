@@ -129,7 +129,14 @@ gtk_css_number_value_transition (GtkCssValue *start,
 gboolean
 gtk_css_number_value_can_parse (GtkCssParser *parser)
 {
-  return _gtk_css_parser_has_number (parser)
+  return gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNED_NUMBER)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNLESS_NUMBER)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNED_INTEGER)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNLESS_INTEGER)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_PERCENTAGE)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_DIMENSION)
       || gtk_css_parser_has_function (parser, "calc");
 }
 

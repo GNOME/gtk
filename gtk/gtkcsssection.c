@@ -43,6 +43,7 @@ _gtk_css_section_new (GtkCssSection     *parent,
                       GtkCssParser      *parser)
 {
   GtkCssSection *section;
+  GtkCssLocation location;
 
   gtk_internal_return_val_if_fail (parser != NULL, NULL);
 
@@ -52,12 +53,13 @@ _gtk_css_section_new (GtkCssSection     *parent,
   section->section_type = type;
   if (parent)
     section->parent = gtk_css_section_ref (parent);
-  section->file = _gtk_css_parser_get_file (parser);
+  section->file = gtk_css_parser_get_file (parser);
   if (section->file)
     g_object_ref (section->file);
-  section->start_line = _gtk_css_parser_get_line (parser);
-  section->start_position = _gtk_css_parser_get_position (parser);
   section->parser = parser;
+  gtk_css_parser_get_location (section->parser, &location);
+  section->start_line = location.lines;
+  section->start_position = location.line_chars;
 
   return section;
 }
@@ -82,11 +84,14 @@ _gtk_css_section_new_for_file (GtkCssSectionType  type,
 void
 _gtk_css_section_end (GtkCssSection *section)
 {
+  GtkCssLocation location;
+
   gtk_internal_return_if_fail (section != NULL);
   gtk_internal_return_if_fail (section->parser != NULL);
 
-  section->end_line = _gtk_css_parser_get_line (section->parser);
-  section->end_position = _gtk_css_parser_get_position (section->parser);
+  gtk_css_parser_get_location (section->parser, &location);
+  section->end_line = location.lines;
+  section->end_position = location.line_chars;
   section->parser = NULL;
 }
 
@@ -243,12 +248,15 @@ gtk_css_section_get_start_position (const GtkCssSection *section)
 guint
 gtk_css_section_get_end_line (const GtkCssSection *section)
 {
+  GtkCssLocation location;
+
   gtk_internal_return_val_if_fail (section != NULL, 0);
 
-  if (section->parser)
-    return _gtk_css_parser_get_line (section->parser);
-  else
+  if (!section->parser)
     return section->end_line;
+
+  gtk_css_parser_get_location (section->parser, &location);
+  return location.lines;
 }
 
 /**
@@ -269,12 +277,15 @@ gtk_css_section_get_end_line (const GtkCssSection *section)
 guint
 gtk_css_section_get_end_position (const GtkCssSection *section)
 {
+  GtkCssLocation location;
+
   gtk_internal_return_val_if_fail (section != NULL, 0);
 
-  if (section->parser)
-    return _gtk_css_parser_get_position (section->parser);
-  else
+  if (!section->parser)
     return section->end_position;
+
+  gtk_css_parser_get_location (section->parser, &location);
+  return location.line_chars;
 }
 
 void
