@@ -146,7 +146,7 @@ gtk_css_image_icon_theme_parse (GtkCssImage  *image,
 {
   if (!gtk_css_parser_has_function (parser, "-gtk-icontheme"))
     {
-      _gtk_css_parser_error (parser, "Expected '-gtk-icontheme('");
+      gtk_css_parser_error_syntax (parser, "Expected '-gtk-icontheme('");
       return FALSE;
     }
 

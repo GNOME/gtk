@@ -253,10 +253,7 @@ gtk_css_image_recolor_parse_arg (GtkCssParser *parser,
     case 1:
       self->palette = gtk_css_palette_value_parse (parser);
       if (self->palette == NULL)
-        {
-          _gtk_css_parser_error (parser, "A palette is required here");
-          return 0;
-        }
+        return 0;
       return 1;
 
     default:
@@ -271,7 +268,7 @@ gtk_css_image_recolor_parse (GtkCssImage  *image,
 {
   if (!gtk_css_parser_has_function (parser, "-gtk-recolor"))
     {
-      _gtk_css_parser_error (parser, "Expected '-gtk-recolor('");
+      gtk_css_parser_error_syntax (parser, "Expected '-gtk-recolor('");
       return FALSE;
     }
 
