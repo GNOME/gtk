@@ -61,12 +61,19 @@ gtk_root_default_get_surface_transform (GtkRoot *self,
   *y = 0;
 }
 
+static GtkConstraintSolver *
+gtk_root_default_get_constraint_solver (GtkRoot *self)
+{
+  return NULL;
+}
+
 static void
 gtk_root_default_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_root_default_get_display;
   iface->get_renderer = gtk_root_default_get_renderer;
   iface->get_surface_transform = gtk_root_default_get_surface_transform;
+  iface->get_constraint_solver = gtk_root_default_get_constraint_solver;
 
   g_object_interface_install_property (iface,
       g_param_spec_object ("focus-widget",
@@ -111,6 +118,17 @@ gtk_root_get_surface_transform (GtkRoot *self,
 
   iface = GTK_ROOT_GET_IFACE (self);
   return iface->get_surface_transform (self, x, y);
+}
+
+GtkConstraintSolver *
+gtk_root_get_constraint_solver (GtkRoot *self)
+{
+  GtkRootInterface *iface;
+
+  g_return_val_if_fail (GTK_IS_ROOT (self), NULL);
+
+  iface = GTK_ROOT_GET_IFACE (self);
+  return iface->get_constraint_solver (self);
 }
 
 /**

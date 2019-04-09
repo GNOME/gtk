@@ -3,6 +3,8 @@
 
 #include "gtkroot.h"
 
+#include "gtkconstraintsolverprivate.h"
+
 G_BEGIN_DECLS
 
 /*
@@ -19,17 +21,22 @@ struct _GtkRootInterface
   GdkDisplay *          (* get_display)                 (GtkRoot                *self);
   GskRenderer *         (* get_renderer)                (GtkRoot                *self);
 
-  void                  (* get_surface_transform)       (GtkRoot                *root,
+  void                  (* get_surface_transform)       (GtkRoot                *self,
                                                          int                    *x,
                                                          int                    *y);
+
+  GtkConstraintSolver * (* get_constraint_solver)       (GtkRoot                *self);
 };
 
-GdkDisplay *            gtk_root_get_display            (GtkRoot                *root);
+GdkDisplay *            gtk_root_get_display            (GtkRoot                *self);
 GskRenderer *           gtk_root_get_renderer           (GtkRoot                *self);
 
 void                    gtk_root_get_surface_transform  (GtkRoot                *self,
                                                          int                    *x,
                                                          int                    *y);
+
+GtkConstraintSolver *   gtk_root_get_constraint_solver  (GtkRoot                *self);
+
 enum {
   GTK_ROOT_PROP_FOCUS_WIDGET,
   GTK_ROOT_NUM_PROPERTIES
