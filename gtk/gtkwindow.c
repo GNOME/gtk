@@ -282,6 +282,8 @@ typedef struct
   GskRenderer *renderer;
 
   GList *foci;
+
+  GtkConstraintSolver *constraint_solver;
 } GtkWindowPrivate;
 
 #ifdef GDK_WINDOWING_X11
@@ -1881,6 +1883,8 @@ gtk_window_init (GtkWindow *window)
   gtk_widget_add_controller (widget, priv->key_controller);
 
   add_actions (window);
+
+  priv->constraint_solver = gtk_constraint_solver_new ();
 }
 
 static GtkGesture *
@@ -2351,6 +2355,15 @@ gtk_window_native_get_renderer (GtkNative *native)
   return priv->renderer;
 }
 
+static GtkConstraintSolver *
+gtk_window_root_get_constraint_solver (GtkRoot *root)
+{
+  GtkWindow *self = GTK_WINDOW (root);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
+
+  return priv->constraint_solver;
+}
+
 static void
 gtk_window_native_get_surface_transform (GtkNative *native,
                                          int       *x,
@@ -2379,6 +2392,7 @@ static void
 gtk_window_root_interface_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_window_root_get_display;
+  iface->get_constraint_solver = gtk_window_root_get_constraint_solver;
 }
 
 static void
@@ -4721,6 +4735,7 @@ gtk_window_finalize (GObject *object)
       priv->mnemonics_display_timeout_id = 0;
     }
 
+  g_clear_object (&priv->constraint_solver);
   g_clear_object (&priv->renderer);
 
   G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
