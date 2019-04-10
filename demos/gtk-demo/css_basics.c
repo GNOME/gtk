@@ -13,17 +13,20 @@ show_parsing_error (GtkCssProvider *provider,
                     const GError   *error,
                     GtkTextBuffer  *buffer)
 {
+  const GtkCssLocation *start_location, *end_location;
   GtkTextIter start, end;
   const char *tag_name;
 
+  start_location = gtk_css_section_get_start_location (section);
   gtk_text_buffer_get_iter_at_line_index (buffer,
                                           &start,
-                                          gtk_css_section_get_start_line (section),
-                                          gtk_css_section_get_start_position (section));
+                                          start_location->lines,
+                                          start_location->line_bytes);
+  end_location = gtk_css_section_get_end_location (section);
   gtk_text_buffer_get_iter_at_line_index (buffer,
                                           &end,
-                                          gtk_css_section_get_end_line (section),
-                                          gtk_css_section_get_end_position (section));
+                                          end_location->lines,
+                                          end_location->line_bytes);
 
   if (error->domain == GTK_CSS_PARSER_WARNING)
     tag_name = "warning";
