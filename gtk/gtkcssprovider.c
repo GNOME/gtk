@@ -30,7 +30,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcsskeyframesprivate.h"
 #include "gtkcssparserprivate.h"
-#include "gtkcsssectionprivate.h"
+#include "gtkcsssection.h"
 #include "gtkcssselectorprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtksettingsprivate.h"
@@ -162,7 +162,7 @@ gtk_css_provider_parsing_error (GtkCssProvider  *provider,
                                      0,
                                      TRUE))
     {
-      char *s = _gtk_css_section_to_string (section);
+      char *s = gtk_css_section_to_string (section);
 
       g_warning ("Theme parsing error: %s: %s",
                  s,
