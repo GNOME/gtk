@@ -5092,12 +5092,10 @@ GtkCssParserWarning
 <SUBSECTION>
 GtkCssLocation
 GtkCssSection
-gtk_css_section_get_end_line
-gtk_css_section_get_end_position
 gtk_css_section_get_file
 gtk_css_section_get_parent
-gtk_css_section_get_start_line
-gtk_css_section_get_start_position
+gtk_css_section_get_start_location
+gtk_css_section_get_end_location
 gtk_css_section_ref
 gtk_css_section_unref
 <SUBSECTION Standard>

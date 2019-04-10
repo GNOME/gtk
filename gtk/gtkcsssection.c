@@ -150,97 +150,40 @@ gtk_css_section_get_file (const GtkCssSection *section)
 }
 
 /**
- * gtk_css_section_get_start_line:
+ * gtk_css_section_get_start_location:
  * @section: the section
  *
- * Returns the line in the CSS document where this section starts.
- * The line number is 0-indexed, so the first line of the document
- * will return 0.
+ * Returns the location in the CSS document where this section starts.
  *
- * Returns: the line number
+ * Returns: (tranfer none) (not nullable): The start location of
+ *     this section
  **/
-guint
-gtk_css_section_get_start_line (const GtkCssSection *section)
+const GtkCssLocation *
+gtk_css_section_get_start_location (const GtkCssSection *section)
 {
-  gtk_internal_return_val_if_fail (section != NULL, 0);
+  gtk_internal_return_val_if_fail (section != NULL, NULL);
 
-  return section->start_location.lines;
+  return &section->start_location;
 }
 
 /**
- * gtk_css_section_get_start_position:
+ * gtk_css_section_get_end_location:
  * @section: the section
  *
- * Returns the offset in bytes from the start of the current line
- * returned via gtk_css_section_get_start_line().
+ * Returns the location in the CSS document where this section ends.
  *
- * Returns: the offset in bytes from the start of the line.
+ * Returns: (tranfer none) (not nullable): The end location of
+ *     this section
  **/
-guint
-gtk_css_section_get_start_position (const GtkCssSection *section)
+const GtkCssLocation *
+gtk_css_section_get_end_location (const GtkCssSection *section)
 {
-  gtk_internal_return_val_if_fail (section != NULL, 0);
+  gtk_internal_return_val_if_fail (section != NULL, NULL);
 
-  return section->start_location.line_chars;
-}
+  if (section->parser)
+    gtk_css_parser_get_location (section->parser, (GtkCssLocation *) &section->end_location);
 
-/**
- * gtk_css_section_get_end_line:
- * @section: the section
- *
- * Returns the line in the CSS document where this section end.
- * The line number is 0-indexed, so the first line of the document
- * will return 0.
- * This value may change in future invocations of this function if
- * @section is not yet parsed completely. This will for example 
- * happen in the GtkCssProvider::parsing-error signal.
- * The end position and line may be identical to the start
- * position and line for sections which failed to parse anything
- * successfully.
- *
- * Returns: the line number
- **/
-guint
-gtk_css_section_get_end_line (const GtkCssSection *section)
-{
-  GtkCssLocation location;
-
-  gtk_internal_return_val_if_fail (section != NULL, 0);
-
-  if (!section->parser)
-    return section->end_location.lines;
-
-  gtk_css_parser_get_location (section->parser, &location);
-  return location.lines;
-}
-
-/**
- * gtk_css_section_get_end_position:
- * @section: the section
- *
- * Returns the offset in bytes from the start of the current line
- * returned via gtk_css_section_get_end_line().
- * This value may change in future invocations of this function if
- * @section is not yet parsed completely. This will for example
- * happen in the GtkCssProvider::parsing-error signal.
- * The end position and line may be identical to the start
- * position and line for sections which failed to parse anything
- * successfully.
- *
- * Returns: the offset in bytes from the start of the line.
- **/
-guint
-gtk_css_section_get_end_position (const GtkCssSection *section)
-{
-  GtkCssLocation location;
-
-  gtk_internal_return_val_if_fail (section != NULL, 0);
-
-  if (!section->parser)
-    return section->end_location.line_chars;
-
-  gtk_css_parser_get_location (section->parser, &location);
-  return location.line_chars;
+  return &section->end_location;
 }
 
 void
@@ -268,9 +211,9 @@ _gtk_css_section_print (const GtkCssSection  *section,
       g_string_append (string, "<data>");
     }
 
-  g_string_append_printf (string, ":%u:%u", 
-                          gtk_css_section_get_end_line (section) + 1,
-                          gtk_css_section_get_end_position (section));
+  g_string_append_printf (string, ":%zu:%zu", 
+                          section->end_location.lines + 1,
+                          section->end_location.line_chars + 1);
 }
 
 char *
