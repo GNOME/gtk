@@ -65,8 +65,10 @@ void                    gtk_css_parser_unref                    (GtkCssParser   
 GFile *                 gtk_css_parser_get_file                 (GtkCssParser                   *self);
 GFile *                 gtk_css_parser_resolve_url              (GtkCssParser                   *self,
                                                                  const char                     *url);
-void                    gtk_css_parser_get_location             (GtkCssParser                   *self,
-                                                                 GtkCssLocation                 *out_location);
+
+const GtkCssLocation *  gtk_css_parser_get_start_location       (GtkCssParser                   *self);
+const GtkCssLocation *  gtk_css_parser_get_end_location         (GtkCssParser                   *self);
+const GtkCssLocation *  gtk_css_parser_get_block_location       (GtkCssParser                   *self);
 
 const GtkCssToken *     gtk_css_parser_peek_token               (GtkCssParser                   *self);
 const GtkCssToken *     gtk_css_parser_get_token                (GtkCssParser                   *self);

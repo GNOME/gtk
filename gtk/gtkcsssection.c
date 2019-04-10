@@ -51,7 +51,7 @@ gtk_css_section_new_for_parser (GtkCssSection     *parent,
   if (section->file)
     g_object_ref (section->file);
   section->parser = parser;
-  gtk_css_parser_get_location (section->parser, &section->start_location);
+  section->start_location = *gtk_css_parser_get_start_location (section->parser);
 
   return section;
 }
@@ -62,7 +62,7 @@ _gtk_css_section_end (GtkCssSection *section)
   gtk_internal_return_if_fail (section != NULL);
   gtk_internal_return_if_fail (section->parser != NULL);
 
-  gtk_css_parser_get_location (section->parser, &section->end_location);
+  section->end_location = *gtk_css_parser_get_end_location (section->parser);
   section->parser = NULL;
 }
 
@@ -181,7 +181,7 @@ gtk_css_section_get_end_location (const GtkCssSection *section)
   gtk_internal_return_val_if_fail (section != NULL, NULL);
 
   if (section->parser)
-    gtk_css_parser_get_location (section->parser, (GtkCssLocation *) &section->end_location);
+    return gtk_css_parser_get_end_location (section->parser);
 
   return &section->end_location;
 }
