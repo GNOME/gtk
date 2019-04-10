@@ -22,8 +22,9 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
+#include <gtk/css/gtkcss.h>
+
 #include <gtk/gtkborder.h>
-#include <gtk/gtkcsssection.h>
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtktypes.h>
 

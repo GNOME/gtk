@@ -84,7 +84,6 @@
 #include <gtk/gtkcomboboxtext.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkcssprovider.h>
-#include <gtk/gtkcsssection.h>
 #include <gtk/gtkcustomlayout.h>
 #include <gtk/gtkdebug.h>
 #include <gtk/gtkdialog.h>
