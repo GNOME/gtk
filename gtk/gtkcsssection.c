@@ -36,9 +36,9 @@ struct _GtkCssSection
 G_DEFINE_BOXED_TYPE (GtkCssSection, gtk_css_section, gtk_css_section_ref, gtk_css_section_unref)
 
 GtkCssSection *
-_gtk_css_section_new (GtkCssSection     *parent,
-                      GtkCssSectionType  type,
-                      GtkCssParser      *parser)
+gtk_css_section_new_for_parser (GtkCssSection     *parent,
+                                GtkCssSectionType  type,
+                                GtkCssParser      *parser)
 {
   GtkCssSection *section;
 
@@ -55,23 +55,6 @@ _gtk_css_section_new (GtkCssSection     *parent,
     g_object_ref (section->file);
   section->parser = parser;
   gtk_css_parser_get_location (section->parser, &section->start_location);
-
-  return section;
-}
-
-GtkCssSection *
-_gtk_css_section_new_for_file (GtkCssSectionType  type,
-                               GFile             *file)
-{
-  GtkCssSection *section;
-
-  gtk_internal_return_val_if_fail (G_IS_FILE (file), NULL);
-
-  section = g_slice_new0 (GtkCssSection);
-
-  section->ref_count = 1;
-  section->section_type = type;
-  section->file = g_object_ref (file);
 
   return section;
 }
