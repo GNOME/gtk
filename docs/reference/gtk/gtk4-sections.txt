@@ -5092,12 +5092,13 @@ GtkCssParserWarning
 <SUBSECTION>
 GtkCssLocation
 GtkCssSection
+gtk_css_section_new
+gtk_css_section_ref
+gtk_css_section_unref
 gtk_css_section_get_file
 gtk_css_section_get_parent
 gtk_css_section_get_start_location
 gtk_css_section_get_end_location
-gtk_css_section_ref
-gtk_css_section_unref
 <SUBSECTION Standard>
 GTK_TYPE_CSS_PROVIDER
 GTK_CSS_PROVIDER
