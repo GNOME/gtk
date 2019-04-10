@@ -18,8 +18,13 @@
 #ifndef __GTK_CSS_SECTION_H__
 #define __GTK_CSS_SECTION_H__
 
+#if !defined (__GTK_CSS_H_INSIDE__) && !defined (GTK_CSS_COMPILATION)
+#error "Only <gtk/css/gtkcss.h> can be included directly."
+#endif
+
 #include <gio/gio.h>
-#include <gtk/css/gtkcss.h>
+#include <gdk/gdkversionmacros.h>
+#include <gtk/css/gtkcsslocation.h>
 
 G_BEGIN_DECLS
 

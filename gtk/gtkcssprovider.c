@@ -17,12 +17,6 @@
 
 #include "config.h"
 
-#include <string.h>
-#include <stdlib.h>
-
-#include <gdk-pixbuf/gdk-pixbuf.h>
-#include <cairo-gobject.h>
-
 #include "gtkcssproviderprivate.h"
 
 #include "gtkbitmaskprivate.h"
@@ -30,7 +24,6 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcsskeyframesprivate.h"
 #include "gtkcssparserprivate.h"
-#include "gtkcsssection.h"
 #include "gtkcssselectorprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtksettingsprivate.h"
@@ -44,6 +37,12 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkversion.h"
+
+#include <string.h>
+#include <stdlib.h>
+
+#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <cairo-gobject.h>
 
 /**
  * SECTION:gtkcssprovider

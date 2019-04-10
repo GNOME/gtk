@@ -21,7 +21,6 @@
  */
 
 #include "config.h"
-#include <glib/gi18n-lib.h>
 
 #include "css-node-tree.h"
 #include "prop-editor.h"
@@ -33,7 +32,6 @@
 #include "gtk/gtkwidgetprivate.h"
 #include "gtkcssproviderprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkcsssection.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcssvalueprivate.h"
 #include "gtkcssselectorprivate.h"
@@ -44,6 +42,9 @@
 #include "gtktypebuiltins.h"
 #include "gtkmodelbutton.h"
 #include "gtkstack.h"
+
+#include <glib/gi18n-lib.h>
+#include <gtk/css/gtkcss.h>
 
 enum {
   COLUMN_NODE_NAME,
