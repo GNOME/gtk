@@ -93,6 +93,9 @@ void                    gtk_css_parser_error_syntax             (GtkCssParser   
 void                    gtk_css_parser_error_value              (GtkCssParser                   *self,
                                                                  const char                     *format,
                                                                  ...) G_GNUC_PRINTF(2, 3);
+void                    gtk_css_parser_error_import             (GtkCssParser                   *self,
+                                                                 const char                     *format,
+                                                                 ...) G_GNUC_PRINTF(2, 3);
 void                    gtk_css_parser_warn_syntax              (GtkCssParser                   *self,
                                                                  const char                     *format,
                                                                  ...) G_GNUC_PRINTF(2, 3);
