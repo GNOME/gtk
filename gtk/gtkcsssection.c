@@ -25,7 +25,6 @@
 struct _GtkCssSection
 {
   gint                ref_count;
-  GtkCssSectionType   section_type;
   GtkCssSection      *parent;
   GFile              *file;
   GtkCssLocation      start_location;
@@ -37,7 +36,6 @@ G_DEFINE_BOXED_TYPE (GtkCssSection, gtk_css_section, gtk_css_section_ref, gtk_cs
 
 GtkCssSection *
 gtk_css_section_new_for_parser (GtkCssSection     *parent,
-                                GtkCssSectionType  type,
                                 GtkCssParser      *parser)
 {
   GtkCssSection *section;
@@ -47,7 +45,6 @@ gtk_css_section_new_for_parser (GtkCssSection     *parent,
   section = g_slice_new0 (GtkCssSection);
 
   section->ref_count = 1;
-  section->section_type = type;
   if (parent)
     section->parent = gtk_css_section_ref (parent);
   section->file = gtk_css_parser_get_file (parser);
@@ -109,22 +106,6 @@ gtk_css_section_unref (GtkCssSection *section)
     g_object_unref (section->file);
 
   g_slice_free (GtkCssSection, section);
-}
-
-/**
- * gtk_css_section_get_section_type:
- * @section: the section
- *
- * Gets the type of information that @section describes.
- *
- * Returns: the type of @section
- **/
-GtkCssSectionType
-gtk_css_section_get_section_type (const GtkCssSection *section)
-{
-  gtk_internal_return_val_if_fail (section != NULL, GTK_CSS_SECTION_DOCUMENT);
-
-  return section->section_type;
 }
 
 /**

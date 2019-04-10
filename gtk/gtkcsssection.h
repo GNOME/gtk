@@ -26,42 +26,6 @@ G_BEGIN_DECLS
 #define GTK_TYPE_CSS_SECTION         (gtk_css_section_get_type ())
 
 /**
- * GtkCssSectionType:
- * @GTK_CSS_SECTION_DOCUMENT: The section describes a complete document.
- *   This section time is the only one where gtk_css_section_get_parent()
- *   might return %NULL.
- * @GTK_CSS_SECTION_IMPORT: The section defines an import rule.
- * @GTK_CSS_SECTION_COLOR_DEFINITION: The section defines a color. This
- *   is a GTK extension to CSS.
- * @GTK_CSS_SECTION_RULESET: The section defines a CSS ruleset.
- * @GTK_CSS_SECTION_SELECTOR: The section defines a CSS selector.
- * @GTK_CSS_SECTION_DECLARATION: The section defines the declaration of
- *   a CSS variable.
- * @GTK_CSS_SECTION_VALUE: The section defines the value of a CSS declaration.
- * @GTK_CSS_SECTION_KEYFRAMES: The section defines keyframes. See [CSS
- *   Animations](http://dev.w3.org/csswg/css3-animations/#keyframes) for details
- *
- * The different types of sections indicate parts of a CSS document as
- * parsed by GTK’s CSS parser. They are oriented towards the
- * [CSS Grammar](http://www.w3.org/TR/CSS21/grammar.html),
- * but may contain extensions.
- *
- * More types might be added in the future as the parser incorporates
- * more features.
- */
-typedef enum
-{
-  GTK_CSS_SECTION_DOCUMENT,
-  GTK_CSS_SECTION_IMPORT,
-  GTK_CSS_SECTION_COLOR_DEFINITION,
-  GTK_CSS_SECTION_RULESET,
-  GTK_CSS_SECTION_SELECTOR,
-  GTK_CSS_SECTION_DECLARATION,
-  GTK_CSS_SECTION_VALUE,
-  GTK_CSS_SECTION_KEYFRAMES
-} GtkCssSectionType;
-
-/**
  * GtkCssSection:
  *
  * Defines a part of a CSS document. Because sections are nested into
@@ -78,8 +42,6 @@ GtkCssSection *    gtk_css_section_ref                 (GtkCssSection        *se
 GDK_AVAILABLE_IN_ALL
 void               gtk_css_section_unref               (GtkCssSection        *section);
 
-GDK_AVAILABLE_IN_ALL
-GtkCssSectionType  gtk_css_section_get_section_type    (const GtkCssSection  *section);
 GDK_AVAILABLE_IN_ALL
 GtkCssSection *    gtk_css_section_get_parent          (const GtkCssSection  *section);
 GDK_AVAILABLE_IN_ALL
