@@ -181,6 +181,96 @@ instance the makefile.msc files might not produce identically named
 DLLs and import libraries as the "autoconfiscated" makefiles and
 libtool do. If this bothers you, you will have to fix the makefiles.
 
+3) Using Meson (for Visual Studio and MinGW builds)
+---
+
+Meson can now be used to build GTK+-3.x with either MinGW or Visual Studio.
+You will need the following items in addition to all the dependencies
+listed above:
+
+- Python 3.5 or later
+- Meson build system, 0.48.0 or later
+- Ninja (if not using the Visual Studio project generator for
+         Visual Studio 2010, 2015, 2017, 2019)
+- CMake (optional, used for dependency searching)
+- pkg-config (optional, or some compatible tool, highly recommended)
+
+For all Windows builds, note that unless -Dbuiltin_immodules=no is specified,
+the input modules (immodules) are built directly into the GTK DLL.
+
+For building with Meson using Visual Studio, do the following:
+
+Create an empty build directory somewhere that is on the same drive
+as the source tree, and launch the Visual Studio command prompt that
+matches the build configuration (Visual Studio version and architecture),
+and run the following:
+
+- Ensure that both the installation directory of Python and its script
+  directory is in your PATH, as well as the Ninja, CMake and pkg-config
+  executables (if used).  If a pkg-config compatible drop-in replacement
+  tool is being used, ensure that PKG_CONFIG is set to point to the
+  executable of that tool as well.
+
+- For non-GNOME dependencies (such as Cairo and Harfbuzz), where pkg-config
+  files or CMake files could not be properly located, set INCLUDE and LIB
+  to ensure that their header files and .lib files can be found respectively.
+  The DLLs of those dependencies should also be in the PATH during the build
+  as well, especially if introspection files are to be built.
+
+- For GNOME dependencies, the pkg-config files for those dependencies should
+  be searchable by pkg-config (or a compatible tool).  Verify this by running
+  $(PKG_CONFIG) --modversion <dependency>.
+
+- Run the following:
+  meson <path_to_directory_of_this_file> --buildtype=... --prefix=...,
+  where buildtype can be release, debugoptimized, debug or plain.  Please
+  refer to the Meson documentation for more details.  You may also wish to
+  pass in -Dbroadway_backend=true if building the Broadway GDK backend is
+  desired, and/or pass in -Dbuiltin_immodules=no to build the immodules as
+  standalone DLLs that can be loaded by GTK dynamically.  For Visual Studio
+  2010, 2015, 2017 and 2019 builds, you may pass in --backend=vs to generate
+  Visual Studio project files to be used to carry out the builds.
+
+If you are building with Visual Studio 2008, note the following items as well:
+
+- For x64 builds, the compiler may hang when building the certain files, due
+  to optimization issues in the compiler.  If this happens, use the Windows
+  Task Manager and terminate all cl.exe processes, and the build will fail
+  with the source files that did not finish compiling due to the hang.
+  Look for them in build.ninja in the build directory, and change their compiler
+  flag "/O2" to "/O1", and the compilation and linking should proceed normally.
+  At this time of writing, the following files are known to cause this hang:
+
+    gtk\gtkfilechoosernativewin32.c
+    gtk\gtkfilesystemmodel.c
+    gtk\gtktextsegment.c
+    gtk\gtktextbtree.c
+    gtk\gtkrbtree.c
+    testsuite\gtk\treemodel.c
+    testsuite\gtk\textbuffer.c
+    testsuite\gtk\rbtree.c
+    testsuite\gtk\icontheme.c
+
+- Upon running install (via "ninja install"), it is likely that
+  gtk-query-immodules-3.0.exe will fail to run as it cannot find msvcr90.dll or
+  msvcr90D.dll.  You can ignore this if you did not specify -Dbuiltin_immodules=no
+  when configuring via Meson.  If -Dbuiltin_immodules=no is specified, you need to
+  run the following after   embedding the manifests as outlined in the next point:
+
+    <gtk_install_prefix>\bin\gtk-query-immodules-3.0.exe > <gtk_install_prefix>\lib\gtk-3.0\3.0.0\immodules.cache
+
+- You will need to run the following upon completing install, from the build
+  directory in the Visual Studio 2008/SDK 6.0 command prompt (third line is not
+  needed unless -Dbuiltin_immodules=no is specified) so that the built binaries
+  can run:
+
+    for /r %f in (*.dll.manifest) do if exist <gtk_install_prefix>\bin\%~nf mt /manifest %f /outputresource:<gtk_install_prefix>\bin\%~nf;2
+    for /r %f in (*.exe.manifest) do if exist <gtk_install_prefix>\bin\%~nf mt /manifest %f /outputresource:<gtk_install_prefix>\bin\%~nf;1
+    for /r %f in (*.dll.manifest) do if exist <gtk_install_prefix>\lib\gtk-3.0\3.0.0\immodules\%~nf mt /manifest %f /outputresource:<gtk_install_prefix>\lib\gtk-3.0\3.0.0\immodules\%~nf;2
+
+- The more modern visual style for the print dialog is not applied for Visual
+  Studio 2008 builds.  Any solutions to this is really appreciated.
+
 Using GTK+ on Win32
 ===================
 
