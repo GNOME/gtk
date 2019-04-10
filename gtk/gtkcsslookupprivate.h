@@ -19,9 +19,11 @@
 #define __GTK_CSS_LOOKUP_PRIVATE_H__
 
 #include <glib-object.h>
+
 #include "gtk/gtkbitmaskprivate.h"
 #include "gtk/gtkcssstaticstyleprivate.h"
-#include "gtk/gtkcsssection.h"
+
+#include "gtk/css/gtkcsssection.h"
 
 
 G_BEGIN_DECLS
