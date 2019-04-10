@@ -256,19 +256,22 @@ show_parsing_error (GtkCssProvider        *provider,
 {
   const char *tag_name;
   GtkTextBuffer *buffer = GTK_TEXT_BUFFER (ce->priv->text);
+  const GtkCssLocation *start, *end;
   CssError *css_error;
 
   css_error = g_new (CssError, 1);
   css_error->error = g_error_copy (error);
 
+  start = gtk_css_section_get_start_location (section);
   gtk_text_buffer_get_iter_at_line_index (buffer,
                                           &css_error->start,
-                                          gtk_css_section_get_start_line (section),
-                                          gtk_css_section_get_start_position (section));
+                                          start->lines,
+                                          start->line_bytes);
+  end = gtk_css_section_get_end_location (section);
   gtk_text_buffer_get_iter_at_line_index (buffer,
                                           &css_error->end,
-                                          gtk_css_section_get_end_line (section),
-                                          gtk_css_section_get_end_position (section));
+                                          end->lines,
+                                          end->line_bytes);
 
   if (error->domain == GTK_CSS_PARSER_WARNING)
     tag_name = "warning";
