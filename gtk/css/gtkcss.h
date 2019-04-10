@@ -34,6 +34,7 @@
 #include <gtk/css/gtkcssenumtypes.h>
 #include <gtk/css/gtkcsserror.h>
 #include <gtk/css/gtkcsslocation.h>
+#include <gtk/css/gtkcsssection.h>
 
 #undef __GTK_CSS_H_INSIDE__
 

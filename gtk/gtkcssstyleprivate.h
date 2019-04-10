@@ -21,9 +21,9 @@
 #define __GTK_CSS_STYLE_PRIVATE_H__
 
 #include <glib-object.h>
+#include <gtk/css/gtkcss.h>
 
 #include "gtk/gtkbitmaskprivate.h"
-#include "gtk/gtkcsssection.h"
 #include "gtk/gtkcssvalueprivate.h"
 
 G_BEGIN_DECLS
