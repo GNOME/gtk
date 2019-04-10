@@ -24,11 +24,6 @@
 
 G_BEGIN_DECLS
 
-GtkCssSection *    gtk_css_section_new_for_parser      (GtkCssSection        *parent,
-                                                        GtkCssParser         *parser);
-
-void               _gtk_css_section_end                (GtkCssSection        *section);
-
 void               _gtk_css_section_print              (const GtkCssSection  *section,
                                                         GString              *string);
 char *             _gtk_css_section_to_string          (const GtkCssSection  *section);
