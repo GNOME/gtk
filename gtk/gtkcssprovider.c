@@ -931,6 +931,8 @@ parse_declaration (GtkCssScanner *scanner,
   GtkStyleProperty *property;
   char *name;
 
+  /* advance the location over whitespace */
+  gtk_css_parser_get_token (scanner->parser);
   gtk_css_parser_start_semicolon_block (scanner->parser, GTK_CSS_TOKEN_EOF);
 
   if (gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
