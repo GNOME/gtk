@@ -415,13 +415,21 @@ gtk_css_parser_end_block (GtkCssParser *self)
 
   if (gtk_css_token_is (&self->token, GTK_CSS_TOKEN_EOF))
     {
-      gtk_css_parser_warn_syntax (self, "Unterminated block at end of document");
+      gtk_css_parser_warn (self,
+                           GTK_CSS_PARSER_WARNING_SYNTAX,
+                           gtk_css_parser_get_block_location (self),
+                           gtk_css_parser_get_start_location (self),
+                           "Unterminated block at end of document");
       g_array_set_size (self->blocks, self->blocks->len - 1);
     }
   else if (gtk_css_token_is (&self->token, block->inherited_end_token))
     {
       g_assert (block->end_token == GTK_CSS_TOKEN_SEMICOLON);
-      gtk_css_parser_warn_syntax (self, "Expected ';' at end of block");
+      gtk_css_parser_warn (self,
+                           GTK_CSS_PARSER_WARNING_SYNTAX,
+                           gtk_css_parser_get_block_location (self),
+                           gtk_css_parser_get_start_location (self),
+                           "Expected ';' at end of block");
       g_array_set_size (self->blocks, self->blocks->len - 1);
     }
   else
@@ -499,6 +507,26 @@ gtk_css_parser_emit_error (GtkCssParser         *self,
 }
 
 void
+gtk_css_parser_error (GtkCssParser         *self,
+                      GtkCssParserError     code,
+                      const GtkCssLocation *start,
+                      const GtkCssLocation *end,
+                      const char           *format,
+                      ...)
+{
+  va_list args;
+  GError *error;
+
+  va_start (args, format);
+  error = g_error_new_valist (GTK_CSS_PARSER_ERROR,
+                              code,
+                              format, args);
+  gtk_css_parser_emit_error (self, start, end, error);
+  g_error_free (error);
+  va_end (args);
+}
+
+void
 gtk_css_parser_error_syntax (GtkCssParser *self,
                              const char   *format,
                              ...)
@@ -554,6 +582,26 @@ gtk_css_parser_error_import (GtkCssParser *self,
                              gtk_css_parser_get_start_location (self),
                              gtk_css_parser_get_end_location (self),
                              error);
+  g_error_free (error);
+  va_end (args);
+}
+
+void
+gtk_css_parser_warn (GtkCssParser         *self,
+                     GtkCssParserWarning   code,
+                     const GtkCssLocation *start,
+                     const GtkCssLocation *end,
+                     const char           *format,
+                     ...)
+{
+  va_list args;
+  GError *error;
+
+  va_start (args, format);
+  error = g_error_new_valist (GTK_CSS_PARSER_WARNING,
+                              code,
+                              format, args);
+  gtk_css_parser_emit_error (self, start, end, error);
   g_error_free (error);
   va_end (args);
 }
