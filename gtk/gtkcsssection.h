@@ -38,6 +38,10 @@ GDK_AVAILABLE_IN_ALL
 GType              gtk_css_section_get_type            (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
+GtkCssSection *    gtk_css_section_new                 (GFile                *file,
+                                                        const GtkCssLocation *start,
+                                                        const GtkCssLocation *end);
+GDK_AVAILABLE_IN_ALL
 GtkCssSection *    gtk_css_section_ref                 (GtkCssSection        *section);
 GDK_AVAILABLE_IN_ALL
 void               gtk_css_section_unref               (GtkCssSection        *section);
