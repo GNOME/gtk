@@ -20,7 +20,6 @@
 #include "gtkcsssection.h"
 
 #include "gtkcssparserprivate.h"
-#include "gtkprivate.h"
 
 struct _GtkCssSection
 {
@@ -52,9 +51,9 @@ gtk_css_section_new (GFile                *file,
 {
   GtkCssSection *result;
 
-  gtk_internal_return_val_if_fail (file == NULL || G_IS_FILE (file), NULL);
-  gtk_internal_return_val_if_fail (start != NULL, NULL);
-  gtk_internal_return_val_if_fail (end != NULL, NULL);
+  g_return_val_if_fail (file == NULL || G_IS_FILE (file), NULL);
+  g_return_val_if_fail (start != NULL, NULL);
+  g_return_val_if_fail (end != NULL, NULL);
 
   result = g_slice_new0 (GtkCssSection);
 
@@ -78,7 +77,7 @@ gtk_css_section_new (GFile                *file,
 GtkCssSection *
 gtk_css_section_ref (GtkCssSection *section)
 {
-  gtk_internal_return_val_if_fail (section != NULL, NULL);
+  g_return_val_if_fail (section != NULL, NULL);
 
   section->ref_count += 1;
 
@@ -95,7 +94,7 @@ gtk_css_section_ref (GtkCssSection *section)
 void
 gtk_css_section_unref (GtkCssSection *section)
 {
-  gtk_internal_return_if_fail (section != NULL);
+  g_return_if_fail (section != NULL);
 
   section->ref_count -= 1;
   if (section->ref_count > 0)
@@ -126,7 +125,7 @@ gtk_css_section_unref (GtkCssSection *section)
 GtkCssSection *
 gtk_css_section_get_parent (const GtkCssSection *section)
 {
-  gtk_internal_return_val_if_fail (section != NULL, NULL);
+  g_return_val_if_fail (section != NULL, NULL);
 
   return section->parent;
 }
@@ -145,7 +144,7 @@ gtk_css_section_get_parent (const GtkCssSection *section)
 GFile *
 gtk_css_section_get_file (const GtkCssSection *section)
 {
-  gtk_internal_return_val_if_fail (section != NULL, NULL);
+  g_return_val_if_fail (section != NULL, NULL);
 
   return section->file;
 }
@@ -162,7 +161,7 @@ gtk_css_section_get_file (const GtkCssSection *section)
 const GtkCssLocation *
 gtk_css_section_get_start_location (const GtkCssSection *section)
 {
-  gtk_internal_return_val_if_fail (section != NULL, NULL);
+  g_return_val_if_fail (section != NULL, NULL);
 
   return &section->start_location;
 }
@@ -179,7 +178,7 @@ gtk_css_section_get_start_location (const GtkCssSection *section)
 const GtkCssLocation *
 gtk_css_section_get_end_location (const GtkCssSection *section)
 {
-  gtk_internal_return_val_if_fail (section != NULL, NULL);
+  g_return_val_if_fail (section != NULL, NULL);
 
   return &section->end_location;
 }
@@ -245,7 +244,7 @@ gtk_css_section_to_string (const GtkCssSection *section)
 {
   GString *string;
 
-  gtk_internal_return_val_if_fail (section != NULL, NULL);
+  g_return_val_if_fail (section != NULL, NULL);
 
   string = g_string_new (NULL);
   gtk_css_section_print (section, string);

@@ -19,7 +19,7 @@
 #define __GTK_CSS_PROVIDER_H__
 
 #include <gio/gio.h>
-#include <gtk/gtkcsssection.h>
+#include <gtk/css/gtkcss.h>
 
 G_BEGIN_DECLS
 
