@@ -391,13 +391,11 @@ gtk_css_scanner_would_recurse (GtkCssScanner *scanner,
 }
 
 static void
-gtk_css_scanner_push_section (GtkCssScanner     *scanner,
-                              GtkCssSectionType  section_type)
+gtk_css_scanner_push_section (GtkCssScanner *scanner)
 {
   GtkCssSection *section;
 
   section = gtk_css_section_new_for_parser (scanner->section,
-                                            section_type,
                                             scanner->parser);
 
   if (scanner->section)
@@ -406,13 +404,10 @@ gtk_css_scanner_push_section (GtkCssScanner     *scanner,
 }
 
 static void
-gtk_css_scanner_pop_section (GtkCssScanner *scanner,
-                             GtkCssSectionType check_type)
+gtk_css_scanner_pop_section (GtkCssScanner *scanner)
 {
   GtkCssSection *parent;
   
-  g_assert (gtk_css_section_get_section_type (scanner->section) == check_type);
-
   parent = gtk_css_section_get_parent (scanner->section);
   if (parent)
     gtk_css_section_ref (parent);
@@ -777,11 +772,11 @@ parse_import (GtkCssScanner *scanner)
 {
   GFile *file;
 
-  gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_IMPORT);
+  gtk_css_scanner_push_section (scanner);
 
   if (!gtk_css_parser_try_at_keyword (scanner->parser, "import"))
     {
-      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_IMPORT);
+      gtk_css_scanner_pop_section (scanner);
       return FALSE;
     }
 
@@ -841,7 +836,7 @@ parse_import (GtkCssScanner *scanner)
 
   g_clear_object (&file);
 
-  gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_IMPORT);
+  gtk_css_scanner_pop_section (scanner);
 
   return TRUE;
 }
@@ -853,18 +848,18 @@ parse_color_definition (GtkCssScanner *scanner)
   GtkCssValue *color;
   char *name;
 
-  gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_COLOR_DEFINITION);
+  gtk_css_scanner_push_section (scanner);
 
   if (!gtk_css_parser_try_at_keyword (scanner->parser, "define-color"))
     {
-      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_COLOR_DEFINITION);
+      gtk_css_scanner_pop_section (scanner);
       return FALSE;
     }
 
   name = gtk_css_parser_consume_ident (scanner->parser);
   if (name == NULL)
     {
-      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_COLOR_DEFINITION);
+      gtk_css_scanner_pop_section (scanner);
       return TRUE;
     }
 
@@ -872,7 +867,7 @@ parse_color_definition (GtkCssScanner *scanner)
   if (color == NULL)
     {
       g_free (name);
-      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_COLOR_DEFINITION);
+      gtk_css_scanner_pop_section (scanner);
       return TRUE;
     }
 
@@ -886,13 +881,13 @@ parse_color_definition (GtkCssScanner *scanner)
                                       GTK_CSS_PARSER_ERROR_SYNTAX,
                                       "Missing semicolon at end of color definition");
 
-      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_COLOR_DEFINITION);
+      gtk_css_scanner_pop_section (scanner);
       return TRUE;
     }
 
   g_hash_table_insert (priv->symbolic_colors, name, color);
 
-  gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_COLOR_DEFINITION);
+  gtk_css_scanner_pop_section (scanner);
   return TRUE;
 }
 
@@ -903,18 +898,18 @@ parse_keyframes (GtkCssScanner *scanner)
   GtkCssKeyframes *keyframes;
   char *name;
 
-  gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_KEYFRAMES);
+  gtk_css_scanner_push_section (scanner);
 
   if (!gtk_css_parser_try_at_keyword (scanner->parser, "keyframes"))
     {
-      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_KEYFRAMES);
+      gtk_css_scanner_pop_section (scanner);
       return FALSE;
     }
 
   name = gtk_css_parser_consume_ident (scanner->parser);
   if (name == NULL)
     {
-      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_KEYFRAMES);
+      gtk_css_scanner_pop_section (scanner);
       return FALSE;
     }
 
@@ -925,7 +920,7 @@ parse_keyframes (GtkCssScanner *scanner)
                                       GTK_CSS_PARSER_ERROR,
                                       GTK_CSS_PARSER_ERROR_SYNTAX,
                                       "Expected '{' for keyframes");
-      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_KEYFRAMES);
+      gtk_css_scanner_pop_section (scanner);
       return FALSE;
     }
 
@@ -944,7 +939,7 @@ parse_keyframes (GtkCssScanner *scanner)
                                       "expected '}' after declarations");
     }
 
-  gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_KEYFRAMES);
+  gtk_css_scanner_pop_section (scanner);
 
   return TRUE;
 }
@@ -973,14 +968,14 @@ parse_selector_list (GtkCssScanner *scanner)
 {
   GSList *selectors = NULL;
 
-  gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_SELECTOR);
+  gtk_css_scanner_push_section (scanner);
 
   do {
       GtkCssSelector *select = _gtk_css_selector_parse (scanner->parser);
 
       if (select == NULL)
         {
-          gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_SELECTOR);
+          gtk_css_scanner_pop_section (scanner);
           return NULL;
         }
 
@@ -988,7 +983,7 @@ parse_selector_list (GtkCssScanner *scanner)
     }
   while (gtk_css_parser_try_token (scanner->parser, GTK_CSS_TOKEN_COMMA));
 
-  gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_SELECTOR);
+  gtk_css_scanner_pop_section (scanner);
 
   return selectors;
 }
@@ -1000,13 +995,14 @@ parse_declaration (GtkCssScanner *scanner,
   GtkStyleProperty *property;
   char *name;
 
-  gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_DECLARATION);
+  gtk_css_scanner_push_section (scanner);
   gtk_css_parser_start_semicolon_block (scanner->parser, GTK_CSS_TOKEN_EOF);
 
   if (gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
     {
       gtk_css_parser_warn_syntax (scanner->parser, "Empty declaration");
       gtk_css_parser_end_block (scanner->parser);
+      gtk_css_scanner_pop_section (scanner);
       return;
     }
 
@@ -1014,7 +1010,7 @@ parse_declaration (GtkCssScanner *scanner,
   if (name == NULL)
     {
       gtk_css_parser_end_block (scanner->parser);
-      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DECLARATION);
+      gtk_css_scanner_pop_section (scanner);
       return;
     }
 
@@ -1029,11 +1025,11 @@ parse_declaration (GtkCssScanner *scanner,
           gtk_css_parser_error_syntax (scanner->parser, "Expected ':'");
           g_free (name);
           gtk_css_parser_end_block (scanner->parser);
-          gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DECLARATION);
+          gtk_css_scanner_pop_section (scanner);
           return;
         }
 
-      gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_VALUE);
+      gtk_css_scanner_push_section (scanner);
 
       value = _gtk_style_property_parse_value (property,
                                                scanner->parser);
@@ -1041,8 +1037,8 @@ parse_declaration (GtkCssScanner *scanner,
       if (value == NULL)
         {
           gtk_css_parser_end_block (scanner->parser);
-          gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
-          gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DECLARATION);
+          gtk_css_scanner_pop_section (scanner);
+          gtk_css_scanner_pop_section (scanner);
           return;
         }
 
@@ -1054,8 +1050,8 @@ parse_declaration (GtkCssScanner *scanner,
                                   GTK_CSS_PARSER_ERROR_SYNTAX,
                                   "Junk at end of value for %s", property->name);
           gtk_css_parser_end_block (scanner->parser);
-          gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
-          gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DECLARATION);
+          gtk_css_scanner_pop_section (scanner);
+          gtk_css_scanner_pop_section (scanner);
           return;
         }
 
@@ -1085,7 +1081,7 @@ parse_declaration (GtkCssScanner *scanner,
         }
 
 
-      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_VALUE);
+      gtk_css_scanner_pop_section (scanner);
     }
   else
     {
@@ -1095,7 +1091,7 @@ parse_declaration (GtkCssScanner *scanner,
   g_free (name);
 
   gtk_css_parser_end_block (scanner->parser);
-  gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DECLARATION);
+  gtk_css_scanner_pop_section (scanner);
 }
 
 static void
@@ -1114,14 +1110,14 @@ parse_ruleset (GtkCssScanner *scanner)
   GSList *selectors;
   GtkCssRuleset ruleset = { 0, };
 
-  gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_RULESET);
+  gtk_css_scanner_push_section (scanner);
 
   selectors = parse_selector_list (scanner);
   if (selectors == NULL)
     {
       gtk_css_parser_skip_until (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY);
       gtk_css_parser_skip (scanner->parser);
-      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_RULESET);
+      gtk_css_scanner_pop_section (scanner);
       return;
     }
 
@@ -1135,7 +1131,7 @@ parse_ruleset (GtkCssScanner *scanner)
       g_slist_free_full (selectors, (GDestroyNotify) _gtk_css_selector_free);
       gtk_css_parser_skip_until (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY);
       gtk_css_parser_skip (scanner->parser);
-      gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_RULESET);
+      gtk_css_scanner_pop_section (scanner);
       return;
     }
 
@@ -1147,7 +1143,7 @@ parse_ruleset (GtkCssScanner *scanner)
 
   css_provider_commit (scanner->provider, selectors, &ruleset);
   gtk_css_ruleset_clear (&ruleset);
-  gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_RULESET);
+  gtk_css_scanner_pop_section (scanner);
 }
 
 static void
@@ -1162,7 +1158,7 @@ parse_statement (GtkCssScanner *scanner)
 static void
 parse_stylesheet (GtkCssScanner *scanner)
 {
-  gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_DOCUMENT);
+  gtk_css_scanner_push_section (scanner);
 
   while (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
     {
@@ -1176,7 +1172,7 @@ parse_stylesheet (GtkCssScanner *scanner)
       parse_statement (scanner);
     }
 
-  gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DOCUMENT);
+  gtk_css_scanner_pop_section (scanner);
 }
 
 static int
@@ -1258,7 +1254,7 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
                                              tmp_bytes);
               g_bytes_unref (tmp_bytes);
 
-              gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_DOCUMENT);
+              gtk_css_scanner_push_section (scanner);
             }
           else
             scanner = parent;
@@ -1272,7 +1268,7 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
 
           if (parent == NULL)
             {
-              gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_DOCUMENT);
+              gtk_css_scanner_pop_section (scanner);
 
               gtk_css_scanner_destroy (scanner);
             }
