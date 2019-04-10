@@ -17,7 +17,7 @@
 
 #include "config.h"
 
-#include "gtkcsssectionprivate.h"
+#include "gtkcsssection.h"
 
 #include "gtkcssparserprivate.h"
 #include "gtkprivate.h"
@@ -184,9 +184,18 @@ gtk_css_section_get_end_location (const GtkCssSection *section)
   return &section->end_location;
 }
 
+/**
+ * gtk_css_section_print:
+ * @section: a section
+ * @string: a #GString to print to
+ *
+ * Prints the @section into @string in a human-readable form. This
+ * is a form like `gtk.css:32:1-23` to denote line 32, characters
+ * 1 to 23 in the file gtk.css.
+ **/
 void
-_gtk_css_section_print (const GtkCssSection  *section,
-                        GString              *string)
+gtk_css_section_print (const GtkCssSection  *section,
+                       GString              *string)
 {
   if (section->file)
     {
@@ -210,19 +219,36 @@ _gtk_css_section_print (const GtkCssSection  *section,
     }
 
   g_string_append_printf (string, ":%zu:%zu", 
-                          section->end_location.lines + 1,
-                          section->end_location.line_chars + 1);
+                          section->start_location.lines + 1,
+                          section->start_location.line_chars + 1);
+  if (section->start_location.lines != section->end_location.lines ||
+      section->start_location.line_chars != section->end_location.line_chars)
+    {
+      g_string_append (string, "-");
+      if (section->start_location.lines != section->end_location.lines)
+        g_string_append_printf (string, "%zu:", section->end_location.lines + 1);
+      g_string_append_printf (string, "%zu", section->end_location.line_chars + 1);
+    }
 }
 
+/**
+ * gtk_css_section_to_string:
+ * @section: a #GtkCssSection
+ *
+ * Prints the section into a human-readable text form using
+ * gtk_css_section_print().
+ *
+ * Returns: (transfer full): A new string.
+ **/
 char *
-_gtk_css_section_to_string (const GtkCssSection *section)
+gtk_css_section_to_string (const GtkCssSection *section)
 {
   GString *string;
 
   gtk_internal_return_val_if_fail (section != NULL, NULL);
 
   string = g_string_new (NULL);
-  _gtk_css_section_print (section, string);
+  gtk_css_section_print (section, string);
 
   return g_string_free (string, FALSE);
 }

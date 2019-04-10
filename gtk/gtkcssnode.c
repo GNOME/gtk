@@ -20,7 +20,6 @@
 #include "gtkcssnodeprivate.h"
 
 #include "gtkcssanimatedstyleprivate.h"
-#include "gtkcsssectionprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"

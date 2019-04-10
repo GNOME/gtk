@@ -47,6 +47,12 @@ GDK_AVAILABLE_IN_ALL
 void               gtk_css_section_unref               (GtkCssSection        *section);
 
 GDK_AVAILABLE_IN_ALL
+void               gtk_css_section_print               (const GtkCssSection  *section,
+                                                        GString              *string);
+GDK_AVAILABLE_IN_ALL
+char *             gtk_css_section_to_string           (const GtkCssSection  *section);
+
+GDK_AVAILABLE_IN_ALL
 GtkCssSection *    gtk_css_section_get_parent          (const GtkCssSection  *section);
 GDK_AVAILABLE_IN_ALL
 GFile *            gtk_css_section_get_file            (const GtkCssSection  *section);
