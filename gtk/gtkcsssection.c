@@ -28,42 +28,43 @@ struct _GtkCssSection
   GtkCssSection      *parent;
   GFile              *file;
   GtkCssLocation      start_location;
-  GtkCssParser       *parser;         /* parser if section isn't finished parsing yet or %NULL */
   GtkCssLocation      end_location;   /* end location if parser is %NULL */
 };
 
 G_DEFINE_BOXED_TYPE (GtkCssSection, gtk_css_section, gtk_css_section_ref, gtk_css_section_unref)
 
+/**
+ * gtk_css_section_new: (constructor)
+ * @file: (optional) (transfer none): The file this section refers to
+ * @start: The start location
+ * @end: The end location
+ *
+ * Creates a new #GtkCssSection referring to the section
+ * in the given @file from the @start location to the
+ * @end location.
+ *
+ * Returns: a new #GtkCssSection
+ **/
 GtkCssSection *
-gtk_css_section_new_for_parser (GtkCssSection     *parent,
-                                GtkCssParser      *parser)
+gtk_css_section_new (GFile                *file,
+                     const GtkCssLocation *start,
+                     const GtkCssLocation *end)
 {
-  GtkCssSection *section;
+  GtkCssSection *result;
 
-  gtk_internal_return_val_if_fail (parser != NULL, NULL);
+  gtk_internal_return_val_if_fail (file == NULL || G_IS_FILE (file), NULL);
+  gtk_internal_return_val_if_fail (start != NULL, NULL);
+  gtk_internal_return_val_if_fail (end != NULL, NULL);
 
-  section = g_slice_new0 (GtkCssSection);
+  result = g_slice_new0 (GtkCssSection);
 
-  section->ref_count = 1;
-  if (parent)
-    section->parent = gtk_css_section_ref (parent);
-  section->file = gtk_css_parser_get_file (parser);
-  if (section->file)
-    g_object_ref (section->file);
-  section->parser = parser;
-  section->start_location = *gtk_css_parser_get_start_location (section->parser);
+  result->ref_count = 1;
+  if (file)
+    result->file = g_object_ref (file);
+  result->start_location = *start;
+  result->end_location = *end;
 
-  return section;
-}
-
-void
-_gtk_css_section_end (GtkCssSection *section)
-{
-  gtk_internal_return_if_fail (section != NULL);
-  gtk_internal_return_if_fail (section->parser != NULL);
-
-  section->end_location = *gtk_css_parser_get_end_location (section->parser);
-  section->parser = NULL;
+  return result;
 }
 
 /**
@@ -179,9 +180,6 @@ const GtkCssLocation *
 gtk_css_section_get_end_location (const GtkCssSection *section)
 {
   gtk_internal_return_val_if_fail (section != NULL, NULL);
-
-  if (section->parser)
-    return gtk_css_parser_get_end_location (section->parser);
 
   return &section->end_location;
 }
