@@ -19,7 +19,7 @@
 #define __GTK_CSS_SECTION_H__
 
 #include <gio/gio.h>
-#include <gdk/gdk.h>
+#include <gtk/css/gtkcss.h>
 
 G_BEGIN_DECLS
 
@@ -47,13 +47,11 @@ GtkCssSection *    gtk_css_section_get_parent          (const GtkCssSection  *se
 GDK_AVAILABLE_IN_ALL
 GFile *            gtk_css_section_get_file            (const GtkCssSection  *section);
 GDK_AVAILABLE_IN_ALL
-guint              gtk_css_section_get_start_line      (const GtkCssSection  *section);
+const GtkCssLocation *
+                   gtk_css_section_get_start_location  (const GtkCssSection  *section);
 GDK_AVAILABLE_IN_ALL
-guint              gtk_css_section_get_start_position  (const GtkCssSection  *section);
-GDK_AVAILABLE_IN_ALL
-guint              gtk_css_section_get_end_line        (const GtkCssSection  *section);
-GDK_AVAILABLE_IN_ALL
-guint              gtk_css_section_get_end_position    (const GtkCssSection  *section);
+const GtkCssLocation *
+                   gtk_css_section_get_end_location    (const GtkCssSection  *section);
 
 G_END_DECLS
 
