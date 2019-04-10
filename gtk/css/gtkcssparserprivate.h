@@ -21,6 +21,7 @@
 #ifndef __GTK_CSS_PARSER_H__
 #define __GTK_CSS_PARSER_H__
 
+#include "gtkcssenums.h"
 #include "gtkcsstokenizerprivate.h"
 
 #include <gio/gio.h>
@@ -87,6 +88,12 @@ void                    gtk_css_parser_emit_error               (GtkCssParser   
                                                                  const GtkCssLocation           *start,
                                                                  const GtkCssLocation           *end,
                                                                  const GError                   *error);
+void                    gtk_css_parser_error                    (GtkCssParser                   *self,
+                                                                 GtkCssParserError               code,
+                                                                 const GtkCssLocation           *start,
+                                                                 const GtkCssLocation           *end,
+                                                                 const char                     *format,
+                                                                 ...) G_GNUC_PRINTF(5, 6);
 void                    gtk_css_parser_error_syntax             (GtkCssParser                   *self,
                                                                  const char                     *format,
                                                                  ...) G_GNUC_PRINTF(2, 3);
@@ -96,6 +103,12 @@ void                    gtk_css_parser_error_value              (GtkCssParser   
 void                    gtk_css_parser_error_import             (GtkCssParser                   *self,
                                                                  const char                     *format,
                                                                  ...) G_GNUC_PRINTF(2, 3);
+void                    gtk_css_parser_warn                     (GtkCssParser                   *self,
+                                                                 GtkCssParserWarning             code,
+                                                                 const GtkCssLocation           *start,
+                                                                 const GtkCssLocation           *end,
+                                                                 const char                     *format,
+                                                                 ...) G_GNUC_PRINTF(5, 6);
 void                    gtk_css_parser_warn_syntax              (GtkCssParser                   *self,
                                                                  const char                     *format,
                                                                  ...) G_GNUC_PRINTF(2, 3);
