@@ -952,10 +952,11 @@ foreach l: immodules
   cflags = l.get(3, [])
 
   if cond and builtin_immodules
+    gtk_cargs += ['-DINCLUDE_IM_@0@'.format(name)]
     mod = static_library('staticimmodule-@0@'.format(name),
                          sources + gtk_dep_sources,
                          dependencies: gtk_deps + [libgdk_dep] ,
-                         c_args: gtk_cargs + common_cflags + ['-DINCLUDE_IM_@0@'.format(name)] + cflags,
+                         c_args: gtk_cargs + common_cflags + cflags,
                          include_directories: [confinc, gdkinc, gtkinc])
 
     gtk_included_im_deps += declare_dependency(link_with: mod)
