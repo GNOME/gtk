@@ -27,7 +27,6 @@
 #include "gtkcssinheritvalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkcsssectionprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"

@@ -29,7 +29,7 @@
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
-#include "gtkcsssectionprivate.h"
+#include "gtkcsssection.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssfontfeaturesvalueprivate.h"
@@ -162,7 +162,7 @@ gtk_css_style_print (GtkCssStyle *style,
       if (section)
         {
           g_string_append (string, " /* ");
-          _gtk_css_section_print (section, string);
+          gtk_css_section_print (section, string);
           g_string_append (string, " */");
         }
 
