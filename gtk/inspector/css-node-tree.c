@@ -33,7 +33,7 @@
 #include "gtk/gtkwidgetprivate.h"
 #include "gtkcssproviderprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkcsssectionprivate.h"
+#include "gtkcsssection.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcssvalueprivate.h"
 #include "gtkcssselectorprivate.h"
@@ -473,7 +473,7 @@ gtk_inspector_css_node_tree_update_style (GtkInspectorCssNodeTree *cnt,
 
           section = gtk_css_style_get_section (new_style, i);
           if (section)
-            location = _gtk_css_section_to_string (section);
+            location = gtk_css_section_to_string (section);
           else
             location = NULL;
         }
