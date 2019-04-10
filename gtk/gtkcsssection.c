@@ -28,11 +28,9 @@ struct _GtkCssSection
   GtkCssSectionType   section_type;
   GtkCssSection      *parent;
   GFile              *file;
-  guint               start_line;
-  guint               start_position;
+  GtkCssLocation      start_location;
   GtkCssParser       *parser;         /* parser if section isn't finished parsing yet or %NULL */
-  guint               end_line;       /* end line if parser is %NULL */
-  guint               end_position;   /* end position if parser is %NULL */
+  GtkCssLocation      end_location;   /* end location if parser is %NULL */
 };
 
 G_DEFINE_BOXED_TYPE (GtkCssSection, gtk_css_section, gtk_css_section_ref, gtk_css_section_unref)
@@ -43,7 +41,6 @@ _gtk_css_section_new (GtkCssSection     *parent,
                       GtkCssParser      *parser)
 {
   GtkCssSection *section;
-  GtkCssLocation location;
 
   gtk_internal_return_val_if_fail (parser != NULL, NULL);
 
@@ -57,9 +54,7 @@ _gtk_css_section_new (GtkCssSection     *parent,
   if (section->file)
     g_object_ref (section->file);
   section->parser = parser;
-  gtk_css_parser_get_location (section->parser, &location);
-  section->start_line = location.lines;
-  section->start_position = location.line_chars;
+  gtk_css_parser_get_location (section->parser, &section->start_location);
 
   return section;
 }
@@ -84,14 +79,10 @@ _gtk_css_section_new_for_file (GtkCssSectionType  type,
 void
 _gtk_css_section_end (GtkCssSection *section)
 {
-  GtkCssLocation location;
-
   gtk_internal_return_if_fail (section != NULL);
   gtk_internal_return_if_fail (section->parser != NULL);
 
-  gtk_css_parser_get_location (section->parser, &location);
-  section->end_line = location.lines;
-  section->end_position = location.line_chars;
+  gtk_css_parser_get_location (section->parser, &section->end_location);
   section->parser = NULL;
 }
 
@@ -209,7 +200,7 @@ gtk_css_section_get_start_line (const GtkCssSection *section)
 {
   gtk_internal_return_val_if_fail (section != NULL, 0);
 
-  return section->start_line;
+  return section->start_location.lines;
 }
 
 /**
@@ -226,7 +217,7 @@ gtk_css_section_get_start_position (const GtkCssSection *section)
 {
   gtk_internal_return_val_if_fail (section != NULL, 0);
 
-  return section->start_position;
+  return section->start_location.line_chars;
 }
 
 /**
@@ -253,7 +244,7 @@ gtk_css_section_get_end_line (const GtkCssSection *section)
   gtk_internal_return_val_if_fail (section != NULL, 0);
 
   if (!section->parser)
-    return section->end_line;
+    return section->end_location.lines;
 
   gtk_css_parser_get_location (section->parser, &location);
   return location.lines;
@@ -282,7 +273,7 @@ gtk_css_section_get_end_position (const GtkCssSection *section)
   gtk_internal_return_val_if_fail (section != NULL, 0);
 
   if (!section->parser)
-    return section->end_position;
+    return section->end_location.line_chars;
 
   gtk_css_parser_get_location (section->parser, &location);
   return location.line_chars;
