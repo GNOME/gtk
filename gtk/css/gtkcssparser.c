@@ -24,6 +24,7 @@
 
 #include "gtkcssenums.h"
 #include "gtkcsserror.h"
+#include "gtkcsslocationprivate.h"
 
 typedef struct _GtkCssParserBlock GtkCssParserBlock;
 
@@ -197,17 +198,79 @@ gtk_css_parser_resolve_url (GtkCssParser *self,
 }
 
 /**
- * gtk_css_parser_get_location:
+ * gtk_css_parser_get_start_location:
+ * @self: a #GtkCssParser
+ *
+ * Queries the location of the current token.
+ *
+ * This function will return the location of the start of the
+ * current token. In the case a token has been consumed, but no
+ * new token has been queried yet via gtk_css_parser_peek_token()
+ * or gtk_css_parser_get_token(), the previous token's start
+ * location will be returned.
+ *
+ * This function may return the same location as
+ * gtk_css_parser_get_end_location() - in particular at the
+ * beginning and end of the document.
+ *
+ * Returns: the start location
+ **/
+const GtkCssLocation *
+gtk_css_parser_get_start_location (GtkCssParser *self)
+{
+  return &self->location;
+}
+
+/**
+ * gtk_css_parser_get_end_location:
  * @self: a #GtkCssParser
  * @out_location: (caller-allocates) Place to store the location
  *
- * Queries the current location of the parser.
+ * Queries the location of the current token.
+ *
+ * This function will return the location of the end of the
+ * current token. In the case a token has been consumed, but no
+ * new token has been queried yet via gtk_css_parser_peek_token()
+ * or gtk_css_parser_get_token(), the previous token's end location
+ * will be returned.
+ *
+ * This function may return the same location as
+ * gtk_css_parser_get_start_location() - in particular at the
+ * beginning and end of the document.
+ *
+ * Returns: the end location
  **/
-void
-gtk_css_parser_get_location (GtkCssParser   *self,
-                             GtkCssLocation *out_location)
+const GtkCssLocation *
+gtk_css_parser_get_end_location (GtkCssParser *self)
 {
-  *out_location = self->location;
+  return gtk_css_tokenizer_get_location (self->tokenizer);
+}
+
+/**
+ * gtk_css_parser_get_block_location:
+ * @self: a #GtkCssParser
+ *
+ * Queries the start location of the token that started the current
+ * block that is being parsed.
+ *
+ * If no block is currently parsed, the beginning of the document
+ * is returned.
+ *
+ * Returns: The start location of the current block
+ */
+const GtkCssLocation *
+gtk_css_parser_get_block_location (GtkCssParser *self)
+{
+  GtkCssParserBlock *block;
+
+  if (self->blocks->len == 0)
+    {
+      static const GtkCssLocation start_of_document = { 0, };
+      return &start_of_document;
+    }
+  
+  block = &g_array_index (self->blocks, GtkCssParserBlock, self->blocks->len - 1);
+  return &block->start_location;
 }
 
 static void
