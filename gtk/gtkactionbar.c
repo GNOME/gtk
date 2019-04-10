@@ -358,7 +358,6 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
 static void
 gtk_action_bar_init (GtkActionBar *action_bar)
 {
-  GtkWidget *widget = GTK_WIDGET (action_bar);
   GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (action_bar);
   GtkCssNode *widget_node;
 
