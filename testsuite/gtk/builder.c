@@ -26,14 +26,14 @@
 #include <gdk/gdkkeysyms.h>
 
 /* exported for GtkBuilder */
-void signal_normal (GtkWindow *window, GParamSpec *spec);
-void signal_after (GtkWindow *window, GParamSpec *spec);
-void signal_object (GtkButton *button, GParamSpec *spec);
-void signal_object_after (GtkButton *button, GParamSpec *spec);
-void signal_first (GtkButton *button, GParamSpec *spec);
-void signal_second (GtkButton *button, GParamSpec *spec);
-void signal_extra (GtkButton *button, GParamSpec *spec);
-void signal_extra2 (GtkButton *button, GParamSpec *spec);
+G_MODULE_EXPORT void signal_normal (GtkWindow *window, GParamSpec *spec);
+G_MODULE_EXPORT void signal_after (GtkWindow *window, GParamSpec *spec);
+G_MODULE_EXPORT void signal_object (GtkButton *button, GParamSpec *spec);
+G_MODULE_EXPORT void signal_object_after (GtkButton *button, GParamSpec *spec);
+G_MODULE_EXPORT void signal_first (GtkButton *button, GParamSpec *spec);
+G_MODULE_EXPORT void signal_second (GtkButton *button, GParamSpec *spec);
+G_MODULE_EXPORT void signal_extra (GtkButton *button, GParamSpec *spec);
+G_MODULE_EXPORT void signal_extra2 (GtkButton *button, GParamSpec *spec);
 
 /* Copied from gtkiconfactory.c; keep in sync! */
 struct _GtkIconSet
@@ -133,7 +133,7 @@ static int after = 0;
 static int object = 0;
 static int object_after = 0;
 
-void /* exported for GtkBuilder */
+G_MODULE_EXPORT void /* exported for GtkBuilder */
 signal_normal (GtkWindow *window, GParamSpec *spec)
 {
   g_assert (GTK_IS_WINDOW (window));
@@ -143,7 +143,7 @@ signal_normal (GtkWindow *window, GParamSpec *spec)
   normal++;
 }
 
-void /* exported for GtkBuilder */
+G_MODULE_EXPORT void /* exported for GtkBuilder */
 signal_after (GtkWindow *window, GParamSpec *spec)
 {
   g_assert (GTK_IS_WINDOW (window));
@@ -153,7 +153,7 @@ signal_after (GtkWindow *window, GParamSpec *spec)
   after++;
 }
 
-void /* exported for GtkBuilder */
+G_MODULE_EXPORT void /* exported for GtkBuilder */
 signal_object (GtkButton *button, GParamSpec *spec)
 {
   g_assert (GTK_IS_BUTTON (button));
@@ -163,7 +163,7 @@ signal_object (GtkButton *button, GParamSpec *spec)
   object++;
 }
 
-void /* exported for GtkBuilder */
+G_MODULE_EXPORT void /* exported for GtkBuilder */
 signal_object_after (GtkButton *button, GParamSpec *spec)
 {
   g_assert (GTK_IS_BUTTON (button));
@@ -173,28 +173,28 @@ signal_object_after (GtkButton *button, GParamSpec *spec)
   object_after++;
 }
 
-void /* exported for GtkBuilder */
+G_MODULE_EXPORT void /* exported for GtkBuilder */
 signal_first (GtkButton *button, GParamSpec *spec)
 {
   g_assert (normal == 0);
   normal = 10;
 }
 
-void /* exported for GtkBuilder */
+G_MODULE_EXPORT void /* exported for GtkBuilder */
 signal_second (GtkButton *button, GParamSpec *spec)
 {
   g_assert (normal == 10);
   normal = 20;
 }
 
-void /* exported for GtkBuilder */
+G_MODULE_EXPORT void /* exported for GtkBuilder */
 signal_extra (GtkButton *button, GParamSpec *spec)
 {
   g_assert (normal == 20);
   normal = 30;
 }
 
-void /* exported for GtkBuilder */
+G_MODULE_EXPORT void /* exported for GtkBuilder */
 signal_extra2 (GtkButton *button, GParamSpec *spec)
 {
   g_assert (normal == 30);
@@ -2619,13 +2619,13 @@ test_level_bar (void)
 
 static GObject *external_object = NULL, *external_object_swapped = NULL;
 
-void
+G_MODULE_EXPORT void
 on_button_clicked (GtkButton *button, GObject *data)
 {
   external_object = data;
 }
 
-void
+G_MODULE_EXPORT void
 on_button_clicked_swapped (GObject *data, GtkButton *button)
 {
   external_object_swapped = data;
@@ -2844,7 +2844,7 @@ test_template ()
   g_assert (GTK_IS_LABEL (my_gtk_grid->priv->label));
 }
 
-void
+G_MODULE_EXPORT void
 on_cellrenderertoggle1_toggled (GtkCellRendererToggle *cell)
 {
 }
