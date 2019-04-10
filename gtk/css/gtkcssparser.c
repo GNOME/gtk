@@ -511,8 +511,8 @@ gtk_css_parser_error_syntax (GtkCssParser *self,
                               GTK_CSS_PARSER_ERROR_SYNTAX,
                               format, args);
   gtk_css_parser_emit_error (self,
-                             &self->location,
-                             gtk_css_tokenizer_get_location (self->tokenizer),
+                             gtk_css_parser_get_start_location (self),
+                             gtk_css_parser_get_end_location (self),
                              error);
   g_error_free (error);
   va_end (args);
@@ -531,8 +531,8 @@ gtk_css_parser_error_value (GtkCssParser *self,
                               GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
                               format, args);
   gtk_css_parser_emit_error (self,
-                             &self->location,
-                             gtk_css_tokenizer_get_location (self->tokenizer),
+                             gtk_css_parser_get_start_location (self),
+                             gtk_css_parser_get_end_location (self),
                              error);
   g_error_free (error);
   va_end (args);
@@ -551,8 +551,8 @@ gtk_css_parser_error_import (GtkCssParser *self,
                               GTK_CSS_PARSER_ERROR_IMPORT,
                               format, args);
   gtk_css_parser_emit_error (self,
-                             &self->location,
-                             gtk_css_tokenizer_get_location (self->tokenizer),
+                             gtk_css_parser_get_start_location (self),
+                             gtk_css_parser_get_end_location (self),
                              error);
   g_error_free (error);
   va_end (args);
@@ -571,8 +571,8 @@ gtk_css_parser_warn_syntax (GtkCssParser *self,
                               GTK_CSS_PARSER_WARNING_SYNTAX,
                               format, args);
   gtk_css_parser_emit_error (self,
-                             &self->location,
-                             gtk_css_tokenizer_get_location (self->tokenizer),
+                             gtk_css_parser_get_start_location (self),
+                             gtk_css_parser_get_end_location (self),
                              error);
   g_error_free (error);
   va_end (args);
