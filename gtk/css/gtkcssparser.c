@@ -539,6 +539,26 @@ gtk_css_parser_error_value (GtkCssParser *self,
 }
 
 void
+gtk_css_parser_error_import (GtkCssParser *self,
+                             const char   *format,
+                             ...)
+{
+  va_list args;
+  GError *error;
+
+  va_start (args, format);
+  error = g_error_new_valist (GTK_CSS_PARSER_ERROR,
+                              GTK_CSS_PARSER_ERROR_IMPORT,
+                              format, args);
+  gtk_css_parser_emit_error (self,
+                             &self->location,
+                             gtk_css_tokenizer_get_location (self->tokenizer),
+                             error);
+  g_error_free (error);
+  va_end (args);
+}
+
+void
 gtk_css_parser_warn_syntax (GtkCssParser *self,
                             const char   *format,
                             ...)
@@ -923,15 +943,8 @@ gtk_css_parser_consume_url (GtkCssParser *self)
   result = gtk_css_parser_resolve_url (self, url);
   if (result == NULL)
     {
-      GError *error = g_error_new (GTK_CSS_PARSER_ERROR,
-                                   GTK_CSS_PARSER_ERROR_IMPORT,
-                                   "Could not resolve \"%s\" to a valid URL", url);
-      gtk_css_parser_emit_error (self,
-                                 &self->location,
-                                 gtk_css_tokenizer_get_location (self->tokenizer),
-                                 error);
+      gtk_css_parser_error_import (self, "Could not resolve \"%s\" to a valid URL", url);
       g_free (url);
-      g_error_free (error);
       return NULL;
     }
   g_free (url);
