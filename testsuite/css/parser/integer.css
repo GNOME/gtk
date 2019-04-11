@@ -1,42 +1,42 @@
 a {
-  margin-top: 0;
+  opacity: 0;
 }
 b {
-  margin-top: 1;
+  opacity: 1;
 }
 c {
-  margin-top: -1;
+  opacity: -1;
 }
 d {
-  margin-top: 2147483647;
+  opacity: 2147483647;
 }
 e {
-  margin-top: -2147483648;
+  opacity: -2147483648;
 }
 f {
-  margin-top: 1.0;
+  opacity: 1.0;
 }
 g {
-  margin-top: 3px;
+  opacity: 3px;
 }
 h {
-  margin-top: 0xFF;
+  opacity: 0xFF;
 }
 i {
-  margin-top: 0377;
+  opacity: 0377;
 }
 j {
-  margin-top: nonumber;
+  opacity: nonumber;
 }
 k {
-  margin-top: "42";
+  opacity: "42";
 }
 l {
-  margin-top: +3;
+  opacity: +3;
 }
 m {
-  margin-top: --5;
+  opacity: --5;
 }
 n {
-  margin-top: - 10;
+  opacity: - 10;
 }
