@@ -330,7 +330,18 @@ gtk_css_calc_value_parse_value (GtkCssParser           *parser,
         }
 
       if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-        gtk_css_parser_error_syntax (parser, "Expected closing ')' in calc() subterm");
+        {
+          GtkCssLocation start = *gtk_css_parser_get_start_location (parser);
+          gtk_css_parser_skip_until (parser, GTK_CSS_TOKEN_EOF);
+          gtk_css_parser_error (parser,
+                                GTK_CSS_PARSER_ERROR_SYNTAX,
+                                &start,
+                                gtk_css_parser_get_start_location (parser),
+                                "Expected closing ')' in calc() subterm");
+          gtk_css_value_unref (result);
+          gtk_css_parser_end_block (parser);
+          return NULL;
+        }
 
       gtk_css_parser_end_block (parser);
 
@@ -353,9 +364,11 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
 {
   GtkCssValue *result, *value, *temp;
   GtkCssNumberParseFlags actual_flags;
+  GtkCssLocation start;
 
   actual_flags = flags | GTK_CSS_PARSE_NUMBER;
-
+  gtk_css_parser_get_token (parser);
+  start = *gtk_css_parser_get_start_location (parser);
   result = gtk_css_calc_value_parse_value (parser, actual_flags);
   if (result == NULL)
     return NULL;
@@ -396,7 +409,11 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
 
   if (is_number (result) && !(flags & GTK_CSS_PARSE_NUMBER))
     {
-      gtk_css_parser_error_syntax (parser, "calc() product term has no units");
+      gtk_css_parser_error (parser,
+                            GTK_CSS_PARSER_ERROR_SYNTAX,
+                            &start,
+                            gtk_css_parser_get_start_location (parser),
+                            "calc() product term has no units");
       goto fail;
     }
 
