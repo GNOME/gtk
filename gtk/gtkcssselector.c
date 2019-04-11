@@ -1245,8 +1245,10 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
                                               GtkCssSelector *selector,
                                               gboolean        negate)
 {
+  GtkCssLocation start_location;
   const GtkCssToken *token;
 
+  start_location = *gtk_css_parser_get_start_location (parser);
   gtk_css_parser_consume_token (parser);
   for (token = gtk_css_parser_peek_token (parser);
        gtk_css_token_is (token, GTK_CSS_TOKEN_COMMENT);
@@ -1305,7 +1307,11 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
             }
         }
           
-      gtk_css_parser_error_value (parser, "Unknown name of pseudo-class");
+      gtk_css_parser_error (parser,
+                            GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                            &start_location,
+                            gtk_css_parser_get_end_location (parser),
+                            "Unknown name of pseudo-class");
       if (selector)
         _gtk_css_selector_free (selector);
       return NULL;
@@ -1452,7 +1458,11 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
         }
       else
         {
-          gtk_css_parser_error_value (parser, "Unknown pseudoclass");
+          gtk_css_parser_error (parser,
+                                GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                                &start_location,
+                                gtk_css_parser_get_end_location (parser),
+                                "Unknown pseudoclass");
           if (selector)
             _gtk_css_selector_free (selector);
           return NULL;
@@ -1460,7 +1470,11 @@ gtk_css_selector_parse_selector_pseudo_class (GtkCssParser   *parser,
     }
   else
     {
-      gtk_css_parser_error_value (parser, "Unknown pseudoclass");
+      gtk_css_parser_error (parser,
+                            GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                            &start_location,
+                            gtk_css_parser_get_end_location (parser),
+                            "Unknown pseudoclass");
       if (selector)
         _gtk_css_selector_free (selector);
       return NULL;
