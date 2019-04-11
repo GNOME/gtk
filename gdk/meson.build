@@ -280,6 +280,7 @@ endif
 
 libgdk = shared_library('gdk-3',
                         soversion: gtk_soversion,
+                        version: gtk_library_version,
                         sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
                         dependencies: gdk_deps,
                         include_directories: [confinc, gdkx11_inc, wlinc],
