@@ -260,6 +260,31 @@ spinner {
   }
 }
 
+/**********************
+ * General Typography *
+ **********************/
+
+.type-large-title {
+   font-weight: 300;
+   font-size: 24pt;
+   letter-spacing: 0.2rem;
+}
+.type-title {
+   font-weight: 600;
+   font-size: 16pt;
+}
+.type-heading {
+   font-weight: 500;
+   font-size: 11pt;
+}
+.type-body {
+   font-weight: 400;
+   font-size: 11pt;
+}
+.type-caption {
+   font-weight: 400;
+   font-size: 9pt;
+}
 
 /****************
  * Text Entries *
