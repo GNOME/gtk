@@ -222,7 +222,6 @@ enum {
   PROP_INPUT_PURPOSE,
   PROP_INPUT_HINTS,
   PROP_ATTRIBUTES,
-  PROP_POPULATE_ALL,
   PROP_TABS,
   PROP_EXTRA_MENU,
   PROP_SHOW_EMOJI_ICON,
@@ -800,19 +799,6 @@ gtk_entry_class_init (GtkEntryClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:populate-all:
-   *
-   * If :populate-all is %TRUE, the #GtkEntry::populate-popup
-   * signal is also emitted for touch popups.
-   */
-  entry_props[PROP_POPULATE_ALL] =
-      g_param_spec_boolean ("populate-all",
-                            P_("Populate all"),
-                            P_("Whether to emit ::populate-popup for touch popups"),
-                            FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  /**
    * GtkEntry::tabs:
    *
    * A list of tabstops to apply to the text of the entry.
@@ -958,7 +944,6 @@ gtk_entry_set_property (GObject         *object,
     case PROP_INPUT_PURPOSE:
     case PROP_INPUT_HINTS:
     case PROP_ATTRIBUTES:
-    case PROP_POPULATE_ALL:
     case PROP_TABS:
     case PROP_ENABLE_EMOJI_COMPLETION:
       g_object_set_property (G_OBJECT (priv->text), pspec->name, value);
@@ -1114,7 +1099,6 @@ gtk_entry_get_property (GObject         *object,
     case PROP_INPUT_PURPOSE:
     case PROP_INPUT_HINTS:
     case PROP_ATTRIBUTES:
-    case PROP_POPULATE_ALL:
     case PROP_TABS:
     case PROP_ENABLE_EMOJI_COMPLETION:
       g_object_get_property (G_OBJECT (priv->text), pspec->name, value);
