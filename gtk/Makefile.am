@@ -1177,7 +1177,7 @@ MAINTAINERCLEANFILES = \
 	$(print_portal_built_sources)		\
 	$(stamp_files)
 
-DISTCLEANFILES =
+DISTCLEANFILES = gtktypefuncs.c
 
 if OS_WIN32
 DISTCLEANFILES += gtk-win32.rc
