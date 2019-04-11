@@ -841,9 +841,6 @@ static void     gtk_tree_view_search_window_hide        (GtkWidget        *searc
 static void     gtk_tree_view_search_position_func      (GtkTreeView      *tree_view,
 							 GtkWidget        *search_window,
 							 gpointer          user_data);
-static void     gtk_tree_view_search_disable_popdown    (GtkEntry         *entry,
-							 GtkMenu          *menu,
-							 gpointer          data);
 static void     gtk_tree_view_search_preedit_changed    (GtkText          *text,
                                                          const char       *preedit,
 							 GtkTreeView      *tree_view);
@@ -851,9 +848,6 @@ static void     gtk_tree_view_search_changed            (GtkEditable      *edita
                                                          GtkTreeView      *tree_view);
 static void     gtk_tree_view_search_activate           (GtkEntry         *entry,
 							 GtkTreeView      *tree_view);
-static gboolean gtk_tree_view_real_search_enable_popdown(gpointer          data);
-static void     gtk_tree_view_search_enable_popdown     (GtkWidget        *widget,
-							 gpointer          data);
 static void     gtk_tree_view_search_pressed_cb         (GtkGesture       *gesture,
                                                          int               n_press,
                                                          double            x,
@@ -10235,8 +10229,6 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
 
   /* add entry */
   tree_view->priv->search_entry = gtk_text_new ();
-  g_signal_connect (tree_view->priv->search_entry, "populate-popup",
-		    G_CALLBACK (gtk_tree_view_search_disable_popdown), tree_view);
   g_signal_connect (tree_view->priv->search_entry, "activate",
                     G_CALLBACK (gtk_tree_view_search_activate), tree_view);
   g_signal_connect (tree_view->priv->search_entry, "preedit-changed",
@@ -13791,18 +13783,6 @@ gtk_tree_view_search_position_func (GtkTreeView *tree_view,
 {
 }
 
-static void
-gtk_tree_view_search_disable_popdown (GtkEntry *entry,
-				      GtkMenu  *menu,
-				      gpointer  data)
-{
-  GtkTreeView *tree_view = (GtkTreeView *)data;
-
-  tree_view->priv->disable_popdown = 1;
-  g_signal_connect (menu, "hide",
-		    G_CALLBACK (gtk_tree_view_search_enable_popdown), data);
-}
-
 /* Because we're visible but offscreen, we just set a flag in the preedit
  * callback.
  */
@@ -13853,27 +13833,6 @@ gtk_tree_view_search_activate (GtkEntry    *entry,
       
       gtk_tree_path_free (path);
     }
-}
-
-static gboolean
-gtk_tree_view_real_search_enable_popdown (gpointer data)
-{
-  GtkTreeView *tree_view = (GtkTreeView *)data;
-
-  tree_view->priv->disable_popdown = 0;
-
-  return FALSE;
-}
-
-static void
-gtk_tree_view_search_enable_popdown (GtkWidget *widget,
-				     gpointer   data)
-{
-  guint id = g_timeout_add_full (G_PRIORITY_HIGH, 200,
-                                 gtk_tree_view_real_search_enable_popdown,
-                                 g_object_ref (data),
-                                 g_object_unref);
-  g_source_set_name_by_id (id, "[gtk] gtk_tree_view_real_search_enable_popdown");
 }
 
 static void
