@@ -61,6 +61,9 @@ void            gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_password_entry_get_show_peek_icon (GtkPasswordEntry *entry);
 
+GDK_AVAILABLE_IN_ALL
+GMenuModel   * gtk_password_entry_get_default_context_menu (GtkPasswordEntry *entry);
+
 G_END_DECLS
 
 #endif /* __GTK_PASSWORD_ENTRY_H__ */
