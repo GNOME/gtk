@@ -1,1 +1,1 @@
-does-not-exist.css:2: error: GTK_CSS_PARSER_ERROR_SYNTAX
+does-not-exist.css:2:23-27: error: GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE

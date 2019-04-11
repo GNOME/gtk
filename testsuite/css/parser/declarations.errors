@@ -1,4 +1,7 @@
-declarations.css:24: error: GTK_CSS_PARSER_ERROR_SYNTAX
+declarations.css:1:5-6: error: GTK_CSS_PARSER_WARNING_SYNTAX
+declarations.css:1:6-7: error: GTK_CSS_PARSER_WARNING_SYNTAX
+declarations.css:1:7-8: error: GTK_CSS_PARSER_WARNING_SYNTAX
+declarations.css:24:5-15: error: GTK_CSS_PARSER_ERROR_SYNTAX
 declarations.css:26: error: GTK_CSS_PARSER_ERROR_SYNTAX
 declarations.css:28: error: GTK_CSS_PARSER_ERROR_SYNTAX
 declarations.css:30: error: GTK_CSS_PARSER_ERROR_SYNTAX

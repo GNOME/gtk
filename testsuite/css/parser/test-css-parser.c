@@ -142,16 +142,14 @@ parsing_error_cb (GtkCssProvider *provider,
                   const GError   *error,
                   GString        *errors)
 {
-  const GtkCssLocation *end_location;
-  char *basename;
+  char *section_string;
 
-  end_location = gtk_css_section_get_end_location (section);
+  section_string = gtk_css_section_to_string (section);
 
-  basename = g_file_get_basename (gtk_css_section_get_file (section));
   g_string_append_printf (errors,
-                          "%s:%zu: error: ",
-                          basename, end_location->lines + 1);
-  g_free (basename);
+                          "%s: error: ",
+                          section_string);
+  g_free (section_string);
 
   if (error->domain == GTK_CSS_PARSER_ERROR)
     append_error_value (errors, GTK_TYPE_CSS_PARSER_ERROR, error->code);
