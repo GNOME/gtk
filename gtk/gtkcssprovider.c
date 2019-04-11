@@ -711,9 +711,12 @@ parse_import (GtkCssScanner *scanner)
   else if (gtk_css_scanner_would_recurse (scanner, file))
     {
        char *path = g_file_get_path (file);
-       gtk_css_parser_error_import (scanner->parser,
-                                    "Loading '%s' would recurse",
-                                    path);
+       gtk_css_parser_error (scanner->parser,
+                             GTK_CSS_PARSER_ERROR_IMPORT,
+                             gtk_css_parser_get_block_location (scanner->parser),
+                             gtk_css_parser_get_end_location (scanner->parser),
+                             "Loading '%s' would recurse",
+                             path);
        g_free (path);
     }
   else
@@ -1077,9 +1080,12 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
             }
           else
             {
-              gtk_css_parser_error_import (parent->parser, 
-                                           "Failed to import: %s",
-                                           load_error->message);
+              gtk_css_parser_error (parent->parser, 
+                                    GTK_CSS_PARSER_ERROR_IMPORT,
+                                    gtk_css_parser_get_block_location (parent->parser),
+                                    gtk_css_parser_get_end_location (parent->parser),
+                                    "Failed to import: %s",
+                                    load_error->message);
             }
         }
     }
