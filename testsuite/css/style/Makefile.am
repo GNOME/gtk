@@ -51,6 +51,7 @@ EXTRA_DIST += \
 	$(resource_files)		\
 	$(test_in_files) 		\
 	$(test_data)			\
+	meson.build	\
 	$(NULL)
 
 if BUILDOPT_INSTALL_TESTS

@@ -34,7 +34,8 @@ EXTRA_DIST = \
 	menus.ui \
 	iconbrowser.gresource.xml \
 	window.ui \
-	icon.list
+	icon.list \
+	meson.build
 
 # ------------------- MSVC Build Items ----------------
 MSVCPROJS = gtk3-icon-browser

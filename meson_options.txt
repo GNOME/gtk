@@ -1,0 +1,43 @@
+# GDK backends
+option('x11_backend', type: 'boolean', value: true,
+  description : 'Enable the X11 gdk backend (only when building on Unix)')
+option('wayland_backend', type: 'boolean', value: true,
+  description : 'Enable the wayland gdk backend (only when building on Unix except for macOS)')
+option('broadway_backend', type: 'boolean', value: false,
+  description : 'Enable the broadway (HTML5) gdk backend')
+option('win32_backend', type: 'boolean', value: true,
+  description : 'Enable the Windows gdk backend (only when building on Windows)')
+option('quartz_backend', type: 'boolean', value: true,
+  description : 'Enable the macOS gdk backend (only when building on macOS)')
+
+# Optional dependencies
+option('xinerama', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Enable support for the Xinerama extension')
+option('cloudproviders', type: 'boolean', value: false,
+  description : 'Enable the cloudproviders support')
+
+# Print backends
+option('print_backends', type : 'string', value : 'auto',
+  description : 'Build the specified print backends (comma-separated list, any of "cloudprint,cups,file,lpr,papi,test" or "auto")')
+option('colord', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
+  description : 'Build colord support for the CUPS printing backend')
+
+# Documentation and introspection
+option('gtk_doc', type: 'boolean', value: 'false',
+  description : 'Build API reference with gtk-doc')
+option('man', type: 'boolean', value: 'false',
+  description : 'Build man pages for installed tools')
+option('introspection', type: 'boolean', value: 'true',
+  description : 'Build introspection data (requires gobject-introspection)')
+
+# Demos and binaries
+option('demos', type: 'boolean', value: 'true',
+  description : 'Build demo programs')
+option('examples', type: 'boolean', value: 'true',
+  description : 'Build examples')
+option('tests', type: 'boolean', value: 'true',
+  description : 'Build tests')
+
+# input modules
+option('builtin_immodules', type: 'combo', choices : ['yes', 'no', 'auto'],
+       value: 'auto', description: 'Build immodules into GTK so/DLL')

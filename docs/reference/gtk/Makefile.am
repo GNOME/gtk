@@ -287,7 +287,7 @@ content_files =					\
 	css-overview.xml			\
 	css-properties.xml			\
 	drawing-model.xml			\
-	getting_started.xml			\
+	$(builddir)/getting_started.xml			\
 	glossary.xml				\
 	gtk3-demo-application.xml		\
 	gtk3-demo.xml				\
@@ -324,7 +324,7 @@ content_files =					\
 expand_content_files = 				\
 	compiling.sgml				\
 	drawing-model.xml			\
-	getting_started.xml			\
+	$(builddir)/getting_started.xml			\
 	glossary.xml				\
 	input-handling.xml			\
 	migrating-2to3.xml			\
@@ -496,7 +496,7 @@ endif
 include $(top_srcdir)/gtk-doc.make
 
 # Other files to distribute
-EXTRA_DIST += version.xml.in gtk3.types.in
+EXTRA_DIST += version.xml.in gtk3.types.in getting_started.xml.in
 
 ########################################################################
 
@@ -543,7 +543,9 @@ endif
 
 MAINTAINERCLEANFILES = $(man_MANS) $(BUILT_SOURCES)
 
-EXTRA_DIST += $(man_MANS)
+EXTRA_DIST += \
+	$(man_MANS) \
+	meson.build
 
 if ENABLE_GTK_DOC
 TESTS_ENVIRONMENT = cd $(srcdir) && \

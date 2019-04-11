@@ -27,6 +27,8 @@ bloatpad-gresources.c: $(resource_files)
 
 CLEANFILES = bloatpad-gresources.c
 
-EXTRA_DIST = $(resource_files)
+EXTRA_DIST = \
+	$(resource_files) \
+	meson.build
 
 -include $(top_srcdir)/git.mk
