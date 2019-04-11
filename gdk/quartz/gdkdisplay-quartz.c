@@ -89,7 +89,7 @@ _gdk_quartz_display_add_frame_callback (GdkDisplay             *display,
                                         GdkWindow              *window)
 {
   GdkQuartzDisplay *display_quartz;
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window);
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
 
   display_quartz = GDK_QUARTZ_DISPLAY (display);
 
