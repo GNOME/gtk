@@ -987,6 +987,7 @@ GtkPasswordEntry
 gtk_password_entry_new
 gtk_password_entry_set_show_peek_icon
 gtk_password_entry_get_show_peek_icon
+gtk_password_entry_add_to_context_menu
 <SUBSECTION Private>
 gtk_password_entry_get_type
 </SECTION>

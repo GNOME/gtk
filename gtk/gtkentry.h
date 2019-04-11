@@ -77,9 +77,6 @@ struct _GtkEntry
 /**
  * GtkEntryClass:
  * @parent_class: The parent class.
- * @populate_popup: Class handler for the #GtkEntry::populate-popup signal. If
- *   non-%NULL, this will be called to add additional entries to the context
- *   menu when it is displayed.
  * @activate: Class handler for the #GtkEntry::activate signal. The default
  *   implementation activates the gtk.activate-default action.
  * @move_cursor: Class handler for the #GtkEntry::move-cursor signal. The

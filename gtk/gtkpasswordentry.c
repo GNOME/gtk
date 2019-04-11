@@ -105,7 +105,7 @@ focus_changed (GtkWidget *widget)
   if (priv->keymap)
     keymap_state_changed (priv->keymap, widget);
 }
-
+ 
 static void
 gtk_password_entry_toggle_peek (GtkPasswordEntry *entry)
 {
@@ -126,27 +126,6 @@ gtk_password_entry_toggle_peek (GtkPasswordEntry *entry)
 }
 
 static void
-populate_popup (GtkText          *text,
-                GtkWidget        *popup,
-                GtkPasswordEntry *entry)
-{
-  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
-
-  if (priv->peek_icon != NULL)
-    {
-      GtkWidget *item;
-
-      item = gtk_check_menu_item_new_with_mnemonic (_("_Show text"));
-      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item),
-                                      gtk_text_get_visibility (text));
-      g_signal_connect_swapped (item, "activate",
-                                G_CALLBACK (gtk_password_entry_toggle_peek), entry);
-      gtk_widget_show (item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (popup), item);
-    }
-}
-
-static void
 gtk_password_entry_init (GtkPasswordEntry *entry)
 {
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
@@ -156,7 +135,6 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   gtk_widget_set_parent (priv->entry, GTK_WIDGET (entry));
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
   g_signal_connect_swapped (priv->entry, "notify::has-focus", G_CALLBACK (focus_changed), entry);
-  g_signal_connect (priv->entry, "populate-popup", G_CALLBACK (populate_popup), entry);
 
   priv->icon = gtk_image_new_from_icon_name ("caps-lock-symbolic");
   gtk_widget_set_tooltip_text (priv->icon, _("Caps Lock is on"));
@@ -165,6 +143,8 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   gtk_widget_set_parent (priv->icon, GTK_WIDGET (entry));
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (entry)), I_("password"));
+
+  gtk_password_entry_add_to_context_menu (entry, NULL);
 }
 
 static void
@@ -389,7 +369,6 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   widget_class->get_accessible = gtk_password_entry_get_accessible;
   widget_class->grab_focus = gtk_password_entry_grab_focus;
   widget_class->mnemonic_activate = gtk_password_entry_mnemonic_activate;
- 
   props[PROP_PLACEHOLDER_TEXT] =
       g_param_spec_string ("placeholder-text",
                            P_("Placeholder text"),
@@ -508,4 +487,39 @@ gtk_password_entry_get_show_peek_icon (GtkPasswordEntry *entry)
   g_return_val_if_fail (GTK_IS_PASSWORD_ENTRY (entry), FALSE);
 
   return priv->peek_icon != NULL;
+}
+
+/**
+ * gtk_password_entry_add_to_context_menu:
+ * @entry: a #GtkPasswordEntry
+ * @model: (allow-none): a #GMenuModel
+ *
+ * Sets a menu model to add when constructing
+ * the context menu for @entry.
+ */
+void
+gtk_password_entry_add_to_context_menu (GtkPasswordEntry *entry,
+                                        GMenuModel       *model)
+{
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+  GMenu *menu;
+  GMenu *section;
+  GMenuItem *item;
+
+  menu = g_menu_new ();
+
+  section = g_menu_new ();
+  item = g_menu_item_new (_("_Show Text"), "context.toggle-visibility");
+  g_menu_item_set_attribute (item, "touch-icon", "s", "eye-not-looking-symbolic");
+  g_menu_append_item (section, item);
+  g_object_unref (item);
+
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
+  g_object_unref (section);
+
+  if (model)
+    g_menu_append_section (menu, NULL, model);
+
+  gtk_text_add_to_context_menu (GTK_TEXT (priv->entry), G_MENU_MODEL (menu));
+  g_object_unref (menu);
 }
