@@ -3853,6 +3853,10 @@ messagedialog { // Message Dialog styling
     border-top-right-radius: 7px;
   }
 
+  box.dialog-vbox.vertical {
+    border-spacing: 10px;
+  }
+
   &.csd { // rounded bottom border styling for csd version
     &.background {
       // bigger radius for better antialiasing
