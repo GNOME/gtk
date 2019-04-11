@@ -5261,10 +5261,15 @@ gtk_text_set_visibility (GtkText  *self,
 
   if (priv->visible != visible)
     {
+      GAction *action;
+
       priv->visible = visible;
 
       g_object_notify (G_OBJECT (self), "visibility");
       gtk_text_recompute (self);
+
+      action = g_action_map_lookup_action (priv->context_actions, "toggle-visibility");
+      g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (visible));
     }
 }
 
@@ -5663,6 +5668,15 @@ insert_emoji_activated (GSimpleAction *action,
 }
 
 static void
+toggle_visibility (GSimpleAction *action,
+                   GVariant      *parameter,
+                   gpointer       user_data)
+{
+  GtkText *text = GTK_TEXT (user_data);
+  gtk_text_set_visibility (text, !gtk_text_get_visibility (text));
+}
+
+static void
 gtk_text_add_context_actions (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
@@ -5674,6 +5688,7 @@ gtk_text_add_context_actions (GtkText *self)
     { "delete-selection", delete_selection_activated, NULL, NULL, NULL },
     { "select-all", select_all_activated, NULL, NULL, NULL },
     { "insert-emoji", insert_emoji_activated, NULL, NULL, NULL },
+    { "toggle-visibility", toggle_visibility, NULL, "true", NULL },
   };
 
   GSimpleActionGroup *actions = g_simple_action_group_new ();
