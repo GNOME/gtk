@@ -144,7 +144,7 @@ autosave_contents (GtkInspectorCssEditor *ce)
   contents = gtk_text_buffer_get_text (GTK_TEXT_BUFFER (ce->priv->text), &start, &end, TRUE);
   autosave_file = get_autosave_path ();
   dir = g_path_get_dirname (autosave_file);
-  g_mkdir_with_parents (dir, 600);
+  g_mkdir_with_parents (dir, 0755);
   g_file_set_contents (autosave_file, contents, -1, NULL);
 
   g_free (dir);
