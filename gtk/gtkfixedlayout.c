@@ -208,6 +208,13 @@ gtk_fixed_layout_child_get_position (GtkFixedLayoutChild *child)
 
 G_DEFINE_TYPE (GtkFixedLayout, gtk_fixed_layout, GTK_TYPE_LAYOUT_MANAGER)
 
+static GtkSizeRequestMode
+gtk_fixed_layout_get_request_mode (GtkLayoutManager *layout_manager,
+                                   GtkWidget        *widget)
+{
+  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
 static void
 gtk_fixed_layout_measure (GtkLayoutManager *layout_manager,
                           GtkWidget        *widget,
@@ -316,6 +323,7 @@ gtk_fixed_layout_class_init (GtkFixedLayoutClass *klass)
 
   layout_class->layout_child_type = GTK_TYPE_FIXED_LAYOUT_CHILD;
 
+  layout_class->get_request_mode = gtk_fixed_layout_get_request_mode;
   layout_class->measure = gtk_fixed_layout_measure;
   layout_class->allocate = gtk_fixed_layout_allocate;
   layout_class->create_layout_child = gtk_fixed_layout_create_layout_child;

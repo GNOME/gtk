@@ -199,42 +199,6 @@ get_spacing (GtkBoxLayout *self,
   return css_spacing + self->spacing;
 }
 
-static GtkSizeRequestMode
-gtk_box_layout_get_request_mode (GtkLayoutManager *layout_manager,
-                                 GtkWidget        *widget)
-{
-  GtkWidget *child;
-  int wfh = 0, hfw = 0;
-
-  for (child = _gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    {
-      GtkSizeRequestMode mode = gtk_widget_get_request_mode (child);
-
-      switch (mode)
-        {
-        case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
-          hfw += 1;
-          break;
-
-        case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
-          wfh += 1;
-          break;
-
-        case GTK_SIZE_REQUEST_CONSTANT_SIZE:
-        default:
-          break;
-        }
-    }
-
-  if (hfw == 0 && wfh == 0)
-    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
-  else
-    return wfh > hfw ? GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT
-                     : GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
-}
-
 static void
 gtk_box_layout_compute_size (GtkBoxLayout *self,
                              GtkWidget    *widget,
@@ -738,7 +702,6 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
   gobject_class->set_property = gtk_box_layout_set_property;
   gobject_class->get_property = gtk_box_layout_get_property;
 
-  layout_manager_class->get_request_mode = gtk_box_layout_get_request_mode;
   layout_manager_class->measure = gtk_box_layout_measure;
   layout_manager_class->allocate = gtk_box_layout_allocate;
 
