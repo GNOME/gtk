@@ -203,7 +203,6 @@ static GtkSizeRequestMode
 gtk_box_layout_get_request_mode (GtkLayoutManager *layout_manager,
                                  GtkWidget        *widget)
 {
-  GtkBoxLayout *self = GTK_BOX_LAYOUT (layout_manager);
   GtkWidget *child;
   int wfh = 0, hfw = 0;
 
