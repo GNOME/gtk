@@ -1325,8 +1325,6 @@ static GtkWidget *
 action_editor (GObject                *object,
                GtkInspectorPropEditor *editor)
 {
-  GtkWidget *vbox;
-  GtkWidget *label;
   GtkWidget *box;
   GtkWidget *button;
   GObject *owner;
@@ -1334,14 +1332,10 @@ action_editor (GObject                *object,
 
   owner = find_action_owner (GTK_ACTIONABLE (object));
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   if (owner)
     {
-      label = gtk_label_new (_("Action"));
-      gtk_widget_set_margin_top (label, 10);
-      gtk_container_add (GTK_CONTAINER (vbox), label);
-      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-      text = g_strdup_printf (_("Defined at: %p (%s)"),
+      text = g_strdup_printf (_("Action from: %p (%s)"),
                               owner, g_type_name_from_instance ((GTypeInstance *)owner));
       gtk_container_add (GTK_CONTAINER (box), gtk_label_new (text));
       g_free (text);
@@ -1350,20 +1344,9 @@ action_editor (GObject                *object,
       g_signal_connect (button, "clicked",
                         G_CALLBACK (show_action_owner), editor);
       gtk_container_add (GTK_CONTAINER (box), button);
-      gtk_container_add (GTK_CONTAINER (vbox), box);
     }
 
-  return vbox;
-}
-
-static void
-binding_object_properties (GtkButton *button, GtkInspectorPropEditor *editor)
-{
-  GObject *obj;
-
-  obj = (GObject *)g_object_get_data (G_OBJECT (button), "object");
-  if (G_IS_OBJECT (obj))
-    g_signal_emit (editor, signals[SHOW_OBJECT], 0, obj, NULL, "properties");
+  return box;
 }
 
 /* Note: Slightly nasty that we have to poke at the
