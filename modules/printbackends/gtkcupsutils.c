@@ -169,9 +169,16 @@ gtk_cups_request_new_with_username (http_t             *connection,
   else
     {
       request->http = NULL;
+#ifdef HAVE_CUPS_API_2_0
+      request->http = httpConnect2 (request->server, ippPort (),
+                                    NULL, AF_UNSPEC,
+                                    cupsEncryption (),
+                                    1, 30000, NULL);
+#else
       request->http = httpConnectEncrypt (request->server, 
                                           ippPort (), 
                                           cupsEncryption ());
+#endif
 
       if (request->http)
         httpBlocking (request->http, 0);
@@ -686,9 +693,16 @@ _connect (GtkCupsRequest *request)
 
   if (request->http == NULL)
     {
+#ifdef HAVE_CUPS_API_2_0
+      request->http = httpConnect2 (request->server, ippPort (),
+                                    NULL, AF_UNSPEC,
+                                    cupsEncryption (),
+                                    1, 30000, NULL);
+#else
       request->http = httpConnectEncrypt (request->server, 
                                           ippPort (), 
                                           cupsEncryption ());
+#endif
 
       if (request->http == NULL)
         request->attempts++;
@@ -741,7 +755,15 @@ _post_send (GtkCupsRequest *request)
 
   if (httpPost (request->http, request->resource))
     {
-      if (httpReconnect (request->http))
+      int res;
+
+#ifdef HAVE_CUPS_API_2_0
+      res = httpReconnect2 (request->http, 30000, NULL);
+#else
+      res = httpReconnect (request->http);
+#endif
+
+      if (res)
         {
           request->state = GTK_CUPS_POST_DONE;
           request->poll_state = GTK_CUPS_HTTP_IDLE;
@@ -1039,7 +1061,11 @@ _post_check (GtkCupsRequest *request)
         }
 
       if (auth_result ||
+#ifdef HAVE_CUPS_API_2_0
+          httpReconnect2 (request->http, 30000, NULL))
+#else
           httpReconnect (request->http))
+#endif
         {
           /* if the password has been used, reset password_state
            * so that we ask for a new one next time around
@@ -1098,7 +1124,11 @@ _post_check (GtkCupsRequest *request)
       request->state = GTK_CUPS_POST_CONNECT;
 
       /* Reconnect... */
+#ifdef HAVE_CUPS_API_2_0
+      httpReconnect2 (request->http, 30000, NULL);
+#else
       httpReconnect (request->http);
+#endif
 
       /* Upgrade with encryption... */
       httpEncryption (request->http, HTTP_ENCRYPT_REQUIRED);
@@ -1226,7 +1256,14 @@ _get_send (GtkCupsRequest *request)
 
   if (httpGet (request->http, request->resource))
     {
-      if (httpReconnect (request->http))
+      int reconnect;
+
+#ifdef HAVE_CUPS_API_2_0
+      reconnect = httpReconnect2 (request->http, 30000, NULL);
+#else
+      reconnect = httpReconnect (request->http);
+#endif
+      if (reconnect)
         {
           request->state = GTK_CUPS_GET_DONE;
           request->poll_state = GTK_CUPS_HTTP_IDLE;
@@ -1335,7 +1372,11 @@ _get_check (GtkCupsRequest *request)
         }
 
       if (auth_result ||
+#ifdef HAVE_CUPS_API_2_0
+          httpReconnect2 (request->http, 30000, NULL))
+#else
           httpReconnect (request->http))
+#endif
         {
           /* if the password has been used, reset password_state
            * so that we ask for a new one next time around
@@ -1367,7 +1408,11 @@ _get_check (GtkCupsRequest *request)
       request->state = GTK_CUPS_GET_CONNECT;
 
       /* Reconnect... */
+#ifdef HAVE_CUPS_API_2_0
+      httpReconnect2 (request->http, 30000, NULL);
+#else
       httpReconnect (request->http);
+#endif
 
       /* Upgrade with encryption... */
       httpEncryption (request->http, HTTP_ENCRYPT_REQUIRED);
