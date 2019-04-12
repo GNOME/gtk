@@ -41,6 +41,7 @@
 #include "gtklayoutmanager.h"
 #include "gtklistbox.h"
 #include "gtksizegroup.h"
+#include "gtkroot.h"
 
 enum
 {
@@ -199,27 +200,64 @@ constructed (GObject *object)
 }
 
 static void
+update_key_capture (GtkInspectorPropList *pl)
+{
+  GtkWidget *capture_widget;
+
+  if (gtk_widget_get_mapped (GTK_WIDGET (pl)))
+    {
+      GtkWidget *toplevel;
+      GtkWidget *focus;
+
+      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (pl));
+      focus = gtk_root_get_focus (GTK_ROOT (toplevel));
+
+      if (GTK_IS_EDITABLE (focus) &&
+          gtk_widget_is_ancestor (focus, pl->priv->list2))
+        capture_widget = NULL;
+      else
+        capture_widget = toplevel;
+    }
+  else
+    capture_widget = NULL;
+
+  gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (pl->priv->search_entry),
+                                           capture_widget);
+}
+
+static void
 map (GtkWidget *widget)
 {
-  GtkInspectorPropList *pl = GTK_INSPECTOR_PROP_LIST (widget);
-  GtkWidget *toplevel;
-
   GTK_WIDGET_CLASS (gtk_inspector_prop_list_parent_class)->map (widget);
 
-  toplevel = gtk_widget_get_toplevel (widget);
-  gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (pl->priv->search_entry), toplevel);
+  update_key_capture (GTK_INSPECTOR_PROP_LIST (widget));
 }
 
 static void
 unmap (GtkWidget *widget)
 {
-  GtkInspectorPropList *pl = GTK_INSPECTOR_PROP_LIST (widget);
-
-  gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (pl->priv->search_entry), NULL);
-
   GTK_WIDGET_CLASS (gtk_inspector_prop_list_parent_class)->unmap (widget);
+
+  update_key_capture (GTK_INSPECTOR_PROP_LIST (widget));
 }
 
+static void
+root (GtkWidget *widget)
+{
+  GTK_WIDGET_CLASS (gtk_inspector_prop_list_parent_class)->root (widget);
+
+  g_signal_connect_swapped (gtk_widget_get_root (widget), "notify::focus-widget",
+                            G_CALLBACK (update_key_capture), widget);
+}
+
+static void
+unroot (GtkWidget *widget)
+{
+  g_signal_handlers_disconnect_by_func (gtk_widget_get_root (widget),
+                                        update_key_capture, widget);
+
+  GTK_WIDGET_CLASS (gtk_inspector_prop_list_parent_class)->unroot (widget);
+}
 
 static void
 gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
@@ -234,6 +272,8 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
 
   widget_class->map = map;
   widget_class->unmap = unmap;
+  widget_class->root = root;
+  widget_class->unroot = unroot;
 
   g_object_class_install_property (object_class, PROP_OBJECT_TREE,
       g_param_spec_object ("object-tree", "Object Tree", "Object tree",
