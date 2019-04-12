@@ -283,6 +283,7 @@ gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
 
 static void
 im_module_setting_changed (GtkSettings       *settings, 
+                           GParamSpec        *pspec,
                            GtkIMMulticontext *self)
 {
   gtk_im_multicontext_set_slave (self, NULL, FALSE);
