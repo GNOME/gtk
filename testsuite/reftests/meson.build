@@ -420,6 +420,7 @@ xfails = [
   'label-shadows.ui',
   'sizegroups-evolution-identity-page.ui',
   'textview-border-windows.ui',
+  'textview-margins.ui',
   'window-show-contents-on-map.ui',
 ]
 
