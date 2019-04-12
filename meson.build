@@ -110,8 +110,16 @@ endif
 
 # Maintain compatibility with the Autotools build
 current = gtk_binary_age - gtk_interface_age
-gtk_library_version = '@0@.@1@.@2@'.format(gtk_soversion, current, gtk_interface_age)
-gail_library_version = '0.0.0'
+
+gtk_library_version = ''
+gail_library_version = ''
+if cc.get_id() == 'msvc'
+  gtk_library_version = '3'
+  gail_library_version = '3'
+else
+  gtk_library_version = '@0@.@1@.@2@'.format(gtk_soversion, current, gtk_interface_age)
+  gail_library_version = '0.0.0'
+endif
 
 gtk_osxversions = [(100 * gtk_minor_version) + 1, '@0@.@1@.0'.format((100 * gtk_minor_version) + 1, gtk_micro_version)]
 
