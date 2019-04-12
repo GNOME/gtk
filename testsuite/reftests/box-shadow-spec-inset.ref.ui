@@ -50,10 +50,6 @@
                   <class name="reference-background"/>
                   <class name="column1"/>
                 </style>
-                <layout>
-                  <property name="x">0</property>
-                  <property name="y">0</property>
-                </layout>
               </object>
             </child>
             <child>
@@ -65,8 +61,7 @@
                   <class name="reference-padding-radius"/>
                 </style>
                 <layout>
-                  <property name="x">5</property>
-                  <property name="y">5</property>
+                  <property name="position">translate(5, 5)</property>
                 </layout>
               </object>
             </child>
@@ -80,8 +75,7 @@
                   <class name="column1"/>
                 </style>
                 <layout>
-                  <property name="x">20</property>
-                  <property name="y">20</property>
+                  <property name="position">translate(20, 20)</property>
                 </layout>
               </object>
             </child>
@@ -93,10 +87,6 @@
                   <class name="reference-border"/>
                   <class name="column1"/>
                 </style>
-                <layout>
-                  <property name="x">0</property>
-                  <property name="y">0</property>
-                </layout>
               </object>
             </child>
             <layout>
@@ -118,10 +108,6 @@
                   <class name="reference-background"/>
                   <class name="column2"/>
                 </style>
-                <layout>
-                  <property name="x">0</property>
-                  <property name="y">0</property>
-                </layout>
               </object>
             </child>
             <child>
@@ -133,8 +119,7 @@
                   <class name="column2"/>
                 </style>
                 <layout>
-                  <property name="x">5</property>
-                  <property name="y">5</property>
+                  <property name="position">translate(5, 5)</property>
                 </layout>
               </object>
             </child>
@@ -147,8 +132,7 @@
                   <class name="column2"/>
                 </style>
                 <layout>
-                  <property name="x">20</property>
-                  <property name="y">20</property>
+                  <property name="position">translate(20, 20)</property>
                 </layout>
               </object>
             </child>
@@ -170,10 +154,6 @@
                   <class name="reference-background"/>
                   <class name="column1"/>
                 </style>
-                <layout>
-                  <property name="x">0</property>
-                  <property name="y">0</property>
-                </layout>
               </object>
             </child>
             <child>
@@ -185,8 +165,7 @@
                   <class name="reference-padding-radius"/>
                 </style>
                 <layout>
-                  <property name="x">5</property>
-                  <property name="y">5</property>
+                  <property name="position">translate(5, 5)</property>
                 </layout>
               </object>
             </child>
@@ -200,8 +179,7 @@
                   <class name="column1"/>
                 </style>
                 <layout>
-                  <property name="x">30</property>
-                  <property name="y">30</property>
+                  <property name="position">translate(30, 30)</property>
                 </layout>
               </object>
             </child>
@@ -213,10 +191,6 @@
                   <class name="reference-border"/>
                   <class name="column1"/>
                 </style>
-                <layout>
-                  <property name="x">0</property>
-                  <property name="y">0</property>
-                </layout>
               </object>
             </child>
             <layout>
@@ -238,10 +212,6 @@
                   <class name="reference-background"/>
                   <class name="column2"/>
                 </style>
-                <layout>
-                  <property name="x">0</property>
-                  <property name="y">0</property>
-                </layout>
               </object>
             </child>
             <child>
@@ -253,8 +223,7 @@
                   <class name="column2"/>
                 </style>
                 <layout>
-                  <property name="x">5</property>
-                  <property name="y">5</property>
+                  <property name="position">translate(5, 5)</property>
                 </layout>
               </object>
             </child>
@@ -267,8 +236,7 @@
                   <class name="column2"/>
                 </style>
                 <layout>
-                  <property name="x">30</property>
-                  <property name="y">30</property>
+                  <property name="position">translate(30, 30)</property>
                 </layout>
               </object>
             </child>
