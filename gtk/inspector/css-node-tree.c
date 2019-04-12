@@ -106,12 +106,8 @@ show_node_prop_editor (NodePropEditor *npe)
   gtk_popover_set_pointing_to (GTK_POPOVER (popover), &npe->rect);
 
   editor = gtk_inspector_prop_editor_new (G_OBJECT (npe->node), npe->prop_name, NULL);
-  gtk_widget_show (editor);
 
   gtk_container_add (GTK_CONTAINER (popover), editor);
-
-  if (gtk_inspector_prop_editor_should_expand (GTK_INSPECTOR_PROP_EDITOR (editor)))
-    gtk_widget_set_vexpand (popover, TRUE);
 
   gtk_popover_popup (GTK_POPOVER (popover));
 
