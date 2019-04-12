@@ -34,6 +34,7 @@
 #include <gdk/wayland/xdg-foreign-unstable-v1-client-protocol.h>
 #include <gdk/wayland/keyboard-shortcuts-inhibit-unstable-v1-client-protocol.h>
 #include <gdk/wayland/server-decoration-client-protocol.h>
+#include <gdk/wayland/xdg-output-unstable-v1-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
@@ -93,6 +94,7 @@ struct _GdkWaylandDisplay
   struct zxdg_importer_v1 *xdg_importer;
   struct zwp_keyboard_shortcuts_inhibit_manager_v1 *keyboard_shortcuts_inhibit;
   struct org_kde_kwin_server_decoration_manager *server_decoration_manager;
+  struct zxdg_output_manager_v1 *xdg_output_manager;
 
   GList *async_roundtrips;
 
@@ -141,6 +143,10 @@ struct _GdkWaylandDisplay
   guint have_egl_swap_buffers_with_damage : 1;
   guint have_egl_surfaceless_context : 1;
   EGLint egl_min_swap_interval;
+
+  /* wl/xdg output completion */
+  guint wl_output_done : 1;
+  guint xdg_output_done : 1;
 };
 
 struct _GdkWaylandDisplayClass
