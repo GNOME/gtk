@@ -669,6 +669,11 @@ gtk_win32_sources = files(
 if os_win32
   # FIXME these sources should not be added to generate_gir?
   gtk_sources += gtk_win32_sources
+  if harfbuzz_dep.found() and ft2_dep.found()
+    gtk_sources += files([
+      'gtkpangofontutils.c'
+    ])
+  endif
 endif
 
 gen_gtk_gresources_xml = find_program('gen-gtk-gresources-xml.py')
@@ -858,6 +863,10 @@ if win32_enabled
   gtk_cargs += []
   gtk_sources += gtk_use_win32_sources
   gtk_deps += [ giowin32_dep, pangowin32_dep ]
+
+  if harfbuzz_dep.found() and not pangoft_dep.found()
+    gtk_deps += [ft2_dep]
+  endif
 
   gtk_rc_body = configure_file(
     input: 'gtk-win32.rc.body.in',
