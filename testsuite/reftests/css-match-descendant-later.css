@@ -1,11 +1,11 @@
 box {
-  background-color: blue
+  background-color: blue;
 }
 
 grid box {
-  background-color: red
+  background-color: red;
 }
 
 window > grid box {
-  background-color: blue
+  background-color: blue;
 }

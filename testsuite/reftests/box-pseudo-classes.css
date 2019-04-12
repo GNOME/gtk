@@ -10,19 +10,19 @@ button:nth-child(odd) {
   background-color: red;
 }
 
-button:nth-child(first) {
+button:first-child {
   background-color: purple;
 }
 
-button:nth-child(last):nth-child(even) {
+button:last-child:nth-child(even) {
   background-color: lime;
 }
 
-button:nth-child(last):nth-child(odd) {
+button:last-child:nth-child(odd) {
   background-color: purple;
 }
 
-button:nth-child(last):nth-child(first) {
+button:last-child:first-child {
   background-color: blue;
 }
 
