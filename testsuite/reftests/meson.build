@@ -417,7 +417,6 @@ xfails = [
   'background-origin.ui',
   'border-half-pixel.ui',
   'border-image-url.ui',
-  'label-shadows.ui',
   'sizegroups-evolution-identity-page.ui',
   'textview-border-windows.ui',
   'window-show-contents-on-map.ui',
