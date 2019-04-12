@@ -30,6 +30,9 @@ if enable_cups
       if cups_major_version > 1 or cups_minor_version >= 6
         cdata.set('HAVE_CUPS_API_1_6', 1)
       endif
+      if cups_major_version > 1 or cups_minor_version >= 7
+        cdata.set('HAVE_CUPS_API_2_0', 1)
+      endif
 
       if cc.compiles('#include <cups/http.h> \n http_t http; char *s = http.authstring;')
         cdata.set('HAVE_HTTP_AUTHSTRING', 1,

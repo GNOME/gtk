@@ -27,6 +27,9 @@
 /* Define to 1 if CUPS 1.6 API is available */
 #mesondefine HAVE_CUPS_API_1_6
 
+/* Define to 1 if CUPS 2.0 API is available */
+#mesondefine HAVE_CUPS_API_2_0
+
 /* Define to 1 if you have the `dcgettext' function. */
 #mesondefine HAVE_DCGETTEXT
 
