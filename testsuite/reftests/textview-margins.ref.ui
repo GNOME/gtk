@@ -6,7 +6,7 @@
   </object>
   <object class="GtkWindow" id="window">
     <property name="type">popup</property>
-    <property name="default_width">106</property>
+    <property name="default_width">150</property>
     <property name="resizable">0</property>
     <child>
       <object class="GtkTextView" id="textview1">
