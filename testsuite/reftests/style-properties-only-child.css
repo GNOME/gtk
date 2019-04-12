@@ -1,4 +1,4 @@
-.only-child-ref:nth-child(first):nth-child(last) {
+.only-child-ref:first-child:last-child {
     color: blue;
     background-color: red;
 }
