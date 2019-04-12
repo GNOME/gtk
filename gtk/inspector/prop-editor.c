@@ -29,10 +29,9 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcolorbutton.h"
 #include "gtkcolorchooser.h"
-#include "gtkcolorchooserwidget.h"
 #include "gtkcombobox.h"
+#include "gtkfontbutton.h"
 #include "gtkfontchooser.h"
-#include "gtkfontchooserwidget.h"
 #include "gtkiconview.h"
 #include "gtklabel.h"
 #include "gtkpopover.h"
@@ -44,6 +43,8 @@
 #include "gtkwidgetprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtklistbox.h"
+#include "gtkcomboboxtext.h"
+#include "gtkmenubutton.h"
 
 struct _GtkInspectorPropEditorPrivate
 {
@@ -412,6 +413,7 @@ strv_changed (GObject *object, GParamSpec *pspec, gpointer data)
 
   g_value_unset (&val);
 }
+
 static void
 bool_modified (GtkToggleButton *tb, ObjectProperty *p)
 {
@@ -439,24 +441,19 @@ bool_changed (GObject *object, GParamSpec *pspec, gpointer data)
       unblock_controller (G_OBJECT (tb));
     }
 
-  gtk_button_set_label (GTK_BUTTON (tb),
-                        g_value_get_boolean (&val) ? "TRUE" : "FALSE");
-
   g_value_unset (&val);
 }
 
 static void
-enum_modified (GtkToggleButton *button, ObjectProperty *p)
+enum_modified (GtkComboBox *combo, ObjectProperty *p)
 {
   gint i;
   GEnumClass *eclass;
   GValue val = G_VALUE_INIT;
 
-  if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
-    return;
+  i = gtk_combo_box_get_active (combo);
 
   eclass = G_ENUM_CLASS (g_type_class_peek (p->spec->value_type));
-  i = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (button), "index"));
 
   g_value_init (&val, p->spec->value_type);
   g_value_set_enum (&val, eclass->values[i].value);
@@ -467,12 +464,10 @@ enum_modified (GtkToggleButton *button, ObjectProperty *p)
 static void
 enum_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
-  GtkWidget *viewport;
-  GtkWidget *box;
-  GList *children, *c;
+  GtkComboBox *combo = GTK_COMBO_BOX (data);
   GValue val = G_VALUE_INIT;
   GEnumClass *eclass;
-  gint i, j;
+  gint i;
 
   eclass = G_ENUM_CLASS (g_type_class_peek (pspec->value_type));
 
@@ -488,21 +483,9 @@ enum_changed (GObject *object, GParamSpec *pspec, gpointer data)
     }
   g_value_unset (&val);
 
-  viewport = gtk_bin_get_child (GTK_BIN (data));
-  box = gtk_bin_get_child (GTK_BIN (viewport));
-  children = gtk_container_get_children (GTK_CONTAINER (box));
-
-  for (c = children; c; c = c->next)
-    block_controller (G_OBJECT (c->data));
-
-  for (c = children, j = 0; c; c = c->next, j++)
-    {
-      if (j == i)
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c->data), TRUE);
-    }
-
-  for (c = children; c; c = c->next)
-    unblock_controller (G_OBJECT (c->data));
+  block_controller (G_OBJECT (combo));
+  gtk_combo_box_set_active (combo, i);
+  unblock_controller (G_OBJECT (combo));
 }
 
 static void
@@ -530,6 +513,38 @@ flags_modified (GtkCheckButton *button, ObjectProperty *p)
   g_value_unset (&val);
 }
 
+static char *
+flags_to_string (GFlagsClass *flags_class,
+                 guint        value)
+{
+  GString *str;
+  GFlagsValue *flags_value;
+
+  str = g_string_new (NULL);
+
+  while ((str->len == 0 || value != 0) &&
+         (flags_value = g_flags_get_first_value (flags_class, value)) != NULL)
+    {
+      if (str->len > 0)
+        g_string_append (str, " | ");
+
+      g_string_append (str, flags_value->value_nick);
+
+      value &= ~flags_value->value;
+    }
+
+  /* Show the extra bits */
+  if (value != 0 || str->len == 0)
+    {
+      if (str->len > 0)
+        g_string_append (str, " | ");
+
+      g_string_append_printf (str, "0x%x", value);
+    }
+
+  return g_string_free (str, FALSE);
+}
+
 static void
 flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
@@ -538,8 +553,11 @@ flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
   GFlagsClass *fclass;
   guint flags;
   gint i;
+  GtkPopover *popover;
+  GtkWidget *sw;
   GtkWidget *viewport;
   GtkWidget *box;
+  char *str;
 
   fclass = G_FLAGS_CLASS (g_type_class_peek (pspec->value_type));
 
@@ -548,7 +566,13 @@ flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
   flags = g_value_get_flags (&val);
   g_value_unset (&val);
 
-  viewport = gtk_bin_get_child (GTK_BIN (data));
+  str = flags_to_string (fclass, flags);
+  gtk_button_set_label (GTK_BUTTON (data), str);
+  g_free (str);
+
+  popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (data));
+  sw =  gtk_bin_get_child (GTK_BIN (popover));
+  viewport = gtk_bin_get_child (GTK_BIN (sw));
   box = gtk_bin_get_child (GTK_BIN (viewport));
   children = gtk_container_get_children (GTK_CONTAINER (box));
 
@@ -633,15 +657,7 @@ pointer_changed (GObject *object, GParamSpec *pspec, gpointer data)
 static gchar *
 object_label (GObject *obj, GParamSpec *pspec)
 {
-  const gchar *name;
-
-  if (obj)
-    name = g_type_name (G_TYPE_FROM_INSTANCE (obj));
-  else if (pspec)
-    name = g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec));
-  else
-    name = C_("type name", "Unknown");
-  return g_strdup_printf (_("Object: %p (%s)"), obj, name);
+  return g_strdup_printf ("%p", obj);
 }
 
 static void
@@ -877,7 +893,7 @@ property_editor (GObject                *object,
     }
   else if (type == G_TYPE_PARAM_BOOLEAN)
     {
-      prop_edit = gtk_toggle_button_new_with_label ("");
+      prop_edit = gtk_check_button_new_with_label ("");
 
       g_object_connect_property (object, spec,
                                  G_CALLBACK (bool_changed),
@@ -889,42 +905,24 @@ property_editor (GObject                *object,
   else if (type == G_TYPE_PARAM_ENUM)
     {
       {
-        GtkWidget *box;
         GEnumClass *eclass;
-        GtkWidget *first;
         gint j;
 
-        prop_edit = gtk_scrolled_window_new (NULL, NULL);
-        g_object_set (prop_edit,
-                      "expand", TRUE,
-                      "hscrollbar-policy", GTK_POLICY_NEVER,
-                      "vscrollbar-policy", GTK_POLICY_NEVER,
-                      NULL);
-        box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-        gtk_widget_show (box);
-        gtk_container_add (GTK_CONTAINER (prop_edit), box);
+        prop_edit = gtk_combo_box_text_new ();
 
         eclass = G_ENUM_CLASS (g_type_class_ref (spec->value_type));
 
         j = 0;
-        first = NULL;
         while (j < eclass->n_values)
           {
-            GtkWidget *b;
-
-            b = gtk_radio_button_new_with_label_from_widget ((GtkRadioButton*)first, eclass->values[j].value_name);
-            if (first == NULL)
-              first = b;
-            g_object_set_data (G_OBJECT (b), "index", GINT_TO_POINTER (j));
-            gtk_widget_show (b);
-            gtk_container_add (GTK_CONTAINER (box), b);
-            connect_controller (G_OBJECT (b), "toggled",
-                                object, spec, G_CALLBACK (enum_modified));
+            gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (prop_edit),
+                                       eclass->values[j].value_name,
+                                       eclass->values[j].value_nick);
             ++j;
           }
 
-        if (j >= 10)
-          g_object_set (prop_edit, "vscrollbar-policy", GTK_POLICY_AUTOMATIC, NULL);
+            connect_controller (G_OBJECT (prop_edit), "changed",
+                                object, spec, G_CALLBACK (enum_modified));
 
         g_type_class_unref (eclass);
 
@@ -937,18 +935,25 @@ property_editor (GObject                *object,
     {
       {
         GtkWidget *box;
+        GtkWidget *sw;
+        GtkWidget *popover;
         GFlagsClass *fclass;
         gint j;
 
-        prop_edit = gtk_scrolled_window_new (NULL, NULL);
-        g_object_set (prop_edit,
+        popover = gtk_popover_new (NULL);        
+        prop_edit = gtk_menu_button_new ();
+        gtk_menu_button_set_popover (GTK_MENU_BUTTON (prop_edit), popover);
+
+        sw = gtk_scrolled_window_new (NULL, NULL);
+        gtk_container_add (GTK_CONTAINER (popover), sw);
+        g_object_set (sw,
                       "expand", TRUE,
                       "hscrollbar-policy", GTK_POLICY_NEVER,
                       "vscrollbar-policy", GTK_POLICY_NEVER,
                       NULL);
         box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
         gtk_widget_show (box);
-        gtk_container_add (GTK_CONTAINER (prop_edit), box);
+        gtk_container_add (GTK_CONTAINER (sw), box);
 
         fclass = G_FLAGS_CLASS (g_type_class_ref (spec->value_type));
 
@@ -956,7 +961,7 @@ property_editor (GObject                *object,
           {
             GtkWidget *b;
 
-            b = gtk_check_button_new_with_label (fclass->values[j].value_name);
+            b = gtk_check_button_new_with_label (fclass->values[j].value_nick);
             g_object_set_data (G_OBJECT (b), "index", GINT_TO_POINTER (j));
             gtk_widget_show (b);
             gtk_container_add (GTK_CONTAINER (box), b);
@@ -965,7 +970,7 @@ property_editor (GObject                *object,
           }
 
         if (j >= 10)
-          g_object_set (prop_edit, "vscrollbar-policy", GTK_POLICY_AUTOMATIC, NULL);
+          g_object_set (sw, "vscrollbar-policy", GTK_POLICY_AUTOMATIC, NULL);
 
         g_type_class_unref (fclass);
 
@@ -997,11 +1002,18 @@ property_editor (GObject                *object,
   else if (type == G_TYPE_PARAM_OBJECT &&
            g_type_is_a (G_PARAM_SPEC_VALUE_TYPE (spec), G_TYPE_LIST_MODEL))
     {
+      GtkWidget *popover; 
       GtkWidget *box; 
+      GtkWidget *sw; 
       GListModel *model;
 
-      prop_edit = gtk_scrolled_window_new (NULL, NULL);
-      g_object_set (prop_edit,
+      popover = gtk_popover_new (NULL);        
+      prop_edit = gtk_menu_button_new ();
+      gtk_menu_button_set_popover (GTK_MENU_BUTTON (prop_edit), popover);
+
+      sw = gtk_scrolled_window_new (NULL, NULL);
+      gtk_container_add (GTK_CONTAINER (popover), sw);
+      g_object_set (sw,
                     "expand", TRUE,
                     "hscrollbar-policy", GTK_POLICY_NEVER,
                     "vscrollbar-policy", GTK_POLICY_NEVER,
@@ -1017,7 +1029,7 @@ property_editor (GObject                *object,
       gtk_list_box_bind_model (GTK_LIST_BOX (box), model, create_row, editor, NULL);
       g_object_unref (model);
 
-      gtk_container_add (GTK_CONTAINER (prop_edit), box);
+      gtk_container_add (GTK_CONTAINER (sw), box);
     }
   else if (type == G_TYPE_PARAM_OBJECT)
     {
@@ -1042,7 +1054,7 @@ property_editor (GObject                *object,
   else if (type == G_TYPE_PARAM_BOXED &&
            G_PARAM_SPEC_VALUE_TYPE (spec) == GDK_TYPE_RGBA)
     {
-      prop_edit = gtk_color_chooser_widget_new ();
+      prop_edit = gtk_color_button_new ();
       gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (prop_edit), TRUE);
 
       g_object_connect_property (object, spec,
@@ -1055,7 +1067,7 @@ property_editor (GObject                *object,
   else if (type == G_TYPE_PARAM_BOXED &&
            G_PARAM_SPEC_VALUE_TYPE (spec) == PANGO_TYPE_FONT_DESCRIPTION)
     {
-      prop_edit = gtk_font_chooser_widget_new ();
+      prop_edit = gtk_font_button_new ();
 
       g_object_connect_property (object, spec,
                                  G_CALLBACK (font_changed),
@@ -1104,9 +1116,8 @@ gtk_inspector_prop_editor_init (GtkInspectorPropEditor *editor)
 {
   editor->priv = gtk_inspector_prop_editor_get_instance_private (editor);
   g_object_set (editor,
-                "orientation", GTK_ORIENTATION_VERTICAL,
+                "orientation", GTK_ORIENTATION_HORIZONTAL,
                 "spacing", 10,
-                "margin", 10,
                 NULL);
 }
 
@@ -1643,10 +1654,6 @@ constructed (GObject *object)
   gboolean can_modify;
 
   spec = find_property (editor);
-
-  label = gtk_label_new (g_param_spec_get_nick (spec));
-  gtk_widget_show (label);
-  gtk_container_add (GTK_CONTAINER (editor), label);
 
   can_modify = ((spec->flags & G_PARAM_WRITABLE) != 0 &&
                 (spec->flags & G_PARAM_CONSTRUCT_ONLY) == 0);
