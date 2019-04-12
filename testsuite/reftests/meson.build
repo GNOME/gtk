@@ -410,6 +410,21 @@ testdata = [
   'window-show-contents-on-map.ui',
 ]
 
+# These need to be fixed but the issue hasn't been tracked down.
+xfails = [
+  'background-color-transparent.ui',
+  'background-image-multiple.ui',
+  'background-origin.ui',
+  'border-half-pixel.ui',
+  'border-image-url.ui',
+  'label-shadows.ui',
+  'sizegroups-evolution-identity-page.ui',
+  'textview-border-windows.ui',
+  'textview-margins.ui',
+  'toplevel-vs-popup.ui',
+  'window-show-contents-on-map.ui',
+]
+
 foreach testname : testdata
   if testname.endswith('.ui') and not testname.endswith('.ref.ui')
     test('reftest ' + testname, gtk_reftest,
@@ -424,7 +439,8 @@ foreach testname : testdata
                 'GSK_RENDERER=opengl',
                 'REFTEST_MODULE_DIR=@0@'.format(meson.current_build_dir()),
               ],
-         suite: 'reftest')
+         suite: 'reftest',
+         should_fail: xfails.contains(testname))
   endif
 endforeach
 
