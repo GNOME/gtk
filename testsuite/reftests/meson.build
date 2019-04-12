@@ -418,10 +418,9 @@ xfails = [
   'border-half-pixel.ui',
   'border-image-url.ui',
   'label-shadows.ui',
-  'label-sizing.ui',
-  'label-wrap-justify.ui',
   'sizegroups-evolution-identity-page.ui',
   'textview-border-windows.ui',
+  'textview-margins.ui',
   'window-show-contents-on-map.ui',
 ]
 
