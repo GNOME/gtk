@@ -513,6 +513,13 @@ gdk_registry_handle_global (void               *data,
                                                            &server_decoration_listener,
                                                            display_wayland);
     }
+  else if (strcmp(interface, "zxdg_output_manager_v1") == 0)
+    {
+      display_wayland->xdg_output_manager =
+            wl_registry_bind(registry, id, &zxdg_output_manager_v1_interface, 1);
+      _gdk_wayland_screen_init_xdg_output (display_wayland->screen);
+      _gdk_wayland_display_async_roundtrip (display_wayland);
+    }
 
   g_hash_table_insert (display_wayland->known_globals,
                        GUINT_TO_POINTER (id), g_strdup (interface));
