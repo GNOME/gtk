@@ -11,6 +11,7 @@ RUN dnf -y install \
     ccache \
     colord-devel \
     cups-devel \
+    dejavu-sans-mono-fonts \
     desktop-file-utils \
     elfutils-libelf-devel \
     fribidi-devel \
