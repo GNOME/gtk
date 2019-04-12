@@ -419,8 +419,7 @@ gtk_inspector_prop_list_create_row (GtkInspectorPropList *pl,
   gtk_size_group_add_widget (pl->priv->origins, label);
   gtk_container_add (GTK_CONTAINER (box), label);
 
-  widget = gtk_inspector_prop_editor_new (pl->priv->object, prop->name);
-  gtk_size_group_add_widget (pl->priv->values, widget);
+  widget = gtk_inspector_prop_editor_new (pl->priv->object, prop->name, pl->priv->values);
   gtk_container_add (GTK_CONTAINER (box), widget);
   g_signal_connect (widget, "show-object", G_CALLBACK (show_object), pl);
 

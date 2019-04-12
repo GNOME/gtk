@@ -51,6 +51,7 @@ struct _GtkInspectorPropEditorPrivate
   GObject *object;
   gchar *name;
   GtkWidget *editor;
+  GtkSizeGroup *size_group;
 };
 
 enum
@@ -58,7 +59,7 @@ enum
   PROP_0,
   PROP_OBJECT,
   PROP_NAME,
-  PROP_IS_CHILD_PROPERTY
+  PROP_SIZE_GROUP
 };
 
 enum
@@ -1190,7 +1191,6 @@ attribute_editor (GObject                *object,
   gint col = -1;
   GtkWidget *label;
   GtkWidget *button;
-  GtkWidget *vbox;
   GtkWidget *box;
   GtkWidget *combo;
   gchar *text;
@@ -1210,24 +1210,16 @@ attribute_editor (GObject                *object,
       model = gtk_cell_layout_get_model (GTK_CELL_LAYOUT (layout));
     }
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-
-  label = gtk_label_new (_("Attribute mapping"));
-  gtk_widget_set_margin_top (label, 10);
-  gtk_container_add (GTK_CONTAINER (vbox), label);
-
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new (_("Model:")));
-  text = g_strdup_printf (_("%p (%s)"), model, model ? g_type_name (G_TYPE_FROM_INSTANCE (model)) : "null" );
-  gtk_container_add (GTK_CONTAINER (box), gtk_label_new (text));
-  g_free (text);
-  button = gtk_button_new_with_label (_("Properties"));
+
+  label = gtk_label_new (_("Attribute:"));
+  gtk_container_add (GTK_CONTAINER (box), label);
+
+  button = gtk_button_new_with_label (_("Model"));
   g_object_set_data (G_OBJECT (button), "model", model);
   g_signal_connect (button, "clicked", G_CALLBACK (model_properties), editor);
   gtk_container_add (GTK_CONTAINER (box), button);
-  gtk_container_add (GTK_CONTAINER (vbox), box);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (box), gtk_label_new (_("Column:")));
   store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);
   combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
@@ -1253,9 +1245,8 @@ attribute_editor (GObject                *object,
   g_signal_connect (combo, "changed",
                     G_CALLBACK (attribute_mapping_changed), editor);
   gtk_container_add (GTK_CONTAINER (box), combo);
-  gtk_container_add (GTK_CONTAINER (vbox), box);
 
-  return vbox;
+  return box;
 }
 
 static GtkWidget *
@@ -1496,14 +1487,11 @@ add_gtk_settings_info (GtkInspectorPropEditor *editor)
     return;
 
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-  gtk_container_add (GTK_CONTAINER (row), gtk_label_new (_("Source:")));
 
   button = gtk_button_new_with_label (_("Reset"));
-  g_signal_connect_swapped (button, "clicked", G_CALLBACK (reset_setting), editor);
-
-  gtk_widget_set_halign (button, GTK_ALIGN_END);
-  gtk_widget_set_sensitive (button, FALSE);
   gtk_container_add (GTK_CONTAINER (row), button);
+  gtk_widget_set_sensitive (button, FALSE);
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (reset_setting), editor);
 
   switch (_gtk_settings_get_setting_source (GTK_SETTINGS (object), name))
     {
@@ -1524,6 +1512,7 @@ add_gtk_settings_info (GtkInspectorPropEditor *editor)
       source = _("Unknown");
       break;
     }
+  gtk_container_add (GTK_CONTAINER (row), gtk_label_new (_("Source:")));
   gtk_container_add (GTK_CONTAINER (row), gtk_label_new (source));
 
   gtk_container_add (GTK_CONTAINER (editor), row);
@@ -1536,11 +1525,14 @@ constructed (GObject *object)
   GParamSpec *spec;
   GtkWidget *label;
   gboolean can_modify;
+  GtkWidget *box;
 
   spec = find_property (editor);
 
   can_modify = ((spec->flags & G_PARAM_WRITABLE) != 0 &&
                 (spec->flags & G_PARAM_CONSTRUCT_ONLY) == 0);
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
 
   if ((spec->flags & G_PARAM_CONSTRUCT_ONLY) != 0)
     label = gtk_label_new ("(construct-only)");
@@ -1551,9 +1543,8 @@ constructed (GObject *object)
 
   if (label)
     {
-      gtk_widget_show (label);
       gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_DIM_LABEL);
-      gtk_container_add (GTK_CONTAINER (editor), label);
+      gtk_container_add (GTK_CONTAINER (box), label);
     }
 
   /* By reaching this, we already know the property is readable.
@@ -1567,8 +1558,10 @@ constructed (GObject *object)
     return;
 
   editor->priv->editor = property_editor (editor->priv->object, spec, editor);
-  gtk_widget_show (editor->priv->editor);
-  gtk_container_add (GTK_CONTAINER (editor), editor->priv->editor);
+  gtk_container_add (GTK_CONTAINER (box), editor->priv->editor);
+  if (editor->priv->size_group)
+    gtk_size_group_add_widget (editor->priv->size_group, box);
+  gtk_container_add (GTK_CONTAINER (editor), box);
 
   add_attribute_info (editor, spec);
   add_actionable_info (editor);
@@ -1604,6 +1597,10 @@ get_property (GObject    *object,
       g_value_set_string (value, r->priv->name);
       break;
 
+    case PROP_SIZE_GROUP:
+      g_value_set_object (value, r->priv->size_group);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -1627,6 +1624,10 @@ set_property (GObject      *object,
     case PROP_NAME:
       g_free (r->priv->name);
       r->priv->name = g_value_dup_string (value);
+      break;
+
+    case PROP_SIZE_GROUP:
+      r->priv->size_group = g_value_get_object (value);
       break;
 
     default:
@@ -1660,15 +1661,21 @@ gtk_inspector_prop_editor_class_init (GtkInspectorPropEditorClass *klass)
   g_object_class_install_property (object_class, PROP_NAME,
       g_param_spec_string ("name", "Name", "The property name",
                            NULL, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
+
+  g_object_class_install_property (object_class, PROP_SIZE_GROUP,
+      g_param_spec_object ("size-group", "Size group", "The size group for the value part",
+                           GTK_TYPE_SIZE_GROUP, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 }
 
 GtkWidget *
-gtk_inspector_prop_editor_new (GObject     *object,
-                               const gchar *name)
+gtk_inspector_prop_editor_new (GObject      *object,
+                               const gchar  *name,
+                               GtkSizeGroup *values)
 {
   return g_object_new (GTK_TYPE_INSPECTOR_PROP_EDITOR,
                        "object", object,
                        "name", name,
+                       "size-group", values,
                        NULL);
 }
 
