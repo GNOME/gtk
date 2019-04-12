@@ -34,6 +34,7 @@
 #include "gtksortlistmodel.h"
 #include "gtkwidgetprivate.h"
 #include "gtkstack.h"
+#include "gtkstylecontext.h"
 
 enum
 {
@@ -84,6 +85,7 @@ gtk_inspector_controllers_init (GtkInspectorControllers *sl)
   gtk_widget_set_vexpand (box, TRUE);
 
   sl->priv->listbox = gtk_list_box_new ();
+  gtk_style_context_add_class (gtk_widget_get_style_context (sl->priv->listbox), "frame");
   gtk_widget_set_halign (sl->priv->listbox, GTK_ALIGN_CENTER);
   g_signal_connect (sl->priv->listbox, "row-activated", G_CALLBACK (row_activated), sl);
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (sl->priv->listbox), GTK_SELECTION_NONE);
@@ -118,6 +120,7 @@ create_controller_widget (gpointer item,
   GtkWidget *combo;
 
   row = gtk_list_box_row_new ();
+  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
   gtk_container_add (GTK_CONTAINER (row), box);
   g_object_set (box, "margin", 10, NULL);
