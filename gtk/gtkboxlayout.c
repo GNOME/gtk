@@ -204,10 +204,36 @@ gtk_box_layout_get_request_mode (GtkLayoutManager *layout_manager,
                                  GtkWidget        *widget)
 {
   GtkBoxLayout *self = GTK_BOX_LAYOUT (layout_manager);
+  GtkWidget *child;
+  int wfh = 0, hfw = 0;
 
-  return self->orientation == GTK_ORIENTATION_HORIZONTAL
-    ? GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT
-    : GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    {
+      GtkSizeRequestMode mode = gtk_widget_get_request_mode (child);
+
+      switch (mode)
+        {
+        case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
+          hfw += 1;
+          break;
+
+        case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
+          wfh += 1;
+          break;
+
+        case GTK_SIZE_REQUEST_CONSTANT_SIZE:
+        default:
+          break;
+        }
+    }
+
+  if (hfw == 0 && wfh == 0)
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+  else
+    return wfh > hfw ? GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT
+                     : GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 static void
