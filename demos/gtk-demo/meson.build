@@ -76,21 +76,30 @@ demos = files([
 
 gtkdemo_deps = [libgtk_dep]
 
-if harfbuzz_dep.found() and pangoft_dep.found()
+demos_extra_sources = files([
+  'gtkfishbowl.c',
+  'gtkfishbowl.h',
+  'main.c',
+])
+
+if harfbuzz_dep.found() and (pangoft_dep.found() or (os_win32 and ft2_dep.found()))
   demos += files('font_features.c')
-  gtkdemo_deps += [harfbuzz_dep, pangoft_dep]
+  demos_extra_sources += files(['../../gtk/gtkpangofontutils.c'])
+
+  gtkdemo_deps += [harfbuzz_dep]
+  if pangoft_dep.found()
+    gtkdemo_deps += [pangoft_dep]
+  endif
+  if os_win32
+    gtkdemo_deps += [pangowin32_dep, ft2_dep]
+  endif
 endif
 
 if os_unix
   demos += files('pagesetup.c')
 endif
 
-gtkdemo_sources = demos + files([
-  'gtkfishbowl.c',
-  'gtkfishbowl.h',
-  'main.c',
-])
-
+gtkdemo_sources = demos + demos_extra_sources
 
 geninclude = find_program('geninclude.py')
 demos_h = custom_target(
