@@ -252,7 +252,7 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
 }
 
 /* Like g_strdup_value_contents, but keeps the type name separate */
-static void
+void
 strdup_value_contents (const GValue  *value,
                        gchar        **contents,
                        gchar        **type)

@@ -21,6 +21,7 @@
 #include "prop-editor.h"
 #include "strv-editor.h"
 #include "object-tree.h"
+#include "prop-list.h"
 
 #include "gtkactionable.h"
 #include "gtkadjustment.h"
@@ -1555,7 +1556,27 @@ constructed (GObject *object)
     can_modify = TRUE;
 
   if (!can_modify)
-    return;
+    {
+      GValue gvalue = {0};
+      gchar *value;
+      gchar *type;
+
+      g_value_init (&gvalue, spec->value_type);
+      g_object_get_property (editor->priv->object, spec->name, &gvalue);
+      strdup_value_contents (&gvalue, &value, &type);
+
+      label = gtk_label_new (value);
+      gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_DIM_LABEL);
+      gtk_container_add (GTK_CONTAINER (box), label);
+
+      g_free (value);
+      g_free (type);
+
+      if (editor->priv->size_group)
+        gtk_size_group_add_widget (editor->priv->size_group, box);
+      gtk_container_add (GTK_CONTAINER (editor), box);
+      return;
+    }
 
   editor->priv->editor = property_editor (editor->priv->object, spec, editor);
   gtk_container_add (GTK_CONTAINER (box), editor->priv->editor);
