@@ -36,7 +36,7 @@ gtk_custom_layout_get_request_mode (GtkLayoutManager *manager,
   if (self->request_mode_func != NULL)
     return self->request_mode_func (widget);
 
-  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+  return GTK_LAYOUT_MANAGER_CLASS (gtk_custom_layout_parent_class)->get_request_mode (manager, widget);
 }
 
 static void

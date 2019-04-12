@@ -75,7 +75,7 @@
 
 #include "gtklayoutmanagerprivate.h"
 #include "gtklayoutchild.h"
-#include "gtkwidget.h"
+#include "gtkwidgetprivate.h"
 
 #ifdef G_ENABLE_DEBUG
 #define LAYOUT_MANAGER_WARN_NOT_IMPLEMENTED(m,method)   G_STMT_START {  \
@@ -101,7 +101,36 @@ static GtkSizeRequestMode
 gtk_layout_manager_real_get_request_mode (GtkLayoutManager *manager,
                                           GtkWidget        *widget)
 {
-  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+  int hfw = 0, wfh = 0;
+  GtkWidget *child;
+
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    {
+      GtkSizeRequestMode res = gtk_widget_get_request_mode (child);
+
+      switch (res)
+        {
+        case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
+          hfw += 1;
+          break;
+
+        case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
+          wfh += 1;
+          break;
+
+        case GTK_SIZE_REQUEST_CONSTANT_SIZE:
+        default:
+          break;
+        }
+    }
+
+ if (hfw == 0 && wfh == 0)
+   return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+
+ return hfw > wfh ? GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH
+                  : GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT;
 }
 
 static void
