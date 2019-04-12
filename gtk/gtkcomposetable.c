@@ -837,7 +837,6 @@ gtk_compose_table_list_add_array (GSList        *compose_tables,
   GtkComposeTable *compose_table;
   gsize n_index_stride;
   gsize length;
-  gsize max_size = (gsize) -1;
   int i;
   guint16 *gtk_compose_seqs = NULL;
 
@@ -845,13 +844,12 @@ gtk_compose_table_list_add_array (GSList        *compose_tables,
   g_return_val_if_fail (max_seq_len <= GTK_MAX_COMPOSE_LEN, compose_tables);
 
   n_index_stride = MIN (max_seq_len, GTK_MAX_COMPOSE_LEN) + 2;
-  if (n_seqs > max_size / n_index_stride)
+  if (!g_size_checked_mul (&length, n_index_stride, n_seqs))
     {
       g_critical ("Overflow in the compose sequences");
       return compose_tables;
     }
 
-  length = n_index_stride * n_seqs;
   hash = gtk_compose_table_data_hash (data, length);
 
   if (g_slist_find_custom (compose_tables, GINT_TO_POINTER (hash), gtk_compose_table_find) != NULL)
