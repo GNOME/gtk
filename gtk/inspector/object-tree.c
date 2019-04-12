@@ -814,13 +814,13 @@ destroy_controller (GtkEventController *controller)
 }
 
 static void
-root (GtkWidget *widget)
+map (GtkWidget *widget)
 {
   GtkInspectorObjectTree *wt = GTK_INSPECTOR_OBJECT_TREE (widget);
   GtkEventController *controller;
   GtkWidget *toplevel;
 
-  GTK_WIDGET_CLASS (gtk_inspector_object_tree_parent_class)->root (widget);
+  GTK_WIDGET_CLASS (gtk_inspector_object_tree_parent_class)->map (widget);
 
   toplevel = gtk_widget_get_toplevel (widget);
 
@@ -833,14 +833,14 @@ root (GtkWidget *widget)
 }
 
 static void
-unroot (GtkWidget *widget)
+unmap (GtkWidget *widget)
 {
   GtkWidget *toplevel;
 
   toplevel = gtk_widget_get_toplevel (widget);
   g_object_set_data (G_OBJECT (toplevel), "object-controller", NULL);
 
-  GTK_WIDGET_CLASS (gtk_inspector_object_tree_parent_class)->unroot (widget);
+  GTK_WIDGET_CLASS (gtk_inspector_object_tree_parent_class)->unmap (widget);
 }
 
 static gboolean
@@ -1196,8 +1196,8 @@ gtk_inspector_object_tree_class_init (GtkInspectorObjectTreeClass *klass)
 
   object_class->dispose = gtk_inspector_object_tree_dispose;
 
-  widget_class->root = root;
-  widget_class->unroot = unroot;
+  widget_class->map = map;
+  widget_class->unmap = unmap;
 
   signals[OBJECT_ACTIVATED] =
       g_signal_new ("object-activated",
