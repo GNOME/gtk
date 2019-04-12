@@ -67,7 +67,7 @@
                 </child>
                 <child>
                   <object class="GtkListBoxRow">
-                    <property name="activatable">0</property>
+                    <property name="activatable">1</property>
                     <child>
                       <object class="GtkBox">
                         <property name="margin">10</property>
@@ -298,7 +298,7 @@
                 </child>
                 <child>
                   <object class="GtkListBoxRow">
-                    <property name="activatable">0</property>
+                    <property name="activatable">1</property>
                     <child>
                       <object class="GtkBox">
                         <property name="margin">10</property>
@@ -373,7 +373,7 @@
                 <property name="selection-mode">none</property>
                 <child>
                   <object class="GtkListBoxRow">
-                    <property name="activatable">0</property>
+                    <property name="activatable">1</property>
                     <child>
                       <object class="GtkBox">
                         <property name="margin">10</property>
@@ -400,7 +400,7 @@
                 </child>
                 <child>
                   <object class="GtkListBoxRow">
-                    <property name="activatable">0</property>
+                    <property name="activatable">1</property>
                     <child>
                       <object class="GtkBox">
                         <property name="margin">10</property>
@@ -414,7 +414,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSwitch">
+                          <object class="GtkSwitch" id="updates_switch">
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="hexpand">1</property>
@@ -427,7 +427,7 @@
                 </child>
                 <child>
                   <object class="GtkListBoxRow">
-                    <property name="activatable">0</property>
+                    <property name="activatable">1</property>
                     <child>
                       <object class="GtkBox">
                         <property name="margin">10</property>
@@ -441,7 +441,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSwitch">
+                          <object class="GtkSwitch" id="baselines_switch">
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="hexpand">1</property>
@@ -454,7 +454,7 @@
                 </child>
                 <child>
                   <object class="GtkListBoxRow">
-                    <property name="activatable">0</property>
+                    <property name="activatable">1</property>
                     <child>
                       <object class="GtkBox">
                         <property name="margin">10</property>
@@ -468,7 +468,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSwitch">
+                          <object class="GtkSwitch" id="layout_switch">
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="hexpand">1</property>
@@ -481,13 +481,13 @@
                 </child>
                 <child>
                   <object class="GtkListBoxRow">
-                    <property name="activatable">0</property>
+                    <property name="activatable">1</property>
                     <child>
                       <object class="GtkBox">
                         <property name="margin">10</property>
                         <property name="spacing">40</property>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="GtkLabel" id="resize_label">
                             <property name="label" translatable="yes">Show Widget Resizes</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
@@ -495,7 +495,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkSwitch" id="widget_resize_switch">
+                          <object class="GtkSwitch" id="resize_switch">
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
                             <property name="hexpand">1</property>
@@ -518,7 +518,7 @@
                 <property name="selection-mode">none</property>
                 <child>
                   <object class="GtkListBoxRow">
-                    <property name="activatable">0</property>
+                    <property name="activatable">1</property>
                     <child>
                       <object class="GtkBox">
                         <property name="margin">10</property>
@@ -544,7 +544,7 @@
                 </child>
                 <child>
                   <object class="GtkListBoxRow">
-                    <property name="activatable">0</property>
+                    <property name="activatable">1</property>
                     <child>
                       <object class="GtkBox">
                         <property name="margin">10</property>
@@ -590,6 +590,7 @@
       <widget name="updates_label"/>
       <widget name="baselines_label"/>
       <widget name="layout_label"/>
+      <widget name="resize_label"/>
       <widget name="touchscreen_label"/>
       <widget name="software_gl_label"/>
     </widgets>

@@ -70,6 +70,11 @@ struct _GtkInspectorVisualPrivate
   GtkAdjustment *cursor_size_adjustment;
 
   GtkWidget *debug_box;
+  GtkWidget *fps_switch;
+  GtkWidget *updates_switch;
+  GtkWidget *baselines_switch;
+  GtkWidget *layout_switch;
+  GtkWidget *resize_switch;
 
   GtkWidget *misc_box;
   GtkWidget *touchscreen_switch;
@@ -840,6 +845,58 @@ keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorVisual
 }
 
 static void
+row_activated (GtkListBox         *box,
+               GtkListBoxRow      *row,
+               GtkInspectorVisual *vis)
+{
+  if (gtk_widget_is_ancestor (vis->priv->dark_switch, GTK_WIDGET (row)))
+    {
+      GtkSwitch *sw = GTK_SWITCH (vis->priv->dark_switch);
+      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
+    }
+  else if (gtk_widget_is_ancestor (vis->priv->animation_switch, GTK_WIDGET (row)))
+    {
+      GtkSwitch *sw = GTK_SWITCH (vis->priv->animation_switch);
+      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
+    }
+  else if (gtk_widget_is_ancestor (vis->priv->fps_switch, GTK_WIDGET (row)))
+    {
+      GtkSwitch *sw = GTK_SWITCH (vis->priv->fps_switch);
+      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
+    }
+  else if (gtk_widget_is_ancestor (vis->priv->updates_switch, GTK_WIDGET (row)))
+    {
+      GtkSwitch *sw = GTK_SWITCH (vis->priv->updates_switch);
+      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
+    }
+  else if (gtk_widget_is_ancestor (vis->priv->baselines_switch, GTK_WIDGET (row)))
+    {
+      GtkSwitch *sw = GTK_SWITCH (vis->priv->baselines_switch);
+      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
+    }
+  else if (gtk_widget_is_ancestor (vis->priv->layout_switch, GTK_WIDGET (row)))
+    {
+      GtkSwitch *sw = GTK_SWITCH (vis->priv->layout_switch);
+      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
+    }
+  else if (gtk_widget_is_ancestor (vis->priv->resize_switch, GTK_WIDGET (row)))
+    {
+      GtkSwitch *sw = GTK_SWITCH (vis->priv->resize_switch);
+      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
+    }
+  else if (gtk_widget_is_ancestor (vis->priv->touchscreen_switch, GTK_WIDGET (row)))
+    {
+      GtkSwitch *sw = GTK_SWITCH (vis->priv->touchscreen_switch);
+      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
+    }
+  else if (gtk_widget_is_ancestor (vis->priv->software_gl_switch, GTK_WIDGET (row)))
+    {
+      GtkSwitch *sw = GTK_SWITCH (vis->priv->software_gl_switch);
+      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
+    }
+}
+
+static void
 init_gl (GtkInspectorVisual *vis)
 {
   GdkDebugFlags flags = gdk_display_get_debug_flags (gdk_display_get_default ());
@@ -910,6 +967,9 @@ gtk_inspector_visual_constructed (GObject *object)
    g_signal_connect (vis->priv->visual_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
    g_signal_connect (vis->priv->debug_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
    g_signal_connect (vis->priv->misc_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
+   g_signal_connect (vis->priv->visual_box, "row-activated", G_CALLBACK (row_activated), vis);
+   g_signal_connect (vis->priv->debug_box, "row-activated", G_CALLBACK (row_activated), vis);
+   g_signal_connect (vis->priv->misc_box, "row-activated", G_CALLBACK (row_activated), vis);
 }
 
 static void
@@ -958,6 +1018,11 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, software_gl_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_scale_adjustment);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, fps_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, updates_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, baselines_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, layout_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, resize_switch);
 
   gtk_widget_class_bind_template_callback (widget_class, fps_activate);
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);
