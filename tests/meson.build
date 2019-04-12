@@ -19,7 +19,6 @@ gtk_tests = [
   ['testassistant'],
   ['testbaseline'],
   ['testbox'],
-  ['testboxcss'],
   ['testbuttons'],
   ['testcairo'],
   ['testcalendar'],
