@@ -376,8 +376,7 @@ pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
 atk_dep        = dependency('atk', version: atk_req)
-harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false,
-                            fallback: ['harfbuzz', 'libharfbuzz_dep'])
+harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false)
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
                             fallback: ['graphene', 'graphene_dep'])
@@ -458,6 +457,11 @@ if cc.get_id() == 'msvc'
       harfbuzz_dep = cc.find_library('harfbuzz', required : false)
     endif
   endif
+endif
+
+if not harfbuzz_dep.found()
+  harfbuzz_dep = dependency('harfbuzz', version: '>= 0.9', required: false,
+                            fallback: ['harfbuzz', 'libharfbuzz_dep'])
 endif
 
 cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
