@@ -225,6 +225,8 @@ testdata = [
   'gtk-icontheme-sizing.css',
   'gtk-icontheme-sizing.ref.ui',
   'gtk-icontheme-sizing.ui',
+  'headerbar-centering.ui',
+  'headerbar-centering.ref.ui',
   'icon-effect-missing.css',
   'icon-effect-missing.ref.ui',
   'icon-effect-missing.ui',
