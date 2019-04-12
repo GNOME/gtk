@@ -3,7 +3,7 @@ libgtkreftestprivate = shared_library('gtkreftestprivate',
   'reftest-compare.c', 'reftest-module.c', 'reftest-snapshot.c',
   dependencies : libgtk_dep)
 
-libreftest = shared_module('reftest',
+libreftest = shared_library('reftest',
   [ 'expand-expander.c',
     'frame-inhibitor.c',
     'letter-spacing.c',
