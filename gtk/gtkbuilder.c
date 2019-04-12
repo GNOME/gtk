@@ -2061,6 +2061,22 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
               ret = FALSE;
             }
         }
+      else if (G_VALUE_HOLDS (value, GSK_TYPE_TRANSFORM))
+        {
+          GskTransform *transform;
+
+          if (gsk_transform_parse (string, &transform))
+            g_value_take_boxed (value, transform);
+          else
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Could not parse transform '%s'",
+                           string);
+              ret = FALSE;
+            }
+        }
       else if (G_VALUE_HOLDS (value, G_TYPE_STRV))
         {
           gchar **vector = g_strsplit (string, "\n", 0);
