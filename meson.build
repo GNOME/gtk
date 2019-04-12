@@ -729,7 +729,7 @@ immodules = [
   [ 'viqr', files([ immodule_srcdir + 'imviqr.c' ]) ],
   [ 'broadway', files([ immodule_srcdir + 'imbroadway.c' ]), broadway_enabled ],
   [ 'ime', files([ immodule_srcdir + 'gtkimcontextime.c', immodule_srcdir + 'imime.c' ]), win32_enabled ],
-  [ 'quartz', files([ immodule_srcdir + 'imquartz.c' ]), quartz_enabled, '-xobjective-c' ],
+  [ 'quartz', files([ immodule_srcdir + 'imquartz.c' ]), quartz_enabled, [ '-xobjective-c' ] ],
   [ 'wayland', files([ immodule_srcdir + 'imwayland.c' ]) + proto_sources_outputs[0], wayland_enabled ],
   [ 'waylandgtk', files([ immodule_srcdir + 'imwaylandgtk.c'])  + proto_sources_outputs[1], wayland_enabled ],
   [ 'xim', files([ immodule_srcdir + 'gtkimcontextxim.c', immodule_srcdir + 'imxim.c' ]), x11_enabled ],
