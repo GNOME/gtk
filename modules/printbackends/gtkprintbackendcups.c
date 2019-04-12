@@ -740,7 +740,15 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
 #ifdef HAVE_CUPS_API_1_6
   if (cups_printer->avahi_browsed)
     {
+#ifdef HAVE_CUPS_API_2_0
+      http = httpConnect2 (cups_printer->hostname, cups_printer->port,
+                           NULL, AF_UNSPEC,
+                           HTTP_ENCRYPTION_IF_REQUESTED,
+                           1, 30000,
+                           NULL);
+#else
       http = httpConnect (cups_printer->hostname, cups_printer->port);
+#endif
       if (http)
         {
           request = gtk_cups_request_new_with_username (http,
@@ -2850,7 +2858,11 @@ cups_request_printer_info (const gchar         *printer_uri,
   GtkCupsRequest *request;
   http_t         *http;
 
+#ifdef HAVE_CUPS_API_2_0
+  http = httpConnect2 (host, port, NULL, AF_UNSPEC, HTTP_ENCRYPTION_IF_REQUESTED, 1, 30000, NULL);
+#else
   http = httpConnect (host, port);
+#endif
   if (http)
     {
       request = gtk_cups_request_new_with_username (http,
@@ -3960,9 +3972,16 @@ cups_request_ppd (GtkPrinter *printer)
         }
     }
 
+#ifdef HAVE_CUPS_API_2_0
+  http = httpConnect2 (cups_printer->hostname, cups_printer->port,
+                       NULL, AF_UNSPEC,
+                       cupsEncryption (),
+                       1, 30000, NULL);
+#else
   http = httpConnectEncrypt (cups_printer->hostname,
 			     cups_printer->port,
 			     cupsEncryption ());
+#endif
 
   data = g_new0 (GetPPDData, 1);
 
