@@ -427,7 +427,12 @@ xfails = [
 foreach testname : testdata
   if testname.endswith('.ui') and not testname.endswith('.ref.ui')
     test('reftest ' + testname, gtk_reftest,
-         args: [ '--tap', '-k', '--verbose', join_paths(meson.current_source_dir(), testname) ],
+         args: [ '--tap',
+                 '-k',
+                 '--verbose',
+                 '-o', join_paths(meson.current_build_dir(), 'output'),
+                 join_paths(meson.current_source_dir(), testname),
+         ],
          env: [ 'GIO_USE_VOLUME_MONITOR=unix',
                 'GSETTINGS_BACKEND=memory',
                 'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
