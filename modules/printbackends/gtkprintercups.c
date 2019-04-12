@@ -184,8 +184,12 @@ gtk_printer_cups_finalize (GObject *object)
 
   g_strfreev (printer->covers);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   if (printer->ppd_file)
     ppdClose (printer->ppd_file);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   g_free (printer->media_default);
   g_list_free_full (printer->media_supported, g_free);
