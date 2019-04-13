@@ -258,6 +258,7 @@ gtk_password_entry_get_property (GObject    *object,
 
     case PROP_ACTIVATES_DEFAULT:
       g_value_set_boolean (value, gtk_text_get_activates_default (GTK_TEXT (priv->entry)));
+      break;
 
     case PROP_SHOW_PEEK_ICON:
       g_value_set_boolean (value, gtk_password_entry_get_show_peek_icon (entry));
