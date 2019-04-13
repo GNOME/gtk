@@ -495,7 +495,11 @@ update_script_combo (void)
   gboolean have_active = FALSE;
 
   lang = gtk_font_chooser_get_language (GTK_FONT_CHOOSER (font));
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   active = hb_ot_tag_from_language (hb_language_from_string (lang, -1));
+  G_GNUC_END_IGNORE_DEPRECATIONS
+
   g_free (lang);
 
   store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_UINT);
