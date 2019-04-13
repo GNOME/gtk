@@ -157,10 +157,6 @@ struct _GtkMenuPopdownData
 
 typedef struct
 {
-  gint left_attach;
-  gint right_attach;
-  gint top_attach;
-  gint bottom_attach;
   gint effective_left_attach;
   gint effective_right_attach;
   gint effective_top_attach;
@@ -337,15 +333,6 @@ get_attach_info (GtkWidget *child)
   return ai;
 }
 
-static gboolean
-is_grid_attached (AttachInfo *ai)
-{
-  return (ai->left_attach >= 0 &&
-          ai->right_attach >= 0 &&
-          ai->top_attach >= 0 &&
-          ai->bottom_attach >= 0);
-}
-
 static void
 menu_ensure_layout (GtkMenu *menu)
 {
@@ -365,34 +352,8 @@ menu_ensure_layout (GtkMenu *menu)
       max_right_attach = 1;
       max_bottom_attach = 0;
 
-      for (l = menu_shell->priv->children; l; l = l->next)
-        {
-          GtkWidget *child = l->data;
-          AttachInfo *ai = get_attach_info (child);
-
-          if (is_grid_attached (ai))
-            {
-              max_bottom_attach = MAX (max_bottom_attach, ai->bottom_attach);
-              max_right_attach = MAX (max_right_attach, ai->right_attach);
-            }
-        }
-
       /* Find empty rows */
       row_occupied = g_malloc0 (max_bottom_attach);
-
-      for (l = menu_shell->priv->children; l; l = l->next)
-        {
-          GtkWidget *child = l->data;
-          AttachInfo *ai = get_attach_info (child);
-
-          if (is_grid_attached (ai))
-            {
-              gint i;
-
-              for (i = ai->top_attach; i < ai->bottom_attach; i++)
-                row_occupied[i] = TRUE;
-            }
-        }
 
       /* Lay non-grid-items out in those rows
        */
@@ -402,25 +363,15 @@ menu_ensure_layout (GtkMenu *menu)
           GtkWidget *child = l->data;
           AttachInfo *ai = get_attach_info (child);
 
-          if (!is_grid_attached (ai))
-            {
-              while (current_row < max_bottom_attach && row_occupied[current_row])
-                current_row++;
+          while (current_row < max_bottom_attach && row_occupied[current_row])
+            current_row++;
 
-              ai->effective_left_attach = 0;
-              ai->effective_right_attach = max_right_attach;
-              ai->effective_top_attach = current_row;
-              ai->effective_bottom_attach = current_row + 1;
+          ai->effective_left_attach = 0;
+          ai->effective_right_attach = max_right_attach;
+          ai->effective_top_attach = current_row;
+          ai->effective_bottom_attach = current_row + 1;
 
-              current_row++;
-            }
-          else
-            {
-              ai->effective_left_attach = ai->left_attach;
-              ai->effective_right_attach = ai->right_attach;
-              ai->effective_top_attach = ai->top_attach;
-              ai->effective_bottom_attach = ai->bottom_attach;
-            }
+          current_row++;
         }
 
       g_free (row_occupied);
@@ -1331,12 +1282,6 @@ gtk_menu_real_insert (GtkMenuShell *menu_shell,
 {
   GtkMenu *menu = GTK_MENU (menu_shell);
   GtkMenuPrivate *priv = menu->priv;
-  AttachInfo *ai = get_attach_info (child);
-
-  ai->left_attach = -1;
-  ai->right_attach = -1;
-  ai->top_attach = -1;
-  ai->bottom_attach = -1;
 
   gtk_widget_insert_before (child, GTK_WIDGET (menu), priv->bottom_arrow_widget);
 
