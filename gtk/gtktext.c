@@ -2646,15 +2646,12 @@ gtk_text_show_magnifier (GtkText *self,
                          int      y)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GtkAllocation allocation;
   cairo_rectangle_int_t rect;
   GtkAllocation text_allocation;
 
   gtk_text_get_text_allocation (self, &text_allocation);
 
   gtk_text_ensure_magnifier (self);
-
-  gtk_widget_get_allocation (GTK_WIDGET (self), &allocation);
 
   rect.x = x + text_allocation.x;
   rect.width = 1;
