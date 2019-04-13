@@ -99,7 +99,7 @@ test_in_files = \
 	a11ymisc.test.in \
 	$(NULL)
 
-EXTRA_DIST += $(test_in_files) $(testdata)
+EXTRA_DIST += $(test_in_files) $(testdata) meson.build
 
 GTK_GSETTINGS_SCHEMAS = \
 	$(top_srcdir)/gtk/org.gtk.Settings.ColorChooser.gschema.xml \

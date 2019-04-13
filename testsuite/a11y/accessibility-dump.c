@@ -928,7 +928,8 @@ parse_command_line (int *argc, char ***argv)
   gtk_test_init (argc, argv);
 
   schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
-  g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
+  if (g_getenv ("GTK_TEST_MESON") == NULL)
+    g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
   g_free (schema_dir);
 
   /* gtk_test_init does not call setlocale(), so do it ourselves,
