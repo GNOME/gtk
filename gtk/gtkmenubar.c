@@ -58,28 +58,6 @@
 
 #define MENU_BAR_POPUP_DELAY 0
 
-/* Properties */
-enum {
-  PROP_0,
-  PROP_PACK_DIRECTION,
-  PROP_CHILD_PACK_DIRECTION
-};
-
-struct _GtkMenuBarPrivate
-{
-  GtkPackDirection pack_direction;
-  GtkPackDirection child_pack_direction;
-};
-
-
-static void gtk_menu_bar_set_property      (GObject             *object,
-					    guint                prop_id,
-					    const GValue        *value,
-					    GParamSpec          *pspec);
-static void gtk_menu_bar_get_property      (GObject             *object,
-					    guint                prop_id,
-					    GValue              *value,
-					    GParamSpec          *pspec);
 static void gtk_menu_bar_measure (GtkWidget     *widget,
                                   GtkOrientation  orientation,
                                   int             for_size,
@@ -97,23 +75,15 @@ static gint gtk_menu_bar_get_popup_delay   (GtkMenuShell    *menu_shell);
 static void gtk_menu_bar_move_current      (GtkMenuShell     *menu_shell,
                                             GtkMenuDirectionType direction);
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkMenuBar, gtk_menu_bar, GTK_TYPE_MENU_SHELL)
+G_DEFINE_TYPE (GtkMenuBar, gtk_menu_bar, GTK_TYPE_MENU_SHELL)
 
 static void
 gtk_menu_bar_class_init (GtkMenuBarClass *class)
 {
-  GObjectClass *gobject_class;
-  GtkWidgetClass *widget_class;
-  GtkMenuShellClass *menu_shell_class;
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkMenuShellClass *menu_shell_class = GTK_MENU_SHELL_CLASS (class);
 
   GtkBindingSet *binding_set;
-
-  gobject_class = (GObjectClass*) class;
-  widget_class = (GtkWidgetClass*) class;
-  menu_shell_class = (GtkMenuShellClass*) class;
-
-  gobject_class->get_property = gtk_menu_bar_get_property;
-  gobject_class->set_property = gtk_menu_bar_set_property;
 
   widget_class->measure = gtk_menu_bar_measure;
   widget_class->size_allocate = gtk_menu_bar_size_allocate;
@@ -166,36 +136,6 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_CHILD);
 
-  /**
-   * GtkMenuBar:pack-direction:
-   *
-   * The pack direction of the menubar. It determines how
-   * menuitems are arranged in the menubar.
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_PACK_DIRECTION,
-                                   g_param_spec_enum ("pack-direction",
-                                                      P_("Pack direction"),
-                                                      P_("The pack direction of the menubar"),
-                                                      GTK_TYPE_PACK_DIRECTION,
-                                                      GTK_PACK_DIRECTION_LTR,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
-  /**
-   * GtkMenuBar:child-pack-direction:
-   *
-   * The child pack direction of the menubar. It determines how
-   * the widgets contained in child menuitems are arranged.
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_CHILD_PACK_DIRECTION,
-                                   g_param_spec_enum ("child-pack-direction",
-                                                      P_("Child Pack direction"),
-                                                      P_("The child pack direction of the menubar"),
-                                                      GTK_TYPE_PACK_DIRECTION,
-                                                      GTK_PACK_DIRECTION_LTR,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_MENU_BAR);
   gtk_widget_class_set_css_name (widget_class, I_("menubar"));
 }
@@ -203,7 +143,6 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 static void
 gtk_menu_bar_init (GtkMenuBar *menu_bar)
 {
-  menu_bar->priv = gtk_menu_bar_get_instance_private (menu_bar);
 }
 
 /**
@@ -220,50 +159,6 @@ gtk_menu_bar_new (void)
 }
 
 static void
-gtk_menu_bar_set_property (GObject      *object,
-			   guint         prop_id,
-			   const GValue *value,
-			   GParamSpec   *pspec)
-{
-  GtkMenuBar *menubar = GTK_MENU_BAR (object);
-  
-  switch (prop_id)
-    {
-    case PROP_PACK_DIRECTION:
-      gtk_menu_bar_set_pack_direction (menubar, g_value_get_enum (value));
-      break;
-    case PROP_CHILD_PACK_DIRECTION:
-      gtk_menu_bar_set_child_pack_direction (menubar, g_value_get_enum (value));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_menu_bar_get_property (GObject    *object,
-			   guint       prop_id,
-			   GValue     *value,
-			   GParamSpec *pspec)
-{
-  GtkMenuBar *menubar = GTK_MENU_BAR (object);
-  
-  switch (prop_id)
-    {
-    case PROP_PACK_DIRECTION:
-      g_value_set_enum (value, gtk_menu_bar_get_pack_direction (menubar));
-      break;
-    case PROP_CHILD_PACK_DIRECTION:
-      g_value_set_enum (value, gtk_menu_bar_get_child_pack_direction (menubar));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
 gtk_menu_bar_measure (GtkWidget      *widget,
                       GtkOrientation  orientation,
                       int             for_size,
@@ -272,8 +167,6 @@ gtk_menu_bar_measure (GtkWidget      *widget,
                       int            *minimum_baseline,
                       int            *natural_baseline)
 {
-  GtkMenuBar *menu_bar;
-  GtkMenuBarPrivate *priv;
   GtkMenuShell *menu_shell;
   GtkWidget *child;
   GList *children;
@@ -283,23 +176,12 @@ gtk_menu_bar_measure (GtkWidget      *widget,
   *minimum = 0;
   *natural = 0;
 
-  menu_bar = GTK_MENU_BAR (widget);
   menu_shell = GTK_MENU_SHELL (widget);
-  priv = menu_bar->priv;
 
   children = menu_shell->priv->children;
 
-  if (priv->child_pack_direction == GTK_PACK_DIRECTION_LTR ||
-      priv->child_pack_direction == GTK_PACK_DIRECTION_RTL)
-    use_toggle_size = (orientation == GTK_ORIENTATION_HORIZONTAL);
-  else
-    use_toggle_size = (orientation == GTK_ORIENTATION_VERTICAL);
-
-  if (priv->pack_direction == GTK_PACK_DIRECTION_LTR ||
-      priv->pack_direction == GTK_PACK_DIRECTION_RTL)
-    use_maximize = (orientation == GTK_ORIENTATION_VERTICAL);
-  else
-    use_maximize = (orientation == GTK_ORIENTATION_HORIZONTAL);
+  use_toggle_size = (orientation == GTK_ORIENTATION_HORIZONTAL);
+  use_maximize = (orientation == GTK_ORIENTATION_VERTICAL);
 
   while (children)
     {
@@ -345,8 +227,6 @@ gtk_menu_bar_size_allocate (GtkWidget *widget,
                             int        height,
                             int        baseline)
 {
-  GtkMenuBar *menu_bar = GTK_MENU_BAR (widget);
-  GtkMenuBarPrivate *priv = menu_bar->priv;
   GtkMenuShell *menu_shell;
   GtkWidget *child;
   GList *children;
@@ -354,6 +234,8 @@ gtk_menu_bar_size_allocate (GtkWidget *widget,
   GArray *requested_sizes;
   gint toggle_size;
   guint i;
+  int size;
+  gboolean ltr = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR);
 
   menu_shell = GTK_MENU_SHELL (widget);
 
@@ -362,115 +244,55 @@ gtk_menu_bar_size_allocate (GtkWidget *widget,
 
   remaining_space = (GtkAllocation) {0, 0, width, height};
   requested_sizes = g_array_new (FALSE, FALSE, sizeof (GtkRequestedSize));
+  size = remaining_space.width;
 
-  if (priv->pack_direction == GTK_PACK_DIRECTION_LTR ||
-      priv->pack_direction == GTK_PACK_DIRECTION_RTL)
+  for (children = menu_shell->priv->children; children; children = children->next)
     {
-      int size = remaining_space.width;
-      gboolean ltr = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) == (priv->pack_direction == GTK_PACK_DIRECTION_LTR);
+      GtkRequestedSize request;
+      child = children->data;
 
-      for (children = menu_shell->priv->children; children; children = children->next)
-        {
-          GtkRequestedSize request;
-          child = children->data;
+      if (!gtk_widget_get_visible (child))
+        continue;
 
-          if (!gtk_widget_get_visible (child))
-            continue;
+      request.data = child;
+      gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL,
+                          remaining_space.height,
+                          &request.minimum_size, &request.natural_size,
+                          NULL, NULL);
+      gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
+                                         &toggle_size);
+      request.minimum_size += toggle_size;
+      request.natural_size += toggle_size;
 
-          request.data = child;
-          gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL,
-                              remaining_space.height,
-                              &request.minimum_size, &request.natural_size,
-                              NULL, NULL);
-          gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
-                                             &toggle_size);
-          request.minimum_size += toggle_size;
-          request.natural_size += toggle_size;
+      gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child), toggle_size);
 
-          gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child), toggle_size);
+      g_array_append_val (requested_sizes, request);
 
-          g_array_append_val (requested_sizes, request);
-
-          size -= request.minimum_size;
-        }
-
-      size = gtk_distribute_natural_allocation (size,
-                                                requested_sizes->len,
-                                                (GtkRequestedSize *) requested_sizes->data);
-
-      for (i = 0; i < requested_sizes->len; i++)
-        {
-          GtkAllocation child_allocation = remaining_space;
-          GtkRequestedSize *request = &g_array_index (requested_sizes, GtkRequestedSize, i);
-
-          child_allocation.width = request->minimum_size;
-          remaining_space.width -= request->minimum_size;
-
-          if (i + 1 == requested_sizes->len && GTK_IS_MENU_ITEM (request->data) &&
-              GTK_MENU_ITEM (request->data)->priv->right_justify)
-            ltr = !ltr;
-
-          if (ltr)
-            remaining_space.x += request->minimum_size;
-          else
-            child_allocation.x += remaining_space.width;
-
-          gtk_widget_size_allocate (request->data, &child_allocation, -1);
-        }
+      size -= request.minimum_size;
     }
-  else
+
+  size = gtk_distribute_natural_allocation (size,
+                                            requested_sizes->len,
+                                            (GtkRequestedSize *) requested_sizes->data);
+
+  for (i = 0; i < requested_sizes->len; i++)
     {
-      int size = remaining_space.height;
-      gboolean ttb = (priv->pack_direction == GTK_PACK_DIRECTION_TTB);
+      GtkAllocation child_allocation = remaining_space;
+      GtkRequestedSize *request = &g_array_index (requested_sizes, GtkRequestedSize, i);
 
-      for (children = menu_shell->priv->children; children; children = children->next)
-        {
-          GtkRequestedSize request;
-          child = children->data;
+      child_allocation.width = request->minimum_size;
+      remaining_space.width -= request->minimum_size;
 
-          if (!gtk_widget_get_visible (child))
-            continue;
+      if (i + 1 == requested_sizes->len && GTK_IS_MENU_ITEM (request->data) &&
+          GTK_MENU_ITEM (request->data)->priv->right_justify)
+        ltr = !ltr;
 
-          request.data = child;
-          gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
-                              remaining_space.width,
-                              &request.minimum_size, &request.natural_size,
-                              NULL, NULL);
-          gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
-                                             &toggle_size);
-          request.minimum_size += toggle_size;
-          request.natural_size += toggle_size;
+      if (ltr)
+        remaining_space.x += request->minimum_size;
+      else
+        child_allocation.x += remaining_space.width;
 
-          gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child), toggle_size);
-
-          g_array_append_val (requested_sizes, request);
-
-          size -= request.minimum_size;
-        }
-
-      size = gtk_distribute_natural_allocation (size,
-                                                requested_sizes->len,
-                                                (GtkRequestedSize *) requested_sizes->data);
-
-      for (i = 0; i < requested_sizes->len; i++)
-        {
-          GtkAllocation child_allocation = remaining_space;
-          GtkRequestedSize *request = &g_array_index (requested_sizes, GtkRequestedSize, i);
-
-          child_allocation.height = request->minimum_size;
-          remaining_space.height -= request->minimum_size;
-
-          if (i + 1 == requested_sizes->len && GTK_IS_MENU_ITEM (request->data) &&
-              GTK_MENU_ITEM (request->data)->priv->right_justify)
-            ttb = !ttb;
-
-          if (ttb)
-            remaining_space.y += request->minimum_size;
-          else
-            child_allocation.y += remaining_space.height;
-
-          gtk_widget_size_allocate (request->data, &child_allocation, -1);
-        }
+      gtk_widget_size_allocate (request->data, &child_allocation, -1);
     }
 
   g_array_free (requested_sizes, TRUE);
@@ -620,162 +442,25 @@ gtk_menu_bar_move_current (GtkMenuShell         *menu_shell,
 			   GtkMenuDirectionType  direction)
 {
   GtkMenuBar *menubar = GTK_MENU_BAR (menu_shell);
-  GtkTextDirection text_dir;
-  GtkPackDirection pack_dir;
 
-  text_dir = gtk_widget_get_direction (GTK_WIDGET (menubar));
-  pack_dir = gtk_menu_bar_get_pack_direction (menubar);
-  
-  if (pack_dir == GTK_PACK_DIRECTION_LTR || pack_dir == GTK_PACK_DIRECTION_RTL)
-     {
-      if ((text_dir == GTK_TEXT_DIR_RTL) == (pack_dir == GTK_PACK_DIRECTION_LTR))
-	{
-	  switch (direction) 
-	    {      
-	    case GTK_MENU_DIR_PREV:
-	      direction = GTK_MENU_DIR_NEXT;
-	      break;
-	    case GTK_MENU_DIR_NEXT:
-	      direction = GTK_MENU_DIR_PREV;
-	      break;
-	    case GTK_MENU_DIR_PARENT:
-	    case GTK_MENU_DIR_CHILD:
-	    default:
-              break;
-	    }
-	}
-    }
-  else
+  if (gtk_widget_get_direction (GTK_WIDGET (menubar)) == GTK_TEXT_DIR_RTL)
     {
       switch (direction) 
-	{
-	case GTK_MENU_DIR_PARENT:
-	  if ((text_dir == GTK_TEXT_DIR_LTR) == (pack_dir == GTK_PACK_DIRECTION_TTB))
-	    direction = GTK_MENU_DIR_PREV;
-	  else
-	    direction = GTK_MENU_DIR_NEXT;
-	  break;
-	case GTK_MENU_DIR_CHILD:
-	  if ((text_dir == GTK_TEXT_DIR_LTR) == (pack_dir == GTK_PACK_DIRECTION_TTB))
-	    direction = GTK_MENU_DIR_NEXT;
-	  else
-	    direction = GTK_MENU_DIR_PREV;
-	  break;
-	case GTK_MENU_DIR_PREV:
-	  if (text_dir == GTK_TEXT_DIR_RTL)	  
-	    direction = GTK_MENU_DIR_CHILD;
-	  else
-	    direction = GTK_MENU_DIR_PARENT;
-	  break;
-	case GTK_MENU_DIR_NEXT:
-	  if (text_dir == GTK_TEXT_DIR_RTL)	  
-	    direction = GTK_MENU_DIR_PARENT;
-	  else
-	    direction = GTK_MENU_DIR_CHILD;
-	  break;
-	default: ;
-	}
+        {      
+        case GTK_MENU_DIR_PREV:
+          direction = GTK_MENU_DIR_NEXT;
+          break;
+        case GTK_MENU_DIR_NEXT:
+          direction = GTK_MENU_DIR_PREV;
+          break;
+        case GTK_MENU_DIR_PARENT:
+        case GTK_MENU_DIR_CHILD:
+        default:
+          break;
+        }
     }
   
   GTK_MENU_SHELL_CLASS (gtk_menu_bar_parent_class)->move_current (menu_shell, direction);
-}
-
-/**
- * gtk_menu_bar_get_pack_direction:
- * @menubar: a #GtkMenuBar
- * 
- * Retrieves the current pack direction of the menubar. 
- * See gtk_menu_bar_set_pack_direction().
- *
- * Returns: the pack direction
- */
-GtkPackDirection
-gtk_menu_bar_get_pack_direction (GtkMenuBar *menubar)
-{
-  g_return_val_if_fail (GTK_IS_MENU_BAR (menubar), 
-			GTK_PACK_DIRECTION_LTR);
-
-  return menubar->priv->pack_direction;
-}
-
-/**
- * gtk_menu_bar_set_pack_direction:
- * @menubar: a #GtkMenuBar
- * @pack_dir: a new #GtkPackDirection
- * 
- * Sets how items should be packed inside a menubar.
- */
-void
-gtk_menu_bar_set_pack_direction (GtkMenuBar       *menubar,
-                                 GtkPackDirection  pack_dir)
-{
-  GtkMenuBarPrivate *priv;
-  GList *l;
-
-  g_return_if_fail (GTK_IS_MENU_BAR (menubar));
-
-  priv = menubar->priv;
-
-  if (priv->pack_direction != pack_dir)
-    {
-      priv->pack_direction = pack_dir;
-
-      gtk_widget_queue_resize (GTK_WIDGET (menubar));
-
-      for (l = GTK_MENU_SHELL (menubar)->priv->children; l; l = l->next)
-	gtk_widget_queue_resize (GTK_WIDGET (l->data));
-
-      g_object_notify (G_OBJECT (menubar), "pack-direction");
-    }
-}
-
-/**
- * gtk_menu_bar_get_child_pack_direction:
- * @menubar: a #GtkMenuBar
- * 
- * Retrieves the current child pack direction of the menubar.
- * See gtk_menu_bar_set_child_pack_direction().
- *
- * Returns: the child pack direction
- */
-GtkPackDirection
-gtk_menu_bar_get_child_pack_direction (GtkMenuBar *menubar)
-{
-  g_return_val_if_fail (GTK_IS_MENU_BAR (menubar), 
-			GTK_PACK_DIRECTION_LTR);
-
-  return menubar->priv->child_pack_direction;
-}
-
-/**
- * gtk_menu_bar_set_child_pack_direction:
- * @menubar: a #GtkMenuBar
- * @child_pack_dir: a new #GtkPackDirection
- * 
- * Sets how widgets should be packed inside the children of a menubar.
- */
-void
-gtk_menu_bar_set_child_pack_direction (GtkMenuBar       *menubar,
-                                       GtkPackDirection  child_pack_dir)
-{
-  GtkMenuBarPrivate *priv;
-  GList *l;
-
-  g_return_if_fail (GTK_IS_MENU_BAR (menubar));
-
-  priv = menubar->priv;
-
-  if (priv->child_pack_direction != child_pack_dir)
-    {
-      priv->child_pack_direction = child_pack_dir;
-
-      gtk_widget_queue_resize (GTK_WIDGET (menubar));
-
-      for (l = GTK_MENU_SHELL (menubar)->priv->children; l; l = l->next)
-	gtk_widget_queue_resize (GTK_WIDGET (l->data));
-
-      g_object_notify (G_OBJECT (menubar), "child-pack-direction");
-    }
 }
 
 /**

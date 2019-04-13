@@ -264,7 +264,6 @@ gtk_menu_item_size_allocate (GtkWidget *widget,
   GtkMenuItemPrivate *priv = menu_item->priv;
   GtkAllocation child_allocation;
   GtkTextDirection direction;
-  GtkPackDirection child_pack_dir;
   GtkWidget *child;
   GtkWidget *parent;
 
@@ -273,33 +272,15 @@ gtk_menu_item_size_allocate (GtkWidget *widget,
   direction = gtk_widget_get_direction (widget);
 
   parent = gtk_widget_get_parent (widget);
-  if (GTK_IS_MENU_BAR (parent))
-    {
-      child_pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (parent));
-    }
-  else
-    {
-      child_pack_dir = GTK_PACK_DIRECTION_LTR;
-    }
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child)
     {
       child_allocation = (GtkAllocation) {0, 0, width, height};
 
-      if (child_pack_dir == GTK_PACK_DIRECTION_LTR ||
-          child_pack_dir == GTK_PACK_DIRECTION_RTL)
-        {
-          if ((direction == GTK_TEXT_DIR_LTR) == (child_pack_dir != GTK_PACK_DIRECTION_RTL))
-            child_allocation.x += priv->toggle_size;
-          child_allocation.width -= priv->toggle_size;
-        }
-      else
-        {
-          if ((direction == GTK_TEXT_DIR_LTR) == (child_pack_dir != GTK_PACK_DIRECTION_BTT))
-            child_allocation.y += priv->toggle_size;
-          child_allocation.height -= priv->toggle_size;
-        }
+      if (direction == GTK_TEXT_DIR_LTR)
+        child_allocation.x += priv->toggle_size;
+      child_allocation.width -= priv->toggle_size;
 
       if ((priv->submenu && !GTK_IS_MENU_BAR (parent)) || priv->reserve_indicator)
 	{

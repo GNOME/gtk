@@ -550,24 +550,6 @@ typedef enum
 } GtkSortType;
 
 /**
- * GtkPackDirection:
- * @GTK_PACK_DIRECTION_LTR: Widgets are packed left-to-right
- * @GTK_PACK_DIRECTION_RTL: Widgets are packed right-to-left
- * @GTK_PACK_DIRECTION_TTB: Widgets are packed top-to-bottom
- * @GTK_PACK_DIRECTION_BTT: Widgets are packed bottom-to-top
- *
- * Determines how widgets should be packed inside menubars
- * and menuitems contained in menubars.
- */
-typedef enum
-{
-  GTK_PACK_DIRECTION_LTR,
-  GTK_PACK_DIRECTION_RTL,
-  GTK_PACK_DIRECTION_TTB,
-  GTK_PACK_DIRECTION_BTT
-} GtkPackDirection;
-
-/**
  * GtkPrintPages:
  * @GTK_PRINT_PAGES_ALL: All pages.
  * @GTK_PRINT_PAGES_CURRENT: Current page.

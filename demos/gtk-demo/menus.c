@@ -70,12 +70,6 @@ change_orientation (GtkWidget *button,
   parent = gtk_widget_get_parent (menubar);
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (parent));
   gtk_orientable_set_orientation (GTK_ORIENTABLE (parent), 1 - orientation);
-
-  if (orientation == GTK_ORIENTATION_VERTICAL)
-    g_object_set (menubar, "pack-direction", GTK_PACK_DIRECTION_TTB, NULL);
-  else
-    g_object_set (menubar, "pack-direction", GTK_PACK_DIRECTION_LTR, NULL);
-
 }
 
 static GtkWidget *window = NULL;
