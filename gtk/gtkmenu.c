@@ -157,8 +157,6 @@ struct _GtkMenuPopdownData
 
 typedef struct
 {
-  gint effective_left_attach;
-  gint effective_right_attach;
   gint effective_top_attach;
   gint effective_bottom_attach;
 } AttachInfo;
@@ -344,12 +342,10 @@ menu_ensure_layout (GtkMenu *menu)
       GList *l;
       gchar *row_occupied;
       gint current_row;
-      gint max_right_attach;
       gint max_bottom_attach;
 
       /* Find extents of gridded portion
        */
-      max_right_attach = 1;
       max_bottom_attach = 0;
 
       /* Find empty rows */
@@ -366,8 +362,6 @@ menu_ensure_layout (GtkMenu *menu)
           while (current_row < max_bottom_attach && row_occupied[current_row])
             current_row++;
 
-          ai->effective_left_attach = 0;
-          ai->effective_right_attach = max_right_attach;
           ai->effective_top_attach = current_row;
           ai->effective_bottom_attach = current_row + 1;
 
@@ -377,20 +371,8 @@ menu_ensure_layout (GtkMenu *menu)
       g_free (row_occupied);
 
       priv->n_rows = MAX (current_row, max_bottom_attach);
-      priv->n_columns = max_right_attach;
       priv->have_layout = TRUE;
     }
-}
-
-
-static gint
-gtk_menu_get_n_columns (GtkMenu *menu)
-{
-  GtkMenuPrivate *priv = menu->priv;
-
-  menu_ensure_layout (menu);
-
-  return priv->n_columns;
 }
 
 static gint
@@ -405,8 +387,6 @@ gtk_menu_get_n_rows (GtkMenu *menu)
 
 static void
 get_effective_child_attach (GtkWidget *child,
-                            int       *l,
-                            int       *r,
                             int       *t,
                             int       *b)
 {
@@ -417,10 +397,6 @@ get_effective_child_attach (GtkWidget *child,
 
   ai = get_attach_info (child);
 
-  if (l)
-    *l = ai->effective_left_attach;
-  if (r)
-    *r = ai->effective_right_attach;
   if (t)
     *t = ai->effective_top_attach;
   if (b)
@@ -2270,7 +2246,6 @@ calculate_line_heights (GtkMenu *menu,
   GtkMenuShell   *menu_shell;
   GtkWidget      *child, *widget;
   GList          *children;
-  guint           n_columns;
   gint            n_heights;
   guint          *min_heights;
   guint          *nat_heights;
@@ -2283,14 +2258,13 @@ calculate_line_heights (GtkMenu *menu,
   min_heights  = g_new0 (guint, gtk_menu_get_n_rows (menu));
   nat_heights  = g_new0 (guint, gtk_menu_get_n_rows (menu));
   n_heights    = gtk_menu_get_n_rows (menu);
-  n_columns    = gtk_menu_get_n_columns (menu);
-  avail_width  = for_width - (2 * priv->toggle_size + priv->accel_size) * n_columns;
+  avail_width  = for_width - (2 * priv->toggle_size + priv->accel_size);
 
   for (children = menu_shell->priv->children; children; children = children->next)
     {
       gint part;
       gint toggle_size;
-      gint l, r, t, b;
+      gint t, b;
       gint child_min, child_nat;
 
       child = children->data;
@@ -2298,12 +2272,10 @@ calculate_line_heights (GtkMenu *menu,
       if (!gtk_widget_get_visible (child))
         continue;
 
-      get_effective_child_attach (child, &l, &r, &t, &b);
-
-      part = avail_width / (r - l);
+      get_effective_child_attach (child, &t, &b);
 
       gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
-                          part,
+                          avail_width,
                           &child_min, &child_nat,
                           NULL, NULL);
 
@@ -2401,7 +2373,7 @@ gtk_menu_size_allocate (GtkWidget *widget,
     gtk_widget_size_allocate (priv->bottom_arrow_widget, &arrow_allocation, -1);
 
 
-  base_width = width / gtk_menu_get_n_columns (menu);
+  base_width = width;
   children = menu_shell->priv->children;
   while (children)
     {
@@ -2410,21 +2382,13 @@ gtk_menu_size_allocate (GtkWidget *widget,
 
       if (gtk_widget_get_visible (child))
         {
-          gint l, r, t, b;
+          gint t, b;
 
-          get_effective_child_attach (child, &l, &r, &t, &b);
+          get_effective_child_attach (child, &t, &b);
 
-          if (gtk_widget_get_direction (GTK_WIDGET (menu)) == GTK_TEXT_DIR_RTL)
-            {
-              guint tmp;
-              tmp = gtk_menu_get_n_columns (menu) - l;
-              l = gtk_menu_get_n_columns (menu) - r;
-              r = tmp;
-            }
-
-          child_allocation.width = (r - l) * base_width;
+          child_allocation.width = base_width;
           child_allocation.height = 0;
-          child_allocation.x = l * base_width;
+          child_allocation.x = 0;
           child_allocation.y = - priv->scroll_offset;
 
           for (i = 0; i < b; i++)
@@ -2510,9 +2474,8 @@ static void gtk_menu_measure (GtkWidget      *widget,
       children = menu_shell->priv->children;
       while (children)
         {
-          gint part;
           gint toggle_size;
-          gint l, r, t, b;
+          gint t, b;
 
           child = children->data;
           children = children->next;
@@ -2520,7 +2483,7 @@ static void gtk_menu_measure (GtkWidget      *widget,
           if (! gtk_widget_get_visible (child))
             continue;
 
-          get_effective_child_attach (child, &l, &r, &t, &b);
+          get_effective_child_attach (child, &t, &b);
 
           /* It's important to size_request the child
            * before doing the toggle size request, in
@@ -2535,11 +2498,8 @@ static void gtk_menu_measure (GtkWidget      *widget,
            max_accel_width = MAX (max_accel_width,
                                   GTK_MENU_ITEM (child)->priv->accelerator_width);
 
-           part = child_min / (r - l);
-           min_width = MAX (min_width, part);
-
-           part = child_nat / (r - l);
-           nat_width = MAX (nat_width, part);
+           min_width = MAX (min_width, child_min);
+           nat_width = MAX (nat_width, child_min);
         }
 
       /* If the menu doesn't include any images or check items
@@ -2548,7 +2508,6 @@ static void gtk_menu_measure (GtkWidget      *widget,
        * menus or multi-column menus
        */
       if (max_toggle_size == 0 &&
-          gtk_menu_get_n_columns (menu) == 1 &&
           !priv->no_toggle_size)
         {
           GtkWidget *menu_item;
@@ -2571,10 +2530,7 @@ static void gtk_menu_measure (GtkWidget      *widget,
         }
 
       min_width += 2 * max_toggle_size + max_accel_width;
-      min_width *= gtk_menu_get_n_columns (menu);
-
       nat_width += 2 * max_toggle_size + max_accel_width;
-      nat_width *= gtk_menu_get_n_columns (menu);
 
       priv->toggle_size = max_toggle_size;
       priv->accel_size  = max_accel_width;
@@ -3572,8 +3528,7 @@ compute_child_offset (GtkMenu   *menu,
   gint child_offset = 0;
   gint i;
 
-  get_effective_child_attach (menu_item, NULL, NULL,
-                              &item_top_attach, NULL);
+  get_effective_child_attach (menu_item, &item_top_attach, NULL);
 
   /* there is a possibility that we get called before _size_request,
    * so check the height table for safety.
@@ -3695,43 +3650,10 @@ gtk_menu_get_popup_delay (GtkMenuShell *menu_shell)
   return MENU_POPUP_DELAY;
 }
 
-static GtkWidget *
-find_child_containing (GtkMenuShell *menu_shell,
-                       int           left,
-                       int           right,
-                       int           top,
-                       int           bottom)
-{
-  GList *list;
-
-  /* find a child which includes the area given by
-   * left, right, top, bottom.
-   */
-  for (list = menu_shell->priv->children; list; list = list->next)
-    {
-      gint l, r, t, b;
-
-      if (!_gtk_menu_item_is_selectable (list->data))
-        continue;
-
-      get_effective_child_attach (list->data, &l, &r, &t, &b);
-
-      if (l <= left && right <= r && t <= top && bottom <= b)
-        return GTK_WIDGET (list->data);
-    }
-
-  return NULL;
-}
-
 static void
 gtk_menu_move_current (GtkMenuShell         *menu_shell,
                        GtkMenuDirectionType  direction)
 {
-  GtkMenu *menu = GTK_MENU (menu_shell);
-  gint i;
-  gint l, r, t, b;
-  GtkWidget *match = NULL;
-
   if (gtk_widget_get_direction (GTK_WIDGET (menu_shell)) == GTK_TEXT_DIR_RTL)
     {
       switch (direction)
@@ -3746,94 +3668,6 @@ gtk_menu_move_current (GtkMenuShell         *menu_shell,
         case GTK_MENU_DIR_PREV:
         default:
           break;
-        }
-    }
-
-  /* use special table menu key bindings */
-  if (menu_shell->priv->active_menu_item && gtk_menu_get_n_columns (menu) > 1)
-    {
-      get_effective_child_attach (menu_shell->priv->active_menu_item, &l, &r, &t, &b);
-
-      if (direction == GTK_MENU_DIR_NEXT)
-        {
-          for (i = b; i < gtk_menu_get_n_rows (menu); i++)
-            {
-              match = find_child_containing (menu_shell, l, l + 1, i, i + 1);
-              if (match)
-                break;
-            }
-
-          if (!match)
-            {
-              /* wrap around */
-              for (i = 0; i < t; i++)
-                {
-                  match = find_child_containing (menu_shell,
-                                                 l, l + 1, i, i + 1);
-                  if (match)
-                    break;
-                }
-            }
-        }
-      else if (direction == GTK_MENU_DIR_PREV)
-        {
-          for (i = t; i > 0; i--)
-            {
-              match = find_child_containing (menu_shell,
-                                             l, l + 1, i - 1, i);
-              if (match)
-                break;
-            }
-
-          if (!match)
-            {
-              /* wrap around */
-              for (i = gtk_menu_get_n_rows (menu); i > b; i--)
-                {
-                  match = find_child_containing (menu_shell,
-                                                 l, l + 1, i - 1, i);
-                  if (match)
-                    break;
-                }
-            }
-        }
-      else if (direction == GTK_MENU_DIR_PARENT)
-        {
-          /* we go one left if possible */
-          if (l > 0)
-            match = find_child_containing (menu_shell,
-                                           l - 1, l, t, t + 1);
-
-          if (!match)
-            {
-              GtkWidget *parent = menu_shell->priv->parent_menu_shell;
-
-              if (!parent
-                  || g_list_length (GTK_MENU_SHELL (parent)->priv->children) <= 1)
-                match = menu_shell->priv->active_menu_item;
-            }
-        }
-      else if (direction == GTK_MENU_DIR_CHILD)
-        {
-          /* we go one right if possible */
-          if (r < gtk_menu_get_n_columns (menu))
-            match = find_child_containing (menu_shell, r, r + 1, t, t + 1);
-
-          if (!match)
-            {
-              GtkWidget *parent = menu_shell->priv->parent_menu_shell;
-
-              if (! GTK_MENU_ITEM (menu_shell->priv->active_menu_item)->priv->submenu &&
-                  (!parent ||
-                   g_list_length (GTK_MENU_SHELL (parent)->priv->children) <= 1))
-                match = menu_shell->priv->active_menu_item;
-            }
-        }
-
-      if (match)
-        {
-          gtk_menu_shell_select_item (menu_shell, match);
-          return;
         }
     }
 
