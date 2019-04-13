@@ -85,11 +85,6 @@
 #define MENU_POPUP_DELAY     225
 #define MENU_POPDOWN_DELAY   1000
 
-#define PACK_DIRECTION(m)                                 \
-   (GTK_IS_MENU_BAR (m)                                   \
-     ? gtk_menu_bar_get_pack_direction (GTK_MENU_BAR (m)) \
-     : GTK_PACK_DIRECTION_LTR)
-
 enum {
   DEACTIVATE,
   SELECTION_DONE,
@@ -1080,7 +1075,6 @@ gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
                                  GtkWidget    *menu_item)
 {
   GtkMenuShellPrivate *priv = menu_shell->priv;
-  GtkPackDirection pack_dir = PACK_DIRECTION (menu_shell);
 
   if (priv->active_menu_item)
     {
@@ -1098,12 +1092,8 @@ gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
   gtk_menu_shell_activate (menu_shell);
 
   priv->active_menu_item = menu_item;
-  if (pack_dir == GTK_PACK_DIRECTION_TTB || pack_dir == GTK_PACK_DIRECTION_BTT)
-    _gtk_menu_item_set_placement (GTK_MENU_ITEM (priv->active_menu_item),
-                                  GTK_LEFT_RIGHT);
-  else
-    _gtk_menu_item_set_placement (GTK_MENU_ITEM (priv->active_menu_item),
-                                  GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement);
+  _gtk_menu_item_set_placement (GTK_MENU_ITEM (priv->active_menu_item),
+                                GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement);
   gtk_menu_item_select (GTK_MENU_ITEM (priv->active_menu_item));
 
   _gtk_menu_shell_update_mnemonics (menu_shell);
@@ -1387,10 +1377,7 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
             gtk_menu_shell_deselect (menu_shell);
           else
             {
-              if (PACK_DIRECTION (parent_menu_shell) == GTK_PACK_DIRECTION_LTR)
-                gtk_menu_shell_move_selected (parent_menu_shell, -1);
-              else
-                gtk_menu_shell_move_selected (parent_menu_shell, 1);
+              gtk_menu_shell_move_selected (parent_menu_shell, -1);
               gtk_menu_shell_select_submenu_first (parent_menu_shell);
             }
         }
@@ -1429,10 +1416,7 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
 
       if (parent_menu_shell)
         {
-          if (PACK_DIRECTION (parent_menu_shell) == GTK_PACK_DIRECTION_LTR)
-            gtk_menu_shell_move_selected (parent_menu_shell, 1);
-          else
-            gtk_menu_shell_move_selected (parent_menu_shell, -1);
+          gtk_menu_shell_move_selected (parent_menu_shell, 1);
 
           gtk_menu_shell_select_submenu_first (parent_menu_shell);
         }
