@@ -17,6 +17,7 @@ EXTRA_DIST += \
 	$(test_simplify)	\
 	test-simplify.in	\
 	test-settings.in	\
+	meson.build		\
 	$(NULL)
 
 TESTS_ENVIRONMENT = \
