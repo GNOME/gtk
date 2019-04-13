@@ -362,6 +362,8 @@ gtk_list_box_get_selected_row
 GtkListBoxForeachFunc
 gtk_list_box_selected_foreach
 gtk_list_box_get_selected_rows
+gtk_list_box_set_show_separators
+gtk_list_box_get_show_separators
 
 gtk_list_box_set_selection_mode
 gtk_list_box_get_selection_mode

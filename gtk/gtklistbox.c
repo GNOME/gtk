@@ -73,11 +73,12 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * list
+ * list[.separators]
  * ╰── row[.activatable]
  * ]|
  *
- * GtkListBox uses a single CSS node named list. Each GtkListBoxRow uses
+ * GtkListBox uses a single CSS node named list. It may carry the .separators style
+ * class, when the #GtkListBox::show-separators property is set. Each GtkListBoxRow uses
  * a single CSS node named row. The row nodes get the .activatable
  * style class added when appropriate.
  */
@@ -113,6 +114,7 @@ typedef struct
   GtkAdjustment *adjustment;
   gboolean activate_single_click;
   gboolean accept_unpaired_release;
+  gboolean show_separators;
 
   /* DnD */
   GtkListBoxRow *drag_highlighted_row;
@@ -160,6 +162,7 @@ enum {
   PROP_SELECTION_MODE,
   PROP_ACTIVATE_ON_SINGLE_CLICK,
   PROP_ACCEPT_UNPAIRED_RELEASE,
+  PROP_SHOW_SEPARATORS,
   LAST_PROPERTY
 };
 
@@ -332,6 +335,9 @@ gtk_list_box_get_property (GObject    *obj,
     case PROP_ACCEPT_UNPAIRED_RELEASE:
       g_value_set_boolean (value, priv->accept_unpaired_release);
       break;
+    case PROP_SHOW_SEPARATORS:
+      g_value_set_boolean (value, priv->show_separators);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
@@ -356,6 +362,9 @@ gtk_list_box_set_property (GObject      *obj,
       break;
     case PROP_ACCEPT_UNPAIRED_RELEASE:
       gtk_list_box_set_accept_unpaired_release (box, g_value_get_boolean (value));
+      break;
+    case PROP_SHOW_SEPARATORS:
+      gtk_list_box_set_show_separators (box, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
@@ -443,6 +452,13 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
     g_param_spec_boolean ("accept-unpaired-release",
                           P_("Accept unpaired release"),
                           P_("Accept unpaired release"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_SHOW_SEPARATORS] =
+    g_param_spec_boolean ("show-separators",
+                          P_("Show separators"),
+                          P_("Show separators between rows"),
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -3598,4 +3614,52 @@ gtk_list_box_bind_model (GtkListBox                 *box,
 
   g_signal_connect (priv->bound_model, "items-changed", G_CALLBACK (gtk_list_box_bound_model_changed), box);
   gtk_list_box_bound_model_changed (model, 0, 0, g_list_model_get_n_items (model), box);
+}
+
+/**
+ * gtk_list_box_set_show_separators:
+ * @box: a #GtkListBox
+ * @show_separators: %TRUE to show separators
+ *
+ * Sets whether the list box should show separators
+ * between rows.
+ */
+void
+gtk_list_box_set_show_separators (GtkListBox *box,
+                                  gboolean    show_separators)
+{
+  GtkListBoxPrivate *priv = BOX_PRIV (box);
+
+  g_return_if_fail (GTK_IS_LIST_BOX (box));
+
+  if (priv->show_separators == show_separators)
+    return;
+
+  priv->show_separators = show_separators;
+
+  if (show_separators)
+    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box)), "separators");
+  else
+    gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (box)), "separators");
+
+  g_object_notify_by_pspec (G_OBJECT (box), properties[PROP_SHOW_SEPARATORS]);
+}
+
+/**
+ * gtk_list_box_get_show_separators:
+ * @box: a #GtkListBox
+ *
+ * Returns whether the list box should show separators
+ * between rows.
+ *
+ * Returns: %TRUE if the list box shows separators
+ */
+gboolean
+gtk_list_box_get_show_separators (GtkListBox *box)
+{
+  GtkListBoxPrivate *priv = BOX_PRIV (box);
+
+  g_return_if_fail (GTK_IS_LIST_BOX (box));
+
+  return priv->show_separators;
 }
