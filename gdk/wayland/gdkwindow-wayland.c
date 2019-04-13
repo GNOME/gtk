@@ -4457,6 +4457,7 @@ gdk_wayland_window_show_window_menu (GdkWindow *window,
     GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   struct wl_seat *seat;
   GdkWaylandDevice *device;
+  GdkWindow *event_window;
   double x, y;
   uint32_t serial;
 
@@ -4476,12 +4477,13 @@ gdk_wayland_window_show_window_menu (GdkWindow *window,
 
   device = GDK_WAYLAND_DEVICE (gdk_event_get_device (event));
   seat = gdk_wayland_device_get_wl_seat (GDK_DEVICE (device));
-  gdk_event_get_coords (event, &x, &y);
 
-  while (gdk_window_get_window_type (window) != GDK_WINDOW_TOPLEVEL)
+  gdk_event_get_coords (event, &x, &y);
+  event_window = gdk_event_get_window (event);
+  while (gdk_window_get_parent (event_window))
     {
-      gdk_window_coords_to_parent (window, x, y, &x, &y);
-      window = gdk_window_get_effective_parent (window);
+      gdk_window_coords_to_parent (event_window, x, y, &x, &y);
+      event_window = gdk_window_get_parent (event_window);
     }
 
   serial = _gdk_wayland_device_get_implicit_grab_serial (device, event);
