@@ -3565,17 +3565,15 @@ static gboolean
 compute_child_offset (GtkMenu   *menu,
                       GtkWidget *menu_item,
                       gint      *offset,
-                      gint      *height,
-                      gboolean  *is_last_child)
+                      gint      *height)
 {
   GtkMenuPrivate *priv = menu->priv;
   gint item_top_attach;
-  gint item_bottom_attach;
   gint child_offset = 0;
   gint i;
 
   get_effective_child_attach (menu_item, NULL, NULL,
-                              &item_top_attach, &item_bottom_attach);
+                              &item_top_attach, NULL);
 
   /* there is a possibility that we get called before _size_request,
    * so check the height table for safety.
@@ -3589,8 +3587,6 @@ compute_child_offset (GtkMenu   *menu,
   for (i = 0; i < item_top_attach; i++)
     child_offset += priv->heights[i];
 
-  if (is_last_child)
-    *is_last_child = (item_bottom_attach == gtk_menu_get_n_rows (menu));
   if (offset)
     *offset = child_offset;
   if (height)
@@ -3610,14 +3606,12 @@ gtk_menu_scroll_item_visible (GtkMenuShell *menu_shell,
   gint height;
   gint y;
   gint arrow_height;
-  gboolean last_child = 0;
 
   /* We need to check if the selected item fully visible.
    * If not we need to scroll the menu so that it becomes fully
    * visible.
    */
-  if (compute_child_offset (menu, menu_item,
-                            &child_offset, &child_height, &last_child))
+  if (compute_child_offset (menu, menu_item, &child_offset, &child_height))
     {
       y = priv->scroll_offset;
       height = gdk_surface_get_height (gtk_widget_get_surface (widget));
@@ -3952,7 +3946,7 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
             gint child_height;
 
             if (compute_child_offset (menu, menu_shell->priv->active_menu_item,
-                                      &child_offset, &child_height, NULL))
+                                      &child_offset, &child_height))
               child_offset += child_height / 2;
           }
 
