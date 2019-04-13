@@ -143,11 +143,7 @@
  * see #GtkText.
  */
 
-#define NAT_ENTRY_WIDTH  150
-
 #define MAX_ICONS 2
-
-#define UNDERSHOOT_SIZE 20
 
 #define IS_VALID_ICON_POSITION(pos)               \
   ((pos) == GTK_ENTRY_ICON_PRIMARY ||                   \
