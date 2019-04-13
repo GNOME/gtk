@@ -371,6 +371,7 @@
             <child>
               <object class="GtkListBox" id="debug_box">
                 <property name="selection-mode">none</property>
+                <property name="show-separators">True</property>
                 <child>
                   <object class="GtkListBoxRow">
                     <property name="activatable">1</property>
@@ -516,6 +517,7 @@
             <child>
               <object class="GtkListBox" id="misc_box">
                 <property name="selection-mode">none</property>
+                <property name="show-separators">True</property>
                 <child>
                   <object class="GtkListBoxRow">
                     <property name="activatable">1</property>
