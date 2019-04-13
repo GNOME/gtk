@@ -73,6 +73,8 @@ RUN dnf -y install \
 
 RUN pip3 install meson==0.50.0
 
+RUN pip3 install jinja2
+
 ARG HOST_USER_ID=5555
 ENV HOST_USER_ID ${HOST_USER_ID}
 RUN useradd -u $HOST_USER_ID -ms /bin/bash user

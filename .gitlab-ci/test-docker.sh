@@ -37,11 +37,17 @@ xvfb-run -a -s "-screen 0 1024x768x24" \
 # Save the exit code
 exit_code=$?
 
-# We always want to run the report generator
+# We always want to run the report generators
 $srcdir/.gitlab-ci/meson-junit-report.py \
         --project-name=gtk \
         --job-id="${CI_JOB_NAME}" \
         --output=report.xml \
+        meson-logs/testlog.json
+
+$srcdir/.gitlab-ci/meson-html-report.py \
+        --project-name=GTK \
+        --job-id="${CI_JOB_NAME}" \
+        --output=report.html \
         meson-logs/testlog.json
 
 exit $exit_code

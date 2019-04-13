@@ -26,6 +26,7 @@ fedora-x86_64:
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
       - "${CI_PROJECT_DIR}/_build/report.xml"
+      - "${CI_PROJECT_DIR}/_build/report.html"
       - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*.png"
   cache:
     key: "$CI_JOB_NAME"
