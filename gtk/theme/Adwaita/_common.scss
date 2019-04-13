@@ -3715,6 +3715,10 @@ list {
   row { padding: 2px; }
   row.expander { padding: 0px; }
   row.expander .row-header { padding: 2px; }
+
+  &.separators row:not(:first-child) {
+    border-top: 1px solid $borders_color;
+  }
 }
 
 row {
