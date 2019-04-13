@@ -3659,7 +3659,7 @@ gtk_list_box_get_show_separators (GtkListBox *box)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
 
-  g_return_if_fail (GTK_IS_LIST_BOX (box));
+  g_return_val_if_fail (GTK_IS_LIST_BOX (box), FALSE);
 
   return priv->show_separators;
 }
