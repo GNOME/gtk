@@ -36,7 +36,7 @@ REPORT_TEMPLATE = '''
           <li><strong>Total units:</strong> {{ report.total_units }}</li>
           <li><strong>Passed:</strong> {{ report.total_successes }}</li>
           <li><strong>Failed:</strong> {{ report.total_failures }}</li>
-        </u>
+        </ul>
       </div>
     </section>
 
@@ -63,6 +63,7 @@ REPORT_TEMPLATE = '''
         </div>
             {% endif %}
         {% endfor %}
+      </div>
     </section>
     {% endfor %}
 
