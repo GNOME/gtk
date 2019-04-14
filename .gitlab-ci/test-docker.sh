@@ -47,6 +47,7 @@ $srcdir/.gitlab-ci/meson-junit-report.py \
 $srcdir/.gitlab-ci/meson-html-report.py \
         --project-name=GTK \
         --job-id="${CI_JOB_NAME}" \
+        --reftest-output-dir="testsuite/reftests/output" \
         --output=report.html \
         meson-logs/testlog.json
 

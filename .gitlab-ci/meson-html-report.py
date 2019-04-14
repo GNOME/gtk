@@ -17,6 +17,97 @@ REPORT_TEMPLATE = '''
 <head>
   <title>{{ report.project_name }} Test Report</title>
   <meta charset="utf-8" />
+  <style type="text/css">
+body {
+  background: white;
+  color: #333;
+  font-family: 'Cantarell', sans-serif;
+}
+
+h1 {
+  color: #333333;
+  font-size: 1.9em;
+  font-weight: normal;
+  margin-bottom: 1em;
+  border-bottom: 1px solid #333333;
+}
+
+header {
+  position: fixed;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+  z-index: 500;
+  left: 0;
+  top: 0;
+  width: 100%;
+  color: rgba(0, 0, 0, 0.3);
+  transform: translateY(0px);
+  transition: .2s background-color, color;
+  box-sizing: border-box;
+  display: block;
+  visibility: visible;
+  text-align: center;
+}
+
+article {
+  padding-top: 160px;
+  margin: 2em;
+}
+
+div.report-meta {
+  width: auto;
+  border: 1px solid #ccc;
+  padding: .5em 2em;
+  color: #3c3c3c;
+}
+
+span.failure {
+  color: rgb(224, 27, 36);
+  font-weight: bold;
+}
+
+div.result {
+  border-top: 1px solid #c0c0c0;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  width: 100%;
+}
+
+div.result h4 {
+  border-bottom: 1px solid #c0c0c0;
+  margin-bottom: 0.7em;
+}
+
+pre {
+  color: #fafafa;
+  background-color: black;
+  border-radius: 6px;
+  box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.25);
+  font-family: monospace;
+  line-height: 1.2em;
+  border: none;
+  padding: 10px 1em;
+  font-size: 0.9em;
+  overflow: auto;
+  white-space: pre;
+  word-break: normal;
+  word-wrap: normal;
+}
+
+ul.passed li {
+  display: inline;
+}
+
+ul.passed li:after {
+  content: ",";
+}
+
+ul.images li {
+  display: inline;
+}
+  </style>
 </head>
 <body>
   <header>
@@ -49,14 +140,33 @@ REPORT_TEMPLATE = '''
           <li><strong>Passed:</strong> {{ suite_result.n_successes }}</li>
           <li><strong>Failed:</strong> {{ suite_result.n_failures }}</li>
         </ul>
+
+        <div class="successes">
+          <h4>Passed</h4>
+          <ul class="passed">
+            {% for success in suite_result.successes %}
+            <li>{{ success.name }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
         {% for failure in suite_result.failures %}
             {% if loop.first %}
-        <div>
-          <h4>Failures</h4>
-          <ul>
+        <div class="failures">
+          <h4>Failed</h4>
+          <ul class="failed">
             {% endif %}
             <li>{{ failure.name }} - result: <span class="failure">{{ failure.result }}</span><br/>
-            <pre>{{ failure.stdout }}</pre>
+            {% if failure.stdout %}
+            Output: <pre>{{ failure.stdout }}</pre>
+            {% endif %}
+            {% if failure.image_data is defined %}
+            <ul class="images">
+              <li><img alt="ref" src="{{ failure.image_data.ref }}" /></li>
+              <li><img alt="out" src="{{ failure.image_data.out }}" /></li>
+              <li><img alt="diff" src="{{ failure.image_data.diff }}" /></li>
+            </ul>
+            {% endif %}
             </li>
             {% if loop.last %}
           </ul>
@@ -86,6 +196,12 @@ aparser.add_argument('--output', metavar='FILE',
                      help='The output HTML file, stdout by default',
                      type=argparse.FileType('w', encoding='UTF-8'),
                      default=sys.stdout)
+aparser.add_argument('--reftest-suite', metavar='NAME',
+                     help='The name of the reftests suite',
+                     default='reftest')
+aparser.add_argument('--reftest-output-dir', metavar='DIR',
+                     help='The output directory for reftests data',
+                     default=None)
 aparser.add_argument('infile', metavar='FILE',
                      help='The input testlog.json, stdin by default',
                      type=argparse.FileType('r', encoding='UTF-8'),
@@ -110,6 +226,18 @@ for line in args.infile:
         'result': data['result'],
         'stdout': data['stdout'],
     }
+
+    if args.reftest_output_dir is not None and suite_name == args.reftest_suite:
+        filename = unit_name.split(' ')[1]
+        basename = os.path.splitext(filename)[0]
+
+        image_data = {
+            'ref': os.path.join(args.reftest_output_dir, '{}.ref.png'.format(basename)),
+            'out': os.path.join(args.reftest_output_dir, '{}.out.png'.format(basename)),
+            'diff': os.path.join(args.reftest_output_dir, '{}.diff.png'.format(basename)),
+        }
+
+        unit['image_data'] = image_data
 
     units = suites.setdefault(full_suite, [])
     units.append(unit)
