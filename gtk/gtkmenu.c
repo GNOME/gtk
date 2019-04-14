@@ -158,7 +158,6 @@ struct _GtkMenuPopdownData
 typedef struct
 {
   gint effective_top_attach;
-  gint effective_bottom_attach;
 } AttachInfo;
 
 enum {
@@ -363,7 +362,6 @@ menu_ensure_layout (GtkMenu *menu)
             current_row++;
 
           ai->effective_top_attach = current_row;
-          ai->effective_bottom_attach = current_row + 1;
 
           current_row++;
         }
@@ -387,8 +385,7 @@ gtk_menu_get_n_rows (GtkMenu *menu)
 
 static void
 get_effective_child_attach (GtkWidget *child,
-                            int       *t,
-                            int       *b)
+                            int       *t)
 {
   GtkMenu *menu = GTK_MENU (gtk_widget_get_parent (child));
   AttachInfo *ai;
@@ -399,9 +396,6 @@ get_effective_child_attach (GtkWidget *child,
 
   if (t)
     *t = ai->effective_top_attach;
-  if (b)
-    *b = ai->effective_bottom_attach;
-
 }
 
 static void
@@ -2264,7 +2258,7 @@ calculate_line_heights (GtkMenu *menu,
     {
       gint part;
       gint toggle_size;
-      gint t, b;
+      gint t;
       gint child_min, child_nat;
 
       child = children->data;
@@ -2272,7 +2266,7 @@ calculate_line_heights (GtkMenu *menu,
       if (!gtk_widget_get_visible (child))
         continue;
 
-      get_effective_child_attach (child, &t, &b);
+      get_effective_child_attach (child, &t);
 
       gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
                           avail_width,
@@ -2281,10 +2275,10 @@ calculate_line_heights (GtkMenu *menu,
 
       gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child), &toggle_size);
 
-      part = MAX (child_min, toggle_size) / (b - t);
+      part = MAX (child_min, toggle_size);
       min_heights[t] = MAX (min_heights[t], part);
 
-      part = MAX (child_nat, toggle_size) / (b - t);
+      part = MAX (child_nat, toggle_size);
       nat_heights[t] = MAX (nat_heights[t], part);
     }
 
@@ -2382,16 +2376,16 @@ gtk_menu_size_allocate (GtkWidget *widget,
 
       if (gtk_widget_get_visible (child))
         {
-          gint t, b;
+          gint t;
 
-          get_effective_child_attach (child, &t, &b);
+          get_effective_child_attach (child, &t);
 
           child_allocation.width = base_width;
           child_allocation.height = 0;
           child_allocation.x = 0;
           child_allocation.y = - priv->scroll_offset;
 
-          for (i = 0; i < b; i++)
+          for (i = 0; i < t + 1; i++)
             {
               if (i < t)
                 child_allocation.y += priv->heights[i];
@@ -2475,15 +2469,12 @@ static void gtk_menu_measure (GtkWidget      *widget,
       while (children)
         {
           gint toggle_size;
-          gint t, b;
 
           child = children->data;
           children = children->next;
 
           if (! gtk_widget_get_visible (child))
             continue;
-
-          get_effective_child_attach (child, &t, &b);
 
           /* It's important to size_request the child
            * before doing the toggle size request, in
@@ -3528,7 +3519,7 @@ compute_child_offset (GtkMenu   *menu,
   gint child_offset = 0;
   gint i;
 
-  get_effective_child_attach (menu_item, &item_top_attach, NULL);
+  get_effective_child_attach (menu_item, &item_top_attach);
 
   /* there is a possibility that we get called before _size_request,
    * so check the height table for safety.
