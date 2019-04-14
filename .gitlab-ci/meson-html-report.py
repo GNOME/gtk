@@ -63,9 +63,24 @@ div.report-meta {
   color: #3c3c3c;
 }
 
-span.failure {
-  color: rgb(224, 27, 36);
+span.result {
   font-weight: bold;
+}
+
+span.pass {
+  color: rgb(51, 209, 122);
+}
+
+span.skip {
+  color: rgb(255, 163, 72);
+}
+
+span.fail {
+  color: rgb(224, 27, 36);
+}
+
+span.xfail {
+  color: rgb(163, 71, 186);
 }
 
 div.result {
@@ -102,6 +117,14 @@ ul.passed li {
 
 ul.passed li:after {
   content: ",";
+}
+
+ul.passed li:last-child:after {
+  content: "";
+}
+
+ul.images {
+  padding-bottom: 1em;
 }
 
 ul.images li {
@@ -144,35 +167,78 @@ ul.images li {
         <div class="successes">
           <h4>Passed</h4>
           <ul class="passed">
-            {% for success in suite_result.successes %}
-            <li>{{ success.name }}</li>
+            {% for success in suite_result.successes if success.result == 'OK' %}
+            <li>{{ success.name }} - result: <span class="result pass">{{ success.result }}</li>
+            {% else %}
+            <li>None</li>
+            {% endfor %}
+          </ul>
+
+          <h4>Skipped</h4>
+          <ul>
+            {% for success in suite_result.successes if success.result == 'SKIP' %}
+            <li>{{ success.name }} - result: <span class="result skip">{{ success.result }}</li>
+            {% else %}
+            <li>None</li>
+            {% endfor %}
+          </ul>
+
+          <h4>Expected failures</h4>
+          <ul>
+          {% for success in suite_result.successes if success.result == 'EXPECTEDFAIL' %}
+            <li>{{ success.name }} - result: <span class="result xfail">{{ success.result }}</span><br/>
+            {% if success.stdout %}
+              Output: <pre>{{ success.stdout }}</pre>
+            {% endif %}
+            {% if success.image_data is defined %}
+              <ul class="images">
+                <li><img alt="ref" src="{{ success.image_data.ref }}" /></li>
+                <li><img alt="out" src="{{ success.image_data.out }}" /></li>
+                <li><img alt="diff" src="{{ success.image_data.diff }}" /></li>
+              </ul>
+            {% endif %}
+            </li>
+          {% else %}
+            <li>None</li>
+          {% endfor %}
+          </ul>
+        </div>
+
+        <div class="failures">
+          <h4>Failed</h4>
+          <ul class="failed">
+            {% for failure in suite_result.failures if failure.result == 'FAIL' %}
+            <li>{{ failure.name }} - result: <span class="result fail">{{ failure.result }}</span><br/>
+              {% if failure.stdout %}
+              Output: <pre>{{ failure.stdout }}</pre>
+              {% endif %}
+              {% if failure.image_data is defined %}
+              <ul class="images">
+                <li><img alt="ref" src="{{ failure.image_data.ref }}" /></li>
+                <li><img alt="out" src="{{ failure.image_data.out }}" /></li>
+                <li><img alt="diff" src="{{ failure.image_data.diff }}" /></li>
+              </ul>
+              {% endif %}
+            </li>
+            {% else %}
+            <li>None</li>
+            {% endfor %}
+          </ul>
+
+          <h4>Timed out</h4>
+          <ul class="failed">
+            {% for failure in suite_result.failures if failure.result == 'TIMEOUT' %}
+            <li>{{ failure.name }} - result: <span class="result fail">{{ failure.result }}</span><br/>
+              {% if failure.stdout %}
+              Output: <pre>{{ failure.stdout }}</pre>
+              {% endif %}
+            </li>
+            {% else %}
+            <li>None</li>
             {% endfor %}
           </ul>
         </div>
 
-        {% for failure in suite_result.failures %}
-            {% if loop.first %}
-        <div class="failures">
-          <h4>Failed</h4>
-          <ul class="failed">
-            {% endif %}
-            <li>{{ failure.name }} - result: <span class="failure">{{ failure.result }}</span><br/>
-            {% if failure.stdout %}
-            Output: <pre>{{ failure.stdout }}</pre>
-            {% endif %}
-            {% if failure.image_data is defined %}
-            <ul class="images">
-              <li><img alt="ref" src="{{ failure.image_data.ref }}" /></li>
-              <li><img alt="out" src="{{ failure.image_data.out }}" /></li>
-              <li><img alt="diff" src="{{ failure.image_data.diff }}" /></li>
-            </ul>
-            {% endif %}
-            </li>
-            {% if loop.last %}
-          </ul>
-        </div>
-            {% endif %}
-        {% endfor %}
       </div>
     </section>
     {% endfor %}
