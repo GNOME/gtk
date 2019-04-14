@@ -52,7 +52,7 @@ header {
 }
 
 article {
-  padding-top: 160px;
+  padding-top: 200px;
   margin: 2em;
 }
 
