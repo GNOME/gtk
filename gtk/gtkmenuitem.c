@@ -103,6 +103,13 @@
  * the .left or .right style class.
  */
 
+/* Directions for submenus */
+typedef enum
+{
+  GTK_DIRECTION_LEFT,
+  GTK_DIRECTION_RIGHT
+} GtkSubmenuDirection;
+
 
 enum {
   ACTIVATE,

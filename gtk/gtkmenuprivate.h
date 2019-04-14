@@ -31,14 +31,6 @@
 
 G_BEGIN_DECLS
 
-/* Directions for submenus */
-typedef enum
-{
-  GTK_DIRECTION_LEFT,
-  GTK_DIRECTION_RIGHT
-} GtkSubmenuDirection;
-
-
 struct _GtkMenuPrivate
 {
   GtkWidget *parent_menu_item;
