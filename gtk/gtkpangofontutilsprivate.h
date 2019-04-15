@@ -36,6 +36,9 @@ void     _gtk_pango_font_release_ft_face     (PangoFont    *font,
 
 gboolean _gtk_pango_font_release_ft_items    (gpointer      ft_items);
 
+GHashTable *
+_gtk_font_chooser_widget_get_win32_locales   (void);
+
 #endif /* HAVE_HARFBUZZ */
 
 #endif /* __GTK_PANGO_FONT_UTILS_PRIVATE_H__ */
