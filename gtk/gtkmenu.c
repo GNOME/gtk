@@ -246,8 +246,7 @@ static void     gtk_menu_real_insert       (GtkMenuShell     *menu_shell,
 static void     gtk_menu_handle_scrolling  (GtkMenu          *menu,
                                             gint              event_x,
                                             gint              event_y,
-                                            gboolean          enter,
-                                            gboolean          motion);
+                                            gboolean          enter);
 static gboolean gtk_menu_focus             (GtkWidget        *widget,
                                             GtkDirectionType direction);
 static gint     gtk_menu_get_popup_delay   (GtkMenuShell     *menu_shell);
@@ -2761,7 +2760,7 @@ gtk_menu_motion (GtkEventController *controller,
       if (priv->ignore_button_release)
         priv->ignore_button_release = FALSE;
 
-      gtk_menu_handle_scrolling (GTK_MENU (menu_item), event->x_root, event->y_root, TRUE, TRUE);
+      gtk_menu_handle_scrolling (GTK_MENU (menu_item), event->x_root, event->y_root, TRUE);
     }
 
   /*We received the event for one of two reasons:
@@ -2912,8 +2911,7 @@ static void
 gtk_menu_handle_scrolling (GtkMenu *menu,
                            gint     x,
                            gint     y,
-                           gboolean enter,
-                           gboolean motion)
+                           gboolean enter)
 {
   GtkMenuPrivate *priv = menu->priv;
   GtkMenuShell *menu_shell;
@@ -3088,7 +3086,7 @@ gtk_menu_enter (GtkEventController *controller,
 
       if (!menu_shell->priv->ignore_enter)
         gtk_menu_handle_scrolling (GTK_MENU (user_data),
-                                   event->x_root, event->y_root, TRUE, TRUE);
+                                   event->x_root, event->y_root, TRUE);
     }
 }
 
@@ -3117,7 +3115,7 @@ gtk_menu_leave (GtkEventController *controller,
   source_device = gdk_event_get_source_device ((GdkEvent *) event);
 
   if (gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHSCREEN)
-    gtk_menu_handle_scrolling (menu, event->x_root, event->y_root, FALSE, TRUE);
+    gtk_menu_handle_scrolling (menu, event->x_root, event->y_root, FALSE);
 }
 
 static gboolean
