@@ -263,6 +263,14 @@ activate_quit (GSimpleAction *action,
 }
 
 static void
+activate_inspector (GSimpleAction *action,
+                    GVariant      *parameter,
+                    gpointer       user_data)
+{
+  gtk_window_set_interactive_debugging (TRUE);
+}
+
+static void
 spin_value_changed (GtkAdjustment *adjustment, GtkWidget *label)
 {
   GtkWidget *w;
@@ -1935,6 +1943,7 @@ main (int argc, char *argv[])
   static GActionEntry app_entries[] = {
     { "about", activate_about, NULL, NULL, NULL },
     { "quit", activate_quit, NULL, NULL, NULL },
+    { "inspector", activate_inspector, NULL, NULL, NULL },
     { "main", NULL, "s", "'steak'", NULL },
     { "wine", NULL, NULL, "false", NULL },
     { "beer", NULL, NULL, "false", NULL },
