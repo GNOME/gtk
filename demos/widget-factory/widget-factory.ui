@@ -18,6 +18,10 @@
     </section>
     <section>
       <item>
+        <attribute name="label" translatable="yes">_Inspector</attribute>
+        <attribute name="action">app.inspector</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">_Keyboard Shortcuts</attribute>
         <attribute name="action">win.show-help-overlay</attribute>
       </item>
