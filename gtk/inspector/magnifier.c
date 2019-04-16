@@ -86,7 +86,7 @@ gtk_inspector_magnifier_add_renderer (GtkInspectorMagnifier *self,
 
   paintable = gtk_renderer_paintable_new (renderer, priv->paintable);
   g_object_set_data_full (G_OBJECT (paintable), "description", g_strdup (description), g_free);
-  g_object_unref (renderer);
+  g_clear_object (&renderer);
 
   g_list_store_append (priv->renderers, paintable);
   g_object_unref (paintable);
