@@ -86,10 +86,18 @@ extra_demo_sources = files(['main.c',
                             'bluroverlay.c',
                             'demotaggedentry.c'])
 
-if harfbuzz_dep.found() and pangoft_dep.found()
+if build_with_harfbuzz
   demos += files('font_features.c')
-  extra_demo_sources += files(['script-names.c', 'language-names.c'])
-  gtkdemo_deps += [ harfbuzz_dep, ]
+  extra_demo_sources += files('../../gtk/gtkpangofontutils.c')
+  gtkdemo_deps += [ harfbuzz_dep ]
+  if pangoft_dep.found()
+    gtkdemo_deps += [ pangoft_dep ]
+  endif
+  if os_win32
+    gtkdemo_deps += [ ft2_dep ]
+  else
+    extra_demo_sources += files(['script-names.c', 'language-names.c'])
+  endif
 endif
 
 if os_unix
