@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkTextTagTable" id="tags">
     <child type="tag">
@@ -18,7 +19,6 @@
     <property name="tag-table">tags</property>
     <signal name="changed" handler="text_changed"/>
   </object>
-
   <template class="NodeEditorWindow" parent="GtkApplicationWindow">
     <style>
       <class name="devel"/>
@@ -30,7 +30,7 @@
       <object class="GtkHeaderBar" id="header">
         <property name="title" translatable="yes">GTK Node Editor</property>
         <property name="show-title-buttons">1</property>
-        <child>
+        <child type="start">
           <object class="GtkBox">
             <child>
               <object class="GtkButton">
@@ -51,27 +51,22 @@
               </object>
             </child>
           </object>
-          <packing>
-            <property name="pack-type">start</property>
-          </packing>
         </child>
         <child type="title">
           <object class="GtkLabel">
             <property name="label" translatable="yes">GTK Node Editor</property>
           </object>
         </child>
-        <child>
+        <child type="end">
           <object class="GtkToggleButton">
             <property name="icon-name">view-more-symbolic</property>
           </object>
-          <packing>
-            <property name="pack-type">end</property>
-          </packing>
         </child>
       </object>
     </child>
     <child>
       <object class="GtkPaned">
+        <property name="shrink-child2">false</property>
         <property name="position">99999</property>
         <child>
           <object class="GtkScrolledWindow">
@@ -100,7 +95,7 @@
               <object class="GtkViewport">
                 <child>
                   <object class="GtkPicture" id="picture">
-                    <property name="can-shrink">false</property>
+                    <property name="can-shrink">0</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                   </object>
@@ -108,9 +103,6 @@
               </object>
             </child>
           </object>
-          <packing>
-            <property name="shrink">false</property>
-          </packing>
         </child>
       </object>
     </child>
