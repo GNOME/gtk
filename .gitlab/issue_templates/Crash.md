@@ -16,7 +16,7 @@
  - Which version of GTK you are using
  - What operating system and version
   - for Linux, which distribution
- - If you built GTK+ yourself, the list of options used to configure the build
+ - If you built GTK yourself, the list of options used to configure the build
 -->
 
 ## Warnings
