@@ -775,8 +775,8 @@ _gdk_device_manager_core_handle_focus (GdkSurface *surface,
 #endif /* XINPUT_2 */
           mode != NotifyUngrab)
         toplevel->has_pointer_focus = (focus_in) ? FALSE : TRUE;
+      G_GNUC_FALLTHROUGH;
 
-      /* fall through */
     case NotifyNonlinear:
     case NotifyNonlinearVirtual:
       if (mode != NotifyGrab &&

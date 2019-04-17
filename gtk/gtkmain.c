@@ -1685,6 +1685,7 @@ handle_pointing_event (GdkEvent *event)
       if (event->crossing.mode == GDK_CROSSING_GRAB ||
           event->crossing.mode == GDK_CROSSING_UNGRAB)
         break;
+      G_GNUC_FALLTHROUGH;
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
       old_target = update_pointer_focus_state (toplevel, event, NULL);
@@ -1697,6 +1698,7 @@ handle_pointing_event (GdkEvent *event)
       if (event->crossing.mode == GDK_CROSSING_GRAB ||
           event->crossing.mode == GDK_CROSSING_UNGRAB)
         break;
+      G_GNUC_FALLTHROUGH;
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_UPDATE:
     case GDK_MOTION_NOTIFY:
@@ -1981,7 +1983,8 @@ gtk_main_do_event (GdkEvent *event)
                 gtk_window_set_mnemonics_visible (GTK_WINDOW (window), FALSE);
             }
         }
-      /* else fall through */
+      G_GNUC_FALLTHROUGH;
+
     case GDK_SCROLL:
     case GDK_BUTTON_PRESS:
     case GDK_TOUCH_BEGIN:

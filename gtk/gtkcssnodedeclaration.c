@@ -316,14 +316,17 @@ gtk_css_node_declaration_has_class (const GtkCssNodeDeclaration *decl,
     case 3:
       if (classes[2] == class_quark)
         return TRUE;
+      G_GNUC_FALLTHROUGH;
 
     case 2:
       if (classes[1] == class_quark)
         return TRUE;
+      G_GNUC_FALLTHROUGH;
 
     case 1:
       if (classes[0] == class_quark)
         return TRUE;
+      G_GNUC_FALLTHROUGH;
 
     case 0:
       return FALSE;

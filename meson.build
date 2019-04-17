@@ -11,7 +11,7 @@ project('gtk', 'c',
         license: 'LGPLv2.1+')
 
 glib_major_req = 2
-glib_minor_req = 55
+glib_minor_req = 59
 glib_micro_req = 0
 
 if glib_minor_req.is_odd()
@@ -252,6 +252,7 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Werror=array-bounds',
     '-Werror=empty-body',
     '-Werror=implicit',
+    '-Werror=implicit-fallthrough',
     '-Werror=init-self',
     '-Werror=int-to-pointer-cast',
     '-Werror=main',
@@ -264,6 +265,7 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Werror=return-type',
     '-Werror=sequence-point',
     '-Werror=trigraphs',
+    '-Werror=vla',
     '-Werror=write-strings',
   ]
 else

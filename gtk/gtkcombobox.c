@@ -2238,7 +2238,7 @@ gtk_combo_box_real_move_active (GtkComboBox   *combo_box,
                              &iter, &new_iter);
           break;
         }
-      /* else fall through */
+      G_GNUC_FALLTHROUGH;
 
     case GTK_SCROLL_PAGE_FORWARD:
     case GTK_SCROLL_PAGE_DOWN:
@@ -2256,7 +2256,7 @@ gtk_combo_box_real_move_active (GtkComboBox   *combo_box,
                              &iter, &new_iter);
           break;
         }
-      /* else fall through */
+      G_GNUC_FALLTHROUGH;
 
     case GTK_SCROLL_PAGE_BACKWARD:
     case GTK_SCROLL_PAGE_UP:
