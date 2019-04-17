@@ -132,8 +132,8 @@
  * # GtkDialog as GtkBuildable
  *
  * The GtkDialog implementation of the #GtkBuildable interface exposes the
- * @message_area and @action_area as internal children with the names
- * “action_area” and “action_area”.
+ * @content_area and @action_area as internal children with the names
+ * “content_area” and “action_area”.
  *
  * GtkDialog supports a custom <action-widgets> element, which can contain
  * multiple <action-widget> elements. The “response” attribute specifies a
