@@ -3295,7 +3295,7 @@ colorswatch {
                 inset 0 -1px transparentize(black, 0.6);
   }
   &:backdrop,
-  &:backdrop:selectedi,
+  &:backdrop:selected,
   &.dark:backdrop,
   &.dark:backdrop:selected {
     background-image: none;
