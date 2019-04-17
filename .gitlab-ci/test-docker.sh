@@ -16,6 +16,7 @@ meson \
         -Dwayland-backend=true \
         -Dbroadway-backend=true \
         -Dvulkan=yes \
+        --werror \
         _build $srcdir
 unset CCACHE_DISABLE
 
