@@ -25,6 +25,7 @@ demos = files([
   'event_axes.c',
   'expander.c',
   'filtermodel.c',
+  'fishbowl.c',
   'foreigndrawing.c',
   'gestures.c',
   'glarea.c',
@@ -45,6 +46,7 @@ demos = files([
   'offscreen_window2.c',
   'overlay.c',
   'overlay2.c',
+  'paint.c',
   'panes.c',
   'pickers.c',
   'pixbufs.c',
@@ -61,6 +63,7 @@ demos = files([
   'spinbutton.c',
   'spinner.c',
   'stack.c',
+  'tabs.c',
   'textmask.c',
   'textview.c',
   'textscroll.c',
@@ -83,6 +86,8 @@ if os_unix
 endif
 
 gtkdemo_sources = demos + files([
+  'gtkfishbowl.c',
+  'gtkfishbowl.h',
   'main.c',
 ])
 
