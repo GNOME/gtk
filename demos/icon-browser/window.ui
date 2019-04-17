@@ -121,6 +121,7 @@
     <property name="hide-on-close">1</property>
     <child internal-child="content_area">
       <object class="GtkBox">
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkGrid">
             <property name="margin">10</property>
