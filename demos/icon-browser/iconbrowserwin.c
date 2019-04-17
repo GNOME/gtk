@@ -205,6 +205,7 @@ add_context (IconBrowserWindow *win,
   g_hash_table_insert (win->contexts, c->id, c);
 
   row = gtk_label_new (name);
+  gtk_label_set_xalign (GTK_LABEL (row), 0);
   g_object_set_data (G_OBJECT (row), "context", c);
   gtk_widget_show (row);
   g_object_set (row, "margin", 10, NULL);
