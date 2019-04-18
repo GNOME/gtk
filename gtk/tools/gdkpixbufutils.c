@@ -364,11 +364,14 @@ gtk_make_symbolic_texture_from_resource (const char  *path,
                                          GError     **error)
 {
   GdkPixbuf *pixbuf;
-  GdkTexture *texture;
+  GdkTexture *texture = NULL;
 
   pixbuf = gtk_make_symbolic_pixbuf_from_resource (path, width, height, scale, error);
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
-  g_object_unref (pixbuf);
+  if (pixbuf)
+    {
+      texture = gdk_texture_new_for_pixbuf (pixbuf);
+      g_object_unref (pixbuf);
+    }
 
   return texture;
 }
