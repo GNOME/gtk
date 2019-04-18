@@ -354,12 +354,12 @@ struct _GtkLabelSelectionInfo
 {
   gint selection_anchor;
   gint selection_end;
-  GtkWidget *popup_menu;
   GtkCssNode *selection_node;
   GdkContentProvider *provider;
 
   GList *links;
   GtkLabelLink *active_link;
+  GtkLabelLink *context_link;
 
   GtkGesture *drag_gesture;
   GtkGesture *click_gesture;
@@ -442,7 +442,6 @@ static gboolean gtk_label_focus         (GtkWidget         *widget,
 
 static void gtk_label_realize           (GtkWidget        *widget);
 static void gtk_label_unrealize         (GtkWidget        *widget);
-static void gtk_label_unmap             (GtkWidget        *widget);
 
 static void gtk_label_motion            (GtkEventControllerMotion *controller,
                                          double                    x,
@@ -535,8 +534,6 @@ static void gtk_label_move_cursor        (GtkLabel        *label,
 					  gboolean         extend_selection);
 static void gtk_label_copy_clipboard     (GtkLabel        *label);
 static void gtk_label_select_all         (GtkLabel        *label);
-static void gtk_label_do_popup           (GtkLabel        *label,
-					  const GdkEvent  *event);
 static gint gtk_label_move_forward_word  (GtkLabel        *label,
 					  gint             start);
 static gint gtk_label_move_backward_word (GtkLabel        *label,
@@ -634,13 +631,12 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->snapshot = gtk_label_snapshot;
   widget_class->realize = gtk_label_realize;
   widget_class->unrealize = gtk_label_unrealize;
-  widget_class->unmap = gtk_label_unmap;
   widget_class->root = gtk_label_root;
   widget_class->unroot = gtk_label_unroot;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
+  widget_class->popup_menu = gtk_label_popup_menu;
   widget_class->drag_data_get = gtk_label_drag_data_get;
   widget_class->grab_focus = gtk_label_grab_focus;
-  widget_class->popup_menu = gtk_label_popup_menu;
   widget_class->focus = gtk_label_focus;
   widget_class->get_request_mode = gtk_label_get_request_mode;
   widget_class->measure = gtk_label_measure;
@@ -1312,6 +1308,7 @@ gtk_label_init (GtkLabel *label)
 
   gtk_label_add_context_actions (label);
   menu = gtk_label_get_default_menu ();
+  g_object_set (label, "handle-context-menu", FALSE, NULL);
   gtk_widget_set_context_menu (GTK_WIDGET (label), menu);
   g_object_unref (menu);
 }
@@ -4105,24 +4102,6 @@ gtk_label_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_label_parent_class)->unrealize (widget);
 }
 
-static void
-gtk_label_unmap (GtkWidget *widget)
-{
-  GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-
-  if (priv->select_info)
-    {
-      if (priv->select_info->popup_menu)
-        {
-          gtk_widget_destroy (priv->select_info->popup_menu);
-          priv->select_info->popup_menu = NULL;
-        }
-    }
-
-  GTK_WIDGET_CLASS (gtk_label_parent_class)->unmap (widget);
-}
-
 static gboolean
 get_layout_index (GtkLabel *label,
                   gint      x,
@@ -4461,7 +4440,7 @@ gtk_label_click_gesture_pressed (GtkGestureClick *gesture,
         {
           info->link_clicked = 1;
           update_link_state (label);
-          gtk_label_do_popup (label, event);
+          gtk_widget_popup_context_menu (widget);
           return;
         }
       else if (button == GDK_BUTTON_PRIMARY)
@@ -4484,7 +4463,7 @@ gtk_label_click_gesture_pressed (GtkGestureClick *gesture,
   info->select_words = FALSE;
 
   if (gdk_event_triggers_context_menu (event))
-    gtk_label_do_popup (label, event);
+    gtk_widget_popup_context_menu (GTK_WIDGET (label));
   else if (button == GDK_BUTTON_PRIMARY)
     {
       if (!gtk_widget_has_focus (widget))
@@ -5963,39 +5942,16 @@ gtk_label_select_all (GtkLabel *label)
 }
 
 static void
-popup_menu_detach (GtkWidget *attach_widget,
-		   GtkMenu   *menu)
-{
-  GtkLabel *label = GTK_LABEL (attach_widget);
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-
-  if (priv->select_info)
-    priv->select_info->popup_menu = NULL;
-}
-
-static gboolean
-gtk_label_popup_menu (GtkWidget *widget)
-{
-  gtk_label_do_popup (GTK_LABEL (widget), NULL);
-
-  return TRUE;
-}
-
-static void
 open_link_activated (GSimpleAction *action,
                      GVariant      *parameter,
                      gpointer       user_data)
 {
   GtkLabel *label = GTK_LABEL (user_data);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkLabelLink *link = NULL;
-  int pos = g_variant_get_int32 (parameter);
+  GtkLabelLink *link = priv->select_info->context_link;
 
-  link = g_list_nth_data (priv->select_info->links, pos);
-  if (link == NULL)
-    return;
-
-  emit_activate_link (label, link);
+  if (link)
+    emit_activate_link (label, link);
 }
 
 static void
@@ -6005,16 +5961,15 @@ copy_link_activated (GSimpleAction *action,
 {
   GtkLabel *label = GTK_LABEL (user_data);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkLabelLink *link = NULL;
-  int pos = g_variant_get_int32 (parameter);
-  GdkClipboard *clipboard;
+  GtkLabelLink *link = priv->select_info->context_link;
 
-  link = g_list_nth_data (priv->select_info->links, pos);
-  if (link == NULL)
-    return;
+  if (link)
+    {
+      GdkClipboard *clipboard;
 
-  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label));
-  gdk_clipboard_set_text (clipboard, link->uri);
+      clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label));
+      gdk_clipboard_set_text (clipboard, link->uri);
+    }
 }
 
 static void
@@ -6050,18 +6005,38 @@ gtk_label_update_clipboard_actions (GtkLabel *label)
 }
 
 static void
+gtk_label_update_link_actions (GtkLabel *label)
+{
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+  gboolean have_selection = FALSE;
+  GAction *action;
+  GtkLabelLink *link;
+
+  have_selection = priv->select_info->selection_anchor != priv->select_info->selection_end;
+  if (priv->select_info->link_clicked)
+    link = priv->select_info->active_link;
+  else
+    link = gtk_label_get_focus_link (label);
+
+  action = g_action_map_lookup_action (priv->context_actions, "open-link");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !have_selection && link);
+  action = g_action_map_lookup_action (priv->context_actions, "copy-link");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !have_selection && link);
+}
+
+static void
 gtk_label_add_context_actions (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
   GActionEntry entries[] = {
-    { "open-link", open_link_activated, "i", NULL, NULL },
-    { "copy-link", copy_link_activated, "i", NULL, NULL },
     { "cut-clipboard", NULL, NULL, NULL, NULL },
     { "copy-clipboard", copy_clipboard_activated, NULL, NULL, NULL },
     { "paste-clipboard", NULL, NULL, NULL, NULL },
     { "delete-selection", NULL, NULL, NULL, NULL },
     { "select-all", select_all_activated, NULL, NULL, NULL },
+    { "open-link", open_link_activated, NULL, NULL, NULL },
+    { "copy-link", copy_link_activated, NULL, NULL, NULL },
   };
 
   GSimpleActionGroup *actions = g_simple_action_group_new ();
@@ -6081,6 +6056,10 @@ gtk_label_add_context_actions (GtkLabel *label)
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
   action = g_action_map_lookup_action (G_ACTION_MAP (actions), "select-all");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "open-link");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "copy-link");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
 
   gtk_widget_insert_action_group (GTK_WIDGET (label), "context", G_ACTION_GROUP (actions));
 }
@@ -6089,6 +6068,7 @@ static GMenuModel *
 gtk_label_get_default_menu (void)
 {
   GMenu *menu, *section;
+  GMenuItem *item;
 
   menu = g_menu_new ();
 
@@ -6105,89 +6085,39 @@ gtk_label_get_default_menu (void)
   g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
   g_object_unref (section);
 
-  return G_MENU_MODEL (menu);
-}
-
-static GMenuModel *
-get_link_context_menu (GtkLabel     *label,
-                       GtkLabelLink *link)
-{
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GMenu *menu;
-  GMenuItem *item;
-  int index;
-
-  index = g_list_index (priv->select_info->links, link);
-
-  menu = g_menu_new ();
+  section = g_menu_new ();
   item = g_menu_item_new (_("_Open Link"), "context.open-link");
-  g_menu_item_set_attribute (item, "target", "i", index);
-  g_menu_append_item (menu, item);
+  g_menu_item_set_attribute (item, "hidden-when", "s", "action-disabled");
+  g_menu_append_item (section, item);
   g_object_unref (item);
-
-  item = g_menu_item_new (_("_Copy Link Address"), "context.copy-link");
-  g_menu_item_set_attribute (item, "target", "i", index);
-  g_menu_append_item (menu, item);
+  item = g_menu_item_new (_("Copy _Link Address"), "context.copy-link");
+  g_menu_item_set_attribute (item, "hidden-when", "s", "action-disabled");
+  g_menu_append_item (section, item);
   g_object_unref (item);
+  g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
+  g_object_unref (section);
 
   return G_MENU_MODEL (menu);
 }
 
-static void
-gtk_label_do_popup (GtkLabel       *label,
-                    const GdkEvent *event)
+static gboolean
+gtk_label_popup_menu (GtkWidget *widget)
 {
+  GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkWidget *menu;
-  GMenuModel *model;
-  GtkLabelLink *link;
-  gboolean have_selection;
 
   if (!priv->select_info)
-    return;
+    return FALSE;
 
   gtk_label_update_clipboard_actions (label);
+  gtk_label_update_link_actions (label);
 
-  if (priv->select_info->popup_menu)
-    gtk_widget_destroy (priv->select_info->popup_menu);
-
-  have_selection = priv->select_info->selection_anchor != priv->select_info->selection_end;
-  if (event)
-    {
-      if (priv->select_info->link_clicked)
-        link = priv->select_info->active_link;
-      else
-        link = NULL;
-    }
+  if (priv->select_info->link_clicked)
+    priv->select_info->context_link = priv->select_info->active_link;
   else
-    link = gtk_label_get_focus_link (label);
+    priv->select_info->context_link = gtk_label_get_focus_link (label);
 
-  if (!have_selection && link)
-    model = get_link_context_menu (label, link);
-  else
-    model = g_object_ref (gtk_widget_get_context_menu (GTK_WIDGET (label)));
-
-  priv->select_info->popup_menu = menu = gtk_menu_new_from_model (model);
-
-  g_object_unref (model);
-
-  g_object_set_data (G_OBJECT (menu), "link", link);
-
-  gtk_style_context_add_class (gtk_widget_get_style_context (menu), GTK_STYLE_CLASS_CONTEXT_MENU);
-  gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (label), popup_menu_detach);
-
-  if (event && gdk_event_triggers_context_menu (event))
-    gtk_menu_popup_at_pointer (GTK_MENU (menu), event);
-  else
-    {
-      gtk_menu_popup_at_widget (GTK_MENU (menu),
-                                GTK_WIDGET (label),
-                                GDK_GRAVITY_SOUTH,
-                                GDK_GRAVITY_NORTH_WEST,
-                                event);
-
-      gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
-    }
+  return GTK_WIDGET_CLASS (gtk_label_parent_class)->popup_menu (widget);
 }
 
 static void

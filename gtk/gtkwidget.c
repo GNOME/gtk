@@ -73,6 +73,7 @@
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
 #include "gtknativeprivate.h"
+#include "gtkgestureclick.h"
 
 #include "a11y/gtkwidgetaccessible.h"
 #include "inspector/window.h"
@@ -576,6 +577,7 @@ enum {
   PROP_CSS_NAME,
   PROP_LAYOUT_MANAGER,
   PROP_CONTEXT_MENU,
+  PROP_HANDLE_CONTEXT_MENU,
   NUM_PROPERTIES
 };
 
@@ -665,6 +667,7 @@ static void             gtk_widget_real_measure                 (GtkWidget      
 static void             gtk_widget_real_state_flags_changed     (GtkWidget        *widget,
                                                                  GtkStateFlags     old_state);
 static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
+static gboolean         gtk_widget_real_popup_menu              (GtkWidget        *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
 static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widget,
@@ -862,6 +865,61 @@ gtk_widget_real_unroot (GtkWidget *widget)
 }
 
 static void
+popup_menu_detach (GtkWidget *widget,
+                   GtkMenu   *menu)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  priv->popup_menu = NULL;
+}
+
+static gboolean
+gtk_widget_real_popup_menu (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkWidget *menu;
+  const GdkEvent *event;
+
+  if (!gtk_widget_get_realized (widget))
+    return FALSE;
+
+  if (!priv->context_menu)
+    return FALSE;
+
+  if (priv->popup_menu)
+    gtk_widget_destroy (priv->popup_menu);
+
+  priv->popup_menu = menu = gtk_menu_new_from_model (priv->context_menu);
+  gtk_style_context_add_class (gtk_widget_get_style_context (menu), GTK_STYLE_CLASS_CONTEXT_MENU);
+  gtk_menu_attach_to_widget (GTK_MENU (menu), widget, popup_menu_detach);
+
+  event = gtk_get_current_event ();
+  if (event && gdk_event_triggers_context_menu (event))
+    gtk_menu_popup_at_pointer (GTK_MENU (menu), event);
+  else
+    {
+      gtk_menu_popup_at_widget (GTK_MENU (menu),
+                                widget,
+                                GDK_GRAVITY_SOUTH_EAST,
+                                GDK_GRAVITY_NORTH_WEST,
+                                event);
+      gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
+    }
+
+  return TRUE;
+}
+
+gboolean
+gtk_widget_popup_context_menu (GtkWidget *widget)
+{
+  gboolean handled;
+
+  g_signal_emit (widget, widget_signals[POPUP_MENU], 0, &handled);
+
+  return handled;
+}
+
+static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -923,6 +981,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->can_activate_accel = gtk_widget_real_can_activate_accel;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
   klass->style_updated = gtk_widget_real_style_updated;
+  klass->popup_menu = gtk_widget_real_popup_menu;
 
   /* Accessibility support */
   klass->priv->accessible_type = GTK_TYPE_ACCESSIBLE;
@@ -1367,6 +1426,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                          P_("The menu model used for this widgets' context menu"),
                          G_TYPE_MENU_MODEL,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  widget_props[PROP_HANDLE_CONTEXT_MENU] =
+      g_param_spec_boolean ("handle-context-menu",
+                            P_("Handle Context Menu"),
+                            P_("Whether the context menu should be handled automatically"),
+                            TRUE,
+                            GTK_PARAM_READWRITE);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, widget_props);
 
@@ -2310,6 +2376,9 @@ gtk_widget_set_property (GObject         *object,
     case PROP_CONTEXT_MENU:
       gtk_widget_set_context_menu (widget, g_value_get_object (value));
       break;
+    case PROP_HANDLE_CONTEXT_MENU:
+      priv->handle_context_menu = g_value_get_boolean (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2458,6 +2527,9 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_CONTEXT_MENU:
       g_value_set_object (value, gtk_widget_get_context_menu (widget));
+      break;
+    case PROP_HANDLE_CONTEXT_MENU:
+      g_value_set_boolean (value, priv->handle_context_menu);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2805,6 +2877,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->highlight_resize = FALSE;
 #endif
   priv->can_target = TRUE;
+  priv->handle_context_menu = TRUE;
 
   switch (_gtk_widget_get_direction (widget))
     {
@@ -8225,6 +8298,12 @@ gtk_widget_real_unrealize (GtkWidget *widget)
   priv->realized = FALSE;
 
   g_clear_object (&priv->surface);
+
+  if (priv->popup_menu)
+    {
+      gtk_widget_destroy (priv->popup_menu);
+      priv->popup_menu = NULL;
+    }
 }
 
 void
@@ -13426,6 +13505,23 @@ gtk_widget_get_layout_manager (GtkWidget *widget)
   return priv->layout_manager;
 }
 
+static void
+popup_controller_pressed (GtkGestureClick *gesture,
+                          int              n_press,
+                          double           widget_x,
+                          double           widget_y,
+                          GtkWidget       *widget)
+{
+  GdkEvent *event;
+
+  event = gtk_get_current_event ();
+  if (event && gdk_event_triggers_context_menu (event))
+    {
+      gboolean handled;
+      g_signal_emit (widget, widget_signals[POPUP_MENU], 0, &handled);
+    }
+}
+
 /**
  * gtk_widget_set_context_menu:
  * @widget: a #GtkWidget
@@ -13445,6 +13541,26 @@ gtk_widget_set_context_menu (GtkWidget  *widget,
 
   if (g_set_object (&priv->context_menu, menu))
     g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CONTEXT_MENU]);
+
+  if (priv->context_menu && priv->handle_context_menu)
+    {
+      if (!priv->popup_controller)
+        {
+          priv->popup_controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
+          gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->popup_controller), 0);
+          g_signal_connect (priv->popup_controller, "pressed",
+                            G_CALLBACK (popup_controller_pressed), widget);
+          gtk_widget_add_controller (widget, priv->popup_controller);
+        }
+    }
+  else
+    {
+      if (priv->popup_controller)
+        {
+          gtk_widget_remove_controller (widget, priv->popup_controller);
+          priv->popup_controller = NULL;
+        }
+    }
 }
 
 /**
