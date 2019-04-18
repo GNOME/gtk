@@ -157,7 +157,7 @@ gtk_css_image_recolor_load (GtkCssImageRecolor  *recolor,
           g_set_error (gerror,
                        GTK_CSS_PARSER_ERROR,
                        GTK_CSS_PARSER_ERROR_FAILED,
-                       "Error loading image '%s': %s", uri, local_error->message);
+                       "Error loading image '%s': %s", uri, local_error ? local_error->message : "");
           g_free (uri);
        }
     }
