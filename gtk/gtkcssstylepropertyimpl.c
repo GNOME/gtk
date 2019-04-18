@@ -1030,7 +1030,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_LETTER_SPACING,
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS | GTK_CSS_AFFECTS_TEXT_SIZE,
                                           parse_letter_spacing,
                                           NULL,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
