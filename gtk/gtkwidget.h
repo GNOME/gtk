@@ -95,6 +95,9 @@ typedef gboolean (*GtkTickCallback) (GtkWidget     *widget,
                                      GdkFrameClock *frame_clock,
                                      gpointer       user_data);
 
+typedef gboolean (*GtkPositionChangedCallback) (GtkWidget *widget,
+                                                gpointer   user_data);
+
 /**
  * GtkRequisition:
  * @width: the widget’s desired width
@@ -882,6 +885,16 @@ guint gtk_widget_add_tick_callback (GtkWidget       *widget,
 GDK_AVAILABLE_IN_ALL
 void gtk_widget_remove_tick_callback (GtkWidget       *widget,
                                       guint            id);
+
+GDK_AVAILABLE_IN_ALL
+guint gtk_widget_add_position_changed_callback (GtkWidget                  *widget,
+                                                GtkPositionChangedCallback  callback,
+                                                gpointer                    user_data,
+                                                GDestroyNotify              notify);
+
+GDK_AVAILABLE_IN_ALL
+void gtk_widget_remove_position_changed_callback (GtkWidget *widget,
+                                                  guint      id);
 
 /**
  * gtk_widget_class_bind_template_callback:

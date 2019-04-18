@@ -3586,6 +3586,257 @@ gtk_widget_disconnect_frame_clock (GtkWidget *widget)
     }
 }
 
+typedef struct _GtkPositionChangedCallbackInfo GtkPositionChangedCallbackInfo;
+
+struct _GtkPositionChangedCallbackInfo
+{
+  guint id;
+  GtkPositionChangedCallback callback;
+  gpointer user_data;
+  GDestroyNotify notify;
+};
+
+static void
+position_changed_callback_info_destroy (GtkPositionChangedCallbackInfo *info)
+{
+  if (info->notify)
+    info->notify (info->user_data);
+
+  g_slice_free (GtkPositionChangedCallbackInfo, info);
+}
+
+static void
+notify_position_changed (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l;
+
+  for (l = priv->position_changed_callbacks; l;)
+    {
+      GtkPositionChangedCallbackInfo *info = l->data;
+      GList *l_next = l->next;
+
+      if (info->callback (widget, info->user_data) == G_SOURCE_REMOVE)
+        {
+          priv->position_changed_callbacks =
+            g_list_delete_link (priv->position_changed_callbacks, l);
+          position_changed_callback_info_destroy (info);
+        }
+
+      l = l_next;
+    }
+}
+
+static void
+destroy_position_changed_callbacks (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l;
+
+  for (l = priv->position_changed_callbacks; l;)
+    {
+      GtkPositionChangedCallbackInfo *info = l->data;
+      GList *l_next = l->next;
+
+      priv->position_changed_callbacks =
+        g_list_delete_link (priv->position_changed_callbacks, l);
+      position_changed_callback_info_destroy (info);
+
+      l = l_next;
+    }
+}
+
+static void
+sync_widget_surface_position (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  gboolean was_valid;
+  graphene_point_t prev_position;
+  GtkWidget *parent;
+  graphene_rect_t bounds;
+
+  parent = _gtk_widget_get_parent (widget);
+  while (parent && !_gtk_widget_get_has_surface (parent))
+    parent = _gtk_widget_get_parent (parent);
+
+  was_valid = priv->surface_relative_position_valid;
+  prev_position = priv->surface_relative_position;
+
+  if (gtk_widget_compute_bounds (widget, parent ? parent : widget, &bounds))
+    {
+      priv->surface_relative_position = bounds.origin;
+      priv->surface_relative_position_valid = TRUE;
+
+      if (!was_valid ||
+          !graphene_point_equal (&priv->surface_relative_position,
+                                 &prev_position))
+        notify_position_changed (widget);
+    }
+  else
+    {
+      priv->surface_relative_position_valid = FALSE;
+
+      if (was_valid)
+        notify_position_changed (widget);
+    }
+}
+
+static guint position_changed_callback_id;
+
+static gboolean
+parent_position_changed_cb (GtkWidget *parent,
+                            gpointer   user_data)
+{
+  GtkWidget *widget = GTK_WIDGET (user_data);
+
+  sync_widget_surface_position (widget);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+remove_parent_position_changed_listener (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  if (!priv->parent_position_changed_parent)
+    return;
+
+  gtk_widget_remove_position_changed_callback (priv->parent_position_changed_parent,
+                                               priv->parent_position_changed_id);
+  priv->parent_position_changed_id = 0;
+  g_clear_object (&priv->parent_position_changed_parent);
+}
+
+static void
+on_parent_changed (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkWidget *parent;
+
+  if (priv->parent_position_changed_parent)
+    remove_parent_position_changed_listener (widget);
+
+  parent = _gtk_widget_get_parent (widget);
+  if (parent)
+    {
+      priv->parent_position_changed_id =
+        gtk_widget_add_position_changed_callback (parent,
+                                                  parent_position_changed_cb,
+                                                  widget,
+                                                  NULL);
+      priv->parent_position_changed_parent = g_object_ref (parent);
+    }
+}
+
+/**
+ * gtk_widget_add_position_changed_callback:
+ * @widget: a #GtkWidget
+ * @callback: a function to call when the position changes
+ * @user_data: data to pass to @callback
+ * @notify: function to call to free @user_data when the callback is removed
+ *
+ * Invokes the callback whenever the surface relative position of the widget
+ * changes.
+ *
+ * Returns: an id for the connection of this callback. Remove the callback by
+ *     passing the id returned from this funcction to
+ *     gtk_widget_remove_position_changed_callback()
+ */
+guint
+gtk_widget_add_position_changed_callback (GtkWidget                  *widget,
+                                          GtkPositionChangedCallback  callback,
+                                          gpointer                    user_data,
+                                          GDestroyNotify              notify)
+{
+  GtkWidgetPrivate *priv;
+  GtkWidget *parent;
+  GtkPositionChangedCallbackInfo *info;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+  g_return_val_if_fail (callback, 0);
+
+  priv = gtk_widget_get_instance_private (widget);
+
+  parent = _gtk_widget_get_parent (widget);
+  if (parent && !priv->parent_position_changed_id)
+    {
+      priv->parent_position_changed_id =
+        gtk_widget_add_position_changed_callback (parent,
+                                                  parent_position_changed_cb,
+                                                  widget,
+                                                  NULL);
+      priv->parent_position_changed_parent = g_object_ref (parent);
+    }
+
+  if (!priv->parent_changed_handler_id)
+    {
+      priv->parent_changed_handler_id =
+        g_signal_connect (widget, "notify::parent",
+                          G_CALLBACK (on_parent_changed),
+                          NULL);
+    }
+
+  if (!priv->position_changed_callbacks)
+    sync_widget_surface_position (widget);
+
+  info = g_slice_new0 (GtkPositionChangedCallbackInfo);
+
+  info->id = ++position_changed_callback_id;
+  info->callback = callback;
+  info->user_data = user_data;
+  info->notify = notify;
+
+  priv->position_changed_callbacks =
+    g_list_prepend (priv->position_changed_callbacks, info);
+
+  return info->id;
+}
+
+/**
+ * gtk_widget_remove_position_changed_callback:
+ * @widget: a #GtkWidget
+ * @id: an id returned by gtk_widget_add_position_changed_callback()
+ *
+ * Removes a position changed callback previously registered with
+ * gtk_widget_add_position_changed_callback().
+ */
+void
+gtk_widget_remove_position_changed_callback (GtkWidget *widget,
+                                             guint      id)
+{
+  GtkWidgetPrivate *priv;
+  GList *l;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (id);
+
+  priv = gtk_widget_get_instance_private (widget);
+
+  for (l = priv->position_changed_callbacks; l; l = l->next)
+    {
+      GtkPositionChangedCallbackInfo *info = l->data;
+
+      if (info->id == id)
+        {
+          priv->position_changed_callbacks =
+            g_list_delete_link (priv->position_changed_callbacks, l);
+
+          position_changed_callback_info_destroy (info);
+          break;
+        }
+    }
+
+  if (!priv->position_changed_callbacks)
+    {
+      if (priv->parent_position_changed_parent)
+        remove_parent_position_changed_listener (widget);
+
+      g_signal_handler_disconnect (widget, priv->parent_changed_handler_id);
+      priv->parent_changed_handler_id = 0;
+    }
+}
+
 /**
  * gtk_widget_realize:
  * @widget: a #GtkWidget
@@ -4199,6 +4450,9 @@ gtk_widget_allocate (GtkWidget    *widget,
     transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
 
   priv->transform = transform;
+
+  if (priv->position_changed_callbacks)
+    sync_widget_surface_position (widget);
 
   if (!alloc_needed && !size_changed && !baseline_changed)
     {
@@ -8125,6 +8379,7 @@ gtk_widget_real_destroy (GtkWidget *object)
   gtk_grab_remove (widget);
 
   destroy_tick_callbacks (widget);
+  destroy_position_changed_callbacks (widget);
 }
 
 static void

@@ -116,6 +116,14 @@ struct _GtkWidgetPrivate
   guint clock_tick_id;
   GList *tick_callbacks;
 
+  /* Surface relative position updates callbacks */
+  guint parent_position_changed_id;
+  GtkWidget *parent_position_changed_parent;
+  gulong parent_changed_handler_id;
+  GList *position_changed_callbacks;
+  gboolean surface_relative_position_valid;
+  graphene_point_t surface_relative_position;
+
   /* The widget's name. If the widget does not have a name
    * (the name is NULL), then its name (as returned by
    * "gtk_widget_get_name") is its class's name.
