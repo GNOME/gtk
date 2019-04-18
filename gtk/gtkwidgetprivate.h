@@ -41,6 +41,10 @@
 
 G_BEGIN_DECLS
 
+typedef gboolean (*GtkSurfaceTransformChangedCallback) (GtkWidget               *widget,
+                                                        const graphene_matrix_t *surface_transform,
+                                                        gpointer                 user_data);
+
 #define GTK_STATE_FLAGS_BITS 14
 
 struct _GtkWidgetPrivate
@@ -115,6 +119,14 @@ struct _GtkWidgetPrivate
   /* Animations and other things to update on clock ticks */
   guint clock_tick_id;
   GList *tick_callbacks;
+
+  /* Surface relative transform updates callbacks */
+  guint parent_surface_transform_changed_id;
+  GtkWidget *parent_surface_transform_changed_parent;
+  gulong parent_changed_handler_id;
+  GList *surface_transform_changed_callbacks;
+  gboolean cached_surface_transform_valid;
+  graphene_matrix_t cached_surface_transform;
 
   /* The widget's name. If the widget does not have a name
    * (the name is NULL), then its name (as returned by
@@ -342,6 +354,15 @@ void              gtk_widget_cancel_event_sequence         (GtkWidget           
 gboolean          gtk_widget_run_controllers               (GtkWidget           *widget,
                                                             const GdkEvent      *event,
                                                             GtkPropagationPhase  phase);
+
+
+guint             gtk_widget_add_surface_transform_changed_callback (GtkWidget                          *widget,
+                                                                     GtkSurfaceTransformChangedCallback  callback,
+                                                                     gpointer                            user_data,
+                                                                     GDestroyNotify                      notify);
+
+void              gtk_widget_remove_surface_transform_changed_callback (GtkWidget *widget,
+                                                                        guint      id);
 
 
 /* inline getters */
