@@ -2215,8 +2215,9 @@ settings_update_theme (GtkSettings *settings)
 
   get_theme_name (settings, &theme_name, &theme_variant);
 
-  _gtk_css_provider_load_named (priv->theme_provider,
-                                theme_name, theme_variant);
+  gtk_css_provider_load_named (priv->theme_provider,
+                               theme_name,
+                               theme_variant);
 
   /* reload per-theme settings */
   theme_dir = _gtk_css_provider_get_theme_dir (priv->theme_provider);

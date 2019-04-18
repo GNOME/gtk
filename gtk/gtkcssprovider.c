@@ -1342,7 +1342,7 @@ _gtk_css_find_theme (const gchar *name,
 }
 
 /**
- * _gtk_css_provider_load_named:
+ * gtk_css_provider_load_named:
  * @provider: a #GtkCssProvider
  * @name: A theme name
  * @variant: (allow-none): variant to load, for example, "dark", or
@@ -1351,12 +1351,12 @@ _gtk_css_find_theme (const gchar *name,
  * Loads a theme from the usual theme paths. The actual process of
  * finding the theme might change between releases, but it is
  * guaranteed that this function uses the same mechanism to load the
- * theme than GTK uses for loading its own theme.
+ * theme that GTK uses for loading its own theme.
  **/
 void
-_gtk_css_provider_load_named (GtkCssProvider *provider,
-                              const gchar    *name,
-                              const gchar    *variant)
+gtk_css_provider_load_named (GtkCssProvider *provider,
+                             const gchar    *name,
+                             const gchar    *variant)
 {
   gchar *path;
   gchar *resource_path;
@@ -1413,55 +1413,15 @@ _gtk_css_provider_load_named (GtkCssProvider *provider,
       if (variant)
         {
           /* If there was a variant, try without */
-          _gtk_css_provider_load_named (provider, name, NULL);
+          gtk_css_provider_load_named (provider, name, NULL);
         }
       else
         {
           /* Worst case, fall back to the default */
           g_return_if_fail (!g_str_equal (name, DEFAULT_THEME_NAME)); /* infloop protection */
-          _gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, NULL);
+          gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, NULL);
         }
     }
-}
-
-/**
- * gtk_css_provider_get_named:
- * @name: A theme name
- * @variant: (allow-none): variant to load, for example, "dark", or
- *     %NULL for the default
- *
- * Loads a theme from the usual theme paths
- *
- * Returns: (transfer none): a #GtkCssProvider with the theme loaded.
- *     This memory is owned by GTK+, and you must not free it.
- */
-GtkCssProvider *
-gtk_css_provider_get_named (const gchar *name,
-                            const gchar *variant)
-{
-  static GHashTable *themes = NULL;
-  GtkCssProvider *provider;
-  gchar *key;
-
-  if (variant == NULL)
-    key = g_strdup (name);
-  else
-    key = g_strconcat (name, "-", variant, NULL);
-  if (G_UNLIKELY (!themes))
-    themes = g_hash_table_new (g_str_hash, g_str_equal);
-
-  provider = g_hash_table_lookup (themes, key);
-  
-  if (!provider)
-    {
-      provider = gtk_css_provider_new ();
-      _gtk_css_provider_load_named (provider, name, variant);
-      g_hash_table_insert (themes, g_strdup (key), provider);
-    }
-  
-  g_free (key);
-
-  return provider;
 }
 
 static int

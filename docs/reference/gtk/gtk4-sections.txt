@@ -5076,7 +5076,7 @@ gtk_border_get_type
 <FILE>gtkcssprovider</FILE>
 <TITLE>GtkCssProvider</TITLE>
 GtkCssProvider
-gtk_css_provider_get_named
+gtk_css_provider_load_named
 gtk_css_provider_load_from_data
 gtk_css_provider_load_from_file
 gtk_css_provider_load_from_path
