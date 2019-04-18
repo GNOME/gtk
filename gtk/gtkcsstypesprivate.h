@@ -96,7 +96,7 @@ typedef guint64 GtkCssChange;
  * GtkCssAffects:
  * @GTK_CSS_AFFECTS_CONTENT: The content rendering is affected.
  *   This does not include things that affect the font. For those,
- *   see @GTK_CSS_AFFECTS_FONT.
+ *   see @GTK_CSS_AFFECTS_TEXT.
  * @GTK_CSS_AFFECTS_BACKGROUND: The background rendering is affected.
  * @GTK_CSS_AFFECTS_BORDER: The border styling is affected.
  * @GTK_CSS_AFFECTS_ICON_SIZE: Icon size is affected.
@@ -106,8 +106,7 @@ typedef guint64 GtkCssChange;
  *   attributes are not.
  * @GTK_CSS_AFFECTS_ICON: Fullcolor icons and their rendering is affected.
  * @GTK_CSS_AFFECTS_SYMBOLIC_ICON: Symbolic icons and their rendering is affected.
- * @GTK_CSS_AFFECTS_OUTLINE: The outline styling is affected. Outlines
- *   only affect elements that can be focused.
+ * @GTK_CSS_AFFECTS_OUTLINE: The outline styling is affected.
  * @GTK_CSS_AFFECTS_SIZE: Changes in this property may have an effect
  *   on the allocated size of the element. Changes in these properties
  *   should cause a recomputation of the element's allocated size.
