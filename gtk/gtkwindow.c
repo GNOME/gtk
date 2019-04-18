@@ -1774,7 +1774,6 @@ gtk_window_capture_motion (GtkWidget *widget,
                            gdouble    x,
                            gdouble    y)
 {
-  GdkCursor *cursor = NULL;
   gint i;
   const gchar *cursor_names[8] = {
     "nw-resize", "n-resize", "ne-resize",
@@ -1786,15 +1785,10 @@ gtk_window_capture_motion (GtkWidget *widget,
     {
       if (edge_under_coordinates (GTK_WINDOW (widget), x, y, i))
         {
-          cursor = gdk_cursor_new_from_name (cursor_names[i], NULL);
+          gtk_widget_set_cursor_from_name (widget, cursor_names[i]);
           break;
         }
     }
-
-  gtk_widget_set_cursor (widget, cursor);
-
-  if (cursor)
-    g_object_unref (cursor);
 }
 
 static void

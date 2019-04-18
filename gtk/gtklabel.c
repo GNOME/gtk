@@ -4897,13 +4897,7 @@ gtk_label_set_selectable_hint (GtkLabel *label)
   widget = GTK_WIDGET (label);
 
   if (priv->select_info->selectable)
-    {
-      GdkCursor *cursor;
-
-      cursor = gdk_cursor_new_from_name ("text", NULL);
-      gtk_widget_set_cursor (widget, cursor);
-      g_object_unref (cursor);
-    }
+    gtk_widget_set_cursor_from_name (widget, "text");
 }
 
 #define GTK_TYPE_LABEL_CONTENT            (gtk_label_content_get_type ())

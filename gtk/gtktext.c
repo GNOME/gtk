@@ -2856,14 +2856,11 @@ static void
 gtk_text_obscure_mouse_cursor (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GdkCursor *cursor;
 
   if (priv->mouse_cursor_obscured)
     return;
 
-  cursor = gdk_cursor_new_from_name ("none", NULL);
-  gtk_widget_set_cursor (GTK_WIDGET (self), cursor);
-  g_object_unref (cursor);
+  gtk_widget_set_cursor_from_name (GTK_WIDGET (self), "none");
 
   priv->mouse_cursor_obscured = TRUE;
 }
