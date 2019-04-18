@@ -146,7 +146,6 @@ struct _GtkTextPrivate
 {
   GtkEntryBuffer *buffer;
   GtkIMContext   *im_context;
-  GtkWidget      *popup_menu;
 
   int             text_baseline;
 
@@ -514,8 +513,6 @@ static void         gtk_text_paste                    (GtkText        *self,
                                                        GdkClipboard   *clipboard);
 static void         gtk_text_update_primary_selection (GtkText        *self);
 static void         gtk_text_schedule_im_reset        (GtkText        *self);
-static void         gtk_text_do_popup                 (GtkText        *self,
-                                                       const GdkEvent *event);
 static gboolean     gtk_text_mnemonic_activate        (GtkWidget      *widget,
                                                        gboolean        group_cycling);
 static void         gtk_text_check_cursor_blink       (GtkText        *self);
@@ -1703,6 +1700,7 @@ gtk_text_init (GtkText *self)
   gtk_text_add_context_actions (self);
 
   menu = gtk_text_get_default_menu ();
+  g_object_set (self, "handle-context-menu", FALSE, NULL);
   gtk_widget_set_context_menu (GTK_WIDGET (self), menu);
   g_object_unref (menu);
 }
@@ -2016,12 +2014,6 @@ gtk_text_unrealize (GtkWidget *widget)
   clipboard = gtk_widget_get_primary_clipboard (widget);
   if (gdk_clipboard_get_content (clipboard) == priv->selection_content)
     gdk_clipboard_set_content (clipboard, NULL);
-
-  if (priv->popup_menu)
-    {
-      gtk_widget_destroy (priv->popup_menu);
-      priv->popup_menu = NULL;
-    }
 
   GTK_WIDGET_CLASS (gtk_text_parent_class)->unrealize (widget);
 }
@@ -2444,7 +2436,8 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
 
   if (gdk_event_triggers_context_menu (event))
     {
-      gtk_text_do_popup (self, event);
+      gtk_text_update_clipboard_actions (self);
+      gtk_widget_popup_context_menu (widget);
     }
   else if (n_press == 1 && button == GDK_BUTTON_MIDDLE &&
            get_middle_click_paste (self))
@@ -5768,60 +5761,11 @@ gtk_text_mnemonic_activate (GtkWidget *widget,
   return GDK_EVENT_STOP;
 }
 
-static void
-popup_menu_detach (GtkWidget *attach_widget,
-                   GtkMenu   *menu)
-{
-  GtkText *self_attach = GTK_TEXT (attach_widget);
-  GtkTextPrivate *priv_attach = gtk_text_get_instance_private (self_attach);
-
-  priv_attach->popup_menu = NULL;
-}
-
-static void
-gtk_text_do_popup (GtkText        *self,
-                   const GdkEvent *event)
-{
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GMenuModel *model;
-  GtkWidget *menu;
-  GdkEvent *trigger_event;
-
-  if (!gtk_widget_get_realized (GTK_WIDGET (self)))
-    return;
-
-  gtk_text_update_clipboard_actions (self);
-
-  if (priv->popup_menu)
-    gtk_widget_destroy (priv->popup_menu);
-
-  model = gtk_widget_get_context_menu (GTK_WIDGET (self));
-  priv->popup_menu = menu = gtk_menu_new_from_model (model);
-
-  gtk_style_context_add_class (gtk_widget_get_style_context (menu), GTK_STYLE_CLASS_CONTEXT_MENU);
-  gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (self), popup_menu_detach);
-
-  trigger_event = event ? gdk_event_copy (event) : gtk_get_current_event ();
-  if (trigger_event && gdk_event_triggers_context_menu (trigger_event))
-    gtk_menu_popup_at_pointer (GTK_MENU (menu), trigger_event);
-  else
-    {
-      gtk_menu_popup_at_widget (GTK_MENU (menu),
-                                GTK_WIDGET (self),
-                                GDK_GRAVITY_SOUTH_EAST,
-                                GDK_GRAVITY_NORTH_WEST,
-                                trigger_event);
-      gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
-    }
- 
-  g_clear_object (&trigger_event);
-}
-
 static gboolean
 gtk_text_popup_menu (GtkWidget *widget)
 {
-  gtk_text_do_popup (GTK_TEXT (widget), NULL);
-  return GDK_EVENT_STOP;
+  gtk_text_update_clipboard_actions (GTK_TEXT (widget));
+  return GTK_WIDGET_CLASS (gtk_text_parent_class)->popup_menu (widget);
 }
 
 static void
