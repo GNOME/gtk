@@ -1063,7 +1063,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FONT_KERNING,
                                           G_TYPE_NONE,
                                           0,
-                                          GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS | GTK_CSS_AFFECTS_TEXT_SIZE,
                                           parse_font_kerning,
                                           NULL,
                                           _gtk_css_font_kerning_value_new (GTK_CSS_FONT_KERNING_AUTO));
