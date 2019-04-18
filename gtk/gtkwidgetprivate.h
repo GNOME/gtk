@@ -99,6 +99,8 @@ struct _GtkWidgetPrivate
   guint   halign              : 4;
   guint   valign              : 4;
 
+  guint   handle_context_menu : 1;
+
   GtkOverflow overflow;
   guint8 alpha;
   guint8 user_alpha;
@@ -192,6 +194,8 @@ struct _GtkWidgetPrivate
   GdkCursor *cursor;
 
   GMenuModel *context_menu;
+  GtkWidget *popup_menu;
+  GtkEventController *popup_controller;
 };
 
 GtkCssNode *  gtk_widget_get_css_node       (GtkWidget *widget);
@@ -344,6 +348,7 @@ void              gtk_widget_cancel_event_sequence         (GtkWidget           
 gboolean          gtk_widget_run_controllers               (GtkWidget           *widget,
                                                             const GdkEvent      *event,
                                                             GtkPropagationPhase  phase);
+gboolean         gtk_widget_popup_context_menu             (GtkWidget           *widget);
 
 
 /* inline getters */
