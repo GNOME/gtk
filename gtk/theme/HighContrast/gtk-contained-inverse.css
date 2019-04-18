@@ -34,7 +34,7 @@
 @define-color content_view_bg #111;
 * { padding: 0; -gtk-icon-style: symbolic; outline-style: none; }
 
-*:focus(visible) { outline-color: currentColor; outline-style: dashed; outline-offset: -4px; outline-width: 2px; -gtk-outline-radius: 2px; }
+button:focus, checkbutton:focus, radiobutton:focus, switch:focus, scale:focus, label:focus, row:focus, flowboxchild:focus { outline-color: currentColor; outline-style: dashed; outline-offset: -4px; outline-width: 2px; -gtk-outline-radius: 2px; }
 
 /*************** Base States * */
 .background { color: #fff; background-color: #000; }
@@ -1464,7 +1464,7 @@ colorswatch:only-child > overlay { border-radius: 5px; }
 
 colorswatch.activatable:hover, colorswatch.activatable:hover:selected { background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 50%); box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), inset 0 -1px rgba(0, 0, 0, 0.4); }
 
-colorswatch:backdrop, colorswatch:backdrop:selectedi, colorswatch.dark:backdrop, colorswatch.dark:backdrop:selected { background-image: none; box-shadow: none; }
+colorswatch:backdrop, colorswatch:backdrop:selected, colorswatch.dark:backdrop, colorswatch.dark:backdrop:selected { background-image: none; box-shadow: none; }
 
 colorswatch.dark { color: white; border: 1px solid rgba(0, 0, 0, 0.3); }
 

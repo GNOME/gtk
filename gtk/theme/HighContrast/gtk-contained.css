@@ -34,7 +34,7 @@
 @define-color content_view_bg #fff;
 * { padding: 0; -gtk-icon-style: symbolic; outline-style: none; }
 
-*:focus(visible) { outline-color: currentColor; outline-style: dashed; outline-offset: -4px; outline-width: 2px; -gtk-outline-radius: 2px; }
+button:focus, checkbutton:focus, radiobutton:focus, switch:focus, scale:focus, label:focus, row:focus, flowboxchild:focus { outline-color: currentColor; outline-style: dashed; outline-offset: -4px; outline-width: 2px; -gtk-outline-radius: 2px; }
 
 /*************** Base States * */
 .background { color: #000; background-color: #fff; }
