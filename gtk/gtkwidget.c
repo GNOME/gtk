@@ -713,6 +713,9 @@ static void gtk_widget_update_input_shape (GtkWidget *widget);
 
 static gboolean gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_class);
 
+static void remove_parent_surface_transform_changed_listener (GtkWidget *widget);
+static void add_parent_surface_transform_changed_listener (GtkWidget *widget);
+
 
 /* --- variables --- */
 static gint             GtkWidget_private_offset = 0;
@@ -2905,6 +2908,9 @@ gtk_widget_root (GtkWidget *widget)
   if (priv->context)
     gtk_style_context_set_display (priv->context, gtk_root_get_display (priv->root));
 
+  if (priv->surface_transform_changed_callbacks)
+    add_parent_surface_transform_changed_listener (widget);
+
   GTK_WIDGET_GET_CLASS (widget)->root (widget);
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_ROOT]);
@@ -2921,6 +2927,9 @@ gtk_widget_unroot (GtkWidget *widget)
 
   g_assert (priv->root);
   g_assert (!priv->realized);
+
+  if (priv->parent_surface_transform_changed_parent)
+    remove_parent_surface_transform_changed_listener (widget);
 
   GTK_WIDGET_GET_CLASS (widget)->unroot (widget);
 
@@ -3586,6 +3595,249 @@ gtk_widget_disconnect_frame_clock (GtkWidget *widget)
     }
 }
 
+typedef struct _GtkSurfaceTransformChangedCallbackInfo GtkSurfaceTransformChangedCallbackInfo;
+
+struct _GtkSurfaceTransformChangedCallbackInfo
+{
+  guint id;
+  GtkSurfaceTransformChangedCallback callback;
+  gpointer user_data;
+  GDestroyNotify notify;
+};
+
+static void
+surface_transform_changed_callback_info_destroy (GtkSurfaceTransformChangedCallbackInfo *info)
+{
+  if (info->notify)
+    info->notify (info->user_data);
+
+  g_slice_free (GtkSurfaceTransformChangedCallbackInfo, info);
+}
+
+static void
+notify_surface_transform_changed (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  graphene_matrix_t *surface_transform;
+  GList *l;
+
+  if (priv->cached_surface_transform_valid)
+    surface_transform = &priv->cached_surface_transform;
+  else
+    surface_transform = NULL;
+
+  for (l = priv->surface_transform_changed_callbacks; l;)
+    {
+      GtkSurfaceTransformChangedCallbackInfo *info = l->data;
+      GList *l_next = l->next;
+
+      if (info->callback (widget,
+                          surface_transform,
+                          info->user_data) == G_SOURCE_REMOVE)
+        {
+          priv->surface_transform_changed_callbacks =
+            g_list_delete_link (priv->surface_transform_changed_callbacks, l);
+          surface_transform_changed_callback_info_destroy (info);
+        }
+
+      l = l_next;
+    }
+}
+
+static void
+destroy_surface_transform_changed_callbacks (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l;
+
+  for (l = priv->surface_transform_changed_callbacks; l;)
+    {
+      GtkSurfaceTransformChangedCallbackInfo *info = l->data;
+      GList *l_next = l->next;
+
+      priv->surface_transform_changed_callbacks =
+        g_list_delete_link (priv->surface_transform_changed_callbacks, l);
+      surface_transform_changed_callback_info_destroy (info);
+
+      l = l_next;
+    }
+}
+
+static void
+sync_widget_surface_transform (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  gboolean was_valid;
+  graphene_matrix_t prev_transform;
+
+  was_valid = priv->cached_surface_transform_valid;
+  prev_transform = priv->cached_surface_transform;
+
+  if (GTK_IS_ROOT (widget))
+    {
+      gsk_transform_to_matrix (priv->transform,
+                               &priv->cached_surface_transform);
+      priv->cached_surface_transform_valid = TRUE;
+    }
+  else if (!priv->root)
+    {
+      priv->cached_surface_transform_valid = FALSE;
+    }
+  else if (gtk_widget_compute_transform (widget, GTK_WIDGET (priv->root),
+                                         &priv->cached_surface_transform))
+    {
+      priv->cached_surface_transform_valid = TRUE;
+    }
+  else
+    {
+      g_warning ("Could not compute surface transform");
+      priv->cached_surface_transform_valid = FALSE;
+    }
+
+  if (was_valid != priv->cached_surface_transform_valid ||
+      (was_valid && priv->cached_surface_transform_valid &&
+       !graphene_matrix_equal (&priv->cached_surface_transform,
+                               &prev_transform)))
+    notify_surface_transform_changed (widget);
+}
+
+static guint surface_transform_changed_callback_id;
+
+static gboolean
+parent_surface_transform_changed_cb (GtkWidget               *parent,
+                                     const graphene_matrix_t *transform,
+                                     gpointer                 user_data)
+{
+  GtkWidget *widget = GTK_WIDGET (user_data);
+
+  sync_widget_surface_transform (widget);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+remove_parent_surface_transform_changed_listener (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_assert (priv->parent_surface_transform_changed_parent);
+
+  gtk_widget_remove_surface_transform_changed_callback (
+    priv->parent_surface_transform_changed_parent,
+    priv->parent_surface_transform_changed_id);
+  priv->parent_surface_transform_changed_id = 0;
+  g_clear_object (&priv->parent_surface_transform_changed_parent);
+}
+
+static void
+add_parent_surface_transform_changed_listener (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkWidget *parent;
+
+  g_assert (!priv->parent_surface_transform_changed_parent);
+
+  parent = priv->parent;
+  priv->parent_surface_transform_changed_id =
+    gtk_widget_add_surface_transform_changed_callback (
+      parent,
+      parent_surface_transform_changed_cb,
+      widget,
+      NULL);
+  priv->parent_surface_transform_changed_parent = g_object_ref (parent);
+}
+
+/**
+ * gtk_widget_add_surface_transform_changed_callback:
+ * @widget: a #GtkWidget
+ * @callback: a function to call when the surface transform changes
+ * @user_data: data to pass to @callback
+ * @notify: function to call to free @user_data when the callback is removed
+ *
+ * Invokes the callback whenever the surface relative transform of the widget
+ * changes.
+ *
+ * Returns: an id for the connection of this callback. Remove the callback by
+ *     passing the id returned from this funcction to
+ *     gtk_widget_remove_surface_transform_changed_callback()
+ */
+guint
+gtk_widget_add_surface_transform_changed_callback (GtkWidget                          *widget,
+                                                   GtkSurfaceTransformChangedCallback  callback,
+                                                   gpointer                            user_data,
+                                                   GDestroyNotify                      notify)
+{
+  GtkWidgetPrivate *priv;
+  GtkSurfaceTransformChangedCallbackInfo *info;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+  g_return_val_if_fail (callback, 0);
+
+  priv = gtk_widget_get_instance_private (widget);
+
+  if (priv->parent && !priv->parent_surface_transform_changed_id)
+    add_parent_surface_transform_changed_listener (widget);
+
+  if (!priv->surface_transform_changed_callbacks)
+    sync_widget_surface_transform (widget);
+
+  info = g_slice_new0 (GtkSurfaceTransformChangedCallbackInfo);
+
+  info->id = ++surface_transform_changed_callback_id;
+  info->callback = callback;
+  info->user_data = user_data;
+  info->notify = notify;
+
+  priv->surface_transform_changed_callbacks =
+    g_list_prepend (priv->surface_transform_changed_callbacks, info);
+
+  return info->id;
+}
+
+/**
+ * gtk_widget_remove_surface_transform_changed_callback:
+ * @widget: a #GtkWidget
+ * @id: an id returned by gtk_widget_add_surface_transform_changed_callback()
+ *
+ * Removes a surface transform changed callback previously registered with
+ * gtk_widget_add_surface_transform_changed_callback().
+ */
+void
+gtk_widget_remove_surface_transform_changed_callback (GtkWidget *widget,
+                                                      guint      id)
+{
+  GtkWidgetPrivate *priv;
+  GList *l;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (id);
+
+  priv = gtk_widget_get_instance_private (widget);
+
+  for (l = priv->surface_transform_changed_callbacks; l; l = l->next)
+    {
+      GtkSurfaceTransformChangedCallbackInfo *info = l->data;
+
+      if (info->id == id)
+        {
+          priv->surface_transform_changed_callbacks =
+            g_list_delete_link (priv->surface_transform_changed_callbacks, l);
+
+          surface_transform_changed_callback_info_destroy (info);
+          break;
+        }
+    }
+
+  if (!priv->surface_transform_changed_callbacks)
+    {
+      if (priv->parent_surface_transform_changed_parent)
+        remove_parent_surface_transform_changed_listener (widget);
+
+      g_signal_handler_disconnect (widget, priv->parent_changed_handler_id);
+      priv->parent_changed_handler_id = 0;
+    }
+}
+
 /**
  * gtk_widget_realize:
  * @widget: a #GtkWidget
@@ -4199,6 +4451,9 @@ gtk_widget_allocate (GtkWidget    *widget,
     transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
 
   priv->transform = transform;
+
+  if (priv->surface_transform_changed_callbacks)
+    sync_widget_surface_transform (widget);
 
   if (!alloc_needed && !size_changed && !baseline_changed)
     {
@@ -8125,6 +8380,7 @@ gtk_widget_real_destroy (GtkWidget *object)
   gtk_grab_remove (widget);
 
   destroy_tick_callbacks (widget);
+  destroy_surface_transform_changed_callbacks (widget);
 }
 
 static void
