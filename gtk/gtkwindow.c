@@ -1786,9 +1786,11 @@ gtk_window_capture_motion (GtkWidget *widget,
       if (edge_under_coordinates (GTK_WINDOW (widget), x, y, i))
         {
           gtk_widget_set_cursor_from_name (widget, cursor_names[i]);
-          break;
+          return;
         }
     }
+
+  gtk_widget_set_cursor (widget, NULL);
 }
 
 static void
