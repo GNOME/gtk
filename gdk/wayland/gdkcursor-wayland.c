@@ -259,6 +259,14 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
       if (wayland_cursor->surface.cairo_surface)
         return _gdk_wayland_shm_surface_get_wl_buffer (wayland_cursor->surface.cairo_surface);
     }
+  else
+    {
+      *hotspot_x = 0;
+      *hotspot_y = 0;
+      *w = 0;
+      *h = 0;
+      *scale = 1;
+    }
 
   return NULL;
 }
