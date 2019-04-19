@@ -421,7 +421,18 @@ static void gtk_window_size_allocate      (GtkWidget         *widget,
 static gboolean gtk_window_close_request  (GtkWindow         *window);
 static void gtk_window_focus_in           (GtkWidget         *widget);
 static void gtk_window_focus_out          (GtkWidget         *widget);
-static void surface_state_changed         (GtkWidget          *widget);
+
+static void     surface_state_changed     (GtkWidget          *widget);
+static void     surface_size_changed      (GtkWidget          *widget,
+                                           int                 width,
+                                           int                 height);
+static gboolean surface_render            (GdkSurface         *surface,
+                                           cairo_region_t     *region,
+                                           GtkWidget          *widget);
+static gboolean surface_event             (GdkSurface         *surface,
+                                           GdkEvent           *event,
+                                           GtkWidget          *widget);
+
 static void gtk_window_remove             (GtkContainer      *container,
                                            GtkWidget         *widget);
 static void gtk_window_forall             (GtkContainer   *container,
@@ -5690,9 +5701,12 @@ gtk_window_realize (GtkWidget *widget)
   priv->surface = surface;
 
   gtk_widget_set_surface (widget, surface);
+  gdk_surface_set_widget (surface, widget);
+
   g_signal_connect_swapped (surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
-  g_signal_connect_swapped (surface, "size-changed", G_CALLBACK (gtk_window_configure), widget);
-  gtk_widget_register_surface (widget, surface);
+  g_signal_connect_swapped (surface, "size-changed", G_CALLBACK (surface_size_changed), widget);
+  g_signal_connect (surface, "render", G_CALLBACK (surface_render), widget);
+  g_signal_connect (surface, "event", G_CALLBACK (surface_event), widget);
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->realize (widget);
 
@@ -5781,6 +5795,7 @@ gtk_window_unrealize (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWindowGeometryInfo *info;
+  GdkSurface *surface;
 
   /* On unrealize, we reset the size of the window such
    * that we will re-apply the default sizing stuff
@@ -5818,12 +5833,13 @@ gtk_window_unrealize (GtkWidget *widget)
   gsk_renderer_unrealize (priv->renderer);
   g_clear_object (&priv->renderer);
 
-  g_signal_handlers_disconnect_by_func (_gtk_widget_get_surface (widget),
-                                        G_CALLBACK (surface_state_changed),
-                                        widget);
-  g_signal_handlers_disconnect_by_func (_gtk_widget_get_surface (widget),
-                                        G_CALLBACK (gtk_window_configure),
-                                        widget);
+  surface = _gtk_widget_get_surface (widget);
+
+  g_signal_handlers_disconnect_by_func (surface, surface_state_changed, widget);
+  g_signal_handlers_disconnect_by_func (surface, surface_size_changed, widget);
+  g_signal_handlers_disconnect_by_func (surface, surface_render, widget);
+  g_signal_handlers_disconnect_by_func (surface, surface_event, widget);
+  gdk_surface_set_widget (surface, NULL);
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
 
@@ -6137,6 +6153,32 @@ surface_state_changed (GtkWidget *widget)
       update_window_buttons (window);
       gtk_widget_queue_resize (widget);
     }
+}
+
+static void
+surface_size_changed (GtkWidget *widget,
+                      int        width,
+                      int        height)
+{
+  gtk_window_configure (GTK_WINDOW (widget), width, height);
+}
+
+static gboolean
+surface_render (GdkSurface     *surface,
+                cairo_region_t *region,
+                GtkWidget      *widget)
+{
+  gtk_widget_render (widget, surface, region);
+  return TRUE;
+}
+
+static gboolean
+surface_event (GdkSurface *surface,
+               GdkEvent   *event,
+               GtkWidget  *widget)
+{
+  gtk_main_do_event (event);
+  return TRUE;
 }
 
 /* the accel_key and accel_mods fields of the key have to be setup
