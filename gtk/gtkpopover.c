@@ -341,10 +341,28 @@ surface_state_changed (GtkWidget *widget)
 }
 
 static void
-surface_size_changed (GtkWindow *window,
+surface_size_changed (GtkWidget *widget,
                       guint      width,
                       guint      height)
 {
+}
+
+static gboolean
+surface_render (GdkSurface     *surface,
+                cairo_region_t *region,
+                GtkWidget      *widget)
+{
+  gtk_widget_render (widget, surface, region);
+  return TRUE;
+}
+
+static gboolean
+surface_event (GdkSurface *surface,
+               GdkEvent   *event,
+               GtkWidget  *widget)
+{
+  gtk_main_do_event (event);
+  return TRUE;
 }
 
 static void
@@ -464,10 +482,12 @@ gtk_popover_realize (GtkWidget *widget)
   priv->surface = gdk_surface_new_popup_full (display, gtk_widget_get_surface (priv->relative_to));
 
   gtk_widget_set_surface (widget, priv->surface);
+  gdk_surface_set_widget (priv->surface, widget);
+
   g_signal_connect_swapped (priv->surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
   g_signal_connect_swapped (priv->surface, "size-changed", G_CALLBACK (surface_size_changed), widget);
-
-  gtk_widget_register_surface (widget, priv->surface);
+  g_signal_connect (priv->surface, "render", G_CALLBACK (surface_render), widget);
+  g_signal_connect (priv->surface, "event", G_CALLBACK (surface_event), widget);
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->realize (widget);
 
@@ -487,6 +507,9 @@ gtk_popover_unrealize (GtkWidget *widget)
 
   g_signal_handlers_disconnect_by_func (priv->surface, surface_state_changed, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_size_changed, widget);
+  g_signal_handlers_disconnect_by_func (priv->surface, surface_render, widget);
+  g_signal_handlers_disconnect_by_func (priv->surface, surface_event, widget);
+  gdk_surface_set_widget (priv->surface, NULL);
 
   g_clear_object (&priv->surface);
 }
