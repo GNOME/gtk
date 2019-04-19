@@ -598,11 +598,11 @@ GDK_AVAILABLE_IN_ALL
 gint          gdk_surface_get_scale_factor  (GdkSurface     *surface);
 
 GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_get_device_position (GdkSurface      *surface,
-                                                GdkDevice       *device,
-                                                double          *x,
-                                                double          *y,
-                                                GdkModifierType *mask);
+void          gdk_surface_get_device_position (GdkSurface      *surface,
+                                               GdkDevice       *device,
+                                               double          *x,
+                                               double          *y,
+                                               GdkModifierType *mask);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_icon_list   (GdkSurface       *surface,
                                            GList           *surfaces);
