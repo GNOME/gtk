@@ -336,7 +336,6 @@ static void
 free_device_grab (GdkDeviceGrabInfo *info)
 {
   g_object_unref (info->surface);
-  g_object_unref (info->native_surface);
   g_free (info);
 }
 
@@ -558,7 +557,6 @@ GdkDeviceGrabInfo *
 _gdk_display_add_device_grab (GdkDisplay       *display,
                               GdkDevice        *device,
                               GdkSurface        *surface,
-                              GdkSurface        *native_surface,
                               GdkGrabOwnership  grab_ownership,
                               gboolean          owner_events,
                               GdkEventMask      event_mask,
@@ -572,7 +570,6 @@ _gdk_display_add_device_grab (GdkDisplay       *display,
   info = g_new0 (GdkDeviceGrabInfo, 1);
 
   info->surface = g_object_ref (surface);
-  info->native_surface = g_object_ref (native_surface);
   info->serial_start = serial_start;
   info->serial_end = G_MAXULONG;
   info->owner_events = owner_events;
