@@ -563,12 +563,6 @@ void                  gtk_widget_set_surface            (GtkWidget    *widget,
                                                          GdkSurface    *surface);
 GDK_AVAILABLE_IN_ALL
 GdkSurface           * gtk_widget_get_surface           (GtkWidget    *widget);
-GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_register_surface       (GtkWidget    *widget,
-                                                         GdkSurface    *surface);
-GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_unregister_surface     (GtkWidget    *widget,
-                                                         GdkSurface    *surface);
 
 GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_allocated_width    (GtkWidget     *widget);
