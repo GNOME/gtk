@@ -8338,7 +8338,6 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
   if (_gtk_widget_get_has_surface (widget))
     {
-      gtk_widget_unregister_surface (widget, priv->surface);
       gdk_surface_destroy (priv->surface);
       priv->surface = NULL;
     }
@@ -11341,6 +11340,7 @@ gtk_widget_set_surface (GtkWidget *widget,
 }
 
 static void gtk_widget_render (GtkWidget *, GdkSurface *, const cairo_region_t *);
+
 static gboolean
 surface_expose (GdkSurface     *surface,
                 cairo_region_t *region,
