@@ -16,6 +16,7 @@ $window_radius: $button_radius + 3;
   -gtk-secondary-caret-color: $selected_bg_color
 }
 
+modelbutton:focus(visible),
 button:focus(visible),
 checkbutton:focus(visible),
 radiobutton:focus(visible),
