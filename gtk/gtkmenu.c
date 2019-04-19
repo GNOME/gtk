@@ -2200,7 +2200,6 @@ menu_grab_transfer_surface_get (GtkMenu *menu)
   if (!surface)
     {
       surface = gdk_surface_new_temp (gtk_widget_get_display (GTK_WIDGET (menu)));
-      gtk_widget_register_surface (GTK_WIDGET (menu), surface);
 
       gdk_surface_show (surface);
 
@@ -2218,7 +2217,6 @@ menu_grab_transfer_surface_destroy (GtkMenu *menu)
     {
       GdkSurface *widget_surface;
 
-      gtk_widget_unregister_surface (GTK_WIDGET (menu), surface);
       gdk_surface_destroy (surface);
       g_object_set_data (G_OBJECT (menu), I_("gtk-menu-transfer-surface"), NULL);
 
