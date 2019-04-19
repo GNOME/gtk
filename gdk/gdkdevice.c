@@ -1237,7 +1237,7 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
 
 GdkGrabStatus
 gdk_device_grab (GdkDevice        *device,
-                 GdkSurface        *surface,
+                 GdkSurface       *surface,
                  GdkGrabOwnership  grab_ownership,
                  gboolean          owner_events,
                  GdkEventMask      event_mask,
@@ -1245,19 +1245,16 @@ gdk_device_grab (GdkDevice        *device,
                  guint32           time_)
 {
   GdkGrabStatus res;
-  GdkSurface *native;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_GRAB_FAILED);
   g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_GRAB_FAILED);
   g_return_val_if_fail (gdk_surface_get_display (surface) == gdk_device_get_display (device), GDK_GRAB_FAILED);
 
-  native = surface;
-
-  if (GDK_SURFACE_DESTROYED (native))
+  if (GDK_SURFACE_DESTROYED (surface))
     return GDK_GRAB_NOT_VIEWABLE;
 
   res = GDK_DEVICE_GET_CLASS (device)->grab (device,
-                                             native,
+                                             surface,
                                              owner_events,
                                              get_native_grab_event_mask (event_mask),
                                              NULL,
@@ -1275,7 +1272,6 @@ gdk_device_grab (GdkDevice        *device,
       _gdk_display_add_device_grab (display,
                                     device,
                                     surface,
-                                    native,
                                     grab_ownership,
                                     owner_events,
                                     event_mask,
