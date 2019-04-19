@@ -1492,12 +1492,8 @@ gdk_surface_constrain_size (GdkGeometry    *geometry,
  * Obtains the current device position in doubles and modifier state.
  * The position is given in coordinates relative to the upper left
  * corner of @surface.
- *
- * Returns: (nullable) (transfer none): The surface underneath @device
- * (as with gdk_device_get_surface_at_position()), or %NULL if the
- * surface is not known to GDK.
  **/
-GdkSurface *
+void
 gdk_surface_get_device_position (GdkSurface       *surface,
                                  GdkDevice       *device,
                                  double          *x,
@@ -1507,9 +1503,9 @@ gdk_surface_get_device_position (GdkSurface       *surface,
   gdouble tmp_x, tmp_y;
   GdkModifierType tmp_mask;
 
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
-  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
+  g_return_if_fail (GDK_IS_SURFACE (surface));
+  g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
 
   tmp_x = tmp_y = 0;
   tmp_mask = 0;
@@ -1524,8 +1520,6 @@ gdk_surface_get_device_position (GdkSurface       *surface,
     *y = tmp_y;
   if (mask)
     *mask = tmp_mask;
-
-  return NULL;
 }
 
 static void
