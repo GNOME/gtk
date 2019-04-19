@@ -177,7 +177,7 @@ _gdk_x11_surface_grab_check_destroy (GdkSurface *surface)
       /* Make sure there is no lasting grab in this native surface */
       grab = _gdk_display_get_last_device_grab (display, d->data);
 
-      if (grab && grab->native_surface == surface)
+      if (grab && grab->surface == surface)
         {
           /* We don't know the actual serial to end, but it
              doesn't really matter as this only happens
