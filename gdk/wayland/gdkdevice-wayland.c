@@ -728,20 +728,20 @@ device_maybe_emit_grab_crossing (GdkDevice  *device,
                                  GdkSurface *window,
                                  guint32     time)
 {
-  GdkSurface *native = gdk_wayland_device_get_focus (device);
+  GdkSurface *surface = gdk_wayland_device_get_focus (device);
   GdkSurface *focus = window;
 
-  if (focus != native)
+  if (focus != surface)
     device_emit_grab_crossing (device, focus, window, GDK_CROSSING_GRAB, time);
 }
 
 static GdkSurface*
-device_maybe_emit_ungrab_crossing (GdkDevice      *device,
-                                   guint32         time)
+device_maybe_emit_ungrab_crossing (GdkDevice *device,
+                                   guint32    time_)
 {
   GdkDeviceGrabInfo *grab;
   GdkSurface *focus = NULL;
-  GdkSurface *native = NULL;
+  GdkSurface *surface = NULL;
   GdkSurface *prev_focus = NULL;
 
   focus = gdk_wayland_device_get_focus (device);
@@ -751,21 +751,21 @@ device_maybe_emit_ungrab_crossing (GdkDevice      *device,
     {
       grab->serial_end = grab->serial_start;
       prev_focus = grab->surface;
-      native = grab->native_surface;
+      surface = grab->surface;
     }
 
-  if (focus != native)
-    device_emit_grab_crossing (device, prev_focus, focus, GDK_CROSSING_UNGRAB, time);
+  if (focus != surface)
+    device_emit_grab_crossing (device, prev_focus, focus, GDK_CROSSING_UNGRAB, time_);
 
   return prev_focus;
 }
 
 static GdkGrabStatus
 gdk_wayland_device_grab (GdkDevice    *device,
-                         GdkSurface    *surface,
+                         GdkSurface   *surface,
                          gboolean      owner_events,
                          GdkEventMask  event_mask,
-                         GdkSurface    *confine_to,
+                         GdkSurface   *confine_to,
                          GdkCursor    *cursor,
                          guint32       time_)
 {
@@ -787,7 +787,7 @@ gdk_wayland_device_grab (GdkDevice    *device,
     {
       /* Device is a keyboard */
       gdk_wayland_surface_inhibit_shortcuts (surface,
-                                            gdk_device_get_seat (device));
+                                             gdk_device_get_seat (device));
       return GDK_GRAB_SUCCESS;
     }
   else
@@ -4614,7 +4614,7 @@ gdk_wayland_seat_set_grab_surface (GdkWaylandSeat *seat,
 
 static GdkGrabStatus
 gdk_wayland_seat_grab (GdkSeat                *seat,
-                       GdkSurface              *surface,
+                       GdkSurface             *surface,
                        GdkSeatCapabilities     capabilities,
                        gboolean                owner_events,
                        GdkCursor              *cursor,
@@ -4625,15 +4625,12 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
   GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
   guint32 evtime = event ? gdk_event_get_time (event) : GDK_CURRENT_TIME;
   GdkDisplay *display = gdk_seat_get_display (seat);
-  GdkSurface *native;
   GList *l;
 
-  native = surface;
-
-  if (native == NULL || GDK_SURFACE_DESTROYED (native))
+  if (surface == NULL || GDK_SURFACE_DESTROYED (surface))
     return GDK_GRAB_NOT_VIEWABLE;
 
-  gdk_wayland_seat_set_grab_surface (wayland_seat, native);
+  gdk_wayland_seat_set_grab_surface (wayland_seat, surface);
   wayland_seat->grab_time = evtime;
 
   if (prepare_func)
@@ -4651,12 +4648,11 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
       capabilities & GDK_SEAT_CAPABILITY_POINTER)
     {
       device_maybe_emit_grab_crossing (wayland_seat->master_pointer,
-                                       native, evtime);
+                                       surface, evtime);
 
       _gdk_display_add_device_grab (display,
                                     wayland_seat->master_pointer,
                                     surface,
-                                    native,
                                     GDK_OWNERSHIP_NONE,
                                     owner_events,
                                     GDK_ALL_EVENTS_MASK,
@@ -4673,12 +4669,11 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
       capabilities & GDK_SEAT_CAPABILITY_TOUCH)
     {
       device_maybe_emit_grab_crossing (wayland_seat->touch_master,
-                                       native, evtime);
+                                       surface, evtime);
 
       _gdk_display_add_device_grab (display,
                                     wayland_seat->touch_master,
                                     surface,
-                                    native,
                                     GDK_OWNERSHIP_NONE,
                                     owner_events,
                                     GDK_ALL_EVENTS_MASK,
@@ -4691,12 +4686,11 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
       capabilities & GDK_SEAT_CAPABILITY_KEYBOARD)
     {
       device_maybe_emit_grab_crossing (wayland_seat->master_keyboard,
-                                       native, evtime);
+                                       surface, evtime);
 
       _gdk_display_add_device_grab (display,
                                     wayland_seat->master_keyboard,
                                     surface,
-                                    native,
                                     GDK_OWNERSHIP_NONE,
                                     owner_events,
                                     GDK_ALL_EVENTS_MASK,
@@ -4716,12 +4710,12 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
         {
           GdkWaylandTabletData *tablet = l->data;
 
-          device_maybe_emit_grab_crossing (tablet->master, native, evtime);
+          device_maybe_emit_grab_crossing (tablet->master,
+                                           surface, evtime);
 
           _gdk_display_add_device_grab (display,
                                         tablet->master,
                                         surface,
-                                        native,
                                         GDK_OWNERSHIP_NONE,
                                         owner_events,
                                         GDK_ALL_EVENTS_MASK,

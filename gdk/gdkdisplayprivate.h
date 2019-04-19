@@ -41,7 +41,6 @@ typedef struct _GdkDisplayClass GdkDisplayClass;
 typedef struct
 {
   GdkSurface *surface;
-  GdkSurface *native_surface;
   gulong serial_start;
   gulong serial_end; /* exclusive, i.e. not active on serial_end */
   guint event_mask;
@@ -200,7 +199,6 @@ GdkDeviceGrabInfo * _gdk_display_get_last_device_grab (GdkDisplay *display,
 GdkDeviceGrabInfo * _gdk_display_add_device_grab      (GdkDisplay       *display,
                                                        GdkDevice        *device,
                                                        GdkSurface        *surface,
-                                                       GdkSurface        *native_surface,
                                                        GdkGrabOwnership  grab_ownership,
                                                        gboolean          owner_events,
                                                        GdkEventMask      event_mask,
