@@ -104,8 +104,7 @@
       a #GdkSurface, which in turn represents a windowing system surface in the
       backend. If a widget has grabbed the current input device, or all input
       devices, the event is propagated to that #GtkWidget. Otherwise, it is
-      propagated to the the #GtkWidget which called gtk_widget_register_surface()
-      on the #GdkSurface receiving the event.
+      propagated to the the #GtkRoot which owns the #GdkSurface receiving the event.
     </para>
 
     <para>
