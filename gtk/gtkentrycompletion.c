@@ -525,6 +525,7 @@ gtk_entry_completion_constructed (GObject *object)
                     G_CALLBACK (gtk_entry_completion_list_activated),
                     completion);
 
+  gtk_tree_view_set_enable_search (GTK_TREE_VIEW (priv->tree_view), FALSE);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (priv->tree_view), FALSE);
   gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (priv->tree_view), TRUE);
   gtk_tree_view_set_activate_on_single_click (GTK_TREE_VIEW (priv->tree_view), TRUE);
@@ -560,6 +561,7 @@ gtk_entry_completion_constructed (GObject *object)
   g_signal_connect (priv->action_view, "row-activated",
                     G_CALLBACK (gtk_entry_completion_action_activated),
                     completion);
+  gtk_tree_view_set_enable_search (GTK_TREE_VIEW (priv->action_view), FALSE);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (priv->action_view), FALSE);
   gtk_tree_view_set_hover_selection (GTK_TREE_VIEW (priv->action_view), TRUE);
   gtk_tree_view_set_activate_on_single_click (GTK_TREE_VIEW (priv->action_view), TRUE);
@@ -760,38 +762,12 @@ gtk_entry_completion_dispose (GObject *object)
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (object);
   GtkEntryCompletionPrivate *priv = completion->priv;
 
-  if (priv->tree_view)
-    {
-      gtk_widget_destroy (priv->tree_view);
-      priv->tree_view = NULL;
-    }
-
   if (priv->entry)
     gtk_entry_set_completion (GTK_ENTRY (priv->entry), NULL);
 
-  if (priv->actions)
-    {
-      g_object_unref (priv->actions);
-      priv->actions = NULL;
-    }
-
-  if (priv->action_view)
-    {
-      g_object_unref (priv->action_view);
-      priv->action_view = NULL;
-    }
-
-  if (priv->popup_window)
-    {
-      gtk_widget_destroy (priv->popup_window);
-      priv->popup_window = NULL;
-    }
-
-  if (priv->cell_area)
-    {
-      g_object_unref (priv->cell_area);
-      priv->cell_area = NULL;
-    }
+  g_clear_object (&priv->actions);
+  g_clear_object (&priv->action_view);
+  g_clear_object (&priv->cell_area);
 
   G_OBJECT_CLASS (gtk_entry_completion_parent_class)->dispose (object);
 }
@@ -1459,33 +1435,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
                                     NULL, FALSE, 0.0, 0.0);
       gtk_tree_path_free (path);
     }
-
-  //if (gtk_window_get_transient_for (GTK_WINDOW (completion->priv->popup_window)))
-    {
-      gdk_surface_move_to_rect (_gtk_widget_get_surface (completion->priv->popup_window),
-                                &allocation,
-                                GDK_GRAVITY_SOUTH,
-                                GDK_GRAVITY_NORTH,
-                                GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X,
-                                0, 0);
-      gtk_widget_show (completion->priv->popup_window);
-   }
-}
-
-static void
-prepare_popup_func (GdkSeat   *seat,
-                    GdkSurface *surface,
-                    gpointer   user_data)
-{
-  GtkEntryCompletion *completion = user_data;
-
-  /* prevent the first row being focused */
-  gtk_widget_grab_focus (completion->priv->tree_view);
-
-  gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->tree_view)));
-  gtk_tree_selection_unselect_all (gtk_tree_view_get_selection (GTK_TREE_VIEW (completion->priv->action_view)));
-
-  gtk_widget_show (completion->priv->popup_window);
 }
 
 static void
@@ -1502,11 +1451,6 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
   if (!gtk_widget_has_focus (GTK_WIDGET (text)))
     return;
 
-  if (completion->priv->has_grab)
-    return;
-
-  gtk_widget_show (completion->priv->vbox);
-
   /* default on no match */
   completion->priv->current_selected = -1;
 
@@ -1514,17 +1458,7 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
 
   _gtk_entry_completion_resize_popup (completion);
 
-  if (completion->priv->device)
-    {
-      gtk_grab_add (completion->priv->popup_window);
-      gdk_seat_grab (gdk_device_get_seat (completion->priv->device),
-                     gtk_widget_get_surface (completion->priv->popup_window),
-                     GDK_SEAT_CAPABILITY_POINTER | GDK_SEAT_CAPABILITY_TOUCH,
-                     TRUE, NULL, NULL,
-                     prepare_popup_func, completion);
-
-      completion->priv->has_grab = TRUE;
-    }
+  gtk_popover_popup (GTK_POPOVER (completion->priv->popup_window));
 }
 
 void
@@ -1533,14 +1467,7 @@ _gtk_entry_completion_popdown (GtkEntryCompletion *completion)
   if (!gtk_widget_get_mapped (completion->priv->popup_window))
     return;
 
-  if (completion->priv->has_grab)
-    {
-      gdk_seat_ungrab (gdk_device_get_seat (completion->priv->device));
-      gtk_grab_remove (completion->priv->popup_window);
-      completion->priv->has_grab = FALSE;
-    }
-
-  gtk_widget_hide (completion->priv->popup_window);
+  gtk_popover_popdown (GTK_POPOVER (completion->priv->popup_window));
 }
 
 static gboolean
@@ -2022,8 +1949,7 @@ gtk_entry_completion_timeout (gpointer data)
     }
   else if (gtk_widget_get_visible (completion->priv->popup_window))
     _gtk_entry_completion_popdown (completion);
-
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static inline gboolean
@@ -2414,6 +2340,15 @@ accept_completion_callback (GtkEntryCompletion *completion)
   return FALSE;
 }
 
+static gboolean
+text_focus_out (GtkEntryCompletion *completion)
+{
+  if (gtk_widget_get_mapped (completion->priv->popup_window))
+    return FALSE;
+
+  return accept_completion_callback (completion);
+}
+
 static void
 completion_insert_text_callback (GtkText            *entry,
                                  const gchar        *text,
@@ -2447,7 +2382,7 @@ connect_completion_signals (GtkEntryCompletion *completion)
   controller = priv->entry_key_controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_entry_completion_key_pressed), completion);
-  g_signal_connect_swapped (controller, "focus-out", G_CALLBACK (accept_completion_callback), completion);
+  g_signal_connect_swapped (controller, "focus-out", G_CALLBACK (text_focus_out), completion);
   gtk_widget_add_controller (GTK_WIDGET (text), controller);
 
   completion->priv->changed_id =
