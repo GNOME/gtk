@@ -474,24 +474,6 @@ gdk_broadway_surface_set_modal_hint (GdkSurface *surface,
 }
 
 static void
-gdk_broadway_surface_set_skip_taskbar_hint (GdkSurface *surface,
-                                            gboolean   skips_taskbar)
-{
-}
-
-static void
-gdk_broadway_surface_set_skip_pager_hint (GdkSurface *surface,
-                                          gboolean   skips_pager)
-{
-}
-
-static void
-gdk_broadway_surface_set_urgency_hint (GdkSurface *surface,
-                                       gboolean   urgent)
-{
-}
-
-static void
 gdk_broadway_surface_set_geometry_hints (GdkSurface         *surface,
                                          const GdkGeometry *geometry,
                                          GdkSurfaceHints     geom_mask)
@@ -1356,9 +1338,6 @@ gdk_surface_impl_broadway_class_init (GdkSurfaceImplBroadwayClass *klass)
   impl_class->set_type_hint = gdk_broadway_surface_set_type_hint;
   impl_class->get_type_hint = gdk_broadway_surface_get_type_hint;
   impl_class->set_modal_hint = gdk_broadway_surface_set_modal_hint;
-  impl_class->set_skip_taskbar_hint = gdk_broadway_surface_set_skip_taskbar_hint;
-  impl_class->set_skip_pager_hint = gdk_broadway_surface_set_skip_pager_hint;
-  impl_class->set_urgency_hint = gdk_broadway_surface_set_urgency_hint;
   impl_class->set_geometry_hints = gdk_broadway_surface_set_geometry_hints;
   impl_class->set_title = gdk_broadway_surface_set_title;
   impl_class->set_startup_id = gdk_broadway_surface_set_startup_id;
