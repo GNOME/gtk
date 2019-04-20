@@ -3,7 +3,6 @@
   <object class="GtkMessageDialog" id="messagedialog1">
     <property name="type">popup</property>
     <property name="type_hint">dialog</property>
-    <property name="skip_taskbar_hint">1</property>
     <property name="buttons">ok</property>
     <property name="text" translatable="yes">Text</property>
     <property name="secondary_text" translatable="yes">Secondary text #5</property>

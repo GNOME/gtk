@@ -2110,8 +2110,8 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
   x11_drag->protocol = GDK_DRAG_PROTO_XDND;
   x11_drag->actions = actions;
   x11_drag->ipc_surface = ipc_surface;
-  if (gdk_surface_get_group (surface))
-    gdk_surface_set_group (x11_drag->ipc_surface, surface);
+  if (gdk_x11_surface_get_group (surface))
+    gdk_x11_surface_set_group (x11_drag->ipc_surface, surface);
   gdk_surface_show (x11_drag->ipc_surface);
 
   x11_drag->drag_surface = create_drag_surface (display);

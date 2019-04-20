@@ -1619,17 +1619,6 @@ gdk_surface_quartz_get_device_state (GdkSurface       *window,
 }
 
 static void
-gdk_quartz_surface_set_urgency_hint (GdkSurface *window,
-                                    gboolean   urgent)
-{
-  if (GDK_SURFACE_DESTROYED (window) ||
-      !SURFACE_IS_TOPLEVEL (window))
-    return;
-
-  /* FIXME: Implement */
-}
-
-static void
 gdk_quartz_surface_set_geometry_hints (GdkSurface         *window,
                                       const GdkGeometry *geometry,
                                       GdkSurfaceHints     geom_mask)
@@ -1989,28 +1978,6 @@ gdk_quartz_surface_get_type_hint (GdkSurface *window)
 static void
 gdk_quartz_surface_set_modal_hint (GdkSurface *window,
                                   gboolean   modal)
-{
-  if (GDK_SURFACE_DESTROYED (window) ||
-      !SURFACE_IS_TOPLEVEL (window))
-    return;
-
-  /* FIXME: Implement */
-}
-
-static void
-gdk_quartz_surface_set_skip_taskbar_hint (GdkSurface *window,
-                                         gboolean   skips_taskbar)
-{
-  if (GDK_SURFACE_DESTROYED (window) ||
-      !SURFACE_IS_TOPLEVEL (window))
-    return;
-
-  /* FIXME: Implement */
-}
-
-static void
-gdk_quartz_surface_set_skip_pager_hint (GdkSurface *window,
-                                       gboolean   skips_pager)
 {
   if (GDK_SURFACE_DESTROYED (window) ||
       !SURFACE_IS_TOPLEVEL (window))
@@ -2617,27 +2584,6 @@ gdk_quartz_surface_set_keep_below (GdkSurface *window,
   [impl->toplevel setLevel: level - (setting ? 1 : 0)];
 }
 
-static GdkSurface *
-gdk_quartz_surface_get_group (GdkSurface *window)
-{
-  g_return_val_if_fail (GDK_SURFACE_TYPE (window) != GDK_SURFACE_CHILD, NULL);
-
-  if (GDK_SURFACE_DESTROYED (window) ||
-      !SURFACE_IS_TOPLEVEL (window))
-    return NULL;
-
-  /* FIXME: Implement */
-
-  return NULL;
-}
-
-static void
-gdk_quartz_surface_set_group (GdkSurface *window,
-                             GdkSurface *leader)
-{
-  /* FIXME: Implement */	
-}
-
 static void
 gdk_quartz_surface_destroy_notify (GdkSurface *window)
 {
@@ -2738,9 +2684,6 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->set_type_hint = gdk_quartz_surface_set_type_hint;
   impl_class->get_type_hint = gdk_quartz_surface_get_type_hint;
   impl_class->set_modal_hint = gdk_quartz_surface_set_modal_hint;
-  impl_class->set_skip_taskbar_hint = gdk_quartz_surface_set_skip_taskbar_hint;
-  impl_class->set_skip_pager_hint = gdk_quartz_surface_set_skip_pager_hint;
-  impl_class->set_urgency_hint = gdk_quartz_surface_set_urgency_hint;
   impl_class->set_geometry_hints = gdk_quartz_surface_set_geometry_hints;
   impl_class->set_title = gdk_quartz_surface_set_title;
   impl_class->set_startup_id = gdk_quartz_surface_set_startup_id;
@@ -2760,8 +2703,6 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->unfullscreen = gdk_quartz_surface_unfullscreen;
   impl_class->set_keep_above = gdk_quartz_surface_set_keep_above;
   impl_class->set_keep_below = gdk_quartz_surface_set_keep_below;
-  impl_class->get_group = gdk_quartz_surface_get_group;
-  impl_class->set_group = gdk_quartz_surface_set_group;
   impl_class->set_decorations = gdk_quartz_surface_set_decorations;
   impl_class->get_decorations = gdk_quartz_surface_get_decorations;
   impl_class->set_functions = gdk_quartz_surface_set_functions;

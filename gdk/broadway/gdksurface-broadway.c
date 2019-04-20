@@ -474,24 +474,6 @@ gdk_broadway_surface_set_modal_hint (GdkSurface *surface,
 }
 
 static void
-gdk_broadway_surface_set_skip_taskbar_hint (GdkSurface *surface,
-                                            gboolean   skips_taskbar)
-{
-}
-
-static void
-gdk_broadway_surface_set_skip_pager_hint (GdkSurface *surface,
-                                          gboolean   skips_pager)
-{
-}
-
-static void
-gdk_broadway_surface_set_urgency_hint (GdkSurface *surface,
-                                       gboolean   urgent)
-{
-}
-
-static void
 gdk_broadway_surface_set_geometry_hints (GdkSurface         *surface,
                                          const GdkGeometry *geometry,
                                          GdkSurfaceHints     geom_mask)
@@ -798,22 +780,6 @@ gdk_broadway_surface_set_keep_below (GdkSurface *surface, gboolean setting)
       !SURFACE_IS_TOPLEVEL (surface))
     return;
 
-}
-
-static GdkSurface *
-gdk_broadway_surface_get_group (GdkSurface *surface)
-{
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
-    return NULL;
-
-  return surface;
-}
-
-static void
-gdk_broadway_surface_set_group (GdkSurface *surface,
-                                GdkSurface *leader)
-{
 }
 
 static void
@@ -1356,9 +1322,6 @@ gdk_surface_impl_broadway_class_init (GdkSurfaceImplBroadwayClass *klass)
   impl_class->set_type_hint = gdk_broadway_surface_set_type_hint;
   impl_class->get_type_hint = gdk_broadway_surface_get_type_hint;
   impl_class->set_modal_hint = gdk_broadway_surface_set_modal_hint;
-  impl_class->set_skip_taskbar_hint = gdk_broadway_surface_set_skip_taskbar_hint;
-  impl_class->set_skip_pager_hint = gdk_broadway_surface_set_skip_pager_hint;
-  impl_class->set_urgency_hint = gdk_broadway_surface_set_urgency_hint;
   impl_class->set_geometry_hints = gdk_broadway_surface_set_geometry_hints;
   impl_class->set_title = gdk_broadway_surface_set_title;
   impl_class->set_startup_id = gdk_broadway_surface_set_startup_id;
@@ -1378,8 +1341,6 @@ gdk_surface_impl_broadway_class_init (GdkSurfaceImplBroadwayClass *klass)
   impl_class->unfullscreen = gdk_broadway_surface_unfullscreen;
   impl_class->set_keep_above = gdk_broadway_surface_set_keep_above;
   impl_class->set_keep_below = gdk_broadway_surface_set_keep_below;
-  impl_class->get_group = gdk_broadway_surface_get_group;
-  impl_class->set_group = gdk_broadway_surface_set_group;
   impl_class->set_decorations = gdk_broadway_surface_set_decorations;
   impl_class->get_decorations = gdk_broadway_surface_get_decorations;
   impl_class->set_functions = gdk_broadway_surface_set_functions;

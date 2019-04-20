@@ -3064,24 +3064,6 @@ gdk_wayland_surface_set_modal_hint (GdkSurface *surface,
 }
 
 static void
-gdk_wayland_surface_set_skip_taskbar_hint (GdkSurface *surface,
-                                           gboolean    skips_taskbar)
-{
-}
-
-static void
-gdk_wayland_surface_set_skip_pager_hint (GdkSurface *surface,
-                                         gboolean    skips_pager)
-{
-}
-
-static void
-gdk_wayland_surface_set_urgency_hint (GdkSurface *surface,
-                                      gboolean    urgent)
-{
-}
-
-static void
 gdk_wayland_surface_set_geometry_hints (GdkSurface         *surface,
                                         const GdkGeometry  *geometry,
                                         GdkSurfaceHints     geom_mask)
@@ -3517,18 +3499,6 @@ gdk_wayland_surface_set_keep_below (GdkSurface *surface,
 {
 }
 
-static GdkSurface *
-gdk_wayland_surface_get_group (GdkSurface *surface)
-{
-  return NULL;
-}
-
-static void
-gdk_wayland_surface_set_group (GdkSurface *surface,
-                               GdkSurface *leader)
-{
-}
-
 static void
 gdk_wayland_surface_set_decorations (GdkSurface      *surface,
                                      GdkWMDecoration  decorations)
@@ -3846,9 +3816,6 @@ _gdk_surface_impl_wayland_class_init (GdkSurfaceImplWaylandClass *klass)
   impl_class->set_type_hint = gdk_wayland_surface_set_type_hint;
   impl_class->get_type_hint = gdk_wayland_surface_get_type_hint;
   impl_class->set_modal_hint = gdk_wayland_surface_set_modal_hint;
-  impl_class->set_skip_taskbar_hint = gdk_wayland_surface_set_skip_taskbar_hint;
-  impl_class->set_skip_pager_hint = gdk_wayland_surface_set_skip_pager_hint;
-  impl_class->set_urgency_hint = gdk_wayland_surface_set_urgency_hint;
   impl_class->set_geometry_hints = gdk_wayland_surface_set_geometry_hints;
   impl_class->set_title = gdk_wayland_surface_set_title;
   impl_class->set_startup_id = gdk_wayland_surface_set_startup_id;
@@ -3869,8 +3836,6 @@ _gdk_surface_impl_wayland_class_init (GdkSurfaceImplWaylandClass *klass)
   impl_class->unfullscreen = gdk_wayland_surface_unfullscreen;
   impl_class->set_keep_above = gdk_wayland_surface_set_keep_above;
   impl_class->set_keep_below = gdk_wayland_surface_set_keep_below;
-  impl_class->get_group = gdk_wayland_surface_get_group;
-  impl_class->set_group = gdk_wayland_surface_set_group;
   impl_class->set_decorations = gdk_wayland_surface_set_decorations;
   impl_class->get_decorations = gdk_wayland_surface_get_decorations;
   impl_class->set_functions = gdk_wayland_surface_set_functions;

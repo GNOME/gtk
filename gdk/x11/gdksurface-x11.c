@@ -1867,9 +1867,9 @@ gdk_x11_surface_set_modal_hint (GdkSurface *surface,
 			     NULL);
 }
 
-static void
+void
 gdk_x11_surface_set_skip_taskbar_hint (GdkSurface *surface,
-				      gboolean   skips_taskbar)
+                                       gboolean    skips_taskbar)
 {
   GdkToplevelX11 *toplevel;
   
@@ -1888,9 +1888,9 @@ gdk_x11_surface_set_skip_taskbar_hint (GdkSurface *surface,
 			     NULL);
 }
 
-static void
+void
 gdk_x11_surface_set_skip_pager_hint (GdkSurface *surface,
-				    gboolean   skips_pager)
+                                     gboolean    skips_pager)
 {
   GdkToplevelX11 *toplevel;
     
@@ -1909,9 +1909,9 @@ gdk_x11_surface_set_skip_pager_hint (GdkSurface *surface,
 			     NULL);
 }
 
-static void
+void
 gdk_x11_surface_set_urgency_hint (GdkSurface *surface,
-			     gboolean   urgent)
+                                  gboolean    urgent)
 {
   GdkToplevelX11 *toplevel;
     
@@ -3363,7 +3363,7 @@ gdk_x11_surface_set_keep_below (GdkSurface *surface, gboolean setting)
 				 setting ? GDK_SURFACE_STATE_BELOW : 0);
 }
 
-static GdkSurface *
+GdkSurface *
 gdk_x11_surface_get_group (GdkSurface *surface)
 {
   GdkToplevelX11 *toplevel;
@@ -3377,9 +3377,9 @@ gdk_x11_surface_get_group (GdkSurface *surface)
   return toplevel->group_leader;
 }
 
-static void
+void
 gdk_x11_surface_set_group (GdkSurface *surface,
-			  GdkSurface *leader)
+                           GdkSurface *leader)
 {
   GdkToplevelX11 *toplevel;
   
@@ -4658,9 +4658,6 @@ gdk_surface_impl_x11_class_init (GdkSurfaceImplX11Class *klass)
   impl_class->set_type_hint = gdk_x11_surface_set_type_hint;
   impl_class->get_type_hint = gdk_x11_surface_get_type_hint;
   impl_class->set_modal_hint = gdk_x11_surface_set_modal_hint;
-  impl_class->set_skip_taskbar_hint = gdk_x11_surface_set_skip_taskbar_hint;
-  impl_class->set_skip_pager_hint = gdk_x11_surface_set_skip_pager_hint;
-  impl_class->set_urgency_hint = gdk_x11_surface_set_urgency_hint;
   impl_class->set_geometry_hints = gdk_x11_surface_set_geometry_hints;
   impl_class->set_title = gdk_x11_surface_set_title;
   impl_class->set_startup_id = gdk_x11_surface_set_startup_id;
@@ -4682,8 +4679,6 @@ gdk_surface_impl_x11_class_init (GdkSurfaceImplX11Class *klass)
   impl_class->unfullscreen = gdk_x11_surface_unfullscreen;
   impl_class->set_keep_above = gdk_x11_surface_set_keep_above;
   impl_class->set_keep_below = gdk_x11_surface_set_keep_below;
-  impl_class->get_group = gdk_x11_surface_get_group;
-  impl_class->set_group = gdk_x11_surface_set_group;
   impl_class->set_decorations = gdk_x11_surface_set_decorations;
   impl_class->get_decorations = gdk_x11_surface_get_decorations;
   impl_class->set_functions = gdk_x11_surface_set_functions;

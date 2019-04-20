@@ -254,12 +254,9 @@ typedef struct
   guint    modal                     : 1;
   guint    position                  : 3;
   guint    resizable                 : 1;
-  guint    skips_pager               : 1;
-  guint    skips_taskbar             : 1;
   guint    stick_initially           : 1;
   guint    transient_parent_group    : 1;
   guint    type                      : 4; /* GtkWindowType */
-  guint    urgent                    : 1;
   guint    gravity                   : 5; /* GdkGravity */
   guint    csd_requested             : 1;
   guint    client_decorated          : 1; /* Decorations drawn client-side */
@@ -321,9 +318,6 @@ enum {
   PROP_ICON_NAME,
   PROP_DISPLAY,
   PROP_TYPE_HINT,
-  PROP_SKIP_TASKBAR_HINT,
-  PROP_SKIP_PAGER_HINT,
-  PROP_URGENCY_HINT,
   PROP_ACCEPT_FOCUS,
   PROP_FOCUS_ON_MAP,
   PROP_DECORATED,
@@ -956,27 +950,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                          GDK_TYPE_SURFACE_TYPE_HINT,
                          GDK_SURFACE_TYPE_HINT_NORMAL,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  window_props[PROP_SKIP_TASKBAR_HINT] =
-      g_param_spec_boolean ("skip-taskbar-hint",
-                            P_("Skip taskbar"),
-                            P_("TRUE if the window should not be in the task bar."),
-                            FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  window_props[PROP_SKIP_PAGER_HINT] =
-      g_param_spec_boolean ("skip-pager-hint",
-                            P_("Skip pager"),
-                            P_("TRUE if the window should not be in the pager."),
-                            FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  window_props[PROP_URGENCY_HINT] =
-      g_param_spec_boolean ("urgency-hint",
-                            P_("Urgent"),
-                            P_("TRUE if the window should be brought to the user’s attention."),
-                            FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:accept-focus:
@@ -1989,18 +1962,6 @@ gtk_window_set_property (GObject      *object,
       gtk_window_set_type_hint (window,
                                 g_value_get_enum (value));
       break;
-    case PROP_SKIP_TASKBAR_HINT:
-      gtk_window_set_skip_taskbar_hint (window,
-                                        g_value_get_boolean (value));
-      break;
-    case PROP_SKIP_PAGER_HINT:
-      gtk_window_set_skip_pager_hint (window,
-                                      g_value_get_boolean (value));
-      break;
-    case PROP_URGENCY_HINT:
-      gtk_window_set_urgency_hint (window,
-				   g_value_get_boolean (value));
-      break;
     case PROP_ACCEPT_FOCUS:
       gtk_window_set_accept_focus (window,
 				   g_value_get_boolean (value));
@@ -2097,18 +2058,6 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_TYPE_HINT:
       g_value_set_enum (value, priv->type_hint);
-      break;
-    case PROP_SKIP_TASKBAR_HINT:
-      g_value_set_boolean (value,
-                           gtk_window_get_skip_taskbar_hint (window));
-      break;
-    case PROP_SKIP_PAGER_HINT:
-      g_value_set_boolean (value,
-                           gtk_window_get_skip_pager_hint (window));
-      break;
-    case PROP_URGENCY_HINT:
-      g_value_set_boolean (value,
-                           gtk_window_get_urgency_hint (window));
       break;
     case PROP_ACCEPT_FOCUS:
       g_value_set_boolean (value,
@@ -3521,147 +3470,6 @@ gtk_window_get_type_hint (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), GDK_SURFACE_TYPE_HINT_NORMAL);
 
   return priv->type_hint;
-}
-
-/**
- * gtk_window_set_skip_taskbar_hint:
- * @window: a #GtkWindow 
- * @setting: %TRUE to keep this window from appearing in the task bar
- * 
- * Windows may set a hint asking the desktop environment not to display
- * the window in the task bar. This function sets this hint.
- **/
-void
-gtk_window_set_skip_taskbar_hint (GtkWindow *window,
-                                  gboolean   setting)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  setting = setting != FALSE;
-
-  if (priv->skips_taskbar != setting)
-    {
-      priv->skips_taskbar = setting;
-      if (_gtk_widget_get_realized (GTK_WIDGET (window)))
-        gdk_surface_set_skip_taskbar_hint (_gtk_widget_get_surface (GTK_WIDGET (window)),
-                                          priv->skips_taskbar);
-      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_SKIP_TASKBAR_HINT]);
-    }
-}
-
-/**
- * gtk_window_get_skip_taskbar_hint:
- * @window: a #GtkWindow
- * 
- * Gets the value set by gtk_window_set_skip_taskbar_hint()
- * 
- * Returns: %TRUE if window shouldn’t be in taskbar
- **/
-gboolean
-gtk_window_get_skip_taskbar_hint (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  return priv->skips_taskbar;
-}
-
-/**
- * gtk_window_set_skip_pager_hint:
- * @window: a #GtkWindow 
- * @setting: %TRUE to keep this window from appearing in the pager
- * 
- * Windows may set a hint asking the desktop environment not to display
- * the window in the pager. This function sets this hint.
- * (A "pager" is any desktop navigation tool such as a workspace
- * switcher that displays a thumbnail representation of the windows
- * on the screen.)
- **/
-void
-gtk_window_set_skip_pager_hint (GtkWindow *window,
-                                gboolean   setting)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  setting = setting != FALSE;
-
-  if (priv->skips_pager != setting)
-    {
-      priv->skips_pager = setting;
-      if (_gtk_widget_get_realized (GTK_WIDGET (window)))
-        gdk_surface_set_skip_pager_hint (_gtk_widget_get_surface (GTK_WIDGET (window)),
-                                        priv->skips_pager);
-      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_SKIP_PAGER_HINT]);
-    }
-}
-
-/**
- * gtk_window_get_skip_pager_hint:
- * @window: a #GtkWindow
- * 
- * Gets the value set by gtk_window_set_skip_pager_hint().
- * 
- * Returns: %TRUE if window shouldn’t be in pager
- **/
-gboolean
-gtk_window_get_skip_pager_hint (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  return priv->skips_pager;
-}
-
-/**
- * gtk_window_set_urgency_hint:
- * @window: a #GtkWindow 
- * @setting: %TRUE to mark this window as urgent
- * 
- * Windows may set a hint asking the desktop environment to draw
- * the users attention to the window. This function sets this hint.
- **/
-void
-gtk_window_set_urgency_hint (GtkWindow *window,
-			     gboolean   setting)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  setting = setting != FALSE;
-
-  if (priv->urgent != setting)
-    {
-      priv->urgent = setting;
-      if (_gtk_widget_get_realized (GTK_WIDGET (window)))
-        gdk_surface_set_urgency_hint (_gtk_widget_get_surface (GTK_WIDGET (window)),
-				     priv->urgent);
-      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_URGENCY_HINT]);
-    }
-}
-
-/**
- * gtk_window_get_urgency_hint:
- * @window: a #GtkWindow
- * 
- * Gets the value set by gtk_window_set_urgency_hint()
- * 
- * Returns: %TRUE if window is urgent
- **/
-gboolean
-gtk_window_get_urgency_hint (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  return priv->urgent;
 }
 
 /**
@@ -5877,12 +5685,6 @@ gtk_window_realize (GtkWidget *widget)
 
   if (!priv->deletable)
     gdk_surface_set_functions (surface, GDK_FUNC_ALL | GDK_FUNC_CLOSE);
-
-  if (gtk_window_get_skip_pager_hint (window))
-    gdk_surface_set_skip_pager_hint (surface, TRUE);
-
-  if (gtk_window_get_skip_taskbar_hint (window))
-    gdk_surface_set_skip_taskbar_hint (surface, TRUE);
 
   if (gtk_window_get_accept_focus (window))
     gdk_surface_set_accept_focus (surface, TRUE);

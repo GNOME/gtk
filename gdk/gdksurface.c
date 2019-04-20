@@ -4119,61 +4119,6 @@ gdk_surface_set_modal_hint (GdkSurface *surface,
 }
 
 /**
- * gdk_surface_set_skip_taskbar_hint:
- * @surface: a toplevel #GdkSurface
- * @skips_taskbar: %TRUE to skip the taskbar
- *
- * Toggles whether a surface should appear in a task list or surface
- * list. If a surface’s semantic type as specified with
- * gdk_surface_set_type_hint() already fully describes the surface, this
- * function should not be called in addition,
- * instead you should allow the surface to be treated according to
- * standard policy for its semantic type.
- **/
-void
-gdk_surface_set_skip_taskbar_hint (GdkSurface *surface,
-                                   gboolean   skips_taskbar)
-{
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_skip_taskbar_hint (surface, skips_taskbar);
-}
-
-/**
- * gdk_surface_set_skip_pager_hint:
- * @surface: a toplevel #GdkSurface
- * @skips_pager: %TRUE to skip the pager
- *
- * Toggles whether a surface should appear in a pager (workspace
- * switcher, or other desktop utility program that displays a small
- * thumbnail representation of the surfaces on the desktop). If a
- * surface’s semantic type as specified with gdk_surface_set_type_hint()
- * already fully describes the surface, this function should
- * not be called in addition, instead you should
- * allow the surface to be treated according to standard policy for
- * its semantic type.
- **/
-void
-gdk_surface_set_skip_pager_hint (GdkSurface *surface,
-                                 gboolean   skips_pager)
-{
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_skip_pager_hint (surface, skips_pager);
-}
-
-/**
- * gdk_surface_set_urgency_hint:
- * @surface: a toplevel #GdkSurface
- * @urgent: %TRUE if the surface is urgent
- *
- * Toggles whether a surface needs the user's
- * urgent attention.
- **/
-void
-gdk_surface_set_urgency_hint (GdkSurface *surface,
-                              gboolean   urgent)
-{
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_urgency_hint (surface, urgent);
-}
-
-/**
  * gdk_surface_set_geometry_hints:
  * @surface: a toplevel #GdkSurface
  * @geometry: geometry hints
@@ -4259,7 +4204,7 @@ gdk_surface_set_startup_id (GdkSurface   *surface,
  **/
 void
 gdk_surface_set_transient_for (GdkSurface *surface,
-                              GdkSurface *parent)
+                               GdkSurface *parent)
 {
   surface->transient_for = parent;
 
@@ -4681,43 +4626,6 @@ gdk_surface_set_keep_below (GdkSurface *surface,
                             gboolean setting)
 {
   GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_keep_below (surface, setting);
-}
-
-/**
- * gdk_surface_get_group:
- * @surface: a toplevel #GdkSurface
- *
- * Returns the group leader surface for @surface. See gdk_surface_set_group().
- *
- * Returns: (transfer none): the group leader surface for @surface
- **/
-GdkSurface *
-gdk_surface_get_group (GdkSurface *surface)
-{
-  return GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->get_group (surface);
-}
-
-/**
- * gdk_surface_set_group:
- * @surface: a toplevel #GdkSurface
- * @leader: (allow-none): group leader surface, or %NULL to restore the default group leader surface
- *
- * Sets the group leader surface for @surface. By default,
- * GDK sets the group leader for all toplevel surfaces
- * to a global surface implicitly created by GDK. With this function
- * you can override this default.
- *
- * The group leader surface allows the window manager to distinguish
- * all surfaces that belong to a single application. It may for example
- * allow users to minimize/unminimize all surfaces belonging to an
- * application at once. You should only set a non-default group surface
- * if your application pretends to be multiple applications.
- **/
-void
-gdk_surface_set_group (GdkSurface *surface,
-                       GdkSurface *leader)
-{
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_group (surface, leader);
 }
 
 /**

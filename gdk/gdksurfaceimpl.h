@@ -125,12 +125,6 @@ struct _GdkSurfaceImplClass
   GdkSurfaceTypeHint (* get_type_hint)   (GdkSurface       *surface);
   void         (* set_modal_hint)       (GdkSurface *surface,
                                          gboolean   modal);
-  void         (* set_skip_taskbar_hint) (GdkSurface *surface,
-                                          gboolean   skips_taskbar);
-  void         (* set_skip_pager_hint)  (GdkSurface *surface,
-                                         gboolean   skips_pager);
-  void         (* set_urgency_hint)     (GdkSurface *surface,
-                                         gboolean   urgent);
   void         (* set_geometry_hints)   (GdkSurface         *surface,
                                          const GdkGeometry *geometry,
                                          GdkSurfaceHints     geom_mask);
@@ -165,9 +159,6 @@ struct _GdkSurfaceImplClass
                                          gboolean   setting);
   void         (* set_keep_below)       (GdkSurface *surface,
                                          gboolean   setting);
-  GdkSurface *  (* get_group)            (GdkSurface *surface);
-  void         (* set_group)            (GdkSurface *surface,
-                                         GdkSurface *leader);
   void         (* set_decorations)      (GdkSurface      *surface,
                                          GdkWMDecoration decorations);
   gboolean     (* get_decorations)      (GdkSurface       *surface,

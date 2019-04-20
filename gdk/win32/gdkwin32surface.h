@@ -50,6 +50,10 @@ typedef struct _GdkWin32SurfaceClass GdkWin32SurfaceClass;
 GDK_AVAILABLE_IN_ALL
 GType    gdk_win32_surface_get_type          (void);
 
+GDK_AVAILABLE_IN_ALL
+void gdk_win32_surface_set_urgency_hint    (GdkSurface *surface,
+                                            gboolean    urgent);
+
 G_END_DECLS
 
 #endif /* __GDK_X11_SURFACE_H__ */

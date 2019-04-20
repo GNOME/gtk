@@ -4694,9 +4694,6 @@ gtk_window_set_decorated
 gtk_window_set_deletable
 gtk_window_set_mnemonic_modifier
 gtk_window_set_type_hint
-gtk_window_set_skip_taskbar_hint
-gtk_window_set_skip_pager_hint
-gtk_window_set_urgency_hint
 gtk_window_set_accept_focus
 gtk_window_set_focus_on_map
 gtk_window_set_startup_id
@@ -4713,9 +4710,6 @@ gtk_window_get_title
 gtk_window_get_transient_for
 gtk_window_get_attached_to
 gtk_window_get_type_hint
-gtk_window_get_skip_taskbar_hint
-gtk_window_get_skip_pager_hint
-gtk_window_get_urgency_hint
 gtk_window_get_accept_focus
 gtk_window_get_focus_on_map
 gtk_window_get_group
