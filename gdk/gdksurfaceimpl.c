@@ -41,7 +41,7 @@ gdk_surface_impl_beep (GdkSurface *surface)
 
 static GdkDisplay *
 get_display_for_surface (GdkSurface *primary,
-                        GdkSurface *secondary)
+                         GdkSurface *secondary)
 {
   GdkDisplay *display = gdk_surface_get_display (primary);
 
@@ -174,13 +174,13 @@ maybe_flip_position (gint      bounds_pos,
 }
 
 static void
-gdk_surface_impl_move_to_rect (GdkSurface          *surface,
-                              const GdkRectangle *rect,
-                              GdkGravity          rect_anchor,
-                              GdkGravity          surface_anchor,
-                              GdkAnchorHints      anchor_hints,
-                              gint                rect_anchor_dx,
-                              gint                rect_anchor_dy)
+gdk_surface_impl_move_to_rect (GdkSurface         *surface,
+                               const GdkRectangle *rect,
+                               GdkGravity          rect_anchor,
+                               GdkGravity          surface_anchor,
+                               GdkAnchorHints      anchor_hints,
+                               gint                rect_anchor_dx,
+                               gint                rect_anchor_dy)
 {
   GdkSurface *transient_for_toplevel;
   GdkDisplay *display;
