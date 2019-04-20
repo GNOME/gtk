@@ -1487,7 +1487,11 @@ gdk_x11_display_open (const gchar *display_name)
 
   gdk_event_init (display);
 
-  display_x11->leader_gdk_surface = gdk_surface_new_temp (display);
+  {
+    GdkRectangle rect = { -100, -100, 1, 1 };
+    display_x11->leader_gdk_surface = gdk_surface_new_popup (display, &rect);
+  }
+
   (_gdk_x11_surface_get_toplevel (display_x11->leader_gdk_surface))->is_leader = TRUE;
 
   display_x11->leader_window = GDK_SURFACE_XID (display_x11->leader_gdk_surface);
