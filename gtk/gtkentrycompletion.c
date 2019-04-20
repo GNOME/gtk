@@ -79,8 +79,7 @@
 #include "gtkscrolledwindow.h"
 #include "gtksizerequest.h"
 #include "gtkbox.h"
-#include "gtkwindow.h"
-#include "gtkwindowgroup.h"
+#include "gtkpopover.h"
 #include "gtkentry.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -578,9 +577,8 @@ gtk_entry_completion_constructed (GObject *object)
                                               NULL);
 
   /* pack it all */
-  priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_resizable (GTK_WINDOW (priv->popup_window), FALSE);
-  gtk_window_set_type_hint (GTK_WINDOW(priv->popup_window), GDK_SURFACE_TYPE_HINT_COMBO);
+  priv->popup_window = gtk_popover_new (NULL);
+  gtk_popover_set_position (GTK_POPOVER (priv->popup_window), GTK_POS_BOTTOM);
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",
@@ -1462,7 +1460,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
       gtk_tree_path_free (path);
     }
 
-  if (gtk_window_get_transient_for (GTK_WINDOW (completion->priv->popup_window)))
+  //if (gtk_window_get_transient_for (GTK_WINDOW (completion->priv->popup_window)))
     {
       gdk_surface_move_to_rect (_gtk_widget_get_surface (completion->priv->popup_window),
                                 &allocation,
@@ -1493,7 +1491,6 @@ prepare_popup_func (GdkSeat   *seat,
 static void
 gtk_entry_completion_popup (GtkEntryCompletion *completion)
 {
-  GtkWidget *toplevel;
   GtkText *text = gtk_entry_get_text_widget (GTK_ENTRY (completion->priv->entry));
 
   if (gtk_widget_get_mapped (completion->priv->popup_window))
@@ -1513,17 +1510,6 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
   /* default on no match */
   completion->priv->current_selected = -1;
 
-  toplevel = gtk_widget_get_toplevel (completion->priv->entry);
-  if (GTK_IS_WINDOW (toplevel))
-    {
-      gtk_window_set_transient_for (GTK_WINDOW (completion->priv->popup_window),
-                                    GTK_WINDOW (toplevel));
-      gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)),
-                                   GTK_WINDOW (completion->priv->popup_window));
-    }
-
-  gtk_window_set_display (GTK_WINDOW (completion->priv->popup_window),
-                          gtk_widget_get_display (completion->priv->entry));
   gtk_widget_realize (completion->priv->popup_window);
 
   _gtk_entry_completion_resize_popup (completion);
@@ -2548,10 +2534,8 @@ _gtk_entry_completion_disconnect (GtkEntryCompletion *completion)
 
   unset_accessible_relation (completion->priv->popup_window,
                              completion->priv->entry);
-  gtk_window_set_attached_to (GTK_WINDOW (completion->priv->popup_window),
-                              NULL);
-
-  gtk_window_set_transient_for (GTK_WINDOW (completion->priv->popup_window), NULL);
+  gtk_popover_set_relative_to (GTK_POPOVER (completion->priv->popup_window),
+                               NULL);
 
   completion->priv->entry = NULL;
 }
@@ -2564,7 +2548,7 @@ _gtk_entry_completion_connect (GtkEntryCompletion *completion,
 
   set_accessible_relation (completion->priv->popup_window,
                            completion->priv->entry);
-  gtk_window_set_attached_to (GTK_WINDOW (completion->priv->popup_window),
+  gtk_popover_set_relative_to (GTK_POPOVER (completion->priv->popup_window),
                               completion->priv->entry);
 
   connect_completion_signals (completion);
