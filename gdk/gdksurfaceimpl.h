@@ -159,9 +159,6 @@ struct _GdkSurfaceImplClass
                                          gboolean   setting);
   void         (* set_keep_below)       (GdkSurface *surface,
                                          gboolean   setting);
-  GdkSurface *  (* get_group)            (GdkSurface *surface);
-  void         (* set_group)            (GdkSurface *surface,
-                                         GdkSurface *leader);
   void         (* set_decorations)      (GdkSurface      *surface,
                                          GdkWMDecoration decorations);
   gboolean     (* get_decorations)      (GdkSurface       *surface,

@@ -3499,18 +3499,6 @@ gdk_wayland_surface_set_keep_below (GdkSurface *surface,
 {
 }
 
-static GdkSurface *
-gdk_wayland_surface_get_group (GdkSurface *surface)
-{
-  return NULL;
-}
-
-static void
-gdk_wayland_surface_set_group (GdkSurface *surface,
-                               GdkSurface *leader)
-{
-}
-
 static void
 gdk_wayland_surface_set_decorations (GdkSurface      *surface,
                                      GdkWMDecoration  decorations)
@@ -3848,8 +3836,6 @@ _gdk_surface_impl_wayland_class_init (GdkSurfaceImplWaylandClass *klass)
   impl_class->unfullscreen = gdk_wayland_surface_unfullscreen;
   impl_class->set_keep_above = gdk_wayland_surface_set_keep_above;
   impl_class->set_keep_below = gdk_wayland_surface_set_keep_below;
-  impl_class->get_group = gdk_wayland_surface_get_group;
-  impl_class->set_group = gdk_wayland_surface_set_group;
   impl_class->set_decorations = gdk_wayland_surface_set_decorations;
   impl_class->get_decorations = gdk_wayland_surface_get_decorations;
   impl_class->set_functions = gdk_wayland_surface_set_functions;

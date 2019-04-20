@@ -782,22 +782,6 @@ gdk_broadway_surface_set_keep_below (GdkSurface *surface, gboolean setting)
 
 }
 
-static GdkSurface *
-gdk_broadway_surface_get_group (GdkSurface *surface)
-{
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
-    return NULL;
-
-  return surface;
-}
-
-static void
-gdk_broadway_surface_set_group (GdkSurface *surface,
-                                GdkSurface *leader)
-{
-}
-
 static void
 gdk_broadway_surface_set_decorations (GdkSurface      *surface,
                                       GdkWMDecoration decorations)
@@ -1357,8 +1341,6 @@ gdk_surface_impl_broadway_class_init (GdkSurfaceImplBroadwayClass *klass)
   impl_class->unfullscreen = gdk_broadway_surface_unfullscreen;
   impl_class->set_keep_above = gdk_broadway_surface_set_keep_above;
   impl_class->set_keep_below = gdk_broadway_surface_set_keep_below;
-  impl_class->get_group = gdk_broadway_surface_get_group;
-  impl_class->set_group = gdk_broadway_surface_set_group;
   impl_class->set_decorations = gdk_broadway_surface_set_decorations;
   impl_class->get_decorations = gdk_broadway_surface_get_decorations;
   impl_class->set_functions = gdk_broadway_surface_set_functions;

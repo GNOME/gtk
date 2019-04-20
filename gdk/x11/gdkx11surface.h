@@ -115,6 +115,13 @@ GDK_AVAILABLE_IN_ALL
 void gdk_x11_surface_set_urgency_hint      (GdkSurface *surface,
                                             gboolean    urgent);
 
+GDK_AVAILABLE_IN_ALL
+void          gdk_x11_surface_set_group    (GdkSurface *surface,
+                                            GdkSurface *leader);
+GDK_AVAILABLE_IN_ALL
+GdkSurface *  gdk_x11_surface_get_group    (GdkSurface *surface);
+
+
 G_END_DECLS
 
 #endif /* __GDK_X11_SURFACE_H__ */

@@ -2071,32 +2071,6 @@ gdk_win32_surface_set_icon_name (GdkSurface   *window,
 #endif
 }
 
-static GdkSurface *
-gdk_win32_surface_get_group (GdkSurface *window)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (window), NULL);
-
-  if (GDK_SURFACE_DESTROYED (window))
-    return NULL;
-
-  g_warning ("gdk_surface_get_group not yet implemented");
-
-  return NULL;
-}
-
-static void
-gdk_win32_surface_set_group (GdkSurface *window,
-		      GdkSurface *leader)
-{
-  g_return_if_fail (GDK_IS_SURFACE (window));
-  g_return_if_fail (leader == NULL || GDK_IS_SURFACE (leader));
-
-  if (GDK_SURFACE_DESTROYED (window) || GDK_SURFACE_DESTROYED (leader))
-    return;
-
-  g_warning ("gdk_surface_set_group not implemented");
-}
-
 static void
 update_single_bit (LONG    *style,
                    gboolean all,
@@ -5273,8 +5247,6 @@ gdk_surface_impl_win32_class_init (GdkSurfaceImplWin32Class *klass)
   impl_class->unfullscreen = gdk_win32_surface_unfullscreen;
   impl_class->set_keep_above = gdk_win32_surface_set_keep_above;
   impl_class->set_keep_below = gdk_win32_surface_set_keep_below;
-  impl_class->get_group = gdk_win32_surface_get_group;
-  impl_class->set_group = gdk_win32_surface_set_group;
   impl_class->set_decorations = gdk_win32_surface_set_decorations;
   impl_class->get_decorations = gdk_win32_surface_get_decorations;
   impl_class->set_functions = gdk_win32_surface_set_functions;
