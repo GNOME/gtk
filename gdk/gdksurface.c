@@ -590,25 +590,6 @@ gdk_surface_new_popup_full (GdkDisplay *display,
   return surface;
 }
 
-/**
- * gdk_surface_new_temp: (constructor)
- * @display: the display to create the surface on
- *
- * Creates a new toplevel temporary surface. The surface will be
- * situated off-screen and not handle output.
- *
- * You most likely do not want to use this function.
- *
- * Returns: (transfer full): the new #GdkSurface
- **/
-GdkSurface *
-gdk_surface_new_temp (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  return gdk_surface_new (display, TRUE, GDK_SURFACE_TEMP, -100, -100, 10, 10);
-}
-
 static void
 update_pointer_info_foreach (GdkDisplay           *display,
                              GdkDevice            *device,
