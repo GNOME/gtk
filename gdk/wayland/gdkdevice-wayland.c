@@ -5010,31 +5010,29 @@ _gdk_wayland_device_get_implicit_grab_serial (GdkWaylandDevice *device,
         }
     }
 
-    return GDK_WAYLAND_SEAT (seat)->pointer_info.press_serial;
+  return GDK_WAYLAND_SEAT (seat)->pointer_info.press_serial;
 }
 
 uint32_t
-_gdk_wayland_seat_get_last_implicit_grab_serial (GdkSeat           *seat,
+_gdk_wayland_seat_get_last_implicit_grab_serial (GdkWaylandSeat    *seat,
                                                  GdkEventSequence **sequence)
 {
-  GdkWaylandSeat *wayland_seat;
   GdkWaylandTouchData *touch;
   GHashTableIter iter;
   GList *l;
   uint32_t serial;
 
-  wayland_seat = GDK_WAYLAND_SEAT (seat);
-  g_hash_table_iter_init (&iter, wayland_seat->touches);
+  g_hash_table_iter_init (&iter, seat->touches);
 
   if (sequence)
     *sequence = NULL;
 
-  serial = wayland_seat->keyboard_key_serial;
+  serial = seat->keyboard_key_serial;
 
-  if (wayland_seat->pointer_info.press_serial > serial)
-    serial = wayland_seat->pointer_info.press_serial;
+  if (seat->pointer_info.press_serial > serial)
+    serial = seat->pointer_info.press_serial;
 
-  for (l = wayland_seat->tablets; l; l = l->next)
+  for (l = seat->tablets; l; l = l->next)
     {
       GdkWaylandTabletData *tablet = l->data;
 
