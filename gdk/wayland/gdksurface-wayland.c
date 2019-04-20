@@ -33,6 +33,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkprivate-wayland.h"
 #include "gdkmonitor-wayland.h"
+#include "gdkseat-wayland.h"
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 
 #include <stdlib.h>
@@ -861,7 +862,7 @@ gdk_wayland_surface_update_dialogs (GdkSurface *surface)
       GdkSurface *w = l->data;
       GdkSurfaceImplWayland *impl;
 
-      if (!GDK_IS_SURFACE_IMPL_WAYLAND(w->impl))
+      if (!GDK_IS_SURFACE_IMPL_WAYLAND (w->impl))
         continue;
 
       impl = GDK_SURFACE_IMPL_WAYLAND (w->impl);
@@ -2185,14 +2186,12 @@ create_simple_positioner (GdkSurface *surface,
 static void
 gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
                                       GdkSurface     *parent,
-                                      struct wl_seat *seat)
+                                      GdkWaylandSeat *grab_input_seat)
 {
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
   GdkSurfaceImplWayland *parent_impl = GDK_SURFACE_IMPL_WAYLAND (parent->impl);
   gpointer positioner;
-  GdkSeat *gdk_seat;
-  guint32 serial;
 
   if (!impl->display_server.wl_surface)
     return;
@@ -2264,10 +2263,13 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
       g_assert_not_reached ();
     }
 
-  if (seat)
+  if (grab_input_seat)
     {
-      gdk_seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
-      serial = _gdk_wayland_seat_get_last_implicit_grab_serial (gdk_seat, NULL);
+      struct wl_seat *seat;
+      guint32 serial;
+
+      seat = gdk_wayland_seat_get_wl_seat (GDK_SEAT (grab_input_seat));
+      serial = _gdk_wayland_seat_get_last_implicit_grab_serial (grab_input_seat, NULL);
 
       switch (display->shell_variant)
         {
@@ -2288,7 +2290,7 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
   display->current_popups = g_list_append (display->current_popups, surface);
 }
 
-static struct wl_seat *
+static GdkWaylandSeat *
 find_grab_input_seat (GdkSurface *surface,
                       GdkSurface *transient_for)
 {
@@ -2301,7 +2303,7 @@ find_grab_input_seat (GdkSurface *surface,
    * grab before showing the popup surface.
    */
   if (impl->grab_input_seat)
-    return gdk_wayland_seat_get_wl_seat (impl->grab_input_seat);
+    return GDK_WAYLAND_SEAT (impl->grab_input_seat);
 
   /* HACK: GtkMenu grabs a special surface known as the "grab transfer surface"
    * and then transfers the grab over to the correct surface later. Look for
@@ -2314,7 +2316,7 @@ find_grab_input_seat (GdkSurface *surface,
     {
       tmp_impl = GDK_SURFACE_IMPL_WAYLAND (attached_grab_surface->impl);
       if (tmp_impl->grab_input_seat)
-        return gdk_wayland_seat_get_wl_seat (tmp_impl->grab_input_seat);
+        return GDK_WAYLAND_SEAT (tmp_impl->grab_input_seat);
     }
 
   while (transient_for)
@@ -2322,7 +2324,7 @@ find_grab_input_seat (GdkSurface *surface,
       tmp_impl = GDK_SURFACE_IMPL_WAYLAND (transient_for->impl);
 
       if (tmp_impl->grab_input_seat)
-        return gdk_wayland_seat_get_wl_seat (tmp_impl->grab_input_seat);
+        return GDK_WAYLAND_SEAT (tmp_impl->grab_input_seat);
 
       transient_for = tmp_impl->transient_for;
     }
@@ -2418,7 +2420,7 @@ gdk_wayland_surface_map (GdkSurface *surface)
   if (should_map_as_popup (surface))
     {
       gboolean create_fallback = FALSE;
-      struct wl_seat *grab_input_seat;
+      GdkWaylandSeat *grab_input_seat;
 
       /* Popup menus can appear without a transient parent, which means they
        * cannot be positioned properly on Wayland. This attempts to guess the
@@ -2492,8 +2494,8 @@ gdk_wayland_surface_map (GdkSurface *surface)
       if (!create_fallback)
         {
           gdk_wayland_surface_create_xdg_popup (surface,
-                                               transient_for,
-                                               grab_input_seat);
+                                                transient_for,
+                                                grab_input_seat);
         }
       else
         {
@@ -3581,7 +3583,7 @@ gdk_wayland_surface_begin_resize_drag (GdkSurface     *surface,
   if (!is_realized_toplevel (surface))
     return;
 
-  serial = _gdk_wayland_seat_get_last_implicit_grab_serial (gdk_device_get_seat (device),
+  serial = _gdk_wayland_seat_get_last_implicit_grab_serial (GDK_WAYLAND_SEAT (gdk_device_get_seat (device)),
                                                             &sequence);
 
   switch (display_wayland->shell_variant)
@@ -3632,7 +3634,7 @@ gdk_wayland_surface_begin_move_drag (GdkSurface *surface,
   if (!is_realized_toplevel (surface))
     return;
 
-  serial = _gdk_wayland_seat_get_last_implicit_grab_serial (gdk_device_get_seat (device),
+  serial = _gdk_wayland_seat_get_last_implicit_grab_serial (GDK_WAYLAND_SEAT (gdk_device_get_seat (device)),
                                                             &sequence);
   switch (display_wayland->shell_variant)
     {
