@@ -3363,7 +3363,7 @@ gdk_x11_surface_set_keep_below (GdkSurface *surface, gboolean setting)
 				 setting ? GDK_SURFACE_STATE_BELOW : 0);
 }
 
-static GdkSurface *
+GdkSurface *
 gdk_x11_surface_get_group (GdkSurface *surface)
 {
   GdkToplevelX11 *toplevel;
@@ -3377,9 +3377,9 @@ gdk_x11_surface_get_group (GdkSurface *surface)
   return toplevel->group_leader;
 }
 
-static void
+void
 gdk_x11_surface_set_group (GdkSurface *surface,
-			  GdkSurface *leader)
+                           GdkSurface *leader)
 {
   GdkToplevelX11 *toplevel;
   
@@ -4679,8 +4679,6 @@ gdk_surface_impl_x11_class_init (GdkSurfaceImplX11Class *klass)
   impl_class->unfullscreen = gdk_x11_surface_unfullscreen;
   impl_class->set_keep_above = gdk_x11_surface_set_keep_above;
   impl_class->set_keep_below = gdk_x11_surface_set_keep_below;
-  impl_class->get_group = gdk_x11_surface_get_group;
-  impl_class->set_group = gdk_x11_surface_set_group;
   impl_class->set_decorations = gdk_x11_surface_set_decorations;
   impl_class->get_decorations = gdk_x11_surface_get_decorations;
   impl_class->set_functions = gdk_x11_surface_set_functions;

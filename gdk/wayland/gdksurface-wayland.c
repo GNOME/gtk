@@ -3499,18 +3499,6 @@ gdk_wayland_surface_set_keep_below (GdkSurface *surface,
 {
 }
 
-static GdkSurface *
-gdk_wayland_surface_get_group (GdkSurface *surface)
-{
-  return NULL;
-}
-
-static void
-gdk_wayland_surface_set_group (GdkSurface *surface,
-                               GdkSurface *leader)
-{
-}
-
 static void
 gdk_wayland_surface_set_decorations (GdkSurface      *surface,
                                      GdkWMDecoration  decorations)
