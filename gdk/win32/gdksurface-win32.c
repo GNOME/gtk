@@ -1407,9 +1407,9 @@ gdk_win32_surface_lower (GdkSurface *window)
     }
 }
 
-static void
+void
 gdk_win32_surface_set_urgency_hint (GdkSurface *window,
-			     gboolean   urgent)
+                                    gboolean    urgent)
 {
   FLASHWINFO flashwinfo;
   typedef BOOL (WINAPI *PFN_FlashWindowEx) (FLASHWINFO*);
@@ -4891,63 +4891,6 @@ gdk_win32_surface_set_modal_hint (GdkSurface *window,
 }
 
 static void
-gdk_win32_surface_set_skip_taskbar_hint (GdkSurface *window,
-				  gboolean   skips_taskbar)
-{
-  static GdkSurface *owner = NULL;
-  //GdkSurfaceAttr wa;
-
-  g_return_if_fail (GDK_IS_SURFACE (window));
-
-  GDK_NOTE (MISC, g_print ("gdk_surface_set_skip_taskbar_hint: %p: %s, doing nothing\n",
-			   GDK_SURFACE_HWND (window),
-			   skips_taskbar ? "YES" : "NO"));
-
-  // ### TODO: Need to figure out what to do here.
-  return;
-
-  if (skips_taskbar)
-    {
-#if 0
-      if (owner == NULL)
-		{
-		  wa.surface_type = GDK_SURFACE_TEMP;
-		  wa.wclass = GDK_INPUT_OUTPUT;
-		  wa.width = wa.height = 1;
-		  owner = gdk_surface_new_internal (NULL, &wa, 0, TRUE);
-		}
-#endif
-
-      SetWindowLongPtr (GDK_SURFACE_HWND (window), GWLP_HWNDPARENT, (LONG_PTR) GDK_SURFACE_HWND (owner));
-
-#if 0 /* Should we also turn off the minimize and maximize buttons? */
-      SetWindowLong (GDK_SURFACE_HWND (window), GWL_STYLE,
-		     GetWindowLong (GDK_SURFACE_HWND (window), GWL_STYLE) & ~(WS_MINIMIZEBOX|WS_MAXIMIZEBOX|WS_SYSMENU));
-
-      SetWindowPos (GDK_SURFACE_HWND (window), SWP_NOZORDER_SPECIFIED,
-		    0, 0, 0, 0,
-		    SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOMOVE |
-		    SWP_NOREPOSITION | SWP_NOSIZE | SWP_NOZORDER);
-#endif
-    }
-  else
-    {
-      SetWindowLongPtr (GDK_SURFACE_HWND (window), GWLP_HWNDPARENT, 0);
-    }
-}
-
-static void
-gdk_win32_surface_set_skip_pager_hint (GdkSurface *window,
-				gboolean   skips_pager)
-{
-  g_return_if_fail (GDK_IS_SURFACE (window));
-
-  GDK_NOTE (MISC, g_print ("gdk_surface_set_skip_pager_hint: %p: %s, doing nothing\n",
-			   GDK_SURFACE_HWND (window),
-			   skips_pager ? "YES" : "NO"));
-}
-
-static void
 gdk_win32_surface_set_type_hint (GdkSurface        *window,
 			  GdkSurfaceTypeHint hint)
 {
@@ -5311,9 +5254,6 @@ gdk_surface_impl_win32_class_init (GdkSurfaceImplWin32Class *klass)
   impl_class->set_type_hint = gdk_win32_surface_set_type_hint;
   impl_class->get_type_hint = gdk_win32_surface_get_type_hint;
   impl_class->set_modal_hint = gdk_win32_surface_set_modal_hint;
-  impl_class->set_skip_taskbar_hint = gdk_win32_surface_set_skip_taskbar_hint;
-  impl_class->set_skip_pager_hint = gdk_win32_surface_set_skip_pager_hint;
-  impl_class->set_urgency_hint = gdk_win32_surface_set_urgency_hint;
   impl_class->set_geometry_hints = gdk_win32_surface_set_geometry_hints;
   impl_class->set_title = gdk_win32_surface_set_title;
   //impl_class->set_startup_id = gdk_x11_surface_set_startup_id;
