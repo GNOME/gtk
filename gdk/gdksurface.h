@@ -440,8 +440,6 @@ GdkSurface *   gdk_surface_new_popup            (GdkDisplay    *display,
 GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_surface_new_popup_full       (GdkDisplay    *display,
                                                  GdkSurface    *parent);
-GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_destroy               (GdkSurface     *surface);
