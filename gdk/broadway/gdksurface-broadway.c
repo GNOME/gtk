@@ -215,7 +215,7 @@ connect_frame_clock (GdkSurface *surface)
 }
 
 void
-_gdk_broadway_display_create_surface_impl (GdkDisplay    *display,
+_gdk_broadway_display_create_surface_impl (GdkDisplay     *display,
                                            GdkSurface     *surface,
                                            GdkSurface     *real_parent,
                                            GdkSurfaceAttr *attributes)
@@ -1080,10 +1080,11 @@ create_moveresize_surface (MoveResizeData *mv_resize,
   GdkGrabStatus status;
   GdkSeat *seat;
   GdkDevice *pointer;
+  GdkRectangle rect = { -100, -100, 1, 1 };
 
   g_assert (mv_resize->moveresize_emulation_surface == NULL);
 
-  mv_resize->moveresize_emulation_surface = gdk_surface_new_temp (mv_resize->display);
+  mv_resize->moveresize_emulation_surface = gdk_surface_new_popup (mv_resize->display, &rect);
 
   gdk_surface_show (mv_resize->moveresize_emulation_surface);
 
