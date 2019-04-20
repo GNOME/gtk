@@ -653,11 +653,6 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_icon_name  (GdkSurface      *surface,
                                           const gchar     *name);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_set_group      (GdkSurface      *surface,
-                                          GdkSurface      *leader);
-GDK_AVAILABLE_IN_ALL
-GdkSurface*    gdk_surface_get_group     (GdkSurface      *surface);
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_decorations (GdkSurface     *surface,
                                            GdkWMDecoration  decorations);
 GDK_AVAILABLE_IN_ALL

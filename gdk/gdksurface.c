@@ -4629,43 +4629,6 @@ gdk_surface_set_keep_below (GdkSurface *surface,
 }
 
 /**
- * gdk_surface_get_group:
- * @surface: a toplevel #GdkSurface
- *
- * Returns the group leader surface for @surface. See gdk_surface_set_group().
- *
- * Returns: (transfer none): the group leader surface for @surface
- **/
-GdkSurface *
-gdk_surface_get_group (GdkSurface *surface)
-{
-  return GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->get_group (surface);
-}
-
-/**
- * gdk_surface_set_group:
- * @surface: a toplevel #GdkSurface
- * @leader: (allow-none): group leader surface, or %NULL to restore the default group leader surface
- *
- * Sets the group leader surface for @surface. By default,
- * GDK sets the group leader for all toplevel surfaces
- * to a global surface implicitly created by GDK. With this function
- * you can override this default.
- *
- * The group leader surface allows the window manager to distinguish
- * all surfaces that belong to a single application. It may for example
- * allow users to minimize/unminimize all surfaces belonging to an
- * application at once. You should only set a non-default group surface
- * if your application pretends to be multiple applications.
- **/
-void
-gdk_surface_set_group (GdkSurface *surface,
-                       GdkSurface *leader)
-{
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_group (surface, leader);
-}
-
-/**
  * gdk_surface_set_decorations:
  * @surface: a toplevel #GdkSurface
  * @decorations: decoration hint mask
