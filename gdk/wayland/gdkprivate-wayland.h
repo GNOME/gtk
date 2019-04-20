@@ -34,6 +34,7 @@
 #include <gdk/gdkcursor.h>
 #include <gdk/wayland/gdkwayland.h>
 #include <gdk/wayland/gdkdisplay-wayland.h>
+#include <gdk/wayland/gdkseat-wayland.h>
 
 #include <xkbcommon/xkbcommon.h>
 
@@ -138,7 +139,7 @@ void        _gdk_wayland_display_remove_seat    (GdkWaylandDisplay       *displa
 GdkKeymap *_gdk_wayland_device_get_keymap (GdkDevice *device);
 uint32_t _gdk_wayland_device_get_implicit_grab_serial(GdkWaylandDevice *device,
                                                       const GdkEvent   *event);
-uint32_t _gdk_wayland_seat_get_last_implicit_grab_serial (GdkSeat           *seat,
+uint32_t _gdk_wayland_seat_get_last_implicit_grab_serial (GdkWaylandSeat     *seat,
                                                           GdkEventSequence **seqence);
 struct wl_data_device * gdk_wayland_device_get_data_device (GdkDevice *gdk_device);
 void gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
