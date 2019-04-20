@@ -1867,9 +1867,9 @@ gdk_x11_surface_set_modal_hint (GdkSurface *surface,
 			     NULL);
 }
 
-static void
+void
 gdk_x11_surface_set_skip_taskbar_hint (GdkSurface *surface,
-				      gboolean   skips_taskbar)
+                                       gboolean    skips_taskbar)
 {
   GdkToplevelX11 *toplevel;
   
@@ -1888,9 +1888,9 @@ gdk_x11_surface_set_skip_taskbar_hint (GdkSurface *surface,
 			     NULL);
 }
 
-static void
+void
 gdk_x11_surface_set_skip_pager_hint (GdkSurface *surface,
-				    gboolean   skips_pager)
+                                     gboolean    skips_pager)
 {
   GdkToplevelX11 *toplevel;
     
@@ -1909,9 +1909,9 @@ gdk_x11_surface_set_skip_pager_hint (GdkSurface *surface,
 			     NULL);
 }
 
-static void
+void
 gdk_x11_surface_set_urgency_hint (GdkSurface *surface,
-			     gboolean   urgent)
+                                  gboolean    urgent)
 {
   GdkToplevelX11 *toplevel;
     
@@ -4658,9 +4658,6 @@ gdk_surface_impl_x11_class_init (GdkSurfaceImplX11Class *klass)
   impl_class->set_type_hint = gdk_x11_surface_set_type_hint;
   impl_class->get_type_hint = gdk_x11_surface_get_type_hint;
   impl_class->set_modal_hint = gdk_x11_surface_set_modal_hint;
-  impl_class->set_skip_taskbar_hint = gdk_x11_surface_set_skip_taskbar_hint;
-  impl_class->set_skip_pager_hint = gdk_x11_surface_set_skip_pager_hint;
-  impl_class->set_urgency_hint = gdk_x11_surface_set_urgency_hint;
   impl_class->set_geometry_hints = gdk_x11_surface_set_geometry_hints;
   impl_class->set_title = gdk_x11_surface_set_title;
   impl_class->set_startup_id = gdk_x11_surface_set_startup_id;

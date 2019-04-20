@@ -556,16 +556,6 @@ void          gdk_surface_set_modal_hint   (GdkSurface       *surface,
                                             gboolean         modal);
 
 GDK_AVAILABLE_IN_ALL
-void gdk_surface_set_skip_taskbar_hint (GdkSurface *surface,
-                                        gboolean   skips_taskbar);
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_set_skip_pager_hint   (GdkSurface *surface,
-                                        gboolean   skips_pager);
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_set_urgency_hint      (GdkSurface *surface,
-                                        gboolean   urgent);
-
-GDK_AVAILABLE_IN_ALL
 void          gdk_surface_set_geometry_hints (GdkSurface          *surface,
                                               const GdkGeometry  *geometry,
                                               GdkSurfaceHints      geom_mask);
