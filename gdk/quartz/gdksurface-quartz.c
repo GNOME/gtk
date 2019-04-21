@@ -734,8 +734,7 @@ get_nsscreen_for_point (gint x, gint y)
 void
 _gdk_quartz_display_create_surface_impl (GdkDisplay    *display,
                                         GdkSurface     *window,
-                                        GdkSurface     *real_parent,
-                                        GdkSurfaceAttr *attributes)
+                                        GdkSurface     *real_parent)
 {
   GdkSurfaceImplQuartz *impl;
   GdkSurfaceImplQuartz *parent_impl;
