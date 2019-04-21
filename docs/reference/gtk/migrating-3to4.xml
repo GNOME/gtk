@@ -265,9 +265,8 @@
       <para>
         The gdk_window_new() function has been replaced by a number of more
         specialized constructors: gdk_surface_new_toplevel(), gdk_surface_new_popup(),
-        gdk_surface_new_temp(), gdk_surface_new_child(), gdk_surface_new_input(),
-        gdk_wayland_surface_new_subsurface(). Use the appropriate ones to create
-        your windows.
+        gdk_surface_new_temp(), gdk_wayland_surface_new_subsurface().
+        Use the appropriate ones to create your windows.
       </para>
       <para>
         Native and foreign subwindows are no longer supported. These concepts were

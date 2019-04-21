@@ -1083,7 +1083,7 @@ create_moveresize_surface (MoveResizeData *mv_resize,
 
   g_assert (mv_resize->moveresize_emulation_surface == NULL);
 
-  mv_resize->moveresize_emulation_surface = gdk_surface_new_popup (mv_resize->display, &rect);
+  mv_resize->moveresize_emulation_surface = gdk_surface_new_temp (mv_resize->display, &rect);
 
   gdk_surface_show (mv_resize->moveresize_emulation_surface);
 

@@ -5690,7 +5690,7 @@ gtk_window_realize (GtkWidget *widget)
 					      allocation.height);
           break;
         case GTK_WINDOW_POPUP:
-          surface = gdk_surface_new_popup (gtk_widget_get_display (widget), &allocation);
+          surface = gdk_surface_new_temp (gtk_widget_get_display (widget), &allocation);
           break;
         default:
           g_error (G_STRLOC": Unknown window type %d!", priv->type);
