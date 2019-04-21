@@ -814,8 +814,7 @@ connect_frame_clock (GdkSurface *surface)
 void
 _gdk_x11_display_create_surface_impl (GdkDisplay    *display,
                                       GdkSurface     *surface,
-                                      GdkSurface     *real_parent,
-                                      GdkSurfaceAttr *attributes)
+                                      GdkSurface     *real_parent)
 {
   GdkSurfaceImplX11 *impl;
   GdkX11Screen *x11_screen;
