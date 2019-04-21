@@ -454,6 +454,7 @@ _gdk_surface_update_size (GdkSurface *surface)
 static GdkSurface *
 gdk_surface_new (GdkDisplay     *display,
                  GdkSurfaceType  surface_type,
+                 GdkSurface     *parent,
                  int             x,
                  int             y,
                  int             width,
@@ -478,7 +479,7 @@ gdk_surface_new (GdkDisplay     *display,
   gdk_surface_set_frame_clock (surface, frame_clock);
   g_object_unref (frame_clock);
 
-  gdk_display_create_surface_impl (display, surface, NULL);
+  gdk_display_create_surface_impl (display, surface, parent);
   surface->impl_surface = surface;
 
   g_signal_connect (display, "seat-removed", G_CALLBACK (seat_removed_cb), surface);
@@ -492,8 +493,7 @@ gdk_surface_new (GdkDisplay     *display,
  * @width: width of new surface
  * @height: height of new surface
  *
- * Creates a new toplevel surface. The surface will be managed by the surface
- * manager.
+ * Creates a new toplevel surface.
  *
  * Returns: (transfer full): the new #GdkSurface
  **/
@@ -504,41 +504,45 @@ gdk_surface_new_toplevel (GdkDisplay *display,
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return gdk_surface_new (display, GDK_SURFACE_TOPLEVEL, 0, 0, width, height);
+  return gdk_surface_new (display, GDK_SURFACE_TOPLEVEL,
+                          NULL, 0, 0, width, height);
 }
 
 /**
- * gdk_surface_new_popup: (constructor)
+ * gdk_surface_new_temp: (constructor)
  * @display: the display to create the surface on
  * @position: position of the surface on screen
  *
- * Creates a new toplevel popup surface. The surface will bypass surface
- * management.
+ * Creates a new temporary surface.
+ * The surface will bypass surface management.
  *
  * Returns: (transfer full): the new #GdkSurface
  **/
 GdkSurface *
-gdk_surface_new_popup (GdkDisplay         *display,
-                       const GdkRectangle *position)
+gdk_surface_new_temp (GdkDisplay         *display,
+                      const GdkRectangle *position)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (position != NULL, NULL);
 
   return gdk_surface_new (display, GDK_SURFACE_TEMP,
+                          NULL,
                           position->x, position->y,
                           position->width, position->height);
 }
 
 GdkSurface *
-gdk_surface_new_popup_full (GdkDisplay *display,
-                            GdkSurface *parent)
+gdk_surface_new_popup (GdkDisplay *display,
+                       GdkSurface *parent)
 {
   GdkSurface *surface;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (GDK_IS_SURFACE (parent), NULL);
 
-  surface = gdk_surface_new (display, GDK_SURFACE_TEMP, 0, 0, 100, 100);
+  surface = gdk_surface_new (display, GDK_SURFACE_TEMP,
+                             NULL, 0, 0, 100, 100);
+
   gdk_surface_set_transient_for (surface, parent);
   gdk_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_MENU);
 
