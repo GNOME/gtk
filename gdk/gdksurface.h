@@ -528,8 +528,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean gdk_surface_is_visible     (GdkSurface *surface);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_surface_is_viewable    (GdkSurface *surface);
-GDK_AVAILABLE_IN_ALL
-gboolean gdk_surface_is_input_only  (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
 GdkSurfaceState gdk_surface_get_state (GdkSurface *surface);
