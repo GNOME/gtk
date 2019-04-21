@@ -118,19 +118,11 @@ typedef enum
 
 typedef struct _GdkSurfacePaint GdkSurfacePaint;
 
-typedef enum
-{
-  GDK_INPUT_OUTPUT,
-  GDK_INPUT_ONLY
-} GdkSurfaceSurfaceClass;
-
-
 struct _GdkSurfaceAttr
 {
   gint x, y;
   gint width;
   gint height;
-  GdkSurfaceSurfaceClass wclass;
   GdkSurfaceType surface_type;
 };
 
