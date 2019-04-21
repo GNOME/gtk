@@ -520,18 +520,12 @@ RegisterGdkClass (GdkSurfaceType wtype, GdkSurfaceTypeHint wtype_hint)
  * except for toplevel window where OS/Window Manager placement
  * is used.
  *
- * From attributes the only things used is: colormap, title,
- * wmclass and type_hint. [1]. We are checking redundant information
- * and complain if that changes, which would break this implementation
- * again.
- *
  * [1] http://mail.gnome.org/archives/gtk-devel-list/2010-August/msg00214.html
  */
 void
 _gdk_win32_display_create_surface_impl (GdkDisplay    *display,
 				       GdkSurface     *window,
-				       GdkSurface     *real_parent,
-				       GdkSurfaceAttr *attributes)
+				       GdkSurface     *real_parent)
 {
   HWND hwndNew;
   HANDLE hparent;
@@ -550,9 +544,8 @@ _gdk_win32_display_create_surface_impl (GdkDisplay    *display,
   g_return_if_fail (display == _gdk_display);
 
   GDK_NOTE (MISC,
-            g_print ("_gdk_surface_impl_new: %s %s\n", (window->surface_type == GDK_SURFACE_TOPLEVEL ? "TOPLEVEL" :
-                                                       (window->surface_type == GDK_SURFACE_TEMP ? "TEMP" : "???")),
-                                                       (attributes->wclass == GDK_INPUT_OUTPUT ? "" : "input-only")));
+            g_print ("_gdk_surface_impl_new: %s\n", (window->surface_type == GDK_SURFACE_TOPLEVEL ? "TOPLEVEL" :
+                                                       (window->surface_type == GDK_SURFACE_TEMP ? "TEMP" : "???")));
 
   hparent = (real_parent != NULL) ? GDK_SURFACE_HWND (real_parent) : NULL;
 

@@ -483,7 +483,6 @@ gdk_surface_new (GdkDisplay     *display,
 {
   GdkSurface *surface;
   GdkFrameClock *frame_clock;
-  GdkSurfaceAttr attributes;
 
   surface = _gdk_display_create_surface (display);
 
@@ -491,22 +490,17 @@ gdk_surface_new (GdkDisplay     *display,
   surface->focus_on_map = TRUE;
   surface->alpha = 255;
 
+  surface->surface_type = surface_type;
   surface->x = x;
   surface->y = y;
   surface->width = width;
   surface->height = height;
-  surface->surface_type = surface_type;
 
   frame_clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE, NULL);
   gdk_surface_set_frame_clock (surface, frame_clock);
   g_object_unref (frame_clock);
 
-  attributes.surface_type = surface_type;
-  attributes.x = x;
-  attributes.y = y;
-  attributes.width = width;
-  attributes.height = height;
-  gdk_display_create_surface_impl (display, surface, NULL, &attributes);
+  gdk_display_create_surface_impl (display, surface, NULL);
   surface->impl_surface = surface;
 
   g_signal_connect (display, "seat-removed", G_CALLBACK (seat_removed_cb), surface);

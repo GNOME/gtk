@@ -545,8 +545,7 @@ static void gdk_wayland_surface_create_surface (GdkSurface *surface);
 void
 _gdk_wayland_display_create_surface_impl (GdkDisplay     *display,
                                           GdkSurface     *surface,
-                                          GdkSurface     *real_parent,
-                                          GdkSurfaceAttr *attributes)
+                                          GdkSurface     *real_parent)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkSurfaceImplWayland *impl;

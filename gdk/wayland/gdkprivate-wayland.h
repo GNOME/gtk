@@ -118,8 +118,7 @@ void             gdk_wayland_drop_set_action               (GdkDrop             
 
 void _gdk_wayland_display_create_surface_impl (GdkDisplay     *display,
                                                GdkSurface     *surface,
-                                               GdkSurface     *real_parent,
-                                               GdkSurfaceAttr *attributes);
+                                               GdkSurface     *real_parent);
 
 gint        _gdk_wayland_display_text_property_to_utf8_list (GdkDisplay    *display,
                                                              GdkAtom        encoding,
