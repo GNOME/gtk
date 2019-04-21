@@ -225,9 +225,6 @@ void _gdk_windowing_event_data_copy (const GdkEvent *src,
                                      GdkEvent       *dst);
 void _gdk_windowing_event_data_free (GdkEvent       *event);
 
-void gdk_surface_set_state (GdkSurface      *surface,
-                            GdkSurfaceState  new_state);
-
 gboolean        _gdk_cairo_surface_extents       (cairo_surface_t *surface,
                                                   GdkRectangle    *extents);
 void            gdk_gl_texture_from_surface      (cairo_surface_t *surface,
