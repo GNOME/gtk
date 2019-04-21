@@ -740,12 +740,6 @@ void gdk_surface_begin_move_drag_for_device   (GdkSurface     *surface,
 /* Interface for dirty-region queueing */
 GDK_AVAILABLE_IN_ALL
 void       gdk_surface_queue_expose              (GdkSurface          *surface);
-GDK_AVAILABLE_IN_ALL
-void       gdk_surface_invalidate_rect           (GdkSurface          *surface,
-                                                  const GdkRectangle   *rect);
-GDK_AVAILABLE_IN_ALL
-void       gdk_surface_invalidate_region         (GdkSurface          *surface,
-                                                  const cairo_region_t *region);
 
 GDK_AVAILABLE_IN_ALL
 void       gdk_surface_freeze_updates      (GdkSurface    *surface);

@@ -233,8 +233,6 @@ gdk_surface_create_gl_context
 gdk_surface_create_vulkan_context
 
 <SUBSECTION>
-gdk_surface_invalidate_rect
-gdk_surface_invalidate_region
 gdk_surface_queue_expose
 gdk_surface_freeze_updates
 gdk_surface_thaw_updates

@@ -282,6 +282,10 @@ GdkSurface* gdk_surface_new               (GdkDisplay     *display,
                                            GdkSurfaceAttr  *attributes);
 void       _gdk_surface_destroy           (GdkSurface      *surface,
                                            gboolean        foreign_destroy);
+void       gdk_surface_invalidate_rect    (GdkSurface           *surface,
+                                           const GdkRectangle   *rect);
+void       gdk_surface_invalidate_region  (GdkSurface           *surface,
+                                           const cairo_region_t *region);
 void       _gdk_surface_clear_update_area (GdkSurface      *surface);
 void       _gdk_surface_update_size       (GdkSurface      *surface);
 gboolean   _gdk_surface_update_viewable   (GdkSurface      *surface);
