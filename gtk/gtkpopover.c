@@ -494,7 +494,7 @@ gtk_popover_realize (GtkWidget *widget)
 
   display = gtk_widget_get_display (priv->relative_to);
 
-  priv->surface = gdk_surface_new_popup_full (display, gtk_widget_get_surface (priv->relative_to));
+  priv->surface = gdk_surface_new_popup (display, gtk_widget_get_surface (priv->relative_to));
 
   gtk_widget_set_surface (widget, priv->surface);
   gdk_surface_set_widget (priv->surface, widget);
