@@ -717,16 +717,13 @@ setup_toplevel_window (GdkSurface    *surface,
 
   set_wm_protocols (surface);
 
-  if (!surface->input_only)
-    {
-      /* The focus surface is off the visible area, and serves to receive key
-       * press events so they don't get sent to child surfaces.
-       */
-      toplevel->focus_window = create_focus_window (display, xid);
-      _gdk_x11_display_add_window (x11_screen->display,
-                                   &toplevel->focus_window,
-                                   surface);
-    }
+  /* The focus surface is off the visible area, and serves to receive key
+   * press events so they don't get sent to child surfaces.
+   */
+  toplevel->focus_window = create_focus_window (display, xid);
+  _gdk_x11_display_add_window (x11_screen->display,
+                               &toplevel->focus_window,
+                               surface);
 
   check_leader_window_title (x11_screen->display);
 
@@ -858,48 +855,31 @@ _gdk_x11_display_create_surface_impl (GdkDisplay    *display,
 
   impl->override_redirect = FALSE;
 
-  if (!surface->input_only)
+  class = InputOutput;
+
+  xattributes.background_pixmap = None;
+  xattributes_mask |= CWBackPixmap;
+
+  xattributes.border_pixel = BlackPixel (xdisplay, x11_screen->screen_num);
+  xattributes_mask |= CWBorderPixel;
+
+  xattributes.bit_gravity = NorthWestGravity;
+  xattributes_mask |= CWBitGravity;
+
+  xattributes.colormap = gdk_x11_display_get_window_colormap (display_x11);
+  xattributes_mask |= CWColormap;
+
+  if (surface->surface_type == GDK_SURFACE_TEMP)
     {
-      class = InputOutput;
+      xattributes.save_under = True;
+      xattributes.override_redirect = True;
+      xattributes.cursor = None;
+      xattributes_mask |= CWSaveUnder | CWOverrideRedirect;
 
-      xattributes.background_pixmap = None;
-      xattributes_mask |= CWBackPixmap;
-
-      xattributes.border_pixel = BlackPixel (xdisplay, x11_screen->screen_num);
-      xattributes_mask |= CWBorderPixel;
-
-      xattributes.bit_gravity = NorthWestGravity;
-      xattributes_mask |= CWBitGravity;
-
-      xattributes.colormap = gdk_x11_display_get_window_colormap (display_x11);
-      xattributes_mask |= CWColormap;
-
-      if (surface->surface_type == GDK_SURFACE_TEMP)
-        {
-          xattributes.save_under = True;
-          xattributes.override_redirect = True;
-          xattributes.cursor = None;
-          xattributes_mask |= CWSaveUnder | CWOverrideRedirect;
-
-          impl->override_redirect = TRUE;
-        }
-
-      depth = gdk_x11_display_get_window_depth (display_x11);
+      impl->override_redirect = TRUE;
     }
-  else
-    {
-      class = InputOnly;
 
-      if (surface->surface_type == GDK_SURFACE_TEMP)
-        {
-          xattributes.override_redirect = True;
-          xattributes_mask |= CWOverrideRedirect;
-
-          impl->override_redirect = TRUE;
-        }
-
-      depth = 0;
-    }
+  depth = gdk_x11_display_get_window_depth (display_x11);
 
   if (surface->width * impl->surface_scale > 32767 ||
       surface->height * impl->surface_scale > 32767)
