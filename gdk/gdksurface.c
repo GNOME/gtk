@@ -505,7 +505,6 @@ gdk_surface_new (GdkDisplay     *display,
   gdk_surface_set_frame_clock (surface, frame_clock);
   g_object_unref (frame_clock);
 
-  attributes.wclass = input_only ? GDK_INPUT_ONLY : GDK_INPUT_OUTPUT;
   attributes.surface_type = surface_type;
   attributes.x = x;
   attributes.y = y;
