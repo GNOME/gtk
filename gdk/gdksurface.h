@@ -511,13 +511,6 @@ void gdk_surface_set_child_input_shapes     (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
 void gdk_surface_merge_child_input_shapes   (GdkSurface       *surface);
 
-
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_set_pass_through (GdkSurface *surface,
-                                   gboolean   pass_through);
-GDK_AVAILABLE_IN_ALL
-gboolean gdk_surface_get_pass_through (GdkSurface *surface);
-
 /*
  * Check if a surface has been shown, and whether all its
  * parents up to a toplevel have been shown, respectively.

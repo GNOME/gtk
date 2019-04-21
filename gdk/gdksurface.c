@@ -2317,56 +2317,6 @@ gdk_surface_set_child_input_shapes (GdkSurface *surface)
 }
 
 /**
- * gdk_surface_set_pass_through:
- * @surface: a #GdkSurface
- * @pass_through: a boolean
- *
- * Sets whether input to the surface is passed through to the surface
- * below.
- *
- * The default value of this is %FALSE, which means that pointer
- * events that happen inside the surface are send first to the surface,
- * but if the event is not selected by the event mask then the event
- * is sent to the parent surface, and so on up the hierarchy.
- *
- * If @pass_through is %TRUE then such pointer events happen as if the
- * surface wasn't there at all, and thus will be sent first to any
- * surfaces below @surface. This is useful if the surface is used in a
- * transparent fashion. In the terminology of the web this would be called
- * "pointer-events: none".
- *
- * Note that a surface with @pass_through %TRUE can still have a subsurface
- * without pass through, so you can get events on a subset of a surface. And in
- * that cases you would get the in-between related events such as the pointer
- * enter/leave events on its way to the destination surface.
- **/
-void
-gdk_surface_set_pass_through (GdkSurface *surface,
-                              gboolean   pass_through)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  surface->pass_through = !!pass_through;
-}
-
-/**
- * gdk_surface_get_pass_through:
- * @surface: a #GdkSurface
- *
- * Returns whether input to the surface is passed through to the surface
- * below.
- *
- * See gdk_surface_set_pass_through() for details
- **/
-gboolean
-gdk_surface_get_pass_through (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-
-  return surface->pass_through;
-}
-
-/**
  * gdk_surface_merge_child_input_shapes:
  * @surface: a #GdkSurface
  *
