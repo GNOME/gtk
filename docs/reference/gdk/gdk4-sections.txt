@@ -190,7 +190,6 @@ gdk_surface_hide
 gdk_surface_is_destroyed
 gdk_surface_is_visible
 gdk_surface_is_viewable
-gdk_surface_is_input_only
 gdk_surface_get_state
 gdk_surface_iconify
 gdk_surface_deiconify
