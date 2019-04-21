@@ -2200,7 +2200,7 @@ menu_grab_transfer_surface_get (GtkMenu *menu)
   if (!surface)
     {
       GdkRectangle rect = { -100, -100, 1, 1 };
-      surface = gdk_surface_new_popup (gtk_widget_get_display (GTK_WIDGET (menu)), &rect);
+      surface = gdk_surface_new_temp (gtk_widget_get_display (GTK_WIDGET (menu)), &rect);
 
       gdk_surface_show (surface);
 
