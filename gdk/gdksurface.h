@@ -49,7 +49,7 @@ typedef struct _GdkGeometry          GdkGeometry;
 typedef enum
 {
   GDK_SURFACE_TOPLEVEL,
-  GDK_SURFACE_TEMP
+  GDK_SURFACE_TEMP,
 } GdkSurfaceType;
 
 /* Size restriction enumeration.
@@ -435,10 +435,10 @@ GdkSurface *   gdk_surface_new_toplevel         (GdkDisplay    *display,
                                                  int            width,
                                                  int            height);
 GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_new_popup            (GdkDisplay    *display,
+GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display,
                                                  const GdkRectangle *position);
 GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_surface_new_popup_full       (GdkDisplay    *display,
+GdkSurface *   gdk_surface_new_popup            (GdkDisplay    *display,
                                                  GdkSurface    *parent);
 
 GDK_AVAILABLE_IN_ALL
