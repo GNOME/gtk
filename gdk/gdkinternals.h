@@ -42,8 +42,6 @@ G_BEGIN_DECLS
 
 /* Debugging support */
 
-typedef struct _GdkSurfaceAttr          GdkSurfaceAttr;
-
 typedef enum {
   GDK_DEBUG_MISC            = 1 <<  0,
   GDK_DEBUG_EVENTS          = 1 <<  1,
@@ -117,14 +115,6 @@ typedef enum
 } GdkEventFlags;
 
 typedef struct _GdkSurfacePaint GdkSurfacePaint;
-
-struct _GdkSurfaceAttr
-{
-  gint x, y;
-  gint width;
-  gint height;
-  GdkSurfaceType surface_type;
-};
 
 struct _GdkSurface
 {
