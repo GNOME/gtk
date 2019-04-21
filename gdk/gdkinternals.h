@@ -131,7 +131,6 @@ struct _GdkSurfaceAttr
   gint height;
   GdkSurfaceSurfaceClass wclass;
   GdkSurfaceType surface_type;
-  GdkSurfaceTypeHint type_hint;
 };
 
 struct _GdkSurface
