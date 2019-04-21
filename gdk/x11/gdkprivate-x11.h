@@ -178,8 +178,7 @@ void       _gdk_x11_display_get_maximal_cursor_size (GdkDisplay *display,
                                                      guint      *height);
 void       _gdk_x11_display_create_surface_impl     (GdkDisplay    *display,
                                                      GdkSurface     *window,
-                                                     GdkSurface     *real_parent,
-                                                     GdkSurfaceAttr *attributes);
+                                                     GdkSurface     *real_parent);
 GList *    gdk_x11_display_get_toplevel_windows     (GdkDisplay *display);
 
 void _gdk_x11_precache_atoms (GdkDisplay          *display,
