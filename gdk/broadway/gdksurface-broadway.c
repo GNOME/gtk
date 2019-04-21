@@ -238,7 +238,6 @@ _gdk_broadway_display_create_surface_impl (GdkDisplay    *display,
 
   g_assert (surface->surface_type == GDK_SURFACE_TOPLEVEL ||
             surface->surface_type == GDK_SURFACE_TEMP);
-  g_assert (surface->parent == NULL);
 
   broadway_display->toplevels = g_list_prepend (broadway_display->toplevels, impl);
 
