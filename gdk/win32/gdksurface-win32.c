@@ -568,19 +568,7 @@ _gdk_win32_display_create_surface_impl (GdkDisplay    *display,
   impl->unscaled_width = window->width * impl->surface_scale;
   impl->unscaled_height = window->height * impl->surface_scale;
 
-  if (!window->input_only)
-    {
-      dwExStyle = 0;
-    }
-  else
-    {
-      /* I very much doubt using WS_EX_TRANSPARENT actually
-       * corresponds to how X11 InputOnly windows work, but it appears
-       * to work well enough for the actual use cases in gtk.
-       */
-      dwExStyle = WS_EX_TRANSPARENT;
-      GDK_NOTE (MISC, g_print ("... GDK_INPUT_ONLY\n"));
-    }
+  dwExStyle = 0;
 
   switch (window->surface_type)
     {
