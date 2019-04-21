@@ -217,8 +217,7 @@ connect_frame_clock (GdkSurface *surface)
 void
 _gdk_broadway_display_create_surface_impl (GdkDisplay     *display,
                                            GdkSurface     *surface,
-                                           GdkSurface     *real_parent,
-                                           GdkSurfaceAttr *attributes)
+                                           GdkSurface     *real_parent)
 {
   GdkSurfaceImplBroadway *impl;
   GdkBroadwayDisplay *broadway_display;
