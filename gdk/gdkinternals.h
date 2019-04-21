@@ -160,7 +160,6 @@ struct _GdkSurface
   guint8 alpha;
   guint8 fullscreen_mode;
 
-  guint input_only : 1;
   guint pass_through : 1;
   guint modal_hint : 1;
 

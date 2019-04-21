@@ -1139,56 +1139,53 @@ move_resize_window_internal (GdkSurface *window,
     }
   else 
     {
-      if (!window->input_only)
+      NSRect nsrect;
+
+      nsrect = NSMakeRect (window->x, window->y, window->width, window->height);
+
+      /* The newly visible area of this window in a coordinate
+       * system rooted at the origin of this window.
+       */
+      new_visible.x = -window->x;
+      new_visible.y = -window->y;
+      new_visible.width = old_visible.width;   /* parent has not changed size */
+      new_visible.height = old_visible.height; /* parent has not changed size */
+
+      expose_region = cairo_region_create_rectangle (&new_visible);
+      old_region = cairo_region_create_rectangle (&old_visible);
+      cairo_region_subtract (expose_region, old_region);
+
+      /* Determine what (if any) part of the previously visible
+       * part of the window can be copied without a redraw
+       */
+      scroll_rect = old_visible;
+      scroll_rect.x -= delta.width;
+      scroll_rect.y -= delta.height;
+      gdk_rectangle_intersect (&scroll_rect, &old_visible, &scroll_rect);
+
+      if (!cairo_region_is_empty (expose_region))
         {
-          NSRect nsrect;
-
-          nsrect = NSMakeRect (window->x, window->y, window->width, window->height);
-
-          /* The newly visible area of this window in a coordinate
-           * system rooted at the origin of this window.
-           */
-          new_visible.x = -window->x;
-          new_visible.y = -window->y;
-          new_visible.width = old_visible.width;   /* parent has not changed size */
-          new_visible.height = old_visible.height; /* parent has not changed size */
-
-          expose_region = cairo_region_create_rectangle (&new_visible);
-          old_region = cairo_region_create_rectangle (&old_visible);
-          cairo_region_subtract (expose_region, old_region);
-
-          /* Determine what (if any) part of the previously visible
-           * part of the window can be copied without a redraw
-           */
-          scroll_rect = old_visible;
-          scroll_rect.x -= delta.width;
-          scroll_rect.y -= delta.height;
-          gdk_rectangle_intersect (&scroll_rect, &old_visible, &scroll_rect);
-
-          if (!cairo_region_is_empty (expose_region))
+          if (scroll_rect.width != 0 && scroll_rect.height != 0)
             {
-              if (scroll_rect.width != 0 && scroll_rect.height != 0)
-                {
-                  [impl->view scrollRect:NSMakeRect (scroll_rect.x,
-                                                     scroll_rect.y,
-                                                     scroll_rect.width,
-                                                     scroll_rect.height)
+              [impl->view scrollRect:NSMakeRect (scroll_rect.x,
+                                                 scroll_rect.y,
+                                                 scroll_rect.width,
+                                                 scroll_rect.height)
 			              by:delta];
-                }
-
-              [impl->view setFrame:nsrect];
-
-              gdk_quartz_surface_set_needs_display_in_region (window, expose_region);
-            }
-          else
-            {
-              [impl->view setFrame:nsrect];
-              [impl->view setNeedsDisplay:YES];
             }
 
-          cairo_region_destroy (expose_region);
-          cairo_region_destroy (old_region);
+          [impl->view setFrame:nsrect];
+
+          gdk_quartz_surface_set_needs_display_in_region (window, expose_region);
         }
+      else
+        {
+          [impl->view setFrame:nsrect];
+          [impl->view setNeedsDisplay:YES];
+        }
+
+      cairo_region_destroy (expose_region);
+      cairo_region_destroy (old_region);
     }
 
   GDK_QUARTZ_RELEASE_POOL;

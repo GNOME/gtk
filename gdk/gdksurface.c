@@ -475,7 +475,6 @@ _gdk_surface_update_size (GdkSurface *surface)
 
 static GdkSurface *
 gdk_surface_new (GdkDisplay     *display,
-                 gboolean        input_only,
                  GdkSurfaceType  surface_type,
                  int             x,
                  int             y,
@@ -496,10 +495,7 @@ gdk_surface_new (GdkDisplay     *display,
   surface->y = y;
   surface->width = width;
   surface->height = height;
-  surface->input_only = input_only;
   surface->surface_type = surface_type;
-
-  g_warn_if_fail (!surface->input_only || surface->surface_type == GDK_SURFACE_TEMP);
 
   frame_clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE, NULL);
   gdk_surface_set_frame_clock (surface, frame_clock);
@@ -536,7 +532,7 @@ gdk_surface_new_toplevel (GdkDisplay *display,
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return gdk_surface_new (display, FALSE, GDK_SURFACE_TOPLEVEL, 0, 0, width, height);
+  return gdk_surface_new (display, GDK_SURFACE_TOPLEVEL, 0, 0, width, height);
 }
 
 /**
@@ -556,7 +552,7 @@ gdk_surface_new_popup (GdkDisplay         *display,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (position != NULL, NULL);
 
-  return gdk_surface_new (display, FALSE, GDK_SURFACE_TEMP,
+  return gdk_surface_new (display, GDK_SURFACE_TEMP,
                           position->x, position->y,
                           position->width, position->height);
 }
@@ -582,7 +578,7 @@ gdk_surface_new_popup_full (GdkDisplay *display,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (GDK_IS_SURFACE (parent), NULL);
 
-  surface = gdk_surface_new (display, FALSE, GDK_SURFACE_TEMP, 0, 0, 100, 100);
+  surface = gdk_surface_new (display, GDK_SURFACE_TEMP, 0, 0, 100, 100);
   gdk_surface_set_transient_for (surface, parent);
   gdk_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_MENU);
 
@@ -1154,7 +1150,7 @@ gdk_surface_invalidate_rect (GdkSurface        *surface,
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  if (surface->input_only || !surface->viewable)
+  if (!surface->viewable)
     return;
 
   if (!rect)
@@ -1233,9 +1229,7 @@ gdk_surface_invalidate_region (GdkSurface          *surface,
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  if (surface->input_only ||
-      !surface->viewable ||
-      cairo_region_is_empty (region))
+  if (!surface->viewable || cairo_region_is_empty (region))
     return;
 
   r.x = 0;
@@ -2452,22 +2446,6 @@ gdk_surface_get_focus_on_map (GdkSurface *surface)
   return surface->focus_on_map;
 }
 
-/**
- * gdk_surface_is_input_only:
- * @surface: a toplevel #GdkSurface
- *
- * Determines whether or not the surface is an input only surface.
- *
- * Returns: %TRUE if @surface is input only
- */
-gboolean
-gdk_surface_is_input_only (GdkSurface *surface)
-{
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
-
-  return surface->input_only;
-}
-
 static void
 update_cursor (GdkDisplay *display,
                GdkDevice  *device)
@@ -2634,9 +2612,6 @@ gdk_surface_print (GdkSurface *surface,
 
   g_print (" %s", surface_types[surface->surface_type]);
 
-  if (surface->input_only)
-    g_print (" input-only");
-
   if (!gdk_surface_is_visible ((GdkSurface *)surface))
     g_print (" hidden");
 
@@ -2653,18 +2628,14 @@ gdk_surface_print (GdkSurface *surface,
 
 static void
 gdk_surface_print_tree (GdkSurface *surface,
-                        int indent,
-                        gboolean include_input_only)
+                        int         indent)
 {
   GList *l;
-
-  if (surface->input_only && !include_input_only)
-    return;
 
   gdk_surface_print (surface, indent);
 
   for (l = surface->children; l != NULL; l = l->next)
-    gdk_surface_print_tree (l->data, indent + 4, include_input_only);
+    gdk_surface_print_tree (l->data, indent + 4);
 }
 
 #endif /* DEBUG_SURFACE_PRINTING */
@@ -2722,7 +2693,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
       (event->key.keyval == 0xa7 ||
        event->key.keyval == 0xbd))
     {
-      gdk_surface_print_tree (event_surface, 0, event->key.keyval == 0xbd);
+      gdk_surface_print_tree (event_surface, 0);
     }
 #endif
 
