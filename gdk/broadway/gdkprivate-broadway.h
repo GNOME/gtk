@@ -103,8 +103,7 @@ void _gdk_broadway_display_get_maximal_cursor_size (GdkDisplay *display,
                                                     guint       *height);
 void       _gdk_broadway_display_create_surface_impl    (GdkDisplay    *display,
                                                          GdkSurface     *surface,
-                                                         GdkSurface     *real_parent,
-                                                         GdkSurfaceAttr *attributes);
+                                                         GdkSurface     *real_parent);
 gint _gdk_broadway_display_text_property_to_utf8_list (GdkDisplay    *display,
                                                        GdkAtom        encoding,
                                                        gint           format,
