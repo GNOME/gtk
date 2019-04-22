@@ -2911,6 +2911,8 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
       return;
     }
 
+  g_assert (gsk_gl_driver_in_frame (self->gl_driver));
+
   /* Set up the modelview and projection matrices to fit our viewport */
   graphene_matrix_init_scale (&modelview, scale_factor, scale_factor, 1.0);
   graphene_matrix_init_ortho (&projection,
@@ -2922,7 +2924,6 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
                               ORTHO_FAR_PLANE);
   graphene_matrix_scale (&projection, 1, -1, 1);
 
-  gsk_gl_driver_begin_frame (self->gl_driver);
   gsk_gl_glyph_cache_begin_frame (&self->glyph_cache);
   gsk_gl_shadow_cache_begin_frame (&self->shadow_cache, self->gl_driver);
 
@@ -2997,8 +2998,6 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 
   gsk_gl_renderer_render_ops (self, render_op_builder.buffer_size);
 
-  gsk_gl_driver_end_frame (self->gl_driver);
-
 #ifdef G_ENABLE_DEBUG
   gsk_profiler_counter_inc (profiler, self->profile_counters.frames);
 
@@ -3047,7 +3046,6 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   g_assert_cmphex (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
 
   gsk_gl_renderer_clear (self);
-  gsk_gl_driver_end_frame (self->gl_driver);
 
   /* Render the actual scene */
   gsk_gl_renderer_do_render (renderer, root, viewport, fbo_id, 1);
@@ -3057,6 +3055,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
                                 width, height,
                                 NULL, NULL);
 
+  gsk_gl_driver_end_frame (self->gl_driver);
   gsk_gl_renderer_clear_tree (self);
   return texture;
 }
@@ -3111,7 +3110,9 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   viewport.size.width = gdk_surface_get_width (surface) * self->scale_factor;
   viewport.size.height = gdk_surface_get_height (surface) * self->scale_factor;
 
+  gsk_gl_driver_begin_frame (self->gl_driver);
   gsk_gl_renderer_do_render (renderer, root, &viewport, 0, self->scale_factor);
+  gsk_gl_driver_end_frame (self->gl_driver);
 
   gdk_gl_context_make_current (self->gl_context);
   gsk_gl_renderer_clear_tree (self);
