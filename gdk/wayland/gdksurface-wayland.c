@@ -549,6 +549,8 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
   if (parent == NULL)
     display_wayland->toplevels = g_list_prepend (display_wayland->toplevels, surface);
 
+  impl->transient_for = parent;
+
   gdk_wayland_surface_create_surface (surface);
 
   g_signal_connect (frame_clock, "before-paint", G_CALLBACK (on_frame_clock_before_paint), surface);
@@ -2292,6 +2294,9 @@ static gboolean
 should_map_as_popup (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  if (GDK_SURFACE_TYPE (surface) == GDK_SURFACE_POPUP)
+    return TRUE;
 
   /* Ideally, popup would be temp surfaces with a parent and grab */
   if (GDK_SURFACE_TYPE (surface) == GDK_SURFACE_TEMP)
