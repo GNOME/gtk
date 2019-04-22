@@ -142,6 +142,7 @@ typedef struct {
   GtkWidget *relative_to;
   GdkRectangle pointing_to;
   gboolean has_pointing_to;
+  guint surface_transform_changed_cb;
   GtkPositionType position;
   gboolean modal;
   gboolean has_grab;
@@ -524,6 +525,25 @@ grab_prepare_func (GdkSeat    *seat,
 }
 
 static void
+unset_surface_transform_changed_cb (gpointer data)
+{
+  GtkPopover *popover = data;
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  priv->surface_transform_changed_cb = 0;
+}
+
+static gboolean
+surface_transform_changed_cb (GtkWidget               *widget,
+                              const graphene_matrix_t *transform,
+                              gpointer                 user_data)
+{
+  move_to_rect (GTK_POPOVER (user_data));
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
 gtk_popover_map (GtkWidget *widget)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
@@ -544,6 +564,12 @@ gtk_popover_map (GtkWidget *widget)
   gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
   move_to_rect (popover);
 
+  priv->surface_transform_changed_cb =
+    gtk_widget_add_surface_transform_changed_callback (priv->relative_to,
+                                                       surface_transform_changed_cb,
+                                                       popover,
+                                                       unset_surface_transform_changed_cb);
+
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->map (widget);
 
   child = gtk_bin_get_child (GTK_BIN (widget));
@@ -557,6 +583,10 @@ gtk_popover_unmap (GtkWidget *widget)
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *child;
+
+  gtk_widget_remove_surface_transform_changed_callback (priv->relative_to,
+                                                        priv->surface_transform_changed_cb);
+  priv->surface_transform_changed_cb = 0;
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->unmap (widget);
 
