@@ -1332,27 +1332,6 @@ rewrite_event_for_grabs (GdkEvent *event)
   event_widget = gtk_get_event_widget (event);
   grab_widget = gtk_native_get_for_surface (grab_surface);
 
-  switch ((guint) event->any.type)
-    {
-    case GDK_BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:
-    case GDK_KEY_PRESS:
-    case GDK_KEY_RELEASE:
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
-    case GDK_TOUCHPAD_SWIPE:
-    case GDK_TOUCHPAD_PINCH:
-      if (grab_surface != event->any.surface &&
-          GTK_IS_POPOVER (grab_widget))
-        {
-          gtk_widget_hide (grab_widget);
-          return NULL;
-        }
-      break;
-    default:;
-    }
-
   if (grab_widget &&
       gtk_main_get_window_group (grab_widget) != gtk_main_get_window_group (event_widget))
     return rewrite_event_for_surface (event, grab_surface);
