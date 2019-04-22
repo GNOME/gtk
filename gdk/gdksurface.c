@@ -1750,7 +1750,10 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
     gdk_surface_raise_internal (surface);
 
   if (!was_mapped)
-    gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
+    {
+      gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_WITHDRAWN, 0);
+      surface->auto_dismissal = FALSE;
+    }
 
   did_show = _gdk_surface_update_viewable (surface);
 
@@ -4171,10 +4174,48 @@ gdk_synthesize_surface_state (GdkSurface     *surface,
   gdk_surface_set_state (surface, (surface->state | set_flags) & ~unset_flags);
 }
 
+static gboolean
+check_auto_dismissal (GdkEvent *event)
+{
+  GdkDisplay *display;
+  GdkDevice *device;
+  GdkSurface *grab_surface;
+
+ switch ((guint) gdk_event_get_event_type (event))
+    {
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+    case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_PINCH:
+      display = gdk_event_get_display (event);
+      device = gdk_event_get_device (event);
+      if (gdk_device_grab_info (display, device, &grab_surface, NULL))
+        {
+          if (grab_surface != gdk_event_get_surface (event) &&
+              grab_surface->auto_dismissal)
+            {
+              gdk_surface_hide (grab_surface);
+              return TRUE;
+            }
+        }
+      break;
+    default:;
+    }
+
+  return FALSE;
+}
+
 gboolean
 gdk_surface_handle_event (GdkEvent *event)
 {
   gboolean handled = FALSE;
+
+  if (check_auto_dismissal (event))
+    return TRUE;
+
   if (gdk_event_get_event_type (event) == GDK_CONFIGURE)
     {
       g_signal_emit (gdk_event_get_surface (event), signals[SIZE_CHANGED], 0,
@@ -4187,4 +4228,25 @@ gdk_surface_handle_event (GdkEvent *event)
     }
 
   return handled;
+}
+
+static void
+grab_prepare_func (GdkSeat    *seat,
+                   GdkSurface *surface,
+                   gpointer    data)
+{
+  gdk_surface_show (surface);
+  surface->auto_dismissal = TRUE;
+}
+
+void
+gdk_surface_show_with_auto_dismissal (GdkSurface *surface,
+                                      GdkSeat    *seat)
+{
+  gdk_seat_grab (seat,
+                 surface,
+                 GDK_SEAT_CAPABILITY_ALL,
+                 TRUE,
+                 NULL, NULL,
+                 grab_prepare_func, NULL);
 }
