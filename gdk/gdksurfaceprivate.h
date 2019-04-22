@@ -32,7 +32,8 @@ struct _GdkSurface
 
   GdkDisplay *display;
 
-  GdkSurface *transient_for;
+  GdkSurface *transient_for; /* for toplevels */
+  GdkSurface *parent;        /* for popups */
 
   gpointer widget;
 
