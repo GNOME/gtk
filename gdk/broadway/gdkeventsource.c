@@ -20,7 +20,7 @@
 #include "gdkeventsource.h"
 #include "gdkseat.h"
 
-#include "gdkinternals.h"
+#include "gdksurfaceprivate.h"
 #include "gdkframeclockprivate.h"
 
 #include <stdlib.h>
