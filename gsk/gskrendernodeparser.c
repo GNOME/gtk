@@ -416,36 +416,34 @@ parse_stops (GtkCssParser *parser,
   GArray *stops;
   GskColorStop stop;
 
-
   stops = g_array_new (FALSE, FALSE, sizeof (GskColorStop));
 
-  do
+  for (;;)
     {
-      gtk_css_parser_skip (parser);
+      if (!gtk_css_parser_consume_number (parser, &stop.offset))
+        goto error;
 
-      if (!gtk_css_parser_consume_number (parser, &stop.offset) ||
-          !gsk_rgba_parse (parser, &stop.color))
-        { /* do nothing */ }
-      else if (stops->len == 0 && stop.offset < 0)
+      if (!gsk_rgba_parse (parser, &stop.color))
+        goto error;
+
+      if (stops->len == 0 && stop.offset < 0)
         gtk_css_parser_error_value (parser, "Color stop offset must be >= 0");
       else if (stops->len > 0 && stop.offset < g_array_index (stops, GskColorStop, stops->len - 1).offset)
         gtk_css_parser_error_value (parser, "Color stop offset must be >= previous value");
       else if (stop.offset > 1)
         gtk_css_parser_error_value (parser, "Color stop offset must be <= 1");
       else
-        {
-          g_array_append_val (stops, stop);
-          continue;
-        }
+        g_array_append_val (stops, stop);
 
-      g_array_free (stops, TRUE);
-      return FALSE;
-    }
-  while (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA));
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+        gtk_css_parser_skip (parser);
+      else
+        break;
+  }
 
   if (stops->len < 2)
     {
-      gtk_css_parser_error_value (parser, "At least 2 color stops need to be specified");
+      gtk_css_parser_error_value (parser, "At least 2 color stops need to be specified, there are only");
       g_array_free (stops, TRUE);
       return FALSE;
     }
@@ -455,6 +453,11 @@ parse_stops (GtkCssParser *parser,
   *(GArray **) out_stops = stops;
 
   return parse_semicolon (parser);
+
+error:
+  g_array_free (stops, TRUE);
+  return FALSE;
+
 }
 
 static gboolean
@@ -836,7 +839,7 @@ parse_node (GtkCssParser *parser,
   };
   const GtkCssToken *token;
   guint i;
-  
+
   token = gtk_css_parser_get_token (parser);
   if (!gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
     {
