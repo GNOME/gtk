@@ -44,7 +44,6 @@ gdk_public_sources = files([
   'gdktexture.c',
   'gdkvulkancontext.c',
   'gdksurface.c',
-  'gdksurfaceimpl.c',
   'gdkprofiler.c'
 ])
 

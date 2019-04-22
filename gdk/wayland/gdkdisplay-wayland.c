@@ -39,7 +39,7 @@
 #include "gdkdisplay-wayland.h"
 #include "gdkmonitor-wayland.h"
 #include "gdkseat-wayland.h"
-#include "gdkinternals.h"
+#include "gdksurfaceprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkkeysprivate.h"
 #include "gdkprivate-wayland.h"
@@ -1004,7 +1004,6 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   object_class->dispose = gdk_wayland_display_dispose;
   object_class->finalize = gdk_wayland_display_finalize;
 
-  display_class->surface_type = gdk_wayland_surface_get_type ();
   display_class->cairo_context_type = GDK_TYPE_WAYLAND_CAIRO_CONTEXT;
 
 #ifdef GDK_RENDERING_VULKAN
@@ -1026,7 +1025,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->get_next_serial = gdk_wayland_display_get_next_serial;
   display_class->get_startup_notification_id = gdk_wayland_display_get_startup_notification_id;
   display_class->notify_startup_complete = gdk_wayland_display_notify_startup_complete;
-  display_class->create_surface_impl = _gdk_wayland_display_create_surface_impl;
+  display_class->create_surface = _gdk_wayland_display_create_surface;
   display_class->get_keymap = _gdk_wayland_display_get_keymap;
   display_class->text_property_to_utf8_list = _gdk_wayland_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_wayland_display_utf8_to_string_target;
