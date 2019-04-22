@@ -25,6 +25,7 @@
 #include "gdkprivate-x11.h"
 
 #include "gdkcairo.h"
+#include "gdksurfaceprivate.h"
 #include "gdkinternals.h"
 
 #include <X11/Xlib.h>
