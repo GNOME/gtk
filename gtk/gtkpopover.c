@@ -139,7 +139,6 @@ typedef struct {
   guint surface_transform_changed_cb;
   GtkPositionType position;
   gboolean modal;
-  gboolean has_grab;
 
   GtkWidget *contents_widget;
 } GtkPopoverPrivate;
@@ -533,14 +532,6 @@ gtk_popover_hide (GtkWidget *widget)
 }
 
 static void
-grab_prepare_func (GdkSeat    *seat,
-                   GdkSurface *surface,
-                   gpointer    data)
-{
-  gdk_surface_show (surface);
-}
-
-static void
 unset_surface_transform_changed_cb (gpointer data)
 {
   GtkPopover *popover = data;
@@ -570,13 +561,11 @@ gtk_popover_map (GtkWidget *widget)
 
   if (priv->modal)
     {
+      GdkSeat *seat;
+
       display = gtk_widget_get_display (priv->relative_to);
-      gdk_seat_grab (gdk_display_get_default_seat (display),
-                     priv->surface,
-                     GDK_SEAT_CAPABILITY_ALL,
-                     TRUE,
-                     NULL, NULL, grab_prepare_func, NULL);
-      priv->has_grab = TRUE;
+      seat = gdk_display_get_default_seat (display),
+      gdk_surface_show_with_auto_dismissal (priv->surface, seat);
     }
 
   gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
@@ -609,14 +598,6 @@ gtk_popover_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->unmap (widget);
 
   gdk_surface_hide (priv->surface);
-  if (priv->has_grab)
-    {
-      GdkDisplay *display;
-
-      display = gtk_widget_get_display (priv->relative_to);
-      gdk_seat_ungrab (gdk_display_get_default_seat (display));
-      priv->has_grab = FALSE;
-    }
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child != NULL)
