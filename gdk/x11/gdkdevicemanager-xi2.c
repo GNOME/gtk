@@ -1480,7 +1480,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
   GdkDevice *device, *source_device;
   gboolean return_val = TRUE;
   GdkSurface *surface;
-  GdkSurfaceImplX11 *impl;
+  GdkX11Surface *impl;
   int scale;
   XIEvent *ev;
 
@@ -1505,7 +1505,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
   scale = 1;
   if (surface)
     {
-      impl = GDK_SURFACE_IMPL_X11 (surface->impl);
+      impl = GDK_X11_SURFACE (surface);
       scale = impl->surface_scale;
     }
 

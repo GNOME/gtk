@@ -318,7 +318,7 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
   else
     {
       xwindow = GDK_SURFACE_XID (surface);
-      scale = GDK_SURFACE_IMPL_X11 (surface->impl)->surface_scale;
+      scale = GDK_X11_SURFACE (surface)->surface_scale;
     }
 
   if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_SLAVE)
@@ -467,7 +467,7 @@ gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
                                        GdkModifierType *mask,
                                        gboolean         get_toplevel)
 {
-  GdkSurfaceImplX11 *impl;
+  GdkX11Surface *impl;
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
   GdkDisplay *display;
   GdkX11Screen *screen;
@@ -616,7 +616,7 @@ gdk_x11_device_xi2_surface_at_position (GdkDevice       *device,
       surface = gdk_x11_surface_lookup_for_display (display, last);
       impl = NULL;
       if (surface)
-        impl = GDK_SURFACE_IMPL_X11 (surface->impl);
+        impl = GDK_X11_SURFACE (surface);
 
       if (mask)
         *mask = _gdk_x11_device_xi2_translate_state (&mod_state, &button_state, &group_state);
