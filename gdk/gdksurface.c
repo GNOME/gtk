@@ -300,7 +300,7 @@ gdk_surface_real_move_to_rect (GdkSurface         *surface,
                                gint                rect_anchor_dx,
                                gint                rect_anchor_dy)
 {
-  GdkSurface *transient_for_toplevel;
+  GdkSurface *toplevel;
   GdkDisplay *display;
   GdkMonitor *monitor;
   GdkRectangle bounds;
@@ -310,18 +310,20 @@ gdk_surface_real_move_to_rect (GdkSurface         *surface,
   gboolean flipped_x;
   gboolean flipped_y;
 
-  /*
-   * First translate the anchor rect to toplevel coordinates.
-   * This is needed because not all backends will be able to get
-   * root coordinates for non-toplevel surfaces.
+  /* This implementation only works for backends that
+   * can provide root coordinates via get_root_coords.
+   * Other backends need to implement move_to_rect.
    */
-  transient_for_toplevel = surface->transient_for;
+  if (surface->surface_type == GDK_SURFACE_POPUP)
+    toplevel = surface->parent;
+  else
+    toplevel = surface->transient_for;
 
-  gdk_surface_get_root_coords (transient_for_toplevel,
-                              root_rect.x,
-                              root_rect.y,
-                              &root_rect.x,
-                              &root_rect.y);
+  gdk_surface_get_root_coords (toplevel,
+                               root_rect.x,
+                               root_rect.y,
+                               &root_rect.x,
+                               &root_rect.y);
 
   display = get_display_for_surface (surface, surface->transient_for);
   monitor = get_monitor_for_rect (display, &root_rect);
@@ -2109,7 +2111,7 @@ gdk_surface_move_to_rect (GdkSurface          *surface,
                           gint                rect_anchor_dy)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (surface->transient_for);
+  g_return_if_fail (surface->parent || surface->transient_for);
   g_return_if_fail (rect);
 
   GDK_SURFACE_GET_CLASS (surface)->move_to_rect (surface,
