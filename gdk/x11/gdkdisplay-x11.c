@@ -985,8 +985,14 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	    }
 	  if (!is_substructure)
 	    {
-	      surface->x = event->configure.x;
-	      surface->y = event->configure.y;
+              if (surface->x != event->configure.x ||
+                  surface->y != event->configure.y)
+                {
+                  surface->x = event->configure.x;
+                  surface->y = event->configure.y;
+
+                  gdk_x11_surface_move_popups (surface);
+                }
 
               if (surface_impl->unscaled_width != xevent->xconfigure.width ||
                   surface_impl->unscaled_height != xevent->xconfigure.height)
