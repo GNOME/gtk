@@ -411,21 +411,6 @@ typedef struct _GdkSurfaceClass GdkSurfaceClass;
 #define GDK_SURFACE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SURFACE, GdkSurfaceClass))
 
 
-struct _GdkSurfaceClass
-{
-  GObjectClass      parent_class;
-
-  /* Padding for future expansion */
-  void (*_gdk_reserved1) (void);
-  void (*_gdk_reserved2) (void);
-  void (*_gdk_reserved3) (void);
-  void (*_gdk_reserved4) (void);
-  void (*_gdk_reserved5) (void);
-  void (*_gdk_reserved6) (void);
-  void (*_gdk_reserved7) (void);
-  void (*_gdk_reserved8) (void);
-};
-
 /* Surfaces
  */
 GDK_AVAILABLE_IN_ALL

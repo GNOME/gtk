@@ -22,8 +22,8 @@
 #include <errno.h>
 
 #include <string.h>
-#include <gdk/gdksurface.h>
-#include <gdk/gdktypes.h>
+#include "gdksurfaceprivate.h"
+#include "gdktypes.h"
 #include "gdkclipboard-wayland.h"
 #include "gdkclipboardprivate.h"
 #include "gdkprivate-wayland.h"
