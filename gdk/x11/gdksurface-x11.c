@@ -799,10 +799,7 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
 
   display_x11 = GDK_X11_DISPLAY (display);
   x11_screen = GDK_X11_SCREEN (display_x11->screen);
-  if (parent)
-    xparent = GDK_SURFACE_XID (parent);
-  else
-    xparent = GDK_SCREEN_XROOTWIN (x11_screen);
+  xparent = GDK_SCREEN_XROOTWIN (x11_screen);
 
   frame_clock = _gdk_frame_clock_idle_new ();
 
@@ -883,24 +880,15 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   g_object_ref (surface);
   _gdk_x11_display_add_window (x11_screen->display, &impl->xid, surface);
 
-  switch (GDK_SURFACE_TYPE (surface))
-    {
-    case GDK_SURFACE_TOPLEVEL:
-    case GDK_SURFACE_TEMP:
-      gdk_surface_set_title (surface, get_default_title ());
+  gdk_surface_set_title (surface, get_default_title ());
 
-      class_hint = XAllocClassHint ();
-      class_hint->res_name = (char *) g_get_prgname ();
-      class_hint->res_class = (char *) display_x11->program_class;
-      XSetClassHint (xdisplay, impl->xid, class_hint);
-      XFree (class_hint);
+  class_hint = XAllocClassHint ();
+  class_hint->res_name = (char *) g_get_prgname ();
+  class_hint->res_class = (char *) display_x11->program_class;
+  XSetClassHint (xdisplay, impl->xid, class_hint);
+  XFree (class_hint);
 
-      setup_toplevel_window (surface, x11_screen);
-      break;
-
-    default:
-      break;
-    }
+  setup_toplevel_window (surface, x11_screen);
 
   gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
                                       GDK_SURFACE_XID (surface), GDK_ALL_EVENTS_MASK,
@@ -1237,22 +1225,7 @@ gdk_x11_surface_hide (GdkSurface *surface)
   _gdk_x11_surface_grab_check_unmap (surface,
                                     NextRequest (GDK_SURFACE_XDISPLAY (surface)));
 
-  /* You can't simply unmap toplevel surfaces. */
-  switch (surface->surface_type)
-    {
-    case GDK_SURFACE_TOPLEVEL:
-    case GDK_SURFACE_TEMP: /* ? */
-      gdk_x11_surface_withdraw (surface);
-      return;
-      
-    default:
-      break;
-    }
-  
-  _gdk_surface_clear_update_area (surface);
-  
-  XUnmapWindow (GDK_SURFACE_XDISPLAY (surface),
-		GDK_SURFACE_XID (surface));
+  gdk_x11_surface_withdraw (surface);
 }
 
 static inline void
