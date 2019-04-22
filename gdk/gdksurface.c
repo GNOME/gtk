@@ -36,7 +36,6 @@
 #include "gdkdeviceprivate.h"
 #include "gdkframeclockidleprivate.h"
 #include "gdkmarshalers.h"
-#include "gdksurfaceimpl.h"
 #include "gdkglcontextprivate.h"
 #include "gdk-private.h"
 
@@ -152,6 +151,272 @@ print_region (cairo_region_t *region)
 }
 #endif
 
+static gboolean
+gdk_surface_real_beep (GdkSurface *surface)
+{
+  return FALSE;
+}
+
+static GdkDisplay *
+get_display_for_surface (GdkSurface *primary,
+                         GdkSurface *secondary)
+{
+  GdkDisplay *display = gdk_surface_get_display (primary);
+
+  if (display)
+    return display;
+
+  display = gdk_surface_get_display (secondary);
+
+  if (display)
+    return display;
+
+  g_warning ("no display for surface, using default");
+  return gdk_display_get_default ();
+}
+
+static GdkMonitor *
+get_monitor_for_rect (GdkDisplay         *display,
+                      const GdkRectangle *rect)
+{
+  gint biggest_area = G_MININT;
+  GdkMonitor *best_monitor = NULL;
+  GdkMonitor *monitor;
+  GdkRectangle workarea;
+  GdkRectangle intersection;
+  gint x;
+  gint y;
+  gint i;
+
+  for (i = 0; i < gdk_display_get_n_monitors (display); i++)
+    {
+      monitor = gdk_display_get_monitor (display, i);
+      gdk_monitor_get_workarea (monitor, &workarea);
+
+      if (gdk_rectangle_intersect (&workarea, rect, &intersection))
+        {
+          if (intersection.width * intersection.height > biggest_area)
+            {
+              biggest_area = intersection.width * intersection.height;
+              best_monitor = monitor;
+            }
+        }
+    }
+
+  if (best_monitor)
+    return best_monitor;
+
+  x = rect->x + rect->width / 2;
+  y = rect->y + rect->height / 2;
+
+  return gdk_display_get_monitor_at_point (display, x, y);
+}
+
+static gint
+get_anchor_x_sign (GdkGravity anchor)
+{
+  switch (anchor)
+    {
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+    case GDK_GRAVITY_WEST:
+    case GDK_GRAVITY_SOUTH_WEST:
+      return -1;
+
+    default:
+    case GDK_GRAVITY_NORTH:
+    case GDK_GRAVITY_CENTER:
+    case GDK_GRAVITY_SOUTH:
+      return 0;
+
+    case GDK_GRAVITY_NORTH_EAST:
+    case GDK_GRAVITY_EAST:
+    case GDK_GRAVITY_SOUTH_EAST:
+      return 1;
+    }
+}
+
+static gint
+get_anchor_y_sign (GdkGravity anchor)
+{
+  switch (anchor)
+    {
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+    case GDK_GRAVITY_NORTH:
+    case GDK_GRAVITY_NORTH_EAST:
+      return -1;
+
+    default:
+    case GDK_GRAVITY_WEST:
+    case GDK_GRAVITY_CENTER:
+    case GDK_GRAVITY_EAST:
+      return 0;
+
+    case GDK_GRAVITY_SOUTH_WEST:
+    case GDK_GRAVITY_SOUTH:
+    case GDK_GRAVITY_SOUTH_EAST:
+      return 1;
+    }
+}
+
+static gint
+maybe_flip_position (gint      bounds_pos,
+                     gint      bounds_size,
+                     gint      rect_pos,
+                     gint      rect_size,
+                     gint      surface_size,
+                     gint      rect_sign,
+                     gint      surface_sign,
+                     gint      offset,
+                     gboolean  flip,
+                     gboolean *flipped)
+{
+  gint primary;
+  gint secondary;
+
+  *flipped = FALSE;
+  primary = rect_pos + (1 + rect_sign) * rect_size / 2 + offset - (1 + surface_sign) * surface_size / 2;
+
+  if (!flip || (primary >= bounds_pos && primary + surface_size <= bounds_pos + bounds_size))
+    return primary;
+
+  *flipped = TRUE;
+  secondary = rect_pos + (1 - rect_sign) * rect_size / 2 - offset - (1 - surface_sign) * surface_size / 2;
+
+  if (secondary >= bounds_pos && secondary + surface_size <= bounds_pos + bounds_size)
+    return secondary;
+
+  *flipped = FALSE;
+  return primary;
+}
+
+static void
+gdk_surface_real_move_to_rect (GdkSurface         *surface,
+                               const GdkRectangle *rect,
+                               GdkGravity          rect_anchor,
+                               GdkGravity          surface_anchor,
+                               GdkAnchorHints      anchor_hints,
+                               gint                rect_anchor_dx,
+                               gint                rect_anchor_dy)
+{
+  GdkSurface *transient_for_toplevel;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
+  GdkRectangle bounds;
+  GdkRectangle root_rect = *rect;
+  GdkRectangle flipped_rect;
+  GdkRectangle final_rect;
+  gboolean flipped_x;
+  gboolean flipped_y;
+
+  /*
+   * First translate the anchor rect to toplevel coordinates.
+   * This is needed because not all backends will be able to get
+   * root coordinates for non-toplevel surfaces.
+   */
+  transient_for_toplevel = surface->transient_for;
+
+  gdk_surface_get_root_coords (transient_for_toplevel,
+                              root_rect.x,
+                              root_rect.y,
+                              &root_rect.x,
+                              &root_rect.y);
+
+  display = get_display_for_surface (surface, surface->transient_for);
+  monitor = get_monitor_for_rect (display, &root_rect);
+  gdk_monitor_get_workarea (monitor, &bounds);
+
+  flipped_rect.width = surface->width - surface->shadow_left - surface->shadow_right;
+  flipped_rect.height = surface->height - surface->shadow_top - surface->shadow_bottom;
+  flipped_rect.x = maybe_flip_position (bounds.x,
+                                        bounds.width,
+                                        root_rect.x,
+                                        root_rect.width,
+                                        flipped_rect.width,
+                                        get_anchor_x_sign (rect_anchor),
+                                        get_anchor_x_sign (surface_anchor),
+                                        rect_anchor_dx,
+                                        anchor_hints & GDK_ANCHOR_FLIP_X,
+                                        &flipped_x);
+  flipped_rect.y = maybe_flip_position (bounds.y,
+                                        bounds.height,
+                                        root_rect.y,
+                                        root_rect.height,
+                                        flipped_rect.height,
+                                        get_anchor_y_sign (rect_anchor),
+                                        get_anchor_y_sign (surface_anchor),
+                                        rect_anchor_dy,
+                                        anchor_hints & GDK_ANCHOR_FLIP_Y,
+                                        &flipped_y);
+
+  final_rect = flipped_rect;
+
+  if (anchor_hints & GDK_ANCHOR_SLIDE_X)
+    {
+      if (final_rect.x + final_rect.width > bounds.x + bounds.width)
+        final_rect.x = bounds.x + bounds.width - final_rect.width;
+
+      if (final_rect.x < bounds.x)
+        final_rect.x = bounds.x;
+    }
+
+  if (anchor_hints & GDK_ANCHOR_SLIDE_Y)
+    {
+      if (final_rect.y + final_rect.height > bounds.y + bounds.height)
+        final_rect.y = bounds.y + bounds.height - final_rect.height;
+
+      if (final_rect.y < bounds.y)
+        final_rect.y = bounds.y;
+    }
+
+  if (anchor_hints & GDK_ANCHOR_RESIZE_X)
+    {
+      if (final_rect.x < bounds.x)
+        {
+          final_rect.width -= bounds.x - final_rect.x;
+          final_rect.x = bounds.x;
+        }
+
+      if (final_rect.x + final_rect.width > bounds.x + bounds.width)
+        final_rect.width = bounds.x + bounds.width - final_rect.x;
+    }
+
+  if (anchor_hints & GDK_ANCHOR_RESIZE_Y)
+    {
+      if (final_rect.y < bounds.y)
+        {
+          final_rect.height -= bounds.y - final_rect.y;
+          final_rect.y = bounds.y;
+        }
+
+      if (final_rect.y + final_rect.height > bounds.y + bounds.height)
+        final_rect.height = bounds.y + bounds.height - final_rect.y;
+    }
+
+  flipped_rect.x -= surface->shadow_left;
+  flipped_rect.y -= surface->shadow_top;
+  flipped_rect.width += surface->shadow_left + surface->shadow_right;
+  flipped_rect.height += surface->shadow_top + surface->shadow_bottom;
+
+  final_rect.x -= surface->shadow_left;
+  final_rect.y -= surface->shadow_top;
+  final_rect.width += surface->shadow_left + surface->shadow_right;
+  final_rect.height += surface->shadow_top + surface->shadow_bottom;
+
+  if (final_rect.width != surface->width || final_rect.height != surface->height)
+    gdk_surface_move_resize (surface, final_rect.x, final_rect.y, final_rect.width, final_rect.height);
+  else
+    gdk_surface_move (surface, final_rect.x, final_rect.y);
+
+  g_signal_emit_by_name (surface,
+                         "moved-to-rect",
+                         &flipped_rect,
+                         &final_rect,
+                         flipped_x,
+                         flipped_y);
+}
+
 static void
 gdk_surface_init (GdkSurface *surface)
 {
@@ -163,6 +428,10 @@ gdk_surface_init (GdkSurface *surface)
   surface->fullscreen_mode = GDK_FULLSCREEN_ON_CURRENT_MONITOR;
   surface->width = 1;
   surface->height = 1;
+
+  surface->accept_focus = TRUE;
+  surface->focus_on_map = TRUE;
+  surface->alpha = 255;
 
   surface->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                  NULL, g_object_unref);
@@ -177,7 +446,8 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   object_class->set_property = gdk_surface_set_property;
   object_class->get_property = gdk_surface_get_property;
 
-  /* Properties */
+  klass->beep = gdk_surface_real_beep;
+  klass->move_to_rect = gdk_surface_real_move_to_rect;
 
   /**
    * GdkSurface:cursor:
@@ -355,18 +625,6 @@ gdk_surface_finalize (GObject *object)
       _gdk_surface_destroy (surface, FALSE);
     }
 
-  if (surface->impl)
-    {
-      g_object_unref (surface->impl);
-      surface->impl = NULL;
-    }
-
-  if (surface->impl_surface != surface)
-    {
-      g_object_unref (surface->impl_surface);
-      surface->impl_surface = NULL;
-    }
-
   if (surface->input_shape)
     cairo_region_destroy (surface->input_shape);
 
@@ -452,12 +710,6 @@ gdk_surface_get_property (GObject    *object,
     }
 }
 
-GdkSurface *
-gdk_surface_get_impl_surface (GdkSurface *surface)
-{
-  return surface->impl_surface;
-}
-
 void
 _gdk_surface_update_size (GdkSurface *surface)
 {
@@ -477,28 +729,14 @@ gdk_surface_new (GdkDisplay     *display,
                  int             height)
 {
   GdkSurface *surface;
-  GdkFrameClock *frame_clock;
 
-  surface = _gdk_display_create_surface (display);
+  surface = gdk_display_create_surface (display,
+                                        surface_type,
+                                        parent,
+                                        x, y, width, height);
 
-  surface->accept_focus = TRUE;
-  surface->focus_on_map = TRUE;
-  surface->alpha = 255;
-
-  surface->surface_type = surface_type;
-  surface->x = x;
-  surface->y = y;
-  surface->width = width;
-  surface->height = height;
-
-  frame_clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE, NULL);
-  gdk_surface_set_frame_clock (surface, frame_clock);
-  g_object_unref (frame_clock);
-
-  gdk_display_create_surface_impl (display, surface, parent);
-  surface->impl_surface = surface;
-
-  g_signal_connect (display, "seat-removed", G_CALLBACK (seat_removed_cb), surface);
+  g_signal_connect (display, "seat-removed",
+                    G_CALLBACK (seat_removed_cb), surface);
 
   return surface;
 }
@@ -609,7 +847,6 @@ static void
 _gdk_surface_destroy_hierarchy (GdkSurface *surface,
                                 gboolean   foreign_destroy)
 {
-  GdkSurfaceImplClass *impl_class;
   GdkDisplay *display;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
@@ -635,8 +872,7 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   _gdk_surface_clear_update_area (surface);
 
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-  impl_class->destroy (surface, foreign_destroy);
+  GDK_SURFACE_GET_CLASS (surface)->destroy (surface, foreign_destroy);
 
   surface->state |= GDK_SURFACE_STATE_WITHDRAWN;
   surface->destroyed = TRUE;
@@ -840,40 +1076,37 @@ gdk_surface_get_paint_gl_context (GdkSurface  *surface,
       return NULL;
     }
 
-  if (surface->impl_surface->gl_paint_context == NULL)
+  if (surface->gl_paint_context == NULL)
     {
-      GdkSurfaceImplClass *impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
+      GdkSurfaceClass *class = GDK_SURFACE_GET_CLASS (surface);
 
-      if (impl_class->create_gl_context == NULL)
+      if (class->create_gl_context == NULL)
         {
           g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
                                _("The current backend does not support OpenGL"));
           return NULL;
         }
 
-      surface->impl_surface->gl_paint_context =
-        impl_class->create_gl_context (surface->impl_surface,
-                                       TRUE,
-                                       NULL,
-                                       &internal_error);
+      surface->gl_paint_context =
+        class->create_gl_context (surface, TRUE, NULL, &internal_error);
     }
 
   if (internal_error != NULL)
     {
       g_propagate_error (error, internal_error);
-      g_clear_object (&(surface->impl_surface->gl_paint_context));
+      g_clear_object (&(surface->gl_paint_context));
       return NULL;
     }
 
-  gdk_gl_context_realize (surface->impl_surface->gl_paint_context, &internal_error);
+  gdk_gl_context_realize (surface->gl_paint_context, &internal_error);
   if (internal_error != NULL)
     {
       g_propagate_error (error, internal_error);
-      g_clear_object (&(surface->impl_surface->gl_paint_context));
+      g_clear_object (&(surface->gl_paint_context));
       return NULL;
     }
 
-  return surface->impl_surface->gl_paint_context;
+  return surface->gl_paint_context;
 }
 
 /**
@@ -906,7 +1139,7 @@ gdk_surface_create_gl_context (GdkSurface   *surface,
   if (paint_context == NULL)
     return NULL;
 
-  return GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->create_gl_context (surface->impl_surface,
+  return GDK_SURFACE_GET_CLASS (surface)->create_gl_context (surface,
                                                                         FALSE,
                                                                         paint_context,
                                                                         error);
@@ -1086,7 +1319,6 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
   surface = GDK_SURFACE (data);
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (surface->impl_surface == surface);
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;
@@ -1266,7 +1498,7 @@ gdk_surface_freeze_updates (GdkSurface *surface)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  surface->impl_surface->update_freeze_count++;
+  surface->update_freeze_count++;
 }
 
 /**
@@ -1278,16 +1510,12 @@ gdk_surface_freeze_updates (GdkSurface *surface)
 void
 gdk_surface_thaw_updates (GdkSurface *surface)
 {
-  GdkSurface *impl_surface;
-
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  impl_surface = gdk_surface_get_impl_surface (surface);
+  g_return_if_fail (surface->update_freeze_count > 0);
 
-  g_return_if_fail (impl_surface->update_freeze_count > 0);
-
-  if (--impl_surface->update_freeze_count == 0)
-    gdk_surface_schedule_update (impl_surface);
+  if (--surface->update_freeze_count == 0)
+    gdk_surface_schedule_update (surface);
 }
 
 void
@@ -1468,10 +1696,10 @@ gdk_surface_get_device_position (GdkSurface       *surface,
 
   tmp_x = tmp_y = 0;
   tmp_mask = 0;
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->get_device_state (surface,
-                                                                device,
-                                                                &tmp_x, &tmp_y,
-                                                                &tmp_mask);
+  GDK_SURFACE_GET_CLASS (surface)->get_device_state (surface,
+                                                     device,
+                                                     &tmp_x, &tmp_y,
+                                                     &tmp_mask);
 
   if (x)
     *x = tmp_x;
@@ -1484,10 +1712,7 @@ gdk_surface_get_device_position (GdkSurface       *surface,
 static void
 gdk_surface_raise_internal (GdkSurface *surface)
 {
-  GdkSurfaceImplClass *impl_class;
-
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-  impl_class->raise (surface);
+  GDK_SURFACE_GET_CLASS (surface)->raise (surface);
 }
 
 /* Returns TRUE If the native surface was mapped or unmapped */
@@ -1512,7 +1737,6 @@ _gdk_surface_update_viewable (GdkSurface *surface)
 static void
 gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
 {
-  GdkSurfaceImplClass *impl_class;
   gboolean was_mapped;
   gboolean did_show;
 
@@ -1531,8 +1755,7 @@ gdk_surface_show_internal (GdkSurface *surface, gboolean raise)
 
   did_show = _gdk_surface_update_viewable (surface);
 
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-  impl_class->show (surface, !did_show ? was_mapped : TRUE);
+  GDK_SURFACE_GET_CLASS (surface)->show (surface, !did_show ? was_mapped : TRUE);
 
   if (!was_mapped)
     {
@@ -1585,10 +1808,7 @@ gdk_surface_raise (GdkSurface *surface)
 static void
 gdk_surface_lower_internal (GdkSurface *surface)
 {
-  GdkSurfaceImplClass *impl_class;
-
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-  impl_class->lower (surface);
+  GDK_SURFACE_GET_CLASS (surface)->lower (surface);
 }
 
 /**
@@ -1640,8 +1860,6 @@ gdk_surface_restack (GdkSurface     *surface,
                      GdkSurface     *sibling,
                      gboolean       above)
 {
-  GdkSurfaceImplClass *impl_class;
-
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (sibling == NULL || GDK_IS_SURFACE (sibling));
 
@@ -1657,8 +1875,7 @@ gdk_surface_restack (GdkSurface     *surface,
       return;
     }
 
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-  impl_class->restack_toplevel (surface, sibling, above);
+  GDK_SURFACE_GET_CLASS (surface)->restack_toplevel (surface, sibling, above);
 }
 
 
@@ -1694,7 +1911,6 @@ gdk_surface_show (GdkSurface *surface)
 void
 gdk_surface_hide (GdkSurface *surface)
 {
-  GdkSurfaceImplClass *impl_class;
   gboolean was_mapped;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
@@ -1740,8 +1956,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       g_list_free (devices);
     }
 
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-  impl_class->hide (surface);
+  GDK_SURFACE_GET_CLASS (surface)->hide (surface);
 }
 
 static void
@@ -1752,10 +1967,7 @@ gdk_surface_move_resize_toplevel (GdkSurface *surface,
                                   gint       width,
                                   gint       height)
 {
-  GdkSurfaceImplClass *impl_class;
-
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-  impl_class->move_resize (surface, with_move, x, y, width, height);
+  GDK_SURFACE_GET_CLASS (surface)->move_resize (surface, with_move, x, y, width, height);
 }
 
 
@@ -1883,20 +2095,17 @@ gdk_surface_move_to_rect (GdkSurface          *surface,
                           gint                rect_anchor_dx,
                           gint                rect_anchor_dy)
 {
-  GdkSurfaceImplClass *impl_class;
-
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (surface->transient_for);
   g_return_if_fail (rect);
 
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-  impl_class->move_to_rect (surface,
-                            rect,
-                            rect_anchor,
-                            surface_anchor,
-                            anchor_hints,
-                            rect_anchor_dx,
-                            rect_anchor_dy);
+  GDK_SURFACE_GET_CLASS (surface)->move_to_rect (surface,
+                                                 rect,
+                                                 rect_anchor,
+                                                 surface_anchor,
+                                                 anchor_hints,
+                                                 rect_anchor_dx,
+                                                 rect_anchor_dy);
 }
 
 static void
@@ -2098,15 +2307,12 @@ gdk_surface_get_geometry (GdkSurface *surface,
                           gint      *width,
                           gint      *height)
 {
-  GdkSurfaceImplClass *impl_class;
-
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-  impl_class->get_geometry (surface, x, y, width, height);
+  GDK_SURFACE_GET_CLASS (surface)->get_geometry (surface, x, y, width, height);
 }
 
 /**
@@ -2199,8 +2405,6 @@ gdk_surface_get_root_coords (GdkSurface *surface,
                              gint      *root_x,
                              gint      *root_y)
 {
-  GdkSurfaceImplClass *impl_class;
-
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (GDK_SURFACE_DESTROYED (surface))
@@ -2210,9 +2414,7 @@ gdk_surface_get_root_coords (GdkSurface *surface,
       return;
     }
   
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-  impl_class->get_root_coords (surface->impl_surface,
-                               x, y, root_x, root_y);
+  GDK_SURFACE_GET_CLASS (surface)->get_root_coords (surface, x, y, root_x, root_y);
 }
 
 /**
@@ -2245,8 +2447,6 @@ gdk_surface_input_shape_combine_region (GdkSurface       *surface,
                                         gint             offset_x,
                                         gint             offset_y)
 {
-  GdkSurfaceImplClass *impl_class;
-
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (GDK_SURFACE_DESTROYED (surface))
@@ -2263,8 +2463,7 @@ gdk_surface_input_shape_combine_region (GdkSurface       *surface,
   else
     surface->input_shape = NULL;
 
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-  impl_class->input_shape_combine_region (surface, surface->input_shape, 0, 0);
+  GDK_SURFACE_GET_CLASS (surface)->input_shape_combine_region (surface, surface->input_shape, 0, 0);
 }
 
 static void
@@ -2434,7 +2633,7 @@ gdk_surface_beep (GdkSurface *surface)
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  if (GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->beep (surface))
+  if (GDK_SURFACE_GET_CLASS (surface)->beep (surface))
     return;
 
   display = gdk_surface_get_display (surface);
@@ -2838,7 +3037,7 @@ void
 gdk_surface_focus (GdkSurface *surface,
                    guint32    timestamp)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->focus (surface, timestamp);
+  GDK_SURFACE_GET_CLASS (surface)->focus (surface, timestamp);
 }
 
 /**
@@ -2857,7 +3056,7 @@ void
 gdk_surface_set_type_hint (GdkSurface        *surface,
                            GdkSurfaceTypeHint hint)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_type_hint (surface, hint);
+  GDK_SURFACE_GET_CLASS (surface)->set_type_hint (surface, hint);
 }
 
 /**
@@ -2871,7 +3070,7 @@ gdk_surface_set_type_hint (GdkSurface        *surface,
 GdkSurfaceTypeHint
 gdk_surface_get_type_hint (GdkSurface *surface)
 {
-  return GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->get_type_hint (surface);
+  return GDK_SURFACE_GET_CLASS (surface)->get_type_hint (surface);
 }
 
 /**
@@ -2891,7 +3090,7 @@ void
 gdk_surface_set_modal_hint (GdkSurface *surface,
                             gboolean   modal)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_modal_hint (surface, modal);
+  GDK_SURFACE_GET_CLASS (surface)->set_modal_hint (surface, modal);
 }
 
 /**
@@ -2929,7 +3128,7 @@ gdk_surface_set_geometry_hints (GdkSurface         *surface,
 {
   g_return_if_fail (geometry != NULL || geom_mask == 0);
 
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_geometry_hints (surface, geometry, geom_mask);
+  GDK_SURFACE_GET_CLASS (surface)->set_geometry_hints (surface, geometry, geom_mask);
 }
 
 /**
@@ -2947,7 +3146,7 @@ void
 gdk_surface_set_title (GdkSurface   *surface,
                        const gchar *title)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_title (surface, title);
+  GDK_SURFACE_GET_CLASS (surface)->set_title (surface, title);
 }
 
 /**
@@ -2962,7 +3161,7 @@ void
 gdk_surface_set_startup_id (GdkSurface   *surface,
                             const gchar *startup_id)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_startup_id (surface, startup_id);
+  GDK_SURFACE_GET_CLASS (surface)->set_startup_id (surface, startup_id);
 }
 
 /**
@@ -2984,7 +3183,7 @@ gdk_surface_set_transient_for (GdkSurface *surface,
 {
   surface->transient_for = parent;
 
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_transient_for (surface, parent);
+  GDK_SURFACE_GET_CLASS (surface)->set_transient_for (surface, parent);
 }
 
 /**
@@ -3002,7 +3201,7 @@ void
 gdk_surface_get_frame_extents (GdkSurface    *surface,
                                GdkRectangle *rect)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->get_frame_extents (surface, rect);
+  GDK_SURFACE_GET_CLASS (surface)->get_frame_extents (surface, rect);
 }
 
 /**
@@ -3020,7 +3219,7 @@ void
 gdk_surface_set_accept_focus (GdkSurface *surface,
                               gboolean accept_focus)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_accept_focus (surface, accept_focus);
+  GDK_SURFACE_GET_CLASS (surface)->set_accept_focus (surface, accept_focus);
 }
 
 /**
@@ -3041,7 +3240,7 @@ void
 gdk_surface_set_focus_on_map (GdkSurface *surface,
                               gboolean focus_on_map)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_focus_on_map (surface, focus_on_map);
+  GDK_SURFACE_GET_CLASS (surface)->set_focus_on_map (surface, focus_on_map);
 }
 
 /**
@@ -3064,7 +3263,7 @@ void
 gdk_surface_set_icon_list (GdkSurface *surface,
                            GList     *textures)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_icon_list (surface, textures);
+  GDK_SURFACE_GET_CLASS (surface)->set_icon_list (surface, textures);
 }
 
 /**
@@ -3089,7 +3288,7 @@ void
 gdk_surface_set_icon_name (GdkSurface   *surface,
                            const gchar *name)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_icon_name (surface, name);
+  GDK_SURFACE_GET_CLASS (surface)->set_icon_name (surface, name);
 }
 
 /**
@@ -3106,7 +3305,7 @@ gdk_surface_set_icon_name (GdkSurface   *surface,
 void
 gdk_surface_iconify (GdkSurface *surface)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->iconify (surface);
+  GDK_SURFACE_GET_CLASS (surface)->iconify (surface);
 }
 
 /**
@@ -3123,7 +3322,7 @@ gdk_surface_iconify (GdkSurface *surface)
 void
 gdk_surface_deiconify (GdkSurface *surface)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->deiconify (surface);
+  GDK_SURFACE_GET_CLASS (surface)->deiconify (surface);
 }
 
 /**
@@ -3144,7 +3343,7 @@ gdk_surface_deiconify (GdkSurface *surface)
 void
 gdk_surface_stick (GdkSurface *surface)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->stick (surface);
+  GDK_SURFACE_GET_CLASS (surface)->stick (surface);
 }
 
 /**
@@ -3158,7 +3357,7 @@ gdk_surface_stick (GdkSurface *surface)
 void
 gdk_surface_unstick (GdkSurface *surface)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->unstick (surface);
+  GDK_SURFACE_GET_CLASS (surface)->unstick (surface);
 }
 
 /**
@@ -3181,7 +3380,7 @@ gdk_surface_unstick (GdkSurface *surface)
 void
 gdk_surface_maximize (GdkSurface *surface)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->maximize (surface);
+  GDK_SURFACE_GET_CLASS (surface)->maximize (surface);
 }
 
 /**
@@ -3204,7 +3403,7 @@ gdk_surface_maximize (GdkSurface *surface)
 void
 gdk_surface_unmaximize (GdkSurface *surface)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->unmaximize (surface);
+  GDK_SURFACE_GET_CLASS (surface)->unmaximize (surface);
 }
 
 /**
@@ -3228,7 +3427,7 @@ gdk_surface_unmaximize (GdkSurface *surface)
 void
 gdk_surface_fullscreen (GdkSurface *surface)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->fullscreen (surface);
+  GDK_SURFACE_GET_CLASS (surface)->fullscreen (surface);
 }
 
 /**
@@ -3250,10 +3449,10 @@ gdk_surface_fullscreen_on_monitor (GdkSurface  *surface,
   g_return_if_fail (gdk_monitor_get_display (monitor) == gdk_surface_get_display (surface));
   g_return_if_fail (gdk_monitor_is_valid (monitor));
 
-  if (GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->fullscreen_on_monitor != NULL)
-    GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->fullscreen_on_monitor (surface, monitor);
+  if (GDK_SURFACE_GET_CLASS (surface)->fullscreen_on_monitor != NULL)
+    GDK_SURFACE_GET_CLASS (surface)->fullscreen_on_monitor (surface, monitor);
   else
-    GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->fullscreen (surface);
+    GDK_SURFACE_GET_CLASS (surface)->fullscreen (surface);
 }
 
 /**
@@ -3283,17 +3482,14 @@ void
 gdk_surface_set_fullscreen_mode (GdkSurface        *surface,
                                  GdkFullscreenMode mode)
 {
-  GdkSurfaceImplClass *impl_class;
-
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (surface->fullscreen_mode != mode)
     {
       surface->fullscreen_mode = mode;
 
-      impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-      if (impl_class->apply_fullscreen_mode != NULL)
-        impl_class->apply_fullscreen_mode (surface);
+      if (GDK_SURFACE_GET_CLASS (surface)->apply_fullscreen_mode != NULL)
+        GDK_SURFACE_GET_CLASS (surface)->apply_fullscreen_mode (surface);
     }
 }
 
@@ -3331,7 +3527,7 @@ gdk_surface_get_fullscreen_mode (GdkSurface *surface)
 void
 gdk_surface_unfullscreen (GdkSurface *surface)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->unfullscreen (surface);
+  GDK_SURFACE_GET_CLASS (surface)->unfullscreen (surface);
 }
 
 /**
@@ -3353,7 +3549,7 @@ void
 gdk_surface_set_keep_above (GdkSurface *surface,
                             gboolean   setting)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_keep_above (surface, setting);
+  GDK_SURFACE_GET_CLASS (surface)->set_keep_above (surface, setting);
 }
 
 /**
@@ -3375,7 +3571,7 @@ void
 gdk_surface_set_keep_below (GdkSurface *surface,
                             gboolean setting)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_keep_below (surface, setting);
+  GDK_SURFACE_GET_CLASS (surface)->set_keep_below (surface, setting);
 }
 
 /**
@@ -3403,7 +3599,7 @@ void
 gdk_surface_set_decorations (GdkSurface      *surface,
                              GdkWMDecoration decorations)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_decorations (surface, decorations);
+  GDK_SURFACE_GET_CLASS (surface)->set_decorations (surface, decorations);
 }
 
 /**
@@ -3420,7 +3616,7 @@ gboolean
 gdk_surface_get_decorations (GdkSurface       *surface,
                              GdkWMDecoration *decorations)
 {
-  return GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->get_decorations (surface, decorations);
+  return GDK_SURFACE_GET_CLASS (surface)->get_decorations (surface, decorations);
 }
 
 /**
@@ -3447,7 +3643,7 @@ void
 gdk_surface_set_functions (GdkSurface    *surface,
                            GdkWMFunction functions)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_functions (surface, functions);
+  GDK_SURFACE_GET_CLASS (surface)->set_functions (surface, functions);
 }
 
 /**
@@ -3472,7 +3668,7 @@ gdk_surface_begin_resize_drag_for_device (GdkSurface     *surface,
                                           gint            y,
                                           guint32         timestamp)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->begin_resize_drag (surface, edge, device, button, x, y, timestamp);
+  GDK_SURFACE_GET_CLASS (surface)->begin_resize_drag (surface, edge, device, button, x, y, timestamp);
 }
 
 /**
@@ -3526,8 +3722,8 @@ gdk_surface_begin_move_drag_for_device (GdkSurface *surface,
                                         gint        y,
                                         guint32     timestamp)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->begin_move_drag (surface,
-                                                               device, button, x, y, timestamp);
+  GDK_SURFACE_GET_CLASS (surface)->begin_move_drag (surface,
+                                                    device, button, x, y, timestamp);
 }
 
 /**
@@ -3593,7 +3789,7 @@ gdk_surface_set_opacity (GdkSurface *surface,
   if (surface->destroyed)
     return;
 
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_opacity (surface, opacity);
+  GDK_SURFACE_GET_CLASS (surface)->set_opacity (surface, opacity);
 }
 
 /* This function is called when the XWindow is really gone.
@@ -3601,7 +3797,7 @@ gdk_surface_set_opacity (GdkSurface *surface,
 void
 gdk_surface_destroy_notify (GdkSurface *surface)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->destroy_notify (surface);
+  GDK_SURFACE_GET_CLASS (surface)->destroy_notify (surface);
 }
 
 /**
@@ -3613,7 +3809,7 @@ gdk_surface_destroy_notify (GdkSurface *surface)
 void
 gdk_surface_register_dnd (GdkSurface *surface)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->register_dnd (surface);
+  GDK_SURFACE_GET_CLASS (surface)->register_dnd (surface);
 }
 
 /**
@@ -3645,7 +3841,7 @@ gdk_drag_begin (GdkSurface          *surface,
   g_return_val_if_fail (gdk_surface_get_display (surface) == gdk_device_get_display (device), NULL);
   g_return_val_if_fail (GDK_IS_CONTENT_PROVIDER (content), NULL);
 
-  return GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->drag_begin (surface, device, content, actions, dx, dy);
+  return GDK_SURFACE_GET_CLASS (surface)->drag_begin (surface, device, content, actions, dx, dy);
 }
 
 static void
@@ -3768,17 +3964,16 @@ gdk_surface_get_frame_clock (GdkSurface *surface)
 gint
 gdk_surface_get_scale_factor (GdkSurface *surface)
 {
-  GdkSurfaceImplClass *impl_class;
+  GdkSurfaceClass *class;
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), 1);
 
   if (GDK_SURFACE_DESTROYED (surface))
     return 1;
 
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-
-  if (impl_class->get_scale_factor)
-    return impl_class->get_scale_factor (surface);
+  class = GDK_SURFACE_GET_CLASS (surface);
+  if (class->get_scale_factor)
+    return class->get_scale_factor (surface);
 
   return 1;
 }
@@ -3791,20 +3986,17 @@ gdk_surface_get_unscaled_size (GdkSurface *surface,
                                int *unscaled_width,
                                int *unscaled_height)
 {
-  GdkSurfaceImplClass *impl_class;
+  GdkSurfaceClass *class;
   gint scale;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (surface->impl_surface == surface)
-    {
-      impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
+  class = GDK_SURFACE_GET_CLASS (surface);
 
-      if (impl_class->get_unscaled_size)
-        {
-          impl_class->get_unscaled_size (surface, unscaled_width, unscaled_height);
-          return;
-        }
+  if (class->get_unscaled_size)
+    {
+      class->get_unscaled_size (surface, unscaled_width, unscaled_height);
+      return;
     }
 
   scale = gdk_surface_get_scale_factor (surface);
@@ -3840,7 +4032,7 @@ void
 gdk_surface_set_opaque_region (GdkSurface      *surface,
                                cairo_region_t *region)
 {
-  GdkSurfaceImplClass *impl_class;
+  GdkSurfaceClass *class;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (!GDK_SURFACE_DESTROYED (surface));
@@ -3853,10 +4045,9 @@ gdk_surface_set_opaque_region (GdkSurface      *surface,
   if (region != NULL)
     surface->opaque_region = cairo_region_reference (region);
 
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-
-  if (impl_class->set_opaque_region)
-    impl_class->set_opaque_region (surface, region);
+  class = GDK_SURFACE_GET_CLASS (surface);
+  if (class->set_opaque_region)
+    class->set_opaque_region (surface, region);
 }
 
 /**
@@ -3884,7 +4075,7 @@ gdk_surface_set_shadow_width (GdkSurface *surface,
                               gint       top,
                               gint       bottom)
 {
-  GdkSurfaceImplClass *impl_class;
+  GdkSurfaceClass *class;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (!GDK_SURFACE_DESTROYED (surface));
@@ -3895,10 +4086,9 @@ gdk_surface_set_shadow_width (GdkSurface *surface,
   surface->shadow_right = right;
   surface->shadow_bottom = bottom;
 
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-
-  if (impl_class->set_shadow_width)
-    impl_class->set_shadow_width (surface, left, right, top, bottom);
+  class = GDK_SURFACE_GET_CLASS (surface);
+  if (class->set_shadow_width)
+    class->set_shadow_width (surface, left, right, top, bottom);
 }
 
 /**
@@ -3918,15 +4108,14 @@ gboolean
 gdk_surface_show_window_menu (GdkSurface *surface,
                               GdkEvent  *event)
 {
-  GdkSurfaceImplClass *impl_class;
+  GdkSurfaceClass *class;
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
   g_return_val_if_fail (!GDK_SURFACE_DESTROYED (surface), FALSE);
 
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-
-  if (impl_class->show_window_menu)
-    return impl_class->show_window_menu (surface, event);
+  class = GDK_SURFACE_GET_CLASS (surface);
+  if (class->show_window_menu)
+    return class->show_window_menu (surface, event);
   else
     return FALSE;
 }
@@ -3934,15 +4123,14 @@ gdk_surface_show_window_menu (GdkSurface *surface,
 gboolean
 gdk_surface_supports_edge_constraints (GdkSurface *surface)
 {
-  GdkSurfaceImplClass *impl_class;
+  GdkSurfaceClass *class;
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
   g_return_val_if_fail (!GDK_SURFACE_DESTROYED (surface), FALSE);
 
-  impl_class = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
-
-  if (impl_class->supports_edge_constraints)
-    return impl_class->supports_edge_constraints (surface);
+  class = GDK_SURFACE_GET_CLASS (surface);
+  if (class->supports_edge_constraints)
+    return class->supports_edge_constraints (surface);
   else
     return FALSE;
 }
