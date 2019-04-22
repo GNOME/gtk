@@ -208,6 +208,7 @@ _gdk_broadway_display_create_surface (GdkDisplay     *display,
   g_object_unref (frame_clock);
 
   surface->surface_type = surface_type;
+  surface->parent = parent;
   surface->x = x;
   surface->y = y;
   surface->width = width;
