@@ -22,6 +22,7 @@
 #include "gdkx11device-core.h"
 
 #include "gdkdeviceprivate.h"
+#include "gdksurfaceprivate.h"
 #include "gdkseatdefaultprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkeventtranslator.h"
@@ -342,7 +343,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
                                              GdkEvent           *event,
                                              const XEvent       *xevent)
 {
-  GdkSurfaceImplX11 *impl;
+  GdkX11Surface *impl;
   GdkX11DeviceManagerCore *device_manager;
   GdkSurface *surface;
   gboolean return_val;
@@ -360,7 +361,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
         return FALSE;
 
       g_object_ref (surface);
-      impl = GDK_SURFACE_IMPL_X11 (surface->impl);
+      impl = GDK_X11_SURFACE (surface);
       scale = impl->surface_scale;
     }
 
