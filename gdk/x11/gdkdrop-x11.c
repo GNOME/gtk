@@ -621,7 +621,7 @@ static gboolean
 xdnd_position_filter (GdkSurface   *surface,
                       const XEvent *xevent)
 {
-  GdkSurfaceImplX11 *impl;
+  GdkX11Surface *impl;
   Window source_window = xevent->xclient.data.l[0];
   gint16 x_root = xevent->xclient.data.l[2] >> 16;
   gint16 y_root = xevent->xclient.data.l[2] & 0xffff;
@@ -647,7 +647,7 @@ xdnd_position_filter (GdkSurface   *surface,
   if ((drop != NULL) &&
       (drop_x11->source_window == source_window))
     {
-      impl = GDK_SURFACE_IMPL_X11 (gdk_drop_get_surface (drop)->impl);
+      impl = GDK_X11_SURFACE (gdk_drop_get_surface (drop));
 
       drop_x11->suggested_action = xdnd_action_from_atom (display, action);
       gdk_x11_drop_update_actions (drop_x11);
