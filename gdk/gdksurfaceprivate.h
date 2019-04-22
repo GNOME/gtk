@@ -69,6 +69,7 @@ struct _GdkSurface
   guint viewable : 1; /* mapped and all parents mapped */
   guint in_update : 1;
   guint frame_clock_events_paused : 1;
+  guint autohide : 1;
 
   guint update_and_descendants_freeze_count;
 
