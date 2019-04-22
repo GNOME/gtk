@@ -60,6 +60,11 @@ struct _GdkBroadwaySurface
 
   GArray *node_data;
   GPtrArray *node_data_textures;
+
+  int offset_x;
+  int offset_y;
+
+  GList *popups;
 };
 
 struct _GdkBroadwaySurfaceClass
