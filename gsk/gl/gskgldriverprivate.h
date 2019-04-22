@@ -28,7 +28,7 @@ int             gsk_gl_driver_get_max_texture_size      (GskGLDriver     *driver
 
 void            gsk_gl_driver_begin_frame               (GskGLDriver     *driver);
 void            gsk_gl_driver_end_frame                 (GskGLDriver     *driver);
-
+gboolean        gsk_gl_driver_in_frame                  (GskGLDriver     *driver);
 int             gsk_gl_driver_get_texture_for_texture   (GskGLDriver     *driver,
                                                          GdkTexture      *texture,
                                                          int              min_filter,

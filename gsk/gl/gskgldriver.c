@@ -206,6 +206,12 @@ gsk_gl_driver_begin_frame (GskGLDriver *self)
 #endif
 }
 
+gboolean
+gsk_gl_driver_in_frame (GskGLDriver *self)
+{
+  return self->in_frame;
+}
+
 void
 gsk_gl_driver_end_frame (GskGLDriver *self)
 {
