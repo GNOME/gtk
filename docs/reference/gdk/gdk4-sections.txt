@@ -186,6 +186,7 @@ gdk_surface_get_surface_type
 gdk_surface_get_display
 gdk_surface_show
 gdk_surface_show_unraised
+gdk_surface_show_with_auto_dismissal
 gdk_surface_hide
 gdk_surface_is_destroyed
 gdk_surface_is_visible

@@ -85,6 +85,7 @@ enum {
   PROP_FRAME_CLOCK,
   PROP_STATE,
   PROP_MAPPED,
+  PROP_AUTOHIDE,
   LAST_PROP
 };
 
@@ -498,6 +499,13 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                             FALSE,
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
+  properties[PROP_AUTOHIDE] =
+      g_param_spec_boolean ("autohide",
+                            P_("Autohide"),
+                            P_("Whether to dismiss the surface on outside clicks"),
+                            FALSE,
+                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
@@ -676,6 +684,10 @@ gdk_surface_set_property (GObject      *object,
       gdk_surface_set_frame_clock (surface, GDK_FRAME_CLOCK (g_value_get_object (value)));
       break;
 
+    case PROP_AUTOHIDE:
+      surface->autohide = g_value_get_boolean (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -710,6 +722,10 @@ gdk_surface_get_property (GObject    *object,
 
     case PROP_MAPPED:
       g_value_set_boolean (value, GDK_SURFACE_IS_MAPPED (surface));
+      break;
+
+    case PROP_AUTOHIDE:
+      g_value_set_boolean (value, surface->autohide);
       break;
 
     default:
@@ -797,8 +813,10 @@ gdk_surface_new_temp (GdkDisplay         *display,
  * gdk_surface_new_popup: (constructor)
  * @display: the display to create the surface on
  * @parent: the parent surface to attach the surface to
+ * @autohide: whether to hide the surface on outside clicks
  *
  * Create a new popup surface.
+ *
  * The surface will be attached to @parent and can
  * be positioned relative to it using
  * gdk_surface_move_to_rect().
@@ -807,7 +825,8 @@ gdk_surface_new_temp (GdkDisplay         *display,
  */
 GdkSurface *
 gdk_surface_new_popup (GdkDisplay *display,
-                       GdkSurface *parent)
+                       GdkSurface *parent,
+                       gboolean    autohide)
 {
   GdkSurface *surface;
 
@@ -816,6 +835,8 @@ gdk_surface_new_popup (GdkDisplay *display,
 
   surface = gdk_surface_new (display, GDK_SURFACE_POPUP,
                              parent, 0, 0, 100, 100);
+
+  surface->autohide = autohide;
 
   return surface;
 }
@@ -1890,6 +1911,13 @@ gdk_surface_restack (GdkSurface     *surface,
   GDK_SURFACE_GET_CLASS (surface)->restack_toplevel (surface, sibling, above);
 }
 
+static void
+grab_prepare_func (GdkSeat    *seat,
+                   GdkSurface *surface,
+                   gpointer    data)
+{
+  gdk_surface_show_internal (surface, TRUE);
+}
 
 /**
  * gdk_surface_show:
@@ -1908,7 +1936,19 @@ gdk_surface_restack (GdkSurface     *surface,
 void
 gdk_surface_show (GdkSurface *surface)
 {
-  gdk_surface_show_internal (surface, TRUE);
+  if (surface->autohide)
+    {
+      gdk_seat_grab (gdk_display_get_default_seat (surface->display),
+                     surface,
+                     GDK_SEAT_CAPABILITY_ALL,
+                     TRUE,
+                     NULL, NULL,
+                     grab_prepare_func, NULL);
+    }
+  else
+    {
+      gdk_surface_show_internal (surface, TRUE);
+    }
 }
 
 /**
@@ -4080,10 +4120,54 @@ gdk_synthesize_surface_state (GdkSurface     *surface,
   gdk_surface_set_state (surface, (surface->state | set_flags) & ~unset_flags);
 }
 
+static gboolean
+check_autohide (GdkEvent *event)
+{
+  GdkDisplay *display;
+  GdkDevice *device;
+  GdkSurface *grab_surface;
+
+ switch ((guint) gdk_event_get_event_type (event))
+    {
+    case GDK_BUTTON_PRESS:
+#if 0
+    // FIXME: we need to ignore the release that is paired
+    // with the press starting the grab - due to implicit
+    // grabs, it will be delivered to the same place as the
+    // press, and will cause the auto dismissal to be triggered.
+    case GDK_BUTTON_RELEASE:
+#endif
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+    case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_PINCH:
+      display = gdk_event_get_display (event);
+      device = gdk_event_get_device (event);
+      if (gdk_device_grab_info (display, device, &grab_surface, NULL))
+        {
+          if (grab_surface != gdk_event_get_surface (event) &&
+              grab_surface->autohide)
+            {
+              gdk_surface_hide (grab_surface);
+              return TRUE;
+            }
+        }
+      break;
+    default:;
+    }
+
+  return FALSE;
+}
+
 gboolean
 gdk_surface_handle_event (GdkEvent *event)
 {
   gboolean handled = FALSE;
+
+  if (check_autohide (event))
+    return TRUE;
+
   if (gdk_event_get_event_type (event) == GDK_CONFIGURE)
     {
       g_signal_emit (gdk_event_get_surface (event), signals[SIZE_CHANGED], 0,
