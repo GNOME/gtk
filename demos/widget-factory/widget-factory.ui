@@ -3439,6 +3439,7 @@ bad things might happen.</property>
     </widgets>
   </object>
   <object class="GtkPopover" id="notebook_info_popover">
+    <property name="modal">0</property>
     <child>
       <object class="GtkLabel" id="notebook_info_label">
         <property name="label">No updates at this time</property>
