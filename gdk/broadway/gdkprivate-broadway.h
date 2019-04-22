@@ -68,6 +68,7 @@ void     _gdk_broadway_roundtrip_notify           (GdkSurface  *surface,
 void     _gdk_broadway_surface_grab_check_destroy (GdkSurface *surface);
 void     _gdk_broadway_surface_grab_check_unmap   (GdkSurface *surface,
                                                    gulong     serial);
+void     gdk_broadway_surface_update_popups       (GdkSurface *surface);
 
 void _gdk_keymap_keys_changed     (GdkDisplay      *display);
 gint _gdk_broadway_get_group_for_state (GdkDisplay      *display,

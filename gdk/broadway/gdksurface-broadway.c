@@ -66,12 +66,20 @@ gdk_broadway_surface_init (GdkBroadwaySurface *impl)
 static void
 gdk_broadway_surface_finalize (GObject *object)
 {
+  GdkSurface *surface;
   GdkBroadwaySurface *impl;
   GdkBroadwayDisplay *broadway_display;
 
   g_return_if_fail (GDK_IS_BROADWAY_SURFACE (object));
 
+  surface = GDK_SURFACE (object);
   impl = GDK_BROADWAY_SURFACE (object);
+
+  if (surface->parent)
+    {
+      GdkBroadwaySurface *parent_impl = GDK_BROADWAY_SURFACE (surface->parent);
+      parent_impl->popups = g_list_remove (parent_impl->popups, surface);
+    }
 
   _gdk_broadway_surface_grab_check_destroy (GDK_SURFACE (impl));
 
@@ -225,12 +233,16 @@ _gdk_broadway_display_create_surface (GdkDisplay     *display,
                                                surface->surface_type == GDK_SURFACE_TEMP);
   g_hash_table_insert (broadway_display->id_ht, GINT_TO_POINTER(impl->id), surface);
 
-  g_assert (surface->surface_type == GDK_SURFACE_TOPLEVEL ||
-            surface->surface_type == GDK_SURFACE_TEMP);
-
-  broadway_display->toplevels = g_list_prepend (broadway_display->toplevels, impl);
+  if (!surface->parent)
+    broadway_display->toplevels = g_list_prepend (broadway_display->toplevels, impl);
 
   connect_frame_clock (surface);
+
+  if (parent)
+    {
+      GdkBroadwaySurface *parent_impl = GDK_BROADWAY_SURFACE (parent);
+      parent_impl->popups = g_list_prepend (parent_impl->popups, surface);
+    }
 
   return surface;
 }
@@ -392,6 +404,12 @@ gdk_broadway_surface_move_resize (GdkSurface *surface,
           surface->width = width;
           surface->height = height;
         }
+    }
+
+  if (surface->parent)
+    {
+      impl->offset_x = x - surface->parent->x;
+      impl->offset_y = y - surface->parent->y;
     }
 
   _gdk_broadway_server_surface_move_resize (broadway_display->server,
@@ -797,6 +815,25 @@ gdk_broadway_surface_set_functions (GdkSurface    *surface,
     return;
 }
 
+void
+gdk_broadway_surface_update_popups (GdkSurface *parent)
+{
+  GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (parent);
+  GList *l;
+
+  for (l = impl->popups; l; l = l->next)
+    {
+      GdkBroadwaySurface *popup_impl = l->data;
+      GdkSurface *popup = GDK_SURFACE (popup_impl);
+      int new_x = parent->x + popup_impl->offset_x;
+      int new_y = parent->y + popup_impl->offset_y;
+
+      if (new_x != popup->x || new_y != popup->y)
+        gdk_broadway_surface_move_resize (popup, TRUE, new_x, new_y, popup->width, popup->height);
+      gdk_broadway_surface_restack_toplevel (popup, parent, TRUE);
+    }
+}
+
 typedef struct _MoveResizeData MoveResizeData;
 
 struct _MoveResizeData
@@ -1189,7 +1226,7 @@ gdk_broadway_surface_begin_resize_drag (GdkSurface     *surface,
   mv_resize->is_resize = TRUE;
   mv_resize->moveresize_button = button;
   mv_resize->resize_edge = edge;
-  mv_resize->moveresize_x = x  + surface->x;
+  mv_resize->moveresize_x = x + surface->x;
   mv_resize->moveresize_y = y + surface->y;
   mv_resize->moveresize_surface = g_object_ref (surface);
 
