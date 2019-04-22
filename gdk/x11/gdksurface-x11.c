@@ -107,10 +107,6 @@ static void     set_wm_name                       (GdkDisplay  *display,
 						   const gchar *name);
 static void     move_to_current_desktop           (GdkSurface *surface);
 
-#define SURFACE_IS_TOPLEVEL(surface)                      \
-  (GDK_SURFACE_TYPE (surface) == GDK_SURFACE_TOPLEVEL ||   \
-   GDK_SURFACE_TYPE (surface) == GDK_SURFACE_TEMP)
-
 /* Return whether time1 is considered later than time2 as far as xserver
  * time is concerned.  Accounts for wraparound.
  */
@@ -134,9 +130,6 @@ _gdk_x11_surface_get_toplevel (GdkSurface *surface)
   GdkX11Surface *impl;
   
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
-
-  if (!SURFACE_IS_TOPLEVEL (surface))
-    return NULL;
 
   impl = GDK_X11_SURFACE (surface);
 
@@ -203,13 +196,9 @@ set_sync_counter(Display     *display,
 void
 gdk_x11_surface_pre_damage (GdkSurface *surface)
 {
-  GdkSurface *toplevel_surface = surface;
   GdkX11Surface *impl;
 
-  if (!toplevel_surface || !SURFACE_IS_TOPLEVEL (toplevel_surface))
-    return;
-
-  impl = GDK_X11_SURFACE (toplevel_surface);
+  impl = GDK_X11_SURFACE (surface);
 
   if (impl->toplevel->in_frame &&
       impl->toplevel->current_counter_value % 2 == 0)
@@ -281,9 +270,6 @@ gdk_x11_surface_predict_presentation_time (GdkSurface *surface)
   gint64 presentation_time;
   gint64 refresh_interval;
 
-  if (!SURFACE_IS_TOPLEVEL (surface))
-    return;
-
   clock = gdk_surface_get_frame_clock (surface);
 
   timings = gdk_frame_clock_get_current_timings (clock);
@@ -328,8 +314,7 @@ gdk_x11_surface_begin_frame (GdkSurface *surface,
 
   impl = GDK_X11_SURFACE (surface);
 
-  if (!SURFACE_IS_TOPLEVEL (surface) ||
-      impl->toplevel->extended_update_counter == None)
+  if (impl->toplevel->extended_update_counter == None)
     return;
 
   impl->toplevel->in_frame = TRUE;
@@ -369,8 +354,7 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
 
   impl = GDK_X11_SURFACE (surface);
 
-  if (!SURFACE_IS_TOPLEVEL (surface) ||
-      impl->toplevel->extended_update_counter == None ||
+  if (impl->toplevel->extended_update_counter == None ||
       !impl->toplevel->in_frame)
     return;
 
@@ -447,7 +431,7 @@ gdk_x11_surface_finalize (GObject *object)
 
   impl = GDK_X11_SURFACE (object);
 
-  if (SURFACE_IS_TOPLEVEL (impl) && impl->toplevel->in_frame)
+  if (impl->toplevel->in_frame)
     unhook_surface_changed (GDK_SURFACE (impl));
 
   _gdk_x11_surface_grab_check_destroy (GDK_SURFACE (impl));
@@ -771,7 +755,7 @@ connect_frame_clock (GdkSurface *surface)
   GdkX11Surface *impl;
 
   impl = GDK_X11_SURFACE (surface);
-  if (SURFACE_IS_TOPLEVEL (surface) && !impl->frame_clock_connected)
+  if (!impl->frame_clock_connected)
     {
       GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
 
@@ -1207,17 +1191,14 @@ gdk_x11_surface_show (GdkSurface *surface, gboolean already_mapped)
   if (!already_mapped)
     set_initial_hints (surface);
       
-  if (SURFACE_IS_TOPLEVEL (surface))
-    {
-      display = gdk_surface_get_display (surface);
-      display_x11 = GDK_X11_DISPLAY (display);
-      toplevel = _gdk_x11_surface_get_toplevel (surface);
+  display = gdk_surface_get_display (surface);
+  display_x11 = GDK_X11_DISPLAY (display);
+  toplevel = _gdk_x11_surface_get_toplevel (surface);
       
-      if (toplevel->user_time != 0 &&
-	      display_x11->user_time != 0 &&
-	  XSERVER_TIME_IS_LATER (display_x11->user_time, toplevel->user_time))
-	gdk_x11_surface_set_user_time (surface, display_x11->user_time);
-    }
+  if (toplevel->user_time != 0 &&
+      display_x11->user_time != 0 &&
+      XSERVER_TIME_IS_LATER (display_x11->user_time, toplevel->user_time))
+    gdk_x11_surface_set_user_time (surface, display_x11->user_time);
   
   XMapWindow (xdisplay, xwindow);
   
@@ -1587,8 +1568,7 @@ gdk_x11_surface_focus (GdkSurface *surface,
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   display = GDK_SURFACE_DISPLAY (surface);
@@ -1637,8 +1617,7 @@ gdk_x11_surface_set_type_hint (GdkSurface        *surface,
   GdkDisplay *display;
   Atom atom;
   
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   display = gdk_surface_get_display (surface);
@@ -1711,8 +1690,7 @@ gdk_x11_surface_get_type_hint (GdkSurface *surface)
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_SURFACE_TYPE_HINT_NORMAL);
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return GDK_SURFACE_TYPE_HINT_NORMAL;
 
   type = GDK_SURFACE_TYPE_HINT_NORMAL;
@@ -1798,8 +1776,7 @@ static void
 gdk_x11_surface_set_modal_hint (GdkSurface *surface,
 			       gboolean   modal)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   surface->modal_hint = modal;
@@ -1816,8 +1793,7 @@ gdk_x11_surface_set_skip_taskbar_hint (GdkSurface *surface,
 {
   GdkToplevelX11 *toplevel;
   
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   toplevel = _gdk_x11_surface_get_toplevel (surface);
@@ -1835,8 +1811,7 @@ gdk_x11_surface_set_skip_pager_hint (GdkSurface *surface,
 {
   GdkToplevelX11 *toplevel;
     
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   toplevel = _gdk_x11_surface_get_toplevel (surface);
@@ -1854,8 +1829,7 @@ gdk_x11_surface_set_urgency_hint (GdkSurface *surface,
 {
   GdkToplevelX11 *toplevel;
     
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   toplevel = _gdk_x11_surface_get_toplevel (surface);
@@ -1873,8 +1847,7 @@ gdk_x11_surface_set_geometry_hints (GdkSurface         *surface,
   XSizeHints size_hints;
   GdkToplevelX11 *toplevel;
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   toplevel = _gdk_x11_surface_get_toplevel (surface);
@@ -1996,8 +1969,7 @@ gdk_surface_get_geometry_hints (GdkSurface      *surface,
 
   *geom_mask = 0;
   
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   impl = GDK_X11_SURFACE (surface);
@@ -2145,8 +2117,7 @@ gdk_x11_surface_set_title (GdkSurface   *surface,
   
   g_return_if_fail (title != NULL);
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface)) 
     return;
   
   display = gdk_surface_get_display (surface);
@@ -2178,8 +2149,7 @@ gdk_x11_surface_set_startup_id (GdkSurface   *surface,
 
   display = gdk_surface_get_display (surface);
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (startup_id)
@@ -2196,8 +2166,7 @@ static void
 gdk_x11_surface_set_transient_for (GdkSurface *surface,
 				  GdkSurface *parent)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface)) 
     return;
 
   /* XSetTransientForHint() doesn't allow unsetting, so do it manually */
@@ -2528,8 +2497,7 @@ gdk_x11_surface_set_accept_focus (GdkSurface *surface,
     {
       surface->accept_focus = accept_focus;
 
-      if (!GDK_SURFACE_DESTROYED (surface) &&
-	  SURFACE_IS_TOPLEVEL (surface))
+      if (!GDK_SURFACE_DESTROYED (surface)) 
 	update_wm_hints (surface, FALSE);
     }
 }
@@ -2544,9 +2512,8 @@ gdk_x11_surface_set_focus_on_map (GdkSurface *surface,
     {
       surface->focus_on_map = focus_on_map;
       
-      if ((!GDK_SURFACE_DESTROYED (surface)) &&
-	  (!surface->focus_on_map) &&
-	  SURFACE_IS_TOPLEVEL (surface))
+      if (!GDK_SURFACE_DESTROYED (surface) &&
+	  !surface->focus_on_map)
 	gdk_x11_surface_set_user_time (surface, 0);
     }
 }
@@ -2579,8 +2546,7 @@ gdk_x11_surface_set_user_time (GdkSurface *surface,
   glong timestamp_long = (glong)timestamp;
   Window xid;
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface)) 
     return;
 
   display = gdk_surface_get_display (surface);
@@ -2630,9 +2596,6 @@ gdk_x11_surface_set_utf8_property  (GdkSurface *surface,
 				   const gchar *value)
 {
   GdkDisplay *display;
-
-  if (!SURFACE_IS_TOPLEVEL (surface))
-    return;
 
   display = gdk_surface_get_display (surface);
 
@@ -2822,8 +2785,7 @@ gdk_x11_surface_set_icon_list (GdkSurface *surface,
   GdkDisplay *display;
   gint i, n;
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   display = gdk_surface_get_display (surface);
@@ -2904,8 +2866,7 @@ gdk_x11_surface_set_icon_name (GdkSurface   *surface,
 {
   GdkDisplay *display;
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   display = gdk_surface_get_display (surface);
@@ -2939,8 +2900,7 @@ gdk_x11_surface_set_icon_name (GdkSurface   *surface,
 static void
 gdk_x11_surface_iconify (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (surface))
@@ -2964,8 +2924,7 @@ gdk_x11_surface_iconify (GdkSurface *surface)
 static void
 gdk_x11_surface_deiconify (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (surface))
@@ -2990,8 +2949,7 @@ gdk_x11_surface_deiconify (GdkSurface *surface)
 static void
 gdk_x11_surface_stick (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (surface))
@@ -3038,8 +2996,7 @@ gdk_x11_surface_stick (GdkSurface *surface)
 static void
 gdk_x11_surface_unstick (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (surface))
@@ -3064,8 +3021,7 @@ gdk_x11_surface_unstick (GdkSurface *surface)
 static void
 gdk_x11_surface_maximize (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (surface))
@@ -3081,8 +3037,7 @@ gdk_x11_surface_maximize (GdkSurface *surface)
 static void
 gdk_x11_surface_unmaximize (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (surface))
@@ -3098,8 +3053,7 @@ gdk_x11_surface_unmaximize (GdkSurface *surface)
 static void
 gdk_x11_surface_apply_fullscreen_mode (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   /* _NET_WM_FULLSCREEN_MONITORS gives an indication to the window manager as
@@ -3190,8 +3144,7 @@ gdk_x11_surface_apply_fullscreen_mode (GdkSurface *surface)
 static void
 gdk_x11_surface_fullscreen (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (surface))
@@ -3217,8 +3170,7 @@ gdk_x11_surface_fullscreen_on_monitor (GdkSurface  *surface,
 {
   GdkRectangle geom;
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   gdk_monitor_get_geometry (monitor, &geom);
@@ -3231,8 +3183,7 @@ gdk_x11_surface_fullscreen_on_monitor (GdkSurface  *surface,
 static void
 gdk_x11_surface_unfullscreen (GdkSurface *surface)
 {
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (surface))
@@ -3252,8 +3203,7 @@ gdk_x11_surface_set_keep_above (GdkSurface *surface,
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (surface))
@@ -3277,8 +3227,7 @@ gdk_x11_surface_set_keep_below (GdkSurface *surface, gboolean setting)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (GDK_SURFACE_IS_MAPPED (surface))
@@ -3302,8 +3251,7 @@ gdk_x11_surface_get_group (GdkSurface *surface)
 {
   GdkToplevelX11 *toplevel;
   
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return NULL;
   
   toplevel = _gdk_x11_surface_get_toplevel (surface);
@@ -3321,8 +3269,7 @@ gdk_x11_surface_set_group (GdkSurface *surface,
   g_return_if_fail (leader == NULL || GDK_IS_SURFACE (leader));
 
   if (GDK_SURFACE_DESTROYED (surface) ||
-      (leader != NULL && GDK_SURFACE_DESTROYED (leader)) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+      (leader != NULL && GDK_SURFACE_DESTROYED (leader)))
     return;
 
   toplevel = _gdk_x11_surface_get_toplevel (surface);
@@ -3427,8 +3374,7 @@ gdk_x11_surface_set_decorations (GdkSurface      *surface,
 {
   MotifWmHints hints;
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
   
   /* initialize to zero to avoid writing uninitialized data to socket */
@@ -3446,8 +3392,7 @@ gdk_x11_surface_get_decorations(GdkSurface       *surface,
   MotifWmHints *hints;
   gboolean result = FALSE;
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return FALSE;
   
   hints = gdk_surface_get_mwm_hints (surface);
@@ -3475,8 +3420,7 @@ gdk_x11_surface_set_functions (GdkSurface    *surface,
   
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
   
   /* initialize to zero to avoid writing uninitialized data to socket */
@@ -4260,8 +4204,7 @@ gdk_x11_surface_begin_resize_drag (GdkSurface     *surface,
 {
   int root_x, root_y;
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   gdk_x11_surface_get_root_coords (surface, x, y, &root_x, &root_y);
@@ -4284,7 +4227,7 @@ gdk_x11_surface_begin_move_drag (GdkSurface *surface,
   int root_x, root_y;
   gint direction;
 
-  if (GDK_SURFACE_DESTROYED (surface) || !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (button == 0)
@@ -4331,8 +4274,7 @@ gdk_x11_surface_set_opacity (GdkSurface *surface,
   
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   display = gdk_surface_get_display (surface);
