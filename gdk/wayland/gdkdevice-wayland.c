@@ -103,6 +103,7 @@ struct _GdkWaylandPointerData {
   uint32_t grab_time;
 
   struct wl_surface *pointer_surface;
+  guint cursor_is_default: 1;
   GdkCursor *cursor;
   guint cursor_timeout_id;
   guint cursor_image_index;
@@ -486,9 +487,9 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
 }
 
 static void
-gdk_wayland_device_set_surface_cursor (GdkDevice *device,
-                                      GdkSurface *surface,
-                                      GdkCursor *cursor)
+gdk_wayland_device_set_surface_cursor (GdkDevice  *device,
+                                       GdkSurface *surface,
+                                       GdkCursor  *cursor)
 {
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
   GdkWaylandPointerData *pointer = GDK_WAYLAND_DEVICE (device)->pointer;
@@ -499,26 +500,35 @@ gdk_wayland_device_set_surface_cursor (GdkDevice *device,
   if (seat->grab_cursor)
     cursor = seat->grab_cursor;
 
-  if (cursor == NULL)
-    cursor = gdk_cursor_new_from_name ("default", NULL);
-  else
-    cursor = g_object_ref (cursor);
-
   if (pointer->cursor != NULL &&
+      cursor != NULL &&
       gdk_cursor_equal (cursor, pointer->cursor))
+    return;
+
+  if (cursor == NULL)
     {
-      g_object_unref (cursor);
-      return;
+      if (!pointer->cursor_is_default)
+        {
+          g_clear_object (&pointer->cursor);
+          pointer->cursor = gdk_cursor_new_from_name ("default", NULL);
+          pointer->cursor_is_default = TRUE;
+
+          gdk_wayland_pointer_stop_cursor_animation (pointer);
+          gdk_wayland_device_update_surface_cursor (device);
+        }
+      else
+        {
+          /* Nothing to do, we'already using the default cursor */
+        }
     }
+  else
+    {
+      g_set_object (&pointer->cursor, cursor);
+      pointer->cursor_is_default = FALSE;
 
-  gdk_wayland_pointer_stop_cursor_animation (pointer);
-
-  if (pointer->cursor)
-    g_object_unref (pointer->cursor);
-
-  pointer->cursor = cursor;
-
-  gdk_wayland_device_update_surface_cursor (device);
+      gdk_wayland_pointer_stop_cursor_animation (pointer);
+      gdk_wayland_device_update_surface_cursor (device);
+    }
 }
 
 static void
