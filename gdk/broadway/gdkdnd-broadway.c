@@ -26,7 +26,7 @@
 
 #include "gdkdragprivate.h"
 
-#include "gdkinternals.h"
+#include "gdksurfaceprivate.h"
 #include "gdkproperty.h"
 #include "gdkprivate-broadway.h"
 #include "gdkinternals.h"
@@ -94,7 +94,7 @@ _gdk_broadway_surface_drag_begin (GdkSurface         *surface,
   GdkDrag *new_context;
 
   g_return_val_if_fail (surface != NULL, NULL);
-  g_return_val_if_fail (GDK_SURFACE_IS_BROADWAY (surface), NULL);
+  g_return_val_if_fail (GDK_IS_BROADWAY_SURFACE (surface), NULL);
 
   new_context = g_object_new (GDK_TYPE_BROADWAY_DRAG,
                               "device", device,

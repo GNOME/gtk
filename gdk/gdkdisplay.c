@@ -31,9 +31,9 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdisplaymanagerprivate.h"
 #include "gdkevents.h"
-#include "gdksurfaceimpl.h"
 #include "gdkinternals.h"
 #include "gdkmonitorprivate.h"
+#include "gdkframeclockidleprivate.h"
 
 #include <math.h>
 #include <glib.h>
@@ -171,8 +171,6 @@ gdk_display_class_init (GdkDisplayClass *class)
   object_class->get_property = gdk_display_get_property;
 
   class->get_app_launch_context = gdk_display_real_get_app_launch_context;
-  class->surface_type = GDK_TYPE_SURFACE;
-
   class->opened = gdk_display_real_opened;
   class->make_default = gdk_display_real_make_default;
   class->event_data_copy = gdk_display_real_event_data_copy;
@@ -1324,22 +1322,19 @@ _gdk_display_event_data_free (GdkDisplay *display,
   GDK_DISPLAY_GET_CLASS (display)->event_data_free (display, event);
 }
 
-void
-gdk_display_create_surface_impl (GdkDisplay       *display,
-                                 GdkSurface       *surface,
-                                 GdkSurface       *real_parent)
-{
-  GDK_DISPLAY_GET_CLASS (display)->create_surface_impl (display,
-                                                        surface,
-                                                        real_parent);
-}
-
 GdkSurface *
-_gdk_display_create_surface (GdkDisplay *display)
+gdk_display_create_surface (GdkDisplay     *display,
+                            GdkSurfaceType  surface_type,
+                            GdkSurface     *parent,
+                            int             x,
+                            int             y,
+                            int             width,
+                            int             height)
 {
-  return g_object_new (GDK_DISPLAY_GET_CLASS (display)->surface_type,
-                       "display", display,
-                       NULL);
+  return GDK_DISPLAY_GET_CLASS (display)->create_surface (display,
+                                                          surface_type,
+                                                          parent,
+                                                          x, y, width, height);
 }
 
 /**

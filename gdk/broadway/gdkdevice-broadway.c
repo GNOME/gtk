@@ -20,7 +20,7 @@
 
 #include "gdkdevice-broadway.h"
 
-#include "gdksurface.h"
+#include "gdksurfaceprivate.h"
 #include "gdkprivate-broadway.h"
 
 static gboolean gdk_broadway_device_get_history (GdkDevice      *device,
@@ -251,7 +251,7 @@ gdk_broadway_device_grab (GdkDevice    *device,
     {
       /* Device is a pointer */
       return _gdk_broadway_server_grab_pointer (broadway_display->server,
-                                                GDK_SURFACE_IMPL_BROADWAY (surface->impl)->id,
+                                                GDK_BROADWAY_SURFACE (surface)->id,
                                                 owner_events,
                                                 event_mask,
                                                 time_);
