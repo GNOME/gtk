@@ -812,8 +812,8 @@ gdk_surface_new_popup (GdkDisplay *display,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (GDK_IS_SURFACE (parent), NULL);
 
-  surface = gdk_surface_new (display, GDK_SURFACE_TEMP,
-                             NULL, 0, 0, 100, 100);
+  surface = gdk_surface_new (display, GDK_SURFACE_POPUP,
+                             parent, 0, 0, 100, 100);
 
   gdk_surface_set_transient_for (surface, parent);
   gdk_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_MENU);
