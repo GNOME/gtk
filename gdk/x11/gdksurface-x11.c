@@ -842,7 +842,8 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   xattributes.colormap = gdk_x11_display_get_window_colormap (display_x11);
   xattributes_mask |= CWColormap;
 
-  if (surface->surface_type == GDK_SURFACE_TEMP)
+  if (surface->surface_type == GDK_SURFACE_TEMP ||
+      surface->surface_type == GDK_SURFACE_POPUP)
     {
       xattributes.save_under = True;
       xattributes.override_redirect = True;
