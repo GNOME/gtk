@@ -28,9 +28,9 @@
 #define __GDK_INTERNALS_H__
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include "gdksurfaceimpl.h"
 #include "gdkdisplay.h"
 #include "gdkeventsprivate.h"
+#include "gdksurfaceprivate.h"
 #include "gdkenumtypes.h"
 #include "gdkdragprivate.h"
 
@@ -115,79 +115,6 @@ typedef enum
 } GdkEventFlags;
 
 typedef struct _GdkSurfacePaint GdkSurfacePaint;
-
-struct _GdkSurface
-{
-  GObject parent_instance;
-
-  GdkDisplay *display;
-
-  GdkSurfaceImpl *impl; /* window-system-specific delegate object */
-
-  GdkSurface *transient_for;
-
-  gpointer widget;
-
-  gint x;
-  gint y;
-
-  guint8 surface_type;
-
-  guint8 resize_count;
-
-  GdkGLContext *gl_paint_context;
-
-  cairo_region_t *update_area;
-  guint update_freeze_count;
-  /* This is the update_area that was in effect when the current expose
-     started. It may be smaller than the expose area if we'e painting
-     more than we have to, but it represents the "true" damage. */
-  cairo_region_t *active_update_area;
-
-  GdkSurfaceState old_state;
-  GdkSurfaceState state;
-
-  guint8 alpha;
-  guint8 fullscreen_mode;
-
-  guint modal_hint : 1;
-
-  guint destroyed : 2;
-
-  guint accept_focus : 1;
-  guint focus_on_map : 1;
-  guint support_multidevice : 1;
-  guint viewable : 1; /* mapped and all parents mapped */
-  guint in_update : 1;
-  guint frame_clock_events_paused : 1;
-
-  /* The GdkSurface that has the impl, ref:ed if another surface.
-   * This ref is required to keep the wrapper of the impl surface alive
-   * for as long as any GdkSurface references the impl. */
-  GdkSurface *impl_surface;
-
-  guint update_and_descendants_freeze_count;
-
-  gint width, height;
-  gint shadow_top;
-  gint shadow_left;
-  gint shadow_right;
-  gint shadow_bottom;
-
-  GdkCursor *cursor;
-  GHashTable *device_cursor;
-
-  cairo_region_t *input_shape;
-
-  GList *devices_inside;
-
-  GdkFrameClock *frame_clock; /* NULL to use from parent or default */
-
-  GSList *draw_contexts;
-  GdkDrawContext *paint_context;
-
-  cairo_region_t *opaque_region;
-};
 
 #define GDK_SURFACE_TYPE(d) ((((GdkSurface *)(d)))->surface_type)
 #define GDK_SURFACE_DESTROYED(d) (((GdkSurface *)(d))->destroyed)
