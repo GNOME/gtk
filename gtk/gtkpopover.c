@@ -139,7 +139,6 @@ typedef struct {
   guint surface_transform_changed_cb;
   GtkPositionType position;
   gboolean modal;
-  gboolean has_grab;
 
   GtkWidget *contents_widget;
 } GtkPopoverPrivate;
@@ -494,7 +493,7 @@ gtk_popover_realize (GtkWidget *widget)
 
   display = gtk_widget_get_display (priv->relative_to);
 
-  priv->surface = gdk_surface_new_popup (display, gtk_widget_get_surface (priv->relative_to));
+  priv->surface = gdk_surface_new_popup (display, gtk_widget_get_surface (priv->relative_to), priv->modal);
 
   gtk_widget_set_surface (widget, priv->surface);
   gdk_surface_set_widget (priv->surface, widget);
@@ -567,14 +566,6 @@ gtk_popover_hide (GtkWidget *widget)
 }
 
 static void
-grab_prepare_func (GdkSeat    *seat,
-                   GdkSurface *surface,
-                   gpointer    data)
-{
-  gdk_surface_show (surface);
-}
-
-static void
 unset_surface_transform_changed_cb (gpointer data)
 {
   GtkPopover *popover = data;
@@ -600,19 +591,8 @@ gtk_popover_map (GtkWidget *widget)
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *child;
   GdkRectangle parent_rect;
-  GdkDisplay *display;
 
-  if (priv->modal)
-    {
-      display = gtk_widget_get_display (priv->relative_to);
-      gdk_seat_grab (gdk_display_get_default_seat (display),
-                     priv->surface,
-                     GDK_SEAT_CAPABILITY_ALL,
-                     TRUE,
-                     NULL, NULL, grab_prepare_func, NULL);
-      priv->has_grab = TRUE;
-    }
-
+  gdk_surface_show (priv->surface);
   gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
   move_to_rect (popover);
 
@@ -643,14 +623,6 @@ gtk_popover_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->unmap (widget);
 
   gdk_surface_hide (priv->surface);
-  if (priv->has_grab)
-    {
-      GdkDisplay *display;
-
-      display = gtk_widget_get_display (priv->relative_to);
-      gdk_seat_ungrab (gdk_display_get_default_seat (display));
-      priv->has_grab = FALSE;
-    }
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child != NULL)
