@@ -75,6 +75,11 @@ struct _GdkX11Surface
 #if defined (HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)
   Damage damage;
 #endif
+
+  int offset_x;
+  int offset_y;
+
+  GList *popups;
 };
  
 struct _GdkX11SurfaceClass 
