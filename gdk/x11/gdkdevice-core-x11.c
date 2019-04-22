@@ -21,8 +21,6 @@
 #include "gdkx11device-core.h"
 #include "gdkdeviceprivate.h"
 
-#include "gdkinternals.h"
-#include "gdksurface.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkasync.h"
@@ -112,15 +110,13 @@ gdk_x11_device_core_get_history (GdkDevice      *device,
 {
   XTimeCoord *xcoords;
   GdkTimeCoord **coords;
-  GdkSurface *impl_surface;
-  GdkSurfaceImplX11 *impl;
+  GdkX11Surface *impl;
   int tmp_n_events;
   int i, j;
 
-  impl_surface = gdk_surface_get_impl_surface (surface);
-  impl =  GDK_SURFACE_IMPL_X11 (impl_surface->impl);
+  impl = GDK_X11_SURFACE (surface);
   xcoords = XGetMotionEvents (GDK_SURFACE_XDISPLAY (surface),
-                              GDK_SURFACE_XID (impl_surface),
+                              GDK_SURFACE_XID (surface),
                               start, stop, &tmp_n_events);
   if (!xcoords)
     return FALSE;
@@ -226,7 +222,7 @@ gdk_x11_device_core_query_state (GdkDevice        *device,
   else
     {
       xwindow = GDK_SURFACE_XID (surface);
-      scale = GDK_SURFACE_IMPL_X11 (surface->impl)->surface_scale;
+      scale = GDK_X11_SURFACE (surface)->surface_scale;
     }
 
   if (!GDK_X11_DISPLAY (display)->trusted_client ||
@@ -292,9 +288,6 @@ gdk_x11_device_core_grab (GdkDevice    *device,
   display = gdk_device_get_display (device);
 
   xwindow = GDK_SURFACE_XID (surface);
-
-  if (confine_to)
-    confine_to = gdk_surface_get_impl_surface (confine_to);
 
   if (!confine_to || GDK_SURFACE_DESTROYED (confine_to))
     xconfine_to = None;
@@ -382,7 +375,7 @@ gdk_x11_device_core_surface_at_position (GdkDevice       *device,
                                         GdkModifierType *mask,
                                         gboolean         get_toplevel)
 {
-  GdkSurfaceImplX11 *impl;
+  GdkX11Surface *impl;
   GdkDisplay *display;
   Display *xdisplay;
   GdkSurface *surface;
@@ -432,7 +425,7 @@ gdk_x11_device_core_surface_at_position (GdkDevice       *device,
       for (list = toplevels; list != NULL; list = list->next)
         {
           surface = GDK_SURFACE (list->data);
-          impl = GDK_SURFACE_IMPL_X11 (surface->impl);
+          impl = GDK_X11_SURFACE (surface);
           xwindow = GDK_SURFACE_XID (surface);
           gdk_x11_display_error_trap_push (display);
           XQueryPointer (xdisplay, xwindow,
@@ -500,7 +493,7 @@ gdk_x11_device_core_surface_at_position (GdkDevice       *device,
   surface = gdk_x11_surface_lookup_for_display (display, last);
   impl = NULL;
   if (surface)
-    impl = GDK_SURFACE_IMPL_X11 (surface->impl);
+    impl = GDK_X11_SURFACE (surface);
 
   if (win_x)
     *win_x = (surface) ? (double)xwin_x / impl->surface_scale : -1;
