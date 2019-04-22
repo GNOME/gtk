@@ -425,11 +425,19 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
 static void
 gdk_x11_surface_finalize (GObject *object)
 {
+  GdkSurface *surface;
   GdkX11Surface *impl;
 
   g_return_if_fail (GDK_IS_X11_SURFACE (object));
 
+  surface = GDK_SURFACE (object);
   impl = GDK_X11_SURFACE (object);
+
+  if (surface->parent)
+    {
+      GdkX11Surface *parent_impl = GDK_X11_SURFACE (surface->parent);
+      parent_impl->popups = g_list_remove (parent_impl->popups, surface);
+    }
 
   if (impl->toplevel->in_frame)
     unhook_surface_changed (GDK_SURFACE (impl));
@@ -842,7 +850,8 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   xattributes.colormap = gdk_x11_display_get_window_colormap (display_x11);
   xattributes_mask |= CWColormap;
 
-  if (surface->surface_type == GDK_SURFACE_TEMP)
+  if (surface->surface_type == GDK_SURFACE_TEMP ||
+      surface->surface_type == GDK_SURFACE_POPUP)
     {
       xattributes.save_under = True;
       xattributes.override_redirect = True;
@@ -898,6 +907,12 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   connect_frame_clock (surface);
 
   gdk_surface_freeze_toplevel_updates (surface);
+
+  if (parent)
+    {
+      GdkX11Surface *parent_impl = GDK_X11_SURFACE (parent);
+      parent_impl->popups = g_list_prepend (parent_impl->popups, surface);
+    }
 
   return surface;
 }
@@ -1231,8 +1246,8 @@ gdk_x11_surface_hide (GdkSurface *surface)
 
 static inline void
 x11_surface_move (GdkSurface *surface,
-                 gint       x,
-                 gint       y)
+                  gint        x,
+                  gint        y)
 {
   GdkX11Surface *impl = GDK_X11_SURFACE (surface);
 
@@ -1244,6 +1259,12 @@ x11_surface_move (GdkSurface *surface,
     {
       surface->x = x;
       surface->y = y;
+
+      if (surface->parent)
+        {
+          impl->offset_x = surface->x - surface->parent->x;
+          impl->offset_y = surface->y - surface->parent->y;
+        }
     }
 }
 
@@ -1283,10 +1304,10 @@ x11_surface_resize (GdkSurface *surface,
 
 static inline void
 x11_surface_move_resize (GdkSurface *surface,
-                        gint       x,
-                        gint       y,
-                        gint       width,
-                        gint       height)
+                         gint        x,
+                         gint        y,
+                         gint        width,
+                         gint        height)
 {
   GdkX11Surface *impl = GDK_X11_SURFACE (surface);
 
@@ -1314,6 +1335,12 @@ x11_surface_move_resize (GdkSurface *surface,
       surface->height = height;
 
       _gdk_x11_surface_update_size (GDK_X11_SURFACE (surface));
+
+      if (surface->parent)
+        {
+          impl->offset_x = surface->x - surface->parent->x;
+          impl->offset_y = surface->y - surface->parent->y;
+        }
     }
   else
     {
@@ -1324,11 +1351,11 @@ x11_surface_move_resize (GdkSurface *surface,
 
 static void
 gdk_x11_surface_move_resize (GdkSurface *surface,
-                            gboolean   with_move,
-                            gint       x,
-                            gint       y,
-                            gint       width,
-                            gint       height)
+                             gboolean    with_move,
+                             gint        x,
+                             gint        y,
+                             gint        width,
+                             gint        height)
 {
   if (with_move && (width < 0 && height < 0))
     x11_surface_move (surface, x, y);
@@ -1338,6 +1365,29 @@ gdk_x11_surface_move_resize (GdkSurface *surface,
         x11_surface_move_resize (surface, x, y, width, height);
       else
         x11_surface_resize (surface, width, height);
+    }
+}
+
+static void gdk_x11_surface_restack_toplevel (GdkSurface *surface,
+                                              GdkSurface *sibling,
+                                              gboolean    above);
+
+void
+gdk_x11_surface_update_popups (GdkSurface *parent)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (parent);
+  GList *l;
+
+  for (l = impl->popups; l; l = l->next)
+    {
+      GdkX11Surface *popup_impl = l->data;
+      GdkSurface *popup = GDK_SURFACE (popup_impl);
+      int new_x = parent->x + popup_impl->offset_x;
+      int new_y = parent->y + popup_impl->offset_y;
+
+      if (new_x != popup->x || new_y != popup->y)
+        x11_surface_move (popup, new_x, new_y);
+      gdk_x11_surface_restack_toplevel (popup, parent, TRUE);
     }
 }
 
@@ -1390,8 +1440,8 @@ gdk_x11_surface_raise (GdkSurface *surface)
 
 static void
 gdk_x11_surface_restack_toplevel (GdkSurface *surface,
-				 GdkSurface *sibling,
-				 gboolean   above)
+                                  GdkSurface *sibling,
+                                  gboolean    above)
 {
   XWindowChanges changes;
 
