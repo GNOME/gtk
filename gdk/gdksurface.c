@@ -2477,68 +2477,6 @@ gdk_surface_input_shape_combine_region (GdkSurface       *surface,
   GDK_SURFACE_GET_CLASS (surface)->input_shape_combine_region (surface, surface->input_shape, 0, 0);
 }
 
-static void
-do_child_input_shapes (GdkSurface *surface,
-                       gboolean merge)
-{
-  GdkRectangle r;
-  cairo_region_t *region;
-
-  r.x = 0;
-  r.y = 0;
-  r.width = surface->width;
-  r.height = surface->height;
-
-  region = cairo_region_create_rectangle (&r);
-
-  if (merge && surface->input_shape)
-    cairo_region_subtract (region, surface->input_shape);
-
-  cairo_region_xor_rectangle (region, &r);
-
-  gdk_surface_input_shape_combine_region (surface, region, 0, 0);
-}
-
-
-/**
- * gdk_surface_set_child_input_shapes:
- * @surface: a #GdkSurface
- *
- * Sets the input shape mask of @surface to the union of input shape masks
- * for all children of @surface, ignoring the input shape mask of @surface
- * itself. Contrast with gdk_surface_merge_child_input_shapes() which includes
- * the input shape mask of @surface in the masks to be merged.
- **/
-void
-gdk_surface_set_child_input_shapes (GdkSurface *surface)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  do_child_input_shapes (surface, FALSE);
-}
-
-/**
- * gdk_surface_merge_child_input_shapes:
- * @surface: a #GdkSurface
- *
- * Merges the input shape masks for any child surfaces into the
- * input shape mask for @surface. i.e. the union of all input masks
- * for @surface and its children will become the new input mask
- * for @surface. See gdk_surface_input_shape_combine_region().
- *
- * This function is distinct from gdk_surface_set_child_input_shapes()
- * because it includes @surface’s input shape mask in the set of
- * shapes to be merged.
- **/
-void
-gdk_surface_merge_child_input_shapes (GdkSurface *surface)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  do_child_input_shapes (surface, TRUE);
-}
-
-
 /**
  * gdk_surface_get_modal_hint:
  * @surface: A toplevel #GdkSurface.
