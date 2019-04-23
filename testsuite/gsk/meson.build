@@ -26,6 +26,14 @@ node_parser = executable(
   install_dir: testexecdir
 )
 
+serialize_deserialize = executable(
+  'serialize-deserialize',
+  ['serialize-deserialize.c'],
+  dependencies: libgtk_dep,
+  install: get_option('install-tests'),
+  install_dir: testexecdir,
+)
+
 test('nodes (cairo)', test_render_nodes,
      args: [ '--tap', '-k' ],
      env: [ 'GIO_USE_VOLUME_MONITOR=unix',
@@ -102,9 +110,9 @@ foreach renderer : renderers
 endforeach
 
 node_parser_tests = [
-  'crash1',
-  'crash2',
-  'crash3',
+  'crash1.invalid',
+  'crash2.invalid',
+  'crash3.invalid',
 ]
 
 foreach test : node_parser_tests
@@ -120,6 +128,27 @@ foreach test : node_parser_tests
             ],
        suite: 'gsk')
 endforeach
+
+serialize_deserialize_tests = [
+  'color.valid',
+  'border.valid',
+  'testswitch.valid',
+]
+
+foreach test : serialize_deserialize_tests
+  test('serialize-deserialize ' + test, serialize_deserialize,
+       args: [join_paths(meson.current_source_dir(), 'nodeparser', test + '.node')],
+       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+              'GSETTINGS_BACKEND=memory',
+              'GTK_CSD=1',
+              'G_ENABLE_DIAGNOSTIC=0',
+              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+              'GSK_RENDERER=opengl'
+            ],
+       suite: 'gsk')
+endforeach
+
 
 if have_vulkan
   test('nodes (vulkan)', test_render_nodes,
