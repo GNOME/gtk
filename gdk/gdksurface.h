@@ -495,10 +495,6 @@ void gdk_surface_input_shape_combine_region (GdkSurface       *surface,
                                              const cairo_region_t *shape_region,
                                              gint             offset_x,
                                              gint             offset_y);
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_set_child_input_shapes     (GdkSurface       *surface);
-GDK_AVAILABLE_IN_ALL
-void gdk_surface_merge_child_input_shapes   (GdkSurface       *surface);
 
 /*
  * Check if a surface has been shown, and whether all its
