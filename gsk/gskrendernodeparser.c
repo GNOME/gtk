@@ -946,24 +946,40 @@ gsk_render_node_parser_error (GtkCssParser         *parser,
                               const GError         *error,
                               gpointer              user_data)
 {
+  GString **error_string = user_data;
+
+  if (!*error_string)
+    *error_string = g_string_new (NULL);
+
+  g_string_append_printf (*error_string,
+                          "ERROR: %zu:%zu: %s\n",
+                          start->lines + 1,
+                          start->line_chars,
+                          error->message);
+#if 0
   g_print ("ERROR: %zu:%zu: %s\n",
-           start->lines, start->line_chars,
-           error->message);
+              start->lines + 1,
+              start->line_chars,
+              error->message);
+#endif
 }
 
 /**
  * All errors are fatal.
  */
 GskRenderNode *
-gsk_render_node_deserialize_from_bytes (GBytes *bytes)
+gsk_render_node_deserialize_from_bytes (GBytes  *bytes,
+                                        GError **error)
 {
   GskRenderNode *root = NULL;
   GtkCssParser *parser;
+  GString *error_string = NULL;
 
-  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, gsk_render_node_parser_error, NULL, NULL);
+  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, gsk_render_node_parser_error,
+                                         &error_string, NULL);
   root = parse_container_node (parser);
 
-  if (gsk_container_node_get_n_children (root) == 1)
+  if (root && gsk_container_node_get_n_children (root) == 1)
     {
       GskRenderNode *child = gsk_container_node_get_child (root, 0);
 
@@ -973,6 +989,12 @@ gsk_render_node_deserialize_from_bytes (GBytes *bytes)
     }
 
   gtk_css_parser_unref (parser);
+
+  if (error_string != NULL)
+    {
+      *error = g_error_new_literal (GTK_CSS_PARSER_ERROR, 0, error_string->str);
+      g_string_free (error_string, TRUE);
+    }
 
   return root;
 }
