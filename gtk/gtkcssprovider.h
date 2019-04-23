@@ -78,7 +78,7 @@ void             gtk_css_provider_load_from_resource (GtkCssProvider *css_provid
                                                       const gchar    *resource_path);
 
 GDK_AVAILABLE_IN_ALL
-void             gtk_css_provider_load_named     (GtkCssProvider  *self,
+void             gtk_css_provider_load_named     (GtkCssProvider  *provider,
                                                   const char      *name,
                                                   const char      *variant);
 
