@@ -188,21 +188,6 @@ void       gtk_window_set_type_hint            (GtkWindow           *window,
 GDK_AVAILABLE_IN_ALL
 GdkSurfaceTypeHint gtk_window_get_type_hint     (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_skip_taskbar_hint    (GtkWindow           *window,
-                                                gboolean             setting);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_get_skip_taskbar_hint    (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_skip_pager_hint      (GtkWindow           *window,
-                                                gboolean             setting);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_get_skip_pager_hint      (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_urgency_hint         (GtkWindow           *window,
-                                                gboolean             setting);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_get_urgency_hint         (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_accept_focus         (GtkWindow           *window,
                                                 gboolean             setting);
 GDK_AVAILABLE_IN_ALL
