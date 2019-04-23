@@ -50,9 +50,6 @@
 #include "wayland/gdkwayland.h"
 #endif
 
-#undef DEBUG_SURFACE_PRINTING
-
-
 /**
  * SECTION:gdksurface
  * @Short_description: Onscreen display areas in the target window system
@@ -113,44 +110,6 @@ static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
 
 G_DEFINE_ABSTRACT_TYPE (GdkSurface, gdk_surface, G_TYPE_OBJECT)
-
-#ifdef DEBUG_SURFACE_PRINTING
-char *
-print_region (cairo_region_t *region)
-{
-  GString *s = g_string_new ("{");
-  if (cairo_region_is_empty (region))
-    {
-      g_string_append (s, "empty");
-    }
-  else
-    {
-      int num = cairo_region_num_rectangles (region);
-      cairo_rectangle_int_t r;
-
-      if (num == 1)
-        {
-          cairo_region_get_rectangle (region, 0, &r);
-          g_string_append_printf (s, "%dx%d @%d,%d", r.width, r.height, r.x, r.y);
-        }
-      else
-        {
-          int i;
-          cairo_region_get_extents (region, &r);
-          g_string_append_printf (s, "extent: %dx%d @%d,%d, details: ", r.width, r.height, r.x, r.y);
-          for (i = 0; i < num; i++)
-            {
-              cairo_region_get_rectangle (region, i, &r);
-              g_string_append_printf (s, "[%dx%d @%d,%d]", r.width, r.height, r.x, r.y);
-              if (i != num -1)
-                g_string_append (s, ", ");
-            }
-        }
-    }
-  g_string_append (s, "}");
-  return g_string_free (s, FALSE);
-}
-#endif
 
 static gboolean
 gdk_surface_real_beep (GdkSurface *surface)
@@ -2765,67 +2724,6 @@ _gdk_display_set_surface_under_pointer (GdkDisplay *display,
                              GDK_BUTTON4_MASK | \
                              GDK_BUTTON5_MASK)
 
-#ifdef DEBUG_SURFACE_PRINTING
-
-#ifdef GDK_WINDOWING_X11
-#include "x11/gdkx.h"
-#endif
-
-static void
-gdk_surface_print (GdkSurface *surface,
-                  int indent)
-{
-  char *s;
-  const char *surface_types[] = {
-    "root",
-    "toplevel",
-    "child",
-    "dialog",
-    "temp",
-    "foreign",
-    "subsurface"
-  };
-
-  g_print ("%*s%p: [%s] %d,%d %dx%d", indent, "", surface,
-           surface->user_data ? g_type_name_from_instance (surface->user_data) : "no widget",
-           surface->x, surface->y,
-           surface->width, surface->height
-           );
-
-#ifdef GDK_WINDOWING_X11
-  g_print (" impl(0x%lx)", gdk_x11_surface_get_xid (window));
-#endif
-
-  g_print (" %s", surface_types[surface->surface_type]);
-
-  if (!gdk_surface_is_visible ((GdkSurface *)surface))
-    g_print (" hidden");
-
-  if (surface->alpha != 255)
-    g_print (" alpha[%d]",
-           surface->alpha);
-
-  s = print_region (surface->clip_region);
-  g_print (" clipbox[%s]", s);
-
-  g_print ("\n");
-}
-
-
-static void
-gdk_surface_print_tree (GdkSurface *surface,
-                        int         indent)
-{
-  GList *l;
-
-  gdk_surface_print (surface, indent);
-
-  for (l = surface->children; l != NULL; l = l->next)
-    gdk_surface_print_tree (l->data, indent + 4);
-}
-
-#endif /* DEBUG_SURFACE_PRINTING */
-
 void
 _gdk_windowing_got_event (GdkDisplay *display,
                           GList      *event_link,
@@ -2873,15 +2771,6 @@ _gdk_windowing_got_event (GdkDisplay *display,
   event_surface = event->any.surface;
   if (!event_surface)
     goto out;
-
-#ifdef DEBUG_SURFACE_PRINTING
-  if (event->any.type == GDK_KEY_PRESS &&
-      (event->key.keyval == 0xa7 ||
-       event->key.keyval == 0xbd))
-    {
-      gdk_surface_print_tree (event_surface, 0);
-    }
-#endif
 
   if (event->any.type == GDK_ENTER_NOTIFY)
     _gdk_display_set_surface_under_pointer (display, device, event_surface);
