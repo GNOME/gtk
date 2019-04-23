@@ -392,7 +392,7 @@ gsk_render_node_deserialize (GBytes  *bytes,
 {
   GskRenderNode *node = NULL;
 
-  node = gsk_render_node_deserialize_from_bytes (bytes);
+  node = gsk_render_node_deserialize_from_bytes (bytes, error);
 
   return node;
 }
