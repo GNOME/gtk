@@ -1,0 +1,389 @@
+transform {
+  transform: translate(0, 0);
+  child: container {
+    color {
+      bounds: 0 0 404 204;
+      color: rgb(246,245,244);
+    }
+    container {
+      container {
+        transform {
+          transform: translate(1, 1);
+          child: container {
+            rounded-clip {
+              clip: -1 -1 50 26 / 13;
+              child: color {
+                bounds: -1 -1 50 26;
+                color: rgb(225,222,219);
+              }
+            }
+            border {
+              outline: -1 -1 50 26 / 13;
+              widths: 1 1 1 1;
+              colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
+            }
+            container {
+              container {
+                outset-shadow {
+                  outline: -1 -1 26 26 / 13;
+                  color: rgba(0,0,0,0.1);
+                  dx: 0;
+                  dy: 1;
+                  spread: 0;
+                  blur: 0;
+                }
+                outset-shadow {
+                  outline: -1 -1 26 26 / 13;
+                  color: rgba(0,0,0,0.07);
+                  dx: 0;
+                  dy: 1;
+                  spread: 0;
+                  blur: 2;
+                }
+                rounded-clip {
+                  clip: -1 -1 26 26 / 13;
+                  child: linear-gradient {
+                    bounds: 0 0 24 24;
+                    start: 12 0;
+                    end: 12 24;
+                    stops: 0.2 rgb(255,255,255),0.9 rgb(246,245,244);
+                  }
+                }
+                inset-shadow {
+                  outline: 0 0 24 24 / 12;
+                  color: rgb(255,255,255);
+                  dx: 0;
+                  dy: 1;
+                  spread: 0;
+                  blur: 0;
+                }
+              }
+              border {
+                outline: -1 -1 26 26 / 13;
+                widths: 1 1 1 1;
+                colors: rgb(191,184,177) rgb(191,184,177) rgb(191,184,177) rgb(191,184,177);
+              }
+            }
+          }
+        }
+        transform {
+          transform: translate(56, 0);
+          child: text {
+            font: "Cantarell 11";
+            x: 145;
+            y: 18;
+            color: rgb(46,52,54);
+            glyphs: 37 11264 0 0 1, 324 4096 0 0 1, 417 7168 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1;
+          }
+        }
+      }
+      transform {
+        transform: translate(0, 38);
+        child: container {
+          transform {
+            transform: translate(1, 1);
+            child: container {
+              rounded-clip {
+                clip: -1 -1 50 26 / 13;
+                child: color {
+                  bounds: -1 -1 50 26;
+                  color: rgb(53,132,228);
+                }
+              }
+              border {
+                outline: -1 -1 50 26 / 13;
+                widths: 1 1 1 1;
+                colors: rgb(24,95,180) rgb(24,95,180) rgb(24,95,180) rgb(24,95,180);
+              }
+              transform {
+                transform: translate(24, 0);
+                child: container {
+                  container {
+                    outset-shadow {
+                      outline: -1 -1 26 26 / 13;
+                      color: rgba(0,0,0,0.1);
+                      dx: 0;
+                      dy: 1;
+                      spread: 0;
+                      blur: 0;
+                    }
+                    outset-shadow {
+                      outline: -1 -1 26 26 / 13;
+                      color: rgba(0,0,0,0.07);
+                      dx: 0;
+                      dy: 1;
+                      spread: 0;
+                      blur: 2;
+                    }
+                    rounded-clip {
+                      clip: -1 -1 26 26 / 13;
+                      child: cross-fade {
+                        progress: 0.756154;
+                        start: cross-fade {
+                          progress: 0.788575;
+                          start: color {
+                            bounds: 0 0 24 24;
+                            color: rgb(246,245,244);
+                          }
+                          end: linear-gradient {
+                            bounds: 0 0 24 24;
+                            start: 12 0;
+                            end: 12 24;
+                            stops: 0.2 rgb(255,255,255),0.9 rgb(246,245,244);
+                          }
+                        }
+                        end: linear-gradient {
+                          bounds: 0 0 24 24;
+                          start: 12 0;
+                          end: 12 24;
+                          stops: 0.1 rgb(255,255,255),0.9 rgb(255,255,255);
+                        }
+                      }
+                    }
+                    inset-shadow {
+                      outline: 0 0 24 24 / 12;
+                      color: rgb(255,255,255);
+                      dx: 0;
+                      dy: 1;
+                      spread: 0;
+                      blur: 0;
+                    }
+                  }
+                  border {
+                    outline: -1 -1 26 26 / 13;
+                    widths: 1 1 1 1;
+                    colors: rgb(24,95,180) rgb(24,95,180) rgb(24,95,180) rgb(24,95,180);
+                  }
+                }
+              }
+            }
+          }
+          transform {
+            transform: translate(56, 0);
+            child: text {
+              font: "Cantarell 11";
+              x: 147;
+              y: 18;
+              color: rgb(46,52,54);
+              glyphs: 45 9216 0 0 1, 360 8192 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1;
+            }
+          }
+        }
+      }
+      transform {
+        transform: translate(0, 76);
+        child: container {
+          transform {
+            transform: translate(1, 1);
+            child: container {
+              rounded-clip {
+                clip: -1 -1 50 26 / 13;
+                child: color {
+                  bounds: -1 -1 50 26;
+                  color: rgb(250,249,248);
+                }
+              }
+              border {
+                outline: -1 -1 50 26 / 13;
+                widths: 1 1 1 1;
+                colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
+              }
+              container {
+                rounded-clip {
+                  clip: -1 -1 26 26 / 13;
+                  child: color {
+                    bounds: 0 0 24 24;
+                    color: rgb(250,249,248);
+                  }
+                }
+                border {
+                  outline: -1 -1 26 26 / 13;
+                  widths: 1 1 1 1;
+                  colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
+                }
+              }
+            }
+          }
+          transform {
+            transform: translate(56, 0);
+            child: text {
+              font: "Cantarell 11";
+              x: 145;
+              y: 18;
+              color: rgb(46,52,54);
+              glyphs: 37 11264 0 0 1, 324 4096 0 0 1, 417 7168 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1;
+            }
+          }
+        }
+      }
+      transform {
+        transform: translate(0, 114);
+        child: container {
+          transform {
+            transform: translate(1, 1);
+            child: container {
+              rounded-clip {
+                clip: -1 -1 50 26 / 13;
+                child: color {
+                  bounds: -1 -1 50 26;
+                  color: rgb(250,249,248);
+                }
+              }
+              border {
+                outline: -1 -1 50 26 / 13;
+                widths: 1 1 1 1;
+                colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
+              }
+              transform {
+                transform: translate(24, 0);
+                child: container {
+                  rounded-clip {
+                    clip: -1 -1 26 26 / 13;
+                    child: color {
+                      bounds: 0 0 24 24;
+                      color: rgb(250,249,248);
+                    }
+                  }
+                  border {
+                    outline: -1 -1 26 26 / 13;
+                    widths: 1 1 1 1;
+                    colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
+                  }
+                }
+              }
+            }
+          }
+          transform {
+            transform: translate(56, 0);
+            child: text {
+              font: "Cantarell 11";
+              x: 147;
+              y: 18;
+              color: rgb(46,52,54);
+              glyphs: 45 9216 0 0 1, 360 8192 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1;
+            }
+          }
+        }
+      }
+      transform {
+        transform: translate(0, 152);
+        child: container {
+          transform {
+            transform: translate(1, 1);
+            child: container {
+              rounded-clip {
+                clip: -1 -1 50 26 / 13;
+                child: color {
+                  bounds: -1 -1 50 26;
+                  color: rgb(225,222,219);
+                }
+              }
+              border {
+                outline: -1 -1 50 26 / 13;
+                widths: 1 1 1 1;
+                colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
+              }
+              container {
+                container {
+                  outset-shadow {
+                    outline: -1 -1 26 26 / 13;
+                    color: rgba(0,0,0,0.1);
+                    dx: 0;
+                    dy: 1;
+                    spread: 0;
+                    blur: 0;
+                  }
+                  outset-shadow {
+                    outline: -1 -1 26 26 / 13;
+                    color: rgba(0,0,0,0.07);
+                    dx: 0;
+                    dy: 1;
+                    spread: 0;
+                    blur: 2;
+                  }
+                  rounded-clip {
+                    clip: -1 -1 26 26 / 13;
+                    child: linear-gradient {
+                      bounds: 0 0 24 24;
+                      start: 12 0;
+                      end: 12 24;
+                      stops: 0.2 rgb(255,255,255),0.9 rgb(246,245,244);
+                    }
+                  }
+                  inset-shadow {
+                    outline: 0 0 24 24 / 12;
+                    color: rgb(255,255,255);
+                    dx: 0;
+                    dy: 1;
+                    spread: 0;
+                    blur: 0;
+                  }
+                }
+                border {
+                  outline: -1 -1 26 26 / 13;
+                  widths: 1 1 1 1;
+                  colors: rgb(191,184,177) rgb(191,184,177) rgb(191,184,177) rgb(191,184,177);
+                }
+              }
+            }
+          }
+          transform {
+            transform: translate(78, 0);
+            child: text {
+              font: "Cantarell 11";
+              x: 123;
+              y: 18;
+              color: rgb(46,52,54);
+              glyphs: 37 11264 0 0 1, 324 4096 0 0 1, 417 7168 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1;
+            }
+          }
+          transform {
+            transform: translate(388, 0);
+            child: transform {
+              transform: translate(1, 6);
+              child: container {
+                container {
+                  outset-shadow {
+                    outline: -1 -1 16 16 / 3;
+                    color: rgba(0,0,0,0.1);
+                    dx: 0;
+                    dy: 1;
+                    spread: 0;
+                    blur: 0;
+                  }
+                  outset-shadow {
+                    outline: -1 -1 16 16 / 3;
+                    color: rgba(0,0,0,0.07);
+                    dx: 0;
+                    dy: 1;
+                    spread: 0;
+                    blur: 2;
+                  }
+                  linear-gradient {
+                    bounds: 0 0 14 14;
+                    start: 7 0;
+                    end: 7 14;
+                    stops: 0.2 rgb(255,255,255),0.9 rgb(246,245,244);
+                  }
+                  inset-shadow {
+                    outline: 0 0 14 14 / 2;
+                    color: rgb(255,255,255);
+                    dx: 0;
+                    dy: 1;
+                    spread: 0;
+                    blur: 0;
+                  }
+                }
+                border {
+                  outline: -1 -1 16 16 / 3;
+                  widths: 1 1 1 1;
+                  colors: rgb(191,184,177) rgb(191,184,177) rgb(191,184,177) rgb(191,184,177);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
