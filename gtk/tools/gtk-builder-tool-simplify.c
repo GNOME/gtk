@@ -189,7 +189,7 @@ needs_explicit_setting (GParamSpec *pspec,
 
 static gboolean
 keep_for_rewrite (const char *class_name,
-                  const char *prop_name,
+                  const char *property_name,
                   PropKind kind)
 {
   struct _Prop {
@@ -213,18 +213,24 @@ keep_for_rewrite (const char *class_name,
   };
   gboolean found;
   gint k;
+  char *canonical_name;
+
+  canonical_name = g_strdup (property_name);
+  g_strdelimit (canonical_name, "_", '-');
 
   found = FALSE;
   for (k = 0; k < G_N_ELEMENTS (props); k++)
     {
       if (strcmp (class_name, props[k].class) == 0 &&
-          strcmp (prop_name, props[k].property) == 0 &&
+          strcmp (canonical_name, props[k].property) == 0 &&
           kind == props[k].kind)
         {
           found = TRUE;
           break;
         }
     }
+
+  g_free (canonical_name);
 
   return found;
 }
