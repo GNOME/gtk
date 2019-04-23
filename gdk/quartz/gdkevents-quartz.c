@@ -613,7 +613,10 @@ find_toplevel_under_pointer (GdkDisplay *display,
       gint gdk_x = 0, gdk_y = 0;
       _gdk_quartz_window_nspoint_to_gdk_xy (screen_point, &gdk_x, &gdk_y);
       toplevel = _gdk_quartz_window_find_child (_gdk_root, gdk_x, gdk_y, TRUE);
-      info->toplevel_under_pointer = g_object_ref (toplevel);
+      if (toplevel)
+        info->toplevel_under_pointer = g_object_ref (toplevel);
+      else
+        info->toplevel_under_pointer = NULL;
     }
   if (toplevel)
     {
