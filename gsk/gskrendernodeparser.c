@@ -1009,14 +1009,27 @@ end_node (Printer *self)
 }
 
 static void
+string_append_double (GString *string,
+                      double   d)
+{
+  char buf[G_ASCII_DTOSTR_BUF_SIZE];
+
+  g_ascii_formatd (buf, G_ASCII_DTOSTR_BUF_SIZE, "%g", d);
+  g_string_append (string, buf);
+}
+
+
+static void
 append_rect (GString               *str,
              const graphene_rect_t *r)
 {
-  g_string_append_printf (str, "(%f, %f, %f, %f)",
-                          r->origin.x,
-                          r->origin.y,
-                          r->size.width,
-                          r->size.height);
+  string_append_double (str, r->origin.x);
+  g_string_append_c (str, ' ');
+  string_append_double (str, r->origin.y);
+  g_string_append_c (str, ' ');
+  string_append_double (str, r->size.width);
+  g_string_append_c (str, ' ');
+  string_append_double (str, r->size.height);
 }
 
 static void
@@ -1027,15 +1040,39 @@ append_rounded_rect (GString              *str,
 
   if (!gsk_rounded_rect_is_rectilinear (r))
     {
-      g_string_append_printf (str, " (%f, %f) (%f, %f) (%f, %f) (%f, %f)",
-                              r->corner[0].width,
-                              r->corner[0].height,
-                              r->corner[1].width,
-                              r->corner[1].height,
-                              r->corner[2].width,
-                              r->corner[2].height,
-                              r->corner[3].width,
-                              r->corner[3].height);
+      gboolean all_the_same = TRUE;
+      float w = r->corner[0].width;
+      float h = r->corner[0].width;
+      int i;
+
+      for (i = 1; i < 4; i ++)
+        {
+          if (r->corner[i].width != w ||
+              r->corner[i].height !=h)
+            {
+              all_the_same = FALSE;
+              break;
+            }
+        }
+
+      if (all_the_same)
+        {
+          g_string_append (str, " / ");
+          string_append_double (str, w);
+        }
+      else
+        {
+          /* TODO: Syntax ??? */
+          g_string_append_printf (str, " / (%f, %f) (%f, %f) (%f, %f) (%f, %f)",
+                                  r->corner[0].width,
+                                  r->corner[0].height,
+                                  r->corner[1].width,
+                                  r->corner[1].height,
+                                  r->corner[2].width,
+                                  r->corner[2].height,
+                                  r->corner[3].width,
+                                  r->corner[3].height);
+        }
     }
 }
 
@@ -1043,18 +1080,23 @@ static void
 append_rgba (GString         *str,
              const GdkRGBA   *rgba)
 {
-  g_string_append_printf (str, "(%f, %f, %f, %f)",
-                          rgba->red,
-                          rgba->green,
-                          rgba->blue,
-                          rgba->alpha);
+  /* TODO: Don't always write alpha */
+  /* TODO: The conversion here is wrong, I'm 61% sure. */
+  g_string_append_printf (str, "rgba(%d, %d, %d, ",
+                          (int)round(rgba->red * 255),
+                          (int)round(rgba->green * 255),
+                          (int)round(rgba->blue * 255));
+  string_append_double (str, rgba->alpha);
+  g_string_append_c (str, ')');
 }
 
 static void
 append_point (GString                *str,
               const graphene_point_t *p)
 {
-  g_string_append_printf (str, "(%f, %f)", p->x, p->y);
+  string_append_double (str, p->x);
+  g_string_append_c (str, ' ');
+  string_append_double (str, p->y);
 }
 
 static void
@@ -1074,11 +1116,13 @@ static void
 append_vec4 (GString               *str,
              const graphene_vec4_t *v)
 {
-  g_string_append_printf (str, "(%f, %f, %f, %f)",
-                          graphene_vec4_get_x (v),
-                          graphene_vec4_get_y (v),
-                          graphene_vec4_get_z (v),
-                          graphene_vec4_get_w (v));
+  string_append_double (str, graphene_vec4_get_x (v));
+  g_string_append_c (str, ' ');
+  string_append_double (str, graphene_vec4_get_y (v));
+  g_string_append_c (str, ' ');
+  string_append_double (str, graphene_vec4_get_z (v));
+  g_string_append_c (str, ' ');
+  string_append_double (str, graphene_vec4_get_w (v));
 }
 
 static void
@@ -1087,7 +1131,9 @@ append_float_param (Printer    *p,
                     float       value)
 {
   _indent (p);
-  g_string_append_printf (p->str, "%s = %f\n", param_name, value);
+  g_string_append_printf (p->str, "%s: ", param_name);
+  string_append_double (p->str, value);
+  g_string_append (p->str, ";\n");
 }
 
 static void
@@ -1096,8 +1142,9 @@ append_rgba_param (Printer       *p,
                    const GdkRGBA *value)
 {
   _indent (p);
-  g_string_append_printf (p->str, "%s = ", param_name);
+  g_string_append_printf (p->str, "%s: ", param_name);
   append_rgba (p->str, value);
+  g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
 }
 
@@ -1107,8 +1154,9 @@ append_rect_param (Printer               *p,
                    const graphene_rect_t *value)
 {
   _indent (p);
-  g_string_append_printf (p->str, "%s = ", param_name);
+  g_string_append_printf (p->str, "%s: ", param_name);
   append_rect (p->str, value);
+  g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
 }
 
@@ -1118,8 +1166,9 @@ append_rounded_rect_param (Printer              *p,
                            const GskRoundedRect *value)
 {
   _indent (p);
-  g_string_append_printf (p->str, "%s = ", param_name);
+  g_string_append_printf (p->str, "%s: ", param_name);
   append_rounded_rect (p->str, value);
+  g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
 }
 
@@ -1129,8 +1178,9 @@ append_point_param (Printer                *p,
                     const graphene_point_t *value)
 {
   _indent (p);
-  g_string_append_printf (p->str, "%s = ", param_name);
+  g_string_append_printf (p->str, "%s: ", param_name);
   append_point (p->str, value);
+  g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
 }
 
@@ -1140,8 +1190,9 @@ append_vec4_param (Printer               *p,
                    const graphene_vec4_t *value)
 {
   _indent (p);
-  g_string_append_printf (p->str, "%s = ", param_name);
+  g_string_append_printf (p->str, "%s: ", param_name);
   append_vec4 (p->str, value);
+  g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
 }
 
@@ -1151,9 +1202,35 @@ append_matrix_param (Printer                 *p,
                      const graphene_matrix_t *value)
 {
   _indent (p);
-  g_string_append_printf (p->str, "%s = ", param_name);
+  g_string_append_printf (p->str, "%s: ", param_name);
   append_matrix (p->str, value);
+  g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
+}
+
+static void
+append_transform_param (Printer      *p,
+                        const char   *param_name,
+                        GskTransform *transform)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+  gsk_transform_print (transform, p->str);
+  g_string_append_c (p->str, ';');
+  g_string_append_c (p->str, '\n');
+}
+
+static void render_node_print (Printer       *p,
+                               GskRenderNode *node);
+
+static void
+append_node_param (Printer       *p,
+                   const char    *param_name,
+                   GskRenderNode *node)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+  render_node_print (p, node);
 }
 
 static void
@@ -1188,11 +1265,11 @@ render_node_print (Printer       *p,
 
     case GSK_CROSS_FADE_NODE:
       {
-        start_node (p, "cross_fade");
+        start_node (p, "cross-fade");
 
         append_float_param (p, "progress", gsk_cross_fade_node_get_progress (node));
-        render_node_print (p, gsk_cross_fade_node_get_start_child (node));
-        render_node_print (p, gsk_cross_fade_node_get_end_child (node));
+        append_node_param (p, "start", gsk_cross_fade_node_get_start_child (node));
+        append_node_param (p, "end", gsk_cross_fade_node_get_end_child (node));
 
         end_node (p);
       }
@@ -1209,7 +1286,7 @@ render_node_print (Printer       *p,
         append_point_param (p, "end", gsk_linear_gradient_node_peek_end (node));
 
         _indent (p);
-        g_string_append (p->str, "stops =");
+        g_string_append (p->str, "stops: ");
         for (i = 0; i < gsk_linear_gradient_node_get_n_color_stops (node); i ++)
           {
             const GskColorStop *stop = gsk_linear_gradient_node_peek_color_stops (node) + i;
@@ -1218,7 +1295,7 @@ render_node_print (Printer       *p,
             append_rgba (p->str, &stop->color);
             g_string_append_c (p->str, ')');
           }
-        g_string_append (p->str, "\n");
+        g_string_append (p->str, ";\n");
 
         end_node (p);
       }
@@ -1243,14 +1320,14 @@ render_node_print (Printer       *p,
 
     case GSK_OUTSET_SHADOW_NODE:
       {
-        start_node (p, "outset_shadow");
+        start_node (p, "outset-shadow");
 
         append_rounded_rect_param (p, "outline", gsk_outset_shadow_node_peek_outline (node));
         append_rgba_param (p, "color", gsk_outset_shadow_node_peek_color (node));
         append_float_param (p, "dx", gsk_outset_shadow_node_get_dx (node));
         append_float_param (p, "dy", gsk_outset_shadow_node_get_dy (node));
         append_float_param (p, "spread", gsk_outset_shadow_node_get_spread (node));
-        append_float_param (p, "blur_radius", gsk_outset_shadow_node_get_blur_radius (node));
+        append_float_param (p, "blur", gsk_outset_shadow_node_get_blur_radius (node));
 
         end_node (p);
       }
@@ -1269,10 +1346,11 @@ render_node_print (Printer       *p,
 
     case GSK_ROUNDED_CLIP_NODE:
       {
-        start_node (p, "rounded_clip");
+        start_node (p, "rounded-clip");
 
         append_rounded_rect_param (p, "clip", gsk_rounded_clip_node_peek_clip (node));
-        render_node_print (p, gsk_rounded_clip_node_get_child (node));
+        append_node_param (p, "child", gsk_rounded_clip_node_get_child (node));
+
 
         end_node (p);
       }
@@ -1280,13 +1358,10 @@ render_node_print (Printer       *p,
 
     case GSK_TRANSFORM_NODE:
       {
-        graphene_matrix_t matrix;
-
         start_node (p, "transform");
 
-        gsk_transform_to_matrix (gsk_transform_node_get_transform (node), &matrix);
-        append_matrix_param (p, "transform", &matrix);
-        render_node_print (p, gsk_transform_node_get_child (node));
+        append_transform_param (p, "transform", gsk_transform_node_get_transform (node));
+        append_node_param (p, "child", gsk_transform_node_get_child (node));
 
         end_node (p);
       }
@@ -1294,7 +1369,7 @@ render_node_print (Printer       *p,
 
     case GSK_COLOR_MATRIX_NODE:
       {
-        start_node (p, "color_matrix");
+        start_node (p, "color-matrix");
 
         append_matrix_param (p, "matrix", gsk_color_matrix_node_peek_color_matrix (node));
         append_vec4_param (p, "offset", gsk_color_matrix_node_peek_color_offset (node));
@@ -1311,23 +1386,26 @@ render_node_print (Printer       *p,
         append_rounded_rect_param (p, "outline", gsk_border_node_peek_outline (node));
 
         _indent (p);
-        g_string_append (p->str, "widths = (");
-        g_string_append_printf (p->str, "%f, ", gsk_border_node_peek_widths (node)[0]);
-        g_string_append_printf (p->str, "%f, ", gsk_border_node_peek_widths (node)[1]);
-        g_string_append_printf (p->str, "%f, ", gsk_border_node_peek_widths (node)[2]);
-        g_string_append_printf (p->str, "%f", gsk_border_node_peek_widths (node)[3]);
-        g_string_append (p->str, ")\n");
+        g_string_append (p->str, "widths: ");
+        string_append_double (p->str, gsk_border_node_peek_widths (node)[0]);
+        g_string_append_c (p->str, ' ');
+        string_append_double (p->str, gsk_border_node_peek_widths (node)[1]);
+        g_string_append_c (p->str, ' ');
+        string_append_double (p->str, gsk_border_node_peek_widths (node)[2]);
+        g_string_append_c (p->str, ' ');
+        string_append_double (p->str, gsk_border_node_peek_widths (node)[3]);
+        g_string_append (p->str, ";\n");
 
         _indent (p);
-        g_string_append (p->str, "colors = ");
+        g_string_append (p->str, "colors: ");
         append_rgba (p->str, &gsk_border_node_peek_colors (node)[0]);
-        g_string_append (p->str, " ");
+        g_string_append_c (p->str, ' ');
         append_rgba (p->str, &gsk_border_node_peek_colors (node)[1]);
-        g_string_append (p->str, " ");
+        g_string_append_c (p->str, ' ');
         append_rgba (p->str, &gsk_border_node_peek_colors (node)[2]);
-        g_string_append (p->str, " ");
+        g_string_append_c (p->str, ' ');
         append_rgba (p->str, &gsk_border_node_peek_colors (node)[3]);
-        g_string_append (p->str, "\n");
+        g_string_append (p->str, ";\n");
 
         end_node (p);
       }
@@ -1340,7 +1418,7 @@ render_node_print (Printer       *p,
         start_node (p, "shadow");
 
         _indent (p);
-        g_string_append (p->str, "shadows = ");
+        g_string_append (p->str, "shadows: ");
         for (i = 0; i < gsk_shadow_node_get_n_shadows (node); i ++)
           {
             const GskShadow *s = gsk_shadow_node_peek_shadow (node, i);
@@ -1358,14 +1436,14 @@ render_node_print (Printer       *p,
 
     case GSK_INSET_SHADOW_NODE:
       {
-        start_node (p, "inset_shadow");
+        start_node (p, "inset-shadow");
 
         append_rounded_rect_param (p, "outline", gsk_inset_shadow_node_peek_outline (node));
         append_rgba_param (p, "color", gsk_inset_shadow_node_peek_color (node));
         append_float_param (p, "dx", gsk_inset_shadow_node_get_dx (node));
         append_float_param (p, "dy", gsk_inset_shadow_node_get_dy (node));
         append_float_param (p, "spread", gsk_inset_shadow_node_get_spread (node));
-        append_float_param (p, "blur_radius", gsk_inset_shadow_node_get_blur_radius (node));
+        append_float_param (p, "blur", gsk_inset_shadow_node_get_blur_radius (node));
 
         end_node (p);
       }
@@ -1413,7 +1491,7 @@ render_node_print (Printer       *p,
         start_node (p, "text");
 
         _indent (p);
-        g_string_append_printf (p->str, "font = \"%s\"\n",
+        g_string_append_printf (p->str, "font: \"%s\";\n",
                                 pango_font_description_to_string (pango_font_describe (
                                      (PangoFont *)gsk_text_node_peek_font (node))));
 
@@ -1453,7 +1531,7 @@ render_node_print (Printer       *p,
       {
         start_node (p, "repeat");
         append_rect_param (p, "bounds", &node->bounds);
-        append_rect_param (p, "child_bounds", gsk_repeat_node_peek_child_bounds (node));
+        append_rect_param (p, "child-bounds", gsk_repeat_node_peek_child_bounds (node));
 
         render_node_print (p, gsk_repeat_node_get_child (node));
 
