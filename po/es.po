@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-07 22:09+0000\n"
-"PO-Revision-Date: 2019-04-09 10:11+0200\n"
+"POT-Creation-Date: 2019-04-23 01:38+0000\n"
+"PO-Revision-Date: 2019-04-23 10:16+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -887,15 +887,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Cerrar"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:404 gtk/gtkwindow.c:7015
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:404 gtk/gtkwindow.c:6812
 msgid "Minimize"
 msgstr "Minimizar"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:7024
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:6821
 msgid "Maximize"
 msgstr "Maximizar"
 
-#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:6981
+#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:427 gtk/gtkwindow.c:6778
 msgid "Restore"
 msgstr "Restaurar"
 
@@ -1348,7 +1348,7 @@ msgid "_License"
 msgstr "_Licencia"
 
 #: gtk/gtkaboutdialog.c:740 gtk/gtkcustompaperunixdialog.c:329
-#: gtk/gtkmessagedialog.c:823 gtk/ui/gtkassistant.ui:37
+#: gtk/gtkmessagedialog.c:819 gtk/ui/gtkassistant.ui:37
 msgid "_Close"
 msgstr "_Cerrar"
 
@@ -1530,7 +1530,7 @@ msgid "Other Applications"
 msgstr "Otras aplicaciones"
 
 #: gtk/gtkapplicationwindow.c:340 gtk/gtkprintoperation-unix.c:479
-#: gtk/gtkprintoperation-win32.c:1477 gtk/inspector/prop-editor.c:1626
+#: gtk/gtkprintoperation-win32.c:1477 gtk/inspector/prop-editor.c:1510
 msgid "Application"
 msgstr "Aplicación"
 
@@ -1968,7 +1968,7 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: gtk/gtkentry.c:3517
+#: gtk/gtkentry.c:3513
 msgid "Insert Emoji"
 msgstr "Insertar emoticono"
 
@@ -2051,11 +2051,11 @@ msgstr "Ya existe un archivo con ese nombre"
 
 #: gtk/gtkfilechoosernative.c:525 gtk/gtkfilechoosernative.c:603
 #: gtk/gtkfilechooserwidget.c:1487 gtk/gtkfilechooserwidget.c:6233
-#: gtk/gtkmessagedialog.c:827 gtk/gtkmessagedialog.c:836
+#: gtk/gtkmessagedialog.c:823 gtk/gtkmessagedialog.c:832
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:657 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:663 gtk/gtkprintunixdialog.c:730
-#: gtk/gtkwindow.c:9683 gtk/inspector/css-editor.c:236
+#: gtk/gtkwindow.c:9480 gtk/inspector/css-editor.c:237
 #: gtk/inspector/recorder.c:1027 gtk/ui/gtkappchooserdialog.ui:46
 #: gtk/ui/gtkassistant.ui:51 gtk/ui/gtkcolorchooserdialog.ui:28
 #: gtk/ui/gtkfontchooserdialog.ui:22
@@ -2069,7 +2069,7 @@ msgstr "_Cancelar"
 msgid "_Open"
 msgstr "_Abrir"
 
-#: gtk/gtkfilechoosernative.c:597 gtk/inspector/css-editor.c:237
+#: gtk/gtkfilechoosernative.c:597 gtk/inspector/css-editor.c:238
 #: gtk/inspector/recorder.c:1028
 msgid "_Save"
 msgstr "_Guardar"
@@ -2157,7 +2157,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Si elimina un elemento, se perderña definitivamente."
 
 #: gtk/gtkfilechooserwidget.c:1488 gtk/gtkfilechooserwidget.c:2208
-#: gtk/gtklabel.c:6113 gtk/gtktext.c:5694 gtk/gtktextview.c:8588
+#: gtk/gtklabel.c:6107 gtk/gtktext.c:5688 gtk/gtktextview.c:8588
 msgid "_Delete"
 msgstr "_Eliminar"
 
@@ -2275,7 +2275,7 @@ msgstr "%-e %b %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:4918 gtk/inspector/prop-editor.c:1629
+#: gtk/gtkfilechooserwidget.c:4918 gtk/inspector/prop-editor.c:1513
 #: modules/printbackends/gtkprintbackendcloudprint.c:731
 msgid "Unknown"
 msgstr "Desconocido"
@@ -2363,31 +2363,31 @@ msgstr "Slant"
 msgid "Optical Size"
 msgstr "Tamaño óptico"
 
-#: gtk/gtkfontchooserwidget.c:2069 gtk/inspector/prop-editor.c:1616
+#: gtk/gtkfontchooserwidget.c:2073 gtk/inspector/prop-editor.c:1500
 msgid "Default"
 msgstr "Predeterminada"
 
-#: gtk/gtkfontchooserwidget.c:2113
+#: gtk/gtkfontchooserwidget.c:2117
 msgid "Ligatures"
 msgstr "Ligaduras"
 
-#: gtk/gtkfontchooserwidget.c:2114
+#: gtk/gtkfontchooserwidget.c:2118
 msgid "Letter Case"
 msgstr "Letter Case"
 
-#: gtk/gtkfontchooserwidget.c:2115
+#: gtk/gtkfontchooserwidget.c:2119
 msgid "Number Case"
 msgstr "Mayúsculas y minúsculas de números"
 
-#: gtk/gtkfontchooserwidget.c:2116
+#: gtk/gtkfontchooserwidget.c:2120
 msgid "Number Spacing"
 msgstr "Espaciado de números"
 
-#: gtk/gtkfontchooserwidget.c:2117
+#: gtk/gtkfontchooserwidget.c:2121
 msgid "Number Formatting"
 msgstr "Formato de número"
 
-#: gtk/gtkfontchooserwidget.c:2118
+#: gtk/gtkfontchooserwidget.c:2122
 msgid "Character Variants"
 msgstr "Variantes de caracteres"
 
@@ -2399,7 +2399,7 @@ msgstr "Falló al crear el contexto de OpenGL"
 msgid "Application menu"
 msgstr "Menú de la aplicación"
 
-#: gtk/gtkheaderbar.c:445 gtk/gtkwindow.c:7051
+#: gtk/gtkheaderbar.c:445 gtk/gtkwindow.c:6848
 msgid "Close"
 msgstr "Cerrar"
 
@@ -2412,45 +2412,45 @@ msgstr "El icono «%s» no está presente en el tema %s"
 msgid "Failed to load icon"
 msgstr "No se pudo cargar el icono"
 
-#: gtk/gtkinfobar.c:1029 gtk/gtkmessagedialog.c:341 gtk/inspector/window.ui:448
+#: gtk/gtkinfobar.c:1029 gtk/gtkmessagedialog.c:337 gtk/inspector/window.ui:448
 msgid "Information"
 msgstr "Información"
 
-#: gtk/gtkinfobar.c:1033 gtk/gtkmessagedialog.c:345
+#: gtk/gtkinfobar.c:1033 gtk/gtkmessagedialog.c:341
 msgid "Question"
 msgstr "Pregunta"
 
-#: gtk/gtkinfobar.c:1037 gtk/gtkmessagedialog.c:349
+#: gtk/gtkinfobar.c:1037 gtk/gtkmessagedialog.c:345
 msgid "Warning"
 msgstr "Advertencia"
 
-#: gtk/gtkinfobar.c:1041 gtk/gtkmessagedialog.c:353
+#: gtk/gtkinfobar.c:1041 gtk/gtkmessagedialog.c:349
 msgid "Error"
 msgstr "Error"
 
 #. Open Link
-#: gtk/gtklabel.c:6090
+#: gtk/gtklabel.c:6084
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6099
+#: gtk/gtklabel.c:6093
 msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
-#: gtk/gtklabel.c:6109 gtk/gtktext.c:5683 gtk/gtktextview.c:8579
+#: gtk/gtklabel.c:6103 gtk/gtktext.c:5677 gtk/gtktextview.c:8579
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/gtklabel.c:6110 gtk/gtktext.c:5687 gtk/gtktextview.c:8583
+#: gtk/gtklabel.c:6104 gtk/gtktext.c:5681 gtk/gtktextview.c:8583
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtklabel.c:6111 gtk/gtktext.c:5691 gtk/gtktextview.c:8585
+#: gtk/gtklabel.c:6105 gtk/gtktext.c:5685 gtk/gtktextview.c:8585
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: gtk/gtklabel.c:6122 gtk/gtktext.c:5705 gtk/gtktextview.c:8602
+#: gtk/gtklabel.c:6116 gtk/gtktext.c:5699 gtk/gtktextview.c:8602
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -2551,16 +2551,16 @@ msgctxt "short time format"
 msgid "%d:%02d"
 msgstr "%d:%02d"
 
-#: gtk/gtkmessagedialog.c:819 gtk/gtkmessagedialog.c:837
-#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:9684
+#: gtk/gtkmessagedialog.c:815 gtk/gtkmessagedialog.c:833
+#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:9481
 msgid "_OK"
 msgstr "_Aceptar"
 
-#: gtk/gtkmessagedialog.c:831
+#: gtk/gtkmessagedialog.c:827
 msgid "_No"
 msgstr "_No"
 
-#: gtk/gtkmessagedialog.c:832
+#: gtk/gtkmessagedialog.c:828
 msgid "_Yes"
 msgstr "_Sí"
 
@@ -2654,7 +2654,7 @@ msgstr "No se puede finalizar el proceso con PID %d: %s"
 msgid "GTK could not find a media module. Check your installation."
 msgstr "GTK no ha podido encontrar un módulo de medios. Revise su instalación."
 
-#: gtk/gtknotebook.c:4347 gtk/gtknotebook.c:6622
+#: gtk/gtknotebook.c:4349 gtk/gtknotebook.c:6624
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -2699,18 +2699,15 @@ msgstr "Gestionar tamaños personalizados…"
 msgid "Page Setup"
 msgstr "Configuración de página"
 
-#: gtk/gtkpasswordentry.c:113 gtk/gtkpasswordentry.c:471
-#| msgid "Show data"
+#: gtk/gtkpasswordentry.c:113 gtk/gtkpasswordentry.c:472
 msgid "Show text"
 msgstr "Mostrar texto"
 
 #: gtk/gtkpasswordentry.c:119
-#| msgid "Hide Others"
 msgid "Hide text"
 msgstr "Ocultar texto"
 
 #: gtk/gtkpasswordentry.c:134
-#| msgid "Show Details"
 msgid "_Show text"
 msgstr "_Mostrar texto"
 
@@ -2718,8 +2715,7 @@ msgstr "_Mostrar texto"
 msgid "Caps Lock is on"
 msgstr "Bloq Mayús está activado"
 
-#: gtk/gtkpasswordentry.c:345
-#| msgid "_Password"
+#: gtk/gtkpasswordentry.c:346
 msgid "Password"
 msgstr "Contraseña"
 
@@ -3287,7 +3283,7 @@ msgstr "De arriba a abajo"
 msgid "Bottom to top"
 msgstr "De abajo a arriba"
 
-#: gtk/gtkprogressbar.c:614
+#: gtk/gtkprogressbar.c:615
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3317,7 +3313,6 @@ msgid "Search"
 msgstr "Buscar"
 
 #: gtk/gtksearchentry.c:570
-#| msgid "_Clear List"
 msgid "Clear entry"
 msgstr "Limpiar entrada"
 
@@ -3402,23 +3397,23 @@ msgstr "No se han encontrado resultados"
 msgid "Try a different search"
 msgstr "Pruebe una búsqueda diferente"
 
-#: gtk/gtktext.c:5714 gtk/gtktextview.c:8612
+#: gtk/gtktext.c:5708 gtk/gtktextview.c:8612
 msgid "Insert _Emoji"
 msgstr "Insertar _emoticono"
 
-#: gtk/gtktext.c:5868 gtk/gtktextview.c:8804
+#: gtk/gtktext.c:5862 gtk/gtktextview.c:8804
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: gtk/gtktext.c:5871 gtk/gtktextview.c:8807
+#: gtk/gtktext.c:5865 gtk/gtktextview.c:8807
 msgid "Cut"
 msgstr "Cortar"
 
-#: gtk/gtktext.c:5874 gtk/gtktextview.c:8810
+#: gtk/gtktext.c:5868 gtk/gtktextview.c:8810
 msgid "Copy"
 msgstr "Copiar"
 
-#: gtk/gtktext.c:5877 gtk/gtktextview.c:8813
+#: gtk/gtktext.c:5871 gtk/gtktextview.c:8813
 msgid "Paste"
 msgstr "Pegar"
 
@@ -3485,30 +3480,25 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6999
+#: gtk/gtkwindow.c:6796
 msgid "Move"
 msgstr "Mover"
 
-#: gtk/gtkwindow.c:7007
+#: gtk/gtkwindow.c:6804
 msgid "Resize"
 msgstr "Redimensionar"
 
-#: gtk/gtkwindow.c:7038
+#: gtk/gtkwindow.c:6835
 msgid "Always on Top"
 msgstr "Siempre encima"
 
-#: gtk/gtkwindow.c:9671
+#: gtk/gtkwindow.c:9468
 #, c-format
-#| msgid "Do you want to use GTK+ Inspector?"
 msgid "Do you want to use GTK Inspector?"
 msgstr "¿Quiere usar el inspector de GTK?"
 
-#: gtk/gtkwindow.c:9673
+#: gtk/gtkwindow.c:9470
 #, c-format
-#| msgid ""
-#| "GTK+ Inspector is an interactive debugger that lets you explore and "
-#| "modify the internals of any GTK+ application. Using it may cause the "
-#| "application to break or crash."
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK application. Using it may cause the application to "
@@ -3518,7 +3508,7 @@ msgstr ""
 "modificar los aspectos internos de cualquier aplicación de GTK. Al usarlo "
 "puede hacer que la aplicación falle o se cierre."
 
-#: gtk/gtkwindow.c:9678
+#: gtk/gtkwindow.c:9475
 msgid "Don’t show this message again"
 msgstr "No mostrar este mensaje de nuevo"
 
@@ -3545,31 +3535,31 @@ msgid "Parameter Type"
 msgstr "Tipo de parámetro"
 
 # src/file-manager/fm-icon-text-window.c:85
-#: gtk/inspector/controllers.c:132
+#: gtk/inspector/controllers.c:135
 msgctxt "event phase"
 msgid "None"
 msgstr "Ninguna"
 
-#: gtk/inspector/controllers.c:133
+#: gtk/inspector/controllers.c:136
 msgctxt "event phase"
 msgid "Capture"
 msgstr "Capturar"
 
-#: gtk/inspector/controllers.c:134
+#: gtk/inspector/controllers.c:137
 msgctxt "event phase"
 msgid "Bubble"
 msgstr "Burbuja"
 
-#: gtk/inspector/controllers.c:135
+#: gtk/inspector/controllers.c:138
 msgctxt "event phase"
 msgid "Target"
 msgstr "Objetivo"
 
-#: gtk/inspector/css-editor.c:126
+#: gtk/inspector/css-editor.c:127
 msgid "You can type here any CSS rule recognized by GTK."
 msgstr "Aquí puede escribir reglas de CSS reconocidas por GTK."
 
-#: gtk/inspector/css-editor.c:127
+#: gtk/inspector/css-editor.c:128
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
@@ -3577,12 +3567,12 @@ msgstr ""
 "Puede desactivar temporalmente este CSS personalizado pulsando el botón "
 "«Pausa» de más arriba."
 
-#: gtk/inspector/css-editor.c:128
+#: gtk/inspector/css-editor.c:129
 msgid "Changes are applied instantly and globally, for the whole application."
 msgstr ""
 "Los cambios se aplican instantánea y globalmente para toda la aplicación."
 
-#: gtk/inspector/css-editor.c:197
+#: gtk/inspector/css-editor.c:198
 #, c-format
 msgid "Saving CSS failed"
 msgstr "Falló al guardar el CSS "
@@ -3607,8 +3597,8 @@ msgstr "Clases de estilos"
 msgid "CSS Property"
 msgstr "Propiedad CSS"
 
-#: gtk/inspector/css-node-tree.ui:117 gtk/inspector/prop-list.ui:44
-#: gtk/inspector/recorder.ui:119 gtk/ui/gtkcoloreditor.ui:278
+#: gtk/inspector/css-node-tree.ui:117 gtk/inspector/recorder.ui:119
+#: gtk/ui/gtkcoloreditor.ui:278
 msgid "Value"
 msgstr "Valor"
 
@@ -3692,7 +3682,7 @@ msgstr "Sección sin nombre"
 msgid "Label"
 msgstr "Etiqueta"
 
-#: gtk/inspector/menu.ui:35 gtk/inspector/prop-editor.c:1329
+#: gtk/inspector/menu.ui:35
 msgid "Action"
 msgstr "Acción"
 
@@ -3708,8 +3698,7 @@ msgstr "Icono"
 msgid "Address"
 msgstr "Dirección"
 
-#: gtk/inspector/misc-info.ui:53 gtk/inspector/prop-list.ui:61
-#: gtk/inspector/statistics.ui:45
+#: gtk/inspector/misc-info.ui:53 gtk/inspector/statistics.ui:45
 msgid "Type"
 msgstr "Tipo"
 
@@ -3726,9 +3715,8 @@ msgid "Default Widget"
 msgstr "Widget predeterminada"
 
 #: gtk/inspector/misc-info.ui:178 gtk/inspector/misc-info.ui:318
-#: gtk/inspector/prop-editor.c:772 gtk/inspector/prop-editor.c:1029
-#: gtk/inspector/prop-editor.c:1213 gtk/inspector/prop-editor.c:1337
-#: gtk/inspector/prop-editor.c:1447 gtk/inspector/window.ui:330
+#: gtk/inspector/prop-editor.c:790 gtk/inspector/prop-editor.c:1043
+#: gtk/inspector/prop-editor.c:1334 gtk/inspector/window.ui:330
 msgid "Properties"
 msgstr "Propiedades"
 
@@ -3792,101 +3780,65 @@ msgstr "Es de nivel superior"
 msgid "Child Visible"
 msgstr "Hijo visible"
 
-#: gtk/inspector/prop-editor.c:628
+#: gtk/inspector/prop-editor.c:654
 #, c-format
 msgid "Pointer: %p"
 msgstr "Puntero: %p"
 
-#: gtk/inspector/prop-editor.c:643
-msgctxt "type name"
-msgid "Unknown"
-msgstr "Desconocido"
-
-#: gtk/inspector/prop-editor.c:644
-#, c-format
-msgid "Object: %p (%s)"
-msgstr "Objeto: %p (%s)"
-
-#: gtk/inspector/prop-editor.c:1086
+#: gtk/inspector/prop-editor.c:1100
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Tipo de propiedad no editable %s"
 
-#: gtk/inspector/prop-editor.c:1204
-msgid "Attribute mapping"
-msgstr "Mapeado de atributos"
+#: gtk/inspector/prop-editor.c:1216
+#| msgid "Attribute"
+msgid "Attribute:"
+msgstr "Atributo:"
 
-#: gtk/inspector/prop-editor.c:1209
-msgid "Model:"
-msgstr "Modelo:"
+#: gtk/inspector/prop-editor.c:1219
+#| msgid "Model:"
+msgid "Model"
+msgstr "Modelo"
 
-#: gtk/inspector/prop-editor.c:1210
-#, c-format
-msgid "%p (%s)"
-msgstr "%p (%s)"
-
-#: gtk/inspector/prop-editor.c:1220
+#: gtk/inspector/prop-editor.c:1224
 msgid "Column:"
 msgstr "Columna:"
 
 # src/file-manager/fm-icon-text-window.c:85
-#: gtk/inspector/prop-editor.c:1230
+#: gtk/inspector/prop-editor.c:1234
 msgctxt "property name"
 msgid "None"
 msgstr "Ninguna"
 
-#: gtk/inspector/prop-editor.c:1333
+#: gtk/inspector/prop-editor.c:1330
 #, c-format
-msgid "Defined at: %p (%s)"
-msgstr "Definida en: %p (%s)"
+#| msgid "Object: %p (%s)"
+msgid "Action from: %p (%s)"
+msgstr "Acción de: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1396 gtk/inspector/prop-editor.c:1412
-msgid "inverted"
-msgstr "invertida"
-
-#: gtk/inspector/prop-editor.c:1428
-msgid "bidirectional, inverted"
-msgstr "bidireccional, invertida"
-
-#: gtk/inspector/prop-editor.c:1433 gtk/inspector/prop-editor.c:1546
+#: gtk/inspector/prop-editor.c:1433
 msgid "bidirectional"
 msgstr "bidireccional"
 
-#: gtk/inspector/prop-editor.c:1438
-msgid "Binding:"
-msgstr "Vinculación:"
-
-#: gtk/inspector/prop-editor.c:1565
+#: gtk/inspector/prop-editor.c:1452
 msgid "Setting:"
 msgstr "Configuración:"
 
-#: gtk/inspector/prop-editor.c:1604
-msgid "Source:"
-msgstr "Fuente:"
-
-#: gtk/inspector/prop-editor.c:1606
+#: gtk/inspector/prop-editor.c:1492
 msgid "Reset"
 msgstr "Reiniciar"
 
-#: gtk/inspector/prop-editor.c:1619
+#: gtk/inspector/prop-editor.c:1503
 msgid "Theme"
 msgstr "Tema"
 
-#: gtk/inspector/prop-editor.c:1622
+#: gtk/inspector/prop-editor.c:1506
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-list.ui:28 gtk/inspector/recorder.ui:106
-msgid "Property"
-msgstr "Propiedad"
-
-#: gtk/inspector/prop-list.ui:78
-msgid "Attribute"
-msgstr "Atributo"
-
-#: gtk/inspector/prop-list.ui:93
-msgid "Defined At"
-msgstr "Definida en"
+#: gtk/inspector/prop-editor.c:1516
+msgid "Source:"
+msgstr "Fuente:"
 
 #: gtk/inspector/recorder.c:998
 #, c-format
@@ -3908,6 +3860,10 @@ msgstr "Añadir nodos de depuración"
 #: gtk/inspector/recorder.ui:42
 msgid "Save selected node"
 msgstr "Guardar el nodo seleccionado"
+
+#: gtk/inspector/recorder.ui:106
+msgid "Property"
+msgstr "Propiedad"
 
 #: gtk/inspector/resource-list.ui:68
 msgid "Path"
@@ -3999,19 +3955,19 @@ msgstr "Jerarquía"
 msgid "Implements"
 msgstr "Implementa"
 
-#: gtk/inspector/visual.c:466 gtk/inspector/visual.c:484
+#: gtk/inspector/visual.c:471 gtk/inspector/visual.c:489
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "El tema está codificado en GTK_THEME"
 
-#: gtk/inspector/visual.c:694
+#: gtk/inspector/visual.c:699
 msgid "Backend does not support window scaling"
 msgstr "El «backend» no soporta el escalado de ventanas"
 
-#: gtk/inspector/visual.c:792
+#: gtk/inspector/visual.c:797
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "La configuración está codificada en GTK_TEST_TOUCHSCREEN"
 
-#: gtk/inspector/visual.c:855
+#: gtk/inspector/visual.c:912
 msgid "GL rendering is disabled"
 msgstr "El renderizado GL está desactivado"
 
@@ -4063,31 +4019,31 @@ msgstr "Animaciones"
 msgid "Slowdown"
 msgstr "Ralentizar"
 
-#: gtk/inspector/visual.ui:383
+#: gtk/inspector/visual.ui:384
 msgid "Show fps overlay"
 msgstr "Mostrar superposición de fps"
 
-#: gtk/inspector/visual.ui:410
+#: gtk/inspector/visual.ui:411
 msgid "Show Graphic Updates"
 msgstr "Mostrar actualizaciones de gráficos"
 
-#: gtk/inspector/visual.ui:437
+#: gtk/inspector/visual.ui:438
 msgid "Show Baselines"
 msgstr "Mostrar líneas base"
 
-#: gtk/inspector/visual.ui:464
+#: gtk/inspector/visual.ui:465
 msgid "Show Layout Borders"
 msgstr "Mostrar bordes de la distribución"
 
-#: gtk/inspector/visual.ui:491
+#: gtk/inspector/visual.ui:492
 msgid "Show Widget Resizes"
 msgstr "Mostrar cambios de tamaño de los widgets"
 
-#: gtk/inspector/visual.ui:528
+#: gtk/inspector/visual.ui:530
 msgid "Simulate Touchscreen"
 msgstr "Simular pantalla táctil"
 
-#: gtk/inspector/visual.ui:554
+#: gtk/inspector/visual.ui:556
 msgid "Software GL"
 msgstr "Software GL"
 
@@ -4116,8 +4072,6 @@ msgid "Objects"
 msgstr "Objetos"
 
 #: gtk/inspector/window.ui:233
-#| msgctxt "printing option"
-#| msgid "Two Sided"
 msgid "Toggle Sidebar"
 msgstr "Conmutar barra lateral"
 
@@ -4158,7 +4112,6 @@ msgid "Global"
 msgstr "Global"
 
 #: gtk/inspector/window.ui:457
-#| msgid "XSettings"
 msgid "Settings"
 msgstr "Configuración"
 
@@ -6530,6 +6483,7 @@ msgstr "No se puede cerrar el flujo"
 #| "\n"
 #| "Simplify Options:\n"
 #| "  --replace          Replace the file\n"
+#| "  --3to4             Convert from a GTK3 to GTK4\n"
 #| "\n"
 #| "Preview Options:\n"
 #| "  --id=ID            Preview only the named object\n"
@@ -6538,76 +6492,70 @@ msgstr "No se puede cerrar el flujo"
 #| "Perform various tasks on GtkBuilder .ui files.\n"
 msgid ""
 "Usage:\n"
-"  gtk-builder-tool [COMMAND] FILE\n"
+"  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
 "\n"
 "Commands:\n"
-"  validate           Validate the file\n"
-"  simplify [OPTIONS] Simplify the file\n"
-"  enumerate          List all named objects\n"
-"  preview [OPTIONS]  Preview the file\n"
+"  validate     Validate the file\n"
+"  simplify     Simplify the file\n"
+"  enumerate    List all named objects\n"
+"  preview      Preview the file\n"
 "\n"
 "Simplify Options:\n"
-"  --replace          Replace the file\n"
-"  --3to4             Convert from a GTK3 to GTK4\n"
+"  --replace    Replace the file\n"
+"  --3to4       Convert from GTK 3 to GTK 4\n"
 "\n"
 "Preview Options:\n"
-"  --id=ID            Preview only the named object\n"
-"  --css=FILE         Use style from CSS file\n"
+"  --id=ID      Preview only the named object\n"
+"  --css=FILE   Use style from CSS file\n"
 "\n"
 "Perform various tasks on GtkBuilder .ui files.\n"
 msgstr ""
 "Uso:\n"
-"  gtk-builder-tool [COMANDO] ARCHIVO\n"
+"  gtk-builder-tool [COMANDO] [OPCIÓN…] ARCHIVO\n"
 "\n"
-"Comandos:\n"
-"  validate           Validar el archivo\n"
-"  simplify [OPCIONES] Simplificar el archivo\n"
-"  enumerate          Listar todos los objetos\n"
-"  preview [OPCIONES]  Vista previa del archivo\n"
+"Commands:\n"
+"  validate     Validate the file\n"
+"  simplify     Simplify the file\n"
+"  enumerate    List all named objects\n"
+"  preview      Preview the file\n"
 "\n"
-"Opciones de «simplify»:\n"
-"  --replace          Reemplazar el archivo\n"
-"  --3to4             Convertir de GTK3 a GTK4\n"
+"Simplify Options:\n"
+"  --replace    Replace the file\n"
+"  --3to4       Convert from GTK 3 to GTK 4\n"
 "\n"
-"Opciones de «preview»:\n"
-"  --id=ID            Vista previa del objeto nombrado\n"
-"  --css=FILE         Usar estilos del archivo CSS\n"
+"Preview Options:\n"
+"  --id=ID      Preview only the named object\n"
+"  --css=FILE   Use style from CSS file\n"
 "\n"
-"Realizar varias tareas en archivos .ui de GtkBuilder.\n"
+"Perform various tasks on GtkBuilder .ui files.\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:369
 #, c-format
-#| msgid "Couldn’t parse value for %s::%s: %s\n"
 msgid "%s: Couldn’t parse value for %s: %s\n"
 msgstr "%s: No se pudo analizar el valor para %s: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:544
 #, c-format
-#| msgid "Property %s::%s not found\n"
 msgid "%s: %sproperty %s::%s not found\n"
 msgstr "%s: %s propiedad %s::%s no encontrada\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:1423
 #, c-format
-#| msgid "Can’t load file: %s\n"
 msgid "Can’t load “%s”: %s\n"
 msgstr "No se puede cargar «%s»: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:1434
 #, c-format
-#| msgid "Can’t parse file: %s\n"
 msgid "Can’t parse “%s”: %s\n"
 msgstr "No se puede analizar «%s»: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:1453
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to read “%s”: %s\n"
 msgstr "Falló al leer «%s»: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:1459
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to write %s: “%s”\n"
 msgstr "Falló al escribir «%s»: %s\n"
 
@@ -7898,6 +7846,31 @@ msgstr "No hay un perfil disponible"
 #: modules/printbackends/gtkprintercups.c:292
 msgid "Unspecified profile"
 msgstr "Perfil no especificado"
+
+#~ msgctxt "type name"
+#~ msgid "Unknown"
+#~ msgstr "Desconocido"
+
+#~ msgid "Attribute mapping"
+#~ msgstr "Mapeado de atributos"
+
+#~ msgid "%p (%s)"
+#~ msgstr "%p (%s)"
+
+#~ msgid "Defined at: %p (%s)"
+#~ msgstr "Definida en: %p (%s)"
+
+#~ msgid "inverted"
+#~ msgstr "invertida"
+
+#~ msgid "bidirectional, inverted"
+#~ msgstr "bidireccional, invertida"
+
+#~ msgid "Binding:"
+#~ msgstr "Vinculación:"
+
+#~ msgid "Defined At"
+#~ msgstr "Definida en"
 
 #~ msgctxt "input method menu"
 #~ msgid "Waylandgtk"
