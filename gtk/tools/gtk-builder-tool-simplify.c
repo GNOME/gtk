@@ -500,7 +500,7 @@ property_can_be_omitted (Element      *element,
 
   if (g_str_equal (element->parent->element_name, "packing"))
     kind = PROP_KIND_PACKING;
-  if (g_str_equal (element->parent->element_name, "cell-packing"))
+  else if (g_str_equal (element->parent->element_name, "cell-packing"))
     kind = PROP_KIND_CELL_PACKING;
   else
     kind = PROP_KIND_OBJECT;
@@ -522,7 +522,8 @@ property_can_be_omitted (Element      *element,
         property_name = (const gchar *)element->attribute_values[i];
     }
 
-  if (keep_for_rewrite (class_name, property_name, kind))
+  if (data->convert3to4 && 
+      keep_for_rewrite (class_name, property_name, kind))
     return FALSE; /* keep, will be rewritten */
 
   if (translatable)
