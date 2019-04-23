@@ -476,6 +476,13 @@ parse_colors4 (GtkCssParser *parser,
 }
 
 static gboolean
+parse_font (GtkCssParser *parser,
+            gpointer      out_font)
+{
+  return FALSE;
+}
+
+static gboolean
 parse_node (GtkCssParser *parser, gpointer out_node);
 
 static GskRenderNode *
@@ -771,6 +778,26 @@ parse_cross_fade_node (GtkCssParser *parser)
 }
 
 static GskRenderNode *
+parse_text_node (GtkCssParser *parser)
+{
+  PangoFont *font = NULL;
+  float x = 0;
+  float y = 0;
+  GdkRGBA color = { 0, 0, 0, 0 };
+  const Declaration declarations[] = {
+    { "font", parse_font, &font },
+    { "x", parse_double, &x },
+    { "y", parse_double, &y },
+    { "color", parse_color, &color }
+  };
+
+  /* TODO: Check font parsing? */
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+
+  return gsk_color_node_new (&color, &GRAPHENE_RECT_INIT (x, y - 10, 100, 20));
+}
+
+static GskRenderNode *
 parse_clip_node (GtkCssParser *parser)
 {
   graphene_rect_t clip = GRAPHENE_RECT_INIT (0, 0, 0, 0);
@@ -863,8 +890,8 @@ parse_node (GtkCssParser *parser,
     { "blend", parse_blend_node },
 #endif
     { "cross-fade", parse_cross_fade_node },
-#if 0
     { "text", parse_text_node },
+#if 0
     { "blur", parse_blur_node },
 #endif
     { "debug", parse_debug_node }
