@@ -963,6 +963,15 @@ gsk_render_node_deserialize_from_bytes (GBytes *bytes)
   parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, gsk_render_node_parser_error, NULL, NULL);
   root = parse_container_node (parser);
 
+  if (gsk_container_node_get_n_children (root) == 1)
+    {
+      GskRenderNode *child = gsk_container_node_get_child (root, 0);
+
+      gsk_render_node_ref (child);
+      gsk_render_node_unref (root);
+      root = child;
+    }
+
   gtk_css_parser_unref (parser);
 
   return root;
