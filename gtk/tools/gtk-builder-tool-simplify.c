@@ -189,7 +189,7 @@ needs_explicit_setting (GParamSpec *pspec,
 
 static gboolean
 keep_for_rewrite (const char *class_name,
-                  const char *prop_name,
+                  const char *property_name,
                   PropKind kind)
 {
   struct _Prop {
@@ -213,18 +213,24 @@ keep_for_rewrite (const char *class_name,
   };
   gboolean found;
   gint k;
+  char *canonical_name;
+
+  canonical_name = g_strdup (property_name);
+  g_strdelimit (canonical_name, "_", '-');
 
   found = FALSE;
   for (k = 0; k < G_N_ELEMENTS (props); k++)
     {
       if (strcmp (class_name, props[k].class) == 0 &&
-          strcmp (prop_name, props[k].property) == 0 &&
+          strcmp (canonical_name, props[k].property) == 0 &&
           kind == props[k].kind)
         {
           found = TRUE;
           break;
         }
     }
+
+  g_free (canonical_name);
 
   return found;
 }
@@ -500,7 +506,7 @@ property_can_be_omitted (Element      *element,
 
   if (g_str_equal (element->parent->element_name, "packing"))
     kind = PROP_KIND_PACKING;
-  if (g_str_equal (element->parent->element_name, "cell-packing"))
+  else if (g_str_equal (element->parent->element_name, "cell-packing"))
     kind = PROP_KIND_CELL_PACKING;
   else
     kind = PROP_KIND_OBJECT;
@@ -522,7 +528,8 @@ property_can_be_omitted (Element      *element,
         property_name = (const gchar *)element->attribute_values[i];
     }
 
-  if (keep_for_rewrite (class_name, property_name, kind))
+  if (data->convert3to4 && 
+      keep_for_rewrite (class_name, property_name, kind))
     return FALSE; /* keep, will be rewritten */
 
   if (translatable)
