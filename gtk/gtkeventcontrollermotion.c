@@ -246,6 +246,8 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
    * @controller: The object that received the signal
    * @x: the x coordinate
    * @y: the y coordinate
+   * @crossing_mode: the crossing mode of this event
+   * @notify_type: the kind of crossing event
    *
    * Signals that the pointer has entered the widget.
    */
@@ -265,6 +267,8 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
   /**
    * GtkEventControllerMotion::leave:
    * @controller: The object that received the signal
+   * @crossing_mode: the crossing mode of this event
+   * @notify_type: the kind of crossing event
    *
    * Signals that pointer has left the widget.
    */
@@ -273,7 +277,7 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_MOTION,
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL,
-        	  NULL,
+                  NULL,
                   G_TYPE_NONE,
                   2,
                   GDK_TYPE_CROSSING_MODE,
