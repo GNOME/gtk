@@ -457,7 +457,22 @@ parse_stops (GtkCssParser *parser,
 error:
   g_array_free (stops, TRUE);
   return FALSE;
+}
 
+static gboolean
+parse_colors4 (GtkCssParser *parser,
+               gpointer      out_colors)
+{
+  GdkRGBA *colors = (GdkRGBA *)out_colors;
+  int i;
+
+  for (i = 0; i < 4; i ++)
+    {
+      if (!gsk_rgba_parse (parser, &colors[i]))
+        return FALSE;
+    }
+
+  return parse_semicolon (parser);
 }
 
 static gboolean
@@ -469,7 +484,7 @@ parse_container_node (GtkCssParser *parser)
   GskRenderNode *node;
   GPtrArray *nodes;
   const GtkCssToken *token;
-  
+
   nodes = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
 
   for (token = gtk_css_parser_get_token (parser);
@@ -628,6 +643,23 @@ parse_inset_shadow_node (GtkCssParser *parser)
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
 
   return gsk_inset_shadow_node_new (&outline, &color, dx, dy, spread, blur);
+}
+
+static GskRenderNode *
+parse_border_node (GtkCssParser *parser)
+{
+  GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
+  graphene_rect_t widths = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  GdkRGBA colors[4] = { { 0, 0, 0, 0 }, {0, 0, 0, 0}, {0, 0, 0, 0}, { 0, 0, 0, 0 } };
+  const Declaration declarations[] = {
+    { "outline", parse_rounded_rect, &outline },
+    { "widths", parse_rect,  &widths },
+    { "colors", parse_colors4, &colors }
+  };
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+
+  return gsk_border_node_new (&outline, (float*)&widths, colors);
 }
 
 static GskRenderNode *
@@ -812,8 +844,8 @@ parse_node (GtkCssParser *parser,
     { "cairo", parse_cairo_node },
 #endif
     { "linear-gradient", parse_linear_gradient_node },
-#if 0
     { "border", parse_border_node },
+#if 0
     { "texture", parse_texture_node },
 #endif
     { "inset-shadow", parse_inset_shadow_node },
