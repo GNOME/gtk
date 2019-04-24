@@ -509,6 +509,44 @@ parse_colors4 (GtkCssParser *parser,
 }
 
 static gboolean
+parse_shadows (GtkCssParser *parser,
+               gpointer      out_shadows)
+{
+  GArray *shadows = out_shadows;
+
+  for (;;)
+    {
+      GskShadow shadow = { {0, 0, 0, 1}, 0, 0, 0 };
+      double dx = 0, dy = 0, radius = 0;
+
+      if (!gsk_rgba_parse (parser, &shadow.color))
+        gtk_css_parser_error_value (parser, "Expected shadow color");
+
+      if (!gtk_css_parser_consume_number (parser, &dx))
+        gtk_css_parser_error_value (parser, "Expected shadow x offset");
+
+      if (!gtk_css_parser_consume_number (parser, &dy))
+        gtk_css_parser_error_value (parser, "Expected shadow x offset");
+
+      if (!gtk_css_parser_consume_number (parser, &radius))
+        gtk_css_parser_error_value (parser, "Expected shadow blur radius");
+
+      shadow.dx = dx;
+      shadow.dy = dy;
+      shadow.radius = radius;
+
+      g_array_append_val (shadows, shadow);
+
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+        gtk_css_parser_skip (parser);
+      else
+        break;
+    }
+
+  return parse_semicolon (parser);
+}
+
+static gboolean
 parse_font (GtkCssParser *parser,
             gpointer      out_font)
 {
@@ -981,6 +1019,38 @@ parse_rounded_clip_node (GtkCssParser *parser)
 }
 
 static GskRenderNode *
+parse_shadow_node (GtkCssParser *parser)
+{
+  GskRenderNode *child = NULL;
+  GArray *shadows = g_array_new (FALSE, TRUE, sizeof (GskShadow));
+  const Declaration declarations[] = {
+    { "child", parse_node, &child },
+    { "shadows", parse_shadows, shadows }
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (child == NULL)
+    {
+      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
+      return NULL;
+    }
+
+  if (shadows->len == 0)
+    {
+      gtk_css_parser_error_syntax (parser, "Need at least one shadow");
+      return child;
+    }
+
+  result = gsk_shadow_node_new (child, (GskShadow *)shadows->data, shadows->len);
+
+  g_array_free (shadows, TRUE);
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static GskRenderNode *
 parse_debug_node (GtkCssParser *parser)
 {
   char *message = NULL;
@@ -1031,8 +1101,8 @@ parse_node (GtkCssParser *parser,
 #endif
     { "clip", parse_clip_node },
     { "rounded-clip", parse_rounded_clip_node },
-#if 0
     { "shadow", parse_shadow_node },
+#if 0
     { "blend", parse_blend_node },
 #endif
     { "cross-fade", parse_cross_fade_node },
@@ -1605,22 +1675,37 @@ render_node_print (Printer       *p,
 
     case GSK_SHADOW_NODE:
       {
+        const guint n_shadows = gsk_shadow_node_get_n_shadows (node);
         int i;
 
         start_node (p, "shadow");
 
         _indent (p);
         g_string_append (p->str, "shadows: ");
-        for (i = 0; i < gsk_shadow_node_get_n_shadows (node); i ++)
+        for (i = 0; i < n_shadows; i ++)
           {
             const GskShadow *s = gsk_shadow_node_peek_shadow (node, i);
+            char *color;
 
-            g_string_append_printf (p->str, "(%f, (%f, %f), ",
-                                    s->radius, s->dx, s->dy);
-            append_rgba (p->str, &s->color);
-            g_string_append (p->str, ", ");
-            /* TODO: One too many commas */
+            color = gdk_rgba_to_string (&s->color);
+            g_string_append (p->str, color);
+            g_string_append_c (p->str, ' ');
+            string_append_double (p->str, s->dx);
+            g_string_append_c (p->str, ' ');
+            string_append_double (p->str, s->dy);
+            g_string_append_c (p->str, ' ');
+            string_append_double (p->str, s->radius);
+
+            if (i < n_shadows - 1)
+              g_string_append (p->str, ", ");
+
+            g_free (color);
           }
+
+        g_string_append_c (p->str, ';');
+        g_string_append_c (p->str, '\n');
+
+        append_node_param (p, "child", gsk_shadow_node_get_child (node));
 
         end_node (p);
       }
