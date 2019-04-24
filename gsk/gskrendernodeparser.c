@@ -663,7 +663,7 @@ static GskRenderNode *
 parse_color_node (GtkCssParser *parser)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
-  GdkRGBA color = { 0, 0, 0, 0 };
+  GdkRGBA color = { 0, 0, 0, 1 };
   const Declaration declarations[] = {
     { "bounds", parse_rect, &bounds },
     { "color", parse_color, &color },
