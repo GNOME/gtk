@@ -59,6 +59,8 @@ enum {
   OP_CLEAR                  =  21,
   OP_DRAW                   =  22,
   OP_DUMP_FRAMEBUFFER       =  23,
+  OP_PUSH_DEBUG_GROUP       =  24,
+  OP_POP_DEBUG_GROUP        =  25,
 };
 
 typedef struct
@@ -217,6 +219,9 @@ typedef struct
       int width;
       int height;
     } dump;
+    struct {
+      char text[80]; /* Size of outset_shadow, so 'should be enough' without growing RenderOp */
+    } debug_group;
   };
 } RenderOp;
 
@@ -277,6 +282,9 @@ void              ops_dump_framebuffer   (RenderOpBuilder         *builder,
                                           const char              *filename,
                                           int                      width,
                                           int                      height);
+void              ops_push_debug_group    (RenderOpBuilder         *builder,
+                                           const char              *text);
+void              ops_pop_debug_group     (RenderOpBuilder         *builder);
 
 void              ops_finish             (RenderOpBuilder         *builder);
 void              ops_push_modelview     (RenderOpBuilder         *builder,

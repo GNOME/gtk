@@ -262,9 +262,14 @@ upload_dirty_glyph (GskGLGlyphCache *self,
 
   g_assert (atlas->pending_glyph.key != NULL);
 
+  gdk_gl_context_push_debug_group_printf (gsk_gl_driver_get_gl_context (self->gl_driver),
+                                          "Uploading glyph %d", atlas->pending_glyph.key->glyph);
+
   render_glyph (atlas, &atlas->pending_glyph, &region);
 
   gsk_gl_image_upload_regions (atlas->image, self->gl_driver, 1, &region);
+
+  gdk_gl_context_pop_debug_group (gsk_gl_driver_get_gl_context (self->gl_driver));
 
   g_free (region.data);
 

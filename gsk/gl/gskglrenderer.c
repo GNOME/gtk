@@ -2516,9 +2516,11 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_DEBUG_NODE:
+      ops_push_debug_group (builder, gsk_debug_node_get_message (node));
       gsk_gl_renderer_add_render_ops (self,
                                       gsk_debug_node_get_child (node),
                                       builder);
+      ops_pop_debug_group (builder);
     break;
 
     case GSK_COLOR_NODE:
@@ -2783,7 +2785,9 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           op->op == OP_CHANGE_VAO)
         continue;
 
-      if (op->op != OP_CHANGE_PROGRAM &&
+      if (op->op != OP_PUSH_DEBUG_GROUP &&
+          op->op != OP_POP_DEBUG_GROUP &&
+          op->op != OP_CHANGE_PROGRAM &&
           op->op != OP_CHANGE_RENDER_TARGET &&
           op->op != OP_CLEAR &&
           program == NULL)
@@ -2888,6 +2892,14 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           dump_framebuffer (op->dump.filename, op->dump.width, op->dump.height);
           break;
 
+        case OP_PUSH_DEBUG_GROUP:
+          gdk_gl_context_push_debug_group (self->gl_context, op->debug_group.text);
+          break;
+
+        case OP_POP_DEBUG_GROUP:
+          gdk_gl_context_pop_debug_group (self->gl_context);
+          break;
+
         default:
           g_warn_if_reached ();
         }
@@ -2984,7 +2996,9 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   if (fbo_id != 0)
     ops_set_render_target (&render_op_builder, fbo_id);
 
+  gdk_gl_context_push_debug_group (self->gl_context, "Adding render ops");
   gsk_gl_renderer_add_render_ops (self, root, &render_op_builder);
+  gdk_gl_context_pop_debug_group (self->gl_context);
 
   /* We correctly reset the state everywhere */
   g_assert_cmpint (render_op_builder.current_render_target, ==, fbo_id);
@@ -3012,7 +3026,9 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
   glBlendEquation (GL_FUNC_ADD);
 
+  gdk_gl_context_push_debug_group (self->gl_context, "Rendering ops");
   gsk_gl_renderer_render_ops (self, render_op_builder.buffer_size);
+  gdk_gl_context_pop_debug_group (self->gl_context);
 
 #ifdef G_ENABLE_DEBUG
   gsk_profiler_counter_inc (profiler, self->profile_counters.frames);
@@ -3039,6 +3055,9 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   guint fbo_id;
 
   g_return_val_if_fail (self->gl_context != NULL, NULL);
+
+  gdk_gl_context_push_debug_group_printf (self->gl_context,
+                                          "Render %s<%p> to texture", root->node_class->type_name, root);
 
   width = ceilf (viewport->size.width);
   height = ceilf (viewport->size.height);
@@ -3077,6 +3096,9 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
                                 NULL, NULL);
 
   gsk_gl_driver_end_frame (self->gl_driver);
+
+  gdk_gl_context_pop_debug_group (self->gl_context);
+
   gsk_gl_renderer_clear_tree (self);
   return texture;
 }
@@ -3094,6 +3116,9 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
 
   if (self->gl_context == NULL)
     return;
+
+  gdk_gl_context_push_debug_group_printf (self->gl_context,
+                                          "Render root node %p", root);
 
   surface = gsk_renderer_get_surface (renderer);
   whole_surface = (GdkRectangle) {
@@ -3139,6 +3164,8 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   gsk_gl_renderer_clear_tree (self);
 
   gdk_draw_context_end_frame (GDK_DRAW_CONTEXT (self->gl_context));
+
+  gdk_gl_context_pop_debug_group (self->gl_context);
 
   g_clear_pointer (&self->render_region, cairo_region_destroy);
 }

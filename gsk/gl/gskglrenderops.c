@@ -44,6 +44,28 @@ ops_dump_framebuffer (RenderOpBuilder *builder,
   g_array_append_val (builder->render_ops, op);
 }
 
+void
+ops_push_debug_group (RenderOpBuilder *builder,
+                      const char *text)
+{
+  RenderOp op;
+
+  op.op = OP_PUSH_DEBUG_GROUP;
+  strncpy (op.debug_group.text, text, sizeof(op.debug_group.text) - 1);
+  op.debug_group.text[sizeof(op.debug_group.text)] = 0; /* Ensure zero terminated */
+
+  g_array_append_val (builder->render_ops, op);
+}
+
+void
+ops_pop_debug_group (RenderOpBuilder *builder)
+{
+  RenderOp op;
+
+  op.op = OP_POP_DEBUG_GROUP;
+  g_array_append_val (builder->render_ops, op);
+}
+
 float
 ops_get_scale (const RenderOpBuilder *builder)
 {
