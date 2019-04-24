@@ -1,0 +1,18 @@
+opacity {
+  opacity: 0;
+
+  child: shadow {
+    child: cross-fade {
+      start: color {
+        color: blue;
+        bounds: 0 0 100 100;
+      }
+      end: color {
+        color: red;
+        bounds: 100 100 100 100;
+      }
+      progress: 0;
+    }
+    shadows: green 200 0 0;
+  }
+}
