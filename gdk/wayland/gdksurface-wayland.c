@@ -2155,14 +2155,6 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
       g_warning ("Can't map popup, already mapped");
       return;
     }
-  if ((display->current_popups &&
-       g_list_last (display->current_popups)->data != parent) ||
-      (!display->current_popups &&
-       !is_realized_toplevel (parent)))
-    {
-      g_warning ("Tried to map a popup with a non-top most parent");
-      return;
-    }
 
   gdk_surface_freeze_updates (surface);
 
