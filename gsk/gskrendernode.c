@@ -387,12 +387,13 @@ gsk_render_node_write_to_file (GskRenderNode *node,
  *     error.
  **/
 GskRenderNode *
-gsk_render_node_deserialize (GBytes  *bytes,
-                             GError **error)
+gsk_render_node_deserialize (GBytes            *bytes,
+                             GskParseErrorFunc  error_func,
+                             gpointer           user_data)
 {
   GskRenderNode *node = NULL;
 
-  node = gsk_render_node_deserialize_from_bytes (bytes, error);
+  node = gsk_render_node_deserialize_from_bytes (bytes, error_func, user_data);
 
   return node;
 }
