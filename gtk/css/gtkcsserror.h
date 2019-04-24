@@ -24,6 +24,8 @@
 #include <glib.h>
 #include <gdk/gdkversionmacros.h>
 
+G_BEGIN_DECLS
+
 /**
  * GTK_CSS_PARSER_ERROR:
  *
@@ -43,5 +45,7 @@ GQuark gtk_css_parser_error_quark (void);
 
 GDK_AVAILABLE_IN_ALL
 GQuark gtk_css_parser_warning_quark (void);
+
+G_END_DECLS
 
 #endif /* __GTK_CSS_ERROR_H__ */
