@@ -2984,6 +2984,10 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
 #endif
 
+  /* Actually do the rendering */
+  if (fbo_id != 0)
+    glBindFramebuffer (GL_FRAMEBUFFER, fbo_id);
+
   glViewport (0, 0, ceilf (viewport->size.width), ceilf (viewport->size.height));
   gsk_gl_renderer_setup_render_mode (self);
   gsk_gl_renderer_clear (self);
@@ -3044,8 +3048,6 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   glBindFramebuffer (GL_FRAMEBUFFER, fbo_id);
   glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
   g_assert_cmphex (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
-
-  gsk_gl_renderer_clear (self);
 
   /* Render the actual scene */
   gsk_gl_renderer_do_render (renderer, root, viewport, fbo_id, 1);
