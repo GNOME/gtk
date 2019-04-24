@@ -26,6 +26,9 @@ main (int argc, char **argv)
   bytes = gsk_render_node_serialize (node);
   /* and deserialize again... */
   deserialized = gsk_render_node_deserialize (bytes, &error);
+  if (error)
+    g_message ("OUTPUT:\n%.*s", (int)g_bytes_get_size (bytes), (char *)g_bytes_get_data (bytes, NULL));
+
   g_assert_no_error (error);
 
   /* And check if that all worked. */
