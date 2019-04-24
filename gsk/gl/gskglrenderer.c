@@ -20,6 +20,7 @@
 #include "gskprivate.h"
 
 #include "gdk/gdkgltextureprivate.h"
+#include "gdk/gdkglcontextprivate.h"
 
 #include <epoxy/gl.h>
 #include <cairo-ft.h>
@@ -478,6 +479,8 @@ render_fallback_node (GskGLRenderer       *self,
   texture_id = gsk_gl_driver_create_texture (self->gl_driver,
                                              surface_width,
                                              surface_height);
+  gdk_gl_context_label_object_printf  (self->gl_context, GL_TEXTURE, texture_id,
+                                       "Fallback %s %d", node->node_class->type_name, texture_id);
 
   gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
   gsk_gl_driver_init_texture_with_surface (self->gl_driver,
@@ -1428,9 +1431,13 @@ render_outset_shadow_node (GskGLRenderer       *self,
       GskRoundedRect blit_clip;
 
       texture_id = gsk_gl_driver_create_texture (self->gl_driver, texture_width, texture_height);
+      gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
+                                          "Outset Shadow Temp %d", texture_id);
       gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
       gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id);
       render_target = gsk_gl_driver_create_render_target (self->gl_driver, texture_id, FALSE, FALSE);
+      gdk_gl_context_label_object_printf  (self->gl_context, GL_FRAMEBUFFER, render_target,
+                                           "Outset Shadow FB Temp %d", render_target);
 
 
       graphene_matrix_init_ortho (&item_proj,
@@ -1461,9 +1468,13 @@ render_outset_shadow_node (GskGLRenderer       *self,
       });
 
       blurred_texture_id = gsk_gl_driver_create_permanent_texture (self->gl_driver, texture_width, texture_height);
+      gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, blurred_texture_id,
+                                          "Outset Shadow Cache %d", blurred_texture_id);
       gsk_gl_driver_bind_source_texture (self->gl_driver, blurred_texture_id);
       gsk_gl_driver_init_texture_empty (self->gl_driver, blurred_texture_id);
       blurred_render_target = gsk_gl_driver_create_render_target (self->gl_driver, blurred_texture_id, TRUE, TRUE);
+      gdk_gl_context_label_object_printf  (self->gl_context, GL_FRAMEBUFFER, render_target,
+                                           "Outset Shadow Cache FB %d", render_target);
 
       ops_set_render_target (builder, blurred_render_target);
       ops_pop_clip (builder);
@@ -2642,9 +2653,14 @@ add_offscreen_ops (GskGLRenderer         *self,
   }
 
   texture_id = gsk_gl_driver_create_texture (self->gl_driver, width, height);
+  gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
+                                      "Offscreen<%s> %d", child_node->node_class->type_name, texture_id);
+
   gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
   gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id);
   render_target = gsk_gl_driver_create_render_target (self->gl_driver, texture_id, TRUE, TRUE);
+  gdk_gl_context_label_object_printf  (self->gl_context, GL_FRAMEBUFFER, render_target,
+                                       "Offscreen<%s> FB %d", child_node->node_class->type_name, render_target);
 
   graphene_matrix_init_ortho (&item_proj,
                               bounds->origin.x * scale,
@@ -3033,6 +3049,9 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   glGenTextures (1, &texture_id);
   glBindTexture (GL_TEXTURE_2D, texture_id);
 
+  gdk_gl_context_label_object_printf  (self->gl_context, GL_TEXTURE, texture_id,
+                                       "Texture %s<%p> %d", root->node_class->type_name, root, texture_id);
+
   if (gdk_gl_context_get_use_es (self->gl_context))
     glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
   else
@@ -3040,6 +3059,8 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 
   glGenFramebuffers (1, &fbo_id);
   glBindFramebuffer (GL_FRAMEBUFFER, fbo_id);
+  gdk_gl_context_label_object_printf  (self->gl_context, GL_FRAMEBUFFER, fbo_id,
+                                       "FB %s<%p> %d", root->node_class->type_name, root, fbo_id);
   glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
   g_assert_cmphex (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
 
