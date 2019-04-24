@@ -328,6 +328,7 @@ struct _GskGLRenderer
     };
   };
 
+  RenderOpBuilder op_builder;
   GArray *render_ops;
 
   GskGLGlyphCache glyph_cache;
@@ -2894,8 +2895,8 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
                            int                    scale_factor)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  RenderOpBuilder render_op_builder;
   graphene_matrix_t modelview, projection;
+  gsize buffer_size;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 gpu_time, cpu_time;
@@ -2927,13 +2928,9 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   gsk_gl_glyph_cache_begin_frame (&self->glyph_cache);
   gsk_gl_shadow_cache_begin_frame (&self->shadow_cache, self->gl_driver);
 
-  /* TODO: REALLY USE ONE BUILDER FOREVER! shader state is not per-frame... */
-  ops_init (&render_op_builder);
-  render_op_builder.renderer = self;
-  render_op_builder.current_projection = projection;
-  render_op_builder.current_viewport = *viewport;
-  render_op_builder.render_ops = self->render_ops;
-  ops_set_modelview (&render_op_builder, &modelview,
+  ops_set_projection (&self->op_builder, &projection);
+  ops_set_viewport (&self->op_builder, viewport);
+  ops_set_modelview (&self->op_builder, &modelview,
                      scale_factor == 1 ? GSK_TRANSFORM_CATEGORY_IDENTITY : GSK_TRANSFORM_CATEGORY_2D_AFFINE);
 
   /* Initial clip is self->render_region! */
@@ -2944,13 +2941,13 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 
       cairo_region_get_extents (self->render_region, &render_extents);
 
-      ops_transform_bounds_modelview (&render_op_builder,
+      ops_transform_bounds_modelview (&self->op_builder,
                                       &GRAPHENE_RECT_INIT (render_extents.x,
                                                            render_extents.y,
                                                            render_extents.width,
                                                            render_extents.height),
                                       &transformed_render_region);
-      ops_push_clip (&render_op_builder,
+      ops_push_clip (&self->op_builder,
                      &GSK_ROUNDED_RECT_INIT (transformed_render_region.origin.x,
                                              transformed_render_region.origin.y,
                                              transformed_render_region.size.width,
@@ -2958,7 +2955,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
     }
   else
     {
-      ops_push_clip (&render_op_builder,
+      ops_push_clip (&self->op_builder,
                      &GSK_ROUNDED_RECT_INIT (viewport->origin.x,
                                              viewport->origin.y,
                                              viewport->size.width,
@@ -2966,15 +2963,16 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
     }
 
   if (fbo_id != 0)
-    ops_set_render_target (&render_op_builder, fbo_id);
+    ops_set_render_target (&self->op_builder, fbo_id);
 
-  gsk_gl_renderer_add_render_ops (self, root, &render_op_builder);
+  gsk_gl_renderer_add_render_ops (self, root, &self->op_builder);
 
   /* We correctly reset the state everywhere */
-  g_assert_cmpint (render_op_builder.current_render_target, ==, fbo_id);
-  ops_pop_modelview (&render_op_builder);
-  ops_pop_clip (&render_op_builder);
-  ops_finish (&render_op_builder);
+  g_assert_cmpint (self->op_builder.current_render_target, ==, fbo_id);
+  ops_pop_modelview (&self->op_builder);
+  ops_pop_clip (&self->op_builder);
+  buffer_size = self->op_builder.buffer_size;
+  ops_finish (&self->op_builder);
 
   /*g_message ("Ops: %u", self->render_ops->len);*/
 
@@ -2996,7 +2994,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
   glBlendEquation (GL_FUNC_ADD);
 
-  gsk_gl_renderer_render_ops (self, render_op_builder.buffer_size);
+  gsk_gl_renderer_render_ops (self, buffer_size);
 
 #ifdef G_ENABLE_DEBUG
   gsk_profiler_counter_inc (profiler, self->profile_counters.frames);
@@ -3142,6 +3140,10 @@ gsk_gl_renderer_init (GskGLRenderer *self)
   gsk_ensure_resources ();
 
   self->render_ops = g_array_new (FALSE, FALSE, sizeof (RenderOp));
+
+  ops_init (&self->op_builder);
+  self->op_builder.renderer = self;
+  self->op_builder.render_ops = self->render_ops;
 
 #ifdef G_ENABLE_DEBUG
   {

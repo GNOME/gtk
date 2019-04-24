@@ -12,9 +12,23 @@ ops_finish (RenderOpBuilder *builder)
 {
   if (builder->mv_stack)
     g_array_free (builder->mv_stack, TRUE);
+  builder->mv_stack = NULL;
 
   if (builder->clip_stack)
     g_array_free (builder->clip_stack, TRUE);
+  builder->clip_stack = NULL;
+
+  builder->buffer_size = 0;
+  builder->dx = 0;
+  builder->dy = 0;
+  builder->current_modelview = NULL;
+  builder->current_clip = NULL;
+  builder->current_render_target = 0;
+  builder->current_texture = 0;
+  builder->current_program = NULL;
+  builder->current_program_state = NULL;
+  graphene_matrix_init_identity (&builder->current_projection);
+  builder->current_viewport = GRAPHENE_RECT_INIT (0, 0, 0, 0);
 }
 
 static inline void
