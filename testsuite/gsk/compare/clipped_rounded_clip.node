@@ -14,6 +14,11 @@ clip {
   }
 }
 
+/* The actual rounded portion of the clip is irrelevant
+ * for this test case. This just ensures that
+ * offscreen-drawn clips work and have the correct
+ * size, color, etc.
+ */
 debug {
   message: "clipped out area";
   child: container {
@@ -22,19 +27,7 @@ debug {
       color: black;
     }
     color {
-      bounds: 110 122 5 11;
-      color: black;
-    }
-    color {
-      bounds: 100 130 10 10;
-      color: black;
-    }
-    color {
-      bounds: 91 140 11 5;
-      color: black;
-    }
-    color {
-      bounds: 60 145 35 5;
+      bounds: 60 120 60 30;
       color: black;
     }
   }
