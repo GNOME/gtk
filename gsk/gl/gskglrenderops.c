@@ -52,7 +52,7 @@ ops_push_debug_group (RenderOpBuilder *builder,
 
   op.op = OP_PUSH_DEBUG_GROUP;
   strncpy (op.debug_group.text, text, sizeof(op.debug_group.text) - 1);
-  op.debug_group.text[sizeof(op.debug_group.text)] = 0; /* Ensure zero terminated */
+  op.debug_group.text[sizeof(op.debug_group.text) - 1] = 0; /* Ensure zero terminated */
 
   g_array_append_val (builder->render_ops, op);
 }
