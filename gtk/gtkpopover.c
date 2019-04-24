@@ -516,14 +516,6 @@ gtk_popover_hide (GtkWidget *widget)
 }
 
 static void
-grab_prepare_func (GdkSeat    *seat,
-                   GdkSurface *surface,
-                   gpointer    data)
-{
-  gdk_surface_show (surface);
-}
-
-static void
 unset_surface_transform_changed_cb (gpointer data)
 {
   GtkPopover *popover = data;
