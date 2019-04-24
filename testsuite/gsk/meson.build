@@ -56,6 +56,7 @@ compare_render_tests = [
   'outset_shadow_offset_y',
   'outset_shadow_rounded_top',
   'outset_shadow_simple',
+  'shadow-in-opacity',
 ]
 
 renderers = [
