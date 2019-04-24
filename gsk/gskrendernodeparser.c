@@ -889,8 +889,8 @@ static GskRenderNode *
 parse_text_node (GtkCssParser *parser)
 {
   PangoFont *font = NULL;
-  float x = 0;
-  float y = 0;
+  double x = 0;
+  double y = 0;
   GdkRGBA color = { 0, 0, 0, 0 };
   const Declaration declarations[] = {
     { "font", parse_font, &font },
@@ -903,6 +903,26 @@ parse_text_node (GtkCssParser *parser)
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
 
   return gsk_color_node_new (&color, &GRAPHENE_RECT_INIT (x, y - 10, 100, 20));
+}
+
+static GskRenderNode *
+parse_blur_node (GtkCssParser *parser)
+{
+  GskRenderNode *child = NULL;
+  double blur_radius = 0.0;
+  const Declaration declarations[] = {
+    { "blur", parse_double, &blur_radius },
+    { "child", parse_node, &child },
+  };
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (child == NULL)
+    {
+      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
+      return NULL;
+    }
+
+  return gsk_blur_node_new (child, blur_radius);
 }
 
 static GskRenderNode *
@@ -997,9 +1017,7 @@ parse_node (GtkCssParser *parser,
 #endif
     { "cross-fade", parse_cross_fade_node },
     { "text", parse_text_node },
-#if 0
     { "blur", parse_blur_node },
-#endif
     { "debug", parse_debug_node }
   };
   GskRenderNode **node_p = out_node;
@@ -1677,7 +1695,7 @@ render_node_print (Printer       *p,
       {
         start_node (p, "blur");
 
-        append_float_param (p, "radius", gsk_blur_node_get_radius (node));
+        append_float_param (p, "blur", gsk_blur_node_get_radius (node));
         append_node_param (p, "child", gsk_blur_node_get_child (node));
 
         end_node (p);
