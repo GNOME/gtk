@@ -3521,30 +3521,19 @@ compute_child_offset (GtkMenu   *menu,
                       gint      *height)
 {
   GtkMenuPrivate *priv = menu->priv;
-  gint item_top_attach;
-  gint child_offset = 0;
-  gint i;
+  GtkAllocation allocation;
 
-  get_effective_child_attach (menu_item, &item_top_attach);
+  gtk_widget_get_allocation (menu_item, &allocation);
+  if (allocation.width > 0)
+    {
+      if (offset)
+        *offset = allocation.y + priv->scroll_offset;
+      if (height)
+        *height = allocation.height;
+      return TRUE;
+    }
 
-  /* there is a possibility that we get called before _size_request,
-   * so check the height table for safety.
-   */
-  if (!priv->heights || priv->heights_length < gtk_menu_get_n_rows (menu))
-    return FALSE;
-
-  /* when we have a row with only invisible children, its height will
-   * be zero, so there's no need to check WIDGET_VISIBLE here
-   */
-  for (i = 0; i < item_top_attach; i++)
-    child_offset += priv->heights[i];
-
-  if (offset)
-    *offset = child_offset;
-  if (height)
-    *height = priv->heights[item_top_attach];
-
-  return TRUE;
+  return FALSE;
 }
 
 static void
