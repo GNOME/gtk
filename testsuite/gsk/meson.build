@@ -133,6 +133,7 @@ endforeach
 serialize_deserialize_tests = [
   'color.valid',
   'border.valid',
+  'shadow.valid',
   'testswitch.valid',
   'widgetfactory.valid',
 ]
