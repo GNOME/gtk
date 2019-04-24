@@ -6597,7 +6597,7 @@ usage (void)
 int
 main (int argc, char *argv[])
 {
-  GtkCssProvider *provider, *memory_provider;
+  GtkCssProvider *memory_provider;
   GdkDisplay *display;
   GtkBindingSet *binding_set;
   int i;
@@ -6615,23 +6615,7 @@ main (int argc, char *argv[])
 
   gtk_init ();
 
-  provider = gtk_css_provider_new ();
-
-  /* Check to see if we are being run from the correct
-   * directory.
-   */
-  if (file_exists ("testgtk.css"))
-    gtk_css_provider_load_from_path (provider, "testgtk.css");
-  else if (file_exists ("tests/testgtk.css"))
-    gtk_css_provider_load_from_path (provider, "tests/testgtk.css");
-  else
-    g_warning ("Couldn't find file \"testgtk.css\".");
-
   display = gdk_display_get_default ();
-
-  gtk_style_context_add_provider_for_display (display, GTK_STYLE_PROVIDER (provider),
-                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-  g_object_unref (provider);
 
   gtk_accelerator_set_default_mod_mask (GDK_SHIFT_MASK |
 					GDK_CONTROL_MASK |
