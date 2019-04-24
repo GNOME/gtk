@@ -914,6 +914,7 @@ parse_blur_node (GtkCssParser *parser)
     { "blur", parse_double, &blur_radius },
     { "child", parse_node, &child },
   };
+  GskRenderNode *result;
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
@@ -922,7 +923,11 @@ parse_blur_node (GtkCssParser *parser)
       return NULL;
     }
 
-  return gsk_blur_node_new (child, blur_radius);
+  result = gsk_blur_node_new (child, blur_radius);
+
+  gsk_render_node_unref (child);
+
+  return result;
 }
 
 static GskRenderNode *
@@ -934,6 +939,7 @@ parse_clip_node (GtkCssParser *parser)
     { "clip", parse_rect, &clip },
     { "child", parse_node, &child },
   };
+  GskRenderNode *result;
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
@@ -942,7 +948,11 @@ parse_clip_node (GtkCssParser *parser)
       return NULL;
     }
 
-  return gsk_clip_node_new (child, &clip);
+  result = gsk_clip_node_new (child, &clip);
+
+  gsk_render_node_unref (child);
+
+  return result;
 }
 
 static GskRenderNode *
@@ -954,6 +964,7 @@ parse_rounded_clip_node (GtkCssParser *parser)
     { "clip", parse_rounded_rect, &clip },
     { "child", parse_node, &child },
   };
+  GskRenderNode *result;
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
@@ -962,7 +973,11 @@ parse_rounded_clip_node (GtkCssParser *parser)
       return NULL;
     }
 
-  return gsk_rounded_clip_node_new (child, &clip);
+  result = gsk_rounded_clip_node_new (child, &clip);
+
+  gsk_render_node_unref (child);
+
+  return result;
 }
 
 static GskRenderNode *
@@ -974,6 +989,7 @@ parse_debug_node (GtkCssParser *parser)
     { "message", parse_string, &message},
     { "child", parse_node, &child },
   };
+  GskRenderNode *result;
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
@@ -982,7 +998,11 @@ parse_debug_node (GtkCssParser *parser)
       return NULL;
     }
 
-  return gsk_debug_node_new (child, message);
+  result = gsk_debug_node_new (child, message);
+
+  gsk_render_node_unref (child);
+
+  return result;
 }
 
 static gboolean
