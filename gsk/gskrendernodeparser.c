@@ -1072,37 +1072,55 @@ append_rounded_rect (GString              *str,
   if (!gsk_rounded_rect_is_rectilinear (r))
     {
       gboolean all_the_same = TRUE;
+      gboolean all_square = TRUE;
       float w = r->corner[0].width;
-      float h = r->corner[0].width;
+      float h = r->corner[0].height;
       int i;
 
       for (i = 1; i < 4; i ++)
         {
           if (r->corner[i].width != w ||
-              r->corner[i].height !=h)
-            {
-              all_the_same = FALSE;
-              break;
-            }
+              r->corner[i].height != h)
+            all_the_same = FALSE;
+
+          if (r->corner[i].width != r->corner[i].height)
+            all_square = FALSE;
+
         }
+
+      g_string_append (str, " / ");
 
       if (all_the_same)
         {
-          g_string_append (str, " / ");
           string_append_double (str, w);
+        }
+      else if (all_square)
+        {
+          string_append_double (str, r->corner[0].width);
+          g_string_append_c (str, ' ');
+          string_append_double (str, r->corner[1].width);
+          g_string_append_c (str, ' ');
+          string_append_double (str, r->corner[2].width);
+          g_string_append_c (str, ' ');
+          string_append_double (str, r->corner[3].width);
         }
       else
         {
-          /* TODO: Syntax ??? */
-          g_string_append_printf (str, " / (%f, %f) (%f, %f) (%f, %f) (%f, %f)",
-                                  r->corner[0].width,
-                                  r->corner[0].height,
-                                  r->corner[1].width,
-                                  r->corner[1].height,
-                                  r->corner[2].width,
-                                  r->corner[2].height,
-                                  r->corner[3].width,
-                                  r->corner[3].height);
+          for (i = 0; i < 4; i ++)
+            {
+              string_append_double (str, r->corner[i].width);
+              g_string_append_c (str, ' ');
+            }
+
+          g_string_append (str, "/ ");
+
+          for (i = 0; i < 3; i ++)
+            {
+              string_append_double (str, r->corner[i].height);
+              g_string_append_c (str, ' ');
+            }
+
+          string_append_double (str, r->corner[4].height);
         }
     }
 }
