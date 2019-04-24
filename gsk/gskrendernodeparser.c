@@ -1132,7 +1132,6 @@ static void
 start_node (Printer    *self,
             const char *node_name)
 {
-  _indent (self);
   g_string_append_printf (self->str, "%s {\n", node_name);
   self->indentation_level ++;
 }
@@ -1392,6 +1391,8 @@ render_node_print (Printer       *p,
           {
             GskRenderNode *child = gsk_container_node_get_child (node, i);
 
+            /* Only in container nodes do we want nodes to be indented. */
+            _indent (p);
             render_node_print (p, child);
           }
         end_node (p);
@@ -1466,7 +1467,7 @@ render_node_print (Printer       *p,
         start_node (p, "opacity");
 
         append_float_param (p, "opacity", gsk_opacity_node_get_opacity (node));
-        render_node_print (p, gsk_opacity_node_get_child (node));
+        append_node_param (p, "child", gsk_opacity_node_get_child (node));
 
         end_node (p);
       }
@@ -1492,7 +1493,7 @@ render_node_print (Printer       *p,
         start_node (p, "clip");
 
         append_rect_param (p, "clip", gsk_clip_node_peek_clip (node));
-        render_node_print (p, gsk_clip_node_get_child (node));
+        append_node_param (p, "child", gsk_clip_node_get_child (node));
 
         end_node (p);
       }
