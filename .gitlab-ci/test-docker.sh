@@ -32,7 +32,6 @@ xvfb-run -a -s "-screen 0 1024x768x24" \
         --timeout-multiplier 2 \
         --print-errorlogs \
         --suite=gtk \
-        --no-suite=gtk:gsk \
         --no-suite=gtk:a11y
 
 # Save the exit code
