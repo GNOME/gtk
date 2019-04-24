@@ -106,6 +106,7 @@ typedef struct {
   guint has_gl_framebuffer_blit : 1;
   guint has_frame_terminator : 1;
   guint has_khr_debug : 1;
+  guint use_khr_debug : 1;
   guint has_unpack_subimage : 1;
   guint has_debug_output : 1;
   guint extensions_checked : 1;
@@ -441,7 +442,7 @@ gdk_gl_context_push_debug_group (GdkGLContext *context,
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
-  if (priv->has_khr_debug)
+  if (priv->use_khr_debug)
     glPushDebugGroupKHR (GL_DEBUG_SOURCE_APPLICATION, 0, -1, message);
 }
 
@@ -454,7 +455,7 @@ gdk_gl_context_push_debug_group_printf (GdkGLContext *context,
   gchar *message;
   va_list args;
 
-  if (priv->has_khr_debug)
+  if (priv->use_khr_debug)
     {
       va_start (args, format);
       message = g_strdup_vprintf (format, args);
@@ -470,7 +471,7 @@ gdk_gl_context_pop_debug_group (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
-  if (priv->has_khr_debug)
+  if (priv->use_khr_debug)
     glPopDebugGroupKHR ();
 }
 
@@ -482,7 +483,7 @@ gdk_gl_context_label_object (GdkGLContext *context,
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
-  if (priv->has_khr_debug)
+  if (priv->use_khr_debug)
     glObjectLabel (identifier, name, -1, label);
 }
 
@@ -497,7 +498,7 @@ gdk_gl_context_label_object_printf  (GdkGLContext *context,
   gchar *message;
   va_list args;
 
-  if (priv->has_khr_debug)
+  if (priv->use_khr_debug)
     {
       va_start (args, format);
       message = g_strdup_vprintf (format, args);
@@ -990,6 +991,8 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 
   display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
 
+  if (priv->has_khr_debug && GDK_DISPLAY_DEBUG_CHECK (display, GL_DEBUG))
+    priv->use_khr_debug = TRUE;
   if (!priv->use_es && GDK_DISPLAY_DEBUG_CHECK (display, GL_TEXTURE_RECT))
     priv->use_texture_rectangle = TRUE;
   else if (has_npot)
