@@ -1323,24 +1323,34 @@ render_node_print (Printer       *p,
 
     case GSK_LINEAR_GRADIENT_NODE:
       {
+        const guint n_stops = gsk_linear_gradient_node_get_n_color_stops (node);
+        const GskColorStop *stop;
         int i;
 
-        start_node (p, "linear_gradient");
+        start_node (p, "linear-gradient");
 
         append_rect_param (p, "bounds", &node->bounds);
         append_point_param (p, "start", gsk_linear_gradient_node_peek_start (node));
         append_point_param (p, "end", gsk_linear_gradient_node_peek_end (node));
 
         _indent (p);
-        g_string_append (p->str, "stops: ");
-        for (i = 0; i < gsk_linear_gradient_node_get_n_color_stops (node); i ++)
+        g_string_append (p->str, "stops:");
+        for (i = 0; i < n_stops - 1; i ++)
           {
-            const GskColorStop *stop = gsk_linear_gradient_node_peek_color_stops (node) + i;
+            stop = gsk_linear_gradient_node_peek_color_stops (node) + i;
 
-            g_string_append_printf (p->str, " (%f, ", stop->offset);
+            g_string_append_c (p->str, ' ');
+            string_append_double (p->str, stop->offset);
+            g_string_append_c (p->str, ' ');
             append_rgba (p->str, &stop->color);
-            g_string_append_c (p->str, ')');
+            g_string_append_c (p->str, ',');
           }
+
+        /* Last one, no comma */
+        stop = gsk_linear_gradient_node_peek_color_stops (node) + n_stops - 1;
+        string_append_double (p->str, stop->offset);
+        g_string_append_c (p->str, ' ');
+        append_rgba (p->str, &stop->color);
         g_string_append (p->str, ";\n");
 
         end_node (p);
