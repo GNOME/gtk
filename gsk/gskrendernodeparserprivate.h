@@ -4,8 +4,9 @@
 
 #include "gskrendernode.h"
 
-GskRenderNode * gsk_render_node_deserialize_from_bytes  (GBytes        *bytes,
-                                                         GError       **error);
+GskRenderNode * gsk_render_node_deserialize_from_bytes  (GBytes            *bytes,
+                                                         GskParseErrorFunc  error_func,
+                                                         gpointer           user_data);
 char *          gsk_render_node_serialize_to_string     (GskRenderNode *root);
 
 #endif
