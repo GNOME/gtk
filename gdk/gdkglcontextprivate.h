@@ -90,7 +90,21 @@ gboolean                gdk_gl_context_use_texture_rectangle    (GdkGLContext   
 gboolean                gdk_gl_context_has_framebuffer_blit     (GdkGLContext    *context);
 gboolean                gdk_gl_context_has_frame_terminator     (GdkGLContext    *context);
 gboolean                gdk_gl_context_has_unpack_subimage      (GdkGLContext    *context);
-
+void                    gdk_gl_context_push_debug_group         (GdkGLContext    *context,
+                                                                 const char      *message);
+void                    gdk_gl_context_push_debug_group_printf  (GdkGLContext    *context,
+                                                                 const gchar     *format,
+                                                                 ...)  G_GNUC_PRINTF (2, 3);
+void                    gdk_gl_context_pop_debug_group          (GdkGLContext    *context);
+void                    gdk_gl_context_label_object             (GdkGLContext    *context,
+                                                                 guint            identifier,
+                                                                 guint            name,
+                                                                 const char      *label);
+void                    gdk_gl_context_label_object_printf      (GdkGLContext    *context,
+                                                                 guint            identifier,
+                                                                 guint            name,
+                                                                 const char      *format,
+                                                                ...)  G_GNUC_PRINTF (4, 5);
 G_END_DECLS
 
 #endif /* __GDK_GL_CONTEXT_PRIVATE_H__ */
