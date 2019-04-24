@@ -49,6 +49,7 @@ test('nodes (cairo)', test_render_nodes,
 # Interesting render nodes proven to be rendered 'correctly' by the GL renderer.
 gl_tests = [
   ['cross fade in opacity',        'cross-fade-in-opacity'],
+  ['shadow in opacity',        'cross-fade-in-opacity'],
 ]
 
 foreach gl_test : gl_tests
