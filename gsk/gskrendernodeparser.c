@@ -745,6 +745,42 @@ parse_opacity_node (GtkCssParser *parser)
 }
 
 static GskRenderNode *
+parse_color_matrix_node (GtkCssParser *parser)
+{
+  GskRenderNode *child = NULL;
+  graphene_matrix_t matrix;
+  GskTransform *transform = NULL;
+  graphene_rect_t offset_rect = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  graphene_vec4_t offset;
+  const Declaration declarations[] = {
+    { "matrix", parse_transform, &transform },
+    { "offset", parse_rect, &offset_rect },
+    { "child", parse_node, &child }
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (child == NULL)
+    {
+      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
+      return NULL;
+    }
+
+  graphene_vec4_init (&offset,
+                      offset_rect.origin.x, offset_rect.origin.y,
+                      offset_rect.size.width, offset_rect.size.height);
+
+  gsk_transform_to_matrix (transform, &matrix);
+
+  result = gsk_color_matrix_node_new (child, &matrix, &offset);
+
+  gsk_transform_unref (transform);
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static GskRenderNode *
 parse_cross_fade_node (GtkCssParser *parser)
 {
   GskRenderNode *start = NULL;
@@ -879,8 +915,8 @@ parse_node (GtkCssParser *parser,
     { "outset-shadow", parse_outset_shadow_node },
     { "transform", parse_transform_node },
     { "opacity", parse_opacity_node },
+    { "color-matrix", parse_color_matrix_node },
 #if 0
-    { "color-matrix", parse_color-matrix_node },
     { "repeat", parse_repeat_node },
 #endif
     { "clip", parse_clip_node },
@@ -1146,19 +1182,6 @@ append_point (GString                *str,
 }
 
 static void
-append_matrix (GString                 *str,
-               const graphene_matrix_t *m)
-{
-  float v[16];
-
-  graphene_matrix_to_float (m, v);
-
-  g_string_append_printf (str, "(%f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f)",
-                          v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7],
-                          v[8], v[9], v[10], v[11], v[12], v[13], v[14], v[15]);
-}
-
-static void
 append_vec4 (GString               *str,
              const graphene_vec4_t *v)
 {
@@ -1247,11 +1270,16 @@ append_matrix_param (Printer                 *p,
                      const char              *param_name,
                      const graphene_matrix_t *value)
 {
+  GskTransform *transform = NULL;
+
   _indent (p);
   g_string_append_printf (p->str, "%s: ", param_name);
-  append_matrix (p->str, value);
+
+  transform = gsk_transform_matrix (transform, value);
+  gsk_transform_print (transform,p->str);
   g_string_append_c (p->str, ';');
-  g_string_append_c (p->str, '\n');
+
+  gsk_transform_unref (transform);
 }
 
 static void
@@ -1429,7 +1457,7 @@ render_node_print (Printer       *p,
 
         append_matrix_param (p, "matrix", gsk_color_matrix_node_peek_color_matrix (node));
         append_vec4_param (p, "offset", gsk_color_matrix_node_peek_color_offset (node));
-        render_node_print (p, gsk_color_matrix_node_get_child (node));
+        append_node_param (p, "child", gsk_color_matrix_node_get_child (node));
 
         end_node (p);
       }
@@ -1524,7 +1552,7 @@ render_node_print (Printer       *p,
         b64 = g_base64_encode (data, len);
 
         _indent (p);
-        g_string_append_printf (p->str, "data = \"%s\"\n", b64);
+        g_string_append_printf (p->str, "data: \"%s\"\n", b64);
         end_node (p);
 
         g_free (b64);
@@ -1565,7 +1593,7 @@ render_node_print (Printer       *p,
 
         _indent (p);
         /* TODO: We potentially need to escape certain characters in the message */
-        g_string_append_printf (p->str, "message = \"%s\"\n", gsk_debug_node_get_message (node));
+        g_string_append_printf (p->str, "message: \"%s\"\n", gsk_debug_node_get_message (node));
 
         render_node_print (p, gsk_debug_node_get_child (node));
         end_node (p);
