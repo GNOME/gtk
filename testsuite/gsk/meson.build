@@ -48,19 +48,12 @@ test('nodes (cairo)', test_render_nodes,
 
 # Interesting render nodes proven to be rendered 'correctly' by the GL renderer.
 gl_tests = [
-  ['outset shadow rounded1',       'outset_shadow_rounded1'],
-  ['outset shadow rounded2',       'outset_shadow_rounded2'],
-  ['outset shadow blurred simple', 'outset_shadow_blurred_simple'],
-  ['outset shadow blurred small',  'outset_shadow_blurred_small'],
-  ['outset shadow blurred offset', 'outset_shadow_blurred_offset'],
-  ['Crossfade simple',             'cross_fade'],
-  ['gradient simple',              'gradient_simple'],
-  ['gradient clipped',             'gradient_clipped'],
+  ['cross fade in opacity',        'cross-fade-in-opacity'],
 ]
 
 foreach gl_test : gl_tests
   test('GL ' + gl_test[0], compare_render,
-       args: [join_paths(meson.current_source_dir(), 'gl', gl_test[1] + '.txt'),
+       args: [join_paths(meson.current_source_dir(), 'gl', gl_test[1] + '.node'),
               join_paths(meson.current_source_dir(), 'gl', gl_test[1] + '.gl.png')],
        env: [ 'GIO_USE_VOLUME_MONITOR=unix',
               'GSETTINGS_BACKEND=memory',
