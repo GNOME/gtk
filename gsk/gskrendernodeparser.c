@@ -1614,6 +1614,9 @@ render_node_print (Printer       *p,
 
         start_node (p, "texture");
         append_rect_param (p, "bounds", &node->bounds);
+        /* TODO: width and height here are unnecessary and can later be computed from the data length? */
+        append_float_param (p, "width", gdk_texture_get_width (texture));
+        append_float_param (p, "height", gdk_texture_get_height (texture));
 
         stride = 4 * gdk_texture_get_width (texture);
         len = sizeof (guchar) * stride * gdk_texture_get_height (texture);
@@ -1623,7 +1626,7 @@ render_node_print (Printer       *p,
         b64 = g_base64_encode (data, len);
 
         _indent (p);
-        g_string_append_printf (p->str, "data: \"%s\"\n", b64);
+        g_string_append_printf (p->str, "texture: \"data:;base64,%s\";\n", b64);
         end_node (p);
 
         g_free (b64);
