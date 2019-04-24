@@ -48,7 +48,6 @@ test('nodes (cairo)', test_render_nodes,
 
 # Interesting render nodes proven to be rendered 'correctly' by the GL renderer.
 gl_tests = [
-  ['cross fade in opacity',        'cross-fade-in-opacity'],
 ]
 
 foreach gl_test : gl_tests
@@ -69,6 +68,7 @@ endforeach
 compare_render_tests = [
   'clip-coordinates-3d',
   'clipped_rounded_clip',
+  'cross-fade-in-opacity',
   'opacity_clip',
   'outset_shadow_offset_both',
   'outset_shadow_offset_x',
