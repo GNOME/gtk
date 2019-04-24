@@ -13,6 +13,15 @@ static GOptionEntry options[] = {
   { NULL }
 };
 
+static void
+deserialize_error_func (const GtkCssLocation *start,
+                        const GtkCssLocation *end,
+                        const GError         *error,
+                        gpointer              user_data)
+{
+  g_warning ("Error at line %d, char %d: %s", (int)start->lines, (int)start->chars, error->message);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -66,7 +75,7 @@ main(int argc, char **argv)
     }
 
   start = g_get_monotonic_time ();
-  node = gsk_render_node_deserialize (bytes, &error);
+  node = gsk_render_node_deserialize (bytes, deserialize_error_func, NULL);
   end = g_get_monotonic_time ();
   if (benchmark)
     {
@@ -78,8 +87,6 @@ main(int argc, char **argv)
 
   if (node == NULL)
     {
-      g_printerr ("Invalid node file: %s\n", error->message);
-      g_clear_error (&error);
       return 1;
     }
 

@@ -1,5 +1,16 @@
 #include <gtk/gtk.h>
 
+static void
+deserialize_error_func (const GtkCssLocation *start,
+                        const GtkCssLocation *end,
+                        const GError         *error,
+                        gpointer              user_data)
+{
+  /* We want to parse invalid node files in this test and simply assert that the
+   * parser doesn't crash. So, just g_message() here instead of a warning or error. */
+  g_message ("Error at line %d, char %d: %s", (int)start->lines, (int)start->chars, error->message);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -17,7 +28,7 @@ main (int argc, char **argv)
   g_assert_no_error (error);
   g_assert (bytes != NULL);
 
-  node = gsk_render_node_deserialize (bytes, &error);
+  node = gsk_render_node_deserialize (bytes, deserialize_error_func, NULL);
   if (error)
     g_test_message ("Error: %s\n", error->message);
 

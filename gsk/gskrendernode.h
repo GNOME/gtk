@@ -25,6 +25,7 @@
 
 #include <gsk/gskroundedrect.h>
 #include <gsk/gsktypes.h>
+#include <gtk/css/gtkcss.h>
 
 G_BEGIN_DECLS
 
@@ -51,6 +52,11 @@ struct _GskShadow
   float dy;
   float radius;
 };
+
+typedef void           (* GskParseErrorFunc)                    (const GtkCssLocation *start,
+                                                                 const GtkCssLocation *end,
+                                                                 const GError         *error,
+                                                                 gpointer              user_data);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_render_node_get_type                (void) G_GNUC_CONST;
@@ -81,8 +87,9 @@ gboolean                gsk_render_node_write_to_file           (GskRenderNode *
                                                                  const char    *filename,
                                                                  GError       **error);
 GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_render_node_deserialize             (GBytes        *bytes,
-                                                                 GError       **error);
+GskRenderNode *         gsk_render_node_deserialize             (GBytes            *bytes,
+                                                                 GskParseErrorFunc  error_func,
+                                                                 gpointer           user_data);
 
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_debug_node_new                      (GskRenderNode            *child,

@@ -54,6 +54,15 @@ get_current_text (GtkTextBuffer *buffer)
 }
 
 static void
+deserialize_error_func (const GtkCssLocation *start,
+                        const GtkCssLocation *end,
+                        const GError         *error,
+                        gpointer              user_data)
+{
+  g_message ("Error at line %d, char %d: %s", (int)start->lines, (int)start->chars, error->message);
+}
+
+static void
 update_node (NodeEditorWindow *self)
 {
   GskRenderNode *node;
@@ -64,7 +73,7 @@ update_node (NodeEditorWindow *self)
   text = get_current_text (self->text_buffer);
   bytes = g_bytes_new_take (text, strlen (text));
 
-  node = gsk_render_node_deserialize (bytes, &error);
+  node = gsk_render_node_deserialize (bytes, deserialize_error_func, NULL);
   g_bytes_unref (bytes);
   if (node)
     {

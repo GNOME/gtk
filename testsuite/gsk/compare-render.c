@@ -54,6 +54,15 @@ save_image (cairo_surface_t *surface,
   g_free (filename);
 }
 
+static void
+deserialize_error_func (const GtkCssLocation *start,
+                        const GtkCssLocation *end,
+                        const GError         *error,
+                        gpointer              user_data)
+{
+  g_error ("Error at line %d, char %d: %s", (int)start->lines, (int)start->chars, error->message);
+}
+
 /*
  * Arguments:
  *   1) .node file to compare
@@ -101,7 +110,7 @@ main (int argc, char **argv)
       }
 
     bytes = g_bytes_new_take (contents, len);
-    node = gsk_render_node_deserialize (bytes, &error);
+    node = gsk_render_node_deserialize (bytes, deserialize_error_func, NULL);
     g_bytes_unref (bytes);
 
     g_assert_no_error (error);
