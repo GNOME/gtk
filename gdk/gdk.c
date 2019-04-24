@@ -145,6 +145,7 @@ static const GDebugKey gdk_debug_keys[] = {
   { "gl-texture-rect", GDK_DEBUG_GL_TEXTURE_RECT },
   { "gl-legacy",       GDK_DEBUG_GL_LEGACY },
   { "gl-gles",         GDK_DEBUG_GL_GLES },
+  { "gl-debug",        GDK_DEBUG_GL_DEBUG },
   { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE },
   { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE }
 };
