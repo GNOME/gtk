@@ -133,6 +133,7 @@ serialize_deserialize_tests = [
   'color.valid',
   'border.valid',
   'testswitch.valid',
+  'widgetfactory.valid',
 ]
 
 foreach test : serialize_deserialize_tests
