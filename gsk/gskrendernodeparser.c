@@ -1669,7 +1669,7 @@ render_node_print (Printer       *p,
         /* TODO: We potentially need to escape certain characters in the message */
         g_string_append_printf (p->str, "message: \"%s\"\n", gsk_debug_node_get_message (node));
 
-        render_node_print (p, gsk_debug_node_get_child (node));
+        append_node_param (p, "child", gsk_debug_node_get_child (node));
         end_node (p);
       }
     break;
@@ -1679,7 +1679,7 @@ render_node_print (Printer       *p,
         start_node (p, "blur");
 
         append_float_param (p, "radius", gsk_blur_node_get_radius (node));
-        render_node_print (p, gsk_blur_node_get_child (node));
+        append_node_param (p, "child", gsk_blur_node_get_child (node));
 
         end_node (p);
       }
@@ -1691,7 +1691,7 @@ render_node_print (Printer       *p,
         append_rect_param (p, "bounds", &node->bounds);
         append_rect_param (p, "child-bounds", gsk_repeat_node_peek_child_bounds (node));
 
-        render_node_print (p, gsk_repeat_node_get_child (node));
+        append_node_param (p, "child", gsk_repeat_node_get_child (node));
 
         end_node (p);
       }
@@ -1704,8 +1704,8 @@ render_node_print (Printer       *p,
         _indent (p);
         /* TODO: (de)serialize enums! */
         g_string_append_printf (p->str, "mode = %d\n", gsk_blend_node_get_blend_mode (node));
-        render_node_print (p, gsk_blend_node_get_bottom_child (node));
-        render_node_print (p, gsk_blend_node_get_top_child (node));
+        append_node_param (p, "top", gsk_blend_node_get_top_child (node));
+        append_node_param (p, "bottom", gsk_blend_node_get_bottom_child (node));
 
         end_node (p);
       }
