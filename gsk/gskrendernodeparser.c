@@ -234,6 +234,39 @@ parse_rect (GtkCssParser *parser,
 }
 
 static gboolean
+parse_data (GtkCssParser *parser,
+            gpointer      out_data)
+{
+  const GtkCssToken *token;
+  struct {
+    guchar *data;
+    gsize data_len;
+  } *texture_data = out_data;
+
+  token = gtk_css_parser_get_token (parser);
+  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_STRING))
+    return FALSE;
+
+  if (!g_str_has_prefix (token->string.string, "data:;base64,")) {
+    g_error ("Meh23");
+    return FALSE;
+  }
+
+  texture_data->data = g_base64_decode (token->string.string + strlen ("data:;base64,"),
+                                        &texture_data->data_len);
+
+  gtk_css_parser_consume_token (parser);
+  if (!parse_semicolon (parser))
+    {
+      g_error ("MEH");
+      g_free (texture_data->data);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
 parse_rounded_rect (GtkCssParser *parser,
                     gpointer      out_rect)
 {
@@ -670,6 +703,45 @@ parse_border_node (GtkCssParser *parser)
 }
 
 static GskRenderNode *
+parse_texture_node (GtkCssParser *parser)
+{
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  struct {
+    guchar *data;
+    gsize data_len;
+  } texture_data = { NULL, 0 };
+  double width = 0.0;
+  double height = 0.0;
+  const Declaration declarations[] = {
+    { "bounds", parse_rect, &bounds },
+    { "width", parse_double, &width },
+    { "height", parse_double, &height },
+    { "texture", parse_data, &texture_data }
+  };
+  GdkTexture *texture;
+  GdkPixbuf *pixbuf;
+  GskRenderNode *node;
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+
+  pixbuf = gdk_pixbuf_new_from_data (texture_data.data,
+                                     GDK_COLORSPACE_RGB,
+                                     TRUE,
+                                     8,
+                                     (int)width,
+                                     (int)height,
+                                     4 * (int)width,
+                                     NULL, NULL);
+
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  g_object_unref (pixbuf);
+  node = gsk_texture_node_new (texture, &bounds);
+  g_object_unref (texture);
+
+  return node;
+}
+
+static GskRenderNode *
 parse_outset_shadow_node (GtkCssParser *parser)
 {
   GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
@@ -908,9 +980,7 @@ parse_node (GtkCssParser *parser,
 #endif
     { "linear-gradient", parse_linear_gradient_node },
     { "border", parse_border_node },
-#if 0
     { "texture", parse_texture_node },
-#endif
     { "inset-shadow", parse_inset_shadow_node },
     { "outset-shadow", parse_outset_shadow_node },
     { "transform", parse_transform_node },
