@@ -442,7 +442,7 @@ gdk_gl_context_push_debug_group (GdkGLContext    *context,
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   if (priv->has_khr_debug)
-    glPushDebugGroupKHR(GL_DEBUG_SOURCE_APPLICATION, 0, -1, message);
+    glPushDebugGroupKHR (GL_DEBUG_SOURCE_APPLICATION, 0, -1, message);
 }
 
 void
@@ -460,7 +460,7 @@ gdk_gl_context_push_debug_group_printf (GdkGLContext    *context,
       message = g_strdup_vprintf (format, args);
       va_end (args);
 
-      glPushDebugGroupKHR(GL_DEBUG_SOURCE_APPLICATION, 0, -1, message);
+      glPushDebugGroupKHR (GL_DEBUG_SOURCE_APPLICATION, 0, -1, message);
       g_free (message);
     }
 }
@@ -471,7 +471,7 @@ gdk_gl_context_pop_debug_group (GdkGLContext    *context)
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   if (priv->has_khr_debug)
-    glPopDebugGroupKHR();
+    glPopDebugGroupKHR ();
 }
 
 void
@@ -483,7 +483,7 @@ gdk_gl_context_label_object (GdkGLContext    *context,
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   if (priv->has_khr_debug)
-    glObjectLabel(identifier, name, -1, label);
+    glObjectLabel (identifier, name, -1, label);
 }
 
 void
@@ -503,7 +503,7 @@ gdk_gl_context_label_object_printf  (GdkGLContext    *context,
       message = g_strdup_vprintf (format, args);
       va_end (args);
 
-      glObjectLabel(identifier, name, -1, message);
+      glObjectLabel (identifier, name, -1, message);
       g_free (message);
     }
 }
