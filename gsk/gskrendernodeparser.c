@@ -476,7 +476,7 @@ parse_stops (GtkCssParser *parser,
 
   if (stops->len < 2)
     {
-      gtk_css_parser_error_value (parser, "At least 2 color stops need to be specified, there are only");
+      gtk_css_parser_error_value (parser, "At least 2 color stops need to be specified");
       g_array_free (stops, TRUE);
       return FALSE;
     }
@@ -1070,9 +1070,6 @@ gsk_render_node_parser_error (GtkCssParser         *parser,
 #endif
 }
 
-/**
- * All errors are fatal.
- */
 GskRenderNode *
 gsk_render_node_deserialize_from_bytes (GBytes  *bytes,
                                         GError **error)
@@ -1126,7 +1123,7 @@ _indent (Printer *self)
   if (self->indentation_level > 0)
     g_string_append_printf (self->str, "%*s", self->indentation_level * IDENT_LEVEL, " ");
 }
-#undef IDENT
+#undef IDENT_LEVEL
 
 static void
 start_node (Printer    *self,
@@ -1347,6 +1344,7 @@ append_matrix_param (Printer                 *p,
   transform = gsk_transform_matrix (transform, value);
   gsk_transform_print (transform,p->str);
   g_string_append_c (p->str, ';');
+  g_string_append_c (p->str, '\n');
 
   gsk_transform_unref (transform);
 }
