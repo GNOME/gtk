@@ -105,6 +105,7 @@ typedef struct {
   guint use_texture_rectangle : 1;
   guint has_gl_framebuffer_blit : 1;
   guint has_frame_terminator : 1;
+  guint has_khr_debug : 1;
   guint has_unpack_subimage : 1;
   guint has_debug_output : 1;
   guint extensions_checked : 1;
@@ -433,6 +434,80 @@ gdk_gl_context_has_frame_terminator (GdkGLContext *context)
 
   return priv->has_frame_terminator;
 }
+
+void
+gdk_gl_context_push_debug_group (GdkGLContext    *context,
+                                 const char      *message)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  if (priv->has_khr_debug)
+    glPushDebugGroupKHR(GL_DEBUG_SOURCE_APPLICATION, 0, -1, message);
+}
+
+void
+gdk_gl_context_push_debug_group_printf (GdkGLContext    *context,
+                                        const gchar *format,
+                                        ...)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  gchar *message;
+  va_list args;
+
+  if (priv->has_khr_debug)
+    {
+      va_start (args, format);
+      message = g_strdup_vprintf (format, args);
+      va_end (args);
+
+      glPushDebugGroupKHR(GL_DEBUG_SOURCE_APPLICATION, 0, -1, message);
+      g_free (message);
+    }
+}
+
+void
+gdk_gl_context_pop_debug_group (GdkGLContext    *context)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  if (priv->has_khr_debug)
+    glPopDebugGroupKHR();
+}
+
+void
+gdk_gl_context_label_object (GdkGLContext    *context,
+                             guint            identifier,
+                             guint            name,
+                             const char      *label)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  if (priv->has_khr_debug)
+    glObjectLabel(identifier, name, -1, label);
+}
+
+void
+gdk_gl_context_label_object_printf  (GdkGLContext    *context,
+                                     guint            identifier,
+                                     guint            name,
+                                     const gchar      *format,
+                                     ...)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  gchar *message;
+  va_list args;
+
+  if (priv->has_khr_debug)
+    {
+      va_start (args, format);
+      message = g_strdup_vprintf (format, args);
+      va_end (args);
+
+      glObjectLabel(identifier, name, -1, message);
+      g_free (message);
+    }
+}
+
 
 gboolean
 gdk_gl_context_has_unpack_subimage (GdkGLContext *context)
@@ -896,6 +971,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       priv->has_frame_terminator = FALSE;
 
       priv->has_unpack_subimage = epoxy_has_gl_extension ("GL_EXT_unpack_subimage");
+      priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
     }
   else
     {
@@ -905,6 +981,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       priv->has_gl_framebuffer_blit = epoxy_has_gl_extension ("GL_EXT_framebuffer_blit");
       priv->has_frame_terminator = epoxy_has_gl_extension ("GL_GREMEDY_frame_terminator");
       priv->has_unpack_subimage = TRUE;
+      priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
 
       /* We asked for a core profile, but we didn't get one, so we're in legacy mode */
       if (priv->gl_version < 32)
@@ -930,6 +1007,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        " - GL_ARB_texture_rectangle: %s\n"
                        " - GL_EXT_framebuffer_blit: %s\n"
                        " - GL_GREMEDY_frame_terminator: %s\n"
+                       " - GL_KHR_debug: %s\n"
                        "* Using texture rectangle: %s",
                        priv->use_es ? "OpenGL ES" : "OpenGL",
                        priv->gl_version / 10, priv->gl_version % 10,
@@ -939,6 +1017,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        has_texture_rectangle ? "yes" : "no",
                        priv->has_gl_framebuffer_blit ? "yes" : "no",
                        priv->has_frame_terminator ? "yes" : "no",
+                       priv->has_khr_debug ? "yes" : "no",
                        priv->use_texture_rectangle ? "yes" : "no"));
 
   priv->extensions_checked = TRUE;
