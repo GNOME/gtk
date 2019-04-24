@@ -1072,28 +1072,34 @@ gsk_render_node_parser_error (GtkCssParser         *parser,
                               const GError         *error,
                               gpointer              user_data)
 {
-  GString **error_string = user_data;
+  struct {
+    GskParseErrorFunc error_func;
+    gpointer user_data;
+  } *error_func_pair = user_data;
 
-  if (!*error_string)
-    *error_string = g_string_new (NULL);
+  if (error_func_pair->error_func)
+    {
+      GtkCssSection *section = gtk_css_section_new (gtk_css_parser_get_file (parser), start, end);
 
-  g_string_append_printf (*error_string,
-                          "ERROR: %zu:%zu: %s\n",
-                          start->lines + 1,
-                          start->line_chars,
-                          error->message);
+      error_func_pair->error_func (section, error, error_func_pair->user_data);
+      gtk_css_section_unref (section);
+    }
 }
 
 GskRenderNode *
-gsk_render_node_deserialize_from_bytes (GBytes  *bytes,
-                                        GError **error)
+gsk_render_node_deserialize_from_bytes (GBytes            *bytes,
+                                        GskParseErrorFunc  error_func,
+                                        gpointer           user_data)
 {
   GskRenderNode *root = NULL;
   GtkCssParser *parser;
-  GString *error_string = NULL;
+  struct {
+    GskParseErrorFunc error_func;
+    gpointer user_data;
+  } error_func_pair = { error_func, user_data };
 
   parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, gsk_render_node_parser_error,
-                                         &error_string, NULL);
+                                         &error_func_pair, NULL);
   root = parse_container_node (parser);
 
   if (root && gsk_container_node_get_n_children (root) == 1)
@@ -1106,12 +1112,6 @@ gsk_render_node_deserialize_from_bytes (GBytes  *bytes,
     }
 
   gtk_css_parser_unref (parser);
-
-  if (error_string != NULL)
-    {
-      *error = g_error_new_literal (GTK_CSS_PARSER_ERROR, 0, error_string->str);
-      g_string_free (error_string, TRUE);
-    }
 
   return root;
 }
