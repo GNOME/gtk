@@ -89,6 +89,7 @@ serialize_deserialize_tests = [
   'border',
   'shadow',
   'testswitch',
+  'widgetfactory',
 ]
 
 foreach test : serialize_deserialize_tests
