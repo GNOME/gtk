@@ -133,6 +133,7 @@ endforeach
 serialize_deserialize_tests = [
   'color',
   'border',
+  'shadow',
   'testswitch',
 ]
 
