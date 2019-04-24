@@ -2927,11 +2927,11 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   gsk_gl_glyph_cache_begin_frame (&self->glyph_cache);
   gsk_gl_shadow_cache_begin_frame (&self->shadow_cache, self->gl_driver);
 
-  memset (&render_op_builder, 0, sizeof (render_op_builder));
+  /* TODO: REALLY USE ONE BUILDER FOREVER! shader state is not per-frame... */
+  ops_init (&render_op_builder);
   render_op_builder.renderer = self;
   render_op_builder.current_projection = projection;
   render_op_builder.current_viewport = *viewport;
-  render_op_builder.current_opacity = 1.0f;
   render_op_builder.render_ops = self->render_ops;
   ops_set_modelview (&render_op_builder, &modelview,
                      scale_factor == 1 ? GSK_TRANSFORM_CATEGORY_IDENTITY : GSK_TRANSFORM_CATEGORY_2D_AFFINE);

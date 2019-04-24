@@ -150,6 +150,22 @@ ops_transform_bounds_modelview (const RenderOpBuilder *builder,
 }
 
 void
+ops_init (RenderOpBuilder *builder)
+{
+  int i;
+
+  memset (builder, 0, sizeof (*builder));
+
+  builder->current_opacity = 1.0f;
+
+  for (i = 0; i < GL_N_PROGRAMS; i ++)
+    {
+      builder->program_state[i].opacity = 1.0f;
+    }
+
+}
+
+void
 ops_set_program (RenderOpBuilder *builder,
                  const Program   *program)
 {

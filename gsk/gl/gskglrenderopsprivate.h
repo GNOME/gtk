@@ -277,7 +277,7 @@ void              ops_dump_framebuffer   (RenderOpBuilder         *builder,
                                           const char              *filename,
                                           int                      width,
                                           int                      height);
-
+void              ops_init               (RenderOpBuilder         *builder);
 void              ops_finish             (RenderOpBuilder         *builder);
 void              ops_push_modelview     (RenderOpBuilder         *builder,
                                           const graphene_matrix_t *mv,
