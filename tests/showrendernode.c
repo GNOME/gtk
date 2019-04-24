@@ -108,6 +108,18 @@ gtk_node_view_class_init (GtkNodeViewClass *klass)
   widget_class->snapshot = gtk_node_view_snapshot;
 }
 
+static void
+deserialize_error_func (const GtkCssSection *section,
+                        const GError        *error,
+                        gpointer             user_data)
+{
+  char *section_str = gtk_css_section_to_string (section);
+
+  g_warning ("Error at %s: %s", section_str, error->message);
+
+  free (section_str);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -152,7 +164,7 @@ main (int argc, char **argv)
     }
 
   bytes = g_bytes_new_take (contents, len);
-  GTK_NODE_VIEW (nodeview)->node = gsk_render_node_deserialize (bytes, &error);
+  GTK_NODE_VIEW (nodeview)->node = gsk_render_node_deserialize (bytes, deserialize_error_func, NULL);
   g_bytes_unref (bytes);
 
   if (GTK_NODE_VIEW (nodeview)->node == NULL)
