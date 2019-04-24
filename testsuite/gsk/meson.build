@@ -113,6 +113,7 @@ node_parser_tests = [
   'crash1',
   'crash2',
   'crash3',
+  'crash4',
 ]
 
 foreach test : node_parser_tests
