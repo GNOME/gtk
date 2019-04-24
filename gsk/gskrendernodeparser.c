@@ -1002,6 +1002,7 @@ parse_node (GtkCssParser *parser,
 #endif
     { "debug", parse_debug_node }
   };
+  GskRenderNode **node_p = out_node;
   const GtkCssToken *token;
   guint i;
 
@@ -1032,8 +1033,8 @@ parse_node (GtkCssParser *parser,
               token = gtk_css_parser_get_token (parser);
               if (!gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
                 gtk_css_parser_error_syntax (parser, "Expected '}' at end of node definition");
-              g_clear_pointer ((GskRenderNode **) out_node, gsk_render_node_unref);
-              *(GskRenderNode **) out_node = node;
+              g_clear_pointer (node_p, gsk_render_node_unref);
+              *node_p = node;
             }
           gtk_css_parser_end_block (parser);
 
