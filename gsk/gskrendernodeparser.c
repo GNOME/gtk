@@ -1126,17 +1126,14 @@ append_rounded_rect (GString              *str,
 }
 
 static void
-append_rgba (GString         *str,
-             const GdkRGBA   *rgba)
+append_rgba (GString       *str,
+             const GdkRGBA *rgba)
 {
-  /* TODO: Don't always write alpha */
-  /* TODO: The conversion here is wrong, I'm 61% sure. */
-  g_string_append_printf (str, "rgba(%d, %d, %d, ",
-                          (int)round(rgba->red * 255),
-                          (int)round(rgba->green * 255),
-                          (int)round(rgba->blue * 255));
-  string_append_double (str, rgba->alpha);
-  g_string_append_c (str, ')');
+  char *rgba_str = gdk_rgba_to_string (rgba);
+
+  g_string_append (str, rgba_str);
+
+  g_free (rgba_str);
 }
 
 static void
