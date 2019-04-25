@@ -31,25 +31,24 @@
         <property name="title" translatable="yes">GTK Node Editor</property>
         <property name="show-title-buttons">1</property>
         <child type="start">
-          <object class="GtkBox">
-            <child>
-              <object class="GtkButton">
-                <property name="icon-name">document-open-symbolic</property>
-                <signal name="clicked" handler="open_cb"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="icon-name">document-save-symbolic</property>
-                <signal name="clicked" handler="save_cb"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="icon-name">insert-image-symbolic</property>
-                <signal name="clicked" handler="export_image_cb"/>
-              </object>
-            </child>
+          <object class="GtkButton">
+            <property name="icon-name">document-open-symbolic</property>
+            <property name="tooltip-text">Open node file</property>
+            <signal name="clicked" handler="open_cb"/>
+          </object>
+        </child>
+        <child type="start">
+          <object class="GtkButton">
+            <property name="icon-name">document-save-symbolic</property>
+            <property name="tooltip-text">Save to node file</property>
+            <signal name="clicked" handler="save_cb"/>
+          </object>
+        </child>
+        <child type="start">
+          <object class="GtkButton">
+            <property name="icon-name">insert-image-symbolic</property>
+            <property name="tooltip-text">Export to image</property>
+            <signal name="clicked" handler="export_image_cb"/>
           </object>
         </child>
         <child type="title">
@@ -57,17 +56,12 @@
             <property name="label" translatable="yes">GTK Node Editor</property>
           </object>
         </child>
-        <child type="end">
-          <object class="GtkToggleButton">
-            <property name="icon-name">view-more-symbolic</property>
-          </object>
-        </child>
       </object>
     </child>
     <child>
       <object class="GtkPaned">
         <property name="shrink-child2">false</property>
-        <property name="position">99999</property>
+        <property name="position">400</property>
         <child>
           <object class="GtkScrolledWindow">
             <property name="hscrollbar-policy">never</property>

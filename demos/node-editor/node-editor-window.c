@@ -63,7 +63,6 @@ deserialize_error_func (const GtkCssSection *section,
   g_message ("Error at %s: %s", section_str, error->message);
 
   free (section_str);
-
 }
 
 static void
@@ -102,26 +101,12 @@ update_node (NodeEditorWindow *self)
     }
 }
 
-static gboolean
-update_timeout (gpointer data)
-{
-  NodeEditorWindow *self = data;
-
-  self->text_timeout = 0;
-
-  update_node (self);
-
-  return G_SOURCE_REMOVE;
-}
-
 static void
 text_changed (GtkTextBuffer    *buffer,
               NodeEditorWindow *self)
 {
-  if (self->text_timeout != 0)
-    g_source_remove (self->text_timeout);
-
-  self->text_timeout = g_timeout_add (100, update_timeout, self); 
+  /* If this is too slow, go fix the parser performance */
+  update_node (self);
 }
 
 static gboolean
@@ -171,7 +156,7 @@ gboolean
 node_editor_window_load (NodeEditorWindow *self,
                          GFile            *file)
 {
-  GtkTextIter start, end;
+  GtkTextIter end;
   GBytes *bytes;
 
   bytes = g_file_load_bytes (file, NULL, NULL, NULL);
@@ -184,7 +169,6 @@ node_editor_window_load (NodeEditorWindow *self,
       return FALSE;
     }
 
-  gtk_text_buffer_get_start_iter (self->text_buffer, &start);
   gtk_text_buffer_get_end_iter (self->text_buffer, &end);
   gtk_text_buffer_insert (self->text_buffer,
                           &end,
@@ -219,7 +203,7 @@ open_cb (GtkWidget        *button,
 {
   GtkWidget *dialog;
 
-  dialog = gtk_file_chooser_dialog_new ("",
+  dialog = gtk_file_chooser_dialog_new ("Open node file",
                                         GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (button))),
                                         GTK_FILE_CHOOSER_ACTION_OPEN,
                                         "_Cancel", GTK_RESPONSE_CANCEL,
@@ -228,7 +212,7 @@ open_cb (GtkWidget        *button,
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), ".");
   g_signal_connect (dialog, "response", G_CALLBACK (open_response_cb), self);
   gtk_widget_show (dialog);
 }
@@ -275,7 +259,7 @@ save_cb (GtkWidget        *button,
 {
   GtkWidget *dialog;
 
-  dialog = gtk_file_chooser_dialog_new ("",
+  dialog = gtk_file_chooser_dialog_new ("Save node",
                                         GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (button))),
                                         GTK_FILE_CHOOSER_ACTION_SAVE,
                                         "_Cancel", GTK_RESPONSE_CANCEL,
@@ -285,6 +269,7 @@ save_cb (GtkWidget        *button,
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), ".");
   g_signal_connect (dialog, "response", G_CALLBACK (save_response_cb), self);
   gtk_widget_show (dialog);
 }
