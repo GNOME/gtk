@@ -4,6 +4,7 @@
 
 #include "gskdebugprivate.h"
 #include "gskprofilerprivate.h"
+#include "gdk/gdkglcontextprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkgltextureprivate.h"
 
@@ -298,6 +299,13 @@ gsk_gl_driver_collect_textures (GskGLDriver *self)
   return old_size - g_hash_table_size (self->textures);
 }
 
+
+GdkGLContext *
+gsk_gl_driver_get_gl_context (GskGLDriver *self)
+{
+  return self->gl_context;
+}
+
 int
 gsk_gl_driver_get_max_texture_size (GskGLDriver *self)
 {
@@ -527,6 +535,8 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *self,
     }
 
   t = create_texture (self, gdk_texture_get_width (texture), gdk_texture_get_height (texture));
+  gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, t->texture_id,
+                                      "GdkTexture<%p> %d", texture, t->texture_id);
 
   if (gdk_texture_set_render_data (texture, self, t, gsk_gl_driver_release_texture))
     t->user = texture;
@@ -639,7 +649,11 @@ gsk_gl_driver_create_render_target (GskGLDriver *self,
   glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, t->texture_id, 0);
 
   if (add_depth_buffer || add_stencil_buffer)
-    glGenRenderbuffersEXT (1, &depth_stencil_buffer_id);
+    {
+      glGenRenderbuffersEXT (1, &depth_stencil_buffer_id);
+      gdk_gl_context_label_object_printf (self->gl_context, GL_RENDERBUFFER, depth_stencil_buffer_id,
+                                          "%s buffer for %d", add_depth_buffer ? "Depth" : "Stencil", texture_id);
+    }
   else
     depth_stencil_buffer_id = 0;
 
