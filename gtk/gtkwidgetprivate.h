@@ -123,7 +123,6 @@ struct _GtkWidgetPrivate
   /* Surface relative transform updates callbacks */
   guint parent_surface_transform_changed_id;
   GtkWidget *parent_surface_transform_changed_parent;
-  gulong parent_changed_handler_id;
   GList *surface_transform_changed_callbacks;
   gboolean cached_surface_transform_valid;
   graphene_matrix_t cached_surface_transform;

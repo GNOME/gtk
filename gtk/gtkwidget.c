@@ -3832,9 +3832,6 @@ gtk_widget_remove_surface_transform_changed_callback (GtkWidget *widget,
     {
       if (priv->parent_surface_transform_changed_parent)
         remove_parent_surface_transform_changed_listener (widget);
-
-      g_signal_handler_disconnect (widget, priv->parent_changed_handler_id);
-      priv->parent_changed_handler_id = 0;
     }
 }
 
