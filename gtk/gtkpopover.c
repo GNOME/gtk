@@ -108,7 +108,7 @@
 #include "config.h"
 
 #include "gtkpopoverprivate.h"
-#include "gtkroot.h"
+#include "gtkbud.h"
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkcssnodeprivate.h"
@@ -129,7 +129,6 @@
 static GListStore *popover_list = NULL;
 
 typedef struct {
-  GdkDisplay *display;
   GskRenderer *renderer;
   GdkSurface *surface;
   GtkWidget *focus_widget;
@@ -167,50 +166,33 @@ enum {
   NUM_PROPERTIES
 };
 
-static void gtk_popover_set_is_active (GtkPopover *popover,
-                                       gboolean    active);
-static void gtk_popover_set_focus     (GtkPopover *popover,
-                                       GtkWidget  *widget);
-static void gtk_popover_set_default   (GtkPopover *popover,
-                                       GtkWidget  *widget);
-
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL };
 
-static void gtk_popover_root_interface_init (GtkRootInterface *iface);
+static void gtk_popover_bud_interface_init (GtkBudInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkPopover, gtk_popover, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkPopover)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,
-                                                gtk_popover_root_interface_init))
-
-
-static GdkDisplay *
-gtk_popover_root_get_display (GtkRoot *root)
-{
-  GtkPopover *popover = GTK_POPOVER (root);
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  return priv->display;
-}
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUD,
+                                                gtk_popover_bud_interface_init))
 
 static GskRenderer *
-gtk_popover_root_get_renderer (GtkRoot *root)
+gtk_popover_bud_get_renderer (GtkBud *bud)
 {
-  GtkPopover *popover = GTK_POPOVER (root);
+  GtkPopover *popover = GTK_POPOVER (bud);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   return priv->renderer;
 }
 
 static void
-gtk_popover_root_get_surface_transform (GtkRoot *root,
-                                        int     *x,
-                                        int     *y)
+gtk_popover_bud_get_surface_transform (GtkBud *bud,
+                                       int    *x,
+                                       int    *y)
 {
   GtkStyleContext *context;
   GtkBorder margin, border, padding;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (root));
+  context = gtk_widget_get_style_context (GTK_WIDGET (bud));
   gtk_style_context_get_margin (context, &margin);
   gtk_style_context_get_border (context, &border);
   gtk_style_context_get_padding (context, &padding);
@@ -287,9 +269,8 @@ gtk_popover_move_resize (GtkPopover *popover)
 }
 
 static void
-gtk_popover_root_check_resize (GtkRoot *root)
+gtk_popover_check_resize (GtkPopover *popover)
 {
-  GtkPopover *popover = GTK_POPOVER (root);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *widget = GTK_WIDGET (popover);
 
@@ -303,19 +284,6 @@ gtk_popover_root_check_resize (GtkRoot *root)
                            gdk_surface_get_height (priv->surface),
                            -1, NULL);
     }
-}
-
-
-static void
-gtk_popover_focus_in (GtkWidget *widget)
-{
-  gtk_popover_set_is_active (GTK_POPOVER (widget), TRUE);
-}
-
-static void
-gtk_popover_focus_out (GtkWidget *widget)
-{
-  gtk_popover_set_is_active (GTK_POPOVER (widget), FALSE);
 }
 
 static void
@@ -414,7 +382,6 @@ static void
 gtk_popover_init (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GtkEventController *controller;
   GtkStyleContext *context;
 
   gtk_widget_set_has_surface (GTK_WIDGET (popover), TRUE);
@@ -422,12 +389,13 @@ gtk_popover_init (GtkPopover *popover)
   priv->position = GTK_POS_TOP;
   priv->modal = TRUE;
 
-  priv->display = gdk_display_get_default ();
-
+#if 0
+  GtkEventController *controller;
   controller = gtk_event_controller_key_new ();
   g_signal_connect_swapped (controller, "focus-in", G_CALLBACK (gtk_popover_focus_in), popover);
   g_signal_connect_swapped (controller, "focus-out", G_CALLBACK (gtk_popover_focus_out), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
+#endif
 
   priv->contents_widget = gtk_gizmo_new ("contents",
                                          measure_contents,
@@ -446,10 +414,12 @@ gtk_popover_realize (GtkWidget *widget)
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GdkRectangle parent_rect;
+  GdkDisplay *display;
 
   gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
+  display = gtk_widget_get_display (priv->relative_to);
 
-  priv->surface = gdk_surface_new_popup (priv->display, gtk_widget_get_surface (priv->relative_to));
+  priv->surface = gdk_surface_new_popup (display, gtk_widget_get_surface (priv->relative_to));
 
   gtk_widget_set_surface (widget, priv->surface);
   gdk_surface_set_widget (priv->surface, widget);
@@ -485,22 +455,12 @@ gtk_popover_unrealize (GtkWidget *widget)
 }
 
 static void
-gtk_popover_move_focus (GtkWidget        *widget,
-                        GtkDirectionType  dir)
-{
-  gtk_widget_child_focus (widget, dir);
-
-  if (!gtk_widget_get_focus_child (widget))
-    gtk_root_set_focus (GTK_ROOT (widget), NULL);
-}
-
-static void
 gtk_popover_show (GtkWidget *widget)
 {
   _gtk_widget_set_visible_flag (widget, TRUE);
   gtk_css_node_validate (gtk_widget_get_css_node (widget));
   gtk_widget_realize (widget);
-  gtk_popover_root_check_resize (GTK_ROOT (widget));
+  gtk_popover_check_resize (GTK_POPOVER (widget));
   gtk_widget_map (widget);
 
   if (!gtk_widget_get_focus_child (widget))
@@ -544,9 +504,11 @@ gtk_popover_map (GtkWidget *widget)
 
   if (priv->modal)
     {
+      GdkDisplay *display;
       GdkSeat *seat;
 
-      seat = gdk_display_get_default_seat (priv->display),
+      display = gtk_widget_get_display (widget);
+      seat = gdk_display_get_default_seat (display);
       gdk_surface_show_with_auto_dismissal (priv->surface, seat);
     }
 
@@ -703,14 +665,6 @@ gtk_popover_set_property (GObject      *object,
       gtk_popover_set_modal (popover, g_value_get_boolean (value));
       break;
 
-    case NUM_PROPERTIES + GTK_ROOT_PROP_FOCUS_WIDGET:
-      gtk_popover_set_focus (popover, g_value_get_object (value));
-      break;
-
-    case NUM_PROPERTIES + GTK_ROOT_PROP_DEFAULT_WIDGET:
-      gtk_popover_set_default (popover, g_value_get_object (value));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -744,14 +698,6 @@ gtk_popover_get_property (GObject      *object,
       g_value_set_boolean (value, priv->modal);
       break;
 
-    case NUM_PROPERTIES + GTK_ROOT_PROP_FOCUS_WIDGET:
-      g_value_set_object (value, priv->focus_widget);
-      break;
-
-    case NUM_PROPERTIES + GTK_ROOT_PROP_DEFAULT_WIDGET:
-      g_value_set_object (value, priv->default_widget);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -761,53 +707,23 @@ gtk_popover_get_property (GObject      *object,
 static void
 gtk_popover_activate_default (GtkPopover *popover)
 {
-  gtk_root_activate_default (GTK_ROOT (popover));
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  gtk_root_activate_default (gtk_widget_get_root (priv->relative_to));
 }
 
 static void
 gtk_popover_activate_focus (GtkPopover *popover)
 {
-  gtk_root_activate_focus (GTK_ROOT (popover));
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  gtk_root_activate_focus (gtk_widget_get_root (priv->relative_to));
 }
 
 static void
 gtk_popover_close (GtkPopover *popover)
 {
   gtk_widget_hide (GTK_WIDGET (popover));
-}
-
-static void
-add_tab_bindings (GtkBindingSet    *binding_set,
-                  GdkModifierType   modifiers,
-                  GtkDirectionType  direction)
-{
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Tab, modifiers,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Tab, modifiers,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-}
-
-static void
-add_arrow_bindings (GtkBindingSet    *binding_set,
-                    guint             keysym,
-                    GtkDirectionType  direction)
-{
-  guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
-
-  gtk_binding_entry_add_signal (binding_set, keysym, 0,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, keysym, GDK_CONTROL_MASK,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, keypad_keysym, 0,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
-  gtk_binding_entry_add_signal (binding_set, keypad_keysym, GDK_CONTROL_MASK,
-                                "move-focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, direction);
 }
 
 static void
@@ -857,7 +773,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->measure = gtk_popover_measure;
   widget_class->size_allocate = gtk_popover_size_allocate;
   widget_class->snapshot = gtk_popover_snapshot;
-  widget_class->move_focus = gtk_popover_move_focus;
 
   container_class->add = gtk_popover_add;
   container_class->remove = gtk_popover_remove;
@@ -895,7 +810,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
-  gtk_root_install_properties (object_class, NUM_PROPERTIES);
 
   signals[ACTIVATE_FOCUS] =
     g_signal_new (I_("activate-focus"),
@@ -939,17 +853,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
 
   binding_set = gtk_binding_set_by_class (klass);
 
-  add_arrow_bindings (binding_set, GDK_KEY_Up, GTK_DIR_UP);
-  add_arrow_bindings (binding_set, GDK_KEY_Down, GTK_DIR_DOWN);
-  add_arrow_bindings (binding_set, GDK_KEY_Left, GTK_DIR_LEFT);
-  add_arrow_bindings (binding_set, GDK_KEY_Right, GTK_DIR_RIGHT);
-
-  add_tab_bindings (binding_set, 0, GTK_DIR_TAB_FORWARD);
-  add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
-  add_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
-  add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
-
-
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, 0, "activate-focus", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, 0, "activate-focus", 0);
 
@@ -982,90 +885,6 @@ size_changed (GtkWidget   *widget,
     gtk_popover_move_resize (popover);
 }
 
-static void
-gtk_popover_set_focus (GtkPopover *popover,
-                       GtkWidget  *focus)
-{
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GtkWidget *old_focus = NULL;
-  GdkSeat *seat;
-  GdkDevice *device;
-  GdkEvent *event;
-
-  if (focus && !gtk_widget_is_sensitive (focus))
-    return;
-
-  if (priv->focus_widget)
-    old_focus = g_object_ref (priv->focus_widget);
-  g_set_object (&priv->focus_widget, NULL);
-
-  seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (popover)));
-  device = gdk_seat_get_keyboard (seat);
-
-  event = gdk_event_new (GDK_FOCUS_CHANGE);
-  gdk_event_set_display (event, gtk_widget_get_display (GTK_WIDGET (popover)));
-  gdk_event_set_device (event, device);
-  event->any.surface = _gtk_widget_get_surface (GTK_WIDGET (popover));
-  if (event->any.surface)
-    g_object_ref (event->any.surface);
-
-  gtk_synthesize_crossing_events (GTK_ROOT (popover), old_focus, focus, event, GDK_CROSSING_NORMAL);
-
-  g_object_unref (event);
-
-  g_set_object (&priv->focus_widget, focus);
-
-  g_clear_object (&old_focus);
-
-  g_object_notify (G_OBJECT (popover), "focus-widget");
-}
-
-static void
-do_focus_change (GtkWidget *widget,
-                 gboolean   in)
-{
-  GdkSeat *seat;
-  GdkDevice *device;
-  GdkEvent *event;
-
-  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-  device = gdk_seat_get_keyboard (seat);
-
-  event = gdk_event_new (GDK_FOCUS_CHANGE);
-  gdk_event_set_display (event, gtk_widget_get_display (widget));
-  gdk_event_set_device (event, device);
-
-  event->any.type = GDK_FOCUS_CHANGE;
-  event->any.surface = _gtk_widget_get_surface (widget);
-  if (event->any.surface)
-    g_object_ref (event->any.surface);
-  event->focus_change.in = in;
-  event->focus_change.mode = GDK_CROSSING_STATE_CHANGED;
-  event->focus_change.detail = GDK_NOTIFY_ANCESTOR;
-
-  gtk_widget_set_has_focus (widget, in);
-  gtk_widget_event (widget, event);
-
-  g_object_unref (event);
-}
-
-static void
-gtk_popover_set_is_active (GtkPopover *popover,
-                           gboolean    active)
-{
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  if (priv->active == active)
-    return;
-
-  priv->active = active;
-
-  if (priv->focus_widget &&
-      priv->focus_widget != GTK_WIDGET (popover) &&
-      gtk_widget_has_focus (priv->focus_widget) != active)
-    do_focus_change (priv->focus_widget, active);
-}
-
 GListModel *
 gtk_popover_get_popovers (void)
 {
@@ -1076,367 +895,10 @@ gtk_popover_get_popovers (void)
 }
 
 static void
-gtk_popover_set_default (GtkPopover *popover,
-                         GtkWidget  *widget)
+gtk_popover_bud_interface_init (GtkBudInterface *iface)
 {
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  g_return_if_fail (GTK_IS_POPOVER (popover));
-
-  if (widget && !gtk_widget_get_can_default (widget))
-    return;
-
-  if (priv->default_widget == widget)
-    return;
-
-  if (priv->default_widget)
-    {
-      if (priv->focus_widget != priv->default_widget ||
-          !gtk_widget_get_receives_default (priv->default_widget))
-        _gtk_widget_set_has_default (priv->default_widget, FALSE);
-
-      gtk_widget_queue_draw (priv->default_widget);
-      g_object_notify (G_OBJECT (priv->default_widget), "has-default");
-    }
-
-  g_set_object (&priv->default_widget, widget);
-
-  if (priv->default_widget)
-    {
-      if (priv->focus_widget == NULL ||
-          !gtk_widget_get_receives_default (priv->focus_widget))
-        _gtk_widget_set_has_default (priv->default_widget, TRUE);
-
-      gtk_widget_queue_draw (priv->default_widget);
-      g_object_notify (G_OBJECT (priv->default_widget), "has-default");
-    }
-
-  g_object_notify (G_OBJECT (popover), "default-widget");
-}
-
-static GtkMnemonicHash *
-gtk_popover_get_mnemonic_hash (GtkPopover *popover,
-                               gboolean    create)
-{
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  if (!priv->mnemonic_hash && create)
-    priv->mnemonic_hash = _gtk_mnemonic_hash_new ();
-
-  return priv->mnemonic_hash;
-}
-
-static void
-gtk_popover_root_add_mnemonic (GtkRoot   *root,
-                               guint      keyval,
-                               GtkWidget *target)
-{
-  _gtk_mnemonic_hash_add (gtk_popover_get_mnemonic_hash (GTK_POPOVER (root), TRUE), keyval, target);
-}
-
-static void
-gtk_popover_root_remove_mnemonic (GtkRoot   *root,
-                                  guint      keyval,
-                                  GtkWidget *target)
-{
-  _gtk_mnemonic_hash_remove (gtk_popover_get_mnemonic_hash (GTK_POPOVER (root), TRUE), keyval, target);
-}
-
-static gboolean
-gtk_popover_root_activate_key (GtkRoot     *root,
-                               GdkEventKey *event)
-{
-  GdkModifierType modifier = event->state;
-  guint keyval = event->keyval;
-
-  if ((modifier & gtk_accelerator_get_default_mod_mask ()) == GDK_MOD1_MASK)
-    {
-      GtkMnemonicHash *hash = gtk_popover_get_mnemonic_hash (GTK_POPOVER (root), FALSE);
-      if (hash)
-        return _gtk_mnemonic_hash_activate (hash, keyval);      
-    }
-
-  return FALSE;
-}
-
-static GtkPointerFocus *
-gtk_popover_lookup_pointer_focus (GtkPopover       *popover,
-                                  GdkDevice        *device,
-                                  GdkEventSequence *sequence)
-{
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GList *l;
-
-  for (l = priv->foci; l; l = l->next)
-    {
-      GtkPointerFocus *focus = l->data;
-
-      if (focus->device == device && focus->sequence == sequence)
-        return focus;
-    }
-
-  return NULL;
-}
-
-static void
-gtk_popover_add_pointer_focus (GtkPopover      *popover,
-                               GtkPointerFocus *focus)
-{
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  priv->foci = g_list_prepend (priv->foci, gtk_pointer_focus_ref (focus));
-}
-
-static void
-gtk_popover_remove_pointer_focus (GtkPopover      *popover,
-                                  GtkPointerFocus *focus)
-{
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GList *pos;
-
-  pos = g_list_find (priv->foci, focus);
-  if (!pos)
-    return;
-
-  priv->foci = g_list_remove (priv->foci, focus);
-  gtk_pointer_focus_unref (focus);
-}
-
-static void
-gtk_popover_root_update_pointer_focus (GtkRoot          *root,
-                                       GdkDevice        *device,
-                                       GdkEventSequence *sequence,
-                                       GtkWidget        *target,
-                                       double            x,
-                                       double            y)
-{
-  GtkPopover *popover = GTK_POPOVER (root);
-  GtkPointerFocus *focus;
-
-  focus = gtk_popover_lookup_pointer_focus (popover, device, sequence);
-  if (focus)
-    {
-      gtk_pointer_focus_ref (focus);
-
-      if (target)
-        {
-          gtk_pointer_focus_set_target (focus, target);
-          gtk_pointer_focus_set_coordinates (focus, x, y);
-        }
-      else
-        {
-          gtk_popover_remove_pointer_focus (popover, focus);
-        }
-
-      gtk_pointer_focus_unref (focus);
-    }
-  else if (target)
-    {
-      focus = gtk_pointer_focus_new (root, target, device, sequence, x, y);
-      gtk_popover_add_pointer_focus (popover, focus);
-      gtk_pointer_focus_unref (focus);
-    }
-}
-
-static void
-gtk_popover_root_update_pointer_focus_on_state_change (GtkRoot   *root,
-                                                       GtkWidget *widget)
-{
-  GtkPopover *popover = GTK_POPOVER (root);
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GList *l = priv->foci, *cur;
-
-  while (l)
-    {
-      GtkPointerFocus *focus = l->data;
-
-      cur = l;
-      focus = cur->data;
-      l = cur->next;
-
-      gtk_pointer_focus_ref (focus);
-
-      if (focus->grab_widget &&
-          (focus->grab_widget == widget ||
-           gtk_widget_is_ancestor (focus->grab_widget, widget)))
-        gtk_pointer_focus_set_implicit_grab (focus, NULL);
-
-      if (GTK_WIDGET (focus->toplevel) == widget)
-        {
-          /* Unmapping the toplevel, remove pointer focus */
-          priv->foci = g_list_remove_link (priv->foci, cur);
-          gtk_pointer_focus_unref (focus);
-        }
-      else if (focus->target == widget ||
-               gtk_widget_is_ancestor (focus->target, widget))
-        {
-          gtk_pointer_focus_repick_target (focus);
-        }
-
-      gtk_pointer_focus_unref (focus);
-    }
-}
-
-static GtkWidget *
-gtk_popover_root_lookup_pointer_focus (GtkRoot          *root,
-                                       GdkDevice        *device,
-                                       GdkEventSequence *sequence)
-{
-  GtkPopover *popover = GTK_POPOVER (root);
-  GtkPointerFocus *focus;
-
-  focus = gtk_popover_lookup_pointer_focus (popover, device, sequence);
-  return focus ? gtk_pointer_focus_get_target (focus) : NULL;
-}
-
-static GtkWidget *
-gtk_popover_root_lookup_effective_pointer_focus (GtkRoot          *root,
-                                                 GdkDevice        *device,
-                                                 GdkEventSequence *sequence)
-{
-  GtkPopover *popover = GTK_POPOVER (root);
-  GtkPointerFocus *focus;
-
-  focus = gtk_popover_lookup_pointer_focus (popover, device, sequence);
-  return focus ? gtk_pointer_focus_get_effective_target (focus) : NULL;
-}
-
-static GtkWidget *
-gtk_popover_root_lookup_pointer_focus_implicit_grab (GtkRoot          *root,
-                                                     GdkDevice        *device,
-                                                     GdkEventSequence *sequence)
-{  
-  GtkPopover *popover = GTK_POPOVER (root);
-  GtkPointerFocus *focus;
-
-  focus = gtk_popover_lookup_pointer_focus (popover, device, sequence);
-  return focus ? gtk_pointer_focus_get_implicit_grab (focus) : NULL;
-}
-
-static void
-gtk_popover_root_set_pointer_focus_grab (GtkRoot          *root,
-                                         GdkDevice        *device,
-                                         GdkEventSequence *sequence,
-                                         GtkWidget        *grab_widget)
-{
-  GtkPopover *popover = GTK_POPOVER (root);
-  GtkPointerFocus *focus;
-
-  focus = gtk_popover_lookup_pointer_focus (popover, device, sequence);
-  if (!focus && !grab_widget)
-    return;
-  g_assert (focus != NULL);
-  gtk_pointer_focus_set_implicit_grab (focus, grab_widget);
-}
-
-static void
-update_cursor (GtkRoot   *root,
-               GdkDevice *device,
-               GtkWidget *grab_widget,
-               GtkWidget *target)
-{
-  GdkCursor *cursor = NULL;
-
-  if (grab_widget && !gtk_widget_is_ancestor (target, grab_widget))
-    {
-      /* Outside the grab widget, cursor stays to whatever the grab
-       * widget says.
-       */
-      cursor = gtk_widget_get_cursor (grab_widget);
-    }
-  else
-    {
-      /* Inside the grab widget or in absence of grabs, allow walking
-       * up the hierarchy to find out the cursor.
-       */
-      while (target)
-        {
-          if (grab_widget && target == grab_widget)
-            break;
-
-          cursor = gtk_widget_get_cursor (target);
-
-          if (cursor)
-            break;
-
-          target = _gtk_widget_get_parent (target);
-        }
-    }
-
-  gdk_surface_set_device_cursor (gtk_widget_get_surface (GTK_WIDGET (root)), device, cursor);
-}
-
-static void
-gtk_popover_root_maybe_update_cursor (GtkRoot   *root,
-                                      GtkWidget *widget,
-                                      GdkDevice *device)
-{
-  GtkPopover *popover = GTK_POPOVER (root);
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GList *l;
-
-  for (l = priv->foci; l; l = l->next)
-    {
-      GtkPointerFocus *focus = l->data;
-      GtkWidget *grab_widget = NULL;
-      GtkWidget  *target;
-
-      if (focus->sequence)
-        continue;
-      if (device && device != focus->device)
-        continue;
-
-#if 0
-        {
-          GtkWindowGroup *group = gtk_window_get_group (root);
-          grab_widget = gtk_window_group_get_current_device_grab (group, focus->device);
-          if (!grab_widget)
-            grab_widget = gtk_window_group_get_current_grab (group);
-        }
-#endif
-
-      if (!grab_widget)
-        grab_widget = gtk_pointer_focus_get_implicit_grab (focus);
-
-      target = gtk_pointer_focus_get_target (focus);
-
-      if (widget)
-        {
-          /* Check whether the changed widget affects the current cursor
-           * lookups.
-           */
-          if (grab_widget && grab_widget != widget &&
-              !gtk_widget_is_ancestor (widget, grab_widget))
-            continue;
-          if (target != widget &&
-              !gtk_widget_is_ancestor (target, widget))
-            continue;
-        }
-
-      update_cursor (focus->toplevel, focus->device, grab_widget, target);
-
-      if (device)
-        break;
-    }
-}
-
-static void
-gtk_popover_root_interface_init (GtkRootInterface *iface)
-{
-  iface->get_display = gtk_popover_root_get_display;
-  iface->get_renderer = gtk_popover_root_get_renderer;
-  iface->get_surface_transform = gtk_popover_root_get_surface_transform;
-  iface->check_resize = gtk_popover_root_check_resize;
-  iface->add_mnemonic = gtk_popover_root_add_mnemonic;
-  iface->remove_mnemonic = gtk_popover_root_remove_mnemonic;
-  iface->activate_key = gtk_popover_root_activate_key;
-  iface->update_pointer_focus = gtk_popover_root_update_pointer_focus;
-  iface->update_pointer_focus_on_state_change = gtk_popover_root_update_pointer_focus_on_state_change;
-  iface->lookup_pointer_focus = gtk_popover_root_lookup_pointer_focus;
-  iface->lookup_pointer_focus_implicit_grab = gtk_popover_root_lookup_pointer_focus_implicit_grab;
-  iface->lookup_effective_pointer_focus = gtk_popover_root_lookup_effective_pointer_focus;
-  iface->set_pointer_focus_grab = gtk_popover_root_set_pointer_focus_grab;
-  iface->maybe_update_cursor = gtk_popover_root_maybe_update_cursor;
+  iface->get_renderer = gtk_popover_bud_get_renderer;
+  iface->get_surface_transform = gtk_popover_bud_get_surface_transform;
 }
 
 /**
@@ -1474,7 +936,6 @@ gtk_popover_set_relative_to (GtkPopover *popover,
   if (priv->relative_to)
     {
       g_signal_connect (priv->relative_to, "size-allocate", G_CALLBACK (size_changed), popover);
-      priv->display = gtk_widget_get_display (relative_to);
       gtk_css_node_set_parent (gtk_widget_get_css_node (GTK_WIDGET (popover)),
                                gtk_widget_get_css_node (relative_to));
       gtk_widget_set_parent (GTK_WIDGET (popover), relative_to);
@@ -1683,25 +1144,6 @@ gtk_popover_popdown (GtkPopover *popover)
   gtk_widget_hide (GTK_WIDGET (popover));
 }
 
-/**
- * gtk_popover_set_default_widget:
- * @popover: a #GtkPopover
- * @widget: (allow-none): the new default widget, or %NULL
- *
- * Sets the widget that should be set as default widget while
- * the popover is shown (see gtk_window_set_default()). #GtkPopover
- * remembers the previous default widget and reestablishes it
- * when the popover is dismissed.
- */
-void
-gtk_popover_set_default_widget (GtkPopover *popover,
-                                GtkWidget  *widget)
-{
-  g_return_if_fail (GTK_IS_POPOVER (popover));
-
-  gtk_root_set_default (GTK_ROOT (popover), widget);
-}
-
 static void
 back_to_main (GtkWidget *popover)
 {
@@ -1827,4 +1269,11 @@ gtk_popover_get_contents_widget (GtkPopover *popover)
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   return priv->contents_widget;
+}
+
+void
+gtk_popover_set_default_widget (GtkPopover *popover,
+                                GtkWidget  *widget)
+{
+  // FIXME
 }
