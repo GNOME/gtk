@@ -132,6 +132,7 @@
 #include "gtkprintbackend.h"
 #include "gtkimmodule.h"
 #include "gtkroot.h"
+#include "gtkbud.h"
 
 #include "a11y/gtkaccessibility.h"
 #include "inspector/window.h"
@@ -1327,7 +1328,7 @@ rewrite_event_for_grabs (GdkEvent *event)
     }
 
   event_widget = gtk_get_event_widget (event);
-  grab_widget = gtk_root_get_for_surface (grab_surface);
+  grab_widget = gtk_bud_get_for_surface (grab_surface);
 
   if (grab_widget &&
       gtk_main_get_window_group (grab_widget) != gtk_main_get_window_group (event_widget))
@@ -1638,6 +1639,20 @@ is_pointing_event (GdkEvent *event)
     }
 }
 
+static gboolean
+is_key_event (GdkEvent *event)
+{
+  switch ((guint) event->any.type)
+    {
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      return TRUE;
+      break;
+    default:
+      return FALSE;
+    }
+}
+
 static inline void
 set_widget_active_state (GtkWidget       *target,
                          const gboolean   release)
@@ -1664,6 +1679,7 @@ handle_pointing_event (GdkEvent *event)
   GdkEventSequence *sequence;
   GdkDevice *device;
   gdouble x, y;
+  GtkWidget *bud;
 
   event_widget = gtk_get_event_widget (event);
   device = gdk_event_get_device (event);
@@ -1671,6 +1687,7 @@ handle_pointing_event (GdkEvent *event)
     return event_widget;
 
   toplevel = gtk_widget_get_root (event_widget);
+  bud = gtk_widget_get_ancestor (event_widget, GTK_TYPE_BUD);
 
   sequence = gdk_event_get_event_sequence (event);
 
@@ -1700,10 +1717,10 @@ handle_pointing_event (GdkEvent *event)
       target = gtk_root_lookup_pointer_focus_implicit_grab (toplevel, device, sequence);
 
       if (!target)
-        target = gtk_widget_pick (GTK_WIDGET (toplevel), x, y, GTK_PICK_DEFAULT);
+       target = gtk_widget_pick (bud, x, y, GTK_PICK_DEFAULT);
 
       if (!target)
-        target = GTK_WIDGET (toplevel);
+        target = GTK_WIDGET (bud);
 
       old_target = update_pointer_focus_state (toplevel, event, target);
 
@@ -1735,7 +1752,7 @@ handle_pointing_event (GdkEvent *event)
       if (event->any.type == GDK_BUTTON_RELEASE)
         {
           GtkWidget *new_target;
-          new_target = gtk_widget_pick (GTK_WIDGET (toplevel), x, y, GTK_PICK_DEFAULT);
+          new_target = gtk_widget_pick (GTK_WIDGET (bud), x, y, GTK_PICK_DEFAULT);
           if (new_target == NULL)
             new_target = GTK_WIDGET (toplevel);
           gtk_synthesize_crossing_events (toplevel, target, new_target, event, GDK_CROSSING_UNGRAB);
@@ -1756,6 +1773,18 @@ handle_pointing_event (GdkEvent *event)
   if (!target)
     target = gtk_root_lookup_effective_pointer_focus (toplevel, device, sequence);
   return target ? target : old_target;
+}
+
+static GtkWidget *
+handle_key_event (GdkEvent *event)
+{
+  GtkWidget *event_widget;
+  GtkWidget *focus_widget;
+
+  event_widget = gtk_get_event_widget (event);
+
+  focus_widget = gtk_root_get_focus (gtk_widget_get_root (event_widget));
+  return focus_widget ? focus_widget : event_widget;
 }
 
 /**
@@ -1837,19 +1866,13 @@ gtk_main_do_event (GdkEvent *event)
 
   if (is_pointing_event (event))
     target_widget = handle_pointing_event (event);
-  else if (GTK_IS_ROOT (target_widget) &&
-           (event->any.type == GDK_KEY_PRESS ||
-            event->any.type == GDK_KEY_RELEASE))
+  else if (is_key_event (event))
     {
-      GtkWidget *focus_widget;
-
       if (event->any.type == GDK_KEY_PRESS &&
-          gtk_root_activate_key (GTK_ROOT (target_widget), (GdkEventKey *) event))
+          gtk_root_activate_key (gtk_widget_get_root (target_widget), (GdkEventKey *) event))
         goto cleanup;
 
-      focus_widget = gtk_root_get_focus (GTK_ROOT (target_widget));
-      if (focus_widget)
-        target_widget = focus_widget;
+      target_widget = handle_key_event (event);
     }
 
   if (!target_widget)
@@ -2457,7 +2480,7 @@ gtk_get_event_widget (const GdkEvent *event)
   widget = NULL;
   if (event && event->any.surface &&
       (event->any.type == GDK_DESTROY || !gdk_surface_is_destroyed (event->any.surface)))
-    widget = gtk_root_get_for_surface (event->any.surface);
+    widget = gtk_bud_get_for_surface (event->any.surface);
 
   return widget;
 }

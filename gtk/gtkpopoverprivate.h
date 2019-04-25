@@ -22,6 +22,8 @@
 
 G_BEGIN_DECLS
 
+void       gtk_popover_check_resize (GtkPopover *popover);
+void       gtk_popover_move_resize (GtkPopover *popover);
 GtkWidget *gtk_popover_get_contents_widget (GtkPopover *popover);
 
 G_END_DECLS

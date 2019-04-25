@@ -62,6 +62,7 @@
 #include "gtkpopoverprivate.h"
 #include "gtkprivate.h"
 #include "gtkroot.h"
+#include "gtkbud.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtksnapshot.h"
@@ -559,7 +560,8 @@ static void gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 						      gpointer       user_data);
 
 /* GtkRoot */
-static void             gtk_window_root_interface_init                  (GtkRootInterface       *iface);
+static void             gtk_window_root_interface_init (GtkRootInterface *iface);
+static void             gtk_window_bud_interface_init  (GtkBudInterface  *iface);
 
 static void ensure_state_flag_backdrop (GtkWidget *widget);
 static void unset_titlebar (GtkWindow *window);
@@ -576,6 +578,8 @@ G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkWindow)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_window_buildable_interface_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUD,
+						gtk_window_bud_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,
 						gtk_window_root_interface_init))
 
@@ -2458,6 +2462,40 @@ gtk_window_root_interface_init (GtkRootInterface *iface)
   iface->lookup_effective_pointer_focus = gtk_window_root_lookup_effective_pointer_focus;
   iface->set_pointer_focus_grab = gtk_window_root_set_pointer_focus_grab;
   iface->maybe_update_cursor = gtk_window_root_maybe_update_cursor;
+}
+
+static GskRenderer *
+gtk_window_bud_get_renderer (GtkBud *bud)
+{
+  GtkWindow *self = GTK_WINDOW (bud);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
+
+  return priv->renderer;
+}
+
+static void
+gtk_window_bud_get_surface_transform (GtkBud *bud,
+                                      int    *x,
+                                      int    *y)
+{
+  GtkWindow *self = GTK_WINDOW (bud);
+  GtkStyleContext *context;
+  GtkBorder margin, border, padding;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  gtk_style_context_get_margin (context, &margin);
+  gtk_style_context_get_border (context, &border);
+  gtk_style_context_get_padding (context, &padding);
+
+  *x = margin.left + border.left + padding.left;
+  *y = margin.top + border.top + padding.top;
+}
+
+static void
+gtk_window_bud_interface_init (GtkBudInterface *iface)
+{
+  iface->get_renderer = gtk_window_bud_get_renderer;
+  iface->get_surface_transform = gtk_window_bud_get_surface_transform;
 }
 
 /**
