@@ -47,6 +47,17 @@ typedef gboolean (*GtkSurfaceTransformChangedCallback) (GtkWidget               
 
 #define GTK_STATE_FLAGS_BITS 14
 
+typedef struct _GtkWidgetSurfaceTransformData
+{
+  GtkWidget *tracked_parent;
+  guint parent_surface_transform_changed_id;
+
+  GList *callbacks;
+
+  gboolean cached_surface_transform_valid;
+  graphene_matrix_t cached_surface_transform;
+} GtkWidgetSurfaceTransformData;
+
 struct _GtkWidgetPrivate
 {
   /* The state of the widget. Needs to be able to hold all GtkStateFlags bits
@@ -121,12 +132,7 @@ struct _GtkWidgetPrivate
   GList *tick_callbacks;
 
   /* Surface relative transform updates callbacks */
-  guint parent_surface_transform_changed_id;
-  GtkWidget *parent_surface_transform_changed_parent;
-  gulong parent_changed_handler_id;
-  GList *surface_transform_changed_callbacks;
-  gboolean cached_surface_transform_valid;
-  graphene_matrix_t cached_surface_transform;
+  GtkWidgetSurfaceTransformData *surface_transform_data;
 
   /* The widget's name. If the widget does not have a name
    * (the name is NULL), then its name (as returned by
