@@ -725,7 +725,6 @@ GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 
 static GQuark		quark_accel_path = 0;
 static GQuark		quark_accel_closures = 0;
-static GQuark		quark_parent_surface = 0;
 static GQuark		quark_input_shape_info = 0;
 static GQuark		quark_pango_context = 0;
 static GQuark		quark_mnemonic_labels = 0;
@@ -876,7 +875,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   quark_accel_path = g_quark_from_static_string ("gtk-accel-path");
   quark_accel_closures = g_quark_from_static_string ("gtk-accel-closures");
-  quark_parent_surface = g_quark_from_static_string ("gtk-parent-surface");
   quark_input_shape_info = g_quark_from_static_string ("gtk-input-shape-info");
   quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
   quark_mnemonic_labels = g_quark_from_static_string ("gtk-mnemonic-labels");
@@ -3045,13 +3043,6 @@ gtk_widget_unparent (GtkWidget *widget)
 
   if (old_parent->priv->layout_manager)
     gtk_layout_manager_remove_layout_child (old_parent->priv->layout_manager, widget);
-
-  /* Now that the parent pointer is nullified and the unroot vfunc already
-   * called, go ahead and unset the parent window, if we are unparenting
-   * an embedded GtkWindow the window will become toplevel again and root
-   * will fire for the new hierarchy.
-   */
-  gtk_widget_set_parent_surface (widget, NULL);
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_PARENT]);
   g_object_thaw_notify (G_OBJECT (widget));
@@ -7354,67 +7345,6 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
 }
 
 /**
- * gtk_widget_set_parent_surface:
- * @widget: a #GtkWidget.
- * @parent_surface: the new parent window.
- *
- * Sets a non default parent window for @widget.
- *
- * For #GtkWindow classes, setting a @parent_surface effects whether
- * the window is a toplevel window or can be embedded into other
- * widgets.
- *
- * For #GtkWindow classes, this needs to be called before the
- * window is realized.
- */
-void
-gtk_widget_set_parent_surface (GtkWidget *widget,
-                              GdkSurface *parent_surface)
-{
-  GdkSurface *old_parent_surface;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (!GTK_IS_WINDOW (widget));
-
-  old_parent_surface = g_object_get_qdata (G_OBJECT (widget),
-					  quark_parent_surface);
-
-  if (parent_surface != old_parent_surface)
-    {
-      g_object_set_qdata (G_OBJECT (widget), quark_parent_surface,
-			  parent_surface);
-      if (old_parent_surface)
-	g_object_unref (old_parent_surface);
-      if (parent_surface)
-	g_object_ref (parent_surface);
-    }
-}
-
-/**
- * gtk_widget_get_parent_surface:
- * @widget: a #GtkWidget.
- *
- * Gets @widget’s parent window, or %NULL if it does not have one.
- *
- * Returns: (transfer none) (nullable): the parent window of @widget, or %NULL
- * if it does not have a parent window.
- **/
-GdkSurface *
-gtk_widget_get_parent_surface (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GdkSurface *parent_surface;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  parent_surface = g_object_get_qdata (G_OBJECT (widget), quark_parent_surface);
-
-  return (parent_surface != NULL) ? parent_surface :
-	 (priv->parent != NULL) ? priv->parent->priv->surface : NULL;
-}
-
-
-/**
  * gtk_widget_set_child_visible:
  * @widget: a #GtkWidget
  * @child_visible: if %TRUE, @widget should be mapped along with its parent.
@@ -8531,7 +8461,7 @@ gtk_widget_real_realize (GtkWidget *widget)
   else
     {
       g_assert (priv->parent);
-      priv->surface = gtk_widget_get_parent_surface (widget);
+      priv->surface = priv->parent->priv->surface;
       g_object_ref (priv->surface);
     }
 
