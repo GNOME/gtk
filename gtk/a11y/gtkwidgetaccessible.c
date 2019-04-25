@@ -557,7 +557,7 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
     {
       *x = allocation.x;
       *y = allocation.y;
-      surface = gtk_widget_get_parent_surface (widget);
+      surface = gtk_widget_get_surface (gtk_widget_get_parent (widget));
     }
   else
     {
