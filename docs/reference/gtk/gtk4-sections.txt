@@ -4438,8 +4438,6 @@ gtk_widget_set_name
 gtk_widget_get_name
 gtk_widget_set_sensitive
 gtk_widget_set_parent
-gtk_widget_set_parent_surface
-gtk_widget_get_parent_surface
 gtk_widget_get_toplevel
 gtk_widget_get_root
 gtk_widget_get_ancestor
