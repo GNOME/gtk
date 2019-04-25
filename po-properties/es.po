@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-23 08:31+0000\n"
-"PO-Revision-Date: 2019-04-24 09:50+0200\n"
+"POT-Creation-Date: 2019-04-24 07:53+0000\n"
+"PO-Revision-Date: 2019-04-25 10:39+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -728,15 +728,13 @@ msgid "Whether all required fields on the page have been filled out"
 msgstr "Indica si todos los campos requeridos en la página se han rellenado"
 
 #: gtk/gtkassistant.c:285
-#| msgid "Label widget"
 msgid "Child widget"
 msgstr "Widget hijo"
 
 #: gtk/gtkassistant.c:286
-#, fuzzy
 #| msgid "The type of the assistant page"
 msgid "The content the assistant page"
-msgstr "El tipo de página del asistente"
+msgstr "El contenido de la página del asistente"
 
 #: gtk/gtkassistant.c:617 gtk/gtkdialog.c:563
 msgid "Use Header Bar"
@@ -751,7 +749,6 @@ msgid "Pages"
 msgstr "Páginas"
 
 #: gtk/gtkassistant.c:626
-#| msgid "The type of the assistant page"
 msgid "The pages of the assistant."
 msgstr "Las páginas del asistente"
 
@@ -789,7 +786,6 @@ msgid "Distribute space homogeneously"
 msgstr "Distribuir el espacio de manera homogénea"
 
 #: gtk/gtkboxlayout.c:732
-#| msgid "Spacing between buttons"
 msgid "Spacing between widgets"
 msgstr "Espaciado entre los widgets"
 
@@ -2550,7 +2546,6 @@ msgid "Is Focus"
 msgstr "Tiene el foco"
 
 #: gtk/gtkeventcontrollerkey.c:276
-#| msgid "Whether to draw the focus indicator inside widgets"
 msgid "Whether the focus is in the controllers widget"
 msgstr "Indica si el foco está en el controlador del widget"
 
@@ -2577,10 +2572,9 @@ msgid "Whether the pointer is in the controllers widget"
 msgstr "Indica si el widget es el widget predeterminado"
 
 #: gtk/gtkeventcontrollermotion.c:237
-#, fuzzy
 #| msgid "Interior Focus"
 msgid "Contains Pointer Focus"
-msgstr "Foco interior"
+msgstr "Contiene el foco del cursor"
 
 #: gtk/gtkeventcontrollermotion.c:238
 #, fuzzy
@@ -2808,10 +2802,9 @@ msgid "Position"
 msgstr "Posición"
 
 #: gtk/gtkfixedlayout.c:156
-#, fuzzy
 #| msgid "X position of child widget"
 msgid "The position of a child of a fixed layout"
-msgstr "Posición X del widget hijo"
+msgstr "La posición de un hijo en una distribución fija"
 
 #: gtk/gtkflattenlistmodel.c:431
 msgid "The model being flattened"
@@ -4067,7 +4060,6 @@ msgid "Child"
 msgstr "Hijo"
 
 #: gtk/gtknotebook.c:520
-#| msgid "The title of the child page"
 msgid "The child for this page"
 msgstr "El hijo para esta página"
 
@@ -4076,22 +4068,19 @@ msgid "Tab"
 msgstr "Pestaña"
 
 #: gtk/gtknotebook.c:527
-#| msgid "The parent widget of this widget."
 msgid "The tab widget for this page"
 msgstr "La pestaña para esta página"
 
 #: gtk/gtknotebook.c:534
-#, fuzzy
 #| msgid "The string displayed in the child’s menu entry"
 msgid "The label widget displayed in the child’s menu entry"
-msgstr "La cadena mostrada en la entrada de menú hijo"
+msgstr "La etiqueta mostrada en la entrada de menú hijo"
 
 #: gtk/gtknotebook.c:540
 msgid "Tab label"
 msgstr "Etiqueta de la pestaña"
 
 #: gtk/gtknotebook.c:541
-#| msgid "The text of the label"
 msgid "The text of the tab widget"
 msgstr "El texto de la etiqueta"
 
@@ -4100,7 +4089,6 @@ msgid "Menu label"
 msgstr "Etiqueta de menú"
 
 #: gtk/gtknotebook.c:548
-#| msgid "The name of the widget"
 msgid "The text of the menu widget"
 msgstr "El texto del menú"
 
@@ -4202,7 +4190,6 @@ msgid "Group name for tab drag and drop"
 msgstr "Nombre del grupo para el arrastre y suelte de pestañas"
 
 #: gtk/gtknotebook.c:1012
-#| msgid "The page size of the adjustment"
 msgid "The pages of the notebook."
 msgstr "Las páginas de cuaderno de notas."
 
@@ -4282,24 +4269,20 @@ msgid "Whether the paned should have a prominent handle"
 msgstr "Indica si el panel debe tener un tirador prominente"
 
 #: gtk/gtkpaned.c:414
-#| msgid "Resize grip"
 msgid "Resize first child"
 msgstr "Redimensionar el primer hijo"
 
 #: gtk/gtkpaned.c:415
-#| msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgid ""
 "If TRUE, the first child expands and shrinks along with the paned widget"
 msgstr ""
 "Si es cierto, el primer hijo se expande y encoge junto con el widget dividido"
 
 #: gtk/gtkpaned.c:427
-#| msgid "Resize mode"
 msgid "Resize second child"
 msgstr "Redimensionar el segundo hijo"
 
 #: gtk/gtkpaned.c:428
-#| msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgid ""
 "If TRUE, the second child expands and shrinks along with the paned widget"
 msgstr ""
@@ -4311,7 +4294,6 @@ msgid "Shrink first child"
 msgstr "Encoger el primer hijo"
 
 #: gtk/gtkpaned.c:441
-#| msgid "If TRUE, the child can be made smaller than its requisition"
 msgid "If TRUE, the first child can be made smaller than its requisition"
 msgstr ""
 "Si es cierto, el primer hijo puede hacerse más pequeño que sus requisitos"
@@ -4321,7 +4303,6 @@ msgid "Shrink second child"
 msgstr "Encoger el segundo hijo"
 
 #: gtk/gtkpaned.c:454
-#| msgid "If TRUE, the child can be made smaller than its requisition"
 msgid "If TRUE, the second child can be made smaller than its requisition"
 msgstr ""
 "Si es cierto, el segundo hijo puede hacerse más pequeño que sus requisitos"
@@ -4333,10 +4314,9 @@ msgid "Show Peek Icon"
 msgstr "Mostrar iconos"
 
 #: gtk/gtkpasswordentry.c:407
-#, fuzzy
 #| msgid "Whether to show an icon for Emoji"
 msgid "Whether to show an icon for revealing the content"
-msgstr "Indica si se debe mostrar un icono para el emoticono"
+msgstr "Indica si se debe mostrar un icono para el revelar el contenido"
 
 #: gtk/gtkpicture.c:311
 msgid "The GdkPaintable to display"
@@ -5794,22 +5774,19 @@ msgid "If the selection will always select an item"
 msgstr "Si la selección escogerá siempre un elemento"
 
 #: gtk/gtksingleselection.c:425
-#, fuzzy
 #| msgid "Has selection"
 msgid "Can unselect"
-msgstr "Tiene selección"
+msgstr "Se puede deseleccionar"
 
 #: gtk/gtksingleselection.c:426
 msgid "If unselecting the selected item is allowed"
 msgstr "Si se permite deseleccionar el elemento elegido"
 
 #: gtk/gtksingleselection.c:437
-#| msgid "Selectable"
 msgid "Selected"
 msgstr "Seleccionado"
 
 #: gtk/gtksingleselection.c:438
-#| msgid "The name of the selected font"
 msgid "Position of the selected item"
 msgstr "Posición del elemento seleccionado"
 
@@ -5826,7 +5803,6 @@ msgid "The model"
 msgstr "El modelo"
 
 #: gtk/gtksingleselection.c:462
-#| msgid "The model being mapped"
 msgid "The model being managed"
 msgstr "El modelo gestionado"
 
@@ -5931,7 +5907,6 @@ msgid "Whether the spinner is active"
 msgstr "Indica si el marcador incrementable está activo"
 
 #: gtk/gtkstack.c:363
-#| msgid "The title of the child page"
 msgid "The child of the page"
 msgstr "El hijo de la página"
 
@@ -5960,7 +5935,6 @@ msgid "Whether this page needs attention"
 msgstr "Indica si la página necesita atención"
 
 #: gtk/gtkstack.c:406
-#| msgid "Whether the widget is visible"
 msgid "Whether this page is visible"
 msgstr "Indica si esta página es visible"
 
@@ -6021,7 +5995,6 @@ msgstr ""
 "distinto tamaño"
 
 #: gtk/gtkstack.c:785
-#| msgid "The toggle action to switch to the tweak page"
 msgid "A selection model with the stacks pages"
 msgstr "Un modelo de selección con páginas apiladas"
 
@@ -6121,17 +6094,14 @@ msgstr ""
 "y el destino del DND"
 
 #: gtk/gtktext.c:709
-#| msgid "Text buffer object which actually stores entry text"
 msgid "Text buffer object which actually stores self text"
 msgstr "Objeto de búfer de texto que actualmente almacena la entrada de texto"
 
 #: gtk/gtktext.c:716
-#| msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgid "Maximum number of characters for this self. Zero if no maximum"
 msgstr "Número máximo de caracteres para esta entrada. Cero si no hay máximo"
 
 #: gtk/gtktext.c:724
-#, fuzzy
 #| msgid ""
 #| "The character to use when masking entry contents (in “password mode”)"
 msgid "The character to use when masking self contents (in “password mode”)"
@@ -6140,7 +6110,6 @@ msgstr ""
 "«modo contraseña»)"
 
 #: gtk/gtktext.c:738
-#| msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgid "Number of pixels of the self scrolled off the screen to the left"
 msgstr ""
 "Número de píxeles de la entrada desplazados fuera de la pantalla hacia la "
@@ -6153,19 +6122,16 @@ msgid "Show text in the self when it’s empty and unfocused"
 msgstr "Mostrar texto en la entrada cuando esta vacía y no tiene el foco"
 
 #: gtk/gtktext.c:856
-#, fuzzy
 #| msgid "A list of style attributes to apply to the text of the label"
 msgid "A list of style attributes to apply to the text of the self"
 msgstr "Un lista de atributos de estilos para aplicar al texto de la etiqueta"
 
 #: gtk/gtktext.c:881
-#, fuzzy
 #| msgid "A list of tabstop locations to apply to the text of the entry"
 msgid "A list of tabstop locations to apply to the text of the self"
 msgstr "Un lista de ubicaciones tabuladas que aplicar al texto de la entrada"
 
 #: gtk/gtktext.c:901
-#| msgid "Propagate Natural Width"
 msgid "Propagate text width"
 msgstr "Propagar anchura del texto"
 
@@ -7123,7 +7089,6 @@ msgid "Root widget"
 msgstr "Widget raíz"
 
 #: gtk/gtkwidget.c:960
-#| msgid "The parent widget of this widget."
 msgid "The root widget in the widget tree."
 msgstr "El widget raíz en el árbol de  widgets."
 
@@ -7190,10 +7155,9 @@ msgid "Can target"
 msgstr "Lista de destinos de la copia"
 
 #: gtk/gtkwidget.c:1018
-#, fuzzy
 #| msgid "Whether the widget can accept the input focus"
 msgid "Whether the widget can receive pointer events"
-msgstr "Indica si el widget puede aceptar el foco de entrada"
+msgstr "Indica si el widget puede recibir eventos del cursor"
 
 #: gtk/gtkwidget.c:1034
 msgid "Focus on click"
@@ -7381,7 +7345,6 @@ msgid "Layout Manager"
 msgstr "Gestor de distribución"
 
 #: gtk/gtkwidget.c:1377
-#| msgid "The padding to insert at the left of the widget."
 msgid "The layout manager used to layout children of the widget"
 msgstr "El gestor de la distribución usado para mostrar el hijo del widget"
 
