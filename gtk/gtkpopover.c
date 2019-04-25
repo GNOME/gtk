@@ -564,7 +564,7 @@ gtk_popover_realize (GtkWidget *widget)
 
   gtk_widget_get_surface_allocation (widget, &allocation);
 
-  surface = gdk_surface_new_child (gtk_widget_get_parent_surface (widget), &allocation);
+  surface = gdk_surface_new_child (gtk_widget_get_surface (gtk_widget_get_parent (widget)), &allocation);
 
   gtk_widget_set_surface (widget, surface);
   gtk_widget_register_surface (widget, surface);
