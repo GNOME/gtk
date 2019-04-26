@@ -121,6 +121,8 @@
 #include "gtkprivate.h"
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
+#include "gtkbuttonprivate.h"
 
 #include "a11y/gtkmenubuttonaccessible.h"
 
@@ -402,6 +404,16 @@ popup_menu (GtkMenuButton *menu_button,
 }
 
 static void
+update_button_events (GtkButton *button,
+                      gboolean   enable)
+{
+  g_object_set (gtk_button_get_gesture (button),
+                "propagation-phase",
+                enable ? GTK_PHASE_CAPTURE : GTK_PHASE_NONE,
+                NULL);
+}
+
+static void
 gtk_menu_button_toggled (GtkToggleButton *button)
 {
   GtkMenuButton *menu_button = GTK_MENU_BUTTON (button);
@@ -430,9 +442,15 @@ gtk_menu_button_toggled (GtkToggleButton *button)
   else if (priv->popover)
     {
       if (active)
-        gtk_popover_popup (GTK_POPOVER (priv->popover));
+        {
+          update_button_events (GTK_BUTTON (button), FALSE);
+          gtk_popover_popup (GTK_POPOVER (priv->popover));
+        }
       else
-        gtk_popover_popdown (GTK_POPOVER (priv->popover));
+        {
+          update_button_events (GTK_BUTTON (button), TRUE);
+          gtk_popover_popdown (GTK_POPOVER (priv->popover));
+        }
     }
 
   if (GTK_TOGGLE_BUTTON_CLASS (gtk_menu_button_parent_class)->toggled)
@@ -465,6 +483,21 @@ gtk_menu_button_remove (GtkContainer *container,
   GTK_CONTAINER_CLASS (gtk_menu_button_parent_class)->remove (container, child);
 }
 
+static gboolean
+gtk_menu_button_focus (GtkWidget        *widget,
+                       GtkDirectionType  direction)
+{
+  GtkMenuButton *button = GTK_MENU_BUTTON (widget);
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (button);
+
+  if (priv->menu && gtk_widget_get_visible (priv->menu))
+    return gtk_widget_focus_move (priv->menu, direction); 
+  else if (priv->popover && gtk_widget_get_visible (priv->popover))
+    return gtk_widget_focus_move (priv->popover, direction); 
+  else
+    return GTK_WIDGET_CLASS (gtk_menu_button_parent_class)->focus (widget, direction);
+}
+
 static void
 gtk_menu_button_class_init (GtkMenuButtonClass *klass)
 {
@@ -478,6 +511,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   gobject_class->dispose = gtk_menu_button_dispose;
 
   widget_class->state_flags_changed = gtk_menu_button_state_flags_changed;
+  widget_class->focus = gtk_menu_button_focus;
 
   container_class->add = gtk_menu_button_add;
   container_class->remove = gtk_menu_button_remove;
