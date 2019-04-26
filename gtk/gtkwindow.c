@@ -10078,6 +10078,9 @@ update_cursor (GtkRoot   *toplevel,
                GtkWidget *target)
 {
   GdkCursor *cursor = NULL;
+  GdkSurface *surface;
+
+  surface = gtk_widget_get_surface (target);
 
   if (grab_widget && !gtk_widget_is_ancestor (target, grab_widget))
     {
@@ -10105,8 +10108,7 @@ update_cursor (GtkRoot   *toplevel,
         }
     }
 
-  gdk_surface_set_device_cursor (gtk_widget_get_surface (GTK_WIDGET (toplevel)),
-                                 device, cursor);
+  gdk_surface_set_device_cursor (surface, device, cursor);
 }
 
 void
