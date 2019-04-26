@@ -923,7 +923,7 @@ gtk_tooltip_handle_event_internal (GdkEventType   event_type,
                                    gdouble       dx,
                                    gdouble       dy)
 {
-  int x = 0, y = 0;
+  int x = dx, y = dy;
   GdkDisplay *display;
   GtkTooltip *current_tooltip;
 
