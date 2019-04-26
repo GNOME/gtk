@@ -121,6 +121,9 @@
 #include "gtkprivate.h"
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
+#include "gtkbuttonprivate.h"
+#include "gtknative.h"
 
 #include "a11y/gtkmenubuttonaccessible.h"
 
@@ -466,6 +469,36 @@ gtk_menu_button_remove (GtkContainer *container,
 }
 
 static void
+gtk_menu_button_size_allocate (GtkWidget *widget,
+                               int        width,
+                               int        height,
+                               int        baseline)
+{
+  GtkMenuButton *button = GTK_MENU_BUTTON (widget);
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (button);
+
+  GTK_WIDGET_CLASS (gtk_menu_button_parent_class)->size_allocate (widget, width, height, baseline);
+
+  if (priv->popover)
+    gtk_native_check_resize (GTK_NATIVE (priv->popover));
+}
+
+static gboolean
+gtk_menu_button_focus (GtkWidget        *widget,
+                       GtkDirectionType  direction)
+{
+  GtkMenuButton *button = GTK_MENU_BUTTON (widget);
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (button);
+
+  if (priv->menu && gtk_widget_get_visible (priv->menu))
+    return gtk_widget_focus_move (priv->menu, direction); 
+  else if (priv->popover && gtk_widget_get_visible (priv->popover))
+    return gtk_widget_focus_move (priv->popover, direction); 
+  else
+    return GTK_WIDGET_CLASS (gtk_menu_button_parent_class)->focus (widget, direction);
+}
+
+static void
 gtk_menu_button_class_init (GtkMenuButtonClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -477,7 +510,9 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   gobject_class->get_property = gtk_menu_button_get_property;
   gobject_class->dispose = gtk_menu_button_dispose;
 
+  widget_class->size_allocate = gtk_menu_button_size_allocate;
   widget_class->state_flags_changed = gtk_menu_button_state_flags_changed;
+  widget_class->focus = gtk_menu_button_focus;
 
   container_class->add = gtk_menu_button_add;
   container_class->remove = gtk_menu_button_remove;
