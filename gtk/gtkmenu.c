@@ -1814,6 +1814,7 @@ gtk_menu_update_scroll_offset (GtkMenu            *menu,
                                gpointer            user_data)
 {
   GtkBorder arrows_border;
+  int offset;
 
   g_return_if_fail (GTK_IS_MENU (menu));
 
@@ -1821,8 +1822,8 @@ gtk_menu_update_scroll_offset (GtkMenu            *menu,
     return;
 
   get_arrows_border (menu, &arrows_border);
-  menu->priv->scroll_offset = arrows_border.top + (final_rect->y - flipped_rect->y);
-  gtk_menu_scroll_to (menu, menu->priv->scroll_offset);
+  offset = arrows_border.top + (final_rect->y - flipped_rect->y);
+  gtk_menu_scroll_to (menu, offset);
 }
 
 /**
