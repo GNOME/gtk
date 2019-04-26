@@ -118,6 +118,7 @@
 #include "gtkmenubutton.h"
 #include "gtkmenubuttonprivate.h"
 #include "gtkpopover.h"
+#include "gtkpopoverprivate.h"
 #include "gtkprivate.h"
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
@@ -483,6 +484,21 @@ gtk_menu_button_remove (GtkContainer *container,
   GTK_CONTAINER_CLASS (gtk_menu_button_parent_class)->remove (container, child);
 }
 
+static void
+gtk_menu_button_size_allocate (GtkWidget *widget,
+                               int        width,
+                               int        height,
+                               int        baseline)
+{
+  GtkMenuButton *button = GTK_MENU_BUTTON (widget);
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (button);
+
+  GTK_WIDGET_CLASS (gtk_menu_button_parent_class)->size_allocate (widget, width, height, baseline);
+
+  if (priv->popover)
+    gtk_popover_check_resize (GTK_POPOVER (priv->popover));
+}
+
 static gboolean
 gtk_menu_button_focus (GtkWidget        *widget,
                        GtkDirectionType  direction)
@@ -510,6 +526,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   gobject_class->get_property = gtk_menu_button_get_property;
   gobject_class->dispose = gtk_menu_button_dispose;
 
+  widget_class->size_allocate = gtk_menu_button_size_allocate;
   widget_class->state_flags_changed = gtk_menu_button_state_flags_changed;
   widget_class->focus = gtk_menu_button_focus;
 
