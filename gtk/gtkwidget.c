@@ -4287,7 +4287,6 @@ gtk_widget_allocate (GtkWidget    *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkRectangle adjusted;
-  gboolean alloc_needed;
   gboolean size_changed;
   gboolean baseline_changed;
   gboolean transform_changed;
@@ -4320,7 +4319,6 @@ gtk_widget_allocate (GtkWidget    *widget,
     }
 #endif /* G_ENABLE_DEBUG */
 
-  alloc_needed = priv->alloc_needed;
   /* Preserve request/allocate ordering */
   priv->alloc_needed = FALSE;
 
@@ -4442,24 +4440,6 @@ gtk_widget_allocate (GtkWidget    *widget,
   if (priv->surface_transform_data)
     sync_widget_surface_transform (widget);
 
-  if (!alloc_needed && !size_changed && !baseline_changed)
-    {
-      /* Still have to move the window... */
-      if (_gtk_widget_get_realized (widget) &&
-          _gtk_widget_get_has_surface (widget) &&
-          GTK_IS_POPOVER (widget))
-         {
-           GtkAllocation window_alloc;
-
-           gtk_widget_get_surface_allocation (widget, &window_alloc);
-           gdk_surface_move_resize (priv->surface,
-                                   window_alloc.x, window_alloc.y,
-                                   window_alloc.width, window_alloc.height);
-         }
-
-      goto skip_allocate;
-    }
-
   priv->width = adjusted.width;
   priv->height = adjusted.height;
   priv->baseline = baseline;
@@ -4501,7 +4481,6 @@ gtk_widget_allocate (GtkWidget    *widget,
 
   gtk_widget_update_paintables (widget);
 
-skip_allocate:
   if (size_changed || baseline_changed)
     gtk_widget_queue_draw (widget);
   else if (transform_changed && priv->parent)
@@ -6293,11 +6272,9 @@ gtk_widget_get_has_surface (GtkWidget *widget)
 gboolean
 gtk_widget_is_toplevel (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return priv->parent == NULL && GTK_IS_ROOT (widget);
+  return GTK_IS_ROOT (widget);
 }
 
 /**
@@ -11990,8 +11967,7 @@ gtk_widget_class_set_css_name (GtkWidgetClass *widget_class,
 static gboolean
 gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_class)
 {
-  return !(g_type_is_a (G_TYPE_FROM_CLASS (widget_class), GTK_TYPE_ROOT) ||
-           GTK_IS_POPOVER_CLASS (widget_class));
+  return !g_type_is_a (G_TYPE_FROM_CLASS (widget_class), GTK_TYPE_NATIVE);
 }
 
 /**
@@ -12110,8 +12086,6 @@ gtk_widget_get_parent_muxer (GtkWidget *widget,
 
   if (GTK_IS_MENU (widget))
     parent = gtk_menu_get_attach_widget (GTK_MENU (widget));
-  else if (GTK_IS_POPOVER (widget))
-    parent = gtk_popover_get_relative_to (GTK_POPOVER (widget));
   else
     parent = _gtk_widget_get_parent (widget);
 
