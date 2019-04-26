@@ -12115,8 +12115,7 @@ gtk_widget_class_set_css_name (GtkWidgetClass *widget_class,
 static gboolean
 gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_class)
 {
-  return !(g_type_is_a (G_TYPE_FROM_CLASS (widget_class), GTK_TYPE_ROOT) ||
-           GTK_IS_POPOVER_CLASS (widget_class));
+  return !g_type_is_a (G_TYPE_FROM_CLASS (widget_class), GTK_TYPE_BUD);
 }
 
 /**
@@ -12235,8 +12234,6 @@ gtk_widget_get_parent_muxer (GtkWidget *widget,
 
   if (GTK_IS_MENU (widget))
     parent = gtk_menu_get_attach_widget (GTK_MENU (widget));
-  else if (GTK_IS_POPOVER (widget))
-    parent = gtk_popover_get_relative_to (GTK_POPOVER (widget));
   else
     parent = _gtk_widget_get_parent (widget);
 
