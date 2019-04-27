@@ -3415,13 +3415,32 @@ bad things might happen.</property>
           </object>
         </child>
         <child>
+          <object class="GtkExpander">
+            <child type="label">
+              <object class="GtkLabel">
+                <property name="label">Extra Info</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry">
+                <property name="placeholder-text">Tell me anything…</property>
+              </object>
+            </child>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">2</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
           <object class="GtkMenuButton">
             <property name="halign">end</property>
             <property name="icon-name">emblem-system-symbolic</property>
             <property name="menu-model">gear_menu</property>
             <layout>
               <property name="left-attach">1</property>
-              <property name="top-attach">2</property>
+              <property name="top-attach">3</property>
             </layout>
           </object>
         </child>
@@ -3437,7 +3456,7 @@ bad things might happen.</property>
             </style>
             <layout>
               <property name="left-attach">2</property>
-              <property name="top-attach">2</property>
+              <property name="top-attach">3</property>
             </layout>
           </object>
         </child>
