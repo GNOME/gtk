@@ -55,6 +55,7 @@
 #include "gtkcombobox.h"
 #include "gtkgesturemultipress.h"
 #include "gtkeventcontrollerscroll.h"
+#include "gtkroot.h"
 
 #if defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT)
 #include <pango/pangofc-font.h>
@@ -618,6 +619,35 @@ rows_changed_cb (GtkFontChooserWidget *fontchooser)
 }
 
 static void
+update_key_capture (GtkWidget *chooser)
+{
+  GtkFontChooserWidgetPrivate *priv;
+  GtkWidget *capture_widget;
+
+ priv = gtk_font_chooser_widget_get_instance_private (GTK_FONT_CHOOSER_WIDGET (chooser));
+
+  if (gtk_widget_get_mapped (chooser) &&
+      g_str_equal (gtk_stack_get_visible_child_name (GTK_STACK (priv->stack)), "list"))
+    {
+      GtkWidget *toplevel;
+      GtkWidget *focus;
+
+      toplevel = gtk_widget_get_toplevel (chooser);
+      focus = gtk_root_get_focus (GTK_ROOT (toplevel));
+
+      if (GTK_IS_EDITABLE (focus) && focus != priv->search_entry)
+        capture_widget = NULL;
+      else
+        capture_widget = chooser;
+    }
+  else
+    capture_widget = NULL;
+
+  gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (priv->search_entry),
+                                           capture_widget);
+}
+
+static void
 gtk_font_chooser_widget_map (GtkWidget *widget)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
@@ -628,6 +658,34 @@ gtk_font_chooser_widget_map (GtkWidget *widget)
   g_simple_action_set_state (G_SIMPLE_ACTION (priv->tweak_action), g_variant_new_boolean (FALSE));
 
   GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->map (widget);
+
+  update_key_capture (widget);
+}
+
+static void
+gtk_font_chooser_widget_unmap (GtkWidget *widget)
+{
+  update_key_capture (widget);
+
+  GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->unmap (widget);
+}
+
+static void
+gtk_font_chooser_widget_root (GtkWidget *widget)
+{
+  GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->root (widget);
+
+  g_signal_connect_swapped (gtk_widget_get_root (widget), "notify::focus-widget",
+                            G_CALLBACK (update_key_capture), widget);
+ }
+
+static void
+gtk_font_chooser_widget_unroot (GtkWidget *widget)
+{
+  g_signal_handlers_disconnect_by_func (gtk_widget_get_root (widget),
+                                        update_key_capture, widget);
+
+  GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->unroot (widget);
 }
 
 static void
@@ -688,7 +746,10 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   widget_class->display_changed = gtk_font_chooser_widget_display_changed;
   widget_class->measure = gtk_font_chooser_widget_measure;
   widget_class->size_allocate = gtk_font_chooser_widget_size_allocate;
+  widget_class->root = gtk_font_chooser_widget_root;
+  widget_class->unroot = gtk_font_chooser_widget_unroot;
   widget_class->map = gtk_font_chooser_widget_map;
+  widget_class->unmap = gtk_font_chooser_widget_unmap;
 
   gobject_class->finalize = gtk_font_chooser_widget_finalize;
   gobject_class->dispose = gtk_font_chooser_widget_dispose;
@@ -876,9 +937,6 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 
   gtk_font_chooser_widget_set_cell_size (fontchooser);
   gtk_font_chooser_widget_take_font_desc (fontchooser, NULL);
-
-  gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (priv->search_entry),
-                                           GTK_WIDGET (fontchooser));
 }
 
 /**
