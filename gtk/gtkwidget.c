@@ -9565,7 +9565,6 @@ gtk_widget_set_vexpand_set (GtkWidget      *widget,
 /*
  * GtkBuildable implementation
  */
-static GQuark		 quark_builder_has_default = 0;
 static GQuark		 quark_builder_has_focus = 0;
 static GQuark		 quark_builder_atk_relations = 0;
 static GQuark            quark_builder_set_name = 0;
@@ -9598,7 +9597,6 @@ gtk_widget_buildable_add_child (GtkBuildable  *buildable,
 static void
 gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
 {
-  quark_builder_has_default = g_quark_from_static_string ("gtk-builder-has-default");
   quark_builder_has_focus = g_quark_from_static_string ("gtk-builder-has-focus");
   quark_builder_atk_relations = g_quark_from_static_string ("gtk-builder-atk-relations");
   quark_builder_set_name = g_quark_from_static_string ("gtk-builder-set-name");
@@ -9677,10 +9675,7 @@ gtk_widget_buildable_set_buildable_property (GtkBuildable *buildable,
 					     const gchar  *name,
 					     const GValue *value)
 {
-  if (strcmp (name, "has-default") == 0 && g_value_get_boolean (value))
-      g_object_set_qdata (G_OBJECT (buildable), quark_builder_has_default,
-			  GINT_TO_POINTER (TRUE));
-  else if (strcmp (name, "has-focus") == 0 && g_value_get_boolean (value))
+  if (strcmp (name, "has-focus") == 0 && g_value_get_boolean (value))
       g_object_set_qdata (G_OBJECT (buildable), quark_builder_has_focus,
 			  GINT_TO_POINTER (TRUE));
   else
@@ -9724,12 +9719,6 @@ gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
 				      GtkBuilder   *builder)
 {
   GSList *atk_relations;
-
-  if (g_object_get_qdata (G_OBJECT (buildable), quark_builder_has_default))
-    {
-      gtk_widget_grab_default (GTK_WIDGET (buildable));
-      g_object_steal_qdata (G_OBJECT (buildable), quark_builder_has_default);
-    }
 
   if (g_object_get_qdata (G_OBJECT (buildable), quark_builder_has_focus))
     {
