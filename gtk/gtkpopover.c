@@ -286,6 +286,12 @@ gtk_popover_check_resize (GtkPopover *popover)
 }
 
 static void
+gtk_popover_bud_check_resize (GtkBud *bud)
+{
+  gtk_popover_check_resize (GTK_POPOVER (bud));
+}
+
+static void
 ensure_state_flag_backdrop (GtkWidget *widget)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
@@ -881,6 +887,7 @@ gtk_popover_bud_interface_init (GtkBudInterface *iface)
 {
   iface->get_renderer = gtk_popover_bud_get_renderer;
   iface->get_surface_transform = gtk_popover_bud_get_surface_transform;
+  iface->check_resize = gtk_popover_bud_check_resize;
 }
 
 /**
