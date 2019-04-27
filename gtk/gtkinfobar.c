@@ -744,7 +744,12 @@ gtk_info_bar_set_default_response (GtkInfoBar *info_bar,
       ResponseData *rd = get_response_data (widget, FALSE);
 
       if (rd && rd->response_id == response_id)
-        gtk_widget_grab_default (widget);
+        {
+          GtkWidget *window;
+
+          window = gtk_widget_get_ancestor (GTK_WIDGET (info_bar), GTK_TYPE_WINDOW);
+          gtk_window_set_default (GTK_WINDOW (window), widget);
+        }
     }
 
   g_list_free (children);

@@ -318,7 +318,7 @@ create_buttons (GtkWidget *widget)
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button[9]);
       gtk_widget_set_can_default (button[9], TRUE);
-      gtk_widget_grab_default (button[9]);
+      gtk_window_set_default (GTK_WINDOW (window), button[9]);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -379,7 +379,7 @@ create_toggle_buttons (GtkWidget *widget)
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
+      gtk_window_set_default (GTK_WINDOW (window), button);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -788,7 +788,7 @@ create_statusbar (GtkWidget *widget)
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
+      gtk_window_set_default (GTK_WINDOW (window), button);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -1283,7 +1283,7 @@ create_pixbuf (GtkWidget *widget)
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
+      gtk_window_set_default (GTK_WINDOW (window), button);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -1373,7 +1373,7 @@ create_tooltips (GtkWidget *widget)
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
+      gtk_window_set_default (GTK_WINDOW (window), button);
 
       gtk_widget_set_tooltip_text (button, "Push this button to close window");
     }
@@ -1807,7 +1807,7 @@ create_menus (GtkWidget *widget)
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
+      gtk_window_set_default (GTK_WINDOW (window), button);
       gtk_widget_show (button);
     }
 
@@ -2410,7 +2410,7 @@ create_entry (GtkWidget *widget)
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
+      gtk_window_set_default (GTK_WINDOW (window), button);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -3926,7 +3926,7 @@ create_range_controls (GtkWidget *widget)
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
+      gtk_window_set_default (GTK_WINDOW (window), button);
       gtk_widget_show (button);
     }
 
@@ -4304,7 +4304,7 @@ create_notebook (GtkWidget *widget)
 				window);
       gtk_container_add (GTK_CONTAINER (box1), button);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
+      gtk_window_set_default (GTK_WINDOW (window), button);
     }
 
   if (!gtk_widget_get_visible (window))
@@ -4929,7 +4929,7 @@ create_wmhints (GtkWidget *widget)
 
       gtk_container_add (GTK_CONTAINER (box2), button);
       gtk_widget_set_can_default (button, TRUE);
-      gtk_widget_grab_default (button);
+      gtk_window_set_default (GTK_WINDOW (window), button);
       gtk_widget_show (button);
     }
 
@@ -5916,7 +5916,7 @@ create_timeout_test (GtkWidget *widget)
 				window);
       gtk_widget_set_can_default (button, TRUE);
       gtk_container_add (GTK_CONTAINER (action_area), button);
-      gtk_widget_grab_default (button);
+      gtk_window_set_default (GTK_WINDOW (window), button);
       gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("start");
@@ -6511,7 +6511,7 @@ create_main_window (void)
 		    window);
   gtk_container_add (GTK_CONTAINER (box2), button);
   gtk_widget_set_can_default (button, TRUE);
-  gtk_widget_grab_default (button);
+  gtk_window_set_default (GTK_WINDOW (window), button);
 
   gtk_widget_show (window);
 }

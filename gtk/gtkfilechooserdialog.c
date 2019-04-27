@@ -563,7 +563,7 @@ ensure_default_response (GtkFileChooserDialog *dialog)
 
   widget = get_accept_action_widget (GTK_DIALOG (dialog), TRUE);
   if (widget)
-    gtk_widget_grab_default (widget);
+    gtk_window_set_default (GTK_WINDOW (dialog), widget);
 }
 
 static void
