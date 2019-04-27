@@ -2374,39 +2374,6 @@ gtk_window_root_get_display (GtkRoot *root)
   return priv->display;
 }
 
-static GskRenderer *
-gtk_window_root_get_renderer (GtkRoot *root)
-{
-  GtkWindow *self = GTK_WINDOW (root);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
-
-  return priv->renderer;
-}
-
-static void
-gtk_window_root_get_surface_transform (GtkRoot *root,
-                                       int     *x,
-                                       int     *y)
-{
-  GtkWindow *self = GTK_WINDOW (root);
-  GtkStyleContext *context;
-  GtkBorder margin, border, padding;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (self));
-  gtk_style_context_get_margin (context, &margin);
-  gtk_style_context_get_border (context, &border);
-  gtk_style_context_get_padding (context, &padding);
-
-  *x = margin.left + border.left + padding.left;
-  *y = margin.top + border.top + padding.top;
-}
-
-static void
-gtk_window_root_check_resize (GtkRoot *root)
-{
-  gtk_window_check_resize (GTK_WINDOW (root));
-}
-
 static void
 gtk_window_root_add_mnemonic (GtkRoot   *root,
                               guint      keyval,
@@ -2493,9 +2460,6 @@ static void
 gtk_window_root_interface_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_window_root_get_display;
-  iface->get_renderer = gtk_window_root_get_renderer;
-  iface->get_surface_transform = gtk_window_root_get_surface_transform;
-  iface->check_resize = gtk_window_root_check_resize;
   iface->add_mnemonic = gtk_window_root_add_mnemonic;
   iface->remove_mnemonic = gtk_window_root_remove_mnemonic;
   iface->activate_key = gtk_window_root_activate_key;

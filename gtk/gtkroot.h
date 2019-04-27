@@ -46,12 +46,6 @@ struct _GtkRootInterface
 
   /*< public >*/
   GdkDisplay *          (* get_display)                 (GtkRoot                *self);
-  GskRenderer *         (* get_renderer)                (GtkRoot                *self);
-
-  void                  (* get_surface_transform)       (GtkRoot                *root,
-                                                         int                    *x,
-                                                         int                    *y);
-
   /* size allocation */
   void                  (* check_resize)                (GtkRoot                *root);
 
@@ -91,9 +85,6 @@ struct _GtkRootInterface
                                                          GtkWidget        *widget,
                                                          GdkDevice        *device);
 };
-
-GDK_AVAILABLE_IN_ALL
-GtkWidget * gtk_root_get_for_surface (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
 void        gtk_root_set_focus (GtkRoot   *self,

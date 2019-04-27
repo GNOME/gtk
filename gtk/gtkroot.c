@@ -50,26 +50,6 @@ gtk_root_default_get_display (GtkRoot *self)
   return gdk_display_get_default ();
 }
 
-static GskRenderer *
-gtk_root_default_get_renderer (GtkRoot *self)
-{
-  return NULL;
-}
-
-static void
-gtk_root_default_get_surface_transform (GtkRoot *self,
-                                        int     *x,
-                                        int     *y)
-{
-  *x = 0;
-  *y = 0;
-}
-
-static void
-gtk_root_default_check_resize (GtkRoot *self)
-{
-}
-
 static void
 gtk_root_default_add_mnemonic (GtkRoot   *self,
                                guint      keyval,
@@ -119,9 +99,6 @@ static void
 gtk_root_default_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_root_default_get_display;
-  iface->get_renderer = gtk_root_default_get_renderer;
-  iface->get_surface_transform = gtk_root_default_get_surface_transform;
-  iface->check_resize = gtk_root_default_check_resize;
   iface->add_mnemonic = gtk_root_default_add_mnemonic;
   iface->remove_mnemonic = gtk_root_default_remove_mnemonic;
   iface->activate_key = gtk_root_default_activate_key;
@@ -146,53 +123,6 @@ gtk_root_get_display (GtkRoot *self)
 
   iface = GTK_ROOT_GET_IFACE (self);
   return iface->get_display (self);
-}
-
-GskRenderer *
-gtk_root_get_renderer (GtkRoot *self)
-{
-  GtkRootInterface *iface;
-
-  g_return_val_if_fail (GTK_IS_ROOT (self), NULL);
-
-  iface = GTK_ROOT_GET_IFACE (self);
-  return iface->get_renderer (self);
-}
-
-void
-gtk_root_get_surface_transform (GtkRoot *self,
-                                int     *x,
-                                int     *y)
-{
-  GtkRootInterface *iface;
-
-  g_return_if_fail (GTK_IS_ROOT (self));
-  g_return_if_fail (x != 0);
-  g_return_if_fail (y != 0);
-
-  iface = GTK_ROOT_GET_IFACE (self);
-  return iface->get_surface_transform (self, x, y);
-}
-
-/**
- * gtk_root_get_for_surface:
- * @surface: a #GdkSurface
- *
- * Finds the GtkRoot associated with the surface.
- * 
- * Returns: (transfer none): the #GtkRoot that is associated with @surface
- */
-GtkWidget *
-gtk_root_get_for_surface (GdkSurface *surface)
-{
-  GtkWidget *widget;
-
-  widget = (GtkWidget *)gdk_surface_get_widget (surface);
-
-  if (widget && GTK_IS_ROOT (widget))
-    return widget;
-
-  return NULL;
 }
 
 /**
@@ -278,14 +208,6 @@ gtk_root_install_properties (GObjectClass *object_class,
   return GTK_ROOT_NUM_PROPERTIES;
 }
 
-static void
-gtk_root_check_resize (GtkRoot *self)
-{
-  g_return_if_fail (GTK_IS_ROOT (self));
-
-  GTK_ROOT_GET_IFACE (self)->check_resize (self);
-}
-
 static gboolean
 gtk_root_get_restyle_pending (GtkRoot *root)
 {
@@ -334,7 +256,7 @@ gtk_root_do_layout_phase (GdkFrameClock *clock,
    * since it doesn't cause any actual harm.
    */
   if (gtk_widget_needs_allocate (GTK_WIDGET (root)))
-    gtk_root_check_resize (root);
+    gtk_bud_check_resize (GTK_BUD (root));
 
   if (!gtk_root_needs_layout_phase (root))
     gtk_root_stop_layout_phase (root);
