@@ -2880,6 +2880,17 @@ microphone-sensitivity-medium-symbolic</property>
                                     <child>
                                       <object class="GtkNotebook">
                                         <property name="show-border">0</property>
+                                        <child type="action-end">
+                                          <object class="GtkMenuButton">
+                                            <property name="valign">center</property>
+                                            <property name="popover">notebook_info_popover2</property>
+                                            <property name="icon-name">emblem-important-symbolic</property>
+                                            <property name="relief">none</property>
+                                            <style>
+                                              <class name="circular"/>
+                                            </style>
+                                          </object>
+                                        </child>
                                         <child>
                                           <object class="GtkNotebookPage">
                                             <property name="tab-expand">1</property>
@@ -3386,6 +3397,7 @@ bad things might happen.</property>
             <layout>
               <property name="left-attach">1</property>
               <property name="top-attach">1</property>
+              <property name="column-span">2</property>
             </layout>
           </object>
         </child>
@@ -3398,12 +3410,43 @@ bad things might happen.</property>
             <layout>
               <property name="left-attach">1</property>
               <property name="top-attach">0</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkExpander">
+            <child type="label">
+              <object class="GtkLabel">
+                <property name="label">Extra Info</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry">
+                <property name="placeholder-text">Tell me anything…</property>
+              </object>
+            </child>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">2</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton">
+            <property name="halign">end</property>
+            <property name="icon-name">emblem-system-symbolic</property>
+            <property name="menu-model">gear_menu</property>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">3</property>
             </layout>
           </object>
         </child>
         <child>
           <object class="GtkButton" id="open_popover_button">
-            <property name="halign">end</property>
+            <property name="halign">fill</property>
             <property name="label">_Open</property>
             <property name="use-underline">1</property>
             <property name="sensitive">0</property>
@@ -3412,8 +3455,8 @@ bad things might happen.</property>
               <class name="suggested-action"/>
             </style>
             <layout>
-              <property name="left-attach">1</property>
-              <property name="top-attach">2</property>
+              <property name="left-attach">2</property>
+              <property name="top-attach">3</property>
             </layout>
           </object>
         </child>
@@ -3439,12 +3482,48 @@ bad things might happen.</property>
     </widgets>
   </object>
   <object class="GtkPopover" id="notebook_info_popover">
+    <property name="modal">0</property>
     <child>
-      <object class="GtkLabel" id="notebook_info_label">
+      <object class="GtkLabel">
         <property name="label">No updates at this time</property>
         <accessibility>
           <role type="static"/>
         </accessibility>
+      </object>
+    </child>
+  </object>
+  <object class="GtkPopover" id="notebook_info_popover3">
+    <property name="modal">0</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="label">You're in too deep!</property>
+        <accessibility>
+          <role type="static"/>
+        </accessibility>
+      </object>
+    </child>
+  </object>
+  <object class="GtkPopover" id="notebook_info_popover2">
+    <property name="modal">0</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Hidden gems:</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton">
+            <property name="valign">center</property>
+            <property name="popover">notebook_info_popover3</property>
+            <property name="icon-name">emblem-important-symbolic</property>
+            <property name="relief">none</property>
+            <style>
+              <class name="circular"/>
+            </style>
+          </object>
+        </child>
       </object>
     </child>
   </object>
