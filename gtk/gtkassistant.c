@@ -432,7 +432,7 @@ add_action_widgets (GtkAssistant *assistant)
 
           if (has_default)
             {
-              gtk_widget_grab_default (child);
+              gtk_window_set_default_widget (GTK_WINDOW (assistant), child);
               gtk_style_context_add_class (gtk_widget_get_style_context (child), GTK_STYLE_CLASS_SUGGESTED_ACTION);
             }
         }
@@ -807,7 +807,7 @@ update_buttons_state (GtkAssistant *assistant)
     case GTK_ASSISTANT_PAGE_INTRO:
       gtk_widget_set_sensitive (priv->cancel, TRUE);
       gtk_widget_set_sensitive (priv->forward, priv->current_page->complete);
-      gtk_widget_grab_default (priv->forward);
+      gtk_window_set_default_widget (GTK_WINDOW (assistant), priv->forward);
       gtk_widget_show (priv->forward);
       gtk_widget_hide (priv->back);
       gtk_widget_hide (priv->apply);
@@ -818,7 +818,7 @@ update_buttons_state (GtkAssistant *assistant)
       gtk_widget_set_sensitive (priv->cancel, TRUE);
       gtk_widget_set_sensitive (priv->back, TRUE);
       gtk_widget_set_sensitive (priv->apply, priv->current_page->complete);
-      gtk_widget_grab_default (priv->apply);
+      gtk_window_set_default_widget (GTK_WINDOW (assistant), priv->apply);
       gtk_widget_show (priv->back);
       gtk_widget_show (priv->apply);
       gtk_widget_hide (priv->forward);
@@ -829,7 +829,7 @@ update_buttons_state (GtkAssistant *assistant)
       gtk_widget_set_sensitive (priv->cancel, TRUE);
       gtk_widget_set_sensitive (priv->back, TRUE);
       gtk_widget_set_sensitive (priv->forward, priv->current_page->complete);
-      gtk_widget_grab_default (priv->forward);
+      gtk_window_set_default_widget (GTK_WINDOW (assistant), priv->forward);
       gtk_widget_show (priv->back);
       gtk_widget_show (priv->forward);
       gtk_widget_hide (priv->apply);
@@ -838,7 +838,7 @@ update_buttons_state (GtkAssistant *assistant)
       break;
     case GTK_ASSISTANT_PAGE_SUMMARY:
       gtk_widget_set_sensitive (priv->close, priv->current_page->complete);
-      gtk_widget_grab_default (priv->close);
+      gtk_window_set_default_widget (GTK_WINDOW (assistant), priv->close);
       gtk_widget_show (priv->close);
       gtk_widget_hide (priv->back);
       gtk_widget_hide (priv->forward);
@@ -849,7 +849,7 @@ update_buttons_state (GtkAssistant *assistant)
       gtk_widget_set_sensitive (priv->cancel, priv->current_page->complete);
       gtk_widget_set_sensitive (priv->back, priv->current_page->complete);
       gtk_widget_set_sensitive (priv->forward, priv->current_page->complete);
-      gtk_widget_grab_default (priv->forward);
+      gtk_window_set_default_widget (GTK_WINDOW (assistant), priv->forward);
       gtk_widget_show (priv->back);
       gtk_widget_hide (priv->apply);
       gtk_widget_hide (priv->close);
