@@ -535,8 +535,6 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *self,
     }
 
   t = create_texture (self, gdk_texture_get_width (texture), gdk_texture_get_height (texture));
-  gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, t->texture_id,
-                                      "GdkTexture<%p> %d", texture, t->texture_id);
 
   if (gdk_texture_set_render_data (texture, self, t, gsk_gl_driver_release_texture))
     t->user = texture;
@@ -547,6 +545,9 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *self,
                                            surface,
                                            min_filter,
                                            mag_filter);
+  gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, t->texture_id,
+                                      "GdkTexture<%p> %d", texture, t->texture_id);
+
   cairo_surface_destroy (surface);
 
   return t->texture_id;
