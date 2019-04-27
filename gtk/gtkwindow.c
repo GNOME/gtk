@@ -1776,6 +1776,31 @@ gtk_window_capture_motion (GtkWidget *widget,
 }
 
 static void
+activate_default_cb (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       data)
+{
+  gtk_window_activate_default (GTK_WINDOW (data));
+}
+
+static void
+add_actions (GtkWindow *window)
+{
+  GActionEntry entries[] = {
+    { "activate-default", activate_default_cb, NULL, NULL, NULL },
+  };
+
+  GActionGroup *actions;
+
+  actions = G_ACTION_GROUP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   window);
+  gtk_widget_insert_action_group (GTK_WIDGET (window), "gtk", actions);
+  g_object_unref (actions);
+}
+
+static void
 gtk_window_init (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -1868,6 +1893,8 @@ gtk_window_init (GtkWindow *window)
   g_signal_connect_swapped (priv->key_controller, "focus-out",
                             G_CALLBACK (gtk_window_focus_out), window);
   gtk_widget_add_controller (widget, priv->key_controller);
+
+  add_actions (window);
 }
 
 static GtkGesture *
