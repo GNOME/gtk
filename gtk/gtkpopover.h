@@ -50,8 +50,6 @@ struct _GtkPopoverClass
 
   /* keybinding signals */
 
-  void     (* activate_focus)   (GtkPopover *popover);
-  void     (* activate_default) (GtkPopover *popover);
   void     (* close)            (GtkPopover *popover);
 
   /* signals */
