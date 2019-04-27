@@ -122,10 +122,13 @@ image.drag-icon {
   }
 }
 
-.view,
+.view {
+  outline: none;
+}
+
 textview {
   outline: none;
-  text {
+  > text {
     @extend %view;
 
     selection { &:focus, & { @extend %selected_items; }}
