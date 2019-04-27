@@ -2492,10 +2492,17 @@ gtk_window_bud_get_surface_transform (GtkBud *bud,
 }
 
 static void
+gtk_window_bud_check_resize (GtkBud *bud)
+{
+  gtk_window_check_resize (GTK_WINDOW (bud));
+}
+
+static void
 gtk_window_bud_interface_init (GtkBudInterface *iface)
 {
   iface->get_renderer = gtk_window_bud_get_renderer;
   iface->get_surface_transform = gtk_window_bud_get_surface_transform;
+  iface->check_resize = gtk_window_bud_check_resize;
 }
 
 /**
