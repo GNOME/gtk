@@ -456,7 +456,7 @@ gtk_dialog_constructed (GObject *object)
           g_object_unref (child);
 
           if (has_default)
-            gtk_widget_grab_default (child);
+            gtk_window_set_default_widget (GTK_WINDOW (dialog), child);
         }
       g_list_free (children);
 
@@ -865,7 +865,7 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
 
       if (gtk_widget_has_default (child))
         {
-          gtk_widget_grab_default (child);
+          gtk_window_set_default_widget (GTK_WINDOW (dialog), child);
           update_suggested_action (dialog);
         }
     }
@@ -1028,7 +1028,7 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
       ResponseData *rd = get_response_data (widget, FALSE);
 
       if (rd && rd->response_id == response_id)
-	gtk_widget_grab_default (widget);
+        gtk_window_set_default_widget (GTK_WINDOW (dialog), widget);
 
       tmp_list = tmp_list->next;
     }
@@ -1528,7 +1528,7 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
         }
 
       if (item->is_default)
-        gtk_widget_grab_default (GTK_WIDGET (object));
+        gtk_window_set_default_widget (GTK_WINDOW (dialog), GTK_WIDGET (object));
     }
 
   g_slist_free_full (data->items, free_action_widget_info);
