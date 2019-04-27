@@ -103,11 +103,12 @@ foreach test : node_parser_tests
 endforeach
 
 serialize_deserialize_tests = [
-  'color.valid',
-  'border.valid',
-  'shadow.valid',
-  'testswitch.valid',
-  'widgetfactory.valid',
+  'blend',
+  'border',
+  'color',
+  'shadow',
+  'testswitch',
+  'widgetfactory',
 ]
 
 foreach test : serialize_deserialize_tests

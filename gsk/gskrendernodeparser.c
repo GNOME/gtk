@@ -382,6 +382,49 @@ parse_shadows (GtkCssParser *parser,
   return parse_semicolon (parser);
 }
 
+static const struct
+{
+  GskBlendMode mode;
+  const char *name;
+} blend_modes[] = {
+  { GSK_BLEND_MODE_DEFAULT, "normal" },
+  { GSK_BLEND_MODE_MULTIPLY, "multiply" },
+  { GSK_BLEND_MODE_SCREEN, "screen" },
+  { GSK_BLEND_MODE_OVERLAY, "overlay" },
+  { GSK_BLEND_MODE_DARKEN, "darken" },
+  { GSK_BLEND_MODE_LIGHTEN, "lighten" },
+  { GSK_BLEND_MODE_COLOR_DODGE, "color-dodge" },
+  { GSK_BLEND_MODE_COLOR_BURN, "color-burn" },
+  { GSK_BLEND_MODE_HARD_LIGHT, "hard-light" },
+  { GSK_BLEND_MODE_SOFT_LIGHT, "soft-light" },
+  { GSK_BLEND_MODE_DIFFERENCE, "difference" },
+  { GSK_BLEND_MODE_EXCLUSION, "exclusion" },
+  { GSK_BLEND_MODE_COLOR, "color" },
+  { GSK_BLEND_MODE_HUE, "hue" },
+  { GSK_BLEND_MODE_SATURATION, "saturation" },
+  { GSK_BLEND_MODE_LUMINOSITY, "luminosity" }
+};
+
+static gboolean
+parse_blend_mode (GtkCssParser *parser,
+                  gpointer      out_mode)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (blend_modes); i++)
+    {
+      if (gtk_css_parser_try_ident (parser, blend_modes[i].name))
+        {
+          if (!parse_semicolon (parser))
+            return FALSE;
+          *(GskBlendMode *) out_mode = blend_modes[i].mode;
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 static gboolean
 parse_font (GtkCssParser *parser,
             gpointer      out_font)
@@ -836,6 +879,39 @@ parse_cross_fade_node (GtkCssParser *parser)
 }
 
 static GskRenderNode *
+parse_blend_node (GtkCssParser *parser)
+{
+  GskRenderNode *bottom = NULL;
+  GskRenderNode *top = NULL;
+  GskBlendMode mode = GSK_BLEND_MODE_DEFAULT;
+  const Declaration declarations[] = {
+    { "mode", parse_blend_mode, &mode },
+    { "bottom", parse_node, &bottom },
+    { "top", parse_node, &top },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (bottom == NULL || top == NULL)
+    {
+      if (bottom == NULL)
+        gtk_css_parser_error_syntax (parser, "Missing \"bottom\" property definition");
+      if (top == NULL)
+        gtk_css_parser_error_syntax (parser, "Missing \"top\" property definition");
+      g_clear_pointer (&bottom, gsk_render_node_unref);
+      g_clear_pointer (&top, gsk_render_node_unref);
+      return NULL;
+    }
+
+  result = gsk_blend_node_new (bottom, top, mode);
+
+  gsk_render_node_unref (bottom);
+  gsk_render_node_unref (top);
+
+  return result;
+}
+
+static GskRenderNode *
 parse_text_node (GtkCssParser *parser)
 {
   PangoFont *font = NULL;
@@ -1021,9 +1097,9 @@ parse_node (GtkCssParser *parser,
     { "cross-fade", parse_cross_fade_node },
     { "text", parse_text_node },
     { "blur", parse_blur_node },
-    { "debug", parse_debug_node }
-#if 0
+    { "debug", parse_debug_node },
     { "blend", parse_blend_node },
+#if 0
     { "repeat", parse_repeat_node },
     { "cairo", parse_cairo_node },
 #endif
@@ -1757,11 +1833,20 @@ render_node_print (Printer       *p,
 
     case GSK_BLEND_NODE:
       {
+        GskBlendMode mode = gsk_blend_node_get_blend_mode (node);
+        guint i;
+
         start_node (p, "blend");
 
         _indent (p);
-        /* TODO: (de)serialize enums! */
-        g_string_append_printf (p->str, "mode = %d\n", gsk_blend_node_get_blend_mode (node));
+        for (i = 0; i < G_N_ELEMENTS (blend_modes); i++)
+          {
+            if (blend_modes[i].mode == mode)
+              {
+                g_string_append_printf (p->str, "mode: %s;\n", blend_modes[i].name);
+                break;
+              }
+          }
         append_node_param (p, "top", gsk_blend_node_get_top_child (node));
         append_node_param (p, "bottom", gsk_blend_node_get_bottom_child (node));
 
