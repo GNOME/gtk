@@ -336,6 +336,7 @@ enum {
   PROP_FOCUS_VISIBLE,
 
   PROP_IS_MAXIMIZED,
+  PROP_DEFAULT_WIDGET,
 
   LAST_ARG
 };
@@ -1071,6 +1072,13 @@ gtk_window_class_init (GtkWindowClass *klass)
                            P_("The GtkApplication for the window"),
                            GTK_TYPE_APPLICATION,
                            GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
+  window_props[PROP_DEFAULT_WIDGET] =
+      g_param_spec_object ("default-widget",
+                           P_("Default widget"),
+                           P_("The default widget"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_ARG, window_props);
   gtk_root_install_properties (gobject_class, LAST_ARG);
@@ -2040,12 +2048,14 @@ gtk_window_set_property (GObject      *object,
     case PROP_FOCUS_VISIBLE:
       gtk_window_set_focus_visible (window, g_value_get_boolean (value));
       break;
+    case PROP_DEFAULT_WIDGET:
+      gtk_window_set_default (window, g_value_get_object (value));
+      break;
+
     case LAST_ARG + GTK_ROOT_PROP_FOCUS_WIDGET:
       gtk_window_set_focus (window, g_value_get_object (value));
       break;
-    case LAST_ARG + GTK_ROOT_PROP_DEFAULT_WIDGET:
-      gtk_window_set_default (window, g_value_get_object (value));
-      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -2143,11 +2153,11 @@ gtk_window_get_property (GObject      *object,
     case PROP_IS_MAXIMIZED:
       g_value_set_boolean (value, gtk_window_is_maximized (window));
       break;
+    case PROP_DEFAULT_WIDGET:
+      g_value_set_object (value, gtk_window_get_default_widget (window));
+      break;
     case LAST_ARG + GTK_ROOT_PROP_FOCUS_WIDGET:
       g_value_set_object (value, gtk_window_get_focus (window));
-      break;
-    case LAST_ARG + GTK_ROOT_PROP_DEFAULT_WIDGET:
-      g_value_set_object (value, gtk_window_get_default_widget (window));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

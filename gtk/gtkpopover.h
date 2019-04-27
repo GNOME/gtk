@@ -102,8 +102,10 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_popover_popdown (GtkPopover *popover);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_popover_set_default_widget (GtkPopover *popover,
-                                     GtkWidget  *widget);
+void            gtk_popover_set_default_widget (GtkPopover *popover,
+                                                GtkWidget  *widget);
+GDK_AVAILABLE_IN_ALL
+GtkWidget     * gtk_popover_get_default_widget (GtkPopover *popover);
 
 GDK_AVAILABLE_IN_ALL
 GListModel *    gtk_popover_get_popovers (void);

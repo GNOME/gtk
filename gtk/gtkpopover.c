@@ -159,6 +159,7 @@ enum {
   PROP_POINTING_TO,
   PROP_POSITION,
   PROP_MODAL,
+  PROP_DEFAULT_WIDGET,
   NUM_PROPERTIES
 };
 
@@ -680,6 +681,10 @@ gtk_popover_set_property (GObject      *object,
       gtk_popover_set_modal (popover, g_value_get_boolean (value));
       break;
 
+    case PROP_DEFAULT_WIDGET:
+      gtk_popover_set_default_widget (popover, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -804,6 +809,12 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                             P_("Whether the popover is modal"),
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+  properties[PROP_DEFAULT_WIDGET] =
+      g_param_spec_object ("default-widget",
+                           P_("Default widget"),
+                           P_("The default widget"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
@@ -1246,5 +1257,47 @@ gtk_popover_set_default_widget (GtkPopover *popover,
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
-  priv->default_widget = widget;
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+
+  if (widget)
+    g_return_if_fail (gtk_widget_get_can_default (widget));
+
+  if (priv->default_widget != widget)
+    {
+      GtkWidget *old_default_widget = NULL;
+
+      if (priv->default_widget)
+        {
+          old_default_widget = priv->default_widget;
+          _gtk_widget_set_has_default (priv->default_widget, FALSE);
+          gtk_widget_queue_draw (priv->default_widget);
+        }
+
+      priv->default_widget = widget;
+
+      if (priv->default_widget)
+        {
+          _gtk_widget_set_has_default (priv->default_widget, TRUE);
+          gtk_widget_queue_draw (priv->default_widget);
+        }
+
+      if (old_default_widget)
+        g_object_notify (G_OBJECT (old_default_widget), "has-default");
+
+      if (widget)
+        g_object_notify (G_OBJECT (widget), "has-default");
+
+      g_object_notify (G_OBJECT (popover), "default-widget");
+    }
 }
+
+GtkWidget *
+gtk_popover_get_default_widget (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  g_return_val_if_fail (GTK_IS_POPOVER (popover), NULL);
+
+  return priv->default_widget;
+}
+
