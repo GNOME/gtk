@@ -1053,7 +1053,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             P_("Has default"),
                             P_("Whether the widget is the default widget"),
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
 
   widget_props[PROP_RECEIVES_DEFAULT] =
       g_param_spec_boolean ("receives-default",
@@ -2200,10 +2200,6 @@ gtk_widget_set_property (GObject         *object,
       break;
     case PROP_CAN_DEFAULT:
       gtk_widget_set_can_default (widget, g_value_get_boolean (value));
-      break;
-    case PROP_HAS_DEFAULT:
-      if (g_value_get_boolean (value))
-	gtk_widget_grab_default (widget);
       break;
     case PROP_RECEIVES_DEFAULT:
       gtk_widget_set_receives_default (widget, g_value_get_boolean (value));
@@ -5886,29 +5882,6 @@ _gtk_widget_set_has_default (GtkWidget *widget,
     gtk_style_context_add_class (context, GTK_STYLE_CLASS_DEFAULT);
   else
     gtk_style_context_remove_class (context, GTK_STYLE_CLASS_DEFAULT);
-}
-
-/**
- * gtk_widget_grab_default:
- * @widget: a #GtkWidget
- *
- * Causes @widget to become the default widget. @widget must be able to be
- * a default widget; typically you would ensure this yourself
- * by calling gtk_widget_set_can_default() with a %TRUE value.
- * The default widget is activated when
- * the user presses Enter in a window. Default widgets must be
- * activatable, that is, gtk_widget_activate() should affect them. Note
- * that #GtkEntry widgets require the “activates-default” property
- * set to %TRUE before they activate the default widget when Enter
- * is pressed and the #GtkEntry is focused.
- **/
-void
-gtk_widget_grab_default (GtkWidget *widget)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (gtk_widget_get_can_default (widget));
-
-  gtk_root_set_default (gtk_widget_get_root (widget), widget);
 }
 
 /**
