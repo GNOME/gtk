@@ -131,11 +131,7 @@ static GListStore *popover_list = NULL;
 typedef struct {
   GskRenderer *renderer;
   GdkSurface *surface;
-  GtkWidget *focus_widget;
-  gboolean active;
   GtkWidget *default_widget;
-  GtkMnemonicHash *mnemonic_hash;
-  GList *foci;
 
   GdkSurfaceState state;
   GtkWidget *relative_to;
