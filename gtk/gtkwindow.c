@@ -2709,9 +2709,7 @@ gtk_window_set_startup_id (GtkWindow   *window,
  *
  * The default widget is the widget that’s activated when the user
  * presses Enter in a dialog (for example). This function sets or
- * unsets the default widget for a #GtkWindow. When setting (rather
- * than unsetting) the default widget it’s generally easier to call
- * gtk_widget_grab_default() on the widget. Before making a widget
+ * unsets the default widget for a #GtkWindow. Before making a widget
  * the default widget, you must call gtk_widget_set_can_default() on
  * the widget you’d like to make the default.
  */
