@@ -3845,7 +3845,13 @@ gtk_text_real_activate (GtkText *self)
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
   if (priv->activates_default)
-    gtk_root_activate_default (gtk_widget_get_root (GTK_WIDGET (self)));
+    {
+      GActionGroup *group;
+
+      group = gtk_widget_get_action_group (GTK_WIDGET (self), "gtk");
+      if (group)
+        g_action_group_activate_action (group, "activate-default", NULL);
+    }
 }
 
 static void

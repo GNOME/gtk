@@ -6202,7 +6202,13 @@ gtk_label_activate_current_link (GtkLabel *label)
   if (link)
     emit_activate_link (label, link);
   else
-    gtk_root_activate_default (gtk_widget_get_root (widget));
+    {
+      GActionGroup *group;
+
+      group = gtk_widget_get_action_group (widget, "gtk");
+      if (group)
+        g_action_group_activate_action (group, "activate-default", NULL);
+    }
 }
 
 static GtkLabelLink *
