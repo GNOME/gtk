@@ -482,8 +482,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_get_can_default     (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_has_default         (GtkWidget           *widget);
-GDK_AVAILABLE_IN_ALL
-void       gtk_widget_grab_default        (GtkWidget           *widget);
 
 GDK_AVAILABLE_IN_ALL
 void      gtk_widget_set_receives_default (GtkWidget           *widget,
