@@ -720,22 +720,6 @@ gtk_popover_get_property (GObject      *object,
 }
 
 static void
-gtk_popover_activate_default (GtkPopover *popover)
-{
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  gtk_root_activate_default (gtk_widget_get_root (priv->relative_to));
-}
-
-static void
-gtk_popover_activate_focus (GtkPopover *popover)
-{
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  gtk_root_activate_focus (gtk_widget_get_root (priv->relative_to));
-}
-
-static void
 gtk_popover_close (GtkPopover *popover)
 {
   gtk_widget_hide (GTK_WIDGET (popover));
@@ -791,8 +775,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   container_class->add = gtk_popover_add;
   container_class->remove = gtk_popover_remove;
 
-  klass->activate_default = gtk_popover_activate_default;
-  klass->activate_focus = gtk_popover_activate_focus;
   klass->close = gtk_popover_close;
 
   properties[PROP_RELATIVE_TO] =
@@ -825,26 +807,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
-  signals[ACTIVATE_FOCUS] =
-    g_signal_new (I_("activate-focus"),
-                  G_TYPE_FROM_CLASS (object_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkPopoverClass, activate_focus),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE,
-                  0);
-
-  signals[ACTIVATE_DEFAULT] =
-    g_signal_new (I_("activate-default"),
-                  G_TYPE_FROM_CLASS (object_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkPopoverClass, activate_default),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE,
-                  0);
-
   signals[CLOSE] =
     g_signal_new (I_("close"),
                   G_TYPE_FROM_CLASS (object_class),
@@ -867,12 +829,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
 
   binding_set = gtk_binding_set_by_class (klass);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, 0, "activate-focus", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, 0, "activate-focus", 0);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0, "activate-default", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0, "activate-default", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0, "activate-default", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
 
   gtk_widget_class_set_css_name (widget_class, "popover");
