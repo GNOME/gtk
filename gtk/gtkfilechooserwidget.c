@@ -1411,12 +1411,13 @@ widget_key_press_cb (GtkEventControllerKey *controller,
     }
   else
     {
-      gtk_event_controller_key_forward (controller, priv->search_entry);
+      if (gtk_event_controller_key_forward (controller, priv->search_entry))
+        {
+          if (priv->operation_mode != OPERATION_MODE_SEARCH)
+            operation_mode_set (impl, OPERATION_MODE_SEARCH);
 
-      if (priv->operation_mode != OPERATION_MODE_SEARCH)
-        operation_mode_set (impl, OPERATION_MODE_SEARCH);
-
-      handled = TRUE;
+          handled = TRUE;
+        }
     }
 
   g_object_unref (event);
