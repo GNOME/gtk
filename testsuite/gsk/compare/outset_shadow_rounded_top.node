@@ -6,3 +6,34 @@ outset-shadow {
   spread: 1;
   blur: 0;
 }
+
+debug {
+  message: "clipped out area";
+  child: container {
+    color {
+      bounds: 99 101 2 6;
+      color: red;
+    }
+    color {
+      bounds: 101 99 6 2;
+      color: red;
+    }
+    color {
+      bounds: 101 101 3 3;
+      color: red;
+    }
+
+    color {
+      bounds: 299 101 2 6;
+      color: red;
+    }
+    color {
+      bounds: 293 99 6 2;
+      color: red;
+    }
+    color {
+      bounds: 296 101 3 3;
+      color: red;
+    }
+  }
+}
