@@ -85,8 +85,9 @@ foreach test : node_parser_tests
 endforeach
 
 serialize_deserialize_tests = [
-  'color',
+  'blend',
   'border',
+  'color',
   'shadow',
   'testswitch',
   'widgetfactory',
