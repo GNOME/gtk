@@ -116,6 +116,8 @@ typedef struct {
 
   int use_es;
 
+  int max_debug_label_length;
+
   GdkGLContextPaintData *paint_data;
 } GdkGLContextPrivate;
 
@@ -457,11 +459,14 @@ gdk_gl_context_push_debug_group_printf (GdkGLContext *context,
 
   if (priv->use_khr_debug)
     {
+      int msg_len;
+
       va_start (args, format);
       message = g_strdup_vprintf (format, args);
       va_end (args);
 
-      glPushDebugGroupKHR (GL_DEBUG_SOURCE_APPLICATION, 0, -1, message);
+      msg_len = MIN (priv->max_debug_label_length, strlen (message) - 1);
+      glPushDebugGroupKHR (GL_DEBUG_SOURCE_APPLICATION, 0, msg_len, message);
       g_free (message);
     }
 }
@@ -500,11 +505,15 @@ gdk_gl_context_label_object_printf  (GdkGLContext *context,
 
   if (priv->use_khr_debug)
     {
+      int msg_len;
+
       va_start (args, format);
       message = g_strdup_vprintf (format, args);
       va_end (args);
 
-      glObjectLabel (identifier, name, -1, message);
+      msg_len = MIN (priv->max_debug_label_length, strlen (message) - 1);
+
+      glObjectLabel (identifier, name, msg_len, message);
       g_free (message);
     }
 }
@@ -992,7 +1001,10 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
   display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
 
   if (priv->has_khr_debug && GDK_DISPLAY_DEBUG_CHECK (display, GL_DEBUG))
-    priv->use_khr_debug = TRUE;
+    {
+      priv->use_khr_debug = TRUE;
+      glGetIntegerv (GL_MAX_LABEL_LENGTH, &priv->max_debug_label_length);
+    }
   if (!priv->use_es && GDK_DISPLAY_DEBUG_CHECK (display, GL_TEXTURE_RECT))
     priv->use_texture_rectangle = TRUE;
   else if (has_npot)
