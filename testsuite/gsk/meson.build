@@ -46,25 +46,6 @@ test('nodes (cairo)', test_render_nodes,
           ],
      suite: 'gsk')
 
-# Interesting render nodes proven to be rendered 'correctly' by the GL renderer.
-gl_tests = [
-]
-
-foreach gl_test : gl_tests
-  test('GL ' + gl_test[0], compare_render,
-       args: [join_paths(meson.current_source_dir(), 'gl', gl_test[1] + '.node'),
-              join_paths(meson.current_source_dir(), 'gl', gl_test[1] + '.gl.png')],
-       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
-              'GSETTINGS_BACKEND=memory',
-              'GTK_CSD=1',
-              'G_ENABLE_DIAGNOSTIC=0',
-              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-              'GSK_RENDERER=opengl'
-            ],
-       suite: 'gsk')
-endforeach
-
 compare_render_tests = [
   'clip-coordinates-3d',
   'clipped_rounded_clip',
