@@ -1768,6 +1768,13 @@ gtk_window_capture_motion (GtkWidget *widget,
     "w-resize",               "e-resize",
     "sw-resize", "s-resize", "se-resize"
   };
+  GdkEvent *event;
+  GdkSurface *surface;
+
+  event = gtk_get_current_event ();
+  surface = gdk_event_get_surface (event);
+  if (surface != _gtk_widget_get_surface (widget))
+    return;
 
   for (i = 0; i < 8; i++)
     {
