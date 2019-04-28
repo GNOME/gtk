@@ -2878,25 +2878,13 @@ gtk_window_set_position (GtkWindow         *window,
     }
 }
 
-/**
- * gtk_window_activate_focus:
- * @window: a #GtkWindow
- * 
- * Activates the current focused widget within the window.
- * 
- * Returns: %TRUE if a widget got activated.
- **/
-gboolean 
-gtk_window_activate_focus (GtkWindow *window)
+static void
+gtk_window_real_activate_focus (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
   if (priv->focus_widget && gtk_widget_is_sensitive (priv->focus_widget))
-    return gtk_widget_activate (priv->focus_widget);
-
-  return FALSE;
+    gtk_widget_activate (priv->focus_widget);
 }
 
 /**
@@ -6254,12 +6242,6 @@ get_active_region_type (GtkWindow *window, gint x, gint y)
     }
 
   return GTK_WINDOW_REGION_CONTENT;
-}
-
-static void
-gtk_window_real_activate_focus (GtkWindow *window)
-{
-  gtk_window_activate_focus (window);
 }
 
 static void
