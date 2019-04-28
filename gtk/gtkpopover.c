@@ -155,6 +155,7 @@ enum {
   PROP_POSITION,
   PROP_MODAL,
   PROP_CONSTRAIN_TO,
+  PROP_DEFAULT_WIDGET,
   NUM_PROPERTIES
 };
 
@@ -419,6 +420,10 @@ gtk_popover_set_property (GObject      *object,
       gtk_popover_set_constrain_to (GTK_POPOVER (object),
                                     g_value_get_enum (value));
       break;
+    case PROP_DEFAULT_WIDGET:
+      gtk_popover_set_default_widget (GTK_POPOVER (object),
+                                      g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -448,6 +453,9 @@ gtk_popover_get_property (GObject    *object,
       break;
     case PROP_CONSTRAIN_TO:
       g_value_set_enum (value, priv->constraint);
+      break;
+    case PROP_DEFAULT_WIDGET:
+      g_value_set_object (value, priv->default_widget);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1645,6 +1653,13 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                          GTK_TYPE_POPOVER_CONSTRAINT, GTK_POPOVER_CONSTRAINT_WINDOW,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  properties[PROP_DEFAULT_WIDGET] =
+      g_param_spec_object ("default-widget",
+                           P_("Default widget"),
+                           P_("The default widget"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
   /**
@@ -2393,6 +2408,8 @@ gtk_popover_set_default_widget (GtkPopover *popover,
 
   if (gtk_widget_get_mapped (GTK_WIDGET (popover)))
     gtk_window_set_default_widget (priv->window, priv->default_widget);
+
+  g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_DEFAULT_WIDGET]);
 }
 
 /**
