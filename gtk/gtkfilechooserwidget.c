@@ -363,6 +363,7 @@ struct _GtkFileChooserWidgetPrivate {
   guint show_size_column : 1;
   guint create_folders : 1;
   guint auto_selecting_first_row : 1;
+  guint starting_search : 1;
 };
 
 #define MAX_LOADING_TIME 500
@@ -1411,9 +1412,11 @@ widget_key_press_cb (GtkEventControllerKey *controller,
     }
   else
     {
+      priv->starting_search = TRUE;
       if (gtk_event_controller_key_forward (controller, priv->search_entry))
         {
-          if (priv->operation_mode != OPERATION_MODE_SEARCH)
+          if (priv->operation_mode != OPERATION_MODE_SEARCH &&
+              priv->starting_search)
             operation_mode_set (impl, OPERATION_MODE_SEARCH);
 
           handled = TRUE;
@@ -7252,6 +7255,8 @@ search_entry_stop_cb (GtkFileChooserWidget *impl)
     search_stop_searching (impl, FALSE);
   else
     g_object_set (impl, "search-mode", FALSE, NULL);
+
+  impl->priv->starting_search = FALSE;
 }
 
 /* Hides the path bar and creates the search entry */
