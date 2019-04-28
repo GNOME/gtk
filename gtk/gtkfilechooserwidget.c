@@ -556,8 +556,6 @@ static void list_row_activated         (GtkTreeView           *tree_view,
                                         GtkTreePath           *path,
                                         GtkTreeViewColumn     *column,
                                         GtkFileChooserWidget  *impl);
-static void list_cursor_changed        (GtkTreeView           *treeview,
-                                        GtkFileChooserWidget  *impl);
 
 static void path_bar_clicked (GtkPathBar            *path_bar,
                               GFile                 *file,
@@ -1260,13 +1258,10 @@ places_sidebar_show_error_message_cb (GtkPlacesSidebar *sidebar,
 }
 
 static gboolean
-key_is_left_or_right (const GdkEvent *event)
+key_is_left_or_right (guint keyval,
+                      guint state)
 {
-  guint modifiers, keyval, state;
-
-  if (!gdk_event_get_keyval (event, &keyval) ||
-      !gdk_event_get_state (event, &state))
-    return FALSE;
+  guint modifiers;
 
   modifiers = gtk_accelerator_get_default_mod_mask ();
 
@@ -1327,10 +1322,7 @@ key_press_cb (GtkEventControllerKey *controller,
 {
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
-  const GdkEvent *event;
   const char *string;
-
-  event = gtk_get_current_event ();
 
   if (should_trigger_location_entry (impl, keyval, state, &string) &&
       (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
@@ -1340,7 +1332,7 @@ key_press_cb (GtkEventControllerKey *controller,
       return GDK_EVENT_STOP;
     }
 
-  if (key_is_left_or_right (event))
+  if (key_is_left_or_right (keyval, state))
     {
       if (gtk_widget_child_focus (priv->places_sidebar, GTK_DIR_LEFT))
         return GDK_EVENT_STOP;
@@ -1396,10 +1388,7 @@ widget_key_press_cb (GtkEventControllerKey *controller,
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   gboolean handled = FALSE;
-  GdkEvent *event;
   const char *string;
-
-  event = gtk_get_current_event ();
 
   if (should_trigger_location_entry (impl, keyval, state, &string))
     {
@@ -1422,8 +1411,6 @@ widget_key_press_cb (GtkEventControllerKey *controller,
           handled = TRUE;
         }
     }
-
-  g_object_unref (event);
 
   return handled;
 }
@@ -7005,10 +6992,6 @@ search_engine_hits_added_cb (GtkSearchEngine      *engine,
 {
   GList *l, *files, *files_with_info, *infos;
   GFile *file;
-  gboolean select = FALSE;
-
-  if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (impl->priv->search_model), NULL) == 0)
-    select = TRUE;
 
   files = NULL;
   files_with_info = NULL;
@@ -7036,8 +7019,6 @@ search_engine_hits_added_cb (GtkSearchEngine      *engine,
   g_list_free_full (infos, g_object_unref);
 
   gtk_stack_set_visible_child_name (GTK_STACK (impl->priv->browse_files_stack), "list");
-  if (select)
-    gtk_widget_grab_focus (impl->priv->browse_files_tree_view);
 }
 
 /* Callback used from GtkSearchEngine when the query is done running */
@@ -7695,6 +7676,24 @@ list_cursor_changed (GtkTreeView          *list,
                      GtkFileChooserWidget *impl)
 {
   check_preview_change (impl);
+}
+
+static gboolean
+browse_files_tree_view_keynav_failed_cb (GtkWidget        *widget,
+                                         GtkDirectionType  direction,
+                                         gpointer          user_data)
+{
+ GtkFileChooserWidget *self = user_data;
+ GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (self);
+
+ if (direction == GTK_DIR_UP && priv->operation_mode == OPERATION_MODE_SEARCH)
+   {
+     gtk_widget_grab_focus (priv->search_entry);
+
+     return TRUE;
+   }
+
+  return FALSE;
 }
 
 /* Callback used when a row in the file list is activated */
@@ -8424,6 +8423,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, file_list_drag_end_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, list_cursor_changed);
+  gtk_widget_class_bind_template_callback (widget_class, browse_files_tree_view_keynav_failed_cb);
   gtk_widget_class_bind_template_callback (widget_class, filter_combo_changed);
   gtk_widget_class_bind_template_callback (widget_class, path_bar_clicked);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_open_location_cb);

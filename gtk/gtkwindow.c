@@ -6524,6 +6524,9 @@ gtk_window_set_focus (GtkWindow *window,
   if (focus && !gtk_widget_is_sensitive (focus))
     return;
 
+  if (focus == priv->focus_widget)
+    return;
+
   if (priv->focus_widget)
     old_focus = g_object_ref (priv->focus_widget);
   g_set_object (&priv->focus_widget, NULL);

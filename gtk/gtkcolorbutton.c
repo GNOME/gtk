@@ -154,16 +154,6 @@ gtk_color_button_measure (GtkWidget       *widget,
 }
 
 static void
-gtk_color_button_snapshot (GtkWidget   *widget,
-                           GtkSnapshot *snapshot)
-{
-  GtkColorButton *button = GTK_COLOR_BUTTON (widget);
-  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
-
-  gtk_widget_snapshot_child (widget, priv->button, snapshot);
-}
-
-static void
 gtk_color_button_size_allocate (GtkWidget *widget,
                                 int        width,
                                 int        height,
@@ -193,7 +183,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   gobject_class->set_property = gtk_color_button_set_property;
   gobject_class->finalize = gtk_color_button_finalize;
 
-  widget_class->snapshot = gtk_color_button_snapshot;
   widget_class->measure = gtk_color_button_measure;
   widget_class->size_allocate = gtk_color_button_size_allocate;
   klass->color_set = NULL;

@@ -3875,6 +3875,10 @@ filechooser {
   #pathbarbox { border-bottom: 1px solid $bg_color; }
 }
 
+
+filechooserbutton>button>box {
+  border-spacing: 6px;
+}
 filechooserbutton:drop(active) {
   box-shadow: none;
   border-color: transparent;
