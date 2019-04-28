@@ -326,6 +326,7 @@ struct _GskGLRenderer
       Program unblurred_outset_shadow_program;
       Program border_program;
       Program cross_fade_program;
+      Program blend_program;
     };
   };
 
@@ -1901,6 +1902,54 @@ render_cross_fade_node (GskGLRenderer       *self,
 }
 
 static inline void
+render_blend_node (GskGLRenderer   *self,
+                   GskRenderNode   *node,
+                   RenderOpBuilder *builder)
+{
+  GskRenderNode *top_child = gsk_blend_node_get_top_child (node);
+  GskRenderNode *bottom_child = gsk_blend_node_get_bottom_child (node);
+  const float min_x = builder->dx + node->bounds.origin.x;
+  const float min_y = builder->dy + node->bounds.origin.y;
+  const float max_x = min_x + node->bounds.size.width;
+  const float max_y = min_y + node->bounds.size.height;
+  int top_texture_id;
+  int bottom_texture_id;
+  gboolean is_offscreen1, is_offscreen2;
+  RenderOp op;
+  const GskQuadVertex vertex_data[GL_N_VERTICES] = {
+    { { min_x, min_y }, { 0, 1 }, },
+    { { min_x, max_y }, { 0, 0 }, },
+    { { max_x, min_y }, { 1, 1 }, },
+
+    { { max_x, max_y }, { 1, 0 }, },
+    { { min_x, max_y }, { 0, 0 }, },
+    { { max_x, min_y }, { 1, 1 }, },
+  };
+
+  /* TODO: We create 2 textures here as big as the blend node, but both the
+   * start and the end node might be a lot smaller than that. */
+  add_offscreen_ops (self, builder,
+                     &node->bounds,
+                     bottom_child,
+                     &bottom_texture_id, &is_offscreen1,
+                     FORCE_OFFSCREEN | RESET_CLIP);
+
+  add_offscreen_ops (self, builder,
+                     &node->bounds,
+                     top_child,
+                     &top_texture_id, &is_offscreen2,
+                     FORCE_OFFSCREEN | RESET_CLIP);
+
+  ops_set_program (builder, &self->blend_program);
+  ops_set_texture (builder, bottom_texture_id);
+  op.op = OP_CHANGE_BLEND;
+  op.blend.source2 = top_texture_id;
+  op.blend.mode = gsk_blend_node_get_blend_mode (node);
+  ops_add (builder, &op);
+  ops_draw (builder, vertex_data);
+}
+
+static inline void
 apply_viewport_op (const Program  *program,
                    const RenderOp *op)
 {
@@ -2174,6 +2223,18 @@ apply_cross_fade_op (const Program  *program,
   glUniform1f (program->cross_fade.progress_location, op->cross_fade.progress);
 }
 
+static inline void
+apply_blend_op (const Program  *program,
+                const RenderOp *op)
+{
+  /* End texture id */
+  glUniform1i (program->blend.source2_location, 1);
+  glActiveTexture (GL_TEXTURE0 + 1);
+  glBindTexture (GL_TEXTURE_2D, op->blend.source2);
+  /* progress */
+  glUniform1i (program->blend.mode_location, op->blend.mode);
+}
+
 static void
 gsk_gl_renderer_dispose (GObject *gobject)
 {
@@ -2206,6 +2267,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
     { "unblurred outset shadow",   "unblurred_outset_shadow.fs.glsl" },
     { "border",          "border.fs.glsl" },
     { "cross fade",      "cross_fade.fs.glsl" },
+    { "blend",           "blend.fs.glsl" },
   };
 
   builder = gsk_shader_builder_new ();
@@ -2335,6 +2397,10 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   /* cross fade */
   INIT_PROGRAM_UNIFORM_LOCATION (cross_fade, progress);
   INIT_PROGRAM_UNIFORM_LOCATION (cross_fade, source2);
+
+  /* blend */
+  INIT_PROGRAM_UNIFORM_LOCATION (blend, source2);
+  INIT_PROGRAM_UNIFORM_LOCATION (blend, mode);
 
   g_object_unref (builder);
   return TRUE;
@@ -2588,8 +2654,11 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       render_cross_fade_node (self, node, builder);
     break;
 
-    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_BLEND_NODE:
+      render_blend_node (self, node, builder);
+    break;
+
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_REPEAT_NODE:
     case GSK_CAIRO_NODE:
     default:
@@ -2853,6 +2922,11 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
         case OP_CHANGE_CROSS_FADE:
           g_assert (program == &self->cross_fade_program);
           apply_cross_fade_op (program, op);
+          break;
+
+        case OP_CHANGE_BLEND:
+          g_assert (program == &self->blend_program);
+          apply_blend_op (program, op);
           break;
 
         case OP_CHANGE_LINEAR_GRADIENT:
