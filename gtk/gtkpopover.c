@@ -818,7 +818,7 @@ gtk_popover_map (GtkWidget *widget)
   gdk_surface_show (gtk_widget_get_surface (widget));
   gtk_popover_update_position (GTK_POPOVER (widget));
 
-  gtk_window_set_default (priv->window, priv->default_widget);
+  gtk_window_set_default_widget (priv->window, priv->default_widget);
 }
 
 static void
@@ -832,7 +832,7 @@ gtk_popover_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->unmap (widget);
 
   if (gtk_window_get_default_widget (priv->window) == priv->default_widget)
-    gtk_window_set_default (priv->window, priv->prev_default);
+    gtk_window_set_default_widget (priv->window, priv->prev_default);
   g_clear_object (&priv->prev_default);
 }
 
@@ -2392,7 +2392,7 @@ gtk_popover_set_default_widget (GtkPopover *popover,
     g_object_ref (priv->default_widget);
 
   if (gtk_widget_get_mapped (GTK_WIDGET (popover)))
-    gtk_window_set_default (priv->window, priv->default_widget);
+    gtk_window_set_default_widget (priv->window, priv->default_widget);
 }
 
 /**
