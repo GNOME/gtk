@@ -85,10 +85,9 @@
                                   <object class="GtkStackPage">
                                     <property name="name">search</property>
                                     <property name="child">
-                                      <object class="GtkBox" id="search_entry_box">
-                                        <property name="spacing">6</property>
+                                      <object class="GtkCenterBox" id="search_entry_box">
                                         <property name="margin">6</property>
-                                        <child>
+                                        <child type="center">
                                           <object class="GtkSearchEntry" id="search_entry">
                                             <property name="width-chars">45</property>
                                             <property name="hexpand">1</property>
@@ -97,7 +96,7 @@
                                             <signal name="stop-search" handler="search_entry_stop_cb" swapped="yes"/>
                                           </object>
                                         </child>
-                                        <child>
+                                        <child type="end">
                                           <object class="GtkSpinner" id="search_spinner">
                                             <property name="visible">0</property>
                                           </object>
