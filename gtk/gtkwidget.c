@@ -5478,7 +5478,8 @@ static void
 gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (focus_widget);
-  gtk_root_set_focus (priv->root, focus_widget);
+  if (priv->root)
+    gtk_root_set_focus (priv->root, focus_widget);
 }
 
 static gboolean
