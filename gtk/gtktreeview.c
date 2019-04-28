@@ -400,7 +400,6 @@ struct _GtkTreeViewPrivate
 
   /* Non-interactive Header Resizing, expand flag support */
   gint last_extra_space;
-  gint last_extra_space_per_column;
   gint last_number_of_expand_columns;
 
   /* Row drag-and-drop */
@@ -2467,10 +2466,10 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
 
   if (update_expand)
     {
-      tree_view->priv->last_extra_space_per_column = extra_per_column;
       tree_view->priv->last_number_of_expand_columns = number_of_expand_columns;
     }
 
+  int i = 0;
   for (list = first_column;
        list != last_column->next;
        list = list->next)
