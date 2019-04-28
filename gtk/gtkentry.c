@@ -2120,10 +2120,6 @@ gtk_entry_get_text_length (GtkEntry *entry)
  * widget for the window containing the entry. This usually means that
  * the dialog box containing the entry will be closed, since the default
  * widget is usually one of the dialog buttons.
- *
- * (For experts: if @setting is %TRUE, the entry calls
- * gtk_window_activate_default() on the window containing the entry, in
- * the default handler for the #GtkEntry::activate signal.)
  **/
 void
 gtk_entry_set_activates_default (GtkEntry *entry,
