@@ -38,8 +38,7 @@ typedef struct _GtkTextClass         GtkTextClass;
  *   non-%NULL, this will be called to add additional entries to the context
  *   menu when it is displayed.
  * @activate: Class handler for the #GtkText::activate signal. The default
- *   implementation calls gtk_window_activate_default() on the entry’s top-level
- *   window.
+ *   implementation activates the gtk.activate-default action.
  * @move_cursor: Class handler for the #GtkText::move-cursor signal. The
  *   default implementation specifies the standard #GtkText cursor movement
  *   behavior.
