@@ -398,10 +398,6 @@ struct _GtkTreeViewPrivate
   gint drag_pos;
   gint x_drag;
 
-  /* Non-interactive Header Resizing, expand flag support */
-  gint last_extra_space;
-  gint last_number_of_expand_columns;
-
   /* Row drag-and-drop */
   GtkTreeRowReference *drag_dest_row;
   GtkTreeViewDropPosition drag_dest_pos;
@@ -500,8 +496,6 @@ struct _GtkTreeViewPrivate
   guint rubber_banding_enable : 1;
 
   guint in_grab : 1;
-
-  guint post_validation_flag : 1;
 
   /* Whether our key press handler is to avoid sending an unhandled binding to the search entry */
   guint search_entry_avoid_unhandled_binding : 1;
@@ -1703,8 +1697,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
 
   priv->tooltip_column = -1;
 
-  priv->post_validation_flag = FALSE;
-
   priv->event_last_x = -10000;
   priv->event_last_y = -10000;
 
@@ -2396,11 +2388,10 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
   GList *list, *first_column, *last_column;
   GtkTreeViewColumn *column;
   gint widget_width, width = 0;
-  gint extra, extra_per_column, extra_for_last;
+  gint extra, extra_per_column;
   gint full_requested_width = 0;
   gint number_of_expand_columns = 0;
   gboolean rtl;
-  gboolean update_expand;
 
   for (last_column = g_list_last (tree_view->priv->columns);
        last_column &&
@@ -2435,41 +2426,14 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
 	number_of_expand_columns++;
     }
 
-  /* Only update the expand value if the number of expand columns has changed,
-   * or if there are no expand columns, or if we didn't have an size-allocation
-   * yet after the last validated node.
-   */
-  update_expand = number_of_expand_columns != tree_view->priv->last_number_of_expand_columns
-      || number_of_expand_columns == 0
-      || tree_view->priv->post_validation_flag == TRUE;
-
-  tree_view->priv->post_validation_flag = FALSE;
-
   widget_width = gtk_widget_get_width (widget);
-  if (!update_expand)
-    {
-      extra = tree_view->priv->last_extra_space;
-      extra_for_last = MAX (widget_width - full_requested_width - extra, 0);
-    }
-  else
-    {
-      extra = MAX (widget_width - full_requested_width, 0);
-      extra_for_last = 0;
-
-      tree_view->priv->last_extra_space = extra;
-    }
+  extra = MAX (widget_width - full_requested_width, 0);
 
   if (number_of_expand_columns > 0)
     extra_per_column = extra/number_of_expand_columns;
   else
     extra_per_column = 0;
 
-  if (update_expand)
-    {
-      tree_view->priv->last_number_of_expand_columns = number_of_expand_columns;
-    }
-
-  int i = 0;
   for (list = first_column;
        list != last_column->next;
        list = list->next)
@@ -2505,12 +2469,6 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
 	{
 	  column_width += extra;
 	}
-
-      /* In addition to expand, the last column can get even more
-       * extra space so all available space is filled up.
-       */
-      if (extra_for_last > 0 && list == last_column)
-	column_width += extra_for_last;
 
       if (rtl)
         _gtk_tree_view_column_allocate (column, widget_width - width - column_width + x_offset,
@@ -5682,7 +5640,6 @@ validate_row (GtkTreeView   *tree_view,
       gtk_tree_rbtree_node_set_height (tree, node, height);
     }
   gtk_tree_rbtree_node_mark_valid (tree, node);
-  tree_view->priv->post_validation_flag = TRUE;
 
   return retval;
 }
