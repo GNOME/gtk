@@ -11,7 +11,7 @@
 #include "gskrendernodeprivate.h"
 
 #define GL_N_VERTICES 6
-#define GL_N_PROGRAMS 11
+#define GL_N_PROGRAMS 12
 
 
 
@@ -61,6 +61,7 @@ enum {
   OP_DUMP_FRAMEBUFFER       =  23,
   OP_PUSH_DEBUG_GROUP       =  24,
   OP_POP_DEBUG_GROUP        =  25,
+  OP_CHANGE_BLEND           =  26,
 };
 
 typedef struct
@@ -136,6 +137,10 @@ typedef struct
       int source2_location;
       int progress_location;
     } cross_fade;
+    struct {
+      int source2_location;
+      int mode_location;
+    } blend;
   };
 
 } Program;
@@ -214,6 +219,10 @@ typedef struct
       float progress;
       int source2;
     } cross_fade;
+    struct {
+      int source2;
+      int mode;
+    } blend;
     struct {
       char *filename;
       int width;
