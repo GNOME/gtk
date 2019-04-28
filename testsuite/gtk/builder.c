@@ -1468,7 +1468,7 @@ test_widget (void)
     "  <object class=\"GtkWindow\" id=\"window1\">"
     "    <child>"
     "      <object class=\"GtkButton\" id=\"button1\">"
-    "         <property name=\"has-default\">True</property>"
+    "         <property name=\"receives-default\">True</property>"
     "      </object>"
     "    </child>"
     "  </object>"
