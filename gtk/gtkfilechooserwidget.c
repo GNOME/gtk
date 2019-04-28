@@ -2482,6 +2482,7 @@ static void
 location_entry_close_clicked (GtkFileChooserWidget *impl)
 {
   location_mode_set (impl, LOCATION_MODE_PATH_BAR);
+  gtk_widget_grab_focus (GTK_WIDGET (impl));
 }
 
 static void
