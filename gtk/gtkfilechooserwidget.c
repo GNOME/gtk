@@ -1395,10 +1395,7 @@ widget_key_press_cb (GtkEventControllerKey *controller,
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   gboolean handled = FALSE;
-  GdkEvent *event;
   const char *string;
-
-  event = gtk_get_current_event ();
 
   if (should_trigger_location_entry (impl, keyval, state, &string))
     {
@@ -1419,8 +1416,6 @@ widget_key_press_cb (GtkEventControllerKey *controller,
           handled = TRUE;
         }
     }
-
-  g_object_unref (event);
 
   return handled;
 }
