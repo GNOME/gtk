@@ -429,7 +429,6 @@ static void gtk_window_move_focus         (GtkWidget         *widget,
                                            GtkDirectionType   dir);
 
 static void gtk_window_real_activate_default (GtkWindow         *window);
-static void gtk_window_real_activate_focus   (GtkWindow         *window);
 static void gtk_window_keys_changed          (GtkWindow         *window);
 static gboolean gtk_window_enable_debugging  (GtkWindow         *window,
                                               gboolean           toggle);
@@ -801,7 +800,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   container_class->forall = gtk_window_forall;
 
   klass->activate_default = gtk_window_real_activate_default;
-  klass->activate_focus = gtk_window_real_activate_focus;
   klass->keys_changed = gtk_window_keys_changed;
   klass->enable_debugging = gtk_window_enable_debugging;
   klass->close_request = gtk_window_close_request;
@@ -2836,27 +2834,6 @@ gtk_window_set_position (GtkWindow         *window,
   
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_WIN_POS]);
     }
-}
-
-/**
- * gtk_window_activate_focus:
- * @window: a #GtkWindow
- * 
- * Activates the current focused widget within the window.
- * 
- * Returns: %TRUE if a widget got activated.
- **/
-gboolean 
-gtk_window_activate_focus (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  if (priv->focus_widget && gtk_widget_is_sensitive (priv->focus_widget))
-    return gtk_widget_activate (priv->focus_widget);
-
-  return FALSE;
 }
 
 /**
@@ -6235,12 +6212,6 @@ static void
 gtk_window_real_activate_default (GtkWindow *window)
 {
   gtk_window_activate_default (window);
-}
-
-static void
-gtk_window_real_activate_focus (GtkWindow *window)
-{
-  gtk_window_activate_focus (window);
 }
 
 static void
