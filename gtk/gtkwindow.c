@@ -2176,8 +2176,10 @@ gtk_window_buildable_set_buildable_property (GtkBuildable *buildable,
 
   if (strcmp (name, "visible") == 0 && g_value_get_boolean (value))
     priv->builder_visible = TRUE;
-  else
+  else if (parent_buildable_iface->set_buildable_property)
     parent_buildable_iface->set_buildable_property (buildable, builder, name, value);
+  else
+    g_object_set_property (G_OBJECT (buildable), name, value);
 }
 
 typedef struct {
