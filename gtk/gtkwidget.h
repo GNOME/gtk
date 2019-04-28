@@ -1012,6 +1012,11 @@ GDK_AVAILABLE_IN_ALL
 const gchar **          gtk_widget_list_action_prefixes (GtkWidget             *widget);
 
 GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_activate_action      (GtkWidget  *widget,
+                                                         const char *name,
+                                                         GVariant   *parameter);
+
+GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_set_font_map         (GtkWidget             *widget,
                                                          PangoFontMap          *font_map);
 GDK_AVAILABLE_IN_ALL
