@@ -2529,7 +2529,7 @@ gtk_window_set_startup_id (GtkWindow   *window,
 }
 
 /**
- * gtk_window_set_default:
+ * gtk_window_set_default_widget:
  * @window: a #GtkWindow
  * @default_widget: (allow-none): widget to be the default, or %NULL
  *     to unset the default widget for the toplevel
@@ -2543,8 +2543,8 @@ gtk_window_set_startup_id (GtkWindow   *window,
  * the widget you’d like to make the default.
  */
 void
-gtk_window_set_default (GtkWindow *window,
-			GtkWidget *default_widget)
+gtk_window_set_default_widget (GtkWindow *window,
+                               GtkWidget *default_widget)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
@@ -3046,7 +3046,7 @@ gtk_window_dispose (GObject *object)
   priv->foci = NULL;
 
   gtk_window_set_focus (window, NULL);
-  gtk_window_set_default (window, NULL);
+  gtk_window_set_default_widget (window, NULL);
   remove_attach_widget (window);
 
   G_OBJECT_CLASS (gtk_window_parent_class)->dispose (object);
@@ -6618,7 +6618,7 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
     child = _gtk_widget_get_parent (child);
 
   if (child == widget)
-    gtk_window_set_default (window, NULL);
+    gtk_window_set_default_widget (window, NULL);
   
   g_object_unref (widget);
   g_object_unref (window);
