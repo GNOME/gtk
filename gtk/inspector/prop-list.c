@@ -42,6 +42,7 @@
 #include "gtklistbox.h"
 #include "gtksizegroup.h"
 #include "gtkroot.h"
+#include "gtkgesturemultipress.h"
 
 enum
 {
@@ -49,6 +50,11 @@ enum
   PROP_OBJECT_TREE,
   PROP_SEARCH_ENTRY
 };
+
+typedef enum {
+  COLUMN_NAME,
+  COLUMN_ORIGIN
+} SortColumn;
 
 struct _GtkInspectorPropListPrivate
 {
@@ -58,6 +64,12 @@ struct _GtkInspectorPropListPrivate
   GtkWidget *search_entry;
   GtkWidget *search_stack;
   GtkWidget *list2;
+  GtkWidget *name_sort_indicator;
+  GtkWidget *origin_sort_indicator;
+  GtkWidget *name_heading;
+  GtkWidget *origin_heading;
+  SortColumn sort_column;
+  GtkSortType sort_direction;
   GtkSizeGroup *names;
   GtkSizeGroup *types;
   GtkSizeGroup *values;
@@ -81,6 +93,90 @@ show_search_entry (GtkInspectorPropList *pl)
                                pl->priv->search_entry);
 }
 
+static void
+apply_sort (GtkInspectorPropList *pl,
+            SortColumn            column,
+            GtkSortType           direction)
+{
+  const char *icon_name;
+
+  icon_name = direction == GTK_SORT_ASCENDING ? "pan-down-symbolic"
+                                              : "pan-up-symbolic";
+
+  if (column == COLUMN_NAME)
+    {
+      gtk_widget_hide (pl->priv->origin_sort_indicator);
+      gtk_widget_show (pl->priv->name_sort_indicator);
+
+      gtk_image_set_from_icon_name (GTK_IMAGE (pl->priv->name_sort_indicator),
+                                    icon_name);
+    }
+  else
+    {
+      gtk_widget_show (pl->priv->origin_sort_indicator);
+      gtk_widget_hide (pl->priv->name_sort_indicator);
+
+      gtk_image_set_from_icon_name (GTK_IMAGE (pl->priv->origin_sort_indicator),
+                                    icon_name);
+    }
+
+  pl->priv->sort_column = column;
+  pl->priv->sort_direction = direction;
+
+  gtk_list_box_invalidate_sort (GTK_LIST_BOX (pl->priv->list2));
+}
+
+static void
+sort_changed (GtkGestureMultiPress *gesture,
+              int                   n_press,
+              double                x,
+              double                y,
+              GtkInspectorPropList *pl)
+{
+  SortColumn column;
+  GtkSortType direction;
+  GtkWidget *widget;
+
+  widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  if (widget == pl->priv->name_heading)
+    column = COLUMN_NAME;
+  else
+    column = COLUMN_ORIGIN;
+
+  if (pl->priv->sort_column == column &&
+      pl->priv->sort_direction == GTK_SORT_ASCENDING)
+    direction = GTK_SORT_DESCENDING;
+  else
+    direction = GTK_SORT_ASCENDING;
+
+  apply_sort (pl, column, direction);
+}
+
+static const char *
+row_get_column (GtkListBoxRow *row,
+                SortColumn     column)
+{
+  GParamSpec *prop = g_object_get_data (G_OBJECT (row), "pspec");
+
+  if (column == COLUMN_NAME)
+    return prop->name;
+  else
+    return g_type_name (prop->owner_type);
+}
+
+static int
+sort_func (GtkListBoxRow *row1,
+           GtkListBoxRow *row2,
+           gpointer       user_data)
+{
+  GtkInspectorPropList *pl = user_data;
+  const char *s1 = row_get_column (row1, pl->priv->sort_column);
+  const char *s2 = row_get_column (row2, pl->priv->sort_column);
+  int ret = strcmp (s1, s2);
+
+  return pl->priv->sort_direction == GTK_SORT_ASCENDING ? ret : -ret;
+}
+
 static gboolean
 filter_func (GtkListBoxRow *row,
              gpointer       data)
@@ -97,6 +193,7 @@ gtk_inspector_prop_list_init (GtkInspectorPropList *pl)
 {
   pl->priv = gtk_inspector_prop_list_get_instance_private (pl);
   gtk_widget_init_template (GTK_WIDGET (pl));
+  apply_sort (pl, COLUMN_NAME, GTK_SORT_ASCENDING);
 }
 
 static void
@@ -197,6 +294,7 @@ constructed (GObject *object)
                             G_CALLBACK (gtk_list_box_invalidate_filter), pl->priv->list2);
 
   gtk_list_box_set_filter_func (GTK_LIST_BOX (pl->priv->list2), filter_func, pl, NULL);
+  gtk_list_box_set_sort_func (GTK_LIST_BOX (pl->priv->list2), sort_func, pl, NULL);
 }
 
 static void
@@ -289,6 +387,11 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, types);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, values);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, origins);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, name_heading);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, name_sort_indicator);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, origin_heading);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, origin_sort_indicator);
+  gtk_widget_class_bind_template_callback (widget_class, sort_changed);
 }
 
 /* Like g_strdup_value_contents, but keeps the type name separate */
@@ -533,7 +636,7 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
         continue;
 
       row = gtk_inspector_prop_list_create_row (pl, prop);
-      gtk_container_add (GTK_CONTAINER (pl->priv->list2), row);      
+      gtk_container_add (GTK_CONTAINER (pl->priv->list2), row);
     }
 
   g_free (props);
