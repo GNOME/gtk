@@ -341,17 +341,7 @@ static void
 file_chooser_widget_file_activated (GtkFileChooser       *chooser,
                                     GtkFileChooserDialog *dialog)
 {
-  GtkWidget *widget;
-
-  if (gtk_window_activate_default (GTK_WINDOW (dialog)))
-    return;
-
-  /* There probably isn't a default widget, so make things easier for the
-   * programmer by looking for a reasonable button on our own.
-   */
-  widget = get_accept_action_widget (GTK_DIALOG (dialog), TRUE);
-  if (widget)
-    gtk_widget_activate (widget);
+  gtk_widget_activate_action (GTK_WIDGET (chooser), "gtk.activate-default", NULL);
 }
 
 static void
@@ -405,22 +395,9 @@ static void
 file_chooser_widget_response_requested (GtkWidget            *widget,
                                         GtkFileChooserDialog *dialog)
 {
-  GtkWidget *button;
-
   dialog->priv->response_requested = TRUE;
 
-  if (gtk_window_activate_default (GTK_WINDOW (dialog)))
-    return;
-
-  /* There probably isn't a default widget, so make things easier for the
-   * programmer by looking for a reasonable button on our own.
-   */
-  button = get_accept_action_widget (GTK_DIALOG (dialog), TRUE);
-  if (button)
-    {
-      gtk_widget_activate (button);
-      return;
-    }
+  gtk_widget_activate_action (widget, "gtk.activate-default", NULL);
 
   dialog->priv->response_requested = FALSE;
 }
