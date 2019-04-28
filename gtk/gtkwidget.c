@@ -676,10 +676,6 @@ static const gchar *    gtk_widget_buildable_get_name           (GtkBuildable   
 static GObject *        gtk_widget_buildable_get_internal_child (GtkBuildable *buildable,
 								 GtkBuilder   *builder,
 								 const gchar  *childname);
-static void             gtk_widget_buildable_set_buildable_property (GtkBuildable     *buildable,
-								     GtkBuilder       *builder,
-								     const gchar      *name,
-								     const GValue     *value);
 static gboolean         gtk_widget_buildable_custom_tag_start   (GtkBuildable     *buildable,
                                                                  GtkBuilder       *builder,
                                                                  GObject          *child,
@@ -9592,14 +9588,12 @@ gtk_widget_buildable_add_child (GtkBuildable  *buildable,
 static void
 gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
 {
-  quark_builder_has_focus = g_quark_from_static_string ("gtk-builder-has-focus");
   quark_builder_atk_relations = g_quark_from_static_string ("gtk-builder-atk-relations");
   quark_builder_set_name = g_quark_from_static_string ("gtk-builder-set-name");
 
   iface->set_name = gtk_widget_buildable_set_name;
   iface->get_name = gtk_widget_buildable_get_name;
   iface->get_internal_child = gtk_widget_buildable_get_internal_child;
-  iface->set_buildable_property = gtk_widget_buildable_set_buildable_property;
   iface->parser_finished = gtk_widget_buildable_parser_finished;
   iface->custom_tag_start = gtk_widget_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_widget_buildable_custom_tag_end;
@@ -9662,19 +9656,6 @@ gtk_widget_buildable_get_internal_child (GtkBuildable *buildable,
     return gtk_widget_get_template_child (GTK_WIDGET (buildable), internal_child_type, childname);
 
   return NULL;
-}
-
-static void
-gtk_widget_buildable_set_buildable_property (GtkBuildable *buildable,
-					     GtkBuilder   *builder,
-					     const gchar  *name,
-					     const GValue *value)
-{
-  if (strcmp (name, "has-focus") == 0 && g_value_get_boolean (value))
-      g_object_set_qdata (G_OBJECT (buildable), quark_builder_has_focus,
-			  GINT_TO_POINTER (TRUE));
-  else
-    g_object_set_property (G_OBJECT (buildable), name, value);
 }
 
 typedef struct
