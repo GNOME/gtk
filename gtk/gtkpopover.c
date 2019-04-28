@@ -155,6 +155,7 @@ enum {
   PROP_POSITION,
   PROP_MODAL,
   PROP_CONSTRAIN_TO,
+  PROP_DEFAULT_WIDGET,
   NUM_PROPERTIES
 };
 
@@ -346,6 +347,40 @@ gesture_released (GtkGestureMultiPress *gesture,
 }
 
 static void
+activate_default_cb (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       data)
+{
+  GtkPopover *popover = data;
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  GtkWidget *focus_widget;
+
+  focus_widget = gtk_window_get_focus (GTK_WINDOW (gtk_widget_get_root (priv->widget)));
+  if (priv->default_widget && gtk_widget_is_sensitive (priv->default_widget) &&
+      (!focus_widget || !gtk_widget_get_receives_default (focus_widget)))
+    gtk_widget_activate (priv->default_widget);
+  else if (focus_widget && gtk_widget_is_sensitive (focus_widget))
+    gtk_widget_activate (focus_widget);
+}
+
+static void
+add_actions (GtkPopover *popover)
+{
+  GActionEntry entries[] = {
+    { "activate", activate_default_cb, NULL, NULL, NULL },
+  };
+
+  GActionGroup *actions;
+
+  actions = G_ACTION_GROUP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   popover);
+  gtk_widget_insert_action_group (GTK_WIDGET (popover), "default", actions);
+  g_object_unref (actions);
+}
+
+static void
 gtk_popover_init (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
@@ -389,6 +424,8 @@ gtk_popover_init (GtkPopover *popover)
   g_signal_connect (controller, "released",
                     G_CALLBACK (gesture_released), popover);
   gtk_widget_add_controller (widget, controller);
+
+  add_actions (popover);
 }
 
 static void
@@ -419,6 +456,10 @@ gtk_popover_set_property (GObject      *object,
       gtk_popover_set_constrain_to (GTK_POPOVER (object),
                                     g_value_get_enum (value));
       break;
+    case PROP_DEFAULT_WIDGET:
+      gtk_popover_set_default_widget (GTK_POPOVER (object),
+                                      g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -448,6 +489,9 @@ gtk_popover_get_property (GObject    *object,
       break;
     case PROP_CONSTRAIN_TO:
       g_value_set_enum (value, priv->constraint);
+      break;
+    case PROP_DEFAULT_WIDGET:
+      g_value_set_object (value, priv->default_widget);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -818,7 +862,7 @@ gtk_popover_map (GtkWidget *widget)
   gdk_surface_show (gtk_widget_get_surface (widget));
   gtk_popover_update_position (GTK_POPOVER (widget));
 
-  gtk_window_set_default (priv->window, priv->default_widget);
+  gtk_window_set_default_widget (priv->window, priv->default_widget);
 }
 
 static void
@@ -832,7 +876,7 @@ gtk_popover_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->unmap (widget);
 
   if (gtk_window_get_default_widget (priv->window) == priv->default_widget)
-    gtk_window_set_default (priv->window, priv->prev_default);
+    gtk_window_set_default_widget (priv->window, priv->prev_default);
   g_clear_object (&priv->prev_default);
 }
 
@@ -1645,6 +1689,13 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                          GTK_TYPE_POPOVER_CONSTRAINT, GTK_POPOVER_CONSTRAINT_WINDOW,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  properties[PROP_DEFAULT_WIDGET] =
+      g_param_spec_object ("default-widget",
+                           P_("Default widget"),
+                           P_("The default widget"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
   /**
@@ -2378,7 +2429,6 @@ gtk_popover_set_default_widget (GtkPopover *popover,
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   g_return_if_fail (GTK_IS_POPOVER (popover));
-  g_return_if_fail (widget == NULL || gtk_widget_get_can_default (widget));
 
   if (priv->default_widget == widget)
     return;
@@ -2392,7 +2442,9 @@ gtk_popover_set_default_widget (GtkPopover *popover,
     g_object_ref (priv->default_widget);
 
   if (gtk_widget_get_mapped (GTK_WIDGET (popover)))
-    gtk_window_set_default (priv->window, priv->default_widget);
+    gtk_window_set_default_widget (priv->window, priv->default_widget);
+
+  g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_DEFAULT_WIDGET]);
 }
 
 /**

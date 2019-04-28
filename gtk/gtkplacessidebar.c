@@ -2688,7 +2688,6 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
   g_free (str);
   button = gtk_button_new_with_mnemonic (_("_Rename"));
-  gtk_widget_set_can_default (button, TRUE);
   gtk_style_context_add_class (gtk_widget_get_style_context (button), "suggested-action");
   g_signal_connect (button, "clicked", G_CALLBACK (do_rename), sidebar);
   error = gtk_label_new ("");

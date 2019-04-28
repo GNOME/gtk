@@ -548,7 +548,6 @@ enum {
   PROP_IS_FOCUS,
   PROP_CAN_TARGET,
   PROP_FOCUS_ON_CLICK,
-  PROP_CAN_DEFAULT,
   PROP_HAS_DEFAULT,
   PROP_RECEIVES_DEFAULT,
   PROP_CURSOR,
@@ -676,10 +675,6 @@ static const gchar *    gtk_widget_buildable_get_name           (GtkBuildable   
 static GObject *        gtk_widget_buildable_get_internal_child (GtkBuildable *buildable,
 								 GtkBuilder   *builder,
 								 const gchar  *childname);
-static void             gtk_widget_buildable_set_buildable_property (GtkBuildable     *buildable,
-								     GtkBuilder       *builder,
-								     const gchar      *name,
-								     const GValue     *value);
 static gboolean         gtk_widget_buildable_custom_tag_start   (GtkBuildable     *buildable,
                                                                  GtkBuilder       *builder,
                                                                  GObject          *child,
@@ -1037,19 +1032,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  widget_props[PROP_CAN_DEFAULT] =
-      g_param_spec_boolean ("can-default",
-                            P_("Can default"),
-                            P_("Whether the widget can be the default widget"),
-                            FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
   widget_props[PROP_HAS_DEFAULT] =
       g_param_spec_boolean ("has-default",
                             P_("Has default"),
                             P_("Whether the widget is the default widget"),
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
 
   widget_props[PROP_RECEIVES_DEFAULT] =
       g_param_spec_boolean ("receives-default",
@@ -2194,13 +2182,6 @@ gtk_widget_set_property (GObject         *object,
     case PROP_FOCUS_ON_CLICK:
       gtk_widget_set_focus_on_click (widget, g_value_get_boolean (value));
       break;
-    case PROP_CAN_DEFAULT:
-      gtk_widget_set_can_default (widget, g_value_get_boolean (value));
-      break;
-    case PROP_HAS_DEFAULT:
-      if (g_value_get_boolean (value))
-	gtk_widget_grab_default (widget);
-      break;
     case PROP_RECEIVES_DEFAULT:
       gtk_widget_set_receives_default (widget, g_value_get_boolean (value));
       break;
@@ -2374,9 +2355,6 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_FOCUS_ON_CLICK:
       g_value_set_boolean (value, gtk_widget_get_focus_on_click (widget));
-      break;
-    case PROP_CAN_DEFAULT:
-      g_value_set_boolean (value, gtk_widget_get_can_default (widget));
       break;
     case PROP_HAS_DEFAULT:
       g_value_set_boolean (value, gtk_widget_has_default (widget));
@@ -5819,58 +5797,12 @@ gtk_widget_get_focus_on_click (GtkWidget *widget)
   return priv->focus_on_click;
 }
 
-
-/**
- * gtk_widget_set_can_default:
- * @widget: a #GtkWidget
- * @can_default: whether or not @widget can be a default widget.
- *
- * Specifies whether @widget can be a default widget. See
- * gtk_widget_grab_default() for details about the meaning of
- * “default”.
- **/
-void
-gtk_widget_set_can_default (GtkWidget *widget,
-                            gboolean   can_default)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (priv->can_default != can_default)
-    {
-      priv->can_default = can_default;
-
-      gtk_widget_queue_resize (widget);
-      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CAN_DEFAULT]);
-    }
-}
-
-/**
- * gtk_widget_get_can_default:
- * @widget: a #GtkWidget
- *
- * Determines whether @widget can be a default widget. See
- * gtk_widget_set_can_default().
- *
- * Returns: %TRUE if @widget can be a default widget, %FALSE otherwise
- **/
-gboolean
-gtk_widget_get_can_default (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  return priv->can_default;
-}
-
 /**
  * gtk_widget_has_default:
  * @widget: a #GtkWidget
  *
  * Determines whether @widget is the current default widget within its
- * toplevel. See gtk_widget_set_can_default().
+ * toplevel.
  *
  * Returns: %TRUE if @widget is the current default widget within
  *     its toplevel, %FALSE otherwise
@@ -5903,46 +5835,13 @@ _gtk_widget_set_has_default (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_grab_default:
- * @widget: a #GtkWidget
- *
- * Causes @widget to become the default widget. @widget must be able to be
- * a default widget; typically you would ensure this yourself
- * by calling gtk_widget_set_can_default() with a %TRUE value.
- * The default widget is activated when
- * the user presses Enter in a window. Default widgets must be
- * activatable, that is, gtk_widget_activate() should affect them. Note
- * that #GtkEntry widgets require the “activates-default” property
- * set to %TRUE before they activate the default widget when Enter
- * is pressed and the #GtkEntry is focused.
- **/
-void
-gtk_widget_grab_default (GtkWidget *widget)
-{
-  GtkWidget *window;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (gtk_widget_get_can_default (widget));
-
-  window = _gtk_widget_get_toplevel (widget);
-
-  if (window && _gtk_widget_is_toplevel (window))
-    gtk_window_set_default (GTK_WINDOW (window), widget);
-  else
-    g_warning (G_STRLOC ": widget not within a GtkWindow");
-}
-
-/**
  * gtk_widget_set_receives_default:
  * @widget: a #GtkWidget
  * @receives_default: whether or not @widget can be a default widget.
  *
- * Specifies whether @widget will be treated as the default widget
- * within its toplevel when it has the focus, even if another widget
- * is the default.
- *
- * See gtk_widget_grab_default() for details about the meaning of
- * “default”.
+ * Specifies whether @widget will be treated as the default
+ * widget within its toplevel when it has the focus, even if
+ * another widget is the default.
  **/
 void
 gtk_widget_set_receives_default (GtkWidget *widget,
@@ -9590,7 +9489,6 @@ gtk_widget_set_vexpand_set (GtkWidget      *widget,
 /*
  * GtkBuildable implementation
  */
-static GQuark		 quark_builder_has_default = 0;
 static GQuark		 quark_builder_atk_relations = 0;
 static GQuark            quark_builder_set_name = 0;
 
@@ -9622,14 +9520,12 @@ gtk_widget_buildable_add_child (GtkBuildable  *buildable,
 static void
 gtk_widget_buildable_interface_init (GtkBuildableIface *iface)
 {
-  quark_builder_has_default = g_quark_from_static_string ("gtk-builder-has-default");
   quark_builder_atk_relations = g_quark_from_static_string ("gtk-builder-atk-relations");
   quark_builder_set_name = g_quark_from_static_string ("gtk-builder-set-name");
 
   iface->set_name = gtk_widget_buildable_set_name;
   iface->get_name = gtk_widget_buildable_get_name;
   iface->get_internal_child = gtk_widget_buildable_get_internal_child;
-  iface->set_buildable_property = gtk_widget_buildable_set_buildable_property;
   iface->parser_finished = gtk_widget_buildable_parser_finished;
   iface->custom_tag_start = gtk_widget_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_widget_buildable_custom_tag_end;
@@ -9694,19 +9590,6 @@ gtk_widget_buildable_get_internal_child (GtkBuildable *buildable,
   return NULL;
 }
 
-static void
-gtk_widget_buildable_set_buildable_property (GtkBuildable *buildable,
-					     GtkBuilder   *builder,
-					     const gchar  *name,
-					     const GValue *value)
-{
-  if (strcmp (name, "has-default") == 0 && g_value_get_boolean (value))
-      g_object_set_qdata (G_OBJECT (buildable), quark_builder_has_default,
-			  GINT_TO_POINTER (TRUE));
-  else
-    g_object_set_property (G_OBJECT (buildable), name, value);
-}
-
 typedef struct
 {
   gchar *action_name;
@@ -9744,12 +9627,6 @@ gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
 				      GtkBuilder   *builder)
 {
   GSList *atk_relations;
-
-  if (g_object_get_qdata (G_OBJECT (buildable), quark_builder_has_default))
-    {
-      gtk_widget_grab_default (GTK_WIDGET (buildable));
-      g_object_steal_qdata (G_OBJECT (buildable), quark_builder_has_default);
-    }
 
   atk_relations = g_object_get_qdata (G_OBJECT (buildable),
 				      quark_builder_atk_relations);
@@ -12918,6 +12795,18 @@ gtk_widget_activate_action (GtkWidget  *widget,
     g_action_group_activate_action (G_ACTION_GROUP (muxer),
                                     name,
                                     parameter);
+}
+
+/**
+ * gtk_widget_activate_default:
+ * @widget: a #GtkWidget
+ *
+ * Activate the default.activate action from @widget.
+ */
+void
+gtk_widget_activate_default (GtkWidget *widget)
+{
+  gtk_widget_activate_action (widget, "default.activate", NULL);
 }
 
 void

@@ -76,8 +76,7 @@ do_password_entry (GtkWidget *do_widget)
       gtk_widget_set_sensitive (button, FALSE);
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
 
-      gtk_widget_set_can_default (button, TRUE);
-      gtk_window_set_default (GTK_WINDOW (window), button);
+      gtk_window_set_default_widget (GTK_WINDOW (window), button);
     }
 
   if (!gtk_widget_get_visible (window))

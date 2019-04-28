@@ -1347,25 +1347,8 @@ key_press_cb (GtkEventControllerKey *controller,
       && !(priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
            priv->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER))
     {
-      GtkWidget *widget = GTK_WIDGET (impl);
-      GtkWindow *window;
-
-      window = get_toplevel (widget);
-      if (window)
-        {
-          GtkWidget *default_widget, *focus_widget;
-
-          default_widget = gtk_window_get_default_widget (window);
-          focus_widget = gtk_root_get_focus (GTK_ROOT (window));
-
-          if (widget != default_widget &&
-              !(widget == focus_widget && (!default_widget || !gtk_widget_get_sensitive (default_widget))))
-            {
-              gtk_window_activate_default (window);
-
-              return GDK_EVENT_STOP;
-            }
-        }
+      gtk_widget_activate_default (GTK_WIDGET (impl));
+      return GDK_EVENT_STOP;
     }
 
   if (keyval == GDK_KEY_Escape &&
@@ -6192,7 +6175,6 @@ add_custom_button_to_dialog (GtkDialog   *dialog,
   GtkWidget *button;
 
   button = gtk_button_new_with_mnemonic (mnemonic_label);
-  gtk_widget_set_can_default (button, TRUE);
 
   gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, response_id);
 }

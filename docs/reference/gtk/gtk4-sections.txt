@@ -4433,7 +4433,6 @@ gtk_widget_event
 gtk_widget_activate
 gtk_widget_is_focus
 gtk_widget_grab_focus
-gtk_widget_grab_default
 gtk_widget_set_name
 gtk_widget_get_name
 gtk_widget_set_sensitive
@@ -4504,8 +4503,6 @@ gtk_widget_compute_point
 gtk_widget_contains
 GtkPickFlags
 gtk_widget_pick
-gtk_widget_get_can_default
-gtk_widget_set_can_default
 gtk_widget_get_can_focus
 gtk_widget_set_can_focus
 gtk_widget_get_focus_on_click
@@ -4546,6 +4543,7 @@ gtk_widget_insert_action_group
 gtk_widget_list_action_prefixes
 gtk_widget_get_action_group
 gtk_widget_activate_action
+gtk_widget_activate_default
 gtk_widget_measure
 gtk_widget_snapshot_child
 gtk_widget_get_next_sibling
@@ -4648,7 +4646,6 @@ gtk_window_set_resizable
 gtk_window_get_resizable
 gtk_window_add_accel_group
 gtk_window_remove_accel_group
-gtk_window_activate_default
 gtk_window_set_modal
 gtk_window_set_default_size
 gtk_window_set_hide_on_close
@@ -4671,7 +4668,7 @@ gtk_window_propagate_key_event
 gtk_window_get_focus
 gtk_window_set_focus
 gtk_window_get_default_widget
-gtk_window_set_default
+gtk_window_set_default_widget
 gtk_window_present
 gtk_window_present_with_time
 gtk_window_close

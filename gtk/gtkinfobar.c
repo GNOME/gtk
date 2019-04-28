@@ -576,8 +576,6 @@ gtk_info_bar_add_button (GtkInfoBar  *info_bar,
   button = gtk_button_new_with_label (button_text);
   gtk_button_set_use_underline (GTK_BUTTON (button), TRUE);
 
-  gtk_widget_set_can_default (button, TRUE);
-
   gtk_widget_show (button);
 
   gtk_info_bar_add_action_widget (info_bar, button, response_id);
@@ -744,7 +742,12 @@ gtk_info_bar_set_default_response (GtkInfoBar *info_bar,
       ResponseData *rd = get_response_data (widget, FALSE);
 
       if (rd && rd->response_id == response_id)
-        gtk_widget_grab_default (widget);
+        {
+          GtkWidget *window;
+
+          window = gtk_widget_get_ancestor (GTK_WIDGET (info_bar), GTK_TYPE_WINDOW);
+          gtk_window_set_default_widget (GTK_WINDOW (window), widget);
+        }
     }
 
   g_list_free (children);

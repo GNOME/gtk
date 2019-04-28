@@ -325,6 +325,8 @@ enum {
   PROP_TRANSIENT_FOR,
   PROP_ATTACHED_TO,
   PROP_APPLICATION,
+  PROP_DEFAULT_WIDGET,
+
   /* Readonly properties */
   PROP_IS_ACTIVE,
 
@@ -1055,6 +1057,13 @@ gtk_window_class_init (GtkWindowClass *klass)
                            GTK_TYPE_APPLICATION,
                            GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
+  window_props[PROP_DEFAULT_WIDGET] =
+      g_param_spec_object ("default-widget",
+                           P_("Default widget"),
+                           P_("The default widget"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (gobject_class, LAST_ARG, window_props);
   gtk_root_install_properties (gobject_class, LAST_ARG);
 
@@ -1765,6 +1774,31 @@ gtk_window_capture_motion (GtkWidget *widget,
 }
 
 static void
+activate_default_cb (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       data)
+{
+  gtk_window_real_activate_default (GTK_WINDOW (data));
+}
+
+static void
+add_actions (GtkWindow *window)
+{
+  GActionEntry entries[] = {
+    { "activate", activate_default_cb, NULL, NULL, NULL },
+  };
+
+  GActionGroup *actions;
+
+  actions = G_ACTION_GROUP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   window);
+  gtk_widget_insert_action_group (GTK_WIDGET (window), "default", actions);
+  g_object_unref (actions);
+}
+
+static void
 gtk_window_init (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -1857,6 +1891,8 @@ gtk_window_init (GtkWindow *window)
   g_signal_connect_swapped (priv->key_controller, "focus-out",
                             G_CALLBACK (gtk_window_focus_out), window);
   gtk_widget_add_controller (widget, priv->key_controller);
+
+  add_actions (window);
 }
 
 static GtkGesture *
@@ -1983,6 +2019,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_APPLICATION:
       gtk_window_set_application (window, g_value_get_object (value));
       break;
+    case PROP_DEFAULT_WIDGET:
+      gtk_window_set_default_widget (window, g_value_get_object (value));
+      break;
     case PROP_MNEMONICS_VISIBLE:
       gtk_window_set_mnemonics_visible (window, g_value_get_boolean (value));
       break;
@@ -2079,6 +2118,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_APPLICATION:
       g_value_set_object (value, gtk_window_get_application (window));
+      break;
+    case PROP_DEFAULT_WIDGET:
+      g_value_set_object (value, gtk_window_get_default_widget (window));
       break;
     case PROP_MNEMONICS_VISIBLE:
       g_value_set_boolean (value, priv->mnemonics_visible);
@@ -2514,34 +2556,27 @@ gtk_window_set_startup_id (GtkWindow   *window,
 }
 
 /**
- * gtk_window_set_default:
+ * gtk_window_set_default_widget:
  * @window: a #GtkWindow
  * @default_widget: (allow-none): widget to be the default, or %NULL
  *     to unset the default widget for the toplevel
  *
  * The default widget is the widget that’s activated when the user
  * presses Enter in a dialog (for example). This function sets or
- * unsets the default widget for a #GtkWindow. When setting (rather
- * than unsetting) the default widget it’s generally easier to call
- * gtk_widget_grab_default() on the widget. Before making a widget
- * the default widget, you must call gtk_widget_set_can_default() on
- * the widget you’d like to make the default.
+ * unsets the default widget for a #GtkWindow.
  */
 void
-gtk_window_set_default (GtkWindow *window,
-			GtkWidget *default_widget)
+gtk_window_set_default_widget (GtkWindow *window,
+                               GtkWidget *default_widget)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  if (default_widget)
-    g_return_if_fail (gtk_widget_get_can_default (default_widget));
-
   if (priv->default_widget != default_widget)
     {
       GtkWidget *old_default_widget = NULL;
-      
+
       if (default_widget)
 	g_object_ref (default_widget);
 
@@ -2569,12 +2604,14 @@ gtk_window_set_default (GtkWindow *window,
 
       if (old_default_widget)
 	g_object_notify (G_OBJECT (old_default_widget), "has-default");
-      
+
       if (default_widget)
 	{
 	  g_object_notify (G_OBJECT (default_widget), "has-default");
 	  g_object_unref (default_widget);
 	}
+
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DEFAULT_WIDGET]);
     }
 }
 
@@ -2862,31 +2899,16 @@ gtk_window_get_focus (GtkWindow *window)
     return priv->focus_widget;
 }
 
-/**
- * gtk_window_activate_default:
- * @window: a #GtkWindow
- * 
- * Activates the default widget for the window, unless the current 
- * focused widget has been configured to receive the default action 
- * (see gtk_widget_set_receives_default()), in which case the
- * focused widget is activated. 
- * 
- * Returns: %TRUE if a widget got activated.
- **/
-gboolean
-gtk_window_activate_default (GtkWindow *window)
+static void
+gtk_window_real_activate_default (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
   if (priv->default_widget && gtk_widget_is_sensitive (priv->default_widget) &&
       (!priv->focus_widget || !gtk_widget_get_receives_default (priv->focus_widget)))
-    return gtk_widget_activate (priv->default_widget);
+    gtk_widget_activate (priv->default_widget);
   else if (priv->focus_widget && gtk_widget_is_sensitive (priv->focus_widget))
-    return gtk_widget_activate (priv->focus_widget);
-
-  return FALSE;
+    gtk_widget_activate (priv->focus_widget);
 }
 
 /**
@@ -3029,7 +3051,7 @@ gtk_window_dispose (GObject *object)
   priv->foci = NULL;
 
   gtk_window_set_focus (window, NULL);
-  gtk_window_set_default (window, NULL);
+  gtk_window_set_default_widget (window, NULL);
   remove_attach_widget (window);
 
   G_OBJECT_CLASS (gtk_window_parent_class)->dispose (object);
@@ -6209,12 +6231,6 @@ get_active_region_type (GtkWindow *window, gint x, gint y)
 }
 
 static void
-gtk_window_real_activate_default (GtkWindow *window)
-{
-  gtk_window_activate_default (window);
-}
-
-static void
 do_focus_change (GtkWidget *widget,
                  gboolean   in)
 {
@@ -6601,7 +6617,7 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
     child = _gtk_widget_get_parent (child);
 
   if (child == widget)
-    gtk_window_set_default (window, NULL);
+    gtk_window_set_default_widget (window, NULL);
   
   g_object_unref (widget);
   g_object_unref (window);

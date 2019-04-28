@@ -3154,6 +3154,7 @@ bad things might happen.</property>
     <property name="use-header-bar">1</property>
     <property name="title" translatable="yes">Zelda</property>
     <property name="hide-on-close">1</property>
+    <property name="default-widget">act_action_dialog</property>
     <child internal-child="content_area">
       <object class="GtkBox">
         <child>
@@ -3175,8 +3176,6 @@ bad things might happen.</property>
     </child>
     <child type="action">
       <object class="GtkButton" id="act_action_dialog">
-        <property name="can-default">1</property>
-        <property name="has-default">1</property>
         <property name="label" translatable="yes">_Act</property>
         <property name="use-underline">1</property>
       </object>
@@ -3314,6 +3313,7 @@ bad things might happen.</property>
     <property name="use-header-bar">1</property>
     <property name="title" translatable="yes">Choose one</property>
     <property name="hide-on-close">1</property>
+    <property name="default-widget">select_selection_dialog</property>
     <child internal-child="content_area">
       <object class="GtkBox">
         <child>
@@ -3335,8 +3335,6 @@ bad things might happen.</property>
     </child>
     <child type="action">
       <object class="GtkButton" id="select_selection_dialog">
-        <property name="can-default">1</property>
-        <property name="has-default">1</property>
         <property name="label" translatable="yes">_Select</property>
         <property name="use-underline">1</property>
       </object>
@@ -3450,7 +3448,6 @@ bad things might happen.</property>
             <property name="label">_Open</property>
             <property name="use-underline">1</property>
             <property name="sensitive">0</property>
-            <property name="can-default">1</property>
             <style>
               <class name="suggested-action"/>
             </style>

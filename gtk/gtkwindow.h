@@ -163,12 +163,10 @@ void       gtk_window_set_focus                (GtkWindow           *window,
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_window_get_focus                (GtkWindow           *window);
 GDK_AVAILABLE_IN_ALL
-void       gtk_window_set_default              (GtkWindow           *window,
+void       gtk_window_set_default_widget       (GtkWindow           *window,
 						GtkWidget           *default_widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_window_get_default_widget       (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_activate_default	       (GtkWindow           *window);
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_transient_for        (GtkWindow           *window,
