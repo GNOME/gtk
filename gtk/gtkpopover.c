@@ -347,6 +347,40 @@ gesture_released (GtkGestureMultiPress *gesture,
 }
 
 static void
+activate_default_cb (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       data)
+{
+  GtkPopover *popover = data;
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  GtkWidget *focus_widget;
+
+  focus_widget = gtk_window_get_focus (GTK_WINDOW (gtk_widget_get_root (priv->widget)));
+  if (priv->default_widget && gtk_widget_is_sensitive (priv->default_widget) &&
+      (!focus_widget || !gtk_widget_get_receives_default (focus_widget)))
+    gtk_widget_activate (priv->default_widget);
+  else if (focus_widget && gtk_widget_is_sensitive (focus_widget))
+    gtk_widget_activate (focus_widget);
+}
+
+static void
+add_actions (GtkPopover *popover)
+{
+  GActionEntry entries[] = {
+    { "activate-default", activate_default_cb, NULL, NULL, NULL },
+  };
+
+  GActionGroup *actions;
+
+  actions = G_ACTION_GROUP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   popover);
+  gtk_widget_insert_action_group (GTK_WIDGET (popover), "gtk", actions);
+  g_object_unref (actions);
+}
+
+static void
 gtk_popover_init (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
@@ -390,6 +424,8 @@ gtk_popover_init (GtkPopover *popover)
   g_signal_connect (controller, "released",
                     G_CALLBACK (gesture_released), popover);
   gtk_widget_add_controller (widget, controller);
+
+  add_actions (popover);
 }
 
 static void
