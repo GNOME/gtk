@@ -44,7 +44,6 @@
           <object class="GtkButton" id="confirm_button">
             <property name="label" translatable="yes">_Join</property>
             <property name="can_focus">1</property>
-            <property name="can_default">1</property>
             <property name="has_default">1</property>
             <property name="receives_default">1</property>
             <property name="use_underline">1</property>

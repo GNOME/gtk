@@ -317,7 +317,6 @@ create_buttons (GtkWidget *widget)
 				G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button[9]);
-      gtk_widget_set_can_default (button[9], TRUE);
       gtk_window_set_default_widget (GTK_WINDOW (window), button[9]);
     }
 
@@ -378,7 +377,6 @@ create_toggle_buttons (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
-      gtk_widget_set_can_default (button, TRUE);
       gtk_window_set_default_widget (GTK_WINDOW (window), button);
     }
 
@@ -787,7 +785,6 @@ create_statusbar (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
-      gtk_widget_set_can_default (button, TRUE);
       gtk_window_set_default_widget (GTK_WINDOW (window), button);
     }
 
@@ -1282,7 +1279,6 @@ create_pixbuf (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
-      gtk_widget_set_can_default (button, TRUE);
       gtk_window_set_default_widget (GTK_WINDOW (window), button);
     }
 
@@ -1372,7 +1368,6 @@ create_tooltips (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
-      gtk_widget_set_can_default (button, TRUE);
       gtk_window_set_default_widget (GTK_WINDOW (window), button);
 
       gtk_widget_set_tooltip_text (button, "Push this button to close window");
@@ -1806,7 +1801,6 @@ create_menus (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
-      gtk_widget_set_can_default (button, TRUE);
       gtk_window_set_default_widget (GTK_WINDOW (window), button);
       gtk_widget_show (button);
     }
@@ -2409,7 +2403,6 @@ create_entry (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
-      gtk_widget_set_can_default (button, TRUE);
       gtk_window_set_default_widget (GTK_WINDOW (window), button);
     }
 
@@ -3925,7 +3918,6 @@ create_range_controls (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
-      gtk_widget_set_can_default (button, TRUE);
       gtk_window_set_default_widget (GTK_WINDOW (window), button);
       gtk_widget_show (button);
     }
@@ -4303,7 +4295,6 @@ create_notebook (GtkWidget *widget)
 			        G_CALLBACK (gtk_widget_destroy),
 				window);
       gtk_container_add (GTK_CONTAINER (box1), button);
-      gtk_widget_set_can_default (button, TRUE);
       gtk_window_set_default_widget (GTK_WINDOW (window), button);
     }
 
@@ -4928,7 +4919,6 @@ create_wmhints (GtkWidget *widget)
 				window);
 
       gtk_container_add (GTK_CONTAINER (box2), button);
-      gtk_widget_set_can_default (button, TRUE);
       gtk_window_set_default_widget (GTK_WINDOW (window), button);
       gtk_widget_show (button);
     }
@@ -5914,7 +5904,6 @@ create_timeout_test (GtkWidget *widget)
       g_signal_connect_swapped (button, "clicked",
 				G_CALLBACK (gtk_widget_destroy),
 				window);
-      gtk_widget_set_can_default (button, TRUE);
       gtk_container_add (GTK_CONTAINER (action_area), button);
       gtk_window_set_default_widget (GTK_WINDOW (window), button);
       gtk_widget_show (button);
@@ -5923,7 +5912,6 @@ create_timeout_test (GtkWidget *widget)
       g_signal_connect (button, "clicked",
 			G_CALLBACK(start_timeout_test),
 			label);
-      gtk_widget_set_can_default (button, TRUE);
       gtk_container_add (GTK_CONTAINER (action_area), button);
       gtk_widget_show (button);
 
@@ -5931,7 +5919,6 @@ create_timeout_test (GtkWidget *widget)
       g_signal_connect (button, "clicked",
 			G_CALLBACK (stop_timeout_test),
 			NULL);
-      gtk_widget_set_can_default (button, TRUE);
       gtk_container_add (GTK_CONTAINER (action_area), button);
       gtk_widget_show (button);
     }
@@ -6510,7 +6497,6 @@ create_main_window (void)
 		    G_CALLBACK (do_exit),
 		    window);
   gtk_container_add (GTK_CONTAINER (box2), button);
-  gtk_widget_set_can_default (button, TRUE);
   gtk_window_set_default_widget (GTK_WINDOW (window), button);
 
   gtk_widget_show (window);

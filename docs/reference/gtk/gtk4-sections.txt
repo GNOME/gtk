@@ -4503,8 +4503,6 @@ gtk_widget_compute_point
 gtk_widget_contains
 GtkPickFlags
 gtk_widget_pick
-gtk_widget_get_can_default
-gtk_widget_set_can_default
 gtk_widget_get_can_focus
 gtk_widget_set_can_focus
 gtk_widget_get_focus_on_click

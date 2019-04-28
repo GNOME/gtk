@@ -26,7 +26,6 @@
       <object class="GtkButton" id="select_button">
         <property name="label" translatable="yes">_Select</property>
         <property name="use-underline">1</property>
-        <property name="can-default">1</property>
       </object>
     </child>
     <child>

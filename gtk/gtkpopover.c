@@ -2429,7 +2429,6 @@ gtk_popover_set_default_widget (GtkPopover *popover,
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   g_return_if_fail (GTK_IS_POPOVER (popover));
-  g_return_if_fail (widget == NULL || gtk_widget_get_can_default (widget));
 
   if (priv->default_widget == widget)
     return;

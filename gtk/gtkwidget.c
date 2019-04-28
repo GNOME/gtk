@@ -548,7 +548,6 @@ enum {
   PROP_IS_FOCUS,
   PROP_CAN_TARGET,
   PROP_FOCUS_ON_CLICK,
-  PROP_CAN_DEFAULT,
   PROP_HAS_DEFAULT,
   PROP_RECEIVES_DEFAULT,
   PROP_CURSOR,
@@ -1031,13 +1030,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             P_("Focus on click"),
                             P_("Whether the widget should grab focus when it is clicked with the mouse"),
                             TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  widget_props[PROP_CAN_DEFAULT] =
-      g_param_spec_boolean ("can-default",
-                            P_("Can default"),
-                            P_("Whether the widget can be the default widget"),
-                            FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   widget_props[PROP_HAS_DEFAULT] =
@@ -2190,9 +2182,6 @@ gtk_widget_set_property (GObject         *object,
     case PROP_FOCUS_ON_CLICK:
       gtk_widget_set_focus_on_click (widget, g_value_get_boolean (value));
       break;
-    case PROP_CAN_DEFAULT:
-      gtk_widget_set_can_default (widget, g_value_get_boolean (value));
-      break;
     case PROP_RECEIVES_DEFAULT:
       gtk_widget_set_receives_default (widget, g_value_get_boolean (value));
       break;
@@ -2366,9 +2355,6 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_FOCUS_ON_CLICK:
       g_value_set_boolean (value, gtk_widget_get_focus_on_click (widget));
-      break;
-    case PROP_CAN_DEFAULT:
-      g_value_set_boolean (value, gtk_widget_get_can_default (widget));
       break;
     case PROP_HAS_DEFAULT:
       g_value_set_boolean (value, gtk_widget_has_default (widget));
@@ -5811,63 +5797,12 @@ gtk_widget_get_focus_on_click (GtkWidget *widget)
   return priv->focus_on_click;
 }
 
-
-/**
- * gtk_widget_set_can_default:
- * @widget: a #GtkWidget
- * @can_default: whether or not @widget can be a default widget.
- *
- * Specifies whether @widget can be a default widget.
- *
- * The default widget is activated when the user presses
- * Enter in a window. Default widgets must be activatable,
- * that is, gtk_widget_activate() should affect them. Note
- * that #GtkEntry widgets require the “activates-default”
- * property set to %TRUE before they activate the default
- * widget when Enter is pressed and the #GtkEntry is focused.
- **/
-void
-gtk_widget_set_can_default (GtkWidget *widget,
-                            gboolean   can_default)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (priv->can_default != can_default)
-    {
-      priv->can_default = can_default;
-
-      gtk_widget_queue_resize (widget);
-      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CAN_DEFAULT]);
-    }
-}
-
-/**
- * gtk_widget_get_can_default:
- * @widget: a #GtkWidget
- *
- * Determines whether @widget can be a default widget. See
- * gtk_widget_set_can_default().
- *
- * Returns: %TRUE if @widget can be a default widget, %FALSE otherwise
- **/
-gboolean
-gtk_widget_get_can_default (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  return priv->can_default;
-}
-
 /**
  * gtk_widget_has_default:
  * @widget: a #GtkWidget
  *
  * Determines whether @widget is the current default widget within its
- * toplevel. See gtk_widget_set_can_default().
+ * toplevel.
  *
  * Returns: %TRUE if @widget is the current default widget within
  *     its toplevel, %FALSE otherwise
@@ -5907,9 +5842,6 @@ _gtk_widget_set_has_default (GtkWidget *widget,
  * Specifies whether @widget will be treated as the default
  * widget within its toplevel when it has the focus, even if
  * another widget is the default.
- *
- * See gtk_widget_set_can_default() for details about the
- * meaning of “default”.
  **/
 void
 gtk_widget_set_receives_default (GtkWidget *widget,
