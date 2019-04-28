@@ -455,7 +455,7 @@ pw_dialog_cycle_focus (GtkWidget         *widget,
   if (next_widget)
     gtk_widget_grab_focus (next_widget);
   else if (pw_dialog_input_is_valid (operation))
-    gtk_window_activate_default (GTK_WINDOW (priv->dialog));
+    gtk_widget_activate_default (widget);
 }
 
 static GtkWidget *
