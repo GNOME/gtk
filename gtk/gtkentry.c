@@ -1547,6 +1547,7 @@ gtk_entry_size_allocate (GtkWidget *widget,
                          int        height,
                          int        baseline)
 {
+  const gboolean is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   gint i;
@@ -1572,8 +1573,8 @@ gtk_entry_size_allocate (GtkWidget *widget,
                           NULL, &icon_width,
                           NULL, NULL);
 
-      if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL && i == GTK_ENTRY_ICON_PRIMARY) ||
-          (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR && i == GTK_ENTRY_ICON_SECONDARY))
+      if ((is_rtl  && i == GTK_ENTRY_ICON_PRIMARY) ||
+          (!is_rtl && i == GTK_ENTRY_ICON_SECONDARY))
         icon_alloc.x = width - icon_width;
       else
         icon_alloc.x = 0;
@@ -1584,7 +1585,9 @@ gtk_entry_size_allocate (GtkWidget *widget,
       gtk_widget_size_allocate (icon_info->widget, &icon_alloc, baseline);
 
       text_alloc.width -= icon_width;
-      if (i == 0)
+
+      if ((!is_rtl  && i == GTK_ENTRY_ICON_PRIMARY) ||
+          (is_rtl && i == GTK_ENTRY_ICON_SECONDARY))
         text_alloc.x += icon_width;
     }
 
