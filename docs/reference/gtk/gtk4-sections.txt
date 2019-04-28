@@ -4649,7 +4649,6 @@ gtk_window_get_resizable
 gtk_window_add_accel_group
 gtk_window_remove_accel_group
 gtk_window_activate_focus
-gtk_window_activate_default
 gtk_window_set_modal
 gtk_window_set_default_size
 gtk_window_set_hide_on_close
