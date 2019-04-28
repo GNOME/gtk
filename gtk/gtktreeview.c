@@ -2526,10 +2526,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
    * which changes the total width of the tree view.  This is of
    * importance for getting the horizontal scroll bar right.
    */
-  if (tree_view->priv->width != width)
-    {
-      tree_view->priv->width = width;
-    }
+  tree_view->priv->width = width;
 }
 
 /* GtkWidget::size_allocate helper */
