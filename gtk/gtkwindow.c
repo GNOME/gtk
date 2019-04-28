@@ -1778,7 +1778,7 @@ activate_default_cb (GSimpleAction *action,
                      GVariant      *parameter,
                      gpointer       data)
 {
-  gtk_window_activate_default (GTK_WINDOW (data));
+  gtk_window_real_activate_default (GTK_WINDOW (data));
 }
 
 static void
@@ -2906,31 +2906,16 @@ gtk_window_get_focus (GtkWindow *window)
     return priv->focus_widget;
 }
 
-/**
- * gtk_window_activate_default:
- * @window: a #GtkWindow
- * 
- * Activates the default widget for the window, unless the current 
- * focused widget has been configured to receive the default action 
- * (see gtk_widget_set_receives_default()), in which case the
- * focused widget is activated. 
- * 
- * Returns: %TRUE if a widget got activated.
- **/
-gboolean
-gtk_window_activate_default (GtkWindow *window)
+static void
+gtk_window_real_activate_default (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
   if (priv->default_widget && gtk_widget_is_sensitive (priv->default_widget) &&
       (!priv->focus_widget || !gtk_widget_get_receives_default (priv->focus_widget)))
-    return gtk_widget_activate (priv->default_widget);
+    gtk_widget_activate (priv->default_widget);
   else if (priv->focus_widget && gtk_widget_is_sensitive (priv->focus_widget))
-    return gtk_widget_activate (priv->focus_widget);
-
-  return FALSE;
+    gtk_widget_activate (priv->focus_widget);
 }
 
 /**
@@ -6250,12 +6235,6 @@ get_active_region_type (GtkWindow *window, gint x, gint y)
     }
 
   return GTK_WINDOW_REGION_CONTENT;
-}
-
-static void
-gtk_window_real_activate_default (GtkWindow *window)
-{
-  gtk_window_activate_default (window);
 }
 
 static void
