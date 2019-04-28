@@ -12890,6 +12890,36 @@ gtk_widget_get_action_group (GtkWidget   *widget,
   return NULL;
 }
 
+/**
+ * gtk_widget_activate_action:
+ * @widget: a #GtkWidget
+ * @name: a prefixed action name
+ * @parameter: parameters that required by the action
+ *
+ * Looks up the action in the action groups associated
+ * with @widget and its ancestors, and activates it.
+ *
+ * The action name is expected to be prefixed with the
+ * prefix that was used when adding the action group
+ * with gtk_widget_insert_action_group().
+ *
+ * The @parameter must match the actions expected parameter
+ * type, as returned by g_action_get_parameter_type().
+ */
+void
+gtk_widget_activate_action (GtkWidget  *widget,
+                            const char *name,
+                            GVariant   *parameter)
+{
+  GtkActionMuxer *muxer;
+
+  muxer = _gtk_widget_get_action_muxer (widget, FALSE);
+  if (muxer)
+    g_action_group_activate_action (G_ACTION_GROUP (muxer),
+                                    name,
+                                    parameter);
+}
+
 void
 gtk_widget_cancel_event_sequence (GtkWidget             *widget,
                                   GtkGesture            *gesture,
