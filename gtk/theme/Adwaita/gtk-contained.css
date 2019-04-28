@@ -1711,6 +1711,8 @@ filechooser .dialog-action-box:backdrop { border-top-color: #d5d0cc; }
 
 filechooser #pathbarbox { border-bottom: 1px solid #f6f5f4; }
 
+filechooserbutton > button > box { border-spacing: 6px; }
+
 filechooserbutton:drop(active) { box-shadow: none; border-color: transparent; }
 
 /*********** Sidebar * */
