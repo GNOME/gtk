@@ -12920,6 +12920,18 @@ gtk_widget_activate_action (GtkWidget  *widget,
                                     parameter);
 }
 
+/**
+ * gtk_widget_activate_default:
+ * @widget: a #GtkWidget
+ *
+ * Activate the default.activate action from @widget.
+ */
+void
+gtk_widget_activate_default (GtkWidget *widget)
+{
+  gtk_widget_activate_action (widget, "default.activate", NULL);
+}
+
 void
 gtk_widget_cancel_event_sequence (GtkWidget             *widget,
                                   GtkGesture            *gesture,
