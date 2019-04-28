@@ -158,8 +158,6 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_position             (GtkWindow           *window,
 						GtkWindowPosition    position);
 GDK_AVAILABLE_IN_ALL
-gboolean   gtk_window_activate_focus	       (GtkWindow           *window);
-GDK_AVAILABLE_IN_ALL
 void       gtk_window_set_focus                (GtkWindow           *window,
 						GtkWidget           *focus);
 GDK_AVAILABLE_IN_ALL
