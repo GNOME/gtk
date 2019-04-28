@@ -325,6 +325,8 @@ enum {
   PROP_TRANSIENT_FOR,
   PROP_ATTACHED_TO,
   PROP_APPLICATION,
+  PROP_DEFAULT_WIDGET,
+
   /* Readonly properties */
   PROP_IS_ACTIVE,
 
@@ -1053,6 +1055,13 @@ gtk_window_class_init (GtkWindowClass *klass)
                            P_("GtkApplication"),
                            P_("The GtkApplication for the window"),
                            GTK_TYPE_APPLICATION,
+                           GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
+  window_props[PROP_DEFAULT_WIDGET] =
+      g_param_spec_object ("default-widget",
+                           P_("Default widget"),
+                           P_("The default widget"),
+                           GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_ARG, window_props);
@@ -1983,6 +1992,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_APPLICATION:
       gtk_window_set_application (window, g_value_get_object (value));
       break;
+    case PROP_DEFAULT_WIDGET:
+      gtk_window_set_default (window, g_value_get_object (value));
+      break;
     case PROP_MNEMONICS_VISIBLE:
       gtk_window_set_mnemonics_visible (window, g_value_get_boolean (value));
       break;
@@ -2079,6 +2091,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_APPLICATION:
       g_value_set_object (value, gtk_window_get_application (window));
+      break;
+    case PROP_DEFAULT_WIDGET:
+      g_value_set_object (value, gtk_window_get_default_widget (window));
       break;
     case PROP_MNEMONICS_VISIBLE:
       g_value_set_boolean (value, priv->mnemonics_visible);
@@ -2541,7 +2556,7 @@ gtk_window_set_default (GtkWindow *window,
   if (priv->default_widget != default_widget)
     {
       GtkWidget *old_default_widget = NULL;
-      
+
       if (default_widget)
 	g_object_ref (default_widget);
 
@@ -2569,12 +2584,14 @@ gtk_window_set_default (GtkWindow *window,
 
       if (old_default_widget)
 	g_object_notify (G_OBJECT (old_default_widget), "has-default");
-      
+
       if (default_widget)
 	{
 	  g_object_notify (G_OBJECT (default_widget), "has-default");
 	  g_object_unref (default_widget);
 	}
+
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DEFAULT_WIDGET]);
     }
 }
 
