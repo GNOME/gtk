@@ -1664,7 +1664,6 @@ visit_file_cb (GSimpleAction *action,
   g_slist_free_full (files, g_object_unref);
 }
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 /* Callback used when the "Open this folder" menu item is activated */
 static void
 open_folder_cb (GSimpleAction *action,
@@ -1690,7 +1689,6 @@ open_folder_cb (GSimpleAction *action,
 
   g_slist_free_full (files, g_object_unref);
 }
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 /* callback used when the "Show Hidden Files" menu item is toggled */
 static void
