@@ -617,6 +617,9 @@ gtk_gesture_filter_event (GtkEventController *controller,
    * subclasses which punch the holes in for the events
    * they can possibly handle.
    */
+  if (GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_parent_class)->filter_event (controller, event))
+    return TRUE;
+
   return EVENT_IS_TOUCHPAD_GESTURE (event);
 }
 
