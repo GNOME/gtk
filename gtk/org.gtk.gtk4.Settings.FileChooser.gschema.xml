@@ -128,7 +128,7 @@
       </description>
     </key>
     <key name='sidebar-width' type='i'>
-      <default>148</default>
+      <default>-1</default>
       <summary>Sidebar width</summary>
       <description>
 	Width in pixels of the file chooser's places sidebar.

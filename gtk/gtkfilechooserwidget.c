@@ -3750,6 +3750,14 @@ settings_load (GtkFileChooserWidget *impl)
    */
 
   update_time_renderer_visible (impl);
+  if (sidebar_width < 0)
+    {
+      GtkWidget *sidebar = gtk_paned_get_child1 (GTK_PANED (priv->browse_widgets_hpaned));
+
+      gtk_widget_measure (sidebar, GTK_ORIENTATION_HORIZONTAL, -1,
+                          NULL, &sidebar_width, NULL, NULL);
+    }
+
   gtk_paned_set_position (GTK_PANED (priv->browse_widgets_hpaned), sidebar_width);
 }
 
