@@ -714,31 +714,6 @@ gtk_file_chooser_widget_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->finalize (object);
 }
 
-/* Shows an error dialog set as transient for the specified window */
-static void
-error_message_with_parent (GtkWindow  *parent,
-                           const char *msg,
-                           const char *detail)
-{
-  GtkWidget *dialog;
-
-  dialog = gtk_message_dialog_new (parent,
-                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_ERROR,
-                                   GTK_BUTTONS_OK,
-                                   "%s",
-                                   msg);
-  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                            "%s", detail);
-
-  if (parent && gtk_window_has_group (parent))
-    gtk_window_group_add_window (gtk_window_get_group (parent),
-                                 GTK_WINDOW (dialog));
-
-  gtk_dialog_run (GTK_DIALOG (dialog));
-  gtk_widget_destroy (dialog);
-}
-
 /* Returns a toplevel GtkWindow, or NULL if none */
 static GtkWindow *
 get_toplevel (GtkWidget *widget)
@@ -758,7 +733,25 @@ error_message (GtkFileChooserWidget *impl,
                const char            *msg,
                const char            *detail)
 {
-  error_message_with_parent (get_toplevel (GTK_WIDGET (impl)), msg, detail);
+  GtkWindow *parent = get_toplevel (GTK_WIDGET (impl));
+  GtkWidget *dialog;
+
+  dialog = gtk_message_dialog_new (parent,
+                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                   GTK_MESSAGE_ERROR,
+                                   GTK_BUTTONS_OK,
+                                   "%s",
+                                   msg);
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                            "%s", detail);
+
+  if (parent && gtk_window_has_group (parent))
+    gtk_window_group_add_window (gtk_window_get_group (parent),
+                                 GTK_WINDOW (dialog));
+
+  gtk_dialog_run (GTK_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+
 }
 
 /* Shows a simple error dialog relative to a path.  Frees the GError as well. */
