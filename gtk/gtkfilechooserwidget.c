@@ -83,6 +83,7 @@
 #include "gtkfilechoosererrorstackprivate.h"
 #include "gtkentryprivate.h"
 #include "gtkroot.h"
+#include "gtkbinlayout.h"
 
 #include <cairo-gobject.h>
 
@@ -7934,39 +7935,6 @@ add_normal_and_shifted_binding (GtkBindingSet   *binding_set,
 }
 
 static void
-gtk_file_chooser_widget_measure (GtkWidget       *widget,
-                                 GtkOrientation  orientation,
-                                 int             for_size,
-                                 int            *minimum,
-                                 int            *natural,
-                                 int            *minimum_baseline,
-                                 int            *natural_baseline)
-{
-  GtkFileChooserWidget *self = GTK_FILE_CHOOSER_WIDGET (widget);
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (self);
-
-  gtk_widget_measure (priv->box, orientation, for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_file_chooser_widget_size_allocate (GtkWidget *widget,
-                                       int        width,
-                                       int        height,
-                                       int        baseline)
-{
-  GtkFileChooserWidget *self = GTK_FILE_CHOOSER_WIDGET (widget);
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (self);
-
-  gtk_widget_size_allocate (priv->box,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            },-1);
-}
-
-static void
 gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
 {
   static const guint quick_bookmark_keyvals[10] = {
@@ -7990,8 +7958,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->unroot = gtk_file_chooser_widget_unroot;
   widget_class->style_updated = gtk_file_chooser_widget_style_updated;
   widget_class->display_changed = gtk_file_chooser_widget_display_changed;
-  widget_class->measure = gtk_file_chooser_widget_measure;
-  widget_class->size_allocate = gtk_file_chooser_widget_size_allocate;
 
   /*
    * Signals
@@ -8557,6 +8523,8 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
    * which cannot be done with GtkBuilder
    */
   post_process_ui (impl);
+
+  gtk_widget_set_layout_manager (GTK_WIDGET (impl), gtk_bin_layout_new ());
 
   profile_end ("end", NULL);
 }
