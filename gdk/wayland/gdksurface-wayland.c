@@ -575,18 +575,7 @@ _gdk_wayland_display_create_surface_impl (GdkDisplay     *display,
       gdk_display_get_n_monitors (display) > 0)
     impl->scale = gdk_monitor_get_scale_factor (gdk_display_get_monitor (display, 0));
 
-  impl->title = NULL;
-
-  switch (GDK_SURFACE_TYPE (surface))
-    {
-    case GDK_SURFACE_TOPLEVEL:
-    case GDK_SURFACE_TEMP:
-      gdk_surface_set_title (surface, get_default_title ());
-      break;
-
-    default:
-      break;
-    }
+  gdk_surface_set_title (surface, get_default_title ());
 
   if (real_parent == NULL)
     display_wayland->toplevels = g_list_prepend (display_wayland->toplevels, surface);
