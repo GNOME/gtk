@@ -56,6 +56,8 @@
 #include "gtkprivate.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
+#include "gtkrootprivate.h"
+#include "gtknativeprivate.h"
 #include "gtkscrollable.h"
 #include "gtkselection.h"
 #include "gtksettingsprivate.h"
@@ -3635,7 +3637,7 @@ sync_widget_surface_transform (GtkWidget *widget)
   was_valid = surface_transform_data->cached_surface_transform_valid;
   prev_transform = surface_transform_data->cached_surface_transform;
 
-  if (GTK_IS_ROOT (widget))
+  if (GTK_IS_NATIVE (widget))
     {
       gsk_transform_to_matrix (priv->transform,
                                &surface_transform_data->cached_surface_transform);
@@ -3644,11 +3646,6 @@ sync_widget_surface_transform (GtkWidget *widget)
   else if (!priv->root)
     {
       surface_transform_data->cached_surface_transform_valid = FALSE;
-    }
-  else if (gtk_widget_compute_transform (widget, GTK_WIDGET (priv->root),
-                                         &surface_transform_data->cached_surface_transform))
-    {
-      surface_transform_data->cached_surface_transform_valid = TRUE;
     }
   else
     {
@@ -11443,7 +11440,7 @@ gtk_widget_unregister_surface (GtkWidget    *widget,
  *
  * Returns: (transfer none) (nullable): @widget’s surface.
  */
-GdkSurface*
+GdkSurface *
 gtk_widget_get_surface (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
@@ -13464,7 +13461,7 @@ gtk_widget_set_cursor (GtkWidget *widget,
 
   root = _gtk_widget_get_root (widget);
   if (root)
-    gtk_root_maybe_update_cursor (root, widget, NULL);
+    gtk_window_maybe_update_cursor (GTK_WINDOW (root), widget, NULL);
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CURSOR]);
 }
