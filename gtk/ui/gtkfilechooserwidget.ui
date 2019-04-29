@@ -458,6 +458,7 @@
         <child>
           <object class="GtkEntry" id="rename_file_name_entry">
             <property name="activates-default">1</property>
+            <property name="hexpand">1</property>
             <signal name="changed" handler="rename_file_name_changed"/>
             <layout>
               <property name="left-attach">0</property>
