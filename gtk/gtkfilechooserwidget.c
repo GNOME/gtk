@@ -3422,29 +3422,10 @@ cancel_all_operations (GtkFileChooserWidget *impl)
 
   pending_select_files_free (impl);
 
-  if (priv->file_list_drag_data_received_cancellable)
-    {
-      g_cancellable_cancel (priv->file_list_drag_data_received_cancellable);
-      priv->file_list_drag_data_received_cancellable = NULL;
-    }
-
-  if (priv->update_current_folder_cancellable)
-    {
-      g_cancellable_cancel (priv->update_current_folder_cancellable);
-      priv->update_current_folder_cancellable = NULL;
-    }
-
-  if (priv->should_respond_get_info_cancellable)
-    {
-      g_cancellable_cancel (priv->should_respond_get_info_cancellable);
-      priv->should_respond_get_info_cancellable = NULL;
-    }
-
-  if (priv->file_exists_get_info_cancellable)
-    {
-      g_cancellable_cancel (priv->file_exists_get_info_cancellable);
-      priv->file_exists_get_info_cancellable = NULL;
-    }
+  g_clear_pointer (&priv->file_list_drag_data_received_cancellable, g_cancellable_cancel);
+  g_clear_pointer (&priv->update_current_folder_cancellable, g_cancellable_cancel);
+  g_clear_pointer (&priv->should_respond_get_info_cancellable, g_cancellable_cancel);
+  g_clear_pointer (&priv->file_exists_get_info_cancellable, g_cancellable_cancel);
 
   search_stop_searching (impl, TRUE);
   recent_stop_loading (impl);
