@@ -968,6 +968,23 @@ typedef enum
 } GtkPropagationPhase;
 
 /**
+ * GtkPropagationLimit:
+ * @GTK_LIMIT_NONE: Events are handled regardless of what their
+ *   target is.
+ * @GTK_LIMIT_SAME_NATIVE: Events are only handled if their target
+ *   is in the same #GtkNative as the event controllers widget. Note
+ *   that some event types have two targets (origin and destination).
+ *
+ * Describes limits of a #GtkEventController for handling events
+ * targeting other widgets.
+ */
+typedef enum
+{
+  GTK_LIMIT_NONE,
+  GTK_LIMIT_SAME_NATIVE
+} GtkPropagationLimit;
+
+/**
  * GtkEventSequenceState:
  * @GTK_EVENT_SEQUENCE_NONE: The sequence is handled, but not grabbed.
  * @GTK_EVENT_SEQUENCE_CLAIMED: The sequence is handled and grabbed.
