@@ -5895,8 +5895,10 @@ popover_size_allocate (GtkWindowPopover *popover,
   if (!gtk_widget_get_mapped (popover->widget))
     return;
 
+#if 0
   if (GTK_IS_POPOVER (popover->widget))
     gtk_popover_update_position (GTK_POPOVER (popover->widget));
+#endif
 
   popover_get_rect (popover, window, &rect);
   gtk_widget_size_allocate (popover->widget, &rect, -1);

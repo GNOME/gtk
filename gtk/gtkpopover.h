@@ -1,5 +1,8 @@
 /* GTK - The GIMP Toolkit
- * Copyright © 2013 Carlos Garnacho <carlosg@gnome.org>
+ * Copyright (C) 2019 Red Hat, Inc.
+ *
+ * Authors:
+ * - Matthias Clasen <mclasen@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,23 +25,23 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkwindow.h>
+#include <gtk/gtkbin.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_POPOVER           (gtk_popover_get_type ())
-#define GTK_POPOVER(o)             (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_POPOVER, GtkPopover))
-#define GTK_POPOVER_CLASS(c)       (G_TYPE_CHECK_CLASS_CAST ((c), GTK_TYPE_POPOVER, GtkPopoverClass))
-#define GTK_IS_POPOVER(o)          (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_POPOVER))
-#define GTK_IS_POPOVER_CLASS(o)    (G_TYPE_CHECK_CLASS_TYPE ((o), GTK_TYPE_POPOVER))
-#define GTK_POPOVER_GET_CLASS(o)   (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_POPOVER, GtkPopoverClass))
+#define GTK_TYPE_POPOVER                 (gtk_popover_get_type ())
+#define GTK_POPOVER(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_POPOVER, GtkPopover))
+#define GTK_POPOVER_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_POPOVER, GtkPopoverClass))
+#define GTK_IS_POPOVER(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_POPOVER))
+#define GTK_IS_POPOVER_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_POPOVER))
+#define GTK_POPOVER_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_POPOVER, GtkPopoverClass))
 
-typedef struct _GtkPopover GtkPopover;
-typedef struct _GtkPopoverClass GtkPopoverClass;
+typedef struct _GtkPopover       GtkPopover;
+typedef struct _GtkPopoverClass  GtkPopoverClass;
 
 struct _GtkPopover
 {
-  GtkBin parent_instance;
+  GtkBin parent;
 };
 
 struct _GtkPopoverClass
@@ -53,63 +56,55 @@ struct _GtkPopoverClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType           gtk_popover_get_type        (void) G_GNUC_CONST;
+GType           gtk_popover_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_popover_new             (GtkWidget             *relative_to);
+GtkWidget *     gtk_popover_new      (GtkWidget *relative_to);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_popover_new_from_model  (GtkWidget             *relative_to,
-                                             GMenuModel            *model);
+GtkWidget *     gtk_popover_new_from_model  (GtkWidget  *relative_to,
+                                             GMenuModel *model);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_popover_set_relative_to (GtkPopover            *popover,
-                                             GtkWidget             *relative_to);
-GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_popover_get_relative_to (GtkPopover            *popover);
+void            gtk_popover_bind_model      (GtkPopover  *popover,
+                                             GMenuModel  *model,
+                                             const gchar *action_namespace);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_popover_set_pointing_to (GtkPopover            *popover,
-                                             const GdkRectangle    *rect);
+void            gtk_popover_set_relative_to (GtkPopover   *popover,
+                                           GtkWidget  *relative_to);
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_popover_get_pointing_to (GtkPopover            *popover,
-                                             GdkRectangle          *rect);
-GDK_AVAILABLE_IN_ALL
-void            gtk_popover_set_position    (GtkPopover            *popover,
-                                             GtkPositionType        position);
-GDK_AVAILABLE_IN_ALL
-GtkPositionType gtk_popover_get_position    (GtkPopover            *popover);
+GtkWidget *     gtk_popover_get_relative_to (GtkPopover   *popover);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_popover_set_modal       (GtkPopover            *popover,
-                                             gboolean               modal);
+void            gtk_popover_set_pointing_to (GtkPopover           *popover,
+                                           const GdkRectangle *rect);
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_popover_get_modal       (GtkPopover            *popover);
+gboolean        gtk_popover_get_pointing_to (GtkPopover           *popover,
+                                           GdkRectangle       *rect);
+GDK_AVAILABLE_IN_ALL
+void            gtk_popover_set_position    (GtkPopover           *popover,
+                                           GtkPositionType     position);
+GDK_AVAILABLE_IN_ALL
+GtkPositionType gtk_popover_get_position    (GtkPopover           *popover);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_popover_bind_model      (GtkPopover            *popover,
-                                             GMenuModel            *model,
-                                             const gchar           *action_namespace);
+void            gtk_popover_set_modal       (GtkPopover           *popover,
+                                           gboolean            modal);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_popover_get_modal       (GtkPopover           *popover);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_popover_set_default_widget (GtkPopover *popover,
-                                                GtkWidget  *widget);
+void            gtk_popover_popup (GtkPopover *popover);
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_popover_get_default_widget (GtkPopover *popover);
+void            gtk_popover_popdown (GtkPopover *popover);
 
 GDK_AVAILABLE_IN_ALL
-void                 gtk_popover_set_constrain_to (GtkPopover           *popover,
-                                                   GtkPopoverConstraint  constraint);
+void gtk_popover_set_default_widget (GtkPopover *popover,
+                                     GtkWidget  *widget);
 
 GDK_AVAILABLE_IN_ALL
-GtkPopoverConstraint gtk_popover_get_constrain_to (GtkPopover           *popover);
-
-GDK_AVAILABLE_IN_ALL
-void                 gtk_popover_popup            (GtkPopover *popover);
-
-GDK_AVAILABLE_IN_ALL
-void                 gtk_popover_popdown          (GtkPopover *popover);
-
+GListModel *    gtk_popover_get_popovers (void);
 
 G_END_DECLS
 
