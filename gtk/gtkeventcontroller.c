@@ -32,17 +32,20 @@
 #include "config.h"
 #include "gtkeventcontroller.h"
 #include "gtkeventcontrollerprivate.h"
+
 #include "gtkwidgetprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtknative.h"
 
 typedef struct _GtkEventControllerPrivate GtkEventControllerPrivate;
 
 enum {
   PROP_WIDGET = 1,
   PROP_PROPAGATION_PHASE,
+  PROP_PROPAGATION_LIMIT,
   LAST_PROP
 };
 
@@ -52,6 +55,7 @@ struct _GtkEventControllerPrivate
 {
   GtkWidget *widget;
   GtkPropagationPhase phase;
+  GtkPropagationLimit limit;
 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkEventController, gtk_event_controller, G_TYPE_OBJECT)
@@ -79,8 +83,35 @@ gtk_event_controller_filter_event_default (GtkEventController *self,
 {
   GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
 
-  if (priv->widget)
-    return !gtk_widget_is_sensitive (priv->widget);
+  if (priv->widget && !gtk_widget_is_sensitive (priv->widget))
+    return TRUE;
+
+  if (priv->limit == GTK_LIMIT_SAME_NATIVE)
+    {
+      GtkWidget *native;
+      GtkWidget *native2;
+      GtkWidget *target;
+
+      native = GTK_WIDGET (gtk_widget_get_native (priv->widget));
+
+      target = GTK_WIDGET (gdk_event_get_target (event));
+      if (target)
+        {
+          native2 = GTK_WIDGET (gtk_widget_get_native (target));
+          if (native == native2)
+            return FALSE;
+        }
+
+      target = GTK_WIDGET (gdk_event_get_related_target (event));
+      if (target)
+        {
+          native2 = GTK_WIDGET (gtk_widget_get_native (target));
+          if (native == native2)
+            return FALSE;
+        }
+
+      return TRUE;
+    }
 
   return FALSE;
 }
@@ -106,6 +137,10 @@ gtk_event_controller_set_property (GObject      *object,
       gtk_event_controller_set_propagation_phase (self,
                                                   g_value_get_enum (value));
       break;
+    case PROP_PROPAGATION_LIMIT:
+      gtk_event_controller_set_propagation_limit (self,
+                                                  g_value_get_enum (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -127,6 +162,9 @@ gtk_event_controller_get_property (GObject    *object,
       break;
     case PROP_PROPAGATION_PHASE:
       g_value_set_enum (value, priv->phase);
+      break;
+    case PROP_PROPAGATION_LIMIT:
+      g_value_set_enum (value, priv->limit);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -157,6 +195,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                            P_("Widget the gesture relates to"),
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READABLE);
+
   /**
    * GtkEventController:propagation-phase:
    *
@@ -170,6 +209,19 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                          GTK_PHASE_BUBBLE,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkEventController:propagation-limit:
+   *
+   * The limit for which events this controller will handle.
+   */
+  properties[PROP_PROPAGATION_LIMIT] =
+      g_param_spec_enum ("propagation-limit",
+                         P_("Propagation limit"),
+                         P_("Propagation limit for events handled by this controller"),
+                         GTK_TYPE_PROPAGATION_LIMIT,
+                         GTK_LIMIT_SAME_NATIVE,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
@@ -180,6 +232,7 @@ gtk_event_controller_init (GtkEventController *controller)
 
   priv = gtk_event_controller_get_instance_private (controller);
   priv->phase = GTK_PHASE_BUBBLE;
+  priv->limit = GTK_LIMIT_SAME_NATIVE;
 }
 
 /**
@@ -310,4 +363,33 @@ gtk_event_controller_set_propagation_phase (GtkEventController  *controller,
     gtk_event_controller_reset (controller);
 
   g_object_notify_by_pspec (G_OBJECT (controller), properties[PROP_PROPAGATION_PHASE]);
+}
+
+GtkPropagationLimit
+gtk_event_controller_get_propagation_limit (GtkEventController *controller)
+{
+  GtkEventControllerPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER (controller), GTK_LIMIT_SAME_NATIVE);
+
+  priv = gtk_event_controller_get_instance_private (controller);
+
+  return priv->limit;
+}
+void
+gtk_event_controller_set_propagation_limit (GtkEventController  *controller,
+                                            GtkPropagationLimit  limit)
+{
+  GtkEventControllerPrivate *priv;
+
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+
+  priv = gtk_event_controller_get_instance_private (controller);
+
+  if (priv->limit == limit)
+    return;
+
+  priv->limit = limit;
+
+  g_object_notify_by_pspec (G_OBJECT (controller), properties[PROP_PROPAGATION_LIMIT]);
 }
