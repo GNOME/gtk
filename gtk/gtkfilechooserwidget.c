@@ -7150,8 +7150,6 @@ search_start_query (GtkFileChooserWidget *impl,
   set_busy_cursor (impl, TRUE);
   priv->show_progress_timeout = g_timeout_add (1500, show_spinner, impl);
 
-  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
-
   if (priv->search_engine == NULL)
     priv->search_engine = _gtk_search_engine_new ();
 
@@ -7185,6 +7183,10 @@ search_start_query (GtkFileChooserWidget *impl,
   if (gtk_query_get_location (priv->search_query) &&
       _gtk_file_consider_as_remote (gtk_query_get_location (priv->search_query)))
     gtk_widget_show (priv->remote_warning_bar);
+
+  /* We're not showing the file list here already and instead rely on the
+   * GtkSearchEntry timout and the ::hits-added signal from above to
+   * switch. */
 }
 
 /* Callback used when the user presses Enter while typing on the search
