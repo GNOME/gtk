@@ -671,8 +671,7 @@ gtk_file_chooser_widget_finalize (GObject *object)
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (object);
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  if (priv->choices)
-    g_hash_table_unref (priv->choices);
+  g_clear_pointer (&priv->choices, g_hash_table_unref);
 
   if (priv->location_changed_id > 0)
     g_source_remove (priv->location_changed_id);
@@ -682,21 +681,10 @@ gtk_file_chooser_widget_finalize (GObject *object)
   g_free (priv->browse_files_last_selected_name);
 
   g_slist_free_full (priv->filters, g_object_unref);
-
-  if (priv->current_filter)
-    g_object_unref (priv->current_filter);
-
-  if (priv->current_volume_file)
-    g_object_unref (priv->current_volume_file);
-
-  if (priv->current_folder)
-    g_object_unref (priv->current_folder);
-
-  if (priv->preview_file)
-    g_object_unref (priv->preview_file);
-
-  if (priv->browse_path_bar_size_group)
-    g_object_unref (priv->browse_path_bar_size_group);
+  g_clear_object (&priv->current_filter);
+  g_clear_object (&priv->current_volume_file);
+  g_clear_object (&priv->current_folder);
+  g_clear_object (&priv->browse_path_bar_size_group);
 
   /* Free all the Models we have */
   stop_loading_and_clear_list_model (impl, FALSE);
