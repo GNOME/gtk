@@ -62,6 +62,7 @@
 #include "gtkpopoverprivate.h"
 #include "gtkprivate.h"
 #include "gtkroot.h"
+#include "gtknative.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtksnapshot.h"
@@ -549,7 +550,8 @@ static void gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 						      gpointer       user_data);
 
 /* GtkRoot */
-static void             gtk_window_root_interface_init                  (GtkRootInterface       *iface);
+static void             gtk_window_root_interface_init (GtkRootInterface *iface);
+static void             gtk_window_native_interface_init  (GtkNativeInterface  *iface);
 
 static void ensure_state_flag_backdrop (GtkWidget *widget);
 static void unset_titlebar (GtkWindow *window);
@@ -566,6 +568,8 @@ G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkWindow)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_window_buildable_interface_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,
+						gtk_window_native_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,
 						gtk_window_root_interface_init))
 
@@ -2351,21 +2355,27 @@ gtk_window_root_get_display (GtkRoot *root)
   return priv->display;
 }
 
-static GskRenderer *
-gtk_window_root_get_renderer (GtkRoot *root)
+static void
+gtk_window_root_interface_init (GtkRootInterface *iface)
 {
-  GtkWindow *self = GTK_WINDOW (root);
+  iface->get_display = gtk_window_root_get_display;
+}
+
+static GskRenderer *
+gtk_window_native_get_renderer (GtkNative *native)
+{
+  GtkWindow *self = GTK_WINDOW (native);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
 
   return priv->renderer;
 }
 
 static void
-gtk_window_root_get_surface_transform (GtkRoot *root,
-                                       int     *x,
-                                       int     *y)
+gtk_window_native_get_surface_transform (GtkNative *native,
+                                         int       *x,
+                                         int       *y)
 {
-  GtkWindow *self = GTK_WINDOW (root);
+  GtkWindow *self = GTK_WINDOW (native);
   GtkStyleContext *context;
   GtkBorder margin, border, padding;
 
@@ -2379,11 +2389,17 @@ gtk_window_root_get_surface_transform (GtkRoot *root,
 }
 
 static void
-gtk_window_root_interface_init (GtkRootInterface *iface)
+gtk_window_native_check_resize (GtkNative *native)
 {
-  iface->get_display = gtk_window_root_get_display;
-  iface->get_renderer = gtk_window_root_get_renderer;
-  iface->get_surface_transform = gtk_window_root_get_surface_transform;
+  gtk_window_check_resize (GTK_WINDOW (native));
+}
+
+static void
+gtk_window_native_interface_init (GtkNativeInterface *iface)
+{
+  iface->get_renderer = gtk_window_native_get_renderer;
+  iface->get_surface_transform = gtk_window_native_get_surface_transform;
+  iface->check_resize = gtk_window_native_check_resize;
 }
 
 /**
