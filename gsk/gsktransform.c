@@ -42,8 +42,7 @@ typedef struct _GskTransformClass GskTransformClass;
 struct _GskTransform
 {
   const GskTransformClass *transform_class;
-  
-  volatile int ref_count;
+
   GskTransformCategory category;
   GskTransform *next;
 };
@@ -113,10 +112,9 @@ gsk_transform_alloc (const GskTransformClass *transform_class,
 
   g_return_val_if_fail (transform_class != NULL, NULL);
 
-  self = g_malloc0 (transform_class->struct_size);
+  self = g_atomic_rc_box_alloc0 (transform_class->struct_size);
 
   self->transform_class = transform_class;
-  self->ref_count = 1;
   self->category = next ? MIN (category, next->category) : category;
   self->next = gsk_transform_is_identity (next) ? NULL : next;
 
@@ -312,15 +310,15 @@ gsk_matrix_transform_apply_affine (GskTransform *transform,
       break;
 
     case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
-      *out_dx += *out_scale_x * graphene_matrix_get_value (&self->matrix, 3, 0);
-      *out_dy += *out_scale_y * graphene_matrix_get_value (&self->matrix, 3, 1);
-      *out_scale_x *= graphene_matrix_get_value (&self->matrix, 0, 0);
-      *out_scale_y *= graphene_matrix_get_value (&self->matrix, 1, 1);
+      *out_dx += *out_scale_x * graphene_matrix_get_x_translation (&self->matrix);
+      *out_dy += *out_scale_y * graphene_matrix_get_y_translation (&self->matrix);
+      *out_scale_x *= graphene_matrix_get_x_scale (&self->matrix);
+      *out_scale_y *= graphene_matrix_get_y_scale (&self->matrix);
       break;
 
     case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      *out_dx += *out_scale_x * graphene_matrix_get_value (&self->matrix, 3, 0);
-      *out_dy += *out_scale_y * graphene_matrix_get_value (&self->matrix, 3, 1);
+      *out_dx += *out_scale_x * graphene_matrix_get_x_translation (&self->matrix);
+      *out_dy += *out_scale_y * graphene_matrix_get_y_translation (&self->matrix);
       break;
 
     case GSK_TRANSFORM_CATEGORY_IDENTITY:
@@ -347,8 +345,8 @@ gsk_matrix_transform_apply_translate (GskTransform *transform,
       break;
 
     case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      *out_dx += graphene_matrix_get_value (&self->matrix, 3, 0);
-      *out_dy += graphene_matrix_get_value (&self->matrix, 3, 1);
+      *out_dx += graphene_matrix_get_x_translation (&self->matrix);
+      *out_dy += graphene_matrix_get_y_translation (&self->matrix);
       break;
 
     case GSK_TRANSFORM_CATEGORY_IDENTITY:
@@ -421,8 +419,10 @@ gsk_matrix_transform_equal (GskTransform *first_transform,
   GskMatrixTransform *first = (GskMatrixTransform *) first_transform;
   GskMatrixTransform *second = (GskMatrixTransform *) second_transform;
 
-  /* Crude, but better than just returning FALSE */
-  return memcmp (&first->matrix, &second->matrix, sizeof (graphene_matrix_t)) == 0;
+  if (graphene_matrix_equal_fast (&first->matrix, &second->matrix))
+    return TRUE;
+
+  return graphene_matrix_equal (&first->matrix, &second->matrix);
 }
 
 static const GskTransformClass GSK_TRANSFORM_TRANSFORM_CLASS =
@@ -735,7 +735,7 @@ gsk_rotate_transform_equal (GskTransform *first_transform,
   GskRotateTransform *first = (GskRotateTransform *) first_transform;
   GskRotateTransform *second = (GskRotateTransform *) second_transform;
 
-  return first->angle == second->angle;
+  return G_APPROX_VALUE (first->angle, second->angle, 0.01f);
 }
 
 static void
@@ -837,8 +837,8 @@ gsk_rotate3d_transform_equal (GskTransform *first_transform,
   GskRotate3dTransform *first = (GskRotate3dTransform *) first_transform;
   GskRotate3dTransform *second = (GskRotate3dTransform *) second_transform;
 
-  return first->angle == second->angle
-         && graphene_vec3_equal (&first->axis, &second->axis);
+  return G_APPROX_VALUE (first->angle, second->angle, 0.01f) &&
+         graphene_vec3_equal (&first->axis, &second->axis);
 }
 
 static void
@@ -996,9 +996,9 @@ gsk_scale_transform_equal (GskTransform *first_transform,
   GskScaleTransform *first = (GskScaleTransform *) first_transform;
   GskScaleTransform *second = (GskScaleTransform *) second_transform;
 
-  return first->factor_x == second->factor_x
-         && first->factor_y == second->factor_y
-         && first->factor_z == second->factor_z;
+  return G_APPROX_VALUE (first->factor_x, second->factor_x, 0.01f) &&
+         G_APPROX_VALUE (first->factor_y, second->factor_y, 0.01f) &&
+         G_APPROX_VALUE (first->factor_z, second->factor_z, 0.01f);
 }
 
 static void
@@ -1150,7 +1150,7 @@ gsk_perspective_transform_equal (GskTransform *first_transform,
   GskPerspectiveTransform *first = (GskPerspectiveTransform *) first_transform;
   GskPerspectiveTransform *second = (GskPerspectiveTransform *) second_transform;
 
-  return first->depth == second->depth;
+  return G_APPROX_VALUE (first->depth, second->depth, 0.001f);
 }
 
 static void
@@ -1217,8 +1217,6 @@ gsk_transform_finalize (GskTransform *self)
   self->transform_class->finalize (self);
 
   gsk_transform_unref (self->next);
-
-  g_free (self);
 }
 
 /**
@@ -1235,9 +1233,7 @@ gsk_transform_ref (GskTransform *self)
   if (self == NULL)
     return NULL;
 
-  g_atomic_int_inc (&self->ref_count);
-
-  return self;
+  return g_atomic_rc_box_acquire (self);
 }
 
 /**
@@ -1255,8 +1251,7 @@ gsk_transform_unref (GskTransform *self)
   if (self == NULL)
     return;
 
-  if (g_atomic_int_dec_and_test (&self->ref_count))
-    gsk_transform_finalize (self);
+  g_atomic_rc_box_release_full (self, (GDestroyNotify) gsk_transform_finalize);
 }
 
 /**
