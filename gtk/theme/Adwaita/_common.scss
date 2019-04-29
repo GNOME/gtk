@@ -4059,10 +4059,8 @@ placesview {
 
   row.activatable:hover { background-color: transparent; }
 
-  // this selects the "connect to server" label
-  > actionbar > revealer > box > label {
-    padding-left: 8px;
-    padding-right: 8px;
+  > actionbar > revealer > box  > box{
+    border-spacing: 6px;
   }
 }
 

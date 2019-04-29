@@ -1771,7 +1771,7 @@ placesview .server-list-button:checked > image { transition: 200ms cubic-bezier(
 
 placesview row.activatable:hover { background-color: transparent; }
 
-placesview > actionbar > revealer > box > label { padding-left: 8px; padding-right: 8px; }
+placesview > actionbar > revealer > box > box { border-spacing: 6px; }
 
 /********* Paned * */
 paned > separator { min-width: 1px; min-height: 1px; -gtk-icon-source: none; border-style: none; background-color: transparent; background-image: image(#1b1b1b); background-size: 1px 1px; }
