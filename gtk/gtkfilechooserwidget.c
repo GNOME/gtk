@@ -2221,7 +2221,12 @@ file_list_show_popover (GtkFileChooserWidget *impl,
   GtkTreeModel *model;
   GList *list;
   GtkTreePath *path;
+  graphene_rect_t bounds;
 
+  if (!gtk_widget_compute_bounds (priv->browse_files_tree_view,
+                                  priv->browse_files_tree_view,
+                                  &bounds))
+    return;
 
   file_list_update_popover (impl);
 
@@ -2234,7 +2239,7 @@ file_list_show_popover (GtkFileChooserWidget *impl,
       gtk_tree_view_convert_bin_window_to_widget_coords (GTK_TREE_VIEW (priv->browse_files_tree_view),
                                                      rect.x, rect.y, &rect.x, &rect.y);
 
-      rect.x = CLAMP (x - 20, 0, gtk_widget_get_allocated_width (priv->browse_files_tree_view) - 40);
+      rect.x = CLAMP (x - 20, 0, bounds.size.width - 40);
       rect.width = 40;
 
       g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
@@ -2257,11 +2262,17 @@ list_popup_menu_cb (GtkWidget            *widget,
                     GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
+  graphene_rect_t bounds;
 
-  file_list_show_popover (impl,
-                          0.5 * gtk_widget_get_allocated_width (GTK_WIDGET (priv->browse_files_tree_view)),
-                          0.5 * gtk_widget_get_allocated_height (GTK_WIDGET (priv->browse_files_tree_view)));
-  return TRUE;
+  if (gtk_widget_compute_bounds (priv->browse_files_tree_view,
+                                 priv->browse_files_tree_view,
+                                 &bounds))
+    {
+      file_list_show_popover (impl, 0.5 * bounds.size.width, 0.5 * bounds.size.height);
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 /* Callback used when a button is pressed on the file list.  We trap button 3 to
