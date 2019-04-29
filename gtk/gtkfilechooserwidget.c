@@ -3479,25 +3479,10 @@ gtk_file_chooser_widget_dispose (GObject *object)
   if (priv->rename_file_popover)
     gtk_popover_set_relative_to (GTK_POPOVER (priv->rename_file_popover), NULL);
 
-  if (priv->browse_files_popover)
-    {
-      gtk_widget_destroy (priv->browse_files_popover);
-      priv->browse_files_popover = NULL;
-    }
-
-  if (priv->extra_widget)
-    {
-      g_object_unref (priv->extra_widget);
-      priv->extra_widget = NULL;
-    }
-
+  g_clear_pointer (&priv->browse_files_popover, gtk_widget_destroy);
+  g_clear_object (&priv->extra_widget);
   remove_settings_signal (impl, gtk_widget_get_display (GTK_WIDGET (impl)));
-
-  if (priv->bookmarks_manager)
-    {
-      _gtk_bookmarks_manager_free (priv->bookmarks_manager);
-      priv->bookmarks_manager = NULL;
-    }
+  g_clear_pointer (&priv->bookmarks_manager, _gtk_bookmarks_manager_free);
 
   if (priv->external_entry && priv->location_entry == priv->external_entry)
     {
@@ -3505,11 +3490,7 @@ gtk_file_chooser_widget_dispose (GObject *object)
       priv->external_entry = NULL;
     }
 
-  if (priv->box)
-    {
-      gtk_widget_unparent (priv->box);
-      priv->box = NULL;
-    }
+  g_clear_pointer (&priv->box, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->dispose (object);
 }
