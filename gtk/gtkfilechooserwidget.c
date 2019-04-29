@@ -901,7 +901,6 @@ update_preview_widget_visibility (GtkFileChooserWidget *impl)
           priv->preview_label = gtk_label_new (priv->preview_display_name);
           gtk_box_insert_child_after (GTK_BOX (priv->preview_box), priv->preview_label, NULL);
           gtk_label_set_ellipsize (GTK_LABEL (priv->preview_label), PANGO_ELLIPSIZE_MIDDLE);
-          gtk_widget_show (priv->preview_label);
         }
     }
   else
@@ -2153,7 +2152,6 @@ file_list_build_popover (GtkFileChooserWidget *impl)
   priv->browse_files_popover = gtk_popover_new (priv->browse_files_tree_view);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   g_object_set (box, "margin", 10, NULL);
-  gtk_widget_show (box);
   gtk_container_add (GTK_CONTAINER (priv->browse_files_popover), box);
 
   priv->visit_file_item = add_button (box, _("_Visit File"), "item.visit");
@@ -2565,7 +2563,6 @@ save_widgets_create (GtkFileChooserWidget *impl)
 
   priv->save_widgets = vbox;
   gtk_box_insert_child_after (GTK_BOX (priv->box), priv->save_widgets, NULL);
-  gtk_widget_show (priv->save_widgets);
 }
 
 /* Destroys the widgets specific to Save mode */
