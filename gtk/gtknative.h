@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Benjamin Otte
+ * Copyright © 2019 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,11 +14,11 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  *
- * Authors: Benjamin Otte <otte@gnome.org>
+ * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GTK_ROOT_H__
-#define __GTK_ROOT_H__
+#ifndef __GTK_NATIVE_H__
+#define __GTK_NATIVE_H__
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -29,31 +29,38 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_ROOT               (gtk_root_get_type ())
+#define GTK_TYPE_NATIVE               (gtk_native_get_type ())
 
 GDK_AVAILABLE_IN_ALL
-G_DECLARE_INTERFACE (GtkRoot, gtk_root, GTK, ROOT, GtkWidget)
+G_DECLARE_INTERFACE (GtkNative, gtk_native, GTK, NATIVE, GtkWidget)
 
 /**
- * GtkRootIface:
+ * GtkNativeIface:
  *
- * The list of functions that must be implemented for the #GtkRoot interface.
+ * The list of functions that must be implemented for the #GtkNative interface.
  */
-struct _GtkRootInterface
+struct _GtkNativeInterface
 {
   /*< private >*/
   GTypeInterface g_iface;
 
   /*< public >*/
-  GdkDisplay * (* get_display)  (GtkRoot *self);
+  GskRenderer * (* get_renderer)          (GtkNative    *self);
+
+  void          (* get_surface_transform) (GtkNative    *self,
+                                           int       *x,
+                                           int       *y);
+
+  void          (* check_resize)          (GtkNative    *self);
 };
 
 GDK_AVAILABLE_IN_ALL
-void        gtk_root_set_focus (GtkRoot   *self,
-                                GtkWidget *focus);
+GtkWidget * gtk_native_get_for_surface (GdkSurface *surface);
+
 GDK_AVAILABLE_IN_ALL
-GtkWidget * gtk_root_get_focus (GtkRoot   *self);
+void        gtk_native_check_resize (GtkNative *self);
+
 
 G_END_DECLS
 
-#endif /* __GTK_ROOT_H__ */
+#endif /* __GTK_NATIVE_H__ */
