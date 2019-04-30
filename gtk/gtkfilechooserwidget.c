@@ -348,6 +348,8 @@ struct _GtkFileChooserWidgetPrivate {
   gint sort_column;
   GtkSortType sort_order;
 
+  ClockFormat clock_format;
+
   /* Flags */
 
   guint local_only : 1;
@@ -3693,6 +3695,7 @@ settings_load (GtkFileChooserWidget *impl)
   priv->startup_mode = startup_mode;
   priv->sort_directories_first = sort_directories_first;
   priv->show_time = date_format == DATE_FORMAT_WITH_TIME;
+  priv->clock_format = g_settings_get_enum (settings, "clock-format");
 
   /* We don't call set_sort_column() here as the models may not have been
    * created yet.  The individual functions that create and set the models will
@@ -4569,13 +4572,11 @@ static char *
 my_g_format_date_for_display (GtkFileChooserWidget *impl,
                               glong                 secs)
 {
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
+  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
   GDateTime *now, *time;
   GDateTime *now_date, *date;
-  ClockFormat clock_format;
   const gchar *format;
   gchar *date_str;
-  GSettings *settings;
   gint days_ago;
 
   time = g_date_time_new_from_unix_local (secs);
@@ -4583,9 +4584,6 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
                                 g_date_time_get_month (time),
                                 g_date_time_get_day_of_month (time),
                                 0, 0, 0);
-
-  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
-  clock_format = g_settings_get_enum (settings, "clock-format");
 
   now = g_date_time_new_now_local ();
   now_date = g_date_time_new_local (g_date_time_get_year (now),
@@ -4598,7 +4596,7 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
     {
       if (priv->show_time)
         format = "";
-      else if (clock_format == CLOCK_FORMAT_24)
+      else if (priv->clock_format == CLOCK_FORMAT_24)
         /* Translators: see g_date_time_format() for details on the format */
         format = _("%H:%M");
       else
@@ -4636,18 +4634,14 @@ static char *
 my_g_format_time_for_display (GtkFileChooserWidget *impl,
                               glong                 secs)
 {
+  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
   GDateTime *time;
-  ClockFormat clock_format;
   const gchar *format;
   gchar *date_str;
-  GSettings *settings;
 
   time = g_date_time_new_from_unix_local (secs);
 
-  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
-  clock_format = g_settings_get_enum (settings, "clock-format");
-
-  if (clock_format == CLOCK_FORMAT_24)
+  if (priv->clock_format == CLOCK_FORMAT_24)
     format = _("%H:%M");
   else
     format = _("%l:%M %p");
