@@ -845,6 +845,7 @@ gtk_im_context_ime_set_cursor_location (GtkIMContext *context,
   COMPOSITIONFORM cf;
   HWND hwnd;
   HIMC himc;
+  guint scale;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
 
@@ -860,10 +861,11 @@ gtk_im_context_ime_set_cursor_location (GtkIMContext *context,
   if (!himc)
     return;
 
+  scale = gdk_window_get_scale_factor (context_ime->client_window);
   get_window_position (context_ime->client_window, &wx, &wy);
   cf.dwStyle = CFS_POINT;
-  cf.ptCurrentPos.x = wx + context_ime->cursor_location.x;
-  cf.ptCurrentPos.y = wy + context_ime->cursor_location.y;
+  cf.ptCurrentPos.x = (wx + context_ime->cursor_location.x) * scale;
+  cf.ptCurrentPos.y = (wy + context_ime->cursor_location.y) * scale;
   ImmSetCompositionWindow (himc, &cf);
 
   ImmReleaseContext (hwnd, himc);
@@ -1050,6 +1052,7 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
       {
         gint wx = 0, wy = 0;
         CANDIDATEFORM cf;
+        guint scale = gdk_window_get_scale_factor (context_ime->client_window);
 
         get_window_position (context_ime->client_window, &wx, &wy);
         /* FIXME! */
@@ -1062,17 +1065,17 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
             gdk_win32_window_get_impl_hwnd (gdk_window_get_toplevel
                                             (context_ime->client_window));
           GetWindowRect (hwnd_top, &rc);
-          pt.x = wx;
-          pt.y = wy;
+          pt.x = wx * scale;
+          pt.y = wy * scale;
           ClientToScreen (hwnd_top, &pt);
-          wx = pt.x - rc.left;
-          wy = pt.y - rc.top;
+          wx = (pt.x - rc.left) / scale;
+          wy = (pt.y - rc.top) / scale;
         }
         cf.dwIndex = 0;
         cf.dwStyle = CFS_CANDIDATEPOS;
-        cf.ptCurrentPos.x = wx + context_ime->cursor_location.x;
-        cf.ptCurrentPos.y = wy + context_ime->cursor_location.y
-          + context_ime->cursor_location.height;
+        cf.ptCurrentPos.x = (wx + context_ime->cursor_location.x) * scale;
+        cf.ptCurrentPos.y = (wy + context_ime->cursor_location.y
+          + context_ime->cursor_location.height) * scale;
         ImmSetCandidateWindow (himc, &cf);
 
         if ((msg->lParam & GCS_COMPSTR))
