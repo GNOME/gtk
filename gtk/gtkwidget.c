@@ -737,6 +737,7 @@ static GQuark           quark_widget_path = 0;
 static GQuark           quark_action_muxer = 0;
 static GQuark           quark_font_options = 0;
 static GQuark           quark_font_map = 0;
+static GQuark           quark_builder_set_name = 0;
 
 /* --- functions --- */
 GType
@@ -896,6 +897,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_action_muxer = g_quark_from_static_string ("gtk-widget-action-muxer");
   quark_font_options = g_quark_from_static_string ("gtk-widget-font-options");
   quark_font_map = g_quark_from_static_string ("gtk-widget-font-map");
+  quark_builder_set_name = g_quark_from_static_string ("gtk-builder-set-name");
 
   gobject_class->constructed = gtk_widget_constructed;
   gobject_class->dispose = gtk_widget_dispose;
@@ -8864,6 +8866,15 @@ gtk_widget_real_get_accessible (GtkWidget *widget)
 
     }
 
+  if (accessible)
+    {
+      const gchar *id;
+
+      id = g_object_get_qdata (G_OBJECT (widget), quark_builder_set_name);
+      if (id)
+        atk_object_set_accessible_id (accessible, id);
+    }
+
   return accessible;
 }
 
@@ -9316,7 +9327,6 @@ gtk_widget_set_vexpand_set (GtkWidget      *widget,
  * GtkBuildable implementation
  */
 static GQuark		 quark_builder_atk_relations = 0;
-static GQuark            quark_builder_set_name = 0;
 
 static void
 gtk_widget_buildable_add_child (GtkBuildable  *buildable,
