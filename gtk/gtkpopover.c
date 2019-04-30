@@ -514,14 +514,20 @@ gtk_popover_move_focus (GtkWidget        *widget,
 static void
 gtk_popover_show (GtkWidget *widget)
 {
+  GtkPopover *popover = GTK_POPOVER (widget);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
   _gtk_widget_set_visible_flag (widget, TRUE);
   gtk_css_node_validate (gtk_widget_get_css_node (widget));
   gtk_widget_realize (widget);
   gtk_popover_native_check_resize (GTK_NATIVE (widget));
   gtk_widget_map (widget);
 
-  if (!gtk_widget_get_focus_child (widget))
-    gtk_widget_child_focus (widget, GTK_DIR_TAB_FORWARD);
+  if (priv->modal)
+    {
+      if (!gtk_widget_get_focus_child (widget))
+        gtk_widget_child_focus (widget, GTK_DIR_TAB_FORWARD);
+    }
 }
 
 static void
