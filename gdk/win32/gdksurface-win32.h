@@ -384,6 +384,15 @@ void  _gdk_win32_update_layered_window_from_cache (GdkSurface *window,
                                                    gboolean    do_paint);
 
 
+void
+gdk_win32_surface_get_queued_window_rect (GdkSurface *surface,
+                                          gint        scale,
+                                          RECT       *return_window_rect);
+
+void
+gdk_win32_surface_apply_queued_move_resize (GdkSurface *surface,
+                                            RECT        window_rect);
+
 G_END_DECLS
 
 #endif /* __GDK_SURFACE_WIN32_H__ */
