@@ -1,4 +1,4 @@
-FROM fedora:29
+FROM fedora:30
 
 RUN dnf -y install \
     hicolor-icon-theme \
@@ -59,6 +59,7 @@ RUN dnf -y install \
     pango-devel \
     pcre-devel \
     python3 \
+    python3-jinja2 \
     python3-pip \
     python3-wheel \
     redhat-rpm-config \
@@ -71,9 +72,7 @@ RUN dnf -y install \
     xorg-x11-server-Xvfb \
  && dnf clean all
 
-RUN pip3 install meson==0.50.0
-
-RUN pip3 install jinja2
+RUN pip3 install meson==0.50.1
 
 ARG HOST_USER_ID=5555
 ENV HOST_USER_ID ${HOST_USER_ID}
