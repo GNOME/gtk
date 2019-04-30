@@ -4011,7 +4011,13 @@ check_auto_dismissal (GdkEvent *event)
  switch ((guint) gdk_event_get_event_type (event))
     {
     case GDK_BUTTON_PRESS:
+#if 0
+    // FIXME: we need to ignore the release that is paired
+    // with the press starting the grab - due to implicit
+    // grabs, it will be delivered to the same place as the
+    // press, and will cause the auto dismissal to be triggered.
     case GDK_BUTTON_RELEASE:
+#endif
     case GDK_TOUCH_BEGIN:
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
