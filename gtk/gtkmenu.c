@@ -1055,6 +1055,17 @@ attach_widget_display_changed (GtkWidget  *attach_widget,
 }
 
 static void
+attach_widget_root_changed (GObject *attach_widget,
+                            GParamSpec *pspec,
+                            gpointer    data)
+{
+  GtkMenu *menu = data;
+
+  if (!g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-display"))
+    menu_change_display (menu, gtk_widget_get_display (attach_widget));
+}
+
+static void
 menu_toplevel_attached_to (GtkWindow *toplevel, GParamSpec *pspec, GtkMenu *menu)
 {
   GtkMenuAttachData *data;
@@ -1109,6 +1120,8 @@ gtk_menu_attach_to_widget (GtkMenu           *menu,
 
   g_signal_connect (attach_widget, "display-changed",
                     G_CALLBACK (attach_widget_display_changed), menu);
+  g_signal_connect (attach_widget, "notify::root",
+                    G_CALLBACK (attach_widget_root_changed), menu);
   attach_widget_display_changed (attach_widget, NULL, menu);
 
   data->detacher = detacher;
@@ -1191,6 +1204,9 @@ gtk_menu_detach (GtkMenu *menu)
   g_signal_handlers_disconnect_by_func (data->attach_widget,
                                         (gpointer) attach_widget_display_changed,
                                         menu);
+  g_signal_handlers_disconnect_by_func (data->attach_widget,
+                                        (gpointer) attach_widget_root_changed,
+                                        menu);
 
   if (data->detacher)
     data->detacher (data->attach_widget, menu);
@@ -1266,6 +1282,8 @@ popup_grab_on_surface (GdkSurface *surface,
   GdkGrabStatus status;
   GdkSeat *seat;
 
+  g_return_val_if_fail (gdk_surface_get_display (surface) == gdk_device_get_display (pointer), FALSE);
+
   seat = gdk_device_get_seat (pointer);
   status = gdk_seat_grab (seat, surface,
                           GDK_SEAT_CAPABILITY_ALL, TRUE,
@@ -1321,7 +1339,11 @@ gtk_menu_popup_internal (GtkMenu             *menu,
     device = NULL;
 
   if (device == NULL)
-    device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
+    {
+      device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
+      g_return_if_fail (gdk_device_get_display (device) == display);
+    }
+
 
   widget = GTK_WIDGET (menu);
   menu_shell = GTK_MENU_SHELL (menu);
@@ -1330,6 +1352,8 @@ gtk_menu_popup_internal (GtkMenu             *menu,
     pointer = gdk_device_get_associated_device (device);
   else
     pointer = device;
+
+  g_return_if_fail (gdk_device_get_display (pointer) == display);
 
   menu_shell->priv->parent_menu_shell = parent_menu_shell;
 
