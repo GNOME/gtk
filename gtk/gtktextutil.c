@@ -201,7 +201,7 @@ limit_layout_lines (PangoLayout *layout)
 GdkPaintable *
 gtk_text_util_create_drag_icon (GtkWidget *widget,
                                 gchar     *text,
-                                gsize      len)
+                                gssize     len)
 {
   GtkStyleContext *style_context;
   GtkSnapshot *snapshot;

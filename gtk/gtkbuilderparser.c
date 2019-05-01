@@ -1230,7 +1230,7 @@ void
 _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
                                   const gchar  *filename,
                                   const gchar  *buffer,
-                                  gsize         length,
+                                  gssize        length,
                                   gchar       **requested_objs,
                                   GError      **error)
 {
