@@ -31,6 +31,7 @@ do_expander (GtkWidget *do_widget)
   GtkWidget *toplevel;
   GtkWidget *area;
   GtkWidget *expander;
+  GtkWidget *label;
   GtkWidget *sw;
   GtkWidget *tv;
   GtkTextBuffer *buffer;
@@ -50,13 +51,19 @@ do_expander (GtkWidget *do_widget)
 
       area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (window));
 
+      label = gtk_widget_get_last_child (area);
+      gtk_label_set_line_wrap (GTK_LABEL (label), FALSE);
+      gtk_widget_set_vexpand (label, FALSE);
+
       expander = gtk_expander_new ("Details:");
+      gtk_widget_set_vexpand (expander, TRUE);
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (sw), 100);
       gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_IN);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                       GTK_POLICY_NEVER,
                                       GTK_POLICY_AUTOMATIC);
+      gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (sw), TRUE);
 
       tv = gtk_text_view_new ();
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (tv));
