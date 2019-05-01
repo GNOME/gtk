@@ -1094,7 +1094,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
   priv->resource_prefix = NULL;
 
   _gtk_builder_parser_parse_buffer (builder, filename,
-                                    buffer, length,
+                                    buffer, (gssize)length,
                                     NULL,
                                     &tmp_error);
 
@@ -1160,7 +1160,7 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
   priv->resource_prefix = NULL;
 
   _gtk_builder_parser_parse_buffer (builder, filename,
-                                    buffer, length,
+                                    buffer, (gssize)length,
                                     object_ids,
                                     &tmp_error);
 
@@ -1198,7 +1198,7 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
                                   GtkWidget    *widget,
                                   GType         template_type,
                                   const gchar  *buffer,
-                                  gsize         length,
+                                  gssize        length,
                                   GError      **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
@@ -1394,7 +1394,7 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
  *
  * Most users will probably want to use gtk_builder_new_from_string().
  *
- * Upon errors 0 will be returned and @error will be assigned a
+ * Upon errors %FALSE will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or
  * #G_VARIANT_PARSE_ERROR domain.
  *
@@ -1407,7 +1407,7 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
 gboolean
 gtk_builder_add_from_string (GtkBuilder   *builder,
                              const gchar  *buffer,
-                             gsize         length,
+                             gssize        length,
                              GError      **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
@@ -1449,7 +1449,7 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
  * building only the requested objects and merges
  * them with the current contents of @builder.
  *
- * Upon errors 0 will be returned and @error will be assigned a
+ * Upon errors %FALSE will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR or #G_MARKUP_ERROR domain.
  *
  * If you are adding an object that depends on an object that is not
@@ -1461,7 +1461,7 @@ gtk_builder_add_from_string (GtkBuilder   *builder,
 gboolean
 gtk_builder_add_objects_from_string (GtkBuilder   *builder,
                                      const gchar  *buffer,
-                                     gsize         length,
+                                     gssize        length,
                                      gchar       **object_ids,
                                      GError      **error)
 {
