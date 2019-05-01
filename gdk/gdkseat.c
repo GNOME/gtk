@@ -293,6 +293,7 @@ gdk_seat_grab (GdkSeat                *seat,
 
   g_return_val_if_fail (GDK_IS_SEAT (seat), GDK_GRAB_FAILED);
   g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_GRAB_FAILED);
+  g_return_val_if_fail (gdk_surface_get_display (surface) == gdk_seat_get_display (seat), GDK_GRAB_FAILED);
 
   capabilities &= GDK_SEAT_CAPABILITY_ALL;
   g_return_val_if_fail (capabilities != GDK_SEAT_CAPABILITY_NONE, GDK_GRAB_FAILED);
