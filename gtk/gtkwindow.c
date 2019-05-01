@@ -9885,7 +9885,10 @@ update_cursor (GtkWindow *toplevel,
       /* Outside the grab widget, cursor stays to whatever the grab
        * widget says.
        */
-      cursor = gtk_widget_get_cursor (grab_widget);
+      if (gtk_widget_get_surface (grab_widget) == gtk_widget_get_surface (target))
+        cursor = gtk_widget_get_cursor (grab_widget);
+      else
+        cursor = NULL;
     }
   else
     {
