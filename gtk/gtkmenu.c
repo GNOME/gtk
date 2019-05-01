@@ -1050,8 +1050,7 @@ attach_widget_display_changed (GtkWidget  *attach_widget,
                                GdkDisplay *previous_display,
                                GtkMenu    *menu)
 {
-  if (!g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-display"))
-    menu_change_display (menu, gtk_widget_get_display (attach_widget));
+  menu_change_display (menu, gtk_widget_get_display (attach_widget));
 }
 
 static void
@@ -1437,7 +1436,7 @@ gtk_menu_popup_internal (GtkMenu             *menu,
   parent_toplevel = NULL;
   if (parent_menu_shell)
     parent_toplevel = gtk_widget_get_toplevel (parent_menu_shell);
-  else if (!g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-display"))
+  else
     {
       GtkWidget *attach_widget = gtk_menu_get_attach_widget (menu);
       if (attach_widget)
@@ -3602,35 +3601,6 @@ gtk_menu_select_item (GtkMenuShell *menu_shell,
     gtk_menu_scroll_item_visible (menu_shell, menu_item);
 
   GTK_MENU_SHELL_CLASS (gtk_menu_parent_class)->select_item (menu_shell, menu_item);
-}
-
-/**
- * gtk_menu_set_display:
- * @menu: a #GtkMenu
- * @display: (allow-none): a #GdkDisplay, or %NULL if the display should be
- *           determined by the widget the menu is attached to
- *
- * Sets the #GdkDisplay on which the menu will be displayed.
- */
-void
-gtk_menu_set_display (GtkMenu    *menu,
-                      GdkDisplay *display)
-{
-  g_return_if_fail (GTK_IS_MENU (menu));
-  g_return_if_fail (display == NULL || GDK_IS_DISPLAY (display));
-
-  g_object_set_data (G_OBJECT (menu), I_("gtk-menu-explicit-display"), display);
-
-  if (display)
-    {
-      menu_change_display (menu, display);
-    }
-  else
-    {
-      GtkWidget *attach_widget = gtk_menu_get_attach_widget (menu);
-      if (attach_widget)
-        attach_widget_display_changed (attach_widget, NULL, menu);
-    }
 }
 
 static gint
