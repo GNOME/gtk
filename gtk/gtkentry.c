@@ -1234,10 +1234,13 @@ notify_cb (GObject    *object,
            gpointer    data)
 {
   gpointer iface;
+  gpointer class;
 
   /* The editable interface properties are already forwarded by the editable delegate setup */
   iface = g_type_interface_peek (g_type_class_peek (G_OBJECT_TYPE (object)), gtk_editable_get_type ());
-  if (!g_object_interface_find_property (iface, pspec->name))
+  class = g_type_class_peek (GTK_TYPE_ENTRY);
+  if (!g_object_interface_find_property (iface, pspec->name) &&
+      g_object_class_find_property (class, pspec->name))
     g_object_notify (data, pspec->name);
 }
 
