@@ -42,6 +42,13 @@ gtk_cell_accessible_parent_get_type (void)
   return g_define_type_id__volatile;
 }
 
+/**
+ * gtk_cell_accessible_parent_get_cell_extents:
+ * @x: (out):
+ * @y: (out):
+ * @width: (out):
+ * @height: (out):
+ */
 void
 gtk_cell_accessible_parent_get_cell_extents (GtkCellAccessibleParent *parent,
                                              GtkCellAccessible       *cell,
@@ -61,6 +68,10 @@ gtk_cell_accessible_parent_get_cell_extents (GtkCellAccessibleParent *parent,
     (iface->get_cell_extents) (parent, cell, x, y, width, height, coord_type);
 }
 
+/**
+ * gtk_cell_accessible_parent_get_cell_area:
+ * @cell_rect: (out):
+ */
 void
 gtk_cell_accessible_parent_get_cell_area (GtkCellAccessibleParent *parent,
                                           GtkCellAccessible       *cell,
@@ -188,6 +199,11 @@ gtk_cell_accessible_parent_update_relationset (GtkCellAccessibleParent *parent,
     (iface->update_relationset) (parent, cell, relationset);
 }
 
+/**
+ * gtk_cell_accessible_parent_get_cell_position:
+ * @row: (out):
+ * @column: (out):
+ */
 void
 gtk_cell_accessible_parent_get_cell_position (GtkCellAccessibleParent *parent,
                                               GtkCellAccessible       *cell,

@@ -1867,6 +1867,11 @@ gdk_x11_surface_set_modal_hint (GdkSurface *surface,
 			     NULL);
 }
 
+/**
+ * gdk_x11_surface_set_skip_taskbar_hint:
+ * @surface: (type GdkX11Surface): a native #GdkSurface
+ * @skips_taskbar:
+ */
 void
 gdk_x11_surface_set_skip_taskbar_hint (GdkSurface *surface,
                                        gboolean    skips_taskbar)
@@ -1888,6 +1893,11 @@ gdk_x11_surface_set_skip_taskbar_hint (GdkSurface *surface,
 			     NULL);
 }
 
+/**
+ * gdk_x11_surface_set_skip_pager_hint:
+ * @surface: (type GdkX11Surface): a native #GdkSurface
+ * @skips_pager:
+ */
 void
 gdk_x11_surface_set_skip_pager_hint (GdkSurface *surface,
                                      gboolean    skips_pager)
@@ -1909,6 +1919,11 @@ gdk_x11_surface_set_skip_pager_hint (GdkSurface *surface,
 			     NULL);
 }
 
+/**
+ * gdk_x11_surface_set_urgency_hint:
+ * @surface: (type GdkX11Surface): a native #GdkSurface
+ * @urgent:
+ */
 void
 gdk_x11_surface_set_urgency_hint (GdkSurface *surface,
                                   gboolean    urgent)
@@ -3377,6 +3392,11 @@ gdk_x11_surface_get_group (GdkSurface *surface)
   return toplevel->group_leader;
 }
 
+/**
+ * gdk_x11_surface_set_group:
+ * @surface: (type GdkX11Surface): a native #GdkSurface
+ * @leader: a #GdkSurface
+ */
 void
 gdk_x11_surface_set_group (GdkSurface *surface,
                            GdkSurface *leader)
