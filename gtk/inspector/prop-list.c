@@ -575,21 +575,6 @@ gtk_inspector_prop_list_create_row (GtkInspectorPropList *pl,
 }
 
 static void
-gtk_inspector_prop_list_prop_changed_cb (GObject              *pspec,
-                                         GParamSpec           *prop,
-                                         GtkInspectorPropList *pl)
-{
-  if (!pl->priv->object)
-    return;
-
-#if 0
-  iter = g_hash_table_lookup (pl->priv->prop_iters, prop->name);
-  if (iter != NULL)
-    gtk_inspector_prop_list_update_prop (pl, iter, prop);
-#endif
-}
-
-static void
 cleanup_object (GtkInspectorPropList *pl)
 {
   if (pl->priv->object &&
@@ -643,11 +628,6 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
 
   if (GTK_IS_WIDGET (object))
     g_signal_connect_object (object, "destroy", G_CALLBACK (cleanup_object), pl, G_CONNECT_SWAPPED);
-
-  /* Listen for updates */
-  pl->priv->notify_handler_id =
-      g_signal_connect_object (object, "notify",
-                               G_CALLBACK (gtk_inspector_prop_list_prop_changed_cb), pl, 0);
 
   gtk_widget_show (GTK_WIDGET (pl));
 
