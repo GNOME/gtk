@@ -146,14 +146,47 @@ gdk_event_class_init (GdkEventClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, event_props);
 }
 
-void
-_gdk_event_emit (GdkEvent *event)
+gboolean
+check_event_sanity (GdkEvent *event)
 {
+  GdkDisplay *display;
+  GdkSurface *surface;
+  GdkDevice *device;
+
+  display = gdk_event_get_display (event);
+  surface = gdk_event_get_surface (event);
+  device = gdk_event_get_device (event);
+
   if (gdk_event_get_event_type (event) == GDK_NOTHING)
     {
       g_warning ("Ignoring GDK_NOTHING events; they're good for nothing");
-      return;
+      return FALSE;
     }
+
+  if (surface && display != gdk_surface_get_display (surface))
+    {
+      char *type = g_enum_to_string (GDK_TYPE_EVENT_TYPE, event->any.type);
+      g_warning ("Event of type %s with mismatched surface display", type);
+      g_free (type);
+      return FALSE;
+    }
+
+  if (device && display != gdk_device_get_display (device))
+    {
+      char *type = g_enum_to_string (GDK_TYPE_EVENT_TYPE, event->any.type);
+      g_warning ("Event of type %s with mismatched device display", type);
+      g_free (type);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+void
+_gdk_event_emit (GdkEvent *event)
+{
+  if (!check_event_sanity (event))
+    return;
 
   if (gdk_drag_handle_source_event (event))
     return;
