@@ -4342,7 +4342,7 @@ colorswatch {
   }
 
   &#add-color-button {
-    border-radius: $_colorswatch_radius $_colorswatch_radius 0 0;
+    border-radius: $_colorswatch_radius 0 0 $_colorswatch_radius;
 
     &:only-child { border-radius: $_colorswatch_radius; }
 
