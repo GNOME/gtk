@@ -5024,7 +5024,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
   guint flags;
   gint bin_window_width;
   gint bin_window_height;
-  GtkTreePath *drag_dest_path;
+  GtkTreePath *drag_dest_path = NULL;
   GList *first_column, *last_column;
   gint vertical_separator;
   gint horizontal_separator;
@@ -5078,7 +5078,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
     }
 
   if (node == NULL)
-    return TRUE;
+    goto done;
 
   /* find the path for the node */
   path = _gtk_tree_path_new_from_rbtree (tree, node);
@@ -5087,8 +5087,6 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 			   path);
   depth = gtk_tree_path_get_depth (path);
   gtk_tree_path_free (path);
-  
-  drag_dest_path = NULL;
 
   if (tree_view->priv->drag_dest_row)
     drag_dest_path = gtk_tree_row_reference_get_path (tree_view->priv->drag_dest_row);
