@@ -1,6 +1,26 @@
+/*
+ * Copyright © 2016  Endless 
+ *             2018  Benjamin Otte
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authors: Benjamin Otte <otte@gnome.org>
+ */
+
 #include "config.h"
 
-#include "gskcairorendererprivate.h"
+#include "gskcairorenderer.h"
 
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
@@ -158,4 +178,24 @@ gsk_cairo_renderer_init (GskCairoRenderer *self)
 
   self->profile_timers.cpu_time = gsk_profiler_add_timer (profiler, "cpu-time", "CPU time", FALSE, TRUE);
 #endif
+}
+
+/**
+ * gsk_cairo_renderer_new:
+ *
+ * Creates a new Cairo renderer.
+ *
+ * The Cairo renderer is the fallback renderer drawing in ways similar
+ * to how GTK 3 drew its content. Its primary use is as comparison tool.
+ *
+ * The Cairo renderer is incomplete. It cannot render 3D transformed
+ * content and will instead render an error marker. Its usage should be
+ * avoided.
+ *
+ * Returns: a new Cairo renderer.
+ **/
+GskRenderer *
+gsk_cairo_renderer_new (void)
+{
+  return g_object_new (GSK_TYPE_CAIRO_RENDERER, NULL);
 }
