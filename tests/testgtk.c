@@ -1609,7 +1609,7 @@ create_listbox (GtkWidget *widget)
  */
 
 static GtkWidget*
-create_menu (GdkDisplay *display, gint depth, gint length)
+create_menu (gint depth, gint length)
 {
   GtkWidget *menu;
   GtkWidget *menuitem;
@@ -1624,12 +1624,10 @@ create_menu (GdkDisplay *display, gint depth, gint length)
     return NULL;
 
   menu = gtk_menu_new ();
-  gtk_menu_set_display (GTK_MENU (menu), display);
 
   group = NULL;
 
   image = gtk_image_new_from_icon_name ("document-open");
-  gtk_widget_show (image);
   menuitem = gtk_menu_item_new ();
   label = gtk_label_new ("Image Item");
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
@@ -1637,7 +1635,6 @@ create_menu (GdkDisplay *display, gint depth, gint length)
   gtk_container_add (GTK_CONTAINER (box), label);
   gtk_container_add (GTK_CONTAINER (menuitem), box);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-  gtk_widget_show (menuitem);
 
   for (i = 0, j = 1; i < length; i++, j++)
     {
@@ -1647,7 +1644,6 @@ create_menu (GdkDisplay *display, gint depth, gint length)
       group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menuitem));
 
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-      gtk_widget_show (menuitem);
       if (i == 3)
 	gtk_widget_set_sensitive (menuitem, FALSE);
 
@@ -1656,8 +1652,8 @@ create_menu (GdkDisplay *display, gint depth, gint length)
                                               TRUE);
 
       if (i < 5)
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), 
-				   create_menu (display , depth - 1, 5));
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem),
+				   create_menu (depth - 1, 5));
     }
 
   return menu;
@@ -1683,75 +1679,64 @@ create_menus (GtkWidget *widget)
       GtkAccelGroup *accel_group;
       GtkWidget *image;
       GdkDisplay *display = gtk_widget_get_display (widget);
-      
+
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_hide_on_close (GTK_WINDOW (window), TRUE);
 
       gtk_window_set_display (GTK_WINDOW (window), display);
-      
+
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
-      
+
       accel_group = gtk_accel_group_new ();
       gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
       gtk_window_set_title (GTK_WINDOW (window), "menus");
-      
-      
+
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
-      gtk_widget_show (box1);
-      
+
       menubar = gtk_menu_bar_new ();
       gtk_container_add (GTK_CONTAINER (box1), menubar);
-      gtk_widget_show (menubar);
-      
-      menu = create_menu (display, 2, 50);
-      
+
+      menu = create_menu (2, 50);
+
       menuitem = gtk_menu_item_new_with_label ("test\nline2");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
-      gtk_widget_show (menuitem);
 
       menuitem = gtk_menu_item_new_with_label ("foo");
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (display, 3, 5));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (3, 5));
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
-      gtk_widget_show (menuitem);
 
       image = gtk_image_new_from_icon_name ("help-browser");
-      gtk_widget_show (image);
       menuitem = gtk_menu_item_new ();
       label = gtk_label_new ("Help");
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
       gtk_container_add (GTK_CONTAINER (box), label);
       gtk_container_add (GTK_CONTAINER (box), image);
       gtk_container_add (GTK_CONTAINER (menuitem), box);
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (display, 4, 5));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (4, 5));
       gtk_widget_set_hexpand (menuitem, TRUE);
       gtk_widget_set_halign (menuitem, GTK_ALIGN_END);
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
-      gtk_widget_show (menuitem);
 
       menubar = gtk_menu_bar_new ();
       gtk_container_add (GTK_CONTAINER (box1), menubar);
-      gtk_widget_show (menubar);
 
-      menu = create_menu (display, 2, 10);
+      menu = create_menu (2, 10);
 
       menuitem = gtk_menu_item_new_with_label ("Second menu bar");
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
-      gtk_widget_show (menuitem);
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
-      gtk_widget_show (box2);
 
-      menu = create_menu (display, 1, 5);
+      menu = create_menu (1, 5);
       gtk_menu_set_accel_group (GTK_MENU (menu), accel_group);
 
       menuitem = gtk_check_menu_item_new_with_label ("Accelerate Me");
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-      gtk_widget_show (menuitem);
       gtk_widget_add_accelerator (menuitem,
 				  "activate",
 				  accel_group,
@@ -1760,7 +1745,6 @@ create_menus (GtkWidget *widget)
 				  GTK_ACCEL_VISIBLE);
       menuitem = gtk_check_menu_item_new_with_label ("Accelerator Locked");
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-      gtk_widget_show (menuitem);
       gtk_widget_add_accelerator (menuitem,
 				  "activate",
 				  accel_group,
@@ -1769,7 +1753,6 @@ create_menus (GtkWidget *widget)
 				  GTK_ACCEL_VISIBLE | GTK_ACCEL_LOCKED);
       menuitem = gtk_check_menu_item_new_with_label ("Accelerators Frozen");
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-      gtk_widget_show (menuitem);
       gtk_widget_add_accelerator (menuitem,
 				  "activate",
 				  accel_group,
@@ -1786,15 +1769,12 @@ create_menus (GtkWidget *widget)
       optionmenu = gtk_combo_box_text_new ();
       gtk_combo_box_set_active (GTK_COMBO_BOX (optionmenu), 3);
       gtk_container_add (GTK_CONTAINER (box2), optionmenu);
-      gtk_widget_show (optionmenu);
 
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_container_add (GTK_CONTAINER (box1), separator);
-      gtk_widget_show (separator);
 
       box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_add (GTK_CONTAINER (box1), box2);
-      gtk_widget_show (box2);
 
       button = gtk_button_new_with_label ("close");
       g_signal_connect_swapped (button, "clicked",
@@ -1802,7 +1782,6 @@ create_menus (GtkWidget *widget)
 				window);
       gtk_container_add (GTK_CONTAINER (box2), button);
       gtk_window_set_default_widget (GTK_WINDOW (window), button);
-      gtk_widget_show (button);
     }
 
   if (!gtk_widget_get_visible (window))
