@@ -819,7 +819,7 @@ property_editor (GObject                *object,
 
       prop_edit = gtk_spin_button_new (adj, 1.0, 0);
 
-      g_object_connect_property (object, spec, G_CALLBACK (int_changed), adj, G_OBJECT (adj)); 
+      g_object_connect_property (object, spec, G_CALLBACK (int_changed), adj, G_OBJECT (adj));
 
       connect_controller (G_OBJECT (adj), "value_changed",
                           object, spec, G_CALLBACK (int_modified));
@@ -1520,6 +1520,25 @@ add_gtk_settings_info (GtkInspectorPropEditor *editor)
 }
 
 static void
+readonly_changed (GObject    *object,
+                  GParamSpec *spec,
+                  gpointer    data)
+{
+  GValue gvalue = {0};
+  gchar *value;
+  gchar *type;
+
+  g_value_init (&gvalue, spec->value_type);
+  g_object_get_property (object, spec->name, &gvalue);
+  strdup_value_contents (&gvalue, &value, &type);
+
+  gtk_label_set_label (GTK_LABEL (data), value);
+
+  g_free (value);
+  g_free (type);
+}
+
+static void
 constructed (GObject *object)
 {
   GtkInspectorPropEditor *editor = GTK_INSPECTOR_PROP_EDITOR (object);
@@ -1557,20 +1576,14 @@ constructed (GObject *object)
 
   if (!can_modify)
     {
-      GValue gvalue = {0};
-      gchar *value;
-      gchar *type;
-
-      g_value_init (&gvalue, spec->value_type);
-      g_object_get_property (editor->priv->object, spec->name, &gvalue);
-      strdup_value_contents (&gvalue, &value, &type);
-
-      label = gtk_label_new (value);
+      label = gtk_label_new ("");
       gtk_style_context_add_class (gtk_widget_get_style_context (label), GTK_STYLE_CLASS_DIM_LABEL);
       gtk_container_add (GTK_CONTAINER (box), label);
 
-      g_free (value);
-      g_free (type);
+      readonly_changed (editor->priv->object, spec, label);
+      g_object_connect_property (editor->priv->object, spec,
+                                 G_CALLBACK (readonly_changed),
+                                 label, G_OBJECT (label));
 
       if (editor->priv->size_group)
         gtk_size_group_add_widget (editor->priv->size_group, box);
