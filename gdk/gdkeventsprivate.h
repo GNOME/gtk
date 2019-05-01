@@ -645,5 +645,7 @@ void           gdk_event_set_related_target       (GdkEvent *event,
                                                   GObject  *user_data);
 GObject *      gdk_event_get_related_target      (const GdkEvent *event);
 
+gboolean       check_event_sanity (GdkEvent *event);
+
 
 #endif /* __GDK_EVENTS_PRIVATE_H__ */
