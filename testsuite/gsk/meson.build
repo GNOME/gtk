@@ -88,6 +88,7 @@ serialize_deserialize_tests = [
   'blend',
   'border',
   'color',
+  'rounded-rect',
   'shadow',
   'testswitch',
   'widgetfactory',
