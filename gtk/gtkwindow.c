@@ -8510,7 +8510,9 @@ gtk_window_set_display (GtkWindow  *window,
                     G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
 
-  _gtk_widget_propagate_display_changed (widget, previous_display);
+  gtk_widget_unroot (widget);
+  gtk_widget_root (widget);
+
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DISPLAY]);
 
   if (was_mapped)

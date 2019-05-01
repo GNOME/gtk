@@ -632,8 +632,6 @@ static void             gtk_widget_real_move_focus              (GtkWidget      
                                                                  GtkDirectionType  direction);
 static gboolean		gtk_widget_real_keynav_failed		(GtkWidget        *widget,
 								 GtkDirectionType  direction);
-static void             gtk_widget_root                         (GtkWidget        *widget);
-static void             gtk_widget_unroot                       (GtkWidget        *widget);
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
 static void             gtk_widget_verify_invariants            (GtkWidget        *widget);
 static void             gtk_widget_push_verify_invariants       (GtkWidget        *widget);
@@ -2865,21 +2863,22 @@ gtk_widget_new (GType        type,
   return widget;
 }
 
-static void
+void
 gtk_widget_root (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  /* roots are rooted by default */
-  if (GTK_IS_ROOT (widget))
-    return;
-
-  g_assert (priv->root == NULL);
   g_assert (!priv->realized);
-  g_assert (priv->parent);
-  g_assert (priv->parent->priv->root);
 
-  priv->root = priv->parent->priv->root;
+  if (GTK_IS_ROOT (widget))
+    {
+      g_assert (priv->root == GTK_ROOT (widget));
+    }
+  else
+    {
+      g_assert (priv->root == NULL);
+      priv->root = priv->parent->priv->root;
+    }
 
   if (priv->context)
     gtk_style_context_set_display (priv->context, gtk_root_get_display (priv->root));
@@ -2889,18 +2888,15 @@ gtk_widget_root (GtkWidget *widget)
 
   GTK_WIDGET_GET_CLASS (widget)->root (widget);
 
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_ROOT]);
+  if (!GTK_IS_ROOT (widget))
+    g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_ROOT]);
 }
 
-static void
+void
 gtk_widget_unroot (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidgetSurfaceTransformData *surface_transform_data;
-
-  /* roots are rooted by default and cannot be unrooted */
-  if (GTK_IS_ROOT (widget))
-    return;
 
   g_assert (priv->root);
   g_assert (!priv->realized);
@@ -2915,9 +2911,16 @@ gtk_widget_unroot (GtkWidget *widget)
   if (priv->context)
     gtk_style_context_set_display (priv->context, gdk_display_get_default ());
 
-  priv->root = NULL;
+  if (g_object_get_qdata (G_OBJECT (widget), quark_pango_context))
+    g_object_set_qdata (G_OBJECT (widget), quark_pango_context, NULL);
 
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_ROOT]);
+  _gtk_tooltip_hide (widget);
+
+  if (!GTK_IS_ROOT (widget))
+    {
+      priv->root = NULL;
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_ROOT]);
+    }
 }
 
 /**
