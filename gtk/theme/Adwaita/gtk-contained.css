@@ -1904,7 +1904,7 @@ colorswatch overlay:hover { box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), in
 
 colorswatch overlay:backdrop, colorswatch overlay:backdrop:hover { border-color: rgba(0, 0, 0, 0.3); box-shadow: none; }
 
-colorswatch#add-color-button { border-radius: 5px 5px 0 0; }
+colorswatch#add-color-button { border-radius: 5px 0 0 5px; }
 
 colorswatch#add-color-button:only-child { border-radius: 5px; }
 
