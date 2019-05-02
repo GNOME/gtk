@@ -11,7 +11,7 @@
     compared to GTK 3.x. Thankfully, most of the changes are not hard
     to adapt to and there are a number of steps that you can take to
     prepare your GTK 3.x application for the switch to GTK 4. After
-    that, there's a small number of adjustments that you may have to do
+    that, there's a number of adjustments that you may have to do
     when you actually switch your application to build against GTK 4.
   </para>
 
@@ -22,7 +22,7 @@
       The steps outlined in the following sections assume that your
       application is working with GTK 3.24, which is the final stable
       release of GTK 3.x. It includes all the necessary APIs and tools
-      to help you port your application to GTK 4. If you are still using
+      to help you port your application to GTK 4. If you are using
       an older version of GTK 3.x, you should first get your application
       to build and work with the latest minor release in the 3.24 series.
     </para>
@@ -84,9 +84,9 @@
       </para>
       <para>
         GTK 4 also removes the GDK_WA_VISUAL flag, and always uses
-        an RGBA visual for windows. To prepare your code for this,
-        use gdk_window_set_visual (gdk_screen_get_rgba_visual ()) after
-        creating your window.
+        an RGBA visual for windows. To prepare your code for this, use
+        <literal>gdk_window_set_visual (gdk_screen_get_rgba_visual ())</literal>
+        after creating your window.
       </para>
       <para>
         GTK 4 also removes the GDK_WA_WMCLASS flag. If you need this
@@ -110,7 +110,7 @@
     <section>
       <title>Stop using GtkBox:padding, GtkBox:fill and GtkBox:expand</title>
       <para>
-        GTK4 removes these #GtkBox child properties, so you should not use them.
+        GTK 4 removes these #GtkBox child properties, so you should not use them.
         You can replace GtkBox:padding using the #GtkWidget:margin properties
         on your #GtkBox child widgets.
       </para>
@@ -172,35 +172,30 @@
     <section>
       <title>Stop using GtkWidget event signals</title>
       <para>
-        Event controllers and #GtkGestures replace event signals in GTK 4. They
-        have been backported to GTK 3.x so you can prepare for this change.
+        Event controllers and #GtkGestures replace event signals in GTK 4.
+        They have been backported to GTK 3.x so you can prepare for this change.
       </para>
     </section>
 
     <section>
-      <title>Set a proper app_id</title>
+      <title>Set a proper application ID</title>
       <para>
-        In GTK4 we want the application's #GApplication
+        In GTK 4 we want the application's #GApplication
         'application-id' (and therefore the D-Bus name), the desktop
         file basename and Wayland's xdg-shell app_id to match. In
-        order to achieve this with GTK3 call g_set_prgname() with the same
-        application id you passed to #GtkApplication. Rename your
-        desktop files to match the application id if needed.
+        order to achieve this with GTK 3.x call g_set_prgname() with the same
+        application ID you passed to #GtkApplication. Rename your
+        desktop files to match the application ID if needed.
       </para>
       <para>
         The call to g_set_prgname() can be removed once you fully migrated
-        to GTK4.
+        to GTK 4.
       </para>
-    </section>
-
-    <section>
-      <title>Stop using GtkBox's pack-type child property</title>
       <para>
-        In order to improve performance and simplify the widget, GtkBox lost its
-        'pack-type' child property. In GTK4, every GtkBox instance has a simple
-        list of child widgets that it allocates from start to end.
-        The old behavior of pack-type=END can be emulated by simply making the
-        box child in the center hexpand and right-align the ones at the end.
+        You should be aware that changing the application ID makes your
+        application appear as a new, different app to application installers.
+        You should consult the appstream documentation for best practices
+        around renaming applications.
       </para>
     </section>
 
@@ -215,6 +210,17 @@
       GTK 4. Making it possible to prepare for these in GTK 3 would
       have been either impossible or impractical.
     </para>
+
+    <section>
+      <title>Convert your ui files</title>
+
+      <para>
+        A number of the changes outlined below affect .ui files. The
+        gtk4-builder-tool simplify command can perform many of the
+        necessary changes automatically, when called with the --3to4
+        option. You should always review the resulting changes.
+      </para>
+    </section>
 
     <section>
       <title>Stop using GdkScreen</title>
@@ -301,9 +307,9 @@
     </section>
 
     <section>
-      <title>Adapt to coordinate api changes</title>
+      <title>Adapt to coordinate API changes</title>
       <para>
-        A number of coordinate apis in GTK 3 had _double variants: 
+        A number of coordinate APIs in GTK 3 had _double variants: 
         gdk_device_get_position(), gdk_device_get_surface_at_position(),
         gdk_surface_get_device_position(). These have been changed to use
         doubles, and the _double variants have been removed. Update your
@@ -395,6 +401,10 @@
         their #GError argument. If you want to handle CSS loading errors,
         use the #GtkCssProvider::parsing-error signal instead.
       </para>
+      <para>
+        gtk_css_provider_get_named() has been replaced by
+        gtk_css_provider_load_named().
+      </para>
     </section>
 
     <section>
@@ -411,7 +421,7 @@
       <para>
         GTK 3 used five different virtual functions in GtkWidget to
         implement size requisition, namely the gtk_widget_get_preferred_width()
-        family of functions. To simplify widget implementations, GTK4 uses
+        family of functions. To simplify widget implementations, GTK 4 uses
         only one virtual function, GtkWidgetClass::measure() that widgets
         have to implement.
       </para>
@@ -640,7 +650,7 @@
     </section>
 
     <section>
-      <title>Adapt to changes in the API of GtkEntry, GtkSearchEntry adn GtkSpinButton</title>
+      <title>Adapt to changes in the API of GtkEntry, GtkSearchEntry and GtkSpinButton</title>
       <para>
         The GtkEditable has been made more useful, and the core functionality of
         GtkEntry has been broken out as a GtkText widget. GtkEntry, GtkSearchEntry,
@@ -673,6 +683,77 @@
         the GtkScrollable interface by automatically wrapping them into a
         GtkViewport, GtkLayout is redundant, and has been removed in favor
         of the existing GtkFixed container widget.
+      </para>
+    </section>
+
+    <section>
+      <title>Adapt to search entry changes</title>
+      <para>
+        The way search entries are connected to global events has changed;
+        gtk_search_entry_handle_event() has been dropped and replaced by
+        gtk_search_entry_set_key_capture_widget() and
+        gtk_event_controller_key_forward().
+      </para>
+    </section>
+
+    <section>
+      <title>Stop using child properties</title>
+      <para>
+        GtkContainer no longer provides facilities for defining and using
+        child properties. If you have custom widgets using child properties,
+        they will have to be converted either to layout properties provided
+        by a layout manager (if they are layout-related), or handled in
+        some other way. One possibility is to use child meta objects,
+        as seen with GtkAssistantPage, GtkStackPage and the like.
+      </para>
+    </section>
+
+    <section>
+      <title>Stop using tabular menus</title>
+      <para>
+        Tabular menus were rarely used and complicated the menu code,
+        so they have been removed. If you need complex layout in menu-like
+        popups, consider using a #GtkPopover instead.
+      </para>
+    </section>
+
+    <section>
+      <title>Stop using gtk_menu_set_display()</title>
+      <para>
+        This function has been removed. Menus should always be
+        attached to a widget and get their display that way.
+      </para>
+    </section>
+
+    <section>
+      <title>Stop using gtk_window_activate_default()</title>
+      <para>
+        The handling of default widgets has been changed, and activating
+        the default now works by calling gtk_widget_activate_default()
+        on the widget that caused the activation.
+      </para>
+      <para>
+        If you have a custom widget that wants to override the default
+        handling, you can provide an implementation of the default.activate
+        action in your widgets' action groups.
+      </para>
+    </section>
+
+    <section>
+      <title>Stop setting ::has-default and ::has-focus in .ui files</title>
+      <para>
+        The special handling for the ::has-default and ::has-focus properties
+        has been removed. If you want to define the initial focus or the
+        the default widget in a .ui file, set the ::default-widget or
+        ::focus-widget properties of the toplevel window.
+      </para>
+    </section>
+
+    <section>
+      <title>Stop using the GtkWidget::display-changed signal</title>
+      <para>
+        To track the current display, use the GtkWidget::root property
+        instead.
       </para>
     </section>
   </section>
