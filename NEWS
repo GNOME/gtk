@@ -12,13 +12,13 @@ Overview of Changes in GTK+ 3.96.0
 * The use of global coordinates in GDK apis has been reduced. This
   work is still incomplete
 
-* Events have been simplified and are just used for input
- - expose events have been replaced by a GdkSurface::render signal
- - configure events have been replaced by a GdkSurface::size-changed signal
- - map events have been replaced by a GdkSurface::mapped property
- - gdk_event_handler_set has been replaced by a GdkSurface::event signal
- - key events no longer contain a string
- - events on unmapped widgets are ignored
+* Events have been simplified and are used just for input
+  - expose events have been replaced by a GdkSurface::render signal
+  - configure events have been replaced by a GdkSurface::size-changed signal
+  - map events have been replaced by a GdkSurface::mapped property
+  - gdk_event_handler_set has been replaced by a GdkSurface::event signal
+  - key events no longer contain a string
+  - events on unmapped widgets are ignored
 
 * Warping the pointer is no longer supported
 
@@ -36,11 +36,11 @@ Overview of Changes in GTK+ 3.96.0
 
 * A number of list models have been introduced, for internal use
   and as public api:
- - GtkMapListModel
- - GtkSliceListModel
- - GtkSortListModel
- - GtkSelectionModel
- - GtkSingleSelection
+  - GtkMapListModel
+  - GtkSliceListModel
+  - GtkSortListModel
+  - GtkSelectionModel
+  - GtkSingleSelection
 
 * Support for tabular menus and combo boxes has been dropped
 
@@ -70,9 +70,13 @@ Overview of Changes in GTK+ 3.96.0
 
 * GtkWidget can now use a GtkLayoutManager for size allocation.
   Layout managers can optionally use layout children holding layout
-  properties. GtkBinLayout, GtkBoxLayout, GtkGridLayout, GtkFixedLayout
-  and GtkCustomLayout are currently available, more layout manager
-  implementations will appear in the future.
+  properties. A number of layout managers are available:
+  - GtkBinLayout
+  - GtkBoxLayout
+  - GtkGridLayout
+  - GtkFixedLayout
+  - GtkCustomLayout
+  More layout manager implementations will appear in the future.
 
 * GtkAssistant, GtkStack and GtkNotebook now have publicly
   accessible page objects for their children. The page objects
@@ -82,8 +86,11 @@ Overview of Changes in GTK+ 3.96.0
   child properties have been removed, converted to regular properties,
   moved to layout properties or moved to child meta objects.
 
+* GtkListBox has gained a ::show-separators property that gets
+  translated into a CSS style class.
+
 * A number of X11-specific GtkWindow and GdkSurface apis have been
-  removed
+  removed or changed to backend APIs.
 
 * GtkBuilder can specify object-valued properties inline.
 
