@@ -231,6 +231,7 @@ gdk_surface_get_scale_factor
 gdk_surface_set_opaque_region
 gdk_surface_create_gl_context
 gdk_surface_create_vulkan_context
+gdk_surface_create_cairo_context
 
 <SUBSECTION>
 gdk_surface_queue_expose
@@ -988,7 +989,6 @@ gdk_wayland_device_get_wl_seat
 gdk_wayland_display_get_wl_compositor
 gdk_wayland_display_get_wl_display
 gdk_wayland_display_query_registry
-gdk_wayland_surface_new_subsurface
 gdk_wayland_surface_get_wl_surface
 GdkWaylandSurfaceExported
 gdk_wayland_surface_export_handle

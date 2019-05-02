@@ -1870,7 +1870,10 @@ gdk_x11_surface_set_modal_hint (GdkSurface *surface,
 /**
  * gdk_x11_surface_set_skip_taskbar_hint:
  * @surface: (type GdkX11Surface): a native #GdkSurface
- * @skips_taskbar:
+ * @skips_taskbar: %TRUE to skip taskbars
+ *
+ * Sets a hint on @surface that taskbars should not
+ * display it. See the EWMH for details.
  */
 void
 gdk_x11_surface_set_skip_taskbar_hint (GdkSurface *surface,
@@ -1895,8 +1898,11 @@ gdk_x11_surface_set_skip_taskbar_hint (GdkSurface *surface,
 
 /**
  * gdk_x11_surface_set_skip_pager_hint:
- * @surface: (type GdkX11Surface): a native #GdkSurface
- * @skips_pager:
+ * @surface: (type GdkX11Surface): a #GdkSurface
+ * @skips_pager: %TRUE to skip pagers
+ *
+ * Sets a hint on @surface that pagers should not
+ * display it. See the EWMH for details.
  */
 void
 gdk_x11_surface_set_skip_pager_hint (GdkSurface *surface,
@@ -1922,7 +1928,10 @@ gdk_x11_surface_set_skip_pager_hint (GdkSurface *surface,
 /**
  * gdk_x11_surface_set_urgency_hint:
  * @surface: (type GdkX11Surface): a native #GdkSurface
- * @urgent:
+ * @urgent: %TRUE to indicate urgenct attention needed
+ *
+ * Sets a hint on @surface that it needs user attention.
+ * See the ICCCM for details.
  */
 void
 gdk_x11_surface_set_urgency_hint (GdkSurface *surface,
@@ -3396,6 +3405,9 @@ gdk_x11_surface_get_group (GdkSurface *surface)
  * gdk_x11_surface_set_group:
  * @surface: (type GdkX11Surface): a native #GdkSurface
  * @leader: a #GdkSurface
+ *
+ * Sets the group leader of @surface to be @leader.
+ * See the ICCCM for details.
  */
 void
 gdk_x11_surface_set_group (GdkSurface *surface,
