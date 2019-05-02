@@ -56,6 +56,7 @@ gsk_public_headers = files([
   'gsktransform.h',
   'gsktypes.h',
   'gsk-autocleanup.h',
+  'broadway/gskbroadwayrenderer.h',
   'gl/gskglrenderer.h'
 ])
 
@@ -100,7 +101,7 @@ if have_vulkan
 endif # have_vulkan
 
 if get_variable('broadway_enabled')
-  gsk_private_sources += files([
+  gsk_public_sources += files([
     'broadway/gskbroadwayrenderer.c',
   ])
 endif
