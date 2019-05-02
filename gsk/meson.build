@@ -28,6 +28,7 @@ gsk_public_sources = files([
   'gskrendernodeimpl.c',
   'gskroundedrect.c',
   'gsktransform.c',
+  'gl/gskglrenderer.c',
 ])
 
 gsk_private_sources = files([
@@ -38,7 +39,6 @@ gsk_private_sources = files([
   'gskrendernodeparser.c',
   'gl/gskshaderbuilder.c',
   'gl/gskglprofiler.c',
-  'gl/gskglrenderer.c',
   'gl/gskglglyphcache.c',
   'gl/gskglimage.c',
   'gl/gskgldriver.c',
@@ -55,10 +55,15 @@ gsk_public_headers = files([
   'gskroundedrect.h',
   'gsktransform.h',
   'gsktypes.h',
-  'gsk-autocleanup.h'
+  'gsk-autocleanup.h',
 ])
-
 install_headers(gsk_public_headers, 'gsk.h', subdir: 'gtk-4.0/gsk')
+
+gsk_public_gl_headers = files([
+  'gl/gskglrenderer.h'
+])
+install_headers(gsk_public_gl_headers, subdir: 'gtk-4.0/gsk/gl')
+gsk_public_headers += gsk_public_gl_headers
 
 gsk_private_vulkan_shaders = []
 # This is an odd split because we use configure_file() below to workaround

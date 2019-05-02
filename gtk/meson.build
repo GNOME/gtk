@@ -1083,6 +1083,8 @@ if build_gir
   gtk_introspection_sources = [
     gtk_public_headers,
     gtk_public_sources,
+    gtk_deprecated_headers,
+    gtk_deprecated_sources,
     a11y_headers,
     a11y_sources,
     gtktypebuiltins_h,
