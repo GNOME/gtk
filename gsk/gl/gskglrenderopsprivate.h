@@ -7,7 +7,7 @@
 
 #include "gskgldriverprivate.h"
 #include "gskroundedrectprivate.h"
-#include "gskglrendererprivate.h"
+#include "gskglrenderer.h"
 #include "gskrendernodeprivate.h"
 
 #define GL_N_VERTICES 6
