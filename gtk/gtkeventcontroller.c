@@ -63,7 +63,6 @@ gtk_event_controller_set_widget (GtkEventController *self,
   GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
 
   priv->widget = widget;
-  priv->responsive = gtk_widget_get_sensitive (widget);
 }
 
 static void
@@ -81,7 +80,7 @@ gtk_event_controller_filter_event_default (GtkEventController *self,
   GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
 
   if (priv->widget)
-    return !gtk_widget_get_sensitive (priv->widget);
+    return !gtk_widget_is_sensitive (priv->widget);
 
   return FALSE;
 }
