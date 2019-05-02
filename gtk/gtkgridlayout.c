@@ -1726,7 +1726,7 @@ gtk_grid_layout_init (GtkGridLayout *self)
 }
 
 /**
- * gtk_grid_layou_new:
+ * gtk_grid_layout_new:
  *
  * Creates a new #GtkGridLayout.
  *

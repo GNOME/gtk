@@ -446,7 +446,7 @@ gtk_password_entry_new (void)
 /**
  * gtk_password_entry_set_show_peek_icon:
  * @entry: a #GtkPasswordEntry
- * show_peek_icon: whether to show the peek icon
+ * @show_peek_icon: whether to show the peek icon
  *
  * Sets whether the entry should have a clickable icon
  * to show the contents of the entry in clear text.

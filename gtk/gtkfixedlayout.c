@@ -334,6 +334,13 @@ gtk_fixed_layout_init (GtkFixedLayout *self)
 {
 }
 
+/**
+ * gtk_fixed_layout_new:
+ *
+ * Creates a new #GtkFixedLayout.
+ *
+ * Returns: the newly created #GtkFixedLayout
+ */
 GtkLayoutManager *
 gtk_fixed_layout_new (void)
 {

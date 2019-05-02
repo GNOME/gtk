@@ -611,6 +611,16 @@ gtk_snapshot_ensure_identity (GtkSnapshot *snapshot)
     gtk_snapshot_autopush_transform (snapshot);
 }
 
+/**
+ * gtk_snapshot_push_repeat:
+ * @snapshot: a #GtkSnapshot
+ * @bounds: the bounds within which to repeat
+ * @child_bounds: the bounds of the child
+ *
+ * Creates a node that repeats the child node.
+ *
+ * The child is recorded until the next call to gtk_snapshot_pop().
+ */
 void
 gtk_snapshot_push_repeat (GtkSnapshot           *snapshot,
                           const graphene_rect_t *bounds,
