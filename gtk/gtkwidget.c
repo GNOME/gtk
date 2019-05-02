@@ -3643,7 +3643,7 @@ sync_widget_surface_transform (GtkWidget *widget)
     }
   else
     {
-      GtkWidget *native = gtk_widget_get_ancestor (widget, GTK_TYPE_NATIVE);
+      GtkWidget *native = GTK_WIDGET (gtk_widget_get_native (widget));
 
       if (gtk_widget_compute_transform (widget, native,
                                         &surface_transform_data->cached_surface_transform))
@@ -6655,6 +6655,27 @@ gtk_widget_get_root (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   return _gtk_widget_get_root (widget);
+}
+
+/**
+ * gtk_widget_get_native:
+ * @widget: a #GtkWidget
+ *
+ * Returns the GtkNative widget that contains @widget,
+ * or %NULL if the widget is not contained inside a
+ * widget tree with a native ancestor.
+ *
+ * #GtkNative widgets will return themselves here.
+ *
+ * Returns: (transfer none) (nullable): the #GtkNative
+ *   widget of @widget, or %NULL
+ */
+GtkNative *
+gtk_widget_get_native (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return GTK_NATIVE (gtk_widget_get_ancestor (widget, GTK_TYPE_NATIVE));
 }
 
 static void
