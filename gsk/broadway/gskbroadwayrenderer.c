@@ -1,6 +1,7 @@
 #include "config.h"
 
-#include "gskbroadwayrendererprivate.h"
+#include "gskbroadwayrenderer.h"
+
 #include "broadway/gdkprivate-broadway.h"
 
 #include "gskdebugprivate.h"
@@ -826,4 +827,24 @@ gsk_broadway_renderer_class_init (GskBroadwayRendererClass *klass)
 static void
 gsk_broadway_renderer_init (GskBroadwayRenderer *self)
 {
+}
+
+/**
+ * gsk_broadway_renderer_new:
+ *
+ * Creates a new Broadway renderer.
+ *
+ * The Broadway renderer is the default renderer for the broadway backend.
+ * It will only work with broadway surfaces, otherwise it will fail the
+ * call to gdk_renderer_realize().
+ *
+ * This function is only available when GTK was compiled with Broadway
+ * support.
+ *
+ * Returns: a new Broadway renderer.
+ **/
+GskRenderer *
+gsk_broadway_renderer_new (void)
+{
+  return g_object_new (GSK_TYPE_BROADWAY_RENDERER, NULL);
 }
