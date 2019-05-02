@@ -580,13 +580,23 @@ gsk_border_node_draw (GskRenderNode *node,
        * Note that the call to cairo_fill() will add the potential final
        * segment by closing the path, so we don't have to care.
        */
-      float dst = MIN (bounds->size.width, bounds->size.height) / 2.0;
       cairo_pattern_t *mesh;
       cairo_matrix_t mat;
+      graphene_point_t tl, br;
+      float scale;
 
       mesh = cairo_pattern_create_mesh ();
       cairo_matrix_init_translate (&mat, -bounds->origin.x, -bounds->origin.y);
       cairo_pattern_set_matrix (mesh, &mat);
+
+      scale = MIN (bounds->size.width / (self->border_width[1] + self->border_width[3]),
+                   bounds->size.height / (self->border_width[0] + self->border_width[2]));
+      graphene_point_init (&tl,
+                           self->border_width[3] * scale,
+                           self->border_width[0] * scale);
+      graphene_point_init (&br,
+                           bounds->size.width - self->border_width[1] * scale,
+                           bounds->size.height - self->border_width[2] * scale);
 
       /* Top */
       if (self->border_width[0] > 0)
@@ -594,8 +604,8 @@ gsk_border_node_draw (GskRenderNode *node,
           gsk_border_node_mesh_add_patch (mesh,
                                           &self->border_color[0],
                                           0, 0,
-                                          dst * self->border_width[3] / self->border_width[0], dst,
-                                          bounds->size.width - dst * self->border_width[1] / self->border_width[0], dst,
+                                          tl.x, tl.y,
+                                          br.x, tl.y,
                                           bounds->size.width, 0);
         }
 
@@ -605,8 +615,8 @@ gsk_border_node_draw (GskRenderNode *node,
           gsk_border_node_mesh_add_patch (mesh,
                                           &self->border_color[1],
                                           bounds->size.width, 0,
-                                          bounds->size.width - dst, dst * self->border_width[0] / self->border_width[1],
-                                          bounds->size.width - dst, bounds->size.height - dst * self->border_width[2] / self->border_width[1],
+                                          br.x, tl.y,
+                                          br.x, br.y,
                                           bounds->size.width, bounds->size.height);
         }
 
@@ -616,8 +626,8 @@ gsk_border_node_draw (GskRenderNode *node,
           gsk_border_node_mesh_add_patch (mesh,
                                           &self->border_color[2],
                                           0, bounds->size.height,
-                                          dst * self->border_width[3] / self->border_width[2], bounds->size.height - dst,
-                                          bounds->size.width - dst * self->border_width[1] / self->border_width[2], bounds->size.height - dst,
+                                          tl.x, br.y,
+                                          br.x, br.y,
                                           bounds->size.width, bounds->size.height);
         }
 
@@ -627,8 +637,8 @@ gsk_border_node_draw (GskRenderNode *node,
           gsk_border_node_mesh_add_patch (mesh,
                                           &self->border_color[3],
                                           0, 0,
-                                          dst, dst * self->border_width[0] / self->border_width[3],
-                                          dst, bounds->size.height - dst * self->border_width[2] / self->border_width[3],
+                                          tl.x, tl.y,
+                                          tl.x, br.y,
                                           0, bounds->size.height);
         }
 
