@@ -395,9 +395,16 @@ static void
 file_chooser_widget_response_requested (GtkWidget            *widget,
                                         GtkFileChooserDialog *dialog)
 {
+  GtkWidget *button;
+
   dialog->priv->response_requested = TRUE;
 
-  gtk_widget_activate_default (widget);
+  button = get_accept_action_widget (GTK_DIALOG (dialog), TRUE);
+  if (button)
+    {
+      gtk_widget_activate (button);
+      return;
+    }
 
   dialog->priv->response_requested = FALSE;
 }
