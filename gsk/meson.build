@@ -71,6 +71,12 @@ gsk_public_broadway_headers = files([
 install_headers(gsk_public_broadway_headers, subdir: 'gtk-4.0/gsk/broadway')
 gsk_public_headers += gsk_public_broadway_headers
 
+gsk_public_vulkan_headers = files([
+  'vulkan/gskvulkanrenderer.h'
+])
+install_headers(gsk_public_vulkan_headers, subdir: 'gtk-4.0/gsk/vulkan')
+gsk_public_headers += gsk_public_vulkan_headers
+
 gsk_private_vulkan_shaders = []
 # This is an odd split because we use configure_file() below to workaround
 # a limitation in meson preventing using custom_target() with gnome.compile_resources()
