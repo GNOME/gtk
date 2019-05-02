@@ -186,8 +186,8 @@ static gboolean   gtk_toolbar_focus                (GtkWidget           *widget,
 						    GtkDirectionType     dir);
 static void       gtk_toolbar_move_focus           (GtkWidget           *widget,
 						    GtkDirectionType     dir);
-static void       gtk_toolbar_display_changed      (GtkWidget           *widget,
-						    GdkDisplay          *previous_display);
+static void       gtk_toolbar_root                 (GtkWidget           *widget);
+static void       gtk_toolbar_unroot               (GtkWidget           *widget);
 static void       gtk_toolbar_finalize             (GObject             *object);
 static void       gtk_toolbar_dispose              (GObject             *object);
 static void       gtk_toolbar_add                  (GtkContainer        *container,
@@ -362,7 +362,8 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
                                    GTK_TYPE_TOOLBAR,
                                    G_CALLBACK (gtk_toolbar_move_focus));
 
-  widget_class->display_changed = gtk_toolbar_display_changed;
+  widget_class->root = gtk_toolbar_root;
+  widget_class->unroot = gtk_toolbar_unroot;
   widget_class->popup_menu = gtk_toolbar_popup_menu;
 
   container_class->add    = gtk_toolbar_add;
@@ -1645,39 +1646,37 @@ settings_change_notify (GtkSettings      *settings,
 }
 
 static void
-gtk_toolbar_display_changed (GtkWidget *widget,
-			     GdkDisplay *previous_display)
+gtk_toolbar_root (GtkWidget *widget)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GtkToolbarPrivate *priv = toolbar->priv;
-  GtkSettings *old_settings = toolbar_get_settings (toolbar);
   GtkSettings *settings;
-  
+
+  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->root (widget);
+
   settings = gtk_widget_get_settings (GTK_WIDGET (toolbar));
-  
-  if (settings == old_settings)
-    return;
-  
-  if (old_settings)
-    {
-      g_signal_handler_disconnect (old_settings, priv->settings_connection);
-      priv->settings_connection = 0;
-      g_object_unref (old_settings);
-    }
 
-  if (settings)
-    {
-      priv->settings_connection =
-	g_signal_connect (settings, "notify",
-                          G_CALLBACK (settings_change_notify),
-                          toolbar);
+  priv->settings_connection =
+    g_signal_connect (settings, "notify",
+                      G_CALLBACK (settings_change_notify),
+                      toolbar);
 
-      priv->settings = g_object_ref (settings);
-    }
-  else
-    priv->settings = NULL;
+  priv->settings = g_object_ref (settings);
 
   animation_change_notify (toolbar);
+}
+
+static void
+gtk_toolbar_unroot (GtkWidget *widget)
+{
+  GtkToolbar *toolbar = GTK_TOOLBAR (widget);
+  GtkToolbarPrivate *priv = toolbar->priv;
+
+  g_signal_handler_disconnect (priv->settings, priv->settings_connection);
+  priv->settings_connection = 0;
+  g_clear_object (&priv->settings);
+
+  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->unroot (widget);
 }
 
 static int

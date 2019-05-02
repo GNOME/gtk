@@ -118,8 +118,7 @@ static gboolean gtk_menu_shell_key_press     (GtkEventControllerKey *key,
                                               guint                  keycode,
                                               GdkModifierType        modifiers,
                                               GtkWidget             *widget);
-static void gtk_menu_shell_display_changed   (GtkWidget         *widget,
-                                              GdkDisplay        *previous_display);
+static void gtk_menu_shell_root              (GtkWidget         *widget);
 static void multi_press_pressed  (GtkGestureMultiPress *gesture,
                                   gint                  n_press,
                                   gdouble               x,
@@ -188,7 +187,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
   object_class->finalize = gtk_menu_shell_finalize;
   object_class->dispose = gtk_menu_shell_dispose;
 
-  widget_class->display_changed = gtk_menu_shell_display_changed;
+  widget_class->root = gtk_menu_shell_root;
 
   container_class->add = gtk_menu_shell_add;
   container_class->remove = gtk_menu_shell_remove;
@@ -945,9 +944,10 @@ gtk_menu_shell_key_press (GtkEventControllerKey *key,
 }
 
 static void
-gtk_menu_shell_display_changed (GtkWidget  *widget,
-                                GdkDisplay *previous_display)
+gtk_menu_shell_root (GtkWidget  *widget)
 {
+  GTK_WIDGET_CLASS (gtk_menu_shell_parent_class)->root (widget);
+
   gtk_menu_shell_reset_key_hash (GTK_MENU_SHELL (widget));
 }
 
