@@ -1,0 +1,16 @@
+/* Test that border widths aren't influence by weird
+   rounded corners.
+   The clip only exists to avoid artifacts with rendering
+   rounded corners, it can be removed for debugging purposes.
+ */
+
+clip {
+  clip: 50 50 100 100;
+  child: border {
+    outline: 0 0 200 200 / 150 50 / 50 150;
+    widths: 75 75 75 75;
+    colors: red pink teal lime;
+  }
+}
+
+
