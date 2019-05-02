@@ -216,11 +216,9 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
   g_hash_table_remove_all (sl->priv->groups);
   g_hash_table_remove_all (sl->priv->iters);
   gtk_list_store_clear (sl->priv->model);
-  
+
   if (GTK_IS_APPLICATION (object))
     add_group (sl, page, G_ACTION_GROUP (object), "app");
-  else if (GTK_IS_APPLICATION_WINDOW (object))
-    add_group (sl, page, G_ACTION_GROUP (object), "win");
   else if (GTK_IS_WIDGET (object))
     {
       const gchar **prefixes;
