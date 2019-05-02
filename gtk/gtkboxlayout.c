@@ -766,6 +766,14 @@ gtk_box_layout_init (GtkBoxLayout *self)
   self->baseline_position = GTK_BASELINE_POSITION_CENTER;
 }
 
+/**
+ * gtk_box_layout_new:
+ * @orientation: the orientation for the new layout
+ *
+ * Creates a new box layout.
+ *
+ * Returns: a new box layout
+ */
 GtkLayoutManager *
 gtk_box_layout_new (GtkOrientation orientation)
 {
@@ -774,6 +782,14 @@ gtk_box_layout_new (GtkOrientation orientation)
                        NULL);
 }
 
+/**
+ * gtk_box_layout_set_homogeneous:
+ * @box_layout: a #GtkBoxLayout
+ * @homogeneous: %TRUE to set the box layout as homogeneous
+ *
+ * Sets whether the box layout will allocate the same
+ * size to all children.
+ */
 void
 gtk_box_layout_set_homogeneous (GtkBoxLayout *box_layout,
                                 gboolean      homogeneous)
@@ -790,6 +806,14 @@ gtk_box_layout_set_homogeneous (GtkBoxLayout *box_layout,
   g_object_notify_by_pspec (G_OBJECT (box_layout), box_layout_props[PROP_HOMOGENEOUS]);
 }
 
+/**
+ * gtk_box_layout_get_homogeneous:
+ * @box_layout: a #GtkBoxLayout
+ *
+ * Returns whether the layout is set to be homogeneous.
+ *
+ * Return: %TRUE if the layout is homogeneous
+ */
 gboolean
 gtk_box_layout_get_homogeneous (GtkBoxLayout *box_layout)
 {
@@ -798,6 +822,13 @@ gtk_box_layout_get_homogeneous (GtkBoxLayout *box_layout)
   return box_layout->homogeneous;
 }
 
+/**
+ * gtk_box_layout_set_spacing:
+ * @box_layout: a #GtkBoxLayout
+ * @spacing: the spacing to apply between children
+ *
+ * Sets how much spacing to put between children.
+ */
 void
 gtk_box_layout_set_spacing (GtkBoxLayout *box_layout,
                             guint         spacing)
@@ -813,6 +844,14 @@ gtk_box_layout_set_spacing (GtkBoxLayout *box_layout,
   g_object_notify_by_pspec (G_OBJECT (box_layout), box_layout_props[PROP_SPACING]);
 }
 
+/**
+ * gtk_box_layout_get_spacing:
+ * @box_layout: a #GtkBoxLayout
+ *
+ * Returns the space that @box_layout puts between children.
+ *
+ * Returns: the spacing of the layout
+ */
 guint
 gtk_box_layout_get_spacing (GtkBoxLayout *box_layout)
 {
