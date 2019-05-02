@@ -43,6 +43,7 @@ typedef struct _GtkEventControllerPrivate GtkEventControllerPrivate;
 enum {
   PROP_WIDGET = 1,
   PROP_PROPAGATION_PHASE,
+  PROP_RESPONSIVE,
   LAST_PROP
 };
 
@@ -52,6 +53,7 @@ struct _GtkEventControllerPrivate
 {
   GtkWidget *widget;
   GtkPropagationPhase phase;
+  gboolean responsive;
 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkEventController, gtk_event_controller, G_TYPE_OBJECT)
@@ -63,6 +65,7 @@ gtk_event_controller_set_widget (GtkEventController *self,
   GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
 
   priv->widget = widget;
+  priv->responsive = gtk_widget_get_sensitive (widget);
 }
 
 static void
@@ -71,6 +74,16 @@ gtk_event_controller_unset_widget (GtkEventController *self)
   GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
 
   priv->widget = NULL;
+  priv->responsive = TRUE;
+}
+
+static gboolean
+gtk_event_controller_filter_event_default (GtkEventController *self,
+                                           const GdkEvent     *event)
+{
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
+
+  return !priv->responsive;
 }
 
 static gboolean
@@ -116,6 +129,9 @@ gtk_event_controller_get_property (GObject    *object,
     case PROP_PROPAGATION_PHASE:
       g_value_set_enum (value, priv->phase);
       break;
+    case PROP_RESPONSIVE:
+      g_value_set_enum (value, priv->responsive);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -128,7 +144,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
 
   klass->set_widget = gtk_event_controller_set_widget;
   klass->unset_widget = gtk_event_controller_unset_widget;
-  klass->filter_event = gtk_event_controller_handle_event_default;
+  klass->filter_event = gtk_event_controller_filter_event_default;
   klass->handle_event = gtk_event_controller_handle_event_default;
 
   object_class->set_property = gtk_event_controller_set_property;
@@ -158,6 +174,21 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                          GTK_PHASE_BUBBLE,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkEventController:responsive:
+   *
+   * Whether the controller handles events.
+   *
+   * GTK sets event controllers to be not responsive
+   * when the widget they are attached to becomes insensitive.
+   */
+  properties[PROP_RESPONSIVE] =
+      g_param_spec_boolean ("responsive",
+                            P_("Responsive"),
+                            P_("Whether the controller is reponsive"),
+                            TRUE,
+                            GTK_PARAM_READABLE);
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
@@ -168,6 +199,7 @@ gtk_event_controller_init (GtkEventController *controller)
 
   priv = gtk_event_controller_get_instance_private (controller);
   priv->phase = GTK_PHASE_BUBBLE;
+  priv->responsive = TRUE;
 }
 
 /**
@@ -298,4 +330,45 @@ gtk_event_controller_set_propagation_phase (GtkEventController  *controller,
     gtk_event_controller_reset (controller);
 
   g_object_notify_by_pspec (G_OBJECT (controller), properties[PROP_PROPAGATION_PHASE]);
+}
+
+void
+gtk_event_controller_set_responsive (GtkEventController *controller,
+                                     gboolean            responsive)
+{
+  GtkEventControllerPrivate *priv;
+
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+
+  priv = gtk_event_controller_get_instance_private (controller);
+
+  if (priv->responsive == responsive)
+    return;
+
+  priv->responsive = responsive;
+
+  if (!responsive)
+    gtk_event_controller_reset (controller);
+
+  g_object_notify_by_pspec (G_OBJECT (controller), properties[PROP_RESPONSIVE]);
+}
+
+/**
+ * gtk_event_controller_get_responsive:
+ * @controller: a #GtkEventController
+ *
+ * Returns whether the controller is currently responsive.
+ *
+ * Returns: %TRUE if @controller is responsive
+ */
+gboolean
+gtk_event_controller_get_responsive (GtkEventController *controller)
+{
+  GtkEventControllerPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER (controller), TRUE);
+
+  priv = gtk_event_controller_get_instance_private (controller);
+
+  return priv->responsive;
 }

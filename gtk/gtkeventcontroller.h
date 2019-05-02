@@ -59,6 +59,9 @@ GDK_AVAILABLE_IN_ALL
 void                gtk_event_controller_set_propagation_phase (GtkEventController  *controller,
                                                                 GtkPropagationPhase  phase);
 
+GDK_AVAILABLE_IN_ALL
+gboolean            gtk_event_controller_get_responsive (GtkEventController *controller);
+
 G_END_DECLS
 
 #endif /* __GTK_EVENT_CONTROLLER_H__ */

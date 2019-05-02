@@ -48,4 +48,8 @@ struct _GtkEventControllerClass
   gpointer padding[10];
 };
 
+void
+gtk_event_controller_set_responsive (GtkEventController *controller,
+                                     gboolean            responsive);
+
 #endif /* __GTK_EVENT_CONTROLLER_PRIVATE_H__ */
