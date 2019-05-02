@@ -4445,6 +4445,7 @@ gtk_widget_set_sensitive
 gtk_widget_set_parent
 gtk_widget_get_toplevel
 gtk_widget_get_root
+gtk_widget_get_native
 gtk_widget_get_ancestor
 gtk_widget_is_ancestor
 gtk_widget_translate_coordinates
