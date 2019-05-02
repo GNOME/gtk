@@ -810,6 +810,14 @@ button_released_cb (GtkGestureMultiPress *gesture,
 }
 
 static void
+button_cancel_cb (GtkGesture       *gesture,
+                  GdkEventSequence *sequence,
+                  GtkSpinButton    *spin_button)
+{
+  gtk_spin_button_stop_spinning (spin_button);
+}
+
+static void
 key_controller_key_released (GtkEventControllerKey *key,
                              guint                  keyval,
                              guint                  keycode,
@@ -886,6 +894,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
                                               GTK_PHASE_CAPTURE);
   g_signal_connect (gesture, "pressed", G_CALLBACK (button_pressed_cb), spin_button);
   g_signal_connect (gesture, "released", G_CALLBACK (button_released_cb), spin_button);
+  g_signal_connect (gesture, "cancel", G_CALLBACK (button_cancel_cb), spin_button);
   gtk_widget_add_controller (GTK_WIDGET (priv->down_button), GTK_EVENT_CONTROLLER (gesture));
 
   priv->up_button = gtk_button_new ();
@@ -902,6 +911,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
                                               GTK_PHASE_CAPTURE);
   g_signal_connect (gesture, "pressed", G_CALLBACK (button_pressed_cb), spin_button);
   g_signal_connect (gesture, "released", G_CALLBACK (button_released_cb), spin_button);
+  g_signal_connect (gesture, "cancel", G_CALLBACK (button_cancel_cb), spin_button);
   gtk_widget_add_controller (GTK_WIDGET (priv->up_button), GTK_EVENT_CONTROLLER (gesture));
 
   gtk_spin_button_set_adjustment (spin_button, NULL);
