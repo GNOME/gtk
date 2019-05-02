@@ -437,6 +437,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_is_destroyed          (GdkSurface     *surface);
 
 GDK_AVAILABLE_IN_ALL
+GdkSurface *  gdk_surface_get_parent            (GdkSurface     *surface);
+
+GDK_AVAILABLE_IN_ALL
 GdkDisplay *  gdk_surface_get_display           (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_show                  (GdkSurface     *surface);

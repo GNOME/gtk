@@ -800,6 +800,26 @@ gdk_surface_new_popup (GdkDisplay *display,
   return surface;
 }
 
+/**
+ * gdk_surface_get_parent:
+ * @surface: a #GtkSurface
+ *
+ * Returns the parent surface of a surface, or
+ * %NULL if the surface does not have a parent.
+ *
+ * Only popup surfaces have parents.
+ *
+ * Returns: (transfer none) (nullable): the parent of
+ *   @surface, or %NULL
+ */
+GdkSurface *
+gdk_surface_get_parent (GdkSurface *surface)
+{
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
+  
+  return surface->parent;
+}
+
 static void
 update_pointer_info_foreach (GdkDisplay           *display,
                              GdkDevice            *device,
