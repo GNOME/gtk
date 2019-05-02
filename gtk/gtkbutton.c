@@ -129,8 +129,6 @@ static void gtk_button_get_property   (GObject            *object,
                                        guint               prop_id,
                                        GValue             *value,
                                        GParamSpec         *pspec);
-static void gtk_button_display_changed (GtkWidget         *widget,
-				        GdkDisplay        *previous_display);
 static void gtk_button_unrealize (GtkWidget * widget);
 static void gtk_real_button_clicked (GtkButton * button);
 static void gtk_real_button_activate  (GtkButton          *button);
@@ -204,7 +202,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   gobject_class->set_property = gtk_button_set_property;
   gobject_class->get_property = gtk_button_get_property;
 
-  widget_class->display_changed = gtk_button_display_changed;
   widget_class->unrealize = gtk_button_unrealize;
   widget_class->state_flags_changed = gtk_button_state_flags_changed;
   widget_class->grab_notify = gtk_button_grab_notify;
@@ -921,18 +918,6 @@ gtk_button_get_use_underline (GtkButton *button)
   g_return_val_if_fail (GTK_IS_BUTTON (button), FALSE);
 
   return priv->use_underline;
-}
-
-static void
-gtk_button_display_changed (GtkWidget  *widget,
-                            GdkDisplay *previous_display)
-{
-  GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
-
-  /* If the button is being pressed while the display changes the
-    release might never occur, so we reset the state. */
-  priv->button_down = FALSE;
 }
 
 static void
