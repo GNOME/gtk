@@ -26,6 +26,7 @@ serialize_deserialize = executable(
 )
 
 compare_render_tests = [
+  'border-colors-with-uneven-corners',
   'clip-coordinates-3d',
   'clipped_rounded_clip',
   'cross-fade-in-opacity',
