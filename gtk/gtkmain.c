@@ -1690,7 +1690,7 @@ handle_pointing_event (GdkEvent *event)
     return event_widget;
 
   toplevel = GTK_WINDOW (gtk_widget_get_root (event_widget));
-  native = gtk_widget_get_ancestor (event_widget, GTK_TYPE_NATIVE);
+  native = GTK_WIDGET (gtk_widget_get_native (event_widget));
 
   sequence = gdk_event_get_event_sequence (event);
 
