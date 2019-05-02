@@ -89,12 +89,12 @@ gtk_event_controller_filter_event_default (GtkEventController *self,
       GtkWidget *native2;
       GtkWidget *target;
 
-      native = gtk_widget_get_ancestor (priv->widget, GTK_TYPE_NATIVE);
+      native = GTK_WIDGET (gtk_widget_get_native (priv->widget));
 
       target = GTK_WIDGET (gdk_event_get_target (event));
       if (target)
         {
-          native2 = gtk_widget_get_ancestor (target, GTK_TYPE_NATIVE);
+          native2 = GTK_WIDGET (gtk_widget_get_native (target));
           if (native == native2)
             return FALSE;
         }
@@ -102,7 +102,7 @@ gtk_event_controller_filter_event_default (GtkEventController *self,
       target = GTK_WIDGET (gdk_event_get_related_target (event));
       if (target)
         {
-          native2 = gtk_widget_get_ancestor (target, GTK_TYPE_NATIVE);
+          native2 = GTK_WIDGET (gtk_widget_get_native (target));
           if (native == native2)
             return FALSE;
         }
