@@ -63,6 +63,7 @@ gtk_event_controller_set_widget (GtkEventController *self,
   GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
 
   priv->widget = widget;
+  priv->responsive = gtk_widget_get_sensitive (widget);
 }
 
 static void
@@ -71,6 +72,18 @@ gtk_event_controller_unset_widget (GtkEventController *self)
   GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
 
   priv->widget = NULL;
+}
+
+static gboolean
+gtk_event_controller_filter_event_default (GtkEventController *self,
+                                           const GdkEvent     *event)
+{
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
+
+  if (priv->widget)
+    return !gtk_widget_get_sensitive (priv->widget);
+
+  return FALSE;
 }
 
 static gboolean
@@ -128,7 +141,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
 
   klass->set_widget = gtk_event_controller_set_widget;
   klass->unset_widget = gtk_event_controller_unset_widget;
-  klass->filter_event = gtk_event_controller_handle_event_default;
+  klass->filter_event = gtk_event_controller_filter_event_default;
   klass->handle_event = gtk_event_controller_handle_event_default;
 
   object_class->set_property = gtk_event_controller_set_property;
