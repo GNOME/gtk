@@ -209,8 +209,6 @@ struct _GtkWidget
  *   context menu.
  * @get_accessible: Returns the accessible object that describes the
  *   widget to an assistive technology.
- * @display_changed: Signal emitted when the #GdkDisplay of a widget has
- *   changed.
  * @can_activate_accel: Signal allows applications and derived widgets
  *   to override the default GtkWidget handling for determining whether
  *   an accelerator can be activated.
@@ -314,8 +312,6 @@ struct _GtkWidgetClass
    */
   AtkObject *  (* get_accessible)     (GtkWidget       *widget);
 
-  void         (* display_changed)     (GtkWidget      *widget,
-                                        GdkDisplay     *previous_display);
   gboolean     (* can_activate_accel) (GtkWidget *widget,
                                        guint      signal_id);
 
