@@ -197,9 +197,10 @@ gsk_rounded_rect_offset (GskRoundedRect *self,
 }
 
 static void
-border_radius_shrink (graphene_size_t *corner,
-                      double           width,
-                      double           height)
+border_radius_shrink (graphene_size_t       *corner,
+                      double                 width,
+                      double                 height,
+                      const graphene_size_t *max)
 {
   if (corner->width > 0)
     corner->width -= width;
@@ -210,6 +211,11 @@ border_radius_shrink (graphene_size_t *corner,
     {
       corner->width = 0;
       corner->height = 0;
+    }
+  else
+    {
+      corner->width = MIN (corner->width, max->width);
+      corner->height = MIN (corner->height, max->height);
     }
 }
 
@@ -260,10 +266,10 @@ gsk_rounded_rect_shrink (GskRoundedRect *self,
       self->bounds.size.height -= top + bottom;
     }
 
-  border_radius_shrink (&self->corner[GSK_CORNER_TOP_LEFT], left, top);
-  border_radius_shrink (&self->corner[GSK_CORNER_TOP_RIGHT], right, top);
-  border_radius_shrink (&self->corner[GSK_CORNER_BOTTOM_RIGHT], right, bottom);
-  border_radius_shrink (&self->corner[GSK_CORNER_BOTTOM_LEFT], left, bottom);
+  border_radius_shrink (&self->corner[GSK_CORNER_TOP_LEFT], left, top, &self->bounds.size);
+  border_radius_shrink (&self->corner[GSK_CORNER_TOP_RIGHT], right, top, &self->bounds.size);
+  border_radius_shrink (&self->corner[GSK_CORNER_BOTTOM_RIGHT], right, bottom, &self->bounds.size);
+  border_radius_shrink (&self->corner[GSK_CORNER_BOTTOM_LEFT], left, bottom, &self->bounds.size);
 
   return self;
 }
