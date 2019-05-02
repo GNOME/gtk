@@ -550,6 +550,9 @@ GDK_AVAILABLE_IN_ALL
 GtkRoot *             gtk_widget_get_root               (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
+GtkNative *           gtk_widget_get_native             (GtkWidget    *widget);
+
+GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_child_visible      (GtkWidget    *widget,
                                                          gboolean      child_visible);
 GDK_AVAILABLE_IN_ALL
