@@ -55,7 +55,7 @@
 #include <gdk/wayland/gdkwayland.h>
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
-#include "broadway/gskbroadwayrendererprivate.h"
+#include "broadway/gskbroadwayrenderer.h"
 #endif
 #ifdef GDK_RENDERING_VULKAN
 #include "vulkan/gskvulkanrendererprivate.h"
