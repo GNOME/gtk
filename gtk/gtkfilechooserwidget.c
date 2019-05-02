@@ -461,8 +461,6 @@ static void     gtk_file_chooser_widget_unmap          (GtkWidget             *w
 static void     gtk_file_chooser_widget_root           (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_unroot         (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_style_updated   (GtkWidget             *widget);
-static void     gtk_file_chooser_widget_display_changed (GtkWidget            *widget,
-                                                         GdkDisplay           *previous_display);
 
 static gboolean       gtk_file_chooser_widget_set_current_folder           (GtkFileChooser    *chooser,
                                                                             GFile             *folder,
@@ -536,6 +534,7 @@ static void search_shortcut_handler (GtkFileChooserWidget *impl);
 static void recent_shortcut_handler (GtkFileChooserWidget *impl);
 static void places_shortcut_handler (GtkFileChooserWidget *impl);
 static void update_appearance       (GtkFileChooserWidget *impl);
+static void check_icon_theme (GtkFileChooserWidget *impl);
 
 static void operation_mode_set (GtkFileChooserWidget *impl, OperationMode mode);
 static void location_mode_set  (GtkFileChooserWidget *impl, LocationMode new_mode);
@@ -3538,6 +3537,10 @@ gtk_file_chooser_widget_unroot (GtkWidget *widget)
       priv->toplevel_current_focus_widget = NULL;
     }
 
+  remove_settings_signal (impl, gtk_widget_get_display (widget));
+  check_icon_theme (impl);
+  emit_default_size_changed (impl);
+
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->unroot (widget);
 }
 
@@ -3616,27 +3619,6 @@ gtk_file_chooser_widget_style_updated (GtkWidget *widget)
   profile_msg ("    parent class style_updated end", NULL);
 
   change_icon_theme (impl);
-
-  emit_default_size_changed (impl);
-
-  profile_end ("end", NULL);
-}
-
-static void
-gtk_file_chooser_widget_display_changed (GtkWidget  *widget,
-                                         GdkDisplay *previous_display)
-{
-  GtkFileChooserWidget *impl;
-
-  profile_start ("start", NULL);
-
-  impl = GTK_FILE_CHOOSER_WIDGET (widget);
-
-  if (GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->display_changed)
-    GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->display_changed (widget, previous_display);
-
-  remove_settings_signal (impl, previous_display);
-  check_icon_theme (impl);
 
   emit_default_size_changed (impl);
 
@@ -7919,7 +7901,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->root = gtk_file_chooser_widget_root;
   widget_class->unroot = gtk_file_chooser_widget_unroot;
   widget_class->style_updated = gtk_file_chooser_widget_style_updated;
-  widget_class->display_changed = gtk_file_chooser_widget_display_changed;
 
   /*
    * Signals

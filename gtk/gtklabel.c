@@ -456,8 +456,6 @@ static void gtk_label_set_markup_internal        (GtkLabel      *label,
 static void gtk_label_recalculate                (GtkLabel      *label);
 static void gtk_label_root                       (GtkWidget     *widget);
 static void gtk_label_unroot                     (GtkWidget     *widget);
-static void gtk_label_display_changed            (GtkWidget     *widget,
-						  GdkDisplay    *old_display);
 static gboolean gtk_label_popup_menu             (GtkWidget     *widget);
 
 static void gtk_label_set_selectable_hint (GtkLabel *label);
@@ -609,7 +607,6 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->unmap = gtk_label_unmap;
   widget_class->root = gtk_label_root;
   widget_class->unroot = gtk_label_unroot;
-  widget_class->display_changed = gtk_label_display_changed;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
   widget_class->drag_data_get = gtk_label_drag_data_get;
   widget_class->grab_focus = gtk_label_grab_focus;
@@ -1804,28 +1801,6 @@ gtk_label_setup_mnemonic (GtkLabel  *label,
 }
 
 static void
-gtk_label_root (GtkWidget *widget)
-{
-  GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-
-  GTK_WIDGET_CLASS (gtk_label_parent_class)->root (widget);
-
-  gtk_label_setup_mnemonic (label, gtk_widget_get_toplevel (widget), priv->mnemonic_keyval);
-}
-
-static void
-gtk_label_unroot (GtkWidget *widget)
-{
-  GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-
-  gtk_label_setup_mnemonic (label, NULL, priv->mnemonic_keyval);
-
-  GTK_WIDGET_CLASS (gtk_label_parent_class)->unroot (widget);
-}
-
-static void
 label_shortcut_setting_apply (GtkLabel *label)
 {
   gtk_label_recalculate (label);
@@ -1859,6 +1834,50 @@ label_shortcut_setting_changed (GtkSettings *settings)
     }
 
   g_list_free (list);
+}
+
+static void
+gtk_label_root (GtkWidget *widget)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+  GtkSettings *settings;
+  gboolean shortcuts_connected;
+
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->root (widget);
+
+  gtk_label_setup_mnemonic (label, gtk_widget_get_toplevel (widget), priv->mnemonic_keyval);
+
+  /* The PangoContext is replaced when the display changes, so clear the layouts */
+  gtk_label_clear_layout (GTK_LABEL (widget));
+
+  settings = gtk_widget_get_settings (widget);
+
+  shortcuts_connected =
+    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (settings), quark_shortcuts_connected));
+
+  if (! shortcuts_connected)
+    {
+      g_signal_connect (settings, "notify::gtk-enable-accels",
+                        G_CALLBACK (label_shortcut_setting_changed),
+                        NULL);
+
+      g_object_set_qdata (G_OBJECT (settings), quark_shortcuts_connected,
+                         GINT_TO_POINTER (TRUE));
+    }
+
+  label_shortcut_setting_apply (GTK_LABEL (widget));
+}
+
+static void
+gtk_label_unroot (GtkWidget *widget)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+
+  gtk_label_setup_mnemonic (label, NULL, priv->mnemonic_keyval);
+
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->unroot (widget);
 }
 
 static void
@@ -1912,35 +1931,6 @@ label_mnemonics_visible_changed (GtkWindow  *window,
                         label_mnemonics_visible_traverse_container,
                         GINT_TO_POINTER (mnemonics_visible));
 }
-
-static void
-gtk_label_display_changed (GtkWidget  *widget,
-			   GdkDisplay *old_display)
-{
-  GtkSettings *settings;
-  gboolean shortcuts_connected;
-
-  /* The PangoContext is replaced when the display changes, so clear the layouts */
-  gtk_label_clear_layout (GTK_LABEL (widget));
-
-  settings = gtk_widget_get_settings (widget);
-
-  shortcuts_connected =
-    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (settings), quark_shortcuts_connected));
-
-  if (! shortcuts_connected)
-    {
-      g_signal_connect (settings, "notify::gtk-enable-accels",
-                        G_CALLBACK (label_shortcut_setting_changed),
-                        NULL);
-
-      g_object_set_qdata (G_OBJECT (settings), quark_shortcuts_connected,
-                         GINT_TO_POINTER (TRUE));
-    }
-
-  label_shortcut_setting_apply (GTK_LABEL (widget));
-}
-
 
 static void
 label_mnemonic_widget_weak_notify (gpointer      data,

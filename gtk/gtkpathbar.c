@@ -151,8 +151,8 @@ static gboolean gtk_path_bar_slider_down_defocus  (GtkWidget        *widget,
 						   GdkEventButton   *event,
 						   GtkPathBar       *path_bar);
 static void gtk_path_bar_style_updated            (GtkWidget        *widget);
-static void gtk_path_bar_display_changed          (GtkWidget        *widget,
-						   GdkDisplay       *previous_display);
+static void gtk_path_bar_root                     (GtkWidget        *widget);
+static void gtk_path_bar_unroot                   (GtkWidget        *widget);
 static void gtk_path_bar_check_icon_theme         (GtkPathBar       *path_bar);
 static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
 						   ButtonData       *button_data,
@@ -273,7 +273,8 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   widget_class->measure = gtk_path_bar_measure;
   widget_class->size_allocate = gtk_path_bar_size_allocate;
   widget_class->style_updated = gtk_path_bar_style_updated;
-  widget_class->display_changed = gtk_path_bar_display_changed;
+  widget_class->root = gtk_path_bar_root;
+  widget_class->unroot = gtk_path_bar_unroot;
 
   container_class->add = gtk_path_bar_add;
   container_class->forall = gtk_path_bar_forall;
@@ -729,17 +730,19 @@ gtk_path_bar_style_updated (GtkWidget *widget)
 }
 
 static void
-gtk_path_bar_display_changed (GtkWidget  *widget,
-			      GdkDisplay *previous_display)
+gtk_path_bar_root (GtkWidget *widget)
 {
-  if (GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->display_changed)
-    GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->display_changed (widget, previous_display);
-
-  /* We might nave a new settings, so we remove the old one */
-  if (previous_display)
-    remove_settings_signal (GTK_PATH_BAR (widget), previous_display);
+  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->root (widget);
 
   gtk_path_bar_check_icon_theme (GTK_PATH_BAR (widget));
+}
+
+static void
+gtk_path_bar_unroot (GtkWidget *widget)
+{
+  remove_settings_signal (GTK_PATH_BAR (widget), gtk_widget_get_display (widget));
+
+  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->root (widget);
 }
 
 static gboolean
