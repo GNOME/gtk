@@ -6363,6 +6363,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
 			  gboolean   sensitive)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -6372,6 +6373,13 @@ gtk_widget_set_sensitive (GtkWidget *widget,
     return;
 
   priv->sensitive = sensitive;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      GtkEventController *controller = l->data;
+
+      gtk_event_controller_reset (controller);
+    }
 
   if (priv->parent == NULL
       || gtk_widget_is_sensitive (priv->parent))
