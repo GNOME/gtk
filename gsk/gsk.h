@@ -27,6 +27,7 @@
 #include <gsk/gsktransform.h>
 
 #include <gsk/gskcairorenderer.h>
+#include <gsk/gl/gskglrenderer.h>
 
 #include <gsk/gsktypes.h>
 #include <gsk/gskenumtypes.h>
