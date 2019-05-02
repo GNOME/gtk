@@ -209,6 +209,8 @@ struct _GtkWidgetPrivate
   GdkCursor *cursor;
 };
 
+void          gtk_widget_root               (GtkWidget *widget);
+void          gtk_widget_unroot             (GtkWidget *widget);
 GtkCssNode *  gtk_widget_get_css_node       (GtkWidget *widget);
 void         _gtk_widget_set_visible_flag   (GtkWidget *widget,
                                              gboolean   visible);

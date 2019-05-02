@@ -1046,14 +1046,6 @@ menu_change_display (GtkMenu    *menu,
 }
 
 static void
-attach_widget_display_changed (GtkWidget  *attach_widget,
-                               GdkDisplay *previous_display,
-                               GtkMenu    *menu)
-{
-  menu_change_display (menu, gtk_widget_get_display (attach_widget));
-}
-
-static void
 attach_widget_root_changed (GObject    *attach_widget,
                             GParamSpec *pspec,
                             gpointer    menu)
@@ -1115,11 +1107,9 @@ gtk_menu_attach_to_widget (GtkMenu           *menu,
   data = g_slice_new (GtkMenuAttachData);
   data->attach_widget = attach_widget;
 
-  g_signal_connect (attach_widget, "display-changed",
-                    G_CALLBACK (attach_widget_display_changed), menu);
   g_signal_connect (attach_widget, "notify::root",
                     G_CALLBACK (attach_widget_root_changed), menu);
-  attach_widget_display_changed (attach_widget, NULL, menu);
+  attach_widget_root_changed (G_OBJECT (attach_widget), NULL, menu);
 
   data->detacher = detacher;
   g_object_set_data (G_OBJECT (menu), I_(attach_data_key), data);
@@ -1198,9 +1188,6 @@ gtk_menu_detach (GtkMenu *menu)
         gtk_window_set_attached_to (toplevel, NULL);
     }
 
-  g_signal_handlers_disconnect_by_func (data->attach_widget,
-                                        (gpointer) attach_widget_display_changed,
-                                        menu);
   g_signal_handlers_disconnect_by_func (data->attach_widget,
                                         (gpointer) attach_widget_root_changed,
                                         menu);

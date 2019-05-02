@@ -632,8 +632,6 @@ static void             gtk_widget_real_move_focus              (GtkWidget      
                                                                  GtkDirectionType  direction);
 static gboolean		gtk_widget_real_keynav_failed		(GtkWidget        *widget,
 								 GtkDirectionType  direction);
-static void             gtk_widget_root                         (GtkWidget        *widget);
-static void             gtk_widget_unroot                       (GtkWidget        *widget);
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
 static void             gtk_widget_verify_invariants            (GtkWidget        *widget);
 static void             gtk_widget_push_verify_invariants       (GtkWidget        *widget);
@@ -918,7 +916,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->drag_motion = NULL;
   klass->drag_drop = NULL;
   klass->drag_data_received = NULL;
-  klass->display_changed = NULL;
   klass->can_activate_accel = gtk_widget_real_can_activate_accel;
   klass->query_tooltip = gtk_widget_real_query_tooltip;
   klass->style_updated = gtk_widget_real_style_updated;
@@ -2078,25 +2075,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_NONE, 0);
 
   /**
-   * GtkWidget::display-changed:
-   * @widget: the object on which the signal is emitted
-   * @previous_display: (allow-none): the previous screen, or %NULL if the
-   *   widget was not associated with a screen before
-   *
-   * The ::display-changed signal gets emitted when the
-   * display of a widget has changed.
-   */
-  widget_signals[DISPLAY_CHANGED] =
-    g_signal_new (I_("display-changed"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, display_changed),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 1,
-		  GDK_TYPE_DISPLAY);
-
-  /**
    * GtkWidget::can-activate-accel:
    * @widget: the object which received the signal
    * @signal_id: the ID of a signal installed on @widget
@@ -2865,21 +2843,22 @@ gtk_widget_new (GType        type,
   return widget;
 }
 
-static void
+void
 gtk_widget_root (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  /* roots are rooted by default */
-  if (GTK_IS_ROOT (widget))
-    return;
-
-  g_assert (priv->root == NULL);
   g_assert (!priv->realized);
-  g_assert (priv->parent);
-  g_assert (priv->parent->priv->root);
 
-  priv->root = priv->parent->priv->root;
+  if (GTK_IS_ROOT (widget))
+    {
+      g_assert (priv->root == GTK_ROOT (widget));
+    }
+  else
+    {
+      g_assert (priv->root == NULL);
+      priv->root = priv->parent->priv->root;
+    }
 
   if (priv->context)
     gtk_style_context_set_display (priv->context, gtk_root_get_display (priv->root));
@@ -2889,18 +2868,15 @@ gtk_widget_root (GtkWidget *widget)
 
   GTK_WIDGET_GET_CLASS (widget)->root (widget);
 
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_ROOT]);
+  if (!GTK_IS_ROOT (widget))
+    g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_ROOT]);
 }
 
-static void
+void
 gtk_widget_unroot (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidgetSurfaceTransformData *surface_transform_data;
-
-  /* roots are rooted by default and cannot be unrooted */
-  if (GTK_IS_ROOT (widget))
-    return;
 
   g_assert (priv->root);
   g_assert (!priv->realized);
@@ -2915,9 +2891,16 @@ gtk_widget_unroot (GtkWidget *widget)
   if (priv->context)
     gtk_style_context_set_display (priv->context, gdk_display_get_default ());
 
-  priv->root = NULL;
+  if (g_object_get_qdata (G_OBJECT (widget), quark_pango_context))
+    g_object_set_qdata (G_OBJECT (widget), quark_pango_context, NULL);
 
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_ROOT]);
+  _gtk_tooltip_hide (widget);
+
+  if (!GTK_IS_ROOT (widget))
+    {
+      priv->root = NULL;
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_ROOT]);
+    }
 }
 
 /**
@@ -6689,84 +6672,6 @@ gtk_widget_real_direction_changed (GtkWidget        *widget,
                                    GtkTextDirection  previous_direction)
 {
   gtk_widget_queue_resize (widget);
-}
-
-typedef struct {
-  GtkWidget *previous_toplevel;
-  GdkDisplay *previous_display;
-  GdkDisplay *new_display;
-} HierarchyChangedInfo;
-
-static void
-do_display_change (GtkWidget  *widget,
-	           GdkDisplay *old_display,
-                   GdkDisplay *new_display)
-{
-  if (old_display != new_display)
-    {
-      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-      if (old_display)
-	{
-	  PangoContext *context = g_object_get_qdata (G_OBJECT (widget), quark_pango_context);
-	  if (context)
-	    g_object_set_qdata (G_OBJECT (widget), quark_pango_context, NULL);
-	}
-
-      _gtk_tooltip_hide (widget);
-
-      if (new_display && priv->context)
-        gtk_style_context_set_display (priv->context, new_display);
-
-      g_signal_emit (widget, widget_signals[DISPLAY_CHANGED], 0, old_display);
-    }
-}
-
-static void
-gtk_widget_propagate_display_changed_recurse (GtkWidget *widget,
-	                  		      gpointer   client_data)
-{
-  HierarchyChangedInfo *info = client_data;
-  GtkWidget *child;
-
-  g_object_ref (widget);
-
-  do_display_change (widget, info->previous_display, info->new_display);
-
-  for (child = gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = gtk_widget_get_next_sibling (child))
-    {
-      gtk_widget_propagate_display_changed_recurse (child, client_data);
-    }
-
-  g_object_unref (widget);
-}
-
-/**
- * _gtk_widget_propagate_display_changed:
- * @widget: a #GtkWidget
- * @previous_display: Previous display
- *
- * Propagates changes in the display for a widget to all
- * children, emitting #GtkWidget::display-changed.
- **/
-void
-_gtk_widget_propagate_display_changed (GtkWidget  *widget,
-                                       GdkDisplay *previous_display)
-{
-  HierarchyChangedInfo info;
-
-  info.previous_display = previous_display;
-  info.new_display = gtk_widget_get_display (widget);
-
-  if (previous_display)
-    g_object_ref (previous_display);
-
-  gtk_widget_propagate_display_changed_recurse (widget, &info);
-
-  if (previous_display)
-    g_object_unref (previous_display);
 }
 
 static void

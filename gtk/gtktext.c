@@ -324,8 +324,7 @@ static void   gtk_text_direction_changed    (GtkWidget        *widget,
                                              GtkTextDirection  previous_dir);
 static void   gtk_text_state_flags_changed  (GtkWidget        *widget,
                                              GtkStateFlags     previous_state);
-static void   gtk_text_display_changed      (GtkWidget        *widget,
-                                             GdkDisplay       *old_display);
+static void   gtk_text_root                 (GtkWidget        *widget);
 
 static gboolean gtk_text_drag_drop          (GtkWidget        *widget,
                                              GdkDrop          *drop,
@@ -679,7 +678,7 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->drag_end = gtk_text_drag_end;
   widget_class->direction_changed = gtk_text_direction_changed;
   widget_class->state_flags_changed = gtk_text_state_flags_changed;
-  widget_class->display_changed = gtk_text_display_changed;
+  widget_class->root = gtk_text_root;
   widget_class->mnemonic_activate = gtk_text_mnemonic_activate;
   widget_class->popup_menu = gtk_text_popup_menu;
   widget_class->drag_drop = gtk_text_drag_drop;
@@ -3029,9 +3028,10 @@ gtk_text_state_flags_changed (GtkWidget     *widget,
 }
 
 static void
-gtk_text_display_changed (GtkWidget  *widget,
-                          GdkDisplay *old_display)
+gtk_text_root (GtkWidget *widget)
 {
+  GTK_WIDGET_CLASS (gtk_text_parent_class)->root (widget);
+
   gtk_text_recompute (GTK_TEXT (widget));
 }
 
