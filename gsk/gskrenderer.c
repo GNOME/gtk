@@ -38,7 +38,7 @@
 
 #include "gskcairorenderer.h"
 #include "gskdebugprivate.h"
-#include "gl/gskglrendererprivate.h"
+#include "gl/gskglrenderer.h"
 #include "gskprofilerprivate.h"
 #include "gskrendernodeprivate.h"
 
