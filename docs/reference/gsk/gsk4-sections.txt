@@ -10,6 +10,7 @@ gsk_renderer_render_texture
 gsk_renderer_new_for_surface
 gsk_gl_renderer_new
 gsk_cairo_renderer_new
+gsk_broadway_renderer_new
 <SUBSECTION Standard>
 GSK_IS_RENDERER
 GSK_RENDERER
