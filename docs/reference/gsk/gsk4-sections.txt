@@ -62,6 +62,7 @@ gsk_outset_shadow_node_get_spread
 gsk_outset_shadow_node_get_blur_radius
 gsk_cairo_node_new
 gsk_cairo_node_get_draw_context
+gsk_cairo_node_peek_surface
 gsk_container_node_new
 gsk_container_node_get_n_children
 gsk_container_node_get_child
@@ -88,6 +89,7 @@ GskShadow
 gsk_shadow_node_new
 gsk_shadow_node_peek_shadow
 gsk_shadow_node_get_n_shadows
+gsk_shadow_node_get_child
 GskBlendMode
 gsk_blend_node_new
 gsk_blend_node_get_bottom_child
@@ -103,6 +105,7 @@ gsk_text_node_peek_glyphs
 gsk_text_node_peek_color
 gsk_text_node_get_x
 gsk_text_node_get_y
+gsk_text_node_get_num_glyphs
 gsk_blur_node_new
 gsk_blur_node_get_child
 gsk_blur_node_get_radius
@@ -162,6 +165,7 @@ gsk_transform_to_translate
 gsk_transform_transform
 gsk_transform_invert
 gsk_transform_matrix
+gsk_transform_matrix_with_category
 gsk_transform_translate
 gsk_transform_translate_3d
 gsk_transform_rotate

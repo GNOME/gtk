@@ -19,7 +19,7 @@
 
 
 /**
- * SECTION:gsktransform
+ * SECTION:GskTransform
  * @Title: GskTransform
  * @Short_description: A description for transform operations
  *
