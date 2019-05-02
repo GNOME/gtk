@@ -181,6 +181,7 @@ GdkSurfaceState
 gdk_surface_new_toplevel
 gdk_surface_new_temp
 gdk_surface_new_popup
+gdk_surface_get_parent
 gdk_surface_destroy
 gdk_surface_get_surface_type
 gdk_surface_get_display
