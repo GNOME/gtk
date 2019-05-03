@@ -80,11 +80,29 @@ Use a GdkPixbuf in combination with GtkImage to display images.
 </varlistentry>
 
 <varlistentry>
+<term>graphene</term>
+<listitem><para>
+This is a small library which provides vector and matrix datatypes
+and operations. graphene provides optimized implementations using
+various SIMD instruction sets such as SSE.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
 <term>GDK</term>
 <listitem><para>
 GDK is the abstraction layer that allows GTK to support multiple
-windowing systems. GDK provides window system facilities on X11, Windows,
-and OS X.
+windowing systems. GDK provides window system facilities on Wayland,
+X11, Windows, and OS X.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GSK</term>
+<listitem><para>
+GSK is a library for creating a scene graph from render nodes,
+and rendering it using different rendering APIs. GSK provides renderers
+for OpenGL, Vulkan and cairo.
 </para></listitem>
 </varlistentry>
 
