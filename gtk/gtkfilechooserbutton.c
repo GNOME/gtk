@@ -988,11 +988,8 @@ gtk_file_chooser_button_finalize (GObject *object)
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (object);
   GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
 
-  if (priv->selection_while_inactive)
-    g_object_unref (priv->selection_while_inactive);
-
-  if (priv->current_folder_while_inactive)
-    g_object_unref (priv->current_folder_while_inactive);
+  g_clear_object (&priv->selection_while_inactive);
+  g_clear_object (&priv->current_folder_while_inactive);
 
   gtk_widget_unparent (priv->button);
   gtk_widget_unparent (priv->combo_box);
@@ -1032,31 +1029,16 @@ gtk_file_chooser_button_destroy (GtkWidget *widget)
       g_clear_object (&priv->model);
     }
 
-  if (priv->dialog != NULL)
-    {
-      gtk_widget_destroy (priv->dialog);
-      priv->dialog = NULL;
-    }
+  g_clear_pointer (&priv->dialog, gtk_widget_destroy);
 
   if (priv->native)
-    {
-      gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (priv->native));
-      g_clear_object (&priv->native);
-    }
+    gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (priv->native));
 
-  priv->chooser = NULL;
+  g_clear_object (&priv->native);
+  priv->chooser = NULL; /* Was either priv->dialog or priv->native! */
 
-  if (priv->dnd_select_folder_cancellable)
-    {
-      g_cancellable_cancel (priv->dnd_select_folder_cancellable);
-      priv->dnd_select_folder_cancellable = NULL;
-    }
-
-  if (priv->update_button_cancellable)
-    {
-      g_cancellable_cancel (priv->update_button_cancellable);
-      priv->update_button_cancellable = NULL;
-    }
+  g_clear_pointer (&priv->dnd_select_folder_cancellable, g_cancellable_cancel);
+  g_clear_pointer (&priv->update_button_cancellable, g_cancellable_cancel);
 
   if (priv->change_icon_theme_cancellables)
     {
@@ -1069,24 +1051,15 @@ gtk_file_chooser_button_destroy (GtkWidget *widget)
       priv->change_icon_theme_cancellables = NULL;
     }
 
-  if (priv->filter_model)
-    {
-      g_object_unref (priv->filter_model);
-      priv->filter_model = NULL;
-    }
+  g_clear_object (&priv->filter_model);
 
   if (priv->fs)
     {
       g_signal_handler_disconnect (priv->fs, priv->fs_volumes_changed_id);
-      g_object_unref (priv->fs);
-      priv->fs = NULL;
+      g_clear_object (&priv->fs);
     }
 
-  if (priv->bookmarks_manager)
-    {
-      _gtk_bookmarks_manager_free (priv->bookmarks_manager);
-      priv->bookmarks_manager = NULL;
-    }
+  g_clear_pointer (&priv->bookmarks_manager, _gtk_bookmarks_manager_free);
 
   GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->destroy (widget);
 }
