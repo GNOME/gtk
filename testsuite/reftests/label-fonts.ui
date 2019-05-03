@@ -4,6 +4,7 @@
     <property name="type">popup</property>
     <child>
       <object class="GtkLabel" id="label3">
+        <property name="name">label</property>
         <property name="label" translatable="yes">abcdefg</property>
       </object>
     </child>
