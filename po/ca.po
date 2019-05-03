@@ -6024,7 +6024,7 @@ msgstr "Hanunoo"
 #: gtk/script-names.c:58
 msgctxt "Script"
 msgid "Buhid"
-msgstr "Bugui"
+msgstr "Buhid"
 
 #: gtk/script-names.c:59
 msgctxt "Script"
@@ -6414,7 +6414,7 @@ msgstr "Pau Cin Hau"
 #: gtk/script-names.c:136
 msgctxt "Script"
 msgid "Psalter Pahlavi"
-msgstr "Inscripcions Pahlavi"
+msgstr "Psalter Pahlavi"
 
 #: gtk/script-names.c:137
 msgctxt "Script"
