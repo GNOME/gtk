@@ -994,12 +994,6 @@ gtk_file_chooser_button_finalize (GObject *object)
   if (priv->current_folder_while_inactive)
     g_object_unref (priv->current_folder_while_inactive);
 
-  if (priv->model)
-    {
-      model_remove_rows (button, 0, gtk_tree_model_iter_n_children (priv->model, NULL));
-      g_object_unref (priv->model);
-    }
-
   gtk_widget_unparent (priv->button);
   gtk_widget_unparent (priv->combo_box);
 
@@ -1031,6 +1025,12 @@ gtk_file_chooser_button_destroy (GtkWidget *widget)
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
   GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
   GSList *l;
+
+  if (priv->model)
+    {
+      model_remove_rows (button, 0, gtk_tree_model_iter_n_children (priv->model, NULL));
+      g_clear_object (&priv->model);
+    }
 
   if (priv->dialog != NULL)
     {
