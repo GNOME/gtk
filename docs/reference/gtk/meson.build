@@ -333,6 +333,7 @@ images = [
 ]
 
 content_files = [
+  'actions.xml',
   'broadway.xml',
   'building.sgml',
   'compiling.sgml',
@@ -368,6 +369,7 @@ content_files = [
 ]
 
 expand_content_files = [
+  'actions.xml',
   'compiling.sgml',
   'drawing-model.xml',
   'glossary.xml',

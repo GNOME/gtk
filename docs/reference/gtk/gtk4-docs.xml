@@ -24,8 +24,9 @@
     <xi:include href="xml/getting_started.xml"/>
     <xi:include href="resources.sgml" />
     <xi:include href="xml/question_index.sgml" />
-    <xi:include href="drawing-model.xml" />
+    <xi:include href="xml/drawing-model.xml" />
     <xi:include href="xml/input-handling.xml" />
+    <xi:include href="xml/actions.xml" />
   </part>
 
   <part id="gtkobjects">
