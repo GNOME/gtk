@@ -4088,7 +4088,12 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
     {
       GtkWidget *parent = _gtk_widget_get_parent (widget);
       if (parent)
-        gtk_widget_queue_resize_internal (parent);
+        {
+          if (GTK_IS_NATIVE (widget))
+            gtk_widget_queue_allocate (parent);
+          else
+            gtk_widget_queue_resize_internal (parent);
+        }
     }
 }
 
