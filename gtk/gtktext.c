@@ -66,6 +66,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
+#include "gtknative.h"
 
 #include "a11y/gtktextaccessible.h"
 
@@ -2174,6 +2175,7 @@ gtk_text_size_allocate (GtkWidget *widget,
 {
   GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  GtkEmojiChooser *chooser;
 
   priv->text_baseline = baseline;
 
@@ -2189,6 +2191,16 @@ gtk_text_size_allocate (GtkWidget *widget,
    */
   if (gtk_widget_get_realized (widget))
     gtk_text_recompute (self);
+
+  chooser = g_object_get_data (G_OBJECT (self), "gtk-emoji-chooser");
+  if (chooser)
+    gtk_native_check_resize (GTK_NATIVE (chooser));
+
+  if (priv->emoji_completion)
+    gtk_native_check_resize (GTK_NATIVE (priv->emoji_completion));
+
+  if (priv->magnifier_popover)
+    gtk_native_check_resize (GTK_NATIVE (priv->magnifier_popover));
 }
 
 static void
