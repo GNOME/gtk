@@ -358,8 +358,11 @@ get_property_pspec (MyParserData *data,
   return pspec;
 }
 
+static const char *get_class_name (Element *element);
+
 static gboolean
-value_is_default (MyParserData *data,
+value_is_default (Element      *element,
+                  MyParserData *data,
                   GParamSpec   *pspec,
                   const gchar  *value_string)
 {
@@ -377,7 +380,25 @@ value_is_default (MyParserData *data,
       ret = FALSE;
     }
   else
-    ret = g_param_value_defaults (pspec, &value);
+    {
+      /* GtkWidget::visible has a 'smart' default */
+      if (pspec->owner_type == GTK_TYPE_WIDGET &&
+          g_str_equal (pspec->name, "visible"))
+        {
+          const char *class_name = get_class_name (element);
+          GType type = g_type_from_name (class_name);
+          gboolean default_value;
+
+          if (g_type_is_a (type, GTK_TYPE_NATIVE))
+            default_value = FALSE;
+          else
+            default_value = TRUE;
+
+          ret = g_value_get_boolean (&value) == default_value;
+        }
+      else
+        ret = g_param_value_defaults (pspec, &value);
+    }
 
   g_value_reset (&value);
 
@@ -556,7 +577,7 @@ property_can_be_omitted (Element      *element,
   if (needs_explicit_setting (pspec, kind))
     return FALSE;
 
-  return value_is_default (data, pspec, value_string);
+  return value_is_default (element, data, pspec, value_string);
 }
 
 static gboolean
