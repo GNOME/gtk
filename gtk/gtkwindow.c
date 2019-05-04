@@ -9923,6 +9923,10 @@ update_cursor (GtkWindow *toplevel,
           if (grab_widget && target == grab_widget)
             break;
 
+          /* Don't inherit cursors across surfaces */
+          if (surface != gtk_widget_get_surface (target))
+            break;
+
           cursor = gtk_widget_get_cursor (target);
 
           if (cursor)
