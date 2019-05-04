@@ -3448,41 +3448,18 @@ gtk_entry_enter_text (GtkEntry *entry,
 }
 
 static void
-gtk_entry_insert_emoji (GtkEntry *entry)
-{
-  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-  GtkWidget *chooser;
-  GdkRectangle rect;
-
-  if (gtk_widget_get_ancestor (GTK_WIDGET (entry), GTK_TYPE_EMOJI_CHOOSER) != NULL)
-    return;
-
-  chooser = GTK_WIDGET (g_object_get_data (G_OBJECT (entry), "gtk-emoji-chooser"));
-  if (!chooser)
-    {
-      chooser = gtk_emoji_chooser_new ();
-      g_object_set_data (G_OBJECT (entry), "gtk-emoji-chooser", chooser);
-
-      gtk_popover_set_relative_to (GTK_POPOVER (chooser), GTK_WIDGET (entry));
-      if (priv->show_emoji_icon)
-        {
-          gtk_entry_get_icon_area (entry, GTK_ENTRY_ICON_SECONDARY, &rect);
-          gtk_popover_set_pointing_to (GTK_POPOVER (chooser), &rect);
-        }
-      g_signal_connect_swapped (chooser, "emoji-picked", G_CALLBACK (gtk_entry_enter_text), entry);
-    }
-
-  gtk_popover_popup (GTK_POPOVER (chooser));
-}
-
-static void
 pick_emoji (GtkEntry *entry,
             int       icon,
             GdkEvent *event,
             gpointer  data)
 {
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  if (gtk_widget_get_ancestor (GTK_WIDGET (entry), GTK_TYPE_EMOJI_CHOOSER) != NULL)
+    return;
+
   if (icon == GTK_ENTRY_ICON_SECONDARY)
-    gtk_entry_insert_emoji (entry);
+    g_signal_emit_by_name (priv->text, "insert-emoji");
 }
 
 static void
