@@ -6737,17 +6737,17 @@ gtk_widget_verify_invariants (GtkWidget *widget)
 
       if (!priv->realized)
         g_warning ("%s %p is mapped but not realized",
-                   G_OBJECT_TYPE_NAME (widget), widget);
+                   gtk_widget_get_name (widget), widget);
 
       if (!priv->visible)
         g_warning ("%s %p is mapped but not visible",
-                   G_OBJECT_TYPE_NAME (widget), widget);
+                   gtk_widget_get_name (widget), widget);
 
       if (!GTK_IS_ROOT (widget))
         {
           if (!priv->child_visible)
             g_warning ("%s %p is mapped but not child_visible",
-                       G_OBJECT_TYPE_NAME (widget), widget);
+                       gtk_widget_get_name (widget), widget);
         }
     }
   else
@@ -6797,8 +6797,8 @@ gtk_widget_verify_invariants (GtkWidget *widget)
 
           if (priv->realized)
             g_warning ("%s %p is not realized but child %s %p is realized",
-                       parent ? G_OBJECT_TYPE_NAME (parent) : "no parent", parent,
-                       G_OBJECT_TYPE_NAME (widget), widget);
+                       parent ? gtk_widget_get_name (parent) : "no parent", parent,
+                       gtk_widget_get_name (widget), widget);
         }
 
       if (parent &&
@@ -6810,8 +6810,8 @@ gtk_widget_verify_invariants (GtkWidget *widget)
 
           if (!priv->mapped)
             g_warning ("%s %p is mapped but visible child %s %p is not mapped",
-                       G_OBJECT_TYPE_NAME (parent), parent,
-                       G_OBJECT_TYPE_NAME (widget), widget);
+                       gtk_widget_get_name (parent), parent,
+                       gtk_widget_get_name (widget), widget);
         }
       else if (!GTK_IS_ROOT (widget))
         {
@@ -6819,10 +6819,10 @@ gtk_widget_verify_invariants (GtkWidget *widget)
 
           if (priv->mapped)
             g_warning ("%s %p is mapped but visible=%d child_visible=%d parent %s %p mapped=%d",
-                       G_OBJECT_TYPE_NAME (widget), widget,
+                       gtk_widget_get_name (widget), widget,
                        priv->visible,
                        priv->child_visible,
-                       parent ? G_OBJECT_TYPE_NAME (parent) : "no parent", parent,
+                       parent ? gtk_widget_get_name (parent) : "no parent", parent,
                        parent ? parent->priv->mapped : FALSE);
         }
     }
@@ -12915,7 +12915,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
 
   if (_gtk_widget_get_alloc_needed (widget))
     {
-      g_warning ("Trying to snapshot %s %p without a current allocation", G_OBJECT_TYPE_NAME (widget), widget);
+      g_warning ("Trying to snapshot %s %p without a current allocation", gtk_widget_get_name (widget), widget);
       return;
     }
 
