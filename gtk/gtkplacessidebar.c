@@ -64,6 +64,7 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkgesturemultipress.h"
 #include "gtkgesturedrag.h"
+#include "gtknative.h"
 
 /*< private >
  * SECTION:gtkplacessidebar
@@ -4421,6 +4422,20 @@ gtk_places_sidebar_finalize (GObject *object)
 }
 
 static void
+gtk_places_sidebar_size_allocate (GtkWidget *widget,
+                                  int        width,
+                                  int        height,
+                                  int        baseline)
+{
+  GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (widget);
+
+  GTK_WIDGET_CLASS (gtk_places_sidebar_parent_class)->size_allocate (widget, width, height, baseline);
+
+  if (sidebar->rename_popover)
+    gtk_native_check_resize (GTK_NATIVE (sidebar->rename_popover));
+}
+
+static void
 gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
@@ -4431,6 +4446,8 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
   gobject_class->finalize = gtk_places_sidebar_finalize;
   gobject_class->set_property = gtk_places_sidebar_set_property;
   gobject_class->get_property = gtk_places_sidebar_get_property;
+
+  widget_class->size_allocate = gtk_places_sidebar_size_allocate;
 
   /*
    * GtkPlacesSidebar::open-location:
