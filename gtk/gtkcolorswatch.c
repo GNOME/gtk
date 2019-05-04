@@ -39,6 +39,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtknative.h"
 
 #include "a11y/gtkcolorswatchaccessibleprivate.h"
 
@@ -362,6 +363,9 @@ swatch_size_allocate (GtkWidget *widget,
                               0, 0,
                               width, height
                             }, -1);
+
+  if (priv->popover)
+    gtk_native_check_resize (GTK_NATIVE (priv->popover));
 }
 
 static void
