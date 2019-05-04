@@ -56,11 +56,12 @@ gsk_public_headers = files([
   'gsktransform.h',
   'gsktypes.h',
   'gsk-autocleanup.h',
-  'broadway/gskbroadwayrenderer.h',
-  'gl/gskglrenderer.h'
 ])
 
 install_headers(gsk_public_headers, 'gsk.h', subdir: 'gtk-4.0/gsk')
+
+install_headers(files(['gl/gskglrenderer.h']), subdir: 'gtk-4.0/gsk/gl')
+install_headers(files(['broadway/gskbroadwayrenderer.h']), subdir: 'gtk-4.0/gsk/broadway')
 
 gsk_private_vulkan_shaders = []
 # This is an odd split because we use configure_file() below to workaround
@@ -96,6 +97,8 @@ if have_vulkan
     'vulkan/gskvulkanrenderpass.c',
     'vulkan/gskvulkanshader.c',
   ])
+
+  install_headers(files(['vulkan/gskvulkanrenderer.h']), subdir: 'gtk-4.0/gsk/vulkan')
 
   subdir('resources/vulkan')
 endif # have_vulkan
