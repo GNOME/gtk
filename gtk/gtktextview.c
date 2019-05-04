@@ -57,6 +57,7 @@
 #include "gtkmagnifierprivate.h"
 #include "gtkemojichooser.h"
 #include "gtkpango.h"
+#include "gtknative.h"
 
 #include "a11y/gtktextviewaccessibleprivate.h"
 
@@ -4098,6 +4099,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GdkRectangle right_rect;
   GdkRectangle top_rect;
   GdkRectangle bottom_rect;
+  GtkWidget *chooser;
   
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -4172,6 +4174,13 @@ gtk_text_view_size_allocate (GtkWidget *widget,
    * chance to run. So we do the work here. 
    */
   gtk_text_view_flush_first_validate (text_view);
+
+  chooser = g_object_get_data (G_OBJECT (text_view), "gtk-emoji-chooser");
+  if (chooser)
+    gtk_native_check_resize (GTK_NATIVE (chooser));
+
+  if (priv->magnifier_popover)
+    gtk_native_check_resize (GTK_NATIVE (priv->magnifier_popover));
 }
 
 static void
