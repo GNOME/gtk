@@ -4641,19 +4641,6 @@ gtk_widget_real_size_allocate (GtkWidget *widget,
                                int        height,
                                int        baseline)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  if (_gtk_widget_get_realized (widget) &&
-      _gtk_widget_get_has_surface (widget) &&
-      GTK_IS_POPOVER (widget))
-     {
-       GtkAllocation window_alloc;
-
-       gtk_widget_get_surface_allocation (widget, &window_alloc);
-       gdk_surface_move_resize (priv->surface,
-                               window_alloc.x, window_alloc.y,
-                               window_alloc.width, window_alloc.height);
-     }
 }
 
 /* translate initial/final into start/end */
