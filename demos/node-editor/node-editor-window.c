@@ -211,6 +211,8 @@ node_editor_window_load (NodeEditorWindow *self,
                           g_bytes_get_data (bytes, NULL),
                           g_bytes_get_size (bytes));
 
+  g_bytes_unref (bytes);
+
   return TRUE;
 }
 
@@ -234,13 +236,12 @@ open_response_cb (GtkWidget        *dialog,
 }
 
 static void
-open_cb (GtkWidget        *button,
-         NodeEditorWindow *self)
+show_open_filechooser (NodeEditorWindow *self)
 {
   GtkWidget *dialog;
 
   dialog = gtk_file_chooser_dialog_new ("Open node file",
-                                        GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (button))),
+                                        GTK_WINDOW (self),
                                         GTK_FILE_CHOOSER_ACTION_OPEN,
                                         "_Cancel", GTK_RESPONSE_CANCEL,
                                         "_Load", GTK_RESPONSE_ACCEPT,
@@ -251,6 +252,13 @@ open_cb (GtkWidget        *button,
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), ".");
   g_signal_connect (dialog, "response", G_CALLBACK (open_response_cb), self);
   gtk_widget_show (dialog);
+}
+
+static void
+open_cb (GtkWidget        *button,
+         NodeEditorWindow *self)
+{
+  show_open_filechooser (self);
 }
 
 static void
@@ -503,6 +511,7 @@ node_editor_window_create_renderer_widget (gpointer item,
 {
   GdkPaintable *paintable = item;
   GtkWidget *box, *label, *picture;
+  GtkWidget *row;
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_size_request (box, 120, 90);
@@ -513,8 +522,26 @@ node_editor_window_create_renderer_widget (gpointer item,
   picture = gtk_picture_new_for_paintable (paintable);
   gtk_container_add (GTK_CONTAINER (box), picture);
 
-  return box;
+  row = gtk_list_box_row_new ();
+  gtk_container_add (GTK_CONTAINER (row), box);
+  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
+
+  return row;
 }
+
+static void
+window_open (GSimpleAction *action,
+             GVariant      *parameter,
+             gpointer       user_data)
+{
+  NodeEditorWindow *self = user_data;
+
+  show_open_filechooser (self);
+}
+
+static GActionEntry win_entries[] = {
+  { "open", window_open, NULL, NULL, NULL },
+};
 
 static void
 node_editor_window_init (NodeEditorWindow *self)
@@ -530,6 +557,8 @@ node_editor_window_init (NodeEditorWindow *self)
 
   self->errors = g_array_new (FALSE, TRUE, sizeof (TextViewError));
   g_array_set_clear_func (self->errors, (GDestroyNotify)text_view_error_free);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (self), win_entries, G_N_ELEMENTS (win_entries), self);
 }
 
 NodeEditorWindow *

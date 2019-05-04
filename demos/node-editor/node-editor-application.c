@@ -56,16 +56,16 @@ static GActionEntry app_entries[] =
 static void
 node_editor_application_startup (GApplication *app)
 {
-  const gchar *quit_accels[2] = { "<Ctrl>Q", NULL };
+  const char *quit_accels[2] = { "<Ctrl>Q", NULL };
+  const char *open_accels[2] = { "<Ctrl>O", NULL };
 
   G_APPLICATION_CLASS (node_editor_application_parent_class)->startup (app);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
                                    app);
-  gtk_application_set_accels_for_action (GTK_APPLICATION (app),
-                                         "app.quit",
-                                         quit_accels);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (app), "app.quit", quit_accels);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (app), "win.open", open_accels);
 }
 
 static void
