@@ -47,9 +47,6 @@ gboolean        _gtk_window_group_widget_is_blocked_for_device (GtkWindowGroup *
 void            _gtk_window_unset_focus_and_default (GtkWindow *window,
                                                      GtkWidget *widget);
 
-void            _gtk_window_set_is_active          (GtkWindow *window,
-                                                    gboolean   is_active);
-
 void            _gtk_window_set_allocation         (GtkWindow     *window,
                                                     int            width,
                                                     int            height,

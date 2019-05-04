@@ -503,6 +503,8 @@ static void        gtk_window_do_popup         (GtkWindow      *window,
 static void gtk_window_style_updated (GtkWidget     *widget);
 static void gtk_window_state_flags_changed (GtkWidget     *widget,
 					     GtkStateFlags  previous_state);
+static void _gtk_window_set_is_active (GtkWindow *window,
+			               gboolean   is_active);
 
 static GListStore  *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
@@ -8946,7 +8948,7 @@ gtk_window_activate_key (GtkWindow   *window,
   return gtk_window_activate_menubar (window, event);
 }
 
-/**
+/*
  * _gtk_window_set_is_active:
  * @window: a #GtkWindow
  * @is_active: %TRUE if the window is in the currently active toplevel
@@ -8955,7 +8957,7 @@ gtk_window_activate_key (GtkWindow   *window,
  * of the currently active toplevel window (taking into account inter-process
  * embedding.)
  **/
-void
+static void
 _gtk_window_set_is_active (GtkWindow *window,
 			   gboolean   is_active)
 {
