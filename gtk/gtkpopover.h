@@ -48,12 +48,6 @@ struct _GtkPopoverClass
 {
   GtkBinClass parent_class;
 
-  /* keybinding signals */
-
-  void     (* close)            (GtkPopover *popover);
-
-  /* signals */
-
   void     (* closed)           (GtkPopover *popover);
 };
 
