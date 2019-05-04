@@ -167,11 +167,9 @@ populate_recent_section (GtkEmojiChooser *chooser)
       empty = FALSE;
     }
 
-  if (!empty)
-    {
-      gtk_widget_show (chooser->recent.box);
-      gtk_widget_set_sensitive (chooser->recent.button, TRUE);
-    }
+  gtk_widget_set_visible (chooser->recent.box, !empty);
+  gtk_widget_set_sensitive (chooser->recent.button, !empty);
+
   g_variant_unref (variant);
 }
 
@@ -492,9 +490,6 @@ populate_emoji_chooser (gpointer data)
         return G_SOURCE_CONTINUE;
     }
 
-  /* We scroll to the top on show, so check the right button for the 1st time */
-  gtk_widget_set_state_flags (chooser->recent.button, GTK_STATE_FLAG_CHECKED, FALSE);
-
   g_variant_iter_free (chooser->iter);
   chooser->iter = NULL;
   chooser->box = NULL;
@@ -529,6 +524,9 @@ adj_value_changed (GtkAdjustment *adj,
     {
       EmojiSection const *section = sections[i];
       GtkAllocation alloc;
+
+      if (!gtk_widget_get_visible (section->box))
+        continue;
 
       if (section->heading)
         gtk_widget_get_allocation (section->heading, &alloc);
@@ -744,6 +742,7 @@ gtk_emoji_chooser_show (GtkWidget *widget)
 
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (chooser->scrolled_window));
   gtk_adjustment_set_value (adj, 0);
+  adj_value_changed (adj, chooser);
 
   gtk_entry_set_text (GTK_ENTRY (chooser->search_entry), "");
 }
