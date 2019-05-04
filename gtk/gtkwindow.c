@@ -6232,47 +6232,6 @@ get_active_region_type (GtkWindow *window, gint x, gint y)
   return GTK_WINDOW_REGION_CONTENT;
 }
 
-static void
-do_focus_change (GtkWidget *widget,
-                 gboolean   in)
-{
-  GdkSeat *seat;
-  GdkDevice *device;
-  GdkEvent *event;
-  GtkRoot *root;
-  GtkStateFlags flags;
-
-  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-  device = gdk_seat_get_keyboard (seat);
-
-  event = gdk_event_new (GDK_FOCUS_CHANGE);
-  gdk_event_set_display (event, gtk_widget_get_display (widget));
-  gdk_event_set_device (event, device);
-
-  event->any.type = GDK_FOCUS_CHANGE;
-  event->any.surface = _gtk_widget_get_surface (widget);
-  if (event->any.surface)
-    g_object_ref (event->any.surface);
-  event->focus_change.in = in;
-  event->focus_change.mode = GDK_CROSSING_STATE_CHANGED;
-  event->focus_change.detail = GDK_NOTIFY_ANCESTOR;
-
-  flags = GTK_STATE_FLAG_FOCUSED;
-  root = gtk_widget_get_root (widget);
-  if (!GTK_IS_WINDOW (root) || gtk_window_get_focus_visible (GTK_WINDOW (root)))
-    flags |= GTK_STATE_FLAG_FOCUS_VISIBLE;
-
-  if (in)
-    gtk_widget_set_state_flags (widget, flags, FALSE);
-  else
-    gtk_widget_unset_state_flags (widget, flags);
-
-  gtk_widget_set_has_focus (widget, in);
-  gtk_widget_event (widget, event);
-
-  g_object_unref (event);
-}
-
 static gboolean
 gtk_window_has_mnemonic_modifier_pressed (GtkWindow *window)
 {
@@ -8963,34 +8922,13 @@ _gtk_window_set_is_active (GtkWindow *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  g_return_if_fail (GTK_IS_WINDOW (window));
+  if (priv->is_active == is_active)
+    return;
 
-  is_active = is_active != FALSE;
+  priv->is_active = is_active;
 
-  if (is_active != priv->is_active)
-    {
-      GtkWidget *widget = GTK_WIDGET (window);
-
-      priv->is_active = is_active;
-
-      if (is_active)
-        {
-          if (priv->focus_widget &&
-              priv->focus_widget != widget &&
-              !gtk_widget_has_focus (priv->focus_widget))
-            do_focus_change (priv->focus_widget, TRUE);
-        }
-      else
-        {
-          if (priv->focus_widget &&
-              priv->focus_widget != widget &&
-              gtk_widget_has_focus (priv->focus_widget))
-            do_focus_change (priv->focus_widget, FALSE);
-        }
-
-      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_IS_ACTIVE]);
-      _gtk_window_accessible_set_is_active (window, is_active);
-    }
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_IS_ACTIVE]);
+  _gtk_window_accessible_set_is_active (window, is_active);
 }
 
 /**
