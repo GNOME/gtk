@@ -325,7 +325,7 @@
 
     <para>
       Typical uses of GMenu inside GTK are to set up an application
-      menu or menubar with gtk_appication_set_app_menu() or
+      menu or menubar with gtk_application_set_app_menu() or
       gtk_application_set_menubar(). Another, maybe more common use
       is to create a popover for a menubutton, using
       gtk_menu_button_set_menu_model().
