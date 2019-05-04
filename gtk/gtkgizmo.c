@@ -107,6 +107,7 @@ gtk_gizmo_new (const char              *css_name,
 {
   GtkGizmo *gizmo = GTK_GIZMO (g_object_new (GTK_TYPE_GIZMO,
                                              "css-name", css_name,
+                                             "name", css_name,
                                              NULL));
 
   gizmo->measure_func  = measure_func;
