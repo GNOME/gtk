@@ -10,6 +10,7 @@
         <child>
           <object class="GtkSearchEntry" id="search_entry">
             <signal name="search-changed" handler="search_changed"/>
+            <signal name="stop-search" handler="stop_search"/>
           </object>
         </child>
         <child>

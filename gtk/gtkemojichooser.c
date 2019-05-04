@@ -610,6 +610,13 @@ search_changed (GtkEntry *entry,
 }
 
 static void
+stop_search (GtkEntry *entry,
+             gpointer  data)
+{
+  gtk_popover_popdown (GTK_POPOVER (data));
+}
+
+static void
 setup_section (GtkEmojiChooser *chooser,
                EmojiSection   *section,
                const char     *first,
@@ -760,6 +767,7 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, emoji_activated);
   gtk_widget_class_bind_template_callback (widget_class, search_changed);
+  gtk_widget_class_bind_template_callback (widget_class, stop_search);
   gtk_widget_class_bind_template_callback (widget_class, pressed_cb);
   gtk_widget_class_bind_template_callback (widget_class, long_pressed_cb);
 }
