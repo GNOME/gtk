@@ -1883,13 +1883,13 @@ render_cross_fade_node (GskGLRenderer       *self,
                      &node->bounds,
                      start_node,
                      &start_texture_id, &is_offscreen1,
-                     FORCE_OFFSCREEN | RESET_CLIP);
+                     FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY);
 
   add_offscreen_ops (self, builder,
                      &node->bounds,
                      end_node,
                      &end_texture_id, &is_offscreen2,
-                     FORCE_OFFSCREEN | RESET_CLIP);
+                     FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY);
 
   ops_set_program (builder, &self->cross_fade_program);
   op.op = OP_CHANGE_CROSS_FADE;
