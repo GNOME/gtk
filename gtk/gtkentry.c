@@ -72,6 +72,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
+#include "gtknative.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -1629,6 +1630,9 @@ gtk_entry_size_allocate (GtkWidget *widget,
       if (completion)
         _gtk_entry_completion_resize_popup (completion);
     }
+
+  if (priv->emoji_chooser)
+    gtk_native_check_resize (GTK_NATIVE (priv->emoji_chooser));
 }
 
 static void
