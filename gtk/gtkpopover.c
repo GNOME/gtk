@@ -144,7 +144,6 @@ typedef struct {
 } GtkPopoverPrivate;
 
 enum {
-  CLOSE,
   CLOSED,
   LAST_SIGNAL
 };
@@ -293,6 +292,21 @@ gtk_popover_focus_out (GtkWidget *widget)
 {
 }
 
+static gboolean
+gtk_popover_key_pressed (GtkWidget       *widget,
+                         guint            keyval,
+                         guint            keycode,
+                         GdkModifierType  state)
+{
+  if (keyval == GDK_KEY_Escape)
+    {
+      gtk_popover_popdown (GTK_POPOVER (widget));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 ensure_state_flag_backdrop (GtkWidget *widget)
 {
@@ -438,6 +452,7 @@ gtk_popover_init (GtkPopover *popover)
   controller = gtk_event_controller_key_new ();
   g_signal_connect_swapped (controller, "focus-in", G_CALLBACK (gtk_popover_focus_in), popover);
   g_signal_connect_swapped (controller, "focus-out", G_CALLBACK (gtk_popover_focus_out), popover);
+  g_signal_connect_swapped (controller, "key-pressed", G_CALLBACK (gtk_popover_key_pressed), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
 
   priv->contents_widget = gtk_gizmo_new ("contents",
@@ -775,12 +790,6 @@ gtk_popover_get_property (GObject      *object,
 }
 
 static void
-gtk_popover_close (GtkPopover *popover)
-{
-  gtk_widget_hide (GTK_WIDGET (popover));
-}
-
-static void
 gtk_popover_add (GtkContainer *container,
                  GtkWidget    *child)
 {
@@ -831,8 +840,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   container_class->add = gtk_popover_add;
   container_class->remove = gtk_popover_remove;
 
-  klass->close = gtk_popover_close;
-
   properties[PROP_RELATIVE_TO] =
       g_param_spec_object ("relative-to",
                            P_("Relative to"),
@@ -869,16 +876,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
-
-  signals[CLOSE] =
-    g_signal_new (I_("close"),
-                  G_TYPE_FROM_CLASS (object_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkPopoverClass, close),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE,
-                  0);
 
   signals[CLOSED] =
     g_signal_new (I_("closed"),
