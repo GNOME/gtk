@@ -510,7 +510,10 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
   GdkWaylandSurface *impl;
   GdkFrameClock *frame_clock;
 
-  frame_clock = _gdk_frame_clock_idle_new ();
+  if (parent)
+    frame_clock = g_object_ref (gdk_surface_get_frame_clock (parent));
+  else
+    frame_clock = _gdk_frame_clock_idle_new ();
 
   surface = g_object_new (GDK_TYPE_WAYLAND_SURFACE,
                           "display", display,
