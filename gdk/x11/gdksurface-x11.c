@@ -809,7 +809,10 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   x11_screen = GDK_X11_SCREEN (display_x11->screen);
   xparent = GDK_SCREEN_XROOTWIN (x11_screen);
 
-  frame_clock = _gdk_frame_clock_idle_new ();
+  if (parent)
+    frame_clock = g_object_ref (gdk_surface_get_frame_clock (parent));
+  else
+    frame_clock = _gdk_frame_clock_idle_new ();
 
   surface = g_object_new (GDK_TYPE_X11_SURFACE,
                           "display", display,
