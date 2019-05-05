@@ -7,7 +7,7 @@ TEST_RESULT_DIR=${TEST_RESULT_DIR:-/tmp}
 shopt -s nullglob
 TESTS=( "$TEST_DATA_DIR"/*.ui )
 
-echo "1..${#TESTS}"
+echo "1..${#TESTS[*]}"
 
 I=1
 for t in ${TESTS[*]}; do
