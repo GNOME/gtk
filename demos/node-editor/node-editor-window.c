@@ -465,7 +465,7 @@ create_texture (NodeEditorWindow *self)
     return NULL;
 
   /* ahem */
-  renderer = GTK_ROOT_GET_IFACE (gtk_widget_get_root (GTK_WIDGET (self)))->get_renderer (gtk_widget_get_root (GTK_WIDGET (self)));
+  renderer = GTK_NATIVE_GET_IFACE (gtk_widget_get_native (GTK_WIDGET (self)))->get_renderer (gtk_widget_get_native (GTK_WIDGET (self)));
   texture = gsk_renderer_render_texture (renderer, node, NULL);
   gsk_render_node_unref (node);
 
