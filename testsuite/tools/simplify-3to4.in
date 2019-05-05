@@ -1,7 +1,7 @@
 #! /bin/bash
 
 GTK_BUILDER_TOOL=${GTK_BUILDER_TOOL:-gtk-builder-tool}
-TEST_DATA_DIR=${TEST_DATA_DIR:-./simplify-data}
+TEST_DATA_DIR=${TEST_DATA_DIR:-./simplify-data-3to4}
 TEST_RESULT_DIR=${TEST_RESULT_DIR:-/tmp}
 
 shopt -s nullglob
@@ -17,7 +17,7 @@ for t in ${TESTS[*]}; do
   diff="$TEST_RESULT_DIR/$name.diff"
   ref="$TEST_RESULT_DIR/$name.ref"
 
-  $GTK_BUILDER_TOOL simplify $t 2>/dev/null >$result
+  $GTK_BUILDER_TOOL simplify --3to4 $t 2>/dev/null >$result
 
   if diff -u "$expected" "$result" > "$diff"; then
     echo "ok $I $name"
