@@ -141,7 +141,23 @@ typedef enum {
   PROP_KIND_OBJECT,
   PROP_KIND_PACKING,
   PROP_KIND_CELL_PACKING,
+  PROP_KIND_LAYOUT
 } PropKind;
+
+static PropKind
+get_prop_kind (Element *element)
+{
+  g_assert (g_str_equal (element->element_name, "property"));
+
+  if (g_str_equal (element->parent->element_name, "packing"))
+    return PROP_KIND_PACKING;
+  else if (g_str_equal (element->parent->element_name, "layout"))
+    return PROP_KIND_LAYOUT;
+  else if (g_str_equal (element->parent->element_name, "cell-packing"))
+    return PROP_KIND_CELL_PACKING;
+  else
+    return PROP_KIND_OBJECT;
+}
 
 /* A number of properties unfortunately can't be omitted even
  * if they are nominally set to their default value. In many
@@ -165,6 +181,8 @@ needs_explicit_setting (GParamSpec *pspec,
     { "GtkRadioButton", "draw-indicator", PROP_KIND_OBJECT },
     { "GtkWidget", "hexpand", PROP_KIND_OBJECT },
     { "GtkWidget", "vexpand", PROP_KIND_OBJECT },
+    { "GtkGrid", "top-attach", PROP_KIND_LAYOUT },
+    { "GtkGrid", "left-attach", PROP_KIND_LAYOUT },
   };
   gboolean found;
   gint k;
@@ -179,6 +197,7 @@ needs_explicit_setting (GParamSpec *pspec,
           strcmp (pspec->name, props[k].property) == 0 &&
           kind == props[k].kind)
         {
+g_print ("explicit: %s::%s\n", class_name, pspec->name);
           found = TRUE;
           break;
         }
@@ -229,6 +248,7 @@ keep_for_rewrite (const char *class_name,
           strcmp (canonical_name, props[k].property) == 0 &&
           kind == props[k].kind)
         {
+g_print ("keep for rewrite: %s::%s\n", class_name, canonical_name);
           found = TRUE;
           break;
         }
@@ -313,6 +333,18 @@ canonicalize_key (gchar *key)
     }
 }
 
+static struct {
+  const char *class;
+  const char *layout_manager;
+} layout_managers[] = {
+  { "GtkBox", "GtkBoxLayout" },
+  { "GtkGrid", "GtkGridLayout" },
+  { "GtkFixed", "GtkFixedLayout" },
+  { "GtkFileChooserButton", "GtkBinLayout" },
+  { "GtkFileChooserWidget", "GtkBinLayout" },
+  { "GtkOverlay", "GtkOverlayLayout" }
+};
+
 static GParamSpec *
 get_property_pspec (MyParserData *data,
                     const gchar  *class_name,
@@ -340,9 +372,11 @@ get_property_pspec (MyParserData *data,
     case PROP_KIND_OBJECT:
       pspec = g_object_class_find_property (class, canonical_name);
       break;
+
     case PROP_KIND_PACKING:
       pspec = NULL;
       break;
+
     case PROP_KIND_CELL_PACKING:
       {
         GObjectClass *cell_class;
@@ -353,6 +387,40 @@ get_property_pspec (MyParserData *data,
         g_type_class_unref (cell_class);
       }
       break;
+
+    case PROP_KIND_LAYOUT:
+      {
+        int i;
+        const char *layout_manager = NULL;
+
+        pspec = NULL;
+
+        for (i = 0; i < G_N_ELEMENTS (layout_managers); i++)
+          {
+            if (g_str_equal (layout_managers[i].class, class_name))
+              {
+                layout_manager = layout_managers[i].layout_manager;
+                break;
+              }
+          }
+
+        if (layout_manager)
+          {
+            GtkLayoutManagerClass *layout_manager_class;
+
+            layout_manager_class = GTK_LAYOUT_MANAGER_CLASS (g_type_class_ref (g_type_from_name (layout_manager)));
+            if (layout_manager_class->layout_child_type != G_TYPE_INVALID)
+              {
+                GObjectClass *layout_child_class;
+                layout_child_class = g_type_class_ref (layout_manager_class->layout_child_type);
+                pspec = g_object_class_find_property (layout_child_class, canonical_name);
+                g_type_class_unref (layout_child_class);
+              }
+            g_type_class_unref (layout_manager_class);
+          }
+      }
+      break;
+
     default:
       g_assert_not_reached ();
     }
@@ -496,11 +564,7 @@ property_is_boolean (Element      *element,
   int i;
   PropKind kind;
 
-  if (g_str_equal (element->parent->element_name, "packing"))
-    kind = PROP_KIND_PACKING;
-  else
-    kind = PROP_KIND_OBJECT;
-
+  kind = get_prop_kind (element);
   class_name = get_class_name (element);
   property_name = "";
 
@@ -530,13 +594,7 @@ property_can_be_omitted (Element      *element,
   GParamSpec *pspec;
   PropKind kind;
 
-  if (g_str_equal (element->parent->element_name, "packing"))
-    kind = PROP_KIND_PACKING;
-  else if (g_str_equal (element->parent->element_name, "cell-packing"))
-    kind = PROP_KIND_CELL_PACKING;
-  else
-    kind = PROP_KIND_OBJECT;
-
+  kind = get_prop_kind (element);
   class_name = get_class_name (element);
   property_name = "";
   value_string = element->data;
@@ -554,7 +612,7 @@ property_can_be_omitted (Element      *element,
         property_name = (const gchar *)element->attribute_values[i];
     }
 
-  if (data->convert3to4 && 
+  if (data->convert3to4 &&
       keep_for_rewrite (class_name, property_name, kind))
     return FALSE; /* keep, will be rewritten */
 
@@ -571,9 +629,10 @@ property_can_be_omitted (Element      *element,
       const char *kind_str[] = {
         "",
         "Packing ",
-        "Cell "
+        "Cell ",
+        "Layout "
       };
-     
+
       g_printerr (_("%s: %sproperty %s::%s not found\n"),
                   data->input_filename, kind_str[kind], class_name, property_name);
       return FALSE;
@@ -613,10 +672,7 @@ property_has_been_removed (Element      *element,
   gint i, k;
   PropKind kind;
 
-  if (g_str_equal (element->parent->element_name, "packing"))
-    kind = PROP_KIND_PACKING;
-  else
-    kind = PROP_KIND_OBJECT;
+  kind = get_prop_kind (element);
 
   class_name = get_class_name (element);
   property_name = "";
@@ -1272,6 +1328,7 @@ rewrite_grid_layout (Element *element,
     }
 }
 
+/* returns TRUE to remove the element from the parent */
 static gboolean
 simplify_element (Element      *element,
                   MyParserData *data)
@@ -1308,58 +1365,6 @@ simplify_element (Element      *element,
       property_can_be_omitted (element, data))
     return TRUE;
 
-  if (data->convert3to4)
-    {
-      if (g_str_equal (element->element_name, "object") &&
-          g_str_equal (get_class_name (element), "GtkStack"))
-        rewrite_stack (element, data);
-
-      if (g_str_equal (element->element_name, "object") &&
-          g_str_equal (get_class_name (element), "GtkAssistant"))
-        rewrite_assistant (element, data);
-
-      if (g_str_equal (element->element_name, "object") &&
-          g_str_equal (get_class_name (element), "GtkNotebook"))
-        rewrite_notebook (element, data);
-
-      if (g_str_equal (element->element_name, "object") &&
-          (g_str_equal (get_class_name (element), "GtkActionBar") ||
-           g_str_equal (get_class_name (element), "GtkHeaderBar")))
-        rewrite_pack_type (element, data);
-
-      if (g_str_equal (element->element_name, "object") &&
-          g_str_equal (get_class_name (element), "GtkPopoverMenu"))
-        rewrite_child_prop_to_prop (element, data, "submenu", "name");
-
-      if (g_str_equal (element->element_name, "object") &&
-          g_str_equal (get_class_name (element), "GtkToolbar"))
-        rewrite_child_prop_to_prop (element, data, "expand", "expand-item");
-
-      if (g_str_equal (element->element_name, "object") &&
-          g_str_equal (get_class_name (element), "GtkToolbar"))
-        rewrite_child_prop_to_prop (element, data, "homogeneous", "homogeneous");
-
-      if (g_str_equal (element->element_name, "object") &&
-          g_str_equal (get_class_name (element), "GtkPaned"))
-        rewrite_paned (element, data);
-
-      if (g_str_equal (element->element_name, "object") &&
-          g_str_equal (get_class_name (element), "GtkOverlay"))
-        rewrite_layout_props (element, data);
-
-      if (g_str_equal (element->element_name, "object") &&
-          g_str_equal (get_class_name (element), "GtkGrid"))
-        rewrite_grid_layout (element, data);
-
-      if (g_str_equal (element->element_name, "object") &&
-          g_str_equal (get_class_name (element), "GtkFixed"))
-        rewrite_layout_props (element, data);
-
-      if (g_str_equal (element->element_name, "property") &&
-          property_has_been_removed (element, data))
-        return TRUE;
-    }
-
   return FALSE;
 }
 
@@ -1367,6 +1372,83 @@ static void
 simplify_tree (MyParserData *data)
 {
   simplify_element (data->root, data);
+}
+
+static gboolean
+rewrite_element (Element      *element,
+                 MyParserData *data)
+{
+  GList *l;
+
+  l = element->children;
+  while (l)
+    {
+      GList *next = l->next;
+      Element *child = l->data;
+      if (rewrite_element (child, data))
+        {
+          element->children = g_list_remove (element->children, child);
+          free_element (child);
+        }
+      l = next;
+    }
+
+  if (g_str_equal (element->element_name, "object") &&
+      g_str_equal (get_class_name (element), "GtkStack"))
+    rewrite_stack (element, data);
+
+  if (g_str_equal (element->element_name, "object") &&
+      g_str_equal (get_class_name (element), "GtkAssistant"))
+    rewrite_assistant (element, data);
+
+  if (g_str_equal (element->element_name, "object") &&
+      g_str_equal (get_class_name (element), "GtkNotebook"))
+    rewrite_notebook (element, data);
+
+  if (g_str_equal (element->element_name, "object") &&
+      (g_str_equal (get_class_name (element), "GtkActionBar") ||
+       g_str_equal (get_class_name (element), "GtkHeaderBar")))
+    rewrite_pack_type (element, data);
+
+  if (g_str_equal (element->element_name, "object") &&
+      g_str_equal (get_class_name (element), "GtkPopoverMenu"))
+    rewrite_child_prop_to_prop (element, data, "submenu", "name");
+
+  if (g_str_equal (element->element_name, "object") &&
+      g_str_equal (get_class_name (element), "GtkToolbar"))
+    rewrite_child_prop_to_prop (element, data, "expand", "expand-item");
+
+  if (g_str_equal (element->element_name, "object") &&
+      g_str_equal (get_class_name (element), "GtkToolbar"))
+    rewrite_child_prop_to_prop (element, data, "homogeneous", "homogeneous");
+
+  if (g_str_equal (element->element_name, "object") &&
+      g_str_equal (get_class_name (element), "GtkPaned"))
+    rewrite_paned (element, data);
+
+  if (g_str_equal (element->element_name, "object") &&
+      g_str_equal (get_class_name (element), "GtkOverlay"))
+    rewrite_layout_props (element, data);
+
+  if (g_str_equal (element->element_name, "object") &&
+      g_str_equal (get_class_name (element), "GtkGrid"))
+    rewrite_grid_layout (element, data);
+
+  if (g_str_equal (element->element_name, "object") &&
+      g_str_equal (get_class_name (element), "GtkFixed"))
+    rewrite_layout_props (element, data);
+
+  if (g_str_equal (element->element_name, "property") &&
+      property_has_been_removed (element, data))
+    return TRUE;
+
+  return FALSE;
+}
+
+static void
+rewrite_tree (MyParserData *data)
+{
+  rewrite_element (data->root, data);
 }
 
 /* For properties which have changed their default
@@ -1437,8 +1519,7 @@ enhance_element (Element      *element,
 static void
 enhance_tree (MyParserData *data)
 {
-  if (data->convert3to4)
-    enhance_element (data->root, data);
+  enhance_element (data->root, data);
 }
 
 static void
@@ -1542,7 +1623,11 @@ simplify_file (const char *filename,
 
   data.builder = gtk_builder_new ();
 
-  enhance_tree (&data);
+  if (data.convert3to4)
+    {
+      enhance_tree (&data);
+      rewrite_tree (&data);
+    }
   simplify_tree (&data);
 
   dump_tree (&data);
