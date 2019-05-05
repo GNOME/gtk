@@ -210,6 +210,10 @@ keep_for_rewrite (const char *class_name,
     { "GtkGrid", "top-attach", PROP_KIND_PACKING },
     { "GtkGrid", "width", PROP_KIND_PACKING },
     { "GtkGrid", "height", PROP_KIND_PACKING },
+    { "GtkStack", "name", PROP_KIND_PACKING },
+    { "GtkStack", "title", PROP_KIND_PACKING },
+    { "GtkStack", "icon-name", PROP_KIND_PACKING },
+    { "GtkStack", "needs-attention", PROP_KIND_PACKING },
   };
   gboolean found;
   gint k;
