@@ -358,8 +358,11 @@ get_property_pspec (MyParserData *data,
   return pspec;
 }
 
+static const char *get_class_name (Element *element);
+
 static gboolean
-value_is_default (MyParserData *data,
+value_is_default (Element      *element,
+                  MyParserData *data,
                   GParamSpec   *pspec,
                   const gchar  *value_string)
 {
@@ -377,7 +380,26 @@ value_is_default (MyParserData *data,
       ret = FALSE;
     }
   else
-    ret = g_param_value_defaults (pspec, &value);
+    {
+      /* GtkWidget::visible has a 'smart' default */
+      if (pspec->owner_type == GTK_TYPE_WIDGET &&
+          g_str_equal (pspec->name, "visible"))
+        {
+          const char *class_name = get_class_name (element);
+          GType type = g_type_from_name (class_name);
+          gboolean default_value;
+
+          if (g_type_is_a (type, GTK_TYPE_ROOT) ||
+              g_type_is_a (type, GTK_TYPE_POPOVER))
+            default_value = FALSE;
+          else
+            default_value = TRUE;
+
+          ret = g_value_get_boolean (&value) == default_value;
+        }
+      else
+        ret = g_param_value_defaults (pspec, &value);
+    }
 
   g_value_reset (&value);
 
@@ -556,7 +578,7 @@ property_can_be_omitted (Element      *element,
   if (needs_explicit_setting (pspec, kind))
     return FALSE;
 
-  return value_is_default (data, pspec, value_string);
+  return value_is_default (element, data, pspec, value_string);
 }
 
 static gboolean
@@ -1291,11 +1313,11 @@ simplify_element (Element      *element,
       if (g_str_equal (element->element_name, "object") &&
           g_str_equal (get_class_name (element), "GtkAssistant"))
         rewrite_assistant (element, data);
-          
+
       if (g_str_equal (element->element_name, "object") &&
           g_str_equal (get_class_name (element), "GtkNotebook"))
         rewrite_notebook (element, data);
-          
+
       if (g_str_equal (element->element_name, "object") &&
           (g_str_equal (get_class_name (element), "GtkActionBar") ||
            g_str_equal (get_class_name (element), "GtkHeaderBar")))
@@ -1343,6 +1365,78 @@ simplify_tree (MyParserData *data)
   simplify_element (data->root, data);
 }
 
+/* For properties which have changed their default
+ * value between 3 and 4, we make sure that their
+ * old default value is present in the tree before
+ * simplifying it.
+ *
+ * So far, this is just GtkWidget::visible,
+ * changing its default from 0 to 1.
+ */
+static void
+add_old_default_properties (Element      *element,
+                            MyParserData *data)
+{
+  const char *class_name;
+  GType type;
+
+  if (!g_str_equal (element->element_name, "object"))
+    return;
+
+  class_name = get_class_name (element);
+  type = g_type_from_name (class_name);
+  if (g_type_is_a (type, GTK_TYPE_WIDGET))
+    {
+      GList *l;
+      gboolean has_visible = FALSE;
+
+      for (l = element->children; l; l = l->next)
+        {
+          Element *prop = l->data;
+          const char *name = get_attribute_value (prop, "name");
+
+          if (g_str_equal (prop->element_name, "property") &&
+              g_str_equal (name, "visible"))
+            has_visible = TRUE;
+        }
+
+      if (!has_visible)
+        {
+          Element *new_prop = g_new0 (Element, 1);
+          new_prop->parent = element;
+          new_prop->element_name = g_strdup ("property");
+          new_prop->attribute_names = g_new0 (char *, 2);
+          new_prop->attribute_names[0] = g_strdup ("name");
+          new_prop->attribute_values = g_new0 (char *, 2);
+          new_prop->attribute_values[0] = g_strdup ("visible");
+          new_prop->data = g_strdup ("0");
+          element->children = g_list_prepend (element->children, new_prop);
+        }
+    }
+}
+
+static void
+enhance_element (Element      *element,
+                 MyParserData *data)
+{
+  GList *l;
+
+  add_old_default_properties (element, data);
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *child = l->data;
+      enhance_element (child, data);
+    }
+}
+
+static void
+enhance_tree (MyParserData *data)
+{
+  if (data->convert3to4)
+    enhance_element (data->root, data);
+}
+
 static void
 dump_element (Element *element,
               FILE    *output,
@@ -1384,7 +1478,7 @@ dump_element (Element *element,
       g_fprintf (output, "</%s>\n", element->element_name);
     }
   else
-    g_fprintf (output, "/>\n"); 
+    g_fprintf (output, "/>\n");
 }
 
 static void
@@ -1444,6 +1538,7 @@ simplify_file (const char *filename,
 
   data.builder = gtk_builder_new ();
 
+  enhance_tree (&data);
   simplify_tree (&data);
 
   dump_tree (&data);
