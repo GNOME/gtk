@@ -42,6 +42,7 @@
 
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
+#include "gskrendernodeparserprivate.h"
 
 #include <graphene-gobject.h>
 
@@ -328,19 +329,11 @@ gsk_render_node_diff (GskRenderNode  *node1,
 GBytes *
 gsk_render_node_serialize (GskRenderNode *node)
 {
-  GVariant *node_variant, *variant;
   GBytes *result;
+  char *str;
 
-  node_variant = gsk_render_node_serialize_node (node);
-
-  variant = g_variant_new ("(suuv)",
-                           GSK_RENDER_NODE_SERIALIZATION_ID,
-                           (guint32) GSK_RENDER_NODE_SERIALIZATION_VERSION,
-                           (guint32) gsk_render_node_get_node_type (node),
-                           node_variant);
-
-  result = g_variant_get_data_as_bytes (variant);
-  g_variant_unref (variant);
+  str = gsk_render_node_serialize_to_string (node);
+  result = g_bytes_new_take (str, strlen (str));
 
   return result;
 }
@@ -394,39 +387,13 @@ gsk_render_node_write_to_file (GskRenderNode *node,
  *     error.
  **/
 GskRenderNode *
-gsk_render_node_deserialize (GBytes  *bytes,
-                             GError **error)
+gsk_render_node_deserialize (GBytes            *bytes,
+                             GskParseErrorFunc  error_func,
+                             gpointer           user_data)
 {
-  char *id_string;
-  guint32 version, node_type;
-  GVariant *variant, *node_variant;
   GskRenderNode *node = NULL;
 
-  variant = g_variant_new_from_bytes (G_VARIANT_TYPE ("(suuv)"), bytes, FALSE);
-
-  g_variant_get (variant, "(suuv)", &id_string, &version, &node_type, &node_variant);
-
-  if (!g_str_equal (id_string, GSK_RENDER_NODE_SERIALIZATION_ID))
-    {
-      g_set_error (error, GSK_SERIALIZATION_ERROR, GSK_SERIALIZATION_UNSUPPORTED_FORMAT,
-                   "Data not in GskRenderNode serialization format.");
-      goto out;
-    }
-
-  if (version != GSK_RENDER_NODE_SERIALIZATION_VERSION)
-    {
-      g_set_error (error, GSK_SERIALIZATION_ERROR, GSK_SERIALIZATION_UNSUPPORTED_VERSION,
-                   "Format version %u not supported.", version);
-      goto out;
-    }
-
-  node = gsk_render_node_deserialize_node (node_type, node_variant, error);
-
-out:
-  g_free (id_string);
-  g_variant_unref (node_variant);
-  g_variant_unref (variant);
+  node = gsk_render_node_deserialize_from_bytes (bytes, error_func, user_data);
 
   return node;
 }
-

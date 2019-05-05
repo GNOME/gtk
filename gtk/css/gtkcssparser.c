@@ -1001,6 +1001,15 @@ gtk_css_parser_consume_url (GtkCssParser *self)
 }
 
 gboolean
+gtk_css_parser_has_number (GtkCssParser *self)
+{
+  return gtk_css_parser_has_token (self, GTK_CSS_TOKEN_SIGNED_NUMBER)
+      || gtk_css_parser_has_token (self, GTK_CSS_TOKEN_SIGNLESS_NUMBER)
+      || gtk_css_parser_has_token (self, GTK_CSS_TOKEN_SIGNED_INTEGER)
+      || gtk_css_parser_has_token (self, GTK_CSS_TOKEN_SIGNLESS_INTEGER);
+}
+
+gboolean
 gtk_css_parser_consume_number (GtkCssParser *self,
                                double       *number)
 {

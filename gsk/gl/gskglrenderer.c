@@ -1,6 +1,6 @@
 #include "config.h"
 
-#include "gskglrendererprivate.h"
+#include "gskglrenderer.h"
 
 #include "gskdebugprivate.h"
 #include "gskenums.h"
@@ -1883,13 +1883,13 @@ render_cross_fade_node (GskGLRenderer       *self,
                      &node->bounds,
                      start_node,
                      &start_texture_id, &is_offscreen1,
-                     FORCE_OFFSCREEN | RESET_CLIP);
+                     FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY);
 
   add_offscreen_ops (self, builder,
                      &node->bounds,
                      end_node,
                      &end_texture_id, &is_offscreen2,
-                     FORCE_OFFSCREEN | RESET_CLIP);
+                     FORCE_OFFSCREEN | RESET_CLIP | RESET_OPACITY);
 
   ops_set_program (builder, &self->cross_fade_program);
   op.op = OP_CHANGE_CROSS_FADE;
@@ -3280,4 +3280,18 @@ gsk_gl_renderer_init (GskGLRenderer *self)
     self->profile_timers.gpu_time = gsk_profiler_add_timer (profiler, "gpu-time", "GPU time", FALSE, TRUE);
   }
 #endif
+}
+
+/**
+ * gsk_gl_renderer_new:
+ *
+ * Creates a new #GskRenderer using OpenGL. This is the default renderer
+ * used by GTK.
+ *
+ * Returns: a new GL renderer
+ **/
+GskRenderer *
+gsk_gl_renderer_new (void)
+{
+  return g_object_new (GSK_TYPE_GL_RENDERER, NULL);
 }

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkTextTagTable" id="tags">
+    <child type="tag">
+      <object class="GtkTextTag">
+        <property name="name">error</property>
+        <property name="underline">error</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkTextBuffer" id="text_buffer">
+    <property name="tag-table">tags</property>
+    <signal name="changed" handler="text_changed"/>
+  </object>
+  <template class="NodeEditorWindow" parent="GtkApplicationWindow">
+    <style>
+      <class name="devel"/>
+    </style>
+    <property name="title" translatable="yes">GTK Node Editor</property>
+    <property name="default-width">1024</property>
+    <property name="default-height">768</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="header">
+        <property name="title" translatable="yes">GTK Node Editor</property>
+        <property name="show-title-buttons">1</property>
+        <child type="start">
+          <object class="GtkButton">
+            <property name="icon-name">document-open-symbolic</property>
+            <property name="tooltip-text">Open node file</property>
+            <signal name="clicked" handler="open_cb"/>
+          </object>
+        </child>
+        <child type="start">
+          <object class="GtkButton">
+            <property name="icon-name">document-save-symbolic</property>
+            <property name="tooltip-text">Save to node file</property>
+            <signal name="clicked" handler="save_cb"/>
+          </object>
+        </child>
+        <child type="start">
+          <object class="GtkButton">
+            <property name="icon-name">insert-image-symbolic</property>
+            <property name="tooltip-text">Export to image</property>
+            <signal name="clicked" handler="export_image_cb"/>
+          </object>
+        </child>
+        <child type="title">
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">GTK Node Editor</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkPaned">
+        <property name="shrink-child2">false</property>
+        <property name="position">400</property>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="hscrollbar-policy">never</property>
+            <property name="expand">1</property>
+            <child>
+              <object class="GtkTextView" id="text_view">
+                <property name="buffer">text_buffer</property>
+                <property name="wrap-mode">word</property>
+                <property name="monospace">1</property>
+                <property name="has-focus">1</property>
+                <property name="top-margin">6</property>
+                <property name="left-margin">6</property>
+                <property name="right-margin">6</property>
+                <property name="bottom-margin">6</property>
+                <property name="has-tooltip">1</property>
+                <signal name="query-tooltip" handler="text_view_query_tooltip_cb"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="expand">1</property>
+                <property name="min-content-height">100</property>
+                <property name="min-content-width">100</property>
+                <child>
+                  <object class="GtkViewport">
+                    <child>
+                      <object class="GtkPicture" id="picture">
+                        <property name="can-shrink">0</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="hscrollbar-policy">never</property>
+                <child>
+                  <object class="GtkListBox" id="renderer_listbox">
+                    <property name="selection-mode">none</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
