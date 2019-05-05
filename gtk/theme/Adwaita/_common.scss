@@ -2170,19 +2170,21 @@ menuitem {
  * Popovers   *
  ***************/
 
+popover.background {
+  background-color: transparent;
+  padding: 0px;
+}
+
+popover.menu>arrow,
 popover>arrow {
   background-color: $popover_bg_color;
   border: 1px solid $borders_color;
 }
 
-popover>contents.menu {
-  padding: 8px;
-  background-color: white;
-  margin: 0px;
-}
-
 popover>contents {
-  padding: 2px;
+  padding: 8px;
+  background-color: $popover_bg_color;
+  border: 1px solid $borders_color;
   margin: 0px;
 }
 
@@ -4701,8 +4703,4 @@ popover.emoji-completion contents row box {
 
 popover.emoji-completion .emoji:hover {
   background-color: $popover_hover_color;
-}
-
-popover.menu {
-  background-color: lightgray;
 }
