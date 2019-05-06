@@ -687,7 +687,7 @@ window1
             <AtkText>
             text: Custom
             character count: 6
-            caret offset: 0
+            caret offset: -1
             default attributes: bg-color: <omitted>
                                 bg-full-height: 0
                                 direction: <omitted>
@@ -822,7 +822,7 @@ window1
                   <AtkText>
                   text: 
                   character count: 0
-                  caret offset: 0
+                  caret offset: -1
                   default attributes: bg-color: <omitted>
                                       bg-full-height: 0
                                       direction: <omitted>
@@ -920,7 +920,7 @@ window1
                     <AtkText>
                     text: S
                     character count: 1
-                    caret offset: 0
+                    caret offset: -1
                     default attributes: bg-color: <omitted>
                                         bg-full-height: 0
                                         direction: <omitted>
@@ -960,7 +960,7 @@ window1
                     <AtkText>
                     text: V
                     character count: 1
-                    caret offset: 0
+                    caret offset: -1
                     default attributes: bg-color: <omitted>
                                         bg-full-height: 0
                                         direction: <omitted>
@@ -1046,7 +1046,7 @@ window1
                     <AtkText>
                     text: H
                     character count: 1
-                    caret offset: 0
+                    caret offset: -1
                     default attributes: bg-color: <omitted>
                                         bg-full-height: 0
                                         direction: <omitted>
@@ -1118,7 +1118,7 @@ window1
                     <AtkText>
                     text: A
                     character count: 1
-                    caret offset: 0
+                    caret offset: -1
                     default attributes: bg-color: <omitted>
                                         bg-full-height: 0
                                         direction: <omitted>

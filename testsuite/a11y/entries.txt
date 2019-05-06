@@ -30,7 +30,7 @@ window1
       <AtkText>
       text: entry:
       character count: 6
-      caret offset: 0
+      caret offset: -1
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
                           direction: <omitted>
@@ -71,7 +71,7 @@ window1
       <AtkText>
       text: password entry:
       character count: 15
-      caret offset: 0
+      caret offset: -1
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
                           direction: <omitted>
@@ -112,7 +112,7 @@ window1
       <AtkText>
       text: spinbutton:
       character count: 11
-      caret offset: 0
+      caret offset: -1
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
                           direction: <omitted>
@@ -196,7 +196,7 @@ window1
       <AtkText>
       text: *************
       character count: 13
-      caret offset: 0
+      caret offset: -1
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
                           direction: <omitted>
@@ -238,7 +238,7 @@ window1
       <AtkText>
       text: icons
       character count: 5
-      caret offset: 0
+      caret offset: -1
       default attributes: bg-color: <omitted>
                           bg-full-height: 0
                           direction: <omitted>

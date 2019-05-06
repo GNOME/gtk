@@ -9,13 +9,11 @@
           <object class="GtkButton" id="button1">
             <property name="label" translatable="yes">Yes</property>
           </object>
-          <packing/>
         </child>
         <child type="end">
           <object class="GtkButton" id="page2">
             <property name="label" translatable="yes">No</property>
           </object>
-          <packing/>
         </child>
       </object>
     </child>

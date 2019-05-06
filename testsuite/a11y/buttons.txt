@@ -55,7 +55,7 @@ window1
       name: Hello World!
       member-of: button4
                  button3
-      state: checked enabled focusable sensitive showing visible
+      state: enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -73,7 +73,7 @@ window1
       name: Hello World!
       member-of: button4
                  button3
-      state: enabled focusable sensitive showing visible
+      state: checked enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
