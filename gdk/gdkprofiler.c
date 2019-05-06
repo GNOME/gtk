@@ -24,10 +24,13 @@
 #include <unistd.h>
 
 #include "gdkversionmacros.h"
-#include "capture/sp-capture-writer.h"
 #include "gdkprofiler.h"
 #include "gdkprofilerprivate.h"
 #include "gdkframeclockprivate.h"
+
+#ifndef G_OS_WIN32
+
+#include "capture/sp-capture-writer.h"
 
 static SpCaptureWriter *writer = NULL;
 static gboolean running = FALSE;
@@ -90,37 +93,6 @@ gdk_profiler_add_mark (gint64      start,
                               -1, getpid (),
                               duration,
                               "gtk", name, message);
-}
-
-/**
- * gdk_profiler_set_mark:
- * @duration: the duration of the mark, or 0
- * @name: the name of the mark (up to 40 characters)
- * @message: (optional): the message of the mark
- *
- * Insert a mark into the profiling data if we
- * are currently profiling.
- * This information will show up in tools like sysprof
- * or GNOME Builder when viewing the profiling data.
- * It can be used to mark interesting regions in the
- * captured data.
- *
- * If the duration is non-zero, the mark applies to
- * the timespan from @duration microseconds in the
- * past to the current time. To mark just a point in
- * time, pass 0 as duration.
- *
- * @name should be a short string, and @message is optional.
- */
-void
-gdk_profiler_set_mark (guint64     duration,
-                       const char *name,
-                       const char *message)
-{
-  guint64 start;
-
-  start = g_get_monotonic_time () - duration;
-  gdk_profiler_add_mark (start, duration, name, message);
 }
 
 static guint
@@ -196,4 +168,91 @@ gdk_profiler_set_int_counter (guint  id,
                                   time,
                                   -1, getpid (),
                                   &id, &value, 1);
+}
+
+#else
+
+void
+gdk_profiler_start (int fd)
+{
+}
+
+void
+gdk_profiler_stop (void)
+{
+}
+
+gboolean
+gdk_profiler_is_running (void)
+{
+  return FALSE;
+}
+
+void
+gdk_profiler_add_mark (gint64      start,
+                       guint64     duration,
+                       const char *name,
+                       const char *message)
+{
+}
+
+guint
+gdk_profiler_define_counter (const char *name,
+                             const char *description)
+{
+ return 0;
+}
+
+void
+gdk_profiler_set_counter (guint  id,
+                          gint64 time,
+                          double value)
+{
+}
+
+guint
+gdk_profiler_define_int_counter (const char *name,
+                                 const char *description)
+{
+  return 0;
+}
+
+void
+gdk_profiler_set_int_counter (guint  id,
+                              gint64 time,
+                              gint64 value)
+{
+}
+
+#endif /* G_OS_WIN32 */
+
+/**
+ * gdk_profiler_set_mark:
+ * @duration: the duration of the mark, or 0
+ * @name: the name of the mark (up to 40 characters)
+ * @message: (optional): the message of the mark
+ *
+ * Insert a mark into the profiling data if we
+ * are currently profiling.
+ * This information will show up in tools like sysprof
+ * or GNOME Builder when viewing the profiling data.
+ * It can be used to mark interesting regions in the
+ * captured data.
+ *
+ * If the duration is non-zero, the mark applies to
+ * the timespan from @duration microseconds in the
+ * past to the current time. To mark just a point in
+ * time, pass 0 as duration.
+ *
+ * @name should be a short string, and @message is optional.
+ */
+void
+gdk_profiler_set_mark (guint64     duration,
+                       const char *name,
+                       const char *message)
+{
+  guint64 start;
+
+  start = g_get_monotonic_time () - duration;
+  gdk_profiler_add_mark (start, duration, name, message);
 }
