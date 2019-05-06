@@ -8,7 +8,8 @@ void main() {
   color.rgb *= color.a;
 
   // u_source is drawn using cairo, so already pre-multiplied.
-  color = vec4(u_color.rgb * diffuse.a * u_alpha, diffuse.a * color.a * u_alpha);
+  color = vec4(color.rgb * diffuse.a * u_alpha,
+               color.a * diffuse.a * u_alpha);
 
   setOutputColor(color);
 }
