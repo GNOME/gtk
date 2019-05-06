@@ -42,8 +42,7 @@ gdk_win32_public_headers = files([
   'gdkwin32surface.h',
 ])
 
-install_headers(gdk_win32_public_headers, subdir: 'gtk-4.0/gdk/win32/')
-install_headers('gdkwin32.h', subdir: 'gtk-4.0/gdk/')
+install_headers(gdk_win32_public_headers, 'gdkwin32.h', subdir: 'gtk-4.0/gdk/win32/')
 
 gdk_win32_deps = [ # FIXME
     pangowin32_dep
