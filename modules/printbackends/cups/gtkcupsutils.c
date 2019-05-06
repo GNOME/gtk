@@ -81,28 +81,6 @@ static GtkCupsRequestStateFunc get_states[] = {
   _get_read_data
 };
 
-#ifndef HAVE_CUPS_API_1_6
-#define ippSetOperation(ipp_request, ipp_op_id) ipp_request->request.op.operation_id = ipp_op_id
-#define ippSetRequestId(ipp_request, ipp_rq_id) ipp_request->request.op.request_id = ipp_rq_id
-#define ippSetState(ipp_request, ipp_state) ipp_request->state = ipp_state
-#define ippGetString(attr, index, foo) attr->values[index].string.text
-#define ippGetCount(attr) attr->num_values
-
-int
-ippSetVersion (ipp_t *ipp,
-               int    major,
-               int    minor)
-{
-  if (!ipp || major < 0 || minor < 0)
-    return 0;
-
-  ipp->request.any.version[0] = major;
-  ipp->request.any.version[1] = minor;
-
-  return 1;
-}
-#endif
-
 static void
 gtk_cups_result_set_error (GtkCupsResult    *result,
                            GtkCupsErrorType  error_type,
@@ -168,17 +146,10 @@ gtk_cups_request_new_with_username (http_t             *connection,
     }
   else
     {
-      request->http = NULL;
-#ifdef HAVE_CUPS_API_2_0
       request->http = httpConnect2 (request->server, ippPort (),
                                     NULL, AF_UNSPEC,
                                     cupsEncryption (),
                                     1, 30000, NULL);
-#else
-      request->http = httpConnectEncrypt (request->server, 
-                                          ippPort (), 
-                                          cupsEncryption ());
-#endif
 
       if (request->http)
         httpBlocking (request->http, 0);
@@ -693,17 +664,10 @@ _connect (GtkCupsRequest *request)
 
   if (request->http == NULL)
     {
-#ifdef HAVE_CUPS_API_2_0
       request->http = httpConnect2 (request->server, ippPort (),
                                     NULL, AF_UNSPEC,
                                     cupsEncryption (),
                                     1, 30000, NULL);
-#else
-      request->http = httpConnectEncrypt (request->server, 
-                                          ippPort (), 
-                                          cupsEncryption ());
-#endif
-
       if (request->http == NULL)
         request->attempts++;
 
@@ -757,11 +721,7 @@ _post_send (GtkCupsRequest *request)
     {
       int res;
 
-#ifdef HAVE_CUPS_API_2_0
       res = httpReconnect2 (request->http, 30000, NULL);
-#else
-      res = httpReconnect (request->http);
-#endif
 
       if (res)
         {
@@ -1061,11 +1021,7 @@ _post_check (GtkCupsRequest *request)
         }
 
       if (auth_result ||
-#ifdef HAVE_CUPS_API_2_0
           httpReconnect2 (request->http, 30000, NULL))
-#else
-          httpReconnect (request->http))
-#endif
         {
           /* if the password has been used, reset password_state
            * so that we ask for a new one next time around
@@ -1124,11 +1080,7 @@ _post_check (GtkCupsRequest *request)
       request->state = GTK_CUPS_POST_CONNECT;
 
       /* Reconnect... */
-#ifdef HAVE_CUPS_API_2_0
       httpReconnect2 (request->http, 30000, NULL);
-#else
-      httpReconnect (request->http);
-#endif
 
       /* Upgrade with encryption... */
       httpEncryption (request->http, HTTP_ENCRYPT_REQUIRED);
@@ -1258,11 +1210,7 @@ _get_send (GtkCupsRequest *request)
     {
       int reconnect;
 
-#ifdef HAVE_CUPS_API_2_0
       reconnect = httpReconnect2 (request->http, 30000, NULL);
-#else
-      reconnect = httpReconnect (request->http);
-#endif
       if (reconnect)
         {
           request->state = GTK_CUPS_GET_DONE;
@@ -1372,11 +1320,7 @@ _get_check (GtkCupsRequest *request)
         }
 
       if (auth_result ||
-#ifdef HAVE_CUPS_API_2_0
           httpReconnect2 (request->http, 30000, NULL))
-#else
-          httpReconnect (request->http))
-#endif
         {
           /* if the password has been used, reset password_state
            * so that we ask for a new one next time around
@@ -1408,11 +1352,7 @@ _get_check (GtkCupsRequest *request)
       request->state = GTK_CUPS_GET_CONNECT;
 
       /* Reconnect... */
-#ifdef HAVE_CUPS_API_2_0
       httpReconnect2 (request->http, 30000, NULL);
-#else
-      httpReconnect (request->http);
-#endif
 
       /* Upgrade with encryption... */
       httpEncryption (request->http, HTTP_ENCRYPT_REQUIRED);
