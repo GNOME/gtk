@@ -5255,11 +5255,7 @@ _gtk_widget_captured_event (GtkWidget      *widget,
     return TRUE;
 
   event_copy = gdk_event_copy (event);
-  if (!translate_event_coordinates (event_copy, widget))
-    {
-      g_object_unref (event_copy);
-      return FALSE;
-    }
+  translate_event_coordinates (event_copy, widget);
 
   return_val = gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_CAPTURE);
 
@@ -5361,11 +5357,7 @@ gtk_widget_event_internal (GtkWidget      *widget,
 
   event_copy = gdk_event_copy (event);
 
-  if (!translate_event_coordinates (event_copy, widget))
-    {
-      g_object_unref (event_copy);
-      return FALSE;
-    }
+  translate_event_coordinates (event_copy, widget);
 
   if (widget == gtk_get_event_target (event_copy))
     return_val |= gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_TARGET);
