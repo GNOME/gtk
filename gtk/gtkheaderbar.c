@@ -2370,6 +2370,7 @@ gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
 
   priv = gtk_header_bar_get_instance_private (bar);
 
+  g_free (priv->decoration_layout);
   priv->decoration_layout = g_strdup (layout);
   priv->decoration_layout_set = (layout != NULL);
 
