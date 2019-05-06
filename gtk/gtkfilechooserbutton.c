@@ -422,6 +422,8 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   _gtk_file_chooser_install_properties (gobject_class);
 
   gtk_widget_class_set_css_name (widget_class, I_("filechooserbutton"));
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 static void
@@ -497,8 +499,6 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 		     target_list,
 		     GDK_ACTION_COPY);
   gdk_content_formats_unref (target_list);
-
-  gtk_widget_set_layout_manager (GTK_WIDGET (button), gtk_bin_layout_new ());
 }
 
 

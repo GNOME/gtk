@@ -302,6 +302,8 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
                   GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   gtk_widget_class_set_css_name (widget_class, I_("overlay"));
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_OVERLAY_LAYOUT);
 }
 
 static void
@@ -311,8 +313,7 @@ gtk_overlay_init (GtkOverlay *overlay)
 
   gtk_widget_set_has_surface (GTK_WIDGET (overlay), FALSE);
 
-  priv->layout = gtk_overlay_layout_new ();
-  gtk_widget_set_layout_manager (GTK_WIDGET (overlay), priv->layout);
+  priv->layout = gtk_widget_get_layout_manager (GTK_WIDGET (overlay));
 }
 
 static GtkBuildableIface *parent_buildable_iface;

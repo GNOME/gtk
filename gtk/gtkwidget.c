@@ -497,6 +497,7 @@ struct _GtkWidgetClassPrivate
   GType accessible_type;
   AtkRole accessible_role;
   const char *css_name;
+  GType layout_manager_type;
 };
 
 enum {
@@ -2740,6 +2741,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 {
   GtkWidget *widget = GTK_WIDGET (instance);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GType layout_manager_type;
 
   widget->priv = priv;
 
@@ -2808,6 +2810,10 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 
   if (g_type_is_a (G_TYPE_FROM_CLASS (g_class), GTK_TYPE_ROOT))
     priv->root = (GtkRoot *) widget;
+
+  layout_manager_type = gtk_widget_class_get_layout_manager_type (g_class);
+  if (layout_manager_type != G_TYPE_INVALID)
+    gtk_widget_set_layout_manager (widget, g_object_new (layout_manager_type, NULL));
 }
 
 /**
@@ -13573,6 +13579,52 @@ gtk_widget_get_height (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
   return priv->height;
+}
+
+/**
+ * gtk_widget_class_set_layout_manager_type:
+ * @widget_class: class to set the layout manager type for
+ * @type: The object type that implements the #GtkLayoutManager for @widget_class
+ *
+ * Sets the type to be used for creating layout managers for widgets of
+ * @widget_class. The given @type must be a subtype of #GtkLayoutManager.
+ *
+ * This function should only be called from class init functions of widgets.
+ **/
+void
+gtk_widget_class_set_layout_manager_type (GtkWidgetClass *widget_class,
+                                          GType           type)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (g_type_is_a (type, GTK_TYPE_LAYOUT_MANAGER));
+
+  priv = widget_class->priv;
+
+  priv->layout_manager_type = type;
+}
+
+/**
+ * gtk_widget_class_get_layout_manager_type:
+ * @widget_class: a #GtkWidgetClass
+ *
+ * Retrieves the type of the #GtkLayoutManager used by the #GtkWidget class.
+ *
+ * See also: gtk_widget_class_set_layout_manager_type()
+ *
+ * Returns: a #GtkLayoutManager subclass, or %G_TYPE_INVALID
+ */
+GType
+gtk_widget_class_get_layout_manager_type (GtkWidgetClass *widget_class)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_WIDGET_CLASS (widget_class), G_TYPE_INVALID);
+
+  priv = widget_class->priv;
+
+  return priv->layout_manager_type;
 }
 
 /**

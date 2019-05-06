@@ -415,6 +415,12 @@ GDK_AVAILABLE_IN_ALL
 GtkLayoutManager *      gtk_widget_get_layout_manager   (GtkWidget        *widget);
 
 GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_class_set_layout_manager_type        (GtkWidgetClass *widget_class,
+                                                                         GType           type);
+GDK_AVAILABLE_IN_ALL
+GType                   gtk_widget_class_get_layout_manager_type        (GtkWidgetClass *widget_class);
+
+GDK_AVAILABLE_IN_ALL
 void       gtk_widget_add_accelerator     (GtkWidget           *widget,
                                            const gchar         *accel_signal,
                                            GtkAccelGroup       *accel_group,

@@ -96,11 +96,14 @@ static void
 gtk_fixed_class_init (GtkFixedClass *klass)
 {
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   container_class->add = gtk_fixed_add;
   container_class->remove = gtk_fixed_remove;
   container_class->forall = gtk_fixed_forall;
   container_class->child_type = gtk_fixed_child_type;
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_FIXED_LAYOUT);
 }
 
 static GType
@@ -117,8 +120,7 @@ gtk_fixed_init (GtkFixed *self)
   gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 
-  priv->layout = gtk_fixed_layout_new ();
-  gtk_widget_set_layout_manager (GTK_WIDGET (self), priv->layout);
+  priv->layout = gtk_widget_get_layout_manager (GTK_WIDGET (self)); 
 }
 
 /**

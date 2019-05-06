@@ -161,6 +161,7 @@ gtk_box_class_init (GtkBoxClass *class)
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILLER);
   gtk_widget_class_set_css_name (widget_class, I_("box"));
 }
@@ -344,11 +345,8 @@ static void
 gtk_box_init (GtkBox *box)
 {
   GtkBoxPrivate *priv = gtk_box_get_instance_private (box);
-  GtkLayoutManager *box_layout = gtk_box_layout_new (GTK_ORIENTATION_HORIZONTAL);
 
   gtk_widget_set_has_surface (GTK_WIDGET (box), FALSE);
-
-  gtk_widget_set_layout_manager (GTK_WIDGET (box), box_layout);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (box));
