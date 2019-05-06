@@ -26,14 +26,7 @@ if enable_cups
     cups_major_version = cc.compute_int('CUPS_VERSION_MAJOR', prefix : '#include <cups/cups.h>')
     cups_minor_version = cc.compute_int('CUPS_VERSION_MINOR', prefix : '#include <cups/cups.h>')
     message('Found CUPS version: @0@.@1@'.format(cups_major_version, cups_minor_version))
-    if cups_major_version > 1 or cups_minor_version >= 2
-      if cups_major_version > 1 or cups_minor_version >= 6
-        cdata.set('HAVE_CUPS_API_1_6', 1)
-      endif
-      if cups_major_version > 1 or cups_minor_version >= 7
-        cdata.set('HAVE_CUPS_API_2_0', 1)
-      endif
-
+    if cups_major_version >= 2
       if cc.compiles('#include <cups/http.h> \n http_t http; char *s = http.authstring;')
         cdata.set('HAVE_HTTP_AUTHSTRING', 1,
           description :'Define if cups http_t authstring field is accessible')
@@ -45,7 +38,7 @@ if enable_cups
 
       print_backends += ['cups']
     else
-      error('Need CUPS version >= 1.2')
+      error('Need CUPS version >= 2.0')
     endif
   else
     error('Cannot find CUPS headers in default prefix.')
