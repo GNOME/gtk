@@ -264,22 +264,22 @@ void main() {
 
   vec4 result;
   switch(u_mode) {
-    case 0:  result = normal(bottom_color, top_color);      break;
-    case 1:  result = multiply(bottom_color, top_color);    break;
-    case 2:  result = screen(bottom_color, top_color);      break;
-    case 3:  result = overlay(bottom_color, top_color);     break;
-    case 4:  result = darken(bottom_color, top_color);      break;
-    case 5:  result = lighten(bottom_color, top_color);     break;
-    case 6:  result = color_dodge(bottom_color, top_color); break;
-    case 7:  result = color_burn(bottom_color, top_color);  break;
-    case 8:  result = hard_light(bottom_color, top_color);  break;
-    case 9:  result = soft_light(bottom_color, top_color);  break;
-    case 10: result = difference(bottom_color, top_color);  break;
-    case 11: result = exclusion(bottom_color, top_color);   break;
-    case 12: result = color(bottom_color, top_color);       break;
-    case 13: result = hue(bottom_color, top_color);         break;
-    case 14: result = saturation(bottom_color, top_color);  break;
-    case 15: result = luminosity(bottom_color, top_color);  break;
+    case 0:  result = normal(top_color, bottom_color);      break;
+    case 1:  result = multiply(top_color, bottom_color);    break;
+    case 2:  result = screen(top_color, bottom_color);      break;
+    case 3:  result = overlay(top_color, bottom_color);     break;
+    case 4:  result = darken(top_color, bottom_color);      break;
+    case 5:  result = lighten(top_color, bottom_color);     break;
+    case 6:  result = color_dodge(top_color, bottom_color); break;
+    case 7:  result = color_burn(top_color, bottom_color);  break;
+    case 8:  result = hard_light(top_color, bottom_color);  break;
+    case 9:  result = soft_light(top_color, bottom_color);  break;
+    case 10: result = difference(top_color, bottom_color);  break;
+    case 11: result = exclusion(top_color, bottom_color);   break;
+    case 12: result = color(top_color, bottom_color);       break;
+    case 13: result = hue(top_color, bottom_color);         break;
+    case 14: result = saturation(top_color, bottom_color);  break;
+    case 15: result = luminosity(top_color, bottom_color);  break;
     default: discard;
   }
 
