@@ -45,10 +45,15 @@ gdk_public_sources = files([
   'gdkvulkancontext.c',
   'gdksurface.c',
   'gdksurfaceimpl.c',
-  'gdkprofiler.c',
-  'capture/sp-capture-writer.c',
-  'capture/sp-clock.c'
+  'gdkprofiler.c'
 ])
+
+if !win32_enabled
+  gdk_public_source += files([
+    'capture/sp-capture-writer.c',
+    'capture/sp-clock.c'
+  ])
+endif
 
 gdk_public_headers = files([
   'gdk-autocleanup.h',
