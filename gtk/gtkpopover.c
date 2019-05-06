@@ -157,6 +157,9 @@ typedef struct {
 
   GtkWidget *contents_widget;
   GtkCssNode *arrow_node;
+
+  GdkRectangle final_rect;
+  GtkPositionType final_position;
 } GtkPopoverPrivate;
 
 enum {
@@ -383,6 +386,42 @@ surface_event (GdkSurface *surface,
 }
 
 static void
+surface_moved_to_rect (GdkSurface   *surface,
+                       GdkRectangle *flipped_rect,
+                       GdkRectangle *final_rect,
+                       gboolean      flipped_x,
+                       gboolean      flipped_y,
+                       GtkWidget    *widget)
+{
+  GtkPopover *popover = GTK_POPOVER (widget);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  priv->final_rect = *final_rect;
+
+  switch (priv->position)
+    {
+    case GTK_POS_LEFT:
+      priv->final_position = flipped_x ? GTK_POS_RIGHT : GTK_POS_LEFT;
+      break;
+    case GTK_POS_RIGHT:
+      priv->final_position = flipped_x ? GTK_POS_LEFT : GTK_POS_RIGHT;
+      break;
+    case GTK_POS_TOP:
+      priv->final_position = flipped_y ? GTK_POS_BOTTOM : GTK_POS_TOP;
+      break;
+    case GTK_POS_BOTTOM:
+      priv->final_position = flipped_y ? GTK_POS_TOP : GTK_POS_BOTTOM;
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  if (priv->final_position != priv->position)
+    gtk_widget_queue_allocate (widget);
+}
+
+static void
 measure_contents (GtkGizmo       *gizmo,
                   GtkOrientation  orientation,
                   int             for_size,
@@ -475,6 +514,7 @@ gtk_popover_init (GtkPopover *popover)
   gtk_widget_set_has_surface (GTK_WIDGET (popover), TRUE);
 
   priv->position = GTK_POS_TOP;
+  priv->final_position = GTK_POS_TOP;
   priv->modal = TRUE;
 
   controller = gtk_event_controller_key_new ();
@@ -526,6 +566,7 @@ gtk_popover_realize (GtkWidget *widget)
   g_signal_connect_swapped (priv->surface, "size-changed", G_CALLBACK (surface_size_changed), widget);
   g_signal_connect (priv->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (priv->surface, "event", G_CALLBACK (surface_event), widget);
+  g_signal_connect (priv->surface, "moved-to-rect", G_CALLBACK (surface_moved_to_rect), widget);
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->realize (widget);
 
@@ -547,6 +588,7 @@ gtk_popover_unrealize (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (priv->surface, surface_size_changed, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_event, widget);
+  g_signal_handlers_disconnect_by_func (priv->surface, surface_moved_to_rect, widget);
   gdk_surface_set_widget (priv->surface, NULL);
 
   g_clear_object (&priv->surface);
@@ -730,30 +772,24 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
   GtkBorder border;
   int popover_width, popover_height;
 
-  gtk_popover_get_pointing_to (popover, &rect);
-  popover_width = gtk_widget_get_width (widget);
-  popover_height = gtk_widget_get_height (widget);
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    {
-      gint win_x, win_y;
+  popover_width = gtk_widget_get_allocated_width (widget);
+  popover_height = gtk_widget_get_allocated_height (widget);
 
-      gtk_widget_translate_coordinates (priv->relative_to, GTK_WIDGET (priv->relative_to),
-                                        rect.x, rect.y, &rect.x, &rect.y);
-      gdk_surface_get_origin (gtk_widget_get_surface (GTK_WIDGET (popover)),
-                              &win_x, &win_y);
-      rect.x -= win_x;
-      rect.y -= win_y;
+  gtk_widget_get_surface_allocation (priv->relative_to, &rect);
+  if (priv->has_pointing_to)
+    {
+      rect.x += priv->pointing_to.x;
+      rect.y += priv->pointing_to.y;
+      rect.width = priv->pointing_to.width;
+      rect.height = priv->pointing_to.height;
     }
-  else
-#endif
-    gtk_widget_translate_coordinates (priv->relative_to, widget,
-                                      rect.x, rect.y, &rect.x, &rect.y);
+
+  rect.x -= priv->final_rect.x;
+  rect.y -= priv->final_rect.y;
 
   context = gtk_widget_get_style_context (priv->contents_widget);
-  gtk_style_context_get_border (context, &border);
 
-  pos = priv->position;
+  pos = priv->final_position;
 
   gtk_style_context_get_border (context, &border);
   gtk_style_context_get (context,
@@ -763,17 +799,17 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
   if (pos == GTK_POS_BOTTOM || pos == GTK_POS_RIGHT)
     {
       tip = 0;
-      base = tip + TAIL_HEIGHT + border.top;
+      base = TAIL_HEIGHT + border.top;
     }
   else if (pos == GTK_POS_TOP)
     {
       base = popover_height - border.bottom - TAIL_HEIGHT;
-      tip = base + TAIL_HEIGHT;
+      tip = popover_height;
     }
   else if (pos == GTK_POS_LEFT)
     {
       base = popover_width - border.right - TAIL_HEIGHT;
-      tip = base + TAIL_HEIGHT;
+      tip = popover_width;
     }
   else
     g_assert_not_reached ();
@@ -1036,15 +1072,35 @@ gtk_popover_size_allocate (GtkWidget *widget,
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GtkAllocation child_alloc = (GtkAllocation) {0, 0, width, height};
+  GtkAllocation child_alloc;
 
   if (priv->surface)
     gtk_popover_move_resize (popover);
 
-  child_alloc.height -= TAIL_HEIGHT;
-  child_alloc.width -= TAIL_HEIGHT;
-  child_alloc.x += TAIL_HEIGHT / 2;
-  child_alloc.y += TAIL_HEIGHT;
+  switch (priv->final_position)
+    {
+    case GTK_POS_TOP:
+      child_alloc.x = TAIL_HEIGHT / 2;
+      child_alloc.y = 0;
+      break;
+    case GTK_POS_BOTTOM:
+      child_alloc.x = TAIL_HEIGHT / 2;
+      child_alloc.y = TAIL_HEIGHT;
+      break;
+    case GTK_POS_LEFT:
+      child_alloc.x = 0;
+      child_alloc.y = TAIL_HEIGHT / 2;
+      break;
+    case GTK_POS_RIGHT:
+      child_alloc.x = TAIL_HEIGHT;
+      child_alloc.y = TAIL_HEIGHT / 2;
+      break;
+    default:
+      break;
+    }
+
+  child_alloc.width = width - TAIL_HEIGHT;
+  child_alloc.height = height - TAIL_HEIGHT;
 
   gtk_widget_size_allocate (priv->contents_widget, &child_alloc, baseline);
 
@@ -1462,6 +1518,18 @@ gtk_popover_get_pointing_to (GtkPopover   *popover,
 
   if (priv->has_pointing_to)
     *rect = priv->pointing_to;
+  else if (priv->relative_to)
+    {
+      graphene_rect_t r;
+
+      if (!gtk_widget_compute_bounds (priv->relative_to, priv->relative_to, &r))
+        return FALSE;
+
+      rect->x = floorf (r.origin.x);
+      rect->y = floorf (r.origin.y);
+      rect->width = ceilf (r.size.width);
+      rect->height = ceilf (r.size.height);
+    }
 
   return priv->has_pointing_to;
 }
@@ -1490,6 +1558,7 @@ gtk_popover_set_position (GtkPopover      *popover,
     return;
 
   priv->position = position;
+  priv->final_position = position;
 
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_POSITION]);
 }

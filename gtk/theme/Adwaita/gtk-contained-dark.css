@@ -869,11 +869,11 @@ menuitem check:dir(ltr), menuitem radio:dir(ltr) { margin-right: 7px; }
 menuitem check:dir(rtl), menuitem radio:dir(rtl) { margin-left: 7px; }
 
 /*************** Popovers   * */
-popover > arrow { background-color: #353535; border: 1px solid #1b1b1b; }
+popover.background { background-color: transparent; padding: 0px; }
 
-popover > contents.menu { padding: 8px; background-color: white; margin: 0px; }
+popover.menu > arrow, popover > arrow { background-color: #353535; border: 1px solid #1b1b1b; }
 
-popover > contents { padding: 2px; margin: 0px; }
+popover > contents { padding: 8px; background-color: #353535; border: 1px solid #1b1b1b; margin: 0px; }
 
 popover > contents.background { border-radius: 9px; background-color: #353535; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); }
 
@@ -1888,7 +1888,7 @@ colorswatch overlay:hover { box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), in
 
 colorswatch overlay:backdrop, colorswatch overlay:backdrop:hover { border-color: #1b1b1b; box-shadow: none; }
 
-colorswatch#add-color-button { border-radius: 5px 5px 0 0; }
+colorswatch#add-color-button { border-radius: 5px 0 0 5px; }
 
 colorswatch#add-color-button:only-child { border-radius: 5px; }
 
