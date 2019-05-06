@@ -8326,6 +8326,8 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, widget_key_press_cb);
 
   gtk_widget_class_set_css_name (widget_class, I_("filechooser"));
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 static void
@@ -8466,8 +8468,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
    * which cannot be done with GtkBuilder
    */
   post_process_ui (impl);
-
-  gtk_widget_set_layout_manager (GTK_WIDGET (impl), gtk_bin_layout_new ());
 
   profile_end ("end", NULL);
 }

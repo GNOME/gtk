@@ -380,6 +380,8 @@ gtk_grid_class_init (GtkGridClass *class)
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 
   gtk_widget_class_set_css_name (widget_class, I_("grid"));
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_GRID_LAYOUT);
 }
 
 static void
@@ -389,8 +391,7 @@ gtk_grid_init (GtkGrid *grid)
 
   gtk_widget_set_has_surface (GTK_WIDGET (grid), FALSE);
 
-  priv->layout_manager = gtk_grid_layout_new ();
-  gtk_widget_set_layout_manager (GTK_WIDGET (grid), priv->layout_manager);
+  priv->layout_manager = gtk_widget_get_layout_manager (GTK_WIDGET (grid));
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (grid));
