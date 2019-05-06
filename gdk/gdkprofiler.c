@@ -24,7 +24,7 @@
 #include <unistd.h>
 
 #include "capture/sp-capture-writer.h"
-#include "gdkprofiler.h"
+#include "gdkprofilerprivate.h"
 #include "gdkframeclockprivate.h"
 
 static SpCaptureWriter *writer = NULL;

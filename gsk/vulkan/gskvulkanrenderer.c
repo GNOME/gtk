@@ -13,7 +13,7 @@
 #include "gskvulkanglyphcacheprivate.h"
 
 #include "gdk/gdktextureprivate.h"
-#include "gdk/gdkprofiler.h"
+#include "gdk/gdkprofilerprivate.h"
 
 #include <graphene.h>
 

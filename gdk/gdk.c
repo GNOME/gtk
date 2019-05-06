@@ -26,7 +26,7 @@
 
 #include "gdkversionmacros.h"
 
-#include "gdkprofiler.h"
+#include "gdkprofilerprivate.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
 

@@ -21,7 +21,7 @@
 
 #include "gdk/gdkgltextureprivate.h"
 #include "gdk/gdkglcontextprivate.h"
-#include "gdk/gdkprofiler.h"
+#include "gdk/gdkprofilerprivate.h"
 
 #include <epoxy/gl.h>
 #include <cairo-ft.h>

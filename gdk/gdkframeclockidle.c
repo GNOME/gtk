@@ -29,7 +29,7 @@
 #include "gdkinternals.h"
 #include "gdkframeclockprivate.h"
 #include "gdk.h"
-#include "gdkprofiler.h"
+#include "gdkprofilerprivate.h"
 
 #ifdef G_OS_WIN32
 #include <windows.h>

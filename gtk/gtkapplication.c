@@ -21,7 +21,7 @@
 #include "config.h"
 
 #include "gtkapplication.h"
-#include "gdkprofiler.h"
+#include "gdkprofilerprivate.h"
 #include <gio/gunixfdlist.h>
 
 
