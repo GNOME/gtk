@@ -707,8 +707,6 @@ static void gtk_widget_update_input_shape (GtkWidget *widget);
 
 static gboolean gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_class);
 
-static GType gtk_widget_class_get_layout_manager_type (GtkWidgetClass *widget_class);
-
 static void remove_parent_surface_transform_changed_listener (GtkWidget *widget);
 static void add_parent_surface_transform_changed_listener (GtkWidget *widget);
 
@@ -13607,7 +13605,17 @@ gtk_widget_class_set_layout_manager_type (GtkWidgetClass *widget_class,
   priv->layout_manager_type = type;
 }
 
-static GType
+/**
+ * gtk_widget_class_get_layout_manager_type:
+ * @widget_class: a #GtkWidgetClass
+ *
+ * Retrieves the type of the #GtkLayoutManager used by the #GtkWidget class.
+ *
+ * See also: gtk_widget_class_set_layout_manager_type()
+ *
+ * Returns: a #GtkLayoutManager subclass, or %G_TYPE_INVALID
+ */
+GType
 gtk_widget_class_get_layout_manager_type (GtkWidgetClass *widget_class)
 {
   GtkWidgetClassPrivate *priv;
