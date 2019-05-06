@@ -22,8 +22,10 @@
 
 #include "gtkapplication.h"
 #include "gdkprofilerprivate.h"
-#include <gio/gunixfdlist.h>
 
+#ifdef G_OS_UNIX
+#include <gio/gunixfdlist.h>
+#endif
 
 #include <stdlib.h>
 
@@ -606,6 +608,8 @@ gtk_application_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_application_parent_class)->finalize (object);
 }
 
+#ifdef G_OS_UNIX
+
 static const gchar org_gnome_Sysprof2_Profiler_xml[] =
   "<node>"
     "<interface name='org.gnome.Sysprof2.Profiler'>"
@@ -679,7 +683,6 @@ sysprof_profiler_method_call (GDBusConnection       *connection,
   g_dbus_method_invocation_return_value (invocation, NULL);
 }
 
-
 static gboolean
 gtk_application_dbus_register (GApplication     *application,
                                GDBusConnection  *connection,
@@ -726,6 +729,26 @@ gtk_application_dbus_unregister (GApplication     *application,
 
   g_dbus_connection_unregister_object (connection, dbus->profiler_id);
 }
+
+#else
+
+static gboolean
+gtk_application_dbus_register (GApplication     *application,
+                               GDBusConnection  *connection,
+                               const char       *obect_path,
+                               GError          **error)
+{
+  return TRUE;
+}
+
+static void
+gtk_application_dbus_unregister (GApplication     *application,
+                                 GDBusConnection  *connection,
+                                 const char       *obect_path)
+{
+}
+
+#endif
 
 static void
 gtk_application_class_init (GtkApplicationClass *class)
