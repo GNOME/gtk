@@ -1376,6 +1376,7 @@ gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
       else
         {
           gtk_css_token_init (token, GTK_CSS_TOKEN_DELIM, '\\');
+          gtk_css_tokenizer_consume_ascii (tokenizer);
           gtk_css_tokenizer_parse_error (error, "Newline may not follow '\' escape character");
           return FALSE;
         }
