@@ -54,6 +54,9 @@
 #include "gtkwindowgroup.h"
 #include "gtkrevealer.h"
 #include "gtklayoutmanager.h"
+#include "gtkcssprovider.h"
+#include "gtkstylecontext.h"
+
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
@@ -290,11 +293,19 @@ static void
 gtk_inspector_window_realize (GtkWidget *widget)
 {
   GskRenderer *renderer;
+  GtkCssProvider *provider;
 
   GTK_WIDGET_CLASS (gtk_inspector_window_parent_class)->realize (widget);
 
   renderer = gtk_root_get_renderer (GTK_ROOT (widget));
   gsk_renderer_set_debug_flags (renderer, 0);
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_resource (provider, "/org/gtk/libgtk/inspector/inspector.css");
+  gtk_style_context_add_provider_for_display (gtk_widget_get_display (widget),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              800);
+  g_object_unref (provider);
 }
 
 static void
