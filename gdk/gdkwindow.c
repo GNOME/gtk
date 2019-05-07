@@ -7901,7 +7901,8 @@ gdk_window_beep (GdkWindow *window)
 
   if (toplevel)
     {
-      if (GDK_WINDOW_IMPL_GET_CLASS (toplevel->impl)->beep (toplevel))
+      GdkWindowImplClass *klass = GDK_WINDOW_IMPL_GET_CLASS (toplevel->impl);
+      if (klass->beep && klass->beep (toplevel))
         return;
     }
   
@@ -10500,7 +10501,10 @@ void
 gdk_window_set_startup_id (GdkWindow   *window,
 			   const gchar *startup_id)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_startup_id (window, startup_id);
+  GdkWindowImplClass *klass = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
+  if (klass->set_startup_id)
+    klass->set_startup_id (window, startup_id);
 }
 
 /**
