@@ -15,6 +15,7 @@
             </style>
             <child>
               <object class="GtkBox" id="name_heading">
+                <property name="hexpand">0</property>
                 <child>
                   <object class="GtkGestureMultiPress">
                     <signal name="pressed" handler="sort_changed" swapped="no"/>
@@ -30,6 +31,9 @@
                 </child>
                 <child>
                   <object class="GtkImage" id="name_sort_indicator">
+                    <style>
+                      <class name="sort_indicator"/>
+                    </style>
                   </object>
                 </child>
               </object>
@@ -42,6 +46,7 @@
             </child>
             <child>
               <object class="GtkBox" id="origin_heading">
+                <property name="hexpand">0</property>
                 <child>
                   <object class="GtkGestureMultiPress">
                     <signal name="pressed" handler="sort_changed" swapped="no"/>
@@ -57,6 +62,9 @@
                 </child>
                 <child>
                   <object class="GtkImage" id="origin_sort_indicator">
+                    <style>
+                      <class name="sort_indicator"/>
+                    </style>
                   </object>
                 </child>
               </object>
@@ -65,9 +73,7 @@
               <object class="GtkLabel" id="value_heading">
                 <property name="label">Value</property>
                 <property name="xalign">0</property>
-                <property name="hexpand">1</property>
-                <property name="margin-start">6</property>
-                <property name="margin-end">6</property>
+                <property name="hexpand">0</property>
               </object>
             </child>
           </object>
@@ -78,6 +84,9 @@
             <property name="hscrollbar-policy">never</property>
             <child>
               <object class="GtkListBox" id="list2">
+                <style>
+                  <class name="list"/>
+                </style>
                 <property name="selection-mode">none</property>
               </object>
             </child>
@@ -87,21 +96,25 @@
     </child>
   </template>
   <object class="GtkSizeGroup" id="names">
+    <property name="mode">horizontal</property>
     <widgets>
       <widget name="name_heading"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="types">
+    <property name="mode">horizontal</property>
     <widgets>
       <widget name="type_heading"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="origins">
+    <property name="mode">horizontal</property>
     <widgets>
       <widget name="origin_heading"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup" id="values">
+    <property name="mode">horizontal</property>
     <widgets>
       <widget name="value_heading"/>
     </widgets>
