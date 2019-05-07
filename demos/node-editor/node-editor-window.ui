@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <object class="GtkTextTagTable" id="tags">
-    <child type="tag">
-      <object class="GtkTextTag">
-        <property name="name">error</property>
-        <property name="underline">error</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkTextBuffer" id="text_buffer">
-    <property name="tag-table">tags</property>
-    <signal name="changed" handler="text_changed"/>
-  </object>
   <template class="NodeEditorWindow" parent="GtkApplicationWindow">
     <style>
       <class name="devel"/>
@@ -61,7 +49,6 @@
             <property name="expand">1</property>
             <child>
               <object class="GtkTextView" id="text_view">
-                <property name="buffer">text_buffer</property>
                 <property name="wrap-mode">word</property>
                 <property name="monospace">1</property>
                 <property name="has-focus">1</property>
@@ -71,6 +58,9 @@
                 <property name="bottom-margin">6</property>
                 <property name="has-tooltip">1</property>
                 <signal name="query-tooltip" handler="text_view_query_tooltip_cb"/>
+                <style>
+                  <class name="editor" />
+                </style>
               </object>
             </child>
           </object>

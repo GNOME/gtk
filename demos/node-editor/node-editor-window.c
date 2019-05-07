@@ -39,6 +39,7 @@ struct _NodeEditorWindow
   GtkWidget *picture;
   GtkWidget *text_view;
   GtkTextBuffer *text_buffer;
+  GtkTextTagTable *tag_table;
 
   GtkWidget *renderer_listbox;
   GListStore *renderers;
@@ -100,6 +101,42 @@ deserialize_error_func (const GtkCssSection *section,
 }
 
 static void
+text_iter_skip_alpha_backward (GtkTextIter *iter)
+{
+  /* Just skip to the previous non-whitespace char */
+
+  while (!gtk_text_iter_is_start (iter))
+    {
+      gunichar c = gtk_text_iter_get_char (iter);
+
+      if (g_unichar_isspace (c))
+        {
+          gtk_text_iter_forward_char (iter);
+          break;
+        }
+
+      gtk_text_iter_backward_char (iter);
+    }
+}
+
+static void
+text_iter_skip_whitespace_backward (GtkTextIter *iter)
+{
+  while (!gtk_text_iter_is_start (iter))
+    {
+      gunichar c = gtk_text_iter_get_char (iter);
+
+      if (g_unichar_isalpha (c))
+        {
+          gtk_text_iter_forward_char (iter);
+          break;
+        }
+
+      gtk_text_iter_backward_char (iter);
+    }
+}
+
+static void
 text_changed (GtkTextBuffer    *buffer,
               NodeEditorWindow *self)
 {
@@ -140,6 +177,71 @@ text_changed (GtkTextBuffer    *buffer,
   else
     {
       gtk_picture_set_paintable (GTK_PICTURE (self->picture), NULL);
+    }
+
+  GtkTextIter iter;
+
+  gtk_text_buffer_get_start_iter (self->text_buffer, &iter);
+
+  while (!gtk_text_iter_is_end (&iter))
+    {
+      gunichar c = gtk_text_iter_get_char (&iter);
+
+      if (c == '{')
+        {
+          GtkTextIter word_end = iter;
+          GtkTextIter word_start;
+
+          gtk_text_iter_backward_char (&word_end);
+          text_iter_skip_whitespace_backward (&word_end);
+
+          word_start = word_end;
+          gtk_text_iter_backward_word_start (&word_start);
+          text_iter_skip_alpha_backward (&word_start);
+
+          gtk_text_buffer_apply_tag_by_name (self->text_buffer, "nodename",
+                                             &word_start, &word_end);
+        }
+      else if (c == ':')
+        {
+          GtkTextIter word_end = iter;
+          GtkTextIter word_start;
+
+          gtk_text_iter_backward_char (&word_end);
+          text_iter_skip_whitespace_backward (&word_end);
+
+          word_start = word_end;
+          gtk_text_iter_backward_word_start (&word_start);
+          text_iter_skip_alpha_backward (&word_start);
+
+          gtk_text_buffer_apply_tag_by_name (self->text_buffer, "propname",
+                                             &word_start, &word_end);
+        }
+      else if (c == '"')
+        {
+          GtkTextIter string_start = iter;
+          GtkTextIter string_end = iter;
+
+          gtk_text_iter_forward_char (&iter);
+          while (!gtk_text_iter_is_end (&iter))
+            {
+              c = gtk_text_iter_get_char (&iter);
+
+              if (c == '"')
+                {
+                  gtk_text_iter_forward_char (&iter);
+                  string_end = iter;
+                  break;
+                }
+
+              gtk_text_iter_forward_char (&iter);
+            }
+
+          gtk_text_buffer_apply_tag_by_name (self->text_buffer, "string",
+                                             &string_start, &string_end);
+        }
+
+      gtk_text_iter_forward_char (&iter);
     }
 }
 
@@ -493,12 +595,10 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   widget_class->realize = node_editor_window_realize;
   widget_class->unrealize = node_editor_window_unrealize;
 
-  gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, text_buffer);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, text_view);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, picture);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, renderer_listbox);
 
-  gtk_widget_class_bind_template_callback (widget_class, text_changed);
   gtk_widget_class_bind_template_callback (widget_class, text_view_query_tooltip_cb);
   gtk_widget_class_bind_template_callback (widget_class, open_cb);
   gtk_widget_class_bind_template_callback (widget_class, save_cb);
@@ -559,6 +659,37 @@ node_editor_window_init (NodeEditorWindow *self)
   g_array_set_clear_func (self->errors, (GDestroyNotify)text_view_error_free);
 
   g_action_map_add_action_entries (G_ACTION_MAP (self), win_entries, G_N_ELEMENTS (win_entries), self);
+
+  self->tag_table = gtk_text_tag_table_new ();
+  gtk_text_tag_table_add (self->tag_table,
+                          g_object_new (GTK_TYPE_TEXT_TAG,
+                                        "name", "error",
+                                        "underline", PANGO_UNDERLINE_ERROR,
+                                        NULL));
+  gtk_text_tag_table_add (self->tag_table,
+                          g_object_new (GTK_TYPE_TEXT_TAG,
+                                        "name", "nodename",
+                                        "foreground-rgba", &(GdkRGBA) { 0.9, 0.78, 0.53, 1},
+                                        NULL));
+  gtk_text_tag_table_add (self->tag_table,
+                          g_object_new (GTK_TYPE_TEXT_TAG,
+                                        "name", "propname",
+                                        "foreground-rgba", &(GdkRGBA) { 0.7, 0.55, 0.67, 1},
+                                        NULL));
+  gtk_text_tag_table_add (self->tag_table,
+                          g_object_new (GTK_TYPE_TEXT_TAG,
+                                        "name", "string",
+                                        "foreground-rgba", &(GdkRGBA) { 0.63, 0.73, 0.54, 1},
+                                        NULL));
+  gtk_text_tag_table_add (self->tag_table,
+                          g_object_new (GTK_TYPE_TEXT_TAG,
+                                        "name", "number",
+                                        "foreground-rgba", &(GdkRGBA) { 0.8, 0.52, 0.43, 1},
+                                        NULL));
+
+  self->text_buffer = gtk_text_buffer_new (self->tag_table);
+  g_signal_connect (self->text_buffer, "changed", G_CALLBACK (text_changed), self);
+  gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->text_view), self->text_buffer);
 }
 
 NodeEditorWindow *

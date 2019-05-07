@@ -23,6 +23,16 @@
 
 #include "node-editor-window.h"
 
+static const char *css =
+"textview.editor {"
+"  color: rgb(192, 197, 206);"
+"  caret-color: white;"
+"}"
+"textview.editor text {"
+"  background-color: rgb(43, 48, 59);"
+"}"
+;
+
 struct _NodeEditorApplication
 {
   GtkApplication parent;
@@ -58,6 +68,7 @@ node_editor_application_startup (GApplication *app)
 {
   const char *quit_accels[2] = { "<Ctrl>Q", NULL };
   const char *open_accels[2] = { "<Ctrl>O", NULL };
+  GtkCssProvider *provider;
 
   G_APPLICATION_CLASS (node_editor_application_parent_class)->startup (app);
 
@@ -66,6 +77,13 @@ node_editor_application_startup (GApplication *app)
                                    app);
   gtk_application_set_accels_for_action (GTK_APPLICATION (app), "app.quit", quit_accels);
   gtk_application_set_accels_for_action (GTK_APPLICATION (app), "win.open", open_accels);
+
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider, css, -1);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (provider),
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
 static void
