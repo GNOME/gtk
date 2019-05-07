@@ -1268,9 +1268,16 @@ render_blur_node (GskGLRenderer       *self,
   const float min_y = builder->dy + node->bounds.origin.y;
   const float max_x = min_x + node->bounds.size.width;
   const float max_y = min_y + node->bounds.size.height;
+  const float blur_radius = gsk_blur_node_get_radius (node);
   int texture_id;
   gboolean is_offscreen;
   RenderOp op;
+
+  if (blur_radius <= 0)
+    {
+      gsk_gl_renderer_add_render_ops (self, gsk_blur_node_get_child (node), builder);
+      return;
+    }
 
   /* TODO(perf): We're forcing the child offscreen even if it's a texture
    * so the resulting offscreen texture is bigger by the gaussian blur factor
