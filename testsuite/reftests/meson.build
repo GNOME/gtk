@@ -426,6 +426,7 @@ xfails = [
   'sizegroups-evolution-identity-page.ui',
   'textview-border-windows.ui',
   'window-show-contents-on-map.ui',
+  'toplevel-vs-popup.ui',
 ]
 
 foreach testname : testdata
