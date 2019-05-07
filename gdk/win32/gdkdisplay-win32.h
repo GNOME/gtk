@@ -69,6 +69,13 @@ typedef struct _GdkWin32User32DPIFuncs
   funcIsProcessDPIAware isDpiAwareFunc;
 } GdkWin32User32DPIFuncs;
 
+/* Detect running architecture */
+typedef BOOL (WINAPI *funcIsWow64Process2) (HANDLE, USHORT *, USHORT *);
+typedef struct _GdkWin32KernelCPUFuncs
+{
+  funcIsWow64Process2 isWow64Process2;
+} GdkWin32KernelCPUFuncs;
+
 struct _GdkWin32Display
 {
   GdkDisplay display;
@@ -131,6 +138,10 @@ struct _GdkWin32Display
 
   /* Message filters */
   GList *filters;
+
+  /* Running CPU items */
+  guint running_on_arm64 : 1;
+  GdkWin32KernelCPUFuncs cpu_funcs;
 };
 
 struct _GdkWin32DisplayClass

@@ -540,7 +540,8 @@ _gdk_win32_display_init_gl (GdkDisplay *display)
 #ifdef GDK_WIN32_ENABLE_EGL
   EGLDisplay egl_disp;
 
-  disable_wgl = GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES);
+  disable_wgl = GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES) ||
+                display_win32->running_on_arm64;
 #endif
 
   if (display_win32->have_wgl
