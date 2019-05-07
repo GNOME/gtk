@@ -10500,7 +10500,10 @@ void
 gdk_window_set_startup_id (GdkWindow   *window,
 			   const gchar *startup_id)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_startup_id (window, startup_id);
+  GdkWindowImplClass *klass = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
+  if (klass->set_startup_id)
+    klass->set_startup_id (window, startup_id);
 }
 
 /**
