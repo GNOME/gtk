@@ -231,7 +231,7 @@ test_data = [
   'dash-backslash-eof-is-identifier.errors',
   'dash-backslash-newline-is-delim.ref.css',
   'dash-backslash-newline-is-delim.errors',
-  'dash-backslash-newline-is-delim.css
+  'dash-backslash-newline-is-delim.css',
   'dash-dash-eof-is-identifier.ref.css',
   'dash-dash-eof-is-identifier.css',
   'dash-dash-eof-is-identifier.errors',
