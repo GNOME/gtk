@@ -37,6 +37,10 @@
 
 #include "gdkwin32langnotification.h"
 
+#ifndef IMAGE_FILE_MACHINE_ARM64
+# define IMAGE_FILE_MACHINE_ARM64 0xAA64
+#endif
+
 static int debug_indent = 0;
 
 static GdkMonitor *
@@ -1035,6 +1039,40 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
 }
 
 static void
+_gdk_win32_check_on_arm64 (GdkWin32Display *display)
+{
+  static gsize checked = 0;
+
+  if (g_once_init_enter (&checked))
+    {
+      HMODULE kernel32 = LoadLibraryW (L"kernel32.dll");
+
+      if (kernel32 != NULL)
+        {
+          display->cpu_funcs.isWow64Process2 =
+            (funcIsWow64Process2) GetProcAddress (kernel32, "IsWow64Process2");
+
+          if (display->cpu_funcs.isWow64Process2 != NULL)
+            {
+              USHORT proc_cpu = 0;
+              USHORT native_cpu = 0;
+
+              display->cpu_funcs.isWow64Process2 (GetCurrentProcess (),
+                                                  &proc_cpu,
+                                                  &native_cpu);
+
+              if (native_cpu == IMAGE_FILE_MACHINE_ARM64)
+                display->running_on_arm64 = TRUE;
+            }
+
+          FreeLibrary (kernel32);
+        }
+
+      g_once_init_leave (&checked, 1);
+    }
+}
+
+static void
 gdk_win32_display_init (GdkWin32Display *display)
 {
   const gchar *scale_str = g_getenv ("GDK_SCALE");
@@ -1042,6 +1080,7 @@ gdk_win32_display_init (GdkWin32Display *display)
   display->monitors = g_ptr_array_new_with_free_func (g_object_unref);
 
   _gdk_win32_enable_hidpi (display);
+  _gdk_win32_check_on_arm64 (display);
 
   /* if we have DPI awareness, set up fixed scale if set */
   if (display->dpi_aware_type != PROCESS_DPI_UNAWARE &&
