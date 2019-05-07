@@ -634,13 +634,6 @@ is_name (char c)
 }
 
 static gboolean
-is_valid_escape (char c1, char c2)
-{
-  return c1 == '\\'
-      && !is_newline (c2);
-}
-
-static gboolean
 is_non_printable (char c)
 {
   return (c >= 0 && c <= 0x08)
@@ -648,6 +641,25 @@ is_non_printable (char c)
       || c == 0x0E
       || c == 0x1F
       || c == 0x7F;
+}
+
+static gboolean
+is_valid_escape (const char *data,
+                 const char *end)
+{
+  switch (end - data)
+    {
+      default:
+        if (is_newline (data[1]))
+          return FALSE;
+        G_GNUC_FALLTHROUGH;
+
+      case 1:
+        return data[0] == '\\';
+
+      case 0:
+        return FALSE;
+    }
 }
 
 static inline gsize
@@ -659,15 +671,7 @@ gtk_css_tokenizer_remaining (GtkCssTokenizer *tokenizer)
 static gboolean
 gtk_css_tokenizer_has_valid_escape (GtkCssTokenizer *tokenizer)
 {
-  switch (gtk_css_tokenizer_remaining (tokenizer))
-    {
-      case 0:
-        return FALSE;
-      case 1:
-        return *tokenizer->data == '\\';
-      default:
-        return is_valid_escape (tokenizer->data[0], tokenizer->data[1]);
-    }
+  return is_valid_escape (tokenizer->data, tokenizer->end);
 }
 
 static gboolean
@@ -814,7 +818,11 @@ gtk_css_tokenizer_read_escape (GtkCssTokenizer *tokenizer)
 
   if (i == 0)
     {
-      value = g_utf8_get_char_validated (tokenizer->data, gtk_css_tokenizer_remaining (tokenizer));
+      gsize remaining = gtk_css_tokenizer_remaining (tokenizer);
+      if (remaining == 0)
+        return 0xFFFD;
+
+      value = g_utf8_get_char_validated (tokenizer->data, remaining);
       if (value == (gunichar) -1 || value == (gunichar) -2)
         value = 0;
 
