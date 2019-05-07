@@ -4202,7 +4202,10 @@ void
 gdk_surface_set_startup_id (GdkSurface   *surface,
                             const gchar *startup_id)
 {
-  GDK_SURFACE_IMPL_GET_CLASS (surface->impl)->set_startup_id (surface, startup_id);
+  GdkSurfaceImplClass *klass = GDK_SURFACE_IMPL_GET_CLASS (surface->impl);
+
+  if (klass->set_startup_id)
+    klass->set_startup_id (surface, startup_id);
 }
 
 /**
