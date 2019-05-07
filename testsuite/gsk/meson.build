@@ -38,6 +38,7 @@ compare_render_tests = [
   'shadow-in-opacity',
   'blend-normal',
   'blend-difference',
+  'color-blur0',
 ]
 
 renderers = [
