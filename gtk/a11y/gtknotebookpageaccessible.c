@@ -244,7 +244,6 @@ gtk_notebook_page_accessible_new (GtkNotebookAccessible *notebook,
   AtkObject *atk_object;
   GtkNotebookPageAccessible *page;
   GtkNotebook *nb;
-  GtkWidget *notebook_page;
 
   g_return_val_if_fail (GTK_IS_NOTEBOOK_ACCESSIBLE (notebook), NULL);
   g_return_val_if_fail (GTK_WIDGET (child), NULL);
@@ -261,9 +260,8 @@ gtk_notebook_page_accessible_new (GtkNotebookAccessible *notebook,
 
   atk_object_set_parent (gtk_widget_get_accessible (child), atk_object);
   nb = GTK_NOTEBOOK (gtk_accessible_get_widget (page->priv->notebook));
-  notebook_page = GTK_NOTEBOOK_PAGE (gtk_notebook_get_page (nb, child));
 
-  g_signal_connect (notebook_page,
+  g_signal_connect (gtk_notebook_get_page (nb, child),
                     "notify::tab-label",
                     G_CALLBACK (notify_tab_label), page);
 
