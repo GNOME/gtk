@@ -21,7 +21,10 @@
 #include "config.h"
 
 #include <sys/types.h>
+
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 
 #include "gdkversionmacros.h"
 #include "gdkprofiler.h"
