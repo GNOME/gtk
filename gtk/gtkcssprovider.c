@@ -71,9 +71,6 @@
  * `GTK_DATA_PREFIX` environment variable), and `VERSION` is the GTK+ version number.
  * If no file is found for the current version, GTK+ tries older versions all the
  * way back to 4.0.
- *
- * In the same way, GTK+ tries to load a gtk-keys.css file for the current
- * key theme, as defined by #GtkSettings:gtk-key-theme-name.
  */
 
 
