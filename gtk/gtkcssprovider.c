@@ -1234,17 +1234,16 @@ _gtk_get_theme_dir (void)
 
 /*
  * Look for
- * $dir/$subdir/gtk-4.16/gtk-$variant.css
- * $dir/$subdir/gtk-4.14/gtk-$variant.css
+ * $dir/$subdir/gtk-4.16/gtk.css
+ * $dir/$subdir/gtk-4.14/gtk.css
  *  ...
- * $dir/$subdir/gtk-4.0/gtk-$variant.css
+ * $dir/$subdir/gtk-4.0/gtk.css
  * and return the first found file.
  */
 static gchar *
 _gtk_css_find_theme_dir (const gchar *dir,
                          const gchar *subdir,
-                         const gchar *name,
-                         const gchar *variant)
+                         const gchar *name)
 {
   gchar *file;
   gchar *base;
@@ -1252,10 +1251,7 @@ _gtk_css_find_theme_dir (const gchar *dir,
   gint i;
   gchar *path;
 
-  if (variant)
-    file = g_strconcat ("gtk-", variant, ".css", NULL);
-  else
-    file = g_strdup ("gtk.css");
+  file = g_strdup ("gtk.css");
 
   if (subdir)
     base = g_build_filename (dir, subdir, name, NULL);
@@ -1284,8 +1280,7 @@ _gtk_css_find_theme_dir (const gchar *dir,
 #undef MINOR
 
 static gchar *
-_gtk_css_find_theme (const gchar *name,
-                     const gchar *variant)
+_gtk_css_find_theme (const gchar *name)
 {
   gchar *path;
   const char *const *dirs;
@@ -1293,12 +1288,12 @@ _gtk_css_find_theme (const gchar *name,
   char *dir;
 
   /* First look in the user's data directory */
-  path = _gtk_css_find_theme_dir (g_get_user_data_dir (), "themes", name, variant);
+  path = _gtk_css_find_theme_dir (g_get_user_data_dir (), "themes", name);
   if (path)
     return path;
 
   /* Next look in the user's home directory */
-  path = _gtk_css_find_theme_dir (g_get_home_dir (), ".themes", name, variant);
+  path = _gtk_css_find_theme_dir (g_get_home_dir (), ".themes", name);
   if (path)
     return path;
 
@@ -1306,62 +1301,42 @@ _gtk_css_find_theme (const gchar *name,
   dirs = g_get_system_data_dirs ();
   for (i = 0; dirs[i]; i++)
     {
-      path = _gtk_css_find_theme_dir (dirs[i], "themes", name, variant);
+      path = _gtk_css_find_theme_dir (dirs[i], "themes", name);
       if (path)
         return path;
     }
 
   /* Finally, try in the default theme directory */
   dir = _gtk_get_theme_dir ();
-  path = _gtk_css_find_theme_dir (dir, NULL, name, variant);
+  path = _gtk_css_find_theme_dir (dir, NULL, name);
   g_free (dir);
 
   return path;
 }
 
-/**
- * gtk_css_provider_load_named:
- * @provider: a #GtkCssProvider
- * @name: A theme name
- * @variant: (allow-none): variant to load, for example, "dark", or
- *     %NULL for the default
- *
- * Loads a theme from the usual theme paths. The actual process of
- * finding the theme might change between releases, but it is
- * guaranteed that this function uses the same mechanism to load the
- * theme that GTK uses for loading its own theme.
- **/
-void
-gtk_css_provider_load_named (GtkCssProvider *provider,
-                             const gchar    *name,
-                             const gchar    *variant)
+static gboolean
+gtk_css_provider_load_theme (GtkCssProvider *provider,
+                             const gchar    *name)
 {
   gchar *path;
   gchar *resource_path;
 
-  g_return_if_fail (GTK_IS_CSS_PROVIDER (provider));
-  g_return_if_fail (name != NULL);
-
-  gtk_css_provider_reset (provider);
-
   /* try loading the resource for the theme. This is mostly meant for built-in
    * themes.
    */
-  if (variant)
-    resource_path = g_strdup_printf ("/org/gtk/libgtk/theme/%s/gtk-%s.css", name, variant);
-  else
-    resource_path = g_strdup_printf ("/org/gtk/libgtk/theme/%s/gtk.css", name);
+  resource_path = g_strconcat ("/org/gtk/libgtk/theme/", name, "/gtk.css", NULL);
 
   if (g_resources_get_info (resource_path, 0, NULL, NULL, NULL))
     {
       gtk_css_provider_load_from_resource (provider, resource_path);
       g_free (resource_path);
-      return;
+      return TRUE;
     }
+
   g_free (resource_path);
 
   /* Next try looking for files in the various theme directories. */
-  path = _gtk_css_find_theme (name, variant);
+  path = _gtk_css_find_theme (name);
   if (path)
     {
       GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
@@ -1383,23 +1358,46 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
 
       g_free (dir);
       g_free (path);
-    }
-  else
-    {
-      /* Things failed! Fall back! Fall back! */
 
-      if (variant)
-        {
-          /* If there was a variant, try without */
-          gtk_css_provider_load_named (provider, name, NULL);
-        }
-      else
-        {
-          /* Worst case, fall back to the default */
-          g_return_if_fail (!g_str_equal (name, DEFAULT_THEME_NAME)); /* infloop protection */
-          gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, NULL);
-        }
+      return TRUE;
     }
+
+  return FALSE;
+}
+
+/**
+ * gtk_css_provider_load_named:
+ * @provider: a #GtkCssProvider
+ * @name: A theme name
+ * @fallback: (allow-none): Fallback theme to load if @name is
+ *     not available, or %NULL for the default
+ *
+ * Loads a theme from the usual theme paths. The actual process of
+ * finding the theme might change between releases, but it is
+ * guaranteed that this function uses the same mechanism to load the
+ * theme that GTK uses for loading its own theme.
+ *
+ * The @fallback can be used to try loading THEME-dark,
+ * falling back to THEME.
+ **/
+void
+gtk_css_provider_load_named (GtkCssProvider *provider,
+                             const gchar    *name,
+                             const gchar    *fallback)
+{
+  g_return_if_fail (GTK_IS_CSS_PROVIDER (provider));
+  g_return_if_fail (name != NULL);
+
+  gtk_css_provider_reset (provider);
+
+  if (gtk_css_provider_load_theme (provider, name))
+    return;
+
+  if (fallback &&
+      gtk_css_provider_load_theme (provider, fallback))
+    return;
+
+  gtk_css_provider_load_theme (provider, DEFAULT_THEME_NAME);
 }
 
 static int
