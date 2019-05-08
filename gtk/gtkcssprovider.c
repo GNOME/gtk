@@ -1283,9 +1283,6 @@ _gtk_css_find_theme_dir (const gchar *dir,
 
   for (i = MINOR; i >= 0; i = i - 2)
     {
-      if (i < 14)
-        i = 0;
-
       subsubdir = g_strdup_printf ("gtk-4.%d", i);
       path = g_build_filename (base, subsubdir, file, NULL);
       g_free (subsubdir);
