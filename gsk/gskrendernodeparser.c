@@ -904,6 +904,39 @@ parse_blend_node (GtkCssParser *parser)
 }
 
 static GskRenderNode *
+parse_repeat_node (GtkCssParser *parser)
+{
+  GskRenderNode *child = NULL;
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  graphene_rect_t child_bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  const Declaration declarations[] = {
+    { "child", parse_node, &child },
+    { "bounds", parse_rect, &bounds },
+    { "child-bounds", parse_rect, &child_bounds },
+  };
+  GskRenderNode *result;
+  guint parse_result;
+
+  parse_result = parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (child == NULL)
+    {
+      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
+      return NULL;
+    }
+
+  if (!(parse_result & (1 << 1)))
+    gsk_render_node_get_bounds (child, &bounds);
+  if (!(parse_result & (1 << 2)))
+    gsk_render_node_get_bounds (child, &child_bounds);
+
+  result = gsk_repeat_node_new (&bounds, child, &child_bounds);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static GskRenderNode *
 parse_text_node (GtkCssParser *parser)
 {
   PangoFont *font = NULL;
@@ -1091,8 +1124,8 @@ parse_node (GtkCssParser *parser,
     { "blur", parse_blur_node },
     { "debug", parse_debug_node },
     { "blend", parse_blend_node },
-#if 0
     { "repeat", parse_repeat_node },
+#if 0
     { "cairo", parse_cairo_node },
 #endif
 
