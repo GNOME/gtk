@@ -45,7 +45,8 @@ enum
   PROP_0,
   PROP_GROUP,
   PROP_PREFIX,
-  PROP_NAME
+  PROP_NAME,
+  PROP_SIZEGROUP
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorActionEditor, gtk_inspector_action_editor, GTK_TYPE_BOX)
@@ -267,28 +268,29 @@ constructed (GObject *object)
   GtkInspectorActionEditor *r = GTK_INSPECTOR_ACTION_EDITOR (object);
   GVariant *state;
   GtkWidget *row;
+  GtkWidget *activate;
   GtkWidget *label;
 
   r->priv->enabled = g_action_group_get_action_enabled (r->priv->group, r->priv->name);
   state = g_action_group_get_action_state (r->priv->group, r->priv->name);
 
-  r->priv->sg = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  activate = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  gtk_container_add (GTK_CONTAINER (row), activate);
+  gtk_size_group_add_widget (r->priv->sg, activate);
 
   r->priv->activate_button = gtk_button_new_with_label (_("Activate"));
   g_signal_connect (r->priv->activate_button, "clicked", G_CALLBACK (activate_action), r);
 
-  gtk_size_group_add_widget (r->priv->sg, r->priv->activate_button);
   gtk_widget_set_sensitive (r->priv->activate_button, r->priv->enabled);
-  gtk_container_add (GTK_CONTAINER (row), r->priv->activate_button);
+  gtk_container_add (GTK_CONTAINER (activate), r->priv->activate_button);
 
   r->priv->parameter_type = g_action_group_get_action_parameter_type (r->priv->group, r->priv->name);
   if (r->priv->parameter_type)
     {
       r->priv->parameter_entry = variant_editor_new (r->priv->parameter_type, parameter_changed, r);
       gtk_widget_set_sensitive (r->priv->parameter_entry, r->priv->enabled);
-      gtk_container_add (GTK_CONTAINER (row), r->priv->parameter_entry);
+      gtk_container_add (GTK_CONTAINER (activate), r->priv->parameter_entry);
     }
 
   gtk_container_add (GTK_CONTAINER (r), row);
@@ -350,6 +352,10 @@ get_property (GObject    *object,
       g_value_set_string (value, r->priv->name);
       break;
 
+    case PROP_SIZEGROUP:
+      g_value_set_object (value, r->priv->sg);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -380,6 +386,10 @@ set_property (GObject      *object,
       r->priv->name = g_value_dup_string (value);
       break;
 
+    case PROP_SIZEGROUP:
+      r->priv->sg = g_value_get_object (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID(object, param_id, pspec);
       break;
@@ -407,16 +417,21 @@ gtk_inspector_action_editor_class_init (GtkInspectorActionEditorClass *klass)
   g_object_class_install_property (object_class, PROP_NAME,
       g_param_spec_string ("name", "Name", "The action name",
                            NULL, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
+  g_object_class_install_property (object_class, PROP_SIZEGROUP,
+      g_param_spec_object ("sizegroup", "Size Group", "The Size Group for activate", 
+                           GTK_TYPE_SIZE_GROUP, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 }
 
 GtkWidget *
 gtk_inspector_action_editor_new (GActionGroup *group,
                                  const gchar  *prefix,
-                                 const gchar  *name)
+                                 const gchar  *name,
+                                 GtkSizeGroup *activate)
 {
   return g_object_new (GTK_TYPE_INSPECTOR_ACTION_EDITOR,
                        "group", group,
                        "prefix", prefix,
                        "name", name,
+                       "sizegroup", activate,
                        NULL);
 }

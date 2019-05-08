@@ -51,6 +51,7 @@ struct _GtkInspectorActionsPrivate
   GtkSizeGroup *enabled;
   GtkSizeGroup *parameter;
   GtkSizeGroup *state;
+  GtkSizeGroup *activate;
   GHashTable *groups;
 };
 
@@ -131,7 +132,7 @@ add_action (GtkInspectorActions *sl,
   gtk_container_add (GTK_CONTAINER (box), label);
   g_object_set_data (G_OBJECT (row), "state", label);
 
-  editor = gtk_inspector_action_editor_new (group, prefix, name);
+  editor = gtk_inspector_action_editor_new (group, prefix, name, sl->priv->activate);
   gtk_style_context_add_class (gtk_widget_get_style_context (editor), "cell");
   gtk_container_add (GTK_CONTAINER (box), editor);
 
@@ -312,6 +313,7 @@ gtk_inspector_actions_class_init (GtkInspectorActionsClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, enabled);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, parameter);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, state);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, activate);
 }
 
 // vim: set et sw=2 ts=2:

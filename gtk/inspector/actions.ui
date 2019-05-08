@@ -50,6 +50,12 @@
             <property name="xalign">0</property>
           </object>
         </child>
+        <child>
+          <object class="GtkLabel" id="changes_heading">
+            <property name="label" translatable="yes"></property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
@@ -96,5 +102,8 @@
     <widgets>
       <widget name="state_heading"/>
     </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="activate">
+    <property name="mode">horizontal</property>
   </object>
 </interface>

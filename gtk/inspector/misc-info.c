@@ -180,7 +180,7 @@ show_object (GtkInspectorMiscInfo *sl,
              const gchar          *tab)
 {
   g_object_set_data_full (G_OBJECT (sl->priv->object_tree), "next-tab", g_strdup (tab), g_free);
-  gtk_inspector_object_tree_select_object (sl->priv->object_tree, object);
+  gtk_inspector_object_tree_activate_object (sl->priv->object_tree, object);
 }
 
 static void
