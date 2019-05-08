@@ -524,6 +524,7 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
 
   surface = g_object_new (GDK_TYPE_WAYLAND_SURFACE,
                           "display", display,
+                          "parent", parent,
                           "frame-clock", frame_clock,
                           NULL);
 
@@ -541,7 +542,6 @@ _gdk_wayland_display_create_surface (GdkDisplay     *display,
     }
 
   surface->surface_type = surface_type;
-  surface->parent = parent;
   surface->x = x;
   surface->y = y;
   surface->width = width;
