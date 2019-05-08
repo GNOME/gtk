@@ -1235,17 +1235,6 @@ _gtk_get_theme_dir (void)
   return g_build_filename (var, "share", "themes", NULL);
 }
 
-/* Return the path that this providers gtk.css was loaded from,
- * if it is part of a theme, otherwise NULL.
- */
-const gchar *
-_gtk_css_provider_get_theme_dir (GtkCssProvider *provider)
-{
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
-
-  return priv->path;
-}
-
 #if (GTK_MINOR_VERSION % 2)
 #define MINOR (GTK_MINOR_VERSION + 1)
 #else

@@ -24,8 +24,6 @@ G_BEGIN_DECLS
 
 gchar *_gtk_get_theme_dir (void);
 
-const gchar *_gtk_css_provider_get_theme_dir (GtkCssProvider *provider);
-
 void   gtk_css_provider_set_keep_css_sections (void);
 
 G_END_DECLS
