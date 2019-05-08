@@ -61,11 +61,12 @@
  * In addition, certain files will be read when GTK+ is initialized. First, the
  * file `$XDG_CONFIG_HOME/gtk-4.0/gtk.css` is loaded if it exists. Then, GTK+
  * loads the first existing file among
- * `XDG_DATA_HOME/themes/THEME/gtk-VERSION/gtk.css`,
- * `$HOME/.themes/THEME/gtk-VERSION/gtk.css`,
- * `$XDG_DATA_DIRS/themes/THEME/gtk-VERSION/gtk.css` and
- * `DATADIR/share/themes/THEME/gtk-VERSION/gtk.css`, where `THEME` is the name of
- * the current theme (see the #GtkSettings:gtk-theme-name setting), `DATADIR`
+ * `XDG_DATA_HOME/themes/THEME/gtk-VERSION/gtk-VARIANT.css`,
+ * `$HOME/.themes/THEME/gtk-VERSION/gtk-VARIANT.css`,
+ * `$XDG_DATA_DIRS/themes/THEME/gtk-VERSION/gtk-VARIANT.css` and
+ * `DATADIR/share/themes/THEME/gtk-VERSION/gtk-VARIANT.css`, where `THEME` is the name of
+ * the current theme (see the #GtkSettings:gtk-theme-name setting),
+ * VARIANT is the variant to load (see the #GtkSettings:gtk-application-prefer-dark-theme setting), `DATADIR`
  * is the prefix configured when GTK+ was compiled (unless overridden by the
  * `GTK_DATA_PREFIX` environment variable), and `VERSION` is the GTK+ version number.
  * If no file is found for the current version, GTK+ tries older versions all the
