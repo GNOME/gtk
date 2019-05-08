@@ -79,6 +79,7 @@ enum {
   PROP_0,
   PROP_CURSOR,
   PROP_DISPLAY,
+  PROP_PARENT,
   PROP_FRAME_CLOCK,
   PROP_STATE,
   PROP_MAPPED,
@@ -437,6 +438,13 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                            GDK_TYPE_DISPLAY,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
+  properties[PROP_PARENT] =
+      g_param_spec_object ("parent",
+                           P_("Parent"),
+                           P_("Parent surface"),
+                           GDK_TYPE_SURFACE,
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
   properties[PROP_FRAME_CLOCK] =
       g_param_spec_object ("frame-clock",
                            P_("Frame Clock"),
@@ -639,6 +647,10 @@ gdk_surface_set_property (GObject      *object,
       g_assert (surface->display != NULL);
       break;
 
+    case PROP_PARENT:
+      surface->parent = g_value_dup_object (value);
+      break;
+
     case PROP_FRAME_CLOCK:
       gdk_surface_set_frame_clock (surface, GDK_FRAME_CLOCK (g_value_get_object (value)));
       break;
@@ -669,6 +681,10 @@ gdk_surface_get_property (GObject    *object,
 
     case PROP_DISPLAY:
       g_value_set_object (value, surface->display);
+      break;
+
+    case PROP_PARENT:
+      g_value_set_object (value, surface->parent);
       break;
 
     case PROP_FRAME_CLOCK:
