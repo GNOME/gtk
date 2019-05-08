@@ -55,9 +55,8 @@ gtk_inspector_action_editor_init (GtkInspectorActionEditor *editor)
 {
   editor->priv = gtk_inspector_action_editor_get_instance_private (editor);
   g_object_set (editor,
-                "orientation", GTK_ORIENTATION_VERTICAL,
+                "orientation", GTK_ORIENTATION_HORIZONTAL,
                 "spacing", 10,
-                "margin", 10,
                 NULL);
 }
 
@@ -238,6 +237,9 @@ action_enabled_changed_cb (GActionGroup             *group,
                            gboolean                  enabled,
                            GtkInspectorActionEditor *r)
 {
+  if (!g_str_equal (action_name, r->priv->name))
+    return;
+
   r->priv->enabled = enabled;
   if (r->priv->parameter_entry)
     {
@@ -252,6 +254,9 @@ action_state_changed_cb (GActionGroup             *group,
                          GVariant                 *state,
                          GtkInspectorActionEditor *r)
 {
+  if (!g_str_equal (action_name, r->priv->name))
+    return;
+
   if (r->priv->state_entry)
     variant_editor_set_value (r->priv->state_entry, state);
 }
@@ -261,16 +266,11 @@ constructed (GObject *object)
 {
   GtkInspectorActionEditor *r = GTK_INSPECTOR_ACTION_EDITOR (object);
   GVariant *state;
-  gchar *fullname;
   GtkWidget *row;
   GtkWidget *label;
 
   r->priv->enabled = g_action_group_get_action_enabled (r->priv->group, r->priv->name);
   state = g_action_group_get_action_state (r->priv->group, r->priv->name);
-
-  fullname = g_strdup_printf ("%s.%s", r->priv->prefix, r->priv->name);
-  gtk_container_add (GTK_CONTAINER (r), gtk_label_new (fullname));
-  g_free (fullname);
 
   r->priv->sg = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
@@ -297,7 +297,7 @@ constructed (GObject *object)
     {
       r->priv->state_type = g_variant_type_copy (g_variant_get_type (state));
       row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-      label = gtk_label_new (_("State"));
+      label = gtk_label_new (_("Set State"));
       gtk_size_group_add_widget (r->priv->sg, label);
       gtk_container_add (GTK_CONTAINER (row), label);
       r->priv->state_entry = variant_editor_new (r->priv->state_type, state_changed, r);
