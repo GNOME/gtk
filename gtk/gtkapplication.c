@@ -610,9 +610,9 @@ gtk_application_finalize (GObject *object)
 
 #ifdef G_OS_UNIX
 
-static const gchar org_gnome_Sysprof2_Profiler_xml[] =
+static const gchar org_gnome_Sysprof3_Profiler_xml[] =
   "<node>"
-    "<interface name='org.gnome.Sysprof2.Profiler'>"
+    "<interface name='org.gnome.Sysprof3.Profiler'>"
       "<method name='Start'>"
         "<arg type='h' name='fd' direction='in'/>"
       "</method>"
@@ -621,7 +621,7 @@ static const gchar org_gnome_Sysprof2_Profiler_xml[] =
     "</interface>"
   "</node>";
 
-static GDBusInterfaceInfo *org_gnome_Sysprof2_Profiler;
+static GDBusInterfaceInfo *org_gnome_Sysprof3_Profiler;
 
 static void
 sysprof_profiler_method_call (GDBusConnection       *connection,
@@ -696,22 +696,22 @@ gtk_application_dbus_register (GApplication     *application,
     NULL
   };
 
-  if (org_gnome_Sysprof2_Profiler == NULL)
+  if (org_gnome_Sysprof3_Profiler == NULL)
     {
       GDBusNodeInfo *info;
 
-      info = g_dbus_node_info_new_for_xml (org_gnome_Sysprof2_Profiler_xml, error);
+      info = g_dbus_node_info_new_for_xml (org_gnome_Sysprof3_Profiler_xml, error);
       if (info == NULL)
         return FALSE;
 
-      org_gnome_Sysprof2_Profiler = g_dbus_node_info_lookup_interface (info, "org.gnome.Sysprof2.Profiler");
-      g_dbus_interface_info_ref (org_gnome_Sysprof2_Profiler);
+      org_gnome_Sysprof3_Profiler = g_dbus_node_info_lookup_interface (info, "org.gnome.Sysprof3.Profiler");
+      g_dbus_interface_info_ref (org_gnome_Sysprof3_Profiler);
       g_dbus_node_info_unref (info);
     }
 
   dbus->profiler_id = g_dbus_connection_register_object (connection,
                                                          "/org/gtk/Profiler",
-                                                         org_gnome_Sysprof2_Profiler,
+                                                         org_gnome_Sysprof3_Profiler,
                                                          &vtable,
                                                          NULL,
                                                          NULL,
