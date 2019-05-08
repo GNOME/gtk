@@ -620,6 +620,9 @@ node_editor_window_create_renderer_widget (gpointer item,
   gtk_container_add (GTK_CONTAINER (box), label);
 
   picture = gtk_picture_new_for_paintable (paintable);
+  /* don't ever scale up, we want to be as accurate as possible */
+  gtk_widget_set_halign (picture, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (picture, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (box), picture);
 
   row = gtk_list_box_row_new ();
