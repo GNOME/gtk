@@ -117,7 +117,6 @@ struct _GtkCssProviderPrivate
   GArray *rulesets;
   GtkCssSelectorTree *tree;
   GResource *resource;
-  gchar *path;
 };
 
 enum {
@@ -602,8 +601,6 @@ gtk_css_provider_finalize (GObject *object)
       priv->resource = NULL;
     }
 
-  g_free (priv->path);
-
   G_OBJECT_CLASS (gtk_css_provider_parent_class)->finalize (object);
 }
 
@@ -651,12 +648,6 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
       g_resources_unregister (priv->resource);
       g_resource_unref (priv->resource);
       priv->resource = NULL;
-    }
-
-  if (priv->path)
-    {
-      g_free (priv->path);
-      priv->path = NULL;
     }
 
   g_hash_table_remove_all (priv->symbolic_colors);
@@ -1389,8 +1380,8 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
 
       /* Only set this after load, as load_from_path will clear it */
       priv->resource = resource;
-      priv->path = dir;
 
+      g_free (dir);
       g_free (path);
     }
   else
