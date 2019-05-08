@@ -497,7 +497,6 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
   GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
   GtkStyleContext *context;
   GdkRectangle pix_rect;
-  GdkRectangle draw_rect;
   gboolean is_expander;
   gint xpad, ypad;
   GtkIconHelper *icon_helper;
@@ -515,7 +514,7 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
   pix_rect.width -= xpad * 2;
   pix_rect.height -= ypad * 2;
 
-  if (!gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect))
+  if (!gdk_rectangle_intersect (cell_area, &pix_rect, NULL))
     return;
 
   context = gtk_widget_get_style_context (widget);
