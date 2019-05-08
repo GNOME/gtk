@@ -94,6 +94,8 @@ struct _GtkCellRendererPixbufPrivate
 
   GdkPixbuf *pixbuf_expander_open;
   GdkPixbuf *pixbuf_expander_closed;
+  GdkTexture *texture_expander_open;
+  GdkTexture *texture_expander_closed;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererPixbuf, gtk_cell_renderer_pixbuf, GTK_TYPE_CELL_RENDERER)
@@ -117,10 +119,10 @@ gtk_cell_renderer_pixbuf_finalize (GObject *object)
 
   gtk_image_definition_unref (priv->image_def);
 
-  if (priv->pixbuf_expander_open)
-    g_object_unref (priv->pixbuf_expander_open);
-  if (priv->pixbuf_expander_closed)
-    g_object_unref (priv->pixbuf_expander_closed);
+  g_clear_object (&priv->pixbuf_expander_open);
+  g_clear_object (&priv->pixbuf_expander_closed);
+  g_clear_object (&priv->texture_expander_open);
+  g_clear_object (&priv->texture_expander_closed);
 
   G_OBJECT_CLASS (gtk_cell_renderer_pixbuf_parent_class)->finalize (object);
 }
@@ -335,14 +337,16 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       take_image_definition (cellpixbuf, gtk_image_definition_new_paintable (GDK_PAINTABLE (texture)));
       break;
     case PROP_PIXBUF_EXPANDER_OPEN:
-      if (priv->pixbuf_expander_open)
-        g_object_unref (priv->pixbuf_expander_open);
+      g_clear_object (&priv->pixbuf_expander_open);
+      g_clear_object (&priv->texture_expander_open);
       priv->pixbuf_expander_open = (GdkPixbuf*) g_value_dup_object (value);
+      priv->texture_expander_open = gdk_texture_new_for_pixbuf (priv->pixbuf_expander_open);
       break;
     case PROP_PIXBUF_EXPANDER_CLOSED:
-      if (priv->pixbuf_expander_closed)
-        g_object_unref (priv->pixbuf_expander_closed);
+      g_clear_object (&priv->pixbuf_expander_closed);
+      g_clear_object (&priv->texture_expander_closed);
       priv->pixbuf_expander_closed = (GdkPixbuf*) g_value_dup_object (value);
+      priv->texture_expander_closed = gdk_texture_new_for_pixbuf (priv->pixbuf_expander_open);
       break;
     case PROP_TEXTURE:
       take_image_definition (cellpixbuf, gtk_image_definition_new_paintable (g_value_get_object (value)));
@@ -500,7 +504,6 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
   gboolean is_expander;
   gint xpad, ypad;
   GtkIconHelper *icon_helper;
-  GdkTexture *texture;
 
   gtk_cell_renderer_pixbuf_get_size (cell, widget, (GdkRectangle *) cell_area,
 				     &pix_rect.x, 
@@ -533,16 +536,12 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
       if (is_expanded && priv->pixbuf_expander_open != NULL)
         {
           icon_helper = gtk_icon_helper_new (gtk_style_context_get_node (context), widget);
-          texture = gdk_texture_new_for_pixbuf (priv->pixbuf_expander_open);
-          _gtk_icon_helper_set_paintable (icon_helper, GDK_PAINTABLE (texture));
-          g_object_unref (texture);
+          _gtk_icon_helper_set_paintable (icon_helper, GDK_PAINTABLE (priv->texture_expander_open));
         }
       else if (!is_expanded && priv->pixbuf_expander_closed != NULL)
         {
           icon_helper = gtk_icon_helper_new (gtk_style_context_get_node (context), widget);
-          texture = gdk_texture_new_for_pixbuf (priv->pixbuf_expander_closed);
-          _gtk_icon_helper_set_paintable (icon_helper, GDK_PAINTABLE (texture));
-          g_object_unref (texture);
+          _gtk_icon_helper_set_paintable (icon_helper, GDK_PAINTABLE (priv->texture_expander_closed));
         }
       else
         {
