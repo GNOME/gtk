@@ -18,7 +18,7 @@ def get_files(subdir,extension):
 
 xml += '''
     <file>theme/Adwaita/gtk.css</file>
-    <file>theme/Adwaita/gtk-dark.css</file>
+    <file alias='theme/Adwaita-dark/gtk.css'>theme/Adwaita/gtk-dark.css</file>
     <file>theme/Adwaita/gtk-contained.css</file>
     <file>theme/Adwaita/gtk-contained-dark.css</file>
 '''
