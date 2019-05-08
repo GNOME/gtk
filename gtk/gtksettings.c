@@ -2208,17 +2208,27 @@ static void
 settings_update_theme (GtkSettings *settings)
 {
   GtkSettingsPrivate *priv = settings->priv;
-  gchar *theme_name;
-  gchar *theme_variant;
+  char *theme_name;
+  char *theme_variant;
+  char *theme_fallback;
 
   get_theme_name (settings, &theme_name, &theme_variant);
 
+  if (theme_variant)
+    {
+      theme_fallback = theme_name;
+      theme_name = g_strconcat (theme_fallback, "-", theme_variant, NULL);
+    }
+  else
+    theme_fallback = NULL;
+
   gtk_css_provider_load_named (priv->theme_provider,
                                theme_name,
-                               theme_variant);
+                               theme_fallback);
 
   g_free (theme_name);
   g_free (theme_variant);
+  g_free (theme_fallback);
 }
 
 const cairo_font_options_t *
