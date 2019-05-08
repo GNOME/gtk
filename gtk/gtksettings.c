@@ -87,18 +87,7 @@
  * Applications can override system-wide settings by setting the property
  * of the GtkSettings object with g_object_set(). This should be restricted
  * to special cases though; GtkSettings are not meant as an application
- * configuration facility. When doing so, you need to be aware that settings
- * that are specific to individual widgets may not be available before the
- * widget type has been realized at least once. The following example
- * demonstrates a way to do this:
- * |[<!-- language="C" -->
- *   gtk_init ();
- *
- *   // make sure the type is realized
- *   g_type_class_unref (g_type_class_ref (GTK_TYPE_BUTTON));
- *
- *   g_object_set (gtk_settings_get_default (), "gtk-enable-animations", FALSE, NULL);
- * ]|
+ * configuration facility.
  *
  * There is one GtkSettings instance per display. It can be obtained with
  * gtk_settings_get_for_display(), but in many cases, it is more convenient
