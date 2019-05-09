@@ -26,8 +26,11 @@ serialize_deserialize = executable(
 )
 
 compare_render_tests = [
+  'blend-normal',
+  'blend-difference',
   'clip-coordinates-3d',
   'clipped_rounded_clip',
+  'color-blur0',
   'cross-fade-in-opacity',
   'opacity_clip',
   'outset_shadow_offset_both',
@@ -36,9 +39,7 @@ compare_render_tests = [
   'outset_shadow_rounded_top',
   'outset_shadow_simple',
   'shadow-in-opacity',
-  'blend-normal',
-  'blend-difference',
-  'color-blur0',
+  'texture-url',
 ]
 
 renderers = [
