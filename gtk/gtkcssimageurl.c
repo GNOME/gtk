@@ -27,6 +27,8 @@
 #include "gtkcssimagepaintableprivate.h"
 #include "gtkstyleproviderprivate.h"
 
+#include "gtk/css/gtkcssdataurlprivate.h"
+
 G_DEFINE_TYPE (GtkCssImageUrl, _gtk_css_image_url, GTK_TYPE_CSS_IMAGE)
 
 static GtkCssImage *
@@ -50,6 +52,31 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
       texture = gdk_texture_new_from_resource (resource_path);
 
       g_free (resource_path);
+      g_free (uri);
+    }
+  else if (g_file_has_uri_scheme (url->file, "data"))
+    {
+      GInputStream *stream;
+      char *uri;
+      GdkPixbuf *pixbuf;
+      GBytes *bytes;
+
+      uri = g_file_get_uri (url->file);
+      texture = NULL;
+
+      bytes = gtk_data_url_parse (uri, NULL, &local_error);
+      if (bytes)
+        {
+          stream = g_memory_input_stream_new_from_bytes (bytes);
+          pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, &local_error);
+          g_object_unref (stream);
+          if (pixbuf != NULL)
+            {
+              texture = gdk_texture_new_for_pixbuf (pixbuf);
+              g_object_unref (pixbuf);
+            }
+        }
+
       g_free (uri);
     }
   else
