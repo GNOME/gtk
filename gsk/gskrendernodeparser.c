@@ -1,12 +1,15 @@
 
 #include "gskrendernodeparserprivate.h"
 
-#include <gdk/gdkrgbaprivate.h>
-#include <gtk/css/gtkcss.h>
-#include "gtk/css/gtkcssparserprivate.h"
 #include "gskroundedrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gsktransformprivate.h"
+
+#include "gdk/gdkrgbaprivate.h"
+#include "gdk/gdktextureprivate.h"
+#include <gtk/css/gtkcss.h>
+#include "gtk/css/gtkcssparserprivate.h"
+#include "gtk/css/gtkcssdataurlprivate.h"
 
 typedef struct _Declaration Declaration;
 
@@ -70,35 +73,67 @@ parse_rect (GtkCssParser *parser,
 }
 
 static gboolean
-parse_data (GtkCssParser *parser,
-            gpointer      out_data)
+parse_texture (GtkCssParser *parser,
+               gpointer      out_data)
 {
-  const GtkCssToken *token;
-  struct {
-    guchar *data;
-    gsize data_len;
-  } *texture_data = out_data;
+  GFile *file;
+  GdkTexture *texture;
+  GError *error = NULL;
+  GtkCssLocation start_location;
 
-  token = gtk_css_parser_get_token (parser);
-  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_STRING))
+  start_location = *gtk_css_parser_get_start_location (parser);
+  file = gtk_css_parser_consume_url (parser);
+  if (file == NULL)
     return FALSE;
 
-  if (!g_str_has_prefix (token->string.string, "data:;base64,"))
+  if (g_file_has_uri_scheme (file, "data"))
     {
-      gtk_css_parser_error_value (parser, "Only base64 encoded data is allowed");
+      GInputStream *stream;
+      char *uri;
+      GdkPixbuf *pixbuf;
+      GBytes *bytes;
+
+      uri = g_file_get_uri (file);
+      texture = NULL;
+
+      bytes = gtk_data_url_parse (uri, NULL, &error);
+      if (bytes)
+        {
+          stream = g_memory_input_stream_new_from_bytes (bytes);
+          pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, &error);
+          g_object_unref (stream);
+          if (pixbuf != NULL)
+            {
+              texture = gdk_texture_new_for_pixbuf (pixbuf);
+              g_object_unref (pixbuf);
+            }
+        }
+
+      g_free (uri);
+    }
+  else
+    {
+      texture = gdk_texture_new_from_file (file, &error);
+    }
+  g_object_unref (file);
+
+  if (texture == NULL)
+    {
+      gtk_css_parser_emit_error (parser,
+                                 &start_location,
+                                 gtk_css_parser_get_end_location (parser),
+                                 error);
+      g_clear_error (&error);
       return FALSE;
     }
 
-  texture_data->data = g_base64_decode (token->string.string + strlen ("data:;base64,"),
-                                        &texture_data->data_len);
-
-  gtk_css_parser_consume_token (parser);
   if (!parse_semicolon (parser))
     {
-      g_free (texture_data->data);
+      g_object_unref (texture);
       return FALSE;
     }
 
+  *(GdkTexture **) out_data = texture;
   return TRUE;
 }
 
@@ -691,35 +726,21 @@ static GskRenderNode *
 parse_texture_node (GtkCssParser *parser)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
-  struct {
-    guchar *data;
-    gsize data_len;
-  } texture_data = { NULL, 0 };
-  double width = 0.0;
-  double height = 0.0;
+  GdkTexture *texture = NULL;
   const Declaration declarations[] = {
     { "bounds", parse_rect, &bounds },
-    { "width", parse_double, &width },
-    { "height", parse_double, &height },
-    { "texture", parse_data, &texture_data }
+    { "texture", parse_texture, &texture }
   };
-  GdkTexture *texture;
-  GdkPixbuf *pixbuf;
   GskRenderNode *node;
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
 
-  pixbuf = gdk_pixbuf_new_from_data (texture_data.data,
-                                     GDK_COLORSPACE_RGB,
-                                     TRUE,
-                                     8,
-                                     (int)width,
-                                     (int)height,
-                                     4 * (int)width,
-                                     (GdkPixbufDestroyNotify)g_free, NULL);
+  if (texture == NULL)
+    {
+      gtk_css_parser_error_syntax (parser, "Missing \"texture\" property definition");
+      return NULL;
+    }
 
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
-  g_object_unref (pixbuf);
   node = gsk_texture_node_new (texture, &bounds);
   g_object_unref (texture);
 
@@ -1497,6 +1518,16 @@ append_node_param (Printer       *p,
   render_node_print (p, node);
 }
 
+static cairo_status_t
+surface_write (void                *closure,
+               const unsigned char *data,
+               unsigned int         length)
+{
+  g_byte_array_append (closure, data, length);
+
+  return CAIRO_STATUS_SUCCESS;
+}
+
 static void
 render_node_print (Printer       *p,
                    GskRenderNode *node)
@@ -1737,30 +1768,25 @@ render_node_print (Printer       *p,
     case GSK_TEXTURE_NODE:
       {
         GdkTexture *texture = gsk_texture_node_get_texture (node);
-        int stride;
-        int len;
-        guchar *data;
+        cairo_surface_t *surface;
+        GByteArray *array;
         char *b64;
 
         start_node (p, "texture");
         append_rect_param (p, "bounds", &node->bounds);
-        /* TODO: width and height here are unnecessary and can later be computed from the data length? */
-        append_float_param (p, "width", gdk_texture_get_width (texture));
-        append_float_param (p, "height", gdk_texture_get_height (texture));
 
-        stride = 4 * gdk_texture_get_width (texture);
-        len = sizeof (guchar) * stride * gdk_texture_get_height (texture);
-        data = g_malloc (len);
-        gdk_texture_download (texture, data, stride);
-
-        b64 = g_base64_encode (data, len);
+        surface = gdk_texture_download_surface (texture);
+        array = g_byte_array_new ();
+        cairo_surface_write_to_png_stream (surface, surface_write, array);
+        b64 = g_base64_encode (array->data, array->len);
 
         _indent (p);
-        g_string_append_printf (p->str, "texture: \"data:;base64,%s\";\n", b64);
+        g_string_append_printf (p->str, "texture: url(\"data:image/png;base64,%s\");\n", b64);
         end_node (p);
 
         g_free (b64);
-        g_free (data);
+        g_byte_array_free (array, TRUE);
+        cairo_surface_destroy (surface);
       }
       break;
 
