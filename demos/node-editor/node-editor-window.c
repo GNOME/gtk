@@ -265,6 +265,7 @@ text_view_query_tooltip_cb (GtkWidget        *widget,
 {
   GtkTextIter iter;
   guint i;
+  GString *text;
 
   if (keyboard_tip)
     {
@@ -282,6 +283,8 @@ text_view_query_tooltip_cb (GtkWidget        *widget,
       gtk_text_view_get_iter_at_position (GTK_TEXT_VIEW (self->text_view), &iter, &trailing, bx, by);
     }
 
+  text = g_string_new ("");
+
   for (i = 0; i < self->errors->len; i ++)
     {
       const TextViewError *e = &g_array_index (self->errors, TextViewError, i);
@@ -292,12 +295,23 @@ text_view_query_tooltip_cb (GtkWidget        *widget,
 
       if (gtk_text_iter_in_range (&iter, &start_iter, &end_iter))
         {
-          gtk_tooltip_set_text (tooltip, e->message);
-          return TRUE;
+          if (text->len > 0)
+            g_string_append (text, "\n");
+          g_string_append (text, e->message);
         }
     }
 
-  return FALSE;
+  if (text->len > 0)
+    {
+      gtk_tooltip_set_text (tooltip, text->str);
+      g_string_free (text, TRUE);
+      return TRUE;
+    }
+  else
+    {
+      g_string_free (text, TRUE);
+      return FALSE;
+    }
 }
 
 gboolean
