@@ -745,7 +745,6 @@ int
 main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv);
-  g_test_bug_base ("http://bugzilla.gnome.org/");
   gtk_test_register_all_types();
 
   g_test_add_func ("/tests/iconview-new", test_iconview_new);

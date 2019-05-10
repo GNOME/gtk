@@ -340,7 +340,6 @@ main (int    argc,
       char **argv)
 {
   gtk_test_init (&argc, &argv, NULL);
-  g_test_bug_base ("http://bugzilla.gnome.org/");
 
   g_test_add_func ("/TreeView/cursor/bug-546005", test_bug_546005);
   g_test_add_func ("/TreeView/cursor/bug-539377", test_bug_539377);

@@ -151,14 +151,12 @@ test_color_parse_nonsense (void)
 int
 main (int argc, char *argv[])
 {
-        g_test_init (&argc, &argv, NULL);
+  g_test_init (&argc, &argv, NULL);
 
-        g_test_bug_base ("http://bugzilla.gnome.org");
+  g_test_add_func ("/rgba/parse", test_color_parse);
+  g_test_add_func ("/rgba/parse/nonsense", test_color_parse_nonsense);
+  g_test_add_func ("/rgba/to-string", test_color_to_string);
+  g_test_add_func ("/rgba/copy", test_color_copy);
 
-        g_test_add_func ("/rgba/parse", test_color_parse);
-        g_test_add_func ("/rgba/parse/nonsense", test_color_parse_nonsense);
-        g_test_add_func ("/rgba/to-string", test_color_to_string);
-        g_test_add_func ("/rgba/copy", test_color_copy);
-
-        return g_test_run ();
+  return g_test_run ();
 }

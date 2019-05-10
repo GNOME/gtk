@@ -50,8 +50,6 @@ main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
 
-  g_test_bug_base ("http://bugzilla.gnome.org/");
-
   g_test_add_func ("/popover/accessible-parent", test_popover_parent);
 
   return g_test_run ();

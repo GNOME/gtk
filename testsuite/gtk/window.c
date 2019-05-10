@@ -258,7 +258,6 @@ main (int argc, char *argv[])
   gint i;
 
   gtk_test_init (&argc, &argv);
-  g_test_bug_base ("http://bugzilla.gnome.org/");
 
   for (i = 0; i < argc; i++)
     {

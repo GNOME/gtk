@@ -78,7 +78,6 @@ gtk_test_init (int    *argcp,
   g_test_init (argcp, argvp, NULL);
   gtk_disable_setlocale();
   setlocale (LC_ALL, "en_US.UTF-8");
-  g_test_bug_base ("http://bugzilla.gnome.org/show_bug.cgi?id=%s");
 
   /* XSendEvent() doesn't work yet on XI2 events.
    * So at the moment gdk_test_simulate_* can only
