@@ -111,8 +111,6 @@ main (int argc, char *argv[])
 
   gtk_init ();
 
-  g_test_bug_base ("http://bugzilla.gnome.org/");
-
   g_test_add_func ("/seat/list", test_list_seats);
   g_test_add_func ("/seat/default", test_default_seat);
 

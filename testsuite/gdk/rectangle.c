@@ -72,8 +72,6 @@ main (int argc, char *argv[])
 
   gtk_init ();
 
-  g_test_bug_base ("http://bugzilla.gnome.org/");
-
   g_test_add_func ("/rectangle/equal", test_rectangle_equal);
   g_test_add_func ("/rectangle/intersect", test_rectangle_intersect);
   g_test_add_func ("/rectangle/union", test_rectangle_union);

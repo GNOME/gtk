@@ -1064,7 +1064,7 @@ test_bold_label (void)
   AtkObject *atk_obj;
   gchar *text;
 
-  g_test_bug ("126797");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=126797 */
 
   label = gtk_label_new ("<b>Bold?</b>");
   g_object_ref_sink (label);
@@ -1088,8 +1088,6 @@ int
 main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
-
-  g_test_bug_base ("http://bugzilla.gnome.org/");
 
   g_test_add_func ("/text/bold/GtkLabel", test_bold_label);
 
