@@ -68,9 +68,18 @@ get_current_text (GtkTextBuffer *buffer)
 
   gtk_text_buffer_get_start_iter (buffer, &start);
   gtk_text_buffer_get_end_iter (buffer, &end);
-  gtk_text_buffer_remove_all_tags (buffer, &start, &end);
 
   return gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+}
+
+static void
+text_buffer_remove_all_tags (GtkTextBuffer *buffer)
+{
+  GtkTextIter start, end;
+
+  gtk_text_buffer_get_start_iter (buffer, &start);
+  gtk_text_buffer_get_end_iter (buffer, &end);
+  gtk_text_buffer_remove_all_tags (buffer, &start, &end);
 }
 
 static void
@@ -146,6 +155,7 @@ text_changed (GtkTextBuffer    *buffer,
 
   g_array_remove_range (self->errors, 0, self->errors->len);
   text = get_current_text (self->text_buffer);
+  text_buffer_remove_all_tags (self->text_buffer);
   bytes = g_bytes_new_take (text, strlen (text));
 
   /* If this is too slow, go fix the parser performance */
