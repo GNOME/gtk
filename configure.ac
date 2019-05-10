@@ -1534,15 +1534,8 @@ else
     CUPS_API_MAJOR=`echo $ECHO_N $CUPS_API_VERSION | awk -F. '{print $1}'`
     CUPS_API_MINOR=`echo $ECHO_N $CUPS_API_VERSION | awk -F. '{print $2}'`
 
-    if test $CUPS_API_MAJOR -lt 1 -o \
-            $CUPS_API_MAJOR -eq 1 -a $CUPS_API_MINOR -lt 2; then
-      AC_MSG_ERROR([CUPS >= 1.2 not found])
-    fi
-    if test $CUPS_API_MAJOR -gt 1 -o \
-	    $CUPS_API_MAJOR -eq 1 -a $CUPS_API_MINOR -ge 6; then
-      AC_DEFINE(HAVE_CUPS_API_1_6, 1,
-                [Define to 1 if CUPS 1.6 API is available])
-      have_cups_api_1_6=yes
+    if test $CUPS_API_MAJOR -lt 2; then
+      AC_MSG_ERROR([CUPS >= 2.0 not found])
     fi
 
     AC_SUBST(CUPS_API_MAJOR)

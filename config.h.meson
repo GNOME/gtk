@@ -23,9 +23,6 @@
 /* Define to 1 if you have the <crt_externs.h> header file. */
 #mesondefine HAVE_CRT_EXTERNS_H
 
-/* Define to 1 if CUPS 1.6 API is available */
-#mesondefine HAVE_CUPS_API_1_6
-
 /* Define if the GNU dcgettext() function is already present or preinstalled.
    */
 #mesondefine HAVE_DCGETTEXT

@@ -29,9 +29,6 @@
 /* Define to 1 if you have the <crt_externs.h> header file. */
 /* #undef HAVE_CRT_EXTERNS_H */
 
-/* Define to 1 if CUPS 1.2 API is available */
-/* #undef HAVE_CUPS_API_1_2 */
-
 /* Define to 1 if you have the `dcgettext' function. */
 #define HAVE_DCGETTEXT 1
 
