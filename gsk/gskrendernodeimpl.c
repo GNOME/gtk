@@ -636,6 +636,7 @@ gsk_texture_node_draw (GskRenderNode *node,
 {
   GskTextureNode *self = (GskTextureNode *) node;
   cairo_surface_t *surface;
+  cairo_pattern_t *pattern;
 
   surface = gdk_texture_download_surface (self->texture);
 
@@ -646,11 +647,14 @@ gsk_texture_node_draw (GskRenderNode *node,
                node->bounds.size.width / gdk_texture_get_width (self->texture),
                node->bounds.size.height / gdk_texture_get_height (self->texture));
 
-  cairo_set_source_surface (cr, surface, 0, 0);
+  pattern = cairo_pattern_create_for_surface (surface);
+  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
+  cairo_set_source (cr, pattern);
   cairo_paint (cr);
 
   cairo_restore (cr);
 
+  cairo_pattern_destroy (pattern);
   cairo_surface_destroy (surface);
 }
 
