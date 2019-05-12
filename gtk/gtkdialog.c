@@ -31,6 +31,7 @@
 #include "gtkdialog.h"
 #include "gtkdialogprivate.h"
 #include "gtkheaderbar.h"
+#include "gtkheaderbarprivate.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkbox.h"
@@ -460,6 +461,7 @@ gtk_dialog_constructed (GObject *object)
       g_list_free (children);
 
       update_suggested_action (dialog);
+      _gtk_header_bar_track_default_decoration (GTK_HEADER_BAR (priv->headerbar));
 
       g_signal_connect (priv->action_area, "add", G_CALLBACK (add_cb), dialog);
     }
@@ -1549,6 +1551,7 @@ gtk_dialog_buildable_add_child (GtkBuildable  *buildable,
   else if (g_str_equal (type, "titlebar"))
     {
       priv->headerbar = GTK_WIDGET (child);
+      _gtk_header_bar_track_default_decoration (GTK_HEADER_BAR (priv->headerbar));
       gtk_window_set_titlebar (GTK_WINDOW (buildable), priv->headerbar);
     }
   else if (g_str_equal (type, "action"))
