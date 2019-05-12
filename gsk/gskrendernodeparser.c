@@ -71,27 +71,26 @@ static gboolean
 parse_texture (GtkCssParser *parser,
                gpointer      out_data)
 {
-  GFile *file;
   GdkTexture *texture;
   GError *error = NULL;
   GtkCssLocation start_location;
+  char *url, *scheme;
 
   start_location = *gtk_css_parser_get_start_location (parser);
-  file = gtk_css_parser_consume_url (parser);
-  if (file == NULL)
+  url = gtk_css_parser_consume_url (parser);
+  if (url == NULL)
     return FALSE;
 
-  if (g_file_has_uri_scheme (file, "data"))
+  scheme = g_uri_parse_scheme (url);
+  if (g_ascii_strcasecmp (scheme, "data") == 0)
     {
       GInputStream *stream;
-      char *uri;
       GdkPixbuf *pixbuf;
       GBytes *bytes;
 
-      uri = g_file_get_uri (file);
       texture = NULL;
 
-      bytes = gtk_css_data_url_parse (uri, NULL, &error);
+      bytes = gtk_css_data_url_parse (url, NULL, &error);
       if (bytes)
         {
           stream = g_memory_input_stream_new_from_bytes (bytes);
@@ -103,14 +102,18 @@ parse_texture (GtkCssParser *parser,
               g_object_unref (pixbuf);
             }
         }
-
-      g_free (uri);
     }
   else
     {
+      GFile *file;
+
+      file = gtk_css_parser_resolve_url (parser, url);
       texture = gdk_texture_new_from_file (file, &error);
+      g_object_unref (file);
     }
-  g_object_unref (file);
+
+  g_free (scheme);
+  g_free (url);
 
   if (texture == NULL)
     {

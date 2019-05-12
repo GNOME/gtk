@@ -245,10 +245,14 @@ gtk_css_image_recolor_parse_arg (GtkCssParser *parser,
   switch (arg)
   {
     case 0:
-      self->file = gtk_css_parser_consume_url (parser);
-      if (self->file == NULL)
-        return 0;
-      return 1;
+      {
+        char *url = gtk_css_parser_consume_url (parser);
+        self->file = gtk_css_parser_resolve_url (parser, url);
+        g_free (url);
+        if (self->file == NULL)
+          return 0;
+        return 1;
+      }
 
     case 1:
       self->palette = gtk_css_palette_value_parse (parser);
