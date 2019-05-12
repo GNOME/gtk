@@ -973,11 +973,10 @@ gtk_css_parser_parse_url_arg (GtkCssParser *parser,
  *
  * Returns: (nullable) (transfer full): the resulting URL or %NULL on error
  **/
-GFile *
+char *
 gtk_css_parser_consume_url (GtkCssParser *self)
 {
   const GtkCssToken *token;
-  GFile *result;
   char *url;
 
   token = gtk_css_parser_get_token (self);
@@ -998,16 +997,7 @@ gtk_css_parser_consume_url (GtkCssParser *self)
       return NULL;
     }
   
-  result = gtk_css_parser_resolve_url (self, url);
-  if (result == NULL)
-    {
-      gtk_css_parser_error_import (self, "Could not resolve \"%s\" to a valid URL", url);
-      g_free (url);
-      return NULL;
-    }
-  g_free (url);
-
-  return result;
+  return url;
 }
 
 gboolean
