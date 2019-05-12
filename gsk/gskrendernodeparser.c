@@ -942,7 +942,7 @@ parse_text_node (GtkCssParser *parser)
   PangoFont *font = NULL;
   double x = 0;
   double y = 0;
-  GdkRGBA color = { 0, 0, 0, 0 };
+  GdkRGBA color = { 0, 0, 0, 1 };
   PangoGlyphString *glyphs = NULL;
   const Declaration declarations[] = {
     { "font", parse_font, &font },
