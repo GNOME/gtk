@@ -22,24 +22,8 @@ struct _Declaration
 };
 
 static gboolean
-check_eof (GtkCssParser *parser)
-{
-  const GtkCssToken *token;
-
-  token = gtk_css_parser_get_token (parser);
-  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
-    {
-      gtk_css_parser_error_syntax (parser, "Expected ';' at end of statement");
-      return FALSE;
-    }
-
-  gtk_css_parser_consume_token (parser);
-  return TRUE;
-}
-
-static gboolean
-parse_rect_without_semicolon (GtkCssParser    *parser,
-                              graphene_rect_t *out_rect)
+parse_rect (GtkCssParser    *parser,
+            gpointer         out_rect)
 {
   double numbers[4];
 
@@ -51,20 +35,6 @@ parse_rect_without_semicolon (GtkCssParser    *parser,
 
   graphene_rect_init (out_rect, numbers[0], numbers[1], numbers[2], numbers[3]);
 
-  return TRUE;
-}
-
-static gboolean
-parse_rect (GtkCssParser *parser,
-            gpointer      out_rect)
-{
-  graphene_rect_t r;
-
-  if (!parse_rect_without_semicolon (parser, &r) ||
-      !check_eof (parser))
-    return FALSE;
-
-  graphene_rect_init_from_rect (out_rect, &r);
   return TRUE;
 }
 
@@ -126,12 +96,6 @@ parse_texture (GtkCssParser *parser,
       return FALSE;
     }
 
-  if (!check_eof (parser))
-    {
-      g_object_unref (texture);
-      return FALSE;
-    }
-
   *(GdkTexture **) out_data = texture;
   return TRUE;
 }
@@ -151,13 +115,11 @@ parse_rounded_rect (GtkCssParser *parser,
   double d;
   guint i;
 
-  if (!parse_rect_without_semicolon (parser, &r))
+  if (!parse_rect (parser, &r))
     return FALSE;
 
   if (!gtk_css_parser_try_delim (parser, '/'))
     {
-      if (!check_eof (parser))
-        return FALSE;
       gsk_rounded_rect_init_from_rect (out_rect, &r, 0);
       return TRUE;
     }
@@ -211,9 +173,6 @@ parse_rounded_rect (GtkCssParser *parser,
         corners[i].height = corners[i].width;
     }
 
-  if (!check_eof (parser))
-    return FALSE;
-
   gsk_rounded_rect_init (out_rect, &r, &corners[0], &corners[1], &corners[2], &corners[3]);
 
   return TRUE;
@@ -223,30 +182,14 @@ static gboolean
 parse_color (GtkCssParser *parser,
              gpointer      out_color)
 {
-  GdkRGBA color;
-
-  if (!gdk_rgba_parser_parse (parser, &color) ||
-      !check_eof (parser))
-    return FALSE;
-
-  *(GdkRGBA *) out_color = color;
-
-  return TRUE;
+  return gdk_rgba_parser_parse (parser, out_color);
 }
 
 static gboolean
 parse_double (GtkCssParser *parser,
               gpointer      out_double)
 {
-  double d;
-
-  if (!gtk_css_parser_consume_number (parser, &d) ||
-      !check_eof (parser))
-    return FALSE;
-
-  *(double *) out_double = d;
-
-  return TRUE;
+  return gtk_css_parser_consume_number (parser, out_double);
 }
 
 static gboolean
@@ -256,8 +199,7 @@ parse_point (GtkCssParser *parser,
   double x, y;
 
   if (!gtk_css_parser_consume_number (parser, &x) ||
-      !gtk_css_parser_consume_number (parser, &y) ||
-      !check_eof (parser))
+      !gtk_css_parser_consume_number (parser, &y))
     return FALSE;
 
   graphene_point_init (out_point, x, y);
@@ -271,14 +213,12 @@ parse_transform (GtkCssParser *parser,
 {
   GskTransform *transform;
 
-  if (!gsk_transform_parser_parse (parser, &transform) ||
-      !check_eof (parser))
+  if (!gsk_transform_parser_parse (parser, &transform))
     {
       gsk_transform_unref (transform);
       return FALSE;
     }
 
-  gsk_transform_unref (*(GskTransform **) out_transform);
   *(GskTransform **) out_transform = transform;
 
   return TRUE;
@@ -303,12 +243,6 @@ parse_string (GtkCssParser *parser,
 
   s = g_strdup (token->string.string);
   gtk_css_parser_consume_token (parser);
-
-  if (!check_eof (parser))
-    {
-      g_free (s);
-      return FALSE;
-    }
 
   g_free (*(char **) out_string);
   *(char **) out_string = s;
@@ -365,7 +299,7 @@ parse_stops (GtkCssParser *parser,
     g_array_free (*(GArray **) out_stops, TRUE);
   *(GArray **) out_stops = stops;
 
-  return check_eof (parser);
+  return TRUE;
 
 error:
   g_array_free (stops, TRUE);
@@ -397,7 +331,7 @@ parse_colors4 (GtkCssParser *parser,
         return FALSE;
     }
 
-  return check_eof (parser);
+  return TRUE;
 }
 
 static gboolean
@@ -435,7 +369,7 @@ parse_shadows (GtkCssParser *parser,
         break;
     }
 
-  return check_eof (parser);
+  return TRUE;
 }
 
 static void
@@ -477,8 +411,6 @@ parse_blend_mode (GtkCssParser *parser,
     {
       if (gtk_css_parser_try_ident (parser, blend_modes[i].name))
         {
-          if (!check_eof (parser))
-            return FALSE;
           *(GskBlendMode *) out_mode = blend_modes[i].mode;
           return TRUE;
         }
@@ -514,7 +446,7 @@ parse_font (GtkCssParser *parser,
   /* Skip font name token */
   gtk_css_parser_consume_token (parser);
 
-  return check_eof (parser);
+  return TRUE;
 }
 
 static void
@@ -573,7 +505,7 @@ parse_glyphs (GtkCssParser *parser,
 
   *((PangoGlyphString **)out_glyphs) = glyph_string;
 
-  return check_eof (parser);
+  return TRUE;
 }
 
 static void
@@ -630,45 +562,54 @@ parse_declarations (GtkCssParser      *parser,
 {
   guint parsed = 0;
   guint i;
-  const GtkCssToken *token;
 
   g_assert (n_declarations < 8 * sizeof (guint));
 
-  for (token = gtk_css_parser_get_token (parser);
-       !gtk_css_token_is (token, GTK_CSS_TOKEN_EOF);
-       token = gtk_css_parser_get_token (parser))
+  while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
     {
       gtk_css_parser_start_semicolon_block (parser, GTK_CSS_TOKEN_OPEN_CURLY);
 
       for (i = 0; i < n_declarations; i++)
         {
-          if (gtk_css_token_is_ident (token, declarations[i].name))
+          if (gtk_css_parser_try_ident (parser, declarations[i].name))
             {
-              gtk_css_parser_consume_token (parser);
-              token = gtk_css_parser_get_token (parser);
-              if (!gtk_css_token_is (token, GTK_CSS_TOKEN_COLON))
+              if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COLON))
                 {
                   gtk_css_parser_error_syntax (parser, "Expected ':' after variable declaration");
                 }
               else
                 {
-                  gtk_css_parser_consume_token (parser);
                   if (parsed & (1 << i))
                     {
                       gtk_css_parser_warn_syntax (parser, "Variable \"%s\" defined multiple times", declarations[i].name);
+                      /* Unset, just to be sure */
+                      parsed &= ~(1 << i);
                       if (declarations[i].clear_func)
                         declarations[i].clear_func (declarations[i].result);
                     }
-                  if (declarations[i].parse_func (parser, declarations[i].result))
-                    parsed |= (1 << i);
+                  if (!declarations[i].parse_func (parser, declarations[i].result))
+                    {
+                      /* nothing to do */
+                    }
+                  else if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+                    {
+                      gtk_css_parser_error_syntax (parser, "Expected ';' at end of statement");
+                      if (declarations[i].clear_func)
+                        declarations[i].clear_func (declarations[i].result);
+                    }
+                  else
+                    {
+                      parsed |= (1 << i);
+                    }
                 }
               break;
             }
         }
       if (i == n_declarations)
         {
-          if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
-            gtk_css_parser_error_syntax (parser, "No variable named \"%s\"", token->string.string);
+          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
+            gtk_css_parser_error_syntax (parser, "No variable named \"%s\"",
+                                         gtk_css_parser_get_token (parser)->string.string);
           else
             gtk_css_parser_error_syntax (parser, "Expected a variable name");
         }
