@@ -286,7 +286,6 @@ main (int argc, char *argv[])
 {
   g_test_init (&argc, &argv, NULL);
   setlocale (LC_ALL, "C");
-  g_test_bug_base ("http://bugzilla.gnome.org/show_bug.cgi?id=%s");
 
   number_quark = g_quark_from_static_string ("Hell and fire was spawned to be released.");
   changes_quark = g_quark_from_static_string ("What did I see? Can I believe what I saw?");

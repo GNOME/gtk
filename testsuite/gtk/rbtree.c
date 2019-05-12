@@ -514,7 +514,6 @@ main (int   argc,
 {
   g_test_init (&argc, &argv, NULL);
   setlocale (LC_ALL, "C");
-  g_test_bug_base ("http://bugzilla.gnome.org/show_bug.cgi?id=%s");
 
   g_test_add_func ("/rbtree/create", test_create);
   g_test_add_func ("/rbtree/insert_after", test_insert_after);

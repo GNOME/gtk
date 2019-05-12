@@ -134,7 +134,7 @@ gboolean                gtk_css_parser_try_token                (GtkCssParser   
 
 char *                  gtk_css_parser_consume_ident            (GtkCssParser                   *self) G_GNUC_WARN_UNUSED_RESULT;
 char *                  gtk_css_parser_consume_string           (GtkCssParser                   *self) G_GNUC_WARN_UNUSED_RESULT;
-GFile *                 gtk_css_parser_consume_url              (GtkCssParser                   *self) G_GNUC_WARN_UNUSED_RESULT;
+char *                  gtk_css_parser_consume_url              (GtkCssParser                   *self) G_GNUC_WARN_UNUSED_RESULT;
 gboolean                gtk_css_parser_consume_number           (GtkCssParser                   *self,
                                                                  double                         *number);
 gboolean                gtk_css_parser_consume_integer          (GtkCssParser                   *self,

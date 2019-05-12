@@ -61,7 +61,8 @@ deserialize_error_func (const GtkCssSection *section,
 {
   char *section_str = gtk_css_section_to_string (section);
 
-  g_error ("Error at %s: %s", section_str, error->message);
+  g_test_message ("Error at %s: %s", section_str, error->message);
+  g_test_fail ();
 
   free (section_str);
 }

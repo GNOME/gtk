@@ -218,7 +218,7 @@ test_show_hide (void)
   GtkWidget *window;
   gint w, h, w1, h1;
 
-  g_test_bug ("696882");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=696882 */
 
   /* test that hide/show does not affect the size */
 
@@ -258,7 +258,6 @@ main (int argc, char *argv[])
   gint i;
 
   gtk_test_init (&argc, &argv);
-  g_test_bug_base ("http://bugzilla.gnome.org/");
 
   for (i = 0; i < argc; i++)
     {

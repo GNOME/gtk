@@ -1040,7 +1040,7 @@ specific_bug_300089 (void)
   GtkTreePath *path;
   GtkTreeIter iter, iter2, sort_iter;
 
-  g_test_bug ("300089");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=300089 */
 
   child_model = GTK_TREE_MODEL (gtk_tree_store_new (1, G_TYPE_STRING));
 
@@ -1084,7 +1084,7 @@ specific_bug_364946 (void)
   GtkTreeIter a, aa, aaa, aab, iter;
   GtkTreeModel *s_model;
 
-  g_test_bug ("364946");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=364946 */
 
   store = gtk_tree_store_new (1, G_TYPE_STRING);
 
@@ -1187,7 +1187,7 @@ specific_bug_698846 (void)
   GtkTreeIter iter;
   guint count = 0;
 
-  g_test_bug ("698846");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=698846 */
 
   store = gtk_list_store_new (1, G_TYPE_STRING);
   sorted = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
@@ -1228,7 +1228,7 @@ sort_column_change (void)
   GtkSortType order;
   gboolean ret;
 
-  g_test_bug ("792459");
+  /*http://bugzilla.gnome.org/show_bug.cgi?id=792459 */
 
   store = gtk_list_store_new (1, G_TYPE_STRING);
   sorted = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
