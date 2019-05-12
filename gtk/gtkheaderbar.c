@@ -85,6 +85,7 @@ struct _GtkHeaderBarPrivate
   gboolean show_title_buttons;
   gchar *decoration_layout;
   gboolean decoration_layout_set;
+  gboolean track_default_decoration;
 
   GtkWidget *titlebar_start_box;
   GtkWidget *titlebar_end_box;
@@ -497,6 +498,30 @@ _gtk_header_bar_shows_app_menu (GtkHeaderBar *bar)
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
 
   return priv->show_title_buttons && priv->shows_app_menu;
+}
+
+static void
+update_default_decoration (GtkHeaderBar *bar)
+{
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (bar));
+
+  if (priv->children != NULL || priv->custom_title != NULL)
+    gtk_style_context_remove_class (context, "default-decoration");
+  else
+    gtk_style_context_add_class (context, "default-decoration");
+}
+
+void
+_gtk_header_bar_track_default_decoration (GtkHeaderBar *bar)
+{
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
+
+  priv->track_default_decoration = true;
+
+  update_default_decoration (bar);
 }
 
 /* As an intended side effect, this function allows @child
@@ -1543,6 +1568,9 @@ gtk_header_bar_pack (GtkHeaderBar *bar,
   g_signal_connect (widget, "notify::visible", G_CALLBACK (notify_child_cb), bar);
 
   _gtk_header_bar_update_separator_visibility (bar);
+
+  if (priv->track_default_decoration)
+    update_default_decoration (bar);
 }
 
 static void
@@ -1595,6 +1623,9 @@ gtk_header_bar_remove (GtkContainer *container,
       g_free (child);
       gtk_widget_queue_resize (GTK_WIDGET (container));
       _gtk_header_bar_update_separator_visibility (bar);
+
+      if (priv->track_default_decoration)
+        update_default_decoration (bar);
     }
 }
 
