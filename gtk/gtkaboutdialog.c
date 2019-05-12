@@ -684,7 +684,7 @@ update_credits_button_visibility (GtkAboutDialog *about)
   gboolean show;
   GtkStackPage *page;
 
-  page = gtk_stack_get_page (GTK_STACK (priv->stack), priv->system_page);
+  page = gtk_stack_get_page (GTK_STACK (priv->stack), priv->credits_page);
 
   show = (priv->authors != NULL ||
           priv->documenters != NULL ||
@@ -2155,7 +2155,6 @@ add_credits_section (GtkAboutDialog  *about,
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_grid_attach (grid, label, 0, *row, 1, 1);
-  gtk_widget_show (label);
 
   for (p = people; *p; p++)
     {
