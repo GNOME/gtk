@@ -47,6 +47,7 @@
 #include "gtkgestureprivate.h"
 #include "gtkgesturesingle.h"
 #include "gtkgestureswipe.h"
+#include "gtkeventcontrollerkey.h"
 #include "gtkintl.h"
 #include "gtklayoutmanagerprivate.h"
 #include "gtkmain.h"
@@ -5225,7 +5226,9 @@ gtk_widget_run_controllers (GtkWidget           *widget,
            * to collaborate with anything else. Break early if any such event
            * controller handled the event.
            */
-          if (handled && !GTK_IS_GESTURE (controller))
+          if (handled &&
+              !GTK_IS_GESTURE (controller) &&
+              !GTK_IS_EVENT_CONTROLLER_KEY (controller))
             break;
         }
 
