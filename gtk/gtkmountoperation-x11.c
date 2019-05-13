@@ -736,7 +736,7 @@ pid_get_command_line (GPid pid)
 static GPid
 pid_get_parent (GPid pid)
 {
-  struct kinfo_proc kp;
+  struct kinfo_proc *kp;
   size_t len;
   GPid ppid;
 
@@ -747,11 +747,14 @@ pid_get_parent (GPid pid)
       return (-1);
   mib[5] = (len / sizeof(struct kinfo_proc));
 
-  if (sysctl (mib, G_N_ELEMENTS (mib), &kp, &len, NULL, 0) < 0)
+  kp = g_malloc0 (len);
+
+  if (sysctl (mib, G_N_ELEMENTS (mib), kp, &len, NULL, 0) < 0)
       return -1;
 
-  ppid = kp.p_ppid;
+  ppid = kp->p_ppid;
 
+  g_free (kp);
   return ppid;
 }
 
