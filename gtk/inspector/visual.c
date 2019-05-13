@@ -23,6 +23,7 @@
 #include "fpsoverlay.h"
 #include "updatesoverlay.h"
 #include "layoutoverlay.h"
+#include "baselineoverlay.h"
 #include "window.h"
 
 #include "gtkadjustment.h"
@@ -85,6 +86,7 @@ struct _GtkInspectorVisualPrivate
   GtkInspectorOverlay *fps_overlay;
   GtkInspectorOverlay *updates_overlay;
   GtkInspectorOverlay *layout_overlay;
+  GtkInspectorOverlay *baseline_overlay;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorVisual, gtk_inspector_visual, GTK_TYPE_SCROLLED_WINDOW)
@@ -301,18 +303,37 @@ updates_activate (GtkSwitch          *sw,
 }
 
 static void
-baselines_activate (GtkSwitch *sw)
+baselines_activate (GtkSwitch          *sw,
+                    GParamSpec         *pspec,
+                    GtkInspectorVisual *vis)
 {
-  guint flags;
+  GtkInspectorVisualPrivate *priv = vis->priv;
+  GtkInspectorWindow *iw;
+  gboolean baselines;
 
-  flags = gtk_get_debug_flags ();
+  baselines = gtk_switch_get_active (sw);
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (vis)));
+  if (iw == NULL)
+    return;
 
-  if (gtk_switch_get_active (sw))
-    flags |= GTK_DEBUG_BASELINES;
+  if (baselines)
+    {
+      if (priv->baseline_overlay == NULL)
+        {
+          priv->baseline_overlay = gtk_baseline_overlay_new ();
+          gtk_inspector_window_add_overlay (iw, priv->baseline_overlay);
+          g_object_unref (priv->baseline_overlay);
+        }
+    }
   else
-    flags &= ~GTK_DEBUG_BASELINES;
+    {
+      if (priv->baseline_overlay != NULL)
+        {
+          gtk_inspector_window_remove_overlay (iw, priv->baseline_overlay);
+          priv->baseline_overlay = NULL;
+        }
+    }
 
-  gtk_set_debug_flags (flags);
   redraw_everything ();
 }
 
