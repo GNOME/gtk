@@ -8,8 +8,8 @@
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include <gtk/css/gtkcss.h>
-#include "gtk/css/gtkcssparserprivate.h"
 #include "gtk/css/gtkcssdataurlprivate.h"
+#include "gtk/css/gtkcssparserprivate.h"
 
 typedef struct _Declaration Declaration;
 
@@ -319,17 +319,59 @@ clear_stops (gpointer inout_stops)
 }
 
 static gboolean
+parse_float4 (GtkCssParser *parser,
+              gpointer      out_floats)
+{
+  float *floats = (float *) out_floats;
+  double d[4];
+  int i;
+
+  for (i = 0; i < 4 && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF); i ++)
+    {
+      if (!gtk_css_parser_consume_number (parser, &d[i]))
+        return FALSE;
+    }
+  if (i == 0)
+    {
+      gtk_css_parser_error_syntax (parser, "Expected a color");
+      return FALSE;
+    }
+  for (; i < 4; i++)
+    {
+      d[i] = d[(i - 1) >> 1];
+    }
+
+  for (i = 0; i < 4; i++)
+    {
+      floats[i] = d[i];
+    }
+
+  return TRUE;
+}
+
+static gboolean
 parse_colors4 (GtkCssParser *parser,
                gpointer      out_colors)
 {
-  GdkRGBA *colors = (GdkRGBA *)out_colors;
+  GdkRGBA colors[4];
   int i;
 
-  for (i = 0; i < 4; i ++)
+  for (i = 0; i < 4 && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF); i ++)
     {
       if (!gdk_rgba_parser_parse (parser, &colors[i]))
         return FALSE;
     }
+  if (i == 0)
+    {
+      gtk_css_parser_error_syntax (parser, "Expected a color");
+      return FALSE;
+    }
+  for (; i < 4; i++)
+    {
+      colors[i] = colors[(i - 1) >> 1];
+    }
+
+  memcpy (out_colors, colors, sizeof (GdkRGBA) * 4);
 
   return TRUE;
 }
@@ -688,17 +730,17 @@ static GskRenderNode *
 parse_border_node (GtkCssParser *parser)
 {
   GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
-  graphene_rect_t widths = GRAPHENE_RECT_INIT (0, 0, 0, 0);
-  GdkRGBA colors[4] = { { 0, 0, 0, 0 }, {0, 0, 0, 0}, {0, 0, 0, 0}, { 0, 0, 0, 0 } };
+  float widths[4] = { 1, 1, 1, 1 };
+  GdkRGBA colors[4] = { { 0, 0, 0, 1 }, {0, 0, 0, 1 }, {0, 0, 0, 1 }, { 0, 0, 0, 1 } };
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
-    { "widths", parse_rect, NULL, &widths },
+    { "widths", parse_float4, NULL, &widths },
     { "colors", parse_colors4, NULL, &colors }
   };
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
 
-  return gsk_border_node_new (&outline, (float*)&widths, colors);
+  return gsk_border_node_new (&outline, widths, colors);
 }
 
 static GskRenderNode *
@@ -970,7 +1012,7 @@ static GskRenderNode *
 parse_blur_node (GtkCssParser *parser)
 {
   GskRenderNode *child = NULL;
-  double blur_radius = 0.0;
+  double blur_radius = 1.0;
   const Declaration declarations[] = {
     { "blur", parse_double, NULL, &blur_radius },
     { "child", parse_node, clear_node, &child },
