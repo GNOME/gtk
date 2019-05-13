@@ -47,6 +47,8 @@ struct _GtkEventControllerKey
   GtkIMContext *im_context;
   GHashTable *pressed_keys;
 
+  GdkModifierType state;
+
   const GdkEvent *current_event;
 };
 
@@ -87,10 +89,10 @@ gtk_event_controller_key_handle_event (GtkEventController *controller,
 {
   GtkEventControllerKey *key = GTK_EVENT_CONTROLLER_KEY (controller);
   GdkEventType event_type = gdk_event_get_event_type (event);
-  gboolean handled;
   GdkModifierType state;
   guint16 keycode;
   guint keyval;
+  gboolean handled = FALSE;
 
   if (event_type == GDK_FOCUS_CHANGE)
     {
@@ -112,23 +114,15 @@ gtk_event_controller_key_handle_event (GtkEventController *controller,
       return TRUE;
     }
 
-  if (!gdk_event_get_state (event, &state) || !event->key.is_modifier)
-    return FALSE;
-
   key->current_event = event;
 
-  if (event->key.is_modifier)
+  gdk_event_get_state (event, &state);
+  if (key->state != state)
     {
-      if (event_type == GDK_KEY_PRESS)
-        g_signal_emit (controller, signals[MODIFIERS], 0, state, &handled);
-      else
-        handled = TRUE;
+      gboolean unused;
 
-      if (handled == TRUE)
-        {
-          key->current_event = NULL;
-          return TRUE;
-        }
+      key->state = state;
+      g_signal_emit (controller, signals[MODIFIERS], 0, state, &unused);
     }
 
   gdk_event_get_keycode (event, &keycode);
