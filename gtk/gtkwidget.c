@@ -12563,6 +12563,27 @@ gtk_widget_remove_controller (GtkWidget          *widget,
     gtk_list_list_model_item_removed (priv->controller_observer, before);
 }
 
+GList *
+_gtk_widget_list_controllers (GtkWidget           *widget,
+                              GtkPropagationPhase  phase)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GList *l, *retval = NULL;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      GtkEventController *controller = l->data;
+
+      if (controller != NULL &&
+          phase == gtk_event_controller_get_propagation_phase (controller))
+        retval = g_list_prepend (retval, controller);
+    }
+
+  return retval;
+}
+
 gboolean
 _gtk_widget_consumes_motion (GtkWidget        *widget,
                              GdkEventSequence *sequence)
