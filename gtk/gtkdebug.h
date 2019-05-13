@@ -45,7 +45,6 @@ typedef enum {
   GTK_DEBUG_BUILDER         = 1 <<  7,
   GTK_DEBUG_SIZE_REQUEST    = 1 <<  8,
   GTK_DEBUG_NO_CSS_CACHE    = 1 <<  9,
-  GTK_DEBUG_BASELINES       = 1 << 10,
   GTK_DEBUG_INTERACTIVE     = 1 << 11,
   GTK_DEBUG_TOUCHSCREEN     = 1 << 12,
   GTK_DEBUG_ACTIONS         = 1 << 13,
