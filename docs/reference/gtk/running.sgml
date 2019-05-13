@@ -96,10 +96,6 @@ additional environment variables.
       <listitem><para>Pretend the pointer is a touchscreen device</para></listitem>
     </varlistentry>
     <varlistentry>
-      <term>baselines</term>
-      <listitem><para>Show baselines</para></listitem>
-    </varlistentry>
-    <varlistentry>
       <term>updates</term>
       <listitem><para>Visual feedback about window updates</para></listitem>
     </varlistentry>
