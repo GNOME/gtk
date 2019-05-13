@@ -12878,24 +12878,6 @@ gtk_widget_maybe_add_debug_render_nodes (GtkWidget   *widget,
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkDisplay *display = _gtk_widget_get_display (widget);
 
-  if (GTK_DISPLAY_DEBUG_CHECK (display, BASELINES))
-    {
-      if (priv->baseline != -1)
-        {
-          GdkRGBA red = {1, 0, 0, 1};
-          graphene_rect_t bounds;
-
-          /* Baselines are relative to the widget's origin,
-           * and we are offset to the widget's allocation here */
-          graphene_rect_init (&bounds,
-                              0, priv->baseline,
-                              priv->width, 1);
-          gtk_snapshot_append_color (snapshot,
-                                     &red,
-                                     &bounds);
-        }
-    }
-
 #ifdef G_ENABLE_DEBUG
   if (GTK_DISPLAY_DEBUG_CHECK (display, RESIZE) && priv->highlight_resize)
     {
