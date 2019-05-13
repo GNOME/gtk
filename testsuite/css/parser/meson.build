@@ -5,16 +5,6 @@ test_parser = executable('test-css-parser', 'test-css-parser.c',
                          install: get_option('install-tests'),
                          install_dir: testexecdir,
                          dependencies: libgtk_dep)
-test('parser', test_parser,
-     args: [ '--tap', '-k' ],
-     env: [ 'GIO_USE_VOLUME_MONITOR=unix',
-            'GSETTINGS_BACKEND=memory',
-            'GTK_CSD=1',
-            'G_ENABLE_DIAGNOSTIC=0',
-            'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-             'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-          ],
-     suite: 'css')
 
 test_data = [
   'animation-crash-3.12.css',
@@ -458,6 +448,24 @@ test_data = [
   'value-none.errors',
   'value-none.ref.css',
 ]
+
+foreach testname : test_data
+  if testname.endswith('.css') and not testname.endswith('.ref.css')
+    test('parser ' + testname, test_parser,
+         args: [ '--tap',
+                 '-k',
+                 join_paths(meson.current_source_dir(), testname),
+               ],
+         env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+                'GSETTINGS_BACKEND=memory',
+                'GTK_CSD=1',
+                'G_ENABLE_DIAGNOSTIC=0',
+                'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+                 'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+              ],
+         suite: 'css')
+  endif
+endforeach
 
 if get_option('install-tests')
   conf = configuration_data()
