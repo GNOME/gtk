@@ -16,9 +16,9 @@ transform {
               clip: -1 -1 50 26 / 13;
             }
             border {
-              colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
+              colors: rgb(205,199,194);
               outline: -1 -1 50 26 / 13;
-              widths: 1 1 1 1;
+              widths: 1;
             }
             container {
               container {
@@ -57,9 +57,9 @@ transform {
                 }
               }
               border {
-                colors: rgb(191,184,177) rgb(191,184,177) rgb(191,184,177) rgb(191,184,177);
+                colors: rgb(191,184,177);
                 outline: -1 -1 26 26 / 13;
-                widths: 1 1 1 1;
+                widths: 1;
               }
             }
           }
@@ -88,9 +88,9 @@ transform {
                 clip: -1 -1 50 26 / 13;
               }
               border {
-                colors: rgb(24,95,180) rgb(24,95,180) rgb(24,95,180) rgb(24,95,180);
+                colors: rgb(24,95,180);
                 outline: -1 -1 50 26 / 13;
-                widths: 1 1 1 1;
+                widths: 1;
               }
               transform {
                 child: container {
@@ -146,9 +146,9 @@ transform {
                     }
                   }
                   border {
-                    colors: rgb(24,95,180) rgb(24,95,180) rgb(24,95,180) rgb(24,95,180);
+                    colors: rgb(24,95,180);
                     outline: -1 -1 26 26 / 13;
-                    widths: 1 1 1 1;
+                    widths: 1;
                   }
                 }
                 transform: translate(24, 0);
@@ -181,9 +181,9 @@ transform {
                 clip: -1 -1 50 26 / 13;
               }
               border {
-                colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
+                colors: rgb(205,199,194);
                 outline: -1 -1 50 26 / 13;
-                widths: 1 1 1 1;
+                widths: 1;
               }
               container {
                 rounded-clip {
@@ -194,9 +194,9 @@ transform {
                   clip: -1 -1 26 26 / 13;
                 }
                 border {
-                  colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
+                  colors: rgb(205,199,194);
                   outline: -1 -1 26 26 / 13;
-                  widths: 1 1 1 1;
+                  widths: 1;
                 }
               }
             }
@@ -227,9 +227,9 @@ transform {
                 clip: -1 -1 50 26 / 13;
               }
               border {
-                colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
+                colors: rgb(205,199,194);
                 outline: -1 -1 50 26 / 13;
-                widths: 1 1 1 1;
+                widths: 1;
               }
               transform {
                 child: container {
@@ -241,9 +241,9 @@ transform {
                     clip: -1 -1 26 26 / 13;
                   }
                   border {
-                    colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
+                    colors: rgb(205,199,194);
                     outline: -1 -1 26 26 / 13;
-                    widths: 1 1 1 1;
+                    widths: 1;
                   }
                 }
                 transform: translate(24, 0);
@@ -276,9 +276,9 @@ transform {
                 clip: -1 -1 50 26 / 13;
               }
               border {
-                colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
+                colors: rgb(205,199,194);
                 outline: -1 -1 50 26 / 13;
-                widths: 1 1 1 1;
+                widths: 1;
               }
               container {
                 container {
@@ -317,9 +317,9 @@ transform {
                   }
                 }
                 border {
-                  colors: rgb(191,184,177) rgb(191,184,177) rgb(191,184,177) rgb(191,184,177);
+                  colors: rgb(191,184,177);
                   outline: -1 -1 26 26 / 13;
-                  widths: 1 1 1 1;
+                  widths: 1;
                 }
               }
             }
@@ -371,9 +371,9 @@ transform {
                   }
                 }
                 border {
-                  colors: rgb(191,184,177) rgb(191,184,177) rgb(191,184,177) rgb(191,184,177);
+                  colors: rgb(191,184,177);
                   outline: -1 -1 16 16 / 3;
-                  widths: 1 1 1 1;
+                  widths: 1;
                 }
               }
               transform: translate(1, 6);

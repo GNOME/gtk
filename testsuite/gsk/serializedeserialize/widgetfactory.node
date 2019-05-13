@@ -55,9 +55,9 @@ transform {
           }
         }
         border {
-          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+          colors: rgb(213,208,204);
           outline: -6 0 1464 47 / 7 7 0 0;
-          widths: 0 0 1 0;
+          widths: 0 0 1;
         }
         transform {
           child: container {
@@ -71,7 +71,7 @@ transform {
                   clip: -17 -5 133 34 / 5 0 0 5;
                 }
                 border {
-                  colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                  colors: rgb(213,208,204);
                   outline: -17 -5 133 34 / 5 0 0 5;
                   widths: 1 0 1 1;
                 }
@@ -95,7 +95,7 @@ transform {
                   color: rgb(246,245,244);
                 }
                 border {
-                  colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                  colors: rgb(213,208,204);
                   outline: -17 -5 133 34;
                   widths: 1 0 1 1;
                 }
@@ -122,9 +122,9 @@ transform {
                   clip: -17 -5 134 34 / 0 5 5 0;
                 }
                 border {
-                  colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                  colors: rgb(213,208,204);
                   outline: -17 -5 134 34 / 0 5 5 0;
-                  widths: 1 1 1 1;
+                  widths: 1;
                 }
                 transform {
                   child: text {
@@ -152,9 +152,9 @@ transform {
               clip: -6 -5 36 34 / 5;
             }
             border {
-              colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+              colors: rgb(213,208,204);
               outline: -6 -5 36 34 / 5;
-              widths: 1 1 1 1;
+              widths: 1;
             }
             color-matrix {
               child: texture {
@@ -199,7 +199,7 @@ transform {
                     clip: -9 -1 374 34 / 5 0 0 5;
                   }
                   border {
-                    colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                    colors: rgb(213,208,204);
                     outline: -9 -1 374 34 / 5 0 0 5;
                     widths: 1 0 1 1;
                   }
@@ -246,7 +246,7 @@ transform {
                   border {
                     colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(53,132,228);
                     outline: -10 -5 36 34 / 0 5 5 0;
-                    widths: 1 1 1 1;
+                    widths: 1;
                   }
                   color-matrix {
                     child: texture {
@@ -272,7 +272,7 @@ transform {
                       clip: -9 -1 374 34 / 5 0 0 5;
                     }
                     border {
-                      colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                      colors: rgb(213,208,204);
                       outline: -9 -1 374 34 / 5 0 0 5;
                       widths: 1 0 1 1;
                     }
@@ -299,9 +299,9 @@ transform {
                       clip: -10 -5 36 34 / 0 5 5 0;
                     }
                     border {
-                      colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                      colors: rgb(213,208,204);
                       outline: -10 -5 36 34 / 0 5 5 0;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                     color-matrix {
                       child: texture {
@@ -327,9 +327,9 @@ transform {
                   clip: -9 -1 410 34 / 5;
                 }
                 border {
-                  colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                  colors: rgb(213,208,204);
                   outline: -9 -1 410 34 / 5;
-                  widths: 1 1 1 1;
+                  widths: 1;
                 }
                 clip {
                   child: opacity {
@@ -368,9 +368,9 @@ transform {
                   clip: -9 -1 410 34 / 5;
                 }
                 border {
-                  colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                  colors: rgb(213,208,204);
                   outline: -9 -1 410 34 / 5;
-                  widths: 1 1 1 1;
+                  widths: 1;
                 }
                 clip {
                   child: text {
@@ -397,7 +397,7 @@ transform {
                       clip: -9 -1 374 35 / 5 0 0 5;
                     }
                     border {
-                      colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                      colors: rgb(213,208,204);
                       outline: -9 -1 374 35 / 5 0 0 5;
                       widths: 1 0 1 1;
                     }
@@ -424,9 +424,9 @@ transform {
                       clip: -6 -5 36 35 / 0 5 5 0;
                     }
                     border {
-                      colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                      colors: rgb(213,208,204);
                       outline: -6 -5 36 35 / 0 5 5 0;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                     color-matrix {
                       child: texture {
@@ -454,7 +454,7 @@ transform {
                       clip: -10 -5 137 34 / 5 0 0 5;
                     }
                     border {
-                      colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                      colors: rgb(213,208,204);
                       outline: -10 -5 137 34 / 5 0 0 5;
                       widths: 1 0 1 1;
                     }
@@ -489,7 +489,7 @@ transform {
                         color: rgb(246,245,244);
                       }
                       border {
-                        colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                        colors: rgb(213,208,204);
                         outline: -10 -5 136 34;
                         widths: 1 0 1 1;
                       }
@@ -529,9 +529,9 @@ transform {
                         clip: -10 -5 137 34 / 0 5 5 0;
                       }
                       border {
-                        colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                        colors: rgb(213,208,204);
                         outline: -10 -5 137 34 / 0 5 5 0;
-                        widths: 1 1 1 1;
+                        widths: 1;
                       }
                       container {
                         text {
@@ -590,9 +590,9 @@ transform {
                       clip: -1 -1 112 34 / 5;
                     }
                     border {
-                      colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                      colors: rgb(213,208,204);
                       outline: -1 -1 112 34 / 5;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                     container {
                       transform {
@@ -608,7 +608,7 @@ transform {
                       transform {
                         child: container {
                           border {
-                            colors: rgba(213,208,204,0.3) rgba(213,208,204,0.3) rgba(213,208,204,0.3) rgba(213,208,204,0.3);
+                            colors: rgba(213,208,204,0.3);
                             outline: -6 0 35 32;
                             widths: 0 0 0 1;
                           }
@@ -626,7 +626,7 @@ transform {
                       transform {
                         child: container {
                           border {
-                            colors: rgba(213,208,204,0.3) rgba(213,208,204,0.3) rgba(213,208,204,0.3) rgba(213,208,204,0.3);
+                            colors: rgba(213,208,204,0.3);
                             outline: -6 0 35 32 / 0 5 5 0;
                             widths: 0 0 0 1;
                           }
@@ -655,9 +655,9 @@ transform {
                       clip: -1 -1 112 34 / 5;
                     }
                     border {
-                      colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                      colors: rgb(213,208,204);
                       outline: -1 -1 112 34 / 5;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                     container {
                       transform {
@@ -677,7 +677,7 @@ transform {
                             color: rgb(250,249,248);
                           }
                           border {
-                            colors: rgba(213,208,204,0.3) rgba(213,208,204,0.3) rgba(213,208,204,0.3) rgba(213,208,204,0.3);
+                            colors: rgba(213,208,204,0.3);
                             outline: -6 0 35 32;
                             widths: 0 0 0 1;
                           }
@@ -702,7 +702,7 @@ transform {
                             clip: -6 0 35 32 / 0 5 5 0;
                           }
                           border {
-                            colors: rgba(213,208,204,0.3) rgba(213,208,204,0.3) rgba(213,208,204,0.3) rgba(213,208,204,0.3);
+                            colors: rgba(213,208,204,0.3);
                             outline: -6 0 35 32 / 0 5 5 0;
                             widths: 0 0 0 1;
                           }
@@ -735,9 +735,9 @@ transform {
                           color: rgb(246,245,244);
                         }
                         border {
-                          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                          colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 3;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                         color-matrix {
                           child: texture {
@@ -772,9 +772,9 @@ transform {
                           color: rgb(246,245,244);
                         }
                         border {
-                          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                          colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 3;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                       }
                       transform: translate(5, 2);
@@ -801,9 +801,9 @@ transform {
                           color: rgb(246,245,244);
                         }
                         border {
-                          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                          colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 3;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                         color-matrix {
                           child: texture {
@@ -838,9 +838,9 @@ transform {
                           color: rgb(250,249,248);
                         }
                         border {
-                          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                          colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 3;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                         color-matrix {
                           child: texture {
@@ -875,9 +875,9 @@ transform {
                           color: rgb(250,249,248);
                         }
                         border {
-                          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                          colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 3;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                       }
                       transform: translate(5, 2);
@@ -904,9 +904,9 @@ transform {
                           color: rgb(250,249,248);
                         }
                         border {
-                          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                          colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 3;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                         color-matrix {
                           child: texture {
@@ -944,9 +944,9 @@ transform {
                           clip: -1 -1 16 16 / 8;
                         }
                         border {
-                          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                          colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 8;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                       }
                       transform: translate(5, 2);
@@ -976,9 +976,9 @@ transform {
                           clip: -1 -1 16 16 / 8;
                         }
                         border {
-                          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                          colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 8;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                       }
                       transform: translate(5, 2);
@@ -1008,9 +1008,9 @@ transform {
                           clip: -1 -1 16 16 / 8;
                         }
                         border {
-                          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                          colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 8;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                         color-matrix {
                           child: texture {
@@ -1048,9 +1048,9 @@ transform {
                           clip: -1 -1 16 16 / 8;
                         }
                         border {
-                          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                          colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 8;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                         color-matrix {
                           child: texture {
@@ -1088,9 +1088,9 @@ transform {
                           clip: -1 -1 16 16 / 8;
                         }
                         border {
-                          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                          colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 8;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                       }
                       transform: translate(5, 2);
@@ -1120,9 +1120,9 @@ transform {
                           clip: -1 -1 16 16 / 8;
                         }
                         border {
-                          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                          colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 8;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                         color-matrix {
                           child: texture {
@@ -1202,9 +1202,9 @@ transform {
                     clip: -17 -5 122 34 / 5;
                   }
                   border {
-                    colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                    colors: rgb(213,208,204);
                     outline: -17 -5 122 34 / 5;
-                    widths: 1 1 1 1;
+                    widths: 1;
                   }
                   text {
                     color: rgb(146,149,149);
@@ -1226,9 +1226,9 @@ transform {
                     clip: -17 -5 122 34 / 5;
                   }
                   border {
-                    colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                    colors: rgb(213,208,204);
                     outline: -17 -5 122 34 / 5;
-                    widths: 1 1 1 1;
+                    widths: 1;
                   }
                   text {
                     color: rgb(212,207,202);
@@ -1250,9 +1250,9 @@ transform {
                     clip: -17 -5 122 34 / 5;
                   }
                   border {
-                    colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                    colors: rgb(213,208,204);
                     outline: -17 -5 122 34 / 5;
-                    widths: 1 1 1 1;
+                    widths: 1;
                   }
                   text {
                     color: rgb(146,149,149);
@@ -1274,9 +1274,9 @@ transform {
                     clip: -17 -5 122 34 / 5;
                   }
                   border {
-                    colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                    colors: rgb(213,208,204);
                     outline: -17 -5 122 34 / 5;
-                    widths: 1 1 1 1;
+                    widths: 1;
                   }
                   text {
                     color: rgb(212,207,202);
@@ -1299,9 +1299,9 @@ transform {
                       clip: -10 -5 122 34 / 5;
                     }
                     border {
-                      colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                      colors: rgb(213,208,204);
                       outline: -10 -5 122 34 / 5;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                     container {
                       text {
@@ -1339,9 +1339,9 @@ transform {
                       clip: -10 -5 122 34 / 5;
                     }
                     border {
-                      colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                      colors: rgb(213,208,204);
                       outline: -10 -5 122 34 / 5;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                     container {
                       text {
@@ -1379,9 +1379,9 @@ transform {
                       clip: -10 -5 122 34 / 5;
                     }
                     border {
-                      colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                      colors: rgb(213,208,204);
                       outline: -10 -5 122 34 / 5;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                     container {
                       text {
@@ -1421,9 +1421,9 @@ transform {
                       clip: -5 -5 122 34 / 5;
                     }
                     border {
-                      colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                      colors: rgb(213,208,204);
                       outline: -5 -5 122 34 / 5;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                     container {
                       color {
@@ -1432,9 +1432,9 @@ transform {
                       }
                       transform {
                         child: border {
-                          colors: rgba(0,0,0,0.3) rgba(0,0,0,0.3) rgba(0,0,0,0.3) rgba(0,0,0,0.3);
+                          colors: rgba(0,0,0,0.3);
                           outline: -1 -1 112 24;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                         transform: translate(1, 1);
                       }
@@ -1455,9 +1455,9 @@ transform {
                       clip: -10 -5 122 34 / 5;
                     }
                     border {
-                      colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                      colors: rgb(213,208,204);
                       outline: -10 -5 122 34 / 5;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                     container {
                       transform {
@@ -1513,9 +1513,9 @@ transform {
                     clip: -1 -1 50 26 / 13;
                   }
                   border {
-                    colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                    colors: rgb(213,208,204);
                     outline: -1 -1 50 26 / 13;
-                    widths: 1 1 1 1;
+                    widths: 1;
                   }
                   container {
                     rounded-clip {
@@ -1526,9 +1526,9 @@ transform {
                       clip: -1 -1 26 26 / 13;
                     }
                     border {
-                      colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                      colors: rgb(213,208,204);
                       outline: -1 -1 26 26 / 13;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                   }
                 }
@@ -1544,9 +1544,9 @@ transform {
                     clip: -1 -1 50 26 / 13;
                   }
                   border {
-                    colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                    colors: rgb(213,208,204);
                     outline: -1 -1 50 26 / 13;
-                    widths: 1 1 1 1;
+                    widths: 1;
                   }
                   container {
                     rounded-clip {
@@ -1557,9 +1557,9 @@ transform {
                       clip: -1 -1 26 26 / 13;
                     }
                     border {
-                      colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                      colors: rgb(213,208,204);
                       outline: -1 -1 26 26 / 13;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                   }
                 }
@@ -1588,9 +1588,9 @@ transform {
                       clip: -1 -1 502 4 / 2;
                     }
                     border {
-                      colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                      colors: rgb(213,208,204);
                       outline: -1 -1 502 4 / 2;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                     transform {
                       child: container {
@@ -1602,9 +1602,9 @@ transform {
                           clip: -1 -1 252 4 / 2 1.5 1.5 2;
                         }
                         border {
-                          colors: rgb(53,132,228) rgb(53,132,228) rgb(53,132,228) rgb(53,132,228);
+                          colors: rgb(53,132,228);
                           outline: -1 -1 252 4 / 2 1.5 1.5 2;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                       }
                       transform: translate(0, -1) translate(0, 1);
@@ -1623,9 +1623,9 @@ transform {
                         clip: -1 -1 502 4 / 2;
                       }
                       border {
-                        colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                        colors: rgb(213,208,204);
                         outline: -1 -1 502 4 / 2;
-                        widths: 1 1 1 1;
+                        widths: 1;
                       }
                       transform {
                         child: container {
@@ -1637,9 +1637,9 @@ transform {
                             clip: -1 -1 252 4 / 1.5 2 2 1.5;
                           }
                           border {
-                            colors: rgb(53,132,228) rgb(53,132,228) rgb(53,132,228) rgb(53,132,228);
+                            colors: rgb(53,132,228);
                             outline: -1 -1 252 4 / 1.5 2 2 1.5;
-                            widths: 1 1 1 1;
+                            widths: 1;
                           }
                         }
                         transform: translate(250, -1) translate(0, 1);
@@ -1671,9 +1671,9 @@ transform {
                           clip: -1 -1 502 4 / 2;
                         }
                         border {
-                          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                          colors: rgb(213,208,204);
                           outline: -1 -1 502 4 / 2;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                         transform {
                           child: container {
@@ -1685,9 +1685,9 @@ transform {
                               clip: -1 -1 102 4 / 1.5;
                             }
                             border {
-                              colors: rgb(53,132,228) rgb(53,132,228) rgb(53,132,228) rgb(53,132,228);
+                              colors: rgb(53,132,228);
                               outline: -1 -1 102 4 / 1.5;
-                              widths: 1 1 1 1;
+                              widths: 1;
                             }
                           }
                           transform: translate(43, -1) translate(0, 1);
@@ -1709,15 +1709,15 @@ transform {
                         clip: -3 -3 502 9 / 3;
                       }
                       border {
-                        colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                        colors: rgb(213,208,204);
                         outline: -3 -3 502 9 / 3;
-                        widths: 1 1 1 1;
+                        widths: 1;
                       }
                       transform {
                         child: border {
-                          colors: rgba(146,149,149,0.15) rgba(146,149,149,0.15) rgba(146,149,149,0.15) rgba(146,149,149,0.15);
+                          colors: rgba(146,149,149,0.15);
                           outline: -1 -1 496 3 / 1;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                         transform: translate(1, 1);
                       }
@@ -1731,9 +1731,9 @@ transform {
                             clip: -1 -1 297 3 / 1;
                           }
                           border {
-                            colors: rgb(53,132,228) rgb(53,132,228) rgb(53,132,228) rgb(53,132,228);
+                            colors: rgb(53,132,228);
                             outline: -1 -1 297 3 / 1;
-                            widths: 1 1 1 1;
+                            widths: 1;
                           }
                         }
                         transform: translate(1, 1);
@@ -1754,9 +1754,9 @@ transform {
                         clip: -3 -3 502 9 / 3;
                       }
                       border {
-                        colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                        colors: rgb(213,208,204);
                         outline: -3 -3 502 9 / 3;
-                        widths: 1 1 1 1;
+                        widths: 1;
                       }
                       transform {
                         child: container {
@@ -1768,9 +1768,9 @@ transform {
                             clip: -1 -1 97 3 / 1;
                           }
                           border {
-                            colors: rgb(53,132,228) rgb(53,132,228) rgb(53,132,228) rgb(53,132,228);
+                            colors: rgb(53,132,228);
                             outline: -1 -1 97 3 / 1;
-                            widths: 1 1 1 1;
+                            widths: 1;
                           }
                         }
                         transform: translate(2, 1);
@@ -1785,34 +1785,34 @@ transform {
                             clip: -1 -1 97 3 / 1;
                           }
                           border {
-                            colors: rgb(53,132,228) rgb(53,132,228) rgb(53,132,228) rgb(53,132,228);
+                            colors: rgb(53,132,228);
                             outline: -1 -1 97 3 / 1;
-                            widths: 1 1 1 1;
+                            widths: 1;
                           }
                         }
                         transform: translate(99, 0) translate(2, 1);
                       }
                       transform {
                         child: border {
-                          colors: rgba(146,149,149,0.15) rgba(146,149,149,0.15) rgba(146,149,149,0.15) rgba(146,149,149,0.15);
+                          colors: rgba(146,149,149,0.15);
                           outline: -1 -1 97 3 / 1;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                         transform: translate(198, 0) translate(2, 1);
                       }
                       transform {
                         child: border {
-                          colors: rgba(146,149,149,0.15) rgba(146,149,149,0.15) rgba(146,149,149,0.15) rgba(146,149,149,0.15);
+                          colors: rgba(146,149,149,0.15);
                           outline: -1 -1 97 3 / 1;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                         transform: translate(297, 0) translate(2, 1);
                       }
                       transform {
                         child: border {
-                          colors: rgba(146,149,149,0.15) rgba(146,149,149,0.15) rgba(146,149,149,0.15) rgba(146,149,149,0.15);
+                          colors: rgba(146,149,149,0.15);
                           outline: -1 -1 97 3 / 1;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                         transform: translate(396, 0) translate(2, 1);
                       }
@@ -1835,9 +1835,9 @@ transform {
                           clip: -1 -1 478 4 / 2;
                         }
                         border {
-                          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                          colors: rgb(213,208,204);
                           outline: -1 -1 478 4 / 2;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                         container {
                           rounded-clip {
@@ -1848,9 +1848,9 @@ transform {
                             clip: -1 -1 237 4 / 2;
                           }
                           border {
-                            colors: rgb(53,132,228) rgb(53,132,228) rgb(53,132,228) rgb(53,132,228);
+                            colors: rgb(53,132,228);
                             outline: -1 -1 237 4 / 2;
-                            widths: 1 1 1 1;
+                            widths: 1;
                           }
                         }
                         transform {
@@ -1863,9 +1863,9 @@ transform {
                               clip: -1 -1 20 20 / 10;
                             }
                             border {
-                              colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                              colors: rgb(213,208,204);
                               outline: -1 -1 20 20 / 10;
-                              widths: 1 1 1 1;
+                              widths: 1;
                             }
                           }
                           transform: translate(234, 0) translate(-8, -8);
@@ -1886,9 +1886,9 @@ transform {
                           clip: -1 -1 478 4 / 2;
                         }
                         border {
-                          colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                          colors: rgb(213,208,204);
                           outline: -1 -1 478 4 / 2;
-                          widths: 1 1 1 1;
+                          widths: 1;
                         }
                         transform {
                           child: container {
@@ -1900,9 +1900,9 @@ transform {
                               clip: -1 -1 20 20 / 10;
                             }
                             border {
-                              colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                              colors: rgb(213,208,204);
                               outline: -1 -1 20 20 / 10;
-                              widths: 1 1 1 1;
+                              widths: 1;
                             }
                           }
                           transform: translate(234, 0) translate(-8, -8);
@@ -1967,9 +1967,9 @@ transform {
                         clip: -1 -1 478 4 / 2;
                       }
                       border {
-                        colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                        colors: rgb(213,208,204);
                         outline: -1 -1 478 4 / 2;
-                        widths: 1 1 1 1;
+                        widths: 1;
                       }
                       transform {
                         child: texture {
@@ -1998,9 +1998,9 @@ transform {
                             clip: -1 -1 4 362 / 2;
                           }
                           border {
-                            colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                            colors: rgb(213,208,204);
                             outline: -1 -1 4 362 / 2;
-                            widths: 1 1 1 1;
+                            widths: 1;
                           }
                           transform {
                             child: container {
@@ -2012,9 +2012,9 @@ transform {
                                 clip: -1 -1 4 182 / 2 2 1.5 1.5;
                               }
                               border {
-                                colors: rgb(53,132,228) rgb(53,132,228) rgb(53,132,228) rgb(53,132,228);
+                                colors: rgb(53,132,228);
                                 outline: -1 -1 4 182 / 2 2 1.5 1.5;
-                                widths: 1 1 1 1;
+                                widths: 1;
                               }
                             }
                             transform: translate(-1, 0) translate(1, 0);
@@ -2035,9 +2035,9 @@ transform {
                             clip: -1 -1 4 362 / 2;
                           }
                           border {
-                            colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                            colors: rgb(213,208,204);
                             outline: -1 -1 4 362 / 2;
-                            widths: 1 1 1 1;
+                            widths: 1;
                           }
                           transform {
                             child: container {
@@ -2049,9 +2049,9 @@ transform {
                                 clip: -1 -1 4 182 / 1.5 1.5 2 2;
                               }
                               border {
-                                colors: rgb(53,132,228) rgb(53,132,228) rgb(53,132,228) rgb(53,132,228);
+                                colors: rgb(53,132,228);
                                 outline: -1 -1 4 182 / 1.5 1.5 2 2;
-                                widths: 1 1 1 1;
+                                widths: 1;
                               }
                             }
                             transform: translate(-1, 180) translate(1, 0);
@@ -2083,9 +2083,9 @@ transform {
                                 clip: -1 -1 4 310 / 2;
                               }
                               border {
-                                colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                                colors: rgb(213,208,204);
                                 outline: -1 -1 4 310 / 2;
-                                widths: 1 1 1 1;
+                                widths: 1;
                               }
                               container {
                                 rounded-clip {
@@ -2096,9 +2096,9 @@ transform {
                                   clip: -1 -1 4 154 / 2;
                                 }
                                 border {
-                                  colors: rgb(53,132,228) rgb(53,132,228) rgb(53,132,228) rgb(53,132,228);
+                                  colors: rgb(53,132,228);
                                   outline: -1 -1 4 154 / 2;
-                                  widths: 1 1 1 1;
+                                  widths: 1;
                                 }
                               }
                               transform {
@@ -2111,9 +2111,9 @@ transform {
                                     clip: -1 -1 20 20 / 10;
                                   }
                                   border {
-                                    colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                                    colors: rgb(213,208,204);
                                     outline: -1 -1 20 20 / 10;
-                                    widths: 1 1 1 1;
+                                    widths: 1;
                                   }
                                 }
                                 transform: translate(0, 151) translate(-8, -8);
@@ -2143,9 +2143,9 @@ transform {
                                 clip: -1 -1 4 310 / 2;
                               }
                               border {
-                                colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                                colors: rgb(213,208,204);
                                 outline: -1 -1 4 310 / 2;
-                                widths: 1 1 1 1;
+                                widths: 1;
                               }
                               transform {
                                 child: container {
@@ -2157,9 +2157,9 @@ transform {
                                     clip: -1 -1 20 20 / 10;
                                   }
                                   border {
-                                    colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                                    colors: rgb(213,208,204);
                                     outline: -1 -1 20 20 / 10;
-                                    widths: 1 1 1 1;
+                                    widths: 1;
                                   }
                                 }
                                 transform: translate(0, 151) translate(-8, -8);
@@ -2193,7 +2193,7 @@ transform {
                   border {
                     colors: rgb(213,208,204) rgb(255,255,255) rgb(255,255,255) rgb(213,208,204);
                     outline: -1 -1 114 135;
-                    widths: 1 1 1 1;
+                    widths: 1;
                   }
                   text {
                     color: rgb(146,149,149);
@@ -2210,7 +2210,7 @@ transform {
                   border {
                     colors: rgb(255,255,255) rgb(213,208,204) rgb(213,208,204) rgb(255,255,255);
                     outline: -1 -1 114 135;
-                    widths: 1 1 1 1;
+                    widths: 1;
                   }
                   text {
                     color: rgb(146,149,149);
@@ -2228,17 +2228,17 @@ transform {
                     border {
                       colors: rgb(213,208,204) rgb(255,255,255) rgb(255,255,255) rgb(213,208,204);
                       outline: -2 -2 114 135;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                     border {
                       colors: rgb(255,255,255) rgb(213,208,204) rgb(213,208,204) rgb(255,255,255);
                       outline: -1 -1 112 133;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                     border {
-                      colors: rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0);
+                      colors: rgba(0,0,0,0);
                       outline: -2 -2 114 135;
-                      widths: 2 2 2 2;
+                      widths: 2;
                     }
                   }
                   text {
@@ -2257,17 +2257,17 @@ transform {
                     border {
                       colors: rgb(255,255,255) rgb(213,208,204) rgb(213,208,204) rgb(255,255,255);
                       outline: -2 -2 114 135;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                     border {
                       colors: rgb(213,208,204) rgb(255,255,255) rgb(255,255,255) rgb(213,208,204);
                       outline: -1 -1 112 133;
-                      widths: 1 1 1 1;
+                      widths: 1;
                     }
                     border {
-                      colors: rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0);
+                      colors: rgba(0,0,0,0);
                       outline: -2 -2 114 135;
-                      widths: 2 2 2 2;
+                      widths: 2;
                     }
                   }
                   text {
@@ -2295,9 +2295,9 @@ transform {
               transform {
                 child: container {
                   border {
-                    colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                    colors: rgb(213,208,204);
                     outline: -1 -1 212 289;
-                    widths: 1 1 1 1;
+                    widths: 1;
                   }
                   color {
                     bounds: 204 281 6 6;
@@ -2334,9 +2334,9 @@ transform {
                               }
                             }
                             border {
-                              colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                              colors: rgb(213,208,204);
                               outline: 13 28 16 16 / 3;
-                              widths: 1 1 1 1;
+                              widths: 1;
                             }
                             color-matrix {
                               child: texture {
@@ -2400,9 +2400,9 @@ transform {
                               }
                             }
                             border {
-                              colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                              colors: rgb(213,208,204);
                               outline: 13 51 16 16 / 3;
-                              widths: 1 1 1 1;
+                              widths: 1;
                             }
                           }
                           color {
@@ -2458,9 +2458,9 @@ transform {
                               }
                             }
                             border {
-                              colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                              colors: rgb(213,208,204);
                               outline: 13 74 16 16 / 3;
-                              widths: 1 1 1 1;
+                              widths: 1;
                             }
                             color-matrix {
                               child: texture {
@@ -2536,9 +2536,9 @@ transform {
                               }
                             }
                             border {
-                              colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                              colors: rgb(213,208,204);
                               outline: 13 97 16 16 / 8;
-                              widths: 1 1 1 1;
+                              widths: 1;
                             }
                             color-matrix {
                               child: texture {
@@ -2604,7 +2604,7 @@ transform {
                                 color: rgb(252,252,252);
                               }
                               border {
-                                colors: rgb(246,245,244) rgb(246,245,244) rgb(246,245,244) rgb(246,245,244);
+                                colors: rgb(246,245,244);
                                 outline: -6 0 42 25;
                                 widths: 0 1 1 0;
                               }
@@ -2625,7 +2625,7 @@ transform {
                                 color: rgb(252,252,252);
                               }
                               border {
-                                colors: rgb(246,245,244) rgb(246,245,244) rgb(246,245,244) rgb(246,245,244);
+                                colors: rgb(246,245,244);
                                 outline: -6 0 40 25;
                                 widths: 0 1 1 0;
                               }
@@ -2646,7 +2646,7 @@ transform {
                                 color: rgb(252,252,252);
                               }
                               border {
-                                colors: rgb(246,245,244) rgb(246,245,244) rgb(246,245,244) rgb(246,245,244);
+                                colors: rgb(246,245,244);
                                 outline: -6 0 71 25;
                                 widths: 0 1 1 0;
                               }
@@ -2667,9 +2667,9 @@ transform {
                                 color: rgb(252,252,252);
                               }
                               border {
-                                colors: rgb(246,245,244) rgb(246,245,244) rgb(246,245,244) rgb(246,245,244);
+                                colors: rgb(246,245,244);
                                 outline: -6 0 60 25;
-                                widths: 0 0 1 0;
+                                widths: 0 0 1;
                               }
                               text {
                                 color: rgb(146,149,149);
@@ -2692,9 +2692,9 @@ transform {
               transform {
                 child: container {
                   border {
-                    colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                    colors: rgb(213,208,204);
                     outline: -1 -1 212 263;
-                    widths: 1 1 1 1;
+                    widths: 1;
                   }
                   container {
                     color {
@@ -2730,9 +2730,9 @@ transform {
             transform {
               child: container {
                 border {
-                  colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                  colors: rgb(213,208,204);
                   outline: -1 -1 354 142;
-                  widths: 1 1 1 1;
+                  widths: 1;
                 }
                 container {
                   transform {
@@ -2742,9 +2742,9 @@ transform {
                         color: rgb(234,232,230);
                       }
                       border {
-                        colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                        colors: rgb(213,208,204);
                         outline: -1 -1 352 37;
-                        widths: 0 0 1 0;
+                        widths: 0 0 1;
                       }
                       transform {
                         child: container {
@@ -2808,9 +2808,9 @@ transform {
             transform {
               child: container {
                 border {
-                  colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                  colors: rgb(213,208,204);
                   outline: -1 -1 354 142;
-                  widths: 1 1 1 1;
+                  widths: 1;
                 }
                 container {
                   color {
@@ -2824,7 +2824,7 @@ transform {
                         color: rgb(234,232,230);
                       }
                       border {
-                        colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                        colors: rgb(213,208,204);
                         outline: -2 -1 67 140;
                         widths: 0 0 0 1;
                       }
@@ -2883,9 +2883,9 @@ transform {
             transform {
               child: container {
                 border {
-                  colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                  colors: rgb(213,208,204);
                   outline: -1 -1 353 142;
-                  widths: 1 1 1 1;
+                  widths: 1;
                 }
                 container {
                   color {
@@ -2899,9 +2899,9 @@ transform {
                         color: rgb(234,232,230);
                       }
                       border {
-                        colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                        colors: rgb(213,208,204);
                         outline: -1 -2 351 37;
-                        widths: 1 0 0 0;
+                        widths: 1 0 0;
                       }
                       transform {
                         child: container {
@@ -2958,9 +2958,9 @@ transform {
             transform {
               child: container {
                 border {
-                  colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                  colors: rgb(213,208,204);
                   outline: -1 -1 353 142;
-                  widths: 1 1 1 1;
+                  widths: 1;
                 }
                 container {
                   transform {
@@ -2970,7 +2970,7 @@ transform {
                         color: rgb(234,232,230);
                       }
                       border {
-                        colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(213,208,204);
+                        colors: rgb(213,208,204);
                         outline: -1 -1 67 140;
                         widths: 0 1 0 0;
                       }
