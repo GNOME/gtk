@@ -3690,27 +3690,21 @@ handle_wmspec_button_release (GdkDisplay   *display,
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   GdkSurface *surface;
 
-#if defined (HAVE_XGENERICEVENTS) && defined (XINPUT_2)
   XIEvent *xiev = (XIEvent *) xevent->xcookie.data;
   XIDeviceEvent *xidev = (XIDeviceEvent *) xiev;
 
   if (xevent->xany.type == GenericEvent)
     surface = gdk_x11_surface_lookup_for_display (display, xidev->event);
   else
-#endif
     surface = gdk_x11_surface_lookup_for_display (display, xevent->xany.window);
 
   if (display_x11->wm_moveresize_button != 0 && surface != NULL)
     {
       if ((xevent->xany.type == ButtonRelease &&
-           xevent->xbutton.button == display_x11->wm_moveresize_button)
-#if defined (HAVE_XGENERICEVENTS) && defined (XINPUT_2)
-          ||
+           xevent->xbutton.button == display_x11->wm_moveresize_button) ||
           (xevent->xany.type == GenericEvent &&
            xiev->evtype == XI_ButtonRelease &&
-           xidev->detail == display_x11->wm_moveresize_button)
-#endif
-          )
+           xidev->detail == display_x11->wm_moveresize_button))
         {
           display_x11->wm_moveresize_button = 0;
           wmspec_send_message (display, surface, 0, 0, _NET_WM_MOVERESIZE_CANCEL, 0);
@@ -4102,7 +4096,6 @@ _gdk_x11_moveresize_handle_event (const XEvent *event)
         }
       break;
 
-#if defined (HAVE_XGENERICEVENTS) && defined (XINPUT_2)
     case GenericEvent:
       {
         /* we just assume this is an XI2 event */
@@ -4138,7 +4131,6 @@ _gdk_x11_moveresize_handle_event (const XEvent *event)
           }
       }
       break;
-#endif
 
     default:
       break;

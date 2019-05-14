@@ -19,9 +19,7 @@
 
 #include "gdkx11devicemanager-core.h"
 #include "gdkdevicemanagerprivate-core.h"
-#ifdef XINPUT_2
 #include "gdkx11devicemanager-xi2.h"
-#endif
 #include "gdkinternals.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
@@ -39,7 +37,6 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
 {
   if (!g_getenv ("GDK_CORE_DEVICE_EVENTS"))
     {
-#ifdef XINPUT_2
       int opcode, firstevent, firsterror;
       Display *xdisplay;
 
@@ -70,7 +67,6 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
               return GDK_X11_DEVICE_MANAGER_CORE (device_manager_xi2);
             }
         }
-#endif /* XINPUT_2 */
     }
 
   GDK_DISPLAY_NOTE (display, INPUT, g_message ("Creating core device manager"));
@@ -98,23 +94,20 @@ gdk_x11_device_manager_lookup (GdkX11DeviceManagerCore *device_manager,
 
   g_return_val_if_fail (GDK_IS_X11_DEVICE_MANAGER_CORE (device_manager), NULL);
 
-#ifdef XINPUT_2
   if (GDK_IS_X11_DEVICE_MANAGER_XI2 (device_manager))
     device = _gdk_x11_device_manager_xi2_lookup (GDK_X11_DEVICE_MANAGER_XI2 (device_manager),
                                                  device_id);
-  else
-#endif /* XINPUT_2 */
-    if (GDK_IS_X11_DEVICE_MANAGER_CORE (device_manager))
-      {
-        /* It is a core/xi1 device manager, we only map
-         * IDs 2 and 3, matching XI2's Virtual Core Pointer
-         * and Keyboard.
-         */
-        if (device_id == VIRTUAL_CORE_POINTER_ID)
-          device = GDK_X11_DEVICE_MANAGER_CORE (device_manager)->core_pointer;
-        else if (device_id == VIRTUAL_CORE_KEYBOARD_ID)
-          device = GDK_X11_DEVICE_MANAGER_CORE (device_manager)->core_keyboard;
-      }
+  else if (GDK_IS_X11_DEVICE_MANAGER_CORE (device_manager))
+    {
+      /* It is a core/xi1 device manager, we only map
+       * IDs 2 and 3, matching XI2's Virtual Core Pointer
+       * and Keyboard.
+       */
+      if (device_id == VIRTUAL_CORE_POINTER_ID)
+        device = GDK_X11_DEVICE_MANAGER_CORE (device_manager)->core_pointer;
+      else if (device_id == VIRTUAL_CORE_KEYBOARD_ID)
+        device = GDK_X11_DEVICE_MANAGER_CORE (device_manager)->core_keyboard;
+    }
 
   return device;
 }
@@ -140,18 +133,15 @@ gdk_x11_device_get_id (GdkDevice *device)
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
 
-#ifdef XINPUT_2
   if (GDK_IS_X11_DEVICE_XI2 (device))
     device_id = _gdk_x11_device_xi2_get_id (GDK_X11_DEVICE_XI2 (device));
-  else
-#endif /* XINPUT_2 */
-    if (GDK_IS_X11_DEVICE_CORE (device))
-      {
-        if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-          device_id = VIRTUAL_CORE_KEYBOARD_ID;
-        else
-          device_id = VIRTUAL_CORE_POINTER_ID;
-      }
+  else if (GDK_IS_X11_DEVICE_CORE (device))
+    {
+      if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+        device_id = VIRTUAL_CORE_KEYBOARD_ID;
+      else
+        device_id = VIRTUAL_CORE_POINTER_ID;
+    }
 
   return device_id;
 }

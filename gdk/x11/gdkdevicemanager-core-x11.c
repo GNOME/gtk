@@ -769,10 +769,8 @@ _gdk_device_manager_core_handle_focus (GdkSurface *surface,
       if (toplevel->has_pointer &&
           !x11_screen->wmspec_check_window &&
           mode != NotifyGrab &&
-#ifdef XINPUT_2
 	  mode != XINotifyPassiveGrab &&
 	  mode != XINotifyPassiveUngrab &&
-#endif /* XINPUT_2 */
           mode != NotifyUngrab)
         toplevel->has_pointer_focus = (focus_in) ? FALSE : TRUE;
       G_GNUC_FALLTHROUGH;
@@ -780,10 +778,8 @@ _gdk_device_manager_core_handle_focus (GdkSurface *surface,
     case NotifyNonlinear:
     case NotifyNonlinearVirtual:
       if (mode != NotifyGrab &&
-#ifdef XINPUT_2
 	  mode != XINotifyPassiveGrab &&
 	  mode != XINotifyPassiveUngrab &&
-#endif /* XINPUT_2 */
           mode != NotifyUngrab)
         toplevel->has_focus_window = (focus_in) ? TRUE : FALSE;
       /* We pretend that the focus moves to the grab
@@ -800,10 +796,8 @@ _gdk_device_manager_core_handle_focus (GdkSurface *surface,
        */
       if (!x11_screen->wmspec_check_window &&
           mode != NotifyGrab &&
-#ifdef XINPUT_2
 	  mode != XINotifyPassiveGrab &&
 	  mode != XINotifyPassiveUngrab &&
-#endif /* XINPUT_2 */
           mode != NotifyUngrab)
         toplevel->has_pointer_focus = (focus_in) ? TRUE : FALSE;
       break;

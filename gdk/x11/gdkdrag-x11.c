@@ -1940,11 +1940,9 @@ drag_grab (GdkDrag *drag)
   root = GDK_DISPLAY_XROOTWIN (display);
   seat = gdk_device_get_seat (gdk_drag_get_device (drag));
 
-#ifdef XINPUT_2
   if (GDK_IS_X11_DEVICE_XI2 (device))
     capabilities = GDK_SEAT_CAPABILITY_ALL_POINTING;
   else
-#endif
     capabilities = GDK_SEAT_CAPABILITY_ALL;
 
   cursor = gdk_drag_get_cursor (drag, x11_drag->current_action);
@@ -1966,7 +1964,6 @@ drag_grab (GdkDrag *drag)
       if (keycode == NoSymbol)
         continue;
 
-#ifdef XINPUT_2
       if (GDK_IS_X11_DEVICE_XI2 (device))
         {
           gint deviceid = gdk_x11_device_get_id (gdk_seat_get_keyboard (seat));
@@ -1998,7 +1995,6 @@ drag_grab (GdkDrag *drag)
                          &mods);
         }
       else
-#endif
         {
           XGrabKey (GDK_DISPLAY_XDISPLAY (display),
                     keycode, grab_keys[i].modifiers,
@@ -2040,7 +2036,6 @@ drag_ungrab (GdkDrag *drag)
       if (keycode == NoSymbol)
         continue;
 
-#ifdef XINPUT_2
       if (GDK_IS_X11_DEVICE_XI2 (keyboard))
         {
           XIGrabModifiers mods;
@@ -2057,7 +2052,6 @@ drag_ungrab (GdkDrag *drag)
                            &mods);
         }
       else
-#endif /* XINPUT_2 */
         {
           XUngrabKey (GDK_DISPLAY_XDISPLAY (display),
                       keycode, grab_keys[i].modifiers,
