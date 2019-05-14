@@ -51,6 +51,10 @@ enum _GdkWin32KeyLevelState
   GDK_WIN32_LEVEL_COUNT
 };
 
+#define GDK_KEY_UNICODE 0x01000000
+#define GDK_KEY_DEAD 0x02000000
+#define GDK_KEY_UNIDEAD 0x03000000
+
 typedef enum _GdkWin32KeyLevelState GdkWin32KeyLevelState;
 
 typedef struct _GdkWin32KeyNode GdkWin32KeyNode;
@@ -164,7 +168,7 @@ Example:
   {
     key.vk = 0xde VK_OEM_7
     key.level = GDK_WIN32_LEVEL_NONE
-    entry.gdk_keyval = 0x027 GDK_KEY_apostrophe (')
+    entry.gdk_keyval = 0x03000027 GDK_KEY_apostrophe (') | GDK_KEY_UNIDEAD
     combinations =
     {
       GdkWin32CombinationNode
@@ -214,7 +218,7 @@ Example:
   {
     key.vk = 0 // Can't be typed directly
     key.level = GDK_WIN32_LEVEL_NONE
-    entry.gdk_keyval = 0x1bd GDK_KEY_doubleacute (˝)
+    entry.gdk_keyval = 0x030002dd ˝ | GDK_KEY_UNIDEAD
     combinations =
     {
       GdkWin32CombinationNode
@@ -1146,11 +1150,12 @@ update_keymap (GdkKeymap *gdk_keymap)
                       if ((vk == VK_DECIMAL) && (level == GDK_WIN32_LEVEL_NONE))
                         options->decimal_mark = ucs4[0];
                       else
-                        ksymp->gdk_keyval = gdk_unicode_to_keyval (ucs4[0]);
+                        /* Be sure to keep the unicode value for dead keys, don't call gdk_unicode_to_keyval() */
+                        ksymp->gdk_keyval = k == -1 ? (ucs4[0] | GDK_KEY_UNIDEAD) : gdk_unicode_to_keyval (ucs4[0]);
 
                       /* We store GDK keyvals, not unicode characters */
                       for (ucs4_index = 0; ucs4_index < ucs4_chars; ucs4_index++)
-                         ucs4[ucs4_index] = gdk_unicode_to_keyval (ucs4[ucs4_index]);
+                         ucs4[ucs4_index] = k == -1 ? (ucs4[ucs4_index] | GDK_KEY_UNIDEAD) : gdk_unicode_to_keyval (ucs4[ucs4_index]);
 
                       if (ucs4_chars == 1)
                         {
@@ -1344,7 +1349,7 @@ update_keymap (GdkKeymap *gdk_keymap)
 
                       /* We store GDK keyvals, not unicode characters */
                       for (ucs4_index = 0; ucs4_index < ucs4_chars; ucs4_index++)
-                         ucs4[ucs4_index] = gdk_unicode_to_keyval (ucs4[ucs4_index]);
+                         ucs4[ucs4_index] = k == -1 ? (ucs4[ucs4_index] | GDK_KEY_UNIDEAD) : gdk_unicode_to_keyval (ucs4[ucs4_index]);
 
                       combo.key.vk = vk;
                       combo.key.level = level;
@@ -1436,39 +1441,6 @@ update_keymap (GdkKeymap *gdk_keymap)
   current_serial = _gdk_keymap_serial;
 }
 
-/* There's a limited number of dead keys that are typeable from the
- * keyboard. The rest of the dead keys are produced by combining a dead key
- * with another key (normally this produces a rare, untypeable character, but
- * with dead key chaining this produces yet another dead key). Because
- * the spacing character produced by such a combination might be quite mundane,
- * we must ensure that we none of these post-first-order dead keys
- * are used at the beginning of our composition check, when depth == 0.
- */
-static gboolean
-check_for_depth (GArray  *dead_keys,
-                 guint32  keyval,
-                 gsize   *index,
-                 gsize    depth)
-{
-  if (dead_keys->len == 0)
-    return FALSE;
-
-  if (depth > 0)
-    return TRUE;
-
-  for (;
-       *index < dead_keys->len;
-       (*index)++)
-    {
-      GdkWin32DeadKeyNode *dead_key = &g_array_index (dead_keys, GdkWin32DeadKeyNode, *index);
-
-      if (dead_key->key.vk != 0)
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
 /* Because this function can be called recursively,
  * it's convenient to split compose_buffer into head
  * (compose_buffer0) and tail (compose_buffer1).
@@ -1518,7 +1490,7 @@ check_compose_internal (GdkWin32Keymap *keymap,
       deadkey_i--;
     }
 
-  if (!check_for_depth (options->dead_keys, compose_buffer0, &deadkey_i, depth))
+  if ((compose_buffer0 & GDK_KEY_UNIDEAD) != GDK_KEY_UNIDEAD)
     return GDK_WIN32_KEYMAP_MATCH_NONE;
 
   /* Can't combine a buffer consisting of one keyval */
@@ -1569,11 +1541,11 @@ check_compose_internal (GdkWin32Keymap *keymap,
       GdkWin32KeymapMatch sub;
 
       sub = check_compose_internal (keymap,
-                                     node->result.gdk_keyval,
-                                     &compose_buffer1[1],
-                                     compose_buffer1_len - 1,
-                                     output, output_len,
-                                     depth + 1);
+                                    node->result.gdk_keyval,
+                                    &compose_buffer1[1],
+                                    compose_buffer1_len - 1,
+                                    output, output_len,
+                                    depth + 1);
       if (sub == GDK_WIN32_KEYMAP_MATCH_EXACT ||
           sub == GDK_WIN32_KEYMAP_MATCH_PARTIAL)
         {

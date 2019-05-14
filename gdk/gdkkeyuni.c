@@ -900,7 +900,7 @@ gdk_keyval_to_unicode (guint keyval)
 
   /* Also check for directly encoded 24-bit UCS characters:
    */
-  if ((keyval & 0xff000000) == 0x01000000)
+  if (((keyval & 0xff000000) & 0x01000000) == 0x01000000)
     return keyval & 0x00ffffff;
 
 #if defined(GDK_WINDOWING_WIN32)
