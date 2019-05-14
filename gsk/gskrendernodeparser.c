@@ -688,7 +688,7 @@ static GskRenderNode *
 parse_color_node (GtkCssParser *parser)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
-  GdkRGBA color = { 0, 0, 0, 1 };
+  GdkRGBA color = GDK_RGBA("FF0000");
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "color", parse_color, NULL, &color },
@@ -732,7 +732,7 @@ static GskRenderNode *
 parse_inset_shadow_node (GtkCssParser *parser)
 {
   GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
-  GdkRGBA color = { 0, 0, 0, 1 };
+  GdkRGBA color = GDK_RGBA("000000");
   double dx = 1, dy = 1, blur = 0, spread = 0;
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
@@ -753,7 +753,7 @@ parse_border_node (GtkCssParser *parser)
 {
   GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
   float widths[4] = { 1, 1, 1, 1 };
-  GdkRGBA colors[4] = { { 0, 0, 0, 1 }, {0, 0, 0, 1 }, {0, 0, 0, 1 }, { 0, 0, 0, 1 } };
+  GdkRGBA colors[4] = { GDK_RGBA("000"), GDK_RGBA("000"), GDK_RGBA("000"), GDK_RGBA("000") };
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
     { "widths", parse_float4, NULL, &widths },
@@ -794,7 +794,7 @@ static GskRenderNode *
 parse_outset_shadow_node (GtkCssParser *parser)
 {
   GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
-  GdkRGBA color = { 0, 0, 0, 1 };
+  GdkRGBA color = GDK_RGBA("000000");
   double dx = 1, dy = 1, blur = 0, spread = 0;
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
@@ -1005,7 +1005,7 @@ parse_text_node (GtkCssParser *parser)
 {
   PangoFont *font = NULL;
   graphene_point_t offset = GRAPHENE_POINT_INIT (0, 0);
-  GdkRGBA color = { 0, 0, 0, 1 };
+  GdkRGBA color = GDK_RGBA("000000");
   PangoGlyphString *glyphs = NULL;
   const Declaration declarations[] = {
     { "font", parse_font, clear_font, &font },
