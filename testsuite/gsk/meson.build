@@ -68,24 +68,34 @@ foreach renderer : renderers
 endforeach
 
 node_parser_tests = [
-  'crash1',
-  'crash2',
-  'crash3',
-  'crash4',
+  'crash1.errors',
+  'crash1.node',
+  'crash1.ref.node',
+  'crash2.errors',
+  'crash2.node',
+  'crash2.ref.node',
+  'crash3.node',
+  'crash3.ref.node',
+  'crash4.errors',
+  'crash4.node',
+  'crash4.ref.node',
 ]
 
 foreach test : node_parser_tests
-  test('parser ' + test, node_parser,
-       args: [join_paths(meson.current_source_dir(), 'nodeparser', test + '.node')],
-       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
-              'GSETTINGS_BACKEND=memory',
-              'GTK_CSD=1',
-              'G_ENABLE_DIAGNOSTIC=0',
-              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-              'GSK_RENDERER=opengl'
-            ],
-       suite: 'gsk')
+  if test.endswith('.node') and not test.endswith('.ref.node')
+    test('parser ' + test, node_parser,
+         args: [ join_paths(meson.current_source_dir(), 'nodeparser', test)
+               ],
+         env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+                'GSETTINGS_BACKEND=memory',
+                'GTK_CSD=1',
+                'G_ENABLE_DIAGNOSTIC=0',
+                'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+                'GSK_RENDERER=opengl'
+              ],
+         suite: 'gsk')
+  endif
 endforeach
 
 serialize_deserialize_tests = [
