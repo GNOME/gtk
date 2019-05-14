@@ -689,7 +689,8 @@ gtk_application_dbus_register (GApplication     *application,
                                const char       *obect_path,
                                GError          **error)
 {
-  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) application;
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) priv->impl;
   GDBusInterfaceVTable vtable = {
     sysprof_profiler_method_call,
     NULL,
