@@ -33,36 +33,33 @@
 GdkX11DeviceManagerCore *
 _gdk_x11_device_manager_new (GdkDisplay *display)
 {
-  if (!g_getenv ("GDK_CORE_DEVICE_EVENTS"))
+  int opcode, firstevent, firsterror;
+  Display *xdisplay;
+
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
+
+  if (XQueryExtension (xdisplay, "XInputExtension",
+                       &opcode, &firstevent, &firsterror))
     {
-      int opcode, firstevent, firsterror;
-      Display *xdisplay;
+      int major, minor;
 
-      xdisplay = GDK_DISPLAY_XDISPLAY (display);
+      major = 2;
+      minor = 3;
 
-      if (XQueryExtension (xdisplay, "XInputExtension",
-                           &opcode, &firstevent, &firsterror))
+      if (XIQueryVersion (xdisplay, &major, &minor) != BadRequest)
         {
-          int major, minor;
+          GdkX11DeviceManagerXI2 *device_manager_xi2;
 
-          major = 2;
-	  minor = 3;
+          GDK_DISPLAY_NOTE (display, INPUT, g_message ("Creating XI2 device manager"));
 
-          if (XIQueryVersion (xdisplay, &major, &minor) != BadRequest)
-            {
-              GdkX11DeviceManagerXI2 *device_manager_xi2;
+          device_manager_xi2 = g_object_new (GDK_TYPE_X11_DEVICE_MANAGER_XI2,
+                                             "display", display,
+                                             "opcode", opcode,
+                                             "major", major,
+                                             "minor", minor,
+                                             NULL);
 
-              GDK_DISPLAY_NOTE (display, INPUT, g_message ("Creating XI2 device manager"));
-
-              device_manager_xi2 = g_object_new (GDK_TYPE_X11_DEVICE_MANAGER_XI2,
-                                                 "display", display,
-                                                 "opcode", opcode,
-                                                 "major", major,
-                                                 "minor", minor,
-                                                 NULL);
-
-              return GDK_X11_DEVICE_MANAGER_CORE (device_manager_xi2);
-            }
+          return GDK_X11_DEVICE_MANAGER_CORE (device_manager_xi2);
         }
     }
 
