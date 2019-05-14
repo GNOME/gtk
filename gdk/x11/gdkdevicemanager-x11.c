@@ -17,8 +17,6 @@
 
 #include "config.h"
 
-#include "gdkx11devicemanager-core.h"
-#include "gdkdevicemanagerprivate-core.h"
 #include "gdkx11devicemanager-xi2.h"
 #include "gdkinternals.h"
 #include "gdkprivate-x11.h"
@@ -30,7 +28,7 @@
 #define VIRTUAL_CORE_POINTER_ID 2
 #define VIRTUAL_CORE_KEYBOARD_ID 3
 
-GdkX11DeviceManagerCore *
+GdkX11DeviceManagerXI2 *
 _gdk_x11_device_manager_new (GdkDisplay *display)
 {
   int opcode, firstevent, firsterror;
@@ -59,7 +57,7 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
                                              "minor", minor,
                                              NULL);
 
-          return GDK_X11_DEVICE_MANAGER_CORE (device_manager_xi2);
+          return device_manager_xi2;
         }
     }
 
@@ -68,17 +66,17 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
 
 /**
  * gdk_x11_device_manager_lookup:
- * @device_manager: (type GdkX11DeviceManagerCore): a #GdkDeviceManager
+ * @device_manager: (type GdkX11DeviceManagerXI2): a #GdkDeviceManager
  * @device_id: a device ID, as understood by the XInput2 protocol
  *
  * Returns the #GdkDevice that wraps the given device ID.
  *
- * Returns: (transfer none) (allow-none) (type GdkX11DeviceCore): The #GdkDevice wrapping the device ID,
+ * Returns: (transfer none) (allow-none) (type GdkX11DeviceXI2): The #GdkDevice wrapping the device ID,
  *          or %NULL if the given ID doesn’t currently represent a device.
  **/
 GdkDevice *
-gdk_x11_device_manager_lookup (GdkX11DeviceManagerCore *device_manager,
-			       gint                     device_id)
+gdk_x11_device_manager_lookup (GdkX11DeviceManagerXI2 *device_manager,
+			       gint                    device_id)
 {
   g_return_val_if_fail (GDK_IS_X11_DEVICE_MANAGER_XI2 (device_manager), NULL);
 
@@ -88,7 +86,7 @@ gdk_x11_device_manager_lookup (GdkX11DeviceManagerCore *device_manager,
 
 /**
  * gdk_x11_device_get_id:
- * @device: (type GdkX11DeviceCore): a #GdkDevice
+ * @device: (type GdkX11DeviceXI2): a #GdkDevice
  *
  * Returns the device ID as seen by XInput2.
  *
