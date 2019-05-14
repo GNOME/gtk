@@ -1,3 +1,25 @@
+/*
+ * Copyright © 2019 Benjamin Otte
+ *                  Timm Bäder
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authors: Benjamin Otte <otte@gnome.org>
+ *          Timm Bäder <mail@baedert.org>
+ */
+
+#include "config.h"
 
 #include "gskrendernodeparserprivate.h"
 
@@ -1945,13 +1967,44 @@ render_node_print (Printer       *p,
     }
 }
 
-char *
-gsk_render_node_serialize_to_string (GskRenderNode *root)
+/**
+ * gsk_render_node_serialize:
+ * @node: a #GskRenderNode
+ *
+ * Serializes the @node for later deserialization via
+ * gsk_render_node_deserialize(). No guarantees are made about the format
+ * used other than that the same version of GTK+ will be able to deserialize
+ * the result of a call to gsk_render_node_serialize() and
+ * gsk_render_node_deserialize() will correctly reject files it cannot open
+ * that were created with previous versions of GTK+.
+ *
+ * The intended use of this functions is testing, benchmarking and debugging.
+ * The format is not meant as a permanent storage format.
+ *
+ * Returns: a #GBytes representing the node.
+ **/
+GBytes *
+gsk_render_node_serialize (GskRenderNode *node)
 {
   Printer p;
 
   printer_init (&p);
-  render_node_print (&p, root);
 
-  return g_string_free (p.str, FALSE);
+  if (gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE)
+    {
+      guint i;
+
+      for (i = 0; i < gsk_container_node_get_n_children (node); i ++)
+        {
+          GskRenderNode *child = gsk_container_node_get_child (node, i);
+
+          render_node_print (&p, child);
+        }
+    }
+  else
+    {
+      render_node_print (&p, node);
+    }
+
+  return g_string_free_to_bytes (p.str);
 }
