@@ -275,8 +275,12 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
 
   for (i = 0; i < g_list_model_get_n_items (self->shortcuts); i++)
     {
-      if (gtk_shortcut_controller_trigger_shortcut (self, 
-                                                    g_list_model_get_item (self->shortcuts, i),
+      GtkShortcut *shortcut = g_list_model_get_item (self->shortcuts, i);
+
+      g_object_unref (shortcut);
+
+      if (gtk_shortcut_controller_trigger_shortcut (self,
+                                                    shortcut,
                                                     i,
                                                     event,
                                                     enable_mnemonics))
