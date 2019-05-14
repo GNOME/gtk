@@ -1600,9 +1600,9 @@ render_node_print (Printer       *p,
       {
         start_node (p, "cross-fade");
 
+        append_node_param (p, "end", gsk_cross_fade_node_get_end_child (node));
         append_float_param (p, "progress", gsk_cross_fade_node_get_progress (node));
         append_node_param (p, "start", gsk_cross_fade_node_get_start_child (node));
-        append_node_param (p, "end", gsk_cross_fade_node_get_end_child (node));
 
         end_node (p);
       }
@@ -1617,8 +1617,8 @@ render_node_print (Printer       *p,
         start_node (p, "linear-gradient");
 
         append_rect_param (p, "bounds", &node->bounds);
-        append_point_param (p, "start", gsk_linear_gradient_node_peek_start (node));
         append_point_param (p, "end", gsk_linear_gradient_node_peek_end (node));
+        append_point_param (p, "start", gsk_linear_gradient_node_peek_start (node));
 
         _indent (p);
         g_string_append (p->str, "stops:");
@@ -1648,8 +1648,8 @@ render_node_print (Printer       *p,
       {
         start_node (p, "opacity");
 
-        append_float_param (p, "opacity", gsk_opacity_node_get_opacity (node));
         append_node_param (p, "child", gsk_opacity_node_get_child (node));
+        append_float_param (p, "opacity", gsk_opacity_node_get_opacity (node));
 
         end_node (p);
       }
@@ -1659,12 +1659,12 @@ render_node_print (Printer       *p,
       {
         start_node (p, "outset-shadow");
 
-        append_rounded_rect_param (p, "outline", gsk_outset_shadow_node_peek_outline (node));
+        append_float_param (p, "blur", gsk_outset_shadow_node_get_blur_radius (node));
         append_rgba_param (p, "color", gsk_outset_shadow_node_peek_color (node));
         append_float_param (p, "dx", gsk_outset_shadow_node_get_dx (node));
         append_float_param (p, "dy", gsk_outset_shadow_node_get_dy (node));
+        append_rounded_rect_param (p, "outline", gsk_outset_shadow_node_peek_outline (node));
         append_float_param (p, "spread", gsk_outset_shadow_node_get_spread (node));
-        append_float_param (p, "blur", gsk_outset_shadow_node_get_blur_radius (node));
 
         end_node (p);
       }
@@ -1674,8 +1674,8 @@ render_node_print (Printer       *p,
       {
         start_node (p, "clip");
 
-        append_rect_param (p, "clip", gsk_clip_node_peek_clip (node));
         append_node_param (p, "child", gsk_clip_node_get_child (node));
+        append_rect_param (p, "clip", gsk_clip_node_peek_clip (node));
 
         end_node (p);
       }
@@ -1685,8 +1685,8 @@ render_node_print (Printer       *p,
       {
         start_node (p, "rounded-clip");
 
-        append_rounded_rect_param (p, "clip", gsk_rounded_clip_node_peek_clip (node));
         append_node_param (p, "child", gsk_rounded_clip_node_get_child (node));
+        append_rounded_rect_param (p, "clip", gsk_rounded_clip_node_peek_clip (node));
 
 
         end_node (p);
@@ -1697,8 +1697,8 @@ render_node_print (Printer       *p,
       {
         start_node (p, "transform");
 
-        append_transform_param (p, "transform", gsk_transform_node_get_transform (node));
         append_node_param (p, "child", gsk_transform_node_get_child (node));
+        append_transform_param (p, "transform", gsk_transform_node_get_transform (node));
 
         end_node (p);
       }
@@ -1708,9 +1708,9 @@ render_node_print (Printer       *p,
       {
         start_node (p, "color-matrix");
 
+        append_node_param (p, "child", gsk_color_matrix_node_get_child (node));
         append_matrix_param (p, "matrix", gsk_color_matrix_node_peek_color_matrix (node));
         append_vec4_param (p, "offset", gsk_color_matrix_node_peek_color_offset (node));
-        append_node_param (p, "child", gsk_color_matrix_node_get_child (node));
 
         end_node (p);
       }
@@ -1719,6 +1719,17 @@ render_node_print (Printer       *p,
     case GSK_BORDER_NODE:
       {
         start_node (p, "border");
+
+        _indent (p);
+        g_string_append (p->str, "colors: ");
+        append_rgba (p->str, &gsk_border_node_peek_colors (node)[0]);
+        g_string_append_c (p->str, ' ');
+        append_rgba (p->str, &gsk_border_node_peek_colors (node)[1]);
+        g_string_append_c (p->str, ' ');
+        append_rgba (p->str, &gsk_border_node_peek_colors (node)[2]);
+        g_string_append_c (p->str, ' ');
+        append_rgba (p->str, &gsk_border_node_peek_colors (node)[3]);
+        g_string_append (p->str, ";\n");
 
         append_rounded_rect_param (p, "outline", gsk_border_node_peek_outline (node));
 
@@ -1733,17 +1744,6 @@ render_node_print (Printer       *p,
         string_append_double (p->str, gsk_border_node_peek_widths (node)[3]);
         g_string_append (p->str, ";\n");
 
-        _indent (p);
-        g_string_append (p->str, "colors: ");
-        append_rgba (p->str, &gsk_border_node_peek_colors (node)[0]);
-        g_string_append_c (p->str, ' ');
-        append_rgba (p->str, &gsk_border_node_peek_colors (node)[1]);
-        g_string_append_c (p->str, ' ');
-        append_rgba (p->str, &gsk_border_node_peek_colors (node)[2]);
-        g_string_append_c (p->str, ' ');
-        append_rgba (p->str, &gsk_border_node_peek_colors (node)[3]);
-        g_string_append (p->str, ";\n");
-
         end_node (p);
       }
       break;
@@ -1756,6 +1756,8 @@ render_node_print (Printer       *p,
         start_node (p, "shadow");
 
         _indent (p);
+        append_node_param (p, "child", gsk_shadow_node_get_child (node));
+
         g_string_append (p->str, "shadows: ");
         for (i = 0; i < n_shadows; i ++)
           {
@@ -1780,8 +1782,6 @@ render_node_print (Printer       *p,
         g_string_append_c (p->str, ';');
         g_string_append_c (p->str, '\n');
 
-        append_node_param (p, "child", gsk_shadow_node_get_child (node));
-
         end_node (p);
       }
       break;
@@ -1790,12 +1790,12 @@ render_node_print (Printer       *p,
       {
         start_node (p, "inset-shadow");
 
-        append_rounded_rect_param (p, "outline", gsk_inset_shadow_node_peek_outline (node));
+        append_float_param (p, "blur", gsk_inset_shadow_node_get_blur_radius (node));
         append_rgba_param (p, "color", gsk_inset_shadow_node_peek_color (node));
         append_float_param (p, "dx", gsk_inset_shadow_node_get_dx (node));
         append_float_param (p, "dy", gsk_inset_shadow_node_get_dy (node));
+        append_rounded_rect_param (p, "outline", gsk_inset_shadow_node_peek_outline (node));
         append_float_param (p, "spread", gsk_inset_shadow_node_get_spread (node));
-        append_float_param (p, "blur", gsk_inset_shadow_node_get_blur_radius (node));
 
         end_node (p);
       }
@@ -1836,15 +1836,13 @@ render_node_print (Printer       *p,
         start_node (p, "text");
 
         _indent (p);
+        append_rgba_param (p, "color", gsk_text_node_peek_color (node));
+
         desc = pango_font_describe ((PangoFont *)gsk_text_node_peek_font (node));;
         font_name = pango_font_description_to_string (desc);
         g_string_append_printf (p->str, "font: \"%s\";\n", font_name);
         g_free (font_name);
         pango_font_description_free (desc);
-
-        append_float_param (p, "x", gsk_text_node_get_x (node));
-        append_float_param (p, "y", gsk_text_node_get_y (node));
-        append_rgba_param (p, "color", gsk_text_node_peek_color (node));
 
         _indent (p);
         g_string_append (p->str, "glyphs: ");
@@ -1863,6 +1861,9 @@ render_node_print (Printer       *p,
                                     glyph->attr.is_cluster_start);
           }
 
+        append_float_param (p, "x", gsk_text_node_get_x (node));
+        append_float_param (p, "y", gsk_text_node_get_y (node));
+
         g_string_append_c (p->str, ';');
         g_string_append_c (p->str, '\n');
 
@@ -1875,10 +1876,10 @@ render_node_print (Printer       *p,
         start_node (p, "debug");
 
         _indent (p);
+        append_node_param (p, "child", gsk_debug_node_get_child (node));
         /* TODO: We potentially need to escape certain characters in the message */
         g_string_append_printf (p->str, "message: \"%s\";\n", gsk_debug_node_get_message (node));
 
-        append_node_param (p, "child", gsk_debug_node_get_child (node));
         end_node (p);
       }
       break;
@@ -1897,10 +1898,10 @@ render_node_print (Printer       *p,
     case GSK_REPEAT_NODE:
       {
         start_node (p, "repeat");
-        append_rect_param (p, "bounds", &node->bounds);
-        append_rect_param (p, "child-bounds", gsk_repeat_node_peek_child_bounds (node));
 
+        append_rect_param (p, "bounds", &node->bounds);
         append_node_param (p, "child", gsk_repeat_node_get_child (node));
+        append_rect_param (p, "child-bounds", gsk_repeat_node_peek_child_bounds (node));
 
         end_node (p);
       }
@@ -1913,6 +1914,8 @@ render_node_print (Printer       *p,
 
         start_node (p, "blend");
 
+        append_node_param (p, "bottom", gsk_blend_node_get_bottom_child (node));
+
         _indent (p);
         for (i = 0; i < G_N_ELEMENTS (blend_modes); i++)
           {
@@ -1923,7 +1926,6 @@ render_node_print (Printer       *p,
               }
           }
         append_node_param (p, "top", gsk_blend_node_get_top_child (node));
-        append_node_param (p, "bottom", gsk_blend_node_get_bottom_child (node));
 
         end_node (p);
       }
