@@ -499,6 +499,7 @@ gtk_keyval_trigger_trigger (GtkShortcutTrigger *trigger,
                             const GdkEvent     *event,
                             gboolean            enable_mnemonics)
 {
+  const GdkModifierType legacy_x11_modifiers = GDK_MOD2_MASK | GDK_MOD3_MASK | GDK_MOD4_MASK | GDK_MOD5_MASK;
   GtkKeyvalTrigger *self = (GtkKeyvalTrigger *) trigger;
   GdkModifierType modifiers;
   guint keyval;
@@ -514,6 +515,9 @@ gtk_keyval_trigger_trigger (GtkShortcutTrigger *trigger,
     keyval = GDK_KEY_Tab;
   else
     keyval = gdk_keyval_to_lower (keyval);
+
+  /* Filter legacy X11 modifiers and Caps lock out */
+  modifiers &= ~(legacy_x11_modifiers | GDK_LOCK_MASK);
 
   return keyval == self->keyval && modifiers == self->modifiers;
 }
