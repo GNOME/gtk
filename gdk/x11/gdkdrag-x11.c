@@ -1925,7 +1925,6 @@ static gboolean
 drag_grab (GdkDrag *drag)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
-  GdkDevice *device = gdk_drag_get_device (drag);
   GdkSeatCapabilities capabilities;
   GdkDisplay *display;
   Window root;
@@ -1940,10 +1939,7 @@ drag_grab (GdkDrag *drag)
   root = GDK_DISPLAY_XROOTWIN (display);
   seat = gdk_device_get_seat (gdk_drag_get_device (drag));
 
-  if (GDK_IS_X11_DEVICE_XI2 (device))
-    capabilities = GDK_SEAT_CAPABILITY_ALL_POINTING;
-  else
-    capabilities = GDK_SEAT_CAPABILITY_ALL;
+  capabilities = GDK_SEAT_CAPABILITY_ALL_POINTING;
 
   cursor = gdk_drag_get_cursor (drag, x11_drag->current_action);
   g_set_object (&x11_drag->cursor, cursor);
@@ -1959,50 +1955,38 @@ drag_grab (GdkDrag *drag)
 
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
     {
+      gint deviceid = gdk_x11_device_get_id (gdk_seat_get_keyboard (seat));
+      unsigned char mask[XIMaskLen(XI_LASTEVENT)];
+      XIGrabModifiers mods;
+      XIEventMask evmask;
+      gint num_mods;
+
       keycode = XKeysymToKeycode (GDK_DISPLAY_XDISPLAY (display),
                                   grab_keys[i].keysym);
       if (keycode == NoSymbol)
         continue;
 
-      if (GDK_IS_X11_DEVICE_XI2 (device))
-        {
-          gint deviceid = gdk_x11_device_get_id (gdk_seat_get_keyboard (seat));
-          unsigned char mask[XIMaskLen(XI_LASTEVENT)];
-          XIGrabModifiers mods;
-          XIEventMask evmask;
-          gint num_mods;
+      memset (mask, 0, sizeof (mask));
+      XISetMask (mask, XI_KeyPress);
+      XISetMask (mask, XI_KeyRelease);
 
-          memset (mask, 0, sizeof (mask));
-          XISetMask (mask, XI_KeyPress);
-          XISetMask (mask, XI_KeyRelease);
+      evmask.deviceid = deviceid;
+      evmask.mask_len = sizeof (mask);
+      evmask.mask = mask;
 
-          evmask.deviceid = deviceid;
-          evmask.mask_len = sizeof (mask);
-          evmask.mask = mask;
+      num_mods = 1;
+      mods.modifiers = grab_keys[i].modifiers;
 
-          num_mods = 1;
-          mods.modifiers = grab_keys[i].modifiers;
-
-          XIGrabKeycode (GDK_DISPLAY_XDISPLAY (display),
-                         deviceid,
-                         keycode,
-                         root,
-                         GrabModeAsync,
-                         GrabModeAsync,
-                         False,
-                         &evmask,
-                         num_mods,
-                         &mods);
-        }
-      else
-        {
-          XGrabKey (GDK_DISPLAY_XDISPLAY (display),
-                    keycode, grab_keys[i].modifiers,
-                    root,
-                    FALSE,
-                    GrabModeAsync,
-                    GrabModeAsync);
-        }
+      XIGrabKeycode (GDK_DISPLAY_XDISPLAY (display),
+                     deviceid,
+                     keycode,
+                     root,
+                     GrabModeAsync,
+                     GrabModeAsync,
+                     False,
+                     &evmask,
+                     num_mods,
+                     &mods);
     }
 
   gdk_x11_display_error_trap_pop_ignored (display);
@@ -2031,32 +2015,23 @@ drag_ungrab (GdkDrag *drag)
 
   for (i = 0; i < G_N_ELEMENTS (grab_keys); ++i)
     {
+      XIGrabModifiers mods;
+      gint num_mods;
+
       keycode = XKeysymToKeycode (GDK_DISPLAY_XDISPLAY (display),
                                   grab_keys[i].keysym);
       if (keycode == NoSymbol)
         continue;
 
-      if (GDK_IS_X11_DEVICE_XI2 (keyboard))
-        {
-          XIGrabModifiers mods;
-          gint num_mods;
+      num_mods = 1;
+      mods.modifiers = grab_keys[i].modifiers;
 
-          num_mods = 1;
-          mods.modifiers = grab_keys[i].modifiers;
-
-          XIUngrabKeycode (GDK_DISPLAY_XDISPLAY (display),
-                           gdk_x11_device_get_id (keyboard),
-                           keycode,
-                           root,
-                           num_mods,
-                           &mods);
-        }
-      else
-        {
-          XUngrabKey (GDK_DISPLAY_XDISPLAY (display),
-                      keycode, grab_keys[i].modifiers,
-                      root);
-        }
+      XIUngrabKeycode (GDK_DISPLAY_XDISPLAY (display),
+                       gdk_x11_device_get_id (keyboard),
+                       keycode,
+                       root,
+                       num_mods,
+                       &mods);
     }
 }
 
