@@ -779,5 +779,7 @@ gtk_distribute_natural_allocation (gint              extra_space,
       extra_space -= extra;
     }
 
+  g_free (spreading);
+
   return extra_space;
 }
