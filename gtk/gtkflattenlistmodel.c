@@ -486,7 +486,7 @@ gtk_flatten_list_model_set_model (GtkFlattenListModel *self,
   g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
   if (model)
     {
-      g_return_if_fail (g_list_model_get_item_type (model) == G_TYPE_LIST_MODEL);
+      g_return_if_fail (g_type_is_a (g_list_model_get_item_type (model), G_TYPE_LIST_MODEL));
     }
 
   if (self->model == model)
