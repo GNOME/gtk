@@ -3944,6 +3944,45 @@ compare_name (GtkFileSystemModel   *model,
   return result;
 }
 
+static int
+compare_name_with_query (GtkFileSystemModel   *model,
+                         GtkTreeIter          *a,
+                         GtkTreeIter          *b,
+                         GtkQuery             *query)
+{
+  const char *key_a, *key_b;
+  int hit_a, hit_b;
+  int result;
+
+  key_a = g_value_get_string (_gtk_file_system_model_get_value (model, a, MODEL_COL_NAME_COLLATED));
+  key_b = g_value_get_string (_gtk_file_system_model_get_value (model, b, MODEL_COL_NAME_COLLATED));
+
+  hit_a = key_a - strstr (key_a, gtk_query_get_text (query));
+  hit_b = key_b - strstr (key_b, gtk_query_get_text (query));
+
+  if (hit_a < hit_b)
+    {
+      result = 1;
+    }
+  else if (hit_b < hit_a)
+    {
+      result = -1;
+    }
+  else
+    {
+      if (key_a && key_b)
+        result = strcmp (key_a, key_b);
+      else if (key_a)
+        result = 1;
+      else if (key_b)
+        result = -1;
+      else
+        result = 0;
+    }
+
+  return result;
+}
+
 static gint
 compare_size (GtkFileSystemModel   *model,
               GtkTreeIter          *a,
@@ -4077,7 +4116,7 @@ search_sort_func (GtkTreeModel *model,
   result = compare_location (fs_model, a, b, impl);
 
   if (result == 0)
-    result = compare_name (fs_model, a, b, impl);
+    result = compare_name_with_query (fs_model, a, b, impl->priv->search_query);
 
   if (result == 0)
     result = compare_time (fs_model, a, b, impl);
