@@ -542,18 +542,19 @@ if x11_enabled
     cdata.set('HAVE_XGENERICEVENTS', 1)
   endif
 
-  if xi_dep.found() and cc.has_header('X11/extensions/XInput2.h', dependencies: xi_dep)
-    cdata.set('XINPUT_2', 1)
-    # Note that we also check that the XIScrollClassInfo struct is defined,
-    # because at least Ubuntu Oneiric seems to have XIAllowTouchEvents(),
-    # but not the XIScrollClassInfo struct
-    has_allow_touch_evens = cc.has_function('XIAllowTouchEvents', dependencies: xi_dep)
-    has_scroll_class_info = cc.has_member('XIScrollClassInfo', 'number', dependencies: xi_dep,
-                                          prefix: '''#include <X11/Xlib.h>
-                                                     #include <X11/extensions/XInput2.h>''')
-    if has_allow_touch_evens and has_scroll_class_info
-      cdata.set('XINPUT_2_2', 1)
-    endif
+  if not xi_dep.found() or not cc.has_header('X11/extensions/XInput2.h', dependencies: xi_dep)
+    error('X11 backend enabled, but XInput2 not found.')
+  endif
+
+  # Note that we also check that the XIScrollClassInfo struct is defined,
+  # because at least Ubuntu Oneiric seems to have XIAllowTouchEvents(),
+  #   but not the XIScrollClassInfo struct
+  has_allow_touch_evens = cc.has_function('XIAllowTouchEvents', dependencies: xi_dep)
+  has_scroll_class_info = cc.has_member('XIScrollClassInfo', 'number', dependencies: xi_dep,
+                                        prefix: '''#include <X11/Xlib.h>
+                                                   #include <X11/extensions/XInput2.h>''')
+  if has_allow_touch_evens and has_scroll_class_info
+    cdata.set('XINPUT_2_2', 1)
   endif
 
   enable_xinerama = get_option('xinerama')
