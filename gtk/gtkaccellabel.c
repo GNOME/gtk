@@ -39,7 +39,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkbox.h"
+#include "gtkboxlayout.h"
 
 /**
  * SECTION:gtkaccellabel
@@ -101,14 +101,12 @@
  *
  * |[<!-- language="plain" -->
  * accellabel
- * ╰── box
- *     ├── label
- *     ╰── accelerator
+ *   ├── label
+ *   ╰── accelerator
  * ]|
  *
  * #GtkAccelLabel has a main CSS node with the name accellabel.
- * It adds a subnode with name box, containing two child nodes with
- * name label and accelerator.
+ * It contains the two child nodes with name label and accelerator.
  */
 
 enum {
@@ -123,7 +121,6 @@ enum {
 typedef struct _GtkAccelLabelPrivate GtkAccelLabelPrivate;
 struct _GtkAccelLabelPrivate
 {
-  GtkWidget     *box;
   GtkWidget     *text_label;
   GtkWidget     *accel_label;
 
@@ -148,32 +145,7 @@ static void         gtk_accel_label_get_property (GObject            *object,
 static void         gtk_accel_label_destroy      (GtkWidget          *widget);
 static void         gtk_accel_label_finalize     (GObject            *object);
 
-static void gtk_accel_label_measure (GtkWidget      *widget,
-                                     GtkOrientation  orientation,
-                                     int             for_size,
-                                     int            *minimum,
-                                     int            *natural,
-                                     int            *minimum_baseline,
-                                     int            *natural_baseline);
-
-
 G_DEFINE_TYPE_WITH_PRIVATE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_WIDGET)
-
-static void
-gtk_accel_label_size_allocate (GtkWidget *widget,
-                               int        width,
-                               int        height,
-                               int        baseline)
-{
-  GtkAccelLabel *al = GTK_ACCEL_LABEL (widget);
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (al);
-
-  gtk_widget_size_allocate (priv->box,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            },baseline);
-}
 
 static void
 gtk_accel_label_class_init (GtkAccelLabelClass *class)
@@ -185,8 +157,6 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   gobject_class->set_property = gtk_accel_label_set_property;
   gobject_class->get_property = gtk_accel_label_get_property;
 
-  widget_class->measure = gtk_accel_label_measure;
-  widget_class->size_allocate = gtk_accel_label_size_allocate;
   widget_class->destroy = gtk_accel_label_destroy;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_ACCEL_LABEL);
@@ -253,6 +223,7 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, props);
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("accellabel"));
 }
 
@@ -326,18 +297,14 @@ gtk_accel_label_init (GtkAccelLabel *accel_label)
   priv->accel_closure = NULL;
   priv->accel_group = NULL;
 
-  priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   priv->text_label = gtk_label_new ("");
   gtk_widget_set_hexpand (priv->text_label, TRUE);
   gtk_label_set_xalign (GTK_LABEL (priv->text_label), 0.0f);
   priv->accel_label = g_object_new (GTK_TYPE_LABEL,
                                     "css-name", "accelerator",
                                     NULL);
-
-  gtk_container_add (GTK_CONTAINER (priv->box), priv->text_label);
-  gtk_container_add (GTK_CONTAINER (priv->box), priv->accel_label);
-
-  gtk_widget_set_parent (priv->box, GTK_WIDGET (accel_label));
+  gtk_widget_set_parent (priv->text_label, GTK_WIDGET (accel_label));
+  gtk_widget_set_parent (priv->accel_label, GTK_WIDGET (accel_label));
 }
 
 /**
@@ -379,7 +346,8 @@ gtk_accel_label_finalize (GObject *object)
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (object);
   GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
 
-  gtk_widget_unparent (priv->box);
+  gtk_widget_unparent (priv->accel_label);
+  gtk_widget_unparent (priv->text_label);
 
   G_OBJECT_CLASS (gtk_accel_label_parent_class)->finalize (object);
 }
@@ -425,23 +393,6 @@ gtk_accel_label_get_accel_width (GtkAccelLabel *accel_label)
                       &min, NULL, NULL, NULL);
 
   return min;
-}
-
-static void
-gtk_accel_label_measure (GtkWidget      *widget,
-                         GtkOrientation  orientation,
-                         int             for_size,
-                         int            *minimum,
-                         int            *natural,
-                         int            *minimum_baseline,
-                         int            *natural_baseline)
-{
-  GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
-  GtkAccelLabelPrivate *priv = gtk_accel_label_get_instance_private (accel_label);
-
-  gtk_widget_measure (priv->box, orientation, for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
 }
 
 static void
