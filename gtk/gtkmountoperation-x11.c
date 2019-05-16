@@ -736,7 +736,7 @@ pid_get_command_line (GPid pid)
 static GPid
 pid_get_parent (GPid pid)
 {
-  struct kinfo_proc *kp;
+  struct kinfo_proc *kp = NULL;
   size_t len;
   GPid ppid = 0;
 
