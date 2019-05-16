@@ -461,12 +461,11 @@ gdk_frame_clock_paint_idle (void *data)
               /* the ::after-paint phase doesn't get repeated on freeze/thaw,
                */
               priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
-
-#ifdef G_ENABLE_DEBUG
-              if (GDK_DEBUG_CHECK (FRAMES) || gdk_profiler_is_running ())
-                timings->frame_end_time = g_get_monotonic_time ();
-#endif /* G_ENABLE_DEBUG */
             }
+#ifdef G_ENABLE_DEBUG
+            if (GDK_DEBUG_CHECK (FRAMES) || gdk_profiler_is_running ())
+              timings->frame_end_time = g_get_monotonic_time ();
+#endif /* G_ENABLE_DEBUG */
           G_GNUC_FALLTHROUGH;
 
         case GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS:
