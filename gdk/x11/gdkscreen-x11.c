@@ -443,6 +443,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
       GdkRectangle geometry;
       GdkRectangle newgeo;
       char *name;
+      char *manufacturer = NULL;
       int refresh_rate = 0;
 
       gdk_x11_display_error_trap_push (display);
@@ -497,6 +498,59 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
           g_ptr_array_add (x11_display->monitors, monitor);
         }
 
+      /* Fetch minimal manufacturer information from EDID */
+      {
+        int num_props;
+        Atom edid_prop, *props;
+        Display *disp = GDK_DISPLAY_XDISPLAY (x11_display);
+
+        edid_prop = XInternAtom (disp, RR_PROPERTY_RANDR_EDID, FALSE);
+        props = XRRListOutputProperties (disp, output, &num_props);
+
+        for (int np = 0; np < num_props; ++np)
+          {
+            char tmp[3];
+            Atom actual_type;
+            int actual_format;
+            unsigned char *prop;
+            unsigned long length, nitems;
+
+            if (props[np] != edid_prop)
+              continue;
+
+            XRRGetOutputProperty (disp, output,
+                                  edid_prop,
+                                  0,
+                                  128,
+                                  FALSE,
+                                  FALSE,
+                                  AnyPropertyType,
+                                  &actual_type,
+                                  &actual_format,
+                                  &nitems,
+                                  &length,
+                                  &prop);
+
+            // Check whether EDID header exists
+            if (prop[0] != 0x00 && prop[1] != 0xff)
+              continue;
+
+            /* decode the Vendor ID from three 5 bit words packed into 2 bytes
+             * /--08--\/--09--\
+             * 7654321076543210
+             * |\---/\---/\---/
+             * R  C1   C2   C3 */
+            tmp[0] = 'A' + ((prop[8] & 0x7c) / 4) - 1;
+            tmp[1] = 'A' + ((prop[8] & 0x3) * 8) + ((prop[9] & 0xe0) / 32) - 1;
+            tmp[2] = 'A' + (prop[9] & 0x1f) - 1;
+
+            manufacturer = g_strndup(tmp, sizeof(tmp));
+            break;
+          }
+
+        XFree(props);
+      }
+
       gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
       name = g_strndup (output_info->name, output_info->nameLen);
 
@@ -524,6 +578,8 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
       gdk_monitor_set_refresh_rate (GDK_MONITOR (monitor), refresh_rate);
       gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), x11_screen->window_scale);
       gdk_monitor_set_model (GDK_MONITOR (monitor), name);
+      gdk_monitor_set_manufacturer (GDK_MONITOR (monitor), manufacturer);
+      g_free (manufacturer);
       g_free (name);
 
       if (rr_monitors[i].primary)
