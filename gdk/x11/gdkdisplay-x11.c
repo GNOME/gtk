@@ -1283,6 +1283,9 @@ _gdk_wm_protocols_filter (const XEvent *xevent,
 #ifdef G_ENABLE_DEBUG
               if (GDK_DISPLAY_DEBUG_CHECK (display, FRAMES))
                 _gdk_frame_clock_debug_print_timings (clock, timings);
+
+              if (gdk_profiler_is_running ())
+                _gdk_frame_clock_add_timings_to_profiler (clock, timings);
 #endif /* G_ENABLE_DEBUG */
             }
         }
