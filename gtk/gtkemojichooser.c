@@ -75,6 +75,9 @@ struct _GtkEmojiChooser
   GtkGesture *body_multi_press;
 
   GVariant *data;
+  GtkWidget *box;
+  GVariantIter *iter;
+  guint populate_idle;
 
   GSettings *settings;
 };
@@ -96,6 +99,9 @@ static void
 gtk_emoji_chooser_finalize (GObject *object)
 {
   GtkEmojiChooser *chooser = GTK_EMOJI_CHOOSER (object);
+
+  if (chooser->populate_idle)
+    g_source_remove (chooser->populate_idle);
 
   g_variant_unref (chooser->data);
   g_object_unref (chooser->settings);
@@ -434,47 +440,67 @@ add_emoji (GtkWidget    *box,
   gtk_flow_box_insert (GTK_FLOW_BOX (box), child, prepend ? 0 : -1);
 }
 
-static void
-populate_emoji_chooser (GtkEmojiChooser *chooser)
+static gboolean
+populate_emoji_chooser (gpointer data)
 {
+  GtkEmojiChooser *chooser = data;
   GBytes *bytes = NULL;
-  GVariantIter iter;
   GVariant *item;
-  GtkWidget *box;
+  guint64 start, now;
 
-  bytes = g_resources_lookup_data ("/org/gtk/libgtk/emoji/emoji.data", 0, NULL);
-  chooser->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(auss)"), bytes, TRUE));
+  start = g_get_monotonic_time ();
 
-  g_variant_iter_init (&iter, chooser->data);
-  box = chooser->people.box;
-  while ((item = g_variant_iter_next_value (&iter)))
+  if (!chooser->data)
+    {
+      bytes = g_resources_lookup_data ("/org/gtk/libgtk/emoji/emoji.data", 0, NULL);
+      chooser->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(auss)"), bytes, TRUE));
+    }
+
+  if (!chooser->iter)
+    {
+      chooser->iter = g_variant_iter_new (chooser->data);
+      chooser->box = chooser->people.box;
+    }
+  while ((item = g_variant_iter_next_value (chooser->iter)))
     {
       const char *name;
 
       g_variant_get_child (item, 1, "&s", &name);
 
       if (strcmp (name, chooser->body.first) == 0)
-        box = chooser->body.box;
+        chooser->box = chooser->body.box;
       else if (strcmp (name, chooser->nature.first) == 0)
-        box = chooser->nature.box;
+        chooser->box = chooser->nature.box;
       else if (strcmp (name, chooser->food.first) == 0)
-        box = chooser->food.box;
+        chooser->box = chooser->food.box;
       else if (strcmp (name, chooser->travel.first) == 0)
-        box = chooser->travel.box;
+        chooser->box = chooser->travel.box;
       else if (strcmp (name, chooser->activities.first) == 0)
-        box = chooser->activities.box;
+        chooser->box = chooser->activities.box;
       else if (strcmp (name, chooser->objects.first) == 0)
-        box = chooser->objects.box;
+        chooser->box = chooser->objects.box;
       else if (strcmp (name, chooser->symbols.first) == 0)
-        box = chooser->symbols.box;
+        chooser->box = chooser->symbols.box;
       else if (strcmp (name, chooser->flags.first) == 0)
-        box = chooser->flags.box;
+        chooser->box = chooser->flags.box;
 
-      add_emoji (box, FALSE, item, 0, chooser);
+      add_emoji (chooser->box, FALSE, item, 0, chooser);
       g_variant_unref (item);
+
+      now = g_get_monotonic_time ();
+      if (now > start + 8000)
+        return G_SOURCE_CONTINUE;
     }
 
-  g_bytes_unref (bytes);
+  /* We scroll to the top on show, so check the right button for the 1st time */
+  gtk_widget_set_state_flags (chooser->recent.button, GTK_STATE_FLAG_CHECKED, FALSE);
+
+  g_variant_iter_free (chooser->iter);
+  chooser->iter = NULL;
+  chooser->box = NULL;
+  chooser->populate_idle = 0;
+
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -702,11 +728,10 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
   setup_section (chooser, &chooser->symbols, "ATM sign", "emoji-symbols-symbolic");
   setup_section (chooser, &chooser->flags, "chequered flag", "emoji-flags-symbolic");
 
-  populate_emoji_chooser (chooser);
   populate_recent_section (chooser);
 
-  /* We scroll to the top on show, so check the right button for the 1st time */
-  gtk_widget_set_state_flags (chooser->recent.button, GTK_STATE_FLAG_CHECKED, FALSE);
+  chooser->populate_idle = g_idle_add (populate_emoji_chooser, chooser);
+  g_source_set_name_by_id (chooser->populate_idle, "[gtk] populate_emoji_chooser");
 }
 
 static void
