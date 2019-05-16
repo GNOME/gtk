@@ -241,9 +241,6 @@
 #endif
 
 
-/* Define to 1 if XInput 2.0 is available */
-#mesondefine XINPUT_2
-
 /* Define to 1 if XInput 2.2 is available */
 #mesondefine XINPUT_2_2
 

@@ -168,6 +168,7 @@ typedef struct
   GtkActionMuxer  *muxer;
   GtkBuilder      *menus_builder;
   gchar           *help_overlay_path;
+  guint            profiler_id;
 } GtkApplicationPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
@@ -689,8 +690,7 @@ gtk_application_dbus_register (GApplication     *application,
                                const char       *obect_path,
                                GError          **error)
 {
-  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
-  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) priv->impl;
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (GTK_APPLICATION (application));
   GDBusInterfaceVTable vtable = {
     sysprof_profiler_method_call,
     NULL,
@@ -710,7 +710,7 @@ gtk_application_dbus_register (GApplication     *application,
       g_dbus_node_info_unref (info);
     }
 
-  dbus->profiler_id = g_dbus_connection_register_object (connection,
+  priv->profiler_id = g_dbus_connection_register_object (connection,
                                                          "/org/gtk/Profiler",
                                                          org_gnome_Sysprof3_Profiler,
                                                          &vtable,
@@ -726,9 +726,9 @@ gtk_application_dbus_unregister (GApplication     *application,
                                  GDBusConnection  *connection,
                                  const char       *obect_path)
 {
-  GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) application;
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (GTK_APPLICATION (application));
 
-  g_dbus_connection_unregister_object (connection, dbus->profiler_id);
+  g_dbus_connection_unregister_object (connection, priv->profiler_id);
 }
 
 #else

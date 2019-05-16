@@ -40,8 +40,6 @@ typedef struct _GtkQueryPrivate GtkQueryPrivate;
 struct _GtkQuery
 {
   GObject parent;
-
-  GtkQueryPrivate *priv;
 };
 
 struct _GtkQueryClass

@@ -79,15 +79,6 @@ gtk_test_init (int    *argcp,
   gtk_disable_setlocale();
   setlocale (LC_ALL, "en_US.UTF-8");
 
-  /* XSendEvent() doesn't work yet on XI2 events.
-   * So at the moment gdk_test_simulate_* can only
-   * send events that GTK+ understands if XI2 is
-   * disabled, bummer.
-   */
-#ifdef GDK_WINDOWING_X11
-  gdk_disable_multidevice ();
-#endif
-
   gtk_init ();
 }
 

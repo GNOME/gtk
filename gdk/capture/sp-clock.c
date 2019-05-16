@@ -24,9 +24,9 @@ void
 sp_clock_init (void)
 {
   static const gint clock_ids[] = {
+    CLOCK_MONOTONIC,
     CLOCK_MONOTONIC_RAW,
     CLOCK_MONOTONIC_COARSE,
-    CLOCK_MONOTONIC,
     CLOCK_REALTIME_COARSE,
     CLOCK_REALTIME,
   };
