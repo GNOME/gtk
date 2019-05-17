@@ -427,8 +427,6 @@ gtk_menu_shell_init (GtkMenuShell *menu_shell)
                     G_CALLBACK (gtk_menu_shell_key_press), widget);
   gtk_widget_add_controller (widget, controller);
 
-  gtk_widget_set_has_surface (widget, FALSE);
-
   controller = GTK_EVENT_CONTROLLER (gtk_gesture_multi_press_new ());
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (controller), 0);
   g_signal_connect (controller, "pressed",
