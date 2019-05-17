@@ -553,9 +553,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_set_surface            (GtkWidget    *widget,
-                                                         GdkSurface    *surface);
-GDK_AVAILABLE_IN_ALL
 GdkSurface           * gtk_widget_get_surface           (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL

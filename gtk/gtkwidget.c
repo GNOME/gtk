@@ -8196,7 +8196,6 @@ gtk_widget_real_realize (GtkWidget *widget)
 
   if (GTK_IS_NATIVE (widget))
     {
-      g_assert (priv->surface != NULL);
       priv->surface = gtk_native_get_surface (GTK_NATIVE (widget));
       g_object_ref (priv->surface);
     }
@@ -11197,38 +11196,6 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
   get_box_padding (style, &padding);
 
   return priv->baseline - margin.top - border.top - padding.top;
-}
-
-/**
- * gtk_widget_set_surface:
- * @widget: a #GtkWidget
- * @surface: (transfer full): a #GdkSurface
- *
- * Sets a widget’s surface. This function should only be used in a
- * widget’s #GtkWidget::realize implementation. The %surface passed is
- * usually either new surface created with gdk_surface_new(), or the
- * surface of its parent widget as returned by
- * gtk_widget_get_parent_surface().
- *
- * Widgets must indicate whether they will create their own #GdkSurface
- * by calling gtk_widget_set_has_surface(). This is usually done in the
- * widget’s init() function.
- *
- * Note that this function does not add any reference to @surface.
- */
-void
-gtk_widget_set_surface (GtkWidget *widget,
-                        GdkSurface *surface)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (surface == NULL || GDK_IS_SURFACE (surface));
-
-  if (priv->surface != surface)
-    {
-      priv->surface = surface;
-    }
 }
 
 /**
