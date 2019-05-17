@@ -143,8 +143,8 @@
 static GListStore *popover_list = NULL;
 
 typedef struct {
-  GskRenderer *renderer;
   GdkSurface *surface;
+  GskRenderer *renderer;
   GtkWidget *default_widget;
 
   GdkSurfaceState state;
@@ -187,6 +187,15 @@ G_DEFINE_TYPE_WITH_CODE (GtkPopover, gtk_popover, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,
                                                 gtk_popover_native_interface_init))
 
+
+static GdkSurface *
+gtk_popover_native_get_surface (GtkNative *native)
+{
+  GtkPopover *popover = GTK_POPOVER (native);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  return priv->surface;
+}
 
 static GskRenderer *
 gtk_popover_native_get_renderer (GtkNative *native)
@@ -275,10 +284,13 @@ gtk_popover_move_resize (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkRequisition req;
- 
-  gtk_widget_get_preferred_size (GTK_WIDGET (popover), NULL, &req);
-  gdk_surface_resize (priv->surface, req.width, req.height);
-  move_to_rect (popover);
+
+  if (priv->surface)
+    {
+      gtk_widget_get_preferred_size (GTK_WIDGET (popover), NULL, &req);
+      gdk_surface_resize (priv->surface, req.width, req.height);
+      move_to_rect (popover);
+    }
 }
 
 static void
@@ -293,10 +305,11 @@ gtk_popover_native_check_resize (GtkNative *native)
   else if (gtk_widget_get_visible (widget))
     {
       gtk_popover_move_resize (popover);
-      gtk_widget_allocate (GTK_WIDGET (popover),
-                           gdk_surface_get_width (priv->surface),
-                           gdk_surface_get_height (priv->surface),
-                           -1, NULL);
+      if (priv->surface)
+        gtk_widget_allocate (GTK_WIDGET (popover),
+                             gdk_surface_get_width (priv->surface),
+                             gdk_surface_get_height (priv->surface),
+                             -1, NULL);
     }
 }
 
@@ -1400,6 +1413,7 @@ gtk_popover_set_default_widget (GtkPopover *popover,
 static void
 gtk_popover_native_interface_init (GtkNativeInterface *iface)
 {
+  iface->get_surface = gtk_popover_native_get_surface;
   iface->get_renderer = gtk_popover_native_get_renderer;
   iface->get_surface_transform = gtk_popover_native_get_surface_transform;
   iface->check_resize = gtk_popover_native_check_resize;
