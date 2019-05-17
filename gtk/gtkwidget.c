@@ -3265,7 +3265,7 @@ gtk_widget_map (GtkWidget *widget)
 
       update_cursor_on_state_change (widget);
 
-      if (!_gtk_widget_get_has_surface (widget))
+      if (!GTK_IS_NATIVE (widget))
         gtk_widget_queue_draw (widget);
 
       gtk_widget_pop_verify_invariants (widget);
@@ -3940,7 +3940,7 @@ gtk_widget_get_surface_allocation (GtkWidget     *widget,
 
   /* Don't consider the parent == widget case here. */
   parent = _gtk_widget_get_parent (widget);
-  while (parent && !_gtk_widget_get_has_surface (parent))
+  while (parent && !GTK_IS_NATIVE (parent))
     parent = _gtk_widget_get_parent (parent);
 
   g_assert (GTK_IS_WINDOW (parent) || GTK_IS_POPOVER (parent));
@@ -4016,7 +4016,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
 
       priv->draw_needed = TRUE;
       g_clear_pointer (&priv->render_node, gsk_render_node_unref);
-      if (_gtk_widget_get_has_surface (widget) &&
+      if (GTK_IS_NATIVE (widget) &&
           _gtk_widget_get_realized (widget))
         gdk_surface_queue_expose (gtk_widget_get_surface (widget));
     }
@@ -4402,7 +4402,7 @@ gtk_widget_allocate (GtkWidget    *widget,
       adjusted.height = 0;
     }
 
-  if (G_UNLIKELY (_gtk_widget_get_has_surface (widget)))
+  if (G_UNLIKELY (GTK_IS_NATIVE (widget)))
     {
       adjusted.width = MAX (1, adjusted.width);
       adjusted.height = MAX (1, adjusted.height);
@@ -6199,57 +6199,6 @@ gtk_widget_is_visible (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_set_has_surface:
- * @widget: a #GtkWidget
- * @has_surface: whether or not @widget has a surface.
- *
- * Specifies whether @widget has a #GdkSurface of its own. Note that
- * all realized widgets have a non-%NULL “window” pointer
- * (gtk_widget_get_surface() never returns a %NULL surface when a widget
- * is realized), but for many of them it’s actually the #GdkSurface of
- * one of its parent widgets. Widgets that do not create a %window for
- * themselves in #GtkWidget::realize must announce this by
- * calling this function with @has_surface = %FALSE.
- *
- * This function should only be called by widget implementations,
- * and they should call it in their init() function.
- **/
-void
-gtk_widget_set_has_surface (GtkWidget *widget,
-                            gboolean   has_surface)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv->no_surface = !has_surface;
-  priv->no_surface_set = TRUE;
-
-  /* GdkSurface has a min size of 1×1 */
-  priv->width = 1;
-  priv->height = 1;
-}
-
-/**
- * gtk_widget_get_has_surface:
- * @widget: a #GtkWidget
- *
- * Determines whether @widget has a #GdkSurface of its own. See
- * gtk_widget_set_has_surface().
- *
- * Returns: %TRUE if @widget has a surface, %FALSE otherwise
- **/
-gboolean
-gtk_widget_get_has_surface (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  return !priv->no_surface;
-}
-
-/**
  * gtk_widget_is_toplevel:
  * @widget: a #GtkWidget
  *
@@ -7913,11 +7862,6 @@ gtk_widget_constructed (GObject *object)
     g_object_set_qdata (object, quark_widget_path, NULL);
 
   G_OBJECT_CLASS (gtk_widget_parent_class)->constructed (object);
-
-  if (!priv->no_surface_set)
-    {
-      g_warning ("%s does not call gtk_widget_set_has_surface() in its init function", G_OBJECT_TYPE_NAME (widget));
-    }
 }
 
 static void
@@ -8221,7 +8165,7 @@ gtk_widget_real_map (GtkWidget *widget)
       GtkWidget *p;
       priv->mapped = TRUE;
 
-      if (_gtk_widget_get_has_surface (widget))
+      if (GTK_IS_NATIVE (widget))
         gdk_surface_show (priv->surface);
 
       for (p = gtk_widget_get_first_child (widget);
@@ -8254,7 +8198,7 @@ gtk_widget_real_unmap (GtkWidget *widget)
       GtkWidget *child;
       priv->mapped = FALSE;
 
-      if (_gtk_widget_get_has_surface (widget))
+      if (GTK_IS_NATIVE (widget))
         gdk_surface_hide (priv->surface);
 
       for (child = gtk_widget_get_first_child (widget);
@@ -8285,7 +8229,7 @@ gtk_widget_real_realize (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  if (_gtk_widget_get_has_surface (widget))
+  if (GTK_IS_NATIVE (widget))
     {
       g_assert (priv->surface != NULL);
     }
@@ -8328,7 +8272,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
   priv->realized = FALSE;
 
-  if (_gtk_widget_get_has_surface (widget))
+  if (GTK_IS_NATIVE (widget))
     {
       gdk_surface_destroy (priv->surface);
       priv->surface = NULL;
@@ -8729,7 +8673,7 @@ gtk_widget_input_shape_combine_region (GtkWidget      *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   /*  set_shape doesn't work on widgets without GDK surface */
-  g_return_if_fail (_gtk_widget_get_has_surface (widget));
+  g_return_if_fail (GTK_IS_NATIVE (widget));
 
   if (region == NULL)
     g_object_set_qdata (G_OBJECT (widget), quark_input_shape_info, NULL);

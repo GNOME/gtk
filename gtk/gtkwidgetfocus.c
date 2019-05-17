@@ -16,6 +16,7 @@
  */
 
 #include "gtkwidgetprivate.h"
+#include "gtknative.h"
 
 typedef struct _CompareInfo CompareInfo;
 
@@ -285,13 +286,13 @@ focus_sort_left_right (GtkWidget        *widget,
         }
       else
         {
-          if (!_gtk_widget_get_has_surface (widget))
+          if (!GTK_IS_NATIVE (widget))
             compare_info.y = bounds.origin.y + bounds.size.height;
           else
             compare_info.y = bounds.size.height / 2.0f;
         }
 
-      if (!_gtk_widget_get_has_surface (widget))
+      if (!GTK_IS_NATIVE (widget))
         compare_info.x = (direction == GTK_DIR_RIGHT) ? bounds.origin.x : bounds.origin.x + bounds.size.width;
       else
         compare_info.x = (direction == GTK_DIR_RIGHT) ? 0 : bounds.size.width;
@@ -387,13 +388,13 @@ focus_sort_up_down (GtkWidget        *widget,
         }
       else
         {
-          if (!_gtk_widget_get_has_surface (widget))
+          if (!GTK_IS_NATIVE (widget))
             compare_info.x = bounds.origin.x + (bounds.size.width / 2.0f);
           else
             compare_info.x = bounds.size.width / 2.0f;
         }
 
-      if (!_gtk_widget_get_has_surface (widget))
+      if (!GTK_IS_NATIVE (widget))
         compare_info.y = (direction == GTK_DIR_DOWN) ? bounds.origin.y : bounds.origin.y + bounds.size.height;
       else
         compare_info.y = (direction == GTK_DIR_DOWN) ? 0 : + bounds.size.height;

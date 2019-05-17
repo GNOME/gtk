@@ -1083,8 +1083,6 @@ gtk_level_bar_init (GtkLevelBar *self)
 
   priv->inverted = FALSE;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
-
   priv->trough_widget = gtk_gizmo_new ("trough",
                                        gtk_level_bar_measure_trough,
                                        gtk_level_bar_allocate_trough,

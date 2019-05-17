@@ -137,7 +137,6 @@ gtk_revealer_init (GtkRevealer *revealer)
   priv->current_pos = 0.0;
   priv->target_pos = 0.0;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (revealer), FALSE);
   gtk_widget_set_overflow (GTK_WIDGET (revealer), GTK_OVERFLOW_HIDDEN);
 }
 

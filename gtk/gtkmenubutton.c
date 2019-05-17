@@ -694,8 +694,6 @@ gtk_menu_button_init (GtkMenuButton *menu_button)
   GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
   GtkStyleContext *context;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (menu_button), FALSE);
-
   priv->arrow_type = GTK_ARROW_DOWN;
   priv->use_popover = TRUE;
 

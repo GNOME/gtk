@@ -581,8 +581,6 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
   GtkGesture *press;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (entry), FALSE);
-
   priv->entry = gtk_text_new ();
   gtk_widget_set_parent (priv->entry, GTK_WIDGET (entry));
   gtk_editable_init_delegate (GTK_EDITABLE (entry));

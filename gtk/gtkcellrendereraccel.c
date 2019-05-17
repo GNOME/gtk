@@ -788,8 +788,6 @@ gtk_cell_editable_widget_init (GtkCellEditableWidget *box)
   g_signal_connect (controller, "modifiers",
                     G_CALLBACK (key_controller_modifiers), box);
   gtk_widget_add_controller (widget, controller);
-
-  gtk_widget_set_has_surface (widget, FALSE);
 }
 
 static GtkWidget *

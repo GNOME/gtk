@@ -352,7 +352,6 @@ gtk_expander_init (GtkExpander *expander)
   GtkGesture *gesture;
 
   gtk_widget_set_can_focus (GTK_WIDGET (expander), TRUE);
-  gtk_widget_set_has_surface (GTK_WIDGET (expander), FALSE);
 
   priv->label_widget = NULL;
   priv->child = NULL;

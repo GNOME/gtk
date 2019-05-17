@@ -445,8 +445,6 @@ gtk_cell_view_init (GtkCellView *cellview)
   GtkCellViewPrivate *priv = gtk_cell_view_get_instance_private (cellview);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
-
-  gtk_widget_set_has_surface (GTK_WIDGET (cellview), FALSE);
 }
 
 static void

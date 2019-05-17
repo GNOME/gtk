@@ -533,8 +533,6 @@ gtk_range_init (GtkRange *range)
   GtkGesture *gesture;
   GtkEventController *controller;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (range), FALSE);
-
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->adjustment = NULL;
   priv->inverted = FALSE;
