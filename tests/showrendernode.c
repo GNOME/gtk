@@ -93,7 +93,6 @@ gtk_node_view_finalize (GObject *object)
 static void
 gtk_node_view_init (GtkNodeView *self)
 {
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 }
 
 static void

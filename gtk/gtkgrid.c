@@ -389,8 +389,6 @@ gtk_grid_init (GtkGrid *grid)
 {
   GtkGridPrivate *priv = gtk_grid_get_instance_private (grid);
 
-  gtk_widget_set_has_surface (GTK_WIDGET (grid), FALSE);
-
   priv->layout_manager = gtk_widget_get_layout_manager (GTK_WIDGET (grid));
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
