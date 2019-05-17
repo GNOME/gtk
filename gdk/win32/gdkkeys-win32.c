@@ -1325,6 +1325,56 @@ update_keymap (GdkKeymap *gdk_keymap)
                   wcs[G_N_ELEMENTS (wcs) - 1] = 0;
                   key_state[vk] = 0;
 
+                  if (k == -1 && wcs[0] == 0)
+                    {
+                      /* Abnormal layout that does not produce spacing version
+                       * of the dead key. Add a space to force it to give
+                       * some output.
+                       */
+                      gsize index;
+                      set_level_vks (key_state, 0);
+                      scancode = MapVirtualKeyEx (vk, 0, hkls[group]);
+                      key_state[VK_SPACE] = 0x80;
+                      k = ToUnicodeEx (VK_SPACE, scancode, key_state,
+                                       wcs, G_N_ELEMENTS (wcs),
+                                       0, hkls[group]);
+                      key_state[VK_SPACE] = 0;
+                      if (k > 0)
+                        {
+                          for (index = 0; index < G_N_ELEMENTS (wcs); index++)
+                            if (wcs[index] == L' ' && (index == G_N_ELEMENTS (wcs) - 1 || wcs[index + 1] == 0))
+                              {
+                                wcs[index] = 0;
+                                break;
+                              }
+                          k = -1;
+                        }
+                      else if (k == 0)
+                        {
+                          /* This message won't be entirely correct for chained deadkeys, as there
+                           * will be other deadkeys between dead_key->key.vk and vk
+                           */
+                          g_warning ("Keyboard layout (group %d) is abnormal, produces no output for dead key %d @ %u + %d @ %u\n",
+                                     group, dead_key->key.vk, dead_key->key.level, vk, level);
+                          reset_after_dead (key_state, hkls[group]);
+                          continue;
+                        }
+                      else if (k == -1)
+                        {
+                          /* Also abnormal, but less clearly */
+                          reset_after_dead (key_state, hkls[group]);
+                          continue;
+                        }
+                      else
+                        {
+                          /* Undocumented */
+                          g_warning ("ToUnicodeEx() returned %d for keycode %u in group %u at level %u",
+                                     k, vk, group, level);
+                          reset_after_dead (key_state, hkls[group]);
+                          continue;
+                        }
+                    }
+
                   if (k == -1 || k > 0)
                     {
                       GError *error = NULL;
