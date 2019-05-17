@@ -7,8 +7,8 @@
 <!--
   You should try and reproduce with the demos applications available
   under the `demos` directory, or the test programs in the `tests` directory.
-  Alternatively, please attach a *small and self-contained* example that
-  exhibits the issue.
+  Alternatively, please attach a *small and self-contained* example
+  *written in C* that exhibits the issue.
 -->
 
 ## Current behavior
