@@ -1577,6 +1577,9 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkImage" id="imageo">
                                                 <property name="icon-name">org.gtk.WidgetFactory4</property>
                                                 <property name="pixel-size">256</property>
+                                                <style>
+                                                  <class name="icon-dropshadow" />
+                                                </style>
                                               </object>
                                             </property>
                                           </object>
