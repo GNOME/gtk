@@ -8199,7 +8199,6 @@ gtk_widget_real_realize (GtkWidget *widget)
 
   if (GTK_IS_NATIVE (widget))
     {
-      g_assert (priv->surface != NULL);
       priv->surface = gtk_native_get_surface (GTK_NATIVE (widget));
       g_object_ref (priv->surface);
     }
@@ -11200,111 +11199,6 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
   get_box_padding (style, &padding);
 
   return priv->baseline - margin.top - border.top - padding.top;
-}
-
-/**
- * gtk_widget_set_surface:
- * @widget: a #GtkWidget
- * @surface: (transfer full): a #GdkSurface
- *
- * Sets a widget’s surface. This function should only be used in a
- * widget’s #GtkWidget::realize implementation. The %surface passed is
- * usually either new surface created with gdk_surface_new(), or the
- * surface of its parent widget as returned by
- * gtk_widget_get_parent_surface().
- *
- * Widgets must indicate whether they will create their own #GdkSurface
- * by calling gtk_widget_set_has_surface(). This is usually done in the
- * widget’s init() function.
- *
- * Note that this function does not add any reference to @surface.
- */
-void
-gtk_widget_set_surface (GtkWidget *widget,
-                        GdkSurface *surface)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (surface == NULL || GDK_IS_SURFACE (surface));
-
-  if (priv->surface != surface)
-    {
-      priv->surface = surface;
-    }
-}
-
-static void gtk_widget_render (GtkWidget *, GdkSurface *, const cairo_region_t *);
-
-static gboolean
-surface_expose (GdkSurface     *surface,
-                cairo_region_t *region,
-                GtkWidget      *widget)
-{
-  gtk_widget_render (widget, surface, region);
-
-  return TRUE;
-}
-
-static gboolean
-surface_event (GdkSurface *surface,
-               GdkEvent   *event,
-               GtkWidget  *widget)
-{
-  gtk_main_do_event (event);
-
-  return TRUE;
-}
-
-/**
- * gtk_widget_register_surface:
- * @widget: a #GtkWidget
- * @surface: a #GdkSurface
- *
- * Registers a #GdkSurface with the widget and sets it up so that
- * the widget receives events for it. Call gtk_widget_unregister_surface()
- * when destroying the surface.
- *
- * Before 3.8 you needed to call gdk_surface_set_user_data() directly to set
- * this up. This is now deprecated and you should use gtk_widget_register_surface()
- * instead. Old code will keep working as is, although some new features like
- * transparency might not work perfectly.
- */
-void
-gtk_widget_register_surface (GtkWidget    *widget,
-			     GdkSurface    *surface)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  g_assert (gdk_surface_get_widget (surface) == NULL);
-  gdk_surface_set_widget (surface, widget);
-
-  g_signal_connect (surface, "render", G_CALLBACK (surface_expose), widget);
-  g_signal_connect (surface, "event", G_CALLBACK (surface_event), widget);
-}
-
-/**
- * gtk_widget_unregister_surface:
- * @widget: a #GtkWidget
- * @surface: a #GdkSurface
- *
- * Unregisters a #GdkSurface from the widget that was previously set up with
- * gtk_widget_register_surface(). You need to call this when the surface is
- * no longer used by the widget, such as when you destroy it.
- */
-void
-gtk_widget_unregister_surface (GtkWidget    *widget,
-			       GdkSurface    *surface)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  g_assert (gdk_surface_get_widget (surface) == widget);
-  gdk_surface_set_widget (surface, NULL);
-
-  g_signal_handlers_disconnect_by_func (surface, surface_expose, widget);
-  g_signal_handlers_disconnect_by_func (surface, surface_event, widget);
 }
 
 /**
