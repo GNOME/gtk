@@ -1282,17 +1282,16 @@ update_keymap (GdkKeymap *gdk_keymap)
 
                   for (stack_p = stack; stack_p != NULL;)
                     {
-                      GdkWin32KeyNode *stack_dead_key = (GdkWin32KeyNode *) stack_p->data;
+                      GdkWin32DeadKeyNode *stack_dead_key = (GdkWin32DeadKeyNode *) stack_p->data;
 
                       /* Prime the ToUnicodeEx() internal state */
-                      wcs[0] = wcs[1] = 0;
-                      set_level_vks (key_state, stack_dead_key->level);
-                      scancode = MapVirtualKeyEx (stack_dead_key->vk, 0, hkls[group]);
-                      key_state[stack_dead_key->vk] = 0x80;
-                      k = ToUnicodeEx (stack_dead_key->vk, scancode, key_state,
+                      set_level_vks (key_state, stack_dead_key->key.level);
+                      scancode = MapVirtualKeyEx (stack_dead_key->key.vk, 0, hkls[group]);
+                      key_state[stack_dead_key->key.vk] = 0x80;
+                      k = ToUnicodeEx (stack_dead_key->key.vk, scancode, key_state,
                                        wcs, G_N_ELEMENTS (wcs),
                                        0, hkls[group]);
-                      key_state[stack_dead_key->vk] = 0;
+                      key_state[stack_dead_key->key.vk] = 0;
 
                       stack_p = stack_p->next;
 
