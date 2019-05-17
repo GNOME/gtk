@@ -45,11 +45,12 @@ struct _GtkNativeInterface
   GTypeInterface g_iface;
 
   /*< public >*/
+  GdkSurface *  (* get_surface)           (GtkNative    *self);
   GskRenderer * (* get_renderer)          (GtkNative    *self);
 
   void          (* get_surface_transform) (GtkNative    *self,
-                                           int       *x,
-                                           int       *y);
+                                           int          *x,
+                                           int          *y);
 
   void          (* check_resize)          (GtkNative    *self);
 };
@@ -58,8 +59,13 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_native_get_for_surface (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
-void        gtk_native_check_resize (GtkNative *self);
+void        gtk_native_check_resize    (GtkNative *self);
 
+GDK_AVAILABLE_IN_ALL
+GdkSurface *gtk_native_get_surface     (GtkNative *self);
+
+GDK_AVAILABLE_IN_ALL
+GskRenderer *gtk_native_get_renderer   (GtkNative *self);
 
 G_END_DECLS
 
