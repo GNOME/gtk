@@ -1887,7 +1887,6 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   };
   gint i;
 
-  gtk_widget_set_has_surface (widget, FALSE);
   gtk_widget_set_can_focus (widget, TRUE);
 
   /* Instantiated by gtk_scrolled_window_set_[hv]adjustment

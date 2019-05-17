@@ -1270,8 +1270,6 @@ gtk_entry_init (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
-  gtk_widget_set_has_surface (GTK_WIDGET (entry), FALSE);
-
   priv->text = gtk_text_new ();
   gtk_widget_set_parent (priv->text, GTK_WIDGET (entry));
   gtk_editable_init_delegate (GTK_EDITABLE (entry));

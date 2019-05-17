@@ -327,8 +327,6 @@ gtk_overlay_init (GtkOverlay *overlay)
 {
   GtkOverlayPrivate *priv = gtk_overlay_get_instance_private (overlay);
 
-  gtk_widget_set_has_surface (GTK_WIDGET (overlay), FALSE);
-
   priv->layout = gtk_widget_get_layout_manager (GTK_WIDGET (overlay));
 }
 

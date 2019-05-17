@@ -239,8 +239,6 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   g_signal_connect_swapped (priv->down_slider_button, "clicked",
 			    G_CALLBACK (gtk_path_bar_scroll_down), path_bar);
 
-  gtk_widget_set_has_surface (GTK_WIDGET (path_bar), FALSE);
-
   context = gtk_widget_get_style_context (GTK_WIDGET (path_bar));
   gtk_style_context_add_class (context, "path-bar");
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);

@@ -749,7 +749,6 @@ static void
 gtk_app_chooser_button_init (GtkAppChooserButton *self)
 {
   GtkAppChooserButtonPrivate *priv = gtk_app_chooser_button_get_instance_private (self);
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 
   priv->custom_item_names = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   priv->store = gtk_list_store_new (NUM_COLUMNS,

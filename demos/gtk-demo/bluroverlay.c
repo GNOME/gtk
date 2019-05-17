@@ -458,7 +458,6 @@ blur_overlay_class_init (BlurOverlayClass *klass)
 static void
 blur_overlay_init (BlurOverlay *overlay)
 {
-  gtk_widget_set_has_surface (GTK_WIDGET (overlay), FALSE);
 }
 
 GtkWidget *

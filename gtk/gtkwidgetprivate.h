@@ -72,8 +72,6 @@ struct _GtkWidgetPrivate
 #endif
 
   guint in_destruction        : 1;
-  guint no_surface            : 1;
-  guint no_surface_set        : 1;
   guint realized              : 1;
   guint mapped                : 1;
   guint visible               : 1;
@@ -400,12 +398,6 @@ static inline gboolean
 _gtk_widget_is_drawable (GtkWidget *widget)
 {
   return widget->priv->visible && widget->priv->mapped;
-}
-
-static inline gboolean
-_gtk_widget_get_has_surface (GtkWidget *widget)
-{
-  return !widget->priv->no_surface;
 }
 
 static inline gboolean

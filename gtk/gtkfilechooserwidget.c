@@ -8441,7 +8441,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
 #ifdef PROFILE_FILE_CHOOSER
   access ("MARK: *** CREATE FILE CHOOSER", F_OK);
 #endif
-  gtk_widget_set_has_surface (GTK_WIDGET (impl), FALSE);
 
   priv->local_only = FALSE;
   priv->preview_widget_active = TRUE;

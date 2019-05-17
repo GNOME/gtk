@@ -1700,8 +1700,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   priv->event_last_x = -10000;
   priv->event_last_y = -10000;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (tree_view), FALSE);
-
   gtk_tree_view_do_set_vadjustment (tree_view, NULL);
   gtk_tree_view_do_set_hadjustment (tree_view, NULL);
 

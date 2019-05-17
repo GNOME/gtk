@@ -873,8 +873,6 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   GtkEventController *controller;
   GtkGesture *gesture;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (spin_button), FALSE);
-
   priv->adjustment = NULL;
   priv->timer = 0;
   priv->climb_rate = 0.0;

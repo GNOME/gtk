@@ -101,8 +101,6 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
   GtkStyleContext *context;
   GtkStackSwitcherPrivate *priv;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (switcher), FALSE);
-
   priv = gtk_stack_switcher_get_instance_private (switcher);
 
   priv->buttons = g_hash_table_new_full (g_direct_hash, g_direct_equal, g_object_unref, NULL);

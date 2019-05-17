@@ -117,7 +117,6 @@ gtk_fixed_init (GtkFixed *self)
 {
   GtkFixedPrivate *priv = gtk_fixed_get_instance_private (self);
 
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 
   priv->layout = gtk_widget_get_layout_manager (GTK_WIDGET (self)); 

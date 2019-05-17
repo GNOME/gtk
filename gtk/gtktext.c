@@ -1665,7 +1665,6 @@ gtk_text_init (GtkText *self)
   int i;
 
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 
   priv->editable = TRUE;

@@ -41,8 +41,6 @@ demo_tagged_entry_init (DemoTaggedEntry *entry)
 {
   DemoTaggedEntryPrivate *priv = demo_tagged_entry_get_instance_private (entry);
 
-  gtk_widget_set_has_surface (GTK_WIDGET (entry), FALSE);
-
   priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_parent (priv->box, GTK_WIDGET (entry));
 
@@ -266,8 +264,6 @@ demo_tagged_entry_tag_init (DemoTaggedEntryTag *tag)
 {
   GtkGesture *gesture;
   GtkCssProvider *provider;
-
-  gtk_widget_set_has_surface (GTK_WIDGET (tag), FALSE);
 
   tag->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_parent (tag->box, GTK_WIDGET (tag));

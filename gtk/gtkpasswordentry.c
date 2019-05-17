@@ -151,8 +151,6 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
 {
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
 
-  gtk_widget_set_has_surface (GTK_WIDGET (entry), FALSE);
-
   priv->entry = gtk_text_new ();
   gtk_text_set_visibility (GTK_TEXT (priv->entry), FALSE);
   gtk_widget_set_parent (priv->entry, GTK_WIDGET (entry));

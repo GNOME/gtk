@@ -627,7 +627,6 @@ gtk_list_box_init (GtkListBox *box)
   GtkWidget *widget = GTK_WIDGET (box);
   GtkGesture *gesture;
 
-  gtk_widget_set_has_surface (widget, FALSE);
   priv->selection_mode = GTK_SELECTION_SINGLE;
   priv->activate_single_click = TRUE;
 

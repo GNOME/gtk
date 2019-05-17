@@ -4515,8 +4515,6 @@ gtk_widget_set_focus_on_click
 gtk_widget_set_focus_child
 gtk_widget_get_can_target
 gtk_widget_set_can_target
-gtk_widget_get_has_surface
-gtk_widget_set_has_surface
 gtk_widget_get_sensitive
 gtk_widget_is_sensitive
 gtk_widget_get_visible

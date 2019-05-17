@@ -117,11 +117,6 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
 static void
 gtk_separator_tool_item_init (GtkSeparatorToolItem *separator_item)
 {
-  GtkWidget *widget;
-
-  widget = GTK_WIDGET (separator_item);
-
-  gtk_widget_set_has_surface (widget, FALSE);
 }
 
 static void

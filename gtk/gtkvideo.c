@@ -345,7 +345,6 @@ static void
 gtk_video_init (GtkVideo *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 }
 
 /**
