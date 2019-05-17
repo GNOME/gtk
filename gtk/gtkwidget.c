@@ -3265,8 +3265,7 @@ gtk_widget_map (GtkWidget *widget)
 
       update_cursor_on_state_change (widget);
 
-      if (!GTK_IS_NATIVE (widget))
-        gtk_widget_queue_draw (widget);
+      gtk_widget_queue_draw (widget);
 
       gtk_widget_pop_verify_invariants (widget);
     }
@@ -4016,9 +4015,8 @@ gtk_widget_queue_draw (GtkWidget *widget)
 
       priv->draw_needed = TRUE;
       g_clear_pointer (&priv->render_node, gsk_render_node_unref);
-      if (GTK_IS_NATIVE (widget) &&
-          _gtk_widget_get_realized (widget))
-        gdk_surface_queue_expose (gtk_widget_get_surface (widget));
+      if (GTK_IS_NATIVE (widget) && _gtk_widget_get_realized (widget))
+        gdk_surface_queue_expose (gtk_native_get_surface (GTK_NATIVE (widget)));
     }
 }
 
@@ -4176,17 +4174,7 @@ gtk_widget_get_frame_clock (GtkWidget *widget)
 
   if (priv->realized)
     {
-      /* We use gtk_widget_get_root() here to make it explicit that
-       * the frame clock is a property of the toplevel that a widget
-       * is anchored to; gdk_surface_get_toplevel() will go up the
-       * hierarchy anyways, but should squash any funny business with
-       * reparenting windows and widgets.
-       */
-      GtkRoot *root = _gtk_widget_get_root (widget);
-      GdkSurface *surface = _gtk_widget_get_surface (GTK_WIDGET (root));
-      g_assert (surface != NULL);
-
-      return gdk_surface_get_frame_clock (surface);
+      return gdk_surface_get_frame_clock (priv->surface);
     }
   else
     {
@@ -8165,9 +8153,6 @@ gtk_widget_real_map (GtkWidget *widget)
       GtkWidget *p;
       priv->mapped = TRUE;
 
-      if (GTK_IS_NATIVE (widget))
-        gdk_surface_show (priv->surface);
-
       for (p = gtk_widget_get_first_child (widget);
            p != NULL;
            p = gtk_widget_get_next_sibling (p))
@@ -8197,9 +8182,6 @@ gtk_widget_real_unmap (GtkWidget *widget)
     {
       GtkWidget *child;
       priv->mapped = FALSE;
-
-      if (GTK_IS_NATIVE (widget))
-        gdk_surface_hide (priv->surface);
 
       for (child = gtk_widget_get_first_child (widget);
            child != NULL;
@@ -8232,6 +8214,8 @@ gtk_widget_real_realize (GtkWidget *widget)
   if (GTK_IS_NATIVE (widget))
     {
       g_assert (priv->surface != NULL);
+      priv->surface = gtk_native_get_surface (GTK_NATIVE (widget));
+      g_object_ref (priv->surface);
     }
   else
     {
@@ -8272,16 +8256,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
   priv->realized = FALSE;
 
-  if (GTK_IS_NATIVE (widget))
-    {
-      gdk_surface_destroy (priv->surface);
-      priv->surface = NULL;
-    }
-  else
-    {
-      g_object_unref (priv->surface);
-      priv->surface = NULL;
-    }
+  g_clear_object (&priv->surface);
 }
 
 void

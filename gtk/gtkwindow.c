@@ -5046,7 +5046,7 @@ gtk_window_map (GtkWidget *widget)
       gtk_widget_get_child_visible (priv->title_box))
     gtk_widget_map (priv->title_box);
 
-  surface = _gtk_widget_get_surface (widget);
+  surface = priv->surface;
 
   if (priv->maximize_initially)
     gdk_surface_maximize (surface);
@@ -5137,7 +5137,7 @@ gtk_window_unmap (GtkWidget *widget)
       return;
     }
 
-  surface = _gtk_widget_get_surface (widget);
+  surface = priv->surface;
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
   gdk_surface_hide (surface);
@@ -5197,16 +5197,17 @@ gtk_window_guess_default_size (GtkWindow *window,
                                gint      *width,
                                gint      *height)
 {
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget;
-  GdkDisplay *display;
   GdkSurface *surface;
+  GdkDisplay *display;
   GdkMonitor *monitor;
   GdkRectangle workarea;
   int minimum, natural;
 
   widget = GTK_WIDGET (window);
   display = gtk_widget_get_display (widget);
-  surface = _gtk_widget_get_surface (widget);
+  surface = priv->surface;
 
   if (surface)
     monitor = gdk_display_get_monitor_at_surface (display, surface);
@@ -5831,13 +5832,15 @@ gtk_window_unrealize (GtkWidget *widget)
   gsk_renderer_unrealize (priv->renderer);
   g_clear_object (&priv->renderer);
 
-  surface = _gtk_widget_get_surface (widget);
+  surface = priv->surface;
 
   g_signal_handlers_disconnect_by_func (surface, surface_state_changed, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_size_changed, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_event, widget);
   gdk_surface_set_widget (surface, NULL);
+  gdk_surface_destroy (surface);
+  g_clear_object (&priv->surface);
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
 
