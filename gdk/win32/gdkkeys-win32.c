@@ -120,8 +120,7 @@ typedef struct _GdkWin32DeadKeyNode GdkWin32DeadKeyNode;
  * one for each key that can be combined with this dead key.
  * If the combination of this dead key and another key is also a dead key,
  * then a new node is created and added to the dead keys array at the
- * layout options. Such a dead key node is marked as not being a first-level
- * dead key by having key.vk == 0. Because all dead keys end up in the same
+ * layout options. Because all dead keys end up in the same
  * array, the whole structure only ever has two levels and does not look
  * like a tree. It can be traversed like a tree only because it's possible
  * to alternate between these two levels, always picking a different root
@@ -132,16 +131,13 @@ struct _GdkWin32DeadKeyNode
 {
   /* key.vk is the code of the key that needs to be pressed to type
    * this dead key. key.level is the needed modifier.
-   * If key.vk == 0, then this dead key can't be typed directly
-   * and can only be typed as a combination of other keys,
-   * in which case key.level is meaningless.
    */
   GdkWin32KeyNode      key;
 
   /* The spacing version of this dead key.
-   * For first-order (key.vk != 0) dead keys it's just a copy of the
+   * For first-order dead keys it's just a copy of the
    * appropriate key table entry.
-   * For chained (key.vk == 0) dead keys this is a copy of the string
+   * For chained dead keys this is a copy of the string
    * from the corresponding GdkWin32CombinationNode (looking it up
    * in the tree is inconvenient, since we do not maintain a link
    * to the parent combination after sorting, hence the copy).
@@ -1390,8 +1386,8 @@ update_keymap (GdkKeymap *gdk_keymap)
                       !linear_find_dead_key_by_keyval (options->dead_keys, combo.result.gdk_keyval, &existing_deadkey_i))
                     {
                       /* Dead key chaining */
-                      chained_dead_key.key.vk = 0;
-                      chained_dead_key.key.level = 0;
+                      chained_dead_key.key.vk = vk;
+                      chained_dead_key.key.level = level;
                       chained_dead_key.entry.gdk_keyval = combo.result.gdk_keyval;
                       chained_dead_key.entry.ligature = NULL;
 
