@@ -1181,8 +1181,6 @@ gtk_app_chooser_widget_init (GtkAppChooserWidget *self)
   GtkTreeModel *sort;
   GtkGesture *gesture;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
   /* Various parts of the GtkTreeView code need custom code to setup, mostly

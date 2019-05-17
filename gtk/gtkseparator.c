@@ -129,8 +129,6 @@ gtk_separator_init (GtkSeparator *separator)
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (separator), FALSE);
-
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (separator));
 }
 

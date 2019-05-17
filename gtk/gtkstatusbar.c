@@ -244,8 +244,6 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
 {
   GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (statusbar);
 
-  gtk_widget_set_has_surface (GTK_WIDGET (statusbar), FALSE);
-
   priv->seq_context_id = 1;
   priv->seq_message_id = 1;
   priv->messages = NULL;

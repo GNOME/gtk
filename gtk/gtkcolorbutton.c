@@ -374,8 +374,6 @@ gtk_color_button_init (GtkColorButton *button)
   GtkStyleContext *context;
   GdkContentFormats *targets;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (button), FALSE);
-
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked", G_CALLBACK (gtk_color_button_clicked), button);
   gtk_widget_set_parent (priv->button, GTK_WIDGET (button));

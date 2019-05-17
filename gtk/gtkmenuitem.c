@@ -658,8 +658,6 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
   priv = gtk_menu_item_get_instance_private (menu_item);
   menu_item->priv = priv;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (menu_item), FALSE);
-
   g_signal_connect (menu_item, "notify::parent", G_CALLBACK (gtk_menu_item_parent_cb), NULL);
 
   priv->submenu = NULL;

@@ -50,7 +50,6 @@ G_DEFINE_TYPE (GtkMatrixChooser, gtk_matrix_chooser, GTK_TYPE_WIDGET)
 static void
 gtk_matrix_chooser_init (GtkMatrixChooser *self)
 {
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 }
 
 static void
@@ -237,8 +236,6 @@ gtk_transform_tester_snapshot (GtkWidget   *widget,
 static void
 gtk_transform_tester_init (GtkTransformTester *self)
 {
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
-
   self->pick_increase = 4;
 }
 

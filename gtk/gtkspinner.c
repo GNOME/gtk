@@ -216,7 +216,6 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
 static void
 gtk_spinner_init (GtkSpinner *spinner)
 {
-  gtk_widget_set_has_surface (GTK_WIDGET (spinner), FALSE);
 }
 
 /**

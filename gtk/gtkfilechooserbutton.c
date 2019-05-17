@@ -448,8 +448,6 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   GtkWidget *icon;
   GdkContentFormats *target_list;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (button), FALSE);
-
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked", G_CALLBACK (button_clicked_cb), button);
   priv->image = gtk_image_new ();

@@ -67,8 +67,6 @@ gtk_fishbowl_init (GtkFishbowl *fishbowl)
 {
   GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
 
-  gtk_widget_set_has_surface (GTK_WIDGET (fishbowl), FALSE);
-
   priv->update_delay = G_USEC_PER_SEC;
 }
 

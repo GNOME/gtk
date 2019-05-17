@@ -509,8 +509,6 @@ gtk_popover_init (GtkPopover *popover)
   GtkEventController *controller;
   GtkStyleContext *context;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (popover), TRUE);
-
   priv->position = GTK_POS_TOP;
   priv->final_position = GTK_POS_TOP;
   priv->modal = TRUE;

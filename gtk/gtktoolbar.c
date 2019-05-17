@@ -522,7 +522,6 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   priv = toolbar->priv;
 
   gtk_widget_set_can_focus (widget, FALSE);
-  gtk_widget_set_has_surface (widget, FALSE);
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->style = DEFAULT_TOOLBAR_STYLE;

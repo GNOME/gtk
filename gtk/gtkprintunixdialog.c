@@ -792,9 +792,6 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 				      priv->paper_size_renderer,
                                       page_name_func, NULL, NULL);
 
-  /* Preview drawing area has no window */
-  gtk_widget_set_has_surface (priv->page_layout_preview, FALSE);
-
   /* Load backends */
   load_print_backends (dialog);
 

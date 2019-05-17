@@ -1867,8 +1867,6 @@ gtk_header_bar_init (GtkHeaderBar *bar)
 
   priv = gtk_header_bar_get_instance_private (bar);
 
-  gtk_widget_set_has_surface (GTK_WIDGET (bar), FALSE);
-
   priv->title = NULL;
   priv->subtitle = NULL;
   priv->custom_title = NULL;
