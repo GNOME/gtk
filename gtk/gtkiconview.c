@@ -936,7 +936,6 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->mouse_x = -1;
   icon_view->priv->mouse_y = -1;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (icon_view), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (icon_view), TRUE);
   gtk_widget_set_overflow (GTK_WIDGET (icon_view), GTK_OVERFLOW_HIDDEN);
 

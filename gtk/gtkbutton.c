@@ -413,7 +413,6 @@ gtk_button_init (GtkButton *button)
 
   gtk_widget_set_can_focus (GTK_WIDGET (button), TRUE);
   gtk_widget_set_receives_default (GTK_WIDGET (button), TRUE);
-  gtk_widget_set_has_surface (GTK_WIDGET (button), FALSE);
 
   priv->in_button = FALSE;
   priv->button_down = FALSE;

@@ -98,7 +98,6 @@ gtk_bin_class_init (GtkBinClass *class)
 static void
 gtk_bin_init (GtkBin *bin)
 {
-  gtk_widget_set_has_surface (GTK_WIDGET (bin), FALSE);
 }
 
 static GType
