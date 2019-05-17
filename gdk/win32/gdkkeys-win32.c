@@ -672,7 +672,7 @@ reset_after_dead (guchar key_state[KEY_STATE_SIZE],
                   HKL    handle)
 {
   guchar  temp_key_state[KEY_STATE_SIZE];
-  wchar_t wcs[2];
+  wchar_t wcs[17];
 
   memmove (temp_key_state, key_state, KEY_STATE_SIZE);
 
@@ -1102,24 +1102,25 @@ update_keymap (GdkKeymap *gdk_keymap)
                 {
                   /* Note: ToUnicodeEx() doesn't tell us how much space it needs
                    * to store the output. Nothing anywhere says that it can't
-                   * be longer than 10 wchars. If it does happen to be longer,
+                   * be longer than 16 wchars. If it does happen to be longer,
                    * then this will cause the output to be truncated.
                    * A workaround for this is to call ToUnicodeEx() repeatedly
                    * with larger and larger buffer, until its positive return value
                    * becomes less than the length of the buffer. That's very
                    * awkward, so we'll burn this bridge after we cross it.
                    */
-                  wchar_t              wcs[10];
+                  wchar_t              wcs[17];
                   gint                 k;
                   GdkWin32DeadKeyNode  dead_key;
                   gsize                existing_deadkey_i;
                   gunichar            *ucs4 = NULL;
                   glong                ucs4_chars = 0;
 
-                  wcs[0] = wcs[1] = 0;
+                  memset (wcs, 0, G_N_ELEMENTS (wcs) * sizeof (wcs[0]));
                   k = ToUnicodeEx (vk, scancode, key_state,
                                    wcs, G_N_ELEMENTS (wcs),
                                    0, hkls[group]);
+                  wcs[G_N_ELEMENTS (wcs) - 1] = 0;
                   /* These checks are spearate to reduce if{} nesting */
                   if (k == -1 || k > 0)
                     {
@@ -1269,7 +1270,7 @@ update_keymap (GdkKeymap *gdk_keymap)
 
               for (level = GDK_WIN32_LEVEL_NONE; level < GDK_WIN32_LEVEL_COUNT; level++)
                 {
-                  wchar_t                  wcs[10];
+                  wchar_t                  wcs[17];
                   gint                     k;
                   GdkWin32CombinationNode  combo;
                   gsize                    existing_deadkey_i;
@@ -1315,13 +1316,14 @@ update_keymap (GdkKeymap *gdk_keymap)
                     }
 
                   /* Check how it combines with vk */
-                  wcs[0] = wcs[1] = 0;
+                  memset (wcs, 0, G_N_ELEMENTS (wcs) * sizeof (wcs[0]));
                   set_level_vks (key_state, level);
                   scancode = MapVirtualKeyEx (vk, 0, hkls[group]);
                   key_state[vk] = 0x80;
                   k = ToUnicodeEx (vk, scancode, key_state,
                                    wcs, G_N_ELEMENTS (wcs),
                                    0, hkls[group]);
+                  wcs[G_N_ELEMENTS (wcs) - 1] = 0;
                   key_state[vk] = 0;
 
                   if (k == -1 || k > 0)
