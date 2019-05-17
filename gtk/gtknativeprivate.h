@@ -5,8 +5,6 @@
 
 G_BEGIN_DECLS
 
-GskRenderer * gtk_native_get_renderer          (GtkNative *self);
-
 void          gtk_native_get_surface_transform (GtkNative *self,
                                                 int       *x,
                                                 int       *y);
