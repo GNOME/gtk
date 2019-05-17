@@ -601,7 +601,7 @@ gtk_popover_unrealize (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (priv->surface, surface_event, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_moved_to_rect, widget);
   gdk_surface_set_widget (priv->surface, NULL);
-
+  gdk_surface_destroy (priv->surface);
   g_clear_object (&priv->surface);
 }
 
@@ -678,6 +678,8 @@ gtk_popover_map (GtkWidget *widget)
       seat = gdk_display_get_default_seat (display),
       gdk_surface_show_with_auto_dismissal (priv->surface, seat);
     }
+  else
+    gdk_surface_show (priv->surface);
 
   gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
   move_to_rect (popover);
@@ -707,7 +709,6 @@ gtk_popover_unmap (GtkWidget *widget)
   priv->surface_transform_changed_cb = 0;
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->unmap (widget);
-
   gdk_surface_hide (priv->surface);
 
   child = gtk_bin_get_child (GTK_BIN (widget));
