@@ -1594,7 +1594,8 @@ check_compose_internal (GdkWin32Keymap *keymap,
                                     output, output_len,
                                     depth + 1);
       if (sub == GDK_WIN32_KEYMAP_MATCH_EXACT ||
-          sub == GDK_WIN32_KEYMAP_MATCH_PARTIAL)
+          sub == GDK_WIN32_KEYMAP_MATCH_PARTIAL ||
+          sub == GDK_WIN32_KEYMAP_MATCH_INCOMPLETE)
         {
           /* Recursive invocation already filled the output buffer */
           return sub;
