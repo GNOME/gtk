@@ -299,7 +299,6 @@ static void
 gtk_media_controls_init (GtkMediaControls *controls)
 {
   gtk_widget_init_template (GTK_WIDGET (controls));
-  gtk_widget_set_has_surface (GTK_WIDGET (controls), FALSE);
 }
 
 /**

@@ -370,8 +370,6 @@ gtk_picture_class_init (GtkPictureClass *class)
 static void
 gtk_picture_init (GtkPicture *self)
 {
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
-
   self->can_shrink = TRUE;
   self->keep_aspect_ratio = TRUE;
 }
