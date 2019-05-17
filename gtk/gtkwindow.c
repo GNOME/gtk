@@ -280,6 +280,7 @@ typedef struct
 
   GtkCssNode *decoration_node;
 
+  GdkSurface  *surface;
   GskRenderer *renderer;
 
   GList *foci;
@@ -2376,6 +2377,15 @@ gtk_window_root_interface_init (GtkRootInterface *iface)
   iface->get_display = gtk_window_root_get_display;
 }
 
+static GdkSurface *
+gtk_window_native_get_surface (GtkNative *native)
+{
+  GtkWindow *self = GTK_WINDOW (native);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
+
+  return priv->surface;
+}
+
 static GskRenderer *
 gtk_window_native_get_renderer (GtkNative *native)
 {
@@ -2412,6 +2422,7 @@ gtk_window_native_check_resize (GtkNative *native)
 static void
 gtk_window_native_interface_init (GtkNativeInterface *iface)
 {
+  iface->get_surface = gtk_window_native_get_surface;
   iface->get_renderer = gtk_window_native_get_renderer;
   iface->get_surface_transform = gtk_window_native_get_surface_transform;
   iface->check_resize = gtk_window_native_check_resize;
@@ -5686,6 +5697,8 @@ gtk_window_realize (GtkWidget *widget)
           break;
         }
     }
+
+  priv->surface = surface;
 
   gtk_widget_set_surface (widget, surface);
   gdk_surface_set_widget (surface, widget);
