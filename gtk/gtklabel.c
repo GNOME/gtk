@@ -1273,8 +1273,6 @@ gtk_label_init (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
-  gtk_widget_set_has_surface (GTK_WIDGET (label), FALSE);
-
   priv->width_chars = -1;
   priv->max_width_chars = -1;
   priv->label = g_strdup ("");

@@ -330,8 +330,6 @@ drawing_area_init (DrawingArea *area)
 {
   GtkGesture *gesture;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (area), FALSE);
-
   gesture = gtk_gesture_stylus_new ();
   g_signal_connect (gesture, "down",
                     G_CALLBACK (stylus_gesture_down), area);
