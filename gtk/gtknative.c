@@ -68,6 +68,30 @@ gtk_native_default_init (GtkNativeInterface *iface)
   iface->check_resize = gtk_native_default_check_resize;
 }
 
+/**
+ * gtk_native_get_surface:
+ * @self: a #GtkNative
+ *
+ * Returns the surface of this #GtkNative.
+ *
+ * Returns: the surface of @self
+ */
+GdkSurface *
+gtk_native_get_surface (GtkNative *self)
+{
+  g_return_val_if_fail (GTK_IS_NATIVE (self), NULL);
+
+  return GTK_NATIVE_GET_IFACE (self)->get_surface (self);
+}
+
+/**
+ * gtk_native_get_renderer:
+ * @self: a #GtkNative
+ *
+ * Returns the renderer that is used for this #GtkNative.
+ *
+ * Returns: the renderer for @self
+ */
 GskRenderer *
 gtk_native_get_renderer (GtkNative *self)
 {
@@ -101,7 +125,7 @@ gtk_native_check_resize (GtkNative *self)
  * @surface: a #GdkSurface
  *
  * Finds the GtkNative associated with the surface.
- * 
+ *
  * Returns: (transfer none): the #GtkNative that is associated with @surface
  */
 GtkWidget *
