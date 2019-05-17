@@ -95,7 +95,6 @@ gtk_gizmo_class_init (GtkGizmoClass *klass)
 static void
 gtk_gizmo_init (GtkGizmo *self)
 {
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 }
 
 GtkWidget *

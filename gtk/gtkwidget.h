@@ -526,12 +526,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_is_visible             (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_set_has_surface        (GtkWidget    *widget,
-                                                         gboolean      has_surface);
-GDK_AVAILABLE_IN_ALL
-gboolean              gtk_widget_get_has_surface        (GtkWidget    *widget);
-
-GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_is_toplevel            (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_is_drawable            (GtkWidget    *widget);
