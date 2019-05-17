@@ -570,7 +570,6 @@ gtk_popover_realize (GtkWidget *widget)
 
   priv->surface = gdk_surface_new_popup (display, gtk_widget_get_surface (priv->relative_to), priv->modal);
 
-  gtk_widget_set_surface (widget, priv->surface);
   gdk_surface_set_widget (priv->surface, widget);
 
   g_signal_connect_swapped (priv->surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
