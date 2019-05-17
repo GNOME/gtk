@@ -558,7 +558,6 @@ enum {
   PROP_HAS_TOOLTIP,
   PROP_TOOLTIP_MARKUP,
   PROP_TOOLTIP_TEXT,
-  PROP_SURFACE,
   PROP_OPACITY,
   PROP_OVERFLOW,
   PROP_HALIGN,
@@ -1117,18 +1116,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                            P_("The contents of the tooltip for this widget"),
                            NULL,
                            GTK_PARAM_READWRITE);
-
-  /**
-   * GtkWidget:surface:
-   *
-   * The widget's surface if it is realized, %NULL otherwise.
-   */
-  widget_props[PROP_SURFACE] =
-      g_param_spec_object ("surface",
-                           P_("Surface"),
-                           P_("The widget’s surface if it is realized"),
-                           GDK_TYPE_SURFACE,
-                           GTK_PARAM_READABLE);
 
   /**
    * GtkWidget:halign:
@@ -2363,9 +2350,6 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_TOOLTIP_MARKUP:
       g_value_set_string (value, g_object_get_qdata (object, quark_tooltip_markup));
-      break;
-    case PROP_SURFACE:
-      g_value_set_object (value, _gtk_widget_get_surface (widget));
       break;
     case PROP_HALIGN:
       g_value_set_enum (value, gtk_widget_get_halign (widget));
@@ -7837,7 +7821,6 @@ static void
 gtk_widget_constructed (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidgetPath *path;
 
   /* As strange as it may seem, this may happen on object construction.
@@ -11245,8 +11228,6 @@ gtk_widget_set_surface (GtkWidget *widget,
   if (priv->surface != surface)
     {
       priv->surface = surface;
-
-      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_SURFACE]);
     }
 }
 
