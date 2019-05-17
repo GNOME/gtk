@@ -8329,9 +8329,6 @@ post_process_ui (GtkFileChooserWidget *impl)
   GList            *cells;
   GFile            *file;
 
-  /* Some qdata, qdata can't be set with GtkBuilder */
-  g_object_set_data (G_OBJECT (impl->priv->browse_files_tree_view), I_("GtkFileChooserWidget"), impl);
-
   /* Setup file list treeview */
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->priv->browse_files_tree_view));
   gtk_tree_selection_set_select_function (selection,
