@@ -5698,8 +5698,6 @@ gtk_window_realize (GtkWidget *widget)
     }
 
   priv->surface = surface;
-
-  gtk_widget_set_surface (widget, surface);
   gdk_surface_set_widget (surface, widget);
 
   g_signal_connect_swapped (surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
