@@ -1832,8 +1832,6 @@ gtk_window_init (GtkWindow *window)
 
   widget = GTK_WIDGET (window);
 
-  gtk_widget_set_has_surface (widget, TRUE);
-
   priv->title = NULL;
   priv->geometry_info = NULL;
   priv->type = GTK_WINDOW_TOPLEVEL;
