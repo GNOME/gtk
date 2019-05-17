@@ -904,8 +904,6 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   fontchooser->priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   priv = fontchooser->priv;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (fontchooser), FALSE);
-
   gtk_widget_init_template (GTK_WIDGET (fontchooser));
 
   priv->axes = g_hash_table_new_full (axis_hash, axis_equal, NULL, axis_free);
