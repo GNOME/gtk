@@ -571,7 +571,6 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   priv->has_menu = TRUE;
 
   gtk_widget_set_can_focus (GTK_WIDGET (swatch), TRUE);
-  gtk_widget_set_has_surface (GTK_WIDGET (swatch), FALSE);
   gtk_widget_set_overflow (GTK_WIDGET (swatch), GTK_OVERFLOW_HIDDEN);
 
   gesture = gtk_gesture_long_press_new ();

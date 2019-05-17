@@ -208,7 +208,6 @@ gtk_magnifier_init (GtkMagnifier *self)
   GtkMagnifierPrivate *priv = gtk_magnifier_get_instance_private (self);
   GtkWidget *widget = GTK_WIDGET (self);
 
-  gtk_widget_set_has_surface (widget, FALSE);
   gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
 
   priv->magnification = 1;
