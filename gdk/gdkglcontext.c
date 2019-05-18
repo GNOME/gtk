@@ -310,6 +310,12 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
     }
 
   damage = GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);
+
+  if (context->old_updated_area[1])
+    cairo_region_destroy (context->old_updated_area[1]);
+  context->old_updated_area[1] = context->old_updated_area[0];
+  context->old_updated_area[0] = cairo_region_copy (region);
+
   cairo_region_union (region, damage);
   cairo_region_destroy (damage);
 
@@ -341,11 +347,6 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
       GDK_DRAW_CONTEXT_GET_CLASS (GDK_DRAW_CONTEXT (shared))->end_frame (GDK_DRAW_CONTEXT (shared), painted);
       return;
     }
-
-  if (context->old_updated_area[1])
-    cairo_region_destroy (context->old_updated_area[1]);
-  context->old_updated_area[1] = context->old_updated_area[0];
-  context->old_updated_area[0] = cairo_region_reference (painted);
 }
 
 static void
