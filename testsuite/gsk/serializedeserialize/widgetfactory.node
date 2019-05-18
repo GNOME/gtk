@@ -10,7 +10,6 @@ transform {
         spread: 2;
       }
       outset-shadow {
-        blur: 0;
         color: rgba(0,0,0,0.18);
         dx: 0;
         dy: 0;
@@ -30,7 +29,7 @@ transform {
               bounds: -6 0 1464 46;
               end: -6 23;
               start: 1458 23;
-              stops: 0.08 rgb(227,234,242),0.25 rgb(246,245,244);
+              stops: 0.08 rgb(227,234,242), 0.25 rgb(246,245,244);
             }
             clip: -6 0 1464 47 / 7 7 0 0;
           }
@@ -46,12 +45,9 @@ transform {
             clip: -6 0 1464 47 / 7 7 0 0;
           }
           inset-shadow {
-            blur: 0;
             color: rgba(255,255,255,0.8);
             dx: 0;
-            dy: 1;
             outline: -6 0 1464 46 / 7 7 0 0;
-            spread: 0;
           }
         }
         border {
@@ -79,7 +75,7 @@ transform {
                   child: text {
                     color: rgb(46,52,54);
                     font: "Cantarell 11";
-                    glyphs: 162 9216 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 678 7168 0 0 1;
+                    glyphs: 162 9, 244 8, 312 8, 287 8, 862 3, 678 7;
                     offset: 0 17;
                   }
                   transform: translate(28, 0);
@@ -102,7 +98,7 @@ transform {
                   child: text {
                     color: rgb(46,52,54);
                     font: "Cantarell 11";
-                    glyphs: 162 9216 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 679 8192 0 0 1;
+                    glyphs: 162 9, 244 8, 312 8, 287 8, 862 3, 679 8;
                     offset: 0 17;
                   }
                   transform: translate(28, 0);
@@ -122,13 +118,12 @@ transform {
                 border {
                   colors: rgb(213,208,204);
                   outline: -17 -5 134 34 / 0 5 5 0;
-                  widths: 1;
                 }
                 transform {
                   child: text {
                     color: rgb(46,52,54);
                     font: "Cantarell 11";
-                    glyphs: 162 9216 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 680 8192 0 0 1;
+                    glyphs: 162 9, 244 8, 312 8, 287 8, 862 3, 680 8;
                     offset: 0 17;
                   }
                   transform: translate(28, 0);
@@ -151,7 +146,6 @@ transform {
             border {
               colors: rgb(213,208,204);
               outline: -6 -5 36 34 / 5;
-              widths: 1;
             }
             color-matrix {
               child: texture {
@@ -205,7 +199,7 @@ transform {
                       text {
                         color: rgb(50,50,50);
                         font: "Cantarell 11";
-                        glyphs: 273 7168 0 0 1, 370 8192 0 0 1, 358 13312 0 0 1, 272 8192 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 370 8192 0 0 1, 472 7168 0 0 1, 287 8192 0 0 1, 360 8192 0 0 1, 430 5120 0 0 1, 409 6144 0 0 1, 473 7168 0 0 1;
+                        glyphs: 273 7, 370 8, 358 13, 272 8, 370 8, 272 8, 370 8, 472 7, 287 8, 360 8, 430 5, 409 6, 473 7;
                         offset: 0 21;
                       }
                       clip {
@@ -217,7 +211,7 @@ transform {
                           text {
                             color: rgb(252,252,252);
                             font: "Cantarell 11";
-                            glyphs: 273 7168 0 0 1, 370 8192 0 0 1, 358 13312 0 0 1, 272 8192 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 370 8192 0 0 1, 472 7168 0 0 1, 287 8192 0 0 1, 360 8192 0 0 1, 430 5120 0 0 1, 409 6144 0 0 1, 473 7168 0 0 1;
+                            glyphs: 273 7, 370 8, 358 13, 272 8, 370 8, 272 8, 370 8, 472 7, 287 8, 360 8, 430 5, 409 6, 473 7;
                             offset: 0 21;
                           }
                         }
@@ -241,7 +235,6 @@ transform {
                   border {
                     colors: rgb(213,208,204) rgb(213,208,204) rgb(213,208,204) rgb(53,132,228);
                     outline: -10 -5 36 34 / 0 5 5 0;
-                    widths: 1;
                   }
                   color-matrix {
                     child: texture {
@@ -275,7 +268,7 @@ transform {
                       child: text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 273 7168 0 0 1, 370 8192 0 0 1, 358 13312 0 0 1, 272 8192 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 370 8192 0 0 1, 472 7168 0 0 1, 287 8192 0 0 1, 360 8192 0 0 1, 430 5120 0 0 1, 409 6144 0 0 1, 473 7168 0 0 1;
+                        glyphs: 273 7, 370 8, 358 13, 272 8, 370 8, 272 8, 370 8, 472 7, 287 8, 360 8, 430 5, 409 6, 473 7;
                         offset: 0 21;
                       }
                       clip: 0 0 357 32;
@@ -295,7 +288,6 @@ transform {
                     border {
                       colors: rgb(213,208,204);
                       outline: -10 -5 36 34 / 0 5 5 0;
-                      widths: 1;
                     }
                     color-matrix {
                       child: texture {
@@ -323,14 +315,13 @@ transform {
                 border {
                   colors: rgb(213,208,204);
                   outline: -9 -1 410 34 / 5;
-                  widths: 1;
                 }
                 clip {
                   child: opacity {
                     child: text {
                       color: rgb(50,50,50);
                       font: "Cantarell 11";
-                      glyphs: 30 10240 0 0 1, 349 4096 0 0 1, 324 4096 0 0 1, 273 7168 0 0 1, 345 7168 0 0 1, 862 3072 0 0 1, 324 4096 0 0 1, 273 7168 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1, 862 3072 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 862 3072 0 0 1, 273 7168 0 0 1, 319 8192 0 0 1, 244 8192 0 0 1, 360 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 358 13312 0 0 1, 370 8192 0 0 1, 280 8192 0 0 1, 287 8192 0 0 1;
+                      glyphs: 30 10, 349 4, 324 4, 273 7, 345 7, 862 3, 324 4, 273 7, 370 8, 360 8, 862 3, 430 5, 370 8, 862 3, 273 7, 319 8, 244 8, 360 8, 312 8, 287 8, 862 3, 358 13, 370 8, 280 8, 287 8;
                       offset: 0 21;
                     }
                     opacity: 0.54902;
@@ -363,13 +354,12 @@ transform {
                 border {
                   colors: rgb(213,208,204);
                   outline: -9 -1 410 34 / 5;
-                  widths: 1;
                 }
                 clip {
                   child: text {
                     color: rgb(212,207,202);
                     font: "Cantarell 11";
-                    glyphs: 287 8192 0 0 1, 360 8192 0 0 1, 430 5120 0 0 1, 409 6144 0 0 1, 473 7168 0 0 1;
+                    glyphs: 287 8, 360 8, 430 5, 409 6, 473 7;
                     offset: 0 21;
                   }
                   clip: 0 0 392 32;
@@ -397,7 +387,7 @@ transform {
                       child: text {
                         color: rgb(50,50,50);
                         font: "Cantarell 11";
-                        glyphs: 287 8192 0 0 1, 360 8192 0 0 1, 430 5120 0 0 1, 409 6144 0 0 1, 473 7168 0 0 1;
+                        glyphs: 287 8, 360 8, 430 5, 409 6, 473 7;
                         offset: 0 22;
                       }
                       clip: 0 0 357 33;
@@ -417,7 +407,6 @@ transform {
                     border {
                       colors: rgb(213,208,204);
                       outline: -6 -5 36 35 / 0 5 5 0;
-                      widths: 1;
                     }
                     color-matrix {
                       child: texture {
@@ -453,7 +442,7 @@ transform {
                       text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 103 8192 0 0 1, 287 8192 0 0 1, 311 5120 0 0 1, 430 5120 0 0 1;
+                        glyphs: 103 8, 287 8, 311 5, 430 5;
                         offset: 2 17;
                       }
                       transform {
@@ -487,7 +476,7 @@ transform {
                         text {
                           color: rgb(146,149,149);
                           font: "Cantarell 11";
-                          glyphs: 113 13312 0 0 1, 324 4096 0 0 1, 280 8192 0 0 1, 280 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1;
+                          glyphs: 113 13, 324 4, 280 8, 280 8, 349 4, 287 8;
                           offset: 2 17;
                         }
                         transform {
@@ -520,13 +509,12 @@ transform {
                       border {
                         colors: rgb(213,208,204);
                         outline: -10 -5 137 34 / 0 5 5 0;
-                        widths: 1;
                       }
                       container {
                         text {
                           color: rgb(146,149,149);
                           font: "Cantarell 11";
-                          glyphs: 165 9216 0 0 1, 324 4096 0 0 1, 312 8192 0 0 1, 319 8192 0 0 1, 430 5120 0 0 1;
+                          glyphs: 165 9, 324 4, 312 8, 319 8, 430 5;
                           offset: 2 17;
                         }
                         transform {
@@ -554,14 +542,14 @@ transform {
                 text {
                   color: rgb(146,149,149);
                   font: "Cantarell 11";
-                  glyphs: 349 4096 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 287 8192 0 0 1, 349 4096 0 0 1;
+                  glyphs: 349 4, 244 8, 272 8, 287 8, 349 4;
                   offset: 0 22;
                 }
                 transform {
                   child: text {
                     color: rgb(212,207,202);
                     font: "Cantarell 11";
-                    glyphs: 349 4096 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 287 8192 0 0 1, 349 4096 0 0 1;
+                    glyphs: 349 4, 244 8, 272 8, 287 8, 349 4;
                     offset: 0 22;
                   }
                   transform: translate(52, 0);
@@ -578,14 +566,13 @@ transform {
                     border {
                       colors: rgb(213,208,204);
                       outline: -1 -1 112 34 / 5;
-                      widths: 1;
                     }
                     container {
                       transform {
                         child: text {
                           color: rgb(50,50,50);
                           font: "Cantarell 11";
-                          glyphs: 682 8192 0 0 1, 677 9216 0 0 1;
+                          glyphs: 682 8, 677 9;
                           offset: 0 15;
                         }
                         transform: translate(6, 6);
@@ -642,14 +629,13 @@ transform {
                     border {
                       colors: rgb(213,208,204);
                       outline: -1 -1 112 34 / 5;
-                      widths: 1;
                     }
                     container {
                       transform {
                         child: text {
                           color: rgb(212,207,202);
                           font: "Cantarell 11";
-                          glyphs: 677 9216 0 0 1;
+                          glyphs: 677 9;
                           offset: 0 15;
                         }
                         transform: translate(6, 6);
@@ -721,7 +707,6 @@ transform {
                         border {
                           colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 3;
-                          widths: 1;
                         }
                         color-matrix {
                           child: texture {
@@ -738,7 +723,7 @@ transform {
                       child: text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 273 7168 0 0 1, 319 8192 0 0 1, 287 8192 0 0 1, 273 7168 0 0 1, 345 7168 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                        glyphs: 273 7, 319 8, 287 8, 273 7, 345 7, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -757,7 +742,6 @@ transform {
                         border {
                           colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 3;
-                          widths: 1;
                         }
                       }
                       transform: translate(5, 2);
@@ -766,7 +750,7 @@ transform {
                       child: text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 273 7168 0 0 1, 319 8192 0 0 1, 287 8192 0 0 1, 273 7168 0 0 1, 345 7168 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                        glyphs: 273 7, 319 8, 287 8, 273 7, 345 7, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -785,7 +769,6 @@ transform {
                         border {
                           colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 3;
-                          widths: 1;
                         }
                         color-matrix {
                           child: texture {
@@ -802,7 +785,7 @@ transform {
                       child: text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 273 7168 0 0 1, 319 8192 0 0 1, 287 8192 0 0 1, 273 7168 0 0 1, 345 7168 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                        glyphs: 273 7, 319 8, 287 8, 273 7, 345 7, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -821,7 +804,6 @@ transform {
                         border {
                           colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 3;
-                          widths: 1;
                         }
                         color-matrix {
                           child: texture {
@@ -838,7 +820,7 @@ transform {
                       child: text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 273 7168 0 0 1, 319 8192 0 0 1, 287 8192 0 0 1, 273 7168 0 0 1, 345 7168 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                        glyphs: 273 7, 319 8, 287 8, 273 7, 345 7, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -857,7 +839,6 @@ transform {
                         border {
                           colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 3;
-                          widths: 1;
                         }
                       }
                       transform: translate(5, 2);
@@ -866,7 +847,7 @@ transform {
                       child: text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 273 7168 0 0 1, 319 8192 0 0 1, 287 8192 0 0 1, 273 7168 0 0 1, 345 7168 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                        glyphs: 273 7, 319 8, 287 8, 273 7, 345 7, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -885,7 +866,6 @@ transform {
                         border {
                           colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 3;
-                          widths: 1;
                         }
                         color-matrix {
                           child: texture {
@@ -902,7 +882,7 @@ transform {
                       child: text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 273 7168 0 0 1, 319 8192 0 0 1, 287 8192 0 0 1, 273 7168 0 0 1, 345 7168 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                        glyphs: 273 7, 319 8, 287 8, 273 7, 345 7, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -924,7 +904,6 @@ transform {
                         border {
                           colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 8;
-                          widths: 1;
                         }
                       }
                       transform: translate(5, 2);
@@ -933,7 +912,7 @@ transform {
                       child: text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 409 6144 0 0 1, 244 8192 0 0 1, 280 8192 0 0 1, 324 4096 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                        glyphs: 409 6, 244 8, 280 8, 324 4, 370 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -955,7 +934,6 @@ transform {
                         border {
                           colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 8;
-                          widths: 1;
                         }
                       }
                       transform: translate(5, 2);
@@ -964,7 +942,7 @@ transform {
                       child: text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 409 6144 0 0 1, 244 8192 0 0 1, 280 8192 0 0 1, 324 4096 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                        glyphs: 409 6, 244 8, 280 8, 324 4, 370 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -986,7 +964,6 @@ transform {
                         border {
                           colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 8;
-                          widths: 1;
                         }
                         color-matrix {
                           child: texture {
@@ -1003,7 +980,7 @@ transform {
                       child: text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 409 6144 0 0 1, 244 8192 0 0 1, 280 8192 0 0 1, 324 4096 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                        glyphs: 409 6, 244 8, 280 8, 324 4, 370 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -1025,7 +1002,6 @@ transform {
                         border {
                           colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 8;
-                          widths: 1;
                         }
                         color-matrix {
                           child: texture {
@@ -1042,7 +1018,7 @@ transform {
                       child: text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 409 6144 0 0 1, 244 8192 0 0 1, 280 8192 0 0 1, 324 4096 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                        glyphs: 409 6, 244 8, 280 8, 324 4, 370 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -1064,7 +1040,6 @@ transform {
                         border {
                           colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 8;
-                          widths: 1;
                         }
                       }
                       transform: translate(5, 2);
@@ -1073,7 +1048,7 @@ transform {
                       child: text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 409 6144 0 0 1, 244 8192 0 0 1, 280 8192 0 0 1, 324 4096 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                        glyphs: 409 6, 244 8, 280 8, 324 4, 370 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -1095,7 +1070,6 @@ transform {
                         border {
                           colors: rgb(213,208,204);
                           outline: -1 -1 16 16 / 8;
-                          widths: 1;
                         }
                         color-matrix {
                           child: texture {
@@ -1112,7 +1086,7 @@ transform {
                       child: text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 409 6144 0 0 1, 244 8192 0 0 1, 280 8192 0 0 1, 324 4096 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                        glyphs: 409 6, 244 8, 280 8, 324 4, 370 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -1176,12 +1150,11 @@ transform {
                   border {
                     colors: rgb(213,208,204);
                     outline: -17 -5 122 34 / 5;
-                    widths: 1;
                   }
                   text {
                     color: rgb(146,149,149);
                     font: "Cantarell 11";
-                    glyphs: 430 5120 0 0 1, 370 8192 0 0 1, 312 8192 0 0 1, 312 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                    glyphs: 430 5, 370 8, 312 8, 312 8, 349 4, 287 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                     offset: 2 17;
                   }
                 }
@@ -1199,12 +1172,11 @@ transform {
                   border {
                     colors: rgb(213,208,204);
                     outline: -17 -5 122 34 / 5;
-                    widths: 1;
                   }
                   text {
                     color: rgb(212,207,202);
                     font: "Cantarell 11";
-                    glyphs: 430 5120 0 0 1, 370 8192 0 0 1, 312 8192 0 0 1, 312 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                    glyphs: 430 5, 370 8, 312 8, 312 8, 349 4, 287 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                     offset: 2 17;
                   }
                 }
@@ -1222,12 +1194,11 @@ transform {
                   border {
                     colors: rgb(213,208,204);
                     outline: -17 -5 122 34 / 5;
-                    widths: 1;
                   }
                   text {
                     color: rgb(146,149,149);
                     font: "Cantarell 11";
-                    glyphs: 430 5120 0 0 1, 370 8192 0 0 1, 312 8192 0 0 1, 312 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                    glyphs: 430 5, 370 8, 312 8, 312 8, 349 4, 287 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                     offset: 2 17;
                   }
                 }
@@ -1245,12 +1216,11 @@ transform {
                   border {
                     colors: rgb(213,208,204);
                     outline: -17 -5 122 34 / 5;
-                    widths: 1;
                   }
                   text {
                     color: rgb(212,207,202);
                     font: "Cantarell 11";
-                    glyphs: 430 5120 0 0 1, 370 8192 0 0 1, 312 8192 0 0 1, 312 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                    glyphs: 430 5, 370 8, 312 8, 312 8, 349 4, 287 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                     offset: 2 17;
                   }
                 }
@@ -1269,13 +1239,12 @@ transform {
                     border {
                       colors: rgb(213,208,204);
                       outline: -10 -5 122 34 / 5;
-                      widths: 1;
                     }
                     container {
                       text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 1 10240 0 0 1, 360 8192 0 0 1, 280 8192 0 0 1, 409 6144 0 0 1, 287 8192 0 0 1, 244 8192 0 0 1;
+                        glyphs: 1 10, 360 8, 280 8, 409 6, 287 8, 244 8;
                         offset: 2 17;
                       }
                       transform {
@@ -1308,13 +1277,12 @@ transform {
                     border {
                       colors: rgb(213,208,204);
                       outline: -10 -5 122 34 / 5;
-                      widths: 1;
                     }
                     container {
                       text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 126 11264 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1;
+                        glyphs: 126 11, 430 5, 430 5, 370 8;
                         offset: 2 17;
                       }
                       transform {
@@ -1347,13 +1315,12 @@ transform {
                     border {
                       colors: rgb(213,208,204);
                       outline: -10 -5 122 34 / 5;
-                      widths: 1;
                     }
                     container {
                       text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 173 9216 0 0 1, 244 8192 0 0 1, 360 8192 0 0 1, 417 7168 0 0 1, 862 3072 0 0 1, 165 9216 0 0 1, 287 8192 0 0 1, 312 8192 0 0 1, 438 8192 0 0 1, 349 4096 0 0 1, 244 8192 0 0 1, 409 6144 0 0 1;
+                        glyphs: 173 9, 244 8, 360 8, 417 7, 862 3, 165 9, 287 8, 312 8, 438 8, 349 4, 244 8, 409 6;
                         offset: 0 17;
                       }
                       transform {
@@ -1361,7 +1328,7 @@ transform {
                           child: text {
                             color: rgb(146,149,149);
                             font: "Cantarell Bold 11";
-                            glyphs: 678 7168 0 0 1, 679 8192 0 0 1;
+                            glyphs: 678 7, 679 8;
                             offset: 0 17;
                           }
                           transform: translate(1, 0);
@@ -1387,7 +1354,6 @@ transform {
                     border {
                       colors: rgb(213,208,204);
                       outline: -5 -5 122 34 / 5;
-                      widths: 1;
                     }
                     container {
                       color {
@@ -1398,7 +1364,6 @@ transform {
                         child: border {
                           colors: rgba(0,0,0,0.3);
                           outline: -1 -1 112 24;
-                          widths: 1;
                         }
                         transform: translate(1, 1);
                       }
@@ -1421,14 +1386,13 @@ transform {
                     border {
                       colors: rgb(213,208,204);
                       outline: -10 -5 122 34 / 5;
-                      widths: 1;
                     }
                     container {
                       transform {
                         child: text {
                           color: rgb(146,149,149);
                           font: "Cantarell 11";
-                          glyphs: 822 4096 0 0 1, 115 11264 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1, 287 8192 0 0 1, 823 4096 0 0 1;
+                          glyphs: 822 4, 115 11, 370 8, 360 8, 287 8, 823 4;
                           offset: 0 17;
                         }
                         transform: translate(16, 0);
@@ -1455,7 +1419,7 @@ transform {
                   text {
                     color: rgb(53,132,228);
                     font: "Cantarell 11";
-                    glyphs: 349 4096 0 0 1, 324 4096 0 0 1, 360 8192 0 0 1, 345 7168 0 0 1, 862 3072 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                    glyphs: 349 4, 324 4, 360 8, 345 7, 862 3, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
                     offset: 10 17;
                   }
                   color {
@@ -1477,7 +1441,6 @@ transform {
                   border {
                     colors: rgb(213,208,204);
                     outline: -1 -1 50 26 / 13;
-                    widths: 1;
                   }
                   container {
                     rounded-clip {
@@ -1490,7 +1453,6 @@ transform {
                     border {
                       colors: rgb(213,208,204);
                       outline: -1 -1 26 26 / 13;
-                      widths: 1;
                     }
                   }
                 }
@@ -1508,7 +1470,6 @@ transform {
                   border {
                     colors: rgb(213,208,204);
                     outline: -1 -1 50 26 / 13;
-                    widths: 1;
                   }
                   container {
                     rounded-clip {
@@ -1521,7 +1482,6 @@ transform {
                     border {
                       colors: rgb(213,208,204);
                       outline: -1 -1 26 26 / 13;
-                      widths: 1;
                     }
                   }
                 }
@@ -1552,7 +1512,6 @@ transform {
                     border {
                       colors: rgb(213,208,204);
                       outline: -1 -1 502 4 / 2;
-                      widths: 1;
                     }
                     transform {
                       child: container {
@@ -1566,7 +1525,6 @@ transform {
                         border {
                           colors: rgb(53,132,228);
                           outline: -1 -1 252 4 / 2 1.5 1.5 2;
-                          widths: 1;
                         }
                       }
                       transform: translate(0, -1) translate(0, 1);
@@ -1587,7 +1545,6 @@ transform {
                       border {
                         colors: rgb(213,208,204);
                         outline: -1 -1 502 4 / 2;
-                        widths: 1;
                       }
                       transform {
                         child: container {
@@ -1601,7 +1558,6 @@ transform {
                           border {
                             colors: rgb(53,132,228);
                             outline: -1 -1 252 4 / 1.5 2 2 1.5;
-                            widths: 1;
                           }
                         }
                         transform: translate(250, -1) translate(0, 1);
@@ -1617,7 +1573,7 @@ transform {
                       child: text {
                         color: rgba(46,52,54,0.4);
                         font: "Cantarell 9.1669921875";
-                        glyphs: 682 7168 0 0 1, 677 8192 0 0 1, 859 1024 0 0 1, 919 12288 0 0 1;
+                        glyphs: 682 7, 677 8, 859 1, 919 12;
                         offset: 0 13;
                       }
                       transform: translate(237, 0);
@@ -1634,7 +1590,6 @@ transform {
                         border {
                           colors: rgb(213,208,204);
                           outline: -1 -1 502 4 / 2;
-                          widths: 1;
                         }
                         transform {
                           child: container {
@@ -1648,7 +1603,6 @@ transform {
                             border {
                               colors: rgb(53,132,228);
                               outline: -1 -1 102 4 / 1.5;
-                              widths: 1;
                             }
                           }
                           transform: translate(43, -1) translate(0, 1);
@@ -1672,13 +1626,11 @@ transform {
                       border {
                         colors: rgb(213,208,204);
                         outline: -3 -3 502 9 / 3;
-                        widths: 1;
                       }
                       transform {
                         child: border {
                           colors: rgba(146,149,149,0.15);
                           outline: -1 -1 496 3 / 1;
-                          widths: 1;
                         }
                         transform: translate(1, 1);
                       }
@@ -1694,7 +1646,6 @@ transform {
                           border {
                             colors: rgb(53,132,228);
                             outline: -1 -1 297 3 / 1;
-                            widths: 1;
                           }
                         }
                         transform: translate(1, 1);
@@ -1717,7 +1668,6 @@ transform {
                       border {
                         colors: rgb(213,208,204);
                         outline: -3 -3 502 9 / 3;
-                        widths: 1;
                       }
                       transform {
                         child: container {
@@ -1731,7 +1681,6 @@ transform {
                           border {
                             colors: rgb(53,132,228);
                             outline: -1 -1 97 3 / 1;
-                            widths: 1;
                           }
                         }
                         transform: translate(2, 1);
@@ -1748,7 +1697,6 @@ transform {
                           border {
                             colors: rgb(53,132,228);
                             outline: -1 -1 97 3 / 1;
-                            widths: 1;
                           }
                         }
                         transform: translate(99, 0) translate(2, 1);
@@ -1757,7 +1705,6 @@ transform {
                         child: border {
                           colors: rgba(146,149,149,0.15);
                           outline: -1 -1 97 3 / 1;
-                          widths: 1;
                         }
                         transform: translate(198, 0) translate(2, 1);
                       }
@@ -1765,7 +1712,6 @@ transform {
                         child: border {
                           colors: rgba(146,149,149,0.15);
                           outline: -1 -1 97 3 / 1;
-                          widths: 1;
                         }
                         transform: translate(297, 0) translate(2, 1);
                       }
@@ -1773,7 +1719,6 @@ transform {
                         child: border {
                           colors: rgba(146,149,149,0.15);
                           outline: -1 -1 97 3 / 1;
-                          widths: 1;
                         }
                         transform: translate(396, 0) translate(2, 1);
                       }
@@ -1798,7 +1743,6 @@ transform {
                         border {
                           colors: rgb(213,208,204);
                           outline: -1 -1 478 4 / 2;
-                          widths: 1;
                         }
                         container {
                           rounded-clip {
@@ -1811,7 +1755,6 @@ transform {
                           border {
                             colors: rgb(53,132,228);
                             outline: -1 -1 237 4 / 2;
-                            widths: 1;
                           }
                         }
                         transform {
@@ -1826,7 +1769,6 @@ transform {
                             border {
                               colors: rgb(213,208,204);
                               outline: -1 -1 20 20 / 10;
-                              widths: 1;
                             }
                           }
                           transform: translate(234, 0) translate(-8, -8);
@@ -1849,7 +1791,6 @@ transform {
                         border {
                           colors: rgb(213,208,204);
                           outline: -1 -1 478 4 / 2;
-                          widths: 1;
                         }
                         transform {
                           child: container {
@@ -1863,7 +1804,6 @@ transform {
                             border {
                               colors: rgb(213,208,204);
                               outline: -1 -1 20 20 / 10;
-                              widths: 1;
                             }
                           }
                           transform: translate(234, 0) translate(-8, -8);
@@ -1930,7 +1870,6 @@ transform {
                       border {
                         colors: rgb(213,208,204);
                         outline: -1 -1 478 4 / 2;
-                        widths: 1;
                       }
                       transform {
                         child: texture {
@@ -1961,7 +1900,6 @@ transform {
                           border {
                             colors: rgb(213,208,204);
                             outline: -1 -1 4 362 / 2;
-                            widths: 1;
                           }
                           transform {
                             child: container {
@@ -1975,7 +1913,6 @@ transform {
                               border {
                                 colors: rgb(53,132,228);
                                 outline: -1 -1 4 182 / 2 2 1.5 1.5;
-                                widths: 1;
                               }
                             }
                             transform: translate(-1, 0) translate(1, 0);
@@ -1998,7 +1935,6 @@ transform {
                           border {
                             colors: rgb(213,208,204);
                             outline: -1 -1 4 362 / 2;
-                            widths: 1;
                           }
                           transform {
                             child: container {
@@ -2012,7 +1948,6 @@ transform {
                               border {
                                 colors: rgb(53,132,228);
                                 outline: -1 -1 4 182 / 1.5 1.5 2 2;
-                                widths: 1;
                               }
                             }
                             transform: translate(-1, 180) translate(1, 0);
@@ -2030,7 +1965,7 @@ transform {
                           text {
                             color: rgba(146,149,149,0.55);
                             font: "Cantarell 11";
-                            glyphs: 682 8192 0 0 1, 677 9216 0 0 1, 805 4096 0 0 1, 677 9216 0 0 1;
+                            glyphs: 682 8, 677 9, 805 4, 677 9;
                             offset: 26 15;
                           }
                           transform {
@@ -2045,7 +1980,6 @@ transform {
                               border {
                                 colors: rgb(213,208,204);
                                 outline: -1 -1 4 310 / 2;
-                                widths: 1;
                               }
                               container {
                                 rounded-clip {
@@ -2058,7 +1992,6 @@ transform {
                                 border {
                                   colors: rgb(53,132,228);
                                   outline: -1 -1 4 154 / 2;
-                                  widths: 1;
                                 }
                               }
                               transform {
@@ -2073,7 +2006,6 @@ transform {
                                   border {
                                     colors: rgb(213,208,204);
                                     outline: -1 -1 20 20 / 10;
-                                    widths: 1;
                                   }
                                 }
                                 transform: translate(0, 151) translate(-8, -8);
@@ -2089,7 +2021,7 @@ transform {
                           text {
                             color: rgba(146,149,149,0.55);
                             font: "Cantarell 11";
-                            glyphs: 682 8192 0 0 1, 677 9216 0 0 1, 805 4096 0 0 1, 677 9216 0 0 1;
+                            glyphs: 682 8, 677 9, 805 4, 677 9;
                             offset: 26 15;
                           }
                           transform {
@@ -2104,7 +2036,6 @@ transform {
                               border {
                                 colors: rgb(213,208,204);
                                 outline: -1 -1 4 310 / 2;
-                                widths: 1;
                               }
                               transform {
                                 child: container {
@@ -2118,7 +2049,6 @@ transform {
                                   border {
                                     colors: rgb(213,208,204);
                                     outline: -1 -1 20 20 / 10;
-                                    widths: 1;
                                   }
                                 }
                                 transform: translate(0, 151) translate(-8, -8);
@@ -2152,12 +2082,11 @@ transform {
                   border {
                     colors: rgb(213,208,204) rgb(255,255,255) rgb(255,255,255) rgb(213,208,204);
                     outline: -1 -1 114 135;
-                    widths: 1;
                   }
                   text {
                     color: rgb(146,149,149);
                     font: "Cantarell Bold 11";
-                    glyphs: 81 4096 0 0 1, 360 8192 0 0 1, 417 7168 0 0 1, 287 8192 0 0 1, 430 6144 0 0 1;
+                    glyphs: 81 4, 360 8, 417 7, 287 8, 430 6;
                     offset: 0 15;
                   }
                 }
@@ -2168,12 +2097,11 @@ transform {
                   border {
                     colors: rgb(255,255,255) rgb(213,208,204) rgb(213,208,204) rgb(255,255,255);
                     outline: -1 -1 114 135;
-                    widths: 1;
                   }
                   text {
                     color: rgb(146,149,149);
                     font: "Cantarell Bold 11";
-                    glyphs: 126 11264 0 0 1, 438 8192 0 0 1, 430 6144 0 0 1, 417 7168 0 0 1, 287 8192 0 0 1, 430 6144 0 0 1;
+                    glyphs: 126 11, 438 8, 430 6, 417 7, 287 8, 430 6;
                     offset: 0 15;
                   }
                 }
@@ -2185,12 +2113,10 @@ transform {
                     border {
                       colors: rgb(213,208,204) rgb(255,255,255) rgb(255,255,255) rgb(213,208,204);
                       outline: -2 -2 114 135;
-                      widths: 1;
                     }
                     border {
                       colors: rgb(255,255,255) rgb(213,208,204) rgb(213,208,204) rgb(255,255,255);
                       outline: -1 -1 112 133;
-                      widths: 1;
                     }
                     border {
                       colors: rgba(0,0,0,0);
@@ -2201,7 +2127,7 @@ transform {
                   text {
                     color: rgb(146,149,149);
                     font: "Cantarell Bold 11";
-                    glyphs: 69 11264 0 0 1, 409 6144 0 0 1, 370 8192 0 0 1, 370 8192 0 0 1, 466 7168 0 0 1, 287 8192 0 0 1;
+                    glyphs: 69 11, 409 6, 370 8, 370 8, 466 7, 287 8;
                     offset: 0 15;
                   }
                 }
@@ -2213,12 +2139,10 @@ transform {
                     border {
                       colors: rgb(255,255,255) rgb(213,208,204) rgb(213,208,204) rgb(255,255,255);
                       outline: -2 -2 114 135;
-                      widths: 1;
                     }
                     border {
                       colors: rgb(213,208,204) rgb(255,255,255) rgb(255,255,255) rgb(213,208,204);
                       outline: -1 -1 112 133;
-                      widths: 1;
                     }
                     border {
                       colors: rgba(0,0,0,0);
@@ -2229,7 +2153,7 @@ transform {
                   text {
                     color: rgb(146,149,149);
                     font: "Cantarell Bold 11";
-                    glyphs: 165 10240 0 0 1, 324 4096 0 0 1, 280 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1;
+                    glyphs: 165 10, 324 4, 280 8, 312 8, 287 8;
                     offset: 0 15;
                   }
                 }
@@ -2252,7 +2176,6 @@ transform {
                   border {
                     colors: rgb(213,208,204);
                     outline: -1 -1 212 289;
-                    widths: 1;
                   }
                   color {
                     bounds: 204 281 6 6;
@@ -2291,7 +2214,6 @@ transform {
                             border {
                               colors: rgb(213,208,204);
                               outline: 13 28 16 16 / 3;
-                              widths: 1;
                             }
                             color-matrix {
                               child: texture {
@@ -2321,7 +2243,7 @@ transform {
                           text {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
-                            glyphs: 1 10240 0 0 1, 360 8192 0 0 1, 280 8192 0 0 1, 409 6144 0 0 1, 287 8192 0 0 1, 244 8192 0 0 1;
+                            glyphs: 1 10, 360 8, 280 8, 409 6, 287 8, 244 8;
                             offset: 86 42;
                           }
                           color {
@@ -2331,7 +2253,7 @@ transform {
                           text {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
-                            glyphs: 30 10240 0 0 1, 324 4096 0 0 1, 358 13312 0 0 1, 324 4096 0 0 1;
+                            glyphs: 30 10, 324 4, 358 13, 324 4;
                             offset: 157 42;
                           }
                           color {
@@ -2355,7 +2277,6 @@ transform {
                             border {
                               colors: rgb(213,208,204);
                               outline: 13 51 16 16 / 3;
-                              widths: 1;
                             }
                           }
                           color {
@@ -2377,7 +2298,7 @@ transform {
                           text {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
-                            glyphs: 126 11264 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1;
+                            glyphs: 126 11, 430 5, 430 5, 370 8;
                             offset: 86 65;
                           }
                           color {
@@ -2387,7 +2308,7 @@ transform {
                           text {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
-                            glyphs: 273 7168 0 0 1, 319 8192 0 0 1, 244 8192 0 0 1, 370 8192 0 0 1, 430 5120 0 0 1, 324 4096 0 0 1, 273 7168 0 0 1;
+                            glyphs: 273 7, 319 8, 244 8, 370 8, 430 5, 324 4, 273 7;
                             offset: 157 65;
                           }
                           color {
@@ -2411,7 +2332,6 @@ transform {
                             border {
                               colors: rgb(213,208,204);
                               outline: 13 74 16 16 / 3;
-                              widths: 1;
                             }
                             color-matrix {
                               child: texture {
@@ -2441,7 +2361,7 @@ transform {
                           text {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
-                            glyphs: 126 11264 0 0 1, 409 6144 0 0 1, 466 7168 0 0 1, 324 4096 0 0 1, 349 4096 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1;
+                            glyphs: 126 11, 409 6, 466 7, 324 4, 349 4, 349 4, 287 8;
                             offset: 86 88;
                           }
                           color {
@@ -2452,13 +2372,13 @@ transform {
                             text {
                               color: rgb(50,50,50);
                               font: "Cantarell 11";
-                              glyphs: 165 9216 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1, 287 8192 0 0 1, 360 8192 0 0 1;
+                              glyphs: 165 9, 287 8, 280 8, 287 8, 360 8;
                               offset: 157 88;
                             }
                             text {
                               color: rgb(50,50,50);
                               font: "Cantarell 11";
-                              glyphs: 809 10240 0 0 1;
+                              glyphs: 809 10;
                               offset: 198 88;
                             }
                           }
@@ -2486,7 +2406,6 @@ transform {
                             border {
                               colors: rgb(213,208,204);
                               outline: 13 97 16 16 / 8;
-                              widths: 1;
                             }
                             color-matrix {
                               child: texture {
@@ -2516,7 +2435,7 @@ transform {
                           text {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
-                            glyphs: 29 10240 0 0 1, 287 8192 0 0 1, 360 8192 0 0 1, 341 4096 0 0 1, 244 8192 0 0 1, 358 13312 0 0 1, 324 4096 0 0 1, 360 8192 0 0 1;
+                            glyphs: 29 10, 287 8, 360 8, 341 4, 244 8, 358 13, 324 4, 360 8;
                             offset: 86 111;
                           }
                           color {
@@ -2527,13 +2446,13 @@ transform {
                             text {
                               color: rgb(50,50,50);
                               font: "Cantarell 11";
-                              glyphs: 30 10240 0 0 1, 370 8192 0 0 1, 358 13312 0 0 1, 406 8192 0 0 1;
+                              glyphs: 30 10, 370 8, 358 13, 406 8;
                               offset: 157 111;
                             }
                             text {
                               color: rgb(50,50,50);
                               font: "Cantarell 11";
-                              glyphs: 809 10240 0 0 1;
+                              glyphs: 809 10;
                               offset: 196 111;
                             }
                           }
@@ -2556,7 +2475,7 @@ transform {
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 30 9216 0 0 1, 370 8192 0 0 1, 370 8192 0 0 1, 349 4096 0 0 1;
+                                glyphs: 30 9, 370 8, 370 8, 349 4;
                                 offset: 0 17;
                               }
                             }
@@ -2576,7 +2495,7 @@ transform {
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 81 4096 0 0 1, 273 7168 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
+                                glyphs: 81 4, 273 7, 370 8, 360 8;
                                 offset: 0 17;
                               }
                             }
@@ -2596,7 +2515,7 @@ transform {
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 115 11264 0 0 1, 244 8192 0 0 1, 358 13312 0 0 1, 287 8192 0 0 1;
+                                glyphs: 115 11, 244 8, 358 13, 287 8;
                                 offset: 0 17;
                               }
                             }
@@ -2616,7 +2535,7 @@ transform {
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 115 11264 0 0 1, 324 4096 0 0 1, 273 7168 0 0 1, 345 8192 0 0 1;
+                                glyphs: 115 11, 324 4, 273 7, 345 8;
                                 offset: 0 17;
                               }
                             }
@@ -2635,7 +2554,6 @@ transform {
                   border {
                     colors: rgb(213,208,204);
                     outline: -1 -1 212 263;
-                    widths: 1;
                   }
                   container {
                     color {
@@ -2673,7 +2591,6 @@ transform {
                 border {
                   colors: rgb(213,208,204);
                   outline: -1 -1 354 142;
-                  widths: 1;
                 }
                 container {
                   transform {
@@ -2693,7 +2610,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 680 8192 0 0 1;
+                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 680 8;
                               offset: 0 20;
                             }
                             transform: translate(149, 0) translate(16, 3);
@@ -2702,7 +2619,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 679 8192 0 0 1;
+                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 679 8;
                               offset: 0 20;
                             }
                             transform: translate(74, 0) translate(16, 3);
@@ -2710,17 +2627,15 @@ transform {
                           transform {
                             child: container {
                               inset-shadow {
-                                blur: 0;
                                 color: rgb(53,132,228);
                                 dx: 0;
                                 dy: -3;
                                 outline: -12 -3 66 37;
-                                spread: 0;
                               }
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 678 7168 0 0 1;
+                                glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 678 7;
                                 offset: 0 20;
                               }
                             }
@@ -2748,7 +2663,6 @@ transform {
                 border {
                   colors: rgb(213,208,204);
                   outline: -1 -1 354 142;
-                  widths: 1;
                 }
                 container {
                   color {
@@ -2772,7 +2686,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 680 8192 0 0 1;
+                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 680 8;
                               offset: 0 20;
                             }
                             transform: translate(0, 88) translate(12, 7);
@@ -2781,7 +2695,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 679 8192 0 0 1;
+                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 679 8;
                               offset: 0 20;
                             }
                             transform: translate(0, 44) translate(12, 7);
@@ -2789,17 +2703,15 @@ transform {
                           transform {
                             child: container {
                               inset-shadow {
-                                blur: 0;
                                 color: rgb(53,132,228);
                                 dx: 3;
                                 dy: 0;
                                 outline: -12 -3 67 36;
-                                spread: 0;
                               }
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 678 7168 0 0 1;
+                                glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 678 7;
                                 offset: 0 20;
                               }
                             }
@@ -2820,7 +2732,6 @@ transform {
                 border {
                   colors: rgb(213,208,204);
                   outline: -1 -1 353 142;
-                  widths: 1;
                 }
                 container {
                   color {
@@ -2844,7 +2755,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 680 8192 0 0 1;
+                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 680 8;
                               offset: 0 20;
                             }
                             transform: translate(149, 0) translate(16, 4);
@@ -2853,7 +2764,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 679 8192 0 0 1;
+                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 679 8;
                               offset: 0 20;
                             }
                             transform: translate(74, 0) translate(16, 4);
@@ -2861,17 +2772,15 @@ transform {
                           transform {
                             child: container {
                               inset-shadow {
-                                blur: 0;
                                 color: rgb(53,132,228);
                                 dx: 0;
                                 dy: 3;
                                 outline: -12 -4 66 37;
-                                spread: 0;
                               }
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 678 7168 0 0 1;
+                                glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 678 7;
                                 offset: 0 20;
                               }
                             }
@@ -2892,7 +2801,6 @@ transform {
                 border {
                   colors: rgb(213,208,204);
                   outline: -1 -1 353 142;
-                  widths: 1;
                 }
                 container {
                   transform {
@@ -2912,7 +2820,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 680 8192 0 0 1;
+                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 680 8;
                               offset: 0 20;
                             }
                             transform: translate(0, 88) translate(12, 7);
@@ -2921,7 +2829,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 679 8192 0 0 1;
+                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 679 8;
                               offset: 0 20;
                             }
                             transform: translate(0, 44) translate(12, 7);
@@ -2929,17 +2837,15 @@ transform {
                           transform {
                             child: container {
                               inset-shadow {
-                                blur: 0;
                                 color: rgb(53,132,228);
                                 dx: -3;
                                 dy: 0;
                                 outline: -12 -3 67 36;
-                                spread: 0;
                               }
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 678 7168 0 0 1;
+                                glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 678 7;
                                 offset: 0 20;
                               }
                             }

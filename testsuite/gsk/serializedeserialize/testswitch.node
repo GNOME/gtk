@@ -18,48 +18,38 @@ transform {
             border {
               colors: rgb(205,199,194);
               outline: -1 -1 50 26 / 13;
-              widths: 1;
             }
             container {
               container {
                 outset-shadow {
-                  blur: 0;
                   color: rgba(0,0,0,0.1);
                   dx: 0;
-                  dy: 1;
                   outline: -1 -1 26 26 / 13;
-                  spread: 0;
                 }
                 outset-shadow {
                   blur: 2;
                   color: rgba(0,0,0,0.07);
                   dx: 0;
-                  dy: 1;
                   outline: -1 -1 26 26 / 13;
-                  spread: 0;
                 }
                 rounded-clip {
                   child: linear-gradient {
                     bounds: 0 0 24 24;
                     end: 12 24;
                     start: 12 0;
-                    stops: 0.2 rgb(255,255,255),0.9 rgb(246,245,244);
+                    stops: 0.2 rgb(255,255,255), 0.9 rgb(246,245,244);
                   }
                   clip: -1 -1 26 26 / 13;
                 }
                 inset-shadow {
-                  blur: 0;
                   color: rgb(255,255,255);
                   dx: 0;
-                  dy: 1;
                   outline: 0 0 24 24 / 12;
-                  spread: 0;
                 }
               }
               border {
                 colors: rgb(191,184,177);
                 outline: -1 -1 26 26 / 13;
-                widths: 1;
               }
             }
           }
@@ -69,7 +59,7 @@ transform {
           child: text {
             color: rgb(46,52,54);
             font: "Cantarell 11";
-            glyphs: 37 11264 0 0 1, 324 4096 0 0 1, 417 7168 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1;
+            glyphs: 37 11, 324 4, 417 7, 244 8, 272 8, 349 4, 287 8, 280 8;
             offset: 145 18;
           }
           transform: translate(56, 0);
@@ -89,26 +79,20 @@ transform {
               border {
                 colors: rgb(24,95,180);
                 outline: -1 -1 50 26 / 13;
-                widths: 1;
               }
               transform {
                 child: container {
                   container {
                     outset-shadow {
-                      blur: 0;
                       color: rgba(0,0,0,0.1);
                       dx: 0;
-                      dy: 1;
                       outline: -1 -1 26 26 / 13;
-                      spread: 0;
                     }
                     outset-shadow {
                       blur: 2;
                       color: rgba(0,0,0,0.07);
                       dx: 0;
-                      dy: 1;
                       outline: -1 -1 26 26 / 13;
-                      spread: 0;
                     }
                     rounded-clip {
                       child: cross-fade {
@@ -116,7 +100,7 @@ transform {
                           bounds: 0 0 24 24;
                           end: 12 24;
                           start: 12 0;
-                          stops: 0.1 rgb(255,255,255),0.9 rgb(255,255,255);
+                          stops: 0.1 rgb(255,255,255), 0.9 rgb(255,255,255);
                         }
                         progress: 0.756154;
                         start: cross-fade {
@@ -124,7 +108,7 @@ transform {
                             bounds: 0 0 24 24;
                             end: 12 24;
                             start: 12 0;
-                            stops: 0.2 rgb(255,255,255),0.9 rgb(246,245,244);
+                            stops: 0.2 rgb(255,255,255), 0.9 rgb(246,245,244);
                           }
                           progress: 0.788575;
                           start: color {
@@ -136,18 +120,14 @@ transform {
                       clip: -1 -1 26 26 / 13;
                     }
                     inset-shadow {
-                      blur: 0;
                       color: rgb(255,255,255);
                       dx: 0;
-                      dy: 1;
                       outline: 0 0 24 24 / 12;
-                      spread: 0;
                     }
                   }
                   border {
                     colors: rgb(24,95,180);
                     outline: -1 -1 26 26 / 13;
-                    widths: 1;
                   }
                 }
                 transform: translate(24, 0);
@@ -159,7 +139,7 @@ transform {
             child: text {
               color: rgb(46,52,54);
               font: "Cantarell 11";
-              glyphs: 45 9216 0 0 1, 360 8192 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1;
+              glyphs: 45 9, 360 8, 244 8, 272 8, 349 4, 287 8, 280 8;
               offset: 147 18;
             }
             transform: translate(56, 0);
@@ -181,7 +161,6 @@ transform {
               border {
                 colors: rgb(205,199,194);
                 outline: -1 -1 50 26 / 13;
-                widths: 1;
               }
               container {
                 rounded-clip {
@@ -194,7 +173,6 @@ transform {
                 border {
                   colors: rgb(205,199,194);
                   outline: -1 -1 26 26 / 13;
-                  widths: 1;
                 }
               }
             }
@@ -204,7 +182,7 @@ transform {
             child: text {
               color: rgb(46,52,54);
               font: "Cantarell 11";
-              glyphs: 37 11264 0 0 1, 324 4096 0 0 1, 417 7168 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1;
+              glyphs: 37 11, 324 4, 417 7, 244 8, 272 8, 349 4, 287 8, 280 8;
               offset: 145 18;
             }
             transform: translate(56, 0);
@@ -226,7 +204,6 @@ transform {
               border {
                 colors: rgb(205,199,194);
                 outline: -1 -1 50 26 / 13;
-                widths: 1;
               }
               transform {
                 child: container {
@@ -240,7 +217,6 @@ transform {
                   border {
                     colors: rgb(205,199,194);
                     outline: -1 -1 26 26 / 13;
-                    widths: 1;
                   }
                 }
                 transform: translate(24, 0);
@@ -252,7 +228,7 @@ transform {
             child: text {
               color: rgb(46,52,54);
               font: "Cantarell 11";
-              glyphs: 45 9216 0 0 1, 360 8192 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1;
+              glyphs: 45 9, 360 8, 244 8, 272 8, 349 4, 287 8, 280 8;
               offset: 147 18;
             }
             transform: translate(56, 0);
@@ -274,48 +250,38 @@ transform {
               border {
                 colors: rgb(205,199,194);
                 outline: -1 -1 50 26 / 13;
-                widths: 1;
               }
               container {
                 container {
                   outset-shadow {
-                    blur: 0;
                     color: rgba(0,0,0,0.1);
                     dx: 0;
-                    dy: 1;
                     outline: -1 -1 26 26 / 13;
-                    spread: 0;
                   }
                   outset-shadow {
                     blur: 2;
                     color: rgba(0,0,0,0.07);
                     dx: 0;
-                    dy: 1;
                     outline: -1 -1 26 26 / 13;
-                    spread: 0;
                   }
                   rounded-clip {
                     child: linear-gradient {
                       bounds: 0 0 24 24;
                       end: 12 24;
                       start: 12 0;
-                      stops: 0.2 rgb(255,255,255),0.9 rgb(246,245,244);
+                      stops: 0.2 rgb(255,255,255), 0.9 rgb(246,245,244);
                     }
                     clip: -1 -1 26 26 / 13;
                   }
                   inset-shadow {
-                    blur: 0;
                     color: rgb(255,255,255);
                     dx: 0;
-                    dy: 1;
                     outline: 0 0 24 24 / 12;
-                    spread: 0;
                   }
                 }
                 border {
                   colors: rgb(191,184,177);
                   outline: -1 -1 26 26 / 13;
-                  widths: 1;
                 }
               }
             }
@@ -325,7 +291,7 @@ transform {
             child: text {
               color: rgb(46,52,54);
               font: "Cantarell 11";
-              glyphs: 37 11264 0 0 1, 324 4096 0 0 1, 417 7168 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1;
+              glyphs: 37 11, 324 4, 417 7, 244 8, 272 8, 349 4, 287 8, 280 8;
               offset: 123 18;
             }
             transform: translate(78, 0);
@@ -335,40 +301,31 @@ transform {
               child: container {
                 container {
                   outset-shadow {
-                    blur: 0;
                     color: rgba(0,0,0,0.1);
                     dx: 0;
-                    dy: 1;
                     outline: -1 -1 16 16 / 3;
-                    spread: 0;
                   }
                   outset-shadow {
                     blur: 2;
                     color: rgba(0,0,0,0.07);
                     dx: 0;
-                    dy: 1;
                     outline: -1 -1 16 16 / 3;
-                    spread: 0;
                   }
                   linear-gradient {
                     bounds: 0 0 14 14;
                     end: 7 14;
                     start: 7 0;
-                    stops: 0.2 rgb(255,255,255),0.9 rgb(246,245,244);
+                    stops: 0.2 rgb(255,255,255), 0.9 rgb(246,245,244);
                   }
                   inset-shadow {
-                    blur: 0;
                     color: rgb(255,255,255);
                     dx: 0;
-                    dy: 1;
                     outline: 0 0 14 14 / 2;
-                    spread: 0;
                   }
                 }
                 border {
                   colors: rgb(191,184,177);
                   outline: -1 -1 16 16 / 3;
-                  widths: 1;
                 }
               }
               transform: translate(1, 6);
