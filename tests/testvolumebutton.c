@@ -111,7 +111,7 @@ main (int    argc,
                     button2);
 
   gtk_widget_show (window);
-  gtk_button_clicked (GTK_BUTTON (button));
+  g_signal_emit_by_name (button, "clicked");
   g_timeout_add (4000, (GSourceFunc) show_error, window);
 
   gtk_main ();

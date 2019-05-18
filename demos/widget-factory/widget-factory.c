@@ -158,7 +158,7 @@ activate_open (GSimpleAction *action,
     return;
 
   button = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "open_menubutton"));
-  gtk_button_clicked (GTK_BUTTON (button));
+  g_signal_emit_by_name (button, "clicked");
 }
 
 static void
@@ -173,7 +173,7 @@ activate_record (GSimpleAction *action,
     return;
 
   button = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "record_button"));
-  gtk_button_clicked (GTK_BUTTON (button));
+  g_signal_emit_by_name (button, "clicked");
 }
 
 static void
@@ -188,7 +188,7 @@ activate_lock (GSimpleAction *action,
     return;
 
   button = GTK_WIDGET (g_object_get_data (G_OBJECT (window), "lockbutton"));
-  gtk_button_clicked (GTK_BUTTON (button));
+  g_signal_emit_by_name (button, "clicked");
 }
 
 static void
