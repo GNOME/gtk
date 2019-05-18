@@ -2260,7 +2260,11 @@ gtk_text_get_pixel_ranges (GtkText  *self,
       int end_index = g_utf8_offset_to_pointer (text, priv->current_pos) - text;
       int real_n_ranges, i;
 
-      pango_layout_line_get_x_ranges (line, start_index, end_index, ranges, &real_n_ranges);
+      pango_layout_line_get_x_ranges (line,
+                                      MIN (start_index, end_index),
+                                      MAX (start_index, end_index),
+                                      ranges,
+                                      &real_n_ranges);
 
       if (ranges)
         {
