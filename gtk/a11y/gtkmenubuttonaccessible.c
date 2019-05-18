@@ -22,7 +22,7 @@
 #include "gtkmenubuttonaccessible.h"
 
 
-G_DEFINE_TYPE (GtkMenuButtonAccessible, gtk_menu_button_accessible, GTK_TYPE_TOGGLE_BUTTON_ACCESSIBLE)
+G_DEFINE_TYPE (GtkMenuButtonAccessible, gtk_menu_button_accessible, GTK_TYPE_WIDGET_ACCESSIBLE)
 
 static void
 gtk_menu_button_accessible_initialize (AtkObject *accessible,
