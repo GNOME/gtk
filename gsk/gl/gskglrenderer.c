@@ -430,9 +430,12 @@ rounded_rect_to_floats (GskGLRenderer        *self,
 static inline void
 render_fallback_node (GskGLRenderer       *self,
                       GskRenderNode       *node,
-                      RenderOpBuilder     *builder,
-                      const GskQuadVertex *vertex_data)
+                      RenderOpBuilder     *builder)
 {
+  const float min_x = builder->dx + node->bounds.origin.x;
+  const float min_y = builder->dy + node->bounds.origin.y;
+  const float max_x = min_x + node->bounds.size.width;
+  const float max_y = min_y + node->bounds.size.height;
   const float scale = ops_get_scale (builder);
   const int surface_width = ceilf (node->bounds.size.width) * scale;
   const int surface_height = ceilf (node->bounds.size.height) * scale;
@@ -440,6 +443,16 @@ render_fallback_node (GskGLRenderer       *self,
   cairo_t *cr;
   int cached_id;
   int texture_id;
+  const GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
+    { { min_x, min_y }, { 0, 1 }, },
+    { { min_x, max_y }, { 0, 0 }, },
+    { { max_x, min_y }, { 1, 1 }, },
+
+    { { max_x, max_y }, { 1, 0 }, },
+    { { min_x, max_y }, { 0, 0 }, },
+    { { max_x, min_y }, { 1, 1 }, },
+  };
+
 
   if (surface_width <= 0 ||
       surface_height <= 0)
@@ -451,7 +464,7 @@ render_fallback_node (GskGLRenderer       *self,
     {
       ops_set_program (builder, &self->blit_program);
       ops_set_texture (builder, cached_id);
-      ops_draw (builder, vertex_data);
+      ops_draw (builder, offscreen_vertex_data);
       return;
     }
 
@@ -461,8 +474,10 @@ render_fallback_node (GskGLRenderer       *self,
   cairo_surface_set_device_scale (surface, scale, scale);
   cr = cairo_create (surface);
 
+  /* We draw upside down here, so it matches what GL does. */
   cairo_save (cr);
-  cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
+  cairo_scale (cr, 1, -1);
+  cairo_translate (cr, -node->bounds.origin.x, ceilf (-node->bounds.origin.y - node->bounds.size.height));
   gsk_render_node_draw (node, cr);
   cairo_restore (cr);
 
@@ -496,7 +511,7 @@ render_fallback_node (GskGLRenderer       *self,
 
   ops_set_program (builder, &self->blit_program);
   ops_set_texture (builder, texture_id);
-  ops_draw (builder, vertex_data);
+  ops_draw (builder, offscreen_vertex_data);
 }
 
 static inline void
@@ -1330,7 +1345,7 @@ render_inset_shadow_node (GskGLRenderer       *self,
   /* TODO: Implement blurred inset shadows as well */
   if (gsk_inset_shadow_node_get_blur_radius (node) > 0)
     {
-      render_fallback_node (self, node, builder, vertex_data);
+      render_fallback_node (self, node, builder);
       return;
     }
 
@@ -1775,7 +1790,7 @@ render_shadow_node (GskGLRenderer       *self,
 
       if (shadow->radius > 0)
         {
-          render_fallback_node (self, node, builder, vertex_data);
+          render_fallback_node (self, node, builder);
           return;
         }
     }
@@ -2670,7 +2685,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     case GSK_CAIRO_NODE:
     default:
       {
-        render_fallback_node (self, node, builder, vertex_data);
+        render_fallback_node (self, node, builder);
       }
     }
 }
