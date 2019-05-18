@@ -1225,7 +1225,6 @@ render_color_matrix_node (GskGLRenderer       *self,
   int texture_id;
   gboolean is_offscreen;
 
-  /* Pass min_x/max_x/min_y/max_y without builder->dx/dy! */
   add_offscreen_ops (self, builder,
                      &node->bounds,
                      child,
