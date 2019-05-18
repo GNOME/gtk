@@ -236,7 +236,7 @@ gtk_button_accessible_do_action (AtkAction *action,
   if (!gtk_widget_is_sensitive (widget) || !gtk_widget_get_visible (widget))
     return FALSE;
 
-  gtk_button_clicked (GTK_BUTTON (widget));
+  g_signal_emit_by_name (widget, "clicked");
   return TRUE;
 }
 

@@ -1669,7 +1669,7 @@ toggle_edit (void)
 static void
 stop_edit (void)
 {
-  gtk_button_clicked (GTK_BUTTON (edit_toggle));
+  g_signal_emit_by_name (edit_toggle, "clicked");
 }
 
 static gboolean

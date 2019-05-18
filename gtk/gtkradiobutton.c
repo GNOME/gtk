@@ -760,7 +760,7 @@ gtk_radio_button_clicked (GtkButton *button)
 
 	  if (gtk_toggle_button_get_active (tmp_button) && (tmp_button != toggle_button))
 	    {
-	      gtk_button_clicked (GTK_BUTTON (tmp_button));
+              g_signal_emit_by_name (tmp_button, "clicked");
 	      break;
 	    }
 	}

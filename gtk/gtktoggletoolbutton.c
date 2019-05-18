@@ -340,7 +340,7 @@ gtk_toggle_tool_button_set_active (GtkToggleToolButton *button,
 
   if (button->priv->active != is_active)
     {
-      gtk_button_clicked (GTK_BUTTON (_gtk_tool_button_get_button (GTK_TOOL_BUTTON (button))));
+      g_signal_emit_by_name (_gtk_tool_button_get_button (GTK_TOOL_BUTTON (button)), "clicked");
       g_object_notify (G_OBJECT (button), "active");
     }
 }

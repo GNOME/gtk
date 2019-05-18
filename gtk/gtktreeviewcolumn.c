@@ -1087,7 +1087,7 @@ gtk_tree_view_column_mnemonic_activate (GtkWidget *widget,
   _gtk_tree_view_set_focus_column (GTK_TREE_VIEW (priv->tree_view), column);
 
   if (priv->clickable)
-    gtk_button_clicked (GTK_BUTTON (priv->button));
+     g_signal_emit_by_name (priv->button, "clicked");
   else if (gtk_widget_get_can_focus (priv->button))
     gtk_widget_grab_focus (priv->button);
   else
@@ -2244,9 +2244,8 @@ gtk_tree_view_column_clicked (GtkTreeViewColumn *tree_column)
 
   priv = tree_column->priv;
 
-  if (priv->visible &&
-      priv->clickable)
-    gtk_button_clicked (GTK_BUTTON (priv->button));
+  if (priv->visible && priv->clickable)
+    g_signal_emit_by_name (priv->button, "clicked");
 }
 
 /**
