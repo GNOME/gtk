@@ -94,9 +94,3 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    <AtkImage>
-    image size: 16 x 16
-    image description: (null)
-    <AtkAction>
-    action 0 name: click
-    action 0 description: Clicks the button
