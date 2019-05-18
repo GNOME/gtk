@@ -2885,8 +2885,8 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="valign">center</property>
                                             <property name="popover">notebook_info_popover2</property>
                                             <property name="icon-name">emblem-important-symbolic</property>
-                                            <property name="relief">none</property>
                                             <style>
+                                              <class name="flat"/>
                                               <class name="circular"/>
                                             </style>
                                           </object>
@@ -3029,8 +3029,8 @@ microphone-sensitivity-medium-symbolic</property>
                                 <property name="valign">center</property>
                                 <property name="popover">notebook_info_popover</property>
                                 <property name="icon-name">emblem-important-symbolic</property>
-                                <property name="relief">none</property>
                                 <style>
+                                  <class name="flat"/>
                                   <class name="circular"/>
                                 </style>
                               </object>
@@ -3515,8 +3515,8 @@ bad things might happen.</property>
             <property name="valign">center</property>
             <property name="popover">notebook_info_popover3</property>
             <property name="icon-name">emblem-important-symbolic</property>
-            <property name="relief">none</property>
             <style>
+              <class name="flat"/>
               <class name="circular"/>
             </style>
           </object>
