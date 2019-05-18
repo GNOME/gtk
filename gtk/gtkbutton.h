@@ -88,8 +88,6 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new_from_icon_name (const gchar    *icon_name);
 GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new_with_mnemonic (const gchar    *label);
-GDK_AVAILABLE_IN_ALL
-void           gtk_button_clicked           (GtkButton      *button);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_relief         (GtkButton      *button,
