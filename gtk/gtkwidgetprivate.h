@@ -314,11 +314,6 @@ gboolean          gtk_widget_query_tooltip                 (GtkWidget  *widget,
                                                             gboolean    keyboard_mode,
                                                             GtkTooltip *tooltip);
 
-void              gtk_widget_render                        (GtkWidget            *widget,
-                                                            GdkSurface            *surface,
-                                                            const cairo_region_t *region);
-
-
 void              gtk_widget_snapshot                      (GtkWidget            *widget,
                                                             GtkSnapshot          *snapshot);
 void              gtk_widget_adjust_size_request           (GtkWidget      *widget,
