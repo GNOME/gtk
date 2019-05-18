@@ -560,6 +560,11 @@ test_type (gconstpointer data)
           g_str_equal (pspec->name, "position"))
         continue;
 
+      /* Can't realize a popover without a parent */
+      if (g_type_is_a (type, GTK_TYPE_POPOVER) &&
+          g_str_equal (pspec->name, "visible"))
+        continue;
+
       if (pspec->owner_type == GTK_TYPE_POPOVER_MENU &&
           g_str_equal (pspec->name, "visible-submenu"))
         continue;
