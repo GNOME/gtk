@@ -308,7 +308,7 @@ gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
 
   if (priv->active != is_active)
     {
-      gtk_button_clicked (GTK_BUTTON (toggle_button));
+      g_signal_emit_by_name (toggle_button, "clicked");
       g_object_notify_by_pspec (G_OBJECT (toggle_button), toggle_button_props[PROP_ACTIVE]);
     }
 }

@@ -739,7 +739,7 @@ gtk_button_do_release (GtkButton *button,
 	return;
 
       if (emit_clicked)
-        gtk_button_clicked (button);
+        g_signal_emit (button, button_signals[CLICKED], 0);
     }
 }
 
@@ -786,7 +786,7 @@ gtk_button_finish_activate (GtkButton *button,
   priv->button_down = FALSE;
 
   if (do_it)
-    gtk_button_clicked (button);
+    g_signal_emit (button, button_signals[CLICKED], 0);
 }
 
 /**

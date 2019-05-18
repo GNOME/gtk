@@ -727,6 +727,12 @@ clone_image_menu_size (GtkImage *image)
   return NULL;
 }
 
+static void
+click_button (GtkButton *button)
+{
+  g_signal_emit_by_name (button, "clicked");
+}
+
 static gboolean
 gtk_tool_button_create_menu_proxy (GtkToolItem *item)
 {
@@ -777,7 +783,7 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
 
   g_signal_connect_closure_by_id (menu_item,
 				  g_signal_lookup ("activate", G_OBJECT_TYPE (menu_item)), 0,
-				  g_cclosure_new_object_swap (G_CALLBACK (gtk_button_clicked),
+				  g_cclosure_new_object_swap (G_CALLBACK (click_button),
 							      G_OBJECT (GTK_TOOL_BUTTON (button)->priv->button)),
 				  FALSE);
 
