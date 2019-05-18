@@ -1818,7 +1818,6 @@ render_shadow_node (GskGLRenderer       *self,
                          shadow_child, &texture_id, &is_offscreen,
                          RESET_CLIP | RESET_OPACITY);
 
-      ops_offset (builder, dx, dy);
       ops_set_program (builder, &self->coloring_program);
       ops_set_color (builder, &shadow->color);
       ops_set_texture (builder, texture_id);
@@ -1850,8 +1849,6 @@ render_shadow_node (GskGLRenderer       *self,
 
           ops_draw (builder, onscreen_vertex_data);
         }
-
-      ops_offset (builder, - dx, - dy);
     }
 
   /* Now draw the child normally */
