@@ -1303,7 +1303,7 @@ gtk_menu_button_get_label (GtkMenuButton *menu_button)
   if (GTK_IS_BOX (child))
     {
       child = gtk_widget_get_first_child (child);
-      return gtk_label_get_label (GTK_LABEL (label));
+      return gtk_label_get_label (GTK_LABEL (child));
     }
 
   return NULL;
