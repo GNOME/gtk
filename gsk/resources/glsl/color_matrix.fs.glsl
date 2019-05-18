@@ -11,7 +11,7 @@ void main() {
   if (color.a != 0.0)
     color.rgb /= color.a;
 
-  color = u_color_matrix * diffuse + u_color_offset;
+  color = u_color_matrix * color + u_color_offset;
   color = clamp(color, 0.0f, 1.0f);
 
   color.rgb *= color.a;
