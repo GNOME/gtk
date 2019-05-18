@@ -22,13 +22,15 @@
 #include "gtkmenubuttonaccessible.h"
 
 
-G_DEFINE_TYPE (GtkMenuButtonAccessible, gtk_menu_button_accessible, GTK_TYPE_TOGGLE_BUTTON_ACCESSIBLE)
+G_DEFINE_TYPE (GtkMenuButtonAccessible, gtk_menu_button_accessible, GTK_TYPE_WIDGET_ACCESSIBLE)
 
 static void
 gtk_menu_button_accessible_initialize (AtkObject *accessible,
                                         gpointer   data)
 {
   ATK_OBJECT_CLASS (gtk_menu_button_accessible_parent_class)->initialize (accessible, data);
+
+  accessible->role = ATK_ROLE_TOGGLE_BUTTON;
 }
 
 static gint
