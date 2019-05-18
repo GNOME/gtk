@@ -237,7 +237,7 @@ update_info (gpointer data)
 
   gtype = G_TYPE_FROM_INSTANCE (sl->priv->object);
 
-  gtk_button_set_label (GTK_BUTTON (sl->priv->type), g_type_name (gtype));
+  gtk_menu_button_set_label (GTK_MENU_BUTTON (sl->priv->type), g_type_name (gtype));
   gtk_inspector_type_popover_set_gtype (GTK_INSPECTOR_TYPE_POPOVER (sl->priv->type_popover),
                                         gtype);
 

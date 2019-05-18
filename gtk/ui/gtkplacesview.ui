@@ -295,14 +295,10 @@
                 <property name="receives-default">1</property>
                 <property name="direction">up</property>
                 <property name="popover">recent_servers_popover</property>
+                <property name="icon-name">pan-down-symbolic</property>
                 <style>
                   <class name="server-list-button"/>
                 </style>
-                <child>
-                  <object class="GtkImage">
-                    <property name="icon-name">pan-down-symbolic</property>
-                  </object>
-                </child>
               </object>
             </child>
             <style>

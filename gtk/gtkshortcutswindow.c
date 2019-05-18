@@ -104,7 +104,6 @@ typedef struct
   GtkStack       *stack;
   GtkStack       *title_stack;
   GtkMenuButton  *menu_button;
-  GtkLabel       *menu_label;
   GtkSearchBar   *search_bar;
   GtkSearchEntry *search_entry;
   GtkHeaderBar   *header_bar;
@@ -177,7 +176,7 @@ update_title_stack (GtkShortcutsWindow *self)
 
           gtk_stack_set_visible_child_name (priv->title_stack, "sections");
           g_object_get (visible_child, "title", &title, NULL);
-          gtk_label_set_label (priv->menu_label, title);
+          gtk_menu_button_set_label (priv->menu_button, title);
           g_free (title);
         }
       else
@@ -858,9 +857,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
 {
   GtkShortcutsWindowPrivate *priv = gtk_shortcuts_window_get_instance_private (self);
   GtkWidget *search_button;
-  GtkBox *menu_box;
   GtkBox *box;
-  GtkWidget *arrow;
   GtkWidget *scroller;
   GtkWidget *label;
   GtkWidget *empty;
@@ -922,23 +919,9 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
 
   priv->menu_button = g_object_new (GTK_TYPE_MENU_BUTTON,
                                     "focus-on-click", FALSE,
-                                    "relief", GTK_RELIEF_NONE,
                                     NULL);
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (priv->menu_button)), "flat");
   gtk_stack_add_named (priv->title_stack, GTK_WIDGET (priv->menu_button), "sections");
-
-  menu_box = g_object_new (GTK_TYPE_BOX,
-                           "orientation", GTK_ORIENTATION_HORIZONTAL,
-                           "spacing", 6,
-                           "visible", TRUE,
-                           NULL);
-  gtk_container_add (GTK_CONTAINER (priv->menu_button), GTK_WIDGET (menu_box));
-
-  priv->menu_label = g_object_new (GTK_TYPE_LABEL,
-                                   NULL);
-  gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (priv->menu_label));
-
-  arrow = gtk_image_new_from_icon_name ("pan-down-symbolic");
-  gtk_container_add (GTK_CONTAINER (menu_box), GTK_WIDGET (arrow));
 
   priv->popover = g_object_new (GTK_TYPE_POPOVER,
                                 "relative-to", priv->menu_button,
