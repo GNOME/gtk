@@ -2349,20 +2349,6 @@ test_level_bar (void)
   g_object_unref (builder);
 }
 
-static GObject *external_object = NULL, *external_object_swapped = NULL;
-
-_BUILDER_TEST_EXPORT void
-on_button_clicked (GtkButton *button, GObject *data)
-{
-  external_object = data;
-}
-
-_BUILDER_TEST_EXPORT void
-on_button_clicked_swapped (GObject *data, GtkButton *button)
-{
-  external_object_swapped = data;
-}
-
 static void
 test_expose_object (void)
 {
@@ -2374,33 +2360,24 @@ test_expose_object (void)
     "<interface>"
     "  <object class=\"GtkMenuButton\" id=\"button\">"
     "    <property name=\"popover\">external_menu</property>"
-    "    <signal name=\"clicked\" handler=\"on_button_clicked\" object=\"builder\" swapped=\"no\"/>"
-    "    <signal name=\"clicked\" handler=\"on_button_clicked_swapped\" object=\"builder\"/>"
     "  </object>"
     "</interface>";
 
   /*menu = gtk_menu_new ();*/
   menu = gtk_popover_new (NULL);
   builder = gtk_builder_new ();
-  gtk_builder_expose_object (builder, "external_menu", G_OBJECT (menu));
   gtk_builder_expose_object (builder, "builder", G_OBJECT (builder));
+  gtk_builder_expose_object (builder, "external_menu", G_OBJECT (menu));
   gtk_builder_add_from_string (builder, buffer, -1, &error);
-  g_assert (error == NULL);
+  g_assert_no_error (error);
 
   obj = gtk_builder_get_object (builder, "button");
-  g_assert (GTK_IS_BUTTON (obj));
+  g_assert (GTK_IS_MENU_BUTTON (obj));
 
   g_assert (gtk_menu_button_get_popover (GTK_MENU_BUTTON (obj)) == GTK_POPOVER (menu));
 
-  /* Connect signals and fake clicked event */
-  gtk_builder_connect_signals (builder, NULL);
-  gtk_button_clicked (GTK_BUTTON (obj));
-
-  g_assert (external_object == G_OBJECT (builder));
-  g_assert (external_object_swapped == G_OBJECT (builder));
-
-  g_object_unref (builder);
   g_object_unref (menu);
+  g_object_unref (builder);
 }
 
 static void
