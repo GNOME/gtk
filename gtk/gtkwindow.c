@@ -5836,11 +5836,12 @@ gtk_window_unrealize (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (surface, surface_size_changed, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_event, widget);
+
+  GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
+
   gdk_surface_set_widget (surface, NULL);
   gdk_surface_destroy (surface);
   g_clear_object (&priv->surface);
-
-  GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
 
   priv->hardcoded_surface = NULL;
 }
