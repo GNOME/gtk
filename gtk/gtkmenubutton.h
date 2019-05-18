@@ -44,12 +44,12 @@ typedef struct _GtkMenuButtonPrivate GtkMenuButtonPrivate;
 
 struct _GtkMenuButton
 {
-  GtkToggleButton parent_instance;
+  GtkWidget parent_instance;
 };
 
 struct _GtkMenuButtonClass
 {
-  GtkToggleButtonClass parent_class;
+  GtkWidgetClass parent_class;
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -99,6 +99,18 @@ void         gtk_menu_button_set_use_popover (GtkMenuButton *menu_button,
 
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_menu_button_get_use_popover (GtkMenuButton *menu_button);
+
+GDK_AVAILABLE_IN_ALL
+void         gtk_menu_button_set_icon_name (GtkMenuButton *menu_button,
+                                            const char    *icon_name);
+GDK_AVAILABLE_IN_ALL
+const char * gtk_menu_button_get_icon_name (GtkMenuButton *menu_button);
+
+GDK_AVAILABLE_IN_ALL
+void         gtk_menu_button_set_label (GtkMenuButton *menu_button,
+                                        const char    *label);
+GDK_AVAILABLE_IN_ALL
+const char * gtk_menu_button_get_label (GtkMenuButton *menu_button);
 
 
 G_END_DECLS
