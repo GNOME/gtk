@@ -647,20 +647,6 @@ gtk_button_new_with_mnemonic (const gchar *label)
 }
 
 /**
- * gtk_button_clicked:
- * @button: The #GtkButton you want to send the signal to.
- *
- * Emits a #GtkButton::clicked signal to the given #GtkButton.
- */
-void
-gtk_button_clicked (GtkButton *button)
-{
-  g_return_if_fail (GTK_IS_BUTTON (button));
-
-  g_signal_emit (button, button_signals[CLICKED], 0);
-}
-
-/**
  * gtk_button_set_relief:
  * @button: The #GtkButton you want to set relief styles of
  * @relief: The GtkReliefStyle as described above
