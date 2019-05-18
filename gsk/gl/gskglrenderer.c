@@ -1807,6 +1807,9 @@ render_shadow_node (GskGLRenderer       *self,
           continue;
         }
 
+      if (gdk_rgba_is_clear (&shadow->color))
+        continue;
+
       min_x = builder->dx + shadow_child->bounds.origin.x;
       min_y = builder->dy + shadow_child->bounds.origin.y;
       max_x = min_x + shadow_child->bounds.size.width;
