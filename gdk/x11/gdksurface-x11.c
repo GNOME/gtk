@@ -745,6 +745,9 @@ static void
 on_frame_clock_before_paint (GdkFrameClock *clock,
                              GdkSurface     *surface)
 {
+  if (surface->update_freeze_count > 0)
+    return;
+
   gdk_x11_surface_predict_presentation_time (surface);
   gdk_x11_surface_begin_frame (surface, FALSE);
 }
@@ -753,8 +756,10 @@ static void
 on_frame_clock_after_paint (GdkFrameClock *clock,
                             GdkSurface     *surface)
 {
-  gdk_x11_surface_end_frame (surface);
+  if (surface->update_freeze_count > 0)
+    return;
 
+  gdk_x11_surface_end_frame (surface);
 }
 
 static void
@@ -909,7 +914,7 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
 
   connect_frame_clock (surface);
 
-  gdk_surface_freeze_toplevel_updates (surface);
+  gdk_surface_freeze_updates (surface);
 
   if (parent)
     {

@@ -878,7 +878,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
             }
 
 	  if (toplevel)
-            gdk_surface_freeze_toplevel_updates (surface);
+            gdk_surface_freeze_updates (surface);
 
           _gdk_x11_surface_grab_check_unmap (surface, xevent->xany.serial);
         }
@@ -901,7 +901,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 					 0);
 
 	  if (toplevel)
-	    gdk_surface_thaw_toplevel_updates (surface);
+	    gdk_surface_thaw_updates (surface);
 	}
 
       return_val = FALSE;
