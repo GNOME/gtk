@@ -27,7 +27,7 @@
 
 #include "gdk/win32/gdkprivate-win32.h"
 #include "gdk/win32/gdkwin32cursor.h"
-#include "gdk/gdksurfaceimpl.h"
+#include "gdk/gdksurfaceprivate.h"
 #include "gdk/gdkcursor.h"
 
 #include <windows.h>
