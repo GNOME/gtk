@@ -49,6 +49,9 @@ struct _GtkRootInterface
 };
 
 GDK_AVAILABLE_IN_ALL
+GdkDisplay * gtk_root_get_display (GtkRoot *root);
+
+GDK_AVAILABLE_IN_ALL
 void        gtk_root_set_focus (GtkRoot   *self,
                                 GtkWidget *focus);
 GDK_AVAILABLE_IN_ALL
