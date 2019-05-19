@@ -100,6 +100,17 @@
 #define DEFAULT_TIMEOUT_REPEAT   50
 #define DEFAULT_TIMEOUT_EXPAND  500
 
+struct _GtkSettingsClass
+{
+  GObjectClass parent_class;
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
+};
+
 typedef struct _GtkSettingsPropertyValue GtkSettingsPropertyValue;
 typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
 
