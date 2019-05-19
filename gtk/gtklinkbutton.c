@@ -73,6 +73,24 @@
 
 #include <string.h>
 
+typedef struct _GtkLinkButtonClass GtkLinkButtonClass;
+typedef struct _GtkLinkButtonPrivate GtkLinkButtonPrivate;
+
+struct _GtkLinkButton
+{
+  /*< private >*/
+  GtkButton parent_instance;
+};
+
+struct _GtkLinkButtonClass
+{
+  /*< private >*/
+  GtkButtonClass parent_class;
+
+  /*< public >*/
+  gboolean (* activate_link) (GtkLinkButton *button);
+};
+
 struct _GtkLinkButtonPrivate
 {
   gchar *uri;
