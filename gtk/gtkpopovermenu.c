@@ -106,9 +106,16 @@
  * popover's contents node.
  */
 
+typedef struct _GtkPopoverMenuClass GtkPopoverMenuClass;
+
 struct _GtkPopoverMenu
 {
   GtkPopover parent_instance;
+};
+
+struct _GtkPopoverMenuClass
+{
+  GtkPopoverClass parent_class;
 };
 
 enum {

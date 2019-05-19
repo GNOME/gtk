@@ -28,23 +28,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_POPOVER_MENU           (gtk_popover_menu_get_type ())
 #define GTK_POPOVER_MENU(o)             (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_POPOVER_MENU, GtkPopoverMenu))
-#define GTK_POPOVER_MENU_CLASS(c)       (G_TYPE_CHECK_CLASS_CAST ((c), GTK_TYPE_POPOVER_MENU, GtkPopoverMenuClass))
 #define GTK_IS_POPOVER_MENU(o)          (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_POPOVER_MENU))
-#define GTK_IS_POPOVER_MENU_CLASS(o)    (G_TYPE_CHECK_CLASS_TYPE ((o), GTK_TYPE_POPOVER_MENU))
-#define GTK_POPOVER_MENU_GET_CLASS(o)   (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_POPOVER_MENU, GtkPopoverMenuClass))
 
 typedef struct _GtkPopoverMenu GtkPopoverMenu;
-typedef struct _GtkPopoverMenuClass GtkPopoverMenuClass;
-
-struct _GtkPopoverMenuClass
-{
-  GtkPopoverClass parent_class;
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  gpointer reserved[10];
-};
 
 GDK_AVAILABLE_IN_ALL
 GType       gtk_popover_menu_get_type (void) G_GNUC_CONST;
