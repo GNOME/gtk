@@ -126,8 +126,6 @@
 
 GdkWin32Screen *GDK_SURFACE_SCREEN(GObject *win);
 
-#define GDK_SURFACE_IS_WIN32(win)        (GDK_IS_SURFACE_IMPL_WIN32 (win->impl))
-
 /* Use this for hWndInsertAfter (2nd argument to SetWindowPos()) if
  * SWP_NOZORDER flag is used. Otherwise it's unobvious why a particular
  * argument is used. Using NULL is misleading, because
@@ -414,10 +412,13 @@ void       _gdk_win32_keymap_set_active_layout   (GdkWin32Keymap *keymap,
 
 GdkKeymap *_gdk_win32_display_get_keymap (GdkDisplay *display);
 
-void       _gdk_win32_display_create_surface_impl   (GdkDisplay    *display,
-                                                     GdkSurface     *window,
-                                                     GdkSurface     *real_parent,
-                                                     GdkSurfaceAttr *attributes);
+GdkSurface *_gdk_win32_display_create_surface  (GdkDisplay    *display,
+                                                GdkSurfaceType surface_type,
+                                                GdkSurface     *parent,
+                                                int             x,
+                                                int             y,
+                                                int             width,
+                                                int             height);
 
 /* stray GdkSurfaceImplWin32 members */
 void _gdk_win32_surface_register_dnd (GdkSurface *window);
