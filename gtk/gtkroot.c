@@ -63,6 +63,14 @@ gtk_root_default_init (GtkRootInterface *iface)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
+/**
+ * gtk_root_get_display:
+ * @self: a #GtkRoot
+ *
+ * Returns the display that this GtkRoot is on.
+ *
+ * Returns: (transfer none): the display of @root
+ */
 GdkDisplay *
 gtk_root_get_display (GtkRoot *self)
 {
