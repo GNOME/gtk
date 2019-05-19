@@ -129,7 +129,7 @@ struct _drop_target_context
    * this surface remains the same.
    * This is not a reference, as drop_target_context must not
    * outlive the surface it's attached to.
-   * drop_target_context is not folded into GdkSurfaceImplWin32
+   * drop_target_context is not folded into GdkWin32Surface
    * only because it's easier to present it to COM as a separate
    * object when it's allocated separately.
    */
@@ -206,12 +206,12 @@ gdk_drop_new (GdkDisplay        *display,
 GdkDrop *
 _gdk_win32_get_drop_for_dest_surface (GdkSurface *dest)
 {
-  GdkSurfaceImplWin32 *impl;
+  GdkWin32Surface *impl;
 
   if (dest == NULL)
     return NULL;
 
-  impl = GDK_SURFACE_IMPL_WIN32 (dest->impl);
+  impl = GDK_WIN32_SURFACE (dest);
 
   if (impl->drop_target != NULL)
     return impl->drop_target->drop;
@@ -465,7 +465,7 @@ _gdk_win32_local_drop_target_dragenter (GdkDrag        *drag,
   GdkWin32Drop *drop_win32;
   GdkDisplay *display;
   GdkDragAction source_actions;
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (dest_surface->impl);
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (dest_surface);
 
   GDK_NOTE (DND, g_print ("_gdk_win32_local_drop_target_dragenter %p @ %d : %d"
                           " for dest window 0x%p"
@@ -685,7 +685,7 @@ void
 _gdk_win32_local_drop_target_dragleave (GdkDrop *drop,
                                         guint32  time_)
 {
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (gdk_drop_get_surface (drop)->impl);
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (gdk_drop_get_surface (drop));
   GDK_NOTE (DND, g_print ("_gdk_win32_local_drop_target_dragleave %p\n", drop));
 
   gdk_drop_emit_leave_event (drop, TRUE, time_);
@@ -1156,7 +1156,7 @@ _gdk_win32_surface_register_dnd (GdkSurface *window)
     }
   else
     {
-      GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+      GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
 
       /* Return if window is already setup for DND. */
       if (impl->drop_target != NULL)
@@ -1188,7 +1188,7 @@ _gdk_win32_surface_register_dnd (GdkSurface *window)
 void
 _gdk_win32_surface_unregister_dnd (GdkSurface *window)
 {
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
 
   if (impl->drop_target)
     idroptarget_release (&impl->drop_target->idt);
@@ -1289,7 +1289,7 @@ gdk_win32_drop_read_async (GdkDrop             *drop,
       return;
     }
 
-  tctx = GDK_SURFACE_IMPL_WIN32 (gdk_drop_get_surface (drop)->impl)->drop_target;
+  tctx = GDK_WIN32_SURFACE (gdk_drop_get_surface (drop))->drop_target;
 
   if (tctx == NULL)
     {
