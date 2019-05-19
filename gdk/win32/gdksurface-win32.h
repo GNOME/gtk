@@ -27,7 +27,7 @@
 
 #include "gdk/win32/gdkprivate-win32.h"
 #include "gdk/win32/gdkwin32cursor.h"
-#include "gdk/gdksurfaceimpl.h"
+#include "gdk/gdksurfaceprivate.h"
 #include "gdk/gdkcursor.h"
 
 #include <windows.h>
@@ -37,15 +37,15 @@ G_BEGIN_DECLS
 /* Window implementation for Win32
  */
 
-typedef struct _GdkSurfaceImplWin32 GdkSurfaceImplWin32;
-typedef struct _GdkSurfaceImplWin32Class GdkSurfaceImplWin32Class;
+typedef struct _GdkWin32Surface GdkWin32Surface;
+typedef struct _GdkWin32SurfaceClass GdkWin32SurfaceClass;
 
-#define GDK_TYPE_SURFACE_IMPL_WIN32              (_gdk_surface_impl_win32_get_type ())
-#define GDK_SURFACE_IMPL_WIN32(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SURFACE_IMPL_WIN32, GdkSurfaceImplWin32))
-#define GDK_SURFACE_IMPL_WIN32_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SURFACE_IMPL_WIN32, GdkSurfaceImplWin32Class))
-#define GDK_IS_SURFACE_IMPL_WIN32(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SURFACE_IMPL_WIN32))
-#define GDK_IS_SURFACE_IMPL_WIN32_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SURFACE_IMPL_WIN32))
-#define GDK_SURFACE_IMPL_WIN32_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SURFACE_IMPL_WIN32, GdkSurfaceImplWin32Class))
+#define GDK_TYPE_WIN32_SURFACE              (_gdk_win32_surface_get_type ())
+#define GDK_WIN32_SURFACE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WIN32_SURFACE, GdkWin32Surface))
+#define GDK_WIN32_SURFACE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WIN32_SURFACE, GdkWin32SurfaceClass))
+#define GDK_IS_WIN32_SURFACE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WIN32_SURFACE))
+#define GDK_IS_WIN32_SURFACE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WIN32_SURFACE))
+#define GDK_WIN32_SURFACE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WIN32_SURFACE, GdkWin32SurfaceClass))
 
 enum _GdkWin32AeroSnapCombo
 {
@@ -219,9 +219,9 @@ typedef struct _GdkW32DragMoveResizeContext GdkW32DragMoveResizeContext;
 /* defined in gdkdrop-win32.c */
 typedef struct _drop_target_context drop_target_context;
 
-struct _GdkSurfaceImplWin32
+struct _GdkWin32Surface
 {
-  GdkSurfaceImpl parent_instance;
+  GdkSurface parent_instance;
 
   GdkSurface *wrapper;
   HANDLE handle;
@@ -355,12 +355,12 @@ struct _GdkSurfaceImplWin32
   gint unscaled_height;
 };
 
-struct _GdkSurfaceImplWin32Class
+struct _GdkWin32SurfaceClass
 {
-  GdkSurfaceImplClass parent_class;
+  GdkSurfaceClass parent_class;
 };
 
-GType _gdk_surface_impl_win32_get_type (void);
+GType _gdk_win32_surface_get_type (void);
 
 void  _gdk_win32_surface_tmp_unset_bg  (GdkSurface *window,
                                         gboolean   recurse);

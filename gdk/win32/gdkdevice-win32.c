@@ -197,7 +197,7 @@ _gdk_device_win32_surface_at_position (GdkDevice       *device,
                                       gboolean         get_toplevel)
 {
   GdkSurface *window = NULL;
-  GdkSurfaceImplWin32 *impl = NULL;
+  GdkWin32Surface *impl = NULL;
   POINT screen_pt, client_pt;
   HWND hwnd, hwndc;
   RECT rect;
