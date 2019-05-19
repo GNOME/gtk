@@ -12803,7 +12803,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
     gtk_snapshot_append_node (snapshot, priv->render_node);
 }
 
-static void
+void
 gtk_widget_render (GtkWidget            *widget,
                    GdkSurface           *surface,
                    const cairo_region_t *region)
