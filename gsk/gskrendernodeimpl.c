@@ -3572,7 +3572,7 @@ gsk_text_node_peek_color (GskRenderNode *node)
   return &self->color;
 }
 
-const PangoFont *
+PangoFont *
 gsk_text_node_peek_font (GskRenderNode *node)
 {
   GskTextNode *self = (GskTextNode *) node;

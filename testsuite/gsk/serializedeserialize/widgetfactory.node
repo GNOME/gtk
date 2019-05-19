@@ -75,7 +75,7 @@ transform {
                   child: text {
                     color: rgb(46,52,54);
                     font: "Cantarell 11";
-                    glyphs: 162 9, 244 8, 312 8, 287 8, 862 3, 678 7;
+                    glyphs: "Page 1";
                     offset: 0 17;
                   }
                   transform: translate(28, 0);
@@ -98,7 +98,7 @@ transform {
                   child: text {
                     color: rgb(46,52,54);
                     font: "Cantarell 11";
-                    glyphs: 162 9, 244 8, 312 8, 287 8, 862 3, 679 8;
+                    glyphs: "Page 2";
                     offset: 0 17;
                   }
                   transform: translate(28, 0);
@@ -123,7 +123,7 @@ transform {
                   child: text {
                     color: rgb(46,52,54);
                     font: "Cantarell 11";
-                    glyphs: 162 9, 244 8, 312 8, 287 8, 862 3, 680 8;
+                    glyphs: "Page 3";
                     offset: 0 17;
                   }
                   transform: translate(28, 0);
@@ -199,7 +199,7 @@ transform {
                       text {
                         color: rgb(50,50,50);
                         font: "Cantarell 11";
-                        glyphs: 273 7, 370 8, 358 13, 272 8, 370 8, 272 8, 370 8, 472 7, 287 8, 360 8, 430 5, 409 6, 473 7;
+                        glyphs: "comboboxentry";
                         offset: 0 21;
                       }
                       clip {
@@ -211,7 +211,7 @@ transform {
                           text {
                             color: rgb(252,252,252);
                             font: "Cantarell 11";
-                            glyphs: 273 7, 370 8, 358 13, 272 8, 370 8, 272 8, 370 8, 472 7, 287 8, 360 8, 430 5, 409 6, 473 7;
+                            glyphs: "comboboxentry";
                             offset: 0 21;
                           }
                         }
@@ -268,7 +268,7 @@ transform {
                       child: text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 273 7, 370 8, 358 13, 272 8, 370 8, 272 8, 370 8, 472 7, 287 8, 360 8, 430 5, 409 6, 473 7;
+                        glyphs: "comboboxentry";
                         offset: 0 21;
                       }
                       clip: 0 0 357 32;
@@ -321,7 +321,7 @@ transform {
                     child: text {
                       color: rgb(50,50,50);
                       font: "Cantarell 11";
-                      glyphs: 30 10, 349 4, 324 4, 273 7, 345 7, 862 3, 324 4, 273 7, 370 8, 360 8, 862 3, 430 5, 370 8, 862 3, 273 7, 319 8, 244 8, 360 8, 312 8, 287 8, 862 3, 358 13, 370 8, 280 8, 287 8;
+                      glyphs: "Click icon to change mode";
                       offset: 0 21;
                     }
                     opacity: 0.54902;
@@ -359,7 +359,7 @@ transform {
                   child: text {
                     color: rgb(212,207,202);
                     font: "Cantarell 11";
-                    glyphs: 287 8, 360 8, 430 5, 409 6, 473 7;
+                    glyphs: "entry";
                     offset: 0 21;
                   }
                   clip: 0 0 392 32;
@@ -387,7 +387,7 @@ transform {
                       child: text {
                         color: rgb(50,50,50);
                         font: "Cantarell 11";
-                        glyphs: 287 8, 360 8, 430 5, 409 6, 473 7;
+                        glyphs: "entry";
                         offset: 0 22;
                       }
                       clip: 0 0 357 33;
@@ -442,7 +442,7 @@ transform {
                       text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 103 8, 287 8, 311 5, 430 5;
+                        glyphs: "Left";
                         offset: 2 17;
                       }
                       transform {
@@ -476,7 +476,7 @@ transform {
                         text {
                           color: rgb(146,149,149);
                           font: "Cantarell 11";
-                          glyphs: 113 13, 324 4, 280 8, 280 8, 349 4, 287 8;
+                          glyphs: "Middle";
                           offset: 2 17;
                         }
                         transform {
@@ -514,7 +514,7 @@ transform {
                         text {
                           color: rgb(146,149,149);
                           font: "Cantarell 11";
-                          glyphs: 165 9, 324 4, 312 8, 319 8, 430 5;
+                          glyphs: "Right";
                           offset: 2 17;
                         }
                         transform {
@@ -542,14 +542,14 @@ transform {
                 text {
                   color: rgb(146,149,149);
                   font: "Cantarell 11";
-                  glyphs: 349 4, 244 8, 272 8, 287 8, 349 4;
+                  glyphs: "label";
                   offset: 0 22;
                 }
                 transform {
                   child: text {
                     color: rgb(212,207,202);
                     font: "Cantarell 11";
-                    glyphs: 349 4, 244 8, 272 8, 287 8, 349 4;
+                    glyphs: "label";
                     offset: 0 22;
                   }
                   transform: translate(52, 0);
@@ -572,7 +572,7 @@ transform {
                         child: text {
                           color: rgb(50,50,50);
                           font: "Cantarell 11";
-                          glyphs: 682 8, 677 9;
+                          glyphs: "50";
                           offset: 0 15;
                         }
                         transform: translate(6, 6);
@@ -635,7 +635,7 @@ transform {
                         child: text {
                           color: rgb(212,207,202);
                           font: "Cantarell 11";
-                          glyphs: 677 9;
+                          glyphs: "0";
                           offset: 0 15;
                         }
                         transform: translate(6, 6);
@@ -723,7 +723,7 @@ transform {
                       child: text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 273 7, 319 8, 287 8, 273 7, 345 7, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                        glyphs: "checkbutton";
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -750,7 +750,7 @@ transform {
                       child: text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 273 7, 319 8, 287 8, 273 7, 345 7, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                        glyphs: "checkbutton";
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -785,7 +785,7 @@ transform {
                       child: text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 273 7, 319 8, 287 8, 273 7, 345 7, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                        glyphs: "checkbutton";
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -820,7 +820,7 @@ transform {
                       child: text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 273 7, 319 8, 287 8, 273 7, 345 7, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                        glyphs: "checkbutton";
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -847,7 +847,7 @@ transform {
                       child: text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 273 7, 319 8, 287 8, 273 7, 345 7, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                        glyphs: "checkbutton";
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -882,7 +882,7 @@ transform {
                       child: text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 273 7, 319 8, 287 8, 273 7, 345 7, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                        glyphs: "checkbutton";
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -912,7 +912,7 @@ transform {
                       child: text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 409 6, 244 8, 280 8, 324 4, 370 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                        glyphs: "radiobutton";
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -942,7 +942,7 @@ transform {
                       child: text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 409 6, 244 8, 280 8, 324 4, 370 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                        glyphs: "radiobutton";
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -980,7 +980,7 @@ transform {
                       child: text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 409 6, 244 8, 280 8, 324 4, 370 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                        glyphs: "radiobutton";
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -1018,7 +1018,7 @@ transform {
                       child: text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 409 6, 244 8, 280 8, 324 4, 370 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                        glyphs: "radiobutton";
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -1048,7 +1048,7 @@ transform {
                       child: text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 409 6, 244 8, 280 8, 324 4, 370 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                        glyphs: "radiobutton";
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -1086,7 +1086,7 @@ transform {
                       child: text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 409 6, 244 8, 280 8, 324 4, 370 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                        glyphs: "radiobutton";
                         offset: 0 15;
                       }
                       transform: translate(24, 0);
@@ -1154,7 +1154,7 @@ transform {
                   text {
                     color: rgb(146,149,149);
                     font: "Cantarell 11";
-                    glyphs: 430 5, 370 8, 312 8, 312 8, 349 4, 287 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                    glyphs: "togglebutton";
                     offset: 2 17;
                   }
                 }
@@ -1176,7 +1176,7 @@ transform {
                   text {
                     color: rgb(212,207,202);
                     font: "Cantarell 11";
-                    glyphs: 430 5, 370 8, 312 8, 312 8, 349 4, 287 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                    glyphs: "togglebutton";
                     offset: 2 17;
                   }
                 }
@@ -1198,7 +1198,7 @@ transform {
                   text {
                     color: rgb(146,149,149);
                     font: "Cantarell 11";
-                    glyphs: 430 5, 370 8, 312 8, 312 8, 349 4, 287 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                    glyphs: "togglebutton";
                     offset: 2 17;
                   }
                 }
@@ -1220,7 +1220,7 @@ transform {
                   text {
                     color: rgb(212,207,202);
                     font: "Cantarell 11";
-                    glyphs: 430 5, 370 8, 312 8, 312 8, 349 4, 287 8, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                    glyphs: "togglebutton";
                     offset: 2 17;
                   }
                 }
@@ -1244,7 +1244,7 @@ transform {
                       text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 1 10, 360 8, 280 8, 409 6, 287 8, 244 8;
+                        glyphs: "Andrea";
                         offset: 2 17;
                       }
                       transform {
@@ -1282,7 +1282,7 @@ transform {
                       text {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
-                        glyphs: 126 11, 430 5, 430 5, 370 8;
+                        glyphs: "Otto";
                         offset: 2 17;
                       }
                       transform {
@@ -1320,7 +1320,7 @@ transform {
                       text {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
-                        glyphs: 173 9, 244 8, 360 8, 417 7, 862 3, 165 9, 287 8, 312 8, 438 8, 349 4, 244 8, 409 6;
+                        glyphs: "Sans Regular";
                         offset: 0 17;
                       }
                       transform {
@@ -1328,7 +1328,7 @@ transform {
                           child: text {
                             color: rgb(146,149,149);
                             font: "Cantarell Bold 11";
-                            glyphs: 678 7, 679 8;
+                            glyphs: "12";
                             offset: 0 17;
                           }
                           transform: translate(1, 0);
@@ -1392,7 +1392,7 @@ transform {
                         child: text {
                           color: rgb(146,149,149);
                           font: "Cantarell 11";
-                          glyphs: 822 4, 115 11, 370 8, 360 8, 287 8, 823 4;
+                          glyphs: "(None)";
                           offset: 0 17;
                         }
                         transform: translate(16, 0);
@@ -1419,7 +1419,7 @@ transform {
                   text {
                     color: rgb(53,132,228);
                     font: "Cantarell 11";
-                    glyphs: 349 4, 324 4, 360 8, 345 7, 862 3, 272 8, 438 8, 430 5, 430 5, 370 8, 360 8;
+                    glyphs: "link button";
                     offset: 10 17;
                   }
                   color {
@@ -1573,7 +1573,7 @@ transform {
                       child: text {
                         color: rgba(46,52,54,0.4);
                         font: "Cantarell 9.1669921875";
-                        glyphs: 682 7, 677 8, 859 1, 919 12;
+                        glyphs: "50", 859 1, "%";
                         offset: 0 13;
                       }
                       transform: translate(237, 0);
@@ -1965,7 +1965,7 @@ transform {
                           text {
                             color: rgba(146,149,149,0.55);
                             font: "Cantarell 11";
-                            glyphs: 682 8, 677 9, 805 4, 677 9;
+                            glyphs: "50.0";
                             offset: 26 15;
                           }
                           transform {
@@ -2021,7 +2021,7 @@ transform {
                           text {
                             color: rgba(146,149,149,0.55);
                             font: "Cantarell 11";
-                            glyphs: 682 8, 677 9, 805 4, 677 9;
+                            glyphs: "50.0";
                             offset: 26 15;
                           }
                           transform {
@@ -2086,7 +2086,7 @@ transform {
                   text {
                     color: rgb(146,149,149);
                     font: "Cantarell Bold 11";
-                    glyphs: 81 4, 360 8, 417 7, 287 8, 430 6;
+                    glyphs: "Inset";
                     offset: 0 15;
                   }
                 }
@@ -2101,7 +2101,7 @@ transform {
                   text {
                     color: rgb(146,149,149);
                     font: "Cantarell Bold 11";
-                    glyphs: 126 11, 438 8, 430 6, 417 7, 287 8, 430 6;
+                    glyphs: "Outset";
                     offset: 0 15;
                   }
                 }
@@ -2127,7 +2127,7 @@ transform {
                   text {
                     color: rgb(146,149,149);
                     font: "Cantarell Bold 11";
-                    glyphs: 69 11, 409 6, 370 8, 370 8, 466 7, 287 8;
+                    glyphs: "Groove";
                     offset: 0 15;
                   }
                 }
@@ -2153,7 +2153,7 @@ transform {
                   text {
                     color: rgb(146,149,149);
                     font: "Cantarell Bold 11";
-                    glyphs: 165 10, 324 4, 280 8, 312 8, 287 8;
+                    glyphs: "Ridge";
                     offset: 0 15;
                   }
                 }
@@ -2243,7 +2243,7 @@ transform {
                           text {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
-                            glyphs: 1 10, 360 8, 280 8, 409 6, 287 8, 244 8;
+                            glyphs: "Andrea";
                             offset: 86 42;
                           }
                           color {
@@ -2253,7 +2253,7 @@ transform {
                           text {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
-                            glyphs: 30 10, 324 4, 358 13, 324 4;
+                            glyphs: "Cimi";
                             offset: 157 42;
                           }
                           color {
@@ -2298,7 +2298,7 @@ transform {
                           text {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
-                            glyphs: 126 11, 430 5, 430 5, 370 8;
+                            glyphs: "Otto";
                             offset: 86 65;
                           }
                           color {
@@ -2308,7 +2308,7 @@ transform {
                           text {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
-                            glyphs: 273 7, 319 8, 244 8, 370 8, 430 5, 324 4, 273 7;
+                            glyphs: "chaotic";
                             offset: 157 65;
                           }
                           color {
@@ -2361,7 +2361,7 @@ transform {
                           text {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
-                            glyphs: 126 11, 409 6, 466 7, 324 4, 349 4, 349 4, 287 8;
+                            glyphs: "Orville";
                             offset: 86 88;
                           }
                           color {
@@ -2372,7 +2372,7 @@ transform {
                             text {
                               color: rgb(50,50,50);
                               font: "Cantarell 11";
-                              glyphs: 165 9, 287 8, 280 8, 287 8, 360 8;
+                              glyphs: "Reden";
                               offset: 157 88;
                             }
                             text {
@@ -2435,7 +2435,7 @@ transform {
                           text {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
-                            glyphs: 29 10, 287 8, 360 8, 341 4, 244 8, 358 13, 324 4, 360 8;
+                            glyphs: "Benjamin";
                             offset: 86 111;
                           }
                           color {
@@ -2446,7 +2446,7 @@ transform {
                             text {
                               color: rgb(50,50,50);
                               font: "Cantarell 11";
-                              glyphs: 30 10, 370 8, 358 13, 406 8;
+                              glyphs: "Comp";
                               offset: 157 111;
                             }
                             text {
@@ -2475,7 +2475,7 @@ transform {
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 30 9, 370 8, 370 8, 349 4;
+                                glyphs: "Cool";
                                 offset: 0 17;
                               }
                             }
@@ -2495,7 +2495,7 @@ transform {
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 81 4, 273 7, 370 8, 360 8;
+                                glyphs: "Icon";
                                 offset: 0 17;
                               }
                             }
@@ -2515,7 +2515,7 @@ transform {
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 115 11, 244 8, 358 13, 287 8;
+                                glyphs: "Name";
                                 offset: 0 17;
                               }
                             }
@@ -2535,7 +2535,7 @@ transform {
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 115 11, 324 4, 273 7, 345 8;
+                                glyphs: "Nick";
                                 offset: 0 17;
                               }
                             }
@@ -2610,7 +2610,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 680 8;
+                              glyphs: "page 3";
                               offset: 0 20;
                             }
                             transform: translate(149, 0) translate(16, 3);
@@ -2619,7 +2619,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 679 8;
+                              glyphs: "page 2";
                               offset: 0 20;
                             }
                             transform: translate(74, 0) translate(16, 3);
@@ -2635,7 +2635,7 @@ transform {
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 678 7;
+                                glyphs: "page 1";
                                 offset: 0 20;
                               }
                             }
@@ -2686,7 +2686,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 680 8;
+                              glyphs: "page 3";
                               offset: 0 20;
                             }
                             transform: translate(0, 88) translate(12, 7);
@@ -2695,7 +2695,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 679 8;
+                              glyphs: "page 2";
                               offset: 0 20;
                             }
                             transform: translate(0, 44) translate(12, 7);
@@ -2711,7 +2711,7 @@ transform {
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 678 7;
+                                glyphs: "page 1";
                                 offset: 0 20;
                               }
                             }
@@ -2755,7 +2755,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 680 8;
+                              glyphs: "page 3";
                               offset: 0 20;
                             }
                             transform: translate(149, 0) translate(16, 4);
@@ -2764,7 +2764,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 679 8;
+                              glyphs: "page 2";
                               offset: 0 20;
                             }
                             transform: translate(74, 0) translate(16, 4);
@@ -2780,7 +2780,7 @@ transform {
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 678 7;
+                                glyphs: "page 1";
                                 offset: 0 20;
                               }
                             }
@@ -2820,7 +2820,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 680 8;
+                              glyphs: "page 3";
                               offset: 0 20;
                             }
                             transform: translate(0, 88) translate(12, 7);
@@ -2829,7 +2829,7 @@ transform {
                             child: text {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
-                              glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 679 8;
+                              glyphs: "page 2";
                               offset: 0 20;
                             }
                             transform: translate(0, 44) translate(12, 7);
@@ -2845,7 +2845,7 @@ transform {
                               text {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
-                                glyphs: 406 8, 244 8, 312 8, 287 8, 862 3, 678 7;
+                                glyphs: "page 1";
                                 offset: 0 20;
                               }
                             }

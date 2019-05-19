@@ -59,7 +59,7 @@ transform {
           child: text {
             color: rgb(46,52,54);
             font: "Cantarell 11";
-            glyphs: 37 11, 324 4, 417 7, 244 8, 272 8, 349 4, 287 8, 280 8;
+            glyphs: "Disabled";
             offset: 145 18;
           }
           transform: translate(56, 0);
@@ -139,7 +139,7 @@ transform {
             child: text {
               color: rgb(46,52,54);
               font: "Cantarell 11";
-              glyphs: 45 9, 360 8, 244 8, 272 8, 349 4, 287 8, 280 8;
+              glyphs: "Enabled";
               offset: 147 18;
             }
             transform: translate(56, 0);
@@ -182,7 +182,7 @@ transform {
             child: text {
               color: rgb(46,52,54);
               font: "Cantarell 11";
-              glyphs: 37 11, 324 4, 417 7, 244 8, 272 8, 349 4, 287 8, 280 8;
+              glyphs: "Disabled";
               offset: 145 18;
             }
             transform: translate(56, 0);
@@ -228,7 +228,7 @@ transform {
             child: text {
               color: rgb(46,52,54);
               font: "Cantarell 11";
-              glyphs: 45 9, 360 8, 244 8, 272 8, 349 4, 287 8, 280 8;
+              glyphs: "Enabled";
               offset: 147 18;
             }
             transform: translate(56, 0);
@@ -291,7 +291,7 @@ transform {
             child: text {
               color: rgb(46,52,54);
               font: "Cantarell 11";
-              glyphs: 37 11, 324 4, 417 7, 244 8, 272 8, 349 4, 287 8, 280 8;
+              glyphs: "Disabled";
               offset: 123 18;
             }
             transform: translate(78, 0);
