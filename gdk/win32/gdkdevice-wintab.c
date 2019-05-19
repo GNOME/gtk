@@ -117,7 +117,7 @@ gdk_device_wintab_query_state (GdkDevice        *device,
   device_wintab = GDK_DEVICE_WINTAB (device);
   if (window)
     {
-      scale = GDK_SURFACE_IMPL_WIN32 (window->impl)->surface_scale;
+      scale = GDK_WIN32_SURFACE (window)->surface_scale;
       hwnd = GDK_SURFACE_HWND (window);
     }
   else
@@ -218,7 +218,7 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
   gint i;
 
   device = GDK_DEVICE (device_wintab);
-  impl_surface = _gdk_surface_get_impl_surface (window);
+  impl_surface = window;
   temp_x = temp_y = 0;
 
   gdk_surface_get_origin (impl_surface, &root_x, &root_y);
