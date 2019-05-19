@@ -49,9 +49,9 @@ typedef struct _GdkSurfaceParentPos GdkSurfaceParentPos;
 static void
 tmp_unset_bg (GdkSurface *window)
 {
-  GdkSurfaceImplWin32 *impl;
+  GdkWin32Surface *impl;
 
-  impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+  impl = GDK_WIN32_SURFACE (window);
 
   impl->no_bg = TRUE;
 }
@@ -59,9 +59,9 @@ tmp_unset_bg (GdkSurface *window)
 static void
 tmp_reset_bg (GdkSurface *window)
 {
-  GdkSurfaceImplWin32 *impl;
+  GdkWin32Surface *impl;
 
-  impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+  impl = GDK_WIN32_SURFACE (window);
 
   impl->no_bg = FALSE;
 }
@@ -73,12 +73,12 @@ _gdk_surface_move_resize_child (GdkSurface *window,
 			       gint       width,
 			       gint       height)
 {
-  GdkSurfaceImplWin32 *impl;
+  GdkWin32Surface *impl;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_SURFACE (window));
 
-  impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+  impl = GDK_WIN32_SURFACE (window);
   GDK_NOTE (MISC, g_print ("_gdk_surface_move_resize_child: %s@%+d%+d %dx%d@%+d%+d\n",
 			   _gdk_win32_surface_description (window),
 			   window->x, window->y, width, height, x, y));
@@ -106,14 +106,14 @@ _gdk_surface_move_resize_child (GdkSurface *window,
   GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,%d,%d,"
 			   "NOACTIVATE|NOZORDER)\n",
 			   GDK_SURFACE_HWND (window),
-			   (window->x + window->parent->abs_x) * impl->surface_scale,
-			   (window->y + window->parent->abs_y) * impl->surface_scale,
+			   window->x * impl->surface_scale,
+			   window->y * impl->surface_scale,
 			   impl->unscaled_width,
 			   impl->unscaled_height));
 
   API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window), NULL,
-			   (window->x + window->parent->abs_x) * impl->surface_scale,
-			   (window->y + window->parent->abs_y) * impl->surface_scale,
+			   window->x * impl->surface_scale,
+			   window->y * impl->surface_scale,
 			   impl->unscaled_width,
 			   impl->unscaled_height,
 			   SWP_NOACTIVATE | SWP_NOZORDER));
@@ -131,14 +131,6 @@ _gdk_win32_surface_tmp_unset_bg (GdkSurface *window,
     return;
 
   tmp_unset_bg (window);
-
-  if (recurse)
-    {
-      GList *l;
-
-      for (l = window->children; l != NULL; l = l->next)
-	_gdk_win32_surface_tmp_unset_bg (l->data, TRUE);
-    }
 }
 
 void
@@ -147,8 +139,7 @@ _gdk_win32_surface_tmp_unset_parent_bg (GdkSurface *window)
   if (window->parent == NULL)
     return;
 
-  window = _gdk_surface_get_impl_surface (window->parent);
-  _gdk_win32_surface_tmp_unset_bg (window, FALSE);
+  _gdk_win32_surface_tmp_unset_bg (window->parent, FALSE);
 }
 
 void
@@ -161,12 +152,4 @@ _gdk_win32_surface_tmp_reset_bg (GdkSurface *window,
     return;
 
   tmp_reset_bg (window);
-
-  if (recurse)
-    {
-      GList *l;
-
-      for (l = window->children; l != NULL; l = l->next)
-	_gdk_win32_surface_tmp_reset_bg (l->data, TRUE);
-    }
 }

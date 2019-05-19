@@ -678,7 +678,7 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
   if (!himc)
     return;
 
-  toplevel = gdk_surface_get_toplevel (context_ime->client_surface);
+  toplevel = context_ime->client_surface;
   if (GDK_IS_SURFACE (toplevel))
     {
       gdk_win32_display_add_filter (gdk_surface_get_display (toplevel),
@@ -776,7 +776,7 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
     }
 
   /* remove event fileter */
-  toplevel = gdk_surface_get_toplevel (context_ime->client_surface);
+  toplevel = context_ime->client_surface;
   if (GDK_IS_SURFACE (toplevel))
     {
       gdk_win32_display_remove_filter (gdk_surface_get_display (toplevel),
@@ -877,7 +877,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
   if (!context_ime->client_surface)
     return;
 
-  widget = gtk_root_get_for_surface (context_ime->client_surface);
+  widget = GTK_WIDGET (gtk_native_get_for_surface (context_ime->client_surface));
   if (!widget)
     return;
 
@@ -998,7 +998,7 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
   if (!context_ime->focus)
     return retval;
 
-  toplevel = gdk_surface_get_toplevel (context_ime->client_surface);
+  toplevel = context_ime->client_surface;
   if (gdk_win32_surface_get_impl_hwnd (toplevel) != msg->hwnd)
     return retval;
 
@@ -1024,8 +1024,7 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
           RECT rc;
 
           hwnd_top =
-            gdk_win32_surface_get_impl_hwnd (gdk_surface_get_toplevel
-                                            (context_ime->client_surface));
+            gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
           GetWindowRect (hwnd_top, &rc);
           pt.x = wx;
           pt.y = wy;
@@ -1131,7 +1130,7 @@ get_window_position (GdkSurface *surface, gint *x, gint *y)
   *x += wx;
   *y += wy;
   parent = gdk_surface_get_parent (surface);
-  toplevel = gdk_surface_get_toplevel (surface);
+  toplevel = surface;
 
   if (parent && parent != toplevel)
     get_window_position (parent, x, y);

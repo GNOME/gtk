@@ -106,7 +106,7 @@ gdk_device_win32_query_state (GdkDevice        *device,
 
   if (window)
     {
-      scale = GDK_SURFACE_IMPL_WIN32 (window->impl)->surface_scale;
+      scale = GDK_WIN32_SURFACE (window)->surface_scale;
       hwnd = GDK_SURFACE_HWND (window);
     }
   else
@@ -197,7 +197,7 @@ _gdk_device_win32_surface_at_position (GdkDevice       *device,
                                       gboolean         get_toplevel)
 {
   GdkSurface *window = NULL;
-  GdkSurfaceImplWin32 *impl = NULL;
+  GdkWin32Surface *impl = NULL;
   POINT screen_pt, client_pt;
   HWND hwnd, hwndc;
   RECT rect;
@@ -261,7 +261,7 @@ _gdk_device_win32_surface_at_position (GdkDevice       *device,
 
   if (window && (win_x || win_y))
     {
-      impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+      impl = GDK_WIN32_SURFACE (window);
 
       if (win_x)
         *win_x = client_pt.x / impl->surface_scale;

@@ -109,7 +109,7 @@ gdk_device_virtual_set_surface_cursor (GdkDevice  *device,
   if (win32_hcursor != NULL)
     SetCursor (gdk_win32_hcursor_get_handle (win32_hcursor));
 
-  g_set_object (&GDK_SURFACE_IMPL_WIN32 (window->impl)->cursor, win32_hcursor);
+  g_set_object (&GDK_WIN32_SURFACE (window)->cursor, win32_hcursor);
 }
 
 static void
