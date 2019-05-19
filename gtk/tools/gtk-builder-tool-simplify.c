@@ -248,7 +248,6 @@ keep_for_rewrite (const char *class_name,
           strcmp (canonical_name, props[k].property) == 0 &&
           kind == props[k].kind)
         {
-g_print ("keep for rewrite: %s::%s\n", class_name, canonical_name);
           found = TRUE;
           break;
         }
