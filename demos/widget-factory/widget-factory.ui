@@ -2442,27 +2442,7 @@ microphone-sensitivity-medium-symbolic</property>
                                   <object class="GtkMenuButton" id="open_menubutton">
                                     <property name="halign">center</property>
                                     <property name="popover">open_popover</property>
-                                    <style>
-                                      <class name="text-button"/>
-                                      <class name="image-button"/>
-                                    </style>
-                                    <child>
-                                      <object class="GtkBox">
-                                        <property name="spacing">6</property>
-                                        <child>
-                                          <object class="GtkLabel">
-                                            <property name="valign">baseline</property>
-                                            <property name="label">Open</property>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkImage">
-                                            <property name="valign">baseline</property>
-                                            <property name="icon-name">pan-down-symbolic</property>
-                                          </object>
-                                        </child>
-                                      </object>
-                                    </child>
+                                    <property name="label">Open</property>
                                   </object>
                                 </child>
                                 <child>
