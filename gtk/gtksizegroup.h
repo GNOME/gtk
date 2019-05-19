@@ -32,15 +32,10 @@ G_BEGIN_DECLS
 #define GTK_IS_SIZE_GROUP(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SIZE_GROUP))
 
 typedef struct _GtkSizeGroup              GtkSizeGroup;
-typedef struct _GtkSizeGroupPrivate       GtkSizeGroupPrivate;
-typedef struct _GtkSizeGroupClass         GtkSizeGroupClass;
 
 struct _GtkSizeGroup
 {
   GObject parent_instance;
-
-  /*< private >*/
-  GtkSizeGroupPrivate *priv;
 };
 
 GDK_AVAILABLE_IN_ALL

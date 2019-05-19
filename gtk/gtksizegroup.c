@@ -102,6 +102,9 @@
  * ]|
  */
 
+typedef struct _GtkSizeGroupClass GtkSizeGroupClass;
+typedef struct _GtkSizeGroupPrivate GtkSizeGroupPrivate;
+
 struct _GtkSizeGroupClass
 {
   GObjectClass parent_class;
@@ -167,7 +170,7 @@ add_widget_to_closure (GHashTable *widgets,
   for (tmp_groups = _gtk_widget_get_sizegroups (widget); tmp_groups; tmp_groups = tmp_groups->next)
     {
       GtkSizeGroup        *tmp_group = tmp_groups->data;
-      GtkSizeGroupPrivate *tmp_priv  = tmp_group->priv;
+      GtkSizeGroupPrivate *tmp_priv  = gtk_size_group_get_instance_private (tmp_group);
 
       if (g_hash_table_lookup (groups, tmp_group))
         continue;
@@ -201,7 +204,7 @@ _gtk_size_group_get_widget_peers (GtkWidget      *for_widget,
 static void
 queue_resize_on_group (GtkSizeGroup *size_group)
 {
-  GtkSizeGroupPrivate *priv = size_group->priv;
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
   GSList *list;
 
   for (list = priv->widgets; list; list = list->next)
@@ -234,8 +237,7 @@ gtk_size_group_init (GtkSizeGroup *size_group)
 {
   GtkSizeGroupPrivate *priv;
 
-  size_group->priv = gtk_size_group_get_instance_private (size_group);
-  priv = size_group->priv;
+  priv = gtk_size_group_get_instance_private (size_group);
 
   priv->widgets = NULL;
   priv->mode = GTK_SIZE_GROUP_HORIZONTAL;
@@ -274,7 +276,7 @@ gtk_size_group_get_property (GObject      *object,
 			     GParamSpec   *pspec)
 {
   GtkSizeGroup *size_group = GTK_SIZE_GROUP (object);
-  GtkSizeGroupPrivate *priv = size_group->priv;
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
 
   switch (prop_id)
     {
@@ -299,7 +301,7 @@ GtkSizeGroup *
 gtk_size_group_new (GtkSizeGroupMode mode)
 {
   GtkSizeGroup *size_group = g_object_new (GTK_TYPE_SIZE_GROUP, NULL);
-  GtkSizeGroupPrivate *priv = size_group->priv;
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
 
   priv->mode = mode;
 
@@ -322,11 +324,9 @@ void
 gtk_size_group_set_mode (GtkSizeGroup     *size_group,
 			 GtkSizeGroupMode  mode)
 {
-  GtkSizeGroupPrivate *priv;
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
 
   g_return_if_fail (GTK_IS_SIZE_GROUP (size_group));
-
-  priv = size_group->priv;
 
   if (priv->mode != mode)
     {
@@ -351,9 +351,11 @@ gtk_size_group_set_mode (GtkSizeGroup     *size_group,
 GtkSizeGroupMode
 gtk_size_group_get_mode (GtkSizeGroup *size_group)
 {
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
+
   g_return_val_if_fail (GTK_IS_SIZE_GROUP (size_group), GTK_SIZE_GROUP_BOTH);
 
-  return size_group->priv->mode;
+  return priv->mode;
 }
 
 /**
@@ -374,13 +376,11 @@ void
 gtk_size_group_add_widget (GtkSizeGroup *size_group,
 			   GtkWidget    *widget)
 {
-  GtkSizeGroupPrivate *priv;
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
   GSList *groups;
   
   g_return_if_fail (GTK_IS_SIZE_GROUP (size_group));
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = size_group->priv;
 
   groups = _gtk_widget_get_sizegroups (widget);
 
@@ -407,12 +407,10 @@ void
 gtk_size_group_remove_widget (GtkSizeGroup *size_group,
 			      GtkWidget    *widget)
 {
-  GtkSizeGroupPrivate *priv;
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
   
   g_return_if_fail (GTK_IS_SIZE_GROUP (size_group));
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = size_group->priv;
 
   g_return_if_fail (g_slist_find (priv->widgets, widget));
 
@@ -437,7 +435,9 @@ gtk_size_group_remove_widget (GtkSizeGroup *size_group,
 GSList *
 gtk_size_group_get_widgets (GtkSizeGroup *size_group)
 {
-  return size_group->priv->widgets;
+  GtkSizeGroupPrivate *priv = gtk_size_group_get_instance_private (size_group);
+
+  return priv->widgets;
 }
 
 typedef struct {
