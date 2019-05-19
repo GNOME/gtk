@@ -1757,7 +1757,7 @@ _gtk_text_view_ensure_magnifier (GtkTextView *text_view)
   priv->magnifier_popover = gtk_popover_new (GTK_WIDGET (text_view));
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->magnifier_popover),
                                "magnifier");
-  gtk_popover_set_modal (GTK_POPOVER (priv->magnifier_popover), FALSE);
+  gtk_popover_set_autohide (GTK_POPOVER (priv->magnifier_popover), FALSE);
   gtk_container_add (GTK_CONTAINER (priv->magnifier_popover),
                      priv->magnifier);
   gtk_widget_show (priv->magnifier);
@@ -8791,7 +8791,7 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->selection_bubble),
                                GTK_STYLE_CLASS_TOUCH_SELECTION);
   gtk_popover_set_position (GTK_POPOVER (priv->selection_bubble), GTK_POS_BOTTOM);
-  gtk_popover_set_modal (GTK_POPOVER (priv->selection_bubble), FALSE);
+  gtk_popover_set_autohide (GTK_POPOVER (priv->selection_bubble), FALSE);
   g_signal_connect (priv->selection_bubble, "notify::visible",
                     G_CALLBACK (show_or_hide_handles), text_view);
 
