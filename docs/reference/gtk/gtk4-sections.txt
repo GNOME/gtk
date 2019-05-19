@@ -7111,6 +7111,7 @@ gtk_media_stream_get_type
 <FILE>gtkroot</FILE>
 <TITLE>GtkRoot</TITLE>
 GtkRoot
+gtk_root_get_display
 gtk_root_get_for_surface
 gtk_root_get_focus
 gtk_root_set_focus
