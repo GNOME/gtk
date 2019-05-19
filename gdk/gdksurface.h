@@ -426,7 +426,8 @@ GdkSurface *   gdk_surface_new_temp             (GdkDisplay    *display,
                                                  const GdkRectangle *position);
 GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_surface_new_popup            (GdkDisplay    *display,
-                                                 GdkSurface    *parent);
+                                                 GdkSurface    *parent,
+                                                 gboolean       autohide);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_destroy               (GdkSurface     *surface);
@@ -446,9 +447,6 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_surface_hide                  (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_show_unraised         (GdkSurface     *surface);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_show_with_auto_dismissal (GdkSurface *surface,
-                                                    GdkSeat    *seat);
 
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_move                  (GdkSurface     *surface,
