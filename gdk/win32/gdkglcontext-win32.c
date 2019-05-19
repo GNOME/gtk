@@ -64,9 +64,9 @@ _gdk_win32_gl_context_dispose (GObject *gobject)
       ReleaseDC (display_win32->gl_hwnd, context_win32->gl_hdc);
     }
 
-  if (surface != NULL && surface->impl != NULL)
+  if (surface != NULL)
     {
-      GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (surface->impl);
+      GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
 
       if (impl->suppress_layered > 0)
         impl->suppress_layered--;
@@ -166,11 +166,11 @@ gdk_win32_gl_context_begin_frame (GdkDrawContext *draw_context,
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkSurface *surface;
-  GdkSurfaceImplWin32 *impl;
+  GdkWin32Surface *impl;
   RECT queued_window_rect;
 
   surface = gdk_gl_context_get_surface (context);
-  impl = GDK_SURFACE_IMPL_WIN32 (surface->impl);
+  impl = GDK_WIN32_SURFACE (surface);
 
   gdk_win32_surface_get_queued_window_rect (surface,
                                             gdk_surface_get_scale_factor (surface),
@@ -667,7 +667,7 @@ gdk_win32_gl_context_realize (GdkGLContext *context,
   gint glver_minor = 0;
 
   GdkSurface *surface = gdk_gl_context_get_surface (context);
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (surface->impl);
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
   GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
 
   if (!_set_pixformat_for_hdc (context_win32->gl_hdc,
