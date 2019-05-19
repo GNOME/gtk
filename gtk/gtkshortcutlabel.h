@@ -25,10 +25,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_SHORTCUT_LABEL (gtk_shortcut_label_get_type())
 #define GTK_SHORTCUT_LABEL(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SHORTCUT_LABEL, GtkShortcutLabel))
-#define GTK_SHORTCUT_LABEL_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SHORTCUT_LABEL, GtkShortcutLabelClass))
 #define GTK_IS_SHORTCUT_LABEL(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SHORTCUT_LABEL))
-#define GTK_IS_SHORTCUT_LABEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SHORTCUT_LABEL))
-#define GTK_SHORTCUT_LABEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SHORTCUT_LABEL, GtkShortcutLabelClass))
 
 
 typedef struct _GtkShortcutLabel      GtkShortcutLabel;
