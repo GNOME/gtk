@@ -2514,15 +2514,11 @@ gdk_wayland_surface_map (GdkSurface *surface)
   impl->mapped = TRUE;
 }
 
-static void gdk_wayland_surface_destroy_surface (GdkSurface *surface);
-
 static void
 gdk_wayland_surface_show (GdkSurface *surface,
                           gboolean    already_mapped)
 {
   GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
-
-  gdk_wayland_surface_destroy_surface (surface);
 
   if (!impl->display_server.wl_surface)
     gdk_wayland_surface_create_surface (surface);
