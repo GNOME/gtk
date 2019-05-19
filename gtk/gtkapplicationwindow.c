@@ -751,7 +751,6 @@ gtk_application_window_set_property (GObject      *object,
                                      GParamSpec   *pspec)
 {
   GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (object);
-  GtkApplicationWindowPrivate *priv = gtk_application_window_get_instance_private (window);
 
   switch (prop_id)
     {
