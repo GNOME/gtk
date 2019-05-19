@@ -216,6 +216,7 @@ keep_for_rewrite (const char *class_name,
     const char *property;
     PropKind kind;
   } props[] = {
+    { "GtkPopover", "modal", PROP_KIND_OBJECT },
     { "GtkActionBar", "pack-type", PROP_KIND_PACKING },
     { "GtkHeaderBar", "pack-type", PROP_KIND_PACKING },
     { "GtkPopoverMenu", "submenu", PROP_KIND_PACKING },
@@ -700,6 +701,59 @@ property_has_been_removed (Element      *element,
   g_free (canonical_name);
 
   return found;
+}
+
+static void
+maybe_rename_property (Element *element, MyParserData *data)
+{
+  const gchar *class_name;
+  const gchar *property_name;
+  struct _Prop {
+    const char *class;
+    const char *property;
+    PropKind kind;
+    const char *new_name;
+  } props[] = {
+    { "GtkPopover", "modal", PROP_KIND_OBJECT, "autohide" },
+  };
+  char *canonical_name;
+  int i, k;
+  PropKind kind;
+  int prop_name_index = 0;
+
+  kind = get_prop_kind (element);
+
+  class_name = get_class_name (element);
+  property_name = NULL;
+
+  for (i = 0; element->attribute_names[i]; i++)
+    {
+      if (strcmp (element->attribute_names[i], "name") == 0)
+        {
+          prop_name_index = i;
+          property_name = (const gchar *)element->attribute_values[i];
+        }
+    }
+
+  if (property_name == NULL)
+    return;
+
+  canonical_name = g_strdup (property_name);
+  g_strdelimit (canonical_name, "_", '-');
+
+  for (k = 0; k < G_N_ELEMENTS (props); k++)
+    {
+      if (strcmp (class_name, props[k].class) == 0 &&
+          strcmp (canonical_name, props[k].property) == 0 &&
+          kind == props[k].kind)
+        {
+          g_free (element->attribute_values[prop_name_index]);
+          element->attribute_values[prop_name_index] = g_strdup (props[k].new_name);
+          break;
+        }
+    }
+
+  g_free (canonical_name);
 }
 
 static Element *
@@ -1436,6 +1490,9 @@ rewrite_element (Element      *element,
   if (g_str_equal (element->element_name, "object") &&
       g_str_equal (get_class_name (element), "GtkFixed"))
     rewrite_layout_props (element, data);
+
+  if (g_str_equal (element->element_name, "property"))
+    maybe_rename_property (element, data);
 
   if (g_str_equal (element->element_name, "property") &&
       property_has_been_removed (element, data))
