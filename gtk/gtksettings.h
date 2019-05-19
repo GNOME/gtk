@@ -35,8 +35,6 @@ G_BEGIN_DECLS
 
 
 /* --- typedefs --- */
-typedef struct _GtkSettingsPrivate GtkSettingsPrivate;
-typedef struct _GtkSettingsClass GtkSettingsClass;
 typedef struct _GtkSettingsValue GtkSettingsValue;
 
 
@@ -44,9 +42,6 @@ typedef struct _GtkSettingsValue GtkSettingsValue;
 struct _GtkSettings
 {
   GObject parent_instance;
-
-  /*< private >*/
-  GtkSettingsPrivate *priv;
 };
 
 /**
