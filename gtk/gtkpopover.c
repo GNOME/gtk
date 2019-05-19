@@ -568,7 +568,7 @@ gtk_popover_realize (GtkWidget *widget)
 
   display = gtk_widget_get_display (priv->relative_to);
 
-  priv->surface = gdk_surface_new_popup (display, gtk_widget_get_surface (priv->relative_to));
+  priv->surface = gdk_surface_new_popup (display, gtk_widget_get_surface (priv->relative_to), priv->modal);
 
   gdk_surface_set_widget (priv->surface, widget);
 
@@ -667,19 +667,8 @@ gtk_popover_map (GtkWidget *widget)
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *child;
   GdkRectangle parent_rect;
-  GdkDisplay *display;
 
-  if (priv->modal)
-    {
-      GdkSeat *seat;
-
-      display = gtk_widget_get_display (priv->relative_to);
-      seat = gdk_display_get_default_seat (display),
-      gdk_surface_show_with_auto_dismissal (priv->surface, seat);
-    }
-  else
-    gdk_surface_show (priv->surface);
-
+  gdk_surface_show (priv->surface);
   gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
   move_to_rect (popover);
 
