@@ -49,8 +49,7 @@ struct _GtkPopoverClass
 
   /*< private >*/
 
-  /* Padding for future expansion */
-  gpointer reserved[10];
+  gpointer reserved[8];
 };
 
 GDK_AVAILABLE_IN_ALL
