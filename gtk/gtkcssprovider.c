@@ -73,6 +73,14 @@
  * way back to 4.0.
  */
 
+struct _GtkCssProviderClass
+{
+  GObjectClass parent_class;
+
+  void (* parsing_error)                        (GtkCssProvider  *provider,
+                                                 GtkCssSection   *section,
+                                                 const GError *   error);
+};
 
 typedef struct GtkCssRuleset GtkCssRuleset;
 typedef struct _GtkCssScanner GtkCssScanner;

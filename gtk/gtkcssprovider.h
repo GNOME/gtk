@@ -25,10 +25,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_CSS_PROVIDER         (gtk_css_provider_get_type ())
 #define GTK_CSS_PROVIDER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_CSS_PROVIDER, GtkCssProvider))
-#define GTK_CSS_PROVIDER_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST    ((c), GTK_TYPE_CSS_PROVIDER, GtkCssProviderClass))
 #define GTK_IS_CSS_PROVIDER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_CSS_PROVIDER))
-#define GTK_IS_CSS_PROVIDER_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE    ((c), GTK_TYPE_CSS_PROVIDER))
-#define GTK_CSS_PROVIDER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_CSS_PROVIDER, GtkCssProviderClass))
 
 typedef struct _GtkCssProvider GtkCssProvider;
 typedef struct _GtkCssProviderClass GtkCssProviderClass;
@@ -39,19 +36,6 @@ struct _GtkCssProvider
   GObject parent_instance;
 };
 
-struct _GtkCssProviderClass
-{
-  GObjectClass parent_class;
-
-  void (* parsing_error)                        (GtkCssProvider  *provider,
-                                                 GtkCssSection   *section,
-                                                 const GError *   error);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType gtk_css_provider_get_type (void) G_GNUC_CONST;
