@@ -31,10 +31,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_PASSWORD_ENTRY                 (gtk_password_entry_get_type ())
 #define GTK_PASSWORD_ENTRY(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PASSWORD_ENTRY, GtkPasswordEntry))
-#define GTK_PASSWORD_ENTRY_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PASSWORD_ENTRY, GtkPasswordEntryClass))
 #define GTK_IS_PASSWORD_ENTRY(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PASSWORD_ENTRY))
-#define GTK_IS_PASSWORD_ENTRY_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PASSWORD_ENTRY))
-#define GTK_PASSWORD_ENTRY_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PASSWORD_ENTRY, GtkPasswordEntryClass))
 
 typedef struct _GtkPasswordEntry       GtkPasswordEntry;
 typedef struct _GtkPasswordEntryClass  GtkPasswordEntryClass;
@@ -42,11 +39,6 @@ typedef struct _GtkPasswordEntryClass  GtkPasswordEntryClass;
 struct _GtkPasswordEntry
 {
   GtkWidget parent;
-};
-
-struct _GtkPasswordEntryClass
-{
-  GtkWidgetClass parent_class;
 };
 
 GDK_AVAILABLE_IN_ALL

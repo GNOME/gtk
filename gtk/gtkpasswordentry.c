@@ -60,6 +60,11 @@ typedef struct {
   GdkKeymap *keymap;
 } GtkPasswordEntryPrivate;
 
+struct _GtkPasswordEntryClass
+{
+  GtkWidgetClass parent_class;
+};
+
 enum {
   PROP_PLACEHOLDER_TEXT = 1,
   PROP_ACTIVATES_DEFAULT,
