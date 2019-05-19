@@ -65,7 +65,7 @@ struct _GtkApplicationClass
                           GtkWindow      *window);
 
   /*< private >*/
-  gpointer padding[12];
+  gpointer padding[8];
 };
 
 GDK_AVAILABLE_IN_ALL

@@ -339,8 +339,7 @@ struct _GtkWidgetClass
 
   GtkWidgetClassPrivate *priv;
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved7) (void);
+  gpointer padding[8];
 };
 
 
