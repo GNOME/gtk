@@ -89,10 +89,10 @@ GDK_AVAILABLE_IN_ALL
 GtkPositionType gtk_popover_get_position    (GtkPopover           *popover);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_popover_set_modal       (GtkPopover           *popover,
-                                           gboolean            modal);
+void            gtk_popover_set_autohide    (GtkPopover           *popover,
+                                             gboolean              autohide);
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_popover_get_modal       (GtkPopover           *popover);
+gboolean        gtk_popover_get_autohide    (GtkPopover           *popover);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_popover_popup (GtkPopover *popover);
