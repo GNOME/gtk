@@ -5,8 +5,6 @@
 
 G_BEGIN_DECLS
 
-GdkDisplay * gtk_root_get_display (GtkRoot *root);
-
 enum {
   GTK_ROOT_PROP_FOCUS_WIDGET,
   GTK_ROOT_NUM_PROPERTIES
