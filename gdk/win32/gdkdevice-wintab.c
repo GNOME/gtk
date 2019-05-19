@@ -117,7 +117,7 @@ gdk_device_wintab_query_state (GdkDevice        *device,
   device_wintab = GDK_DEVICE_WINTAB (device);
   if (window)
     {
-      scale = GDK_SURFACE_IMPL_WIN32 (window->impl)->surface_scale;
+      scale = GDK_WIN32_SURFACE (window)->surface_scale;
       hwnd = GDK_SURFACE_HWND (window);
     }
   else
