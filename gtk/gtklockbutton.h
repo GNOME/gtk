@@ -26,38 +26,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_LOCK_BUTTON         (gtk_lock_button_get_type ())
 #define GTK_LOCK_BUTTON(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_LOCK_BUTTON, GtkLockButton))
-#define GTK_LOCK_BUTTON_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_LOCK_BUTTON,  GtkLockButtonClass))
 #define GTK_IS_LOCK_BUTTON(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_LOCK_BUTTON))
-#define GTK_IS_LOCK_BUTTON_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_LOCK_BUTTON))
-#define GTK_LOCK_BUTTON_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_LOCK_BUTTON, GtkLockButtonClass))
 
 typedef struct _GtkLockButton        GtkLockButton;
-typedef struct _GtkLockButtonClass   GtkLockButtonClass;
-
-struct _GtkLockButton
-{
-  GtkButton parent_instance;
-};
-
-/**
- * GtkLockButtonClass:
- * @parent_class: The parent class.
- */
-struct _GtkLockButtonClass
-{
-  GtkButtonClass parent_class;
-
-  /*< private >*/
-
-  void (*reserved0) (void);
-  void (*reserved1) (void);
-  void (*reserved2) (void);
-  void (*reserved3) (void);
-  void (*reserved4) (void);
-  void (*reserved5) (void);
-  void (*reserved6) (void);
-  void (*reserved7) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType        gtk_lock_button_get_type       (void) G_GNUC_CONST;
