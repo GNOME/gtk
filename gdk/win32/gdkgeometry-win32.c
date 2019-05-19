@@ -49,7 +49,7 @@ typedef struct _GdkSurfaceParentPos GdkSurfaceParentPos;
 static void
 tmp_unset_bg (GdkSurface *window)
 {
-  GdkSurfaceImplWin32 *impl;
+  GdkWin32Surface *impl;
 
   impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
 
@@ -59,7 +59,7 @@ tmp_unset_bg (GdkSurface *window)
 static void
 tmp_reset_bg (GdkSurface *window)
 {
-  GdkSurfaceImplWin32 *impl;
+  GdkWin32Surface *impl;
 
   impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
 
@@ -73,7 +73,7 @@ _gdk_surface_move_resize_child (GdkSurface *window,
 			       gint       width,
 			       gint       height)
 {
-  GdkSurfaceImplWin32 *impl;
+  GdkWin32Surface *impl;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_SURFACE (window));

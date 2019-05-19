@@ -991,7 +991,7 @@ apply_message_filters (GdkDisplay *display,
 static void
 show_window_recurse (GdkSurface *window, gboolean hide_window)
 {
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+  GdkWin32Surface *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
   GSList *children = impl->transient_children;
   GdkSurface *child = NULL;
 
@@ -1040,7 +1040,7 @@ static void
 do_show_window (GdkSurface *window, gboolean hide_window)
 {
   GdkSurface *tmp_window = NULL;
-  GdkSurfaceImplWin32 *tmp_impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+  GdkWin32Surface *tmp_impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
 
   if (!tmp_impl->changing_state)
     {
@@ -1080,7 +1080,7 @@ send_crossing_event (GdkDisplay                 *display,
   GdkDeviceGrabInfo *grab;
   GdkDeviceManagerWin32 *device_manager;
   POINT pt;
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+  GdkWin32Surface *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
 
   device_manager = _gdk_device_manager;
 
@@ -1294,15 +1294,12 @@ synthesize_crossing_events (GdkDisplay                 *display,
  * TRUE otherwise.
  */
 gboolean
-_gdk_win32_get_window_rect (GdkSurface *window,
+_gdk_win32_get_window_rect (GdkSurface *surface,
                             RECT      *rect)
 {
-  GdkSurfaceImplWin32 *surface_impl;
   RECT client_rect;
   POINT point;
   HWND hwnd;
-
-  surface_impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
 
   hwnd = GDK_SURFACE_HWND (window);
 
@@ -1314,8 +1311,8 @@ _gdk_win32_get_window_rect (GdkSurface *window,
   if (gdk_surface_get_parent (window) == NULL)
     {
       ClientToScreen (hwnd, &point);
-      point.x += _gdk_offset_x * surface_impl->surface_scale;
-      point.y += _gdk_offset_y * surface_impl->surface_scale;
+      point.x += _gdk_offset_x * surface->surface_scale;
+      point.y += _gdk_offset_y * surface->surface_scale;
     }
 
   rect->left = point.x;
@@ -1323,36 +1320,34 @@ _gdk_win32_get_window_rect (GdkSurface *window,
   rect->right = point.x + client_rect.right - client_rect.left;
   rect->bottom = point.y + client_rect.bottom - client_rect.top;
 
-  return !surface_impl->inhibit_configure;
+  return !surface->inhibit_configure;
 }
 
 void
-_gdk_win32_do_emit_configure_event (GdkSurface *window,
+_gdk_win32_do_emit_configure_event (GdkSurface *surface,
                                     RECT       rect)
 {
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+  surface->unscaled_width = rect.right - rect.left;
+  surface->unscaled_height = rect.bottom - rect.top;
+  surface->width = (surface->unscaled_width + surface->surface_scale - 1) / surface->surface_scale;
+  surface->height = (surface->unscaled_height + surface->surface_scale - 1) / surface->surface_scale;
+  surface->x = rect.left / surface->surface_scale;
+  surface->y = rect.top / surface->surface_scale;
 
-  impl->unscaled_width = rect.right - rect.left;
-  impl->unscaled_height = rect.bottom - rect.top;
-  window->width = (impl->unscaled_width + impl->surface_scale - 1) / impl->surface_scale;
-  window->height = (impl->unscaled_height + impl->surface_scale - 1) / impl->surface_scale;
-  window->x = rect.left / impl->surface_scale;
-  window->y = rect.top / impl->surface_scale;
+  _gdk_surface_update_size (surface);
 
-  _gdk_surface_update_size (window);
-
-  g_signal_emit_by_name (window, "size-changed", window->width, window->height);
+  g_signal_emit_by_name (surface, "size-changed", surface->width, surface->height);
 }
 
 void
-_gdk_win32_emit_configure_event (GdkSurface *window)
+_gdk_win32_emit_configure_event (GdkSurface *surface)
 {
   RECT rect;
 
-  if (!_gdk_win32_get_window_rect (window, &rect))
+  if (!_gdk_win32_get_window_rect (surface, &rect))
     return;
 
-  _gdk_win32_do_emit_configure_event (window, rect);
+  _gdk_win32_do_emit_configure_event (surface, rect);
 }
 
 cairo_region_t *
@@ -1418,7 +1413,7 @@ handle_wm_paint (MSG        *msg,
   HDC hdc;
   PAINTSTRUCT paintstruct;
   cairo_region_t *update_region;
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+  GdkWin32Surface *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
 
   if (GetUpdateRgn (msg->hwnd, hrgn, FALSE) == ERROR)
     {
@@ -1523,7 +1518,7 @@ handle_nchittest (HWND hwnd,
                   gint *ret_valp)
 {
   RECT rect;
-  GdkSurfaceImplWin32 *impl;
+  GdkWin32Surface *impl;
 
   if (window == NULL || window->input_shape == NULL)
     return FALSE;
@@ -1558,7 +1553,7 @@ static void
 handle_dpi_changed (GdkSurface *window,
                     MSG       *msg)
 {
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+  GdkWin32Surface *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
   GdkDisplay *display = gdk_display_get_default ();
   GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
   RECT *rect = (RECT *)msg->lParam;
@@ -1611,7 +1606,7 @@ generate_button_event (GdkEventType      type,
 {
   GdkEvent *event = gdk_event_new (type);
   GdkDeviceManagerWin32 *device_manager;
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+  GdkWin32Surface *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
 
   if (_gdk_input_ignore_core > 0)
     return;
@@ -1674,7 +1669,7 @@ ensure_stacking_on_unminimize (MSG *msg)
        rover = GetNextWindow (rover, GW_HWNDNEXT))
     {
       GdkSurface *rover_gdkw = gdk_win32_handle_table_lookup (rover);
-      GdkSurfaceImplWin32 *rover_impl;
+      GdkWin32Surface *rover_impl;
       gboolean rover_ontop;
 
       /* Checking window group not implemented yet */
@@ -1708,7 +1703,7 @@ static gboolean
 ensure_stacking_on_window_pos_changing (MSG       *msg,
 					GdkSurface *window)
 {
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+  GdkWin32Surface *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
   WINDOWPOS *windowpos = (WINDOWPOS *) msg->lParam;
   HWND rover;
   gboolean restacking;
@@ -1735,7 +1730,7 @@ ensure_stacking_on_window_pos_changing (MSG       *msg,
        rover = GetNextWindow (rover, GW_HWNDNEXT))
     {
       GdkSurface *rover_gdkw = gdk_win32_handle_table_lookup (rover);
-      GdkSurfaceImplWin32 *rover_impl;
+      GdkWin32Surface *rover_impl;
       gboolean rover_ontop;
 
       /* Checking window group not implemented yet */
@@ -1772,7 +1767,7 @@ static void
 ensure_stacking_on_activate_app (MSG       *msg,
 				 GdkSurface *window)
 {
-  GdkSurfaceImplWin32 *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
+  GdkWin32Surface *impl = GDK_SURFACE_IMPL_WIN32 (window->impl);
   HWND rover;
   gboolean window_ontop;
 
@@ -1803,7 +1798,7 @@ ensure_stacking_on_activate_app (MSG       *msg,
        rover = GetNextWindow (rover, GW_HWNDPREV))
     {
       GdkSurface *rover_gdkw = gdk_win32_handle_table_lookup (rover);
-      GdkSurfaceImplWin32 *rover_impl;
+      GdkWin32Surface *rover_impl;
       gboolean rover_ontop;
 
       /* Checking window group not implemented yet */
@@ -1832,7 +1827,7 @@ ensure_stacking_on_activate_app (MSG       *msg,
 static gboolean
 handle_wm_sysmenu (GdkSurface *window, MSG *msg, gint *ret_valp)
 {
-  GdkSurfaceImplWin32 *impl;
+  GdkWin32Surface *impl;
   LONG_PTR style, tmp_style;
   LONG_PTR additional_styles;
 
@@ -1907,7 +1902,7 @@ gboolean
 _gdk_win32_surface_fill_min_max_info (GdkSurface  *window,
                                      MINMAXINFO *mmi)
 {
-  GdkSurfaceImplWin32 *impl;
+  GdkWin32Surface *impl;
   RECT rect;
 
   if (GDK_SURFACE_DESTROYED (window))
@@ -2035,7 +2030,7 @@ gdk_event_translate (MSG  *msg,
 
   GdkDisplay *display;
   GdkSurface *window = NULL;
-  GdkSurfaceImplWin32 *impl;
+  GdkWin32Surface *impl;
   GdkWin32Display *win32_display;
 
   GdkSurface *new_window;
