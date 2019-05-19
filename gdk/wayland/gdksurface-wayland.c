@@ -243,13 +243,6 @@ _gdk_wayland_surface_clear_saved_size (GdkSurface *surface)
   impl->saved_height = -1;
 }
 
-/*
- * gdk_wayland_surface_update_size:
- * @drawable: a #GdkDrawableImplWayland.
- *
- * Updates the state of the drawable (in particular the drawable's
- * cairo surface) when its size has changed.
- */
 static void
 gdk_wayland_surface_update_size (GdkSurface *surface,
                                  int32_t     width,
@@ -2591,7 +2584,7 @@ static void
 gdk_wayland_surface_destroy_surface (GdkSurface *surface)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
   if (impl->display_server.wl_surface)
     {
