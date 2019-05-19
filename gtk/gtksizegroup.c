@@ -102,6 +102,10 @@
  * ]|
  */
 
+struct _GtkSizeGroupClass
+{
+  GObjectClass parent_class;
+};
 
 struct _GtkSizeGroupPrivate
 {
