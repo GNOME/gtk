@@ -57,7 +57,7 @@
  * of a GTK+ application in a convenient fashion, without enforcing
  * a one-size-fits-all application model.
  *
- * Currently, GtkApplication handles GTK+ initialization, application
+ * Currently, GtkApplication handles GTK initialization, application
  * uniqueness, session management, provides some basic scriptability and
  * desktop shell integration by exporting actions and menus and manages a
  * list of toplevel windows whose life-cycle is automatically tied to the
@@ -128,7 +128,7 @@
  *
  * ## See Also ## {#seealso}
  * [HowDoI: Using GtkApplication](https://wiki.gnome.org/HowDoI/GtkApplication),
- * [Getting Started with GTK+: Basics](https://developer.gnome.org/gtk3/stable/gtk-getting-started.html#id-1.2.3.3)
+ * [Getting Started with GTK: Basics](https://developer.gnome.org/gtk3/stable/gtk-getting-started.html#id-1.2.3.3)
  */
 
 enum {
