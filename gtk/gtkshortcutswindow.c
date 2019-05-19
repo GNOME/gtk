@@ -91,6 +91,14 @@
  * The .ui file for this example can be found [here](https://gitlab.gnome.org/GNOME/gtk/tree/master/demos/gtk-demo/shortcuts-builder.ui).
  */
 
+struct _GtkShortcutsWindowClass
+{
+  GtkWindowClass parent_class;
+
+  void (*close)  (GtkShortcutsWindow *self);
+  void (*search) (GtkShortcutsWindow *self);
+};
+
 typedef struct
 {
   GHashTable     *keywords;
