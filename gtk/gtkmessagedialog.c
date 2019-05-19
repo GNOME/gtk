@@ -106,6 +106,11 @@ typedef struct
   guint          message_type       : 3;
 } GtkMessageDialogPrivate;
 
+struct _GtkMessageDialogClass
+{
+  GtkDialogClass parent_class;
+};
+
 static void gtk_message_dialog_constructed  (GObject          *object);
 static void gtk_message_dialog_set_property (GObject          *object,
 					     guint             prop_id,
