@@ -37,8 +37,8 @@
  * input events get redirected to it while it is shown, and also so
  * the popover is dismissed in the expected situations (clicks outside
  * the popover, or the Esc key being pressed). If no such modal behavior
- * is desired on a popover, gtk_popover_set_modal() may be called on it
- * to tweak its behavior.
+ * is desired on a popover, gtk_popover_set_autohide() may be called
+ * on it to tweak its behavior.
  *
  * ## GtkPopover as menu replacement
  *
@@ -153,7 +153,7 @@ typedef struct {
   gboolean has_pointing_to;
   guint surface_transform_changed_cb;
   GtkPositionType position;
-  gboolean modal;
+  gboolean autohide;
 
   GtkWidget *contents_widget;
   GtkCssNode *arrow_node;
@@ -173,7 +173,7 @@ enum {
   PROP_RELATIVE_TO = 1,
   PROP_POINTING_TO,
   PROP_POSITION,
-  PROP_MODAL,
+  PROP_AUTOHIDE,
   PROP_DEFAULT_WIDGET,
   NUM_PROPERTIES
 };
@@ -526,7 +526,7 @@ gtk_popover_init (GtkPopover *popover)
 
   priv->position = GTK_POS_TOP;
   priv->final_position = GTK_POS_TOP;
-  priv->modal = TRUE;
+  priv->autohide = TRUE;
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect_swapped (controller, "focus-in", G_CALLBACK (gtk_popover_focus_in), popover);
@@ -568,7 +568,7 @@ gtk_popover_realize (GtkWidget *widget)
 
   display = gtk_widget_get_display (priv->relative_to);
 
-  priv->surface = gdk_surface_new_popup (display, gtk_widget_get_surface (priv->relative_to), priv->modal);
+  priv->surface = gdk_surface_new_popup (display, gtk_widget_get_surface (priv->relative_to), priv->autohide);
 
   gdk_surface_set_widget (priv->surface, widget);
 
@@ -626,7 +626,7 @@ gtk_popover_show (GtkWidget *widget)
   gtk_popover_native_check_resize (GTK_NATIVE (widget));
   gtk_widget_map (widget);
 
-  if (priv->modal)
+  if (priv->autohide)
     {
       if (!gtk_widget_get_focus_child (widget))
         gtk_widget_child_focus (widget, GTK_DIR_TAB_FORWARD);
@@ -1185,8 +1185,8 @@ gtk_popover_set_property (GObject      *object,
       gtk_popover_set_position (popover, g_value_get_enum (value));
       break;
 
-    case PROP_MODAL:
-      gtk_popover_set_modal (popover, g_value_get_boolean (value));
+    case PROP_AUTOHIDE:
+      gtk_popover_set_autohide (popover, g_value_get_boolean (value));
       break;
 
     case PROP_DEFAULT_WIDGET:
@@ -1222,8 +1222,8 @@ gtk_popover_get_property (GObject      *object,
       g_value_set_enum (value, priv->position);
       break;
 
-    case PROP_MODAL:
-      g_value_set_boolean (value, priv->modal);
+    case PROP_AUTOHIDE:
+      g_value_set_boolean (value, priv->autohide);
       break;
 
     case PROP_DEFAULT_WIDGET:
@@ -1308,10 +1308,10 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                          GTK_TYPE_POSITION_TYPE, GTK_POS_TOP,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  properties[PROP_MODAL] =
-      g_param_spec_boolean ("modal",
-                            P_("Modal"),
-                            P_("Whether the popover is modal"),
+  properties[PROP_AUTOHIDE] =
+      g_param_spec_boolean ("autohide",
+                            P_("Autohide"),
+                            P_("Whether to dismiss the popver on outside clicks"),
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1583,50 +1583,53 @@ gtk_popover_get_position (GtkPopover *popover)
 }
 
 /**
- * gtk_popover_set_modal:
+ * gtk_popover_set_autohide:
  * @popover: a #GtkPopover
- * @modal: #TRUE to make popover claim all input within the toplevel
+ * @autohide: #TRUE to dismiss the popover on outside clicks
  *
- * Sets whether @popover is modal, a modal popover will grab all input
- * within the toplevel and grab the keyboard focus on it when being
+ * Sets whether @popover is modal.
+ *
+ * A modal popover will grab the keyboard focus on it when being
  * displayed. Clicking outside the popover area or pressing Esc will
- * dismiss the popover and ungrab input.
+ * dismiss the popover.
  **/
 void
-gtk_popover_set_modal (GtkPopover *popover,
-                       gboolean    modal)
+gtk_popover_set_autohide (GtkPopover *popover,
+                          gboolean    autohide)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   g_return_if_fail (GTK_IS_POPOVER (popover));
 
-  modal = modal != FALSE;
+  autohide = autohide != FALSE;
 
-  if (priv->modal == modal)
+  if (priv->autohide == autohide)
     return;
 
-  priv->modal = modal;
+  priv->autohide = autohide;
 
-  g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_MODAL]);
+  g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_AUTOHIDE]);
 }
 
 /**
- * gtk_popover_get_modal:
+ * gtk_popover_get_autohide:
  * @popover: a #GtkPopover
  *
- * Returns whether the popover is modal, see gtk_popover_set_modal to
- * see the implications of this.
+ * Returns whether the popover is modal.
+ *
+ * See gtk_popover_set_autohide() for the
+ * implications of this.
  *
  * Returns: #TRUE if @popover is modal
  **/
 gboolean
-gtk_popover_get_modal (GtkPopover *popover)
+gtk_popover_get_autohide (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   g_return_val_if_fail (GTK_IS_POPOVER (popover), FALSE);
 
-  return priv->modal;
+  return priv->autohide;
 }
 
 /**
