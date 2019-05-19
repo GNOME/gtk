@@ -11331,7 +11331,6 @@ gtk_widget_set_surface (GtkWidget *widget,
     }
 }
 
-static void gtk_widget_render (GtkWidget *, GdkSurface *, const cairo_region_t *);
 static gboolean
 surface_expose (GdkSurface     *surface,
                 cairo_region_t *region,
@@ -13008,7 +13007,7 @@ gtk_widget_snapshot (GtkWidget   *widget,
     gtk_snapshot_append_node (snapshot, priv->render_node);
 }
 
-static void
+void
 gtk_widget_render (GtkWidget            *widget,
                    GdkSurface           *surface,
                    const cairo_region_t *region)
