@@ -80,8 +80,7 @@ transform {
                     color: rgb(46,52,54);
                     font: "Cantarell 11";
                     glyphs: 162 9216 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 678 7168 0 0 1;
-                    x: 0;
-                    y: 17;
+                    offset: 0 17;
                   }
                   transform: translate(28, 0);
                 }
@@ -104,8 +103,7 @@ transform {
                     color: rgb(46,52,54);
                     font: "Cantarell 11";
                     glyphs: 162 9216 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 679 8192 0 0 1;
-                    x: 0;
-                    y: 17;
+                    offset: 0 17;
                   }
                   transform: translate(28, 0);
                 }
@@ -131,8 +129,7 @@ transform {
                     color: rgb(46,52,54);
                     font: "Cantarell 11";
                     glyphs: 162 9216 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 680 8192 0 0 1;
-                    x: 0;
-                    y: 17;
+                    offset: 0 17;
                   }
                   transform: translate(28, 0);
                 }
@@ -209,8 +206,7 @@ transform {
                         color: rgb(50,50,50);
                         font: "Cantarell 11";
                         glyphs: 273 7168 0 0 1, 370 8192 0 0 1, 358 13312 0 0 1, 272 8192 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 370 8192 0 0 1, 472 7168 0 0 1, 287 8192 0 0 1, 360 8192 0 0 1, 430 5120 0 0 1, 409 6144 0 0 1, 473 7168 0 0 1;
-                        x: 0;
-                        y: 21;
+                        offset: 0 21;
                       }
                       clip {
                         child: container {
@@ -222,8 +218,7 @@ transform {
                             color: rgb(252,252,252);
                             font: "Cantarell 11";
                             glyphs: 273 7168 0 0 1, 370 8192 0 0 1, 358 13312 0 0 1, 272 8192 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 370 8192 0 0 1, 472 7168 0 0 1, 287 8192 0 0 1, 360 8192 0 0 1, 430 5120 0 0 1, 409 6144 0 0 1, 473 7168 0 0 1;
-                            x: 0;
-                            y: 21;
+                            offset: 0 21;
                           }
                         }
                         clip: 0 6 101 19;
@@ -281,8 +276,7 @@ transform {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
                         glyphs: 273 7168 0 0 1, 370 8192 0 0 1, 358 13312 0 0 1, 272 8192 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 370 8192 0 0 1, 472 7168 0 0 1, 287 8192 0 0 1, 360 8192 0 0 1, 430 5120 0 0 1, 409 6144 0 0 1, 473 7168 0 0 1;
-                        x: 0;
-                        y: 21;
+                        offset: 0 21;
                       }
                       clip: 0 0 357 32;
                     }
@@ -337,8 +331,7 @@ transform {
                       color: rgb(50,50,50);
                       font: "Cantarell 11";
                       glyphs: 30 10240 0 0 1, 349 4096 0 0 1, 324 4096 0 0 1, 273 7168 0 0 1, 345 7168 0 0 1, 862 3072 0 0 1, 324 4096 0 0 1, 273 7168 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1, 862 3072 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 862 3072 0 0 1, 273 7168 0 0 1, 319 8192 0 0 1, 244 8192 0 0 1, 360 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 358 13312 0 0 1, 370 8192 0 0 1, 280 8192 0 0 1, 287 8192 0 0 1;
-                      x: 0;
-                      y: 21;
+                      offset: 0 21;
                     }
                     opacity: 0.54902;
                   }
@@ -377,8 +370,7 @@ transform {
                     color: rgb(212,207,202);
                     font: "Cantarell 11";
                     glyphs: 287 8192 0 0 1, 360 8192 0 0 1, 430 5120 0 0 1, 409 6144 0 0 1, 473 7168 0 0 1;
-                    x: 0;
-                    y: 21;
+                    offset: 0 21;
                   }
                   clip: 0 0 392 32;
                 }
@@ -406,8 +398,7 @@ transform {
                         color: rgb(50,50,50);
                         font: "Cantarell 11";
                         glyphs: 287 8192 0 0 1, 360 8192 0 0 1, 430 5120 0 0 1, 409 6144 0 0 1, 473 7168 0 0 1;
-                        x: 0;
-                        y: 22;
+                        offset: 0 22;
                       }
                       clip: 0 0 357 33;
                     }
@@ -463,8 +454,7 @@ transform {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
                         glyphs: 103 8192 0 0 1, 287 8192 0 0 1, 311 5120 0 0 1, 430 5120 0 0 1;
-                        x: 2;
-                        y: 17;
+                        offset: 2 17;
                       }
                       transform {
                         child: color-matrix {
@@ -498,8 +488,7 @@ transform {
                           color: rgb(146,149,149);
                           font: "Cantarell 11";
                           glyphs: 113 13312 0 0 1, 324 4096 0 0 1, 280 8192 0 0 1, 280 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1;
-                          x: 2;
-                          y: 17;
+                          offset: 2 17;
                         }
                         transform {
                           child: color-matrix {
@@ -538,8 +527,7 @@ transform {
                           color: rgb(146,149,149);
                           font: "Cantarell 11";
                           glyphs: 165 9216 0 0 1, 324 4096 0 0 1, 312 8192 0 0 1, 319 8192 0 0 1, 430 5120 0 0 1;
-                          x: 2;
-                          y: 17;
+                          offset: 2 17;
                         }
                         transform {
                           child: color-matrix {
@@ -567,16 +555,14 @@ transform {
                   color: rgb(146,149,149);
                   font: "Cantarell 11";
                   glyphs: 349 4096 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 287 8192 0 0 1, 349 4096 0 0 1;
-                  x: 0;
-                  y: 22;
+                  offset: 0 22;
                 }
                 transform {
                   child: text {
                     color: rgb(212,207,202);
                     font: "Cantarell 11";
                     glyphs: 349 4096 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 287 8192 0 0 1, 349 4096 0 0 1;
-                    x: 0;
-                    y: 22;
+                    offset: 0 22;
                   }
                   transform: translate(52, 0);
                 }
@@ -600,8 +586,7 @@ transform {
                           color: rgb(50,50,50);
                           font: "Cantarell 11";
                           glyphs: 682 8192 0 0 1, 677 9216 0 0 1;
-                          x: 0;
-                          y: 15;
+                          offset: 0 15;
                         }
                         transform: translate(6, 6);
                       }
@@ -665,8 +650,7 @@ transform {
                           color: rgb(212,207,202);
                           font: "Cantarell 11";
                           glyphs: 677 9216 0 0 1;
-                          x: 0;
-                          y: 15;
+                          offset: 0 15;
                         }
                         transform: translate(6, 6);
                       }
@@ -755,8 +739,7 @@ transform {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
                         glyphs: 273 7168 0 0 1, 319 8192 0 0 1, 287 8192 0 0 1, 273 7168 0 0 1, 345 7168 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                        x: 0;
-                        y: 15;
+                        offset: 0 15;
                       }
                       transform: translate(24, 0);
                     }
@@ -784,8 +767,7 @@ transform {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
                         glyphs: 273 7168 0 0 1, 319 8192 0 0 1, 287 8192 0 0 1, 273 7168 0 0 1, 345 7168 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                        x: 0;
-                        y: 15;
+                        offset: 0 15;
                       }
                       transform: translate(24, 0);
                     }
@@ -821,8 +803,7 @@ transform {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
                         glyphs: 273 7168 0 0 1, 319 8192 0 0 1, 287 8192 0 0 1, 273 7168 0 0 1, 345 7168 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                        x: 0;
-                        y: 15;
+                        offset: 0 15;
                       }
                       transform: translate(24, 0);
                     }
@@ -858,8 +839,7 @@ transform {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
                         glyphs: 273 7168 0 0 1, 319 8192 0 0 1, 287 8192 0 0 1, 273 7168 0 0 1, 345 7168 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                        x: 0;
-                        y: 15;
+                        offset: 0 15;
                       }
                       transform: translate(24, 0);
                     }
@@ -887,8 +867,7 @@ transform {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
                         glyphs: 273 7168 0 0 1, 319 8192 0 0 1, 287 8192 0 0 1, 273 7168 0 0 1, 345 7168 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                        x: 0;
-                        y: 15;
+                        offset: 0 15;
                       }
                       transform: translate(24, 0);
                     }
@@ -924,8 +903,7 @@ transform {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
                         glyphs: 273 7168 0 0 1, 319 8192 0 0 1, 287 8192 0 0 1, 273 7168 0 0 1, 345 7168 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                        x: 0;
-                        y: 15;
+                        offset: 0 15;
                       }
                       transform: translate(24, 0);
                     }
@@ -956,8 +934,7 @@ transform {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
                         glyphs: 409 6144 0 0 1, 244 8192 0 0 1, 280 8192 0 0 1, 324 4096 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                        x: 0;
-                        y: 15;
+                        offset: 0 15;
                       }
                       transform: translate(24, 0);
                     }
@@ -988,8 +965,7 @@ transform {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
                         glyphs: 409 6144 0 0 1, 244 8192 0 0 1, 280 8192 0 0 1, 324 4096 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                        x: 0;
-                        y: 15;
+                        offset: 0 15;
                       }
                       transform: translate(24, 0);
                     }
@@ -1028,8 +1004,7 @@ transform {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
                         glyphs: 409 6144 0 0 1, 244 8192 0 0 1, 280 8192 0 0 1, 324 4096 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                        x: 0;
-                        y: 15;
+                        offset: 0 15;
                       }
                       transform: translate(24, 0);
                     }
@@ -1068,8 +1043,7 @@ transform {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
                         glyphs: 409 6144 0 0 1, 244 8192 0 0 1, 280 8192 0 0 1, 324 4096 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                        x: 0;
-                        y: 15;
+                        offset: 0 15;
                       }
                       transform: translate(24, 0);
                     }
@@ -1100,8 +1074,7 @@ transform {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
                         glyphs: 409 6144 0 0 1, 244 8192 0 0 1, 280 8192 0 0 1, 324 4096 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                        x: 0;
-                        y: 15;
+                        offset: 0 15;
                       }
                       transform: translate(24, 0);
                     }
@@ -1140,8 +1113,7 @@ transform {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
                         glyphs: 409 6144 0 0 1, 244 8192 0 0 1, 280 8192 0 0 1, 324 4096 0 0 1, 370 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                        x: 0;
-                        y: 15;
+                        offset: 0 15;
                       }
                       transform: translate(24, 0);
                     }
@@ -1210,8 +1182,7 @@ transform {
                     color: rgb(146,149,149);
                     font: "Cantarell 11";
                     glyphs: 430 5120 0 0 1, 370 8192 0 0 1, 312 8192 0 0 1, 312 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                    x: 2;
-                    y: 17;
+                    offset: 2 17;
                   }
                 }
                 transform: translate(17, 5);
@@ -1234,8 +1205,7 @@ transform {
                     color: rgb(212,207,202);
                     font: "Cantarell 11";
                     glyphs: 430 5120 0 0 1, 370 8192 0 0 1, 312 8192 0 0 1, 312 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                    x: 2;
-                    y: 17;
+                    offset: 2 17;
                   }
                 }
                 transform: translate(0, 44) translate(17, 5);
@@ -1258,8 +1228,7 @@ transform {
                     color: rgb(146,149,149);
                     font: "Cantarell 11";
                     glyphs: 430 5120 0 0 1, 370 8192 0 0 1, 312 8192 0 0 1, 312 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                    x: 2;
-                    y: 17;
+                    offset: 2 17;
                   }
                 }
                 transform: translate(0, 88) translate(17, 5);
@@ -1282,8 +1251,7 @@ transform {
                     color: rgb(212,207,202);
                     font: "Cantarell 11";
                     glyphs: 430 5120 0 0 1, 370 8192 0 0 1, 312 8192 0 0 1, 312 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                    x: 2;
-                    y: 17;
+                    offset: 2 17;
                   }
                 }
                 transform: translate(0, 132) translate(17, 5);
@@ -1308,8 +1276,7 @@ transform {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
                         glyphs: 1 10240 0 0 1, 360 8192 0 0 1, 280 8192 0 0 1, 409 6144 0 0 1, 287 8192 0 0 1, 244 8192 0 0 1;
-                        x: 2;
-                        y: 17;
+                        offset: 2 17;
                       }
                       transform {
                         child: color-matrix {
@@ -1348,8 +1315,7 @@ transform {
                         color: rgb(212,207,202);
                         font: "Cantarell 11";
                         glyphs: 126 11264 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1;
-                        x: 2;
-                        y: 17;
+                        offset: 2 17;
                       }
                       transform {
                         child: color-matrix {
@@ -1388,8 +1354,7 @@ transform {
                         color: rgb(146,149,149);
                         font: "Cantarell 11";
                         glyphs: 173 9216 0 0 1, 244 8192 0 0 1, 360 8192 0 0 1, 417 7168 0 0 1, 862 3072 0 0 1, 165 9216 0 0 1, 287 8192 0 0 1, 312 8192 0 0 1, 438 8192 0 0 1, 349 4096 0 0 1, 244 8192 0 0 1, 409 6144 0 0 1;
-                        x: 0;
-                        y: 17;
+                        offset: 0 17;
                       }
                       transform {
                         child: transform {
@@ -1397,8 +1362,7 @@ transform {
                             color: rgb(146,149,149);
                             font: "Cantarell Bold 11";
                             glyphs: 678 7168 0 0 1, 679 8192 0 0 1;
-                            x: 0;
-                            y: 17;
+                            offset: 0 17;
                           }
                           transform: translate(1, 0);
                         }
@@ -1465,8 +1429,7 @@ transform {
                           color: rgb(146,149,149);
                           font: "Cantarell 11";
                           glyphs: 822 4096 0 0 1, 115 11264 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1, 287 8192 0 0 1, 823 4096 0 0 1;
-                          x: 0;
-                          y: 17;
+                          offset: 0 17;
                         }
                         transform: translate(16, 0);
                       }
@@ -1493,8 +1456,7 @@ transform {
                     color: rgb(53,132,228);
                     font: "Cantarell 11";
                     glyphs: 349 4096 0 0 1, 324 4096 0 0 1, 360 8192 0 0 1, 345 7168 0 0 1, 862 3072 0 0 1, 272 8192 0 0 1, 438 8192 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                    x: 10;
-                    y: 17;
+                    offset: 10 17;
                   }
                   color {
                     bounds: 10 19 68 1;
@@ -1656,8 +1618,7 @@ transform {
                         color: rgba(46,52,54,0.4);
                         font: "Cantarell 9.1669921875";
                         glyphs: 682 7168 0 0 1, 677 8192 0 0 1, 859 1024 0 0 1, 919 12288 0 0 1;
-                        x: 0;
-                        y: 13;
+                        offset: 0 13;
                       }
                       transform: translate(237, 0);
                     }
@@ -2070,8 +2031,7 @@ transform {
                             color: rgba(146,149,149,0.55);
                             font: "Cantarell 11";
                             glyphs: 682 8192 0 0 1, 677 9216 0 0 1, 805 4096 0 0 1, 677 9216 0 0 1;
-                            x: 26;
-                            y: 15;
+                            offset: 26 15;
                           }
                           transform {
                             child: container {
@@ -2130,8 +2090,7 @@ transform {
                             color: rgba(146,149,149,0.55);
                             font: "Cantarell 11";
                             glyphs: 682 8192 0 0 1, 677 9216 0 0 1, 805 4096 0 0 1, 677 9216 0 0 1;
-                            x: 26;
-                            y: 15;
+                            offset: 26 15;
                           }
                           transform {
                             child: container {
@@ -2199,8 +2158,7 @@ transform {
                     color: rgb(146,149,149);
                     font: "Cantarell Bold 11";
                     glyphs: 81 4096 0 0 1, 360 8192 0 0 1, 417 7168 0 0 1, 287 8192 0 0 1, 430 6144 0 0 1;
-                    x: 0;
-                    y: 15;
+                    offset: 0 15;
                   }
                 }
                 transform: translate(1, 1);
@@ -2216,8 +2174,7 @@ transform {
                     color: rgb(146,149,149);
                     font: "Cantarell Bold 11";
                     glyphs: 126 11264 0 0 1, 438 8192 0 0 1, 430 6144 0 0 1, 417 7168 0 0 1, 287 8192 0 0 1, 430 6144 0 0 1;
-                    x: 0;
-                    y: 15;
+                    offset: 0 15;
                   }
                 }
                 transform: translate(0, 141) translate(1, 1);
@@ -2245,8 +2202,7 @@ transform {
                     color: rgb(146,149,149);
                     font: "Cantarell Bold 11";
                     glyphs: 69 11264 0 0 1, 409 6144 0 0 1, 370 8192 0 0 1, 370 8192 0 0 1, 466 7168 0 0 1, 287 8192 0 0 1;
-                    x: 0;
-                    y: 15;
+                    offset: 0 15;
                   }
                 }
                 transform: translate(0, 282) translate(2, 2);
@@ -2274,8 +2230,7 @@ transform {
                     color: rgb(146,149,149);
                     font: "Cantarell Bold 11";
                     glyphs: 165 10240 0 0 1, 324 4096 0 0 1, 280 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1;
-                    x: 0;
-                    y: 15;
+                    offset: 0 15;
                   }
                 }
                 transform: translate(0, 423) translate(2, 2);
@@ -2367,8 +2322,7 @@ transform {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
                             glyphs: 1 10240 0 0 1, 360 8192 0 0 1, 280 8192 0 0 1, 409 6144 0 0 1, 287 8192 0 0 1, 244 8192 0 0 1;
-                            x: 86;
-                            y: 42;
+                            offset: 86 42;
                           }
                           color {
                             bounds: 153 25 60 23;
@@ -2378,8 +2332,7 @@ transform {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
                             glyphs: 30 10240 0 0 1, 324 4096 0 0 1, 358 13312 0 0 1, 324 4096 0 0 1;
-                            x: 157;
-                            y: 42;
+                            offset: 157 42;
                           }
                           color {
                             bounds: 0 48 42 23;
@@ -2425,8 +2378,7 @@ transform {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
                             glyphs: 126 11264 0 0 1, 430 5120 0 0 1, 430 5120 0 0 1, 370 8192 0 0 1;
-                            x: 86;
-                            y: 65;
+                            offset: 86 65;
                           }
                           color {
                             bounds: 153 48 60 23;
@@ -2436,8 +2388,7 @@ transform {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
                             glyphs: 273 7168 0 0 1, 319 8192 0 0 1, 244 8192 0 0 1, 370 8192 0 0 1, 430 5120 0 0 1, 324 4096 0 0 1, 273 7168 0 0 1;
-                            x: 157;
-                            y: 65;
+                            offset: 157 65;
                           }
                           color {
                             bounds: 0 71 42 23;
@@ -2491,8 +2442,7 @@ transform {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
                             glyphs: 126 11264 0 0 1, 409 6144 0 0 1, 466 7168 0 0 1, 324 4096 0 0 1, 349 4096 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1;
-                            x: 86;
-                            y: 88;
+                            offset: 86 88;
                           }
                           color {
                             bounds: 153 71 60 23;
@@ -2503,15 +2453,13 @@ transform {
                               color: rgb(50,50,50);
                               font: "Cantarell 11";
                               glyphs: 165 9216 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1, 287 8192 0 0 1, 360 8192 0 0 1;
-                              x: 157;
-                              y: 88;
+                              offset: 157 88;
                             }
                             text {
                               color: rgb(50,50,50);
                               font: "Cantarell 11";
                               glyphs: 809 10240 0 0 1;
-                              x: 198;
-                              y: 88;
+                              offset: 198 88;
                             }
                           }
                           color {
@@ -2569,8 +2517,7 @@ transform {
                             color: rgb(50,50,50);
                             font: "Cantarell 11";
                             glyphs: 29 10240 0 0 1, 287 8192 0 0 1, 360 8192 0 0 1, 341 4096 0 0 1, 244 8192 0 0 1, 358 13312 0 0 1, 324 4096 0 0 1, 360 8192 0 0 1;
-                            x: 86;
-                            y: 111;
+                            offset: 86 111;
                           }
                           color {
                             bounds: 153 94 60 23;
@@ -2581,15 +2528,13 @@ transform {
                               color: rgb(50,50,50);
                               font: "Cantarell 11";
                               glyphs: 30 10240 0 0 1, 370 8192 0 0 1, 358 13312 0 0 1, 406 8192 0 0 1;
-                              x: 157;
-                              y: 111;
+                              offset: 157 111;
                             }
                             text {
                               color: rgb(50,50,50);
                               font: "Cantarell 11";
                               glyphs: 809 10240 0 0 1;
-                              x: 196;
-                              y: 111;
+                              offset: 196 111;
                             }
                           }
                         }
@@ -2612,8 +2557,7 @@ transform {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
                                 glyphs: 30 9216 0 0 1, 370 8192 0 0 1, 370 8192 0 0 1, 349 4096 0 0 1;
-                                x: 0;
-                                y: 17;
+                                offset: 0 17;
                               }
                             }
                             transform: translate(6, 0);
@@ -2633,8 +2577,7 @@ transform {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
                                 glyphs: 81 4096 0 0 1, 273 7168 0 0 1, 370 8192 0 0 1, 360 8192 0 0 1;
-                                x: 0;
-                                y: 17;
+                                offset: 0 17;
                               }
                             }
                             transform: translate(42, 0) translate(6, 0);
@@ -2654,8 +2597,7 @@ transform {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
                                 glyphs: 115 11264 0 0 1, 244 8192 0 0 1, 358 13312 0 0 1, 287 8192 0 0 1;
-                                x: 0;
-                                y: 17;
+                                offset: 0 17;
                               }
                             }
                             transform: translate(82, 0) translate(6, 0);
@@ -2675,8 +2617,7 @@ transform {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
                                 glyphs: 115 11264 0 0 1, 324 4096 0 0 1, 273 7168 0 0 1, 345 8192 0 0 1;
-                                x: 0;
-                                y: 17;
+                                offset: 0 17;
                               }
                             }
                             transform: translate(153, 0) translate(6, 0);
@@ -2753,8 +2694,7 @@ transform {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
                               glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 680 8192 0 0 1;
-                              x: 0;
-                              y: 20;
+                              offset: 0 20;
                             }
                             transform: translate(149, 0) translate(16, 3);
                           }
@@ -2763,8 +2703,7 @@ transform {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
                               glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 679 8192 0 0 1;
-                              x: 0;
-                              y: 20;
+                              offset: 0 20;
                             }
                             transform: translate(74, 0) translate(16, 3);
                           }
@@ -2782,8 +2721,7 @@ transform {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
                                 glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 678 7168 0 0 1;
-                                x: 0;
-                                y: 20;
+                                offset: 0 20;
                               }
                             }
                             transform: translate(16, 3);
@@ -2835,8 +2773,7 @@ transform {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
                               glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 680 8192 0 0 1;
-                              x: 0;
-                              y: 20;
+                              offset: 0 20;
                             }
                             transform: translate(0, 88) translate(12, 7);
                           }
@@ -2845,8 +2782,7 @@ transform {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
                               glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 679 8192 0 0 1;
-                              x: 0;
-                              y: 20;
+                              offset: 0 20;
                             }
                             transform: translate(0, 44) translate(12, 7);
                           }
@@ -2864,8 +2800,7 @@ transform {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
                                 glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 678 7168 0 0 1;
-                                x: 0;
-                                y: 20;
+                                offset: 0 20;
                               }
                             }
                             transform: translate(12, 7);
@@ -2910,8 +2845,7 @@ transform {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
                               glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 680 8192 0 0 1;
-                              x: 0;
-                              y: 20;
+                              offset: 0 20;
                             }
                             transform: translate(149, 0) translate(16, 4);
                           }
@@ -2920,8 +2854,7 @@ transform {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
                               glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 679 8192 0 0 1;
-                              x: 0;
-                              y: 20;
+                              offset: 0 20;
                             }
                             transform: translate(74, 0) translate(16, 4);
                           }
@@ -2939,8 +2872,7 @@ transform {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
                                 glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 678 7168 0 0 1;
-                                x: 0;
-                                y: 20;
+                                offset: 0 20;
                               }
                             }
                             transform: translate(16, 4);
@@ -2981,8 +2913,7 @@ transform {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
                               glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 680 8192 0 0 1;
-                              x: 0;
-                              y: 20;
+                              offset: 0 20;
                             }
                             transform: translate(0, 88) translate(12, 7);
                           }
@@ -2991,8 +2922,7 @@ transform {
                               color: rgb(146,149,149);
                               font: "Cantarell Bold 11";
                               glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 679 8192 0 0 1;
-                              x: 0;
-                              y: 20;
+                              offset: 0 20;
                             }
                             transform: translate(0, 44) translate(12, 7);
                           }
@@ -3010,8 +2940,7 @@ transform {
                                 color: rgb(146,149,149);
                                 font: "Cantarell Bold 11";
                                 glyphs: 406 8192 0 0 1, 244 8192 0 0 1, 312 8192 0 0 1, 287 8192 0 0 1, 862 3072 0 0 1, 678 7168 0 0 1;
-                                x: 0;
-                                y: 20;
+                                offset: 0 20;
                               }
                             }
                             transform: translate(12, 7);

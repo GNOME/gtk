@@ -29,8 +29,7 @@ void                    gsk_vulkan_text_pipeline_collect_vertex_data   (GskVulka
                                                                         guint                           total_glyphs,
                                                                         const PangoGlyphInfo           *glyphs,
                                                                         const GdkRGBA                  *color,
-                                                                        float                           x,
-                                                                        float                           y,
+                                                                        const graphene_point_t         *offset,
                                                                         guint                           start_glyph,
                                                                         guint                           num_glyphs,
                                                                         float                           scale);

@@ -292,8 +292,7 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_text_node_new                       (PangoFont                *font,
                                                                  PangoGlyphString         *glyphs,
                                                                  const GdkRGBA            *color,
-                                                                 float                     x,
-                                                                 float                     y);
+                                                                 const graphene_point_t   *offset);
 GDK_AVAILABLE_IN_ALL
 const PangoFont *       gsk_text_node_peek_font                 (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
@@ -303,9 +302,7 @@ const PangoGlyphInfo   *gsk_text_node_peek_glyphs               (GskRenderNode  
 GDK_AVAILABLE_IN_ALL
 const GdkRGBA *         gsk_text_node_peek_color                (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-float                   gsk_text_node_get_x                     (GskRenderNode            *node);
-GDK_AVAILABLE_IN_ALL
-float                   gsk_text_node_get_y                     (GskRenderNode            *node);
+const graphene_point_t *gsk_text_node_get_offset                (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_blur_node_new                       (GskRenderNode            *child,

@@ -527,8 +527,9 @@ render_text_node (GskGLRenderer   *self,
   guint num_glyphs = gsk_text_node_get_num_glyphs (node);
   int i;
   int x_position = 0;
-  float x = gsk_text_node_get_x (node) + builder->dx;
-  float y = gsk_text_node_get_y (node) + builder->dy;
+  const graphene_point_t *offset = gsk_text_node_get_offset (node);
+  float x = offset->x + builder->dx;
+  float y = offset->y + builder->dy;
 
   /* If the font has color glyphs, we don't need to recolor anything */
   if (!force_color && font_has_color_glyphs (font))

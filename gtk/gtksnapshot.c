@@ -1724,8 +1724,7 @@ gtk_snapshot_append_text (GtkSnapshot           *snapshot,
   node = gsk_text_node_new (font,
                             glyphs,
                             color,
-                            x + dx,
-                            y + dy);
+                            &GRAPHENE_POINT_INIT (x + dx, y + dy));
   if (node == NULL)
     return;
 

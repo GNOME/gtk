@@ -1004,14 +1004,12 @@ static GskRenderNode *
 parse_text_node (GtkCssParser *parser)
 {
   PangoFont *font = NULL;
-  double x = 0;
-  double y = 0;
+  graphene_point_t offset = GRAPHENE_POINT_INIT (0, 0);
   GdkRGBA color = { 0, 0, 0, 1 };
   PangoGlyphString *glyphs = NULL;
   const Declaration declarations[] = {
     { "font", parse_font, clear_font, &font },
-    { "x", parse_double, NULL, &x },
-    { "y", parse_double, NULL, &y },
+    { "offset", parse_point, NULL, &offset },
     { "color", parse_color, NULL, &color },
     { "glyphs", parse_glyphs, clear_glyphs, &glyphs }
   };
@@ -1022,7 +1020,7 @@ parse_text_node (GtkCssParser *parser)
   if (!font || !glyphs)
     return NULL;
 
-  result = gsk_text_node_new (font, glyphs, &color, x, y);
+  result = gsk_text_node_new (font, glyphs, &color, &offset);
 
   g_object_unref (font);
   pango_glyph_string_free (glyphs);
@@ -1855,6 +1853,7 @@ render_node_print (Printer       *p,
       {
         const guint n_glyphs = gsk_text_node_get_num_glyphs (node);
         const PangoGlyphInfo *glyph;
+        const graphene_point_t *offset = gsk_text_node_get_offset (node);
         PangoFontDescription *desc;
         char *font_name;
         guint i;
@@ -1887,9 +1886,8 @@ render_node_print (Printer       *p,
         g_string_append_c (p->str, ';');
         g_string_append_c (p->str, '\n');
 
-        append_float_param (p, "x", gsk_text_node_get_x (node));
-        append_float_param (p, "y", gsk_text_node_get_y (node));
-
+        if (!graphene_point_equal (offset, graphene_point_zero ()))
+          append_point_param (p, "offset", offset);
 
         end_node (p);
       }
