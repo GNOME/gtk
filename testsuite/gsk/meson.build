@@ -17,14 +17,6 @@ node_parser = executable(
   install_dir: testexecdir
 )
 
-serialize_deserialize = executable(
-  'serialize-deserialize',
-  ['serialize-deserialize.c'],
-  dependencies: libgtk_dep,
-  install: get_option('install-tests'),
-  install_dir: testexecdir,
-)
-
 compare_render_tests = [
   'blend-normal',
   'blend-difference',
@@ -88,6 +80,9 @@ foreach renderer : renderers
 endforeach
 
 node_parser_tests = [
+  'blend.node',
+  'border.node',
+  'color.node',
   'crash1.errors',
   'crash1.node',
   'crash1.ref.node',
@@ -99,6 +94,7 @@ node_parser_tests = [
   'crash4.errors',
   'crash4.node',
   'crash4.ref.node',
+  'debug.node',
   'empty-blend.node',
   'empty-blend.ref.node',
   'empty-blur.node',
@@ -137,6 +133,10 @@ node_parser_tests = [
   'empty-texture.ref.node',
   'empty-transform.node',
   'empty-transform.ref.node',
+  'rounded-rect.node',
+  'shadow.node',
+  'testswitch.node',
+  'widgetfactory.node',
 ]
 
 foreach test : node_parser_tests
@@ -154,29 +154,4 @@ foreach test : node_parser_tests
               ],
          suite: 'gsk')
   endif
-endforeach
-
-serialize_deserialize_tests = [
-  'blend',
-  'border',
-  'color',
-  'debug',
-  'rounded-rect',
-  'shadow',
-  'testswitch',
-  'widgetfactory',
-]
-
-foreach test : serialize_deserialize_tests
-  test('serialize-deserialize ' + test, serialize_deserialize,
-       args: [join_paths(meson.current_source_dir(), 'serializedeserialize', test + '.node')],
-       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
-              'GSETTINGS_BACKEND=memory',
-              'GTK_CSD=1',
-              'G_ENABLE_DIAGNOSTIC=0',
-              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-              'GSK_RENDERER=opengl'
-            ],
-       suite: 'gsk')
 endforeach
