@@ -1159,7 +1159,7 @@ gtk_tree_view_accessible_grab_cell_focus (GtkCellAccessibleParent *parent,
       gtk_tree_path_free (path);
       gtk_widget_grab_focus (widget);
       toplevel = gtk_widget_get_toplevel (widget);
-      if (gtk_widget_is_toplevel (toplevel))
+      if (GTK_IS_WINDOW (toplevel))
         {
           G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           gtk_window_present (GTK_WINDOW (toplevel));
