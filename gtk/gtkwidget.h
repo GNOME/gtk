@@ -526,8 +526,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_is_visible             (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
-gboolean              gtk_widget_is_toplevel            (GtkWidget    *widget);
-GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_is_drawable            (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_realized           (GtkWidget    *widget);
