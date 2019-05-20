@@ -280,7 +280,8 @@ void
 _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  GtkWidget *widget = GTK_WIDGET (bar), *toplevel;
+  GtkWidget *widget = GTK_WIDGET (bar);
+  GtkWidget *toplevel;
   GtkWindow *window;
   gchar *layout_desc;
   gchar **tokens, **t;
@@ -290,7 +291,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   gboolean is_sovereign_window;
 
   toplevel = gtk_widget_get_toplevel (widget);
-  if (!gtk_widget_is_toplevel (toplevel))
+  if (!GTK_IS_WINDOW (toplevel))
     return;
 
   if (priv->titlebar_start_box)

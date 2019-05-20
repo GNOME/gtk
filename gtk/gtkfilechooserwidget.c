@@ -713,10 +713,10 @@ get_toplevel (GtkWidget *widget)
   GtkWidget *toplevel;
 
   toplevel = gtk_widget_get_toplevel (widget);
-  if (!gtk_widget_is_toplevel (toplevel))
-    return NULL;
-  else
+  if (GTK_IS_WINDOW (toplevel))
     return GTK_WINDOW (toplevel);
+  else
+    return NULL;
 }
 
 /* Shows an error dialog for the file chooser */
@@ -1682,7 +1682,7 @@ open_folder_cb (GSimpleAction *action,
   files = get_selected_files (impl);
 
   /* Sigh, just use the first one */
-  if (files && gtk_widget_is_toplevel (toplevel))
+  if (files && GTK_IS_WINDOW (toplevel))
     {
       GFile *file = files->data;
       gchar *uri;
