@@ -580,7 +580,7 @@ get_toplevel (GtkWidget *widget)
 {
   GtkWidget *toplevel = NULL;
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   if (GTK_IS_WINDOW (toplevel))
     return GTK_WINDOW (toplevel);
   else

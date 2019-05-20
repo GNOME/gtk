@@ -880,7 +880,7 @@ _gtk_menu_shell_update_mnemonics (GtkMenuShell *menu_shell)
   while (target)
     {
       GtkMenuShellPrivate *priv = target->priv;
-      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (target));
+      GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (target)));
 
       /* The idea with keyboard mode is that once you start using
        * the keyboard to navigate the menus, we show mnemonics

@@ -1021,7 +1021,7 @@ render_node_save (GtkButton            *button,
     return;
 
   dialog = gtk_file_chooser_dialog_new ("",
-                                        GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (recorder))),
+                                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (recorder))),
                                         GTK_FILE_CHOOSER_ACTION_SAVE,
                                         _("_Cancel"), GTK_RESPONSE_CANCEL,
                                         _("_Save"), GTK_RESPONSE_ACCEPT,

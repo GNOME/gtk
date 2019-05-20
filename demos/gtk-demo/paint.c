@@ -176,7 +176,7 @@ drawing_area_unroot (GtkWidget *widget)
   DrawingArea *area = (DrawingArea *) widget;
   GtkWidget *toplevel;
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
 
   if (area->pad_controller)
     {
@@ -198,7 +198,7 @@ drawing_area_root (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (drawing_area_parent_class)->root (widget);
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (area));
+  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (area)));
 
   action_group = g_simple_action_group_new ();
   area->pad_controller = gtk_pad_controller_new (G_ACTION_GROUP (action_group), NULL);

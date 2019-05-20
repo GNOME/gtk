@@ -361,7 +361,7 @@ notify_cursor_location (GtkIMContextWayland *context)
 
   rect = context->cursor_rect;
   gtk_widget_translate_coordinates (context->widget,
-                                    gtk_widget_get_toplevel (context->widget),
+                                    GTK_WIDGET (gtk_widget_get_root (context->widget)),
                                     rect.x, rect.y,
                                     &rect.x, &rect.y);
 

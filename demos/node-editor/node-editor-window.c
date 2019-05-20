@@ -406,7 +406,7 @@ save_response_cb (GtkWidget        *dialog,
         {
           GtkWidget *dialog;
 
-          dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (self))),
+          dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
                                            GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
                                            GTK_MESSAGE_INFO,
                                            GTK_BUTTONS_OK,
@@ -430,7 +430,7 @@ save_cb (GtkWidget        *button,
   GtkWidget *dialog;
 
   dialog = gtk_file_chooser_dialog_new ("Save node",
-                                        GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (button))),
+                                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
                                         GTK_FILE_CHOOSER_ACTION_SAVE,
                                         "_Cancel", GTK_RESPONSE_CANCEL,
                                         "_Save", GTK_RESPONSE_ACCEPT,
@@ -514,7 +514,7 @@ export_image_cb (GtkWidget        *button,
     return;
 
   dialog = gtk_file_chooser_dialog_new ("",
-                                        GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (button))),
+                                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
                                         GTK_FILE_CHOOSER_ACTION_SAVE,
                                         "_Cancel", GTK_RESPONSE_CANCEL,
                                         "_Save", GTK_RESPONSE_ACCEPT,

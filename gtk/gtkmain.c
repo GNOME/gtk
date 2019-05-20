@@ -2066,7 +2066,7 @@ gtk_main_get_window_group (GtkWidget *widget)
   GtkWidget *toplevel = NULL;
 
   if (widget)
-    toplevel = gtk_widget_get_toplevel (widget);
+    toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
 
   if (GTK_IS_WINDOW (toplevel))
     return gtk_window_get_group (GTK_WINDOW (toplevel));

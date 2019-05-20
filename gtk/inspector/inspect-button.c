@@ -124,7 +124,7 @@ on_highlight_widget (GtkWidget          *button,
       return;
     }
 
-  if (gtk_widget_get_toplevel (widget) == GTK_WIDGET (iw))
+  if (gtk_widget_get_root (widget) == GTK_ROOT (iw))
     {
       /* Don't hilight things in the inspector window */
       return;
