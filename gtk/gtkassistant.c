@@ -1779,7 +1779,6 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), 0);
   g_return_val_if_fail (GTK_IS_WIDGET (page), 0);
   g_return_val_if_fail (gtk_widget_get_parent (page) == NULL, 0);
-  g_return_val_if_fail (!gtk_widget_is_toplevel (page), 0);
 
   page_info = g_object_new (GTK_TYPE_ASSISTANT_PAGE, NULL);
   page_info->page = g_object_ref (page);

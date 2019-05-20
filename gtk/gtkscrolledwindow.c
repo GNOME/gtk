@@ -2904,7 +2904,7 @@ gtk_scrolled_window_move_focus_out (GtkScrolledWindow *scrolled_window,
    * a flag, then propagating the focus motion to the notebook.
    */
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (scrolled_window));
-  if (!gtk_widget_is_toplevel (toplevel))
+  if (!GTK_IS_ROOT (toplevel))
     return;
 
   g_object_ref (scrolled_window);
