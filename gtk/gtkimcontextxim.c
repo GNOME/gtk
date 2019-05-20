@@ -1419,7 +1419,7 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
  * The toplevel is computed by walking up the GdkSurface
  * hierarchy from context->client_surface until we find a
  * window that is owned by some widget, and then calling
- * gtk_widget_get_toplevel() on that widget. This should
+ * gtk_widget_get_root() on that widget. This should
  * handle both cases where we might have GdkSurfaces without widgets,
  * and cases where GtkWidgets have strange window hierarchies
  * (like a torn off GtkHandleBox.)
