@@ -569,7 +569,7 @@ flags_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_value_unset (&val);
 
   str = flags_to_string (fclass, flags);
-  gtk_button_set_label (GTK_BUTTON (data), str);
+  gtk_menu_button_set_label (GTK_MENU_BUTTON (data), str);
   g_free (str);
 
   popover = gtk_menu_button_get_popover (GTK_MENU_BUTTON (data));
