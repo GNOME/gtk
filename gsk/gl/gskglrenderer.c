@@ -3196,6 +3196,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
                                 width, height,
                                 NULL, NULL);
 
+  glDeleteFramebuffers (1, &fbo_id);
   gsk_gl_driver_end_frame (self->gl_driver);
 
   gdk_gl_context_pop_debug_group (self->gl_context);
