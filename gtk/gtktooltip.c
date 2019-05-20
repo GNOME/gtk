@@ -400,6 +400,9 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
 
   toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
 
+  if (toplevel == NULL)
+    return;
+
   if (gtk_native_get_surface (GTK_NATIVE (toplevel)) != surface)
     return;
 
