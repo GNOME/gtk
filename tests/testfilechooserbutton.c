@@ -115,7 +115,7 @@ tests_button_clicked_cb (GtkButton *real_button,
       gtk_window_set_title (GTK_WINDOW (tests),
 			    "Tests - TestFileChooserButton");
       gtk_window_set_transient_for (GTK_WINDOW (tests),
-				    GTK_WINDOW (gtk_widget_get_toplevel (user_data)));
+				    GTK_WINDOW (gtk_widget_get_root (user_data)));
 
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (tests), box);

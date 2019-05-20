@@ -9517,7 +9517,7 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
                                           count < 0 ?
                                           GTK_DIR_UP : GTK_DIR_DOWN))
             {
-              GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tree_view));
+              GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (tree_view)));
 
               if (toplevel)
                 gtk_widget_child_focus (toplevel,
@@ -10089,7 +10089,7 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   if (tree_view->priv->search_custom_entry_set)
     return;
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (tree_view));
+  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (tree_view)));
   display = gtk_widget_get_display (GTK_WIDGET (tree_view));
 
    if (tree_view->priv->search_window != NULL)

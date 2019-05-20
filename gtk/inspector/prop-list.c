@@ -299,7 +299,7 @@ update_key_capture (GtkInspectorPropList *pl)
       GtkWidget *toplevel;
       GtkWidget *focus;
 
-      toplevel = gtk_widget_get_toplevel (GTK_WIDGET (pl));
+      toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (pl)));
       focus = gtk_root_get_focus (GTK_ROOT (toplevel));
 
       if (GTK_IS_EDITABLE (focus) &&
