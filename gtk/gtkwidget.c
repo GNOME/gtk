@@ -7216,6 +7216,7 @@ _gtk_widget_scale_changed (GtkWidget *widget)
 gint
 gtk_widget_get_scale_factor (GtkWidget *widget)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkRoot *root;
   GdkDisplay *display;
   GdkMonitor *monitor;
@@ -7223,7 +7224,7 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 1);
 
   if (_gtk_widget_get_realized (widget))
-    return gdk_surface_get_scale_factor (_gtk_widget_get_surface (widget));
+    return gdk_surface_get_scale_factor (priv->surface);
 
   root = _gtk_widget_get_root (widget);
   if (root && GTK_WIDGET (root) != widget)

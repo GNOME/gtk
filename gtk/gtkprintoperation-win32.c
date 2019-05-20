@@ -676,8 +676,11 @@ op_win32_free (GtkPrintOperationWin32 *op_win32)
 static HWND
 get_parent_hwnd (GtkWidget *widget)
 {
-  gtk_widget_realize (widget);
-  return gdk_win32_surface_get_handle (gtk_widget_get_surface (widget));
+  GtkNative *native;
+
+  native = gtk_widget_get_native (widget);
+  gtk_widget_realize (GTK_WIDGET (native));
+  return gdk_win32_surface_get_handle (gtk_native_get_surface (native));
 }
 
 static void
@@ -1362,7 +1365,7 @@ plug_grab_notify (GtkWidget        *widget,
 		  gboolean          was_grabbed,
 		  GtkPrintOperation *op)
 {
-  EnableWindow (GetAncestor (GDK_SURFACE_HWND (gtk_widget_get_surface (widget)), GA_ROOT),
+  EnableWindow (GetAncestor (GDK_SURFACE_HWND (gtk_native_get_surface (gtk_widget_get_native (widget))), GA_ROOT),
 		was_grabbed);
 }
 
@@ -1388,7 +1391,7 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
       gtk_container_add (GTK_CONTAINER (plug), op->priv->custom_widget);
       gtk_widget_show (op->priv->custom_widget);
       gtk_widget_show (plug);
-      gdk_surface_focus (gtk_widget_get_surface (plug), GDK_CURRENT_TIME);
+      gdk_surface_focus (gtk_native_get_surface (gtk_widget_get_native (plug)), GDK_CURRENT_TIME);
 
       /* This dialog is modal, so we grab the embed widget */
       gtk_grab_add (plug);
@@ -1721,7 +1724,7 @@ gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
       invisible = gtk_window_new (GTK_WINDOW_POPUP);
       parentHWnd = get_parent_hwnd (invisible);
     }
-  else 
+  else
     parentHWnd = get_parent_hwnd (GTK_WIDGET (parent));
 
   printdlgex = (LPPRINTDLGEXW)GlobalAlloc (GPTR, sizeof (PRINTDLGEXW));
