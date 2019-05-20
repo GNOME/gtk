@@ -212,7 +212,7 @@ set_widget_type (GtkFishbowl *fishbowl,
   gtk_fishbowl_set_creation_func (fishbowl,
                                   widget_types[selected_widget_type].create_func);
 
-  window = gtk_widget_get_toplevel (GTK_WIDGET (fishbowl));
+  window = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (fishbowl)));
   headerbar = gtk_window_get_titlebar (GTK_WINDOW (window));
   gtk_header_bar_set_title (GTK_HEADER_BAR (headerbar),
                             widget_types[selected_widget_type].name);

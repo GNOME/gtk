@@ -3693,7 +3693,7 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
     {
       if (!gtk_widget_keynav_failed (GTK_WIDGET (icon_view), direction))
         {
-          GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (icon_view));
+          GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (icon_view)));
           if (toplevel)
             gtk_widget_child_focus (toplevel,
                                     direction == GTK_DIR_UP ?
@@ -3845,7 +3845,7 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
     {
       if (!gtk_widget_keynav_failed (GTK_WIDGET (icon_view), direction))
         {
-          GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (icon_view));
+          GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (icon_view)));
           if (toplevel)
             gtk_widget_child_focus (toplevel,
                                     direction == GTK_DIR_LEFT ?

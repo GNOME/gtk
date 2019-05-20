@@ -2897,7 +2897,7 @@ get_mount_operation (GtkPlacesSidebar *sidebar)
 {
   GMountOperation *mount_op;
 
-  mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
+  mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (sidebar))));
 
   emit_mount_operation (sidebar, mount_op);
 
@@ -2909,7 +2909,7 @@ get_unmount_operation (GtkPlacesSidebar *sidebar)
 {
   GMountOperation *mount_op;
 
-  mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
+  mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (sidebar))));
 
   emit_unmount_operation (sidebar, mount_op);
 

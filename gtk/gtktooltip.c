@@ -398,7 +398,7 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
   if (!surface)
     return;
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
 
   if (gtk_native_get_surface (GTK_NATIVE (toplevel)) != surface)
     return;
@@ -503,7 +503,7 @@ gtk_tooltip_set_last_surface (GtkTooltip *tooltip,
     window_widget = gtk_native_get_for_surface (surface);
 
   if (window_widget)
-    window_widget = gtk_widget_get_toplevel (window_widget);
+    window_widget = GTK_WIDGET (gtk_widget_get_root (window_widget));
 
   if (window_widget &&
       window_widget != tooltip->window &&
@@ -584,7 +584,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 
   tooltip->tooltip_widget = new_tooltip_widget;
 
-  toplevel = _gtk_widget_get_toplevel (new_tooltip_widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (new_tooltip_widget));
   if (gtk_widget_compute_bounds (new_tooltip_widget, toplevel, &anchor_bounds))
     {
       anchor_rect = (GdkRectangle) {

@@ -805,7 +805,7 @@ gtk_scale_popup (GtkWidget *widget)
 
   gtk_popover_popup (GTK_POPOVER (priv->dock));
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   _gtk_window_get_shadow_width (GTK_WINDOW (toplevel), &border);
   w = gtk_widget_get_allocated_width (toplevel) - border.left - border.right;
   h = gtk_widget_get_allocated_height (toplevel) - border.top - border.bottom;

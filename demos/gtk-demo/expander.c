@@ -38,7 +38,7 @@ do_expander (GtkWidget *do_widget)
 
   if (!window)
     {
-      toplevel = gtk_widget_get_toplevel (do_widget);
+      toplevel = GTK_WIDGET (gtk_widget_get_root (do_widget));
       window = gtk_message_dialog_new_with_markup (GTK_WINDOW (toplevel),
                                                    0,
                                                    GTK_MESSAGE_ERROR,

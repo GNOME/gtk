@@ -1445,12 +1445,12 @@ gtk_menu_popup_internal (GtkMenu             *menu,
 
   parent_toplevel = NULL;
   if (parent_menu_shell)
-    parent_toplevel = gtk_widget_get_toplevel (parent_menu_shell);
+    parent_toplevel = GTK_WIDGET (gtk_widget_get_root (parent_menu_shell));
   else
     {
       GtkWidget *attach_widget = gtk_menu_get_attach_widget (menu);
       if (attach_widget)
-        parent_toplevel = gtk_widget_get_toplevel (attach_widget);
+        parent_toplevel = GTK_WIDGET (gtk_widget_get_root (attach_widget));
     }
 
   /* Set transient for to get the right window group and parent */
@@ -3919,7 +3919,7 @@ gtk_menu_grab_notify (GtkWidget *widget,
       !gtk_widget_device_is_shadowed (widget, pointer))
     return;
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
 
   if (!GTK_IS_WINDOW (toplevel))
     return;

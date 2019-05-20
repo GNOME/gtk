@@ -366,7 +366,7 @@ gtk_menu_bar_root (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_menu_bar_parent_class)->root (widget);
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   add_to_window (GTK_WINDOW (toplevel), menubar);
 }
 
@@ -376,7 +376,7 @@ gtk_menu_bar_unroot (GtkWidget *widget)
   GtkMenuBar *menubar = GTK_MENU_BAR (widget);
   GtkWidget *toplevel;
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   remove_from_window (GTK_WINDOW (toplevel), menubar);
 
   GTK_WIDGET_CLASS (gtk_menu_bar_parent_class)->unroot (widget);
@@ -393,7 +393,7 @@ void
 _gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
 			   GtkDirectionType  dir)
 {
-  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (menubar));
+  GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (menubar)));
   GtkMenuItem *to_activate = NULL;
 
   if (GTK_IS_WINDOW (toplevel))
