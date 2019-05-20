@@ -487,7 +487,7 @@ get_origins (GtkWidget *widget,
 {
   GdkSurface *surface;
 
-  surface = gtk_widget_get_surface (widget);
+  surface = gtk_native_get_surface (gtk_widget_get_native (widget));
   gdk_surface_get_origin (surface, x_surface, y_surface);
   gdk_surface_get_origin (surface, x_toplevel, y_toplevel);
 
