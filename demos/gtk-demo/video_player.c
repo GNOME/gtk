@@ -33,7 +33,7 @@ open_clicked_cb (GtkWidget *button,
   GtkWidget *dialog;
 
   dialog = gtk_file_chooser_dialog_new ("Select a video",
-                                        GTK_WINDOW (gtk_widget_get_toplevel (button)),
+                                        GTK_WINDOW (gtk_widget_get_root (button)),
                                         GTK_FILE_CHOOSER_ACTION_OPEN,
                                         "_Cancel", GTK_RESPONSE_CANCEL,
                                         "_Open", GTK_RESPONSE_ACCEPT,
@@ -48,7 +48,7 @@ static void
 fullscreen_clicked_cb (GtkWidget *button,
                        gpointer   unused)
 {
-  GtkWidget *window = gtk_widget_get_toplevel (button);
+  GtkWidget *window = GTK_WIDGET (gtk_widget_get_root (button));
 
   gtk_window_fullscreen (GTK_WINDOW (window));
 }

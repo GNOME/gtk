@@ -143,7 +143,7 @@ flag_toggled (GtkWidget        *button,
       GtkWidget *toplevel = l->data;
       GskRenderer *renderer;
 
-      if (toplevel == gtk_widget_get_toplevel (button)) /* skip the inspector */
+      if ((GtkRoot *)toplevel == gtk_widget_get_root (button)) /* skip the inspector */
         continue;
 
       renderer = gtk_native_get_renderer (GTK_NATIVE (toplevel));
