@@ -511,8 +511,11 @@ gsk_gl_driver_get_texture_for_texture (GskGLDriver *self,
         {
           /* In this case, we have to temporarily make the texture's context the current one,
            * download its data into our context and then create a texture from it. */
-          gdk_gl_context_make_current (texture_context);
+          if (texture_context)
+            gdk_gl_context_make_current (texture_context);
+
           surface = gdk_texture_download_surface (texture);
+
           gdk_gl_context_make_current (self->gl_context);
         }
       else
