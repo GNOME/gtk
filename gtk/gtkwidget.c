@@ -11200,24 +11200,6 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_get_surface:
- * @widget: a #GtkWidget
- *
- * Returns the widget’s surface if it is realized, %NULL otherwise
- *
- * Returns: (transfer none) (nullable): @widget’s surface.
- */
-GdkSurface *
-gtk_widget_get_surface (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-
-  return priv->surface;
-}
-
-/**
  * gtk_widget_get_support_multidevice:
  * @widget: a #GtkWidget
  *

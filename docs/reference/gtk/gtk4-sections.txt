@@ -4495,7 +4495,6 @@ gtk_widget_set_tooltip_window
 gtk_widget_get_has_tooltip
 gtk_widget_set_has_tooltip
 gtk_widget_trigger_tooltip_query
-gtk_widget_get_surface
 gtk_widget_get_allocated_width
 gtk_widget_get_allocated_height
 gtk_widget_get_allocation
