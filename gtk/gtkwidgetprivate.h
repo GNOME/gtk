@@ -423,15 +423,6 @@ _gtk_widget_get_direction (GtkWidget *widget)
     return widget->priv->direction;
 }
 
-static inline GtkWidget *
-_gtk_widget_get_toplevel (GtkWidget *widget)
-{
-  while (widget->priv->parent)
-    widget = widget->priv->parent;
-
-  return widget;
-}
-
 static inline GtkRoot *
 _gtk_widget_get_root (GtkWidget *widget)
 {

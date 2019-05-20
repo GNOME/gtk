@@ -607,9 +607,6 @@ void         gtk_widget_set_overflow      (GtkWidget           *widget,
 GDK_AVAILABLE_IN_ALL
 GtkOverflow  gtk_widget_get_overflow      (GtkWidget           *widget);
 
-
-GDK_AVAILABLE_IN_ALL
-GtkWidget*   gtk_widget_get_toplevel    (GtkWidget      *widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget*   gtk_widget_get_ancestor    (GtkWidget      *widget,
                                          GType           widget_type);
