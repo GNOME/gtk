@@ -642,7 +642,7 @@ update_key_capture (GtkWidget *chooser)
       GtkWidget *toplevel;
       GtkWidget *focus;
 
-      toplevel = gtk_widget_get_toplevel (chooser);
+      toplevel = GTK_WIDGET (gtk_widget_get_root (chooser));
       focus = gtk_root_get_focus (GTK_ROOT (toplevel));
 
       if (GTK_IS_EDITABLE (focus) && focus != priv->search_entry)

@@ -290,7 +290,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   gboolean shown_by_shell;
   gboolean is_sovereign_window;
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   if (!GTK_IS_WINDOW (toplevel))
     return;
 

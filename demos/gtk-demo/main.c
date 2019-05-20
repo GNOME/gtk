@@ -991,7 +991,7 @@ row_activated_cb (GtkWidget         *tree_view,
   GtkWidget *window;
   GtkTreeModel *model;
 
-  window = gtk_widget_get_toplevel (tree_view);
+  window = GTK_WIDGET (gtk_widget_get_root (tree_view));
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree_view));
   gtk_tree_model_get_iter (model, &iter, path);
 

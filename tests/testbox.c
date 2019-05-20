@@ -14,7 +14,7 @@ edit_widget (GtkWidget *button)
   if (!dialog)
     {
       dialog = gtk_dialog_new_with_buttons ("",
-                                            GTK_WINDOW (gtk_widget_get_toplevel (button)),
+                                            GTK_WINDOW (gtk_widget_get_root (button)),
                                             GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_USE_HEADER_BAR,
                                             NULL, NULL);
 

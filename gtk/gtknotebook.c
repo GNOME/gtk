@@ -1535,7 +1535,7 @@ gtk_notebook_move_focus_out (GtkNotebook      *notebook,
   /* At this point, we know we should be focusing out of the notebook entirely. We
    * do this by setting a flag, then propagating the focus motion to the notebook.
    */
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (notebook));
+  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (notebook)));
   if (!GTK_IS_ROOT (toplevel))
     return;
 
@@ -3807,7 +3807,7 @@ gtk_notebook_set_focus_child (GtkContainer *container,
    * for future use if we switch to the page with a mnemonic.
    */
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (container));
+  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (container)));
   if (GTK_IS_WINDOW (toplevel))
     {
       page_child = gtk_window_get_focus (GTK_WINDOW (toplevel));

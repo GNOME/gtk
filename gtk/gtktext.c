@@ -3487,7 +3487,7 @@ gtk_text_move_cursor (GtkText         *self,
                                                  count > 0 ?
                                                  GTK_DIR_RIGHT : GTK_DIR_LEFT))
                     {
-                      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+                      GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (self)));
 
                       if (toplevel)
                         gtk_widget_child_focus (toplevel,

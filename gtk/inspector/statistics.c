@@ -335,7 +335,7 @@ root (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_inspector_statistics_parent_class)->root (widget);
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
 
   controller = gtk_event_controller_key_new ();
   g_object_set_data_full (G_OBJECT (toplevel), "statistics-controller", controller, (GDestroyNotify)destroy_controller);
@@ -350,7 +350,7 @@ unroot (GtkWidget *widget)
 {
   GtkWidget *toplevel;
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   g_object_set_data (G_OBJECT (toplevel), "statistics-controller", NULL);
 
   GTK_WIDGET_CLASS (gtk_inspector_statistics_parent_class)->unroot (widget);

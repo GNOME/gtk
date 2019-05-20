@@ -311,7 +311,7 @@ get_toplevel (GtkWidget *widget)
 {
   GtkWidget *toplevel;
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   if (GTK_IS_WINDOW (toplevel))
     return GTK_WINDOW (toplevel);
   else
@@ -1404,7 +1404,7 @@ unmount_mount (GtkPlacesView *view,
   GtkWidget *toplevel;
 
   priv = gtk_places_view_get_instance_private (view);
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
+  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (view)));
 
   g_cancellable_cancel (priv->cancellable);
   g_clear_object (&priv->cancellable);
@@ -1442,7 +1442,7 @@ mount_server (GtkPlacesView *view,
     return;
 
   priv->cancellable = g_cancellable_new ();
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
+  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (view)));
   operation = gtk_mount_operation_new (GTK_WINDOW (toplevel));
 
   priv->should_pulse_entry = TRUE;
@@ -1481,7 +1481,7 @@ mount_volume (GtkPlacesView *view,
   GtkWidget *toplevel;
 
   priv = gtk_places_view_get_instance_private (view);
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
+  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (view)));
   operation = gtk_mount_operation_new (GTK_WINDOW (toplevel));
 
   g_cancellable_cancel (priv->cancellable);

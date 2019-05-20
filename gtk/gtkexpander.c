@@ -720,9 +720,9 @@ gtk_expander_resize_toplevel (GtkExpander *expander)
   if (child && priv->resize_toplevel &&
       gtk_widget_get_realized (GTK_WIDGET (expander)))
     {
-      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (expander));
+      GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (expander)));
 
-      if (toplevel && GTK_IS_WINDOW (toplevel) &&
+      if (GTK_IS_WINDOW (toplevel) &&
           gtk_widget_get_realized (toplevel))
         {
           int toplevel_width, toplevel_height;

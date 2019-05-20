@@ -144,7 +144,7 @@ size_group_state_flags_changed (GtkWidget     *widget,
   state = gtk_widget_get_state_flags (widget);
   if ((state & GTK_STATE_FLAG_PRELIGHT) != (old_state & GTK_STATE_FLAG_PRELIGHT))
     {
-      GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (widget));
+      GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (widget));
 
       if (state & GTK_STATE_FLAG_PRELIGHT)
         {

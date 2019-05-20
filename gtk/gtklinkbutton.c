@@ -415,7 +415,7 @@ gtk_link_button_activate_link (GtkLinkButton *link_button)
   GtkWidget *toplevel;
   GError *error;
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (link_button));
+  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (link_button)));
 
   error = NULL;
   gtk_show_uri_on_window (GTK_WINDOW (toplevel), priv->uri, GDK_CURRENT_TIME, &error);

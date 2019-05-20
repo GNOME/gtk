@@ -878,12 +878,12 @@ gtk_menu_item_buildable_custom_finished (GtkBuildable *buildable,
                  (attach = gtk_menu_get_attach_widget (GTK_MENU (menu_shell))) != NULL)
             menu_shell = GTK_MENU_SHELL (gtk_widget_get_parent (attach));
 
-          toplevel = gtk_widget_get_toplevel (GTK_WIDGET (menu_shell));
+          toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (menu_shell)));
         }
       else
         {
           /* Fall back to something ... */
-          toplevel = gtk_widget_get_toplevel (GTK_WIDGET (buildable));
+          toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (buildable)));
 
           g_warning ("found a GtkMenuItem '%s' without a parent GtkMenuShell, assigned accelerators wont work.",
                      gtk_buildable_get_name (buildable));

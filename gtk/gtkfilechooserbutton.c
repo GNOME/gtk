@@ -2600,7 +2600,7 @@ open_dialog (GtkFileChooserButton *button)
   GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
   GtkWidget *toplevel;
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (button));
+  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (button)));
 
   /* Setup the dialog parent to be chooser button's toplevel, and be modal
      as needed. */

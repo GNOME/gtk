@@ -123,7 +123,7 @@ direction_changed (GtkComboBox *combo)
   GtkWidget *iw;
   const gchar *direction;
 
-  iw = gtk_widget_get_toplevel (GTK_WIDGET (combo));
+  iw = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (combo)));
   fix_direction (iw);
 
   direction = gtk_combo_box_get_active_id (combo);
@@ -240,7 +240,7 @@ fps_activate (GtkSwitch          *sw,
   gboolean fps;
 
   fps = gtk_switch_get_active (sw);
-  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (vis)));
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (GTK_WIDGET (vis)));
   if (iw == NULL)
     return;
 
@@ -275,7 +275,7 @@ updates_activate (GtkSwitch          *sw,
   gboolean updates;
 
   updates = gtk_switch_get_active (sw);
-  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (vis)));
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (GTK_WIDGET (vis)));
   if (iw == NULL)
     return;
 
@@ -326,7 +326,7 @@ layout_activate (GtkSwitch          *sw,
   gboolean draw_layout;
 
   draw_layout = gtk_switch_get_active (sw);
-  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (vis)));
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (GTK_WIDGET (vis)));
   if (iw == NULL)
     return;
 
@@ -976,7 +976,7 @@ static void
 gtk_inspector_visual_finalize (GObject *object)
 {
   GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (object);
-  GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (vis)));
+  GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (GTK_WIDGET (vis)));
 
   if (vis->priv->layout_overlay)
     gtk_inspector_window_remove_overlay (iw, vis->priv->layout_overlay);
