@@ -380,15 +380,6 @@ gtk_window_accessible_get_extents (AtkComponent  *component,
   if (widget == NULL)
     return;
 
-  if (!gtk_widget_is_toplevel (widget))
-    {
-      AtkComponentIface *parent_iface;
-
-      parent_iface = (AtkComponentIface *) g_type_interface_peek_parent (ATK_COMPONENT_GET_IFACE (component));
-      parent_iface->get_extents (component, x, y, width, height, coord_type);
-      return;
-    }
-
   surface = gtk_native_get_surface (GTK_NATIVE (widget));
   if (surface == NULL)
     return;
@@ -426,15 +417,6 @@ gtk_window_accessible_get_size (AtkComponent *component,
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
   if (widget == NULL)
     return;
-
-  if (!gtk_widget_is_toplevel (widget))
-    {
-      AtkComponentIface *parent_iface;
-
-      parent_iface = (AtkComponentIface *) g_type_interface_peek_parent (ATK_COMPONENT_GET_IFACE (component));
-      parent_iface->get_size (component, width, height);
-      return;
-    }
 
   surface = gtk_native_get_surface (GTK_NATIVE (widget));
   if (surface == NULL)
