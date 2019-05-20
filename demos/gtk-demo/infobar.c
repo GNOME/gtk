@@ -20,7 +20,7 @@ on_bar_response (GtkInfoBar *info_bar,
       return;
     }
 
-  window = gtk_widget_get_toplevel (GTK_WIDGET (info_bar));
+  window = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (info_bar)));
   dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                    GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_INFO,

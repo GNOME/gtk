@@ -30,7 +30,7 @@ inhibitor_toggled (GtkToggleButton *button, GtkApplication *app)
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (inhibit_idle)))
     flags |= GTK_APPLICATION_INHIBIT_IDLE;
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (button));
+  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (button)));
 
   if (active)
     {
