@@ -470,12 +470,6 @@ _gtk_widget_peek_request_cache (GtkWidget *widget)
   return &widget->priv->requests;
 }
 
-static inline GdkSurface *
-_gtk_widget_get_surface (GtkWidget *widget)
-{
-  return widget->priv->surface;
-}
-
 static inline GtkWidget *
 _gtk_widget_get_prev_sibling (GtkWidget *widget)
 {
