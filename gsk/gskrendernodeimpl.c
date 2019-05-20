@@ -3666,6 +3666,7 @@ blur_once (cairo_surface_t *src,
           r += c1[0];
           g += c1[1];
           b += c1[2];
+          a += c1[3];
         }
       p_dest_row = p_dest;
       for (x = 0; x < width; x++)
@@ -3674,6 +3675,7 @@ blur_once (cairo_surface_t *src,
           p_dest_row[0] = div_kernel_size[r];
           p_dest_row[1] = div_kernel_size[g];
           p_dest_row[2] = div_kernel_size[b];
+          p_dest_row[3] = div_kernel_size[a];
           p_dest_row += n_channels;
 
           /* the pixel to add to the kernel */
@@ -3692,6 +3694,7 @@ blur_once (cairo_surface_t *src,
           r += c1[0] - c2[0];
           g += c1[1] - c2[1];
           b += c1[2] - c2[2];
+          a += c1[3] - c2[3];
         }
 
       p_src += src_rowstride;
@@ -3715,6 +3718,7 @@ blur_once (cairo_surface_t *src,
           r += c1[0];
           g += c1[1];
           b += c1[2];
+          a += c1[3];
         }
 
       p_dest_col = p_dest;
@@ -3725,6 +3729,7 @@ blur_once (cairo_surface_t *src,
           p_dest_col[0] = div_kernel_size[r];
           p_dest_col[1] = div_kernel_size[g];
           p_dest_col[2] = div_kernel_size[b];
+          p_dest_col[3] = div_kernel_size[a];
           p_dest_col += dest_rowstride;
 
           /* the pixel to add to the kernel */
@@ -3742,6 +3747,7 @@ blur_once (cairo_surface_t *src,
           r += c1[0] - c2[0];
           g += c1[1] - c2[1];
           b += c1[2] - c2[2];
+          a += c1[3] - c2[3];
         }
 
       p_src += n_channels;
