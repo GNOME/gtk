@@ -129,6 +129,9 @@ create_texture (GtkColorPlane *plane)
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
 
+  if (width == 0 || height == 0)
+    return;
+
   g_clear_object (&plane->priv->texture);
 
   stride = width * 4;
