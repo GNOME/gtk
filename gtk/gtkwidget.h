@@ -834,11 +834,9 @@ GdkModifierType   gtk_widget_get_modifier_mask (GtkWidget         *widget,
                                                 GdkModifierIntent  intent);
 
 GDK_AVAILABLE_IN_ALL
-void                    gtk_widget_insert_action_group                  (GtkWidget    *widget,
-                                                                         const gchar  *name,
-                                                                         GActionGroup *group);
-
-
+void              gtk_widget_insert_action_group (GtkWidget    *widget,
+                                                  const gchar  *name,
+                                                  GActionGroup *group);
 
 GDK_AVAILABLE_IN_ALL
 guint gtk_widget_add_tick_callback (GtkWidget       *widget,
