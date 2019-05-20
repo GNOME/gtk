@@ -89,6 +89,7 @@
 #include "gtkprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtknative.h"
 
 #include <string.h>
 
@@ -1345,7 +1346,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   GtkTreeViewColumn *action_column;
   gint action_height;
 
-  surface = gtk_widget_get_surface (completion->priv->entry);
+  surface = gtk_native_get_surface (gtk_widget_get_native (completion->priv->entry));
 
   if (!surface)
     return;

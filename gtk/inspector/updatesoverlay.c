@@ -23,6 +23,7 @@
 
 #include "gtkintl.h"
 #include "gtkwidget.h"
+#include "gtknative.h"
 
 #include "gsk/gskrendernodeprivate.h"
 
@@ -107,7 +108,7 @@ gtk_widget_updates_tick (GtkWidget     *widget,
       gtk_update_free (draw);
     }
 
-  gdk_surface_queue_expose (gtk_widget_get_surface (widget));
+  gdk_surface_queue_expose (gtk_native_get_surface (gtk_widget_get_native (widget)));
   if (draw)
     {
       g_queue_push_tail (updates->updates, draw);
@@ -239,7 +240,7 @@ gtk_updates_overlay_queue_draw (GtkInspectorOverlay *overlay)
 
   g_hash_table_iter_init (&iter, self->toplevels);
   while (g_hash_table_iter_next (&iter, &widget, NULL))
-    gdk_surface_queue_expose (gtk_widget_get_surface (widget));
+    gdk_surface_queue_expose (gtk_native_get_surface (gtk_widget_get_native (widget)));
 }
 
 static void

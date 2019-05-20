@@ -547,7 +547,7 @@ node_editor_window_add_renderer (NodeEditorWindow *self,
   GdkSurface *surface;
   GdkPaintable *paintable;
 
-  surface = gtk_widget_get_surface (GTK_WIDGET (self));
+  surface = gtk_native_get_surface (GTK_NATIVE (self));
   g_assert (surface != NULL);
 
   if (renderer != NULL && !gsk_renderer_realize (renderer, surface, NULL))

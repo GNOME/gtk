@@ -46,6 +46,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkiconprivate.h"
+#include "gtknative.h"
 
 #define MENU_POPUP_DELAY     225
 
@@ -1398,7 +1399,7 @@ gtk_menu_item_real_popup_submenu (GtkWidget      *widget,
       /* Position the submenu at the menu item if it is mapped.
        * Otherwise, position the submenu at the pointer device.
        */
-      if (gtk_widget_get_surface (widget))
+      if (gtk_native_get_surface (gtk_widget_get_native (widget)))
         {
           switch (priv->submenu_placement)
             {

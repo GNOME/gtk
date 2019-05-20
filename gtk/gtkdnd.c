@@ -38,6 +38,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
+#include "gtknative.h"
 
 #include "gdk/gdkcontentformatsprivate.h"
 #include "gdk/gdktextureprivate.h"
@@ -880,7 +881,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
                          int                 y)
 {
   GtkDragSourceInfo *info;
-  GtkRoot *root;
+  GtkNative *native;
   GdkDrag *drag;
   double px, py;
   int dx, dy;
@@ -889,9 +890,9 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     device = gdk_device_get_associated_device (device);
 
-  root = gtk_widget_get_root (widget);
-  gtk_widget_translate_coordinates (widget, GTK_WIDGET (root), x, y, &x, &y);
-  gdk_surface_get_device_position (gtk_widget_get_surface (widget),
+  native = gtk_widget_get_native (widget);
+  gtk_widget_translate_coordinates (widget, GTK_WIDGET (native), x, y, &x, &y);
+  gdk_surface_get_device_position (gtk_native_get_surface (native),
                                    device,
                                    &px, &py,
                                    NULL);
@@ -902,7 +903,7 @@ gtk_drag_begin_internal (GtkWidget          *widget,
   content->widget = g_object_ref (widget);
   content->formats = gdk_content_formats_ref (target_list);
 
-  drag = gdk_drag_begin (gtk_widget_get_surface (GTK_WIDGET (root)), device, GDK_CONTENT_PROVIDER (content), actions, dx, dy);
+  drag = gdk_drag_begin (gtk_native_get_surface (native), device, GDK_CONTENT_PROVIDER (content), actions, dx, dy);
   if (drag == NULL)
     {
       g_object_unref (content);
