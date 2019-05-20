@@ -6170,26 +6170,6 @@ gtk_widget_is_visible (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_is_toplevel:
- * @widget: a #GtkWidget
- *
- * Determines whether @widget is a toplevel widget.
- *
- * Currently only #GtkWindows are toplevel widgets.
- * Toplevel widgets have no parent widget and implement
- * the #GtkRoot interface.
- *
- * Returns: %TRUE if @widget is a toplevel, %FALSE otherwise
- **/
-gboolean
-gtk_widget_is_toplevel (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  return GTK_IS_ROOT (widget);
-}
-
-/**
  * gtk_widget_is_drawable:
  * @widget: a #GtkWidget
  *

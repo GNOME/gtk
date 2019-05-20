@@ -406,12 +406,6 @@ _gtk_widget_get_realized (GtkWidget *widget)
   return widget->priv->realized;
 }
 
-static inline gboolean
-_gtk_widget_is_toplevel (GtkWidget *widget)
-{
-  return GTK_IS_ROOT (widget);
-}
-
 static inline GtkStateFlags
 _gtk_widget_get_state_flags (GtkWidget *widget)
 {
