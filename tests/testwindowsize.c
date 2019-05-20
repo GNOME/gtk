@@ -65,7 +65,7 @@ show_dialog (void)
 
   gtk_dialog_add_action_widget (GTK_DIALOG (dialog), label, GTK_RESPONSE_HELP);
   gtk_widget_realize (dialog);
-  g_signal_connect (gtk_widget_get_surface (dialog), "size-changed",
+  g_signal_connect (gtk_native_get_surface (GTK_NATIVE (dialog)), "size-changed",
                     G_CALLBACK (size_changed_cb), label);
 
   gtk_dialog_run (GTK_DIALOG (dialog));

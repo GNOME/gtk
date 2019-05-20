@@ -26,16 +26,18 @@ point_press (PointState *point,
   GdkDisplay *display;
   GdkDevice *device;
   GdkSeat *seat;
+  GdkSurface *surface;
   GdkEvent *ev;
 
   display = gtk_widget_get_display (widget);
   seat = gdk_display_get_default_seat (display);
   device = gdk_seat_get_pointer (seat);
+  surface = gtk_native_get_surface (gtk_widget_get_native (widget));
 
   if (point == &mouse_state)
     {
       ev = gdk_event_new (GDK_BUTTON_PRESS);
-      ev->any.surface = g_object_ref (gtk_widget_get_surface (widget));
+      ev->any.surface = g_object_ref (surface);
       ev->button.time = GDK_CURRENT_TIME;
       ev->button.x = point->x;
       ev->button.y = point->y;
@@ -47,7 +49,7 @@ point_press (PointState *point,
   else
     {
       ev = gdk_event_new (GDK_TOUCH_BEGIN);
-      ev->any.surface = g_object_ref (gtk_widget_get_surface (widget));
+      ev->any.surface = g_object_ref (surface);
       ev->touch.time = GDK_CURRENT_TIME;
       ev->touch.x = point->x;
       ev->touch.y = point->y;
@@ -75,11 +77,13 @@ point_update (PointState *point,
   GdkDisplay *display;
   GdkDevice *device;
   GdkSeat *seat;
+  GdkSurface *surface;
   GdkEvent *ev;
 
   display = gtk_widget_get_display (widget);
   seat = gdk_display_get_default_seat (display);
   device = gdk_seat_get_pointer (seat);
+  surface = gtk_native_get_surface (gtk_widget_get_native (widget));
 
   point->x = x;
   point->y = y;
@@ -87,7 +91,7 @@ point_update (PointState *point,
   if (point == &mouse_state)
     {
       ev = gdk_event_new (GDK_MOTION_NOTIFY);
-      ev->any.surface = g_object_ref (gtk_widget_get_surface (widget));
+      ev->any.surface = g_object_ref (surface);
       ev->button.time = GDK_CURRENT_TIME;
       ev->motion.x = x;
       ev->motion.y = y;
@@ -99,7 +103,7 @@ point_update (PointState *point,
         return;
 
       ev = gdk_event_new (GDK_TOUCH_UPDATE);
-      ev->any.surface = g_object_ref (gtk_widget_get_surface (widget));
+      ev->any.surface = g_object_ref (surface);
       ev->touch.time = GDK_CURRENT_TIME;
       ev->touch.x = x;
       ev->touch.y = y;
@@ -124,6 +128,7 @@ point_release (PointState *point,
   GdkDisplay *display;
   GdkDevice *device;
   GdkSeat *seat;
+  GdkSurface *surface;
   GdkEvent *ev;
 
   if (point->widget == NULL)
@@ -132,6 +137,7 @@ point_release (PointState *point,
   display = gtk_widget_get_display (point->widget);
   seat = gdk_display_get_default_seat (display);
   device = gdk_seat_get_pointer (seat);
+  surface = gtk_native_get_surface (gtk_widget_get_native (point->widget));
 
   if (!point->widget)
     return;
@@ -142,7 +148,7 @@ point_release (PointState *point,
         return;
 
       ev = gdk_event_new (GDK_BUTTON_RELEASE);
-      ev->any.surface = g_object_ref (gtk_widget_get_surface (point->widget));
+      ev->any.surface = g_object_ref (surface);
       ev->button.time = GDK_CURRENT_TIME;
       ev->button.x = point->x;
       ev->button.y = point->y;
@@ -153,7 +159,7 @@ point_release (PointState *point,
   else
     {
       ev = gdk_event_new (GDK_TOUCH_END);
-      ev->any.surface = g_object_ref (gtk_widget_get_surface (point->widget));
+      ev->any.surface = g_object_ref (surface);
       ev->touch.time = GDK_CURRENT_TIME;
       ev->touch.x = point->x;
       ev->touch.y = point->y;

@@ -28,6 +28,7 @@
 #include "gtkprivate.h"
 #include "gtkrender.h"
 #include "gtksnapshot.h"
+#include "gtknative.h"
 
 #include <epoxy/gl.h>
 
@@ -312,7 +313,7 @@ gtk_gl_area_real_create_context (GtkGLArea *area)
   GError *error = NULL;
   GdkGLContext *context;
 
-  context = gdk_surface_create_gl_context (gtk_widget_get_surface (widget), &error);
+  context = gdk_surface_create_gl_context (gtk_native_get_surface (gtk_widget_get_native (widget)), &error);
   if (error != NULL)
     {
       gtk_gl_area_set_error (area, error);

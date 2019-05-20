@@ -116,6 +116,7 @@
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtknative.h"
 
 #include "a11y/gtkmenuaccessible.h"
 
@@ -1283,7 +1284,7 @@ associate_menu_grab_transfer_surface (GtkMenu *menu)
   GdkSurface *toplevel_surface;
   GdkSurface *transfer_surface;
 
-  toplevel_surface = gtk_widget_get_surface (priv->toplevel);
+  toplevel_surface = gtk_native_get_surface (GTK_NATIVE (priv->toplevel));
   transfer_surface = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-surface");
 
   if (toplevel_surface == NULL || transfer_surface == NULL)
@@ -1388,7 +1389,7 @@ gtk_menu_popup_internal (GtkMenu             *menu,
 
   if (xgrab_shell && xgrab_shell != widget)
     {
-      if (popup_grab_on_surface (gtk_widget_get_surface (xgrab_shell), pointer))
+      if (popup_grab_on_surface (gtk_native_get_surface (gtk_widget_get_native (xgrab_shell)), pointer))
         {
           _gtk_menu_shell_set_grab_device (GTK_MENU_SHELL (xgrab_shell), pointer);
           GTK_MENU_SHELL (xgrab_shell)->priv->have_xgrab = TRUE;
@@ -1483,7 +1484,7 @@ gtk_menu_popup_internal (GtkMenu             *menu,
   gtk_widget_show (priv->toplevel);
 
   if (xgrab_shell == widget)
-    popup_grab_on_surface (gtk_widget_get_surface (widget), pointer); /* Should always succeed */
+    popup_grab_on_surface (gtk_native_get_surface (gtk_widget_get_native (widget)), pointer); /* Should always succeed */
 
   gtk_grab_add (GTK_WIDGET (menu));
 
@@ -2221,7 +2222,7 @@ menu_grab_transfer_surface_destroy (GtkMenu *menu)
       gdk_surface_destroy (surface);
       g_object_set_data (G_OBJECT (menu), I_("gtk-menu-transfer-surface"), NULL);
 
-      widget_surface = gtk_widget_get_surface (GTK_WIDGET (menu));
+      widget_surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (menu)));
       g_object_set_data (G_OBJECT (widget_surface), I_("gdk-attached-grab-surface"), surface);
     }
 }
@@ -2600,7 +2601,7 @@ pointer_in_menu_surface (GtkWidget *widget,
       GtkMenuShell *menu_shell;
       gint          surface_x, surface_y;
 
-      gdk_surface_get_position (gtk_widget_get_surface (priv->toplevel),
+      gdk_surface_get_position (gtk_native_get_surface (GTK_NATIVE (priv->toplevel)),
 				&surface_x, &surface_y);
 
       gtk_widget_get_allocation (widget, &allocation);
@@ -2825,7 +2826,7 @@ gtk_menu_scroll_by (GtkMenu *menu,
   if ((priv->scroll_offset >= 0) && (offset < 0))
     offset = 0;
 
-  view_height = gdk_surface_get_height (gtk_widget_get_surface (widget));
+  view_height = gdk_surface_get_height (gtk_native_get_surface (gtk_widget_get_native (widget)));
 
   if (priv->scroll_offset == 0 &&
       view_height >= priv->requested_height)
@@ -2891,7 +2892,7 @@ get_arrows_sensitive_area (GtkMenu      *menu,
                       &bottom_arrow_height, NULL,
                       NULL, NULL);
 
-  surface = gtk_widget_get_surface (widget);
+  surface = gtk_native_get_surface (gtk_widget_get_native (widget));
   width = gdk_surface_get_width (surface);
   height = gdk_surface_get_height (surface);
 
@@ -2929,7 +2930,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
 
   menu_shell = GTK_MENU_SHELL (menu);
 
-  gdk_surface_get_position (gtk_widget_get_surface (priv->toplevel),
+  gdk_surface_get_position (gtk_native_get_surface (GTK_NATIVE (priv->toplevel)),
                            &top_x, &top_y);
   x -= top_x;
   y -= top_y;
@@ -3146,7 +3147,7 @@ pointer_on_menu_widget (GtkMenu *menu,
   gint surface_x, surface_y;
 
   gtk_widget_get_allocation (GTK_WIDGET (menu), &allocation);
-  gdk_surface_get_position (gtk_widget_get_surface (priv->toplevel),
+  gdk_surface_get_position (gtk_native_get_surface (GTK_NATIVE (priv->toplevel)),
 			    &surface_x, &surface_y);
 
   if (x_root >= surface_x && x_root < surface_x + allocation.width &&
@@ -3237,7 +3238,7 @@ gtk_menu_captured_event (GtkWidget *widget,
               y_diff = y_root - priv->drag_start_y;
               offset = priv->initial_drag_offset - y_diff;
 
-              view_height = gdk_surface_get_height (gtk_widget_get_surface (widget));
+              view_height = gdk_surface_get_height (gtk_native_get_surface (gtk_widget_get_native (widget)));
               get_arrows_border (menu, &arrow_border);
 
               if (gtk_widget_get_child_visible (priv->top_arrow_widget))
@@ -3414,7 +3415,7 @@ gtk_menu_position (GtkMenu  *menu,
     }
   else if (priv->widget)
     {
-      rect_surface = gtk_widget_get_surface (priv->widget);
+      rect_surface = gtk_native_get_surface (gtk_widget_get_native (priv->widget));
       gtk_widget_get_surface_allocation (priv->widget, &rect);
       text_direction = gtk_widget_get_direction (priv->widget);
     }
@@ -3440,7 +3441,7 @@ gtk_menu_position (GtkMenu  *menu,
       menu_anchor = get_horizontally_flipped_anchor (menu_anchor);
     }
 
-  toplevel = gtk_widget_get_surface (priv->toplevel);
+  toplevel = gtk_native_get_surface (GTK_NATIVE (priv->toplevel));
 
   gdk_surface_set_transient_for (toplevel, rect_surface);
 
@@ -3565,7 +3566,7 @@ gtk_menu_scroll_item_visible (GtkMenuShell *menu_shell,
   if (compute_child_offset (menu, menu_item, &child_offset, &child_height))
     {
       y = priv->scroll_offset;
-      height = gdk_surface_get_height (gtk_widget_get_surface (widget));
+      height = gdk_surface_get_height (gtk_native_get_surface (gtk_widget_get_native (widget)));
 
       if (child_offset < y)
         {

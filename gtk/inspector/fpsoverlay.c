@@ -24,6 +24,7 @@
 #include "gtkintl.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
+#include "gtknative.h"
 
 /* duration before we start fading in us */
 #define GDK_FPS_OVERLAY_LINGER_DURATION (1000 * 1000)
@@ -140,7 +141,7 @@ gtk_fps_overlay_force_redraw (GtkWidget     *widget,
                               GdkFrameClock *clock,
                               gpointer       unused)
 {
-  gdk_surface_queue_expose (gtk_widget_get_surface (widget));
+  gdk_surface_queue_expose (gtk_native_get_surface (gtk_widget_get_native (widget)));
 
   return G_SOURCE_REMOVE;
 }
@@ -243,7 +244,7 @@ gtk_fps_overlay_queue_draw (GtkInspectorOverlay *overlay)
 
   g_hash_table_iter_init (&iter, self->infos);
   while (g_hash_table_iter_next (&iter, &widget, NULL))
-    gdk_surface_queue_expose (gtk_widget_get_surface (widget));
+    gdk_surface_queue_expose (gtk_native_get_surface (gtk_widget_get_native (widget)));
 }
 
 static void

@@ -123,6 +123,7 @@
 #include "gtkprivate.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
+#include "gtknative.h"
 
 typedef struct _GtkGesturePrivate GtkGesturePrivate;
 typedef struct _PointData PointData;
@@ -605,7 +606,7 @@ gesture_within_surface (GtkGesture *gesture,
   GtkWidget *widget;
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  return surface == gtk_widget_get_surface (widget);
+  return surface == gtk_native_get_surface (gtk_widget_get_native (widget));
 }
 
 static gboolean

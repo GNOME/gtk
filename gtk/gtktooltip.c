@@ -400,7 +400,7 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
 
   toplevel = gtk_widget_get_toplevel (widget);
 
-  if (gtk_widget_get_surface (toplevel) != surface)
+  if (gtk_native_get_surface (GTK_NATIVE (toplevel)) != surface)
     return;
 
   gtk_widget_translate_coordinates (toplevel, widget, round (x), round (y), &dx, &dy);
@@ -581,7 +581,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   int anchor_rect_padding;
 
   gtk_widget_realize (GTK_WIDGET (tooltip->current_window));
-  surface = _gtk_widget_get_surface (GTK_WIDGET (tooltip->current_window));
+  surface = gtk_native_get_surface (GTK_NATIVE (tooltip->current_window));
 
   tooltip->tooltip_widget = new_tooltip_widget;
 
@@ -636,7 +636,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
        * If the anchor rectangle isn't to tall, make sure the tooltip isn't too
        * far away from the pointer position.
        */
-      effective_toplevel = _gtk_widget_get_surface (toplevel);
+      effective_toplevel = gtk_native_get_surface (GTK_NATIVE (toplevel));
       gdk_surface_get_device_position (effective_toplevel, device, &px, &py, NULL);
       pointer_x = round (px);
       pointer_y = round (py);

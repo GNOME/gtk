@@ -359,7 +359,7 @@ surface_state_changed (GtkWidget *widget)
   GdkSurfaceState new_surface_state;
   GdkSurfaceState changed_mask;
 
-  new_surface_state = gdk_surface_get_state (_gtk_widget_get_surface (widget));
+  new_surface_state = gdk_surface_get_state (priv->surface);
   changed_mask = new_surface_state ^ priv->state;
   priv->state = new_surface_state;
 
@@ -563,12 +563,14 @@ gtk_popover_realize (GtkWidget *widget)
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GdkRectangle parent_rect;
   GdkDisplay *display;
+  GdkSurface *parent;
 
   gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
 
   display = gtk_widget_get_display (priv->relative_to);
 
-  priv->surface = gdk_surface_new_popup (display, gtk_widget_get_surface (priv->relative_to), priv->autohide);
+  parent = gtk_native_get_surface (gtk_widget_get_native (priv->relative_to));
+  priv->surface = gdk_surface_new_popup (display, parent, priv->autohide);
 
   gdk_surface_set_widget (priv->surface, widget);
 
@@ -975,23 +977,22 @@ gtk_popover_fill_border_path (GtkPopover *popover,
 static void
 gtk_popover_update_shape (GtkPopover *popover)
 {
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *widget = GTK_WIDGET (popover);
   cairo_surface_t *cairo_surface;
   cairo_region_t *region;
-  GdkSurface *surface;
   cairo_t *cr;
 
-#ifdef GDK_WINDOWING_WAYLAND 
+#ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
     return;
 #endif
 
-  surface = gtk_widget_get_surface (widget);
   cairo_surface =
-    gdk_surface_create_similar_surface (surface,
+    gdk_surface_create_similar_surface (priv->surface,
                                        CAIRO_CONTENT_COLOR_ALPHA,
-                                       gdk_surface_get_width (surface),
-                                       gdk_surface_get_height (surface));
+                                       gdk_surface_get_width (priv->surface),
+                                       gdk_surface_get_height (priv->surface));
 
   cr = cairo_create (cairo_surface);
   gtk_popover_fill_border_path (popover, cr);

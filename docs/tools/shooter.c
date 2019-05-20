@@ -235,7 +235,7 @@ shoot_one (WidgetInfo *info)
       gtk_main_quit ();
     }
 
-  window = gtk_widget_get_surface (info->window);
+  window = gtk_native_get_surface (GTK_NATIVE (info->window));
   id = gdk_x11_surface_get_xid (window);
   if (window_is_csd (window))
     decor = (info->include_decorations) ? DECOR_NONE : DECOR_WINDOW_FRAME;
