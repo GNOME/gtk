@@ -200,7 +200,7 @@ add_to_cache (GskGLGlyphCache  *cache,
 #endif
 }
 
-static void
+static gboolean
 render_glyph (const GskGLGlyphAtlas *atlas,
               DirtyGlyph            *glyph,
               GskImageRegion        *region)
@@ -212,14 +212,21 @@ render_glyph (const GskGLGlyphAtlas *atlas,
   cairo_scaled_font_t *scaled_font;
   PangoGlyphString glyph_string;
   PangoGlyphInfo glyph_info;
+  int surface_width, surface_height;
 
   scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)key->font);
   if (G_UNLIKELY (!scaled_font || cairo_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS))
-    return;
+    return FALSE;
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        value->draw_width * key->scale / 1024,
-                                        value->draw_height * key->scale / 1024);
+  surface_width = value->draw_width * key->scale / 1024;
+  surface_height = value->draw_height * key->scale / 1024;
+
+  /* TODO: Give glyphs that large their own texture in the proper size. Don't
+   *       put them in the atlas at all. */
+  if (surface_width > ATLAS_SIZE || surface_height > ATLAS_SIZE)
+    return FALSE;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, surface_width, surface_height);
   cairo_surface_set_device_scale (surface, key->scale / 1024.0, key->scale / 1024.0);
 
   cr = cairo_create (surface);
@@ -252,6 +259,7 @@ render_glyph (const GskGLGlyphAtlas *atlas,
   region->y = (gsize)(value->ty * atlas->height);
 
   cairo_surface_destroy (surface);
+  return TRUE;
 }
 
 static void
@@ -265,14 +273,15 @@ upload_dirty_glyph (GskGLGlyphCache *self,
   gdk_gl_context_push_debug_group_printf (gsk_gl_driver_get_gl_context (self->gl_driver),
                                           "Uploading glyph %d", atlas->pending_glyph.key->glyph);
 
-  render_glyph (atlas, &atlas->pending_glyph, &region);
+  if (render_glyph (atlas, &atlas->pending_glyph, &region))
+    {
 
-  gsk_gl_image_upload_regions (atlas->image, self->gl_driver, 1, &region);
+      gsk_gl_image_upload_regions (atlas->image, self->gl_driver, 1, &region);
+
+      g_free (region.data);
+    }
 
   gdk_gl_context_pop_debug_group (gsk_gl_driver_get_gl_context (self->gl_driver));
-
-  g_free (region.data);
-
   atlas->pending_glyph.key = NULL;
   atlas->pending_glyph.value = NULL;
 }
