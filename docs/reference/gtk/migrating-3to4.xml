@@ -780,6 +780,14 @@
         Use GTK_IS_ROOT, GTK_IS_NATIVE or GTK_IS_WINDOW
         instead, as appropriate.
       </para>
+
+    <section>
+      <title>gtk_widget_get_toplevel has been removed</title>
+      <para>
+        gtk_widget_get_toplevel() has been removed.
+        Use gtk_widget_get_root() or gtk_widget_get_native()
+        instead, as appropriate.
+      </para>
   </section>
 
 </chapter>
