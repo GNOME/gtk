@@ -29,14 +29,15 @@
 #include "gtkdnd.h"
 #include "gtkdndprivate.h"
 #include "gtkintl.h"
+#include "gtknative.h"
 
 
 static void
 gtk_drag_dest_realized (GtkWidget *widget)
 {
-  GtkRoot *root = gtk_widget_get_root (widget);
+  GtkNative *native = gtk_widget_get_native (widget);
 
-  gdk_surface_register_dnd (gtk_widget_get_surface (GTK_WIDGET (root)));
+  gdk_surface_register_dnd (gtk_native_get_surface (native));
 }
 
 static void
@@ -44,10 +45,10 @@ gtk_drag_dest_hierarchy_changed (GtkWidget  *widget,
                                  GParamSpec *pspec,
                                  gpointer    data)
 {
-  GtkRoot *root = gtk_widget_get_root (widget);
+  GtkNative *native = gtk_widget_get_native (widget);
 
-  if (root && gtk_widget_get_realized (GTK_WIDGET (root)))
-    gdk_surface_register_dnd (gtk_widget_get_surface (GTK_WIDGET (root)));
+  if (native && gtk_widget_get_realized (GTK_WIDGET (native)))
+    gdk_surface_register_dnd (gtk_native_get_surface (native));
 }
 
 static void
@@ -132,7 +133,7 @@ gtk_drag_dest_set_internal (GtkWidget       *widget,
  * {
 *   GdkModifierType mask;
  *
- *   gdk_surface_get_pointer (gtk_widget_get_surface (widget),
+ *   gdk_surface_get_pointer (gtk_native_get_surface (gtk_widget_get_native (widget)),
  *                           NULL, NULL, &mask);
  *   if (mask & GDK_CONTROL_MASK)
  *     gdk_drag_status (context, GDK_ACTION_COPY, time);
