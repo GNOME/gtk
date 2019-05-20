@@ -29,9 +29,9 @@ size_allocate_cb (GtkWidget     *widget,
       surface = NULL;
     }
 
-  if (gtk_widget_get_surface (widget))
+  if (gtk_native_get_surface (gtk_widget_get_native (widget)))
     {
-      surface = gdk_surface_create_similar_surface (gtk_widget_get_surface (widget),
+      surface = gdk_surface_create_similar_surface (gtk_native_get_surface (gtk_widget_get_native (widget)),
                                                    CAIRO_CONTENT_COLOR,
                                                    gtk_widget_get_width (widget),
                                                    gtk_widget_get_height (widget));
