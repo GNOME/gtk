@@ -18,7 +18,7 @@ start_resize (GtkGestureMultiPress *gesture,
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
-  surface = gtk_widget_get_surface (widget);
+  surface = gtk_native_get_surface (gtk_widget_get_native (widget));
   event = gtk_get_current_event ();
   gdk_event_get_button (event, &button);  
   timestamp = gdk_event_get_time (event);
@@ -63,7 +63,7 @@ start_move (GtkGestureMultiPress *gesture,
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
-  surface = gtk_widget_get_surface (widget);
+  surface = gtk_native_get_surface (gtk_widget_get_native (widget));
   event = gtk_get_current_event ();
   gdk_event_get_button (event, &button);  
   timestamp = gdk_event_get_time (event);

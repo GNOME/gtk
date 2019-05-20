@@ -1471,7 +1471,12 @@ synth_crossing (GtkWidget       *widget,
       gdouble x, y;
       event = gdk_event_new (enter ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY);
       if (related_target)
-        event->crossing.child_surface = g_object_ref (gtk_widget_get_surface (related_target));
+        {
+          GdkSurface *surface;
+
+          surface = gtk_native_get_surface (gtk_widget_get_native (related_target));
+          event->crossing.child_surface = g_object_ref (surface);
+        }
       gdk_event_get_coords (source, &x, &y);
       event->crossing.x = x;
       event->crossing.y = y;
@@ -1486,7 +1491,7 @@ synth_crossing (GtkWidget       *widget,
   gdk_event_set_device (event, gdk_event_get_device (source));
   gdk_event_set_source_device (event, gdk_event_get_source_device (source));
 
-  event->any.surface = gtk_widget_get_surface (toplevel);
+  event->any.surface = gtk_native_get_surface (gtk_widget_get_native (toplevel));
   if (event->any.surface)
     g_object_ref (event->any.surface);
 
