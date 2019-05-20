@@ -52,7 +52,7 @@ find_widget_at_pointer (GdkDevice *device)
     {
       double x, y;
 
-      gdk_surface_get_device_position (gtk_widget_get_surface (widget),
+      gdk_surface_get_device_position (gtk_native_get_surface (GTK_NATIVE (widget)),
                                        device, &x, &y, NULL);
 
       widget = gtk_widget_pick (widget, x, y, GTK_PICK_INSENSITIVE|GTK_PICK_NON_TARGETABLE);
@@ -99,7 +99,7 @@ on_inspect_widget (GtkInspectorWindow *iw,
 {
   GtkWidget *widget;
 
-  gdk_surface_raise (gtk_widget_get_surface (GTK_WIDGET (iw)));
+  gdk_surface_raise (gtk_native_get_surface (GTK_NATIVE (iw)));
 
   clear_flash (iw);
 
@@ -159,7 +159,7 @@ deemphasize_window (GtkWidget *window)
       cairo_region_destroy (region);
     }
   else
-    gdk_surface_lower (gtk_widget_get_surface (window));
+    gdk_surface_lower (gtk_native_get_surface (GTK_NATIVE (window)));
 }
 
 static void
@@ -174,7 +174,7 @@ reemphasize_window (GtkWidget *window)
       gtk_widget_input_shape_combine_region (window, NULL);
     }
   else
-    gdk_surface_raise (gtk_widget_get_surface (window));
+    gdk_surface_raise (gtk_native_get_surface (GTK_NATIVE (window)));
 }
 
 static gboolean handle_event (GtkInspectorWindow *iw, GdkEvent *event);

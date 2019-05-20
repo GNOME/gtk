@@ -8650,7 +8650,7 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
                                                      &iter_location.y);
 
               gtk_menu_popup_at_rect (GTK_MENU (priv->popup_menu),
-                                      gtk_widget_get_surface (GTK_WIDGET (text_view)),
+                                      gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (text_view))),
                                       &iter_location,
                                       GDK_GRAVITY_SOUTH_EAST,
                                       GDK_GRAVITY_NORTH_WEST,
