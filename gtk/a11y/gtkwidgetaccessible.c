@@ -584,7 +584,7 @@ gtk_widget_accessible_grab_focus (AtkComponent *component)
     return FALSE;
 
   gtk_widget_grab_focus (widget);
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   if (GTK_IS_WINDOW (toplevel))
     {
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS

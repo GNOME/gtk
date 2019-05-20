@@ -538,7 +538,7 @@ filesave_choose_cb (GtkWidget              *button,
   /* this will be unblocked in the dialog_response_callback function */
   g_signal_handler_block (priv->source, priv->source_changed_handler);
 
-  toplevel = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (widget)));
+  toplevel = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (widget)));
   dialog = gtk_file_chooser_dialog_new (_("Select a filename"),
                                         toplevel,
                                         GTK_FILE_CHOOSER_ACTION_SAVE,
