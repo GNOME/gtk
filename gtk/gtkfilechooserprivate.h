@@ -38,6 +38,7 @@ G_BEGIN_DECLS
 #define SETTINGS_KEY_LOCATION_MODE          "location-mode"
 #define SETTINGS_KEY_SHOW_HIDDEN            "show-hidden"
 #define SETTINGS_KEY_SHOW_SIZE_COLUMN       "show-size-column"
+#define SETTINGS_KEY_SHOW_TYPE_COLUMN       "show-type-column"
 #define SETTINGS_KEY_SORT_COLUMN            "sort-column"
 #define SETTINGS_KEY_SORT_ORDER             "sort-order"
 #define SETTINGS_KEY_WINDOW_POSITION        "window-position"
@@ -47,6 +48,7 @@ G_BEGIN_DECLS
 #define SETTINGS_KEY_SORT_DIRECTORIES_FIRST "sort-directories-first"
 #define SETTINGS_KEY_CLOCK_FORMAT           "clock-format"
 #define SETTINGS_KEY_DATE_FORMAT            "date-format"
+#define SETTINGS_KEY_TYPE_FORMAT            "type-format"
 
 #define GTK_FILE_CHOOSER_GET_IFACE(inst)  (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GTK_TYPE_FILE_CHOOSER, GtkFileChooserIface))
 
