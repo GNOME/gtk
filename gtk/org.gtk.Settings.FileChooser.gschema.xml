@@ -25,7 +25,8 @@
   <enum id='org.gtk.Settings.FileChooser.SortColumn'>
     <value nick='name' value='0'/>
     <value nick='size' value='1'/>
-    <value nick='modified' value='2'/>
+    <value nick='type' value='2'/>
+    <value nick='modified' value='3'/>
   </enum>
 
   <enum id='org.gtk.Settings.FileChooser.SortOrder'>
@@ -46,6 +47,12 @@
   <enum id='org.gtk.Settings.FileChooser.DateFormat'>
     <value nick='regular' value='0'/>
     <value nick='with-time' value='1'/>
+  </enum>
+
+  <enum id='org.gtk.Settings.FileChooser.TypeFormat'>
+    <value nick='mime' value='0'/>
+    <value nick='description' value='1'/>
+    <value nick='category' value='2'/>
   </enum>
 
   <schema id='org.gtk.Settings.FileChooser' path='/org/gtk/settings/file-chooser/'>
@@ -85,6 +92,13 @@
       <summary>Show file sizes</summary>
       <description>
 	Controls whether the file chooser shows a column with file sizes.
+      </description>
+    </key>
+    <key name='show-type-column' type='b'>
+      <default>true</default>
+      <summary>Show file types</summary>
+      <description>
+	Controls whether the file chooser shows a column with file types.
       </description>
     </key>
     <key name='sort-column' enum='org.gtk.Settings.FileChooser.SortColumn'>
@@ -146,6 +160,17 @@
       <summary>Date format</summary>
       <description>
         The amount of detail to show in the Modified column.
+      </description>
+    </key>
+    <key name="type-format" enum="org.gtk.Settings.FileChooser.TypeFormat">
+      <default>'category'</default>
+      <summary>Type format</summary>
+      <description>
+        Different ways to show the 'Type' column information.
+        Example outputs for a video mp4 file:
+        'mime' -> 'video/mp4'
+        'description' -> 'MPEG-4 video'
+        'category' -> 'Video'
       </description>
     </key>
   </schema>
