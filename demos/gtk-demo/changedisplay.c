@@ -120,7 +120,7 @@ query_for_toplevel (GdkDisplay *display,
   device = gtk_get_current_event_device ();
 
   if (gdk_seat_grab (gdk_device_get_seat (device),
-                     gtk_widget_get_surface (popup),
+                     gtk_native_get_surface (GTK_NATIVE (popup)),
                      GDK_SEAT_CAPABILITY_ALL_POINTING,
                      FALSE, cursor, NULL, NULL, NULL) == GDK_GRAB_SUCCESS)
     {

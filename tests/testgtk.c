@@ -1245,7 +1245,7 @@ create_pixbuf (GtkWidget *widget)
       button = gtk_button_new ();
       gtk_container_add (GTK_CONTAINER (box2), button);
 
-      gdk_surface = gtk_widget_get_surface (window);
+      gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
 
       pixbufwid = new_pixbuf ("test.xpm", gdk_surface);
 
@@ -4855,7 +4855,7 @@ create_wmhints (GtkWidget *widget)
 
       gtk_widget_realize (window);
 
-      gdk_surface = gtk_widget_get_surface (window);
+      gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
 
       pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) openfile);
       texture = gdk_texture_new_for_pixbuf (pixbuf);
@@ -4963,7 +4963,7 @@ tracking_label (GtkWidget *window)
   gtk_container_add (GTK_CONTAINER (hbox), label);
 
   g_object_set_data (G_OBJECT (label), "title", (gpointer)gtk_window_get_title (GTK_WINDOW (window)));
-  g_signal_connect (gtk_widget_get_surface (window), "notify::state",
+  g_signal_connect (gtk_native_get_surface (GTK_NATIVE (window)), "notify::state",
                     G_CALLBACK (surface_state_callback),
                     label);
 
