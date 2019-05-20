@@ -823,7 +823,7 @@ map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_inspector_object_tree_parent_class)->map (widget);
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
 
   controller = gtk_event_controller_key_new ();
   g_object_set_data_full (G_OBJECT (toplevel), "object-controller", controller, (GDestroyNotify)destroy_controller);
@@ -838,7 +838,7 @@ unmap (GtkWidget *widget)
 {
   GtkWidget *toplevel;
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   g_object_set_data (G_OBJECT (toplevel), "object-controller", NULL);
 
   GTK_WIDGET_CLASS (gtk_inspector_object_tree_parent_class)->unmap (widget);

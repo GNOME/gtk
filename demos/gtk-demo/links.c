@@ -25,7 +25,7 @@ activate_link (GtkWidget   *label,
       GtkWidget *dialog;
       GtkWidget *parent;
 
-      parent = gtk_widget_get_toplevel (label);
+      parent = GTK_WIDGET (gtk_widget_get_root (label));
       dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (parent),
                  GTK_DIALOG_DESTROY_WITH_PARENT,
                  GTK_MESSAGE_INFO,
