@@ -576,7 +576,7 @@ gtk_im_context_xim_set_client_widget (GtkIMContext *context,
   GdkSurface *surface = NULL;
 
   if (widget != NULL)
-    surface = gtk_widget_get_surface (gtk_widget_get_toplevel (widget));
+    surface = gtk_native_get_surface (gtk_widget_get_native (widget));
 
   set_ic_client_surface (context_xim, surface);
 }

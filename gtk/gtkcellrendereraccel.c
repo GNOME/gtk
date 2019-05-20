@@ -28,6 +28,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtknative.h"
 
 
 /**
@@ -452,7 +453,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   if (!is_editable)
     return NULL;
 
-  surface = gtk_widget_get_surface (widget);
+  surface = gtk_native_get_surface (gtk_widget_get_native (widget));
 
   if (event)
     seat = gdk_event_get_seat (event);
