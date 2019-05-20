@@ -1844,7 +1844,7 @@ gtk_label_root (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->root (widget);
 
-  gtk_label_setup_mnemonic (label, gtk_widget_get_toplevel (widget), priv->mnemonic_keyval);
+  gtk_label_setup_mnemonic (label, GTK_WIDGET (gtk_widget_get_root (widget)), priv->mnemonic_keyval);
 
   /* The PangoContext is replaced when the display changes, so clear the layouts */
   gtk_label_clear_layout (GTK_LABEL (widget));
@@ -2134,7 +2134,7 @@ gtk_label_recalculate (GtkLabel *label)
 
   if (keyval != priv->mnemonic_keyval)
     {
-      gtk_label_setup_mnemonic (label, gtk_widget_get_toplevel (GTK_WIDGET (label)), keyval);
+      gtk_label_setup_mnemonic (label, GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (label))), keyval);
       g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_MNEMONIC_KEYVAL]);
     }
 
@@ -6142,7 +6142,7 @@ gtk_label_activate_link (GtkLabel    *label,
                          const gchar *uri)
 {
   GtkWidget *widget = GTK_WIDGET (label);
-  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   guint32 timestamp = gtk_get_current_event_time ();
   GError *error = NULL;
 
