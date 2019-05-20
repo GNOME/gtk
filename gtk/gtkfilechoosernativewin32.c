@@ -790,7 +790,7 @@ gtk_file_chooser_native_win32_show (GtkFileChooserNative *self)
   if (transient_for)
     {
       gtk_widget_realize (GTK_WIDGET (transient_for));
-      data->parent = gdk_win32_surface_get_handle (gtk_widget_get_surface (GTK_WIDGET (transient_for)));
+      data->parent = gdk_win32_surface_get_handle (gtk_native_get_surface (GTK_NATIVE (transient_for)));
 
       if (gtk_native_dialog_get_modal (GTK_NATIVE_DIALOG (self)))
         data->modal = TRUE;

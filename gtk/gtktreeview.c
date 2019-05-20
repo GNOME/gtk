@@ -62,6 +62,7 @@
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowgroup.h"
+#include "gtknative.h"
 
 #include "a11y/gtktreeviewaccessibleprivate.h"
 
@@ -10059,7 +10060,7 @@ send_focus_change (GtkWidget *widget,
       GdkEvent *fevent;
       GdkSurface *surface;
 
-      surface = gtk_widget_get_surface (widget);
+      surface = gtk_native_get_surface (gtk_widget_get_native (widget));
 
       fevent = gdk_event_new (GDK_FOCUS_CHANGE);
 

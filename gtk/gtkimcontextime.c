@@ -251,13 +251,11 @@ gtk_im_context_ime_set_client_widget (GtkIMContext *context,
                                       GtkWidget    *widget)
 {
   GtkIMContextIME *context_ime;
-  GtkWidget *toplevel;
   GdkSurface *client_surface;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
   context_ime = GTK_IM_CONTEXT_IME (context);
-  toplevel = gtk_widget_get_toplevel (widget);
-  client_surface = gtk_widget_get_surface (toplevel);
+  client_surface = gtk_native_get_surface (gtk_widget_get_native (widget));
 
   if (client_surface)
     {
