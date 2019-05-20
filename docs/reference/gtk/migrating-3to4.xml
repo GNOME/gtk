@@ -763,6 +763,15 @@
         gtk-builder-tool can assist with the rename in ui files.
       </para>
     </section>
+
+    <section>
+      <title>gtk_widget_get_surface has been removed</title>
+      <para>
+        gtk_widget_get_surface() has been removed.
+        Use gtk_native_get_surface() in combination with
+        gtk_widget_get_native() instead.
+      </para>
+    </section>
   </section>
 
 </chapter>
