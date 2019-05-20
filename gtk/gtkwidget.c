@@ -4289,9 +4289,6 @@ gtk_widget_allocate (GtkWidget    *widget,
   GtkCssStyle *style;
   GtkBorder margin, border, padding;
   GskTransform *css_transform;
-#ifdef G_ENABLE_DEBUG
-  GdkDisplay *display;
-#endif
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (baseline >= -1);
@@ -4302,8 +4299,7 @@ gtk_widget_allocate (GtkWidget    *widget,
     goto out;
 
 #ifdef G_ENABLE_DEBUG
-  display = _gtk_widget_get_display (widget);
-  if (GTK_DISPLAY_DEBUG_CHECK (display, RESIZE))
+  if (GTK_DISPLAY_DEBUG_CHECK (_gtk_widget_get_display (widget), RESIZE))
     {
       priv->highlight_resize = TRUE;
       gtk_widget_queue_draw (widget);
@@ -4483,7 +4479,8 @@ gtk_widget_allocate (GtkWidget    *widget,
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
 #ifdef G_ENABLE_DEBUG
-  if (GTK_DISPLAY_DEBUG_CHECK (display, GEOMETRY) && gtk_widget_get_resize_needed (widget))
+  if (GTK_DISPLAY_DEBUG_CHECK (_gtk_widget_get_display (widget), GEOMETRY) &&
+      gtk_widget_get_resize_needed (widget))
     {
       g_warning ("%s %p or a child called gtk_widget_queue_resize() during size_allocate().",
                  gtk_widget_get_name (widget), widget);
