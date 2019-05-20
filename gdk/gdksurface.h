@@ -246,7 +246,7 @@ typedef enum
   GDK_SURFACE_EDGE_EAST,
   GDK_SURFACE_EDGE_SOUTH_WEST,
   GDK_SURFACE_EDGE_SOUTH,
-  GDK_SURFACE_EDGE_SOUTH_EAST  
+  GDK_SURFACE_EDGE_SOUTH_EAST
 } GdkSurfaceEdge;
 
 /**
@@ -413,8 +413,6 @@ typedef struct _GdkSurfaceClass GdkSurfaceClass;
 #define GDK_SURFACE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SURFACE, GdkSurfaceClass))
 
 
-/* Surfaces
- */
 GDK_AVAILABLE_IN_ALL
 GType         gdk_surface_get_type              (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
@@ -499,12 +497,6 @@ void gdk_surface_input_shape_combine_region (GdkSurface       *surface,
                                              gint             offset_x,
                                              gint             offset_y);
 
-/*
- * Check if a surface has been shown, and whether all its
- * parents up to a toplevel have been shown, respectively.
- * Note that a surface that is_viewable below is not necessarily
- * viewable in the X sense.
- */
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_surface_is_visible     (GdkSurface *surface);
 GDK_AVAILABLE_IN_ALL
@@ -512,9 +504,6 @@ gboolean gdk_surface_is_viewable    (GdkSurface *surface);
 
 GDK_AVAILABLE_IN_ALL
 GdkSurfaceState gdk_surface_get_state (GdkSurface *surface);
-
-
-/* GdkSurface */
 
 GDK_AVAILABLE_IN_ALL
 void              gdk_surface_set_type_hint (GdkSurface        *surface,
@@ -671,7 +660,6 @@ void gdk_surface_begin_move_drag_for_device   (GdkSurface     *surface,
                                                gint            y,
                                                guint32         timestamp);
 
-/* Interface for dirty-region queueing */
 GDK_AVAILABLE_IN_ALL
 void       gdk_surface_queue_expose              (GdkSurface          *surface);
 
@@ -688,14 +676,12 @@ void       gdk_surface_constrain_size      (GdkGeometry    *geometry,
                                             gint           *new_width,
                                             gint           *new_height);
 
-/* Multidevice support */
 GDK_AVAILABLE_IN_ALL
 void       gdk_surface_set_support_multidevice (GdkSurface *surface,
                                                 gboolean   support_multidevice);
 GDK_AVAILABLE_IN_ALL
 gboolean   gdk_surface_get_support_multidevice (GdkSurface *surface);
 
-/* Frame clock */
 GDK_AVAILABLE_IN_ALL
 GdkFrameClock* gdk_surface_get_frame_clock      (GdkSurface     *surface);
 
