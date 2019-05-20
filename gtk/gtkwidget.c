@@ -3503,7 +3503,7 @@ gtk_widget_connect_frame_clock (GtkWidget *widget)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkFrameClock *frame_clock;
 
-  if (GTK_IS_CONTAINER (widget) && _gtk_widget_is_toplevel (widget))
+  if (GTK_IS_CONTAINER (widget) && GTK_IS_ROOT (widget))
     gtk_container_start_idle_sizer (GTK_CONTAINER (widget));
 
   frame_clock = gtk_widget_get_frame_clock (widget);
@@ -3524,7 +3524,7 @@ gtk_widget_disconnect_frame_clock (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  if (GTK_IS_CONTAINER (widget) && _gtk_widget_is_toplevel (widget))
+  if (GTK_IS_CONTAINER (widget) && GTK_IS_ROOT (widget))
     gtk_container_stop_idle_sizer (GTK_CONTAINER (widget));
 
   gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
@@ -3850,8 +3850,7 @@ gtk_widget_realize (GtkWidget *widget)
 	  g_message ("gtk_widget_realize(%s)", G_OBJECT_TYPE_NAME (widget));
       */
 
-      if (priv->parent == NULL &&
-          !_gtk_widget_is_toplevel (widget))
+      if (priv->parent == NULL && !GTK_IS_ROOT (widget))
         g_warning ("Calling gtk_widget_realize() on a widget that isn't "
                    "inside a toplevel window is not going to work very well. "
                    "Widgets must be inside a toplevel container before realizing them.");
@@ -4278,7 +4277,7 @@ gtk_widget_allocate (GtkWidget    *widget,
 
   gtk_widget_push_verify_invariants (widget);
 
-  if (!priv->visible && !_gtk_widget_is_toplevel (widget))
+  if (!priv->visible && !GTK_IS_ROOT (widget))
     goto out;
 
 #ifdef G_ENABLE_DEBUG
@@ -7124,7 +7123,7 @@ gtk_widget_set_child_visible (GtkWidget *widget,
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (!_gtk_widget_is_toplevel (widget));
+  g_return_if_fail (!GTK_IS_ROOT (widget));
 
   child_visible = !!child_visible;
 
@@ -11271,7 +11270,7 @@ gtk_widget_update_alpha (GtkWidget *widget)
 
   if (_gtk_widget_get_realized (widget))
     {
-      if (_gtk_widget_is_toplevel (widget))
+      if (GTK_IS_NATIVE (widget))
 	gdk_surface_set_opacity (priv->surface, priv->alpha / 255.0);
 
       gtk_widget_queue_draw (widget);
@@ -11461,7 +11460,7 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
       if (!priv->visible)
         break;
 
-      if (_gtk_widget_is_toplevel (widget))
+      if (GTK_IS_ROOT (widget))
         {
           gtk_container_start_idle_sizer (GTK_CONTAINER (widget));
           break;

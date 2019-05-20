@@ -4954,12 +4954,6 @@ gtk_window_show (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  if (!_gtk_widget_is_toplevel (GTK_WIDGET (widget)))
-    {
-      GTK_WIDGET_CLASS (gtk_window_parent_class)->show (widget);
-      return;
-    }
-
   _gtk_widget_set_visible_flag (widget, TRUE);
 
   gtk_css_node_validate (gtk_widget_get_css_node (widget));
@@ -4988,12 +4982,6 @@ gtk_window_hide (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  if (!_gtk_widget_is_toplevel (GTK_WIDGET (widget)))
-    {
-      GTK_WIDGET_CLASS (gtk_window_parent_class)->hide (widget);
-      return;
-    }
-
   _gtk_widget_set_visible_flag (widget, FALSE);
   gtk_widget_unmap (widget);
 
@@ -5008,12 +4996,6 @@ gtk_window_map (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GdkSurface *surface;
-
-  if (!_gtk_widget_is_toplevel (widget))
-    {
-      GTK_WIDGET_CLASS (gtk_window_parent_class)->map (widget);
-      return;
-    }
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->map (widget);
 
@@ -5109,12 +5091,6 @@ gtk_window_unmap (GtkWidget *widget)
   GtkWidget *child;
   GtkWindowGeometryInfo *info;
   GdkSurfaceState state;
-
-  if (!_gtk_widget_is_toplevel (GTK_WIDGET (widget)))
-    {
-      GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
-      return;
-    }
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
   gdk_surface_hide (priv->surface);
@@ -5429,9 +5405,6 @@ get_shadow_width (GtkWindow *window,
       priv->fullscreen)
     return;
 
-  if (!_gtk_widget_is_toplevel (GTK_WIDGET (window)))
-    return;
-
   context = _gtk_widget_get_style_context (GTK_WIDGET (window));
 
   gtk_style_context_save_to_node (context, priv->decoration_node);
@@ -5605,9 +5578,6 @@ update_realized_window_properties (GtkWindow     *window,
                                    GtkBorder     *window_border)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (!_gtk_widget_is_toplevel (GTK_WIDGET (window)))
-    return;
 
   if (priv->client_decorated && priv->use_client_shadow)
     update_shadow_width (window, window_border);
@@ -5974,11 +5944,6 @@ _gtk_window_set_allocation (GtkWindow           *window,
                                  priv->title_height;
     }
 
-  if (!_gtk_widget_is_toplevel (widget) && _gtk_widget_get_realized (widget))
-    {
-      gdk_surface_move_resize (priv->surface, 0, 0, width, height);
-    }
-
   *allocation_out = child_allocation;
 
   for (link = priv->popovers.head; link; link = link->next)
@@ -6016,9 +5981,6 @@ gtk_window_configure (GtkWindow *window,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
   check_scale_changed (window);
-
-  if (!_gtk_widget_is_toplevel (widget))
-    return FALSE;
 
   /* If this is a gratuitous ConfigureNotify that's already
    * the same as our allocation, then we can fizzle it out.
@@ -6427,9 +6389,6 @@ gtk_window_focus (GtkWidget        *widget,
   GtkWidget *old_focus_child;
   GtkWidget *parent;
 
-  if (!_gtk_widget_is_toplevel (widget))
-    return GTK_WIDGET_CLASS (gtk_window_parent_class)->focus (widget, direction);
-
   container = GTK_CONTAINER (widget);
   bin = GTK_BIN (widget);
 
@@ -6495,12 +6454,6 @@ static void
 gtk_window_move_focus (GtkWidget        *widget,
                        GtkDirectionType  dir)
 {
-  if (!_gtk_widget_is_toplevel (widget))
-    {
-      GTK_WIDGET_CLASS (gtk_window_parent_class)->move_focus (widget, dir);
-      return;
-    }
-
   gtk_widget_child_focus (widget, dir);
 
   if (!gtk_widget_get_focus_child (widget))

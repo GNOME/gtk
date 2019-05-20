@@ -396,7 +396,7 @@ _gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
   GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (menubar));
   GtkMenuItem *to_activate = NULL;
 
-  if (gtk_widget_is_toplevel (toplevel))
+  if (GTK_IS_WINDOW (toplevel))
     {
       GList *tmp_menubars = _gtk_menu_bar_get_viewable_menu_bars (GTK_WINDOW (toplevel));
       GList *l;

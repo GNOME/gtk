@@ -493,7 +493,7 @@ gtk_widget_measure (GtkWidget        *widget,
    * possibly queries the widget class to compute the size if it's
    * not cached.
    */
-  if (!_gtk_widget_get_visible (widget) && !_gtk_widget_is_toplevel (widget))
+  if (!_gtk_widget_get_visible (widget) && !GTK_IS_ROOT (widget))
     {
       if (minimum)
         *minimum = 0;

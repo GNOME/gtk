@@ -2608,7 +2608,7 @@ open_dialog (GtkFileChooserButton *button)
     {
       if (!gtk_widget_get_visible (priv->dialog))
         {
-          if (gtk_widget_is_toplevel (toplevel) && GTK_IS_WINDOW (toplevel))
+          if (GTK_IS_WINDOW (toplevel))
             {
               if (GTK_WINDOW (toplevel) != gtk_window_get_transient_for (GTK_WINDOW (priv->dialog)))
                 gtk_window_set_transient_for (GTK_WINDOW (priv->dialog),
@@ -2623,7 +2623,7 @@ open_dialog (GtkFileChooserButton *button)
     {
       if (!gtk_native_dialog_get_visible (GTK_NATIVE_DIALOG (priv->native)))
         {
-          if (gtk_widget_is_toplevel (toplevel) && GTK_IS_WINDOW (toplevel))
+          if (GTK_IS_WINDOW (toplevel))
             {
               if (GTK_WINDOW (toplevel) != gtk_native_dialog_get_transient_for (GTK_NATIVE_DIALOG (priv->native)))
                 gtk_native_dialog_set_transient_for (GTK_NATIVE_DIALOG (priv->native),

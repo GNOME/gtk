@@ -1536,7 +1536,7 @@ gtk_notebook_move_focus_out (GtkNotebook      *notebook,
    * do this by setting a flag, then propagating the focus motion to the notebook.
    */
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (notebook));
-  if (!gtk_widget_is_toplevel (toplevel))
+  if (!GTK_IS_ROOT (toplevel))
     return;
 
   g_object_ref (notebook);
@@ -3808,7 +3808,7 @@ gtk_notebook_set_focus_child (GtkContainer *container,
    */
 
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (container));
-  if (toplevel && gtk_widget_is_toplevel (toplevel))
+  if (GTK_IS_WINDOW (toplevel))
     {
       page_child = gtk_window_get_focus (GTK_WINDOW (toplevel));
       while (page_child)

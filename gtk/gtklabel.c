@@ -1764,16 +1764,16 @@ gtk_label_setup_mnemonic (GtkLabel  *label,
 	  mnemonic_menu = NULL;
 	}
     }
-  
+
   if (priv->mnemonic_keyval == GDK_KEY_VoidSymbol)
       goto done;
 
   connect_mnemonics_visible_notify (GTK_LABEL (widget));
 
-  if (toplevel && gtk_widget_is_toplevel (toplevel))
+  if (GTK_IS_WINDOW (toplevel))
     {
       GtkWidget *menu_shell;
-      
+
       menu_shell = gtk_widget_get_ancestor (widget,
 					    GTK_TYPE_MENU_SHELL);
 
@@ -1784,7 +1784,7 @@ gtk_label_setup_mnemonic (GtkLabel  *label,
 					widget);
 	  mnemonic_menu = menu_shell;
 	}
-      
+
       if (!GTK_IS_MENU (menu_shell))
 	{
 	  gtk_window_add_mnemonic (GTK_WINDOW (toplevel),
@@ -1793,7 +1793,7 @@ gtk_label_setup_mnemonic (GtkLabel  *label,
 	  priv->mnemonic_window = GTK_WINDOW (toplevel);
 	}
     }
-  
+
  done:
   g_object_set_qdata (G_OBJECT (label), quark_mnemonic_menu, mnemonic_menu);
 }
