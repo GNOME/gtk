@@ -2746,11 +2746,11 @@ add_offscreen_ops (GskGLRenderer         *self,
   }
 
   texture_id = gsk_gl_driver_create_texture (self->gl_driver, width, height);
+  gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
+  gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id);
   gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
                                       "Offscreen<%s> %d", child_node->node_class->type_name, texture_id);
 
-  gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
-  gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id);
   render_target = gsk_gl_driver_create_render_target (self->gl_driver, texture_id, TRUE, TRUE);
   gdk_gl_context_label_object_printf  (self->gl_context, GL_FRAMEBUFFER, render_target,
                                        "Offscreen<%s> FB %d", child_node->node_class->type_name, render_target);
@@ -3262,10 +3262,10 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   gsk_gl_renderer_do_render (renderer, root, &viewport, 0, self->scale_factor);
   gsk_gl_driver_end_frame (self->gl_driver);
 
-  gdk_gl_context_make_current (self->gl_context);
   gsk_gl_renderer_clear_tree (self);
 
   gdk_draw_context_end_frame (GDK_DRAW_CONTEXT (self->gl_context));
+  gdk_gl_context_make_current (self->gl_context);
 
   gdk_gl_context_pop_debug_group (self->gl_context);
 
