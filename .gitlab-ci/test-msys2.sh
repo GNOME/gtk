@@ -42,10 +42,11 @@ ccache --zero-stats
 ccache --show-stats
 export CCACHE_DISABLE=true
 meson \
-    -Denable-x11-backend=false \
-    -Denable-wayland-backend=false \
-    -Denable-win32-backend=true \
+    -Dx11-backend=false \
+    -Dwayland-backend=false \
+    -Dwin32-backend=true \
     -Dvulkan=no \
+    --werror \
     _build
 unset CCACHE_DISABLE
 

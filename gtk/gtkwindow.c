@@ -8446,7 +8446,6 @@ gtk_window_set_display (GtkWindow  *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget;
-  GdkDisplay *previous_display;
   gboolean was_mapped;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
@@ -8460,8 +8459,6 @@ gtk_window_set_display (GtkWindow  *window,
 
   widget = GTK_WIDGET (window);
 
-  previous_display = priv->display;
-
   was_mapped = _gtk_widget_get_mapped (widget);
 
   if (was_mapped)
@@ -8473,14 +8470,14 @@ gtk_window_set_display (GtkWindow  *window,
     gtk_window_set_transient_for (window, NULL);
 
   gtk_window_free_key_hash (window);
-  priv->display = display;
 #ifdef GDK_WINDOWING_X11
-  g_signal_handlers_disconnect_by_func (gtk_settings_get_for_display (previous_display),
+  g_signal_handlers_disconnect_by_func (gtk_settings_get_for_display (priv->display),
                                         gtk_window_on_theme_variant_changed, window);
   g_signal_connect (gtk_settings_get_for_display (display),
                     "notify::gtk-application-prefer-dark-theme",
                     G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
+  priv->display = display;
 
   gtk_widget_unroot (widget);
   gtk_widget_root (widget);

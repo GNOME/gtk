@@ -22,7 +22,7 @@ deserialize_error_func (const GtkCssSection *section,
 
   g_warning ("Error at %s: %s", section_str, error->message);
 
-  free (section_str);
+  g_free (section_str);
 }
 
 

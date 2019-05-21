@@ -1211,6 +1211,7 @@ dialog_from_print_settings (GtkPrintOperation *op,
       switch (print_pages)
 	{
 	default:
+	case GTK_PRINT_PAGES_SELECTION:
 	case GTK_PRINT_PAGES_ALL:
 	  printdlgex->Flags |= PD_ALLPAGES;
 	  break;

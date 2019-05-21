@@ -419,7 +419,6 @@ enum_locale_proc (LPTSTR locale)
             SUBLANGID (LANGIDFROMLCID (lcid)) == SUBLANG_DEFAULT)))
         {
           char language[100], country[100];
-          char locale[300];
 
           if (script_to_check != NULL)
             {
@@ -467,11 +466,13 @@ enum_locale_proc (LPTSTR locale)
           if (GetLocaleInfo (lcid, LOCALE_SENGLANGUAGE, language, sizeof (language)) &&
               GetLocaleInfo (lcid, LOCALE_SENGCOUNTRY, country, sizeof (country)))
             {
-              strcpy (locale, language);
-              strcat (locale, "_");
-              strcat (locale, country);
+              char str[300];
 
-              if (setlocale (LC_ALL, locale) != NULL)
+              strcpy (str, language);
+              strcat (str, "_");
+              strcat (str, country);
+
+              if (setlocale (LC_ALL, str) != NULL)
                 setlocale_called = TRUE;
             }
 
