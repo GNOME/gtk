@@ -1997,8 +1997,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 
 /**
  * gtk_scrolled_window_new:
- * @hadjustment: (allow-none): horizontal adjustment
- * @vadjustment: (allow-none): vertical adjustment
+ * @hadjustment: (nullable): horizontal adjustment
+ * @vadjustment: (nullable): vertical adjustment
  *
  * Creates a new scrolled window.
  *
@@ -2293,9 +2293,9 @@ gtk_scrolled_window_set_policy (GtkScrolledWindow *scrolled_window,
 /**
  * gtk_scrolled_window_get_policy:
  * @scrolled_window: a #GtkScrolledWindow
- * @hscrollbar_policy: (out) (allow-none): location to store the policy 
+ * @hscrollbar_policy: (out) (optional): location to store the policy
  *     for the horizontal scrollbar, or %NULL
- * @vscrollbar_policy: (out) (allow-none): location to store the policy
+ * @vscrollbar_policy: (out) (optional): location to store the policy
  *     for the vertical scrollbar, or %NULL
  * 
  * Retrieves the current policy values for the horizontal and vertical
