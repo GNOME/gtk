@@ -1901,18 +1901,21 @@ choose_icon (GtkIconTheme       *icon_theme,
 
   if ((flags & GTK_ICON_LOOKUP_FORCE_REGULAR) && has_symbolic)
     {
-      new_names = g_ptr_array_new_full (2 * n_icon_names, g_free);
+      new_names = g_ptr_array_new_full (4 * n_icon_names, g_free);
+
       for (i = 0; icon_names[i]; i++)
         {
-          if (icon_name_is_symbolic (icon_names[i], -1))
-            icon_name_list_add_icon (new_names, dir_suffix, g_strndup (icon_names[i], strlen (icon_names[i]) - strlen ("-symbolic")));
+          int icon_name_len = strlen (icon_names[i]);
+
+          if (icon_name_is_symbolic (icon_names[i], icon_name_len))
+            {
+              icon_name_list_add_icon (new_names, dir_suffix, g_strndup (icon_names[i], icon_name_len - strlen ("-symbolic")));
+              icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
+            }
           else
-            icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
-        }
-      for (i = 0; icon_names[i]; i++)
-        {
-          if (icon_name_is_symbolic (icon_names[i], -1))
-            icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
+            {
+              icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
+            }
         }
 
       icon_info = real_choose_icon (icon_theme,
@@ -1926,18 +1929,21 @@ choose_icon (GtkIconTheme       *icon_theme,
     }
   else if ((flags & GTK_ICON_LOOKUP_FORCE_SYMBOLIC) && has_regular)
     {
-      new_names = g_ptr_array_new_full (2 * n_icon_names, g_free);
+      new_names = g_ptr_array_new_full (4 * n_icon_names, g_free);
+
       for (i = 0; icon_names[i]; i++)
         {
-          if (!icon_name_is_symbolic (icon_names[i], -1))
-            icon_name_list_add_icon (new_names, dir_suffix, g_strconcat (icon_names[i], "-symbolic", NULL));
+          int icon_name_len = strlen (icon_names[i]);
+
+          if (!icon_name_is_symbolic (icon_names[i], icon_name_len))
+            {
+              icon_name_list_add_icon (new_names, dir_suffix, g_strconcat (icon_names[i], "-symbolic", NULL));
+              icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
+            }
           else
-            icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
-        }
-      for (i = 0; icon_names[i]; i++)
-        {
-          if (!icon_name_is_symbolic (icon_names[i], -1))
-            icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
+            {
+              icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
+            }
         }
 
       icon_info = real_choose_icon (icon_theme,
