@@ -3429,8 +3429,7 @@ struct _GskTextNode
   PangoFont *font;
 
   GdkRGBA color;
-  double x;
-  double y;
+  graphene_point_t offset;
 
   guint num_glyphs;
   PangoGlyphInfo glyphs[];
@@ -3464,7 +3463,7 @@ gsk_text_node_draw (GskRenderNode *node,
   cairo_save (cr);
 
   gdk_cairo_set_source_rgba (cr, &self->color);
-  cairo_translate (cr, self->x, self->y);
+  cairo_translate (cr, self->offset.x, self->offset.y);
   pango_cairo_show_glyph_string (cr, self->font, &glyphs);
 
   cairo_restore (cr);
@@ -3480,8 +3479,7 @@ gsk_text_node_diff (GskRenderNode  *node1,
 
   if (self1->font == self2->font &&
       gdk_rgba_equal (&self1->color, &self2->color) &&
-      self1->x == self2->x &&
-      self1->y == self2->y &&
+      graphene_point_equal (&self1->offset, &self2->offset) &&
       self1->num_glyphs == self2->num_glyphs)
     {
       guint i;
@@ -3523,8 +3521,7 @@ static const GskRenderNodeClass GSK_TEXT_NODE_CLASS = {
  * @font: the #PangoFont containing the glyphs
  * @glyphs: the #PangoGlyphString to render
  * @color: the foreground color to render with
- * @x: the x coordinate at which to put the baseline
- * @y: the y coordinate at wihch to put the baseline
+ * @offset: offset of the baseline
  *
  * Creates a render node that renders the given glyphs,
  * Note that @color may not be used if the font contains
@@ -3533,11 +3530,10 @@ static const GskRenderNodeClass GSK_TEXT_NODE_CLASS = {
  * Returns: (nullable): a new text node, or %NULL
  */
 GskRenderNode *
-gsk_text_node_new (PangoFont        *font,
-                   PangoGlyphString *glyphs,
-                   const GdkRGBA    *color,
-                   float             x,
-                   float             y)
+gsk_text_node_new (PangoFont              *font,
+                   PangoGlyphString       *glyphs,
+                   const GdkRGBA          *color,
+                   const graphene_point_t *offset)
 {
   GskTextNode *self;
   PangoRectangle ink_rect;
@@ -3553,14 +3549,13 @@ gsk_text_node_new (PangoFont        *font,
 
   self->font = g_object_ref (font);
   self->color = *color;
-  self->x = x;
-  self->y = y;
+  self->offset = *offset;
   self->num_glyphs = glyphs->num_glyphs;
   memcpy (self->glyphs, glyphs->glyphs, sizeof (PangoGlyphInfo) * glyphs->num_glyphs);
 
   graphene_rect_init (&self->render_node.bounds,
-                      x + ink_rect.x - 1,
-                      y + ink_rect.y - 1,
+                      offset->x + ink_rect.x - 1,
+                      offset->y + ink_rect.y - 1,
                       ink_rect.width + 2,
                       ink_rect.height + 2);
 
@@ -3577,7 +3572,7 @@ gsk_text_node_peek_color (GskRenderNode *node)
   return &self->color;
 }
 
-const PangoFont *
+PangoFont *
 gsk_text_node_peek_font (GskRenderNode *node)
 {
   GskTextNode *self = (GskTextNode *) node;
@@ -3607,24 +3602,14 @@ gsk_text_node_peek_glyphs (GskRenderNode *node)
   return self->glyphs;
 }
 
-float
-gsk_text_node_get_x (GskRenderNode *node)
+const graphene_point_t *
+gsk_text_node_get_offset (GskRenderNode *node)
 {
   GskTextNode *self = (GskTextNode *) node;
 
-  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TEXT_NODE), 0.0);
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TEXT_NODE), NULL);
 
-  return (float)self->x;
-}
-
-float
-gsk_text_node_get_y (GskRenderNode *node)
-{
-  GskTextNode *self = (GskTextNode *) node;
-
-  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TEXT_NODE), 0.0);
-
-  return (float)self->y;
+  return &self->offset;
 }
 
 /*** GSK_BLUR_NODE ***/
@@ -3681,6 +3666,7 @@ blur_once (cairo_surface_t *src,
           r += c1[0];
           g += c1[1];
           b += c1[2];
+          a += c1[3];
         }
       p_dest_row = p_dest;
       for (x = 0; x < width; x++)
@@ -3689,6 +3675,7 @@ blur_once (cairo_surface_t *src,
           p_dest_row[0] = div_kernel_size[r];
           p_dest_row[1] = div_kernel_size[g];
           p_dest_row[2] = div_kernel_size[b];
+          p_dest_row[3] = div_kernel_size[a];
           p_dest_row += n_channels;
 
           /* the pixel to add to the kernel */
@@ -3707,6 +3694,7 @@ blur_once (cairo_surface_t *src,
           r += c1[0] - c2[0];
           g += c1[1] - c2[1];
           b += c1[2] - c2[2];
+          a += c1[3] - c2[3];
         }
 
       p_src += src_rowstride;
@@ -3730,6 +3718,7 @@ blur_once (cairo_surface_t *src,
           r += c1[0];
           g += c1[1];
           b += c1[2];
+          a += c1[3];
         }
 
       p_dest_col = p_dest;
@@ -3740,6 +3729,7 @@ blur_once (cairo_surface_t *src,
           p_dest_col[0] = div_kernel_size[r];
           p_dest_col[1] = div_kernel_size[g];
           p_dest_col[2] = div_kernel_size[b];
+          p_dest_col[3] = div_kernel_size[a];
           p_dest_col += dest_rowstride;
 
           /* the pixel to add to the kernel */
@@ -3757,6 +3747,7 @@ blur_once (cairo_surface_t *src,
           r += c1[0] - c2[0];
           g += c1[1] - c2[1];
           b += c1[2] - c2[2];
+          a += c1[3] - c2[3];
         }
 
       p_src += n_channels;

@@ -311,34 +311,6 @@ gsk_render_node_diff (GskRenderNode  *node1,
 #define GSK_RENDER_NODE_SERIALIZATION_ID "GskRenderNode"
 
 /**
- * gsk_render_node_serialize:
- * @node: a #GskRenderNode
- *
- * Serializes the @node for later deserialization via
- * gsk_render_node_deserialize(). No guarantees are made about the format
- * used other than that the same version of GTK+ will be able to deserialize
- * the result of a call to gsk_render_node_serialize() and
- * gsk_render_node_deserialize() will correctly reject files it cannot open
- * that were created with previous versions of GTK+.
- *
- * The intended use of this functions is testing, benchmarking and debugging.
- * The format is not meant as a permanent storage format.
- *
- * Returns: a #GBytes representing the node.
- **/
-GBytes *
-gsk_render_node_serialize (GskRenderNode *node)
-{
-  GBytes *result;
-  char *str;
-
-  str = gsk_render_node_serialize_to_string (node);
-  result = g_bytes_new_take (str, strlen (str));
-
-  return result;
-}
-
-/**
  * gsk_render_node_write_to_file:
  * @node: a #GskRenderNode
  * @filename: the file to save it to.

@@ -1,3 +1,25 @@
+/*
+ * Copyright © 2019 Benjamin Otte
+ *                  Timm Bäder
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Authors: Benjamin Otte <otte@gnome.org>
+ *          Timm Bäder <mail@baedert.org>
+ */
+
+#include "config.h"
 
 #include "gskrendernodeparserprivate.h"
 
@@ -8,8 +30,8 @@
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include <gtk/css/gtkcss.h>
-#include "gtk/css/gtkcssparserprivate.h"
 #include "gtk/css/gtkcssdataurlprivate.h"
+#include "gtk/css/gtkcssparserprivate.h"
 
 typedef struct _Declaration Declaration;
 
@@ -319,17 +341,59 @@ clear_stops (gpointer inout_stops)
 }
 
 static gboolean
+parse_float4 (GtkCssParser *parser,
+              gpointer      out_floats)
+{
+  float *floats = (float *) out_floats;
+  double d[4];
+  int i;
+
+  for (i = 0; i < 4 && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF); i ++)
+    {
+      if (!gtk_css_parser_consume_number (parser, &d[i]))
+        return FALSE;
+    }
+  if (i == 0)
+    {
+      gtk_css_parser_error_syntax (parser, "Expected a color");
+      return FALSE;
+    }
+  for (; i < 4; i++)
+    {
+      d[i] = d[(i - 1) >> 1];
+    }
+
+  for (i = 0; i < 4; i++)
+    {
+      floats[i] = d[i];
+    }
+
+  return TRUE;
+}
+
+static gboolean
 parse_colors4 (GtkCssParser *parser,
                gpointer      out_colors)
 {
-  GdkRGBA *colors = (GdkRGBA *)out_colors;
+  GdkRGBA colors[4];
   int i;
 
-  for (i = 0; i < 4; i ++)
+  for (i = 0; i < 4 && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF); i ++)
     {
       if (!gdk_rgba_parser_parse (parser, &colors[i]))
         return FALSE;
     }
+  if (i == 0)
+    {
+      gtk_css_parser_error_syntax (parser, "Expected a color");
+      return FALSE;
+    }
+  for (; i < 4; i++)
+    {
+      colors[i] = colors[(i - 1) >> 1];
+    }
+
+  memcpy (out_colors, colors, sizeof (GdkRGBA) * 4);
 
   return TRUE;
 }
@@ -340,9 +404,9 @@ parse_shadows (GtkCssParser *parser,
 {
   GArray *shadows = out_shadows;
 
-  for (;;)
+  do
     {
-      GskShadow shadow = { {0, 0, 0, 1}, 0, 0, 0 };
+      GskShadow shadow = { GDK_RGBA("000000"), 0, 0, 0 };
       double dx = 0, dy = 0, radius = 0;
 
       if (!gdk_rgba_parser_parse (parser, &shadow.color))
@@ -352,22 +416,21 @@ parse_shadows (GtkCssParser *parser,
         gtk_css_parser_error_value (parser, "Expected shadow x offset");
 
       if (!gtk_css_parser_consume_number (parser, &dy))
-        gtk_css_parser_error_value (parser, "Expected shadow x offset");
+        gtk_css_parser_error_value (parser, "Expected shadow y offset");
 
-      if (!gtk_css_parser_consume_number (parser, &radius))
-        gtk_css_parser_error_value (parser, "Expected shadow blur radius");
+      if (gtk_css_parser_has_number (parser))
+        {
+          if (!gtk_css_parser_consume_number (parser, &radius))
+            gtk_css_parser_error_value (parser, "Expected shadow blur radius");
+        }
 
       shadow.dx = dx;
       shadow.dy = dy;
       shadow.radius = radius;
 
       g_array_append_val (shadows, shadow);
-
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
-        gtk_css_parser_skip (parser);
-      else
-        break;
     }
+  while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   return TRUE;
 }
@@ -419,21 +482,15 @@ parse_blend_mode (GtkCssParser *parser,
   return FALSE;
 }
 
-static gboolean
-parse_font (GtkCssParser *parser,
-            gpointer      out_font)
+static PangoFont *
+font_from_string (const char *string)
 {
-  const GtkCssToken *token;
   PangoFontDescription *desc;
   PangoFontMap *font_map;
   PangoContext *context;
   PangoFont *font;
 
-  token = gtk_css_parser_get_token (parser);
-  if (!gtk_css_token_is (token, GTK_CSS_TOKEN_STRING))
-    return FALSE;
-
-  desc = pango_font_description_from_string (token->string.string);
+  desc = pango_font_description_from_string (string);
   font_map = pango_cairo_font_map_get_default ();
   context = pango_font_map_create_context (font_map);
   font = pango_font_map_load_font (font_map, context, desc);
@@ -441,10 +498,86 @@ parse_font (GtkCssParser *parser,
   pango_font_description_free (desc);
   g_object_unref (context);
 
+  return font;
+}
+
+#define MIN_ASCII_GLYPH 32
+#define MAX_ASCII_GLYPH 127 /* exclusive */
+#define N_ASCII_GLYPHS (MAX_ASCII_GLYPH - MIN_ASCII_GLYPH)
+
+static PangoGlyphString *
+create_ascii_glyphs (PangoFont *font)
+{
+  PangoLanguage *language = pango_language_from_string ("en_US"); /* just pick one */
+  PangoCoverage *coverage;
+  PangoAnalysis not_a_hack = {
+    .shape_engine = pango_font_find_shaper (font, language, MIN_ASCII_GLYPH), /* never changes */
+    .lang_engine = NULL, /* unused by pango_shape() */
+    .font = font,
+    .level = 0,
+    .gravity = PANGO_GRAVITY_SOUTH,
+    .flags = 0,
+    .script = PANGO_SCRIPT_COMMON,
+    .language = language,
+    .extra_attrs = NULL
+  };
+  PangoGlyphString *result, *glyph_string;
+  guint i;
+
+  coverage = pango_font_get_coverage (font, language);
+  for (i = MIN_ASCII_GLYPH; i < MAX_ASCII_GLYPH; i++)
+    {
+      if (!pango_coverage_get (coverage, i))
+        break;
+    }
+  pango_coverage_unref (coverage);
+  if (i < MAX_ASCII_GLYPH)
+    return NULL;
+
+  result = pango_glyph_string_new ();
+  pango_glyph_string_set_size (result, N_ASCII_GLYPHS);
+  glyph_string = pango_glyph_string_new ();
+  for (i = MIN_ASCII_GLYPH; i < MAX_ASCII_GLYPH; i++)
+    {
+      pango_shape ((char[2]) { i, 0 },
+                   1,
+                   &not_a_hack,
+                   glyph_string);
+      if (glyph_string->num_glyphs != 1)
+        {
+          pango_glyph_string_free (glyph_string);
+          pango_glyph_string_free (result);
+          return NULL;
+        }
+      result->glyphs[i - MIN_ASCII_GLYPH] = glyph_string->glyphs[0];
+    }
+
+  pango_glyph_string_free (glyph_string);
+
+  return result;
+}
+
+static gboolean
+parse_font (GtkCssParser *parser,
+            gpointer      out_font)
+{
+  PangoFont *font;
+  char *s;
+
+  s = gtk_css_parser_consume_string (parser);
+  if (s == NULL)
+    return FALSE;
+
+  font = font_from_string (s);
+  if (font == NULL)
+    {
+      gtk_css_parser_error_syntax (parser, "This font does not exist.");
+      return FALSE;
+    }
+
   *((PangoFont**)out_font) = font;
 
-  /* Skip font name token */
-  gtk_css_parser_consume_token (parser);
+  g_free (s);
 
   return TRUE;
 }
@@ -459,49 +592,64 @@ static gboolean
 parse_glyphs (GtkCssParser *parser,
               gpointer      out_glyphs)
 {
-  GArray *glyphs;
   PangoGlyphString *glyph_string;
-  int i;
-
-  glyphs = g_array_new (FALSE, TRUE, sizeof (double[5]));
-
-  for (;;)
-    {
-      double values[5];
-
-      /* We have 5 numbers per glyph */
-      for (i = 0; i < 5; i ++)
-        {
-          if (!gtk_css_parser_consume_number (parser, &values[i]))
-            return FALSE;
-        }
-
-      g_array_append_val (glyphs, values);
-
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
-        gtk_css_parser_skip (parser);
-      else
-        break;
-    }
 
   glyph_string = pango_glyph_string_new ();
-  pango_glyph_string_set_size (glyph_string, glyphs->len);
 
-  for (i = 0; i < glyphs->len; i ++)
+  do
     {
-      PangoGlyphInfo g;
-      double *v = (double *)(glyphs->data + (i * sizeof (double) * 5));
+      PangoGlyphInfo gi = { 0, { 0, 0, 0}, { 1 } };
+      double d, d2;
+      int i;
 
-      g.glyph = (guint)v[0];
-      g.geometry.width = (int)v[1];
-      g.geometry.x_offset = (int)v[2];
-      g.geometry.y_offset = (int)v[3];
-      g.attr.is_cluster_start = (int)v[4];
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
+        {
+          char *s = gtk_css_parser_consume_string (parser);
 
-      glyph_string->glyphs[i] = g;
+          for (i = 0; s[i] != 0; i++)
+            {
+              if (s[i] < MIN_ASCII_GLYPH || s[i] >= MAX_ASCII_GLYPH)
+                {
+                  gtk_css_parser_error_value (parser, "Unsupported character %d in string", i);
+                }
+              gi.glyph = PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH + s[i];
+              pango_glyph_string_set_size (glyph_string, glyph_string->num_glyphs + 1);
+              glyph_string->glyphs[glyph_string->num_glyphs - 1] = gi;
+            }
+        }
+      else
+        {
+          if (!gtk_css_parser_consume_integer (parser, &i) ||
+              !gtk_css_parser_consume_number (parser, &d))
+            {
+              pango_glyph_string_free (glyph_string);
+              return FALSE;
+            }
+          gi.glyph = i;
+          gi.geometry.width = (int) (d * PANGO_SCALE);
+
+          if (gtk_css_parser_has_number (parser))
+            {
+              if (!gtk_css_parser_consume_number (parser, &d) ||
+                  !gtk_css_parser_consume_number (parser, &d2))
+                {
+                  pango_glyph_string_free (glyph_string);
+                  return FALSE;
+                }
+              gi.geometry.x_offset = (int) (d * PANGO_SCALE);
+              gi.geometry.y_offset = (int) (d2 * PANGO_SCALE);
+
+              if (gtk_css_parser_try_ident (parser, "same-cluster"))
+                gi.attr.is_cluster_start = 0;
+              else
+                gi.attr.is_cluster_start = 1;
+            }
+
+          pango_glyph_string_set_size (glyph_string, glyph_string->num_glyphs + 1);
+          glyph_string->glyphs[glyph_string->num_glyphs - 1] = gi;
+        }
     }
-
-  g_array_free (glyphs, TRUE);
+  while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
   *((PangoGlyphString **)out_glyphs) = glyph_string;
 
@@ -621,10 +769,16 @@ parse_declarations (GtkCssParser      *parser,
 }
 
 static GskRenderNode *
+create_default_render_node (void)
+{
+  return gsk_color_node_new (&GDK_RGBA("FF00CC"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
+}
+
+static GskRenderNode *
 parse_color_node (GtkCssParser *parser)
 {
-  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
-  GdkRGBA color = { 0, 0, 0, 1 };
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
+  GdkRGBA color = GDK_RGBA("FF00CC");
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "color", parse_color, NULL, &color },
@@ -638,9 +792,9 @@ parse_color_node (GtkCssParser *parser)
 static GskRenderNode *
 parse_linear_gradient_node (GtkCssParser *parser)
 {
-  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
   graphene_point_t start = GRAPHENE_POINT_INIT (0, 0);
-  graphene_point_t end = GRAPHENE_POINT_INIT (0, 0);
+  graphene_point_t end = GRAPHENE_POINT_INIT (0, 50);
   GArray *stops = NULL;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
@@ -653,8 +807,12 @@ parse_linear_gradient_node (GtkCssParser *parser)
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (stops == NULL)
     {
-      gtk_css_parser_error_syntax (parser, "No color stops given");
-      return NULL;
+      GskColorStop from = { 0.0, GDK_RGBA("AAFF00") };
+      GskColorStop to = { 1.0, GDK_RGBA("FF00CC") };
+
+      stops = g_array_new (FALSE, FALSE, sizeof (GskColorStop));
+      g_array_append_val (stops, from);
+      g_array_append_val (stops, to);
     }
 
   result = gsk_linear_gradient_node_new (&bounds, &start, &end, (GskColorStop *) stops->data, stops->len);
@@ -667,8 +825,8 @@ parse_linear_gradient_node (GtkCssParser *parser)
 static GskRenderNode *
 parse_inset_shadow_node (GtkCssParser *parser)
 {
-  GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
-  GdkRGBA color = { 0, 0, 0, 1 };
+  GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 50, 50);
+  GdkRGBA color = GDK_RGBA("000000");
   double dx = 1, dy = 1, blur = 0, spread = 0;
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
@@ -687,24 +845,24 @@ parse_inset_shadow_node (GtkCssParser *parser)
 static GskRenderNode *
 parse_border_node (GtkCssParser *parser)
 {
-  GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
-  graphene_rect_t widths = GRAPHENE_RECT_INIT (0, 0, 0, 0);
-  GdkRGBA colors[4] = { { 0, 0, 0, 0 }, {0, 0, 0, 0}, {0, 0, 0, 0}, { 0, 0, 0, 0 } };
+  GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 50, 50);
+  float widths[4] = { 1, 1, 1, 1 };
+  GdkRGBA colors[4] = { GDK_RGBA("000"), GDK_RGBA("000"), GDK_RGBA("000"), GDK_RGBA("000") };
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
-    { "widths", parse_rect, NULL, &widths },
+    { "widths", parse_float4, NULL, &widths },
     { "colors", parse_colors4, NULL, &colors }
   };
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
 
-  return gsk_border_node_new (&outline, (float*)&widths, colors);
+  return gsk_border_node_new (&outline, widths, colors);
 }
 
 static GskRenderNode *
 parse_texture_node (GtkCssParser *parser)
 {
-  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 0, 0);
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
   GdkTexture *texture = NULL;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
@@ -716,8 +874,21 @@ parse_texture_node (GtkCssParser *parser)
 
   if (texture == NULL)
     {
-      gtk_css_parser_error_syntax (parser, "Missing \"texture\" property definition");
-      return NULL;
+      static const guint32 pixels[100] = {
+        0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0, 0, 0, 0, 0,
+        0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0, 0, 0, 0, 0,
+        0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0, 0, 0, 0, 0,
+        0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0, 0, 0, 0, 0,
+        0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC,
+        0, 0, 0, 0, 0, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC,
+        0, 0, 0, 0, 0, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC,
+        0, 0, 0, 0, 0, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC,
+        0, 0, 0, 0, 0, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC };
+      GBytes *bytes = g_bytes_new_static ((guchar *) pixels, 400);
+
+      texture = gdk_memory_texture_new (10, 10, GDK_MEMORY_DEFAULT, bytes, 40);
+      g_bytes_unref (bytes);
     }
 
   node = gsk_texture_node_new (texture, &bounds);
@@ -729,8 +900,8 @@ parse_texture_node (GtkCssParser *parser)
 static GskRenderNode *
 parse_outset_shadow_node (GtkCssParser *parser)
 {
-  GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
-  GdkRGBA color = { 0, 0, 0, 1 };
+  GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 50, 50);
+  GdkRGBA color = GDK_RGBA("000000");
   double dx = 1, dy = 1, blur = 0, spread = 0;
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
@@ -759,11 +930,8 @@ parse_transform_node (GtkCssParser *parser)
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
-    {
-      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
-      gsk_transform_unref (transform);
-      return NULL;
-    }
+    child = create_default_render_node ();
+
   /* This is very much cheating, isn't it? */
   if (transform == NULL)
     transform = gsk_transform_new ();
@@ -780,7 +948,7 @@ static GskRenderNode *
 parse_opacity_node (GtkCssParser *parser)
 {
   GskRenderNode *child = NULL;
-  double opacity = 1.0;
+  double opacity = 0.5;
   const Declaration declarations[] = {
     { "opacity", parse_double, NULL, &opacity },
     { "child", parse_node, clear_node, &child },
@@ -789,10 +957,7 @@ parse_opacity_node (GtkCssParser *parser)
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
-    {
-      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
-      return NULL;
-    }
+    child = create_default_render_node ();
 
   result = gsk_opacity_node_new (child, opacity);
 
@@ -818,10 +983,7 @@ parse_color_matrix_node (GtkCssParser *parser)
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
-    {
-      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
-      return NULL;
-    }
+    child = create_default_render_node ();
 
   graphene_vec4_init (&offset,
                       offset_rect.origin.x, offset_rect.origin.y,
@@ -851,16 +1013,10 @@ parse_cross_fade_node (GtkCssParser *parser)
   GskRenderNode *result;
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
-  if (start == NULL || end == NULL)
-    {
-      if (start == NULL)
-        gtk_css_parser_error_syntax (parser, "Missing \"start\" property definition");
-      if (end == NULL)
-        gtk_css_parser_error_syntax (parser, "Missing \"end\" property definition");
-      g_clear_pointer (&start, gsk_render_node_unref);
-      g_clear_pointer (&end, gsk_render_node_unref);
-      return NULL;
-    }
+  if (start == NULL)
+    start = gsk_color_node_new (&GDK_RGBA("AAFF00"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
+  if (end == NULL)
+    end = create_default_render_node ();
 
   result = gsk_cross_fade_node_new (start, end, progress);
 
@@ -884,16 +1040,10 @@ parse_blend_node (GtkCssParser *parser)
   GskRenderNode *result;
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
-  if (bottom == NULL || top == NULL)
-    {
-      if (bottom == NULL)
-        gtk_css_parser_error_syntax (parser, "Missing \"bottom\" property definition");
-      if (top == NULL)
-        gtk_css_parser_error_syntax (parser, "Missing \"top\" property definition");
-      g_clear_pointer (&bottom, gsk_render_node_unref);
-      g_clear_pointer (&top, gsk_render_node_unref);
-      return NULL;
-    }
+  if (bottom == NULL)
+    bottom = gsk_color_node_new (&GDK_RGBA("AAFF00"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
+  if (top == NULL)
+    top = create_default_render_node ();
 
   result = gsk_blend_node_new (bottom, top, mode);
 
@@ -919,10 +1069,7 @@ parse_repeat_node (GtkCssParser *parser)
 
   parse_result = parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
-    {
-      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
-      return NULL;
-    }
+    child = create_default_render_node ();
 
   if (!(parse_result & (1 << 1)))
     gsk_render_node_get_bounds (child, &bounds);
@@ -936,18 +1083,49 @@ parse_repeat_node (GtkCssParser *parser)
   return result;
 }
 
+static gboolean
+unpack_glyphs (PangoFont        *font,
+               PangoGlyphString *glyphs)
+{
+  PangoGlyphString *ascii = NULL;
+  guint i;
+
+  for (i = 0; i < glyphs->num_glyphs; i++)
+    {
+      PangoGlyph glyph = glyphs->glyphs[i].glyph;
+
+      if (glyph < PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH ||
+          glyph >= PANGO_GLYPH_INVALID_INPUT)
+        continue;
+
+      glyph = glyph - (PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH) - MIN_ASCII_GLYPH;
+
+      if (ascii == NULL)
+        {
+          ascii = create_ascii_glyphs (font);
+          if (ascii == NULL)
+            return FALSE;
+        }
+
+      glyphs->glyphs[i].glyph = ascii->glyphs[glyph].glyph;
+      glyphs->glyphs[i].geometry.width = ascii->glyphs[glyph].geometry.width;
+    }
+
+  g_clear_pointer (&ascii, pango_glyph_string_free);
+
+  return TRUE;
+}
+
 static GskRenderNode *
 parse_text_node (GtkCssParser *parser)
 {
   PangoFont *font = NULL;
-  double x = 0;
-  double y = 0;
-  GdkRGBA color = { 0, 0, 0, 1 };
+  graphene_point_t offset = GRAPHENE_POINT_INIT (0, 0);
+  GdkRGBA color = GDK_RGBA("000000");
   PangoGlyphString *glyphs = NULL;
   const Declaration declarations[] = {
     { "font", parse_font, clear_font, &font },
-    { "x", parse_double, NULL, &x },
-    { "y", parse_double, NULL, &y },
+    { "offset", parse_point, NULL, &offset },
     { "color", parse_color, NULL, &color },
     { "glyphs", parse_glyphs, clear_glyphs, &glyphs }
   };
@@ -955,13 +1133,47 @@ parse_text_node (GtkCssParser *parser)
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
 
-  if (!font || !glyphs)
-    return NULL;
+  if (font == NULL)
+    {
+      font = font_from_string ("Cantarell 11");
+      g_assert (font);
+    }
 
-  result = gsk_text_node_new (font, glyphs, &color, x, y);
+  if (!glyphs)
+    {
+      const char *text = "Hello";
+      PangoGlyphInfo gi = { 0, { 0, 0, 0}, { 1 } };
+      guint i;
+
+      glyphs = pango_glyph_string_new ();
+      pango_glyph_string_set_size (glyphs, strlen (text));
+      for (i = 0; i < strlen (text); i++)
+        {
+          gi.glyph = PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH + text[i];
+          glyphs->glyphs[i] = gi;
+        }
+    }
+
+  if (!unpack_glyphs (font, glyphs))
+    {
+      gtk_css_parser_error_value (parser, "Given font cannot decode the glyph text");
+      result = NULL;
+    }
+  else
+    {
+      result = gsk_text_node_new (font, glyphs, &color, &offset);
+      if (result == NULL)
+        {
+          gtk_css_parser_error_value (parser, "Glyphs result in empty text");
+        }
+    }
 
   g_object_unref (font);
   pango_glyph_string_free (glyphs);
+
+  /* return anything, whatever, just not NULL */
+  if (result == NULL)
+    result = create_default_render_node ();
 
   return result;
 }
@@ -970,7 +1182,7 @@ static GskRenderNode *
 parse_blur_node (GtkCssParser *parser)
 {
   GskRenderNode *child = NULL;
-  double blur_radius = 0.0;
+  double blur_radius = 1.0;
   const Declaration declarations[] = {
     { "blur", parse_double, NULL, &blur_radius },
     { "child", parse_node, clear_node, &child },
@@ -979,10 +1191,7 @@ parse_blur_node (GtkCssParser *parser)
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
-    {
-      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
-      return NULL;
-    }
+    child = create_default_render_node ();
 
   result = gsk_blur_node_new (child, blur_radius);
 
@@ -994,32 +1203,7 @@ parse_blur_node (GtkCssParser *parser)
 static GskRenderNode *
 parse_clip_node (GtkCssParser *parser)
 {
-  graphene_rect_t clip = GRAPHENE_RECT_INIT (0, 0, 0, 0);
-  GskRenderNode *child = NULL;
-  const Declaration declarations[] = {
-    { "clip", parse_rect, NULL, &clip },
-    { "child", parse_node, clear_node, &child },
-  };
-  GskRenderNode *result;
-
-  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
-  if (child == NULL)
-    {
-      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
-      return NULL;
-    }
-
-  result = gsk_clip_node_new (child, &clip);
-
-  gsk_render_node_unref (child);
-
-  return result;
-}
-
-static GskRenderNode *
-parse_rounded_clip_node (GtkCssParser *parser)
-{
-  GskRoundedRect clip = GSK_ROUNDED_RECT_INIT (0, 0, 0, 0);
+  GskRoundedRect clip = GSK_ROUNDED_RECT_INIT (0, 0, 50, 50);
   GskRenderNode *child = NULL;
   const Declaration declarations[] = {
     { "clip", parse_rounded_rect, NULL, &clip },
@@ -1029,10 +1213,32 @@ parse_rounded_clip_node (GtkCssParser *parser)
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
-    {
-      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
-      return NULL;
-    }
+    child = create_default_render_node ();
+
+  if (gsk_rounded_rect_is_rectilinear (&clip))
+    result = gsk_clip_node_new (child, &clip.bounds);
+  else
+    result = gsk_rounded_clip_node_new (child, &clip);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
+static GskRenderNode *
+parse_rounded_clip_node (GtkCssParser *parser)
+{
+  GskRoundedRect clip = GSK_ROUNDED_RECT_INIT (0, 0, 50, 50);
+  GskRenderNode *child = NULL;
+  const Declaration declarations[] = {
+    { "clip", parse_rounded_rect, NULL, &clip },
+    { "child", parse_node, clear_node, &child },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (child == NULL)
+    child = create_default_render_node ();
 
   result = gsk_rounded_clip_node_new (child, &clip);
 
@@ -1054,15 +1260,12 @@ parse_shadow_node (GtkCssParser *parser)
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
-    {
-      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
-      return NULL;
-    }
+    child = create_default_render_node ();
 
   if (shadows->len == 0)
     {
-      gtk_css_parser_error_syntax (parser, "Need at least one shadow");
-      return child;
+      GskShadow default_shadow = { GDK_RGBA("000000"), 1, 1, 0 };
+      g_array_append_val (shadows, default_shadow);
     }
 
   result = gsk_shadow_node_new (child, (GskShadow *)shadows->data, shadows->len);
@@ -1086,10 +1289,7 @@ parse_debug_node (GtkCssParser *parser)
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
-    {
-      gtk_css_parser_error_syntax (parser, "Missing \"child\" property definition");
-      return NULL;
-    }
+    child = create_default_render_node ();
 
   result = gsk_debug_node_new (child, message);
 
@@ -1379,8 +1579,13 @@ append_vec4 (GString               *str,
 static void
 append_float_param (Printer    *p,
                     const char *param_name,
-                    float       value)
+                    float       value,
+                    float       default_value)
 {
+  /* Don't approximate-compare here, better be topo verbose */
+  if (value == default_value)
+    return;
+
   _indent (p);
   g_string_append_printf (p->str, "%s: ", param_name);
   string_append_double (p->str, value);
@@ -1536,9 +1741,9 @@ render_node_print (Printer       *p,
       {
         start_node (p, "cross-fade");
 
-        append_float_param (p, "progress", gsk_cross_fade_node_get_progress (node));
-        append_node_param (p, "start", gsk_cross_fade_node_get_start_child (node));
         append_node_param (p, "end", gsk_cross_fade_node_get_end_child (node));
+        append_float_param (p, "progress", gsk_cross_fade_node_get_progress (node), 0.5f);
+        append_node_param (p, "start", gsk_cross_fade_node_get_start_child (node));
 
         end_node (p);
       }
@@ -1547,33 +1752,26 @@ render_node_print (Printer       *p,
     case GSK_LINEAR_GRADIENT_NODE:
       {
         const guint n_stops = gsk_linear_gradient_node_get_n_color_stops (node);
-        const GskColorStop *stop;
+        const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node);
         int i;
 
         start_node (p, "linear-gradient");
 
         append_rect_param (p, "bounds", &node->bounds);
-        append_point_param (p, "start", gsk_linear_gradient_node_peek_start (node));
         append_point_param (p, "end", gsk_linear_gradient_node_peek_end (node));
+        append_point_param (p, "start", gsk_linear_gradient_node_peek_start (node));
 
         _indent (p);
-        g_string_append (p->str, "stops:");
-        for (i = 0; i < n_stops - 1; i ++)
+        g_string_append (p->str, "stops: ");
+        for (i = 0; i < n_stops; i ++)
           {
-            stop = gsk_linear_gradient_node_peek_color_stops (node) + i;
+            if (i > 0)
+              g_string_append (p->str, ", ");
 
+            string_append_double (p->str, stops[i].offset);
             g_string_append_c (p->str, ' ');
-            string_append_double (p->str, stop->offset);
-            g_string_append_c (p->str, ' ');
-            append_rgba (p->str, &stop->color);
-            g_string_append_c (p->str, ',');
+            append_rgba (p->str, &stops[i].color);
           }
-
-        /* Last one, no comma */
-        stop = gsk_linear_gradient_node_peek_color_stops (node) + n_stops - 1;
-        string_append_double (p->str, stop->offset);
-        g_string_append_c (p->str, ' ');
-        append_rgba (p->str, &stop->color);
         g_string_append (p->str, ";\n");
 
         end_node (p);
@@ -1584,8 +1782,8 @@ render_node_print (Printer       *p,
       {
         start_node (p, "opacity");
 
-        append_float_param (p, "opacity", gsk_opacity_node_get_opacity (node));
         append_node_param (p, "child", gsk_opacity_node_get_child (node));
+        append_float_param (p, "opacity", gsk_opacity_node_get_opacity (node), 0.5f);
 
         end_node (p);
       }
@@ -1593,14 +1791,17 @@ render_node_print (Printer       *p,
 
     case GSK_OUTSET_SHADOW_NODE:
       {
+        const GdkRGBA *color = gsk_outset_shadow_node_peek_color (node);
+
         start_node (p, "outset-shadow");
 
+        append_float_param (p, "blur", gsk_outset_shadow_node_get_blur_radius (node), 0.0f);
+        if (!gdk_rgba_equal (color, &GDK_RGBA("000")))
+          append_rgba_param (p, "color", color);
+        append_float_param (p, "dx", gsk_outset_shadow_node_get_dx (node), 1.0f);
+        append_float_param (p, "dy", gsk_outset_shadow_node_get_dy (node), 1.0f);
         append_rounded_rect_param (p, "outline", gsk_outset_shadow_node_peek_outline (node));
-        append_rgba_param (p, "color", gsk_outset_shadow_node_peek_color (node));
-        append_float_param (p, "dx", gsk_outset_shadow_node_get_dx (node));
-        append_float_param (p, "dy", gsk_outset_shadow_node_get_dy (node));
-        append_float_param (p, "spread", gsk_outset_shadow_node_get_spread (node));
-        append_float_param (p, "blur", gsk_outset_shadow_node_get_blur_radius (node));
+        append_float_param (p, "spread", gsk_outset_shadow_node_get_spread (node), 0.0f);
 
         end_node (p);
       }
@@ -1610,8 +1811,8 @@ render_node_print (Printer       *p,
       {
         start_node (p, "clip");
 
-        append_rect_param (p, "clip", gsk_clip_node_peek_clip (node));
         append_node_param (p, "child", gsk_clip_node_get_child (node));
+        append_rect_param (p, "clip", gsk_clip_node_peek_clip (node));
 
         end_node (p);
       }
@@ -1621,8 +1822,8 @@ render_node_print (Printer       *p,
       {
         start_node (p, "rounded-clip");
 
-        append_rounded_rect_param (p, "clip", gsk_rounded_clip_node_peek_clip (node));
         append_node_param (p, "child", gsk_rounded_clip_node_get_child (node));
+        append_rounded_rect_param (p, "clip", gsk_rounded_clip_node_peek_clip (node));
 
 
         end_node (p);
@@ -1631,10 +1832,12 @@ render_node_print (Printer       *p,
 
     case GSK_TRANSFORM_NODE:
       {
+        GskTransform *transform = gsk_transform_node_get_transform (node);
         start_node (p, "transform");
 
-        append_transform_param (p, "transform", gsk_transform_node_get_transform (node));
         append_node_param (p, "child", gsk_transform_node_get_child (node));
+        if (gsk_transform_get_category (transform) != GSK_TRANSFORM_CATEGORY_IDENTITY)
+          append_transform_param (p, "transform", transform);
 
         end_node (p);
       }
@@ -1644,9 +1847,11 @@ render_node_print (Printer       *p,
       {
         start_node (p, "color-matrix");
 
-        append_matrix_param (p, "matrix", gsk_color_matrix_node_peek_color_matrix (node));
-        append_vec4_param (p, "offset", gsk_color_matrix_node_peek_color_offset (node));
         append_node_param (p, "child", gsk_color_matrix_node_get_child (node));
+        if (!graphene_matrix_is_identity (gsk_color_matrix_node_peek_color_matrix (node)))
+          append_matrix_param (p, "matrix", gsk_color_matrix_node_peek_color_matrix (node));
+        if (!graphene_vec4_equal (gsk_color_matrix_node_peek_color_offset (node), graphene_vec4_zero ()))
+          append_vec4_param (p, "offset", gsk_color_matrix_node_peek_color_offset (node));
 
         end_node (p);
       }
@@ -1654,31 +1859,60 @@ render_node_print (Printer       *p,
 
     case GSK_BORDER_NODE:
       {
+        const GdkRGBA *colors = gsk_border_node_peek_colors (node);
+        const float *widths = gsk_border_node_peek_widths (node);
+        guint i, n;
         start_node (p, "border");
+
+        if (!gdk_rgba_equal (&colors[3], &colors[1]))
+          n = 4;
+        else if (!gdk_rgba_equal (&colors[2], &colors[0]))
+          n = 3;
+        else if (!gdk_rgba_equal (&colors[1], &colors[0]))
+          n = 2;
+        else if (!gdk_rgba_equal (&colors[0], &GDK_RGBA("000000")))
+          n = 1;
+        else
+          n = 0;
+
+        if (n > 0)
+          {
+            _indent (p);
+            g_string_append (p->str, "colors: ");
+            for (i = 0; i < n; i++)
+              {
+                if (i > 0)
+                  g_string_append_c (p->str, ' ');
+                append_rgba (p->str, &colors[i]);
+              }
+            g_string_append (p->str, ";\n");
+          }
 
         append_rounded_rect_param (p, "outline", gsk_border_node_peek_outline (node));
 
-        _indent (p);
-        g_string_append (p->str, "widths: ");
-        string_append_double (p->str, gsk_border_node_peek_widths (node)[0]);
-        g_string_append_c (p->str, ' ');
-        string_append_double (p->str, gsk_border_node_peek_widths (node)[1]);
-        g_string_append_c (p->str, ' ');
-        string_append_double (p->str, gsk_border_node_peek_widths (node)[2]);
-        g_string_append_c (p->str, ' ');
-        string_append_double (p->str, gsk_border_node_peek_widths (node)[3]);
-        g_string_append (p->str, ";\n");
+        if (widths[3] != widths[1])
+          n = 4;
+        else if (widths[2] != widths[0])
+          n = 3;
+        else if (widths[1] != widths[0])
+          n = 2;
+        else if (widths[0] != 1.0)
+          n = 1;
+        else
+          n = 0;
 
-        _indent (p);
-        g_string_append (p->str, "colors: ");
-        append_rgba (p->str, &gsk_border_node_peek_colors (node)[0]);
-        g_string_append_c (p->str, ' ');
-        append_rgba (p->str, &gsk_border_node_peek_colors (node)[1]);
-        g_string_append_c (p->str, ' ');
-        append_rgba (p->str, &gsk_border_node_peek_colors (node)[2]);
-        g_string_append_c (p->str, ' ');
-        append_rgba (p->str, &gsk_border_node_peek_colors (node)[3]);
-        g_string_append (p->str, ";\n");
+        if (n > 0)
+          {
+            _indent (p);
+            g_string_append (p->str, "widths: ");
+            for (i = 0; i < n; i++)
+              {
+                if (i > 0)
+                  g_string_append_c (p->str, ' ');
+                string_append_double (p->str, widths[i]);
+              }
+            g_string_append (p->str, ";\n");
+          }
 
         end_node (p);
       }
@@ -1691,6 +1925,8 @@ render_node_print (Printer       *p,
 
         start_node (p, "shadow");
 
+        append_node_param (p, "child", gsk_shadow_node_get_child (node));
+
         _indent (p);
         g_string_append (p->str, "shadows: ");
         for (i = 0; i < n_shadows; i ++)
@@ -1698,17 +1934,20 @@ render_node_print (Printer       *p,
             const GskShadow *s = gsk_shadow_node_peek_shadow (node, i);
             char *color;
 
+            if (i > 0)
+              g_string_append (p->str, ", ");
+
             color = gdk_rgba_to_string (&s->color);
             g_string_append (p->str, color);
             g_string_append_c (p->str, ' ');
             string_append_double (p->str, s->dx);
             g_string_append_c (p->str, ' ');
             string_append_double (p->str, s->dy);
-            g_string_append_c (p->str, ' ');
-            string_append_double (p->str, s->radius);
-
-            if (i < n_shadows - 1)
-              g_string_append (p->str, ", ");
+            if (s->radius > 0)
+              {
+                g_string_append_c (p->str, ' ');
+                string_append_double (p->str, s->radius);
+              }
 
             g_free (color);
           }
@@ -1716,22 +1955,22 @@ render_node_print (Printer       *p,
         g_string_append_c (p->str, ';');
         g_string_append_c (p->str, '\n');
 
-        append_node_param (p, "child", gsk_shadow_node_get_child (node));
-
         end_node (p);
       }
       break;
 
     case GSK_INSET_SHADOW_NODE:
       {
+        const GdkRGBA *color = gsk_inset_shadow_node_peek_color (node);
         start_node (p, "inset-shadow");
 
+        append_float_param (p, "blur", gsk_inset_shadow_node_get_blur_radius (node), 0.0f);
+        if (!gdk_rgba_equal (color, &GDK_RGBA("000")))
+          append_rgba_param (p, "color", color);
+        append_float_param (p, "dx", gsk_inset_shadow_node_get_dx (node), 1.0f);
+        append_float_param (p, "dy", gsk_inset_shadow_node_get_dy (node), 1.0f);
         append_rounded_rect_param (p, "outline", gsk_inset_shadow_node_peek_outline (node));
-        append_rgba_param (p, "color", gsk_inset_shadow_node_peek_color (node));
-        append_float_param (p, "dx", gsk_inset_shadow_node_get_dx (node));
-        append_float_param (p, "dy", gsk_inset_shadow_node_get_dy (node));
-        append_float_param (p, "spread", gsk_inset_shadow_node_get_spread (node));
-        append_float_param (p, "blur", gsk_inset_shadow_node_get_blur_radius (node));
+        append_float_param (p, "spread", gsk_inset_shadow_node_get_spread (node), 0.0f);
 
         end_node (p);
       }
@@ -1765,56 +2004,108 @@ render_node_print (Printer       *p,
     case GSK_TEXT_NODE:
       {
         const guint n_glyphs = gsk_text_node_get_num_glyphs (node);
-        const PangoGlyphInfo *glyph;
+        const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
+        const graphene_point_t *offset = gsk_text_node_get_offset (node);
+        const GdkRGBA *color = gsk_text_node_peek_color (node);
+        PangoFont *font = gsk_text_node_peek_font (node);
         PangoFontDescription *desc;
         char *font_name;
-        guint i;
+        GString *str;
+        guint i, j;
+        PangoGlyphString *ascii = create_ascii_glyphs (font);
+
         start_node (p, "text");
 
+        if (!gdk_rgba_equal (color, &GDK_RGBA("000000")))
+          append_rgba_param (p, "color", color);
+
         _indent (p);
-        desc = pango_font_describe ((PangoFont *)gsk_text_node_peek_font (node));;
+        desc = pango_font_describe (font);
         font_name = pango_font_description_to_string (desc);
+        if (ascii == NULL)
+          g_print ("\"%s\" has no ascii table\n", font_name);
         g_string_append_printf (p->str, "font: \"%s\";\n", font_name);
         g_free (font_name);
         pango_font_description_free (desc);
 
-        append_float_param (p, "x", gsk_text_node_get_x (node));
-        append_float_param (p, "y", gsk_text_node_get_y (node));
-        append_rgba_param (p, "color", gsk_text_node_peek_color (node));
-
         _indent (p);
+        str = g_string_new (NULL);
         g_string_append (p->str, "glyphs: ");
-        glyph = gsk_text_node_peek_glyphs (node);
-        g_string_append_printf (p->str, "%u %i %i %i %i",
-                                glyph->glyph, glyph->geometry.width,
-                                glyph->geometry.x_offset, glyph->geometry.y_offset,
-                                glyph->attr.is_cluster_start);
-
-        for (i = 1; i < n_glyphs; i ++)
+        for (i = 0; i < n_glyphs; i++)
           {
-            glyph = gsk_text_node_peek_glyphs (node) + i;
-            g_string_append_printf (p->str, ", %u %i %i %i %i",
-                                    glyph->glyph, glyph->geometry.width,
-                                    glyph->geometry.x_offset, glyph->geometry.y_offset,
-                                    glyph->attr.is_cluster_start);
+            if (ascii)
+              {
+                for (j = 0; j < ascii->num_glyphs; j++)
+                  {
+                    if (glyphs[i].glyph == ascii->glyphs[j].glyph &&
+                        glyphs[i].geometry.width == ascii->glyphs[j].geometry.width &&
+                        glyphs[i].geometry.x_offset == 0 &&
+                        glyphs[i].geometry.x_offset == 0 &&
+                        glyphs[i].attr.is_cluster_start)
+                      {
+                        g_string_append_c (str, j + MIN_ASCII_GLYPH);
+                        break;
+                      }
+                  }
+                if (j != ascii->num_glyphs)
+                  continue;
+              }
+
+            if (str->len)
+              {
+                g_string_append_printf (p->str, "\"%s\", ", str->str);
+                g_string_set_size (str, 0);
+              }
+
+            g_string_append_printf (p->str, "%u %g",
+                                    glyphs[i].glyph,
+                                    (double) glyphs[i].geometry.width / PANGO_SCALE);
+            if (!glyphs[i].attr.is_cluster_start ||
+                glyphs[i].geometry.x_offset != 0 ||
+                glyphs[i].geometry.y_offset != 0)
+            {
+              g_string_append_printf (p->str, "%g %g",
+                                      (double) glyphs[i].geometry.x_offset / PANGO_SCALE,
+                                      (double) glyphs[i].geometry.y_offset / PANGO_SCALE);
+              if (!glyphs[i].attr.is_cluster_start)
+                g_string_append (p->str, " same-cluster");
+            }
+
+            if (i + 1 < n_glyphs)
+              g_string_append (p->str, ", ");
           }
+
+        if (str->len)
+          g_string_append_printf (p->str, "\"%s\"", str->str);
 
         g_string_append_c (p->str, ';');
         g_string_append_c (p->str, '\n');
 
+        if (!graphene_point_equal (offset, graphene_point_zero ()))
+          append_point_param (p, "offset", offset);
+
         end_node (p);
+
+        g_string_free (str, TRUE);
+        if (ascii)
+          pango_glyph_string_free (ascii);
       }
       break;
 
     case GSK_DEBUG_NODE:
       {
+        const char *message = gsk_debug_node_get_message (node);
+
         start_node (p, "debug");
 
-        _indent (p);
-        /* TODO: We potentially need to escape certain characters in the message */
-        g_string_append_printf (p->str, "message: \"%s\";\n", gsk_debug_node_get_message (node));
-
         append_node_param (p, "child", gsk_debug_node_get_child (node));
+        /* TODO: We potentially need to escape certain characters in the message */
+        if (message)
+          {
+            _indent (p);
+            g_string_append_printf (p->str, "message: \"%s\";\n", message);
+          }
+
         end_node (p);
       }
       break;
@@ -1823,7 +2114,7 @@ render_node_print (Printer       *p,
       {
         start_node (p, "blur");
 
-        append_float_param (p, "blur", gsk_blur_node_get_radius (node));
+        append_float_param (p, "blur", gsk_blur_node_get_radius (node), 1.0f);
         append_node_param (p, "child", gsk_blur_node_get_child (node));
 
         end_node (p);
@@ -1832,11 +2123,16 @@ render_node_print (Printer       *p,
 
     case GSK_REPEAT_NODE:
       {
-        start_node (p, "repeat");
-        append_rect_param (p, "bounds", &node->bounds);
-        append_rect_param (p, "child-bounds", gsk_repeat_node_peek_child_bounds (node));
+        GskRenderNode *child = gsk_repeat_node_get_child (node);
+        const graphene_rect_t *child_bounds = gsk_repeat_node_peek_child_bounds (node);
 
+        start_node (p, "repeat");
+
+        if (!graphene_rect_equal (&node->bounds, &child->bounds))
+          append_rect_param (p, "bounds", &node->bounds);
         append_node_param (p, "child", gsk_repeat_node_get_child (node));
+        if (!graphene_rect_equal (child_bounds, &child->bounds))
+          append_rect_param (p, "child-bounds", child_bounds);
 
         end_node (p);
       }
@@ -1849,17 +2145,21 @@ render_node_print (Printer       *p,
 
         start_node (p, "blend");
 
-        _indent (p);
-        for (i = 0; i < G_N_ELEMENTS (blend_modes); i++)
+        append_node_param (p, "bottom", gsk_blend_node_get_bottom_child (node));
+
+        if (mode != GSK_BLEND_MODE_DEFAULT)
           {
-            if (blend_modes[i].mode == mode)
+            _indent (p);
+            for (i = 0; i < G_N_ELEMENTS (blend_modes); i++)
               {
-                g_string_append_printf (p->str, "mode: %s;\n", blend_modes[i].name);
-                break;
+                if (blend_modes[i].mode == mode)
+                  {
+                    g_string_append_printf (p->str, "mode: %s;\n", blend_modes[i].name);
+                    break;
+                  }
               }
           }
         append_node_param (p, "top", gsk_blend_node_get_top_child (node));
-        append_node_param (p, "bottom", gsk_blend_node_get_bottom_child (node));
 
         end_node (p);
       }
@@ -1877,13 +2177,44 @@ render_node_print (Printer       *p,
     }
 }
 
-char *
-gsk_render_node_serialize_to_string (GskRenderNode *root)
+/**
+ * gsk_render_node_serialize:
+ * @node: a #GskRenderNode
+ *
+ * Serializes the @node for later deserialization via
+ * gsk_render_node_deserialize(). No guarantees are made about the format
+ * used other than that the same version of GTK+ will be able to deserialize
+ * the result of a call to gsk_render_node_serialize() and
+ * gsk_render_node_deserialize() will correctly reject files it cannot open
+ * that were created with previous versions of GTK+.
+ *
+ * The intended use of this functions is testing, benchmarking and debugging.
+ * The format is not meant as a permanent storage format.
+ *
+ * Returns: a #GBytes representing the node.
+ **/
+GBytes *
+gsk_render_node_serialize (GskRenderNode *node)
 {
   Printer p;
 
   printer_init (&p);
-  render_node_print (&p, root);
 
-  return g_string_free (p.str, FALSE);
+  if (gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE)
+    {
+      guint i;
+
+      for (i = 0; i < gsk_container_node_get_n_children (node); i ++)
+        {
+          GskRenderNode *child = gsk_container_node_get_child (node, i);
+
+          render_node_print (&p, child);
+        }
+    }
+  else
+    {
+      render_node_print (&p, node);
+    }
+
+  return g_string_free_to_bytes (p.str);
 }

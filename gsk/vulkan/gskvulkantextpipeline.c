@@ -108,8 +108,7 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
                                               guint                   total_glyphs,
                                               const PangoGlyphInfo   *glyphs,
                                               const GdkRGBA          *color,
-                                              float                   x,
-                                              float                   y,
+                                              const graphene_point_t *offset,
                                               guint                   start_glyph,
                                               guint                   num_glyphs,
                                               float                   scale)
@@ -140,8 +139,8 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
           instance->tex_rect[2] = glyph->tw;
           instance->tex_rect[3] = glyph->th;
 
-          instance->rect[0] = x + cx + glyph->draw_x;
-          instance->rect[1] = y + cy + glyph->draw_y;
+          instance->rect[0] = offset->x + cx + glyph->draw_x;
+          instance->rect[1] = offset->y + cy + glyph->draw_y;
           instance->rect[2] = glyph->draw_width;
           instance->rect[3] = glyph->draw_height;
 

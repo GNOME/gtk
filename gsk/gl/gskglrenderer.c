@@ -527,8 +527,9 @@ render_text_node (GskGLRenderer   *self,
   guint num_glyphs = gsk_text_node_get_num_glyphs (node);
   int i;
   int x_position = 0;
-  float x = gsk_text_node_get_x (node) + builder->dx;
-  float y = gsk_text_node_get_y (node) + builder->dy;
+  const graphene_point_t *offset = gsk_text_node_get_offset (node);
+  float x = offset->x + builder->dx;
+  float y = offset->y + builder->dy;
 
   /* If the font has color glyphs, we don't need to recolor anything */
   if (!force_color && font_has_color_glyphs (font))
@@ -2605,11 +2606,16 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_DEBUG_NODE:
-      ops_push_debug_group (builder, gsk_debug_node_get_message (node));
-      gsk_gl_renderer_add_render_ops (self,
-                                      gsk_debug_node_get_child (node),
-                                      builder);
-      ops_pop_debug_group (builder);
+      {
+        const char *message = gsk_debug_node_get_message (node);
+        if (message)
+          ops_push_debug_group (builder, message);
+        gsk_gl_renderer_add_render_ops (self,
+                                        gsk_debug_node_get_child (node),
+                                        builder);
+        if (message)
+          ops_pop_debug_group (builder);
+      }
     break;
 
     case GSK_COLOR_NODE:

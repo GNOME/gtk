@@ -1,5 +1,4 @@
 transform {
-  transform: translate(0, 0);
   child: container {
     color {
       bounds: 0 0 404 204;
@@ -8,382 +7,335 @@ transform {
     container {
       container {
         transform {
-          transform: translate(1, 1);
           child: container {
             rounded-clip {
-              clip: -1 -1 50 26 / 13;
               child: color {
                 bounds: -1 -1 50 26;
                 color: rgb(225,222,219);
               }
+              clip: -1 -1 50 26 / 13;
             }
             border {
+              colors: rgb(205,199,194);
               outline: -1 -1 50 26 / 13;
-              widths: 1 1 1 1;
-              colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
             }
             container {
               container {
                 outset-shadow {
-                  outline: -1 -1 26 26 / 13;
                   color: rgba(0,0,0,0.1);
                   dx: 0;
-                  dy: 1;
-                  spread: 0;
-                  blur: 0;
+                  outline: -1 -1 26 26 / 13;
                 }
                 outset-shadow {
-                  outline: -1 -1 26 26 / 13;
+                  blur: 2;
                   color: rgba(0,0,0,0.07);
                   dx: 0;
-                  dy: 1;
-                  spread: 0;
-                  blur: 2;
+                  outline: -1 -1 26 26 / 13;
                 }
                 rounded-clip {
-                  clip: -1 -1 26 26 / 13;
                   child: linear-gradient {
                     bounds: 0 0 24 24;
-                    start: 12 0;
                     end: 12 24;
-                    stops: 0.2 rgb(255,255,255),0.9 rgb(246,245,244);
+                    start: 12 0;
+                    stops: 0.2 rgb(255,255,255), 0.9 rgb(246,245,244);
                   }
+                  clip: -1 -1 26 26 / 13;
                 }
                 inset-shadow {
-                  outline: 0 0 24 24 / 12;
                   color: rgb(255,255,255);
                   dx: 0;
-                  dy: 1;
-                  spread: 0;
-                  blur: 0;
+                  outline: 0 0 24 24 / 12;
                 }
               }
               border {
+                colors: rgb(191,184,177);
                 outline: -1 -1 26 26 / 13;
-                widths: 1 1 1 1;
-                colors: rgb(191,184,177) rgb(191,184,177) rgb(191,184,177) rgb(191,184,177);
               }
             }
           }
+          transform: translate(1, 1);
         }
         transform {
-          transform: translate(56, 0);
           child: text {
-            font: "Cantarell 11";
-            x: 145;
-            y: 18;
             color: rgb(46,52,54);
-            glyphs: 37 11264 0 0 1, 324 4096 0 0 1, 417 7168 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1;
+            font: "Cantarell 11";
+            glyphs: "Disabled";
+            offset: 145 18;
           }
+          transform: translate(56, 0);
         }
       }
       transform {
-        transform: translate(0, 38);
         child: container {
           transform {
-            transform: translate(1, 1);
             child: container {
               rounded-clip {
-                clip: -1 -1 50 26 / 13;
                 child: color {
                   bounds: -1 -1 50 26;
                   color: rgb(53,132,228);
                 }
+                clip: -1 -1 50 26 / 13;
               }
               border {
+                colors: rgb(24,95,180);
                 outline: -1 -1 50 26 / 13;
-                widths: 1 1 1 1;
-                colors: rgb(24,95,180) rgb(24,95,180) rgb(24,95,180) rgb(24,95,180);
               }
               transform {
-                transform: translate(24, 0);
                 child: container {
                   container {
                     outset-shadow {
-                      outline: -1 -1 26 26 / 13;
                       color: rgba(0,0,0,0.1);
                       dx: 0;
-                      dy: 1;
-                      spread: 0;
-                      blur: 0;
+                      outline: -1 -1 26 26 / 13;
                     }
                     outset-shadow {
-                      outline: -1 -1 26 26 / 13;
+                      blur: 2;
                       color: rgba(0,0,0,0.07);
                       dx: 0;
-                      dy: 1;
-                      spread: 0;
-                      blur: 2;
+                      outline: -1 -1 26 26 / 13;
                     }
                     rounded-clip {
-                      clip: -1 -1 26 26 / 13;
                       child: cross-fade {
+                        end: linear-gradient {
+                          bounds: 0 0 24 24;
+                          end: 12 24;
+                          start: 12 0;
+                          stops: 0.1 rgb(255,255,255), 0.9 rgb(255,255,255);
+                        }
                         progress: 0.756154;
                         start: cross-fade {
+                          end: linear-gradient {
+                            bounds: 0 0 24 24;
+                            end: 12 24;
+                            start: 12 0;
+                            stops: 0.2 rgb(255,255,255), 0.9 rgb(246,245,244);
+                          }
                           progress: 0.788575;
                           start: color {
                             bounds: 0 0 24 24;
                             color: rgb(246,245,244);
                           }
-                          end: linear-gradient {
-                            bounds: 0 0 24 24;
-                            start: 12 0;
-                            end: 12 24;
-                            stops: 0.2 rgb(255,255,255),0.9 rgb(246,245,244);
-                          }
-                        }
-                        end: linear-gradient {
-                          bounds: 0 0 24 24;
-                          start: 12 0;
-                          end: 12 24;
-                          stops: 0.1 rgb(255,255,255),0.9 rgb(255,255,255);
                         }
                       }
+                      clip: -1 -1 26 26 / 13;
                     }
                     inset-shadow {
-                      outline: 0 0 24 24 / 12;
                       color: rgb(255,255,255);
                       dx: 0;
-                      dy: 1;
-                      spread: 0;
-                      blur: 0;
+                      outline: 0 0 24 24 / 12;
                     }
                   }
                   border {
+                    colors: rgb(24,95,180);
                     outline: -1 -1 26 26 / 13;
-                    widths: 1 1 1 1;
-                    colors: rgb(24,95,180) rgb(24,95,180) rgb(24,95,180) rgb(24,95,180);
                   }
                 }
+                transform: translate(24, 0);
               }
             }
+            transform: translate(1, 1);
           }
           transform {
-            transform: translate(56, 0);
             child: text {
-              font: "Cantarell 11";
-              x: 147;
-              y: 18;
               color: rgb(46,52,54);
-              glyphs: 45 9216 0 0 1, 360 8192 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1;
+              font: "Cantarell 11";
+              glyphs: "Enabled";
+              offset: 147 18;
             }
+            transform: translate(56, 0);
           }
         }
+        transform: translate(0, 38);
       }
       transform {
-        transform: translate(0, 76);
         child: container {
           transform {
-            transform: translate(1, 1);
             child: container {
               rounded-clip {
-                clip: -1 -1 50 26 / 13;
                 child: color {
                   bounds: -1 -1 50 26;
                   color: rgb(250,249,248);
                 }
+                clip: -1 -1 50 26 / 13;
               }
               border {
+                colors: rgb(205,199,194);
                 outline: -1 -1 50 26 / 13;
-                widths: 1 1 1 1;
-                colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
               }
               container {
                 rounded-clip {
-                  clip: -1 -1 26 26 / 13;
                   child: color {
                     bounds: 0 0 24 24;
                     color: rgb(250,249,248);
                   }
+                  clip: -1 -1 26 26 / 13;
                 }
                 border {
+                  colors: rgb(205,199,194);
                   outline: -1 -1 26 26 / 13;
-                  widths: 1 1 1 1;
-                  colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
                 }
               }
             }
+            transform: translate(1, 1);
           }
           transform {
-            transform: translate(56, 0);
             child: text {
-              font: "Cantarell 11";
-              x: 145;
-              y: 18;
               color: rgb(46,52,54);
-              glyphs: 37 11264 0 0 1, 324 4096 0 0 1, 417 7168 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1;
+              font: "Cantarell 11";
+              glyphs: "Disabled";
+              offset: 145 18;
             }
+            transform: translate(56, 0);
           }
         }
+        transform: translate(0, 76);
       }
       transform {
-        transform: translate(0, 114);
         child: container {
           transform {
-            transform: translate(1, 1);
             child: container {
               rounded-clip {
-                clip: -1 -1 50 26 / 13;
                 child: color {
                   bounds: -1 -1 50 26;
                   color: rgb(250,249,248);
                 }
+                clip: -1 -1 50 26 / 13;
               }
               border {
+                colors: rgb(205,199,194);
                 outline: -1 -1 50 26 / 13;
-                widths: 1 1 1 1;
-                colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
               }
               transform {
-                transform: translate(24, 0);
                 child: container {
                   rounded-clip {
-                    clip: -1 -1 26 26 / 13;
                     child: color {
                       bounds: 0 0 24 24;
                       color: rgb(250,249,248);
                     }
+                    clip: -1 -1 26 26 / 13;
                   }
                   border {
+                    colors: rgb(205,199,194);
                     outline: -1 -1 26 26 / 13;
-                    widths: 1 1 1 1;
-                    colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
                   }
                 }
+                transform: translate(24, 0);
               }
             }
+            transform: translate(1, 1);
           }
           transform {
-            transform: translate(56, 0);
             child: text {
-              font: "Cantarell 11";
-              x: 147;
-              y: 18;
               color: rgb(46,52,54);
-              glyphs: 45 9216 0 0 1, 360 8192 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1;
+              font: "Cantarell 11";
+              glyphs: "Enabled";
+              offset: 147 18;
             }
+            transform: translate(56, 0);
           }
         }
+        transform: translate(0, 114);
       }
       transform {
-        transform: translate(0, 152);
         child: container {
           transform {
-            transform: translate(1, 1);
             child: container {
               rounded-clip {
-                clip: -1 -1 50 26 / 13;
                 child: color {
                   bounds: -1 -1 50 26;
                   color: rgb(225,222,219);
                 }
+                clip: -1 -1 50 26 / 13;
               }
               border {
+                colors: rgb(205,199,194);
                 outline: -1 -1 50 26 / 13;
-                widths: 1 1 1 1;
-                colors: rgb(205,199,194) rgb(205,199,194) rgb(205,199,194) rgb(205,199,194);
               }
               container {
                 container {
                   outset-shadow {
-                    outline: -1 -1 26 26 / 13;
                     color: rgba(0,0,0,0.1);
                     dx: 0;
-                    dy: 1;
-                    spread: 0;
-                    blur: 0;
+                    outline: -1 -1 26 26 / 13;
                   }
                   outset-shadow {
-                    outline: -1 -1 26 26 / 13;
+                    blur: 2;
                     color: rgba(0,0,0,0.07);
                     dx: 0;
-                    dy: 1;
-                    spread: 0;
-                    blur: 2;
+                    outline: -1 -1 26 26 / 13;
                   }
                   rounded-clip {
-                    clip: -1 -1 26 26 / 13;
                     child: linear-gradient {
                       bounds: 0 0 24 24;
-                      start: 12 0;
                       end: 12 24;
-                      stops: 0.2 rgb(255,255,255),0.9 rgb(246,245,244);
+                      start: 12 0;
+                      stops: 0.2 rgb(255,255,255), 0.9 rgb(246,245,244);
                     }
+                    clip: -1 -1 26 26 / 13;
                   }
                   inset-shadow {
-                    outline: 0 0 24 24 / 12;
                     color: rgb(255,255,255);
                     dx: 0;
-                    dy: 1;
-                    spread: 0;
-                    blur: 0;
+                    outline: 0 0 24 24 / 12;
                   }
                 }
                 border {
+                  colors: rgb(191,184,177);
                   outline: -1 -1 26 26 / 13;
-                  widths: 1 1 1 1;
-                  colors: rgb(191,184,177) rgb(191,184,177) rgb(191,184,177) rgb(191,184,177);
                 }
               }
             }
+            transform: translate(1, 1);
           }
           transform {
-            transform: translate(78, 0);
             child: text {
-              font: "Cantarell 11";
-              x: 123;
-              y: 18;
               color: rgb(46,52,54);
-              glyphs: 37 11264 0 0 1, 324 4096 0 0 1, 417 7168 0 0 1, 244 8192 0 0 1, 272 8192 0 0 1, 349 4096 0 0 1, 287 8192 0 0 1, 280 8192 0 0 1;
+              font: "Cantarell 11";
+              glyphs: "Disabled";
+              offset: 123 18;
             }
+            transform: translate(78, 0);
           }
           transform {
-            transform: translate(388, 0);
             child: transform {
-              transform: translate(1, 6);
               child: container {
                 container {
                   outset-shadow {
-                    outline: -1 -1 16 16 / 3;
                     color: rgba(0,0,0,0.1);
                     dx: 0;
-                    dy: 1;
-                    spread: 0;
-                    blur: 0;
+                    outline: -1 -1 16 16 / 3;
                   }
                   outset-shadow {
-                    outline: -1 -1 16 16 / 3;
+                    blur: 2;
                     color: rgba(0,0,0,0.07);
                     dx: 0;
-                    dy: 1;
-                    spread: 0;
-                    blur: 2;
+                    outline: -1 -1 16 16 / 3;
                   }
                   linear-gradient {
                     bounds: 0 0 14 14;
-                    start: 7 0;
                     end: 7 14;
-                    stops: 0.2 rgb(255,255,255),0.9 rgb(246,245,244);
+                    start: 7 0;
+                    stops: 0.2 rgb(255,255,255), 0.9 rgb(246,245,244);
                   }
                   inset-shadow {
-                    outline: 0 0 14 14 / 2;
                     color: rgb(255,255,255);
                     dx: 0;
-                    dy: 1;
-                    spread: 0;
-                    blur: 0;
+                    outline: 0 0 14 14 / 2;
                   }
                 }
                 border {
+                  colors: rgb(191,184,177);
                   outline: -1 -1 16 16 / 3;
-                  widths: 1 1 1 1;
-                  colors: rgb(191,184,177) rgb(191,184,177) rgb(191,184,177) rgb(191,184,177);
                 }
               }
+              transform: translate(1, 6);
             }
+            transform: translate(388, 0);
           }
         }
+        transform: translate(0, 152);
       }
     }
   }
+  transform: translate(0, 0);
 }

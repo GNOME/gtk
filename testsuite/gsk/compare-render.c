@@ -61,8 +61,8 @@ deserialize_error_func (const GtkCssSection *section,
 {
   char *section_str = gtk_css_section_to_string (section);
 
-  g_test_message ("Error at %s: %s", section_str, error->message);
-  g_test_fail ();
+  g_print ("Error at %s: %s", section_str, error->message);
+  *((gboolean *) user_data) = FALSE;
 
   free (section_str);
 }
@@ -84,6 +84,7 @@ main (int argc, char **argv)
   GskRenderNode *node;
   const char *node_file;
   const char *png_file;
+  gboolean success = TRUE;
 
   g_assert (argc == 3);
 
@@ -109,12 +110,11 @@ main (int argc, char **argv)
       {
         g_print ("Could not open node file: %s\n", error->message);
         g_clear_error (&error);
-        g_test_fail ();
-        return -1;
+        return 1;
       }
 
     bytes = g_bytes_new_take (contents, len);
-    node = gsk_render_node_deserialize (bytes, deserialize_error_func, NULL);
+    node = gsk_render_node_deserialize (bytes, deserialize_error_func, &success);
     g_bytes_unref (bytes);
 
     g_assert_no_error (error);
@@ -135,15 +135,30 @@ main (int argc, char **argv)
 
   /* Load the given reference png file */
   reference_surface = cairo_image_surface_create_from_png (png_file);
-  g_assert (reference_surface != NULL);
+  if (cairo_surface_status (reference_surface))
+    {
+      g_print ("Error loading reference surface: %s\n",
+               cairo_status_to_string (cairo_surface_status (reference_surface)));
+      success = FALSE;
+    }
+  else
+    {
+      /* Now compare the two */
+      diff_surface = reftest_compare_surfaces (rendered_surface, reference_surface);
 
-  /* Now compare the two */
-  diff_surface = reftest_compare_surfaces (rendered_surface, reference_surface);
+      if (diff_surface)
+        {
+          save_image (diff_surface, node_file, ".diff.png");
+          cairo_surface_destroy (diff_surface);
+          success = FALSE;
+        }
+    }
 
   save_image (rendered_surface, node_file, ".out.png");
 
-  if (diff_surface)
-    save_image (diff_surface, node_file, ".diff.png");
+  cairo_surface_destroy (reference_surface);
+  cairo_surface_destroy (rendered_surface);
+  g_object_unref (texture);
 
-  return diff_surface == NULL ? 0 : 1;
+  return success ? 0 : 1;
 }
