@@ -326,8 +326,7 @@ static GtkIconInfo *theme_lookup_icon         (IconTheme        *theme,
                                                const gchar      *icon_name,
                                                gint              size,
                                                gint              scale,
-                                               gboolean          allow_svg,
-                                               gboolean          use_default_icons);
+                                               gboolean          allow_svg);
 static void         theme_list_icons          (IconTheme        *theme,
                                                GHashTable       *icons,
                                                GQuark            context);
@@ -1683,7 +1682,6 @@ real_choose_icon (GtkIconTheme       *icon_theme,
   UnthemedIcon *unthemed_icon = NULL;
   const gchar *icon_name = NULL;
   gboolean allow_svg;
-  gboolean use_builtin;
   IconTheme *theme = NULL;
   gint i;
   IconInfoKey key;
@@ -1720,8 +1718,6 @@ real_choose_icon (GtkIconTheme       *icon_theme,
   else
     allow_svg = priv->pixbuf_supports_svg;
 
-  use_builtin = flags & GTK_ICON_LOOKUP_USE_BUILTIN;
-
   /* This is used in the icontheme unit test */
   GTK_DISPLAY_NOTE (priv->display, ICONTHEME,
             for (i = 0; i < n_icon_names; i++)
@@ -1741,7 +1737,7 @@ real_choose_icon (GtkIconTheme       *icon_theme,
       for (i = 0; i < n_icon_names && icon_name_is_symbolic (icon_names[i], -1); i++)
         {
           icon_name = icon_names[i];
-          icon_info = theme_lookup_icon (theme, icon_name, size, scale, allow_svg, use_builtin);
+          icon_info = theme_lookup_icon (theme, icon_name, size, scale, allow_svg);
           if (icon_info)
             goto out;
         }
@@ -1754,7 +1750,7 @@ real_choose_icon (GtkIconTheme       *icon_theme,
       for (i = 0; i < n_icon_names; i++)
         {
           icon_name = icon_names[i];
-          icon_info = theme_lookup_icon (theme, icon_name, size, scale, allow_svg, use_builtin);
+          icon_info = theme_lookup_icon (theme, icon_name, size, scale, allow_svg);
           if (icon_info)
             goto out;
         }
@@ -1834,7 +1830,7 @@ real_choose_icon (GtkIconTheme       *icon_theme,
       icon_info->unscaled_scale = 1.0;
       if (scale != 1 && !icon_info->forced_size && theme != NULL)
         {
-          unscaled_icon_info = theme_lookup_icon (theme, icon_name, size, 1, allow_svg, use_builtin);
+          unscaled_icon_info = theme_lookup_icon (theme, icon_name, size, 1, allow_svg);
           if (unscaled_icon_info)
             {
               icon_info->unscaled_scale =
@@ -2942,8 +2938,7 @@ theme_lookup_icon (IconTheme   *theme,
                    const gchar *icon_name,
                    gint         size,
                    gint         scale,
-                   gboolean     allow_svg,
-                   gboolean     use_builtin)
+                   gboolean     allow_svg)
 {
   GList *dirs, *l;
   IconThemeDir *dir, *min_dir;
