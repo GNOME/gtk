@@ -2798,10 +2798,6 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
 
   if (dir->cache)
     {
-      suffix = (IconSuffix)gtk_icon_cache_get_icon_flags (dir->cache,
-                                                           icon_name,
-                                                           dir->subdir_index);
-
       if (icon_name_is_symbolic (icon_name))
         {
           /* Look for foo-symbolic.symbolic.png, as the cache only stores the ".png" suffix */
@@ -2813,7 +2809,15 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
 
           if (symbolic_suffix & ICON_SUFFIX_PNG)
             suffix = ICON_SUFFIX_SYMBOLIC_PNG;
+          else
+            suffix = (IconSuffix)gtk_icon_cache_get_icon_flags (dir->cache,
+                                                                icon_name,
+                                                                dir->subdir_index);
         }
+      else
+        suffix = (IconSuffix)gtk_icon_cache_get_icon_flags (dir->cache,
+                                                            icon_name,
+                                                            dir->subdir_index);
 
       if (has_icon_file)
         *has_icon_file = suffix & HAS_ICON_FILE;
