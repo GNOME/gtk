@@ -440,6 +440,7 @@ render_fallback_node (GskGLRenderer       *self,
   const int surface_width = ceilf (node->bounds.size.width) * scale;
   const int surface_height = ceilf (node->bounds.size.height) * scale;
   cairo_surface_t *surface;
+  cairo_surface_t *rendered_surface;
   cairo_t *cr;
   int cached_id;
   int texture_id;
@@ -468,6 +469,25 @@ render_fallback_node (GskGLRenderer       *self,
       return;
     }
 
+
+  /* We first draw the recording surface on an image surface,
+   * just because the scaleY(-1) later otherwise screws up the
+   * rendering... */
+  {
+    rendered_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                                   surface_width,
+                                                   surface_height);
+
+    cairo_surface_set_device_scale (rendered_surface, scale, scale);
+    cr = cairo_create (rendered_surface);
+
+    cairo_save (cr);
+    cairo_translate (cr, -node->bounds.origin.x, -node->bounds.origin.y);
+    gsk_render_node_draw (node, cr);
+    cairo_restore (cr);
+    cairo_destroy (cr);
+  }
+
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         surface_width,
                                         surface_height);
@@ -477,8 +497,10 @@ render_fallback_node (GskGLRenderer       *self,
   /* We draw upside down here, so it matches what GL does. */
   cairo_save (cr);
   cairo_scale (cr, 1, -1);
-  cairo_translate (cr, -node->bounds.origin.x, ceilf (-node->bounds.origin.y - node->bounds.size.height));
-  gsk_render_node_draw (node, cr);
+  cairo_translate (cr, 0, -surface_height);
+  cairo_set_source_surface (cr, rendered_surface, 0, 0);
+  cairo_rectangle (cr, 0, 0, surface_width, surface_height);
+  cairo_fill (cr);
   cairo_restore (cr);
 
 #if HIGHLIGHT_FALLBACK
@@ -504,8 +526,8 @@ render_fallback_node (GskGLRenderer       *self,
   gdk_gl_context_label_object_printf  (self->gl_context, GL_TEXTURE, texture_id,
                                        "Fallback %s %d", node->node_class->type_name, texture_id);
 
-
   cairo_surface_destroy (surface);
+  cairo_surface_destroy (rendered_surface);
 
   gsk_gl_driver_set_texture_for_pointer (self->gl_driver, node, texture_id);
 
