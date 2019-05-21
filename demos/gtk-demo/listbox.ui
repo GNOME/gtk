@@ -171,13 +171,8 @@
                   <object class="GtkMenuButton" id="more-button">
                     <property name="can-focus">1</property>
                     <property name="receives-default">1</property>
-                    <property name="relief">none</property>
                     <property name="popup">menu1</property>
-                    <child>
-                      <object class="GtkLabel" id="label7">
-                        <property name="label" translatable="yes">More...</property>
-                      </object>
-                    </child>
+                    <property name="label" translatable="yes">More...</property>
                   </object>
                 </child>
               </object>
