@@ -484,6 +484,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
   RECT rect;
   GdkWin32Surface *impl;
   GdkWin32Display *display_win32;
+  GdkSurface *surface;
   const gchar *title;
   wchar_t *wtitle;
   gint window_width, window_height;
@@ -512,6 +513,13 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
                        "parent", parent,
                        "frame-clock", frame_clock,
                        NULL);
+
+  surface = GDK_SURFACE (impl);
+  surface->surface_type = surface_type;
+  surface->x = x;
+  surface->y = y;
+  surface->width = width;
+  surface->height = height;
 
   impl->layered = FALSE;
   impl->layered_opacity = 1.0;
@@ -608,7 +616,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
 			     hparent,
 			     NULL,
 			     _gdk_dll_hinstance,
-			     GDK_SURFACE (impl));
+			     surface);
   impl->handle = hwndNew;
 
   GetWindowRect (hwndNew, &rect);
@@ -638,8 +646,8 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
   GDK_NOTE (MISC, g_print ("... \"%s\" %dx%d@%+d%+d %p = %p\n",
 			   title,
 			   window_width, window_height,
-			   GDK_SURFACE (impl)->x - offset_x,
-			   GDK_SURFACE (impl)->y - offset_y,
+			   surface->x - offset_x,
+			   surface->y - offset_y,
 			   hparent,
 			   hwndNew));
 
@@ -652,7 +660,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
       return NULL;
     }
 
-  _gdk_win32_surface_enable_transparency (GDK_SURFACE (impl));
+  _gdk_win32_surface_enable_transparency (surface);
 
   g_signal_connect (frame_clock,
                     "after-paint",
@@ -661,7 +669,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
 
   g_object_unref (frame_clock);
 
-  return GDK_SURFACE (impl);
+  return surface;
 }
 
 static void
