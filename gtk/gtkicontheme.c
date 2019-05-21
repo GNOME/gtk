@@ -2768,7 +2768,7 @@ best_suffix (IconSuffix suffix,
   else
     return ICON_SUFFIX_NONE;
 }
- 
+
 static IconSuffix
 theme_dir_get_icon_suffix (IconThemeDir *dir,
                            const gchar  *icon_name,
@@ -2780,13 +2780,15 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
     {
       if (icon_name_is_symbolic (icon_name))
         {
+          int icon_name_len = strlen (icon_name);
+          char icon_name_with_prefix[1024];
           /* Look for foo-symbolic.symbolic.png, as the cache only stores the ".png" suffix */
-          char *icon_name_with_prefix = g_strconcat (icon_name, ".symbolic", NULL);
-          symbolic_suffix = (IconSuffix)gtk_icon_cache_get_icon_flags (dir->cache,
-                                                                        icon_name_with_prefix,
-                                                                        dir->subdir_index);
-          g_free (icon_name_with_prefix);
+          strncpy (icon_name_with_prefix, icon_name, icon_name_len);
+          strncpy (icon_name_with_prefix + icon_name_len, ".symbolic", strlen (".symbolic") + 1);
 
+          symbolic_suffix = (IconSuffix)gtk_icon_cache_get_icon_flags (dir->cache,
+                                                                       icon_name_with_prefix,
+                                                                       dir->subdir_index);
           if (symbolic_suffix & ICON_SUFFIX_PNG)
             suffix = ICON_SUFFIX_SYMBOLIC_PNG;
           else
