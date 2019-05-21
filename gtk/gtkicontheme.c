@@ -1636,12 +1636,28 @@ symbolic_pixbuf_cache_free (SymbolicPixbufCache *cache)
     }
 }
 
-static gboolean
-icon_name_is_symbolic (const gchar *icon_name)
+static inline gboolean
+icon_name_is_symbolic (const gchar *icon_name,
+                       int          icon_name_len)
 {
-  return g_str_has_suffix (icon_name, "-symbolic")
-      || g_str_has_suffix (icon_name, "-symbolic-ltr")
-      || g_str_has_suffix (icon_name, "-symbolic-rtl");
+
+  if (icon_name_len < 0)
+    icon_name_len = strlen (icon_name);
+
+  if (icon_name_len > strlen ("-symbolic"))
+    {
+      if (strcmp (icon_name + icon_name_len - strlen ("-symbolic"), "-symbolic") == 0)
+        return TRUE;
+    }
+
+  if (icon_name_len > strlen ("-symbolic-ltr"))
+    {
+      if (strcmp (icon_name + icon_name_len - strlen ("-symbolic-ltr"), "-symbolic-ltr") == 0 ||
+          strcmp (icon_name + icon_name_len - strlen ("-symbolic-rtl"), "-symbolic-rtl") == 0)
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 static gboolean
@@ -1723,7 +1739,7 @@ real_choose_icon (GtkIconTheme       *icon_theme,
   for (l = priv->themes; l; l = l->next)
     {
       theme = l->data;
-      for (i = 0; i < n_icon_names && icon_name_is_symbolic (icon_names[i]); i++)
+      for (i = 0; i < n_icon_names && icon_name_is_symbolic (icon_names[i], -1); i++)
         {
           icon_name = icon_names[i];
           icon_info = theme_lookup_icon (theme, icon_name, size, scale, allow_svg, use_builtin);
@@ -1911,7 +1927,7 @@ choose_icon (GtkIconTheme       *icon_theme,
 
   for (i = 0; icon_names[i]; i++)
     {
-      if (icon_name_is_symbolic (icon_names[i]))
+      if (icon_name_is_symbolic (icon_names[i], -1))
         has_symbolic = TRUE;
       else
         has_regular = TRUE;
@@ -1924,14 +1940,14 @@ choose_icon (GtkIconTheme       *icon_theme,
       new_names = g_ptr_array_new_full (2 * n_icon_names, g_free);
       for (i = 0; icon_names[i]; i++)
         {
-          if (icon_name_is_symbolic (icon_names[i]))
+          if (icon_name_is_symbolic (icon_names[i], -1))
             icon_name_list_add_icon (new_names, dir_suffix, g_strndup (icon_names[i], strlen (icon_names[i]) - strlen ("-symbolic")));
           else
             icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
         }
       for (i = 0; icon_names[i]; i++)
         {
-          if (icon_name_is_symbolic (icon_names[i]))
+          if (icon_name_is_symbolic (icon_names[i], -1))
             icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
         }
 
@@ -1949,14 +1965,14 @@ choose_icon (GtkIconTheme       *icon_theme,
       new_names = g_ptr_array_new_full (2 * n_icon_names, g_free);
       for (i = 0; icon_names[i]; i++)
         {
-          if (!icon_name_is_symbolic (icon_names[i]))
+          if (!icon_name_is_symbolic (icon_names[i], -1))
             icon_name_list_add_icon (new_names, dir_suffix, g_strconcat (icon_names[i], "-symbolic", NULL));
           else
             icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
         }
       for (i = 0; icon_names[i]; i++)
         {
-          if (!icon_name_is_symbolic (icon_names[i]))
+          if (!icon_name_is_symbolic (icon_names[i], -1))
             icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]));
         }
 
@@ -2082,10 +2098,11 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *icon_theme,
       gint dashes, i;
       gchar *p, *nonsymbolic_icon_name;
       gboolean is_symbolic;
+      int icon_name_len = strlen (icon_name);
 
-      is_symbolic = icon_name_is_symbolic (icon_name);
+      is_symbolic = icon_name_is_symbolic (icon_name, icon_name_len);
       if (is_symbolic)
-        nonsymbolic_icon_name = g_strndup (icon_name, strlen (icon_name) - strlen ("-symbolic"));
+        nonsymbolic_icon_name = g_strndup (icon_name, icon_name_len - strlen ("-symbolic"));
       else
         nonsymbolic_icon_name = g_strdup (icon_name);
  
@@ -2814,9 +2831,10 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
 
   if (dir->cache)
     {
-      if (icon_name_is_symbolic (icon_name))
+      int icon_name_len = strlen (icon_name);
+
+      if (icon_name_is_symbolic (icon_name, icon_name_len))
         {
-          int icon_name_len = strlen (icon_name);
           /* Look for foo-symbolic.symbolic.png, as the cache only stores the ".png" suffix */
           static char icon_name_with_prefix[1024];
           static const int end_offset = sizeof (icon_name_with_prefix) - strlen (".symbolic") - 1;
