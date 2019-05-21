@@ -879,7 +879,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
 
   widget = gtk_root_get_for_surface (context_ime->client_surface);
   if (!widget)
-    return
+    return;
 
   hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
   himc = ImmGetContext (hwnd);
