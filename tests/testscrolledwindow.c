@@ -217,7 +217,7 @@ scrollable_policy (void)
 
   widget = gtk_menu_button_new ();
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (widget), popover);
-  gtk_container_add (GTK_CONTAINER (widget), gtk_label_new ("Popover"));
+  gtk_menu_button_set_label (GTK_MENU_BUTTON (widget), "Popover");
   gtk_container_add (GTK_CONTAINER (cntl), widget);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
