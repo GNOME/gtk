@@ -664,7 +664,6 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
 {
   GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (context);
   GdkSurface *toplevel;
-  GtkWidget *widget = NULL;
   HWND hwnd;
   HIMC himc;
 
@@ -721,7 +720,6 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
 {
   GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (context);
   GdkSurface *toplevel;
-  GtkWidget *widget = NULL;
   HWND hwnd;
   HIMC himc;
 
