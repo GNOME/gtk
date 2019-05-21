@@ -33,8 +33,6 @@ BUILT_SOURCES = 				\
 	gtk-primary-selection-protocol.c			\
 	tablet-unstable-v2-client-protocol.h	\
 	tablet-unstable-v2-protocol.c		\
-	xdg-output-unstable-v1-protocol.c			\
-	xdg-output-unstable-v1-client-protocol.h		\
 	keyboard-shortcuts-inhibit-unstable-v1-client-protocol.h \
 	keyboard-shortcuts-inhibit-unstable-v1-protocol.c	\
 	server-decoration-client-protocol.h		\
