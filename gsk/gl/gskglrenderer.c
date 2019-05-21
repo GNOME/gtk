@@ -2605,11 +2605,16 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_DEBUG_NODE:
-      ops_push_debug_group (builder, gsk_debug_node_get_message (node));
-      gsk_gl_renderer_add_render_ops (self,
-                                      gsk_debug_node_get_child (node),
-                                      builder);
-      ops_pop_debug_group (builder);
+      {
+        const char *message = gsk_debug_node_get_message (node);
+        if (message)
+          ops_push_debug_group (builder, message);
+        gsk_gl_renderer_add_render_ops (self,
+                                        gsk_debug_node_get_child (node),
+                                        builder);
+        if (message)
+          ops_pop_debug_group (builder);
+      }
     break;
 
     case GSK_COLOR_NODE:
