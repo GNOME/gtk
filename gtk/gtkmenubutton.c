@@ -155,6 +155,7 @@ enum
   PROP_POPOVER,
   PROP_ICON_NAME,
   PROP_LABEL,
+  PROP_RELIEF,
   LAST_PROP
 };
 
@@ -198,6 +199,9 @@ gtk_menu_button_set_property (GObject      *object,
       case PROP_LABEL:
         gtk_menu_button_set_label (self, g_value_get_string (value));
         break;
+      case PROP_RELIEF:
+        gtk_menu_button_set_relief (self, g_value_get_enum (value));
+        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -236,6 +240,9 @@ gtk_menu_button_get_property (GObject    *object,
         break;
       case PROP_LABEL:
         g_value_set_string (value, gtk_menu_button_get_label (GTK_MENU_BUTTON (object)));
+        break;
+      case PROP_RELIEF:
+        g_value_set_enum (value, gtk_menu_button_get_relief (GTK_MENU_BUTTON (object)));
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -593,6 +600,14 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                            P_("The label for the button"),
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  menu_button_props[PROP_RELIEF] =
+    g_param_spec_enum ("relief",
+                       P_("Border relief"),
+                       P_("The border relief style"),
+                       GTK_TYPE_RELIEF_STYLE,
+                       GTK_RELIEF_NORMAL,
+                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, menu_button_props);
 
@@ -1309,3 +1324,48 @@ gtk_menu_button_get_label (GtkMenuButton *menu_button)
 
   return NULL;
 }
+
+/**
+ * gtk_menu_button_set_relief:
+ * @menu_button: The #GtkMenuButton you want to set relief styles of
+ * @relief: The GtkReliefStyle as described above
+ *
+ * Sets the relief style of the edges of the given
+ * #GtkMenuButton widget.
+ *
+ * Two styles exist, %GTK_RELIEF_NORMAL and %GTK_RELIEF_NONE.
+ * The default style is, as one can guess, %GTK_RELIEF_NORMAL.
+ */
+void
+gtk_menu_button_set_relief (GtkMenuButton  *menu_button,
+                            GtkReliefStyle  relief)
+{
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
+
+  g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
+
+  if (relief == gtk_button_get_relief (GTK_BUTTON (priv->button)))
+    return;
+
+  gtk_button_set_relief (GTK_BUTTON (priv->button), relief);
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_RELIEF]);
+}
+
+/**
+ * gtk_menu_button_get_relief:
+ * @menu_button: The #GtkMenuButton you want the #GtkReliefStyle from.
+ *
+ * Returns the current relief style of the given #GtkMenuButton.
+ *
+ * Returns: The current #GtkReliefStyle
+ */
+GtkReliefStyle
+gtk_menu_button_get_relief (GtkMenuButton *menu_button)
+{
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
+
+  g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), GTK_RELIEF_NORMAL);
+
+  return gtk_button_get_relief (GTK_BUTTON (priv->button));
+}
+
