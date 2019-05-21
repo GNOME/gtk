@@ -343,8 +343,7 @@ static void         do_theme_change           (GtkIconTheme     *icon_theme);
 static void         blow_themes               (GtkIconTheme     *icon_themes);
 static gboolean     rescan_themes             (GtkIconTheme     *icon_themes);
 static IconSuffix   theme_dir_get_icon_suffix (IconThemeDir     *dir,
-                                               const gchar      *icon_name,
-                                               gboolean         *has_icon_file);
+                                               const gchar      *icon_name);
 static GtkIconInfo *icon_info_new             (IconThemeDirType  type,
                                                gint              dir_size,
                                                gint              dir_scale);
@@ -2448,7 +2447,7 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
           if (dir->type != ICON_THEME_DIR_SCALABLE && g_hash_table_lookup_extended (sizes, GINT_TO_POINTER (dir->size), NULL, NULL))
             continue;
 
-          suffix = theme_dir_get_icon_suffix (dir, icon_name, NULL);
+          suffix = theme_dir_get_icon_suffix (dir, icon_name);
           if (suffix != ICON_SUFFIX_NONE)
             {
               if (suffix == ICON_SUFFIX_SVG)
@@ -2824,8 +2823,7 @@ best_suffix (IconSuffix suffix,
 
 static IconSuffix
 theme_dir_get_icon_suffix (IconThemeDir *dir,
-                           const gchar  *icon_name,
-                           gboolean     *has_icon_file)
+                           const gchar  *icon_name)
 {
   IconSuffix suffix, symbolic_suffix;
 
@@ -2863,9 +2861,6 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
         suffix = (IconSuffix)gtk_icon_cache_get_icon_flags (dir->cache,
                                                             icon_name,
                                                             dir->subdir_index);
-
-      if (has_icon_file)
-        *has_icon_file = suffix & HAS_ICON_FILE;
 
       suffix = suffix & ~HAS_ICON_FILE;
     }
@@ -2967,7 +2962,7 @@ theme_lookup_icon (IconTheme   *theme,
       dir = l->data;
 
       GTK_NOTE (ICONTHEME, g_message ("look up icon dir %s", dir->dir));
-      suffix = theme_dir_get_icon_suffix (dir, icon_name, NULL);
+      suffix = theme_dir_get_icon_suffix (dir, icon_name);
       if (best_suffix (suffix, allow_svg) != ICON_SUFFIX_NONE)
         {
           difference = theme_dir_size_difference (dir, size, scale);
@@ -2987,13 +2982,12 @@ theme_lookup_icon (IconTheme   *theme,
   if (min_dir)
     {
       GtkIconInfo *icon_info;
-      gboolean has_icon_file = FALSE;
 
       icon_info = icon_info_new (min_dir->type, min_dir->size, min_dir->scale);
       icon_info->min_size = min_dir->min_size;
       icon_info->max_size = min_dir->max_size;
 
-      suffix = theme_dir_get_icon_suffix (min_dir, icon_name, &has_icon_file);
+      suffix = theme_dir_get_icon_suffix (min_dir, icon_name);
       suffix = best_suffix (suffix, allow_svg);
       g_assert (suffix != ICON_SUFFIX_NONE);
 
