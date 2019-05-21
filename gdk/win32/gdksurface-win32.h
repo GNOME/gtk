@@ -211,7 +211,6 @@ struct _GdkWin32Surface
 {
   GdkSurface parent_instance;
 
-  GdkSurface *wrapper;
   HANDLE handle;
 
   HICON   hicon_big;
