@@ -90,6 +90,8 @@ diff_with_file (const char  *file1,
       return NULL;
     }
 
+  g_object_unref (process);
+
   return output;
 }
 

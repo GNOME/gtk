@@ -101,6 +101,7 @@ diff_with_file (const char  *file1,
       return NULL;
     }
 
+  g_object_unref (process);
   g_bytes_unref (input);
 
   return output;
