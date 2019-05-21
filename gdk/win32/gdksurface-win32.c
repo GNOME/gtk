@@ -36,7 +36,7 @@
 #include "gdkenumtypes.h"
 #include "gdkwin32.h"
 #include "gdkdisplayprivate.h"
-#include "gdkframeclockprivate.h"
+#include "gdkframeclockidleprivate.h"
 #include "gdkmonitorprivate.h"
 #include "gdkwin32surface.h"
 #include "gdkwin32cursor.h"
@@ -158,16 +158,13 @@ gdk_surface_win32_dispose (GObject *object)
 static void
 gdk_surface_win32_finalize (GObject *object)
 {
-  GdkSurface *wrapper;
   GdkWin32Surface *surface;
 
   g_return_if_fail (GDK_IS_WIN32_SURFACE (object));
 
   surface = GDK_WIN32_SURFACE (object);
 
-  wrapper = surface->wrapper;
-
-  if (!GDK_SURFACE_DESTROYED (wrapper))
+  if (!GDK_SURFACE_DESTROYED (surface))
     {
       gdk_win32_handle_table_remove (surface->handle);
     }
@@ -195,7 +192,7 @@ gdk_surface_win32_finalize (GObject *object)
       surface->cache_surface = NULL;
     }
 
-  _gdk_win32_surface_unregister_dnd (wrapper);
+  _gdk_win32_surface_unregister_dnd (GDK_SURFACE (surface));
   g_clear_object (&surface->drop);
 
   g_assert (surface->transient_owner == NULL);
@@ -503,12 +500,22 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
 
   hparent = (parent != NULL) ? GDK_SURFACE_HWND (parent) : NULL;
 
-  impl = g_object_new (GDK_TYPE_WIN32_SURFACE, NULL);
+  display_win32 = GDK_WIN32_DISPLAY (display);
+
+  if (parent)
+    frame_clock = g_object_ref (gdk_surface_get_frame_clock (parent));
+  else
+    frame_clock = _gdk_frame_clock_idle_new ();
+
+  impl = g_object_new (GDK_TYPE_WIN32_SURFACE,
+                       "display", display,
+                       "parent", parent,
+                       "frame-clock", frame_clock,
+                       NULL);
 
   impl->layered = FALSE;
   impl->layered_opacity = 1.0;
 
-  display_win32 = GDK_WIN32_DISPLAY (display);
   impl->surface_scale = _gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL, NULL);
   impl->unscaled_width = width * impl->surface_scale;
   impl->unscaled_height = height * impl->surface_scale;
@@ -601,7 +608,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
 			     hparent,
 			     NULL,
 			     _gdk_dll_hinstance,
-			     NULL);
+			     GDK_SURFACE (impl));
   impl->handle = hwndNew;
 
   GetWindowRect (hwndNew, &rect);
@@ -618,7 +625,15 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
     }
 
   g_object_ref (impl);
-  gdk_win32_handle_table_insert (&hwndNew, impl);
+  /* Take note: we're inserting a pointer into a heap-allocated
+   * object (impl). Inserting a pointer to a stack variable
+   * will break the logic, since stack variables are short-lived.
+   * We insert a pointer to the handle instead of the handle itself
+   * probably because we need to hash them differently depending
+   * on the bitness of the OS. That pointer is still unique,
+   * so this works out in the end.
+   */
+  gdk_win32_handle_table_insert (&GDK_SURFACE_HWND (impl), impl);
 
   GDK_NOTE (MISC, g_print ("... \"%s\" %dx%d@%+d%+d %p = %p\n",
 			   title,
@@ -639,11 +654,12 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
 
   _gdk_win32_surface_enable_transparency (GDK_SURFACE (impl));
 
-  frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (impl));
   g_signal_connect (frame_clock,
                     "after-paint",
                     G_CALLBACK (gdk_win32_impl_frame_clock_after_paint),
                     impl);
+
+  g_object_unref (frame_clock);
 
   return GDK_SURFACE (impl);
 }
