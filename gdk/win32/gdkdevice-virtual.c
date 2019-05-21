@@ -144,7 +144,11 @@ gdk_device_virtual_grab (GdkDevice    *device,
     {
       GdkWin32HCursor *win32_hcursor;
       GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_device_get_display (device));
-      win32_hcursor = gdk_win32_display_get_win32hcursor (display, cursor);
+      win32_hcursor = NULL;
+
+      if (cursor != NULL)
+        win32_hcursor = gdk_win32_display_get_win32hcursor (display, cursor);
+
       g_set_object (&display->grab_cursor, win32_hcursor);
 
       if (display->grab_cursor != NULL)
