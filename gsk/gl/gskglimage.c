@@ -22,6 +22,7 @@ gsk_gl_image_destroy (GskGLImage  *self,
                       GskGLDriver *gl_driver)
 {
   gsk_gl_driver_destroy_texture (gl_driver, self->texture_id);
+  self->texture_id = 0;
 }
 
 void
