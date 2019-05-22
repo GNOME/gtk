@@ -2,6 +2,7 @@
 <interface domain="gtk40">
   <template class="GtkEmojiCompletion" parent="GtkPopover">
     <property name="autohide">0</property>
+    <property name="has-arrow">0</property>
     <style>
       <class name="emoji-completion"/>
     </style>
