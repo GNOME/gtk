@@ -4,7 +4,7 @@
 #include "gskgldriverprivate.h"
 #include "gskglimageprivate.h"
 #include "gskrendererprivate.h"
-#include "stb_rect_pack.h"
+#include "gskgltextureatlasprivate.h"
 #include <pango/pango.h>
 #include <gdk/gdk.h>
 
@@ -35,21 +35,9 @@ struct _DirtyGlyph
   GskGLCachedGlyph *value;
 };
 
-typedef struct
-{
-  GskGLImage *image;
-  int width, height;
-  guint old_pixels;
-
-  DirtyGlyph pending_glyph;
-
-  struct stbrp_context context;
-  struct stbrp_node *nodes;
-} GskGLGlyphAtlas;
-
 struct _GskGLCachedGlyph
 {
-  GskGLGlyphAtlas *atlas;
+  GskGLTextureAtlas *atlas;
 
   float tx;
   float ty;
@@ -64,6 +52,7 @@ struct _GskGLCachedGlyph
   float scale;
 
   guint64 timestamp;
+  guint used: 1;
 };
 
 
