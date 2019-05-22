@@ -50,7 +50,6 @@ struct _GskGLDriver
   GHashTable *pointer_textures;
 
   const Texture *bound_source_texture;
-  const Fbo *bound_fbo;
 
   int max_texture_size;
 
@@ -189,7 +188,6 @@ gsk_gl_driver_begin_frame (GskGLDriver *self)
     }
 
   glBindFramebuffer (GL_FRAMEBUFFER, 0);
-  self->bound_fbo = &self->default_fbo;
 
   glActiveTexture (GL_TEXTURE0);
   glBindTexture (GL_TEXTURE_2D, 0);
@@ -220,7 +218,6 @@ gsk_gl_driver_end_frame (GskGLDriver *self)
   g_return_if_fail (self->in_frame);
 
   self->bound_source_texture = NULL;
-  self->bound_fbo = NULL;
 
   self->default_fbo.fbo_id = 0;
 
@@ -330,18 +327,6 @@ gsk_gl_driver_get_texture (GskGLDriver *self,
     return t;
 
   return NULL;
-}
-
-static const Fbo *
-gsk_gl_driver_get_fbo (GskGLDriver *self,
-                       int          texture_id)
-{
-  Texture *t = gsk_gl_driver_get_texture (self, texture_id);
-
-  if (t->fbo.fbo_id == 0)
-    return &self->default_fbo;
-
-  return &t->fbo;
 }
 
 static Texture *
@@ -711,43 +696,6 @@ gsk_gl_driver_bind_source_texture (GskGLDriver *self,
 
       self->bound_source_texture = t;
     }
-}
-
-gboolean
-gsk_gl_driver_bind_render_target (GskGLDriver *self,
-                                  int          texture_id)
-{
-  int status;
-  const Fbo *f;
-
-  g_return_val_if_fail (GSK_IS_GL_DRIVER (self), FALSE);
-  g_return_val_if_fail (self->in_frame, FALSE);
-
-  if (texture_id == 0)
-    {
-      glBindFramebuffer (GL_FRAMEBUFFER, 0);
-      self->bound_fbo = &self->default_fbo;
-      goto out;
-    }
-
-  f = gsk_gl_driver_get_fbo (self, texture_id);
-
-  if (f != self->bound_fbo)
-    {
-      glBindFramebuffer (GL_FRAMEBUFFER, f->fbo_id);
-
-      self->bound_fbo = f;
-    }
-
-out:
-
-  if (texture_id != 0)
-    {
-      status = glCheckFramebufferStatus (GL_FRAMEBUFFER);
-      g_assert_cmpint (status, ==, GL_FRAMEBUFFER_COMPLETE);
-    }
-
-  return TRUE;
 }
 
 void
