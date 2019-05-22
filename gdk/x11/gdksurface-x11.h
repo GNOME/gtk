@@ -78,8 +78,6 @@ struct _GdkX11Surface
 
   int offset_x;
   int offset_y;
-
-  GList *popups;
 };
  
 struct _GdkX11SurfaceClass 
