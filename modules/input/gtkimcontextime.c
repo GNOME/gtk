@@ -326,11 +326,12 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
   GtkIMContextIMEPrivate *priv;
   guint32          c;
   gsize            i;
-  guint32          output[10];
-  gsize            output_size = 10;
+  guint32          output[17];
+  gsize            output_size = 17;
   const guint32   *ligature = NULL;
   GdkKeymap       *keymap;
   GdkWin32Keymap  *win32_keymap;
+  gsize            committed;
 
   g_return_val_if_fail (GTK_IS_IM_CONTEXT_IME (context), FALSE);
   g_return_val_if_fail (event, FALSE);
@@ -365,7 +366,7 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
     }
   else
     {
-      priv->compose_buffer[priv->n_compose++] = gdk_keyval_to_unicode (event->keyval);
+      priv->compose_buffer[priv->n_compose++] = event->keyval;
     }
 
   /* Compose buffer overflow */
@@ -381,25 +382,31 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
                                             output, &output_size))
     {
     case GDK_WIN32_KEYMAP_MATCH_NONE:
-      for (i = 0; i < priv->n_compose; i++)
+      for (committed = 0, i = 0; i < priv->n_compose; i++)
         {
           c = gdk_keyval_to_unicode (priv->compose_buffer[i]);
+          if (c == 0)
+            continue;
           _gtk_im_context_ime_commit_unichar (context_ime, c);
+          committed += 1;
         }
       priv->n_compose = 0;
 
-      return TRUE;
+      return committed > 0;
       break;
     case GDK_WIN32_KEYMAP_MATCH_EXACT:
     case GDK_WIN32_KEYMAP_MATCH_PARTIAL:
-      for (i = 0; i < output_size; i++)
+      for (committed = 0, i = 0; i < output_size; i++)
         {
           c = gdk_keyval_to_unicode (output[i]);
+          if (c == 0)
+            continue;
           _gtk_im_context_ime_commit_unichar (context_ime, c);
+          committed += 1;
         }
       priv->n_compose = 0;
 
-      return TRUE;
+      return committed > 0;
     case GDK_WIN32_KEYMAP_MATCH_INCOMPLETE:
       return TRUE;
     }
