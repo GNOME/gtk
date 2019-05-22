@@ -77,6 +77,7 @@ enum {
 
 enum {
   PROP_0,
+  PROP_SURFACE_TYPE,
   PROP_CURSOR,
   PROP_DISPLAY,
   PROP_PARENT,
@@ -473,6 +474,13 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
+  properties[PROP_SURFACE_TYPE] =
+      g_param_spec_enum ("surface-type",
+                          P_("Surface type"),
+                          P_("Surface type"),
+                          GDK_TYPE_SURFACE_TYPE, GDK_SURFACE_TOPLEVEL,
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
@@ -659,6 +667,10 @@ gdk_surface_set_property (GObject      *object,
       surface->autohide = g_value_get_boolean (value);
       break;
 
+    case PROP_SURFACE_TYPE:
+      surface->surface_type = g_value_get_enum (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -701,6 +713,10 @@ gdk_surface_get_property (GObject    *object,
 
     case PROP_AUTOHIDE:
       g_value_set_boolean (value, surface->autohide);
+      break;
+
+    case PROP_SURFACE_TYPE:
+      g_value_set_enum (value, surface->surface_type);
       break;
 
     default:
