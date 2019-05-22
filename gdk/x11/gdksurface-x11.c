@@ -425,19 +425,11 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
 static void
 gdk_x11_surface_finalize (GObject *object)
 {
-  GdkSurface *surface;
   GdkX11Surface *impl;
 
   g_return_if_fail (GDK_IS_X11_SURFACE (object));
 
-  surface = GDK_SURFACE (object);
   impl = GDK_X11_SURFACE (object);
-
-  if (surface->parent)
-    {
-      GdkX11Surface *parent_impl = GDK_X11_SURFACE (surface->parent);
-      parent_impl->popups = g_list_remove (parent_impl->popups, surface);
-    }
 
   if (impl->toplevel->in_frame)
     unhook_surface_changed (GDK_SURFACE (impl));
@@ -916,12 +908,6 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
 
   gdk_surface_freeze_updates (surface);
 
-  if (parent)
-    {
-      GdkX11Surface *parent_impl = GDK_X11_SURFACE (parent);
-      parent_impl->popups = g_list_prepend (parent_impl->popups, surface);
-    }
-
   return surface;
 }
 
@@ -1383,10 +1369,9 @@ static void gdk_x11_surface_restack_toplevel (GdkSurface *surface,
 void
 gdk_x11_surface_update_popups (GdkSurface *parent)
 {
-  GdkX11Surface *impl = GDK_X11_SURFACE (parent);
   GList *l;
 
-  for (l = impl->popups; l; l = l->next)
+  for (l = parent->children; l; l = l->next)
     {
       GdkX11Surface *popup_impl = l->data;
       GdkSurface *popup = GDK_SURFACE (popup_impl);
