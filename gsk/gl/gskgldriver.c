@@ -586,21 +586,6 @@ gsk_gl_driver_set_texture_for_pointer (GskGLDriver *self,
 }
 
 int
-gsk_gl_driver_create_permanent_texture (GskGLDriver *self,
-                                        float        width,
-                                        float        height)
-{
-  Texture *t;
-
-  g_return_val_if_fail (GSK_IS_GL_DRIVER (self), -1);
-
-  t = create_texture (self, width, height);
-  t->permanent = TRUE;
-
-  return t->texture_id;
-}
-
-int
 gsk_gl_driver_create_texture (GskGLDriver *self,
                               float        width,
                               float        height)
@@ -614,11 +599,11 @@ gsk_gl_driver_create_texture (GskGLDriver *self,
   return t->texture_id;
 }
 
-int
-gsk_gl_driver_create_render_target (GskGLDriver *self,
-                                    int          texture_id,
-                                    gboolean     add_depth_buffer,
-                                    gboolean     add_stencil_buffer)
+static int
+create_render_target (GskGLDriver *self,
+                      int          texture_id,
+                      gboolean     add_depth_buffer,
+                      gboolean     add_stencil_buffer)
 {
   GLuint fbo_id, depth_stencil_buffer_id;
   Texture *t;
@@ -671,6 +656,38 @@ gsk_gl_driver_create_render_target (GskGLDriver *self,
   glBindFramebuffer (GL_FRAMEBUFFER, self->default_fbo.fbo_id);
 
   return fbo_id;
+}
+
+void
+gsk_gl_driver_create_render_target (GskGLDriver *self,
+                                    int          width,
+                                    int          height,
+                                    int         *out_texture_id,
+                                    int         *out_render_target_id)
+{
+  int texture_id, render_target;
+
+  texture_id = gsk_gl_driver_create_texture (self, width, height);
+  gsk_gl_driver_bind_source_texture (self, texture_id);
+  gsk_gl_driver_init_texture_empty (self, texture_id);
+
+  render_target = create_render_target (self, texture_id, FALSE, FALSE);
+
+  *out_texture_id = texture_id;
+  *out_render_target_id = render_target;
+}
+
+/* Mark the texture permanent, meaning it won'e be reused by the GLDriver.
+ * E.g. to store it in some other cache. */
+void
+gsk_gl_driver_mark_texture_permanent (GskGLDriver *self,
+                                      int          texture_id)
+{
+  Texture *t = gsk_gl_driver_get_texture (self, texture_id);
+
+  g_assert_nonnull (t);
+
+  t->permanent = TRUE;
 }
 
 void

@@ -39,17 +39,16 @@ int             gsk_gl_driver_get_texture_for_pointer   (GskGLDriver     *driver
 void            gsk_gl_driver_set_texture_for_pointer   (GskGLDriver     *driver,
                                                          gpointer         pointer,
                                                          int              texture_id);
-int             gsk_gl_driver_create_permanent_texture  (GskGLDriver     *driver,
-                                                         float            width,
-                                                         float            height);
 int             gsk_gl_driver_create_texture            (GskGLDriver     *driver,
                                                          float            width,
                                                          float            height);
-int             gsk_gl_driver_create_render_target      (GskGLDriver     *driver,
-                                                         int              texture_id,
-                                                         gboolean         add_depth_buffer,
-                                                         gboolean         add_stencil_buffer);
-
+void            gsk_gl_driver_create_render_target      (GskGLDriver     *driver,
+                                                         int              width,
+                                                         int              height,
+                                                         int             *out_texture_id,
+                                                         int             *out_render_target_id);
+void            gsk_gl_driver_mark_texture_permanent    (GskGLDriver     *self,
+                                                         int              texture_id);
 void            gsk_gl_driver_bind_source_texture       (GskGLDriver     *driver,
                                                          int              texture_id);
 

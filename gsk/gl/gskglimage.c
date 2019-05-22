@@ -8,12 +8,13 @@ gsk_gl_image_create (GskGLImage  *self,
                      int          width,
                      int          height)
 {
-  self->texture_id = gsk_gl_driver_create_permanent_texture (gl_driver, width, height);
+  self->texture_id = gsk_gl_driver_create_texture (gl_driver, width, height);
   self->width = width;
   self->height = height;
 
   gsk_gl_driver_bind_source_texture (gl_driver, self->texture_id);
   gsk_gl_driver_init_texture_empty (gl_driver, self->texture_id);
+  gsk_gl_driver_mark_texture_permanent (gl_driver, self->texture_id);
 }
 
 void
