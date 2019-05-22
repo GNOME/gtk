@@ -90,7 +90,7 @@ enum {
 
 /* Global info */
 
-static void gdk_surface_finalize   (GObject              *object);
+static void gdk_surface_finalize     (GObject      *object);
 
 static void gdk_surface_set_property (GObject      *object,
                                       guint         prop_id,
@@ -633,6 +633,9 @@ gdk_surface_finalize (GObject *object)
   if (surface->opaque_region)
     cairo_region_destroy (surface->opaque_region);
 
+  if (surface->parent)
+    surface->parent->children = g_list_remove (surface->parent->children, surface);
+
   G_OBJECT_CLASS (gdk_surface_parent_class)->finalize (object);
 }
 
@@ -749,6 +752,10 @@ gdk_surface_new (GdkDisplay     *display,
                                         surface_type,
                                         parent,
                                         x, y, width, height);
+
+  surface->parent = parent;
+  if (parent)
+    parent->children = g_list_prepend (parent->children, surface);
 
   g_signal_connect (display, "seat-removed",
                     G_CALLBACK (seat_removed_cb), surface);

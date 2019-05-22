@@ -63,8 +63,6 @@ struct _GdkBroadwaySurface
 
   int offset_x;
   int offset_y;
-
-  GList *popups;
 };
 
 struct _GdkBroadwaySurfaceClass
