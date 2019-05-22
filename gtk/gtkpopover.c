@@ -983,11 +983,6 @@ gtk_popover_update_shape (GtkPopover *popover)
   cairo_region_t *region;
   cairo_t *cr;
 
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    return;
-#endif
-
   cairo_surface =
     gdk_surface_create_similar_surface (priv->surface,
                                        CAIRO_CONTENT_COLOR_ALPHA,
