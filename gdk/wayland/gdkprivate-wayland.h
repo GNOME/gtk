@@ -227,6 +227,8 @@ struct wl_output *_gdk_wayland_screen_get_wl_output (GdkScreen *screen,
 
 void _gdk_wayland_screen_set_has_gtk_shell (GdkScreen       *screen);
 
+void _gdk_wayland_screen_init_xdg_output (GdkScreen *screen);
+
 void _gdk_wayland_window_set_grab_seat (GdkWindow      *window,
                                         GdkSeat        *seat);
 
