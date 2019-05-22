@@ -509,13 +509,13 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
     frame_clock = _gdk_frame_clock_idle_new ();
 
   impl = g_object_new (GDK_TYPE_WIN32_SURFACE,
+                       "surface-type", surface_type,
                        "display", display,
                        "parent", parent,
                        "frame-clock", frame_clock,
                        NULL);
 
   surface = GDK_SURFACE (impl);
-  surface->surface_type = surface_type;
   surface->x = x;
   surface->y = y;
   surface->width = width;
