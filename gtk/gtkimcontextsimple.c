@@ -748,7 +748,8 @@ beep_window (GdkWindow *window)
 static gboolean
 no_sequence_matches (GtkIMContextSimple *context_simple,
                      gint                n_compose,
-                     GdkEventKey        *event)
+                     GdkEventKey        *event,
+                     gboolean            use_full_buffer)
 {
   GtkIMContext *context;
   gunichar ch;
@@ -779,6 +780,20 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
     }
   else
     {
+      if (use_full_buffer)
+	{
+	  gsize i;
+
+	  for (i = 0; i < n_compose; i++)
+	    {
+	      ch = gdk_keyval_to_unicode (context_simple->compose_buffer[i]);
+	      gtk_im_context_simple_commit_char (context, ch);
+	    }
+
+	  context_simple->compose_buffer[0] = 0;
+
+	  return TRUE;
+	}
       context_simple->compose_buffer[0] = 0;
       if (n_compose > 1)		/* Invalid sequence */
 	{
@@ -863,6 +878,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   gboolean is_escape;
   guint hex_keyval;
   int i;
+  gboolean use_full_buffer = FALSE;
 
   while (context_simple->compose_buffer[n_compose] != 0)
     n_compose++;
@@ -1064,13 +1080,33 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   else
     {
 #ifdef GDK_WINDOWING_WIN32
-      guint16  output[2];
-      gsize    output_size = 2;
+      guint32  output[17];
+      gsize    output_size = 17;
+      const guint32 *ligature = NULL;
+      GdkKeymap *keymap = gdk_keymap_get_default ();
+      GdkWin32Keymap *win32_keymap = GDK_WIN32_KEYMAP (keymap);
 
-      switch (gdk_win32_keymap_check_compose (GDK_WIN32_KEYMAP (gdk_keymap_get_default ()),
-                                              context_simple->compose_buffer,
-                                              n_compose,
-                                              output, &output_size))
+      ligature = gdk_win32_keymap_fetch_ligature (win32_keymap, event);
+
+      /* Work around the fact that event->keyval can't hold more
+       * than 1 UCS-4 codepoint.
+       */
+      if (ligature != NULL)
+        {
+          gsize l_i;
+
+          n_compose -= 1;
+          context_simple->compose_buffer[n_compose] = 0;
+          for (l_i = 0; ligature[l_i] != 0 && n_compose < GTK_MAX_COMPOSE_LEN; l_i++)
+            context_simple->compose_buffer[n_compose++] = ligature[l_i];
+
+          use_full_buffer = TRUE;
+        }
+
+      switch (gdk_win32_keymap_check_compose32 (win32_keymap,
+                                                context_simple->compose_buffer,
+                                                n_compose,
+                                                output, &output_size))
         {
         case GDK_WIN32_KEYMAP_MATCH_NONE:
           break;
@@ -1130,7 +1166,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     }
   
   /* The current compose_buffer doesn't match anything */
-  return no_sequence_matches (context_simple, n_compose, event);
+  return no_sequence_matches (context_simple, n_compose, event, use_full_buffer);
 }
 
 static void
