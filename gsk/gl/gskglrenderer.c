@@ -11,6 +11,7 @@
 #include "gsktransformprivate.h"
 #include "gskshaderbuilderprivate.h"
 #include "gskglglyphcacheprivate.h"
+#include "gskgliconcacheprivate.h"
 #include "gskglrenderopsprivate.h"
 #include "gskcairoblurprivate.h"
 #include "gskglshadowcacheprivate.h"
@@ -335,6 +336,7 @@ struct _GskGLRenderer
   GArray *render_ops;
 
   GskGLGlyphCache glyph_cache;
+  GskGLIconCache icon_cache;
   GskGLShadowCache shadow_cache;
 
 #ifdef G_ENABLE_DEBUG
@@ -823,27 +825,45 @@ render_texture_node (GskGLRenderer       *self,
     }
   else
     {
-      int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
       int texture_id;
+      float tx = 0, ty = 0, tx2 = 1, ty2 = 1;
 
-      get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
+      if (texture->width <= 64 &&
+          texture->height <= 64)
+        {
+          graphene_rect_t trect;
 
-      texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
-                                                          texture,
-                                                          gl_min_filter,
-                                                          gl_mag_filter);
+          gsk_gl_icon_cache_lookup_or_add (&self->icon_cache,
+                                           texture,
+                                           &texture_id,
+                                           &trect);
+          tx = trect.origin.x;
+          ty = trect.origin.y;
+          tx2 = tx + trect.size.width;
+          ty2 = ty + trect.size.height;
+        }
+      else
+        {
+          int gl_min_filter = GL_NEAREST, gl_mag_filter = GL_NEAREST;
+          get_gl_scaling_filters (node, &gl_min_filter, &gl_mag_filter);
+
+          texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
+                                                              texture,
+                                                              gl_min_filter,
+                                                              gl_mag_filter);
+        }
+
       ops_set_program (builder, &self->blit_program);
       ops_set_texture (builder, texture_id);
 
-
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-        { { min_x, min_y }, { 0, 0 }, },
-        { { min_x, max_y }, { 0, 1 }, },
-        { { max_x, min_y }, { 1, 0 }, },
+        { { min_x, min_y }, { tx,  ty  }, },
+        { { min_x, max_y }, { tx,  ty2 }, },
+        { { max_x, min_y }, { tx2, ty  }, },
 
-        { { max_x, max_y }, { 1, 1 }, },
-        { { min_x, max_y }, { 0, 1 }, },
-        { { max_x, min_y }, { 1, 0 }, },
+        { { max_x, max_y }, { tx2, ty2 }, },
+        { { min_x, max_y }, { tx,  ty2 }, },
+        { { max_x, min_y }, { tx2, ty  }, },
       });
     }
 }
@@ -2476,6 +2496,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
     return FALSE;
 
   gsk_gl_glyph_cache_init (&self->glyph_cache, renderer, self->gl_driver);
+  gsk_gl_icon_cache_init (&self->icon_cache, renderer, self->gl_driver);
   gsk_gl_shadow_cache_init (&self->shadow_cache);
 
   return TRUE;
@@ -2501,6 +2522,7 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
     glDeleteProgram (self->programs[i].id);
 
   gsk_gl_glyph_cache_free (&self->glyph_cache);
+  gsk_gl_icon_cache_free (&self->icon_cache);
   gsk_gl_shadow_cache_free (&self->shadow_cache, self->gl_driver);
 
   g_clear_object (&self->gl_profiler);
@@ -3067,6 +3089,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   graphene_matrix_scale (&projection, 1, -1, 1);
 
   gsk_gl_glyph_cache_begin_frame (&self->glyph_cache);
+  gsk_gl_icon_cache_begin_frame (&self->icon_cache);
   gsk_gl_shadow_cache_begin_frame (&self->shadow_cache, self->gl_driver);
 
   ops_set_projection (&self->op_builder, &projection);
