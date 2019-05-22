@@ -3802,7 +3802,6 @@ gdk_surface_set_frame_clock (GdkSurface     *surface,
   if (clock == surface->frame_clock)
     return;
 
-g_print ("surface set frame clock %p\n", clock);
   if (clock)
     {
       g_object_ref (clock);
