@@ -90,10 +90,9 @@ struct _GtkInspectorVisualPrivate
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorVisual, gtk_inspector_visual, GTK_TYPE_SCROLLED_WINDOW)
 
 static void
-fix_direction_recurse (GtkWidget *widget,
-                       gpointer   data)
+fix_direction_recurse (GtkWidget        *widget,
+                       GtkTextDirection  dir)
 {
-  GtkTextDirection dir = GPOINTER_TO_INT (data);
   GtkWidget *child;
 
   g_object_ref (widget);
@@ -103,7 +102,7 @@ fix_direction_recurse (GtkWidget *widget,
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
      {
-        fix_direction_recurse (child, data);
+        fix_direction_recurse (child, dir);
      }
 
   g_object_unref (widget);
@@ -114,7 +113,7 @@ static GtkTextDirection initial_direction;
 static void
 fix_direction (GtkWidget *iw)
 {
-  fix_direction_recurse (iw, GINT_TO_POINTER (initial_direction));
+  fix_direction_recurse (iw, initial_direction);
 }
 
 static void
@@ -124,7 +123,8 @@ direction_changed (GtkComboBox *combo)
   const gchar *direction;
 
   iw = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (combo)));
-  fix_direction (iw);
+  if (iw)
+    fix_direction (iw);
 
   direction = gtk_combo_box_get_active_id (combo);
   if (g_strcmp0 (direction, "ltr") == 0)
