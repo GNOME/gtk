@@ -3811,8 +3811,12 @@ gtk_scrolled_window_update_use_indicators (GtkScrolledWindow *scrolled_window)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
   gboolean use_indicators;
+  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (scrolled_window));
+  gboolean overlay_scrolling;
 
-  use_indicators = priv->overlay_scrolling;
+  g_object_get (settings, "gtk-overlay-scrolling", &overlay_scrolling, NULL);
+
+  use_indicators = overlay_scrolling && priv->overlay_scrolling;
 
   if (priv->use_indicators != use_indicators)
     {
