@@ -271,6 +271,7 @@ gdk_surface_real_move_to_rect (GdkSurface         *surface,
   GdkRectangle final_rect;
   gboolean flipped_x;
   gboolean flipped_y;
+  int x, y;
 
   /* This implementation only works for backends that
    * can provide root coordinates via get_root_coords.
@@ -372,6 +373,12 @@ gdk_surface_real_move_to_rect (GdkSurface         *surface,
     gdk_surface_move_resize (surface, final_rect.x, final_rect.y, final_rect.width, final_rect.height);
   else
     gdk_surface_move (surface, final_rect.x, final_rect.y);
+
+  gdk_surface_get_origin (toplevel, &x, &y);
+  final_rect.x -= x;
+  final_rect.y -= y;
+  flipped_rect.x -= x;
+  flipped_rect.y -= y;
 
   g_signal_emit_by_name (surface,
                          "moved-to-rect",
