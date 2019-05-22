@@ -154,6 +154,7 @@ typedef struct {
   guint surface_transform_changed_cb;
   GtkPositionType position;
   gboolean autohide;
+  gboolean has_arrow;
 
   GtkWidget *contents_widget;
   GtkCssNode *arrow_node;
@@ -175,6 +176,7 @@ enum {
   PROP_POSITION,
   PROP_AUTOHIDE,
   PROP_DEFAULT_WIDGET,
+  PROP_HAS_ARROW,
   NUM_PROPERTIES
 };
 
@@ -527,6 +529,7 @@ gtk_popover_init (GtkPopover *popover)
   priv->position = GTK_POS_TOP;
   priv->final_position = GTK_POS_TOP;
   priv->autohide = TRUE;
+  priv->has_arrow = TRUE;
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect_swapped (controller, "focus-in", G_CALLBACK (gtk_popover_focus_in), popover);
@@ -979,25 +982,32 @@ gtk_popover_update_shape (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *widget = GTK_WIDGET (popover);
-  cairo_surface_t *cairo_surface;
-  cairo_region_t *region;
-  cairo_t *cr;
 
-  cairo_surface =
-    gdk_surface_create_similar_surface (priv->surface,
-                                       CAIRO_CONTENT_COLOR_ALPHA,
-                                       gdk_surface_get_width (priv->surface),
-                                       gdk_surface_get_height (priv->surface));
+  if (priv->has_arrow)
+    {
 
-  cr = cairo_create (cairo_surface);
-  gtk_popover_fill_border_path (popover, cr);
-  cairo_destroy (cr);
+      cairo_surface_t *cairo_surface;
+      cairo_region_t *region;
+      cairo_t *cr;
 
-  region = gdk_cairo_region_create_from_surface (cairo_surface);
-  cairo_surface_destroy (cairo_surface);
+      cairo_surface =
+        gdk_surface_create_similar_surface (priv->surface,
+                                           CAIRO_CONTENT_COLOR_ALPHA,
+                                           gdk_surface_get_width (priv->surface),
+                                           gdk_surface_get_height (priv->surface));
 
-  gtk_widget_input_shape_combine_region (widget, region);
-  cairo_region_destroy (region);
+      cr = cairo_create (cairo_surface);
+      gtk_popover_fill_border_path (popover, cr);
+      cairo_destroy (cr);
+
+      region = gdk_cairo_region_create_from_surface (cairo_surface);
+      cairo_surface_destroy (cairo_surface);
+
+      gtk_widget_input_shape_combine_region (widget, region);
+      cairo_region_destroy (region);
+    }
+  else
+    gtk_widget_input_shape_combine_region (widget, NULL);
 }
 
 static gint
@@ -1020,13 +1030,14 @@ get_minimal_size (GtkPopover     *popover,
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkPositionType pos;
   gint minimal_size;
+  int tail_gap_width = priv->has_arrow ? TAIL_GAP_WIDTH : 0;
 
   minimal_size = 2 * get_border_radius (GTK_WIDGET (popover));
   pos = priv->position;
 
   if ((orientation == GTK_ORIENTATION_HORIZONTAL && POS_IS_VERTICAL (pos)) ||
       (orientation == GTK_ORIENTATION_VERTICAL && !POS_IS_VERTICAL (pos)))
-    minimal_size += TAIL_GAP_WIDTH;
+    minimal_size += tail_gap_width;
 
   return minimal_size;
 }
@@ -1043,9 +1054,10 @@ gtk_popover_measure (GtkWidget      *widget,
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   int minimal_size;
+  int tail_height = priv->has_arrow ? TAIL_HEIGHT : 0;
 
   if (for_size >= 0)
-    for_size -= TAIL_HEIGHT;
+    for_size -= tail_height;
 
   gtk_widget_measure (priv->contents_widget,
                       orientation, for_size,
@@ -1056,8 +1068,8 @@ gtk_popover_measure (GtkWidget      *widget,
   *minimum = MAX (*minimum, minimal_size);
   *natural = MAX (*natural, minimal_size);
 
-  *minimum += TAIL_HEIGHT;
-  *natural += TAIL_HEIGHT;
+  *minimum += tail_height;
+  *natural += tail_height;
 }
 
 static void
@@ -1069,6 +1081,7 @@ gtk_popover_size_allocate (GtkWidget *widget,
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkAllocation child_alloc;
+  int tail_height = priv->has_arrow ? TAIL_HEIGHT : 0;
 
   if (priv->surface)
     gtk_popover_move_resize (popover);
@@ -1076,27 +1089,27 @@ gtk_popover_size_allocate (GtkWidget *widget,
   switch (priv->final_position)
     {
     case GTK_POS_TOP:
-      child_alloc.x = TAIL_HEIGHT / 2;
+      child_alloc.x = tail_height / 2;
       child_alloc.y = 0;
       break;
     case GTK_POS_BOTTOM:
-      child_alloc.x = TAIL_HEIGHT / 2;
-      child_alloc.y = TAIL_HEIGHT;
+      child_alloc.x = tail_height / 2;
+      child_alloc.y = tail_height;
       break;
     case GTK_POS_LEFT:
       child_alloc.x = 0;
-      child_alloc.y = TAIL_HEIGHT / 2;
+      child_alloc.y = tail_height / 2;
       break;
     case GTK_POS_RIGHT:
-      child_alloc.x = TAIL_HEIGHT;
-      child_alloc.y = TAIL_HEIGHT / 2;
+      child_alloc.x = tail_height;
+      child_alloc.y = tail_height / 2;
       break;
     default:
       break;
     }
 
-  child_alloc.width = width - TAIL_HEIGHT;
-  child_alloc.height = height - TAIL_HEIGHT;
+  child_alloc.width = width - tail_height;
+  child_alloc.height = height - tail_height;
 
   gtk_widget_size_allocate (priv->contents_widget, &child_alloc, baseline);
 
@@ -1110,53 +1123,55 @@ gtk_popover_snapshot (GtkWidget   *widget,
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GtkStyleContext *context;
-  GtkBorder border;
-  cairo_t *cr;
 
   gtk_widget_snapshot_child (widget, priv->contents_widget, snapshot);
 
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT (
-                                    0, 0,
-                                    gtk_widget_get_width (widget),
-                                    gtk_widget_get_height (widget)
-                                  ));
-
-    /* Clip to the arrow shape */
-  cairo_save (cr);
-
-  gtk_popover_apply_tail_path (popover, cr);
-
-  cairo_clip (cr);
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save_to_node (context, priv->arrow_node);
-  gtk_style_context_get_border (context, &border);
-
-  /* Render the arrow background */
-  gtk_render_background (context, cr,
-                         0, 0,
-                         gtk_widget_get_width (widget),
-                         gtk_widget_get_height (widget));
-
-  /* Render the border of the arrow tip */
-  if (border.bottom > 0)
+  if (priv->has_arrow)
     {
-      GdkRGBA *border_color;
+      GtkStyleContext *context;
+      GtkBorder border;
+      cairo_t *cr;
 
-      gtk_style_context_get (context, "border-color", &border_color, NULL);
+      cr = gtk_snapshot_append_cairo (snapshot,
+                                      &GRAPHENE_RECT_INIT (
+                                        0, 0,
+                                        gtk_widget_get_width (widget),
+                                        gtk_widget_get_height (widget)
+                                      ));
+
+      /* Clip to the arrow shape */
+      cairo_save (cr);
       gtk_popover_apply_tail_path (popover, cr);
-      gdk_cairo_set_source_rgba (cr, border_color);
+      cairo_clip (cr);
 
-      cairo_set_line_width (cr, border.bottom + 1);
-      cairo_stroke (cr);
-      gdk_rgba_free (border_color);
+      context = gtk_widget_get_style_context (widget);
+      gtk_style_context_save_to_node (context, priv->arrow_node);
+      gtk_style_context_get_border (context, &border);
+
+      /* Render the arrow background */
+      gtk_render_background (context, cr,
+                             0, 0,
+                             gtk_widget_get_width (widget),
+                             gtk_widget_get_height (widget));
+
+      /* Render the border of the arrow tip */
+      if (border.bottom > 0)
+        {
+          GdkRGBA *border_color;
+
+          gtk_style_context_get (context, "border-color", &border_color, NULL);
+          gtk_popover_apply_tail_path (popover, cr);
+          gdk_cairo_set_source_rgba (cr, border_color);
+
+          cairo_set_line_width (cr, border.bottom + 1);
+          cairo_stroke (cr);
+          gdk_rgba_free (border_color);
+        }
+
+      cairo_restore (cr);
+      cairo_destroy (cr);
+      gtk_style_context_restore (context);
     }
-
-  cairo_restore (cr);
-  cairo_destroy (cr);
-  gtk_style_context_restore (context);
 }
 
 static void
@@ -1187,6 +1202,10 @@ gtk_popover_set_property (GObject      *object,
 
     case PROP_DEFAULT_WIDGET:
       gtk_popover_set_default_widget (popover, g_value_get_object (value));
+      break;
+
+    case PROP_HAS_ARROW:
+      gtk_popover_set_has_arrow (popover, g_value_get_boolean (value));
       break;
 
     default:
@@ -1224,6 +1243,10 @@ gtk_popover_get_property (GObject      *object,
 
     case PROP_DEFAULT_WIDGET:
       g_value_set_object (value, priv->default_widget);
+      break;
+
+    case PROP_HAS_ARROW:
+      g_value_set_boolean (value, priv->has_arrow);
       break;
 
     default:
@@ -1317,6 +1340,13 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                            P_("The default widget"),
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_HAS_ARROW] =
+      g_param_spec_boolean ("has-arrow",
+                            P_("Has Arrow"),
+                            P_("Whether to draw an arrow"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
@@ -1784,4 +1814,48 @@ gtk_popover_get_contents_widget (GtkPopover *popover)
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   return priv->contents_widget;
+}
+
+/**
+ * gtk_popover_set_has_arrow:
+ * @popover: a #GtkPopover
+ * @has_arrow: %TRUE to draw an arrow
+ *
+ * Sets whether this popover should draw an arrow
+ * pointing at the widget it is relative to.
+ */
+void
+gtk_popover_set_has_arrow (GtkPopover *popover,
+                           gboolean    has_arrow)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+
+  if (priv->has_arrow == has_arrow)
+    return;
+
+  priv->has_arrow = has_arrow;
+
+  g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_HAS_ARROW]);
+  gtk_widget_queue_resize (GTK_WIDGET (popover));
+}
+
+/**
+ * gtk_popover_get_has_arrow:
+ * @popover: a #GtkPopover
+ *
+ * Gets whether this popover is showing an arrow
+ * pointing at the widget that it is relative to.
+ *
+ * Returns: whether the popover has an arrow
+ */
+gboolean
+gtk_popover_get_has_arrow (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  g_return_val_if_fail (GTK_IS_POPOVER (popover), TRUE);
+
+  return priv->has_arrow;
 }

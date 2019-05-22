@@ -95,6 +95,12 @@ GDK_AVAILABLE_IN_ALL
 gboolean        gtk_popover_get_autohide    (GtkPopover           *popover);
 
 GDK_AVAILABLE_IN_ALL
+void            gtk_popover_set_has_arrow   (GtkPopover           *popover,
+                                             gboolean              has_arrow);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_popover_get_has_arrow   (GtkPopover           *popover);
+
+GDK_AVAILABLE_IN_ALL
 void            gtk_popover_popup (GtkPopover *popover);
 GDK_AVAILABLE_IN_ALL
 void            gtk_popover_popdown (GtkPopover *popover);
