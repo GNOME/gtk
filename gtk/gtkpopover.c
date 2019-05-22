@@ -1849,6 +1849,7 @@ gtk_popover_set_has_arrow (GtkPopover *popover,
  * pointing at the widget that it is relative to.
  *
  * Returns: whether the popover has an arrow
+ */
 gboolean
 gtk_popover_get_has_arrow (GtkPopover *popover)
 {
