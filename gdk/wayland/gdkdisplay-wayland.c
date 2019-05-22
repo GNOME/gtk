@@ -2357,16 +2357,17 @@ output_handle_scale (void             *data,
   GDK_NOTE (MISC,
             g_message ("handle scale output %d, scale %d", monitor->id, scale));
 
-  if (monitor_has_xdg_output (monitor))
-    return;
-
   gdk_monitor_get_geometry (GDK_MONITOR (monitor), &previous_geometry);
-  previous_scale = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
 
   width = previous_geometry.width * previous_scale;
   height = previous_geometry.height * previous_scale;
 
+  /* Set the scale from wl_output protocol, regardless of xdg-output support */
   gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), scale);
+
+  if (monitor_has_xdg_output (monitor))
+    return;
+
   monitor->width = width / scale;
   monitor->height = height / scale;
 
