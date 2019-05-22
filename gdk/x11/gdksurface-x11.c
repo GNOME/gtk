@@ -820,13 +820,13 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
     frame_clock = _gdk_frame_clock_idle_new ();
 
   surface = g_object_new (GDK_TYPE_X11_SURFACE,
+                          "surface-type", surface_type,
                           "display", display,
                           "frame-clock", frame_clock,
                           NULL);
 
   g_object_unref (frame_clock);
 
-  surface->surface_type = surface_type;
   surface->parent = parent;
   surface->x = x;
   surface->y = y;
