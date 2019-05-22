@@ -63,6 +63,16 @@ GdkWin32KeymapMatch gdk_win32_keymap_check_compose (GdkWin32Keymap *keymap,
                                                     guint16        *output,
                                                     gsize          *output_len);
 
+const guint32*      gdk_win32_keymap_fetch_ligature (GdkWin32Keymap *keymap,
+                                                     GdkEventKey    *event);
+
+GdkWin32KeymapMatch gdk_win32_keymap_check_compose32 (GdkWin32Keymap *keymap,
+                                                      guint32        *compose_buffer,
+                                                      gsize           compose_buffer_len,
+                                                      guint32        *output,
+                                                      gsize          *output_len);
+
+
 G_END_DECLS
 
 #endif /* __GDK_WIN32_KEYMAP_H__ */
