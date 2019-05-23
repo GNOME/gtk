@@ -31,7 +31,7 @@
         </child>
         <child type="end">
           <object class="GtkLabel">
-            <property name="label" bind-source="bowl" bind-property="framerate"/>
+            <property name="label" bind-source="bowl" bind-property="framerate-string"/>
           </object>
         </child>
         <child type="end">
