@@ -416,9 +416,6 @@ surface_moved_to_rect (GdkSurface   *surface,
       g_assert_not_reached ();
       break;
     }
-
-  if (priv->final_position != priv->position)
-    gtk_widget_queue_allocate (widget);
 }
 
 static void
