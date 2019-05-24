@@ -686,6 +686,10 @@ gdk_win32_surface_destroy (GdkSurface *window,
   /* Remove ourself from the modal stack */
   _gdk_remove_modal_window (window);
 
+  g_signal_handlers_disconnect_by_func (gdk_surface_get_frame_clock (window),
+                                        gdk_win32_impl_frame_clock_after_paint,
+                                        window);
+
   /* Remove all our transient children */
   while (surface->transient_children != NULL)
     {
