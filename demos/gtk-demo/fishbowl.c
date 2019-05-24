@@ -164,6 +164,12 @@ create_switch (void)
   return w;
 }
 
+static void
+mapped (GtkWidget *w)
+{
+  gtk_menu_button_popup (GTK_MENU_BUTTON (w));
+}
+
 static GtkWidget *
 create_menu_button (void)
 {
@@ -171,8 +177,9 @@ create_menu_button (void)
   GtkWidget *popover = gtk_popover_new (NULL);
 
   gtk_container_add (GTK_CONTAINER (popover), gtk_button_new_with_label ("Hey!"));
+  gtk_popover_set_autohide (GTK_POPOVER (popover), FALSE);
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (w), popover);
-  gtk_menu_button_popup (GTK_MENU_BUTTON (w));
+  g_signal_connect (w, "map", G_CALLBACK (mapped), NULL);
 
   return w;
 }
