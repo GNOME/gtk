@@ -442,8 +442,8 @@ is_directory_shortcut (const char *text)
 }
 
 static GFile *
-gtk_file_chooser_get_directory_for_text (GtkFileChooserEntry *chooser_entry,
-                                         const char *         text)
+gtk_file_chooser_entry_get_directory_for_text (GtkFileChooserEntry *chooser_entry,
+                                               const char *         text)
 {
   GFile *file, *parent;
 
@@ -746,7 +746,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
       chooser_entry->file_part = g_strdup (text);
     }
 
-  folder_file = gtk_file_chooser_get_directory_for_text (chooser_entry, text);
+  folder_file = gtk_file_chooser_entry_get_directory_for_text (chooser_entry, text);
 
   set_completion_folder (chooser_entry, folder_file, dir_part);
 
@@ -914,8 +914,8 @@ _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry), NULL);
 
-  return gtk_file_chooser_get_directory_for_text (chooser_entry,
-                                                  gtk_editable_get_text (GTK_EDITABLE (chooser_entry)));
+  return gtk_file_chooser_entry_get_directory_for_text (chooser_entry,
+                                                        gtk_editable_get_text (GTK_EDITABLE (chooser_entry)));
 }
 
 /**
