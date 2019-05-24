@@ -773,6 +773,25 @@ connect_frame_clock (GdkSurface *surface)
     }
 }
 
+static void
+disconnect_frame_clock (GdkSurface *surface)
+{
+  GdkX11Surface *impl;
+
+  impl = GDK_X11_SURFACE (surface);
+  if (impl->frame_clock_connected)
+    {
+      GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
+
+      g_signal_handlers_disconnect_by_func (frame_clock,
+                                            on_frame_clock_before_paint, surface);
+      g_signal_handlers_disconnect_by_func (frame_clock,
+                                            on_frame_clock_after_paint, surface);
+
+      impl->frame_clock_connected = FALSE;
+    }
+}
+
 GdkSurface *
 _gdk_x11_display_create_surface (GdkDisplay     *display,
                                  GdkSurfaceType  surface_type,
@@ -959,6 +978,7 @@ gdk_x11_surface_destroy (GdkSurface *surface,
     gdk_toplevel_x11_free_contents (GDK_SURFACE_DISPLAY (surface), toplevel);
 
   unhook_surface_changed (surface);
+  disconnect_frame_clock (surface);
 
   if (impl->cairo_surface)
     {
