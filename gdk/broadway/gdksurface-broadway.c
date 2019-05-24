@@ -184,6 +184,17 @@ connect_frame_clock (GdkSurface *surface)
                     G_CALLBACK (on_frame_clock_after_paint), surface);
 }
 
+static void
+disconnect_frame_clock (GdkSurface *surface)
+{
+  GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
+
+  g_signal_handlers_disconnect_by_func (frame_clock,
+                                        on_frame_clock_before_paint, surface);
+  g_signal_handlers_disconnect_by_func (frame_clock,
+                                        on_frame_clock_after_paint, surface);
+}
+
 GdkSurface *
 _gdk_broadway_display_create_surface (GdkDisplay     *display,
                                       GdkSurfaceType  surface_type,
@@ -253,6 +264,8 @@ _gdk_broadway_surface_destroy (GdkSurface *surface,
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   impl = GDK_BROADWAY_SURFACE (surface);
+
+  disconnect_frame_clock (surface);
 
   if (impl->node_data)
     g_array_unref (impl->node_data);
