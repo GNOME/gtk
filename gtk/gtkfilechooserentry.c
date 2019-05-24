@@ -906,8 +906,9 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
  * be different.  If the user has entered unparsable text, or text which
  * the entry cannot handle, this will return %NULL.
  *
- * Returns: the file for the current folder - you must g_object_unref()
- *   the value after use.
+ * Returns: (nullable): the file for the current folder or %NULL if the
+ *   current folder can not be determined. Unref the file with
+ *   g_object_unref() after use.
  **/
 GFile *
 _gtk_file_chooser_entry_get_current_folder (GtkFileChooserEntry *chooser_entry)
