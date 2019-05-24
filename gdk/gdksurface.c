@@ -919,6 +919,8 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   display = gdk_surface_get_display (surface);
 
+  GDK_SURFACE_GET_CLASS (surface)->destroy (surface, foreign_destroy);
+
   if (surface->gl_paint_context)
     {
       /* Make sure to destroy if current */
@@ -935,8 +937,6 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
     }
 
   _gdk_surface_clear_update_area (surface);
-
-  GDK_SURFACE_GET_CLASS (surface)->destroy (surface, foreign_destroy);
 
   surface->state |= GDK_SURFACE_STATE_WITHDRAWN;
   surface->destroyed = TRUE;
