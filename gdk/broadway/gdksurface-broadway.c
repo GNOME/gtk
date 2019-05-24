@@ -135,7 +135,7 @@ _gdk_broadway_roundtrip_notify (GdkSurface  *surface,
   timings = gdk_frame_clock_get_timings (clock, impl->pending_frame_counter);
   impl->pending_frame_counter = 0;
 
-  /* If there is no remove web client, rate limit update to once a second */
+  /* If there is no remote web client, rate limit update to once a second */
   if (local_reply)
     g_timeout_add_seconds (1, (GSourceFunc)thaw_clock_cb, g_object_ref (clock));
   else
@@ -152,6 +152,9 @@ _gdk_broadway_roundtrip_notify (GdkSurface  *surface,
 #ifdef G_ENABLE_DEBUG
       if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
         _gdk_frame_clock_debug_print_timings (clock, timings);
+
+  if (gdk_profiler_is_running ())
+    _gdk_frame_clock_add_timings_to_profiler (clock, timings);
 #endif
     }
 }
