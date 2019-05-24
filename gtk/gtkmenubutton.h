@@ -118,6 +118,12 @@ void           gtk_menu_button_set_relief   (GtkMenuButton  *menu_button,
 GDK_AVAILABLE_IN_ALL
 GtkReliefStyle gtk_menu_button_get_relief   (GtkMenuButton  *menu_button);
 
+GDK_AVAILABLE_IN_ALL
+void          gtk_menu_button_popup (GtkMenuButton *menu_button);
+GDK_AVAILABLE_IN_ALL
+void          gtk_menu_button_popdown (GtkMenuButton *menu_button);
+
+
 G_END_DECLS
 
 #endif /* __GTK_MENU_BUTTON_H__ */

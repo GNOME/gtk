@@ -1369,3 +1369,34 @@ gtk_menu_button_get_relief (GtkMenuButton *menu_button)
   return gtk_button_get_relief (GTK_BUTTON (priv->button));
 }
 
+/**
+ * gtk_menu_button_popup:
+ * @menu_button: a #GtkMenuButton
+ *
+ * Pop up the menu.
+ */
+void
+gtk_menu_button_popup (GtkMenuButton *menu_button)
+{
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
+
+  g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->button), TRUE);
+}
+
+/**
+ * gtk_menu_button_popdown:
+ * @menu_button: a #GtkMenuButton
+ *
+ * Dismiss the menu.
+ */
+void
+gtk_menu_button_popdown (GtkMenuButton *menu_button)
+{
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
+
+  g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->button), FALSE);
+}
