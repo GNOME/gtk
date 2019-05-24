@@ -164,6 +164,19 @@ create_switch (void)
   return w;
 }
 
+static GtkWidget *
+create_menu_button (void)
+{
+  GtkWidget *w = gtk_menu_button_new ();
+  GtkWidget *popover = gtk_popover_new (NULL);
+
+  gtk_container_add (GTK_CONTAINER (popover), gtk_button_new_with_label ("Hey!"));
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (w), popover);
+  gtk_menu_button_popup (GTK_MENU_BUTTON (w));
+
+  return w;
+}
+
 static const struct {
   const char *name;
   GtkWidget * (*create_func) (void);
@@ -179,6 +192,7 @@ static const struct {
   { "Video",      create_video          },
   { "Gears",      create_gears          },
   { "Switch",     create_switch         },
+  { "Menubutton", create_menu_button    },
 };
 
 static int selected_widget_type = -1;
