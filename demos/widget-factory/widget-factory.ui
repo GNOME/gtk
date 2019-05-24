@@ -3403,8 +3403,9 @@ bad things might happen.</property>
               </object>
             </child>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkEntry" id="extra_info_entry">
                 <property name="placeholder-text">Tell me anything…</property>
+                <property name="progress-fraction">0.2</property>
               </object>
             </child>
             <layout>

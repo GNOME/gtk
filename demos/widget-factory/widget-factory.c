@@ -1903,6 +1903,9 @@ activate (GApplication *app)
   g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget);
   g_signal_connect (adj, "value-changed", G_CALLBACK (adjustment3_value_changed), widget2);
 
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "extra_info_entry");
+  g_timeout_add (100, (GSourceFunc)pulse_it, widget);
+
   gtk_widget_show (GTK_WIDGET (window));
 
   g_object_unref (builder);
