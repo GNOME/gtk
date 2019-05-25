@@ -71,6 +71,17 @@ pop_recursion_check (GtkWidget       *widget,
 #define pop_recursion_check(widget, orientation)
 #endif /* G_ENABLE_CONSISTENCY_CHECKS */
 
+static GtkSizeRequestMode
+fetch_request_mode (GtkWidget *widget)
+{
+  GtkLayoutManager *layout_manager = gtk_widget_get_layout_manager (widget);
+
+  if (layout_manager != NULL)
+    return gtk_layout_manager_get_request_mode (layout_manager);
+  else
+    return GTK_WIDGET_GET_CLASS (widget)->get_request_mode (widget);
+}
+
 static gint
 get_number (GtkCssStyle *style,
             guint        property)
@@ -146,7 +157,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
   cache = _gtk_widget_peek_request_cache (widget);
   if (G_UNLIKELY (!cache->request_mode_valid))
     {
-      cache->request_mode = GTK_WIDGET_GET_CLASS (widget)->get_request_mode (widget);
+      cache->request_mode = fetch_request_mode (widget);
       cache->request_mode_valid = TRUE;
     }
 
@@ -562,13 +573,7 @@ gtk_widget_get_request_mode (GtkWidget *widget)
 
   if (G_UNLIKELY (!cache->request_mode_valid))
     {
-      GtkLayoutManager *layout_manager = gtk_widget_get_layout_manager (widget);
-
-      if (layout_manager != NULL)
-        cache->request_mode = gtk_layout_manager_get_request_mode (layout_manager);
-      else
-        cache->request_mode = GTK_WIDGET_GET_CLASS (widget)->get_request_mode (widget);
-
+      cache->request_mode = fetch_request_mode (widget);
       cache->request_mode_valid = TRUE;
     }
 
