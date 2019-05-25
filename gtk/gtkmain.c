@@ -740,7 +740,10 @@ gtk_set_display_debug_flags (GdkDisplay *display,
 guint
 gtk_get_debug_flags (void)
 {
-  return gtk_get_display_debug_flags (gdk_display_get_default ());
+  if (gtk_get_any_display_debug_flag_set ())
+    return gtk_get_display_debug_flags (gdk_display_get_default ());
+
+  return 0;
 }
 
 /**
