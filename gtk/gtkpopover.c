@@ -158,6 +158,7 @@ typedef struct {
 
   GtkWidget *contents_widget;
   GtkCssNode *arrow_node;
+  GskRenderNode *arrow_render_node;
 
   GdkRectangle final_rect;
   GtkPositionType final_position;
@@ -494,6 +495,9 @@ node_style_changed_cb (GtkCssNode        *node,
                        GtkCssStyleChange *change,
                        GtkWidget         *widget)
 {
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (GTK_POPOVER (widget));
+  g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
+
   if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_SIZE))
     gtk_widget_queue_resize (widget);
   else
@@ -642,7 +646,11 @@ surface_transform_changed_cb (GtkWidget               *widget,
                               const graphene_matrix_t *transform,
                               gpointer                 user_data)
 {
-  move_to_rect (GTK_POPOVER (user_data));
+  GtkPopover *popover = GTK_POPOVER (widget);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  move_to_rect (popover);
+  g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
 
   return G_SOURCE_CONTINUE;
 }
@@ -720,6 +728,7 @@ gtk_popover_dispose (GObject *object)
     }
 
   g_clear_pointer (&priv->contents_widget, gtk_widget_unparent);
+  g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
 
   G_OBJECT_CLASS (gtk_popover_parent_class)->dispose (object);
 }
@@ -1096,7 +1105,66 @@ gtk_popover_size_allocate (GtkWidget *widget,
   gtk_widget_size_allocate (priv->contents_widget, &child_alloc, baseline);
 
   if (priv->surface)
-    gtk_popover_update_shape (popover);
+    {
+      gtk_popover_update_shape (popover);
+      g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
+    }
+}
+
+static void
+create_arrow_render_node (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  GtkWidget *widget = GTK_WIDGET (popover);
+  GtkStyleContext *context;
+  GtkBorder border;
+  cairo_t *cr;
+  GtkSnapshot *snapshot;
+
+  snapshot = gtk_snapshot_new ();
+
+  cr = gtk_snapshot_append_cairo (snapshot,
+                                  &GRAPHENE_RECT_INIT (
+                                    0, 0,
+                                    gtk_widget_get_width (widget),
+                                    gtk_widget_get_height (widget)
+                                  ));
+
+  /* Clip to the arrow shape */
+  cairo_save (cr);
+  gtk_popover_apply_tail_path (popover, cr);
+  cairo_clip (cr);
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save_to_node (context, priv->arrow_node);
+  gtk_style_context_get_border (context, &border);
+
+  /* Render the arrow background */
+  gtk_render_background (context, cr,
+                         0, 0,
+                         gtk_widget_get_width (widget),
+                         gtk_widget_get_height (widget));
+
+  /* Render the border of the arrow tip */
+  if (border.bottom > 0)
+    {
+      GdkRGBA *border_color;
+
+      gtk_style_context_get (context, "border-color", &border_color, NULL);
+      gtk_popover_apply_tail_path (popover, cr);
+      gdk_cairo_set_source_rgba (cr, border_color);
+
+      cairo_set_line_width (cr, border.bottom + 1);
+      cairo_stroke (cr);
+      gdk_rgba_free (border_color);
+    }
+
+  cairo_restore (cr);
+  cairo_destroy (cr);
+
+  gtk_style_context_restore (context);
+
+  priv->arrow_render_node = gtk_snapshot_free_to_node (snapshot);
 }
 
 static void
@@ -1110,49 +1178,10 @@ gtk_popover_snapshot (GtkWidget   *widget,
 
   if (priv->has_arrow)
     {
-      GtkStyleContext *context;
-      GtkBorder border;
-      cairo_t *cr;
+      if (!priv->arrow_render_node)
+        create_arrow_render_node (popover);
 
-      cr = gtk_snapshot_append_cairo (snapshot,
-                                      &GRAPHENE_RECT_INIT (
-                                        0, 0,
-                                        gtk_widget_get_width (widget),
-                                        gtk_widget_get_height (widget)
-                                      ));
-
-      /* Clip to the arrow shape */
-      cairo_save (cr);
-      gtk_popover_apply_tail_path (popover, cr);
-      cairo_clip (cr);
-
-      context = gtk_widget_get_style_context (widget);
-      gtk_style_context_save_to_node (context, priv->arrow_node);
-      gtk_style_context_get_border (context, &border);
-
-      /* Render the arrow background */
-      gtk_render_background (context, cr,
-                             0, 0,
-                             gtk_widget_get_width (widget),
-                             gtk_widget_get_height (widget));
-
-      /* Render the border of the arrow tip */
-      if (border.bottom > 0)
-        {
-          GdkRGBA *border_color;
-
-          gtk_style_context_get (context, "border-color", &border_color, NULL);
-          gtk_popover_apply_tail_path (popover, cr);
-          gdk_cairo_set_source_rgba (cr, border_color);
-
-          cairo_set_line_width (cr, border.bottom + 1);
-          cairo_stroke (cr);
-          gdk_rgba_free (border_color);
-        }
-
-      cairo_restore (cr);
-      cairo_destroy (cr);
-      gtk_style_context_restore (context);
+      gtk_snapshot_append_node (snapshot, priv->arrow_render_node);
     }
 }
 
