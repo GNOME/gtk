@@ -1788,11 +1788,6 @@ gdk_surface_queue_expose (GdkSurface *surface)
  * GDK will process all updates whenever the frame clock schedules a redraw,
  * so there’s no need to do forces redraws manually, you just need to
  * invalidate regions that you know should be redrawn.
- *
- * The @invalidate_children parameter controls whether the region of
- * each child surface that intersects @region will also be invalidated.
- * If %FALSE, then the update area for child surfaces will remain
- * unaffected.
  **/
 void
 gdk_surface_invalidate_region (GdkSurface          *surface,
