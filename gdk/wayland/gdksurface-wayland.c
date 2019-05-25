@@ -2549,15 +2549,39 @@ unmap_popups_for_surface (GdkSurface *surface)
 }
 
 static void
-gdk_wayland_surface_unmap_surface (GdkSurface *surface)
+gdk_wayland_surface_hide_surface (GdkSurface *surface)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
 
   unmap_popups_for_surface (surface);
 
-  if (impl->display_server.xdg_surface)
+  if (impl->display_server.wl_surface)
     {
+      if (impl->dummy_egl_surface)
+        {
+          eglDestroySurface (display_wayland->egl_display, impl->dummy_egl_surface);
+          impl->dummy_egl_surface = NULL;
+        }
+
+      if (impl->display_server.dummy_egl_window)
+        {
+          wl_egl_window_destroy (impl->display_server.dummy_egl_window);
+          impl->display_server.dummy_egl_window = NULL;
+        }
+
+      if (impl->egl_surface)
+        {
+          eglDestroySurface (display_wayland->egl_display, impl->egl_surface);
+          impl->egl_surface = NULL;
+        }
+
+      if (impl->display_server.egl_window)
+        {
+          wl_egl_window_destroy (impl->display_server.egl_window);
+          impl->display_server.egl_window = NULL;
+        }
+
       if (impl->display_server.xdg_toplevel)
         {
           xdg_toplevel_destroy (impl->display_server.xdg_toplevel);
@@ -2619,6 +2643,12 @@ gdk_wayland_surface_unmap_surface (GdkSurface *surface)
           impl->application.was_set = FALSE;
         }
 
+      wl_surface_destroy (impl->display_server.wl_surface);
+      impl->display_server.wl_surface = NULL;
+
+      g_slist_free (impl->display_server.outputs);
+      impl->display_server.outputs = NULL;
+
       if (impl->hint == GDK_SURFACE_TYPE_HINT_DIALOG && !impl->transient_for)
         display_wayland->orphan_dialogs =
           g_list_remove (display_wayland->orphan_dialogs, surface);
@@ -2632,57 +2662,9 @@ gdk_wayland_surface_unmap_surface (GdkSurface *surface)
 }
 
 static void
-gdk_wayland_surface_destroy_surface (GdkSurface *surface)
-{
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  GdkSurfaceImplWayland *impl = GDK_SURFACE_IMPL_WAYLAND (surface->impl);
-
-  if (impl->display_server.wl_surface)
-    {
-      if (impl->dummy_egl_surface)
-        {
-          eglDestroySurface (display_wayland->egl_display, impl->dummy_egl_surface);
-          impl->dummy_egl_surface = NULL;
-        }
-
-      if (impl->display_server.dummy_egl_window)
-        {
-          wl_egl_window_destroy (impl->display_server.dummy_egl_window);
-          impl->display_server.dummy_egl_window = NULL;
-        }
-
-      if (impl->egl_surface)
-        {
-          eglDestroySurface (display_wayland->egl_display, impl->egl_surface);
-          impl->egl_surface = NULL;
-        }
-
-      if (impl->display_server.egl_window)
-        {
-          wl_egl_window_destroy (impl->display_server.egl_window);
-          impl->display_server.egl_window = NULL;
-        }
-
-      g_assert (impl->display_server.xdg_toplevel == NULL);
-      g_assert (impl->display_server.xdg_popup == NULL);
-      g_assert (impl->display_server.xdg_surface == NULL);
-      g_assert (impl->display_server.zxdg_toplevel_v6 == NULL);
-      g_assert (impl->display_server.zxdg_popup_v6 == NULL);
-      g_assert (impl->display_server.zxdg_surface_v6 == NULL);
-      g_assert (impl->display_server.gtk_surface == NULL);
-
-      wl_surface_destroy (impl->display_server.wl_surface);
-      impl->display_server.wl_surface = NULL;
-
-      g_slist_free (impl->display_server.outputs);
-      impl->display_server.outputs = NULL;
-    }
-}
-
-static void
 gdk_wayland_surface_hide (GdkSurface *surface)
 {
-  gdk_wayland_surface_unmap_surface (surface);
+  gdk_wayland_surface_hide_surface (surface);
   _gdk_surface_clear_update_area (surface);
 }
 
@@ -2696,7 +2678,7 @@ gdk_surface_wayland_withdraw (GdkSurface *surface)
 
       g_assert (!GDK_SURFACE_IS_MAPPED (surface));
 
-      gdk_wayland_surface_unmap_surface (surface);
+      gdk_wayland_surface_hide_surface (surface);
     }
 }
 
@@ -2899,8 +2881,7 @@ gdk_wayland_surface_destroy (GdkSurface *surface,
    */
   g_return_if_fail (!foreign_destroy);
 
-  gdk_wayland_surface_unmap_surface (surface);
-  gdk_wayland_surface_destroy_surface (surface);
+  gdk_wayland_surface_hide_surface (surface);
 
   if (surface->parent == NULL)
     {
