@@ -231,9 +231,9 @@ gsk_render_node_draw (GskRenderNode *node,
  * @node1: a #GskRenderNode
  * @node2: the #GskRenderNode to compare with
  *
- * Checks if 2 render nodes can be expected to be compared via
+ * Checks if two render nodes can be expected to be compared via
  * gsk_render_node_diff(). The node diffing algorithm uses this function
- * to match up similar nodes to compare when trying to minimze the
+ * to match up similar nodes to compare when trying to minimize the
  * resulting region.
  *
  * Nodes of different type always return %FALSE here.
