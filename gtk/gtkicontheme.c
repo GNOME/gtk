@@ -2945,6 +2945,7 @@ theme_lookup_icon (IconTheme   *theme,
   gchar *file;
   gint min_difference, difference;
   IconSuffix suffix;
+  IconSuffix min_suffix;
 
   min_difference = G_MAXINT;
   min_dir = NULL;
@@ -2967,6 +2968,7 @@ theme_lookup_icon (IconTheme   *theme,
                                    size, scale))
             {
               min_dir = dir;
+              min_suffix = suffix;
               min_difference = difference;
             }
         }
@@ -2982,7 +2984,7 @@ theme_lookup_icon (IconTheme   *theme,
       icon_info->min_size = min_dir->min_size;
       icon_info->max_size = min_dir->max_size;
 
-      suffix = theme_dir_get_icon_suffix (min_dir, icon_name);
+      suffix = min_suffix;
       suffix = best_suffix (suffix, allow_svg);
       g_assert (suffix != ICON_SUFFIX_NONE);
 
