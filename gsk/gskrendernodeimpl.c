@@ -1592,22 +1592,6 @@ gsk_cairo_node_peek_surface (GskRenderNode *node)
   return self->surface;
 }
 
-GskRenderNode *
-gsk_cairo_node_new_for_surface (const graphene_rect_t *bounds,
-                                cairo_surface_t       *surface)
-{
-  GskCairoNode *self;
-
-  g_return_val_if_fail (bounds != NULL, NULL);
-
-  self = (GskCairoNode *) gsk_render_node_new (&GSK_CAIRO_NODE_CLASS, 0);
-
-  graphene_rect_init_from_rect (&self->render_node.bounds, bounds);
-  self->surface = cairo_surface_reference (surface);
-
-  return &self->render_node;
-}
-
 /**
  * gsk_cairo_node_new:
  * @bounds: the rectangle to render to

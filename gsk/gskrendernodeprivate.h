@@ -47,9 +47,6 @@ void            gsk_render_node_diff_impossible  (GskRenderNode             *nod
                                                   GskRenderNode             *node2,
                                                   cairo_region_t            *region);
 
-GskRenderNode * gsk_cairo_node_new_for_surface   (const graphene_rect_t    *bounds,
-                                                  cairo_surface_t          *surface);
-
 
 G_END_DECLS
 
