@@ -189,7 +189,7 @@ GskRenderNode *         gsk_cairo_node_new                      (const graphene_
 GDK_AVAILABLE_IN_ALL
 cairo_t *               gsk_cairo_node_get_draw_context         (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
-const cairo_surface_t * gsk_cairo_node_peek_surface             (GskRenderNode            *node);
+cairo_surface_t *       gsk_cairo_node_peek_surface             (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_container_node_new                  (GskRenderNode           **children,

@@ -1582,7 +1582,7 @@ static const GskRenderNodeClass GSK_CAIRO_NODE_CLASS = {
   gsk_render_node_diff_impossible,
 };
 
-const cairo_surface_t *
+cairo_surface_t *
 gsk_cairo_node_peek_surface (GskRenderNode *node)
 {
   GskCairoNode *self = (GskCairoNode *) node;

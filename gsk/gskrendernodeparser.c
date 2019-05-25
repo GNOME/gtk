@@ -33,6 +33,10 @@
 #include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
 
+#ifdef CAIRO_HAS_SCRIPT_SURFACE
+#include <cairo-script.h>
+#endif
+
 typedef struct _Declaration Declaration;
 
 struct _Declaration
@@ -768,6 +772,30 @@ parse_declarations (GtkCssParser      *parser,
   return parsed;
 }
 
+static GdkTexture *
+create_default_texture (void)
+{
+  static const guint32 pixels[100] = {
+    0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0, 0, 0, 0, 0,
+    0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0, 0, 0, 0, 0,
+    0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0, 0, 0, 0, 0,
+    0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0, 0, 0, 0, 0,
+    0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC,
+    0, 0, 0, 0, 0, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC,
+    0, 0, 0, 0, 0, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC,
+    0, 0, 0, 0, 0, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC,
+    0, 0, 0, 0, 0, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC };
+  GBytes *bytes;
+  GdkTexture *texture;
+
+  bytes = g_bytes_new_static ((guchar *) pixels, 400);
+  texture = gdk_memory_texture_new (10, 10, GDK_MEMORY_DEFAULT, bytes, 40);
+  g_bytes_unref (bytes);
+
+  return texture;
+}
+
 static GskRenderNode *
 create_default_render_node (void)
 {
@@ -873,26 +901,48 @@ parse_texture_node (GtkCssParser *parser)
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
 
   if (texture == NULL)
-    {
-      static const guint32 pixels[100] = {
-        0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0, 0, 0, 0, 0,
-        0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0, 0, 0, 0, 0,
-        0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0, 0, 0, 0, 0,
-        0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0, 0, 0, 0, 0,
-        0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC,
-        0, 0, 0, 0, 0, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC,
-        0, 0, 0, 0, 0, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC,
-        0, 0, 0, 0, 0, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC,
-        0, 0, 0, 0, 0, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC, 0xFFFF00CC };
-      GBytes *bytes = g_bytes_new_static ((guchar *) pixels, 400);
-
-      texture = gdk_memory_texture_new (10, 10, GDK_MEMORY_DEFAULT, bytes, 40);
-      g_bytes_unref (bytes);
-    }
+    texture = create_default_texture ();
 
   node = gsk_texture_node_new (texture, &bounds);
   g_object_unref (texture);
+
+  return node;
+}
+
+static GskRenderNode *
+parse_cairo_node (GtkCssParser *parser)
+{
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
+  GdkTexture *pixels = NULL;
+  const Declaration declarations[] = {
+    { "bounds", parse_rect, NULL, &bounds },
+    { "pixels", parse_texture, clear_texture, &pixels }
+  };
+  GskRenderNode *node;
+  cairo_t *cr;
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+
+  node = gsk_cairo_node_new (&bounds);
+  
+  cr = gsk_cairo_node_get_draw_context (node);
+
+  if (pixels != NULL)
+    {
+      cairo_surface_t *surface;
+      surface = gdk_texture_download_surface (pixels);
+      cairo_set_source_surface (cr, surface, 0, 0);
+      cairo_paint (cr);
+      cairo_surface_destroy (surface);
+    }
+  else
+    {
+      gdk_cairo_set_source_rgba (cr, &GDK_RGBA ("FF00CC"));
+      cairo_paint (cr);
+    }
+
+  cairo_destroy (cr);
+  g_clear_object (&pixels);
 
   return node;
 }
@@ -1325,10 +1375,7 @@ parse_node (GtkCssParser *parser,
     { "debug", parse_debug_node },
     { "blend", parse_blend_node },
     { "repeat", parse_repeat_node },
-#if 0
     { "cairo", parse_cairo_node },
-#endif
-
   };
   GskRenderNode **node_p = out_node;
   guint i;
@@ -1696,9 +1743,9 @@ append_node_param (Printer       *p,
 }
 
 static cairo_status_t
-surface_write (void                *closure,
-               const unsigned char *data,
-               unsigned int         length)
+cairo_write_array (void                *closure,
+                   const unsigned char *data,
+                   unsigned int         length)
 {
   g_byte_array_append (closure, data, length);
 
@@ -1988,7 +2035,7 @@ render_node_print (Printer       *p,
 
         surface = gdk_texture_download_surface (texture);
         array = g_byte_array_new ();
-        cairo_surface_write_to_png_stream (surface, surface_write, array);
+        cairo_surface_write_to_png_stream (surface, cairo_write_array, array);
         b64 = g_base64_encode (array->data, array->len);
 
         _indent (p);
@@ -2170,6 +2217,49 @@ render_node_print (Printer       *p,
       break;
 
     case GSK_CAIRO_NODE:
+      {
+        cairo_surface_t *surface = gsk_cairo_node_peek_surface (node);
+        GByteArray *array;
+        char *b64;
+
+        start_node (p, "cairo");
+        append_rect_param (p, "bounds", &node->bounds);
+
+        array = g_byte_array_new ();
+        cairo_surface_write_to_png_stream (surface, cairo_write_array, array);
+        b64 = g_base64_encode (array->data, array->len);
+
+        _indent (p);
+        g_string_append_printf (p->str, "pixels: url(\"data:image/png;base64,%s\");\n", b64);
+
+        g_free (b64);
+        g_byte_array_free (array, TRUE);
+
+#ifdef CAIRO_HAS_SCRIPT_SURFACE
+        if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_RECORDING)
+          {
+            cairo_device_t *script;
+
+            array = g_byte_array_new ();
+            script = cairo_script_create_for_stream (cairo_write_array, array);
+
+            if (cairo_script_from_recording_surface (script, surface) == CAIRO_STATUS_SUCCESS)
+              {
+                b64 = g_base64_encode (array->data, array->len);
+                _indent (p);
+                g_string_append_printf (p->str, "script: url(\"data:;base64,%s\");\n", b64);
+                g_free (b64);
+              }
+
+          cairo_device_destroy (script);
+          g_byte_array_free (array, TRUE);
+        }
+#endif
+
+        end_node (p);
+      }
+      break;
+
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     default:
       g_error ("Unhandled node: %s", node->node_class->type_name);
