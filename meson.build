@@ -790,10 +790,8 @@ endif
 subdir('po')
 subdir('po-properties')
 
-if get_option('documentation')
-  subdir('docs/tools')
-  subdir('docs/reference')
-endif
+subdir('docs/tools')
+subdir('docs/reference')
 
 # Keep this in sync with post-install.sh expected arguments
 meson.add_install_script('build-aux/meson/post-install.py',
@@ -815,6 +813,7 @@ summary = [
   '    Colord support: @0@'.format(get_option('colord')),
   '     Introspection: @0@'.format(get_option('introspection')),
   '     Documentation: @0@'.format(get_option('documentation')),
+  '         Man pages: @0@'.format(get_option('man-pages')),
   '       Build tests: @0@'.format(get_option('build-tests')),
   '     Install tests: @0@'.format(get_option('install-tests')),
   '             Demos: @0@'.format(get_option('demos')),
