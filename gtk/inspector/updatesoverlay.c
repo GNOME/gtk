@@ -68,27 +68,25 @@ gtk_update_free (gpointer data)
 }
 
 static void
-gtk_widget_updates_release_widget (GtkWidgetUpdates *updates)
-{
-  g_assert (updates->widget);
-  g_signal_handler_disconnect (updates->widget, updates->unmap_callback);
-  if (updates->tick_callback)
-    gtk_widget_remove_tick_callback (updates->widget, updates->tick_callback);
-  updates->tick_callback = 0;
-  updates->widget = NULL;
-}
-
-static void
 gtk_widget_updates_free (gpointer data)
 {
   GtkWidgetUpdates *updates = data;
 
   g_queue_free_full (updates->updates, gtk_update_free);
   g_clear_pointer (&updates->last, gsk_render_node_unref);
-  if (updates->widget)
-    gtk_widget_updates_release_widget (updates);
+  g_signal_handler_disconnect (updates->widget, updates->unmap_callback);
+  if (updates->tick_callback)
+    gtk_widget_remove_tick_callback (updates->widget, updates->tick_callback);
+  updates->tick_callback = 0;
 
   g_slice_free (GtkWidgetUpdates, updates);
+}
+
+static void
+gtk_widget_updates_unmap_widget (GtkWidget         *widget,
+                                 GtkUpdatesOverlay *self)
+{
+  g_hash_table_remove (self->toplevels, widget);
 }
 
 static gboolean
@@ -135,7 +133,7 @@ gtk_update_overlay_lookup_for_widget (GtkUpdatesOverlay *self,
   updates = g_slice_new0 (GtkWidgetUpdates);
   updates->updates = g_queue_new ();
   updates->widget = widget;
-  updates->unmap_callback = g_signal_connect_swapped (widget, "unmap", G_CALLBACK (gtk_widget_updates_release_widget), updates);
+  updates->unmap_callback = g_signal_connect (widget, "unmap", G_CALLBACK (gtk_widget_updates_unmap_widget), self);
 
   g_hash_table_insert (self->toplevels, g_object_ref (widget), updates);
   return updates;
@@ -269,7 +267,7 @@ gtk_updates_overlay_class_init (GtkUpdatesOverlayClass *klass)
 static void
 gtk_updates_overlay_init (GtkUpdatesOverlay *self)
 {
-  self->toplevels = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, gtk_widget_updates_free);
+  self->toplevels = g_hash_table_new_full (g_direct_hash, g_direct_equal, g_object_unref, gtk_widget_updates_free);
 }
 
 GtkInspectorOverlay *
