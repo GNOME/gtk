@@ -264,6 +264,11 @@ gtk_layout_manager_measure (GtkLayoutManager *manager,
                             int              *natural_baseline)
 {
   GtkLayoutManagerClass *klass;
+  int min_size = 0;
+  int nat_size = 0;
+  int min_baseline = -1;
+  int nat_baseline = -1;
+
 
   g_return_if_fail (GTK_IS_LAYOUT_MANAGER (manager));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -272,8 +277,20 @@ gtk_layout_manager_measure (GtkLayoutManager *manager,
 
   klass->measure (manager, widget, orientation,
                   for_size,
-                  minimum, natural,
-                  minimum_baseline, natural_baseline);
+                  &min_size, &nat_size,
+                  &min_baseline, &nat_baseline);
+
+  if (minimum)
+    *minimum = min_size;
+
+  if (natural)
+    *natural = nat_size;
+
+  if (minimum_baseline)
+    *minimum_baseline = min_baseline;
+
+  if (natural_baseline)
+    *natural_baseline = nat_baseline;
 }
 
 /**
