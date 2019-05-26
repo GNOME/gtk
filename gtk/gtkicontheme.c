@@ -159,7 +159,7 @@ struct _GtkIconThemePrivate
   gchar *current_theme;
   gchar **search_path;
   gint search_path_len;
-  GList *resource_paths;
+  GPtrArray *resource_paths;
 
   guint custom_theme         : 1;
   guint is_display_singleton : 1;
@@ -739,7 +739,8 @@ gtk_icon_theme_init (GtkIconTheme *icon_theme)
   for (j = 0; xdg_data_dirs[j]; j++) 
     priv->search_path[i++] = g_build_filename (xdg_data_dirs[j], "pixmaps", NULL);
 
-  priv->resource_paths = g_list_append (NULL, g_strdup ("/org/gtk/libgtk/icons/"));
+  priv->resource_paths = g_ptr_array_new_with_free_func (g_free);
+  g_ptr_array_add (priv->resource_paths, g_strdup ("/org/gtk/libgtk/icons/"));
 
   priv->themes_valid = FALSE;
   priv->themes = NULL;
@@ -845,7 +846,7 @@ gtk_icon_theme_finalize (GObject *object)
     g_free (priv->search_path[i]);
   g_free (priv->search_path);
 
-  g_list_free_full (priv->resource_paths, g_free);
+  g_ptr_array_free (priv->resource_paths, TRUE);
 
   blow_themes (icon_theme);
 
@@ -1010,7 +1011,7 @@ gtk_icon_theme_add_resource_path (GtkIconTheme *icon_theme,
   g_return_if_fail (GTK_IS_ICON_THEME (icon_theme));
   g_return_if_fail (path != NULL);
 
-  priv->resource_paths = g_list_append (priv->resource_paths, g_strdup (path));
+  g_ptr_array_add (priv->resource_paths, g_strdup (path));
 
   do_theme_change (icon_theme);
 }
@@ -1332,7 +1333,7 @@ load_themes (GtkIconTheme *icon_theme)
   GTimeVal tv;
   IconThemeDirMtime *dir_mtime;
   GStatBuf stat_buf;
-  GList *d;
+  guint i;
 
   if (priv->current_theme)
     insert_theme (icon_theme, priv->current_theme);
@@ -1385,17 +1386,18 @@ load_themes (GtkIconTheme *icon_theme)
     }
   priv->dir_mtimes = g_list_reverse (priv->dir_mtimes);
 
-  for (d = priv->resource_paths; d; d = d->next)
+  for (i = 0; i < priv->resource_paths->len; i ++)
     {
       gchar **children;
-      gint i;
+      int j;
 
-      dir = d->data;
+      dir = g_ptr_array_index (priv->resource_paths, i);
+
       children = g_resources_enumerate_children (dir, 0, NULL);
       if (!children)
         continue;
 
-      for (i = 0; children[i]; i++)
+      for (j = 0; children[j]; j++)
         add_unthemed_icon (icon_theme, dir, children[i], TRUE);
 
       g_strfreev (children);
@@ -3295,12 +3297,15 @@ theme_subdir_load (GtkIconTheme *icon_theme,
     }
 
   if (strcmp (theme->name, FALLBACK_ICON_THEME) == 0)
-    { 
-      for (d = priv->resource_paths; d; d = d->next)
+    {
+      guint i;
+
+      for (i = 0; i < priv->resource_paths->len; i ++)
         {
+          const char *path = g_ptr_array_index (priv->resource_paths, i);
           memset (&dir, 0, sizeof (IconThemeDir));
           /* Force a trailing / here, to avoid extra copies in GResource */
-          full_dir = g_build_filename ((const gchar *)d->data, subdir, " ", NULL);
+          full_dir = g_build_filename (path, subdir, " ", NULL);
           full_dir[strlen (full_dir) - 1] = '\0';
           dir.type = type;
           dir.is_resource = TRUE;
