@@ -35,8 +35,6 @@ typedef struct _GtkPrinterPrivate   GtkPrinterPrivate;
 struct _GtkPrinter
 {
   GObject parent_instance;
-
-  GtkPrinterPrivate *priv;
 };
 
 struct _GtkPrinterClass
