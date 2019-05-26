@@ -48,7 +48,7 @@
 #include "gtklabel.h"
 #include "gtkmodulesprivate.h"
 #include "gtkprivate.h"
-#include "gtkrootprivate.h"
+#include "gtknative.h"
 #include "gtkstack.h"
 #include "gtktreeviewcolumn.h"
 #include "gtkwindowgroup.h"
@@ -297,7 +297,7 @@ gtk_inspector_window_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_inspector_window_parent_class)->realize (widget);
 
-  renderer = gtk_root_get_renderer (GTK_ROOT (widget));
+  renderer = gtk_native_get_renderer (GTK_NATIVE (widget));
   gsk_renderer_set_debug_flags (renderer, 0);
 
   provider = gtk_css_provider_new ();

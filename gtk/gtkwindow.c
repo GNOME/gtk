@@ -2378,12 +2378,6 @@ gtk_window_native_get_renderer (GtkNative *native)
   return priv->renderer;
 }
 
-static GskRenderer *
-gtk_window_root_get_renderer (GtkRoot *root)
-{
-  return gtk_window_native_get_renderer (GTK_NATIVE (root));
-}
-
 static void
 gtk_window_native_get_surface_transform (GtkNative *native,
                                          int       *x,
@@ -2403,14 +2397,6 @@ gtk_window_native_get_surface_transform (GtkNative *native,
 }
 
 static void
-gtk_window_root_get_surface_transform (GtkRoot *root,
-                                       int     *x,
-                                       int     *y)
-{
-  gtk_window_native_get_surface_transform (GTK_NATIVE (root), x, y);
-}
-
-static void
 gtk_window_native_check_resize (GtkNative *native)
 {
   gtk_window_check_resize (GTK_WINDOW (native));
@@ -2420,8 +2406,6 @@ static void
 gtk_window_root_interface_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_window_root_get_display;
-  iface->get_renderer = gtk_window_root_get_renderer;
-  iface->get_surface_transform = gtk_window_root_get_surface_transform;
 }
 
 static void
