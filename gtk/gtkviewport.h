@@ -45,30 +45,6 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkViewport              GtkViewport;
-typedef struct _GtkViewportPrivate       GtkViewportPrivate;
-typedef struct _GtkViewportClass         GtkViewportClass;
-
-struct _GtkViewport
-{
-  GtkBin parent_instance;
-};
-
-/**
- * GtkViewportClass:
- * @parent_class: The parent class.
- */
-struct _GtkViewportClass
-{
-  GtkBinClass parent_class;
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 
 GDK_AVAILABLE_IN_ALL

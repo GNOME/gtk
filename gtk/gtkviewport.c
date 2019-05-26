@@ -63,6 +63,14 @@
  * GtkViewport has a single CSS node with name viewport.
  */
 
+typedef struct _GtkViewportPrivate       GtkViewportPrivate;
+typedef struct _GtkViewportClass         GtkViewportClass;
+
+struct _GtkViewport
+{
+  GtkBin parent_instance;
+};
+
 struct _GtkViewportPrivate
 {
   GtkAdjustment  *hadjustment;
@@ -73,6 +81,11 @@ struct _GtkViewportPrivate
    * driving the scrollable adjustment values */
   guint hscroll_policy : 1;
   guint vscroll_policy : 1;
+};
+
+struct _GtkViewportClass
+{
+  GtkBinClass parent_class;
 };
 
 enum {
