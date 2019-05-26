@@ -25,7 +25,7 @@
 
 #include "gtkprinter.h"
 #include "gtkprinterprivate.h"
-#include "gtkprintbackend.h"
+#include "gtkprintbackendprivate.h"
 #include "gtkprintjob.h"
 
 /**

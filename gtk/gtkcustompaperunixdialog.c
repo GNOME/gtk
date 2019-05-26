@@ -35,7 +35,7 @@
 #include "gtkspinbutton.h"
 
 #include "gtkcustompaperunixdialog.h"
-#include "gtkprintbackend.h"
+#include "gtkprintbackendprivate.h"
 #include "gtkprintutils.h"
 #include "gtkdialogprivate.h"
 

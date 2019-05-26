@@ -50,7 +50,7 @@
 #include "gtkprintjob.h"
 #include "gtkprinter.h"
 #include "gtkprinterprivate.h"
-#include "gtkprintbackend.h"
+#include "gtkprintbackendprivate.h"
 
 #ifndef O_BINARY
 #define O_BINARY 0

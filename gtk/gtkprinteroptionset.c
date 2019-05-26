@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * gtkprintbackend.h: Abstract printer backend interfaces
+ * gtkprintbackendprivate.h: Abstract printer backend interfaces
  * Copyright (C) 2006, Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or

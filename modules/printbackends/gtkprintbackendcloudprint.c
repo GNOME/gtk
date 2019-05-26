@@ -32,7 +32,7 @@
 
 #include <glib/gi18n-lib.h>
 
-#include <gtk/gtkprintbackend.h>
+#include <gtk/gtkprintbackendprivate.h>
 #include <gtk/gtkunixprint.h>
 #include <gtk/gtkprinterprivate.h>
 

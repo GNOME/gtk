@@ -45,7 +45,7 @@
 #include <gmodule.h>
 
 #include <gtk/gtk.h>
-#include <gtk/gtkprintbackend.h>
+#include <gtk/gtkprintbackendprivate.h>
 #include <gtk/gtkunixprint.h>
 #include <gtk/gtkprinterprivate.h>
 

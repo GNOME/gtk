@@ -28,7 +28,7 @@
 #include "gtkprintunixdialog.h"
 
 #include "gtkcustompaperunixdialog.h"
-#include "gtkprintbackend.h"
+#include "gtkprintbackendprivate.h"
 #include "gtkprinterprivate.h"
 #include "gtkprinteroptionwidget.h"
 #include "gtkprintutils.h"
