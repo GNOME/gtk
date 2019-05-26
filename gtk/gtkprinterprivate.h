@@ -25,6 +25,28 @@
 
 G_BEGIN_DECLS
 
+#define GTK_PRINTER_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PRINTER, GtkPrinterClass))
+#define GTK_IS_PRINTER_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINTER))
+#define GTK_PRINTER_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PRINTER, GtkPrinterClass))
+
+typedef struct _GtkPrinterClass     GtkPrinterClass;
+typedef struct _GtkPrinterPrivate   GtkPrinterPrivate;
+
+struct _GtkPrinter
+{
+  GObject parent_instance;
+
+  GtkPrinterPrivate *priv;
+};
+
+struct _GtkPrinterClass
+{
+  GObjectClass parent_class;
+
+  void (*details_acquired) (GtkPrinter *printer,
+                            gboolean    success);
+};
+
 GtkPrinterOptionSet *_gtk_printer_get_options               (GtkPrinter          *printer,
 							     GtkPrintSettings    *settings,
 							     GtkPageSetup        *page_setup,
