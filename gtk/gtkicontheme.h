@@ -53,7 +53,6 @@ typedef struct _GtkIconInfo         GtkIconInfo;
 typedef struct _GtkIconInfoClass    GtkIconInfoClass;
 typedef struct _GtkIconTheme        GtkIconTheme;
 typedef struct _GtkIconThemeClass   GtkIconThemeClass;
-typedef struct _GtkIconThemePrivate GtkIconThemePrivate;
 
 /**
  * GtkIconTheme:
@@ -70,8 +69,6 @@ struct _GtkIconTheme
 {
   /*< private >*/
   GObject parent_instance;
-
-  GtkIconThemePrivate *priv;
 };
 
 /**
@@ -123,7 +120,7 @@ struct _GtkIconThemeClass
  *   text direction
  * @GTK_ICON_LOOKUP_DIR_RTL: Try to load a variant of the icon for right-to-left
  *   text direction
- * 
+ *
  * Used to specify options for gtk_icon_theme_lookup_icon()
  */
 typedef enum
@@ -150,7 +147,7 @@ typedef enum
  * GtkIconThemeError:
  * @GTK_ICON_THEME_NOT_FOUND: The icon specified does not exist in the theme
  * @GTK_ICON_THEME_FAILED: An unspecified error occurred.
- * 
+ *
  * Error codes for GtkIconTheme operations.
  **/
 typedef enum {
