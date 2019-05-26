@@ -181,8 +181,8 @@ gtk_print_error_quark (void)
 static void
 gtk_print_operation_finalize (GObject *object)
 {
-  GtkPrintOperation *print_operation = GTK_PRINT_OPERATION (object);
-  GtkPrintOperationPrivate *priv = print_operation->priv;
+  GtkPrintOperation *op = GTK_PRINT_OPERATION (object);
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   if (priv->free_platform_data &&
       priv->platform_data)
@@ -220,10 +220,8 @@ gtk_print_operation_finalize (GObject *object)
 static void
 gtk_print_operation_init (GtkPrintOperation *operation)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (operation);
   const char *appname;
-
-  priv = operation->priv = gtk_print_operation_get_instance_private (operation);
 
   priv->status = GTK_PRINT_STATUS_INITIAL;
   priv->status_string = g_strdup ("");
@@ -300,13 +298,10 @@ static gboolean
 preview_iface_is_selected (GtkPrintOperationPreview *preview,
 			   gint                      page_nr)
 {
-  GtkPrintOperation *op;
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperation *op = GTK_PRINT_OPERATION (preview);
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
   int i;
-  
-  op = GTK_PRINT_OPERATION (preview);
-  priv = op->priv;
-  
+
   switch (priv->print_pages)
     {
     case GTK_PRINT_PAGES_SELECTION:
@@ -437,7 +432,7 @@ gtk_print_operation_get_property (GObject    *object,
 				  GParamSpec *pspec)
 {
   GtkPrintOperation *op = GTK_PRINT_OPERATION (object);
-  GtkPrintOperationPrivate *priv = op->priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   switch (prop_id)
     {
@@ -575,14 +570,10 @@ preview_print_idle_done (gpointer data)
 static gboolean
 preview_print_idle (gpointer data)
 {
-  PreviewOp *pop;
-  GtkPrintOperation *op;
-  GtkPrintOperationPrivate *priv; 
+  PreviewOp *pop = (PreviewOp *) data;
+  GtkPrintOperation *op = GTK_PRINT_OPERATION (pop->preview);
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
   gboolean done = FALSE;
-
-  pop = (PreviewOp *) data;
-  op = GTK_PRINT_OPERATION (pop->preview);
-  priv = op->priv;
 
   if (priv->page_drawing_state == GTK_PAGE_DRAWING_STATE_READY)
     {
@@ -707,7 +698,7 @@ static void
 gtk_print_operation_done (GtkPrintOperation       *operation,
                           GtkPrintOperationResult  result)
 {
-  GtkPrintOperationPrivate *priv = operation->priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (operation);
 
   if (priv->print_context)
     {
@@ -1424,13 +1415,11 @@ void
 gtk_print_operation_set_default_page_setup (GtkPrintOperation *op,
 					    GtkPageSetup      *default_page_setup)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
-  g_return_if_fail (default_page_setup == NULL || 
+  g_return_if_fail (default_page_setup == NULL ||
                     GTK_IS_PAGE_SETUP (default_page_setup));
-
-  priv = op->priv;
 
   if (default_page_setup != priv->default_page_setup)
     {
@@ -1477,13 +1466,11 @@ void
 gtk_print_operation_set_print_settings (GtkPrintOperation *op,
 					GtkPrintSettings  *print_settings)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
   g_return_if_fail (print_settings == NULL || 
                     GTK_IS_PRINT_SETTINGS (print_settings));
-
-  priv = op->priv;
 
   if (print_settings != priv->print_settings)
     {
@@ -1534,12 +1521,10 @@ void
 gtk_print_operation_set_job_name (GtkPrintOperation *op,
 				  const gchar       *job_name)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
   g_return_if_fail (job_name != NULL);
-
-  priv = op->priv;
 
   if (g_strcmp0 (priv->job_name, job_name) == 0)
     return;
@@ -1571,12 +1556,10 @@ void
 gtk_print_operation_set_n_pages (GtkPrintOperation *op,
 				 gint               n_pages)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
   g_return_if_fail (n_pages > 0);
-
-  priv = op->priv;
   g_return_if_fail (priv->current_page == -1 || 
                     priv->current_page < n_pages);
 
@@ -1604,12 +1587,10 @@ void
 gtk_print_operation_set_current_page (GtkPrintOperation *op,
 				      gint               current_page)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
   g_return_if_fail (current_page >= 0);
-
-  priv = op->priv;
   g_return_if_fail (priv->nr_of_pages == -1 || 
 		    current_page < priv->nr_of_pages);
 
@@ -1637,14 +1618,12 @@ void
 gtk_print_operation_set_use_full_page (GtkPrintOperation *op,
 				       gboolean           full_page)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
 
   full_page = full_page != FALSE;
- 
-  priv = op->priv;
-	
+
   if (priv->use_full_page != full_page)
     {
       priv->use_full_page = full_page;
@@ -1666,11 +1645,9 @@ void
 gtk_print_operation_set_unit (GtkPrintOperation *op,
 			      GtkUnit            unit)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
-
-  priv = op->priv;
 
   if (priv->unit != unit)
     {
@@ -1697,11 +1674,9 @@ void
 gtk_print_operation_set_track_print_status (GtkPrintOperation  *op,
 					    gboolean            track_status)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
-
-  priv = op->priv;
 
   if (priv->track_print_status != track_status)
     {
@@ -1716,7 +1691,7 @@ _gtk_print_operation_set_status (GtkPrintOperation *op,
 				 GtkPrintStatus     status,
 				 const gchar       *string)
 {
-  GtkPrintOperationPrivate *priv = op->priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
   static const gchar *status_strs[] = {
     NC_("print operation status", "Initial state"),
     NC_("print operation status", "Preparing to print"),
@@ -1807,11 +1782,10 @@ gtk_print_operation_get_status_string (GtkPrintOperation *op)
 gboolean
 gtk_print_operation_is_finished (GtkPrintOperation *op)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), TRUE);
 
-  priv = op->priv;
   return
     priv->status == GTK_PRINT_STATUS_FINISHED_ABORTED ||
     priv->status == GTK_PRINT_STATUS_FINISHED;
@@ -1829,11 +1803,9 @@ void
 gtk_print_operation_set_show_progress (GtkPrintOperation  *op,
 				       gboolean            show_progress)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
-
-  priv = op->priv;
 
   show_progress = show_progress != FALSE;
 
@@ -1858,11 +1830,9 @@ void
 gtk_print_operation_set_allow_async (GtkPrintOperation  *op,
 				     gboolean            allow_async)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
-
-  priv = op->priv;
 
   allow_async = allow_async != FALSE;
 
@@ -1886,11 +1856,9 @@ void
 gtk_print_operation_set_custom_tab_label (GtkPrintOperation  *op,
 					  const gchar        *label)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
-
-  priv = op->priv;
 
   g_free (priv->custom_tab_label);
   priv->custom_tab_label = g_strdup (label);
@@ -1917,11 +1885,9 @@ void
 gtk_print_operation_set_export_filename (GtkPrintOperation *op,
 					 const gchar       *filename)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
-
-  priv = op->priv;
 
   g_free (priv->export_filename);
   priv->export_filename = g_strdup (filename);
@@ -1943,7 +1909,7 @@ gtk_print_operation_set_export_filename (GtkPrintOperation *op,
 static GtkPageSetup *
 create_page_setup (GtkPrintOperation *op)
 {
-  GtkPrintOperationPrivate *priv = op->priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
   GtkPageSetup *page_setup;
   GtkPrintSettings *settings;
   
@@ -2008,7 +1974,7 @@ pdf_end_run (GtkPrintOperation *op,
 	     gboolean           wait,
 	     gboolean           cancelled)
 {
-  GtkPrintOperationPrivate *priv = op->priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
   cairo_surface_t *surface = priv->platform_data;
 
   cairo_surface_finish (surface);
@@ -2023,7 +1989,7 @@ run_pdf (GtkPrintOperation  *op,
 	 GtkWindow          *parent,
 	 gboolean           *do_print)
 {
-  GtkPrintOperationPrivate *priv = op->priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
   GtkPageSetup *page_setup;
   cairo_surface_t *surface;
   cairo_t *cr;
@@ -2090,11 +2056,9 @@ run_pdf (GtkPrintOperation  *op,
 static void
 clamp_page_ranges (PrintPagesData *data)
 {
-  GtkPrintOperationPrivate *priv; 
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (data->op);
   gint                      num_of_correct_ranges;
   gint                      i;
-
-  priv = data->op->priv;
 
   num_of_correct_ranges = 0;
 
@@ -2130,7 +2094,7 @@ clamp_page_ranges (PrintPagesData *data)
 static void
 increment_page_sequence (PrintPagesData *data)
 {
-  GtkPrintOperationPrivate *priv = data->op->priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (data->op);
   gint inc;
 
   if (data->total == -1)
@@ -2224,10 +2188,9 @@ increment_page_sequence (PrintPagesData *data)
 static void
 print_pages_idle_done (gpointer user_data)
 {
-  PrintPagesData *data;
-  GtkPrintOperationPrivate *priv;
+  PrintPagesData *data = (PrintPagesData*)user_data;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (data->op);
 
-  data = (PrintPagesData*)user_data;
   priv = data->op->priv;
 
   priv->print_pages_idle_id = 0;
@@ -2266,11 +2229,9 @@ print_pages_idle_done (gpointer user_data)
 static void
 update_progress (PrintPagesData *data)
 {
-  GtkPrintOperationPrivate *priv; 
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (data->op);
   gchar *text = NULL;
-  
-  priv = data->op->priv;
- 
+
   if (data->progress)
     {
       if (priv->status == GTK_PRINT_STATUS_PREPARING)
@@ -2304,7 +2265,7 @@ update_progress (PrintPagesData *data)
 void
 gtk_print_operation_set_defer_drawing (GtkPrintOperation *op)
 {
-  GtkPrintOperationPrivate *priv = op->priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (priv->page_drawing_state == GTK_PAGE_DRAWING_STATE_DRAWING);
 
@@ -2323,11 +2284,9 @@ void
 gtk_print_operation_set_embed_page_setup (GtkPrintOperation  *op,
                                           gboolean            embed)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
-
-  priv = op->priv;
 
   embed = embed != FALSE;
   if (priv->embed_page_setup != embed)
@@ -2348,9 +2307,11 @@ gtk_print_operation_set_embed_page_setup (GtkPrintOperation  *op,
 gboolean
 gtk_print_operation_get_embed_page_setup (GtkPrintOperation *op)
 {
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
+
   g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), FALSE);
 
-  return op->priv->embed_page_setup;
+  return priv->embed_page_setup;
 }
 
 /**
@@ -2368,7 +2329,7 @@ gtk_print_operation_get_embed_page_setup (GtkPrintOperation *op)
 void
 gtk_print_operation_draw_page_finish (GtkPrintOperation *op)
 {
-  GtkPrintOperationPrivate *priv = op->priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
   GtkPageSetup *page_setup;
   GtkPrintContext *print_context;
   cairo_t *cr;
@@ -2391,7 +2352,7 @@ static void
 common_render_page (GtkPrintOperation *op,
 		    gint               page_nr)
 {
-  GtkPrintOperationPrivate *priv = op->priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
   GtkPageSetup *page_setup;
   GtkPrintContext *print_context;
   cairo_t *cr;
@@ -2617,12 +2578,10 @@ common_render_page (GtkPrintOperation *op,
 static void
 prepare_data (PrintPagesData *data)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (data->op);
   GtkPageSetup             *page_setup;
   gboolean                  paginated = FALSE;
   gint                      i, j, counter;
-
-  priv = data->op->priv;
 
   if (priv->manual_collation)
     {
@@ -2786,12 +2745,9 @@ prepare_data (PrintPagesData *data)
 static gboolean
 print_pages_idle (gpointer user_data)
 {
-  PrintPagesData *data; 
-  GtkPrintOperationPrivate *priv;
+  PrintPagesData *data = (PrintPagesData*)user_data;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (data->op);
   gboolean done = FALSE;
-
-  data = (PrintPagesData*)user_data;
-  priv = data->op->priv;
 
   if (priv->page_drawing_state == GTK_PAGE_DRAWING_STATE_READY)
     {
@@ -2867,7 +2823,7 @@ print_pages (GtkPrintOperation       *op,
 	     gboolean                 do_print,
 	     GtkPrintOperationResult  result)
 {
-  GtkPrintOperationPrivate *priv = op->priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
   PrintPagesData *data;
  
   if (!do_print) 
@@ -3095,7 +3051,7 @@ gtk_print_operation_run (GtkPrintOperation        *op,
 			 GtkWindow                *parent,
 			 GError                  **error)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
   GtkPrintOperationResult result;
   GtkPageSetup *page_setup;
   gboolean do_print;
@@ -3105,7 +3061,6 @@ gtk_print_operation_run (GtkPrintOperation        *op,
                         GTK_PRINT_OPERATION_RESULT_ERROR);
   g_return_val_if_fail (op->priv->status == GTK_PRINT_STATUS_INITIAL,
                         GTK_PRINT_OPERATION_RESULT_ERROR);
-  priv = op->priv;
   
   run_print_pages = TRUE;
   do_print = FALSE;
@@ -3203,11 +3158,9 @@ void
 gtk_print_operation_set_support_selection (GtkPrintOperation  *op,
                                            gboolean            support_selection)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
-
-  priv = op->priv;
 
   support_selection = support_selection != FALSE;
   if (priv->support_selection != support_selection)
@@ -3228,9 +3181,11 @@ gtk_print_operation_set_support_selection (GtkPrintOperation  *op,
 gboolean
 gtk_print_operation_get_support_selection (GtkPrintOperation *op)
 {
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
+
   g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), FALSE);
 
-  return op->priv->support_selection;
+  return priv->support_selection;
 }
 
 /**
@@ -3248,11 +3203,9 @@ void
 gtk_print_operation_set_has_selection (GtkPrintOperation  *op,
                                        gboolean            has_selection)
 {
-  GtkPrintOperationPrivate *priv;
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
 
   g_return_if_fail (GTK_IS_PRINT_OPERATION (op));
-
-  priv = op->priv;
 
   has_selection = has_selection != FALSE;
   if (priv->has_selection != has_selection)
@@ -3273,9 +3226,11 @@ gtk_print_operation_set_has_selection (GtkPrintOperation  *op,
 gboolean
 gtk_print_operation_get_has_selection (GtkPrintOperation *op)
 {
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
+
   g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), FALSE);
 
-  return op->priv->has_selection;
+  return priv->has_selection;
 }
 
 /**
@@ -3297,7 +3252,9 @@ gtk_print_operation_get_has_selection (GtkPrintOperation *op)
 gint
 gtk_print_operation_get_n_pages_to_print (GtkPrintOperation *op)
 {
+  GtkPrintOperationPrivate *priv = gtk_print_operation_get_instance_private (op);
+
   g_return_val_if_fail (GTK_IS_PRINT_OPERATION (op), -1);
 
-  return op->priv->nr_of_pages_to_print;
+  return priv->nr_of_pages_to_print;
 }
