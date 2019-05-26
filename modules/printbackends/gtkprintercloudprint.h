@@ -20,7 +20,7 @@
 #define __GTK_PRINTER_CLOUDPRINT_H__
 
 #include <glib-object.h>
-#include <gtk/gtkprinter-private.h>
+#include <gtk/gtkprinterprivate.h>
 
 #include "gtkcloudprintaccount.h"
 
