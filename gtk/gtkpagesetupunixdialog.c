@@ -60,6 +60,20 @@
  * Printing support was added in GTK+ 2.10.
  */
 
+typedef struct _GtkPageSetupUnixDialogClass    GtkPageSetupUnixDialogClass;
+typedef struct _GtkPageSetupUnixDialogPrivate  GtkPageSetupUnixDialogPrivate;
+
+struct _GtkPageSetupUnixDialog
+{
+  GtkDialog parent_instance;
+
+  GtkPageSetupUnixDialogPrivate *priv;
+};
+
+struct _GtkPageSetupUnixDialogClass
+{
+  GtkDialogClass parent_class;
+};
 
 struct _GtkPageSetupUnixDialogPrivate
 {
