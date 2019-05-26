@@ -87,6 +87,38 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
+typedef struct _GtkCellRendererAccelPrivate       GtkCellRendererAccelPrivate;
+typedef struct _GtkCellRendererAccelClass         GtkCellRendererAccelClass;
+
+struct _GtkCellRendererAccel
+{
+  GtkCellRendererText parent;
+
+  /*< private >*/
+  GtkCellRendererAccelPrivate *priv;
+};
+
+struct _GtkCellRendererAccelClass
+{
+  GtkCellRendererTextClass parent_class;
+
+  void (* accel_edited)  (GtkCellRendererAccel *accel,
+                          const gchar          *path_string,
+                          guint                 accel_key,
+                          GdkModifierType       accel_mods,
+                          guint                 hardware_keycode);
+
+  void (* accel_cleared) (GtkCellRendererAccel *accel,
+                          const gchar          *path_string);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved0) (void);
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
+};
+
 struct _GtkCellRendererAccelPrivate
 {
   GtkWidget *sizing_label;

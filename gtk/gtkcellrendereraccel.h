@@ -28,14 +28,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_CELL_RENDERER_ACCEL            (gtk_cell_renderer_accel_get_type ())
 #define GTK_CELL_RENDERER_ACCEL(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CELL_RENDERER_ACCEL, GtkCellRendererAccel))
-#define GTK_CELL_RENDERER_ACCEL_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CELL_RENDERER_ACCEL, GtkCellRendererAccelClass))
 #define GTK_IS_CELL_RENDERER_ACCEL(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CELL_RENDERER_ACCEL))
-#define GTK_IS_CELL_RENDERER_ACCEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CELL_RENDERER_ACCEL))
-#define GTK_CELL_RENDERER_ACCEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CELL_RENDERER_ACCEL, GtkCellRendererAccelClass))
 
-typedef struct _GtkCellRendererAccel              GtkCellRendererAccel;
-typedef struct _GtkCellRendererAccelPrivate       GtkCellRendererAccelPrivate;
-typedef struct _GtkCellRendererAccelClass         GtkCellRendererAccelClass;
+typedef struct _GtkCellRendererAccel GtkCellRendererAccel;
 
 /**
  * GtkCellRendererAccelMode:
@@ -53,35 +48,6 @@ typedef enum
   GTK_CELL_RENDERER_ACCEL_MODE_OTHER
 } GtkCellRendererAccelMode;
 
-
-struct _GtkCellRendererAccel
-{
-  GtkCellRendererText parent;
-
-  /*< private >*/
-  GtkCellRendererAccelPrivate *priv;
-};
-
-struct _GtkCellRendererAccelClass
-{
-  GtkCellRendererTextClass parent_class;
-
-  void (* accel_edited)  (GtkCellRendererAccel *accel,
-		 	  const gchar          *path_string,
-			  guint                 accel_key,
-			  GdkModifierType       accel_mods,
-			  guint                 hardware_keycode);
-
-  void (* accel_cleared) (GtkCellRendererAccel *accel,
-			  const gchar          *path_string);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved0) (void);
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType            gtk_cell_renderer_accel_get_type        (void) G_GNUC_CONST;
