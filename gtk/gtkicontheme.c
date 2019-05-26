@@ -130,6 +130,29 @@ typedef enum
 #define DEBUG_CACHE(args)
 #endif
 
+typedef struct _GtkIconInfoClass    GtkIconInfoClass;
+typedef struct _GtkIconThemeClass   GtkIconThemeClass;
+typedef struct _GtkIconThemePrivate GtkIconThemePrivate;
+
+/**
+ * GtkIconTheme:
+ *
+ * Acts as a database of information about an icon theme.
+ * Normally, you retrieve the icon theme for a particular
+ * display using gtk_icon_theme_get_for_display() and it
+ * will contain information about current icon theme for
+ * that display, but you can also create a new #GtkIconTheme
+ * object and set the icon theme name explicitly using
+ * gtk_icon_theme_set_custom_theme().
+ */
+struct _GtkIconTheme
+{
+  /*< private >*/
+  GObject parent_instance;
+
+  GtkIconThemePrivate *priv;
+};
+
 struct _GtkIconThemePrivate
 {
   GHashTable *info_cache;
@@ -162,6 +185,13 @@ struct _GtkIconThemePrivate
   gulong theme_changed_idle;
 };
 
+struct _GtkIconThemeClass
+{
+  GObjectClass parent_class;
+
+  void (* changed)  (GtkIconTheme *icon_theme);
+};
+
 typedef struct {
   gchar **icon_names;
   gint size;
@@ -186,6 +216,12 @@ struct _GtkIconInfoClass
   GObjectClass parent_class;
 };
 
+/**
+ * GtkIconInfo:
+ *
+ * Contains information found when looking up an icon in
+ * an icon theme.
+ */
 struct _GtkIconInfo
 {
   GObject parent_instance;
