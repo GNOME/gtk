@@ -663,10 +663,14 @@ gdk_surface_set_property (GObject      *object,
     case PROP_DISPLAY:
       surface->display = g_value_dup_object (value);
       g_assert (surface->display != NULL);
+      g_signal_connect (surface->display, "seat-removed",
+                        G_CALLBACK (seat_removed_cb), surface);
       break;
 
     case PROP_PARENT:
       surface->parent = g_value_dup_object (value);
+      if (surface->parent != NULL)
+        surface->parent->children = g_list_prepend (surface->parent->children, surface);
       break;
 
     case PROP_FRAME_CLOCK:
@@ -753,21 +757,10 @@ gdk_surface_new (GdkDisplay     *display,
                  int             width,
                  int             height)
 {
-  GdkSurface *surface;
-
-  surface = gdk_display_create_surface (display,
-                                        surface_type,
-                                        parent,
-                                        x, y, width, height);
-
-  surface->parent = parent;
-  if (parent)
-    parent->children = g_list_prepend (parent->children, surface);
-
-  g_signal_connect (display, "seat-removed",
-                    G_CALLBACK (seat_removed_cb), surface);
-
-  return surface;
+  return gdk_display_create_surface (display,
+                                     surface_type,
+                                     parent,
+                                     x, y, width, height);
 }
 
 /**
