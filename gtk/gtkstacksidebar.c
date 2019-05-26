@@ -55,6 +55,19 @@
  * pages.
  */
 
+typedef struct _GtkStackSidebarPrivate GtkStackSidebarPrivate;
+typedef struct _GtkStackSidebarClass   GtkStackSidebarClass;
+
+struct _GtkStackSidebar
+{
+  GtkBin parent;
+};
+
+struct _GtkStackSidebarClass
+{
+  GtkBinClass parent_class;
+};
+
 struct _GtkStackSidebarPrivate
 {
   GtkListBox *list;
