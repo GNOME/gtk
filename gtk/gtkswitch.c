@@ -73,6 +73,9 @@
 
 #include "fallback-c89.c"
 
+typedef struct _GtkSwitchPrivate GtkSwitchPrivate;
+typedef struct _GtkSwitchClass   GtkSwitchClass;
+
 struct _GtkSwitchPrivate
 {
   GtkActionHelper *action_helper;
@@ -91,7 +94,27 @@ struct _GtkSwitchPrivate
   GtkWidget *off_image;
   GtkWidget *slider;
 };
-typedef struct _GtkSwitchPrivate GtkSwitchPrivate;
+
+/**
+ * GtkSwitch:
+ *
+ * The #GtkSwitch-struct contains private
+ * data and it should only be accessed using the provided API.
+ */
+struct _GtkSwitch
+{
+  /*< private >*/
+  GtkWidget parent_instance;
+};
+
+struct _GtkSwitchClass
+{
+  GtkWidgetClass parent_class;
+
+  void (* activate) (GtkSwitch *sw);
+
+  gboolean (* state_set) (GtkSwitch *sw, gboolean state);
+};
 
 enum
 {
