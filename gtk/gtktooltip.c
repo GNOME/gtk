@@ -429,7 +429,7 @@ _gtk_widget_find_at_coords (GdkSurface *surface,
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
 
-  event_widget = gtk_root_get_for_surface (surface);
+  event_widget = gtk_native_get_for_surface (surface);
 
   if (!event_widget)
     return NULL;
@@ -500,7 +500,7 @@ gtk_tooltip_set_last_surface (GtkTooltip *tooltip,
 			       (gpointer *) &tooltip->last_surface);
 
   if (surface)
-    window_widget = gtk_root_get_for_surface (surface);
+    window_widget = gtk_native_get_for_surface (surface);
 
   if (window_widget)
     window_widget = gtk_widget_get_toplevel (window_widget);

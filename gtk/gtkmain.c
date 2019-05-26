@@ -132,6 +132,7 @@
 #include "gtkprintbackendprivate.h"
 #include "gtkimmodule.h"
 #include "gtkroot.h"
+#include "gtknative.h"
 
 #include "a11y/gtkaccessibility.h"
 #include "inspector/window.h"
@@ -1329,7 +1330,7 @@ rewrite_event_for_grabs (GdkEvent *event)
     }
 
   event_widget = gtk_get_event_widget (event);
-  grab_widget = gtk_root_get_for_surface (grab_surface);
+  grab_widget = gtk_native_get_for_surface (grab_surface);
 
   if (grab_widget &&
       gtk_main_get_window_group (grab_widget) != gtk_main_get_window_group (event_widget))
@@ -2473,7 +2474,7 @@ gtk_get_event_widget (const GdkEvent *event)
   widget = NULL;
   if (event && event->any.surface &&
       (event->any.type == GDK_DESTROY || !gdk_surface_is_destroyed (event->any.surface)))
-    widget = gtk_root_get_for_surface (event->any.surface);
+    widget = gtk_native_get_for_surface (event->any.surface);
 
   return widget;
 }
