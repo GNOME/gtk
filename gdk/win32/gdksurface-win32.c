@@ -401,6 +401,7 @@ RegisterGdkClass (GdkSurfaceType wtype, GdkSurfaceTypeHint wtype_hint)
   switch (wtype)
     {
     case GDK_SURFACE_TOPLEVEL:
+    case GDK_SURFACE_POPUP:
       /* MSDN: CS_OWNDC is needed for OpenGL contexts */
       wcl.style |= CS_OWNDC;
       if (0 == klassTOPLEVEL)
@@ -539,19 +540,22 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
 	  hparent = GetDesktopWindow ();
 	}
       /* MSDN: We need WS_CLIPCHILDREN and WS_CLIPSIBLINGS for GL Context Creation */
-      if (surface_type == GDK_SURFACE_TOPLEVEL)
-        dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-      else
-        dwStyle = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION | WS_THICKFRAME | WS_CLIPCHILDREN;
+      dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
       offset_x = _gdk_offset_x;
       offset_y = _gdk_offset_y;
       break;
 
     case GDK_SURFACE_POPUP:
+      dwStyle = WS_POPUP;
+      dwStyle |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+      offset_x = _gdk_offset_x;
+      offset_y = _gdk_offset_y;
+      break;
+
     case GDK_SURFACE_TEMP:
       /* A temp window is not necessarily a top level window */
-      dwStyle = parent == NULL ? WS_POPUP : WS_CHILDWINDOW;
+      dwStyle = WS_POPUP;
       dwStyle |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
       dwExStyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
       offset_x = _gdk_offset_x;
