@@ -61,6 +61,18 @@
  * active, the :checked pseudoclass is added to this node.
  */
 
+typedef struct _GtkSpinnerClass GtkSpinnerClass;
+
+struct _GtkSpinner
+{
+  GtkWidget parent;
+};
+
+struct _GtkSpinnerClass
+{
+  GtkWidgetClass parent_class;
+};
+
 
 enum {
   PROP_0,
