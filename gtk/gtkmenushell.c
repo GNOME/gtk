@@ -423,6 +423,7 @@ gtk_menu_shell_init (GtkMenuShell *menu_shell)
   menu_shell->priv->take_focus = TRUE;
 
   controller = gtk_event_controller_key_new ();
+  gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
   g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_menu_shell_key_press), widget);
   gtk_widget_add_controller (widget, controller);
@@ -430,6 +431,7 @@ gtk_menu_shell_init (GtkMenuShell *menu_shell)
   gtk_widget_set_has_surface (widget, FALSE);
 
   controller = GTK_EVENT_CONTROLLER (gtk_gesture_multi_press_new ());
+  gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (controller), 0);
   g_signal_connect (controller, "pressed",
                     G_CALLBACK (multi_press_pressed), menu_shell);
