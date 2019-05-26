@@ -91,6 +91,19 @@
  * in overlays like the one Epiphany has for page loading progress.
  */
 
+typedef struct _GtkProgressBarClass         GtkProgressBarClass;
+
+struct _GtkProgressBar
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkProgressBarClass
+{
+  GtkWidgetClass parent_class;
+};
+
+
 typedef struct
 {
   gchar         *text;
