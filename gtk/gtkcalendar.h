@@ -40,16 +40,10 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_CALENDAR                  (gtk_calendar_get_type ())
 #define GTK_CALENDAR(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CALENDAR, GtkCalendar))
-#define GTK_CALENDAR_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CALENDAR, GtkCalendarClass))
 #define GTK_IS_CALENDAR(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CALENDAR))
-#define GTK_IS_CALENDAR_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CALENDAR))
-#define GTK_CALENDAR_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CALENDAR, GtkCalendarClass))
 
 
 typedef struct _GtkCalendar	       GtkCalendar;
-typedef struct _GtkCalendarClass       GtkCalendarClass;
-
-typedef struct _GtkCalendarPrivate     GtkCalendarPrivate;
 
 /**
  * GtkCalendarDisplayOptions:
@@ -92,34 +86,6 @@ typedef gchar* (*GtkCalendarDetailFunc) (GtkCalendar *calendar,
                                          guint        month,
                                          guint        day,
                                          gpointer     user_data);
-
-struct _GtkCalendar
-{
-  GtkWidget widget;
-
-  GtkCalendarPrivate *priv;
-};
-
-struct _GtkCalendarClass
-{
-  GtkWidgetClass parent_class;
-  
-  /* Signal handlers */
-  void (* month_changed)		(GtkCalendar *calendar);
-  void (* day_selected)			(GtkCalendar *calendar);
-  void (* day_selected_double_click)	(GtkCalendar *calendar);
-  void (* prev_month)			(GtkCalendar *calendar);
-  void (* next_month)			(GtkCalendar *calendar);
-  void (* prev_year)			(GtkCalendar *calendar);
-  void (* next_year)			(GtkCalendar *calendar);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
 
 GDK_AVAILABLE_IN_ALL
 GType	   gtk_calendar_get_type	(void) G_GNUC_CONST;

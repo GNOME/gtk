@@ -184,6 +184,29 @@ enum
 
 static guint gtk_calendar_signals[LAST_SIGNAL] = { 0 };
 
+typedef struct _GtkCalendarClass   GtkCalendarClass;
+typedef struct _GtkCalendarPrivate GtkCalendarPrivate;
+
+struct _GtkCalendar
+{
+  GtkWidget widget;
+
+  GtkCalendarPrivate *priv;
+};
+
+struct _GtkCalendarClass
+{
+  GtkWidgetClass parent_class;
+
+  void (* month_changed)                (GtkCalendar *calendar);
+  void (* day_selected)                 (GtkCalendar *calendar);
+  void (* day_selected_double_click)    (GtkCalendar *calendar);
+  void (* prev_month)                   (GtkCalendar *calendar);
+  void (* next_month)                   (GtkCalendar *calendar);
+  void (* prev_year)                    (GtkCalendar *calendar);
+  void (* next_year)                    (GtkCalendar *calendar);
+};
+
 struct _GtkCalendarPrivate
 {
   GtkCalendarDisplayOptions display_flags;
