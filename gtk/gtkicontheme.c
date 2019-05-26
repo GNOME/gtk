@@ -272,17 +272,6 @@ struct _GtkIconInfo
 
 typedef struct
 {
-  gchar *name;
-  gchar *display_name;
-  gchar *comment;
-  gchar *example;
-
-  /* In search order */
-  GList *dirs;
-} IconTheme;
-
-typedef struct
-{
   IconThemeDirType type;
   GQuark context;
 
@@ -301,6 +290,18 @@ typedef struct
   
   GHashTable *icons;
 } IconThemeDir;
+
+typedef struct
+{
+  gchar *name;
+  gchar *display_name;
+  gchar *comment;
+  gchar *example;
+
+  /* In search order */
+  IconThemeDir *dirs;
+  int n_dirs;
+} IconTheme;
 
 typedef struct
 {
@@ -334,13 +335,14 @@ static void         theme_list_contexts       (IconTheme        *theme,
                                                GHashTable       *contexts);
 static void         theme_subdir_load         (GtkIconTheme     *icon_theme,
                                                IconTheme        *theme,
+                                               GArray           *theme_dirs, 
                                                GKeyFile         *theme_file,
                                                gchar            *subdir);
 static void         do_theme_change           (GtkIconTheme     *icon_theme);
 static void         blow_themes               (GtkIconTheme     *icon_themes);
 static gboolean     rescan_themes             (GtkIconTheme     *icon_themes);
-static IconSuffix   theme_dir_get_icon_suffix (IconThemeDir     *dir,
-                                               const gchar      *icon_name);
+static IconSuffix   theme_dir_get_icon_suffix (const IconThemeDir *dir,
+                                               const gchar        *icon_name);
 static GtkIconInfo *icon_info_new             (IconThemeDirType  type,
                                                gint              dir_size,
                                                gint              dir_scale);
@@ -1102,6 +1104,7 @@ insert_theme (GtkIconTheme *icon_theme,
   GKeyFile *theme_file;
   GError *error = NULL;
   IconThemeDirMtime *dir_mtime;
+  GArray *theme_dirs;
   GStatBuf stat_buf;
 
   for (l = priv->themes; l != NULL; l = l->next)
@@ -1197,18 +1200,20 @@ insert_theme (GtkIconTheme *icon_theme,
                            NULL);
 
   theme->dirs = NULL;
+  theme_dirs = g_array_new (FALSE, FALSE, sizeof (IconThemeDir));
   for (i = 0; dirs[i] != NULL; i++)
-    theme_subdir_load (icon_theme, theme, theme_file, dirs[i]);
+    theme_subdir_load (icon_theme, theme, theme_dirs, theme_file, dirs[i]);
 
   if (scaled_dirs)
     {
       for (i = 0; scaled_dirs[i] != NULL; i++)
-        theme_subdir_load (icon_theme, theme, theme_file, scaled_dirs[i]);
+        theme_subdir_load (icon_theme, theme, theme_dirs, theme_file, scaled_dirs[i]);
     }
   g_strfreev (dirs);
   g_strfreev (scaled_dirs);
 
-  theme->dirs = g_list_reverse (theme->dirs);
+  theme->n_dirs = theme_dirs->len;
+  theme->dirs = (IconThemeDir *)g_array_free (theme_dirs, FALSE);
 
   themes = g_key_file_get_string_list (theme_file,
                                        "Icon Theme",
@@ -2427,7 +2432,7 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
                                const gchar  *icon_name)
 {
   GtkIconThemePrivate *priv = gtk_icon_theme_get_instance_private (icon_theme);
-  GList *l, *d;
+  GList *l;
   GHashTable *sizes;
   gint *result, *r;
   guint suffix;
@@ -2440,10 +2445,12 @@ gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
 
   for (l = priv->themes; l; l = l->next)
     {
+      int i;
       IconTheme *theme = l->data;
-      for (d = theme->dirs; d; d = d->next)
+
+      for (i = 0; i < theme->n_dirs; i ++)
         {
-          IconThemeDir *dir = d->data;
+          const IconThemeDir *dir = &theme->dirs[i];
 
           if (dir->type != ICON_THEME_DIR_SCALABLE && g_hash_table_lookup_extended (sizes, GINT_TO_POINTER (dir->size), NULL, NULL))
             continue;
@@ -2695,13 +2702,17 @@ gtk_icon_theme_rescan_if_needed (GtkIconTheme *icon_theme)
 static void
 theme_destroy (IconTheme *theme)
 {
+  int i;
+
   g_free (theme->display_name);
   g_free (theme->comment);
   g_free (theme->name);
   g_free (theme->example);
 
-  g_list_free_full (theme->dirs, (GDestroyNotify) theme_dir_destroy);
-  
+  for (i = 0; i < theme->n_dirs; i ++)
+    theme_dir_destroy (&theme->dirs[i]);
+  g_free (theme->dirs);
+
   g_free (theme);
 }
 
@@ -2712,16 +2723,15 @@ theme_dir_destroy (IconThemeDir *dir)
     gtk_icon_cache_unref (dir->cache);
   if (dir->icons)
     g_hash_table_destroy (dir->icons);
-  
+
   g_free (dir->dir);
   g_free (dir->subdir);
-  g_free (dir);
 }
 
 static int
-theme_dir_size_difference (IconThemeDir *dir,
-                           gint          size,
-                           gint          scale)
+theme_dir_size_difference (const IconThemeDir *dir,
+                           int                 size,
+                           int                 scale)
 {
   gint scaled_size, scaled_dir_size;
   gint min, max;
@@ -2815,8 +2825,8 @@ best_suffix (IconSuffix suffix,
 }
 
 static IconSuffix
-theme_dir_get_icon_suffix (IconThemeDir *dir,
-                           const gchar  *icon_name)
+theme_dir_get_icon_suffix (const IconThemeDir *dir,
+                           const char         *icon_name)
 {
   IconSuffix suffix, symbolic_suffix;
 
@@ -2867,8 +2877,8 @@ theme_dir_get_icon_suffix (IconThemeDir *dir,
 
 /* returns TRUE if dir_a is a better match */
 static gboolean
-compare_dir_matches (IconThemeDir *dir_a, gint difference_a,
-                     IconThemeDir *dir_b, gint difference_b,
+compare_dir_matches (const IconThemeDir *dir_a, int difference_a,
+                     const IconThemeDir *dir_b, int difference_b,
                      gint requested_size,
                      gint requested_scale)
 {
@@ -2937,22 +2947,19 @@ theme_lookup_icon (IconTheme   *theme,
                    gint         scale,
                    gboolean     allow_svg)
 {
-  GList *dirs, *l;
-  IconThemeDir *dir, *min_dir;
-  gchar *file;
-  gint min_difference, difference;
+  const IconThemeDir *min_dir;
+  char *file;
+  int min_difference, difference;
   IconSuffix suffix;
   IconSuffix min_suffix;
+  int i;
 
   min_difference = G_MAXINT;
   min_dir = NULL;
 
-  dirs = theme->dirs;
-
-  l = dirs;
-  while (l != NULL)
+  for (i = 0; i < theme->n_dirs; i ++)
     {
-      dir = l->data;
+      const IconThemeDir *dir = &theme->dirs[i];
 
       GTK_NOTE (ICONTHEME, g_message ("look up icon dir %s", dir->dir));
       suffix = theme_dir_get_icon_suffix (dir, icon_name);
@@ -2969,8 +2976,6 @@ theme_lookup_icon (IconTheme   *theme,
               min_difference = difference;
             }
         }
-
-      l = l->next;
     }
 
   if (min_dir)
@@ -3027,12 +3032,11 @@ theme_list_icons (IconTheme  *theme,
                   GHashTable *icons,
                   GQuark      context)
 {
-  GList *l = theme->dirs;
-  IconThemeDir *dir;
-  
-  while (l != NULL)
+  int i;
+
+  for (i = 0; i < theme->n_dirs; i ++)
     {
-      dir = l->data;
+      const IconThemeDir *dir = &theme->dirs[i];
 
       if (context == dir->context ||
           context == 0)
@@ -3042,7 +3046,7 @@ theme_list_icons (IconTheme  *theme,
           else
             g_hash_table_foreach (dir->icons, add_key_to_hash, icons);
         }
-      l = l->next;
+
     }
 }
 
@@ -3050,12 +3054,11 @@ static gboolean
 theme_has_icon (IconTheme   *theme,
                 const gchar *icon_name)
 {
-  GList *l;
+  int i;
 
-  for (l = theme->dirs; l; l = l->next)
+  for (i = 0; i < theme->n_dirs; i ++)
     {
-      IconThemeDir *dir = l->data;
-
+      const IconThemeDir *dir = &theme->dirs[i];
       if (dir->cache)
         {
           if (gtk_icon_cache_has_icon (dir->cache, icon_name))
@@ -3072,22 +3075,19 @@ theme_has_icon (IconTheme   *theme,
 }
 
 static void
-theme_list_contexts (IconTheme  *theme, 
+theme_list_contexts (IconTheme  *theme,
                      GHashTable *contexts)
 {
-  GList *l = theme->dirs;
-  IconThemeDir *dir;
   const gchar *context;
+  int i;
 
-  while (l != NULL)
+  for (i = 0; i < theme->n_dirs; i ++)
     {
-      dir = l->data;
+      const IconThemeDir *dir = &theme->dirs[i];
 
       context = g_quark_to_string (dir->context);
       if (context != NULL)
         g_hash_table_replace (contexts, (gpointer) context, NULL);
-
-      l = l->next;
     }
 }
 
@@ -3170,13 +3170,14 @@ scan_resources (GtkIconThemePrivate  *icon_theme,
 static void
 theme_subdir_load (GtkIconTheme *icon_theme,
                    IconTheme    *theme,
+                   GArray       *theme_dirs,
                    GKeyFile     *theme_file,
                    gchar        *subdir)
 {
   GtkIconThemePrivate *priv = gtk_icon_theme_get_instance_private (icon_theme);
   GList *d;
   gchar *type_string;
-  IconThemeDir *dir;
+  IconThemeDir dir;
   IconThemeDirType type;
   gchar *context_string;
   GQuark context;
@@ -3259,35 +3260,35 @@ theme_subdir_load (GtkIconTheme *icon_theme,
               dir_mtime->cache = gtk_icon_cache_new_for_path (dir_mtime->dir);
             }
 
-          dir = g_new0 (IconThemeDir, 1);
-          dir->type = type;
-          dir->is_resource = FALSE;
-          dir->context = context;
-          dir->size = size;
-          dir->min_size = min_size;
-          dir->max_size = max_size;
-          dir->threshold = threshold;
-          dir->dir = full_dir;
-          dir->subdir = g_strdup (subdir);
-          dir->scale = scale;
+          memset (&dir, 0, sizeof (IconThemeDir));
+          dir.type = type;
+          dir.is_resource = FALSE;
+          dir.context = context;
+          dir.size = size;
+          dir.min_size = min_size;
+          dir.max_size = max_size;
+          dir.threshold = threshold;
+          dir.dir = full_dir;
+          dir.subdir = g_strdup (subdir);
+          dir.scale = scale;
 
           if (dir_mtime->cache != NULL)
             {
-              dir->cache = gtk_icon_cache_ref (dir_mtime->cache);
-              dir->subdir_index = gtk_icon_cache_get_directory_index (dir->cache, dir->subdir);
-              has_icons = gtk_icon_cache_has_icons (dir->cache, dir->subdir);
+              dir.cache = gtk_icon_cache_ref (dir_mtime->cache);
+              dir.subdir_index = gtk_icon_cache_get_directory_index (dir.cache, dir.subdir);
+              has_icons = gtk_icon_cache_has_icons (dir.cache, dir.subdir);
             }
           else
             {
-              dir->cache = NULL;
-              dir->subdir_index = -1;
-              has_icons = scan_directory (priv, dir, full_dir);
+              dir.cache = NULL;
+              dir.subdir_index = -1;
+              has_icons = scan_directory (priv, &dir, full_dir);
             }
 
           if (has_icons)
-            theme->dirs = g_list_prepend (theme->dirs, dir);
+            g_array_append_val (theme_dirs, dir);
           else
-            theme_dir_destroy (dir);
+            theme_dir_destroy (&dir);
         }
       else
         g_free (full_dir);
@@ -3297,27 +3298,27 @@ theme_subdir_load (GtkIconTheme *icon_theme,
     { 
       for (d = priv->resource_paths; d; d = d->next)
         {
+          memset (&dir, 0, sizeof (IconThemeDir));
           /* Force a trailing / here, to avoid extra copies in GResource */
           full_dir = g_build_filename ((const gchar *)d->data, subdir, " ", NULL);
           full_dir[strlen (full_dir) - 1] = '\0';
-          dir = g_new0 (IconThemeDir, 1);
-          dir->type = type;
-          dir->is_resource = TRUE;
-          dir->context = context;
-          dir->size = size;
-          dir->min_size = min_size;
-          dir->max_size = max_size;
-          dir->threshold = threshold;
-          dir->dir = full_dir;
-          dir->subdir = g_strdup (subdir);
-          dir->scale = scale;
-          dir->cache = NULL;
-          dir->subdir_index = -1;
+          dir.type = type;
+          dir.is_resource = TRUE;
+          dir.context = context;
+          dir.size = size;
+          dir.min_size = min_size;
+          dir.max_size = max_size;
+          dir.threshold = threshold;
+          dir.dir = full_dir;
+          dir.subdir = g_strdup (subdir);
+          dir.scale = scale;
+          dir.cache = NULL;
+          dir.subdir_index = -1;
 
-          if (scan_resources (priv, dir, full_dir))
-            theme->dirs = g_list_prepend (theme->dirs, dir);
+          if (scan_resources (priv, &dir, full_dir))
+            g_array_append_val (theme_dirs, dir);
           else
-            theme_dir_destroy (dir);
+            theme_dir_destroy (&dir);
         }
     }
 }
