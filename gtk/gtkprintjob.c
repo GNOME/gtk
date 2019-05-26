@@ -56,6 +56,23 @@
 #define O_BINARY 0
 #endif
 
+typedef struct _GtkPrintJobClass     GtkPrintJobClass;
+typedef struct _GtkPrintJobPrivate   GtkPrintJobPrivate;
+
+struct _GtkPrintJob
+{
+  GObject parent_instance;
+
+  GtkPrintJobPrivate *priv;
+};
+
+struct _GtkPrintJobClass
+{
+  GObjectClass parent_class;
+
+  void (*status_changed) (GtkPrintJob *job);
+};
+
 struct _GtkPrintJobPrivate
 {
   gchar *title;
