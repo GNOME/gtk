@@ -22,7 +22,7 @@
 
 #include "gtkimcontextxim.h"
 #include "gtkimmoduleprivate.h"
-#include "gtkroot.h"
+#include "gtknative.h"
 
 #include "gtk/gtkintl.h"
 
@@ -1536,7 +1536,7 @@ update_client_widget (GtkIMContextXIM *context_xim)
   GtkWidget *new_client_widget = NULL;
 
   if (context_xim->client_surface)
-    new_client_widget = gtk_root_get_for_surface (context_xim->client_surface);
+    new_client_widget = gtk_native_get_for_surface (context_xim->client_surface);
 
   if (new_client_widget != context_xim->client_widget)
     {

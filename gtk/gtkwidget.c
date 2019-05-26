@@ -70,6 +70,7 @@
 #include "gtkwidgetpathprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
+#include "gtknativeprivate.h"
 
 #include "a11y/gtkwidgetaccessible.h"
 #include "inspector/window.h"
@@ -13050,19 +13051,19 @@ gtk_widget_render (GtkWidget            *widget,
   GskRenderNode *root;
   int x, y;
 
-  if (!GTK_IS_ROOT (widget))
+  if (!GTK_IS_NATIVE (widget))
     return;
 
   /* We only render double buffered on native windows */
   if (!gdk_surface_has_native (surface))
     return;
 
-  renderer = gtk_root_get_renderer (GTK_ROOT (widget));
+  renderer = gtk_native_get_renderer (GTK_NATIVE (widget));
   if (renderer == NULL)
     return;
 
   snapshot = gtk_snapshot_new ();
-  gtk_root_get_surface_transform (GTK_ROOT (widget), &x, &y);
+  gtk_native_get_surface_transform (GTK_NATIVE (widget), &x, &y);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
   gtk_widget_snapshot (widget, snapshot);
   root = gtk_snapshot_free_to_node (snapshot);

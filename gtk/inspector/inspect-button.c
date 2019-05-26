@@ -35,7 +35,7 @@
 #include "gtkgesturemultipress.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
-#include "gtkroot.h"
+#include "gtknative.h"
 
 static GtkWidget *
 find_widget_at_pointer (GdkDevice *device)
@@ -46,7 +46,7 @@ find_widget_at_pointer (GdkDevice *device)
   pointer_surface = gdk_device_get_surface_at_position (device, NULL, NULL);
 
   if (pointer_surface)
-    widget = gtk_root_get_for_surface (pointer_surface);
+    widget = gtk_native_get_for_surface (pointer_surface);
 
   if (widget)
     {
