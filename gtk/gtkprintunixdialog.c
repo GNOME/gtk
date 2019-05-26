@@ -261,6 +261,22 @@ enum {
   PROP_EMBED_PAGE_SETUP
 };
 
+typedef struct _GtkPrintUnixDialogClass    GtkPrintUnixDialogClass;
+typedef struct GtkPrintUnixDialogPrivate   GtkPrintUnixDialogPrivate;
+
+struct _GtkPrintUnixDialog
+{
+  GtkDialog parent_instance;
+
+  /*< private >*/
+  GtkPrintUnixDialogPrivate *priv;
+};
+
+struct _GtkPrintUnixDialogClass
+{
+  GtkDialogClass parent_class;
+};
+
 struct GtkPrintUnixDialogPrivate
 {
   GtkWidget *notebook;
