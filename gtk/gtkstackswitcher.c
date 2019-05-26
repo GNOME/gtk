@@ -66,7 +66,19 @@
 
 #define TIMEOUT_EXPAND 500
 
+typedef struct _GtkStackSwitcherClass   GtkStackSwitcherClass;
 typedef struct _GtkStackSwitcherPrivate GtkStackSwitcherPrivate;
+
+struct _GtkStackSwitcher
+{
+  GtkBox widget;
+};
+
+struct _GtkStackSwitcherClass
+{
+  GtkBoxClass parent_class;
+};
+
 struct _GtkStackSwitcherPrivate
 {
   GtkStack *stack;
