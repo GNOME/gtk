@@ -137,6 +137,7 @@
 
 typedef struct _GtkScaleMark GtkScaleMark;
 
+typedef struct _GtkScalePrivate       GtkScalePrivate;
 struct _GtkScalePrivate
 {
   GSList       *marks;
