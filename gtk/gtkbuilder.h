@@ -101,15 +101,9 @@ struct _GtkBuilderClass
   GType (* get_type_from_name) (GtkBuilder *builder,
                                 const char *type_name);
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
-  void (*_gtk_reserved7) (void);
-  void (*_gtk_reserved8) (void);
+  /*< private >*/
+
+  gpointer padding[8];
 };
 
 GDK_AVAILABLE_IN_ALL
