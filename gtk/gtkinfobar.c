@@ -135,6 +135,21 @@ enum
   LAST_PROP
 };
 
+typedef struct _GtkInfoBarClass GtkInfoBarClass;
+
+struct _GtkInfoBar
+{
+  GtkBox parent_instance;
+};
+
+struct _GtkInfoBarClass
+{
+  GtkBoxClass parent_class;
+
+  void (* response) (GtkInfoBar *info_bar, gint response_id);
+  void (* close)    (GtkInfoBar *info_bar);
+};
+
 typedef struct
 {
   GtkWidget *content_area;
