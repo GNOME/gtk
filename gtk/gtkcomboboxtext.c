@@ -86,6 +86,19 @@
  * children, and the .linked class to the node of its internal box.
  */
 
+typedef struct _GtkComboBoxTextClass GtkComboBoxTextClass;
+
+struct _GtkComboBoxText
+{
+  GtkComboBox parent_instance;
+};
+
+struct _GtkComboBoxTextClass
+{
+  GtkComboBoxClass parent_class;
+};
+
+
 static void     gtk_combo_box_text_buildable_interface_init     (GtkBuildableIface *iface);
 static gboolean gtk_combo_box_text_buildable_custom_tag_start   (GtkBuildable     *buildable,
 								 GtkBuilder       *builder,
