@@ -34,10 +34,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_ASSISTANT         (gtk_assistant_get_type ())
 #define GTK_ASSISTANT(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_ASSISTANT, GtkAssistant))
-#define GTK_ASSISTANT_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST    ((c), GTK_TYPE_ASSISTANT, GtkAssistantClass))
 #define GTK_IS_ASSISTANT(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_ASSISTANT))
-#define GTK_IS_ASSISTANT_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE    ((c), GTK_TYPE_ASSISTANT))
-#define GTK_ASSISTANT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_ASSISTANT, GtkAssistantClass))
 
 /**
  * GtkAssistantPageType:
@@ -78,55 +75,12 @@ typedef enum
 } GtkAssistantPageType;
 
 typedef struct _GtkAssistant        GtkAssistant;
-typedef struct _GtkAssistantPrivate GtkAssistantPrivate;
-typedef struct _GtkAssistantClass   GtkAssistantClass;
-
-struct _GtkAssistant
-{
-  GtkWindow  parent;
-
-  /*< private >*/
-  GtkAssistantPrivate *priv;
-};
-
-/**
- * GtkAssistantClass:
- * @parent_class: The parent class.
- * @prepare: Signal emitted when a new page is set as the assistant’s current page, before making the new page visible.
- * @apply: Signal emitted when the apply button is clicked.
- * @close: Signal emitted either when the close button or last page apply button is clicked.
- * @cancel: Signal emitted when the cancel button is clicked.
- */
-struct _GtkAssistantClass
-{
-  GtkWindowClass parent_class;
-
-  /*< public >*/
-
-  void (* prepare) (GtkAssistant *assistant, GtkWidget *page);
-  void (* apply)   (GtkAssistant *assistant);
-  void (* close)   (GtkAssistant *assistant);
-  void (* cancel)  (GtkAssistant *assistant);
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
-};
 
 #define GTK_TYPE_ASSISTANT_PAGE (gtk_assistant_page_get_type ())
 #define GTK_ASSISTANT_PAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ASSISTANT_PAGE, GtkAssistantPage))
-#define GTK_ASSISTANT_PAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ASSISTANT_PAGE, GtkAssistantPageClass))
 #define GTK_IS_ASSISTANT_PAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ASSISTANT_PAGE))
-#define GTK_IS_ASSISTANT_PAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ASSISTANT_PAGE))
-#define GTK_ASSISTANT_PAGE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ASSISTANT_PAGE, GtkAssistantPageClass))
 
 typedef struct _GtkAssistantPage GtkAssistantPage;
-typedef struct _GtkAssistantPageClass GtkAssistantPageClass;
 
 /**
  * GtkAssistantPageFunc:

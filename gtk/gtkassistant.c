@@ -87,6 +87,8 @@
 #include "a11y/gtkwindowaccessible.h"
 
 
+typedef struct _GtkAssistantPageClass   GtkAssistantPageClass;
+
 struct _GtkAssistantPage
 {
   GObject instance;
@@ -104,6 +106,27 @@ struct _GtkAssistantPage
 struct _GtkAssistantPageClass
 {
   GObjectClass parent_class;
+};
+
+typedef struct _GtkAssistantPrivate GtkAssistantPrivate;
+typedef struct _GtkAssistantClass   GtkAssistantClass;
+
+struct _GtkAssistant
+{
+  GtkWindow  parent;
+
+  /*< private >*/
+  GtkAssistantPrivate *priv;
+};
+
+struct _GtkAssistantClass
+{
+  GtkWindowClass parent_class;
+
+  void (* prepare) (GtkAssistant *assistant, GtkWidget *page);
+  void (* apply)   (GtkAssistant *assistant);
+  void (* close)   (GtkAssistant *assistant);
+  void (* cancel)  (GtkAssistant *assistant);
 };
 
 struct _GtkAssistantPrivate
