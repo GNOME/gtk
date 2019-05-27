@@ -28,7 +28,7 @@
 
 #include "gtkaccelgroup.h"
 #include "gtkaccelgroupprivate.h"
-#include "gtkaccellabel.h"
+#include "gtkaccellabelprivate.h"
 #include "gtkaccelmapprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"

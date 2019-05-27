@@ -30,6 +30,7 @@
 
 #include "gtklabel.h"
 #include "gtkaccellabel.h"
+#include "gtkaccellabelprivate.h"
 #include "gtkaccelmap.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -116,6 +117,21 @@ enum {
   PROP_LABEL,
   PROP_USE_UNDERLINE,
   LAST_PROP
+};
+
+struct _GtkAccelLabel
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkAccelLabelClass
+{
+  GtkWidgetClass parent_class;
+
+  char *mod_name_shift;
+  char *mod_name_control;
+  char *mod_name_alt;
+  char *mod_separator;
 };
 
 typedef struct _GtkAccelLabelPrivate GtkAccelLabelPrivate;
