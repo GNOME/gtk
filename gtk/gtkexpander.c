@@ -145,6 +145,20 @@ enum
   PROP_RESIZE_TOPLEVEL
 };
 
+typedef struct _GtkExpanderClass   GtkExpanderClass;
+
+struct _GtkExpander
+{
+  GtkContainer parent_instance;
+};
+
+struct _GtkExpanderClass
+{
+  GtkContainerClass parent_class;
+
+  void (* activate) (GtkExpander *expander);
+};
+
 typedef struct _GtkExpanderPrivate GtkExpanderPrivate;
 struct _GtkExpanderPrivate
 {

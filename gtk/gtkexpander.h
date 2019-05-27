@@ -32,43 +32,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_EXPANDER            (gtk_expander_get_type ())
 #define GTK_EXPANDER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_EXPANDER, GtkExpander))
-#define GTK_EXPANDER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_EXPANDER, GtkExpanderClass))
 #define GTK_IS_EXPANDER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_EXPANDER))
-#define GTK_IS_EXPANDER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_EXPANDER))
-#define GTK_EXPANDER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_EXPANDER, GtkExpanderClass))
 
 typedef struct _GtkExpander        GtkExpander;
-typedef struct _GtkExpanderClass   GtkExpanderClass;
-
-struct _GtkExpander
-{
-  GtkContainer parent_instance;
-};
-
-/**
- * GtkExpanderClass:
- * @parent_class: The parent class.
- * @activate: Keybinding signal is emitted when the user hits the Enter key.
- */
-struct _GtkExpanderClass
-{
-  GtkContainerClass parent_class;
-
-  /*< public >*/
-
-  /* Key binding signal; to get notification on the expansion
-   * state connect to notify:expanded.
-   */
-  void        (* activate) (GtkExpander *expander);
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_expander_get_type            (void) G_GNUC_CONST;
