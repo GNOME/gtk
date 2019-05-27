@@ -37,36 +37,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_ASPECT_FRAME            (gtk_aspect_frame_get_type ())
 #define GTK_ASPECT_FRAME(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ASPECT_FRAME, GtkAspectFrame))
-#define GTK_ASPECT_FRAME_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ASPECT_FRAME, GtkAspectFrameClass))
 #define GTK_IS_ASPECT_FRAME(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ASPECT_FRAME))
-#define GTK_IS_ASPECT_FRAME_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ASPECT_FRAME))
-#define GTK_ASPECT_FRAME_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ASPECT_FRAME, GtkAspectFrameClass))
 
-typedef struct _GtkAspectFrame              GtkAspectFrame;
-typedef struct _GtkAspectFrameClass         GtkAspectFrameClass;
-
-struct _GtkAspectFrame
-{
-  GtkFrame parent_instance;
-};
-
-/**
- * GtkAspectFrameClass:
- * @parent_class: The parent class.
- */
-struct _GtkAspectFrameClass
-{
-  GtkFrameClass parent_class;
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
+typedef struct _GtkAspectFrame      GtkAspectFrame;
 
 GDK_AVAILABLE_IN_ALL
 GType      gtk_aspect_frame_get_type   (void) G_GNUC_CONST;
