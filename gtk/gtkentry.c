@@ -153,6 +153,7 @@ static GQuark          quark_entry_completion = 0;
 
 typedef struct _EntryIconInfo EntryIconInfo;
 
+typedef struct _GtkEntryPrivate       GtkEntryPrivate;
 struct _GtkEntryPrivate
 {
   EntryIconInfo *icons[MAX_ICONS];
