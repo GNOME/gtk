@@ -59,6 +59,7 @@ static void gtk_cell_area_context_real_allocate (GtkCellAreaContext *context,
                                                  gint                width,
                                                  gint                height);
 
+typedef struct _GtkCellAreaContextPrivate GtkCellAreaContextPrivate;
 struct _GtkCellAreaContextPrivate
 {
   GtkCellArea *cell_area;
@@ -85,7 +86,6 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkCellAreaContext, gtk_cell_area_context, G_TYPE_OB
 static void
 gtk_cell_area_context_init (GtkCellAreaContext *context)
 {
-  context->priv = gtk_cell_area_context_get_instance_private (context);
 }
 
 static void
@@ -183,7 +183,7 @@ static void
 gtk_cell_area_context_dispose (GObject *object)
 {
   GtkCellAreaContext        *context = GTK_CELL_AREA_CONTEXT (object);
-  GtkCellAreaContextPrivate *priv = context->priv;
+  GtkCellAreaContextPrivate *priv = gtk_cell_area_context_get_instance_private (context);
 
   if (priv->cell_area)
     {
@@ -202,7 +202,7 @@ gtk_cell_area_context_set_property (GObject      *object,
                                     GParamSpec   *pspec)
 {
   GtkCellAreaContext        *context = GTK_CELL_AREA_CONTEXT (object);
-  GtkCellAreaContextPrivate *priv = context->priv;
+  GtkCellAreaContextPrivate *priv = gtk_cell_area_context_get_instance_private (context);
 
   switch (prop_id)
     {
@@ -222,7 +222,7 @@ gtk_cell_area_context_get_property (GObject     *object,
                                     GParamSpec  *pspec)
 {
   GtkCellAreaContext        *context = GTK_CELL_AREA_CONTEXT (object);
-  GtkCellAreaContextPrivate *priv = context->priv;
+  GtkCellAreaContextPrivate *priv = gtk_cell_area_context_get_instance_private (context);
 
   switch (prop_id)
     {
@@ -253,7 +253,7 @@ gtk_cell_area_context_get_property (GObject     *object,
 static void
 gtk_cell_area_context_real_reset (GtkCellAreaContext *context)
 {
-  GtkCellAreaContextPrivate *priv = context->priv;
+  GtkCellAreaContextPrivate *priv = gtk_cell_area_context_get_instance_private (context);
 
   g_object_freeze_notify (G_OBJECT (context));
 
@@ -292,7 +292,7 @@ gtk_cell_area_context_real_allocate (GtkCellAreaContext *context,
                                      gint                width,
                                      gint                height)
 {
-  GtkCellAreaContextPrivate *priv = context->priv;
+  GtkCellAreaContextPrivate *priv = gtk_cell_area_context_get_instance_private (context);
 
   priv->alloc_width  = width;
   priv->alloc_height = height;
@@ -321,11 +321,9 @@ gtk_cell_area_context_real_allocate (GtkCellAreaContext *context,
 GtkCellArea *
 gtk_cell_area_context_get_area (GtkCellAreaContext *context)
 {
-  GtkCellAreaContextPrivate *priv;
+  GtkCellAreaContextPrivate *priv = gtk_cell_area_context_get_instance_private (context);
 
   g_return_val_if_fail (GTK_IS_CELL_AREA_CONTEXT (context), NULL);
-
-  priv = context->priv;
 
   return priv->cell_area;
 }
@@ -413,11 +411,9 @@ gtk_cell_area_context_get_preferred_width (GtkCellAreaContext *context,
                                            gint               *minimum_width,
                                            gint               *natural_width)
 {
-  GtkCellAreaContextPrivate *priv;
+  GtkCellAreaContextPrivate *priv = gtk_cell_area_context_get_instance_private (context);
 
   g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
-
-  priv = context->priv;
 
   if (minimum_width)
     *minimum_width = priv->min_width;
@@ -445,11 +441,9 @@ gtk_cell_area_context_get_preferred_height (GtkCellAreaContext *context,
                                             gint               *minimum_height,
                                             gint               *natural_height)
 {
-  GtkCellAreaContextPrivate *priv;
+  GtkCellAreaContextPrivate *priv = gtk_cell_area_context_get_instance_private (context);
 
   g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
-
-  priv = context->priv;
 
   if (minimum_height)
     *minimum_height = priv->min_height;
@@ -535,11 +529,9 @@ gtk_cell_area_context_get_allocation (GtkCellAreaContext *context,
                                       gint               *width,
                                       gint               *height)
 {
-  GtkCellAreaContextPrivate *priv;
+  GtkCellAreaContextPrivate *priv = gtk_cell_area_context_get_instance_private (context);
 
   g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
-
-  priv = context->priv;
 
   if (width)
     *width = priv->alloc_width;
@@ -567,11 +559,9 @@ gtk_cell_area_context_push_preferred_width (GtkCellAreaContext *context,
                                             gint                minimum_width,
                                             gint                natural_width)
 {
-  GtkCellAreaContextPrivate *priv;
+  GtkCellAreaContextPrivate *priv = gtk_cell_area_context_get_instance_private (context);
 
   g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
-
-  priv = context->priv;
 
   g_object_freeze_notify (G_OBJECT (context));
 
@@ -611,11 +601,9 @@ gtk_cell_area_context_push_preferred_height (GtkCellAreaContext *context,
                                              gint                minimum_height,
                                              gint                natural_height)
 {
-  GtkCellAreaContextPrivate *priv;
+  GtkCellAreaContextPrivate *priv = gtk_cell_area_context_get_instance_private (context);
 
   g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
-
-  priv = context->priv;
 
   g_object_freeze_notify (G_OBJECT (context));
 
