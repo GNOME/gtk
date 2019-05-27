@@ -50,6 +50,18 @@
  * GtkSeparatorToolItem has a single CSS node with name separator.
  */
 
+typedef struct _GtkSeparatorToolItemClass   GtkSeparatorToolItemClass;
+
+struct _GtkSeparatorToolItem
+{
+  GtkToolItem parent_instance;
+};
+
+struct _GtkSeparatorToolItemClass
+{
+  GtkToolItemClass parent_class;
+};
+
 #define MENU_ID "gtk-separator-tool-item-menu-id"
 
 enum {
