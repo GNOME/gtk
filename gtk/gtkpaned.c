@@ -127,6 +127,28 @@ enum {
   CHILD2
 };
 
+typedef struct _GtkPanedClass   GtkPanedClass;
+
+struct _GtkPaned
+{
+  GtkContainer parent_instance;
+};
+
+struct _GtkPanedClass
+{
+  GtkContainerClass parent_class;
+
+  gboolean (* cycle_child_focus)   (GtkPaned      *paned,
+                                    gboolean       reverse);
+  gboolean (* toggle_handle_focus) (GtkPaned      *paned);
+  gboolean (* move_handle)         (GtkPaned      *paned,
+                                    GtkScrollType  scroll);
+  gboolean (* cycle_handle_focus)  (GtkPaned      *paned,
+                                    gboolean       reverse);
+  gboolean (* accept_position)     (GtkPaned      *paned);
+  gboolean (* cancel_position)     (GtkPaned      *paned);
+};
+
 typedef struct
 {
   GtkPaned       *first_paned;

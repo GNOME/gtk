@@ -35,41 +35,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_PANED                  (gtk_paned_get_type ())
 #define GTK_PANED(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PANED, GtkPaned))
-#define GTK_PANED_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_PANED, GtkPanedClass))
 #define GTK_IS_PANED(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PANED))
-#define GTK_IS_PANED_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PANED))
-#define GTK_PANED_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PANED, GtkPanedClass))
 
-
-typedef struct _GtkPaned        GtkPaned;
-typedef struct _GtkPanedClass   GtkPanedClass;
-
-struct _GtkPaned
-{
-  GtkContainer parent_instance;
-};
-
-struct _GtkPanedClass
-{
-  GtkContainerClass parent_class;
-
-  gboolean (* cycle_child_focus)   (GtkPaned      *paned,
-				    gboolean       reverse);
-  gboolean (* toggle_handle_focus) (GtkPaned      *paned);
-  gboolean (* move_handle)         (GtkPaned      *paned,
-				    GtkScrollType  scroll);
-  gboolean (* cycle_handle_focus)  (GtkPaned      *paned,
-				    gboolean       reverse);
-  gboolean (* accept_position)     (GtkPaned	  *paned);
-  gboolean (* cancel_position)     (GtkPaned	  *paned);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
+typedef struct _GtkPaned GtkPaned;
 
 GDK_AVAILABLE_IN_ALL
 GType       gtk_paned_get_type     (void) G_GNUC_CONST;
