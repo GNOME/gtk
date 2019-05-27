@@ -182,6 +182,30 @@
  * ]|
  */
 
+typedef struct _GtkSpinButton      GtkSpinButton;
+typedef struct _GtkSpinButtonClass GtkSpinButtonClass;
+
+struct _GtkSpinButton
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkSpinButtonClass
+{
+  GtkWidgetClass parent_class;
+
+  gint (*input)  (GtkSpinButton *spin_button,
+                  gdouble       *new_value);
+  gint (*output) (GtkSpinButton *spin_button);
+  void (*value_changed) (GtkSpinButton *spin_button);
+
+  /* Action signals for keybindings, do not connect to these */
+  void (*change_value) (GtkSpinButton *spin_button,
+                        GtkScrollType  scroll);
+
+  void (*wrapped) (GtkSpinButton *spin_button);
+};
+
 struct _GtkSpinButtonPrivate
 {
   GtkAdjustment *adjustment;
