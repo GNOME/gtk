@@ -76,6 +76,18 @@
  * property.
  */
 
+typedef struct _GtkImageClass GtkImageClass;
+
+struct _GtkImage
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkImageClass
+{
+  GtkWidgetClass parent_class;
+};
+
 
 typedef struct
 {
