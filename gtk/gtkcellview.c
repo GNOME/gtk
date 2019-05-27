@@ -112,6 +112,21 @@ static void       row_changed_cb                               (GtkTreeModel    
 								GtkTreeIter          *iter,
 								GtkCellView          *view);
 
+typedef struct _GtkCellViewClass        GtkCellViewClass;
+typedef struct _GtkCellViewPrivate      GtkCellViewPrivate;
+
+struct _GtkCellView
+{
+  GtkWidget parent_instance;
+
+  GtkCellViewPrivate *priv;
+};
+
+struct _GtkCellViewClass
+{
+  GtkWidgetClass parent_class;
+};
+
 struct _GtkCellViewPrivate
 {
   GtkTreeModel        *model;

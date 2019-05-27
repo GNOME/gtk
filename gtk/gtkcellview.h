@@ -32,39 +32,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_CELL_VIEW                (gtk_cell_view_get_type ())
 #define GTK_CELL_VIEW(obj)                (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CELL_VIEW, GtkCellView))
-#define GTK_CELL_VIEW_CLASS(vtable)       (G_TYPE_CHECK_CLASS_CAST ((vtable), GTK_TYPE_CELL_VIEW, GtkCellViewClass))
 #define GTK_IS_CELL_VIEW(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CELL_VIEW))
-#define GTK_IS_CELL_VIEW_CLASS(vtable)    (G_TYPE_CHECK_CLASS_TYPE ((vtable), GTK_TYPE_CELL_VIEW))
-#define GTK_CELL_VIEW_GET_CLASS(inst)     (G_TYPE_INSTANCE_GET_CLASS ((inst), GTK_TYPE_CELL_VIEW, GtkCellViewClass))
 
 typedef struct _GtkCellView             GtkCellView;
-typedef struct _GtkCellViewClass        GtkCellViewClass;
-typedef struct _GtkCellViewPrivate      GtkCellViewPrivate;
-
-struct _GtkCellView
-{
-  GtkWidget parent_instance;
-
-  /*< private >*/
-  GtkCellViewPrivate *priv;
-};
-
-/**
- * GtkCellViewClass:
- * @parent_class: The parent class.
- */
-struct _GtkCellViewClass
-{
-  GtkWidgetClass parent_class;
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType             gtk_cell_view_get_type                (void) G_GNUC_CONST;
