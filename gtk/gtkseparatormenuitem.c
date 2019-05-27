@@ -43,6 +43,18 @@
  * GtkSeparatorMenuItem has a single CSS node with name separator.
  */
 
+typedef struct _GtkSeparatorMenuItemClass  GtkSeparatorMenuItemClass;
+
+struct _GtkSeparatorMenuItem
+{
+  GtkMenuItem menu_item;
+};
+
+struct _GtkSeparatorMenuItemClass
+{
+  GtkMenuItemClass parent_class;
+};
+
 G_DEFINE_TYPE (GtkSeparatorMenuItem, gtk_separator_menu_item, GTK_TYPE_MENU_ITEM)
 
 
