@@ -78,6 +78,25 @@
 
 typedef struct _GtkStatusbarMsg GtkStatusbarMsg;
 
+typedef struct _GtkStatusbarClass         GtkStatusbarClass;
+
+struct _GtkStatusbar
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkStatusbarClass
+{
+  GtkWidgetClass parent_class;
+
+  void  (*text_pushed)  (GtkStatusbar   *statusbar,
+                         guint           context_id,
+                         const gchar    *text);
+  void  (*text_popped)  (GtkStatusbar   *statusbar,
+                         guint           context_id,
+                         const gchar    *text);
+};
+
 typedef struct
 {
   GtkWidget     *frame;
