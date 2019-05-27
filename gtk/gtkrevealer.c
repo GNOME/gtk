@@ -84,6 +84,16 @@ enum  {
   LAST_PROP
 };
 
+typedef struct _GtkRevealerClass GtkRevealerClass;
+
+struct _GtkRevealer {
+  GtkBin parent_instance;
+};
+
+struct _GtkRevealerClass {
+  GtkBinClass parent_class;
+};
+
 typedef struct {
   GtkRevealerTransitionType transition_type;
   guint transition_duration;
