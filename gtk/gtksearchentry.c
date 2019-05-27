@@ -97,6 +97,24 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
 
+typedef struct _GtkSearchEntryClass  GtkSearchEntryClass;
+
+struct _GtkSearchEntry
+{
+  GtkWidget parent;
+};
+
+struct _GtkSearchEntryClass
+{
+  GtkWidgetClass parent_class;
+
+  void (* activate)       (GtkSearchEntry *entry);
+  void (* search_changed) (GtkSearchEntry *entry);
+  void (* next_match)     (GtkSearchEntry *entry);
+  void (* previous_match) (GtkSearchEntry *entry);
+  void (* stop_search)    (GtkSearchEntry *entry);
+};
+
 typedef struct {
   GtkWidget *capture_widget;
   GtkEventController *capture_widget_controller;

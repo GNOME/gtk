@@ -38,29 +38,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_SEARCH_ENTRY                 (gtk_search_entry_get_type ())
 #define GTK_SEARCH_ENTRY(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SEARCH_ENTRY, GtkSearchEntry))
-#define GTK_SEARCH_ENTRY_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SEARCH_ENTRY, GtkSearchEntryClass))
 #define GTK_IS_SEARCH_ENTRY(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SEARCH_ENTRY))
-#define GTK_IS_SEARCH_ENTRY_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SEARCH_ENTRY))
-#define GTK_SEARCH_ENTRY_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SEARCH_ENTRY, GtkSearchEntryClass))
 
 typedef struct _GtkSearchEntry       GtkSearchEntry;
-typedef struct _GtkSearchEntryClass  GtkSearchEntryClass;
-
-struct _GtkSearchEntry
-{
-  GtkWidget parent;
-};
-
-struct _GtkSearchEntryClass
-{
-  GtkWidgetClass parent_class;
-
-  void (* activate)       (GtkSearchEntry *entry);
-  void (* search_changed) (GtkSearchEntry *entry);
-  void (* next_match)     (GtkSearchEntry *entry);
-  void (* previous_match) (GtkSearchEntry *entry);
-  void (* stop_search)    (GtkSearchEntry *entry);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType           gtk_search_entry_get_type       (void) G_GNUC_CONST;
