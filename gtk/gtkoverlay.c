@@ -72,6 +72,22 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 static void gtk_overlay_buildable_init (GtkBuildableIface *iface);
 
+typedef struct _GtkOverlayClass    GtkOverlayClass;
+
+struct _GtkOverlay
+{
+  GtkBin parent_instance;
+};
+
+struct _GtkOverlayClass
+{
+  GtkBinClass parent_class;
+
+  gboolean (*get_child_position) (GtkOverlay    *overlay,
+                                  GtkWidget     *widget,
+                                  GtkAllocation *allocation);
+};
+
 typedef struct {
   GtkLayoutManager *layout;
 } GtkOverlayPrivate;
