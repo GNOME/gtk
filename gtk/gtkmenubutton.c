@@ -126,6 +126,19 @@
 
 #include "a11y/gtkmenubuttonaccessible.h"
 
+typedef struct _GtkMenuButtonClass   GtkMenuButtonClass;
+typedef struct _GtkMenuButtonPrivate GtkMenuButtonPrivate;
+
+struct _GtkMenuButton
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkMenuButtonClass
+{
+  GtkWidgetClass parent_class;
+};
+
 struct _GtkMenuButtonPrivate
 {
   GtkWidget *button;
