@@ -322,10 +322,6 @@ GdkSurface * _gdk_surface_find_descendant_at (GdkSurface *toplevel,
                                               double *found_x,
                                               double *found_y);
 
-GdkEvent * _gdk_make_event (GdkSurface    *surface,
-                            GdkEventType  type,
-                            GdkEvent     *event_in_queue,
-                            gboolean      before_event);
 gboolean _gdk_surface_event_parent_of (GdkSurface *parent,
                                        GdkSurface *child);
 
