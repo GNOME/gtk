@@ -90,6 +90,25 @@ enum {
 
 static guint toggle_cell_signals[LAST_SIGNAL] = { 0 };
 
+typedef struct _GtkCellRendererTogglePrivate       GtkCellRendererTogglePrivate;
+typedef struct _GtkCellRendererToggleClass         GtkCellRendererToggleClass;
+
+struct _GtkCellRendererToggle
+{
+  GtkCellRenderer parent;
+
+  /*< private >*/
+  GtkCellRendererTogglePrivate *priv;
+};
+
+struct _GtkCellRendererToggleClass
+{
+  GtkCellRendererClass parent_class;
+
+  void (* toggled) (GtkCellRendererToggle *cell,
+                    const char            *path);
+};
+
 struct _GtkCellRendererTogglePrivate
 {
   guint active       : 1;
