@@ -138,6 +138,22 @@ typedef struct
   gchar **people;
 } CreditSection;
 
+typedef struct _GtkAboutDialogClass   GtkAboutDialogClass;
+
+struct _GtkAboutDialog
+{
+  GtkDialog parent_instance;
+};
+
+struct _GtkAboutDialogClass
+{
+  GtkDialogClass parent_class;
+
+  gboolean (*activate_link) (GtkAboutDialog *dialog,
+                             const gchar    *uri);
+};
+
+
 typedef struct
 {
   gchar *name;
