@@ -44,7 +44,6 @@ G_BEGIN_DECLS
 #define GTK_RANGE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RANGE, GtkRangeClass))
 
 typedef struct _GtkRange              GtkRange;
-typedef struct _GtkRangePrivate       GtkRangePrivate;
 typedef struct _GtkRangeClass         GtkRangeClass;
 
 struct _GtkRange
@@ -77,10 +76,9 @@ struct _GtkRangeClass
                                     gint           *minimum,
                                     gint           *natural);
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
+  /*< private > */
+
+  gpointer padding[8];
 };
 
 

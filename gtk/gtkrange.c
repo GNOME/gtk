@@ -69,6 +69,7 @@
 
 typedef struct _GtkRangeStepTimer GtkRangeStepTimer;
 
+typedef struct _GtkRangePrivate       GtkRangePrivate;
 struct _GtkRangePrivate
 {
   GtkWidget *grab_location;   /* "grabbed" mouse location, NULL for no grab */
