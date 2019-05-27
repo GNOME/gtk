@@ -64,6 +64,28 @@ enum {
   PROP_SIZE
 };
 
+typedef struct _GtkCellRendererSpinnerClass   GtkCellRendererSpinnerClass;
+typedef struct _GtkCellRendererSpinnerPrivate GtkCellRendererSpinnerPrivate;
+
+struct _GtkCellRendererSpinner
+{
+  GtkCellRenderer                parent;
+
+  /*< private >*/
+  GtkCellRendererSpinnerPrivate *priv;
+};
+
+struct _GtkCellRendererSpinnerClass
+{
+  GtkCellRendererClass parent_class;
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
+};
+
 struct _GtkCellRendererSpinnerPrivate
 {
   gboolean active;

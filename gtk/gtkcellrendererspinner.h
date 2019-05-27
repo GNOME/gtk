@@ -31,33 +31,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_CELL_RENDERER_SPINNER            (gtk_cell_renderer_spinner_get_type ())
 #define GTK_CELL_RENDERER_SPINNER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CELL_RENDERER_SPINNER, GtkCellRendererSpinner))
-#define GTK_CELL_RENDERER_SPINNER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CELL_RENDERER_SPINNER, GtkCellRendererSpinnerClass))
 #define GTK_IS_CELL_RENDERER_SPINNER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CELL_RENDERER_SPINNER))
-#define GTK_IS_CELL_RENDERER_SPINNER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CELL_RENDERER_SPINNER))
-#define GTK_CELL_RENDERER_SPINNER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CELL_RENDERER_SPINNER, GtkCellRendererSpinnerClass))
 
 typedef struct _GtkCellRendererSpinner        GtkCellRendererSpinner;
-typedef struct _GtkCellRendererSpinnerClass   GtkCellRendererSpinnerClass;
-typedef struct _GtkCellRendererSpinnerPrivate GtkCellRendererSpinnerPrivate;
-
-struct _GtkCellRendererSpinner
-{
-  GtkCellRenderer                parent;
-
-  /*< private >*/
-  GtkCellRendererSpinnerPrivate *priv;
-};
-
-struct _GtkCellRendererSpinnerClass
-{
-  GtkCellRendererClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType            gtk_cell_renderer_spinner_get_type (void) G_GNUC_CONST;
