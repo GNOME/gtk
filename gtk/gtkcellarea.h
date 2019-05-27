@@ -41,7 +41,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkCellArea              GtkCellArea;
 typedef struct _GtkCellAreaClass         GtkCellAreaClass;
-typedef struct _GtkCellAreaPrivate       GtkCellAreaPrivate;
 typedef struct _GtkCellAreaContext       GtkCellAreaContext;
 
 /**
@@ -95,8 +94,6 @@ struct _GtkCellArea
 {
   /*< private >*/
   GInitiallyUnowned parent_instance;
-
-  GtkCellAreaPrivate *priv;
 };
 
 
