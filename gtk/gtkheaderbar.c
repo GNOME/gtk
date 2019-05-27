@@ -67,6 +67,19 @@
 #define DEFAULT_SPACING 6
 #define MIN_TITLE_CHARS 5
 
+typedef struct _GtkHeaderBarPrivate       GtkHeaderBarPrivate;
+typedef struct _GtkHeaderBarClass         GtkHeaderBarClass;
+
+struct _GtkHeaderBar
+{
+  GtkContainer container;
+};
+
+struct _GtkHeaderBarClass
+{
+  GtkContainerClass parent_class;
+};
+
 struct _GtkHeaderBarPrivate
 {
   gchar *title;
