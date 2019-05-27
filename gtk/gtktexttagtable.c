@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include "gtktexttagtable.h"
+#include "gtktexttagtableprivate.h"
 
 #include "gtkbuildable.h"
 #include "gtktexttagprivate.h"
@@ -60,6 +61,25 @@
  * </object>
  * ]|
  */
+
+typedef struct _GtkTextTagTablePrivate       GtkTextTagTablePrivate;
+typedef struct _GtkTextTagTableClass         GtkTextTagTableClass;
+
+struct _GtkTextTagTable
+{
+  GObject parent_instance;
+
+  GtkTextTagTablePrivate *priv;
+};
+
+struct _GtkTextTagTableClass
+{
+  GObjectClass parent_class;
+
+  void (* tag_changed) (GtkTextTagTable *table, GtkTextTag *tag, gboolean size_changed);
+  void (* tag_added) (GtkTextTagTable *table, GtkTextTag *tag);
+  void (* tag_removed) (GtkTextTagTable *table, GtkTextTag *tag);
+};
 
 struct _GtkTextTagTablePrivate
 {
