@@ -128,6 +128,19 @@
  * can be used to determine if the button has been selected or deselected.
  */
 
+typedef struct _GtkRadioButtonClass         GtkRadioButtonClass;
+
+struct _GtkRadioButton
+{
+  GtkCheckButton parent_instance;
+};
+
+struct _GtkRadioButtonClass
+{
+  GtkCheckButtonClass parent_class;
+
+  void (*group_changed) (GtkRadioButton *radio_button);
+};
 
 typedef struct
 {
