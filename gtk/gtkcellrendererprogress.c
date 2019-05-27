@@ -58,6 +58,22 @@ enum
   PROP_INVERTED
 };
 
+typedef struct _GtkCellRendererProgressClass    GtkCellRendererProgressClass;
+typedef struct _GtkCellRendererProgressPrivate  GtkCellRendererProgressPrivate;
+
+struct _GtkCellRendererProgress
+{
+  GtkCellRenderer parent_instance;
+
+  /*< private >*/
+  GtkCellRendererProgressPrivate *priv;
+};
+
+struct _GtkCellRendererProgressClass
+{
+  GtkCellRendererClass parent_class;
+};
+
 struct _GtkCellRendererProgressPrivate
 {
   gint value;
