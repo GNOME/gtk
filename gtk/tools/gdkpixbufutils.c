@@ -131,6 +131,40 @@ _gdk_pixbuf_new_from_resource_scaled (const gchar  *resource_path,
   return pixbuf;
 }
 
+/*                              rgba(255,255,255,1.0) */
+#define MAX_RGBA_STRING_LENGTH (4 + 1 + (((3 + 1) * 3) + 3) + 1)
+static inline void
+rgba_to_string (const GdkRGBA *rgba,
+                char          *buff)
+{
+  /* gdk_rgba_to_string inlined in here for the alpha == 1 case,
+   * and g_strdup_printf replaced with g_snprintf */
+  if (rgba->alpha > 0.999)
+    {
+      g_snprintf (buff,
+                  MAX_RGBA_STRING_LENGTH,
+                  "rgb(%d,%d,%d)",
+                  (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
+                  (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
+                  (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.));
+    }
+  else
+    {
+      gchar alpha[G_ASCII_DTOSTR_BUF_SIZE];
+
+      g_ascii_formatd (alpha, G_ASCII_DTOSTR_BUF_SIZE, "%g", CLAMP (rgba->alpha, 0, 1));
+
+      g_snprintf (buff,
+                  MAX_RGBA_STRING_LENGTH,
+                  "rgba(%d,%d,%d,%s)",
+                  (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
+                  (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
+                  (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.),
+                  alpha);
+
+    }
+}
+
 static GdkPixbuf *
 load_symbolic_svg (const char     *file_data,
                    gsize           file_len,
@@ -145,21 +179,19 @@ load_symbolic_svg (const char     *file_data,
 {
   GInputStream *stream;
   GdkPixbuf *pixbuf;
-  gchar *css_fg;
-  gchar *css_success;
-  gchar *css_warning;
-  gchar *css_error;
   gchar *data;
-  gchar *svg_width, *svg_height;
   gchar *escaped_file_data;
+  char svg_width[32];
+  char svg_height[32];
+  char css_fg[MAX_RGBA_STRING_LENGTH];
+  char css_warning[MAX_RGBA_STRING_LENGTH];
+  char css_error[MAX_RGBA_STRING_LENGTH];
+  char css_success[MAX_RGBA_STRING_LENGTH];
 
-  css_fg = gdk_rgba_to_string (fg);
-
-  css_success = css_warning = css_error = NULL;
-
-  css_warning = gdk_rgba_to_string (warning_color);
-  css_error = gdk_rgba_to_string (error_color);
-  css_success = gdk_rgba_to_string (success_color);
+  rgba_to_string (fg, css_fg);
+  rgba_to_string (warning_color, css_warning);
+  rgba_to_string (error_color, css_error);
+  rgba_to_string (success_color, css_success);
 
   /* Fetch size from the original icon */
   stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
@@ -174,8 +206,8 @@ load_symbolic_svg (const char     *file_data,
   if (height == 0)
     height = gdk_pixbuf_get_height (pixbuf) * scale;
 
-  svg_width = g_strdup_printf ("%d", gdk_pixbuf_get_width (pixbuf));
-  svg_height = g_strdup_printf ("%d", gdk_pixbuf_get_height (pixbuf));
+  g_snprintf (svg_width, 32, "%d", gdk_pixbuf_get_width (pixbuf));
+  g_snprintf (svg_height, 32, "%d", gdk_pixbuf_get_height (pixbuf));
   g_object_unref (pixbuf);
 
   escaped_file_data = g_base64_encode ((guchar *) file_data, file_len);
@@ -204,12 +236,6 @@ load_symbolic_svg (const char     *file_data,
                       "</svg>",
                       NULL);
   g_free (escaped_file_data);
-  g_free (css_fg);
-  g_free (css_warning);
-  g_free (css_error);
-  g_free (css_success);
-  g_free (svg_width);
-  g_free (svg_height);
 
   stream = g_memory_input_stream_new_from_data (data, -1, g_free);
   pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream, width, height, TRUE, NULL, error);
