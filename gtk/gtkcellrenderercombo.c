@@ -48,6 +48,22 @@
  * The #GtkCellRendererCombo cell renderer was added in GTK+ 2.6.
  */
 
+typedef struct _GtkCellRendererComboPrivate GtkCellRendererComboPrivate;
+typedef struct _GtkCellRendererComboClass   GtkCellRendererComboClass;
+
+struct _GtkCellRendererCombo
+{
+  GtkCellRendererText parent;
+
+  /*< private >*/
+  GtkCellRendererComboPrivate *priv;
+};
+
+struct _GtkCellRendererComboClass
+{
+  GtkCellRendererTextClass parent;
+};
+
 
 struct _GtkCellRendererComboPrivate
 {
