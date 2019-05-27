@@ -81,6 +81,18 @@
  * classes related to overlay scrolling (.overlay-indicator, .dragging, .hovering).
  */
 
+typedef struct _GtkScrollbarClass   GtkScrollbarClass;
+
+struct _GtkScrollbar
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkScrollbarClass
+{
+  GtkWidgetClass parent_class;
+};
+
 typedef struct {
   GtkOrientation orientation;
   GtkWidget *box;
