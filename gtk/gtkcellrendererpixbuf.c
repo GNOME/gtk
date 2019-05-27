@@ -92,9 +92,6 @@ typedef struct _GtkCellRendererPixbufClass         GtkCellRendererPixbufClass;
 struct _GtkCellRendererPixbuf
 {
   GtkCellRenderer parent;
-
-  /*< private >*/
-  GtkCellRendererPixbufPrivate *priv;
 };
 
 struct _GtkCellRendererPixbufClass
@@ -118,10 +115,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererPixbuf, gtk_cell_renderer_pixbuf, GTK
 static void
 gtk_cell_renderer_pixbuf_init (GtkCellRendererPixbuf *cellpixbuf)
 {
-  GtkCellRendererPixbufPrivate *priv;
-
-  cellpixbuf->priv = gtk_cell_renderer_pixbuf_get_instance_private (cellpixbuf);
-  priv = cellpixbuf->priv;
+  GtkCellRendererPixbufPrivate *priv = gtk_cell_renderer_pixbuf_get_instance_private (cellpixbuf);
 
   priv->image_def = gtk_image_definition_new_empty ();
 }
@@ -130,7 +124,7 @@ static void
 gtk_cell_renderer_pixbuf_finalize (GObject *object)
 {
   GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (object);
-  GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
+  GtkCellRendererPixbufPrivate *priv = gtk_cell_renderer_pixbuf_get_instance_private (cellpixbuf);
 
   gtk_image_definition_unref (priv->image_def);
 
@@ -246,7 +240,7 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
 				       GParamSpec     *pspec)
 {
   GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (object);
-  GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
+  GtkCellRendererPixbufPrivate *priv = gtk_cell_renderer_pixbuf_get_instance_private (cellpixbuf);
 
   switch (param_id)
     {
@@ -300,13 +294,12 @@ static void
 take_image_definition (GtkCellRendererPixbuf *cellpixbuf,
                        GtkImageDefinition    *def)
 {
-  GtkCellRendererPixbufPrivate *priv;
+  GtkCellRendererPixbufPrivate *priv = gtk_cell_renderer_pixbuf_get_instance_private (cellpixbuf);
   GtkImageType old_storage_type, new_storage_type;
   
   if (def == NULL)
     def = gtk_image_definition_new_empty ();
 
-  priv = cellpixbuf->priv;
   old_storage_type = gtk_image_definition_get_storage_type (priv->image_def);
   new_storage_type = gtk_image_definition_get_storage_type (def);
  
@@ -321,7 +314,7 @@ static void
 gtk_cell_renderer_pixbuf_set_icon_size (GtkCellRendererPixbuf *cellpixbuf,
                                         GtkIconSize            icon_size)
 {
-  GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
+  GtkCellRendererPixbufPrivate *priv = gtk_cell_renderer_pixbuf_get_instance_private (cellpixbuf);
 
   if (priv->icon_size == icon_size)
     return;
@@ -337,7 +330,7 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
 				       GParamSpec   *pspec)
 {
   GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (object);
-  GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
+  GtkCellRendererPixbufPrivate *priv = gtk_cell_renderer_pixbuf_get_instance_private (cellpixbuf);
   GdkTexture *texture;
   GdkPixbuf *pixbuf;
 
@@ -401,11 +394,10 @@ gtk_cell_renderer_pixbuf_new (void)
 }
 
 static GtkIconHelper *
-create_icon_helper (
-                    GtkCellRendererPixbuf *cellpixbuf,
+create_icon_helper (GtkCellRendererPixbuf *cellpixbuf,
                     GtkWidget             *widget)
 {
-  GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
+  GtkCellRendererPixbufPrivate *priv = gtk_cell_renderer_pixbuf_get_instance_private (cellpixbuf);
   GtkIconHelper *icon_helper;
 
   icon_helper = gtk_icon_helper_new (gtk_style_context_get_node (gtk_widget_get_style_context (widget)),
@@ -426,8 +418,8 @@ gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
 				   gint               *width,
 				   gint               *height)
 {
-  GtkCellRendererPixbuf *cellpixbuf = (GtkCellRendererPixbuf *) cell;
-  GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
+  GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (cell);
+  GtkCellRendererPixbufPrivate *priv = gtk_cell_renderer_pixbuf_get_instance_private (cellpixbuf);
   gint pixbuf_width;
   gint pixbuf_height;
   gint calc_width;
@@ -512,8 +504,8 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
                                    GtkCellRendererState  flags)
 
 {
-  GtkCellRendererPixbuf *cellpixbuf = (GtkCellRendererPixbuf *) cell;
-  GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;
+  GtkCellRendererPixbuf *cellpixbuf = GTK_CELL_RENDERER_PIXBUF (cell);
+  GtkCellRendererPixbufPrivate *priv = gtk_cell_renderer_pixbuf_get_instance_private (cellpixbuf);
   GtkStyleContext *context;
   GdkRectangle pix_rect;
   gboolean is_expander;
