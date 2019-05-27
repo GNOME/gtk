@@ -57,9 +57,6 @@ typedef struct _GtkCellRendererSpinPrivate GtkCellRendererSpinPrivate;
 struct _GtkCellRendererSpin
 {
   GtkCellRendererText parent;
-
-  /*< private >*/
-  GtkCellRendererSpinPrivate *priv;
 };
 
 struct _GtkCellRendererSpinClass
@@ -166,10 +163,7 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
 static void
 gtk_cell_renderer_spin_init (GtkCellRendererSpin *self)
 {
-  GtkCellRendererSpinPrivate *priv;
-
-  self->priv = gtk_cell_renderer_spin_get_instance_private (self);
-  priv = self->priv;
+  GtkCellRendererSpinPrivate *priv = gtk_cell_renderer_spin_get_instance_private (self);
 
   priv->adjustment = NULL;
   priv->climb_rate = 0.0;
@@ -179,9 +173,7 @@ gtk_cell_renderer_spin_init (GtkCellRendererSpin *self)
 static void
 gtk_cell_renderer_spin_finalize (GObject *object)
 {
-  GtkCellRendererSpinPrivate *priv;
-
-  priv = GTK_CELL_RENDERER_SPIN (object)->priv;
+  GtkCellRendererSpinPrivate *priv = gtk_cell_renderer_spin_get_instance_private (GTK_CELL_RENDERER_SPIN (object));
 
   if (priv && priv->adjustment)
     g_object_unref (priv->adjustment);
@@ -195,11 +187,7 @@ gtk_cell_renderer_spin_get_property (GObject      *object,
 				     GValue       *value,
 				     GParamSpec   *pspec)
 {
-  GtkCellRendererSpin *renderer;
-  GtkCellRendererSpinPrivate *priv;
-
-  renderer = GTK_CELL_RENDERER_SPIN (object);
-  priv = renderer->priv;
+  GtkCellRendererSpinPrivate *priv = gtk_cell_renderer_spin_get_instance_private (GTK_CELL_RENDERER_SPIN (object));
 
   switch (prop_id)
     {
@@ -224,12 +212,8 @@ gtk_cell_renderer_spin_set_property (GObject      *object,
 				     const GValue *value,
 				     GParamSpec   *pspec)
 {
-  GtkCellRendererSpin *renderer;
-  GtkCellRendererSpinPrivate *priv;
+  GtkCellRendererSpinPrivate *priv = gtk_cell_renderer_spin_get_instance_private (GTK_CELL_RENDERER_SPIN (object));
   GObject *obj;
-
-  renderer = GTK_CELL_RENDERER_SPIN (object);
-  priv = renderer->priv;
 
   switch (prop_id)
     {
@@ -326,15 +310,12 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
 				      const GdkRectangle   *cell_area,
 				      GtkCellRendererState  flags)
 {
-  GtkCellRendererSpinPrivate *priv;
-  GtkCellRendererText *cell_text;
+  GtkCellRendererSpinPrivate *priv = gtk_cell_renderer_spin_get_instance_private (GTK_CELL_RENDERER_SPIN (cell));
+  GtkCellRendererText *cell_text = GTK_CELL_RENDERER_TEXT (cell);
   GtkEventController *key_controller;
   GtkWidget *spin;
   gboolean editable;
   gchar *text;
-
-  cell_text = GTK_CELL_RENDERER_TEXT (cell);
-  priv = GTK_CELL_RENDERER_SPIN (cell)->priv;
 
   g_object_get (cell_text, "editable", &editable, NULL);
   if (!editable)
