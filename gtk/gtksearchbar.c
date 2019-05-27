@@ -82,6 +82,18 @@
  * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/master/examples/search-bar.c)
  */
 
+typedef struct _GtkSearchBarClass   GtkSearchBarClass;
+
+struct _GtkSearchBar
+{
+  GtkBin parent;
+};
+
+struct _GtkSearchBarClass
+{
+  GtkBinClass parent_class;
+};
+
 typedef struct {
   GtkWidget   *revealer;
   GtkWidget   *box_center;

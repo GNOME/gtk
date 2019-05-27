@@ -39,36 +39,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_SEARCH_BAR                 (gtk_search_bar_get_type ())
 #define GTK_SEARCH_BAR(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SEARCH_BAR, GtkSearchBar))
-#define GTK_SEARCH_BAR_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SEARCH_BAR, GtkSearchBarClass))
 #define GTK_IS_SEARCH_BAR(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SEARCH_BAR))
-#define GTK_IS_SEARCH_BAR_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SEARCH_BAR))
-#define GTK_SEARCH_BAR_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SEARCH_BAR, GtkSearchBarClass))
 
 typedef struct _GtkSearchBar        GtkSearchBar;
-typedef struct _GtkSearchBarClass   GtkSearchBarClass;
-
-struct _GtkSearchBar
-{
-  /*< private >*/
-  GtkBin parent;
-};
-
-/**
- * GtkSearchBarClass:
- * @parent_class: The parent class.
- */
-struct _GtkSearchBarClass
-{
-  GtkBinClass parent_class;
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType       gtk_search_bar_get_type        (void) G_GNUC_CONST;
