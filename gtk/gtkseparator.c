@@ -46,6 +46,17 @@
  * gets one of the .horizontal or .vertical style classes.
  */
 
+typedef struct _GtkSeparatorClass         GtkSeparatorClass;
+
+struct _GtkSeparator
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkSeparatorClass
+{
+  GtkWidgetClass parent_class;
+};
 
 typedef struct _GtkSeparatorPrivate GtkSeparatorPrivate;
 struct _GtkSeparatorPrivate
