@@ -74,6 +74,23 @@
  * with name radio, which gets the .left or .right style class.
  */
 
+typedef struct _GtkRadioMenuItemPrivate       GtkRadioMenuItemPrivate;
+typedef struct _GtkRadioMenuItemClass         GtkRadioMenuItemClass;
+
+struct _GtkRadioMenuItem
+{
+  GtkCheckMenuItem check_menu_item;
+
+  GtkRadioMenuItemPrivate *priv;
+};
+
+struct _GtkRadioMenuItemClass
+{
+  GtkCheckMenuItemClass parent_class;
+
+  void (*group_changed) (GtkRadioMenuItem *radio_menu_item);
+};
+
 struct _GtkRadioMenuItemPrivate
 {
   GSList *group;
