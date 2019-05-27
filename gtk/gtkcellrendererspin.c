@@ -51,6 +51,21 @@
  * The #GtkCellRendererSpin cell renderer was added in GTK 2.10.
  */
 
+typedef struct _GtkCellRendererSpinClass   GtkCellRendererSpinClass;
+typedef struct _GtkCellRendererSpinPrivate GtkCellRendererSpinPrivate;
+
+struct _GtkCellRendererSpin
+{
+  GtkCellRendererText parent;
+
+  /*< private >*/
+  GtkCellRendererSpinPrivate *priv;
+};
+
+struct _GtkCellRendererSpinClass
+{
+  GtkCellRendererTextClass parent;
+};
 
 struct _GtkCellRendererSpinPrivate
 {
