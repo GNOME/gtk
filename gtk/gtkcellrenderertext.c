@@ -160,6 +160,8 @@ static GParamSpec *text_cell_renderer_props [LAST_PROP];
 
 #define GTK_CELL_RENDERER_TEXT_PATH "gtk-cell-renderer-text-path"
 
+typedef struct _GtkCellRendererTextPrivate       GtkCellRendererTextPrivate;
+
 struct _GtkCellRendererTextPrivate
 {
   GtkWidget *entry;
@@ -212,11 +214,8 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererText, gtk_cell_renderer_text, GTK_TYP
 static void
 gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
 {
-  GtkCellRendererTextPrivate *priv;
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
   GtkCellRenderer *cell = GTK_CELL_RENDERER (celltext);
-
-  celltext->priv = gtk_cell_renderer_text_get_instance_private (celltext);
-  priv = celltext->priv;
 
   gtk_cell_renderer_set_alignment (cell, 0.0, 0.5);
   gtk_cell_renderer_set_padding (cell, 2, 2);
@@ -647,7 +646,7 @@ static void
 gtk_cell_renderer_text_finalize (GObject *object)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (object);
-  GtkCellRendererTextPrivate *priv = celltext->priv;
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
 
   pango_font_description_free (priv->font);
 
@@ -694,7 +693,7 @@ gtk_cell_renderer_text_get_property (GObject        *object,
 				     GParamSpec     *pspec)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (object);
-  GtkCellRendererTextPrivate *priv = celltext->priv;
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
 
   switch (param_id)
     {
@@ -873,7 +872,7 @@ static void
 set_bg_color (GtkCellRendererText *celltext,
               GdkRGBA             *rgba)
 {
-  GtkCellRendererTextPrivate *priv = celltext->priv;
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
 
   if (rgba)
     {
@@ -895,12 +894,11 @@ set_bg_color (GtkCellRendererText *celltext,
     }
 }
 
-
 static void
 set_fg_color (GtkCellRendererText *celltext,
               GdkRGBA             *rgba)
 {
-  GtkCellRendererTextPrivate *priv = celltext->priv;
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
 
   if (rgba)
     {
@@ -1005,7 +1003,7 @@ static void
 set_font_description (GtkCellRendererText  *celltext,
                       PangoFontDescription *font_desc)
 {
-  GtkCellRendererTextPrivate *priv = celltext->priv;
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
   GObject *object = G_OBJECT (celltext);
   PangoFontDescription *new_font_desc;
   PangoFontMask old_mask, new_mask, changed_mask, set_changed_mask;
@@ -1042,7 +1040,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 				     GParamSpec   *pspec)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (object);
-  GtkCellRendererTextPrivate *priv = celltext->priv;
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
 
   switch (param_id)
     {
@@ -1409,7 +1407,7 @@ gtk_cell_renderer_text_new (void)
 static inline gboolean
 show_placeholder_text (GtkCellRendererText *celltext)
 {
-  GtkCellRendererTextPrivate *priv = celltext->priv;
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
 
   return priv->editable && priv->placeholder_text &&
     (!priv->text || !priv->text[0]);
@@ -1431,7 +1429,7 @@ get_layout (GtkCellRendererText *celltext,
             const GdkRectangle  *cell_area,
             GtkCellRendererState flags)
 {
-  GtkCellRendererTextPrivate *priv = celltext->priv;
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
   PangoAttrList *attr_list;
   PangoLayout *layout;
   PangoUnderline uline;
@@ -1602,7 +1600,7 @@ get_size (GtkCellRenderer    *cell,
 	  gint               *height)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
-  GtkCellRendererTextPrivate *priv = celltext->priv;
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
   PangoRectangle rect;
   gint xpad, ypad;
   gint cell_width, cell_height;
@@ -1710,7 +1708,7 @@ gtk_cell_renderer_text_snapshot (GtkCellRenderer      *cell,
 
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
-  GtkCellRendererTextPrivate *priv = celltext->priv;
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
   GtkStyleContext *context;
   PangoLayout *layout;
   gint x_offset = 0;
@@ -1763,12 +1761,11 @@ static void
 gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 				     gpointer         data)
 {
-  GtkCellRendererTextPrivate *priv;
+  GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (data);
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
   const gchar *path;
   const gchar *new_text;
   gboolean canceled;
-
-  priv = GTK_CELL_RENDERER_TEXT (data)->priv;
 
   g_clear_object (&priv->entry);
 
@@ -1807,9 +1804,8 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 static gboolean
 popdown_timeout (gpointer data)
 {
-  GtkCellRendererTextPrivate *priv;
-
-  priv = GTK_CELL_RENDERER_TEXT (data)->priv;
+  GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (data);
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
 
   priv->entry_menu_popdown_timeout = 0;
 
@@ -1823,9 +1819,8 @@ static void
 gtk_cell_renderer_text_popup_unmap (GtkMenu *menu,
                                     gpointer data)
 {
-  GtkCellRendererTextPrivate *priv;
-
-  priv = GTK_CELL_RENDERER_TEXT (data)->priv;
+  GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (data);
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
 
   priv->in_entry_menu = FALSE;
 
@@ -1841,9 +1836,8 @@ gtk_cell_renderer_text_populate_popup (GtkEntry *entry,
                                        GtkMenu  *menu,
                                        gpointer  data)
 {
-  GtkCellRendererTextPrivate *priv;
-
-  priv = GTK_CELL_RENDERER_TEXT (data)->priv;
+  GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (data);
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
 
   if (priv->entry_menu_popdown_timeout)
     {
@@ -1862,9 +1856,8 @@ gtk_cell_renderer_text_focus_changed (GtkWidget  *entry,
                                       GParamSpec *pspec,
                                       gpointer    data)
 {
-  GtkCellRendererTextPrivate *priv;
-
-  priv = GTK_CELL_RENDERER_TEXT (data)->priv;
+  GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (data);
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
 
   if (gtk_widget_has_focus (entry))
     return;
@@ -1888,12 +1881,9 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 				      const GdkRectangle   *cell_area,
 				      GtkCellRendererState  flags)
 {
-  GtkCellRendererText *celltext;
-  GtkCellRendererTextPrivate *priv;
+  GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
   gfloat xalign, yalign;
-
-  celltext = GTK_CELL_RENDERER_TEXT (cell);
-  priv = celltext->priv;
 
   /* If the cell isn't editable we return NULL. */
   if (priv->editable == FALSE)
@@ -1955,14 +1945,11 @@ void
 gtk_cell_renderer_text_set_fixed_height_from_font (GtkCellRendererText *renderer,
 						   gint                 number_of_rows)
 {
-  GtkCellRendererTextPrivate *priv;
-  GtkCellRenderer *cell;
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (renderer);
+  GtkCellRenderer *cell = GTK_CELL_RENDERER (renderer);
 
   g_return_if_fail (GTK_IS_CELL_RENDERER_TEXT (renderer));
   g_return_if_fail (number_of_rows == -1 || number_of_rows > 0);
-
-  cell = GTK_CELL_RENDERER (renderer);
-  priv = renderer->priv;
 
   if (number_of_rows == -1)
     {
@@ -1984,8 +1971,8 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
                                             gint            *minimum_size,
                                             gint            *natural_size)
 {
-  GtkCellRendererTextPrivate *priv;
-  GtkCellRendererText        *celltext;
+  GtkCellRendererText        *celltext = GTK_CELL_RENDERER_TEXT (cell);
+  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
   PangoLayout                *layout;
   PangoContext               *context;
   PangoFontMetrics           *metrics;
@@ -2001,10 +1988,6 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
    *    - minimum size should be MAX (width-chars, 0)
    *    - natural size should be MIN (wrap-width, strlen (label->text))
    */
-
-  celltext = GTK_CELL_RENDERER_TEXT (cell);
-  priv = celltext->priv;
-
   gtk_cell_renderer_get_padding (cell, &xpad, NULL);
 
   layout = get_layout (celltext, widget, NULL, 0);
@@ -2071,12 +2054,9 @@ gtk_cell_renderer_text_get_preferred_height_for_width (GtkCellRenderer *cell,
                                                        gint            *minimum_height,
                                                        gint            *natural_height)
 {
-  GtkCellRendererText *celltext;
+  GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
   PangoLayout         *layout;
   gint                 text_height, xpad, ypad;
-
-
-  celltext = GTK_CELL_RENDERER_TEXT (cell);
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
 
