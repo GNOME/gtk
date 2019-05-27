@@ -3430,6 +3430,16 @@ gdk_event_translate (MSG  *msg,
 				   (LOWORD (msg->wParam) == WA_INACTIVE ? "INACTIVE" : "???"))),
 				 HIWORD (msg->wParam) ? " minimized" : "",
 				 (HWND) msg->lParam));
+      if (window->surface_type == GDK_SURFACE_POPUP)
+        {
+          /* Popups cannot be activated or de-activated - 
+           * they only support keyboard focus, which GTK
+           * will handle for us.
+           */
+          *ret_valp = 0;
+          return_val = TRUE;
+          break;
+        }
       /* We handle mouse clicks for modally-blocked windows under WM_MOUSEACTIVATE,
        * but we still need to deal with alt-tab, or with SetActiveWindow() type
        * situations.
