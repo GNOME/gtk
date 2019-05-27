@@ -86,6 +86,21 @@ enum {
   PROP_GICON
 };
 
+typedef struct _GtkCellRendererPixbufPrivate       GtkCellRendererPixbufPrivate;
+typedef struct _GtkCellRendererPixbufClass         GtkCellRendererPixbufClass;
+
+struct _GtkCellRendererPixbuf
+{
+  GtkCellRenderer parent;
+
+  /*< private >*/
+  GtkCellRendererPixbufPrivate *priv;
+};
+
+struct _GtkCellRendererPixbufClass
+{
+  GtkCellRendererClass parent_class;
+};
 
 struct _GtkCellRendererPixbufPrivate
 {
