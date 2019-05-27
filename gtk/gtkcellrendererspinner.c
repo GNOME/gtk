@@ -70,9 +70,6 @@ typedef struct _GtkCellRendererSpinnerPrivate GtkCellRendererSpinnerPrivate;
 struct _GtkCellRendererSpinner
 {
   GtkCellRenderer                parent;
-
-  /*< private >*/
-  GtkCellRendererSpinnerPrivate *priv;
 };
 
 struct _GtkCellRendererSpinnerClass
@@ -178,9 +175,9 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
 static void
 gtk_cell_renderer_spinner_init (GtkCellRendererSpinner *cell)
 {
-  cell->priv = gtk_cell_renderer_spinner_get_instance_private (cell);
-  cell->priv->pulse = 0;
-  cell->priv->icon_size = GTK_ICON_SIZE_INHERIT;
+  GtkCellRendererSpinnerPrivate *priv = gtk_cell_renderer_spinner_get_instance_private (cell);
+  priv->pulse = 0;
+  priv->icon_size = GTK_ICON_SIZE_INHERIT;
 }
 
 /**
@@ -201,7 +198,7 @@ static void
 gtk_cell_renderer_spinner_update_size (GtkCellRendererSpinner *cell,
                                        GtkWidget              *widget)
 {
-  GtkCellRendererSpinnerPrivate *priv = cell->priv;
+  GtkCellRendererSpinnerPrivate *priv = gtk_cell_renderer_spinner_get_instance_private (cell);
   GtkStyleContext *context;
   GtkCssNode *node;
   GtkCssStyle *style;
@@ -225,7 +222,7 @@ gtk_cell_renderer_spinner_get_property (GObject    *object,
                                         GParamSpec *pspec)
 {
   GtkCellRendererSpinner *cell = GTK_CELL_RENDERER_SPINNER (object);
-  GtkCellRendererSpinnerPrivate *priv = cell->priv;
+  GtkCellRendererSpinnerPrivate *priv = gtk_cell_renderer_spinner_get_instance_private (cell);
 
   switch (param_id)
     {
@@ -250,7 +247,7 @@ gtk_cell_renderer_spinner_set_property (GObject      *object,
                                         GParamSpec   *pspec)
 {
   GtkCellRendererSpinner *cell = GTK_CELL_RENDERER_SPINNER (object);
-  GtkCellRendererSpinnerPrivate *priv = cell->priv;
+  GtkCellRendererSpinnerPrivate *priv = gtk_cell_renderer_spinner_get_instance_private (cell);
 
   switch (param_id)
     {
@@ -290,7 +287,7 @@ gtk_cell_renderer_spinner_get_size (GtkCellRenderer    *cellr,
                                     gint               *height)
 {
   GtkCellRendererSpinner *cell = GTK_CELL_RENDERER_SPINNER (cellr);
-  GtkCellRendererSpinnerPrivate *priv = cell->priv;
+  GtkCellRendererSpinnerPrivate *priv = gtk_cell_renderer_spinner_get_instance_private (cell);
   gdouble align;
   gint w, h;
   gint xpad, ypad;
@@ -411,7 +408,7 @@ gtk_cell_renderer_spinner_snapshot (GtkCellRenderer      *cellr,
                                     GtkCellRendererState  flags)
 {
   GtkCellRendererSpinner *cell = GTK_CELL_RENDERER_SPINNER (cellr);
-  GtkCellRendererSpinnerPrivate *priv = cell->priv;
+  GtkCellRendererSpinnerPrivate *priv = gtk_cell_renderer_spinner_get_instance_private (cell);
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
   gint xpad, ypad;
