@@ -53,6 +53,19 @@
  * GtkActionBar has a single CSS node with name actionbar.
  */
 
+typedef struct _GtkActionBarPrivate       GtkActionBarPrivate;
+typedef struct _GtkActionBarClass         GtkActionBarClass;
+
+struct _GtkActionBar
+{
+  GtkContainer container;
+};
+
+struct _GtkActionBarClass
+{
+  GtkContainerClass parent_class;
+};
+
 struct _GtkActionBarPrivate
 {
   GtkWidget *center_box;
