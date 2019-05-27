@@ -164,6 +164,18 @@ typedef struct {
   gdouble value;
 } GtkLevelBarOffset;
 
+struct _GtkLevelBar {
+  GtkWidget parent_instance;
+};
+
+typedef struct _GtkLevelBarClass   GtkLevelBarClass;
+struct _GtkLevelBarClass {
+  GtkWidgetClass parent_class;
+
+  void (* offset_changed) (GtkLevelBar *self,
+                           const gchar *name);
+};
+
 typedef struct _GtkLevelBarPrivate GtkLevelBarPrivate;
 struct _GtkLevelBarPrivate {
   GtkOrientation orientation;
