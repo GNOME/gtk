@@ -9555,7 +9555,8 @@ gtk_window_export_handle (GtkWindow               *window,
     }
 #endif
 
-  g_warning ("Couldn't export handle, unsupported windowing system");
+  g_warning ("Couldn't export handle for %s surface, unsupported windowing system",
+             G_OBJECT_TYPE_NAME (priv->surface));
 
   return FALSE;
 }
@@ -9569,8 +9570,12 @@ gtk_window_unexport_handle (GtkWindow *window)
   if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
     {
       gdk_wayland_surface_unexport_handle (priv->surface);
+      return;
     }
 #endif
+
+  g_warning ("Couldn't unexport handle for %s surface, unsupported windowing system",
+             G_OBJECT_TYPE_NAME (priv->surface));
 }
 
 static void
