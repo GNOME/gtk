@@ -72,7 +72,7 @@ struct _GtkGLAreaClass
   GdkGLContext * (* create_context) (GtkGLArea        *area);
 
   /*< private >*/
-  gpointer _padding[6];
+  gpointer _padding[8];
 };
 
 GDK_AVAILABLE_IN_ALL
