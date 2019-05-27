@@ -44,15 +44,11 @@ G_BEGIN_DECLS
 
 
 typedef struct _GtkCheckMenuItem              GtkCheckMenuItem;
-typedef struct _GtkCheckMenuItemPrivate       GtkCheckMenuItemPrivate;
 typedef struct _GtkCheckMenuItemClass         GtkCheckMenuItemClass;
 
 struct _GtkCheckMenuItem
 {
   GtkMenuItem menu_item;
-
-  /*< private >*/
-  GtkCheckMenuItemPrivate *priv;
 };
 
 /**
