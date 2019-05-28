@@ -492,7 +492,8 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
 
   GDK_NOTE (MISC,
             g_print ("_gdk_surface_new: %s\n", (surface_type == GDK_SURFACE_TOPLEVEL ? "TOPLEVEL" :
-                                                       (surface_type == GDK_SURFACE_TEMP ? "TEMP" : "???"))));
+                                                       (surface_type == GDK_SURFACE_TEMP ? "TEMP" :
+                                                      (surface_type == GDK_SURFACE_TEMP ? "POPUP" : "???")))));
 
   display_win32 = GDK_WIN32_DISPLAY (display);
 
