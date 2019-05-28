@@ -461,11 +461,14 @@ if cc.get_id() == 'msvc'
   endif
 endif
 
+cairo_csi_dep = cc.find_library('cairo-script-interpreter')
+
 if not harfbuzz_dep.found()
   harfbuzz_dep = dependency('harfbuzz', version: '>= 0.9', required: false,
                             fallback: ['harfbuzz', 'libharfbuzz_dep'])
 endif
 
+cdata.set('HAVE_CAIRO_SCRIPT_INTERPRETER', cairo_csi_dep.found())
 cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
 cdata.set('HAVE_PANGOFT', pangoft_dep.found())
 

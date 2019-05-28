@@ -36,6 +36,9 @@
 #ifdef CAIRO_HAS_SCRIPT_SURFACE
 #include <cairo-script.h>
 #endif
+#ifdef HAVE_CAIRO_SCRIPT_INTERPRETER
+#include <cairo-script-interpreter.h>
+#endif
 
 typedef struct _Declaration Declaration;
 
@@ -130,6 +133,131 @@ static void
 clear_texture (gpointer inout_texture)
 {
   g_clear_object ((GdkTexture **) inout_texture);
+}
+
+static cairo_surface_t *
+csi_hooks_surface_create (void            *closure,
+                          cairo_content_t  content,
+                          double           width,
+                          double           height,
+                          long             uid)
+{
+  return cairo_surface_create_similar (closure, content, width, height);
+}
+
+static const cairo_user_data_key_t csi_hooks_key;
+
+static cairo_t *
+csi_hooks_context_create (void            *closure,
+                          cairo_surface_t *surface)
+{
+  cairo_t *cr = cairo_create (surface);
+
+  cairo_set_user_data (cr,
+                       &csi_hooks_key,
+                       cairo_surface_reference (surface),
+                       (cairo_destroy_func_t) cairo_surface_destroy);
+
+  return cr;
+}
+
+static void
+csi_hooks_context_destroy (void *closure,
+                           void *ptr)
+{
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  surface = cairo_get_user_data (ptr, &csi_hooks_key);
+  cr = cairo_create (closure);
+  cairo_set_source_surface (cr, surface, 0, 0);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+}
+
+static gboolean
+parse_script (GtkCssParser *parser,
+              gpointer      out_data)
+{
+#ifdef HAVE_CAIRO_SCRIPT_INTERPRETER
+  GError *error = NULL;
+  GBytes *bytes;
+  GtkCssLocation start_location;
+  char *url, *scheme;
+  cairo_script_interpreter_t *csi;
+  cairo_script_interpreter_hooks_t hooks = {
+    .surface_create = csi_hooks_surface_create,
+    .context_create = csi_hooks_context_create,
+    .context_destroy = csi_hooks_context_destroy,
+  };
+
+  start_location = *gtk_css_parser_get_start_location (parser);
+  url = gtk_css_parser_consume_url (parser);
+  if (url == NULL)
+    return FALSE;
+
+  scheme = g_uri_parse_scheme (url);
+  if (scheme && g_ascii_strcasecmp (scheme, "data") == 0)
+    {
+      bytes = gtk_css_data_url_parse (url, NULL, &error);
+    }
+  else
+    {
+      GFile *file;
+
+      file = gtk_css_parser_resolve_url (parser, url);
+      bytes = g_file_load_bytes (file, NULL, NULL, &error);
+      g_object_unref (file);
+    }
+
+  g_free (scheme);
+  g_free (url);
+
+  if (bytes == NULL)
+    {
+      gtk_css_parser_emit_error (parser,
+                                 &start_location,
+                                 gtk_css_parser_get_end_location (parser),
+                                 error);
+      g_clear_error (&error);
+      return FALSE;
+    }
+
+  hooks.closure = cairo_recording_surface_create (CAIRO_CONTENT_COLOR_ALPHA, NULL);
+  csi = cairo_script_interpreter_create ();
+  cairo_script_interpreter_install_hooks (csi, &hooks);
+  cairo_script_interpreter_feed_string (csi, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
+  g_bytes_unref (bytes);
+  if (cairo_surface_status (hooks.closure) != CAIRO_STATUS_SUCCESS)
+    {
+      gtk_css_parser_error_value (parser, "Invalid Cairo script: %s", cairo_status_to_string (cairo_surface_status (hooks.closure)));
+      cairo_script_interpreter_destroy (csi);
+      return FALSE;
+    }
+  if (cairo_script_interpreter_destroy (csi) != CAIRO_STATUS_SUCCESS)
+    {
+      gtk_css_parser_error_value (parser, "Invalid Cairo script");
+      cairo_surface_destroy (hooks.closure);
+      return FALSE;
+    }
+
+  *(cairo_surface_t **) out_data = hooks.closure;
+  return TRUE;
+#else
+  gtk_css_parser_warn (parser,
+                       GTK_CSS_PARSER_WARNING_UNIMPLEMENTED,
+                       gtk_css_parser_get_block_location (parser),
+                       gtk_css_parser_get_start_location (parser),
+                       "GTK was compiled with script interpreter support. Using fallback pixel data for Cairo node.");
+  *(cairo_surface_t **) out_data = NULL;
+  return TRUE;
+#endif
+}
+
+static void
+clear_surface (gpointer inout_surface)
+{
+  g_clear_pointer ((cairo_surface_t **) inout_surface, cairo_surface_destroy);
 }
 
 static gboolean
@@ -914,9 +1042,11 @@ parse_cairo_node (GtkCssParser *parser)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
   GdkTexture *pixels = NULL;
+  cairo_surface_t *surface = NULL;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
-    { "pixels", parse_texture, clear_texture, &pixels }
+    { "pixels", parse_texture, clear_texture, &pixels },
+    { "script", parse_script, clear_surface, &surface }
   };
   GskRenderNode *node;
   cairo_t *cr;
@@ -927,13 +1057,16 @@ parse_cairo_node (GtkCssParser *parser)
   
   cr = gsk_cairo_node_get_draw_context (node);
 
-  if (pixels != NULL)
+  if (surface != NULL)
     {
-      cairo_surface_t *surface;
+      cairo_set_source_surface (cr, surface, 0, 0);
+      cairo_paint (cr);
+    }
+  else if (pixels != NULL)
+    {
       surface = gdk_texture_download_surface (pixels);
       cairo_set_source_surface (cr, surface, 0, 0);
       cairo_paint (cr);
-      cairo_surface_destroy (surface);
     }
   else
     {
@@ -943,6 +1076,7 @@ parse_cairo_node (GtkCssParser *parser)
 
   cairo_destroy (cr);
   g_clear_object (&pixels);
+  g_clear_pointer (&surface, cairo_surface_destroy);
 
   return node;
 }
