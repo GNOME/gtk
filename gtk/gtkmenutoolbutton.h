@@ -31,44 +31,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_MENU_TOOL_BUTTON         (gtk_menu_tool_button_get_type ())
 #define GTK_MENU_TOOL_BUTTON(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_MENU_TOOL_BUTTON, GtkMenuToolButton))
-#define GTK_MENU_TOOL_BUTTON_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), GTK_TYPE_MENU_TOOL_BUTTON, GtkMenuToolButtonClass))
 #define GTK_IS_MENU_TOOL_BUTTON(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_MENU_TOOL_BUTTON))
-#define GTK_IS_MENU_TOOL_BUTTON_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_MENU_TOOL_BUTTON))
-#define GTK_MENU_TOOL_BUTTON_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_MENU_TOOL_BUTTON, GtkMenuToolButtonClass))
 
-typedef struct _GtkMenuToolButtonClass   GtkMenuToolButtonClass;
 typedef struct _GtkMenuToolButton        GtkMenuToolButton;
-typedef struct _GtkMenuToolButtonPrivate GtkMenuToolButtonPrivate;
-
-struct _GtkMenuToolButton
-{
-  GtkToolButton parent;
-
-  /*< private >*/
-  GtkMenuToolButtonPrivate *priv;
-};
-
-/**
- * GtkMenuToolButtonClass:
- * @parent_class: The parent class.
- * @show_menu: Signal emitted before the menu is shown.
- */
-struct _GtkMenuToolButtonClass
-{
-  GtkToolButtonClass parent_class;
-
-  /*< public >*/
-
-  void (*show_menu) (GtkMenuToolButton *button);
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType         gtk_menu_tool_button_get_type       (void) G_GNUC_CONST;

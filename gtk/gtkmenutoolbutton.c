@@ -63,6 +63,23 @@
  * ]|
  */
 
+typedef struct _GtkMenuToolButtonClass   GtkMenuToolButtonClass;
+typedef struct _GtkMenuToolButtonPrivate GtkMenuToolButtonPrivate;
+
+struct _GtkMenuToolButton
+{
+  GtkToolButton parent;
+
+  GtkMenuToolButtonPrivate *priv;
+};
+
+struct _GtkMenuToolButtonClass
+{
+  GtkToolButtonClass parent_class;
+
+  void (*show_menu) (GtkMenuToolButton *button);
+};
+
 
 struct _GtkMenuToolButtonPrivate
 {
