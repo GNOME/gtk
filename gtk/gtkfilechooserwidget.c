@@ -208,6 +208,21 @@ typedef enum {
   DATE_FORMAT_WITH_TIME
 } DateFormat;
 
+typedef struct _GtkFileChooserWidgetPrivate GtkFileChooserWidgetPrivate;
+typedef struct _GtkFileChooserWidgetClass   GtkFileChooserWidgetClass;
+
+struct _GtkFileChooserWidget
+{
+  GtkWidget parent_instance;
+
+  GtkFileChooserWidgetPrivate *priv;
+};
+
+struct _GtkFileChooserWidgetClass
+{
+  GtkWidgetClass parent_class;
+};
+
 struct _GtkFileChooserWidgetPrivate {
   GtkFileChooserAction action;
 
