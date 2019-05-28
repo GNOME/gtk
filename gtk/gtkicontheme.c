@@ -1648,13 +1648,28 @@ icon_name_is_symbolic (const gchar *icon_name,
   return FALSE;
 }
 
-static gboolean
-icon_uri_is_symbolic (const gchar *icon_name)
+static inline gboolean
+icon_uri_is_symbolic (const gchar *icon_name,
+                      int          icon_name_len)
 {
-  return g_str_has_suffix (icon_name, "-symbolic.svg")
-      || g_str_has_suffix (icon_name, "-symbolic-ltr.svg")
-      || g_str_has_suffix (icon_name, "-symbolic-rtl.svg")
-      || g_str_has_suffix (icon_name, ".symbolic.png");
+  if (icon_name_len < 0)
+    icon_name_len = strlen (icon_name);
+
+  if (icon_name_len > strlen ("-symbolic.svg"))
+    {
+      if (strcmp (icon_name + icon_name_len - strlen ("-symbolic.svg"), "-symbolic.svg") == 0 ||
+          strcmp (icon_name + icon_name_len - strlen (".symbolic.png"), ".symbolic.png") == 0)
+        return TRUE;
+    }
+
+  if (icon_name_len > strlen ("-symbolic-ltr.svg"))
+    {
+      if (strcmp (icon_name + icon_name_len - strlen ("-symbolic.ltr.svg"), "-symbolic-ltr.svg") == 0 ||
+          strcmp (icon_name + icon_name_len - strlen ("-symbolic.rtl.svg"), "-symbolic-rtl.svg") == 0)
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 static GtkIconInfo *
@@ -3521,7 +3536,7 @@ gtk_icon_info_is_symbolic (GtkIconInfo *icon_info)
   if (icon_info->icon_file)
     icon_uri = g_file_get_uri (icon_info->icon_file);
 
-  is_symbolic = (icon_uri != NULL) && (icon_uri_is_symbolic (icon_uri));
+  is_symbolic = (icon_uri != NULL) && (icon_uri_is_symbolic (icon_uri, -1));
   g_free (icon_uri);
 
   return is_symbolic;
