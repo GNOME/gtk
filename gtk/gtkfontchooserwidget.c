@@ -96,6 +96,21 @@
  * GtkFontChooserWidget has a single CSS node with name fontchooser.
  */
 
+typedef struct _GtkFontChooserWidgetPrivate       GtkFontChooserWidgetPrivate;
+typedef struct _GtkFontChooserWidgetClass         GtkFontChooserWidgetClass;
+
+struct _GtkFontChooserWidget
+{
+  GtkWidget parent_instance;
+
+  GtkFontChooserWidgetPrivate *priv;
+};
+
+struct _GtkFontChooserWidgetClass
+{
+  GtkWidgetClass parent_class;
+};
+
 struct _GtkFontChooserWidgetPrivate
 {
   GtkWidget    *stack;
