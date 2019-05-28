@@ -473,7 +473,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
                                    int             height)
 {
   HWND hwndNew;
-  HANDLE hparent;
+  HANDLE owner;
   ATOM klass = 0;
   DWORD dwStyle = 0, dwExStyle;
   RECT rect;
@@ -493,8 +493,6 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
   GDK_NOTE (MISC,
             g_print ("_gdk_surface_new: %s\n", (surface_type == GDK_SURFACE_TOPLEVEL ? "TOPLEVEL" :
                                                        (surface_type == GDK_SURFACE_TEMP ? "TEMP" : "???"))));
-
-  hparent = (parent != NULL) ? GDK_SURFACE_HWND (parent) : NULL;
 
   display_win32 = GDK_WIN32_DISPLAY (display);
 
@@ -524,36 +522,28 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
   impl->unscaled_height = height * impl->surface_scale;
 
   dwExStyle = 0;
+  owner = NULL;
+
+  offset_x = _gdk_offset_x;
+  offset_y = _gdk_offset_y;
+  /* MSDN: We need WS_CLIPCHILDREN and WS_CLIPSIBLINGS for GL Context Creation */
+  dwStyle = WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 
   switch (surface_type)
     {
     case GDK_SURFACE_TOPLEVEL:
-      if (parent)
-	{
-	  /* The common code warns for this case. */
-	  hparent = GetDesktopWindow ();
-	}
-      /* MSDN: We need WS_CLIPCHILDREN and WS_CLIPSIBLINGS for GL Context Creation */
-      dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-
-      offset_x = _gdk_offset_x;
-      offset_y = _gdk_offset_y;
-      break;
-
-    case GDK_SURFACE_POPUP:
-      dwStyle = WS_POPUP;
-      dwStyle |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
-      offset_x = _gdk_offset_x;
-      offset_y = _gdk_offset_y;
+      dwStyle |= WS_OVERLAPPEDWINDOW;
       break;
 
     case GDK_SURFACE_TEMP:
-      /* A temp window is not necessarily a top level window */
-      dwStyle = WS_POPUP;
-      dwStyle |= WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
       dwExStyle |= WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
-      offset_x = _gdk_offset_x;
-      offset_y = _gdk_offset_y;
+      /* fall through */
+    case GDK_SURFACE_POPUP:
+      dwStyle |= WS_POPUP;
+
+      /* Only popup and temp windows are fit to use the Owner Window mechanism */
+      if (parent != NULL)
+        owner = GDK_SURFACE_HWND (parent);
       break;
 
     default:
@@ -611,7 +601,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
 			     dwStyle,
 			     window_x, window_y,
 			     window_width, window_height,
-			     hparent,
+			     owner,
 			     NULL,
 			     _gdk_dll_hinstance,
 			     surface);
@@ -646,7 +636,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
 			   window_width, window_height,
 			   surface->x - offset_x,
 			   surface->y - offset_y,
-			   hparent,
+			   owner,
 			   hwndNew));
 
   g_free (wtitle);
