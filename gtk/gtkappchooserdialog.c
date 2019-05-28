@@ -62,6 +62,19 @@
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 
+typedef struct _GtkAppChooserDialogClass   GtkAppChooserDialogClass;
+typedef struct _GtkAppChooserDialogPrivate GtkAppChooserDialogPrivate;
+
+struct _GtkAppChooserDialog {
+  GtkDialog parent;
+
+  GtkAppChooserDialogPrivate *priv;
+};
+
+struct _GtkAppChooserDialogClass {
+  GtkDialogClass parent_class;
+};
+
 struct _GtkAppChooserDialogPrivate {
   char *content_type;
   GFile *gfile;
