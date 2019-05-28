@@ -38,31 +38,9 @@ G_BEGIN_DECLS
 
 #define	GTK_TYPE_MENU_BAR               (gtk_menu_bar_get_type ())
 #define GTK_MENU_BAR(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_MENU_BAR, GtkMenuBar))
-#define GTK_MENU_BAR_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_MENU_BAR, GtkMenuBarClass))
 #define GTK_IS_MENU_BAR(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_MENU_BAR))
-#define GTK_IS_MENU_BAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MENU_BAR))
-#define GTK_MENU_BAR_GET_CLASS(obj)     (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MENU_BAR, GtkMenuBarClass))
 
-typedef struct _GtkMenuBar         GtkMenuBar;
-typedef struct _GtkMenuBarPrivate  GtkMenuBarPrivate;
-typedef struct _GtkMenuBarClass    GtkMenuBarClass;
-
-struct _GtkMenuBar
-{
-  GtkMenuShell menu_shell;
-};
-
-struct _GtkMenuBarClass
-{
-  GtkMenuShellClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
+typedef struct _GtkMenuBar GtkMenuBar;
 
 GDK_AVAILABLE_IN_ALL
 GType      gtk_menu_bar_get_type        (void) G_GNUC_CONST;

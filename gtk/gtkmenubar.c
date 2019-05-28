@@ -58,6 +58,20 @@
 
 #define MENU_BAR_POPUP_DELAY 0
 
+
+typedef struct _GtkMenuBarPrivate  GtkMenuBarPrivate;
+typedef struct _GtkMenuBarClass    GtkMenuBarClass;
+
+struct _GtkMenuBar
+{
+  GtkMenuShell menu_shell;
+};
+
+struct _GtkMenuBarClass
+{
+  GtkMenuShellClass parent_class;
+};
+
 static void gtk_menu_bar_measure (GtkWidget     *widget,
                                   GtkOrientation  orientation,
                                   int             for_size,
