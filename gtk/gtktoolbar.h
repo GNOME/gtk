@@ -43,42 +43,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_TOOLBAR            (gtk_toolbar_get_type ())
 #define GTK_TOOLBAR(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TOOLBAR, GtkToolbar))
-#define GTK_TOOLBAR_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOOLBAR, GtkToolbarClass))
 #define GTK_IS_TOOLBAR(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TOOLBAR))
-#define GTK_IS_TOOLBAR_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOOLBAR))
-#define GTK_TOOLBAR_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TOOLBAR, GtkToolbarClass))
 
-typedef struct _GtkToolbar              GtkToolbar;
-typedef struct _GtkToolbarPrivate       GtkToolbarPrivate;
-typedef struct _GtkToolbarClass         GtkToolbarClass;
-
-struct _GtkToolbar
-{
-  GtkContainer container;
-
-  GtkToolbarPrivate *priv;
-};
-
-struct _GtkToolbarClass
-{
-  GtkContainerClass parent_class;
-
-  /* signals */
-  void     (* orientation_changed) (GtkToolbar       *toolbar,
-				    GtkOrientation    orientation);
-  void     (* style_changed)       (GtkToolbar       *toolbar,
-				    GtkToolbarStyle   style);
-  gboolean (* popup_context_menu)  (GtkToolbar       *toolbar,
-				    gint              x,
-				    gint              y,
-				    gint              button_number);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
+typedef struct _GtkToolbar GtkToolbar;
 
 GDK_AVAILABLE_IN_ALL
 GType           gtk_toolbar_get_type                (void) G_GNUC_CONST;

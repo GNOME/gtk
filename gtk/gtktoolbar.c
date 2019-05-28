@@ -106,6 +106,29 @@ typedef struct _ToolbarContent ToolbarContent;
 #define SLIDE_SPEED 600.0	   /* How fast the items slide, in pixels per second */
 #define ACCEL_THRESHOLD 0.18	   /* After how much time in seconds will items start speeding up */
 
+typedef struct _GtkToolbarPrivate       GtkToolbarPrivate;
+typedef struct _GtkToolbarClass         GtkToolbarClass;
+
+struct _GtkToolbar
+{
+  GtkContainer container;
+
+  GtkToolbarPrivate *priv;
+};
+
+struct _GtkToolbarClass
+{
+  GtkContainerClass parent_class;
+
+  void     (* orientation_changed) (GtkToolbar       *toolbar,
+                                    GtkOrientation    orientation);
+  void     (* style_changed)       (GtkToolbar       *toolbar,
+                                    GtkToolbarStyle   style);
+  gboolean (* popup_context_menu)  (GtkToolbar       *toolbar,
+                                    gint              x,
+                                    gint              y,
+                                    gint              button_number);
+};
 
 struct _GtkToolbarPrivate
 {
