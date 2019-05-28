@@ -41,6 +41,21 @@
 #include "gtkactionable.h"
 #include "gtkeventcontrollerkey.h"
 
+typedef struct _GtkFontChooserDialogPrivate       GtkFontChooserDialogPrivate;
+typedef struct _GtkFontChooserDialogClass         GtkFontChooserDialogClass;
+
+struct _GtkFontChooserDialog
+{
+  GtkDialog parent_instance;
+
+  GtkFontChooserDialogPrivate *priv;
+};
+
+struct _GtkFontChooserDialogClass
+{
+  GtkDialogClass parent_class;
+};
+
 struct _GtkFontChooserDialogPrivate
 {
   GtkWidget *fontchooser;

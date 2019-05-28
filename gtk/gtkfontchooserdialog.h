@@ -28,39 +28,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_FONT_CHOOSER_DIALOG              (gtk_font_chooser_dialog_get_type ())
 #define GTK_FONT_CHOOSER_DIALOG(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FONT_CHOOSER_DIALOG, GtkFontChooserDialog))
-#define GTK_FONT_CHOOSER_DIALOG_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_CHOOSER_DIALOG, GtkFontChooserDialogClass))
 #define GTK_IS_FONT_CHOOSER_DIALOG(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FONT_CHOOSER_DIALOG))
-#define GTK_IS_FONT_CHOOSER_DIALOG_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FONT_CHOOSER_DIALOG))
-#define GTK_FONT_CHOOSER_DIALOG_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FONT_CHOOSER_DIALOG, GtkFontChooserDialogClass))
 
 typedef struct _GtkFontChooserDialog              GtkFontChooserDialog;
-typedef struct _GtkFontChooserDialogPrivate       GtkFontChooserDialogPrivate;
-typedef struct _GtkFontChooserDialogClass         GtkFontChooserDialogClass;
-
-struct _GtkFontChooserDialog
-{
-  GtkDialog parent_instance;
-
-  /*< private >*/
-  GtkFontChooserDialogPrivate *priv;
-};
-
-/**
- * GtkFontChooserDialogClass:
- * @parent_class: The parent class.
- */
-struct _GtkFontChooserDialogClass
-{
-  GtkDialogClass parent_class;
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType      gtk_font_chooser_dialog_get_type         (void) G_GNUC_CONST;
