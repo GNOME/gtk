@@ -156,6 +156,7 @@ gsk_deps = [
   graphene_dep,
   pango_dep,
   cairo_dep,
+  cairo_csi_dep,
   pixbuf_dep,
   libgdk_dep,
 ]

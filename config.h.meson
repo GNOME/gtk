@@ -294,6 +294,8 @@
 
 #mesondefine GTK_PRINT_BACKENDS
 
+#mesondefine HAVE_CAIRO_SCRIPT_INTERPRETER
+
 #mesondefine HAVE_HARFBUZZ
 
 #mesondefine HAVE_PANGOFT

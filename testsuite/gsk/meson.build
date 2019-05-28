@@ -23,6 +23,7 @@ compare_render_tests = [
   'clip-coordinates-3d',
   'clipped_rounded_clip',
   'color-blur0',
+  'color-matrix-identity',
   'cross-fade-in-opacity',
   'empty-blend',
   'empty-blur',
@@ -50,9 +51,9 @@ compare_render_tests = [
   'outset_shadow_offset_y',
   'outset_shadow_rounded_top',
   'outset_shadow_simple',
+  'scaled-cairo',
   'shadow-in-opacity',
   'texture-url',
-  'color-matrix-identity',
 ]
 
 renderers = [
