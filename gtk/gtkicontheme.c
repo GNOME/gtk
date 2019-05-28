@@ -1906,6 +1906,7 @@ icon_name_list_add_icon (char       **icon_names,
 static GtkIconInfo *
 choose_icon (GtkIconTheme       *icon_theme,
              const gchar        *icon_names[],
+             int                 n_icon_names,
              gint                size,
              gint                scale,
              GtkIconLookupFlags  flags)
@@ -1915,10 +1916,10 @@ choose_icon (GtkIconTheme       *icon_theme,
   char **new_names = NULL;
   int n_new_names = 0;
   guint i;
-  int n_icon_names = 0;
   int n_symbolic_icon_names = 0;
   int n_regular_icon_names = 0;
   int dir_factor;
+  gboolean *symbolic_info;
 
   if (flags & GTK_ICON_LOOKUP_DIR_LTR)
     dir_suffix = "-ltr";
@@ -1929,14 +1930,20 @@ choose_icon (GtkIconTheme       *icon_theme,
 
   dir_factor = (dir_suffix == NULL ? 1 : 2);
 
-  for (i = 0; icon_names[i]; i++)
+  symbolic_info = g_alloca (sizeof (gboolean) * n_icon_names);
+
+  for (i = 0; i < n_icon_names; i ++)
     {
       if (icon_name_is_symbolic (icon_names[i], -1))
-        n_symbolic_icon_names ++;
+        {
+          n_symbolic_icon_names ++;
+          symbolic_info[i] = TRUE;
+        }
       else
-        n_regular_icon_names ++;
-
-      n_icon_names ++;
+        {
+          n_regular_icon_names ++;
+          symbolic_info[i] = FALSE;
+        }
     }
 
   if ((flags & GTK_ICON_LOOKUP_FORCE_REGULAR) && n_symbolic_icon_names > 0)
@@ -1950,7 +1957,7 @@ choose_icon (GtkIconTheme       *icon_theme,
         {
           int icon_name_len = strlen (icon_names[i]);
 
-          if (icon_name_is_symbolic (icon_names[i], icon_name_len))
+          if (symbolic_info[i])
             icon_name_list_add_icon (new_names, dir_suffix, g_strndup (icon_names[i], icon_name_len - strlen ("-symbolic")), &p);
           else
             icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]), &p);
@@ -1958,7 +1965,7 @@ choose_icon (GtkIconTheme       *icon_theme,
 
       for (i = 0; i < n_icon_names; i ++)
         {
-          if (icon_name_is_symbolic (icon_names[i], -1))
+          if (symbolic_info[i])
             icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]), &p);
         }
 
@@ -1981,7 +1988,7 @@ choose_icon (GtkIconTheme       *icon_theme,
 
       for (i = 0; i < n_icon_names; i ++)
         {
-          if (!icon_name_is_symbolic (icon_names[i], -1))
+          if (!symbolic_info[i])
             icon_name_list_add_icon (new_names, dir_suffix, g_strconcat (icon_names[i], "-symbolic", NULL), &p);
           else
             icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]), &p);
@@ -1989,7 +1996,7 @@ choose_icon (GtkIconTheme       *icon_theme,
 
       for (i = 0; i < n_icon_names; i ++)
         {
-          if (!icon_name_is_symbolic (icon_names[i], -1))
+          if (!symbolic_info[i])
             icon_name_list_add_icon (new_names, dir_suffix, g_strdup (icon_names[i]), &p);
         }
 
@@ -2006,7 +2013,7 @@ choose_icon (GtkIconTheme       *icon_theme,
     {
       int p = 0;
 
-      n_new_names = (dir_suffix != NULL ? 2 : 1) * n_icon_names;
+      n_new_names = dir_factor * n_icon_names;
       new_names = g_alloca (sizeof (char *) * n_new_names);
 
       for (i = 0; i < n_icon_names; i ++)
@@ -2124,6 +2131,7 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *icon_theme,
       gchar *p, *nonsymbolic_icon_name;
       gboolean is_symbolic;
       int icon_name_len = strlen (icon_name);
+      int n_icon_names;
 
       is_symbolic = icon_name_is_symbolic (icon_name, icon_name_len);
       if (is_symbolic)
@@ -2149,7 +2157,8 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *icon_theme,
 
       if (is_symbolic)
         {
-          names = g_new (gchar *, 2 * dashes + 3);
+          n_icon_names = 2 * dashes + 2;
+          names = g_new (gchar *, n_icon_names + 1);
           for (i = 0; nonsymbolic_names[i] != NULL; i++)
             {
               names[i] = g_strconcat (nonsymbolic_names[i], "-symbolic", NULL);
@@ -2161,21 +2170,21 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *icon_theme,
         }
       else
         {
+          n_icon_names = dashes + 1;
           names = nonsymbolic_names;
         }
 
-      info = choose_icon (icon_theme, (const gchar **) names, size, scale, flags);
+      info = choose_icon (icon_theme, (const gchar **) names, n_icon_names, size, scale, flags);
 
       g_strfreev (names);
     }
   else
     {
-      const gchar *names[2];
+      const char *names[1];
 
       names[0] = icon_name;
-      names[1] = NULL;
 
-      info = choose_icon (icon_theme, names, size, scale, flags);
+      info = choose_icon (icon_theme, names, 1, size, scale, flags);
     }
 
   return info;
@@ -2209,13 +2218,18 @@ gtk_icon_theme_choose_icon (GtkIconTheme       *icon_theme,
                             gint                size,
                             GtkIconLookupFlags  flags)
 {
+  int i, n_icon_names = 0;
+
   g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), NULL);
   g_return_val_if_fail (icon_names != NULL, NULL);
   g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
                         (flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
   g_warn_if_fail ((flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK) == 0);
 
-  return choose_icon (icon_theme, icon_names, size, 1, flags);
+  for (i = 0; icon_names[i]; i ++)
+    n_icon_names ++;
+
+  return choose_icon (icon_theme, icon_names, n_icon_names, size, 1, flags);
 }
 
 /**
@@ -2248,6 +2262,8 @@ gtk_icon_theme_choose_icon_for_scale (GtkIconTheme       *icon_theme,
                                       gint                scale,
                                       GtkIconLookupFlags  flags)
 {
+  int i, n_icon_names = 0;
+
   g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), NULL);
   g_return_val_if_fail (icon_names != NULL, NULL);
   g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
@@ -2255,7 +2271,10 @@ gtk_icon_theme_choose_icon_for_scale (GtkIconTheme       *icon_theme,
   g_return_val_if_fail (scale >= 1, NULL);
   g_warn_if_fail ((flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK) == 0);
 
-  return choose_icon (icon_theme, icon_names, size, scale, flags);
+  for (i = 0; icon_names[i]; i ++)
+    n_icon_names ++;
+
+  return choose_icon (icon_theme, icon_names, n_icon_names, size, scale, flags);
 }
 
 
