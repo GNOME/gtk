@@ -60,6 +60,8 @@
 
 struct _GtkInspectorGeneralPrivate
 {
+  GtkWidget *swin;
+  GtkWidget *box;
   GtkWidget *version_box;
   GtkWidget *env_box;
   GtkWidget *display_box;
@@ -88,7 +90,7 @@ struct _GtkInspectorGeneralPrivate
   GtkAdjustment *focus_adjustment;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorGeneral, gtk_inspector_general, GTK_TYPE_SCROLLED_WINDOW)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorGeneral, gtk_inspector_general, GTK_TYPE_WIDGET)
 
 static void
 init_version (GtkInspectorGeneral *gen)
@@ -857,8 +859,8 @@ gtk_inspector_general_constructed (GObject *object)
 
   G_OBJECT_CLASS (gtk_inspector_general_parent_class)->constructed (object);
 
-  gen->priv->focus_adjustment = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (gen));
-  gtk_container_set_focus_vadjustment (GTK_CONTAINER (gtk_bin_get_child (GTK_BIN (gen))),
+  gen->priv->focus_adjustment = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (gen->priv->swin));
+  gtk_container_set_focus_vadjustment (GTK_CONTAINER (gen->priv->box),
                                        gen->priv->focus_adjustment);
 
    g_signal_connect (gen->priv->version_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
@@ -870,6 +872,37 @@ gtk_inspector_general_constructed (GObject *object)
 }
 
 static void
+measure (GtkWidget      *widget,
+         GtkOrientation  orientation,
+         int             for_size,
+         int            *minimum,
+         int            *natural,
+         int            *minimum_baseline,
+         int            *natural_baseline)
+{
+  GtkInspectorGeneral *gen = GTK_INSPECTOR_GENERAL (widget);
+
+  gtk_widget_measure (gen->priv->swin,
+                      orientation,
+                      for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+size_allocate (GtkWidget *widget,
+               int        width,
+               int        height,
+               int        baseline)
+{
+  GtkInspectorGeneral *gen = GTK_INSPECTOR_GENERAL (widget);
+
+  gtk_widget_size_allocate (gen->priv->swin,
+                            &(GtkAllocation) { 0, 0, width, height },
+                            baseline);
+}
+
+static void
 gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -877,7 +910,12 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
 
   object_class->constructed = gtk_inspector_general_constructed;
 
+  widget_class->measure = measure;
+  widget_class->size_allocate = size_allocate;
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/general.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, swin);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, version_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, env_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, display_box);

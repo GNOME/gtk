@@ -32,13 +32,14 @@ typedef struct _GtkInspectorGeneralPrivate GtkInspectorGeneralPrivate;
 
 typedef struct _GtkInspectorGeneral
 {
-  GtkScrolledWindow parent;
+  GtkWidget parent;
+
   GtkInspectorGeneralPrivate *priv;
 } GtkInspectorGeneral;
 
 typedef struct _GtkInspectorGeneralClass
 {
-  GtkScrolledWindowClass parent;
+  GtkWidgetClass parent_class;
 } GtkInspectorGeneralClass;
 
 G_BEGIN_DECLS

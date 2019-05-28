@@ -52,6 +52,8 @@
 
 struct _GtkInspectorVisualPrivate
 {
+  GtkWidget *swin;
+  GtkWidget *box;
   GtkWidget *visual_box;
   GtkWidget *theme_combo;
   GtkWidget *dark_switch;
@@ -87,7 +89,7 @@ struct _GtkInspectorVisualPrivate
   GtkInspectorOverlay *layout_overlay;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorVisual, gtk_inspector_visual, GTK_TYPE_SCROLLED_WINDOW)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorVisual, gtk_inspector_visual, GTK_TYPE_WIDGET)
 
 static void
 fix_direction_recurse (GtkWidget        *widget,
@@ -960,8 +962,8 @@ gtk_inspector_visual_constructed (GObject *object)
 
   G_OBJECT_CLASS (gtk_inspector_visual_parent_class)->constructed (object);
 
-  vis->priv->focus_adjustment = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (vis));
-  gtk_container_set_focus_vadjustment (GTK_CONTAINER (gtk_bin_get_child (GTK_BIN (vis))),
+  vis->priv->focus_adjustment = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (vis->priv->swin));
+  gtk_container_set_focus_vadjustment (GTK_CONTAINER (vis->priv->box),
                                        vis->priv->focus_adjustment);
 
    g_signal_connect (vis->priv->visual_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
@@ -989,6 +991,37 @@ gtk_inspector_visual_finalize (GObject *object)
 }
 
 static void
+measure (GtkWidget      *widget,
+         GtkOrientation  orientation,
+         int             for_size,
+         int            *minimum,
+         int            *natural,
+         int            *minimum_baseline,
+         int            *natural_baseline)
+{
+  GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (widget);
+
+  gtk_widget_measure (vis->priv->swin,
+                      orientation,
+                      for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+size_allocate (GtkWidget *widget,
+               int        width,
+               int        height,
+               int        baseline)
+{
+  GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (widget);
+
+  gtk_widget_size_allocate (vis->priv->swin,
+                            &(GtkAllocation) { 0, 0, width, height },
+                            baseline);
+}
+
+static void
 gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -997,7 +1030,12 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   object_class->constructed = gtk_inspector_visual_constructed;
   object_class->finalize = gtk_inspector_visual_finalize;
 
+  widget_class->measure = measure;
+  widget_class->size_allocate = size_allocate;
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/visual.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, swin);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, direction_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, theme_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, dark_switch);

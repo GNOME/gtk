@@ -38,6 +38,7 @@ struct _GtkInspectorMiscInfoPrivate {
 
   GObject *object;
 
+  GtkWidget *swin;
   GtkWidget *address;
   GtkWidget *type;
   GtkWidget *type_popover;
@@ -95,7 +96,7 @@ enum
   PROP_OBJECT_TREE
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorMiscInfo, gtk_inspector_misc_info, GTK_TYPE_SCROLLED_WINDOW)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorMiscInfo, gtk_inspector_misc_info, GTK_TYPE_WIDGET)
 
 static gchar *
 format_state_flags (GtkStateFlags state)
@@ -569,6 +570,37 @@ set_property (GObject      *object,
 }
 
 static void
+measure (GtkWidget      *widget,
+         GtkOrientation  orientation,
+         int             for_size,
+         int            *minimum,
+         int            *natural,
+         int            *minimum_baseline,
+         int            *natural_baseline)
+{
+  GtkInspectorMiscInfo *sl = GTK_INSPECTOR_MISC_INFO (widget);
+
+  gtk_widget_measure (sl->priv->swin,
+                      orientation,
+                      for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
+}
+
+static void
+size_allocate (GtkWidget *widget,
+               int        width,
+               int        height,
+               int        baseline)
+{
+  GtkInspectorMiscInfo *sl = GTK_INSPECTOR_MISC_INFO (widget);
+
+  gtk_widget_size_allocate (sl->priv->swin,
+                            &(GtkAllocation) { 0, 0, width, height },
+                            baseline);
+}
+
+static void
 gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -579,12 +611,15 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
 
   widget_class->map = map;
   widget_class->unmap = unmap;
+  widget_class->measure = measure;
+  widget_class->size_allocate = size_allocate;
 
   g_object_class_install_property (object_class, PROP_OBJECT_TREE,
       g_param_spec_object ("object-tree", "Object Tree", "Object tree",
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/misc-info.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, swin);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, address);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, type);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, refcount_row);
