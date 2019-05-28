@@ -36,57 +36,10 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_SCROLLED_WINDOW            (gtk_scrolled_window_get_type ())
 #define GTK_SCROLLED_WINDOW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SCROLLED_WINDOW, GtkScrolledWindow))
-#define GTK_SCROLLED_WINDOW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SCROLLED_WINDOW, GtkScrolledWindowClass))
 #define GTK_IS_SCROLLED_WINDOW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SCROLLED_WINDOW))
-#define GTK_IS_SCROLLED_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SCROLLED_WINDOW))
-#define GTK_SCROLLED_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SCROLLED_WINDOW, GtkScrolledWindowClass))
 
 
-typedef struct _GtkScrolledWindow              GtkScrolledWindow;
-typedef struct _GtkScrolledWindowClass         GtkScrolledWindowClass;
-
-struct _GtkScrolledWindow
-{
-  GtkBin parent_instance;
-};
-
-/**
- * GtkScrolledWindowClass:
- * @parent_class: The parent class.
- * @scroll_child: Keybinding signal which gets emitted when a
- *    keybinding that scrolls is pressed.
- * @move_focus_out: Keybinding signal which gets emitted when focus is
- *    moved away from the scrolled window by a keybinding.
- */
-struct _GtkScrolledWindowClass
-{
-  GtkBinClass parent_class;
-
-  /*< public >*/
-
-  /* Action signals for keybindings. Do not connect to these signals
-   */
-
-  /* Unfortunately, GtkScrollType is deficient in that there is
-   * no horizontal/vertical variants for GTK_SCROLL_START/END,
-   * so we have to add an additional boolean flag.
-   */
-  gboolean (*scroll_child) (GtkScrolledWindow *scrolled_window,
-	  		    GtkScrollType      scroll,
-			    gboolean           horizontal);
-
-  void (* move_focus_out) (GtkScrolledWindow *scrolled_window,
-			   GtkDirectionType   direction);
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
+typedef struct _GtkScrolledWindow GtkScrolledWindow;
 
 /**
  * GtkCornerType:

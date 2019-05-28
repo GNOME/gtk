@@ -196,6 +196,29 @@
 /* Scrolled off indication */
 #define UNDERSHOOT_SIZE 40
 
+typedef struct _GtkScrolledWindowClass         GtkScrolledWindowClass;
+
+struct _GtkScrolledWindow
+{
+  GtkBin parent_instance;
+};
+
+struct _GtkScrolledWindowClass
+{
+  GtkBinClass parent_class;
+
+  /* Unfortunately, GtkScrollType is deficient in that there is
+   * no horizontal/vertical variants for GTK_SCROLL_START/END,
+   * so we have to add an additional boolean flag.
+   */
+  gboolean (*scroll_child) (GtkScrolledWindow *scrolled_window,
+                            GtkScrollType      scroll,
+                            gboolean           horizontal);
+
+  void (* move_focus_out) (GtkScrolledWindow *scrolled_window,
+                           GtkDirectionType   direction);
+};
+
 typedef struct
 {
   GtkWidget *scrollbar;
