@@ -343,18 +343,6 @@ gtk_popover_key_pressed (GtkWidget       *widget,
 }
 
 static void
-ensure_state_flag_backdrop (GtkWidget *widget)
-{
-  GtkPopover *popover = GTK_POPOVER (widget);
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  if ((priv->state & GDK_SURFACE_STATE_FOCUSED) != 0)
-    gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_BACKDROP);
-  else
-    gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_BACKDROP, FALSE);
-}
-
-static void
 surface_state_changed (GtkWidget *widget)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
@@ -365,9 +353,6 @@ surface_state_changed (GtkWidget *widget)
   new_surface_state = gdk_surface_get_state (priv->surface);
   changed_mask = new_surface_state ^ priv->state;
   priv->state = new_surface_state;
-
-  if (changed_mask & GDK_SURFACE_STATE_FOCUSED)
-    ensure_state_flag_backdrop (widget);
 
   if (changed_mask & GDK_SURFACE_STATE_WITHDRAWN)
     {
