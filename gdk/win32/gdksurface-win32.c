@@ -1101,6 +1101,9 @@ static void
 gdk_win32_surface_move (GdkSurface *window,
 		       gint x, gint y)
 {
+  RECT outer_rect;
+  GdkWin32Surface *impl;
+
   g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (GDK_SURFACE_DESTROYED (window))
@@ -1112,33 +1115,32 @@ gdk_win32_surface_move (GdkSurface *window,
   if (window->state & GDK_SURFACE_STATE_FULLSCREEN)
     return;
 
-    {
-      RECT outer_rect;
-      GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
+  impl = GDK_WIN32_SURFACE (window);
+  get_outer_rect (window, window->width, window->height, &outer_rect);
 
-      get_outer_rect (window, window->width, window->height, &outer_rect);
+  adjust_for_gravity_hints (window, &outer_rect, &x, &y);
 
-      adjust_for_gravity_hints (window, &outer_rect, &x, &y);
+  GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,0,0,"
+                           "NOACTIVATE|NOSIZE|NOZORDER)\n",
+                           GDK_SURFACE_HWND (window),
+                           (x - _gdk_offset_x) * impl->surface_scale,
+                           (y - _gdk_offset_y) * impl->surface_scale));
 
-      GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,0,0,"
-                               "NOACTIVATE|NOSIZE|NOZORDER)\n",
-                               GDK_SURFACE_HWND (window),
-                               (x - _gdk_offset_x) * impl->surface_scale,
-                               (y - _gdk_offset_y) * impl->surface_scale));
-
-      API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window),
-			       SWP_NOZORDER_SPECIFIED,
-                               (x - _gdk_offset_x) * impl->surface_scale,
-                               (y - _gdk_offset_y) * impl->surface_scale,
-                               0, 0,
-                               SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
-    }
+  API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window),
+                           SWP_NOZORDER_SPECIFIED,
+                           (x - _gdk_offset_x) * impl->surface_scale,
+                           (y - _gdk_offset_y) * impl->surface_scale,
+                           0, 0,
+                           SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
 }
 
 static void
 gdk_win32_surface_resize (GdkSurface *window,
 			 gint width, gint height)
 {
+  RECT outer_rect;
+  GdkWin32Surface *impl;
+
   g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (GDK_SURFACE_DESTROYED (window))
@@ -1155,25 +1157,22 @@ gdk_win32_surface_resize (GdkSurface *window,
   if (window->state & GDK_SURFACE_STATE_FULLSCREEN)
     return;
 
-    {
-      RECT outer_rect;
+  impl = GDK_WIN32_SURFACE (window);
+  get_outer_rect (window, width, height, &outer_rect);
 
-      get_outer_rect (window, width, height, &outer_rect);
+  GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,0,0,%ld,%ld,"
+                           "NOACTIVATE|NOMOVE|NOZORDER)\n",
+                           GDK_SURFACE_HWND (window),
+                           outer_rect.right - outer_rect.left,
+                           outer_rect.bottom - outer_rect.top));
 
-      GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,0,0,%ld,%ld,"
-                               "NOACTIVATE|NOMOVE|NOZORDER)\n",
-                               GDK_SURFACE_HWND (window),
-                               outer_rect.right - outer_rect.left,
-                               outer_rect.bottom - outer_rect.top));
-
-      API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window),
-			       SWP_NOZORDER_SPECIFIED,
-                               0, 0,
-                               outer_rect.right - outer_rect.left,
-                               outer_rect.bottom - outer_rect.top,
-                               SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER));
-      window->resize_count += 1;
-    }
+  API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window),
+                           SWP_NOZORDER_SPECIFIED,
+                           0, 0,
+                           outer_rect.right - outer_rect.left,
+                           outer_rect.bottom - outer_rect.top,
+                           SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER));
+  window->resize_count += 1;
 }
 
 static void
@@ -1183,6 +1182,9 @@ gdk_win32_surface_move_resize_internal (GdkSurface *window,
 				       gint       width,
 				       gint       height)
 {
+  RECT outer_rect;
+  GdkWin32Surface *impl;
+
   g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (GDK_SURFACE_DESTROYED (window))
@@ -1200,30 +1202,27 @@ gdk_win32_surface_move_resize_internal (GdkSurface *window,
                            GDK_SURFACE_HWND (window),
                            width, height, x, y));
 
-    {
-      RECT outer_rect;
-      GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
+  impl = GDK_WIN32_SURFACE (window);
 
-      get_outer_rect (window, width, height, &outer_rect);
+  get_outer_rect (window, width, height, &outer_rect);
 
-      adjust_for_gravity_hints (window, &outer_rect, &x, &y);
+  adjust_for_gravity_hints (window, &outer_rect, &x, &y);
 
-      GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,%ld,%ld,"
-                               "NOACTIVATE|NOZORDER)\n",
-                               GDK_SURFACE_HWND (window),
-                               (x - _gdk_offset_x) * impl->surface_scale,
-                               (y - _gdk_offset_y) * impl->surface_scale,
-                               outer_rect.right - outer_rect.left,
-                               outer_rect.bottom - outer_rect.top));
+  GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,%ld,%ld,"
+                           "NOACTIVATE|NOZORDER)\n",
+                           GDK_SURFACE_HWND (window),
+                           (x - _gdk_offset_x) * impl->surface_scale,
+                           (y - _gdk_offset_y) * impl->surface_scale,
+                           outer_rect.right - outer_rect.left,
+                           outer_rect.bottom - outer_rect.top));
 
-      API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window),
-			       SWP_NOZORDER_SPECIFIED,
-                               (x - _gdk_offset_x) * impl->surface_scale,
-                               (y - _gdk_offset_y) * impl->surface_scale,
-                               outer_rect.right - outer_rect.left,
-                               outer_rect.bottom - outer_rect.top,
-                               SWP_NOACTIVATE | SWP_NOZORDER));
-    }
+  API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window),
+                           SWP_NOZORDER_SPECIFIED,
+                           (x - _gdk_offset_x) * impl->surface_scale,
+                           (y - _gdk_offset_y) * impl->surface_scale,
+                           outer_rect.right - outer_rect.left,
+                           outer_rect.bottom - outer_rect.top,
+                           SWP_NOACTIVATE | SWP_NOZORDER));
 }
 
 static void
