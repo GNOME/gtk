@@ -61,6 +61,21 @@
  * GtkColorChooserWidget has a single CSS node with name colorchooser.
  */
 
+typedef struct _GtkColorChooserWidgetPrivate GtkColorChooserWidgetPrivate;
+typedef struct _GtkColorChooserWidgetClass   GtkColorChooserWidgetClass;
+
+struct _GtkColorChooserWidget
+{
+  GtkBox parent_instance;
+
+  GtkColorChooserWidgetPrivate *priv;
+};
+
+struct _GtkColorChooserWidgetClass
+{
+  GtkBoxClass parent_class;
+};
+
 struct _GtkColorChooserWidgetPrivate
 {
   GtkWidget *palette;
