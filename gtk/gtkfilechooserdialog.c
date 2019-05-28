@@ -204,6 +204,20 @@
  * when you use #GtkFileChooserDialog to ensure proper operation.
  */
 
+typedef struct _GtkFileChooserDialogPrivate GtkFileChooserDialogPrivate;
+typedef struct _GtkFileChooserDialogClass   GtkFileChooserDialogClass;
+
+struct _GtkFileChooserDialog
+{
+  GtkDialog parent_instance;
+
+  GtkFileChooserDialogPrivate *priv;
+};
+
+struct _GtkFileChooserDialogClass
+{
+  GtkDialogClass parent_class;
+};
 
 struct _GtkFileChooserDialogPrivate
 {
