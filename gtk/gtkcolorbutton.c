@@ -62,6 +62,17 @@
  * it from a plain #GtkButton, it gets the .color style class.
  */
 
+typedef struct _GtkColorButtonClass     GtkColorButtonClass;
+
+struct _GtkColorButton {
+  GtkWidget parent_instance;
+};
+
+struct _GtkColorButtonClass {
+  GtkWidgetClass parent_class;
+
+  void (* color_set) (GtkColorButton *cp);
+};
 
 typedef struct
 {
