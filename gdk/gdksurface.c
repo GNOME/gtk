@@ -367,10 +367,13 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   0,
                   g_signal_accumulator_true_handled,
                   NULL,
-                  NULL,
+                  _gdk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN,
                   1,
                   CAIRO_GOBJECT_TYPE_REGION);
+  g_signal_set_va_marshaller (signals[RENDER],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gdk_marshal_BOOLEAN__BOXEDv);
 
   /**
    * GdkSurface::event:
@@ -388,10 +391,13 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   0,
                   g_signal_accumulator_true_handled,
                   NULL,
-                  NULL,
+                  _gdk_marshal_BOOLEAN__OBJECT,
                   G_TYPE_BOOLEAN,
                   1,
                   GDK_TYPE_EVENT);
+  g_signal_set_va_marshaller (signals[EVENT],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gdk_marshal_BOOLEAN__OBJECTv);
 }
 
 static void
