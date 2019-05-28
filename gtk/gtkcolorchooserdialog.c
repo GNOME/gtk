@@ -45,8 +45,6 @@ typedef struct _GtkColorChooserDialogClass   GtkColorChooserDialogClass;
 struct _GtkColorChooserDialog
 {
   GtkDialog parent_instance;
-
-  GtkColorChooserDialogPrivate *priv;
 };
 
 struct _GtkColorChooserDialogClass
@@ -115,8 +113,6 @@ gtk_color_chooser_dialog_response (GtkDialog *dialog,
 static void
 gtk_color_chooser_dialog_init (GtkColorChooserDialog *cc)
 {
-  cc->priv = gtk_color_chooser_dialog_get_instance_private (cc);
-
   gtk_widget_init_template (GTK_WIDGET (cc));
   gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (cc));
 
@@ -142,6 +138,7 @@ gtk_color_chooser_dialog_get_property (GObject    *object,
                                        GParamSpec *pspec)
 {
   GtkColorChooserDialog *cd = GTK_COLOR_CHOOSER_DIALOG (object);
+  GtkColorChooserDialogPrivate *priv = gtk_color_chooser_dialog_get_instance_private (cd);
   GtkColorChooser *cc = GTK_COLOR_CHOOSER (object);
 
   switch (prop_id)
@@ -155,12 +152,12 @@ gtk_color_chooser_dialog_get_property (GObject    *object,
       }
       break;
     case PROP_USE_ALPHA:
-      g_value_set_boolean (value, gtk_color_chooser_get_use_alpha (GTK_COLOR_CHOOSER (cd->priv->chooser)));
+      g_value_set_boolean (value, gtk_color_chooser_get_use_alpha (GTK_COLOR_CHOOSER (priv->chooser)));
       break;
     case PROP_SHOW_EDITOR:
       {
         gboolean show_editor;
-        g_object_get (cd->priv->chooser, "show-editor", &show_editor, NULL);
+        g_object_get (priv->chooser, "show-editor", &show_editor, NULL);
         g_value_set_boolean (value, show_editor);
       }
       break;
@@ -177,6 +174,7 @@ gtk_color_chooser_dialog_set_property (GObject      *object,
                                        GParamSpec   *pspec)
 {
   GtkColorChooserDialog *cd = GTK_COLOR_CHOOSER_DIALOG (object);
+  GtkColorChooserDialogPrivate *priv = gtk_color_chooser_dialog_get_instance_private (cd);
   GtkColorChooser *cc = GTK_COLOR_CHOOSER (object);
 
   switch (prop_id)
@@ -185,14 +183,14 @@ gtk_color_chooser_dialog_set_property (GObject      *object,
       gtk_color_chooser_set_rgba (cc, g_value_get_boxed (value));
       break;
     case PROP_USE_ALPHA:
-      if (gtk_color_chooser_get_use_alpha (GTK_COLOR_CHOOSER (cd->priv->chooser)) != g_value_get_boolean (value))
+      if (gtk_color_chooser_get_use_alpha (GTK_COLOR_CHOOSER (priv->chooser)) != g_value_get_boolean (value))
         {
-          gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (cd->priv->chooser), g_value_get_boolean (value));
+          gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (priv->chooser), g_value_get_boolean (value));
           g_object_notify_by_pspec (object, pspec);
         }
       break;
     case PROP_SHOW_EDITOR:
-      g_object_set (cd->priv->chooser,
+      g_object_set (priv->chooser,
                     "show-editor", g_value_get_boolean (value),
                     NULL);
       break;
@@ -233,8 +231,9 @@ gtk_color_chooser_dialog_get_rgba (GtkColorChooser *chooser,
                                    GdkRGBA         *color)
 {
   GtkColorChooserDialog *cc = GTK_COLOR_CHOOSER_DIALOG (chooser);
+  GtkColorChooserDialogPrivate *priv = gtk_color_chooser_dialog_get_instance_private (cc);
 
-  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (cc->priv->chooser), color);
+  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (priv->chooser), color);
 }
 
 static void
@@ -242,8 +241,9 @@ gtk_color_chooser_dialog_set_rgba (GtkColorChooser *chooser,
                                    const GdkRGBA   *color)
 {
   GtkColorChooserDialog *cc = GTK_COLOR_CHOOSER_DIALOG (chooser);
+  GtkColorChooserDialogPrivate *priv = gtk_color_chooser_dialog_get_instance_private (cc);
 
-  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc->priv->chooser), color);
+  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (priv->chooser), color);
 }
 
 static void
@@ -254,8 +254,9 @@ gtk_color_chooser_dialog_add_palette (GtkColorChooser *chooser,
                                       GdkRGBA         *colors)
 {
   GtkColorChooserDialog *cc = GTK_COLOR_CHOOSER_DIALOG (chooser);
+  GtkColorChooserDialogPrivate *priv = gtk_color_chooser_dialog_get_instance_private (cc);
 
-  gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (cc->priv->chooser),
+  gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (priv->chooser),
                                  orientation, colors_per_line, n_colors, colors);
 }
 
