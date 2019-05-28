@@ -171,6 +171,64 @@ enum {
   N_ACTION_WIDGETS
 };
 
+#define GTK_NOTEBOOK_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_NOTEBOOK, GtkNotebookClass))
+#define GTK_NOTEBOOK_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_NOTEBOOK, GtkNotebookClass))
+
+typedef struct _GtkNotebookPrivate       GtkNotebookPrivate;
+typedef struct _GtkNotebookClass         GtkNotebookClass;
+
+struct _GtkNotebook
+{
+  GtkContainer container;
+
+  GtkNotebookPrivate *priv;
+};
+
+struct _GtkNotebookClass
+{
+  GtkContainerClass parent_class;
+
+  void (* switch_page)       (GtkNotebook     *notebook,
+                              GtkWidget       *page,
+                              guint            page_num);
+
+  /* Action signals for keybindings */
+  gboolean (* select_page)     (GtkNotebook       *notebook,
+                                gboolean           move_focus);
+  gboolean (* focus_tab)       (GtkNotebook       *notebook,
+                                GtkNotebookTab     type);
+  gboolean (* change_current_page) (GtkNotebook   *notebook,
+                                gint               offset);
+  void (* move_focus_out)      (GtkNotebook       *notebook,
+                                GtkDirectionType   direction);
+  gboolean (* reorder_tab)     (GtkNotebook       *notebook,
+                                GtkDirectionType   direction,
+                                gboolean           move_to_last);
+  /* More vfuncs */
+  gint (* insert_page)         (GtkNotebook       *notebook,
+                                GtkWidget         *child,
+                                GtkWidget         *tab_label,
+                                GtkWidget         *menu_label,
+                                gint               position);
+
+  GtkNotebook * (* create_window) (GtkNotebook       *notebook,
+                                   GtkWidget         *page,
+                                   gint               x,
+                                   gint               y);
+
+  void (* page_reordered)      (GtkNotebook     *notebook,
+                                GtkWidget       *child,
+                                guint            page_num);
+
+  void (* page_removed)        (GtkNotebook     *notebook,
+                                GtkWidget       *child,
+                                guint            page_num);
+
+  void (* page_added)          (GtkNotebook     *notebook,
+                                GtkWidget       *child,
+                                guint            page_num);
+};
+
 struct _GtkNotebookPrivate
 {
   GtkNotebookDragOperation   operation;
@@ -323,6 +381,7 @@ struct _GtkNotebookPage
   gulong notify_visible_handler;
 };
 
+typedef struct _GtkNotebookPageClass GtkNotebookPageClass;
 struct _GtkNotebookPageClass
 {
   GObjectClass parent_class;

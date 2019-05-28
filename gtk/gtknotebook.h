@@ -38,21 +38,13 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_NOTEBOOK                  (gtk_notebook_get_type ())
 #define GTK_NOTEBOOK(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_NOTEBOOK, GtkNotebook))
-#define GTK_NOTEBOOK_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_NOTEBOOK, GtkNotebookClass))
 #define GTK_IS_NOTEBOOK(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_NOTEBOOK))
-#define GTK_IS_NOTEBOOK_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_NOTEBOOK))
-#define GTK_NOTEBOOK_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_NOTEBOOK, GtkNotebookClass))
 
 #define GTK_TYPE_NOTEBOOK_PAGE (gtk_notebook_page_get_type ())
 #define GTK_NOTEBOOK_PAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_NOTEBOOK_PAGE, GtkNotebookPage))
-#define GTK_NOTEBOOK_PAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_NOTEBOOK_PAGE, GtkNotebookPageClass))
 #define GTK_IS_NOTEBOOK_PAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_NOTEBOOK_PAGE))
-#define GTK_IS_NOTEBOOK_PAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_NOTEBOOK_PAGE))
-#define GTK_NOTEBOOK_PAGE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_NOTEBOOK_PAGE, GtkNotebookPageClass))
 
 typedef struct _GtkNotebookPage GtkNotebookPage;
-typedef struct _GtkNotebookPageClass GtkNotebookPageClass;
-
 
 typedef enum
 {
@@ -60,73 +52,7 @@ typedef enum
   GTK_NOTEBOOK_TAB_LAST
 } GtkNotebookTab;
 
-typedef struct _GtkNotebook              GtkNotebook;
-typedef struct _GtkNotebookPrivate       GtkNotebookPrivate;
-typedef struct _GtkNotebookClass         GtkNotebookClass;
-
-struct _GtkNotebook
-{
-  /*< private >*/
-  GtkContainer container;
-
-  GtkNotebookPrivate *priv;
-};
-
-struct _GtkNotebookClass
-{
-  GtkContainerClass parent_class;
-
-  void (* switch_page)       (GtkNotebook     *notebook,
-                              GtkWidget       *page,
-			      guint            page_num);
-
-  /* Action signals for keybindings */
-  gboolean (* select_page)     (GtkNotebook       *notebook,
-                                gboolean           move_focus);
-  gboolean (* focus_tab)       (GtkNotebook       *notebook,
-                                GtkNotebookTab     type);
-  gboolean (* change_current_page) (GtkNotebook   *notebook,
-                                gint               offset);
-  void (* move_focus_out)      (GtkNotebook       *notebook,
-				GtkDirectionType   direction);
-  gboolean (* reorder_tab)     (GtkNotebook       *notebook,
-				GtkDirectionType   direction,
-				gboolean           move_to_last);
-
-  /* More vfuncs */
-  gint (* insert_page)         (GtkNotebook       *notebook,
-			        GtkWidget         *child,
-				GtkWidget         *tab_label,
-				GtkWidget         *menu_label,
-				gint               position);
-
-  GtkNotebook * (* create_window) (GtkNotebook       *notebook,
-                                   GtkWidget         *page,
-                                   gint               x,
-                                   gint               y);
-
-  void (* page_reordered)      (GtkNotebook     *notebook,
-                                GtkWidget       *child,
-                                guint            page_num);
-
-  void (* page_removed)        (GtkNotebook     *notebook,
-                                GtkWidget       *child,
-                                guint            page_num);
-
-  void (* page_added)          (GtkNotebook     *notebook,
-                                GtkWidget       *child,
-                                guint            page_num);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
-  void (*_gtk_reserved7) (void);
-  void (*_gtk_reserved8) (void);
-};
+typedef struct _GtkNotebook GtkNotebook;
 
 /***********************************************************
  *           Creation, insertion, deletion                 *
