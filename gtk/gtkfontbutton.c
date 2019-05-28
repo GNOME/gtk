@@ -60,6 +60,19 @@
  * GtkFontButton has a single CSS node with name fontbutton.
  */
 
+typedef struct _GtkFontButtonClass   GtkFontButtonClass;
+
+struct _GtkFontButton
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkFontButtonClass
+{
+  GtkWidgetClass parent_class;
+
+  void (* font_set) (GtkFontButton *gfp);
+};
 
 typedef struct
 {

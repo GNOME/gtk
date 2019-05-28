@@ -35,38 +35,11 @@
 
 G_BEGIN_DECLS
 
-/* GtkFontButton is a button widget that allow user to select a font.
- */
-
 #define GTK_TYPE_FONT_BUTTON             (gtk_font_button_get_type ())
 #define GTK_FONT_BUTTON(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FONT_BUTTON, GtkFontButton))
-#define GTK_FONT_BUTTON_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FONT_BUTTON, GtkFontButtonClass))
 #define GTK_IS_FONT_BUTTON(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FONT_BUTTON))
-#define GTK_IS_FONT_BUTTON_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FONT_BUTTON))
-#define GTK_FONT_BUTTON_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FONT_BUTTON, GtkFontButtonClass))
 
 typedef struct _GtkFontButton        GtkFontButton;
-typedef struct _GtkFontButtonClass   GtkFontButtonClass;
-
-struct _GtkFontButton
-{
-  GtkWidget parent_instance;
-};
-
-struct _GtkFontButtonClass
-{
-  GtkWidgetClass parent_class;
-
-  /* font_set signal is emitted when font is chosen */
-  void (* font_set) (GtkFontButton *gfp);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
 
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_font_button_get_type       (void) G_GNUC_CONST;
