@@ -44,6 +44,18 @@
  * GtkRadioToolButton has a single CSS node with name toolbutton.
  */
 
+typedef struct _GtkRadioToolButtonClass GtkRadioToolButtonClass;
+
+struct _GtkRadioToolButton
+{
+  GtkToggleToolButton parent;
+};
+
+struct _GtkRadioToolButtonClass
+{
+  GtkToggleToolButtonClass parent_class;
+};
+
 
 enum {
   PROP_0,
