@@ -3424,6 +3424,8 @@ gtk_icon_info_finalize (GObject *object)
   for (i = 0; i < icon_info->key.n_icon_names; i ++)
     g_free (icon_info->key.icon_names[i]);
 
+  g_free (icon_info->key.icon_names);
+
   g_free (icon_info->filename);
   g_clear_object (&icon_info->icon_file);
 
