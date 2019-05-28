@@ -30,6 +30,34 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GtkEntryCompletionClass       GtkEntryCompletionClass;
+typedef struct _GtkEntryCompletionPrivate     GtkEntryCompletionPrivate;
+
+struct _GtkEntryCompletion
+{
+  GObject parent_instance;
+
+  /*< private >*/
+  GtkEntryCompletionPrivate *priv;
+};
+
+struct _GtkEntryCompletionClass
+{
+  GObjectClass parent_class;
+
+  gboolean (* match_selected)   (GtkEntryCompletion *completion,
+                                 GtkTreeModel       *model,
+                                 GtkTreeIter        *iter);
+  void     (* action_activated) (GtkEntryCompletion *completion,
+                                 gint                index_);
+  gboolean (* insert_prefix)    (GtkEntryCompletion *completion,
+                                 const gchar        *prefix);
+  gboolean (* cursor_on_match)  (GtkEntryCompletion *completion,
+                                 GtkTreeModel       *model,
+                                 GtkTreeIter        *iter);
+  void     (* no_matches)       (GtkEntryCompletion *completion);
+};
+
 struct _GtkEntryCompletionPrivate
 {
   GtkWidget *entry;

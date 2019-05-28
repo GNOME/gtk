@@ -521,116 +521,6 @@ test_completion_object_new (void)
   g_object_unref (c);
 }
 
-typedef GtkEntryCompletion MyEntryCompletion;
-typedef GtkEntryCompletionClass MyEntryCompletionClass;
-
-GType my_entry_completion_get_type (void);
-
-G_DEFINE_TYPE (MyEntryCompletion, my_entry_completion, GTK_TYPE_ENTRY_COMPLETION)
-
-static void
-my_entry_completion_class_init (MyEntryCompletionClass *klass)
-{
-}
-
-static void
-my_entry_completion_init (MyEntryCompletion *c)
-{
-  GtkCellArea *area;
-
-  if (subclass_init == 0)
-    {
-      /* do nothing to area */
-    }
-  else if (subclass_init == 1)
-    {
-      area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c));
-      g_assert (GTK_IS_CELL_AREA_BOX (area));
-      g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
-      gtk_orientable_set_orientation (GTK_ORIENTABLE (area), GTK_ORIENTATION_VERTICAL);
-    }
-}
-
-/* test that a completion subclass has an area */
-static void
-test_completion_subclass0 (void)
-{
-  GtkEntryCompletion *c;
-  GtkCellArea *area;
-
-  subclass_init = 0;
-
-  c = g_object_new (my_entry_completion_get_type (), NULL);
-  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
-
-  g_object_ref_sink (c);
-  g_object_unref (c);
-}
-
-/* test that a completion subclass keeps the provided area */
-static void
-test_completion_subclass1 (void)
-{
-  GtkEntryCompletion *c;
-  GtkCellArea *area;
-
-  subclass_init = 0;
-
-  area = gtk_cell_area_box_new ();
-  c = g_object_new (my_entry_completion_get_type (), "cell-area", area, NULL);
-  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c)));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_HORIZONTAL);
-
-  g_object_ref_sink (c);
-  g_object_unref (c);
-}
-
-/* test we can access the area in subclass init */
-static void
-test_completion_subclass2 (void)
-{
-  GtkEntryCompletion *c;
-  GtkCellArea *area;
-
-  subclass_init = 1;
-
-  c = g_object_new (my_entry_completion_get_type (), NULL);
-  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c));
-  g_assert (GTK_IS_CELL_AREA_BOX (area));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-  g_object_ref_sink (c);
-  g_object_unref (c);
-}
-
-static void
-test_completion_subclass3_subprocess (void)
-{
-  GtkEntryCompletion *c;
-  GtkCellArea *area;
-
-  subclass_init = 1;
-
-  area = gtk_cell_area_box_new ();
-  c = g_object_new (my_entry_completion_get_type (), "cell-area", area, NULL);
-  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c)));
-  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-  g_object_ref_sink (c);
-  g_object_unref (c);
-}
-
-/* test we get a warning if an area is provided, but ignored */
-static void
-test_completion_subclass3 (void)
-{
-  g_test_trap_subprocess ("/tests/completion-subclass3/subprocess", 0, 0);
-  g_test_trap_assert_failed ();
-  g_test_trap_assert_stderr ("*ignoring construct property*");
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -666,11 +556,6 @@ main (int argc, char *argv[])
   g_test_add_func ("/tests/completion-new", test_completion_new);
   g_test_add_func ("/tests/completion-new-with-area", test_completion_new_with_area);
   g_test_add_func ("/tests/completion-object-new", test_completion_object_new);
-  g_test_add_func ("/tests/completion-subclass0", test_completion_subclass0);
-  g_test_add_func ("/tests/completion-subclass1", test_completion_subclass1);
-  g_test_add_func ("/tests/completion-subclass2", test_completion_subclass2);
-  g_test_add_func ("/tests/completion-subclass3", test_completion_subclass3);
-  g_test_add_func ("/tests/completion-subclass3/subprocess", test_completion_subclass3_subprocess);
 
   return g_test_run();
 }
