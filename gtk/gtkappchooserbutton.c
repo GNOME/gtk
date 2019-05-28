@@ -104,6 +104,20 @@ static void real_insert_separator   (GtkAppChooserButton *self,
 static guint signals[NUM_SIGNALS] = { 0, };
 static GParamSpec *properties[NUM_PROPERTIES];
 
+typedef struct _GtkAppChooserButtonClass   GtkAppChooserButtonClass;
+
+struct _GtkAppChooserButton {
+  GtkWidget parent_instance;
+};
+
+struct _GtkAppChooserButtonClass {
+  GtkWidgetClass parent_class;
+
+  void (* changed)               (GtkAppChooserButton *self);
+  void (* custom_item_activated) (GtkAppChooserButton *self,
+                                  const gchar *item_name);
+};
+
 typedef struct
 {
   GtkWidget *combobox;
