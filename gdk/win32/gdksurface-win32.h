@@ -261,7 +261,6 @@ struct _GdkWin32Surface
    * We don't actually set margins to 0, we just set this bit.
    */
   guint zero_margins : 1;
-  guint no_bg : 1;
   guint inhibit_configure : 1;
 
   /* Set to TRUE if window is using true layered mode adjustments
@@ -348,14 +347,6 @@ struct _GdkWin32SurfaceClass
 };
 
 GType _gdk_win32_surface_get_type (void);
-
-void  _gdk_win32_surface_tmp_unset_bg  (GdkSurface *window,
-                                        gboolean   recurse);
-void  _gdk_win32_surface_tmp_reset_bg  (GdkSurface *window,
-                                        gboolean   recurse);
-
-void  _gdk_win32_surface_tmp_unset_parent_bg (GdkSurface *window);
-void  _gdk_win32_surface_tmp_reset_parent_bg (GdkSurface *window);
 
 void  _gdk_win32_surface_update_style_bits   (GdkSurface *window);
 

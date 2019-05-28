@@ -268,7 +268,7 @@ _gdk_win32_surface_enable_transparency (GdkSurface *window)
   DWM_BLURBEHIND blur_behind;
   HRGN empty_region;
   HRESULT call_result;
-  HWND parent, thiswindow;
+  HWND thiswindow;
 
   if (window == NULL || GDK_SURFACE_HWND (window) == NULL)
     return FALSE;
@@ -283,12 +283,6 @@ _gdk_win32_surface_enable_transparency (GdkSurface *window)
     return FALSE;
 
   thiswindow = GDK_SURFACE_HWND (window);
-
-  /* Blurbehind only works on toplevel windows */
-  parent = GetAncestor (thiswindow, GA_PARENT);
-  if (!(GetWindowLong (thiswindow, GWL_STYLE) & WS_POPUP) &&
-      (parent == NULL || parent != GetDesktopWindow ()))
-    return FALSE;
 
   empty_region = CreateRectRgn (0, 0, -1, -1);
 
@@ -1127,11 +1121,6 @@ gdk_win32_surface_move (GdkSurface *window,
   if (window->state & GDK_SURFACE_STATE_FULLSCREEN)
     return;
 
-  if (GetAncestor (GDK_SURFACE_HWND (window), GA_PARENT) != GetDesktopWindow ())
-    {
-      _gdk_surface_move_resize_child (window, x, y, window->width, window->height);
-    }
-  else
     {
       RECT outer_rect;
       GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
@@ -1175,11 +1164,6 @@ gdk_win32_surface_resize (GdkSurface *window,
   if (window->state & GDK_SURFACE_STATE_FULLSCREEN)
     return;
 
-  if (GetAncestor (GDK_SURFACE_HWND (window), GA_PARENT) != GetDesktopWindow ())
-    {
-      _gdk_surface_move_resize_child (window, window->x, window->y, width, height);
-    }
-  else
     {
       RECT outer_rect;
 
@@ -1225,11 +1209,6 @@ gdk_win32_surface_move_resize_internal (GdkSurface *window,
                            GDK_SURFACE_HWND (window),
                            width, height, x, y));
 
-  if (GetAncestor (GDK_SURFACE_HWND (window), GA_PARENT) != GetDesktopWindow ())
-    {
-      _gdk_surface_move_resize_child (window, x, y, width, height);
-    }
-  else
     {
       RECT outer_rect;
       GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
