@@ -34,23 +34,15 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_STACK (gtk_stack_get_type ())
 #define GTK_STACK(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_STACK, GtkStack))
-#define GTK_STACK_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_STACK, GtkStackClass))
 #define GTK_IS_STACK(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_STACK))
-#define GTK_IS_STACK_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STACK))
-#define GTK_STACK_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STACK, GtkStackClass))
 
 typedef struct _GtkStack GtkStack;
-typedef struct _GtkStackClass GtkStackClass;
 
 #define GTK_TYPE_STACK_PAGE (gtk_stack_page_get_type ())
 #define GTK_STACK_PAGE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_STACK_PAGE, GtkStackPage))
-#define GTK_STACK_PAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_STACK_PAGE, GtkStackPageClass))
 #define GTK_IS_STACK_PAGE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_STACK_PAGE))
-#define GTK_IS_STACK_PAGE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STACK_PAGE))
-#define GTK_STACK_PAGE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STACK_PAGE, GtkStackPageClass))
 
 typedef struct _GtkStackPage GtkStackPage;
-typedef struct _GtkStackPageClass GtkStackPageClass;
 
 typedef enum {
   GTK_STACK_TRANSITION_TYPE_NONE,
@@ -77,14 +69,6 @@ typedef enum {
   GTK_STACK_TRANSITION_TYPE_ROTATE_RIGHT,
   GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT_RIGHT
 } GtkStackTransitionType;
-
-struct _GtkStack {
-  GtkContainer parent_instance;
-};
-
-struct _GtkStackClass {
-  GtkContainerClass parent_class;
-};
 
 GDK_AVAILABLE_IN_ALL
 GType                  gtk_stack_page_get_type           (void) G_GNUC_CONST;

@@ -118,6 +118,15 @@
  *  filter events out events to the last_child widget during transitions
  */
 
+struct _GtkStack {
+  GtkContainer parent_instance;
+};
+
+typedef struct _GtkStackClass GtkStackClass;
+struct _GtkStackClass {
+  GtkContainerClass parent_class;
+};
+
 typedef struct {
   GList *children;
 
@@ -191,6 +200,7 @@ struct _GtkStackPage {
   GtkWidget *last_focus;
 };
 
+typedef struct _GtkStackPageClass GtkStackPageClass;
 struct _GtkStackPageClass {
   GObjectClass parent_class;
 };
