@@ -39,6 +39,21 @@
  * a color. It implements the #GtkColorChooser interface.
  */
 
+typedef struct _GtkColorChooserDialogPrivate GtkColorChooserDialogPrivate;
+typedef struct _GtkColorChooserDialogClass   GtkColorChooserDialogClass;
+
+struct _GtkColorChooserDialog
+{
+  GtkDialog parent_instance;
+
+  GtkColorChooserDialogPrivate *priv;
+};
+
+struct _GtkColorChooserDialogClass
+{
+  GtkDialogClass parent_class;
+};
+
 struct _GtkColorChooserDialogPrivate
 {
   GtkWidget *chooser;
