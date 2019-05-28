@@ -12,7 +12,6 @@ gdk_win32_sources = files([
   'gdkdrag-win32.c',
   'gdkdrop-win32.c',
   'gdkevents-win32.c',
-  'gdkgeometry-win32.c',
   'gdkglcontext-win32.c',
   'gdkglobals-win32.c',
   'gdkhdataoutputstream-win32.c',
