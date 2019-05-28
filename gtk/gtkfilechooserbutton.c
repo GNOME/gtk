@@ -166,6 +166,20 @@ RowType;
  *  Private Structures  *
  * ******************** */
 
+typedef struct _GtkFileChooserButtonClass   GtkFileChooserButtonClass;
+
+struct _GtkFileChooserButton
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkFileChooserButtonClass
+{
+  GtkWidgetClass parent_class;
+
+  void (* file_set) (GtkFileChooserButton *fc);
+};
+
 typedef struct
 {
   GtkFileChooser *chooser;      /* Points to either dialog or native, depending on which is set */
