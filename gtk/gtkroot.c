@@ -20,6 +20,9 @@
 #include "config.h"
 
 #include "gtkrootprivate.h"
+#include "gtknative.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gdk/gdk-private.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -38,7 +41,8 @@
  * The obvious example of a #GtkRoot is #GtkWindow.
  */
 
-G_DEFINE_INTERFACE (GtkRoot, gtk_root, GTK_TYPE_WIDGET)
+G_DEFINE_INTERFACE_WITH_CODE (GtkRoot, gtk_root, GTK_TYPE_WIDGET,
+                              g_type_interface_add_prerequisite (g_define_type_id, GTK_TYPE_NATIVE))
 
 static GdkDisplay *
 gtk_root_default_get_display (GtkRoot *self)
@@ -46,27 +50,10 @@ gtk_root_default_get_display (GtkRoot *self)
   return gdk_display_get_default ();
 }
 
-static GskRenderer *
-gtk_root_default_get_renderer (GtkRoot *self)
-{
-  return NULL;
-}
-
-static void
-gtk_root_default_get_surface_transform (GtkRoot *self,
-                                        int     *x,
-                                        int     *y)
-{
-  *x = 0;
-  *y = 0;
-}
-
 static void
 gtk_root_default_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_root_default_get_display;
-  iface->get_renderer = gtk_root_default_get_renderer;
-  iface->get_surface_transform = gtk_root_default_get_surface_transform;
 
   g_object_interface_install_property (iface,
       g_param_spec_object ("focus-widget",
@@ -76,6 +63,14 @@ gtk_root_default_init (GtkRootInterface *iface)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }
 
+/**
+ * gtk_root_get_display:
+ * @self: a #GtkRoot
+ *
+ * Returns the display that this GtkRoot is on.
+ *
+ * Returns: (transfer none): the display of @root
+ */
 GdkDisplay *
 gtk_root_get_display (GtkRoot *self)
 {
@@ -85,53 +80,6 @@ gtk_root_get_display (GtkRoot *self)
 
   iface = GTK_ROOT_GET_IFACE (self);
   return iface->get_display (self);
-}
-
-GskRenderer *
-gtk_root_get_renderer (GtkRoot *self)
-{
-  GtkRootInterface *iface;
-
-  g_return_val_if_fail (GTK_IS_ROOT (self), NULL);
-
-  iface = GTK_ROOT_GET_IFACE (self);
-  return iface->get_renderer (self);
-}
-
-void
-gtk_root_get_surface_transform (GtkRoot *self,
-                                int     *x,
-                                int     *y)
-{
-  GtkRootInterface *iface;
-
-  g_return_if_fail (GTK_IS_ROOT (self));
-  g_return_if_fail (x != 0);
-  g_return_if_fail (y != 0);
-
-  iface = GTK_ROOT_GET_IFACE (self);
-  return iface->get_surface_transform (self, x, y);
-}
-
-/**
- * gtk_root_get_for_surface:
- * @surface: a #GdkSurface
- *
- * Finds the GtkRoot associated with the surface.
- * 
- * Returns: (transfer none): the #GtkRoot that is associated with @surface
- */
-GtkWidget *
-gtk_root_get_for_surface (GdkSurface *surface)
-{
-  GtkWidget *widget;
-
-  widget = (GtkWidget *)gdk_surface_get_widget (surface);
-
-  if (widget && GTK_IS_ROOT (widget))
-    return widget;
-
-  return NULL;
 }
 
 /**

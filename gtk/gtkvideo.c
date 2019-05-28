@@ -26,6 +26,7 @@
 #include "gtkintl.h"
 #include "gtkmediacontrols.h"
 #include "gtkmediafile.h"
+#include "gtknative.h"
 #include "gtkpicture.h"
 #include "gtkrevealer.h"
 
@@ -141,7 +142,12 @@ gtk_video_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_video_parent_class)->realize (widget);
 
   if (self->media_stream)
-    gtk_media_stream_realize (self->media_stream, gtk_widget_get_surface (GTK_WIDGET (self)));
+    {
+      GdkSurface *surface;
+
+      surface = gtk_native_get_surface (gtk_widget_get_native (widget));
+      gtk_media_stream_realize (self->media_stream, surface);
+    }
 
   if (self->file)
     gtk_media_file_set_file (GTK_MEDIA_FILE (self->media_stream), self->file);
@@ -153,7 +159,12 @@ gtk_video_unrealize (GtkWidget *widget)
   GtkVideo *self = GTK_VIDEO (widget);
 
   if (self->media_stream)
-    gtk_media_stream_unrealize (self->media_stream, gtk_widget_get_surface (GTK_WIDGET (self)));
+    {
+      GdkSurface *surface;
+
+      surface = gtk_native_get_surface (gtk_widget_get_native (widget));
+      gtk_media_stream_unrealize (self->media_stream, surface);
+    }
 
   GTK_WIDGET_CLASS (gtk_video_parent_class)->unrealize (widget);
 }
@@ -345,7 +356,6 @@ static void
 gtk_video_init (GtkVideo *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
 }
 
 /**
@@ -581,7 +591,12 @@ gtk_video_set_media_stream (GtkVideo       *self,
                                             gtk_video_notify_cb,
                                             self);
       if (gtk_widget_get_realized (GTK_WIDGET (self)))
-        gtk_media_stream_unrealize (self->media_stream, gtk_widget_get_surface (GTK_WIDGET (self)));
+        {
+          GdkSurface *surface;
+
+          surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (self)));
+          gtk_media_stream_unrealize (self->media_stream, surface);
+        }
       g_object_unref (self->media_stream);
       self->media_stream = NULL;
     }
@@ -591,7 +606,12 @@ gtk_video_set_media_stream (GtkVideo       *self,
       self->media_stream = g_object_ref (stream);
       gtk_media_stream_set_loop (stream, self->loop);
       if (gtk_widget_get_realized (GTK_WIDGET (self)))
-        gtk_media_stream_realize (stream, gtk_widget_get_surface (GTK_WIDGET (self)));
+        {
+          GdkSurface *surface;
+
+          surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (self)));
+          gtk_media_stream_realize (stream, surface);
+        }
       g_signal_connect (self->media_stream,
                         "notify",
                         G_CALLBACK (gtk_video_notify_cb),

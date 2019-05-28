@@ -526,14 +526,6 @@ GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_is_visible             (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_set_has_surface        (GtkWidget    *widget,
-                                                         gboolean      has_surface);
-GDK_AVAILABLE_IN_ALL
-gboolean              gtk_widget_get_has_surface        (GtkWidget    *widget);
-
-GDK_AVAILABLE_IN_ALL
-gboolean              gtk_widget_is_toplevel            (GtkWidget    *widget);
-GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_is_drawable            (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_realized           (GtkWidget    *widget);
@@ -550,22 +542,13 @@ GDK_AVAILABLE_IN_ALL
 GtkRoot *             gtk_widget_get_root               (GtkWidget    *widget);
 
 GDK_AVAILABLE_IN_ALL
+GtkNative *           gtk_widget_get_native             (GtkWidget    *widget);
+
+GDK_AVAILABLE_IN_ALL
 void                  gtk_widget_set_child_visible      (GtkWidget    *widget,
                                                          gboolean      child_visible);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);
-
-GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_set_surface            (GtkWidget    *widget,
-                                                         GdkSurface    *surface);
-GDK_AVAILABLE_IN_ALL
-GdkSurface           * gtk_widget_get_surface           (GtkWidget    *widget);
-GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_register_surface       (GtkWidget    *widget,
-                                                         GdkSurface    *surface);
-GDK_AVAILABLE_IN_ALL
-void                  gtk_widget_unregister_surface     (GtkWidget    *widget,
-                                                         GdkSurface    *surface);
 
 GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_allocated_width    (GtkWidget     *widget);
@@ -624,9 +607,6 @@ void         gtk_widget_set_overflow      (GtkWidget           *widget,
 GDK_AVAILABLE_IN_ALL
 GtkOverflow  gtk_widget_get_overflow      (GtkWidget           *widget);
 
-
-GDK_AVAILABLE_IN_ALL
-GtkWidget*   gtk_widget_get_toplevel    (GtkWidget      *widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidget*   gtk_widget_get_ancestor    (GtkWidget      *widget,
                                          GType           widget_type);

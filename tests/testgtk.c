@@ -175,7 +175,7 @@ on_composited_changed (GdkDisplay *display,
     gtk_label_set_text (label, "Not composited");
 
   /* We draw a different background on the GdkSurface */
-  gtk_widget_queue_draw (gtk_widget_get_toplevel (GTK_WIDGET (label)));
+  gtk_widget_queue_draw (GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (label))));
 }
 
 void
@@ -192,7 +192,7 @@ create_alpha_window (GtkWidget *widget)
       GtkCssProvider *provider;
       
       window = gtk_dialog_new_with_buttons ("Alpha Window",
-					    GTK_WINDOW (gtk_widget_get_toplevel (widget)), 0,
+					    GTK_WINDOW (gtk_widget_get_root (widget)), 0,
 					    "_Close", 0,
 					    NULL);
       provider = gtk_css_provider_new ();
@@ -899,7 +899,7 @@ activate_link (GtkWidget *label, const gchar *uri, gpointer data)
     {
       GtkWidget *dialog;
 
-      dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (gtk_widget_get_toplevel (label)),
+      dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (gtk_widget_get_root (label)),
                                        GTK_DIALOG_DESTROY_WITH_PARENT,
                                        GTK_MESSAGE_INFO,
                                        GTK_BUTTONS_OK,
@@ -1164,7 +1164,7 @@ create_rotated_text (GtkWidget *widget)
       GdkPixbuf *tile_pixbuf;
 
       window = gtk_dialog_new_with_buttons ("Rotated Text",
-					    GTK_WINDOW (gtk_widget_get_toplevel (widget)), 0,
+					    GTK_WINDOW (gtk_widget_get_root (widget)), 0,
 					    "_Close", GTK_RESPONSE_CLOSE,
 					    NULL);
 
@@ -1245,7 +1245,7 @@ create_pixbuf (GtkWidget *widget)
       button = gtk_button_new ();
       gtk_container_add (GTK_CONTAINER (box2), button);
 
-      gdk_surface = gtk_widget_get_surface (window);
+      gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
 
       pixbufwid = new_pixbuf ("test.xpm", gdk_surface);
 
@@ -3435,7 +3435,7 @@ flipping_orientation_toggled_cb (GtkWidget *widget, gpointer data)
   GtkWidget *content_area;
   GtkWidget *toplevel;
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (toplevel));
   orientable_toggle_orientation (GTK_ORIENTABLE (content_area));
 }
@@ -3676,7 +3676,7 @@ screen_display_check (GtkWidget *widget, ScreenDisplaySelection *data)
       
   if (!display)
     {
-      dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (widget)),
+      dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (widget)),
                                        GTK_DIALOG_DESTROY_WITH_PARENT,
                                        GTK_MESSAGE_ERROR,
                                        GTK_BUTTONS_OK,
@@ -3771,7 +3771,7 @@ create_display_screen (GtkWidget *widget)
   scr_dpy_data = g_new0 (ScreenDisplaySelection, 1);
 
   scr_dpy_data->entry = gtk_bin_get_child (GTK_BIN (combo_dpy));
-  scr_dpy_data->toplevel = gtk_widget_get_toplevel (widget);
+  scr_dpy_data->toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   scr_dpy_data->dialog_window = window;
 
   g_signal_connect (cancelb, "clicked", 
@@ -4855,7 +4855,7 @@ create_wmhints (GtkWidget *widget)
 
       gtk_widget_realize (window);
 
-      gdk_surface = gtk_widget_get_surface (window);
+      gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
 
       pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) openfile);
       texture = gdk_texture_new_for_pixbuf (pixbuf);
@@ -4963,7 +4963,7 @@ tracking_label (GtkWidget *window)
   gtk_container_add (GTK_CONTAINER (hbox), label);
 
   g_object_set_data (G_OBJECT (label), "title", (gpointer)gtk_window_get_title (GTK_WINDOW (window)));
-  g_signal_connect (gtk_widget_get_surface (window), "notify::state",
+  g_signal_connect (gtk_native_get_surface (GTK_NATIVE (window)), "notify::state",
                     G_CALLBACK (surface_state_callback),
                     label);
 

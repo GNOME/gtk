@@ -176,10 +176,14 @@ void       _gdk_x11_display_get_default_cursor_size (GdkDisplay *display,
 void       _gdk_x11_display_get_maximal_cursor_size (GdkDisplay *display,
                                                      guint      *width,
                                                      guint      *height);
-void       _gdk_x11_display_create_surface_impl     (GdkDisplay    *display,
-                                                     GdkSurface     *window,
-                                                     GdkSurface     *real_parent,
-                                                     GdkSurfaceAttr *attributes);
+
+GdkSurface * _gdk_x11_display_create_surface (GdkDisplay     *display,
+                                              GdkSurfaceType  surface_type,
+                                              GdkSurface     *parent,
+                                              int             x,
+                                              int             y,
+                                              int             width,
+                                              int             height);
 GList *    gdk_x11_display_get_toplevel_windows     (GdkDisplay *display);
 
 void _gdk_x11_precache_atoms (GdkDisplay          *display,
@@ -219,6 +223,8 @@ void _gdk_x11_cursor_display_finalize (GdkDisplay *display);
 
 void _gdk_x11_surface_register_dnd (GdkSurface *window);
 
+void gdk_x11_surface_update_popups (GdkSurface *surface);
+
 GdkDrag        * _gdk_x11_surface_drag_begin (GdkSurface          *window,
                                               GdkDevice          *device,
                                               GdkContentProvider *content,
@@ -241,7 +247,6 @@ extern const gint        _gdk_x11_event_mask_table_size;
 #define GDK_SURFACE_SCREEN(win)        (GDK_X11_DISPLAY (gdk_surface_get_display (win))->screen)
 #define GDK_SURFACE_DISPLAY(win)       (gdk_surface_get_display (win))
 #define GDK_SURFACE_XROOTWIN(win)      (GDK_X11_SCREEN (GDK_SURFACE_SCREEN (win))->xroot_window)
-#define GDK_SURFACE_IS_X11(win)        (GDK_IS_SURFACE_IMPL_X11 ((win)->impl))
 
 /* override some macros from gdkx.h with direct-access variants */
 #undef GDK_DISPLAY_XDISPLAY
@@ -251,7 +256,7 @@ extern const gint        _gdk_x11_event_mask_table_size;
 
 #define GDK_DISPLAY_XDISPLAY(display) (GDK_X11_DISPLAY(display)->xdisplay)
 #define GDK_SURFACE_XDISPLAY(win)      (GDK_X11_SCREEN (GDK_SURFACE_SCREEN (win))->xdisplay)
-#define GDK_SURFACE_XID(win)           (GDK_SURFACE_IMPL_X11(GDK_SURFACE (win)->impl)->xid)
+#define GDK_SURFACE_XID(win)           (GDK_X11_SURFACE (win)->xid)
 #define GDK_SCREEN_XDISPLAY(screen)   (GDK_X11_SCREEN (screen)->xdisplay)
 
 #endif /* __GDK_PRIVATE_X11_H__ */

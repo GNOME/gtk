@@ -348,7 +348,6 @@ gtk_viewport_init (GtkViewport *viewport)
 
   widget = GTK_WIDGET (viewport);
 
-  gtk_widget_set_has_surface (widget, FALSE);
   gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
 
   priv->shadow_type = GTK_SHADOW_IN;

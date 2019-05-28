@@ -57,6 +57,7 @@
 #include "gtkmagnifierprivate.h"
 #include "gtkemojichooser.h"
 #include "gtkpango.h"
+#include "gtknative.h"
 
 #include "a11y/gtktextviewaccessibleprivate.h"
 
@@ -1618,7 +1619,6 @@ gtk_text_view_init (GtkTextView *text_view)
   text_view->priv = gtk_text_view_get_instance_private (text_view);
   priv = text_view->priv;
 
-  gtk_widget_set_has_surface (widget, FALSE);
   gtk_widget_set_can_focus (widget, TRUE);
   gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
 
@@ -1757,7 +1757,7 @@ _gtk_text_view_ensure_magnifier (GtkTextView *text_view)
   priv->magnifier_popover = gtk_popover_new (GTK_WIDGET (text_view));
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->magnifier_popover),
                                "magnifier");
-  gtk_popover_set_modal (GTK_POPOVER (priv->magnifier_popover), FALSE);
+  gtk_popover_set_autohide (GTK_POPOVER (priv->magnifier_popover), FALSE);
   gtk_container_add (GTK_CONTAINER (priv->magnifier_popover),
                      priv->magnifier);
   gtk_widget_show (priv->magnifier);
@@ -4098,6 +4098,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GdkRectangle right_rect;
   GdkRectangle top_rect;
   GdkRectangle bottom_rect;
+  GtkWidget *chooser;
   
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -4172,6 +4173,13 @@ gtk_text_view_size_allocate (GtkWidget *widget,
    * chance to run. So we do the work here. 
    */
   gtk_text_view_flush_first_validate (text_view);
+
+  chooser = g_object_get_data (G_OBJECT (text_view), "gtk-emoji-chooser");
+  if (chooser)
+    gtk_native_check_resize (GTK_NATIVE (chooser));
+
+  if (priv->magnifier_popover)
+    gtk_native_check_resize (GTK_NATIVE (priv->magnifier_popover));
 }
 
 static void
@@ -8642,7 +8650,7 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
                                                      &iter_location.y);
 
               gtk_menu_popup_at_rect (GTK_MENU (priv->popup_menu),
-                                      gtk_widget_get_surface (GTK_WIDGET (text_view)),
+                                      gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (text_view))),
                                       &iter_location,
                                       GDK_GRAVITY_SOUTH_EAST,
                                       GDK_GRAVITY_NORTH_WEST,
@@ -8783,7 +8791,7 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->selection_bubble),
                                GTK_STYLE_CLASS_TOUCH_SELECTION);
   gtk_popover_set_position (GTK_POPOVER (priv->selection_bubble), GTK_POS_BOTTOM);
-  gtk_popover_set_modal (GTK_POPOVER (priv->selection_bubble), FALSE);
+  gtk_popover_set_autohide (GTK_POPOVER (priv->selection_bubble), FALSE);
   g_signal_connect (priv->selection_bubble, "notify::visible",
                     G_CALLBACK (show_or_hide_handles), text_view);
 

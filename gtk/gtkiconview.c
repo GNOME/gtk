@@ -936,7 +936,6 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->mouse_x = -1;
   icon_view->priv->mouse_y = -1;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (icon_view), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (icon_view), TRUE);
   gtk_widget_set_overflow (GTK_WIDGET (icon_view), GTK_OVERFLOW_HIDDEN);
 
@@ -3694,7 +3693,7 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
     {
       if (!gtk_widget_keynav_failed (GTK_WIDGET (icon_view), direction))
         {
-          GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (icon_view));
+          GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (icon_view)));
           if (toplevel)
             gtk_widget_child_focus (toplevel,
                                     direction == GTK_DIR_UP ?
@@ -3846,7 +3845,7 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
     {
       if (!gtk_widget_keynav_failed (GTK_WIDGET (icon_view), direction))
         {
-          GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (icon_view));
+          GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (icon_view)));
           if (toplevel)
             gtk_widget_child_focus (toplevel,
                                     direction == GTK_DIR_LEFT ?

@@ -3694,8 +3694,6 @@ gtk_flow_box_init (GtkFlowBox *box)
   GtkEventController *controller;
   GtkGesture *gesture;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (box), FALSE);
-
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->selection_mode = GTK_SELECTION_SINGLE;
   priv->max_children_per_line = DEFAULT_MAX_CHILDREN_PER_LINE;

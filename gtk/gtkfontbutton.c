@@ -606,8 +606,6 @@ gtk_font_button_init (GtkFontButton *font_button)
   GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (font_button);
   GtkWidget *box;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (font_button), FALSE);
-
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked", G_CALLBACK (gtk_font_button_clicked), font_button);
   priv->font_label = gtk_label_new (_("Font"));
@@ -950,7 +948,7 @@ gtk_font_button_clicked (GtkButton *button,
     {
       GtkWidget *parent;
       
-      parent = gtk_widget_get_toplevel (GTK_WIDGET (font_button));
+      parent = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (font_button)));
 
       priv->font_dialog = gtk_font_chooser_dialog_new (priv->title, NULL);
       gtk_window_set_hide_on_close (GTK_WINDOW (priv->font_dialog), TRUE);
@@ -982,7 +980,7 @@ gtk_font_button_clicked (GtkButton *button,
           priv->font_filter_data_destroy = NULL;
         }
 
-      if (gtk_widget_is_toplevel (parent) && GTK_IS_WINDOW (parent))
+      if (GTK_IS_WINDOW (parent))
         {
           if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (font_dialog)))
             gtk_window_set_transient_for (GTK_WINDOW (font_dialog), GTK_WINDOW (parent));

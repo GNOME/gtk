@@ -1241,7 +1241,6 @@ gtk_notebook_init (GtkNotebook *notebook)
   GtkGesture *gesture;
 
   gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
-  gtk_widget_set_has_surface (GTK_WIDGET (notebook), FALSE);
 
   notebook->priv = gtk_notebook_get_instance_private (notebook);
   priv = notebook->priv;
@@ -1536,8 +1535,8 @@ gtk_notebook_move_focus_out (GtkNotebook      *notebook,
   /* At this point, we know we should be focusing out of the notebook entirely. We
    * do this by setting a flag, then propagating the focus motion to the notebook.
    */
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (notebook));
-  if (!gtk_widget_is_toplevel (toplevel))
+  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (notebook)));
+  if (!GTK_IS_ROOT (toplevel))
     return;
 
   g_object_ref (notebook);
@@ -3808,8 +3807,8 @@ gtk_notebook_set_focus_child (GtkContainer *container,
    * for future use if we switch to the page with a mnemonic.
    */
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (container));
-  if (toplevel && gtk_widget_is_toplevel (toplevel))
+  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (container)));
+  if (GTK_IS_WINDOW (toplevel))
     {
       page_child = gtk_window_get_focus (GTK_WINDOW (toplevel));
       while (page_child)
@@ -4206,7 +4205,7 @@ gtk_notebook_remove_tab_label (GtkNotebook     *notebook,
                                      page->mnemonic_activate_signal);
       page->mnemonic_activate_signal = 0;
 
-      if (gtk_widget_get_surface (page->tab_label) != gtk_widget_get_surface (GTK_WIDGET (notebook)) ||
+      if (gtk_widget_get_native (page->tab_label) != gtk_widget_get_native (GTK_WIDGET (notebook)) ||
           !NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page))
         {
           GtkWidget *parent;

@@ -1887,7 +1887,6 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   };
   gint i;
 
-  gtk_widget_set_has_surface (widget, FALSE);
   gtk_widget_set_can_focus (widget, TRUE);
 
   /* Instantiated by gtk_scrolled_window_set_[hv]adjustment
@@ -2904,8 +2903,8 @@ gtk_scrolled_window_move_focus_out (GtkScrolledWindow *scrolled_window,
   /* Focus out of the scrolled window entirely. We do this by setting
    * a flag, then propagating the focus motion to the notebook.
    */
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (scrolled_window));
-  if (!gtk_widget_is_toplevel (toplevel))
+  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (scrolled_window)));
+  if (!GTK_IS_ROOT (toplevel))
     return;
 
   g_object_ref (scrolled_window);

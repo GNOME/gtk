@@ -487,8 +487,6 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
   priv->text = NULL;
   priv->fraction = 0.0;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (pbar), FALSE);
-
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (pbar));
 
   priv->trough_widget = gtk_gizmo_new ("trough",

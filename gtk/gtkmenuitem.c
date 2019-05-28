@@ -46,6 +46,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkiconprivate.h"
+#include "gtknative.h"
 
 #define MENU_POPUP_DELAY     225
 
@@ -658,8 +659,6 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
   priv = gtk_menu_item_get_instance_private (menu_item);
   menu_item->priv = priv;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (menu_item), FALSE);
-
   g_signal_connect (menu_item, "notify::parent", G_CALLBACK (gtk_menu_item_parent_cb), NULL);
 
   priv->submenu = NULL;
@@ -879,12 +878,12 @@ gtk_menu_item_buildable_custom_finished (GtkBuildable *buildable,
                  (attach = gtk_menu_get_attach_widget (GTK_MENU (menu_shell))) != NULL)
             menu_shell = GTK_MENU_SHELL (gtk_widget_get_parent (attach));
 
-          toplevel = gtk_widget_get_toplevel (GTK_WIDGET (menu_shell));
+          toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (menu_shell)));
         }
       else
         {
           /* Fall back to something ... */
-          toplevel = gtk_widget_get_toplevel (GTK_WIDGET (buildable));
+          toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (buildable)));
 
           g_warning ("found a GtkMenuItem '%s' without a parent GtkMenuShell, assigned accelerators wont work.",
                      gtk_buildable_get_name (buildable));
@@ -1400,7 +1399,7 @@ gtk_menu_item_real_popup_submenu (GtkWidget      *widget,
       /* Position the submenu at the menu item if it is mapped.
        * Otherwise, position the submenu at the pointer device.
        */
-      if (gtk_widget_get_surface (widget))
+      if (gtk_native_get_surface (gtk_widget_get_native (widget)))
         {
           switch (priv->submenu_placement)
             {

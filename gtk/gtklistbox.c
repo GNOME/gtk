@@ -627,7 +627,6 @@ gtk_list_box_init (GtkListBox *box)
   GtkWidget *widget = GTK_WIDGET (box);
   GtkGesture *gesture;
 
-  gtk_widget_set_has_surface (widget, FALSE);
   priv->selection_mode = GTK_SELECTION_SINGLE;
   priv->activate_single_click = TRUE;
 
@@ -2864,7 +2863,7 @@ gtk_list_box_move_cursor (GtkListBox      *box,
 
       if (!gtk_widget_keynav_failed (GTK_WIDGET (box), direction))
         {
-          GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (box));
+          GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (box)));
 
           if (toplevel)
             gtk_widget_child_focus (toplevel,

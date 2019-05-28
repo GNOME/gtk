@@ -35,7 +35,7 @@
 #include "gtkwindowprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkaccessible.h"
-#include "gtkroot.h"
+#include "gtknative.h"
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
@@ -398,9 +398,12 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
   if (!surface)
     return;
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
 
-  if (gtk_widget_get_surface (toplevel) != surface)
+  if (toplevel == NULL)
+    return;
+
+  if (gtk_native_get_surface (GTK_NATIVE (toplevel)) != surface)
     return;
 
   gtk_widget_translate_coordinates (toplevel, widget, round (x), round (y), &dx, &dy);
@@ -429,7 +432,7 @@ _gtk_widget_find_at_coords (GdkSurface *surface,
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
 
-  event_widget = gtk_root_get_for_surface (surface);
+  event_widget = gtk_native_get_for_surface (surface);
 
   if (!event_widget)
     return NULL;
@@ -500,14 +503,13 @@ gtk_tooltip_set_last_surface (GtkTooltip *tooltip,
 			       (gpointer *) &tooltip->last_surface);
 
   if (surface)
-    window_widget = gtk_root_get_for_surface (surface);
+    window_widget = gtk_native_get_for_surface (surface);
 
   if (window_widget)
-    window_widget = gtk_widget_get_toplevel (window_widget);
+    window_widget = GTK_WIDGET (gtk_widget_get_root (window_widget));
 
   if (window_widget &&
       window_widget != tooltip->window &&
-      gtk_widget_is_toplevel (window_widget) &&
       GTK_IS_WINDOW (window_widget))
     gtk_window_set_transient_for (GTK_WINDOW (tooltip->window),
                                   GTK_WINDOW (window_widget));
@@ -581,11 +583,11 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   int anchor_rect_padding;
 
   gtk_widget_realize (GTK_WIDGET (tooltip->current_window));
-  surface = _gtk_widget_get_surface (GTK_WIDGET (tooltip->current_window));
+  surface = gtk_native_get_surface (GTK_NATIVE (tooltip->current_window));
 
   tooltip->tooltip_widget = new_tooltip_widget;
 
-  toplevel = _gtk_widget_get_toplevel (new_tooltip_widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (new_tooltip_widget));
   if (gtk_widget_compute_bounds (new_tooltip_widget, toplevel, &anchor_bounds))
     {
       anchor_rect = (GdkRectangle) {
@@ -636,7 +638,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
        * If the anchor rectangle isn't to tall, make sure the tooltip isn't too
        * far away from the pointer position.
        */
-      effective_toplevel = _gtk_widget_get_surface (toplevel);
+      effective_toplevel = gtk_native_get_surface (GTK_NATIVE (toplevel));
       gdk_surface_get_device_position (effective_toplevel, device, &px, &py, NULL);
       pointer_x = round (px);
       pointer_y = round (py);

@@ -4443,8 +4443,8 @@ gtk_widget_set_name
 gtk_widget_get_name
 gtk_widget_set_sensitive
 gtk_widget_set_parent
-gtk_widget_get_toplevel
 gtk_widget_get_root
+gtk_widget_get_native
 gtk_widget_get_ancestor
 gtk_widget_is_ancestor
 gtk_widget_translate_coordinates
@@ -4494,9 +4494,6 @@ gtk_widget_set_tooltip_window
 gtk_widget_get_has_tooltip
 gtk_widget_set_has_tooltip
 gtk_widget_trigger_tooltip_query
-gtk_widget_get_surface
-gtk_widget_register_surface
-gtk_widget_unregister_surface
 gtk_widget_get_allocated_width
 gtk_widget_get_allocated_height
 gtk_widget_get_allocation
@@ -4516,8 +4513,6 @@ gtk_widget_set_focus_on_click
 gtk_widget_set_focus_child
 gtk_widget_get_can_target
 gtk_widget_set_can_target
-gtk_widget_get_has_surface
-gtk_widget_set_has_surface
 gtk_widget_get_sensitive
 gtk_widget_is_sensitive
 gtk_widget_get_visible
@@ -4531,8 +4526,6 @@ gtk_widget_has_focus
 gtk_widget_has_visible_focus
 gtk_widget_has_grab
 gtk_widget_is_drawable
-gtk_widget_is_toplevel
-gtk_widget_set_surface
 gtk_widget_set_receives_default
 gtk_widget_get_receives_default
 gtk_widget_set_support_multidevice
@@ -6461,8 +6454,10 @@ gtk_popover_get_position
 GtkPopoverConstraint
 gtk_popover_set_constrain_to
 gtk_popover_get_constrain_to
-gtk_popover_set_modal
-gtk_popover_get_modal
+gtk_popover_set_autohide
+gtk_popover_get_autohide
+gtk_popover_set_has_arrow
+gtk_popover_get_has_arrow
 gtk_popover_set_default_widget
 gtk_popover_get_default_widget
 <SUBSECTION Standard>
@@ -6521,6 +6516,9 @@ GtkEventController
 GtkPropagationPhase
 gtk_event_controller_get_propagation_phase
 gtk_event_controller_set_propagation_phase
+GtkPropagationLimit
+gtk_event_controller_get_propagation_limit
+gtk_event_controller_set_propagation_limit
 gtk_event_controller_handle_event
 gtk_event_controller_get_widget
 gtk_event_controller_reset
@@ -7110,15 +7108,24 @@ gtk_media_stream_get_type
 <FILE>gtkroot</FILE>
 <TITLE>GtkRoot</TITLE>
 GtkRoot
-gtk_root_get_for_surface
+gtk_root_get_display
 gtk_root_get_focus
 gtk_root_set_focus
 
-<SUBSECTION>
-gtk_root_install_properties
-
 <SUBSECTION Private>
 gtk_root_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtknative</FILE>
+GtkNative
+gtk_native_get_for_surface
+gtk_native_get_surface
+gtk_native_get_renderer
+gtk_native_check_resize
+
+<SUBSECTION Private>
+gtk_native_get_type
 </SECTION>
 
 <SECTION>

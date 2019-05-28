@@ -31,9 +31,9 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdisplaymanagerprivate.h"
 #include "gdkevents.h"
-#include "gdksurfaceimpl.h"
 #include "gdkinternals.h"
 #include "gdkmonitorprivate.h"
+#include "gdkframeclockidleprivate.h"
 
 #include <math.h>
 #include <glib.h>
@@ -171,8 +171,6 @@ gdk_display_class_init (GdkDisplayClass *class)
   object_class->get_property = gdk_display_get_property;
 
   class->get_app_launch_context = gdk_display_real_get_app_launch_context;
-  class->surface_type = GDK_TYPE_SURFACE;
-
   class->opened = gdk_display_real_opened;
   class->make_default = gdk_display_real_make_default;
   class->event_data_copy = gdk_display_real_event_data_copy;
@@ -336,7 +334,6 @@ static void
 free_device_grab (GdkDeviceGrabInfo *info)
 {
   g_object_unref (info->surface);
-  g_object_unref (info->native_surface);
   g_free (info);
 }
 
@@ -558,7 +555,6 @@ GdkDeviceGrabInfo *
 _gdk_display_add_device_grab (GdkDisplay       *display,
                               GdkDevice        *device,
                               GdkSurface        *surface,
-                              GdkSurface        *native_surface,
                               GdkGrabOwnership  grab_ownership,
                               gboolean          owner_events,
                               GdkEventMask      event_mask,
@@ -572,7 +568,6 @@ _gdk_display_add_device_grab (GdkDisplay       *display,
   info = g_new0 (GdkDeviceGrabInfo, 1);
 
   info->surface = g_object_ref (surface);
-  info->native_surface = g_object_ref (native_surface);
   info->serial_start = serial_start;
   info->serial_end = G_MAXULONG;
   info->owner_events = owner_events;
@@ -845,9 +840,7 @@ _gdk_display_end_device_grab (GdkDisplay *display,
     return FALSE;
 
   grab = l->data;
-  if (grab &&
-      (if_child == NULL ||
-       _gdk_surface_event_parent_of (if_child, grab->surface)))
+  if (grab && (if_child == NULL || if_child == grab->surface))
     {
       grab->serial_end = serial;
       grab->implicit_ungrab = implicit;
@@ -1329,24 +1322,19 @@ _gdk_display_event_data_free (GdkDisplay *display,
   GDK_DISPLAY_GET_CLASS (display)->event_data_free (display, event);
 }
 
-void
-gdk_display_create_surface_impl (GdkDisplay       *display,
-                                 GdkSurface       *surface,
-                                 GdkSurface       *real_parent,
-                                 GdkSurfaceAttr   *attributes)
-{
-  GDK_DISPLAY_GET_CLASS (display)->create_surface_impl (display,
-                                                        surface,
-                                                        real_parent,
-                                                        attributes);
-}
-
 GdkSurface *
-_gdk_display_create_surface (GdkDisplay *display)
+gdk_display_create_surface (GdkDisplay     *display,
+                            GdkSurfaceType  surface_type,
+                            GdkSurface     *parent,
+                            int             x,
+                            int             y,
+                            int             width,
+                            int             height)
 {
-  return g_object_new (GDK_DISPLAY_GET_CLASS (display)->surface_type,
-                       "display", display,
-                       NULL);
+  return GDK_DISPLAY_GET_CLASS (display)->create_surface (display,
+                                                          surface_type,
+                                                          parent,
+                                                          x, y, width, height);
 }
 
 /**

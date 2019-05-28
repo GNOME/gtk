@@ -44,7 +44,7 @@ G_BEGIN_DECLS
 
 #include "gdkprivate-win32.h"
 
-#define GDK_SURFACE_HWND(win)          (GDK_SURFACE_IMPL_WIN32(win->impl)->handle)
+#define GDK_SURFACE_HWND(win)          (GDK_WIN32_SURFACE(win)->handle)
 #else
 /* definition for exported 'internals' go here */
 #define GDK_SURFACE_HWND(d) (gdk_win32_surface_get_handle (d))

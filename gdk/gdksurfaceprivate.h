@@ -1,5 +1,5 @@
 /* GDK - The GIMP Drawing Kit
- * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 2019 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,37 +15,87 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
- * file for a list of people on the GTK+ Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
- */
+/* Uninstalled header defining types and functions internal to GDK */
 
-#ifndef __GDK_SURFACE_IMPL_H__
-#define __GDK_SURFACE_IMPL_H__
+#ifndef __GDK_SURFACE_PRIVATE_H__
+#define __GDK_SURFACE_PRIVATE_H__
 
-#include <gdk/gdksurface.h>
-#include <gdk/gdkproperty.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+#include "gdkenumtypes.h"
+#include "gdksurface.h"
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_SURFACE_IMPL           (gdk_surface_impl_get_type ())
-#define GDK_SURFACE_IMPL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SURFACE_IMPL, GdkSurfaceImpl))
-#define GDK_SURFACE_IMPL_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SURFACE_IMPL, GdkSurfaceImplClass))
-#define GDK_IS_SURFACE_IMPL(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SURFACE_IMPL))
-#define GDK_IS_SURFACE_IMPL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SURFACE_IMPL))
-#define GDK_SURFACE_IMPL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SURFACE_IMPL, GdkSurfaceImplClass))
-
-typedef struct _GdkSurfaceImpl       GdkSurfaceImpl;
-typedef struct _GdkSurfaceImplClass  GdkSurfaceImplClass;
-
-struct _GdkSurfaceImpl
+struct _GdkSurface
 {
-  GObject parent;
+  GObject parent_instance;
+
+  GdkDisplay *display;
+
+  GdkSurface *transient_for; /* for toplevels */
+  GdkSurface *parent;        /* for popups */
+  GList *children;           /* popups */
+
+  gpointer widget;
+
+  gint x;
+  gint y;
+
+  guint8 surface_type;
+
+  guint8 resize_count;
+
+  GdkGLContext *gl_paint_context;
+
+  cairo_region_t *update_area;
+  guint update_freeze_count;
+  /* This is the update_area that was in effect when the current expose
+     started. It may be smaller than the expose area if we'e painting
+     more than we have to, but it represents the "true" damage. */
+  cairo_region_t *active_update_area;
+
+  GdkSurfaceState old_state;
+  GdkSurfaceState state;
+
+  guint8 alpha;
+  guint8 fullscreen_mode;
+
+  guint modal_hint : 1;
+
+  guint destroyed : 2;
+
+  guint accept_focus : 1;
+  guint focus_on_map : 1;
+  guint support_multidevice : 1;
+  guint viewable : 1; /* mapped and all parents mapped */
+  guint in_update : 1;
+  guint frame_clock_events_paused : 1;
+  guint autohide : 1;
+
+  guint update_and_descendants_freeze_count;
+
+  gint width, height;
+  gint shadow_top;
+  gint shadow_left;
+  gint shadow_right;
+  gint shadow_bottom;
+
+  GdkCursor *cursor;
+  GHashTable *device_cursor;
+
+  cairo_region_t *input_shape;
+
+  GList *devices_inside;
+
+  GdkFrameClock *frame_clock; /* NULL to use from parent or default */
+
+  GSList *draw_contexts;
+  GdkDrawContext *paint_context;
+
+  cairo_region_t *opaque_region;
 };
 
-struct _GdkSurfaceImplClass
+struct _GdkSurfaceClass
 {
   GObjectClass parent_class;
 
@@ -100,18 +150,12 @@ struct _GdkSurfaceImplClass
 /* Called to do the windowing system specific part of gdk_surface_destroy(),
  *
  * surface: The window being destroyed
- * recursing: If TRUE, then this is being called because a parent
- *     was destroyed. This generally means that the call to the windowing
- *     system to destroy the surface can be omitted, since it will be
- *     destroyed as a result of the parent being destroyed.
- *     Unless @foreign_destroy
  * foreign_destroy: If TRUE, the surface or a parent was destroyed by some
  *     external agency. The surface has already been destroyed and no
  *     windowing system calls should be made. (This may never happen
  *     for some windowing systems.)
  */
   void         (* destroy)              (GdkSurface       *surface,
-                                         gboolean         recursing,
                                          gboolean         foreign_destroy);
 
 
@@ -210,9 +254,9 @@ struct _GdkSurfaceImplClass
   gboolean     (* supports_edge_constraints)(GdkSurface    *surface);
 };
 
-/* Interface Functions */
-GType gdk_surface_impl_get_type (void) G_GNUC_CONST;
+void gdk_surface_set_state (GdkSurface      *surface,
+                            GdkSurfaceState  new_state);
 
 G_END_DECLS
 
-#endif /* __GDK_SURFACE_IMPL_H__ */
+#endif /* __GDK_SURFACE_PRIVATE_H__ */

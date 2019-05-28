@@ -661,8 +661,6 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
 static void
 gtk_center_box_init (GtkCenterBox *self)
 {
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
-
   self->start_widget = NULL;
   self->center_widget = NULL;
   self->end_widget = NULL;

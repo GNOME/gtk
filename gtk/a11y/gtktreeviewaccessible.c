@@ -1094,18 +1094,6 @@ gtk_tree_view_accessible_get_cell_extents (GtkCellAccessibleParent *parent,
                                                      0, 0, 
                                                      &w_x, &w_y);
 
-  if (coord_type != ATK_XY_WINDOW)
-    {
-      GdkSurface *surface;
-      gint x_toplevel, y_toplevel;
-
-      surface = gdk_surface_get_toplevel (gtk_widget_get_surface (widget));
-      gdk_surface_get_origin (surface, &x_toplevel, &y_toplevel);
-
-      w_x += x_toplevel;
-      w_y += y_toplevel;
-    }
-
   *width = cell_rect.width;
   *height = cell_rect.height;
   if (is_cell_showing (tree_view, &cell_rect))
@@ -1170,20 +1158,12 @@ gtk_tree_view_accessible_grab_cell_focus (GtkCellAccessibleParent *parent,
 
       gtk_tree_path_free (path);
       gtk_widget_grab_focus (widget);
-      toplevel = gtk_widget_get_toplevel (widget);
-      if (gtk_widget_is_toplevel (toplevel))
+      toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+      if (GTK_IS_WINDOW (toplevel))
         {
-#ifdef GDK_WINDOWING_X11
-          if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (toplevel)))
-            gtk_window_present_with_time (GTK_WINDOW (toplevel),
-                                          gdk_x11_get_server_time (gtk_widget_get_surface (widget)));
-          else
-#endif
-            {
-              G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-              gtk_window_present (GTK_WINDOW (toplevel));
-              G_GNUC_END_IGNORE_DEPRECATIONS
-            }
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+          gtk_window_present (GTK_WINDOW (toplevel));
+          G_GNUC_END_IGNORE_DEPRECATIONS
         }
 
       return TRUE;

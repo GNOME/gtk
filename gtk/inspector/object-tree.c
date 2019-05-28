@@ -41,6 +41,7 @@
 #include "gtklabel.h"
 #include "gtklistbox.h"
 #include "gtkmenuitem.h"
+#include "gtkpopover.h"
 #include "gtksettings.h"
 #include "gtksizegroup.h"
 #include "gtktextview.h"
@@ -822,7 +823,7 @@ map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_inspector_object_tree_parent_class)->map (widget);
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
 
   controller = gtk_event_controller_key_new ();
   g_object_set_data_full (G_OBJECT (toplevel), "object-controller", controller, (GDestroyNotify)destroy_controller);
@@ -837,7 +838,7 @@ unmap (GtkWidget *widget)
 {
   GtkWidget *toplevel;
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   g_object_set_data (G_OBJECT (toplevel), "object-controller", NULL);
 
   GTK_WIDGET_CLASS (gtk_inspector_object_tree_parent_class)->unmap (widget);
@@ -1144,6 +1145,7 @@ create_root_model (void)
                                          g_object_unref);
   gtk_filter_list_model_set_model (filter, gtk_window_get_toplevels ());
   g_list_store_append (list, filter);
+  g_list_store_append (list, gtk_popover_get_popovers ());
   g_object_unref (filter);
 
   flatten = gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (list));

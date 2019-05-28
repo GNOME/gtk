@@ -410,7 +410,7 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
 
   GDK_DISPLAY_NOTE (GDK_DISPLAY (display_x11), OPENGL, g_message ("Using GLX_EXT_texture_from_pixmap to draw surface"));
 
-  surface = gdk_gl_context_get_surface (paint_context)->impl_surface;
+  surface = gdk_gl_context_get_surface (paint_context);
   surface_scale = gdk_surface_get_scale_factor (surface);
   gdk_surface_get_unscaled_size (surface, NULL, &unscaled_surface_height);
 
@@ -679,7 +679,7 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
 
   xvisinfo = find_xvisinfo_for_fbconfig (display, context_x11->glx_config);
 
-  info = get_glx_drawable_info (surface->impl_surface);
+  info = get_glx_drawable_info (surface);
   if (info == NULL)
     {
       XSetWindowAttributes attrs;
@@ -708,7 +708,7 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
       if (GDK_X11_DISPLAY (display)->glx_version >= 13)
         {
           info->glx_drawable = glXCreateWindow (dpy, context_x11->glx_config,
-                                                gdk_x11_surface_get_xid (surface->impl_surface),
+                                                gdk_x11_surface_get_xid (surface),
                                                 NULL);
           info->dummy_glx = glXCreateWindow (dpy, context_x11->glx_config, info->dummy_xwin, NULL);
         }
@@ -727,12 +727,12 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
           return FALSE;
         }
 
-      set_glx_drawable_info (surface->impl_surface, info);
+      set_glx_drawable_info (surface, info);
     }
 
   XFree (xvisinfo);
 
-  context_x11->attached_drawable = info->glx_drawable ? info->glx_drawable : gdk_x11_surface_get_xid (surface->impl_surface);
+  context_x11->attached_drawable = info->glx_drawable ? info->glx_drawable : gdk_x11_surface_get_xid (surface);
   context_x11->unattached_drawable = info->dummy_glx ? info->dummy_glx : info->dummy_xwin;
 
   context_x11->is_direct = glXIsDirect (dpy, context_x11->glx_context);

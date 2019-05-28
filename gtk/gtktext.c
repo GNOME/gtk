@@ -66,6 +66,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
+#include "gtknative.h"
 
 #include "a11y/gtktextaccessible.h"
 
@@ -156,6 +157,7 @@ struct _GtkTextPrivate
 
   char         *im_module;
 
+  GtkWidget     *emoji_completion;
   GtkTextHandle *text_handle;
   GtkWidget     *selection_bubble;
   guint          selection_bubble_timeout_id;
@@ -1663,7 +1665,6 @@ gtk_text_init (GtkText *self)
   int i;
 
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
-  gtk_widget_set_has_surface (GTK_WIDGET (self), FALSE);
   gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 
   priv->editable = TRUE;
@@ -1785,8 +1786,11 @@ gtk_text_dispose (GObject *object)
       priv->buffer = NULL;
     }
 
+  g_clear_pointer (&priv->emoji_completion, gtk_widget_unparent);
+
   keymap = gdk_display_get_keymap (gtk_widget_get_display (GTK_WIDGET (object)));
   g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, self);
+
   G_OBJECT_CLASS (gtk_text_parent_class)->dispose (object);
 }
 
@@ -1834,7 +1838,7 @@ gtk_text_ensure_magnifier (GtkText *self)
   priv->magnifier_popover = gtk_popover_new (GTK_WIDGET (self));
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->magnifier_popover),
                                "magnifier");
-  gtk_popover_set_modal (GTK_POPOVER (priv->magnifier_popover), FALSE);
+  gtk_popover_set_autohide (GTK_POPOVER (priv->magnifier_popover), FALSE);
   gtk_container_add (GTK_CONTAINER (priv->magnifier_popover),
                      priv->magnifier);
   gtk_widget_show (priv->magnifier);
@@ -2170,6 +2174,7 @@ gtk_text_size_allocate (GtkWidget *widget,
 {
   GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  GtkEmojiChooser *chooser;
 
   priv->text_baseline = baseline;
 
@@ -2185,6 +2190,16 @@ gtk_text_size_allocate (GtkWidget *widget,
    */
   if (gtk_widget_get_realized (widget))
     gtk_text_recompute (self);
+
+  chooser = g_object_get_data (G_OBJECT (self), "gtk-emoji-chooser");
+  if (chooser)
+    gtk_native_check_resize (GTK_NATIVE (chooser));
+
+  if (priv->emoji_completion)
+    gtk_native_check_resize (GTK_NATIVE (priv->emoji_completion));
+
+  if (priv->magnifier_popover)
+    gtk_native_check_resize (GTK_NATIVE (priv->magnifier_popover));
 }
 
 static void
@@ -3472,7 +3487,7 @@ gtk_text_move_cursor (GtkText         *self,
                                                  count > 0 ?
                                                  GTK_DIR_RIGHT : GTK_DIR_LEFT))
                     {
-                      GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+                      GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (self)));
 
                       if (toplevel)
                         gtk_widget_child_focus (toplevel,
@@ -5825,7 +5840,7 @@ gtk_text_selection_bubble_popup_show (gpointer user_data)
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->selection_bubble),
                                GTK_STYLE_CLASS_TOUCH_SELECTION);
   gtk_popover_set_position (GTK_POPOVER (priv->selection_bubble), GTK_POS_BOTTOM);
-  gtk_popover_set_modal (GTK_POPOVER (priv->selection_bubble), FALSE);
+  gtk_popover_set_autohide (GTK_POPOVER (priv->selection_bubble), FALSE);
   g_signal_connect (priv->selection_bubble, "notify::visible",
                     G_CALLBACK (show_or_hide_handles), self);
 
@@ -6652,10 +6667,9 @@ set_enable_emoji_completion (GtkText  *self,
   priv->enable_emoji_completion = value;
 
   if (priv->enable_emoji_completion)
-    g_object_set_data (G_OBJECT (self), "emoji-completion-popup",
-                       gtk_emoji_completion_new (self));
+    priv->emoji_completion = gtk_emoji_completion_new (self);
   else
-    g_object_set_data (G_OBJECT (self), "emoji-completion-popup", NULL);
+    g_clear_pointer (&priv->emoji_completion, gtk_widget_unparent);
 
   g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_ENABLE_EMOJI_COMPLETION]);
 }

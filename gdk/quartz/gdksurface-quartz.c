@@ -62,7 +62,7 @@ static FullscreenSavedGeometry *get_fullscreen_geometry (GdkSurface *window);
 static void update_toplevel_order (void);
 static void clear_toplevel_order  (void);
 
-#define SURFACE_IS_TOPLEVEL(window)      (GDK_SURFACE_TYPE (window) != GDK_SURFACE_CHILD)
+#define SURFACE_IS_TOPLEVEL(window)      TRUE
 
 /*
  * GdkQuartzSurface
@@ -734,8 +734,7 @@ get_nsscreen_for_point (gint x, gint y)
 void
 _gdk_quartz_display_create_surface_impl (GdkDisplay    *display,
                                         GdkSurface     *window,
-                                        GdkSurface     *real_parent,
-                                        GdkSurfaceAttr *attributes)
+                                        GdkSurface     *real_parent)
 {
   GdkSurfaceImplQuartz *impl;
   GdkSurfaceImplQuartz *parent_impl;
@@ -824,29 +823,6 @@ _gdk_quartz_display_create_surface_impl (GdkDisplay    *display,
 	[impl->view setGdkSurface:window];
 	[impl->toplevel setContentView:impl->view];
 	[impl->view release];
-      }
-      break;
-
-    case GDK_SURFACE_CHILD:
-      {
-	GdkSurfaceImplQuartz *parent_impl = GDK_SURFACE_IMPL_QUARTZ (window->parent->impl);
-
-	if (!window->input_only)
-	  {
-	    NSRect frame_rect = NSMakeRect (window->x + window->parent->abs_x,
-                                            window->y + window->parent->abs_y,
-                                            window->width,
-                                            window->height);
-	
-	    impl->view = [[GdkQuartzView alloc] initWithFrame:frame_rect];
-	    
-	    [impl->view setGdkSurface:window];
-
-	    /* GdkSurfaces should be hidden by default */
-	    [impl->view setHidden:YES];
-	    [parent_impl->view addSubview:impl->view];
-	    [impl->view release];
-	  }
       }
       break;
 
@@ -1162,56 +1138,53 @@ move_resize_window_internal (GdkSurface *window,
     }
   else 
     {
-      if (!window->input_only)
+      NSRect nsrect;
+
+      nsrect = NSMakeRect (window->x, window->y, window->width, window->height);
+
+      /* The newly visible area of this window in a coordinate
+       * system rooted at the origin of this window.
+       */
+      new_visible.x = -window->x;
+      new_visible.y = -window->y;
+      new_visible.width = old_visible.width;   /* parent has not changed size */
+      new_visible.height = old_visible.height; /* parent has not changed size */
+
+      expose_region = cairo_region_create_rectangle (&new_visible);
+      old_region = cairo_region_create_rectangle (&old_visible);
+      cairo_region_subtract (expose_region, old_region);
+
+      /* Determine what (if any) part of the previously visible
+       * part of the window can be copied without a redraw
+       */
+      scroll_rect = old_visible;
+      scroll_rect.x -= delta.width;
+      scroll_rect.y -= delta.height;
+      gdk_rectangle_intersect (&scroll_rect, &old_visible, &scroll_rect);
+
+      if (!cairo_region_is_empty (expose_region))
         {
-          NSRect nsrect;
-
-          nsrect = NSMakeRect (window->x, window->y, window->width, window->height);
-
-          /* The newly visible area of this window in a coordinate
-           * system rooted at the origin of this window.
-           */
-          new_visible.x = -window->x;
-          new_visible.y = -window->y;
-          new_visible.width = old_visible.width;   /* parent has not changed size */
-          new_visible.height = old_visible.height; /* parent has not changed size */
-
-          expose_region = cairo_region_create_rectangle (&new_visible);
-          old_region = cairo_region_create_rectangle (&old_visible);
-          cairo_region_subtract (expose_region, old_region);
-
-          /* Determine what (if any) part of the previously visible
-           * part of the window can be copied without a redraw
-           */
-          scroll_rect = old_visible;
-          scroll_rect.x -= delta.width;
-          scroll_rect.y -= delta.height;
-          gdk_rectangle_intersect (&scroll_rect, &old_visible, &scroll_rect);
-
-          if (!cairo_region_is_empty (expose_region))
+          if (scroll_rect.width != 0 && scroll_rect.height != 0)
             {
-              if (scroll_rect.width != 0 && scroll_rect.height != 0)
-                {
-                  [impl->view scrollRect:NSMakeRect (scroll_rect.x,
-                                                     scroll_rect.y,
-                                                     scroll_rect.width,
-                                                     scroll_rect.height)
+              [impl->view scrollRect:NSMakeRect (scroll_rect.x,
+                                                 scroll_rect.y,
+                                                 scroll_rect.width,
+                                                 scroll_rect.height)
 			              by:delta];
-                }
-
-              [impl->view setFrame:nsrect];
-
-              gdk_quartz_surface_set_needs_display_in_region (window, expose_region);
-            }
-          else
-            {
-              [impl->view setFrame:nsrect];
-              [impl->view setNeedsDisplay:YES];
             }
 
-          cairo_region_destroy (expose_region);
-          cairo_region_destroy (old_region);
+          [impl->view setFrame:nsrect];
+
+          gdk_quartz_surface_set_needs_display_in_region (window, expose_region);
         }
+      else
+        {
+          [impl->view setFrame:nsrect];
+          [impl->view setNeedsDisplay:YES];
+        }
+
+      cairo_region_destroy (expose_region);
+      cairo_region_destroy (old_region);
     }
 
   GDK_QUARTZ_RELEASE_POOL;
@@ -1528,11 +1501,8 @@ gdk_surface_quartz_get_root_coords (GdkSurface *window,
 
   while (window != toplevel)
     {
-      if (_gdk_surface_has_impl ((GdkSurface *)window))
-        {
-          tmp_x += window->x;
-          tmp_y += window->y;
-        }
+      tmp_x += window->x;
+      tmp_y += window->y;
 
       window = window->parent;
     }

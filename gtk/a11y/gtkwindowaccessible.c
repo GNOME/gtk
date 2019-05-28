@@ -27,6 +27,7 @@
 #include "gtklabel.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
+#include "gtknative.h"
 
 /* atkcomponent.h */
 
@@ -243,7 +244,7 @@ gtk_window_accessible_ref_state_set (AtkObject *accessible)
   if (gtk_window_is_active (window))
     atk_state_set_add_state (state_set, ATK_STATE_ACTIVE);
 
-  gdk_surface = gtk_widget_get_surface (widget);
+  gdk_surface = gtk_native_get_surface (GTK_NATIVE (window));
   if (gdk_surface)
     {
       state = gdk_surface_get_state (gdk_surface);
@@ -379,16 +380,7 @@ gtk_window_accessible_get_extents (AtkComponent  *component,
   if (widget == NULL)
     return;
 
-  if (!gtk_widget_is_toplevel (widget))
-    {
-      AtkComponentIface *parent_iface;
-
-      parent_iface = (AtkComponentIface *) g_type_interface_peek_parent (ATK_COMPONENT_GET_IFACE (component));
-      parent_iface->get_extents (component, x, y, width, height, coord_type);
-      return;
-    }
-
-  surface = gtk_widget_get_surface (widget);
+  surface = gtk_native_get_surface (GTK_NATIVE (widget));
   if (surface == NULL)
     return;
 
@@ -426,16 +418,7 @@ gtk_window_accessible_get_size (AtkComponent *component,
   if (widget == NULL)
     return;
 
-  if (!gtk_widget_is_toplevel (widget))
-    {
-      AtkComponentIface *parent_iface;
-
-      parent_iface = (AtkComponentIface *) g_type_interface_peek_parent (ATK_COMPONENT_GET_IFACE (component));
-      parent_iface->get_size (component, width, height);
-      return;
-    }
-
-  surface = gtk_widget_get_surface (widget);
+  surface = gtk_native_get_surface (GTK_NATIVE (widget));
   if (surface == NULL)
     return;
 

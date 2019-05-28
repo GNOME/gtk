@@ -510,7 +510,7 @@ gdk_device_get_property (GObject    *object,
  * Gets the current state of a pointer device relative to @surface. As a slave
  * device’s coordinates are those of its master pointer, this
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them. See gdk_device_grab().
+ * unless there is an ongoing grab on them. See gdk_seat_grab().
  */
 void
 gdk_device_get_state (GdkDevice       *device,
@@ -537,7 +537,7 @@ gdk_device_get_state (GdkDevice       *device,
  * Gets the current location of @device in double precision. As a slave device's
  * coordinates are those of its master pointer, this function
  * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them. See gdk_device_grab().
+ * unless there is an ongoing grab on them. See gdk_seat_grab().
  **/
 void
 gdk_device_get_position (GdkDevice *device,
@@ -581,7 +581,7 @@ gdk_device_get_position (GdkDevice *device,
  *
  * As a slave device coordinates are those of its master pointer, This
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them, see gdk_device_grab().
+ * unless there is an ongoing grab on them, see gdk_seat_grab().
  *
  * Returns: (nullable) (transfer none): the #GdkSurface under the
  *   device position, or %NULL.
@@ -600,13 +600,6 @@ gdk_device_get_surface_at_position (GdkDevice *device,
                         gdk_display_device_is_grabbed (gdk_device_get_display (device), device), NULL);
 
   surface = _gdk_device_surface_at_position (device, &tmp_x, &tmp_y, NULL, FALSE);
-
-  /* This might need corrections, as the native surface returned
-     may contain client side children */
-  if (surface)
-    surface = _gdk_surface_find_descendant_at (surface,
-                                             tmp_x, tmp_y,
-                                             &tmp_x, &tmp_y);
 
   if (win_x)
     *win_x = tmp_x;
@@ -1244,7 +1237,7 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
 
 GdkGrabStatus
 gdk_device_grab (GdkDevice        *device,
-                 GdkSurface        *surface,
+                 GdkSurface       *surface,
                  GdkGrabOwnership  grab_ownership,
                  gboolean          owner_events,
                  GdkEventMask      event_mask,
@@ -1252,19 +1245,16 @@ gdk_device_grab (GdkDevice        *device,
                  guint32           time_)
 {
   GdkGrabStatus res;
-  GdkSurface *native;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_GRAB_FAILED);
   g_return_val_if_fail (GDK_IS_SURFACE (surface), GDK_GRAB_FAILED);
   g_return_val_if_fail (gdk_surface_get_display (surface) == gdk_device_get_display (device), GDK_GRAB_FAILED);
 
-  native = gdk_surface_get_toplevel (surface);
-
-  if (native == NULL || GDK_SURFACE_DESTROYED (native))
+  if (GDK_SURFACE_DESTROYED (surface))
     return GDK_GRAB_NOT_VIEWABLE;
 
   res = GDK_DEVICE_GET_CLASS (device)->grab (device,
-                                             native,
+                                             surface,
                                              owner_events,
                                              get_native_grab_event_mask (event_mask),
                                              NULL,
@@ -1282,7 +1272,6 @@ gdk_device_grab (GdkDevice        *device,
       _gdk_display_add_device_grab (display,
                                     device,
                                     surface,
-                                    native,
                                     grab_ownership,
                                     owner_events,
                                     event_mask,
@@ -1548,7 +1537,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
       else
         scale = 1;
 
-      offset = - surface_root_x - surface->abs_x;
+      offset = - surface_root_x;
     }
   else
     {
@@ -1557,7 +1546,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
       else
         scale = 1;
 
-      offset = - surface_root_y - surface->abs_y;
+      offset = - surface_root_y;
     }
 
   if (axis_value)

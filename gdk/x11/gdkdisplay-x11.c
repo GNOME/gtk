@@ -34,6 +34,7 @@
 #include "gdkframeclockprivate.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
+#include "gdksurfaceprivate.h"
 #include "gdkkeysprivate.h"
 #include "gdkmarshalers.h"
 #include "xsettings-client.h"
@@ -638,7 +639,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
   Window xwindow;
   GdkSurface *surface;
   gboolean is_substructure;
-  GdkSurfaceImplX11 *surface_impl = NULL;
+  GdkX11Surface *surface_impl = NULL;
   GdkX11Screen *x11_screen = NULL;
   GdkToplevelX11 *toplevel = NULL;
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
@@ -668,7 +669,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
       x11_screen = GDK_SURFACE_SCREEN (surface);
       toplevel = _gdk_x11_surface_get_toplevel (surface);
-      surface_impl = GDK_SURFACE_IMPL_X11 (surface->impl);
+      surface_impl = GDK_X11_SURFACE (surface);
 
       g_object_ref (surface);
     }
@@ -877,7 +878,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
             }
 
 	  if (toplevel)
-            gdk_surface_freeze_toplevel_updates (surface);
+            gdk_surface_freeze_updates (surface);
 
           _gdk_x11_surface_grab_check_unmap (surface, xevent->xany.serial);
         }
@@ -900,7 +901,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 					 0);
 
 	  if (toplevel)
-	    gdk_surface_thaw_toplevel_updates (surface);
+	    gdk_surface_thaw_updates (surface);
 	}
 
       return_val = FALSE;
@@ -931,13 +932,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 			   xevent->xconfigure.border_width,
 			   xevent->xconfigure.above,
 			   xevent->xconfigure.override_redirect,
-			   !surface
-			   ? " (discarding)"
-			   : surface->surface_type == GDK_SURFACE_CHILD
-			   ? " (discarding child)"
-			   : xevent->xconfigure.event != xevent->xconfigure.window
-			   ? " (discarding substructure)"
-			   : ""));
+			   !surface ? " (discarding)" : ""));
       if (_gdk_x11_display_is_root_window (display, xevent->xconfigure.window))
         {
 	  _gdk_x11_screen_size_changed (x11_screen, xevent);
@@ -953,8 +948,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 #endif
 
     if (!surface ||
-	  xevent->xconfigure.event != xevent->xconfigure.window ||
-          GDK_SURFACE_TYPE (surface) == GDK_SURFACE_CHILD)
+	  xevent->xconfigure.event != xevent->xconfigure.window)
 	return_val = FALSE;
       else
 	{
@@ -991,8 +985,12 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	    }
 	  if (!is_substructure)
 	    {
-	      surface->x = event->configure.x;
-	      surface->y = event->configure.y;
+              if (surface->x != event->configure.x ||
+                  surface->y != event->configure.y)
+                {
+                  surface->x = event->configure.x;
+                  surface->y = event->configure.y;
+                }
 
               if (surface_impl->unscaled_width != xevent->xconfigure.width ||
                   surface_impl->unscaled_height != xevent->xconfigure.height)
@@ -1013,6 +1011,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 		  if (surface->resize_count == 0)
 		    _gdk_x11_moveresize_configure_done (display, surface);
 		}
+
+              gdk_x11_surface_update_popups (surface);
 	    }
         }
       break;
@@ -1216,8 +1216,8 @@ _gdk_wm_protocols_filter (const XEvent *xevent,
    * in the message for everything that gets stuffed in */
   if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_FRAME_DRAWN"))
     {
-      GdkSurfaceImplX11 *surface_impl;
-      surface_impl = GDK_SURFACE_IMPL_X11 (win->impl);
+      GdkX11Surface *surface_impl;
+      surface_impl = GDK_X11_SURFACE (win);
       if (surface_impl->toplevel)
         {
           guint32 d0 = xevent->xclient.data.l[0];
@@ -1254,8 +1254,8 @@ _gdk_wm_protocols_filter (const XEvent *xevent,
 
   if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_FRAME_TIMINGS"))
     {
-      GdkSurfaceImplX11 *surface_impl;
-      surface_impl = GDK_SURFACE_IMPL_X11 (win->impl);
+      GdkX11Surface *surface_impl;
+      surface_impl = GDK_X11_SURFACE (win);
       if (surface_impl->toplevel)
         {
           guint32 d0 = xevent->xclient.data.l[0];
@@ -1494,7 +1494,11 @@ gdk_x11_display_open (const gchar *display_name)
 
   gdk_event_init (display);
 
-  display_x11->leader_gdk_surface = gdk_surface_new_temp (display);
+  {
+    GdkRectangle rect = { -100, -100, 1, 1 };
+    display_x11->leader_gdk_surface = gdk_surface_new_temp (display, &rect);
+  }
+
   (_gdk_x11_surface_get_toplevel (display_x11->leader_gdk_surface))->is_leader = TRUE;
 
   display_x11->leader_window = GDK_SURFACE_XID (display_x11->leader_gdk_surface);
@@ -3026,7 +3030,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   object_class->dispose = gdk_x11_display_dispose;
   object_class->finalize = gdk_x11_display_finalize;
 
-  display_class->surface_type = GDK_TYPE_X11_SURFACE;
   display_class->cairo_context_type = GDK_TYPE_X11_CAIRO_CONTEXT;
 #ifdef GDK_RENDERING_VULKAN
   display_class->vk_context_type = GDK_TYPE_X11_VULKAN_CONTEXT;
@@ -3048,7 +3051,7 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->get_next_serial = gdk_x11_display_get_next_serial;
   display_class->get_startup_notification_id = gdk_x11_display_get_startup_notification_id;
   display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;
-  display_class->create_surface_impl = _gdk_x11_display_create_surface_impl;
+  display_class->create_surface = _gdk_x11_display_create_surface;
   display_class->get_keymap = gdk_x11_display_get_keymap;
   display_class->text_property_to_utf8_list = _gdk_x11_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_x11_display_utf8_to_string_target;

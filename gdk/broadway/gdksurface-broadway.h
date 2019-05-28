@@ -25,28 +25,17 @@
 #ifndef __GDK_SURFACE_BROADWAY_H__
 #define __GDK_SURFACE_BROADWAY_H__
 
-#include <gdk/gdksurfaceimpl.h>
+#include <gdk/gdksurfaceprivate.h>
+#include "gdkbroadwaysurface.h"
 
 G_BEGIN_DECLS
-
-typedef struct _GdkSurfaceImplBroadway GdkSurfaceImplBroadway;
-typedef struct _GdkSurfaceImplBroadwayClass GdkSurfaceImplBroadwayClass;
 
 /* Surface implementation for Broadway
  */
 
-#define GDK_TYPE_SURFACE_IMPL_BROADWAY              (gdk_surface_impl_broadway_get_type ())
-#define GDK_SURFACE_IMPL_BROADWAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SURFACE_IMPL_BROADWAY, GdkSurfaceImplBroadway))
-#define GDK_SURFACE_IMPL_BROADWAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SURFACE_IMPL_BROADWAY, GdkSurfaceImplBroadwayClass))
-#define GDK_IS_SURFACE_IMPL_BROADWAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SURFACE_IMPL_BROADWAY))
-#define GDK_IS_SURFACE_IMPL_BROADWAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SURFACE_IMPL_BROADWAY))
-#define GDK_SURFACE_IMPL_BROADWAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SURFACE_IMPL_BROADWAY, GdkSurfaceImplBroadwayClass))
-
-struct _GdkSurfaceImplBroadway
+struct _GdkBroadwaySurface
 {
-  GdkSurfaceImpl parent_instance;
-
-  GdkSurface *wrapper;
+  GdkSurface parent_instance;
 
   GdkCursor *cursor;
 
@@ -71,14 +60,17 @@ struct _GdkSurfaceImplBroadway
 
   GArray *node_data;
   GPtrArray *node_data_textures;
+
+  int offset_x;
+  int offset_y;
 };
 
-struct _GdkSurfaceImplBroadwayClass
+struct _GdkBroadwaySurfaceClass
 {
-  GdkSurfaceImplClass parent_class;
+  GdkSurfaceClass parent_class;
 };
 
-GType gdk_surface_impl_broadway_get_type (void);
+GType gdk_surface_broadway_get_type (void);
 
 G_END_DECLS
 

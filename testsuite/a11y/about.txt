@@ -52,7 +52,7 @@ window1
           parent: box
           index: 1
           name: FancyPants
-          state: enabled focusable multi-line sensitive showing visible
+          state: enabled focusable focused multi-line sensitive showing visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
@@ -60,7 +60,8 @@ window1
           <AtkText>
           text: FancyPants
           character count: 10
-          caret offset: 0
+          caret offset: 10
+          selection 0: (0, 10) FancyPants
           default attributes: bg-color: <omitted>
                               bg-full-height: 0
                               direction: <omitted>
@@ -364,7 +365,7 @@ See the GNU General Public License, version 3 or later for details.
       "filler"
       parent: headerbar1
       index: 0
-      state: enabled horizontal sensitive showing visible
+      state: enabled horizontal sensitive
       toolkit: gtk
       <AtkComponent>
       layer: widget
@@ -374,7 +375,7 @@ See the GNU General Public License, version 3 or later for details.
         parent: stack_switcher
         index: 0
         name: About
-        state: checked enabled focusable focused sensitive showing visible
+        state: checked enabled focusable sensitive visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
@@ -390,7 +391,7 @@ See the GNU General Public License, version 3 or later for details.
         parent: stack_switcher
         index: 1
         name: Credits
-        state: enabled focusable sensitive showing visible
+        state: enabled focusable sensitive
         toolkit: gtk
         <AtkComponent>
         layer: widget
@@ -422,7 +423,7 @@ See the GNU General Public License, version 3 or later for details.
         parent: stack_switcher
         index: 3
         name: System
-        state: enabled focusable sensitive showing visible
+        state: enabled focusable sensitive
         toolkit: gtk
         <AtkComponent>
         layer: widget

@@ -533,9 +533,6 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
                                    gint           *height,
                                    AtkCoordType    coord_type)
 {
-  GdkSurface *surface;
-  gint x_surface, y_surface;
-  gint x_toplevel, y_toplevel;
   GtkWidget *widget;
   GtkAllocation allocation;
 
@@ -557,25 +554,11 @@ gtk_widget_accessible_get_extents (AtkComponent   *component,
     {
       *x = allocation.x;
       *y = allocation.y;
-      surface = gtk_widget_get_surface (gtk_widget_get_parent (widget));
     }
   else
     {
       *x = 0;
       *y = 0;
-      surface = gtk_widget_get_surface (widget);
-    }
-  gdk_surface_get_origin (surface, &x_surface, &y_surface);
-  *x += x_surface;
-  *y += y_surface;
-
-  if (coord_type == ATK_XY_WINDOW)
-    {
-      surface = gdk_surface_get_toplevel (gtk_widget_get_surface (widget));
-      gdk_surface_get_origin (surface, &x_toplevel, &y_toplevel);
-
-      *x -= x_toplevel;
-      *y -= y_toplevel;
     }
 }
 
@@ -601,17 +584,12 @@ gtk_widget_accessible_grab_focus (AtkComponent *component)
     return FALSE;
 
   gtk_widget_grab_focus (widget);
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (gtk_widget_is_toplevel (toplevel))
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+  if (GTK_IS_WINDOW (toplevel))
     {
-#ifdef GDK_WINDOWING_X11
-      gtk_window_present_with_time (GTK_WINDOW (toplevel),
-      gdk_x11_get_server_time (gtk_widget_get_surface (widget)));
-#else
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_window_present (GTK_WINDOW (toplevel));
       G_GNUC_END_IGNORE_DEPRECATIONS
-#endif
     }
 
   return TRUE;
@@ -625,7 +603,7 @@ gtk_widget_accessible_set_extents (AtkComponent *component,
                                    gint          height,
                                    AtkCoordType  coord_type)
 {
-   return FALSE;
+  return FALSE;
 }
 
 static gboolean
@@ -634,7 +612,7 @@ gtk_widget_accessible_set_position (AtkComponent *component,
                                     gint          y,
                                     AtkCoordType  coord_type)
 {
-   return FALSE;
+  return FALSE;
 }
 
 static gboolean
@@ -642,7 +620,7 @@ gtk_widget_accessible_set_size (AtkComponent *component,
                                 gint          width,
                                 gint          height)
 {
-   return FALSE;
+  return FALSE;
 }
 
 static void

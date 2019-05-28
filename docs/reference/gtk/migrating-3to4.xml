@@ -265,9 +265,8 @@
       <para>
         The gdk_window_new() function has been replaced by a number of more
         specialized constructors: gdk_surface_new_toplevel(), gdk_surface_new_popup(),
-        gdk_surface_new_temp(), gdk_surface_new_child(), gdk_surface_new_input(),
-        gdk_wayland_surface_new_subsurface(). Use the appropriate ones to create
-        your windows.
+        gdk_surface_new_temp(), gdk_wayland_surface_new_subsurface().
+        Use the appropriate ones to create your windows.
       </para>
       <para>
         Native and foreign subwindows are no longer supported. These concepts were
@@ -671,7 +670,7 @@
       <title>Adapt to changes in GtkOverlay API</title>
       <para>
         The GtkOverlay::pass-through child property has been replaced by the
-        GtkWidget::can-pick property. Note that they have the oppositve sense:
+        GtkWidget::can-pick property. Note that they have the opposite sense:
         pass-through == !can-pick.
       </para>
     </section>
@@ -756,6 +755,39 @@
         instead.
       </para>
     </section>
+
+    <section>
+      <title>GtkPopover::modal has been renamed to autohide</title>
+      <para>
+        The modal property has been renamed to autohide.
+        gtk-builder-tool can assist with the rename in ui files.
+      </para>
+    </section>
+
+    <section>
+      <title>gtk_widget_get_surface has been removed</title>
+      <para>
+        gtk_widget_get_surface() has been removed.
+        Use gtk_native_get_surface() in combination with
+        gtk_widget_get_native() instead.
+      </para>
+    </section>
+
+    <section>
+      <title>gtk_widget_is_toplevel has been removed</title>
+      <para>
+        gtk_widget_is_toplevel() has been removed.
+        Use GTK_IS_ROOT, GTK_IS_NATIVE or GTK_IS_WINDOW
+        instead, as appropriate.
+      </para>
+
+    <section>
+      <title>gtk_widget_get_toplevel has been removed</title>
+      <para>
+        gtk_widget_get_toplevel() has been removed.
+        Use gtk_widget_get_root() or gtk_widget_get_native()
+        instead, as appropriate.
+      </para>
   </section>
 
 </chapter>

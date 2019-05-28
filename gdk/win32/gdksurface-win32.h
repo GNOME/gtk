@@ -27,25 +27,13 @@
 
 #include "gdk/win32/gdkprivate-win32.h"
 #include "gdk/win32/gdkwin32cursor.h"
-#include "gdk/gdksurfaceimpl.h"
+#include "gdk/win32/gdkwin32surface.h"
+#include "gdk/gdksurfaceprivate.h"
 #include "gdk/gdkcursor.h"
 
 #include <windows.h>
 
 G_BEGIN_DECLS
-
-/* Window implementation for Win32
- */
-
-typedef struct _GdkSurfaceImplWin32 GdkSurfaceImplWin32;
-typedef struct _GdkSurfaceImplWin32Class GdkSurfaceImplWin32Class;
-
-#define GDK_TYPE_SURFACE_IMPL_WIN32              (_gdk_surface_impl_win32_get_type ())
-#define GDK_SURFACE_IMPL_WIN32(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SURFACE_IMPL_WIN32, GdkSurfaceImplWin32))
-#define GDK_SURFACE_IMPL_WIN32_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SURFACE_IMPL_WIN32, GdkSurfaceImplWin32Class))
-#define GDK_IS_SURFACE_IMPL_WIN32(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SURFACE_IMPL_WIN32))
-#define GDK_IS_SURFACE_IMPL_WIN32_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SURFACE_IMPL_WIN32))
-#define GDK_SURFACE_IMPL_WIN32_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SURFACE_IMPL_WIN32, GdkSurfaceImplWin32Class))
 
 enum _GdkWin32AeroSnapCombo
 {
@@ -219,11 +207,10 @@ typedef struct _GdkW32DragMoveResizeContext GdkW32DragMoveResizeContext;
 /* defined in gdkdrop-win32.c */
 typedef struct _drop_target_context drop_target_context;
 
-struct _GdkSurfaceImplWin32
+struct _GdkWin32Surface
 {
-  GdkSurfaceImpl parent_instance;
+  GdkSurface parent_instance;
 
-  GdkSurface *wrapper;
   HANDLE handle;
 
   HICON   hicon_big;
@@ -274,7 +261,6 @@ struct _GdkSurfaceImplWin32
    * We don't actually set margins to 0, we just set this bit.
    */
   guint zero_margins : 1;
-  guint no_bg : 1;
   guint inhibit_configure : 1;
 
   /* Set to TRUE if window is using true layered mode adjustments
@@ -355,20 +341,12 @@ struct _GdkSurfaceImplWin32
   gint unscaled_height;
 };
 
-struct _GdkSurfaceImplWin32Class
+struct _GdkWin32SurfaceClass
 {
-  GdkSurfaceImplClass parent_class;
+  GdkSurfaceClass parent_class;
 };
 
-GType _gdk_surface_impl_win32_get_type (void);
-
-void  _gdk_win32_surface_tmp_unset_bg  (GdkSurface *window,
-                                        gboolean   recurse);
-void  _gdk_win32_surface_tmp_reset_bg  (GdkSurface *window,
-                                        gboolean   recurse);
-
-void  _gdk_win32_surface_tmp_unset_parent_bg (GdkSurface *window);
-void  _gdk_win32_surface_tmp_reset_parent_bg (GdkSurface *window);
+GType _gdk_win32_surface_get_type (void);
 
 void  _gdk_win32_surface_update_style_bits   (GdkSurface *window);
 

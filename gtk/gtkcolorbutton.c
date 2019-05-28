@@ -374,8 +374,6 @@ gtk_color_button_init (GtkColorButton *button)
   GtkStyleContext *context;
   GdkContentFormats *targets;
 
-  gtk_widget_set_has_surface (GTK_WIDGET (button), FALSE);
-
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked", G_CALLBACK (gtk_color_button_clicked), button);
   gtk_widget_set_parent (priv->button, GTK_WIDGET (button));
@@ -519,12 +517,12 @@ ensure_dialog (GtkColorButton *button)
   if (priv->cs_dialog != NULL)
     return;
 
-  parent = gtk_widget_get_toplevel (GTK_WIDGET (button));
+  parent = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (button)));
 
   priv->cs_dialog = dialog = gtk_color_chooser_dialog_new (priv->title, NULL);
   gtk_window_set_hide_on_close (GTK_WINDOW (dialog), TRUE);
 
-  if (gtk_widget_is_toplevel (parent) && GTK_IS_WINDOW (parent))
+  if (GTK_IS_WINDOW (parent))
   {
     if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (dialog)))
       gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));

@@ -41,7 +41,6 @@ typedef struct _GdkDisplayClass GdkDisplayClass;
 typedef struct
 {
   GdkSurface *surface;
-  GdkSurface *native_surface;
   gulong serial_start;
   gulong serial_end; /* exclusive, i.e. not active on serial_end */
   guint event_mask;
@@ -113,7 +112,6 @@ struct _GdkDisplayClass
 {
   GObjectClass parent_class;
 
-  GType surface_type;         /* type for native surfaces for this display, set in class_init */
   GType cairo_context_type;   /* type for GdkCairoContext, must be set */
   GType vk_context_type;      /* type for GdkVulkanContext, must be set if vk_extension_name != NULL */
   const char *vk_extension_name; /* Name of required windowing vulkan extension or %NULL (default) if Vulkan isn't supported */
@@ -142,10 +140,13 @@ struct _GdkDisplayClass
                                                  GdkEvent       *new_event);
   void                       (*event_data_free) (GdkDisplay     *display,
                                                  GdkEvent       *event);
-  void                       (*create_surface_impl) (GdkDisplay    *display,
-                                                     GdkSurface     *surface,
-                                                     GdkSurface     *real_parent,
-                                                     GdkSurfaceAttr *attributes);
+  GdkSurface *               (*create_surface) (GdkDisplay     *display,
+                                                GdkSurfaceType  surface_type,
+                                                GdkSurface     *parent,
+                                                int             x,
+                                                int             y,
+                                                int             width,
+                                                int             height);
 
   GdkKeymap *                (*get_keymap)         (GdkDisplay    *display);
 
@@ -200,7 +201,6 @@ GdkDeviceGrabInfo * _gdk_display_get_last_device_grab (GdkDisplay *display,
 GdkDeviceGrabInfo * _gdk_display_add_device_grab      (GdkDisplay       *display,
                                                        GdkDevice        *device,
                                                        GdkSurface        *surface,
-                                                       GdkSurface        *native_surface,
                                                        GdkGrabOwnership  grab_ownership,
                                                        gboolean          owner_events,
                                                        GdkEventMask      event_mask,
@@ -231,11 +231,13 @@ void                _gdk_display_event_data_copy      (GdkDisplay       *display
                                                        GdkEvent         *new_event);
 void                _gdk_display_event_data_free      (GdkDisplay       *display,
                                                        GdkEvent         *event);
-void                gdk_display_create_surface_impl   (GdkDisplay       *display,
-                                                       GdkSurface        *surface,
-                                                       GdkSurface        *real_parent,
-                                                       GdkSurfaceAttr    *attributes);
-GdkSurface *         _gdk_display_create_surface      (GdkDisplay       *display);
+GdkSurface *        gdk_display_create_surface        (GdkDisplay       *display,
+                                                       GdkSurfaceType    surface_type,
+                                                       GdkSurface       *parent,
+                                                       int               x,
+                                                       int               y,
+                                                       int               width,
+                                                       int               height);
 
 gboolean            gdk_display_make_gl_context_current  (GdkDisplay        *display,
                                                           GdkGLContext      *context);

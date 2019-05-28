@@ -272,7 +272,6 @@ gtk_image_init (GtkImage *image)
   GtkCssNode *widget_node;
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (image));
-  gtk_widget_set_has_surface (GTK_WIDGET (image), FALSE);
 
   priv->icon_helper = gtk_icon_helper_new (widget_node, GTK_WIDGET (image));
 }

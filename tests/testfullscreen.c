@@ -25,7 +25,7 @@ set_fullscreen_monitor_cb (GtkWidget *widget, gpointer user_data)
   GdkFullscreenMode mode = (GdkFullscreenMode) GPOINTER_TO_INT (user_data);
   GdkSurface  *window;
 
-  window = gtk_widget_get_surface (gtk_widget_get_parent (widget));
+  window = gtk_native_get_surface (gtk_widget_get_native (widget));
   gdk_surface_set_fullscreen_mode (window, mode);
   gdk_surface_fullscreen (window);
 }
@@ -35,7 +35,7 @@ remove_fullscreen_cb (GtkWidget *widget, gpointer user_data)
 {
   GdkSurface  *window;
 
-  window = gtk_widget_get_surface (gtk_widget_get_parent (widget));
+  window = gtk_native_get_surface (gtk_widget_get_native (widget));
   gdk_surface_unfullscreen (window);
 }
 

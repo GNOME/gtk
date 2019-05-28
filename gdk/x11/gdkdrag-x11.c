@@ -33,6 +33,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay-x11.h"
 #include "gdkdragprivate.h"
+#include "gdksurfaceprivate.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkproperty.h"
@@ -532,14 +533,14 @@ gdk_surface_cache_new (GdkDisplay *display)
     {
       GList *toplevel_windows, *list;
       GdkSurface *surface;
-      GdkSurfaceImplX11 *impl;
+      GdkX11Surface *impl;
       gint x, y, width, height;
 
       toplevel_windows = gdk_x11_display_get_toplevel_windows (display);
       for (list = toplevel_windows; list; list = list->next)
         {
           surface = GDK_SURFACE (list->data);
-	  impl = GDK_SURFACE_IMPL_X11 (surface->impl);
+	  impl = GDK_X11_SURFACE (surface);
           gdk_surface_get_geometry (surface, &x, &y, &width, &height);
           gdk_surface_cache_add (result, GDK_SURFACE_XID (surface),
                                 x * impl->surface_scale, y * impl->surface_scale, 
@@ -1324,7 +1325,7 @@ create_drag_surface (GdkDisplay *display)
 {
   GdkSurface *surface;
 
-  surface = gdk_surface_new_popup (display, &(GdkRectangle) { 0, 0, 100, 100 });
+  surface = gdk_surface_new_temp (display, &(GdkRectangle) { 0, 0, 100, 100 });
 
   gdk_surface_set_type_hint (surface, GDK_SURFACE_TYPE_HINT_DND);
   
@@ -1401,11 +1402,11 @@ drag_find_window_cache (GdkX11Drag *drag_x11,
 }
 
 static Window
-gdk_x11_drag_find_surface (GdkDrag  *drag,
-                                   GdkSurface       *drag_surface,
-                                   gint             x_root,
-                                   gint             y_root,
-                                   GdkDragProtocol *protocol)
+gdk_x11_drag_find_surface (GdkDrag         *drag,
+                           GdkSurface      *drag_surface,
+                           gint             x_root,
+                           gint             y_root,
+                           GdkDragProtocol *protocol)
 {
   GdkX11Screen *screen_x11;
   GdkX11Drag *drag_x11 = GDK_X11_DRAG (drag);
@@ -1420,7 +1421,7 @@ gdk_x11_drag_find_surface (GdkDrag  *drag,
   window_cache = drag_find_window_cache (drag_x11, display);
 
   dest = get_client_window_at_coords (window_cache,
-                                      drag_surface && GDK_SURFACE_IS_X11 (drag_surface) ?
+                                      drag_surface && GDK_IS_X11_SURFACE (drag_surface) ?
                                       GDK_SURFACE_XID (drag_surface) : None,
                                       x_root * screen_x11->surface_scale,
 				      y_root * screen_x11->surface_scale);
@@ -2053,7 +2054,7 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
 
   display = gdk_surface_get_display (surface);
 
-  ipc_surface = gdk_surface_new_popup (display, &(GdkRectangle) { -99, -99, 1, 1 });
+  ipc_surface = gdk_surface_new_temp (display, &(GdkRectangle) { -99, -99, 1, 1 });
 
   drag = (GdkDrag *) g_object_new (GDK_TYPE_X11_DRAG,
                                    "surface", ipc_surface,

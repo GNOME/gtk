@@ -712,11 +712,11 @@ get_toplevel (GtkWidget *widget)
 {
   GtkWidget *toplevel;
 
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (!gtk_widget_is_toplevel (toplevel))
-    return NULL;
-  else
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+  if (GTK_IS_WINDOW (toplevel))
     return GTK_WINDOW (toplevel);
+  else
+    return NULL;
 }
 
 /* Shows an error dialog for the file chooser */
@@ -1676,13 +1676,13 @@ open_folder_cb (GSimpleAction *action,
                 gpointer       data)
 {
   GtkFileChooserWidget *impl = data;
-  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (impl));
+  GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (impl)));
   GSList *files;
 
   files = get_selected_files (impl);
 
   /* Sigh, just use the first one */
-  if (files && gtk_widget_is_toplevel (toplevel))
+  if (files && GTK_IS_WINDOW (toplevel))
     {
       GFile *file = files->data;
       gchar *uri;
@@ -3523,7 +3523,7 @@ gtk_file_chooser_widget_root (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->root (widget);
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
 
   g_assert (priv->toplevel_set_focus_id == 0);
   priv->toplevel_set_focus_id = g_signal_connect (toplevel, "notify::focus-widget",
@@ -3539,7 +3539,7 @@ gtk_file_chooser_widget_unroot (GtkWidget *widget)
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
   GtkWidget *toplevel;
 
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
   if (toplevel && priv->toplevel_set_focus_id != 0)
     {
       g_signal_handler_disconnect (toplevel, priv->toplevel_set_focus_id);
@@ -5220,7 +5220,7 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
           GtkWidget *toplevel;
 
           g_object_unref (cancellable);
-          toplevel = gtk_widget_get_toplevel (GTK_WIDGET (impl));
+          toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (impl)));
 
           mount_operation = gtk_mount_operation_new (GTK_WINDOW (toplevel));
 
@@ -6575,7 +6575,7 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserEmbed *chooser_embed)
   GtkWidget *current_focus;
   gboolean retval;
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (impl));
+  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (impl)));
   g_assert (GTK_IS_WINDOW (toplevel));
 
   retval = FALSE;
@@ -8441,7 +8441,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
 #ifdef PROFILE_FILE_CHOOSER
   access ("MARK: *** CREATE FILE CHOOSER", F_OK);
 #endif
-  gtk_widget_set_has_surface (GTK_WIDGET (impl), FALSE);
 
   priv->local_only = FALSE;
   priv->preview_widget_active = TRUE;

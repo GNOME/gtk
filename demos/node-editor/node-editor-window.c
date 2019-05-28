@@ -406,7 +406,7 @@ save_response_cb (GtkWidget        *dialog,
         {
           GtkWidget *dialog;
 
-          dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (self))),
+          dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
                                            GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
                                            GTK_MESSAGE_INFO,
                                            GTK_BUTTONS_OK,
@@ -430,7 +430,7 @@ save_cb (GtkWidget        *button,
   GtkWidget *dialog;
 
   dialog = gtk_file_chooser_dialog_new ("Save node",
-                                        GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (button))),
+                                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
                                         GTK_FILE_CHOOSER_ACTION_SAVE,
                                         "_Cancel", GTK_RESPONSE_CANCEL,
                                         "_Save", GTK_RESPONSE_ACCEPT,
@@ -464,8 +464,7 @@ create_texture (NodeEditorWindow *self)
   if (node == NULL)
     return NULL;
 
-  /* ahem */
-  renderer = GTK_ROOT_GET_IFACE (gtk_widget_get_root (GTK_WIDGET (self)))->get_renderer (gtk_widget_get_root (GTK_WIDGET (self)));
+  renderer = gtk_native_get_renderer (gtk_widget_get_native (GTK_WIDGET (self)));
   texture = gsk_renderer_render_texture (renderer, node, NULL);
   gsk_render_node_unref (node);
 
@@ -515,7 +514,7 @@ export_image_cb (GtkWidget        *button,
     return;
 
   dialog = gtk_file_chooser_dialog_new ("",
-                                        GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (button))),
+                                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
                                         GTK_FILE_CHOOSER_ACTION_SAVE,
                                         "_Cancel", GTK_RESPONSE_CANCEL,
                                         "_Save", GTK_RESPONSE_ACCEPT,
@@ -548,7 +547,7 @@ node_editor_window_add_renderer (NodeEditorWindow *self,
   GdkSurface *surface;
   GdkPaintable *paintable;
 
-  surface = gtk_widget_get_surface (GTK_WIDGET (self));
+  surface = gtk_native_get_surface (GTK_NATIVE (self));
   g_assert (surface != NULL);
 
   if (renderer != NULL && !gsk_renderer_realize (renderer, surface, NULL))

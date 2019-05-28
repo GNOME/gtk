@@ -72,6 +72,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
+#include "gtknative.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -160,6 +161,7 @@ struct _GtkEntryPrivate
 
   GtkWidget     *text;
   GtkWidget     *progress_widget;
+  GtkWidget     *emoji_chooser;
 
   guint         show_emoji_icon         : 1;
   guint         editing_canceled        : 1; /* Only used by GtkCellRendererText */
@@ -1268,8 +1270,6 @@ gtk_entry_init (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
-  gtk_widget_set_has_surface (GTK_WIDGET (entry), FALSE);
-
   priv->text = gtk_text_new ();
   gtk_widget_set_parent (priv->text, GTK_WIDGET (entry));
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
@@ -1292,6 +1292,8 @@ gtk_entry_dispose (GObject *object)
       gtk_editable_finish_delegate (GTK_EDITABLE (entry));
     }
   g_clear_pointer (&priv->text, gtk_widget_unparent);
+
+  g_clear_pointer (&priv->emoji_chooser, gtk_widget_unparent);
 
   gtk_entry_set_icon_from_paintable (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
@@ -1626,6 +1628,9 @@ gtk_entry_size_allocate (GtkWidget *widget,
       if (completion)
         _gtk_entry_completion_resize_popup (completion);
     }
+
+  if (priv->emoji_chooser)
+    gtk_native_check_resize (GTK_NATIVE (priv->emoji_chooser));
 }
 
 static void

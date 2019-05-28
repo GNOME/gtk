@@ -20,7 +20,7 @@
 #include "gdkeventsource.h"
 #include "gdkseat.h"
 
-#include "gdkinternals.h"
+#include "gdksurfaceprivate.h"
 #include "gdkframeclockprivate.h"
 
 #include <stdlib.h>
@@ -287,6 +287,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
       {
         surface->x = message->configure_notify.x;
         surface->y = message->configure_notify.y;
+
+        gdk_broadway_surface_update_popups (surface);
 
         event = gdk_event_new (GDK_CONFIGURE);
         event->any.surface = g_object_ref (surface);

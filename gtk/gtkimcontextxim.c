@@ -22,7 +22,7 @@
 
 #include "gtkimcontextxim.h"
 #include "gtkimmoduleprivate.h"
-#include "gtkroot.h"
+#include "gtknative.h"
 
 #include "gtk/gtkintl.h"
 
@@ -560,19 +560,9 @@ set_ic_client_surface (GtkIMContextXIM *context_xim,
 
   if (context_xim->client_surface)
     {
-      GdkSurface *native;
-
       context_xim->im_info = get_im (context_xim->client_surface, context_xim->locale);
       context_xim->im_info->ics = g_slist_prepend (context_xim->im_info->ics, context_xim);
-
-      for (native = client_surface; native; native = gdk_surface_get_parent (native))
-        {
-          if (gdk_surface_has_native (native))
-            {
-              context_xim->client_surface_xid = gdk_x11_surface_get_xid (native);
-              break;
-            }
-        }
+      context_xim->client_surface_xid = gdk_x11_surface_get_xid (client_surface);
     }
 
   update_client_widget (context_xim);
@@ -586,7 +576,7 @@ gtk_im_context_xim_set_client_widget (GtkIMContext *context,
   GdkSurface *surface = NULL;
 
   if (widget != NULL)
-    surface = gtk_widget_get_surface (gtk_widget_get_toplevel (widget));
+    surface = gtk_native_get_surface (gtk_widget_get_native (widget));
 
   set_ic_client_surface (context_xim, surface);
 }
@@ -641,7 +631,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   if (event_type == GDK_KEY_RELEASE && !context_xim->filter_key_release)
     return FALSE;
 
-  window = gdk_surface_get_toplevel (gdk_event_get_surface ((GdkEvent *) event));
+  window = gdk_event_get_surface ((GdkEvent *) event);
 
   xevent.type = (event_type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
   xevent.serial = 0;		/* hope it doesn't matter */
@@ -1429,7 +1419,7 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
  * The toplevel is computed by walking up the GdkSurface
  * hierarchy from context->client_surface until we find a
  * window that is owned by some widget, and then calling
- * gtk_widget_get_toplevel() on that widget. This should
+ * gtk_widget_get_root() on that widget. This should
  * handle both cases where we might have GdkSurfaces without widgets,
  * and cases where GtkWidgets have strange window hierarchies
  * (like a torn off GtkHandleBox.)
@@ -1466,8 +1456,8 @@ claim_status_window (GtkIMContextXIM *context_xim)
 {
   if (!context_xim->status_window && context_xim->client_widget)
     {
-      GtkWidget *toplevel = gtk_widget_get_toplevel (context_xim->client_widget);
-      if (toplevel && gtk_widget_is_toplevel (toplevel))
+      GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (context_xim->client_widget));
+      if (toplevel)
 	{
 	  StatusWindow *status_window = status_window_get (toplevel);
 
@@ -1499,9 +1489,9 @@ update_in_toplevel (GtkIMContextXIM *context_xim)
 {
   if (context_xim->client_widget)
     {
-      GtkWidget *toplevel = gtk_widget_get_toplevel (context_xim->client_widget);
+      GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (context_xim->client_widget));
 
-      context_xim->in_toplevel = (toplevel && gtk_widget_is_toplevel (toplevel));
+      context_xim->in_toplevel = toplevel != NULL;
     }
   else
     context_xim->in_toplevel = FALSE;
@@ -1536,7 +1526,7 @@ update_client_widget (GtkIMContextXIM *context_xim)
   GtkWidget *new_client_widget = NULL;
 
   if (context_xim->client_surface)
-    new_client_widget = gtk_root_get_for_surface (context_xim->client_surface);
+    new_client_widget = gtk_native_get_for_surface (context_xim->client_surface);
 
   if (new_client_widget != context_xim->client_widget)
     {

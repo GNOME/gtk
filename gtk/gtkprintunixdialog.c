@@ -580,11 +580,11 @@ get_toplevel (GtkWidget *widget)
 {
   GtkWidget *toplevel = NULL;
 
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (!gtk_widget_is_toplevel (toplevel))
-    return NULL;
-  else
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+  if (GTK_IS_WINDOW (toplevel))
     return GTK_WINDOW (toplevel);
+  else
+    return NULL;
 }
 
 static void
@@ -791,9 +791,6 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (priv->paper_size_combo),
 				      priv->paper_size_renderer,
                                       page_name_func, NULL, NULL);
-
-  /* Preview drawing area has no window */
-  gtk_widget_set_has_surface (priv->page_layout_preview, FALSE);
 
   /* Load backends */
   load_print_backends (dialog);

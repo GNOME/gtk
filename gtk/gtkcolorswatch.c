@@ -39,6 +39,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtknative.h"
 
 #include "a11y/gtkcolorswatchaccessibleprivate.h"
 
@@ -362,6 +363,9 @@ swatch_size_allocate (GtkWidget *widget,
                               0, 0,
                               width, height
                             }, -1);
+
+  if (priv->popover)
+    gtk_native_check_resize (GTK_NATIVE (priv->popover));
 }
 
 static void
@@ -567,7 +571,6 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   priv->has_menu = TRUE;
 
   gtk_widget_set_can_focus (GTK_WIDGET (swatch), TRUE);
-  gtk_widget_set_has_surface (GTK_WIDGET (swatch), FALSE);
   gtk_widget_set_overflow (GTK_WIDGET (swatch), GTK_OVERFLOW_HIDDEN);
 
   gesture = gtk_gesture_long_press_new ();

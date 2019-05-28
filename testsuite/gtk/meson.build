@@ -8,6 +8,7 @@ if cc.get_id() != 'msvc'
 endif
 
 tests = [
+  ['popover'],
   ['accel'],
   ['accessible'],
   ['adjustment'],

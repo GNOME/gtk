@@ -642,7 +642,7 @@ update_key_capture (GtkWidget *chooser)
       GtkWidget *toplevel;
       GtkWidget *focus;
 
-      toplevel = gtk_widget_get_toplevel (chooser);
+      toplevel = GTK_WIDGET (gtk_widget_get_root (chooser));
       focus = gtk_root_get_focus (GTK_ROOT (toplevel));
 
       if (GTK_IS_EDITABLE (focus) && focus != priv->search_entry)
@@ -914,8 +914,6 @@ static void
 gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 {
   GtkFontChooserWidgetPrivate *priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
-
-  gtk_widget_set_has_surface (GTK_WIDGET (fontchooser), FALSE);
 
   gtk_widget_init_template (GTK_WIDGET (fontchooser));
 

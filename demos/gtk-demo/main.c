@@ -164,7 +164,7 @@ run_example_for_row (GtkWidget    *window,
           cbdata->model = model;
           cbdata->path = gtk_tree_model_get_path (model, iter);
 
-          if (gtk_widget_is_toplevel (demo))
+          if (GTK_IS_WINDOW (demo))
             {
               gtk_window_set_transient_for (GTK_WINDOW (demo), GTK_WINDOW (window));
               gtk_window_set_modal (GTK_WINDOW (demo), TRUE);
@@ -991,7 +991,7 @@ row_activated_cb (GtkWidget         *tree_view,
   GtkWidget *window;
   GtkTreeModel *model;
 
-  window = gtk_widget_get_toplevel (tree_view);
+  window = GTK_WIDGET (gtk_widget_get_root (tree_view));
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree_view));
   gtk_tree_model_get_iter (model, &iter, path);
 

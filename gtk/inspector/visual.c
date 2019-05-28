@@ -90,10 +90,9 @@ struct _GtkInspectorVisualPrivate
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorVisual, gtk_inspector_visual, GTK_TYPE_SCROLLED_WINDOW)
 
 static void
-fix_direction_recurse (GtkWidget *widget,
-                       gpointer   data)
+fix_direction_recurse (GtkWidget        *widget,
+                       GtkTextDirection  dir)
 {
-  GtkTextDirection dir = GPOINTER_TO_INT (data);
   GtkWidget *child;
 
   g_object_ref (widget);
@@ -103,7 +102,7 @@ fix_direction_recurse (GtkWidget *widget,
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
      {
-        fix_direction_recurse (child, data);
+        fix_direction_recurse (child, dir);
      }
 
   g_object_unref (widget);
@@ -114,7 +113,7 @@ static GtkTextDirection initial_direction;
 static void
 fix_direction (GtkWidget *iw)
 {
-  fix_direction_recurse (iw, GINT_TO_POINTER (initial_direction));
+  fix_direction_recurse (iw, initial_direction);
 }
 
 static void
@@ -123,8 +122,9 @@ direction_changed (GtkComboBox *combo)
   GtkWidget *iw;
   const gchar *direction;
 
-  iw = gtk_widget_get_toplevel (GTK_WIDGET (combo));
-  fix_direction (iw);
+  iw = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (combo)));
+  if (iw)
+    fix_direction (iw);
 
   direction = gtk_combo_box_get_active_id (combo);
   if (g_strcmp0 (direction, "ltr") == 0)
@@ -240,7 +240,7 @@ fps_activate (GtkSwitch          *sw,
   gboolean fps;
 
   fps = gtk_switch_get_active (sw);
-  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (vis)));
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (GTK_WIDGET (vis)));
   if (iw == NULL)
     return;
 
@@ -275,7 +275,7 @@ updates_activate (GtkSwitch          *sw,
   gboolean updates;
 
   updates = gtk_switch_get_active (sw);
-  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (vis)));
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (GTK_WIDGET (vis)));
   if (iw == NULL)
     return;
 
@@ -326,7 +326,7 @@ layout_activate (GtkSwitch          *sw,
   gboolean draw_layout;
 
   draw_layout = gtk_switch_get_active (sw);
-  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (vis)));
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (GTK_WIDGET (vis)));
   if (iw == NULL)
     return;
 
@@ -976,7 +976,7 @@ static void
 gtk_inspector_visual_finalize (GObject *object)
 {
   GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (object);
-  GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (vis)));
+  GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (GTK_WIDGET (vis)));
 
   if (vis->priv->layout_overlay)
     gtk_inspector_window_remove_overlay (iw, vis->priv->layout_overlay);

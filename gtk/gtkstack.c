@@ -2544,8 +2544,6 @@ gtk_stack_init (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
-  gtk_widget_set_has_surface (GTK_WIDGET (stack), FALSE);
-
   priv->vhomogeneous = TRUE;
   priv->hhomogeneous = TRUE;
   priv->transition_duration = 200;

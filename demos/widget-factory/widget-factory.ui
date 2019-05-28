@@ -3463,7 +3463,7 @@ bad things might happen.</property>
     </widgets>
   </object>
   <object class="GtkPopover" id="notebook_info_popover">
-    <property name="modal">0</property>
+    <property name="autohide">0</property>
     <child>
       <object class="GtkLabel">
         <property name="label">No updates at this time</property>
@@ -3474,7 +3474,7 @@ bad things might happen.</property>
     </child>
   </object>
   <object class="GtkPopover" id="notebook_info_popover3">
-    <property name="modal">0</property>
+    <property name="autohide">0</property>
     <child>
       <object class="GtkLabel">
         <property name="label">You're in too deep!</property>
@@ -3485,7 +3485,7 @@ bad things might happen.</property>
     </child>
   </object>
   <object class="GtkPopover" id="notebook_info_popover2">
-    <property name="modal">0</property>
+    <property name="autohide">0</property>
     <child>
       <object class="GtkBox">
         <property name="orientation">horizontal</property>

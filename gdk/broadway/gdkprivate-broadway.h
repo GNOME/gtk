@@ -68,6 +68,7 @@ void     _gdk_broadway_roundtrip_notify           (GdkSurface  *surface,
 void     _gdk_broadway_surface_grab_check_destroy (GdkSurface *surface);
 void     _gdk_broadway_surface_grab_check_unmap   (GdkSurface *surface,
                                                    gulong     serial);
+void     gdk_broadway_surface_update_popups       (GdkSurface *surface);
 
 void _gdk_keymap_keys_changed     (GdkDisplay      *display);
 gint _gdk_broadway_get_group_for_state (GdkDisplay      *display,
@@ -101,10 +102,13 @@ void _gdk_broadway_display_get_default_cursor_size (GdkDisplay *display,
 void _gdk_broadway_display_get_maximal_cursor_size (GdkDisplay *display,
                                                     guint       *width,
                                                     guint       *height);
-void       _gdk_broadway_display_create_surface_impl    (GdkDisplay    *display,
-                                                         GdkSurface     *surface,
-                                                         GdkSurface     *real_parent,
-                                                         GdkSurfaceAttr *attributes);
+GdkSurface * _gdk_broadway_display_create_surface (GdkDisplay     *display,
+                                                   GdkSurfaceType  surface_type,
+                                                   GdkSurface     *parent,
+                                                   int             x,
+                                                   int             y,
+                                                   int             width,
+                                                   int             height);
 gint _gdk_broadway_display_text_property_to_utf8_list (GdkDisplay    *display,
                                                        GdkAtom        encoding,
                                                        gint           format,
@@ -125,7 +129,5 @@ void _gdk_broadway_surface_resize_surface        (GdkSurface *surface);
 
 void _gdk_broadway_cursor_update_theme (GdkCursor *cursor);
 void _gdk_broadway_cursor_display_finalize (GdkDisplay *display);
-
-#define GDK_SURFACE_IS_BROADWAY(win)   (GDK_IS_SURFACE_IMPL_BROADWAY (((GdkSurface *)win)->impl))
 
 #endif /* __GDK_PRIVATE_BROADWAY_H__ */

@@ -28,9 +28,9 @@
 #define __GDK_INTERNALS_H__
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include "gdksurfaceimpl.h"
 #include "gdkdisplay.h"
 #include "gdkeventsprivate.h"
+#include "gdksurfaceprivate.h"
 #include "gdkenumtypes.h"
 #include "gdkdragprivate.h"
 
@@ -41,8 +41,6 @@ G_BEGIN_DECLS
  **********************/
 
 /* Debugging support */
-
-typedef struct _GdkSurfaceAttr          GdkSurfaceAttr;
 
 typedef enum {
   GDK_DEBUG_MISC            = 1 <<  0,
@@ -118,102 +116,6 @@ typedef enum
 
 typedef struct _GdkSurfacePaint GdkSurfacePaint;
 
-typedef enum
-{
-  GDK_INPUT_OUTPUT,
-  GDK_INPUT_ONLY
-} GdkSurfaceSurfaceClass;
-
-
-struct _GdkSurfaceAttr
-{
-  gint x, y;
-  gint width;
-  gint height;
-  GdkSurfaceSurfaceClass wclass;
-  GdkSurfaceType surface_type;
-};
-
-struct _GdkSurface
-{
-  GObject parent_instance;
-
-  GdkDisplay *display;
-
-  GdkSurfaceImpl *impl; /* window-system-specific delegate object */
-
-  GdkSurface *parent;
-  GdkSurface *transient_for;
-
-  gpointer widget;
-
-  gint x;
-  gint y;
-
-  guint8 surface_type;
-
-  guint8 resize_count;
-
-  GList *children;
-  GList children_list_node;
-
-  GdkGLContext *gl_paint_context;
-
-  cairo_region_t *update_area;
-  guint update_freeze_count;
-  /* This is the update_area that was in effect when the current expose
-     started. It may be smaller than the expose area if we'e painting
-     more than we have to, but it represents the "true" damage. */
-  cairo_region_t *active_update_area;
-
-  GdkSurfaceState old_state;
-  GdkSurfaceState state;
-
-  guint8 alpha;
-  guint8 fullscreen_mode;
-
-  guint input_only : 1;
-  guint pass_through : 1;
-  guint modal_hint : 1;
-
-  guint destroyed : 2;
-
-  guint accept_focus : 1;
-  guint focus_on_map : 1;
-  guint support_multidevice : 1;
-  guint viewable : 1; /* mapped and all parents mapped */
-  guint in_update : 1;
-  guint frame_clock_events_paused : 1;
-
-  /* The GdkSurface that has the impl, ref:ed if another surface.
-   * This ref is required to keep the wrapper of the impl surface alive
-   * for as long as any GdkSurface references the impl. */
-  GdkSurface *impl_surface;
-
-  guint update_and_descendants_freeze_count;
-
-  gint abs_x, abs_y; /* Absolute offset in impl */
-  gint width, height;
-  gint shadow_top;
-  gint shadow_left;
-  gint shadow_right;
-  gint shadow_bottom;
-
-  GdkCursor *cursor;
-  GHashTable *device_cursor;
-
-  cairo_region_t *input_shape;
-
-  GList *devices_inside;
-
-  GdkFrameClock *frame_clock; /* NULL to use from parent or default */
-
-  GSList *draw_contexts;
-  GdkDrawContext *paint_context;
-
-  cairo_region_t *opaque_region;
-};
-
 #define GDK_SURFACE_TYPE(d) ((((GdkSurface *)(d)))->surface_type)
 #define GDK_SURFACE_DESTROYED(d) (((GdkSurface *)(d))->destroyed)
 
@@ -250,9 +152,6 @@ void _gdk_windowing_event_data_copy (const GdkEvent *src,
                                      GdkEvent       *dst);
 void _gdk_windowing_event_data_free (GdkEvent       *event);
 
-void gdk_surface_set_state (GdkSurface      *surface,
-                            GdkSurfaceState  new_state);
-
 gboolean        _gdk_cairo_surface_extents       (cairo_surface_t *surface,
                                                   GdkRectangle    *extents);
 void            gdk_gl_texture_from_surface      (cairo_surface_t *surface,
@@ -278,9 +177,6 @@ cairo_region_t *gdk_cairo_region_from_clip       (cairo_t         *cr);
  * Interfaces used by windowing code *
  *************************************/
 
-GdkSurface* gdk_surface_new               (GdkDisplay     *display,
-                                           GdkSurface      *parent,
-                                           GdkSurfaceAttr  *attributes);
 void       _gdk_surface_destroy           (GdkSurface      *surface,
                                            gboolean        foreign_destroy);
 void       gdk_surface_invalidate_rect    (GdkSurface           *surface,
@@ -315,16 +211,6 @@ void _gdk_windowing_got_event                (GdkDisplay       *display,
 
 #define GDK_SURFACE_IS_MAPPED(surface) (((surface)->state & GDK_SURFACE_STATE_WITHDRAWN) == 0)
 
-GdkSurface * _gdk_surface_find_child_at (GdkSurface *surface,
-                                         double x, double y);
-GdkSurface * _gdk_surface_find_descendant_at (GdkSurface *toplevel,
-                                              double x, double y,
-                                              double *found_x,
-                                              double *found_y);
-
-gboolean _gdk_surface_event_parent_of (GdkSurface *parent,
-                                       GdkSurface *child);
-
 void _gdk_synthesize_crossing_events (GdkDisplay                 *display,
                                       GdkSurface                  *src,
                                       GdkSurface                  *dest,
@@ -342,8 +228,7 @@ void _gdk_display_set_surface_under_pointer (GdkDisplay *display,
                                              GdkDevice  *device,
                                              GdkSurface  *surface);
 
-gboolean    _gdk_surface_has_impl (GdkSurface *surface);
-GdkSurface * _gdk_surface_get_impl_surface (GdkSurface *surface);
+GdkSurface * gdk_surface_get_impl_surface (GdkSurface *surface);
 
 void gdk_surface_destroy_notify       (GdkSurface *surface);
 
@@ -360,6 +245,17 @@ GdkGrabStatus gdk_device_grab (GdkDevice        *device,
                                guint32           time_);
 void gdk_device_ungrab        (GdkDevice        *device,
                                guint32           time_);
+void gdk_surface_get_root_coords (GdkSurface *surface,
+                                  gint        x,
+                                  gint        y,
+                                  gint       *root_x,
+                                  gint       *root_y);
+
+void gdk_surface_get_geometry (GdkSurface *surface,
+                               gint       *x,
+                               gint       *y,
+                               gint       *width,
+                               gint       *height);
 
 
 G_END_DECLS

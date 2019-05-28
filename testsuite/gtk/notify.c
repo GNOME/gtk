@@ -406,7 +406,7 @@ test_type (gconstpointer data)
     instance = G_OBJECT (g_object_ref (gtk_settings_get_default ()));
   else if (g_type_is_a (type, GDK_TYPE_SURFACE))
     {
-      instance = G_OBJECT (g_object_ref (gdk_surface_new_popup (display,
+      instance = G_OBJECT (g_object_ref (gdk_surface_new_temp (display,
                                                                &(GdkRectangle) { 0, 0, 100, 100 })));
     }
   else if (g_str_equal (g_type_name (type), "GdkX11Cursor"))
@@ -558,6 +558,11 @@ test_type (gconstpointer data)
 
       if (pspec->owner_type == GTK_TYPE_STACK_PAGE && /* Can't change position without a stack */
           g_str_equal (pspec->name, "position"))
+        continue;
+
+      /* Can't realize a popover without a parent */
+      if (g_type_is_a (type, GTK_TYPE_POPOVER) &&
+          g_str_equal (pspec->name, "visible"))
         continue;
 
       if (pspec->owner_type == GTK_TYPE_POPOVER_MENU &&
