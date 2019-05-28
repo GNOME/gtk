@@ -36,15 +36,10 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_MENU			(gtk_menu_get_type ())
 #define GTK_MENU(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_MENU, GtkMenu))
-#define GTK_MENU_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_MENU, GtkMenuClass))
 #define GTK_IS_MENU(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_MENU))
-#define GTK_IS_MENU_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MENU))
-#define GTK_MENU_GET_CLASS(obj)         (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MENU, GtkMenuClass))
 
 
-typedef struct _GtkMenu        GtkMenu;
-typedef struct _GtkMenuClass   GtkMenuClass;
-typedef struct _GtkMenuPrivate GtkMenuPrivate;
+typedef struct _GtkMenu GtkMenu;
 
 /**
  * GtkArrowPlacement:
@@ -71,26 +66,6 @@ typedef enum
  */
 typedef void (*GtkMenuDetachFunc)   (GtkWidget *attach_widget,
 				     GtkMenu   *menu);
-
-struct _GtkMenu
-{
-  GtkMenuShell menu_shell;
-
-  /*< private >*/
-  GtkMenuPrivate *priv;
-};
-
-struct _GtkMenuClass
-{
-  GtkMenuShellClass parent_class;
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
-
 
 GDK_AVAILABLE_IN_ALL
 GType	   gtk_menu_get_type		  (void) G_GNUC_CONST;

@@ -31,6 +31,21 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GtkMenuClass   GtkMenuClass;
+typedef struct _GtkMenuPrivate GtkMenuPrivate;
+
+struct _GtkMenu
+{
+  GtkMenuShell menu_shell;
+
+  GtkMenuPrivate *priv;
+};
+
+struct _GtkMenuClass
+{
+  GtkMenuShellClass parent_class;
+};
+
 struct _GtkMenuPrivate
 {
   GtkWidget *parent_menu_item;
