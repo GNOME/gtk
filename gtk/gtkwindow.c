@@ -7485,6 +7485,35 @@ gtk_window_move_resize (GtkWindow *window)
        * we don't get the ConfigureNotify back, the resize queue will never be run.
        */
 
+      if (priv->type != GTK_WINDOW_POPUP)
+        {
+	  /* Increment the number of have-not-yet-received-notify requests.
+           * This is done before gdk_surface[_move]_resize(), because
+           * that call might be synchronous (depending on which GDK backend
+           * is being used), so any preparations for its effects must
+           * be done beforehand.
+           */
+	  priv->configure_request_count += 1;
+
+          gdk_surface_freeze_toplevel_updates (surface);
+
+	  /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
+	   * configure event in response to our resizing request.
+	   * the configure event will cause a new resize with
+	   * ->configure_notify_received=TRUE.
+	   * until then, we want to
+	   * - discard expose events
+	   * - coalesce resizes for our children
+	   * - defer any window resizes until the configure event arrived
+	   * to achieve this, we queue a resize for the window, but remove its
+	   * resizing handler, so resizing will not be handled from the next
+	   * idle handler but when the configure event arrives.
+	   *
+	   * FIXME: we should also dequeue the pending redraws here, since
+	   * we handle those ourselves upon ->configure_notify_received==TRUE.
+	   */
+	}
+
       /* Now send the configure request */
       if (configure_request_pos_changed)
         {
@@ -7509,29 +7538,6 @@ gtk_window_move_resize (GtkWindow *window)
 	  allocation.height = new_request.height;
 
           gtk_widget_size_allocate (widget, &allocation, -1);
-	}
-      else
-        {
-	  /* Increment the number of have-not-yet-received-notify requests */
-	  priv->configure_request_count += 1;
-
-          gdk_surface_freeze_toplevel_updates (surface);
-
-	  /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
-	   * configure event in response to our resizing request.
-	   * the configure event will cause a new resize with
-	   * ->configure_notify_received=TRUE.
-	   * until then, we want to
-	   * - discard expose events
-	   * - coalesce resizes for our children
-	   * - defer any window resizes until the configure event arrived
-	   * to achieve this, we queue a resize for the window, but remove its
-	   * resizing handler, so resizing will not be handled from the next
-	   * idle handler but when the configure event arrives.
-	   *
-	   * FIXME: we should also dequeue the pending redraws here, since
-	   * we handle those ourselves upon ->configure_notify_received==TRUE.
-	   */
 	}
     }
   else
