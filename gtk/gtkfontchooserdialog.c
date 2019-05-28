@@ -47,8 +47,6 @@ typedef struct _GtkFontChooserDialogClass         GtkFontChooserDialogClass;
 struct _GtkFontChooserDialog
 {
   GtkDialog parent_instance;
-
-  GtkFontChooserDialogPrivate *priv;
 };
 
 struct _GtkFontChooserDialogClass
@@ -102,7 +100,7 @@ gtk_font_chooser_dialog_set_property (GObject      *object,
                                       GParamSpec   *pspec)
 {
   GtkFontChooserDialog *dialog = GTK_FONT_CHOOSER_DIALOG (object);
-  GtkFontChooserDialogPrivate *priv = dialog->priv;
+  GtkFontChooserDialogPrivate *priv = gtk_font_chooser_dialog_get_instance_private (dialog);
 
   switch (prop_id)
     {
@@ -119,7 +117,7 @@ gtk_font_chooser_dialog_get_property (GObject      *object,
                                       GParamSpec   *pspec)
 {
   GtkFontChooserDialog *dialog = GTK_FONT_CHOOSER_DIALOG (object);
-  GtkFontChooserDialogPrivate *priv = dialog->priv;
+  GtkFontChooserDialogPrivate *priv = gtk_font_chooser_dialog_get_instance_private (dialog);
 
   switch (prop_id)
     {
@@ -146,32 +144,35 @@ dialog_forward_key (GtkEventControllerKey *controller,
                     GdkModifierType        modifiers,
                     GtkWidget             *widget)
 {
-  GtkFontChooserDialog *fdialog = GTK_FONT_CHOOSER_DIALOG (widget);
+  GtkFontChooserDialog *dialog = GTK_FONT_CHOOSER_DIALOG (widget);
+  GtkFontChooserDialogPrivate *priv = gtk_font_chooser_dialog_get_instance_private (dialog);
 
-  return gtk_event_controller_key_forward (controller, fdialog->priv->fontchooser);
+  return gtk_event_controller_key_forward (controller, priv->fontchooser);
 }
 
 static void
 update_tweak_button (GtkFontChooserDialog *dialog)
 {
+  GtkFontChooserDialogPrivate *priv = gtk_font_chooser_dialog_get_instance_private (dialog);
   GtkFontChooserLevel level;
 
-  if (!dialog->priv->tweak_button)
+  if (!priv->tweak_button)
     return;
 
-  g_object_get (dialog->priv->fontchooser, "level", &level, NULL);
+  g_object_get (priv->fontchooser, "level", &level, NULL);
   if ((level & (GTK_FONT_CHOOSER_LEVEL_FEATURES | GTK_FONT_CHOOSER_LEVEL_VARIATIONS)) != 0)
-    gtk_widget_show (dialog->priv->tweak_button);
+    gtk_widget_show (priv->tweak_button);
   else
-    gtk_widget_hide (dialog->priv->tweak_button);
+    gtk_widget_hide (priv->tweak_button);
 }
 
 static void
 setup_tweak_button (GtkFontChooserDialog *dialog)
 {
+  GtkFontChooserDialogPrivate *priv = gtk_font_chooser_dialog_get_instance_private (dialog);
   gboolean use_header;
 
-  if (dialog->priv->tweak_button)
+  if (priv->tweak_button)
     return;
 
   g_object_get (dialog, "use-header-bar", &use_header, NULL);
@@ -182,7 +183,7 @@ setup_tweak_button (GtkFontChooserDialog *dialog)
       GActionGroup *actions;
 
       actions = G_ACTION_GROUP (g_simple_action_group_new ());
-      g_action_map_add_action (G_ACTION_MAP (actions), gtk_font_chooser_widget_get_tweak_action (dialog->priv->fontchooser));
+      g_action_map_add_action (G_ACTION_MAP (actions), gtk_font_chooser_widget_get_tweak_action (priv->fontchooser));
       gtk_widget_insert_action_group (GTK_WIDGET (dialog), "font", actions);
       g_object_unref (actions);
 
@@ -195,7 +196,7 @@ setup_tweak_button (GtkFontChooserDialog *dialog)
       header = gtk_dialog_get_header_bar (GTK_DIALOG (dialog));
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
 
-      dialog->priv->tweak_button = button;
+      priv->tweak_button = button;
     }
 }
 
@@ -237,7 +238,7 @@ gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
 static void
 update_button (GtkFontChooserDialog *dialog)
 {
-  GtkFontChooserDialogPrivate *priv = dialog->priv;
+  GtkFontChooserDialogPrivate *priv = gtk_font_chooser_dialog_get_instance_private (dialog);
   PangoFontDescription *desc;
 
   desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (priv->fontchooser));
@@ -252,10 +253,7 @@ update_button (GtkFontChooserDialog *dialog)
 static void
 gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
 {
-  GtkFontChooserDialogPrivate *priv;
-
-  fontchooserdiag->priv = gtk_font_chooser_dialog_get_instance_private (fontchooserdiag);
-  priv = fontchooserdiag->priv;
+  GtkFontChooserDialogPrivate *priv = gtk_font_chooser_dialog_get_instance_private (fontchooserdiag);
 
   gtk_widget_init_template (GTK_WIDGET (fontchooserdiag));
   gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (fontchooserdiag));
@@ -305,9 +303,8 @@ gtk_font_chooser_dialog_buildable_get_internal_child (GtkBuildable *buildable,
                                                       GtkBuilder   *builder,
                                                       const gchar  *childname)
 {
-  GtkFontChooserDialogPrivate *priv;
-
-  priv = GTK_FONT_CHOOSER_DIALOG (buildable)->priv;
+  GtkFontChooserDialog *dialog = GTK_FONT_CHOOSER_DIALOG (buildable);
+  GtkFontChooserDialogPrivate *priv = gtk_font_chooser_dialog_get_instance_private (dialog);
 
   if (g_strcmp0 (childname, "select_button") == 0)
     return G_OBJECT (priv->select_button);
