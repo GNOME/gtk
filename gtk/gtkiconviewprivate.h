@@ -37,6 +37,34 @@ struct _GtkIconViewItem
 
 };
 
+typedef struct _GtkIconViewClass      GtkIconViewClass;
+typedef struct _GtkIconViewPrivate    GtkIconViewPrivate;
+
+struct _GtkIconView
+{
+  GtkContainer parent;
+
+  GtkIconViewPrivate *priv;
+};
+
+struct _GtkIconViewClass
+{
+  GtkContainerClass parent_class;
+
+  void    (* item_activated)         (GtkIconView      *icon_view,
+                                      GtkTreePath      *path);
+  void    (* selection_changed)      (GtkIconView      *icon_view);
+
+  void    (* select_all)             (GtkIconView      *icon_view);
+  void    (* unselect_all)           (GtkIconView      *icon_view);
+  void    (* select_cursor_item)     (GtkIconView      *icon_view);
+  void    (* toggle_cursor_item)     (GtkIconView      *icon_view);
+  gboolean (* move_cursor)           (GtkIconView      *icon_view,
+                                      GtkMovementStep   step,
+                                      gint              count);
+  gboolean (* activate_cursor_item)  (GtkIconView      *icon_view);
+};
+
 struct _GtkIconViewPrivate
 {
   GtkCellArea        *cell_area;
