@@ -253,6 +253,78 @@
                   </object>
                 </child>
                 <child>
+                  <object class="GtkListBoxRow" id="surface_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="surface_label">
+                            <property name="label" translatable="yes">Surface</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                            <property name="hexpand">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="surface">
+                            <property name="selectable">1</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="ellipsize">end</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="surface_button">
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="label" translatable="yes">Properties</property>
+                            <signal name="clicked" handler="show_surface"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow" id="renderer_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="renderer_label">
+                            <property name="label" translatable="yes">Renderer</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                            <property name="hexpand">1</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="renderer">
+                            <property name="selectable">1</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="ellipsize">end</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="renderer_button">
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="label" translatable="yes">Properties</property>
+                            <signal name="clicked" handler="show_frame_clock"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkListBoxRow" id="frame_clock_row">
                     <property name="activatable">0</property>
                     <child>
@@ -570,6 +642,8 @@
       <widget name="refcount_label"/>
       <widget name="state_label"/>
       <widget name="buildable_id_label"/>
+      <widget name="surface_label"/>
+      <widget name="renderer_label"/>
       <widget name="frame_clock_label"/>
     </widgets>
   </object>
