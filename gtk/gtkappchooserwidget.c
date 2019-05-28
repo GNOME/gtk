@@ -71,6 +71,29 @@
  * GtkAppChooserWidget has a single CSS node with name appchooser.
  */
 
+typedef struct _GtkAppChooserWidgetClass   GtkAppChooserWidgetClass;
+typedef struct _GtkAppChooserWidgetPrivate GtkAppChooserWidgetPrivate;
+
+struct _GtkAppChooserWidget {
+  GtkWidget parent_instance;
+
+  GtkAppChooserWidgetPrivate *priv;
+};
+
+struct _GtkAppChooserWidgetClass {
+  GtkWidgetClass parent_class;
+
+  void (* application_selected)  (GtkAppChooserWidget *self,
+                                  GAppInfo            *app_info);
+
+  void (* application_activated) (GtkAppChooserWidget *self,
+                                  GAppInfo            *app_info);
+
+  void (* populate_popup)        (GtkAppChooserWidget *self,
+                                  GtkMenu             *menu,
+                                  GAppInfo            *app_info);
+};
+
 struct _GtkAppChooserWidgetPrivate {
   GAppInfo *selected_app_info;
 

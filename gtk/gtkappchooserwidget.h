@@ -37,52 +37,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_APP_CHOOSER_WIDGET            (gtk_app_chooser_widget_get_type ())
 #define GTK_APP_CHOOSER_WIDGET(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_APP_CHOOSER_WIDGET, GtkAppChooserWidget))
-#define GTK_APP_CHOOSER_WIDGET_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_APP_CHOOSER_WIDGET, GtkAppChooserWidgetClass))
 #define GTK_IS_APP_CHOOSER_WIDGET(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_APP_CHOOSER_WIDGET))
-#define GTK_IS_APP_CHOOSER_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_APP_CHOOSER_WIDGET))
-#define GTK_APP_CHOOSER_WIDGET_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_APP_CHOOSER_WIDGET, GtkAppChooserWidgetClass))
 
 typedef struct _GtkAppChooserWidget        GtkAppChooserWidget;
-typedef struct _GtkAppChooserWidgetClass   GtkAppChooserWidgetClass;
-typedef struct _GtkAppChooserWidgetPrivate GtkAppChooserWidgetPrivate;
-
-struct _GtkAppChooserWidget {
-  GtkWidget parent_instance;
-
-  /*< private >*/
-  GtkAppChooserWidgetPrivate *priv;
-};
-
-/**
- * GtkAppChooserWidgetClass:
- * @parent_class: The parent class.
- * @application_selected: Signal emitted when an application item is
- *    selected from the widget’s list.
- * @application_activated: Signal emitted when an application item is
- *    activated from the widget’s list.
- * @populate_popup: Signal emitted when a context menu is about to
- *    popup over an application item.
- */
-struct _GtkAppChooserWidgetClass {
-  GtkWidgetClass parent_class;
-
-  /*< public >*/
-
-  void (* application_selected)  (GtkAppChooserWidget *self,
-                                  GAppInfo            *app_info);
-
-  void (* application_activated) (GtkAppChooserWidget *self,
-                                  GAppInfo            *app_info);
-
-  void (* populate_popup)        (GtkAppChooserWidget *self,
-                                  GtkMenu             *menu,
-                                  GAppInfo            *app_info);
-
-  /*< private >*/
-
-  /* padding for future class expansion */
-  gpointer padding[16];
-};
 
 GDK_AVAILABLE_IN_ALL
 GType         gtk_app_chooser_widget_get_type             (void) G_GNUC_CONST;
