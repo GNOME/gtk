@@ -120,8 +120,9 @@ typedef enum {
 } DropState;
 
 struct _GtkPlacesSidebar {
-  GtkScrolledWindow parent;
+  GtkWidget parent;
 
+  GtkWidget *swin;
   GtkWidget *list_box;
   GtkWidget *new_bookmark_row;
 
@@ -190,7 +191,7 @@ struct _GtkPlacesSidebar {
 };
 
 struct _GtkPlacesSidebarClass {
-  GtkScrolledWindowClass parent;
+  GtkWidgetClass parent_class;
 
   void    (* open_location)          (GtkPlacesSidebar   *sidebar,
                                       GFile              *location,
@@ -327,7 +328,7 @@ static const char *dnd_drop_targets [] = {
   "DND_GTK_SIDEBAR_ROW"
 };
 
-G_DEFINE_TYPE (GtkPlacesSidebar, gtk_places_sidebar, GTK_TYPE_SCROLLED_WINDOW);
+G_DEFINE_TYPE (GtkPlacesSidebar, gtk_places_sidebar, GTK_TYPE_WIDGET);
 
 static void
 emit_open_location (GtkPlacesSidebar   *sidebar,
@@ -4083,12 +4084,14 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   sidebar->trash_monitor_changed_id = g_signal_connect_swapped (sidebar->trash_monitor, "trash-state-changed",
                                                                 G_CALLBACK (update_trash_icon), sidebar);
 
-  gtk_widget_set_size_request (GTK_WIDGET (sidebar), 140, 280);
+  sidebar->swin = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_parent (sidebar->swin, GTK_WIDGET (sidebar));
+  gtk_widget_set_size_request (sidebar->swin, 140, 280);
 
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sidebar),
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sidebar->swin),
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sidebar), GTK_SHADOW_IN);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sidebar->swin), GTK_SHADOW_IN);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (sidebar));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SIDEBAR);
@@ -4148,7 +4151,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   sidebar->dragging_over = FALSE;
   sidebar->drag_data_info = DND_UNKNOWN;
 
-  gtk_container_add (GTK_CONTAINER (sidebar), sidebar->list_box);
+  gtk_container_add (GTK_CONTAINER (sidebar->swin), sidebar->list_box);
 
   sidebar->hostname = g_strdup (_("Computer"));
   sidebar->hostnamed_cancellable = g_cancellable_new ();
@@ -4411,14 +4414,33 @@ gtk_places_sidebar_dispose (GObject *object)
 static void
 gtk_places_sidebar_finalize (GObject *object)
 {
-#ifdef HAVE_CLOUDPROVIDERS
-  GtkPlacesSidebar *sidebar;
+  GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (object);
 
-  sidebar = GTK_PLACES_SIDEBAR (object);
+#ifdef HAVE_CLOUDPROVIDERS
   g_clear_object (&sidebar->cloud_manager);
 #endif
 
+  g_clear_pointer (&sidebar->swin, gtk_widget_unparent);
+
   G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->finalize (object);
+}
+
+static void
+gtk_places_sidebar_measure (GtkWidget      *widget,
+                            GtkOrientation  orientation,
+                            int             for_size,
+                            int            *minimum,
+                            int            *natural,
+                            int            *minimum_baseline,
+                            int            *natural_baseline)
+{
+  GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (widget);
+
+  gtk_widget_measure (sidebar->swin,
+                      orientation,
+                      for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
 }
 
 static void
@@ -4429,7 +4451,9 @@ gtk_places_sidebar_size_allocate (GtkWidget *widget,
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (widget);
 
-  GTK_WIDGET_CLASS (gtk_places_sidebar_parent_class)->size_allocate (widget, width, height, baseline);
+  gtk_widget_size_allocate (sidebar->swin,
+                            &(GtkAllocation) { 0, 0, width, height },
+                            baseline);
 
   if (sidebar->rename_popover)
     gtk_native_check_resize (GTK_NATIVE (sidebar->rename_popover));
@@ -4447,6 +4471,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
   gobject_class->set_property = gtk_places_sidebar_set_property;
   gobject_class->get_property = gtk_places_sidebar_get_property;
 
+  widget_class->measure = gtk_places_sidebar_measure;
   widget_class->size_allocate = gtk_places_sidebar_size_allocate;
 
   /*
