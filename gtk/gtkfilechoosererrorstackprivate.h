@@ -36,12 +36,14 @@ typedef struct _GtkFileChooserErrorStackClass        GtkFileChooserErrorStackCla
 
 struct _GtkFileChooserErrorStack
 {
-  GtkStack parent_instance;
+  GtkWidget parent_instance;
+
+  GtkWidget *stack;
 };
 
 struct _GtkFileChooserErrorStackClass
 {
-  GtkStackClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 GType  gtk_file_chooser_error_stack_get_type          (void) G_GNUC_CONST;
