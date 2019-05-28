@@ -37,50 +37,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_LABEL		  (gtk_label_get_type ())
 #define GTK_LABEL(obj)		  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LABEL, GtkLabel))
-#define GTK_LABEL_CLASS(klass)	  (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_LABEL, GtkLabelClass))
 #define GTK_IS_LABEL(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_LABEL))
-#define GTK_IS_LABEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LABEL))
-#define GTK_LABEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LABEL, GtkLabelClass))
 
-
-typedef struct _GtkLabel              GtkLabel;
-typedef struct _GtkLabelPrivate       GtkLabelPrivate;
-typedef struct _GtkLabelClass         GtkLabelClass;
-
-typedef struct _GtkLabelSelectionInfo GtkLabelSelectionInfo;
-
-struct _GtkLabel
-{
-  GtkWidget parent_instance;
-};
-
-struct _GtkLabelClass
-{
-  GtkWidgetClass parent_class;
-
-  void (* move_cursor)     (GtkLabel       *label,
-			    GtkMovementStep step,
-			    gint            count,
-			    gboolean        extend_selection);
-  void (* copy_clipboard)  (GtkLabel       *label);
-
-  /* Hook to customize right-click popup for selectable labels */
-  void (* populate_popup)   (GtkLabel       *label,
-                             GtkMenu        *menu);
-
-  gboolean (*activate_link) (GtkLabel       *label,
-                             const gchar    *uri);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
-  void (*_gtk_reserved7) (void);
-  void (*_gtk_reserved8) (void);
-};
+typedef struct _GtkLabel GtkLabel;
 
 GDK_AVAILABLE_IN_ALL
 GType                 gtk_label_get_type          (void) G_GNUC_CONST;

@@ -250,6 +250,32 @@
  * the #GtkLabel::activate-link signal and the gtk_label_get_current_uri() function.
  */
 
+typedef struct _GtkLabelPrivate       GtkLabelPrivate;
+typedef struct _GtkLabelClass         GtkLabelClass;
+typedef struct _GtkLabelSelectionInfo GtkLabelSelectionInfo;
+
+struct _GtkLabel
+{
+  GtkWidget parent_instance;
+};
+
+struct _GtkLabelClass
+{
+  GtkWidgetClass parent_class;
+
+  void (* move_cursor)     (GtkLabel       *label,
+                            GtkMovementStep step,
+                            gint            count,
+                            gboolean        extend_selection);
+  void (* copy_clipboard)  (GtkLabel       *label);
+
+  void (* populate_popup)   (GtkLabel       *label,
+                             GtkMenu        *menu);
+
+  gboolean (*activate_link) (GtkLabel       *label,
+                             const gchar    *uri);
+};
+
 struct _GtkLabelPrivate
 {
   GtkLabelSelectionInfo *select_info;
