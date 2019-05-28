@@ -7110,15 +7110,24 @@ gtk_media_stream_get_type
 <FILE>gtkroot</FILE>
 <TITLE>GtkRoot</TITLE>
 GtkRoot
-gtk_root_get_for_surface
+gtk_root_get_display
 gtk_root_get_focus
 gtk_root_set_focus
 
-<SUBSECTION>
-gtk_root_install_properties
-
 <SUBSECTION Private>
 gtk_root_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtknative</FILE>
+GtkNative
+gtk_native_get_for_surface
+gtk_native_get_surface
+gtk_native_get_renderer
+gtk_native_check_resize
+
+<SUBSECTION Private>
+gtk_native_get_type
 </SECTION>
 
 <SECTION>

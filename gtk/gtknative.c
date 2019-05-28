@@ -112,6 +112,15 @@ gtk_native_get_surface_transform (GtkNative *self,
   return GTK_NATIVE_GET_IFACE (self)->get_surface_transform (self, x, y);
 }
 
+/**
+ * gtk_native_check_resize:
+ * @self: a #GtkNative
+ *
+ * Reposition and resize a #GtkNative.
+ *
+ * Widgets need to call this function on their attached
+ * native widgets when they receive a new size allocation.
+ */
 void
 gtk_native_check_resize (GtkNative *self)
 {
