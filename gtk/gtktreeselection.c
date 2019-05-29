@@ -61,6 +61,23 @@
  * select_row on an already selected row).
  */
 
+typedef struct _GtkTreeSelectionPrivate GtkTreeSelectionPrivate;
+typedef struct _GtkTreeSelectionClass   GtkTreeSelectionClass;
+
+struct _GtkTreeSelection
+{
+  GObject parent;
+
+  GtkTreeSelectionPrivate *priv;
+};
+
+struct _GtkTreeSelectionClass
+{
+  GObjectClass parent_class;
+
+  void (* changed) (GtkTreeSelection *selection);
+};
+
 struct _GtkTreeSelectionPrivate
 {
   GtkTreeView *tree_view;
