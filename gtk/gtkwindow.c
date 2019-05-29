@@ -380,19 +380,11 @@ struct _GtkWindowGeometryInfo
   gint           resize_width;  
   gint           resize_height;
 
-  /* From last gtk_window_move () prior to mapping -
-   * only used if initial_pos_set
-   */
-  gint           initial_x;
-  gint           initial_y;
-  
   /* Default size - used only the FIRST time we map a window,
    * only if > 0.
    */
   gint           default_width; 
   gint           default_height;
-  /* whether to use initial_x, initial_y */
-  guint          initial_pos_set : 1;
   /* CENTER_ALWAYS or other position constraint changed since
    * we sent the last configure request.
    */
@@ -3652,9 +3644,6 @@ gtk_window_get_geometry_info (GtkWindow *window,
       info->default_height = -1;
       info->resize_width = -1;
       info->resize_height = -1;
-      info->initial_x = 0;
-      info->initial_y = 0;
-      info->initial_pos_set = FALSE;
       info->position_constraints_changed = FALSE;
       info->last.configure_request.x = 0;
       info->last.configure_request.y = 0;
@@ -5053,7 +5042,6 @@ gtk_window_unmap (GtkWidget *widget)
   info = gtk_window_get_geometry_info (window, FALSE);
   if (info)
     {
-      info->initial_pos_set = FALSE;
       info->position_constraints_changed = FALSE;
     }
 
@@ -6855,7 +6843,6 @@ gtk_window_compute_configure_request (GtkWindow    *window,
                                       GdkGeometry  *geometry,
                                       guint        *flags)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GdkGeometry new_geometry;
   guint new_flags;
   int w, h;
@@ -6884,14 +6871,6 @@ gtk_window_compute_configure_request (GtkWindow    *window,
     {
       x = 0;
       y = 0;
-    }
-
-  if (priv->need_default_position &&
-      info && info->initial_pos_set)
-    {
-      x = info->initial_x;
-      y = info->initial_y;
-      gtk_window_constrain_position (window, w, h, &x, &y);
     }
 
   request->x = x;
@@ -7109,7 +7088,7 @@ gtk_window_move_resize (GtkWindow *window)
    * work.
    */
 
-  if (configure_request_pos_changed || info->initial_pos_set)
+  if (configure_request_pos_changed)
     {
       new_flags |= GDK_HINT_POS;
       hints_changed = TRUE;
@@ -7305,7 +7284,6 @@ gtk_window_move_resize (GtkWindow *window)
    * GTK_RESIZE_IMMEDIATE containers)
    */
   info->position_constraints_changed = FALSE;
-  info->initial_pos_set = FALSE;
   info->resize_width = -1;
   info->resize_height = -1;
 }
