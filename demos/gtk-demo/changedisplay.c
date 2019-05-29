@@ -105,7 +105,6 @@ query_for_toplevel (GdkDisplay *display,
   popup = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_display (GTK_WINDOW (popup), display);
   gtk_window_set_modal (GTK_WINDOW (popup), TRUE);
-  gtk_window_set_position (GTK_WINDOW (popup), GTK_WIN_POS_CENTER);
 
   frame = gtk_frame_new (NULL);
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_OUT);
