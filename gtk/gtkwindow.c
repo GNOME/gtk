@@ -5007,7 +5007,6 @@ gtk_window_unmap (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *child;
-  GtkWindowGeometryInfo *info;
   GdkSurfaceState state;
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
@@ -5019,8 +5018,6 @@ gtk_window_unmap (GtkWidget *widget)
       gdk_surface_thaw_toplevel_updates (priv->surface);
     }
   priv->configure_notify_received = FALSE;
-
-  info = gtk_window_get_geometry_info (window, FALSE);
 
   state = gdk_surface_get_state (priv->surface);
   priv->iconify_initially = (state & GDK_SURFACE_STATE_ICONIFIED) != 0;
