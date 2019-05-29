@@ -1216,14 +1216,11 @@ rewrite_events_translate (GdkSurface *old_surface,
                           gdouble   *x,
                           gdouble   *y)
 {
-  gint old_origin_x, old_origin_y;
-  gint new_origin_x, new_origin_y;
-
-  gdk_surface_get_origin (old_surface, &old_origin_x, &old_origin_y);
-  gdk_surface_get_origin (new_surface, &new_origin_x, &new_origin_y);
-
-  *x += old_origin_x - new_origin_x;
-  *y += old_origin_y - new_origin_y;
+  if (!gdk_surface_translate_coordinates (old_surface, new_surface, x, y))
+    {
+      *x = 0;
+      *y = 0;
+    }
 }
 
 static GdkEvent *
