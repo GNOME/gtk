@@ -557,6 +557,12 @@ gint          gdk_surface_get_origin     (GdkSurface      *surface,
                                           gint            *x,
                                           gint            *y);
 GDK_AVAILABLE_IN_ALL
+gboolean gdk_surface_translate_coordinates (GdkSurface *from,
+                                            GdkSurface *to,
+                                            double     *x,
+                                            double     *y);
+
+GDK_AVAILABLE_IN_ALL
 void          gdk_surface_get_frame_extents (GdkSurface     *surface,
                                              GdkRectangle  *rect);
 
