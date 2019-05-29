@@ -373,7 +373,6 @@ gtk_window_accessible_get_extents (AtkComponent  *component,
 {
   GtkWidget *widget;
   GdkSurface *surface;
-  GdkRectangle rect;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
   if (widget == NULL)
@@ -383,12 +382,10 @@ gtk_window_accessible_get_extents (AtkComponent  *component,
   if (surface == NULL)
     return;
 
-  gdk_surface_get_frame_extents (surface, &rect);
-
   *x = 0;
   *y = 0;
-  *width = rect.width;
-  *height = rect.height;
+  *width = gdk_surface_get_width (surface);
+  *height = gdk_surface_get_height (surface);
   if (!gtk_widget_is_drawable (widget))
     {
       *x = G_MININT;
@@ -404,7 +401,6 @@ gtk_window_accessible_get_size (AtkComponent *component,
 {
   GtkWidget *widget;
   GdkSurface *surface;
-  GdkRectangle rect;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
   if (widget == NULL)
@@ -414,10 +410,8 @@ gtk_window_accessible_get_size (AtkComponent *component,
   if (surface == NULL)
     return;
 
-  gdk_surface_get_frame_extents (surface, &rect);
-
-  *width = rect.width;
-  *height = rect.height;
+  *width = gdk_surface_get_width (surface);
+  *height = gdk_surface_get_height (surface);
 }
 
 void
