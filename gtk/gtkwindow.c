@@ -253,7 +253,6 @@ typedef struct
   guint    mnemonics_visible_set     : 1;
   guint    focus_visible             : 1;
   guint    modal                     : 1;
-  guint    position                  : 3;
   guint    resizable                 : 1;
   guint    stick_initially           : 1;
   guint    transient_parent_group    : 1;
@@ -312,7 +311,6 @@ enum {
   PROP_TITLE,
   PROP_RESIZABLE,
   PROP_MODAL,
-  PROP_WIN_POS,
   PROP_DEFAULT_WIDTH,
   PROP_DEFAULT_HEIGHT,
   PROP_DESTROY_WITH_PARENT,
@@ -868,14 +866,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                             P_("If TRUE, the window is modal (other windows are not usable while this one is up)"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  window_props[PROP_WIN_POS] =
-      g_param_spec_enum ("window-position",
-                         P_("Window Position"),
-                         P_("The initial position of the window"),
-                         GTK_TYPE_WINDOW_POSITION,
-                         GTK_WIN_POS_NONE,
-                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   window_props[PROP_DEFAULT_WIDTH] =
       g_param_spec_int ("default-width",
@@ -1840,7 +1830,6 @@ gtk_window_init (GtkWindow *window)
   priv->configure_request_count = 0;
   priv->resizable = TRUE;
   priv->configure_notify_received = FALSE;
-  priv->position = GTK_WIN_POS_NONE;
   priv->need_default_size = TRUE;
   priv->need_default_position = TRUE;
   priv->modal = FALSE;
@@ -1985,9 +1974,6 @@ gtk_window_set_property (GObject      *object,
     case PROP_MODAL:
       gtk_window_set_modal (window, g_value_get_boolean (value));
       break;
-    case PROP_WIN_POS:
-      gtk_window_set_position (window, g_value_get_enum (value));
-      break;
     case PROP_DEFAULT_WIDTH:
       gtk_window_set_default_size_internal (window,
                                             TRUE, g_value_get_int (value),
@@ -2078,9 +2064,6 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_MODAL:
       g_value_set_boolean (value, priv->modal);
-      break;
-    case PROP_WIN_POS:
-      g_value_set_enum (value, priv->position);
       break;
     case PROP_DEFAULT_WIDTH:
       info = gtk_window_get_geometry_info (window, FALSE);
@@ -2864,47 +2847,6 @@ gtk_window_get_mnemonic_modifier (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), 0);
 
   return priv->mnemonic_modifier;
-}
-
-/**
- * gtk_window_set_position:
- * @window: a #GtkWindow.
- * @position: a position constraint.
- *
- * Sets a position constraint for this window. If the old or new
- * constraint is %GTK_WIN_POS_CENTER_ALWAYS, this will also cause
- * the window to be repositioned to satisfy the new constraint. 
- **/
-void
-gtk_window_set_position (GtkWindow         *window,
-			 GtkWindowPosition  position)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  if (position == GTK_WIN_POS_CENTER_ALWAYS ||
-      priv->position == GTK_WIN_POS_CENTER_ALWAYS)
-    {
-      GtkWindowGeometryInfo *info;
-
-      info = gtk_window_get_geometry_info (window, TRUE);
-
-      /* this flag causes us to re-request the CENTER_ALWAYS
-       * constraint in gtk_window_move_resize(), see
-       * comment in that function.
-       */
-      info->position_constraints_changed = TRUE;
-
-      gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
-    }
-
-  if (priv->position != position)
-    {
-      priv->position = position;
-  
-      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_WIN_POS]);
-    }
 }
 
 /**
@@ -6907,107 +6849,6 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
   *height = MAX (*height, 1);
 }
 
-static GtkWindowPosition
-get_effective_position (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWindowPosition pos = priv->position;
-
-  if (pos == GTK_WIN_POS_CENTER_ON_PARENT &&
-      (priv->transient_parent == NULL ||
-       !_gtk_widget_get_mapped (GTK_WIDGET (priv->transient_parent))))
-    pos = GTK_WIN_POS_NONE;
-
-  return pos;
-}
-
-static GdkMonitor *
-get_center_monitor_of_window (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GdkDisplay *display;
-
-  /* We could try to sort out the relative positions of the monitors and
-   * stuff, or we could just be losers and assume you have a row
-   * or column of monitors.
-   */
-  display = priv->display;
-  return gdk_display_get_monitor (display, gdk_display_get_n_monitors (display) / 2);
-}
-
-static GdkMonitor *
-get_monitor_containing_pointer (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  double px, py;
-  GdkDevice *pointer;
-
-  pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (priv->display));
-  gdk_device_get_position (pointer, &px, &py);
-
-  return gdk_display_get_monitor_at_point (priv->display, round (px), round (py));
-}
-
-static void
-center_window_on_monitor (GtkWindow *window,
-                          gint       w,
-                          gint       h,
-                          gint      *x,
-                          gint      *y)
-{
-  GdkRectangle area;
-  GdkMonitor *monitor;
-
-  monitor = get_monitor_containing_pointer (window);
-
-  if (monitor == NULL)
-    monitor = get_center_monitor_of_window (window);
-
- gdk_monitor_get_workarea (monitor, &area);
-
-  *x = (area.width - w) / 2 + area.x;
-  *y = (area.height - h) / 2 + area.y;
-
-  /* Be sure we aren't off the monitor, ignoring _NET_WM_STRUT
-   * and WM decorations.
-   */
-  if (*x < area.x)
-    *x = area.x;
-  if (*y < area.y)
-    *y = area.y;
-}
-
-static void
-clamp (gint *base,
-       gint  extent,
-       gint  clamp_base,
-       gint  clamp_extent)
-{
-  if (extent > clamp_extent)
-    /* Center */
-    *base = clamp_base + clamp_extent/2 - extent/2;
-  else if (*base < clamp_base)
-    *base = clamp_base;
-  else if (*base + extent > clamp_base + clamp_extent)
-    *base = clamp_base + clamp_extent - extent;
-}
-
-static void
-clamp_window_to_rectangle (gint               *x,
-                           gint               *y,
-                           gint                w,
-                           gint                h,
-                           const GdkRectangle *rect)
-{
-  /* If it is too large, center it. If it fits on the monitor but is
-   * partially outside, move it to the closest edge. Do this
-   * separately in x and y directions.
-   */
-  clamp (x, w, rect->x, rect->width);
-  clamp (y, h, rect->y, rect->height);
-}
-
-
 static void
 gtk_window_compute_configure_request (GtkWindow    *window,
                                       GdkRectangle *request,
@@ -7018,8 +6859,6 @@ gtk_window_compute_configure_request (GtkWindow    *window,
   GdkGeometry new_geometry;
   guint new_flags;
   int w, h;
-  GtkWindowPosition pos;
-  GtkWidget *parent_widget;
   GtkWindowGeometryInfo *info;
   int x, y;
 
@@ -7033,9 +6872,6 @@ gtk_window_compute_configure_request (GtkWindow    *window,
                              w, h,
                              &w, &h);
 
-  parent_widget = (GtkWidget*) priv->transient_parent;
-
-  pos = get_effective_position (window);
   info = gtk_window_get_geometry_info (window, FALSE);
 
   /* by default, don't change position requested */
@@ -7050,87 +6886,8 @@ gtk_window_compute_configure_request (GtkWindow    *window,
       y = 0;
     }
 
-
-  if (priv->need_default_position)
-    {
-
-      /* FIXME this all interrelates with window gravity.
-       * For most of them I think we want to set GRAVITY_CENTER.
-       *
-       * Not sure how to go about that.
-       */
-      switch (pos)
-        {
-          /* here we are only handling CENTER_ALWAYS
-           * as it relates to default positioning,
-           * where it's equivalent to simply CENTER
-           */
-        case GTK_WIN_POS_CENTER_ALWAYS:
-        case GTK_WIN_POS_CENTER:
-          center_window_on_monitor (window, w, h, &x, &y);
-          break;
-
-        case GTK_WIN_POS_CENTER_ON_PARENT:
-          {
-            GtkAllocation allocation;
-            GdkMonitor *monitor;
-            GdkRectangle area;
-            gint ox, oy;
-            GtkWindowPrivate *parent_priv = gtk_window_get_instance_private (priv->transient_parent);
-
-            g_assert (_gtk_widget_get_mapped (parent_widget)); /* established earlier */
-
-            monitor = gdk_display_get_monitor_at_surface (priv->display, parent_priv->surface);
-
-            gdk_surface_get_origin (parent_priv->surface, &ox, &oy);
-
-            gtk_widget_get_allocation (parent_widget, &allocation);
-            x = ox + (allocation.width - w) / 2;
-            y = oy + (allocation.height - h) / 2;
-
-            /* Clamp onto current monitor, ignoring _NET_WM_STRUT and
-             * WM decorations. If parent wasn't on a monitor, just
-             * give up.
-             */
-            if (monitor != NULL)
-              {
-                gdk_monitor_get_geometry (monitor, &area);
-                clamp_window_to_rectangle (&x, &y, w, h, &area);
-              }
-          }
-          break;
-
-        case GTK_WIN_POS_MOUSE:
-          {
-            GdkRectangle area;
-            GdkDevice *pointer;
-            GdkMonitor *monitor;
-            double px, py;
-
-            pointer = gdk_seat_get_pointer (gdk_display_get_default_seat (priv->display));
-
-            gdk_device_get_position (pointer, &px, &py);
-            monitor = gdk_display_get_monitor_at_point (priv->display, round (px), round (py));
-
-            x = round (px) - w / 2;
-            y = round (py) - h / 2;
-
-            /* Clamp onto current monitor, ignoring _NET_WM_STRUT and
-             * WM decorations.
-             */
-            gdk_monitor_get_geometry (monitor, &area);
-            clamp_window_to_rectangle (&x, &y, w, h, &area);
-          }
-          break;
-
-        case GTK_WIN_POS_NONE:
-        default:
-          break;
-        }
-    } /* if (priv->need_default_position) */
-
-  if (priv->need_default_position && info &&
-      info->initial_pos_set)
+  if (priv->need_default_position &&
+      info && info->initial_pos_set)
     {
       x = info->initial_x;
       y = info->initial_y;
@@ -7155,20 +6912,6 @@ gtk_window_constrain_position (GtkWindow    *window,
                                gint         *x,
                                gint         *y)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  /* See long comments in gtk_window_move_resize()
-   * on when it's safe to call this function.
-   */
-  if (priv->position == GTK_WIN_POS_CENTER_ALWAYS)
-    {
-      gint center_x, center_y;
-
-      center_window_on_monitor (window, new_width, new_height, &center_x, &center_y);
-      
-      *x = center_x;
-      *y = center_y;
-    }
 }
 
 static void
@@ -7201,15 +6944,11 @@ gtk_window_move_resize (GtkWindow *window)
    *        as a substitute default size
    *      - else the current size of the window, as received from
    *        configure notifies (i.e. the current allocation)
-   *
-   *   If GTK_WIN_POS_CENTER_ALWAYS is active, we constrain
-   *   the position request to be centered.
    */
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget;
   GtkWindowGeometryInfo *info;
   GdkGeometry new_geometry;
-  GdkSurface *surface;
   guint new_flags;
   GdkRectangle new_request;
   gboolean configure_request_size_changed;
@@ -7220,7 +6959,6 @@ gtk_window_move_resize (GtkWindow *window)
 
   widget = GTK_WIDGET (window);
 
-  surface = priv->surface;
   info = gtk_window_get_geometry_info (window, TRUE);
   
   configure_request_size_changed = FALSE;
@@ -7371,15 +7109,7 @@ gtk_window_move_resize (GtkWindow *window)
    * work.
    */
 
-  /* Also, we toggle on PPosition if GTK_WIN_POS_ is in use and
-   * this is an initial map
-   */
-  
-  if ((configure_request_pos_changed ||
-       info->initial_pos_set ||
-       (priv->need_default_position &&
-        get_effective_position (window) != GTK_WIN_POS_NONE)) &&
-      (new_flags & GDK_HINT_POS) == 0)
+  if (configure_request_pos_changed || info->initial_pos_set)
     {
       new_flags |= GDK_HINT_POS;
       hints_changed = TRUE;
@@ -7388,12 +7118,12 @@ gtk_window_move_resize (GtkWindow *window)
   /* Set hints if necessary
    */
   if (hints_changed)
-    gdk_surface_set_geometry_hints (surface,
+    gdk_surface_set_geometry_hints (priv->surface,
 				    &new_geometry,
 				    new_flags);
 
-  current_width = gdk_surface_get_width (surface);
-  current_height = gdk_surface_get_height (surface);
+  current_width = gdk_surface_get_width (priv->surface);
+  current_height = gdk_surface_get_height (priv->surface);
 
   /* handle resizing/moving and widget tree allocation
    */
@@ -7495,7 +7225,7 @@ gtk_window_move_resize (GtkWindow *window)
            */
 	  priv->configure_request_count += 1;
 
-          gdk_surface_freeze_toplevel_updates (surface);
+          gdk_surface_freeze_toplevel_updates (priv->surface);
 
 	  /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
 	   * configure event in response to our resizing request.
@@ -7517,13 +7247,13 @@ gtk_window_move_resize (GtkWindow *window)
       /* Now send the configure request */
       if (configure_request_pos_changed)
         {
-          gdk_surface_move_resize (surface,
+          gdk_surface_move_resize (priv->surface,
 				   new_request.x, new_request.y,
 				   new_request.width, new_request.height);
         }
       else  /* only size changed */
         {
-          gdk_surface_resize (surface,
+          gdk_surface_resize (priv->surface,
 			      new_request.width, new_request.height);
         }
 
@@ -7549,7 +7279,7 @@ gtk_window_move_resize (GtkWindow *window)
        */
       if (configure_request_pos_changed)
         {
-          gdk_surface_move (surface,
+          gdk_surface_move (priv->surface,
 			    new_request.x, new_request.y);
         }
 
