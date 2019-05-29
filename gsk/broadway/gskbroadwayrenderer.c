@@ -506,11 +506,13 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
     case GSK_CAIRO_NODE:
       if (add_new_node (renderer, node, BROADWAY_NODE_TEXTURE))
         {
-          cairo_surface_t *surface = (cairo_surface_t *)gsk_cairo_node_peek_surface (node);
+          cairo_surface_t *surface = gsk_cairo_node_peek_surface (node);
           cairo_surface_t *image_surface = NULL;
           GdkTexture *texture;
           guint32 texture_id;
 
+          if (surface == NULL)
+            return;
           if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE)
             image_surface = cairo_surface_reference (surface);
           else
