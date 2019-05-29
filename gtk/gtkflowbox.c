@@ -595,6 +595,29 @@ enum {
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
 
+typedef struct _GtkFlowBoxClass       GtkFlowBoxClass;
+
+struct _GtkFlowBox
+{
+  GtkContainer container;
+};
+
+struct _GtkFlowBoxClass
+{
+  GtkContainerClass parent_class;
+
+  void (*child_activated)            (GtkFlowBox        *box,
+                                      GtkFlowBoxChild   *child);
+  void (*selected_children_changed)  (GtkFlowBox        *box);
+  void (*activate_cursor_child)      (GtkFlowBox        *box);
+  void (*toggle_cursor_child)        (GtkFlowBox        *box);
+  gboolean (*move_cursor)            (GtkFlowBox        *box,
+                                      GtkMovementStep    step,
+                                      gint               count);
+  void (*select_all)                 (GtkFlowBox        *box);
+  void (*unselect_all)               (GtkFlowBox        *box);
+};
+
 typedef struct _GtkFlowBoxPrivate GtkFlowBoxPrivate;
 struct _GtkFlowBoxPrivate {
   GtkOrientation    orientation;

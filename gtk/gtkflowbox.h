@@ -36,45 +36,11 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_FLOW_BOX                  (gtk_flow_box_get_type ())
 #define GTK_FLOW_BOX(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FLOW_BOX, GtkFlowBox))
-#define GTK_FLOW_BOX_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FLOW_BOX, GtkFlowBoxClass))
 #define GTK_IS_FLOW_BOX(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_FLOW_BOX))
-#define GTK_IS_FLOW_BOX_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FLOW_BOX))
-#define GTK_FLOW_BOX_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_FLOW_BOX, GtkFlowBoxClass))
 
 typedef struct _GtkFlowBox            GtkFlowBox;
-typedef struct _GtkFlowBoxClass       GtkFlowBoxClass;
-
 typedef struct _GtkFlowBoxChild       GtkFlowBoxChild;
 typedef struct _GtkFlowBoxChildClass  GtkFlowBoxChildClass;
-
-struct _GtkFlowBox
-{
-  GtkContainer container;
-};
-
-struct _GtkFlowBoxClass
-{
-  GtkContainerClass parent_class;
-
-  void (*child_activated)            (GtkFlowBox        *box,
-                                      GtkFlowBoxChild   *child);
-  void (*selected_children_changed)  (GtkFlowBox        *box);
-  void (*activate_cursor_child)      (GtkFlowBox        *box);
-  void (*toggle_cursor_child)        (GtkFlowBox        *box);
-  gboolean (*move_cursor)            (GtkFlowBox        *box,
-                                      GtkMovementStep    step,
-                                      gint               count);
-  void (*select_all)                 (GtkFlowBox        *box);
-  void (*unselect_all)               (GtkFlowBox        *box);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
-};
 
 #define GTK_TYPE_FLOW_BOX_CHILD            (gtk_flow_box_child_get_type ())
 #define GTK_FLOW_BOX_CHILD(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_FLOW_BOX_CHILD, GtkFlowBoxChild))
@@ -94,9 +60,7 @@ struct _GtkFlowBoxChildClass
 
   void (* activate) (GtkFlowBoxChild *child);
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
+  gpointer padding[8];
 };
 
 /**
