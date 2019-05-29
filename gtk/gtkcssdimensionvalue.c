@@ -198,7 +198,7 @@ gtk_css_value_dimension_print (const GtkCssValue *number,
     g_string_append (string, "infinite");
   else
     {
-      g_ascii_formatd (buf, G_ASCII_DTOSTR_BUF_SIZE, "%.17f", number->value);
+      g_ascii_dtostr (buf, sizeof (buf), number->value);
       g_string_append (string, buf);
       if (number->value != 0.0)
         g_string_append (string, names[number->unit]);
