@@ -3080,6 +3080,36 @@ gtk_widget_destroyed (GtkWidget      *widget,
     *widget_pointer = NULL;
 }
 
+static void
+gtk_widget_update_paintables (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GSList *l;
+
+  for (l = priv->paintables; l; l = l->next)
+    gtk_widget_paintable_update_image (l->data);
+}
+
+static void
+gtk_widget_push_paintables (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GSList *l;
+
+  for (l = priv->paintables; l; l = l->next)
+    gtk_widget_paintable_push_snapshot_count (l->data);
+}
+
+static void
+gtk_widget_pop_paintables (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GSList *l;
+
+  for (l = priv->paintables; l; l = l->next)
+    gtk_widget_paintable_pop_snapshot_count (l->data);
+}
+
 /**
  * gtk_widget_show:
  * @widget: a #GtkWidget
@@ -3938,36 +3968,6 @@ gtk_widget_get_surface_allocation (GtkWidget     *widget,
     {
       *allocation = (GtkAllocation) { 0, 0, 0, 0 };
     }
-}
-
-static void
-gtk_widget_update_paintables (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GSList *l;
-
-  for (l = priv->paintables; l; l = l->next)
-    gtk_widget_paintable_update_image (l->data);
-}
-
-static void
-gtk_widget_push_paintables (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GSList *l;
-
-  for (l = priv->paintables; l; l = l->next)
-    gtk_widget_paintable_push_snapshot_count (l->data);
-}
-
-static void
-gtk_widget_pop_paintables (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GSList *l;
-
-  for (l = priv->paintables; l; l = l->next)
-    gtk_widget_paintable_pop_snapshot_count (l->data);
 }
 
 /**
