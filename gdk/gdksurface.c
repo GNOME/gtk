@@ -146,8 +146,6 @@ get_monitor_for_rect (GdkDisplay         *display,
   GdkMonitor *monitor;
   GdkRectangle workarea;
   GdkRectangle intersection;
-  gint x;
-  gint y;
   gint i;
 
   for (i = 0; i < gdk_display_get_n_monitors (display); i++)
@@ -165,13 +163,7 @@ get_monitor_for_rect (GdkDisplay         *display,
         }
     }
 
-  if (best_monitor)
-    return best_monitor;
-
-  x = rect->x + rect->width / 2;
-  y = rect->y + rect->height / 2;
-
-  return gdk_display_get_monitor_at_point (display, x, y);
+  return best_monitor;
 }
 
 static gint
@@ -1038,29 +1030,28 @@ gdk_surface_is_destroyed (GdkSurface *surface)
 /**
  * gdk_surface_get_position:
  * @surface: a #GdkSurface
- * @x: (out) (allow-none): X coordinate of surface
- * @y: (out) (allow-none): Y coordinate of surface
+ * @x: (out): X coordinate of surface
+ * @y: (out): Y coordinate of surface
  *
- * Obtains the position of the surface as reported in the
- * most-recently-processed #GdkEventConfigure. Contrast with
- * gdk_surface_get_geometry() which queries the X server for the
- * current surface position, regardless of which events have been
- * received or processed.
- *
- * The position coordinates are relative to the surface’s parent surface.
- *
+ * Obtains the position of the surface relative to its parent.
  **/
 void
 gdk_surface_get_position (GdkSurface *surface,
-                          gint      *x,
-                          gint      *y)
+                          int        *x,
+                          int        *y)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (x)
-    *x = surface->x;
-  if (y)
-    *y = surface->y;
+  if (surface->parent)
+    {
+      *x = surface->x;
+      *y = surface->y;
+    }
+  else
+    {
+      *x = 0;
+      *y = 0;
+    }
 }
 
 /**
@@ -2062,7 +2053,7 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
 
 
 
-/**
+/*
  * gdk_surface_move:
  * @surface: a #GdkSurface
  * @x: X coordinate relative to surface’s parent
@@ -2096,10 +2087,7 @@ gdk_surface_move (GdkSurface *surface,
  * use gtk_window_resize() instead of this low-level GDK function.
  *
  * Surfaces may not be resized below 1x1.
- *
- * If you’re also planning to move the surface, use gdk_surface_move_resize()
- * to both move and resize simultaneously, for a nicer visual effect.
- **/
+ */
 void
 gdk_surface_resize (GdkSurface *surface,
                     gint       width,
@@ -2109,7 +2097,7 @@ gdk_surface_resize (GdkSurface *surface,
 }
 
 
-/**
+/*
  * gdk_surface_move_resize:
  * @surface: a #GdkSurface
  * @x: new X position relative to surface’s parent
@@ -2344,7 +2332,7 @@ gdk_surface_set_device_cursor (GdkSurface *surface,
   gdk_surface_set_cursor_internal (surface, device, cursor);
 }
 
-/**
+/*
  * gdk_surface_get_geometry:
  * @surface: a #GdkSurface
  * @x: (out) (allow-none): return location for X coordinate of surface (relative to its parent)
@@ -2428,37 +2416,28 @@ gdk_surface_get_height (GdkSurface *surface)
   return surface->height;
 }
 
-/**
+/*
  * gdk_surface_get_origin:
  * @surface: a #GdkSurface
- * @x: (out) (allow-none): return location for X coordinate
- * @y: (out) (allow-none): return location for Y coordinate
+ * @x: (out): return location for X coordinate
+ * @y: (out): return location for Y coordinate
  *
  * Obtains the position of a surface in root window coordinates.
  * (Compare with gdk_surface_get_position() and
- * gdk_surface_get_geometry() which return the position of a surface
- * relative to its parent surface.)
- *
- * Returns: not meaningful, ignore
+ * gdk_surface_get_geometry() which return the position
+ * of a surface relative to its parent surface.)
  */
-gint
+void
 gdk_surface_get_origin (GdkSurface *surface,
-                        gint      *x,
-                        gint      *y)
+                        gint       *x,
+                        gint       *y)
 {
-  gint dummy_x, dummy_y;
+  g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), 0);
-
-  gdk_surface_get_root_coords (surface,
-                               0, 0,
-                               x ? x : &dummy_x,
-                               y ? y : &dummy_y);
-
-  return TRUE;
+  gdk_surface_get_root_coords (surface, 0, 0, x, y);
 }
 
-/**
+/*
  * gdk_surface_get_root_coords:
  * @surface: a #GdkSurface
  * @x: X coordinate in surface
@@ -3021,24 +3000,6 @@ gdk_surface_set_transient_for (GdkSurface *surface,
   surface->transient_for = parent;
 
   GDK_SURFACE_GET_CLASS (surface)->set_transient_for (surface, parent);
-}
-
-/**
- * gdk_surface_get_frame_extents:
- * @surface: a toplevel #GdkSurface
- * @rect: (out): rectangle to fill with bounding box of the surface frame
- *
- * Obtains the bounding box of the surface, including window manager
- * titlebar/borders if any. The frame position is given in root window
- * coordinates. To get the position of the surface itself (rather than
- * the frame) in root window coordinates, use gdk_surface_get_origin().
- *
- **/
-void
-gdk_surface_get_frame_extents (GdkSurface    *surface,
-                               GdkRectangle *rect)
-{
-  GDK_SURFACE_GET_CLASS (surface)->get_frame_extents (surface, rect);
 }
 
 /**
@@ -4075,4 +4036,42 @@ gdk_surface_handle_event (GdkEvent *event)
     }
 
   return handled;
+}
+
+gboolean
+gdk_surface_translate_coordinates (GdkSurface *from,
+                                   GdkSurface *to,
+                                   double     *x,
+                                   double     *y)
+{
+  int x1, y1, x2, y2;
+  GdkSurface *f, *t;
+
+  x1 = 0;
+  y1 = 0;
+  f = from;
+  while (f->parent)
+    {
+      x1 += f->x;
+      y1 += f->y;
+      f = f->parent;
+    }
+
+  x2 = 0;
+  y2 = 0;
+  t = to;
+  while (t->parent)
+    {
+      x2 += t->x;
+      y2 += t->y;
+      t = t->parent;
+    }
+
+  if (f != t)
+    return FALSE;
+
+  *x += x1 - x2;
+  *y += y1 - y2;
+
+  return TRUE;
 }

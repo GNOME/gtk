@@ -3949,10 +3949,6 @@ gtk_widget_unrealize (GtkWidget *widget)
   g_object_unref (widget);
 }
 
-/*
- * Returns the values you're supposed to pass to gdk_surface_move_resize
- * for a windowed widget.
- */
 void
 gtk_widget_get_surface_allocation (GtkWidget     *widget,
                                   GtkAllocation *allocation)
@@ -8315,9 +8311,8 @@ synth_crossing (GtkWidget       *widget,
   event->any.send_event = TRUE;
   event->crossing.child_surface = g_object_ref (surface);
   event->crossing.time = GDK_CURRENT_TIME;
-  gdk_device_get_position (device,
-                           &event->crossing.x_root,
-                           &event->crossing.y_root);
+  event->crossing.x_root = 0;
+  event->crossing.y_root = 0;
   gdk_surface_get_device_position (surface,
                                    device,
                                    &event->crossing.x,

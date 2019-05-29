@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <template class="GtkDialog" parent="GtkWindow">
-    <property name="window-position">center-on-parent</property>
     <property name="type-hint">dialog</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar">

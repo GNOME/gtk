@@ -1271,13 +1271,18 @@ x11_surface_move (GdkSurface *surface,
 
   if (impl->override_redirect)
     {
-      surface->x = x;
-      surface->y = y;
+      impl->abs_x = x;
+      impl->abs_y = y;
 
       if (surface->parent)
         {
-          impl->offset_x = surface->x - surface->parent->x;
-          impl->offset_y = surface->y - surface->parent->y;
+          surface->x = impl->abs_x - GDK_X11_SURFACE (surface->parent)->abs_x;
+          surface->y = impl->abs_y - GDK_X11_SURFACE (surface->parent)->abs_y;
+        }
+      else
+        {
+          surface->x = x;
+          surface->y = y;
         }
     }
 }
@@ -1340,8 +1345,8 @@ x11_surface_move_resize (GdkSurface *surface,
 
   if (impl->override_redirect)
     {
-      surface->x = x;
-      surface->y = y;
+      impl->abs_x = x;
+      impl->abs_y = y;
 
       impl->unscaled_width = width * impl->surface_scale;
       impl->unscaled_height = height * impl->surface_scale;
@@ -1352,8 +1357,13 @@ x11_surface_move_resize (GdkSurface *surface,
 
       if (surface->parent)
         {
-          impl->offset_x = surface->x - surface->parent->x;
-          impl->offset_y = surface->y - surface->parent->y;
+          surface->x = impl->abs_x - GDK_X11_SURFACE (surface->parent)->abs_x;
+          surface->y = impl->abs_y - GDK_X11_SURFACE (surface->parent)->abs_y;
+        }
+      else
+        {
+          surface->x = x;
+          surface->y = y;
         }
     }
   else
@@ -1395,10 +1405,10 @@ gdk_x11_surface_update_popups (GdkSurface *parent)
     {
       GdkX11Surface *popup_impl = l->data;
       GdkSurface *popup = GDK_SURFACE (popup_impl);
-      int new_x = parent->x + popup_impl->offset_x;
-      int new_y = parent->y + popup_impl->offset_y;
+      int new_x = GDK_X11_SURFACE (parent)->abs_x + popup->x;
+      int new_y = GDK_X11_SURFACE (parent)->abs_y + popup->y;
 
-      if (new_x != popup->x || new_y != popup->y)
+      if (new_x != popup_impl->abs_x || new_y != popup_impl->abs_y)
         x11_surface_move (popup, new_x, new_y);
       gdk_x11_surface_restack_toplevel (popup, parent, TRUE);
     }
@@ -2346,8 +2356,8 @@ gdk_x11_surface_get_frame_extents (GdkSurface    *surface,
   impl = GDK_X11_SURFACE (surface);
 
   /* Refine our fallback answer a bit using local information */
-  rect->x = surface->x * impl->surface_scale;
-  rect->y = surface->y * impl->surface_scale;
+  rect->x = impl->abs_x * impl->surface_scale;
+  rect->y = impl->abs_y * impl->surface_scale;
   rect->width = surface->width * impl->surface_scale;
   rect->height = surface->height * impl->surface_scale;
 
@@ -4124,7 +4134,7 @@ calculate_unmoving_origin (MoveResizeData *mv_resize)
     }
   else
     {
-      gdk_surface_get_frame_extents (mv_resize->moveresize_surface, &rect);
+      gdk_x11_surface_get_frame_extents (mv_resize->moveresize_surface, &rect);
       gdk_surface_get_geometry (mv_resize->moveresize_surface, 
 			       NULL, NULL, &width, &height);
       
@@ -4587,7 +4597,6 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->set_title = gdk_x11_surface_set_title;
   impl_class->set_startup_id = gdk_x11_surface_set_startup_id;
   impl_class->set_transient_for = gdk_x11_surface_set_transient_for;
-  impl_class->get_frame_extents = gdk_x11_surface_get_frame_extents;
   impl_class->set_accept_focus = gdk_x11_surface_set_accept_focus;
   impl_class->set_focus_on_map = gdk_x11_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_x11_surface_set_icon_list;

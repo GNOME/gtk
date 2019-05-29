@@ -1615,66 +1615,6 @@ gdk_display_get_primary_monitor (GdkDisplay *display)
 }
 
 /**
- * gdk_display_get_monitor_at_point:
- * @display: a #GdkDisplay
- * @x: the x coordinate of the point
- * @y: the y coordinate of the point
- *
- * Gets the monitor in which the point (@x, @y) is located,
- * or a nearby monitor if the point is not in any monitor.
- *
- * Returns: (transfer none): the monitor containing the point
- */
-GdkMonitor *
-gdk_display_get_monitor_at_point (GdkDisplay *display,
-                                  int         x,
-                                  int         y)
-{
-  GdkMonitor *nearest = NULL;
-  int nearest_dist = G_MAXINT;
-  int n_monitors, i;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
-  n_monitors = gdk_display_get_n_monitors (display);
-  for (i = 0; i < n_monitors; i++)
-    {
-      GdkMonitor *monitor;
-      GdkRectangle geometry;
-      int dist_x, dist_y, dist;
-
-      monitor = gdk_display_get_monitor (display, i);
-      gdk_monitor_get_geometry (monitor, &geometry);
-
-      if (x < geometry.x)
-        dist_x = geometry.x - x;
-      else if (geometry.x + geometry.width <= x)
-        dist_x = x - (geometry.x + geometry.width) + 1;
-      else
-        dist_x = 0;
-
-      if (y < geometry.y)
-        dist_y = geometry.y - y;
-      else if (geometry.y + geometry.height <= y)
-        dist_y = y - (geometry.y + geometry.height) + 1;
-      else
-        dist_y = 0;
-
-      dist = dist_x + dist_y;
-      if (dist < nearest_dist)
-        {
-          nearest_dist = dist;
-          nearest = monitor;
-        }
-
-      if (nearest_dist == 0)
-        break;
-    }
-
-  return nearest;
-}
-
-/**
  * gdk_display_get_monitor_at_surface:
  * @display: a #GdkDisplay
  * @surface: a #GdkSurface
@@ -1706,6 +1646,7 @@ gdk_display_get_monitor_at_surface (GdkDisplay *display,
         return best;
     }
 
+  /* the fallback implementation requires global coordinates */
   gdk_surface_get_geometry (surface, &win.x, &win.y, &win.width, &win.height);
   gdk_surface_get_origin (surface, &win.x, &win.y);
 
@@ -1727,12 +1668,7 @@ gdk_display_get_monitor_at_surface (GdkDisplay *display,
         }
     }
 
-  if (best)
-    return best;
-
-  return gdk_display_get_monitor_at_point (display,
-                                           win.x + win.width / 2,
-                                           win.y + win.height / 2);
+  return best;
 }
 
 void

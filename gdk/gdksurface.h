@@ -445,19 +445,8 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_surface_hide                  (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_show_unraised         (GdkSurface     *surface);
-
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_move                  (GdkSurface     *surface,
-                                                 gint           x,
-                                                 gint           y);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_resize                (GdkSurface     *surface,
-                                                 gint           width,
-                                                 gint           height);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_move_resize           (GdkSurface     *surface,
-                                                 gint           x,
-                                                 gint           y,
                                                  gint           width,
                                                  gint           height);
 GDK_AVAILABLE_IN_ALL
@@ -553,12 +542,10 @@ void          gdk_surface_get_position   (GdkSurface      *surface,
                                           gint            *x,
                                           gint            *y);
 GDK_AVAILABLE_IN_ALL
-gint          gdk_surface_get_origin     (GdkSurface      *surface,
-                                          gint            *x,
-                                          gint            *y);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_get_frame_extents (GdkSurface     *surface,
-                                             GdkRectangle  *rect);
+gboolean gdk_surface_translate_coordinates (GdkSurface *from,
+                                            GdkSurface *to,
+                                            double     *x,
+                                            double     *y);
 
 GDK_AVAILABLE_IN_ALL
 gint          gdk_surface_get_scale_factor  (GdkSurface     *surface);

@@ -1763,56 +1763,6 @@ gdk_win32_surface_restack_toplevel (GdkSurface *window,
 	// ### TODO
 }
 
-static void
-gdk_win32_surface_get_frame_extents (GdkSurface    *window,
-                              GdkRectangle *rect)
-{
-  HWND hwnd;
-  RECT r;
-  GdkWin32Surface *impl;
-
-  g_return_if_fail (GDK_IS_SURFACE (window));
-  g_return_if_fail (rect != NULL);
-
-  rect->x = 0;
-  rect->y = 0;
-  rect->width = 1;
-  rect->height = 1;
-
-  if (GDK_SURFACE_DESTROYED (window))
-    return;
-
-  /* FIXME: window is documented to be a toplevel GdkSurface, so is it really
-   * necessary to walk its parent chain?
-   */
-  while (window->parent && window->parent->parent)
-    window = window->parent;
-
-  impl = GDK_WIN32_SURFACE (window);
-  hwnd = GDK_SURFACE_HWND (window);
-  API_CALL (GetWindowRect, (hwnd, &r));
-
-  /* Initialize to real, unscaled size */
-  rect->x = r.left + _gdk_offset_x * impl->surface_scale;
-  rect->y = r.top + _gdk_offset_y * impl->surface_scale;
-  rect->width = (r.right - r.left);
-  rect->height = (r.bottom - r.top);
-
-  /* Extend width and height to ensure that they cover the real size when de-scaled,
-   * and replace everyting with scaled values
-   */
-  rect->width = (rect->width + rect->x % impl->surface_scale + impl->surface_scale - 1) / impl->surface_scale;
-  rect->height = (rect->height + rect->y % impl->surface_scale + impl->surface_scale - 1) / impl->surface_scale;
-  rect->x = r.left / impl->surface_scale + _gdk_offset_x;
-  rect->y = r.top / impl->surface_scale + _gdk_offset_y;
-
-  GDK_NOTE (MISC, g_print ("gdk_surface_get_frame_extents: %p: %dx%d@%+d%+d\n",
-                           GDK_SURFACE_HWND (window),
-                           rect->width,
-                           rect->height,
-                           rect->x, rect->y));
-}
-
 static gboolean
 gdk_surface_win32_get_device_state (GdkSurface       *window,
                                    GdkDevice       *device,
@@ -3378,6 +3328,74 @@ update_fullup_indicator (GdkSurface                   *window,
   ensure_snap_indicator_surface (context, from_or_to.width, from_or_to.height, impl->surface_scale);
 }
 
+static GdkMonitor *
+get_monitor_at_point (GdkDisplay *display,
+                      int         x,
+                      int         y)
+{
+  GdkMonitor *nearest = NULL;
+  int nearest_dist = G_MAXINT;
+  int n_monitors, i;
+
+  n_monitors = gdk_display_get_n_monitors (display);
+  for (i = 0; i < n_monitors; i++)
+    {
+      GdkMonitor *monitor;
+      GdkRectangle geometry;
+      int dist_x, dist_y, dist;
+
+      monitor = gdk_display_get_monitor (display, i);
+      gdk_monitor_get_geometry (monitor, &geometry);
+
+      if (x < geometry.x)
+        dist_x = geometry.x - x;
+      else if (geometry.x + geometry.width <= x)
+        dist_x = x - (geometry.x + geometry.width) + 1;
+      else
+        dist_x = 0;
+
+      if (y < geometry.y)
+        dist_y = geometry.y - y;
+      else if (geometry.y + geometry.height <= y)
+        dist_y = y - (geometry.y + geometry.height) + 1;
+      else
+        dist_y = 0;
+
+      dist = dist_x + dist_y;
+      if (dist < nearest_dist)
+        {
+          nearest_dist = dist;
+          nearest = monitor;
+        }
+
+      if (x < geometry.x)
+        dist_x = geometry.x - x;
+      else if (geometry.x + geometry.width <= x)
+        dist_x = x - (geometry.x + geometry.width) + 1;
+      else
+        dist_x = 0;
+
+      if (y < geometry.y)
+        dist_y = geometry.y - y;
+      else if (geometry.y + geometry.height <= y)
+        dist_y = y - (geometry.y + geometry.height) + 1;
+      else
+        dist_y = 0;
+
+      dist = dist_x + dist_y;
+      if (dist < nearest_dist)
+        {
+          nearest_dist = dist;
+          nearest = monitor;
+        }
+
+      if (nearest_dist == 0)
+        break;
+    }
+
+  return nearest;
+}
+
 static void
 start_indicator (GdkSurface                   *window,
                  GdkW32DragMoveResizeContext *context,
@@ -3393,7 +3411,7 @@ start_indicator (GdkSurface                   *window,
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
 
   display = gdk_surface_get_display (window);
-  monitor = gdk_display_get_monitor_at_point (display, x, y);
+  monitor = get_monitor_at_point (display, x, y);
   gdk_monitor_get_workarea (monitor, &workarea);
 
   maxysize = GetSystemMetrics (SM_CYVIRTUALSCREEN) / impl->surface_scale;
@@ -5084,7 +5102,6 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->set_title = gdk_win32_surface_set_title;
   //impl_class->set_startup_id = gdk_x11_surface_set_startup_id;
   impl_class->set_transient_for = gdk_win32_surface_set_transient_for;
-  impl_class->get_frame_extents = gdk_win32_surface_get_frame_extents;
   impl_class->set_accept_focus = gdk_win32_surface_set_accept_focus;
   impl_class->set_focus_on_map = gdk_win32_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_win32_surface_set_icon_list;

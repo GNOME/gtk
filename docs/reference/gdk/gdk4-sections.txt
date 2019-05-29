@@ -95,7 +95,6 @@ gdk_display_list_seats
 gdk_display_get_n_monitors
 gdk_display_get_monitor
 gdk_display_get_primary_monitor
-gdk_display_get_monitor_at_point
 gdk_display_get_monitor_at_surface
 gdk_display_get_clipboard
 gdk_display_get_primary_clipboard
@@ -208,9 +207,7 @@ gdk_surface_set_fullscreen_mode
 gdk_surface_set_keep_above
 gdk_surface_set_keep_below
 gdk_surface_set_opacity
-gdk_surface_move
 gdk_surface_resize
-gdk_surface_move_resize
 gdk_surface_move_to_rect
 gdk_surface_raise
 gdk_surface_lower
@@ -256,8 +253,6 @@ gdk_surface_set_type_hint
 gdk_surface_get_type_hint
 gdk_surface_set_shadow_width
 gdk_surface_get_position
-gdk_surface_get_frame_extents
-gdk_surface_get_origin
 gdk_surface_get_device_position
 GdkModifierType
 GdkModifierIntent
@@ -482,7 +477,6 @@ gdk_device_get_seat
 
 <SUBSECTION>
 gdk_device_get_state
-gdk_device_get_position
 gdk_device_get_surface_at_position
 gdk_device_get_history
 gdk_device_free_history

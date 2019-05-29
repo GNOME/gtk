@@ -228,8 +228,6 @@ void _gdk_display_set_surface_under_pointer (GdkDisplay *display,
                                              GdkDevice  *device,
                                              GdkSurface  *surface);
 
-GdkSurface * gdk_surface_get_impl_surface (GdkSurface *surface);
-
 void gdk_surface_destroy_notify       (GdkSurface *surface);
 
 void gdk_synthesize_surface_state (GdkSurface     *surface,
@@ -245,11 +243,20 @@ GdkGrabStatus gdk_device_grab (GdkDevice        *device,
                                guint32           time_);
 void gdk_device_ungrab        (GdkDevice        *device,
                                guint32           time_);
+void gdk_device_get_position  (GdkDevice        *device,
+                               double           *x,
+                               double           *y);
+
+
 void gdk_surface_get_root_coords (GdkSurface *surface,
                                   gint        x,
                                   gint        y,
                                   gint       *root_x,
                                   gint       *root_y);
+void gdk_surface_get_origin      (GdkSurface *surface,
+                                  gint       *x,
+                                  gint       *y);
+
 
 void gdk_surface_get_geometry (GdkSurface *surface,
                                gint       *x,
@@ -257,6 +264,15 @@ void gdk_surface_get_geometry (GdkSurface *surface,
                                gint       *width,
                                gint       *height);
 
+void gdk_surface_move         (GdkSurface *surface,
+                               gint           x,
+                               gint           y);
+
+void gdk_surface_move_resize  (GdkSurface     *surface,
+                               gint           x,
+                               gint           y,
+                               gint           width,
+                               gint           height);
 
 G_END_DECLS
 
