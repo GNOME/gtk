@@ -5219,15 +5219,16 @@ create_surface_states (GtkWidget *widget)
  */
 
 static void
-size_allocate_callback (GtkWidget     *widget,
-			GtkAllocation *allocation,
-			int            baseline,
-			gpointer       data)
+size_allocate_callback (GtkWidget *widget,
+			int        width,
+                        int        height,
+			int        baseline,
+			gpointer   data)
 {
   GtkWidget *label = data;
   gchar *msg;
 
-  msg = g_strdup_printf ("size: %d x %d\n", allocation->width, allocation->height);
+  msg = g_strdup_printf ("size: %d x %d\n", width, height);
 
   gtk_label_set_text (GTK_LABEL (label), msg);
 
