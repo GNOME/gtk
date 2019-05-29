@@ -211,10 +211,8 @@ struct _GtkNotebookClass
                                 GtkWidget         *menu_label,
                                 gint               position);
 
-  GtkNotebook * (* create_window) (GtkNotebook       *notebook,
-                                   GtkWidget         *page,
-                                   gint               x,
-                                   gint               y);
+  GtkNotebook * (* create_window) (GtkNotebook    *notebook,
+                                   GtkWidget      *page);
 
   void (* page_reordered)      (GtkNotebook     *notebook,
                                 GtkWidget       *child,
@@ -752,9 +750,7 @@ static gint gtk_notebook_real_insert_page    (GtkNotebook      *notebook,
                                               gint              position);
 
 static GtkNotebook *gtk_notebook_create_window (GtkNotebook    *notebook,
-                                                GtkWidget      *page,
-                                                gint            x,
-                                                gint            y);
+                                                GtkWidget      *page);
 
 static void gtk_notebook_measure_tabs        (GtkGizmo         *gizmo,
                                               GtkOrientation    orientation,
@@ -1200,8 +1196,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * GtkNotebook::create-window:
    * @notebook: the #GtkNotebook emitting the signal
    * @page: the tab of @notebook that is being detached
-   * @x: the X coordinate where the drop happens
-   * @y: the Y coordinate where the drop happens
    *
    * The ::create-window signal is emitted when a detachable
    * tab is dropped on the root window.
@@ -1221,9 +1215,9 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkNotebookClass, create_window),
                   gtk_object_handled_accumulator, NULL,
-                  _gtk_marshal_OBJECT__OBJECT_INT_INT,
-                  GTK_TYPE_NOTEBOOK, 3,
-                  GTK_TYPE_WIDGET, G_TYPE_INT, G_TYPE_INT);
+                  NULL,
+                  GTK_TYPE_NOTEBOOK, 1,
+                  GTK_TYPE_WIDGET);
 
   binding_set = gtk_binding_set_by_class (class);
   gtk_binding_entry_add_signal (binding_set,
@@ -3196,11 +3190,9 @@ gtk_notebook_drag_end (GtkWidget      *widget,
   if (priv->rootwindow_drop)
     {
       GtkNotebook *dest_notebook = NULL;
-      double x, y;
 
-      gdk_device_get_position (gdk_drag_get_device (drag), &x, &y);
       g_signal_emit (notebook, notebook_signals[CREATE_WINDOW], 0,
-                     priv->detached_tab->child, round (x), round (y), &dest_notebook);
+                     priv->detached_tab->child, &dest_notebook);
 
       if (dest_notebook)
         do_detach_tab (notebook, dest_notebook, priv->detached_tab->child);
@@ -3225,9 +3217,7 @@ gtk_notebook_drag_end (GtkWidget      *widget,
 
 static GtkNotebook *
 gtk_notebook_create_window (GtkNotebook *notebook,
-                            GtkWidget   *page,
-                            gint         x,
-                            gint         y)
+                            GtkWidget   *page)
 {
   return NULL;
 }
@@ -3245,12 +3235,9 @@ gtk_notebook_drag_failed (GtkWidget      *widget,
   if (result == GTK_DRAG_RESULT_NO_TARGET)
     {
       GtkNotebook *dest_notebook = NULL;
-      double x, y;
-
-      gdk_device_get_position (gdk_drag_get_device (drag), &x, &y);
 
       g_signal_emit (notebook, notebook_signals[CREATE_WINDOW], 0,
-                     priv->detached_tab->child, round (x), round (y), &dest_notebook);
+                     priv->detached_tab->child, &dest_notebook);
 
       if (dest_notebook)
         do_detach_tab (notebook, dest_notebook, priv->detached_tab->child);
