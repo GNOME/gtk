@@ -76,8 +76,8 @@ struct _GdkX11Surface
   Damage damage;
 #endif
 
-  int offset_x;
-  int offset_y;
+  int abs_x;
+  int abs_y;
 };
  
 struct _GdkX11SurfaceClass 
