@@ -2332,7 +2332,7 @@ gdk_surface_set_device_cursor (GdkSurface *surface,
   gdk_surface_set_cursor_internal (surface, device, cursor);
 }
 
-/**
+/*
  * gdk_surface_get_geometry:
  * @surface: a #GdkSurface
  * @x: (out) (allow-none): return location for X coordinate of surface (relative to its parent)
