@@ -5309,14 +5309,6 @@ resizable_callback (GtkWidget *widget,
                 NULL);
 }
 
-static void
-pos_selected (GtkWidget *widget,
-              gpointer   data)
-{
-  gtk_window_set_position (GTK_WINDOW (g_object_get_data (data, "target")),
-                           gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) + GTK_WIN_POS_NONE);
-}
-
 static GtkWidget*
 window_controls (GtkWidget *window)
 {
@@ -5326,8 +5318,6 @@ window_controls (GtkWidget *window)
   GtkWidget *button;
   GtkWidget *spin;
   GtkAdjustment *adjustment;
-  GtkWidget *om;
-  gint i;
   
   control_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
@@ -5435,35 +5425,6 @@ window_controls (GtkWidget *window)
                            window,
 			   G_CONNECT_SWAPPED);
   gtk_container_add (GTK_CONTAINER (vbox), button);
-
-
-
-
-  om = gtk_combo_box_text_new ();
-  i = 0;
-  while (i < 5)
-    {
-      static gchar *names[] = {
-        "GTK_WIN_POS_NONE",
-        "GTK_WIN_POS_CENTER",
-        "GTK_WIN_POS_MOUSE",
-        "GTK_WIN_POS_CENTER_ALWAYS",
-        "GTK_WIN_POS_CENTER_ON_PARENT",
-        NULL
-      };
-
-      g_assert (names[i]);
-      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (om), names[i]);
-
-      ++i;
-    }
-
-  g_signal_connect (om,
-		    "changed",
-		    G_CALLBACK (pos_selected),
-		    control_window);
-
-  gtk_container_add (GTK_CONTAINER (vbox), om);
 
   gtk_widget_show (vbox);
 
