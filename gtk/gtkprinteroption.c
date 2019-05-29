@@ -94,7 +94,7 @@ gtk_printer_option_class_init (GtkPrinterOptionClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrinterOptionClass, changed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
   g_object_class_install_property (G_OBJECT_CLASS (class),

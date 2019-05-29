@@ -719,7 +719,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkAppChooserButtonClass, changed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
 

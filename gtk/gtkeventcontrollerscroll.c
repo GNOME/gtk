@@ -385,7 +385,7 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_SCROLL,
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
   /**
    * GtkEventControllerScroll::scroll:
@@ -417,7 +417,7 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_SCROLL,
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**

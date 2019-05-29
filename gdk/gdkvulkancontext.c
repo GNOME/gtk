@@ -475,7 +475,7 @@ gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 }
 
@@ -1126,7 +1126,7 @@ gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 }
 

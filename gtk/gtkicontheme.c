@@ -496,7 +496,7 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
                                  G_SIGNAL_RUN_LAST,
                                  G_STRUCT_OFFSET (GtkIconThemeClass, changed),
                                  NULL, NULL,
-                                 g_cclosure_marshal_VOID__VOID,
+                                 NULL,
                                  G_TYPE_NONE, 0);
 }
 
