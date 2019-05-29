@@ -1646,6 +1646,7 @@ gdk_display_get_monitor_at_surface (GdkDisplay *display,
         return best;
     }
 
+  /* the fallback implementation requires global coordinates */
   gdk_surface_get_geometry (surface, &win.x, &win.y, &win.width, &win.height);
   gdk_surface_get_origin (surface, &win.x, &win.y);
 

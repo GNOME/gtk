@@ -2419,37 +2419,28 @@ gdk_surface_get_height (GdkSurface *surface)
   return surface->height;
 }
 
-/**
+/*
  * gdk_surface_get_origin:
  * @surface: a #GdkSurface
- * @x: (out) (allow-none): return location for X coordinate
- * @y: (out) (allow-none): return location for Y coordinate
+ * @x: (out): return location for X coordinate
+ * @y: (out): return location for Y coordinate
  *
  * Obtains the position of a surface in root window coordinates.
  * (Compare with gdk_surface_get_position() and
- * gdk_surface_get_geometry() which return the position of a surface
- * relative to its parent surface.)
- *
- * Returns: not meaningful, ignore
+ * gdk_surface_get_geometry() which return the position
+ * of a surface relative to its parent surface.)
  */
-gint
+void
 gdk_surface_get_origin (GdkSurface *surface,
-                        gint      *x,
-                        gint      *y)
+                        gint       *x,
+                        gint       *y)
 {
-  gint dummy_x, dummy_y;
+  g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), 0);
-
-  gdk_surface_get_root_coords (surface,
-                               0, 0,
-                               x ? x : &dummy_x,
-                               y ? y : &dummy_y);
-
-  return TRUE;
+  gdk_surface_get_root_coords (surface, 0, 0, x, y);
 }
 
-/**
+/*
  * gdk_surface_get_root_coords:
  * @surface: a #GdkSurface
  * @x: X coordinate in surface

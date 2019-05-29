@@ -255,7 +255,6 @@ gdk_surface_set_type_hint
 gdk_surface_get_type_hint
 gdk_surface_set_shadow_width
 gdk_surface_get_position
-gdk_surface_get_origin
 gdk_surface_get_device_position
 GdkModifierType
 GdkModifierIntent
