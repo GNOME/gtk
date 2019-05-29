@@ -1065,32 +1065,31 @@ parse_cairo_node (GtkCssParser *parser)
     { "script", parse_script, clear_surface, &surface }
   };
   GskRenderNode *node;
-  cairo_t *cr;
 
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
 
   node = gsk_cairo_node_new (&bounds);
   
-  cr = gsk_cairo_node_get_draw_context (node);
-
   if (surface != NULL)
     {
+      cairo_t *cr = gsk_cairo_node_get_draw_context (node);
       cairo_set_source_surface (cr, surface, 0, 0);
       cairo_paint (cr);
+      cairo_destroy (cr);
     }
   else if (pixels != NULL)
     {
+      cairo_t *cr = gsk_cairo_node_get_draw_context (node);
       surface = gdk_texture_download_surface (pixels);
       cairo_set_source_surface (cr, surface, 0, 0);
       cairo_paint (cr);
+      cairo_destroy (cr);
     }
   else
     {
-      gdk_cairo_set_source_rgba (cr, &GDK_RGBA ("FF00CC"));
-      cairo_paint (cr);
+      /* do nothing */
     }
 
-  cairo_destroy (cr);
   g_clear_object (&pixels);
   g_clear_pointer (&surface, cairo_surface_destroy);
 
@@ -2380,36 +2379,39 @@ render_node_print (Printer       *p,
         start_node (p, "cairo");
         append_rect_param (p, "bounds", &node->bounds);
 
-        array = g_byte_array_new ();
-        cairo_surface_write_to_png_stream (surface, cairo_write_array, array);
-        b64 = g_base64_encode (array->data, array->len);
+        if (surface != NULL)
+          {
+            array = g_byte_array_new ();
+            cairo_surface_write_to_png_stream (surface, cairo_write_array, array);
+            b64 = g_base64_encode (array->data, array->len);
 
-        _indent (p);
-        g_string_append_printf (p->str, "pixels: url(\"data:image/png;base64,%s\");\n", b64);
+            _indent (p);
+            g_string_append_printf (p->str, "pixels: url(\"data:image/png;base64,%s\");\n", b64);
 
-        g_free (b64);
-        g_byte_array_free (array, TRUE);
+            g_free (b64);
+            g_byte_array_free (array, TRUE);
 
 #ifdef CAIRO_HAS_SCRIPT_SURFACE
-        if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_RECORDING)
-          {
-            cairo_device_t *script;
-
-            array = g_byte_array_new ();
-            script = cairo_script_create_for_stream (cairo_write_array, array);
-
-            if (cairo_script_from_recording_surface (script, surface) == CAIRO_STATUS_SUCCESS)
+            if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_RECORDING)
               {
-                b64 = g_base64_encode (array->data, array->len);
-                _indent (p);
-                g_string_append_printf (p->str, "script: url(\"data:;base64,%s\");\n", b64);
-                g_free (b64);
-              }
+                cairo_device_t *script;
 
-          cairo_device_destroy (script);
-          g_byte_array_free (array, TRUE);
-        }
+                array = g_byte_array_new ();
+                script = cairo_script_create_for_stream (cairo_write_array, array);
+
+                if (cairo_script_from_recording_surface (script, surface) == CAIRO_STATUS_SUCCESS)
+                  {
+                    b64 = g_base64_encode (array->data, array->len);
+                    _indent (p);
+                    g_string_append_printf (p->str, "script: url(\"data:;base64,%s\");\n", b64);
+                    g_free (b64);
+                  }
+
+              cairo_device_destroy (script);
+              g_byte_array_free (array, TRUE);
+            }
 #endif
+        }
 
         end_node (p);
       }
