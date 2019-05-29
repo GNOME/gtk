@@ -460,11 +460,6 @@ static void     gtk_window_constrain_size            (GtkWindow    *window,
                                                       gint          height,
                                                       gint         *new_width,
                                                       gint         *new_height);
-static void     gtk_window_constrain_position        (GtkWindow    *window,
-                                                      gint          new_width,
-                                                      gint          new_height,
-                                                      gint         *x,
-                                                      gint         *y);
 static void     gtk_window_update_fixed_size         (GtkWindow    *window,
                                                       GdkGeometry  *new_geometry,
                                                       gint          new_width,
@@ -6876,15 +6871,6 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 }
 
 static void
-gtk_window_constrain_position (GtkWindow    *window,
-                               gint          new_width,
-                               gint          new_height,
-                               gint         *x,
-                               gint         *y)
-{
-}
-
-static void
 gtk_window_move_resize (GtkWindow *window)
 {
   /* Overview:
@@ -6930,13 +6916,14 @@ gtk_window_move_resize (GtkWindow *window)
   widget = GTK_WIDGET (window);
 
   info = gtk_window_get_geometry_info (window, TRUE);
-  
+
   configure_request_size_changed = FALSE;
   configure_request_pos_changed = FALSE;
-  
+  hints_changed = FALSE;
+
   gtk_window_compute_configure_request (window, &new_request,
                                         &new_geometry, &new_flags);  
-  
+
   /* This check implies the invariant that we never set info->last
    * without setting the hints and sending off a configure request.
    *
@@ -6950,78 +6937,10 @@ gtk_window_move_resize (GtkWindow *window)
   if ((info->last.configure_request.width != new_request.width ||
        info->last.configure_request.height != new_request.height))
     configure_request_size_changed = TRUE;
-  
-  hints_changed = FALSE;
-  
+
   if (!gtk_window_compare_hints (&info->last.geometry, info->last.flags,
 				 &new_geometry, new_flags))
-    {
-      hints_changed = TRUE;
-    }
-  
-  /* Position Constraints
-   * ====================
-   * 
-   * POS_CENTER_ALWAYS is conceptually a constraint rather than
-   * a default. The other POS_ values are used only when the
-   * window is shown, not after that.
-   * 
-   * However, we can't implement a position constraint as
-   * "anytime the window size changes, center the window"
-   * because this may well end up fighting the WM or user.  In
-   * fact it gets in an infinite loop with at least one WM.
-   *
-   * Basically, applications are in no way in a position to
-   * constrain the position of a window, with one exception:
-   * override redirect windows. (Really the intended purpose
-   * of CENTER_ALWAYS anyhow, I would think.)
-   *
-   * So the way we implement this "constraint" is to say that when WE
-   * cause a move or resize, i.e. we make a configure request changing
-   * window size, we recompute the CENTER_ALWAYS position to reflect
-   * the new window size, and include it in our request.  Also, if we
-   * just turned on CENTER_ALWAYS we snap to center with a new
-   * request.  Otherwise, if we are just NOTIFIED of a move or resize
-   * done by someone else e.g. the window manager, we do NOT send a
-   * new configure request.
-   *
-   * For override redirect windows, this works fine; all window
-   * sizes are from our configure requests. For managed windows,
-   * it is at least semi-sane, though who knows what the
-   * app author is thinking.
-   */
-
-  /* This condition should be kept in sync with the condition later on
-   * that determines whether we send a configure request.  i.e. we
-   * should do this position constraining anytime we were going to
-   * send a configure request anyhow, plus when constraints have
-   * changed.
-   */
-  if (configure_request_pos_changed ||
-      configure_request_size_changed ||
-      hints_changed ||
-      info->position_constraints_changed)
-    {
-      /* We request the constrained position if:
-       *  - we were changing position, and need to clamp
-       *    the change to the constraint
-       *  - we're changing the size anyway
-       *  - set_position() was called to toggle CENTER_ALWAYS on
-       */
-
-      gtk_window_constrain_position (window,
-                                     new_request.width,
-                                     new_request.height,
-                                     &new_request.x,
-                                     &new_request.y);
-      
-      /* Update whether we need to request a move */
-      if (info->last.configure_request.x != new_request.x ||
-          info->last.configure_request.y != new_request.y)
-        configure_request_pos_changed = TRUE;
-      else
-        configure_request_pos_changed = FALSE;
-    }
+    hints_changed = TRUE;
 
 #if 0
   if (priv->type == GTK_WINDOW_TOPLEVEL)
