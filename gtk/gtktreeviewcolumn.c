@@ -133,6 +133,23 @@ static void gtk_tree_view_column_set_attributesv               (GtkTreeViewColum
 /* GtkBuildable implementation */
 static void gtk_tree_view_column_buildable_init                 (GtkBuildableIface     *iface);
 
+typedef struct _GtkTreeViewColumnClass   GtkTreeViewColumnClass;
+typedef struct _GtkTreeViewColumnPrivate GtkTreeViewColumnPrivate;
+
+struct _GtkTreeViewColumn
+{
+  GInitiallyUnowned parent_instance;
+
+  GtkTreeViewColumnPrivate *priv;
+};
+
+struct _GtkTreeViewColumnClass
+{
+  GInitiallyUnownedClass parent_class;
+
+  void (*clicked) (GtkTreeViewColumn *tree_column);
+};
+
 
 struct _GtkTreeViewColumnPrivate 
 {

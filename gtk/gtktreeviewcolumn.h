@@ -33,14 +33,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_TREE_VIEW_COLUMN	     (gtk_tree_view_column_get_type ())
 #define GTK_TREE_VIEW_COLUMN(obj)	     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumn))
-#define GTK_TREE_VIEW_COLUMN_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumnClass))
 #define GTK_IS_TREE_VIEW_COLUMN(obj)	     (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TREE_VIEW_COLUMN))
-#define GTK_IS_TREE_VIEW_COLUMN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_VIEW_COLUMN))
-#define GTK_TREE_VIEW_COLUMN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumnClass))
 
 typedef struct _GtkTreeViewColumn        GtkTreeViewColumn;
-typedef struct _GtkTreeViewColumnClass   GtkTreeViewColumnClass;
-typedef struct _GtkTreeViewColumnPrivate GtkTreeViewColumnPrivate;
 
 /**
  * GtkTreeViewColumnSizing:
@@ -80,26 +75,6 @@ typedef void (* GtkTreeCellDataFunc) (GtkTreeViewColumn *tree_column,
 				      GtkTreeIter       *iter,
 				      gpointer           data);
 
-
-struct _GtkTreeViewColumn
-{
-  GInitiallyUnowned parent_instance;
-
-  GtkTreeViewColumnPrivate *priv;
-};
-
-struct _GtkTreeViewColumnClass
-{
-  GInitiallyUnownedClass parent_class;
-
-  void (*clicked) (GtkTreeViewColumn *tree_column);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
-};
 
 GDK_AVAILABLE_IN_ALL
 GType                   gtk_tree_view_column_get_type            (void) G_GNUC_CONST;
