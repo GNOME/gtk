@@ -500,7 +500,6 @@ popup_cb (gpointer data)
           GdkContentFormats *targets;
 	  
 	  popup_window = gtk_window_new (GTK_WINDOW_POPUP);
-	  gtk_window_set_position (GTK_WINDOW (popup_window), GTK_WIN_POS_MOUSE);
 
 	  grid = gtk_grid_new ();
           targets = gdk_content_formats_new (target_table, n_targets - 1); /* no rootwin */
