@@ -4076,3 +4076,41 @@ gdk_surface_handle_event (GdkEvent *event)
 
   return handled;
 }
+
+gboolean
+gdk_surface_translate_coordinates (GdkSurface *from,
+                                   GdkSurface *to,
+                                   double     *x,
+                                   double     *y)
+{
+  int x1, y1, x2, y2;
+  GdkSurface *f, *t;
+
+  x1 = 0;
+  y1 = 0;
+  f = from;
+  while (f->parent)
+    {
+      x1 += f->x;
+      y1 += f->y;
+      f = f->parent;
+    }
+
+  x2 = 0;
+  y2 = 0;
+  t = to;
+  while (t->parent)
+    {
+      x2 += t->x;
+      y2 += t->y;
+      t = t->parent;
+    }
+
+  if (f != t)
+    return FALSE;
+
+  *x += x1 - x2;
+  *y += y1 - y2;
+
+  return TRUE;
+}
