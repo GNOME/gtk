@@ -1595,7 +1595,7 @@ notebook {
   & header {
     // FIXME: double borders in some case, can't fix it w/o a class tho
     // FIXME: doesn't work on dark var
-    background-color: mix($bg_color, $borders_color, 70%);
+    background-color: mix($bg_color, $borders_color, 85%);
 
     // this is the shading of the header behind the tabs
     .frame & {
@@ -1736,14 +1736,14 @@ notebook {
     label { //tab text
       padding: 0 2px; // needed for a nicer focus ring
       font-weight: bold;
-      color: $insensitive_fg_color; /* color: inherit doesn't work here */
+      color: mix($fg_color, $insensitive_fg_color, 50%); /* color: inherit doesn't work here */
       &:backdrop {
         color: $insensitive_fg_color;
       }
     }
     &:hover label {
       // prelight tab text
-      color: mix($fg_color, $insensitive_fg_color, 50%);
+      color: mix($fg_color, $insensitive_fg_color, 75%);
     }
     &:checked label {
       // active tab text
