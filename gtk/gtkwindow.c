@@ -6922,7 +6922,7 @@ gtk_window_move_resize (GtkWindow *window)
   hints_changed = FALSE;
 
   gtk_window_compute_configure_request (window, &new_request,
-                                        &new_geometry, &new_flags);  
+                                        &new_geometry, &new_flags);
 
   /* This check implies the invariant that we never set info->last
    * without setting the hints and sending off a configure request.
@@ -6986,13 +6986,13 @@ gtk_window_move_resize (GtkWindow *window)
   info->last.geometry = new_geometry;
   info->last.flags = new_flags;
   info->last.configure_request = new_request;
-  
+
   /* need to set PPosition so the WM will look at our position,
    * but we don't want to count PPosition coming and going as a hints
    * change for future iterations. So we saved info->last prior to
    * this.
    */
-  
+
   /* Also, if the initial position was explicitly set, then we always
    * toggle on PPosition. This makes gtk_window_move(window, 0, 0)
    * work.
@@ -7003,7 +7003,7 @@ gtk_window_move_resize (GtkWindow *window)
       new_flags |= GDK_HINT_POS;
       hints_changed = TRUE;
     }
-  
+
   /* Set hints if necessary
    */
   if (hints_changed)
@@ -7135,16 +7135,10 @@ gtk_window_move_resize (GtkWindow *window)
 
       /* Now send the configure request */
       if (configure_request_pos_changed)
-        {
-          gdk_surface_move_resize (priv->surface,
-				   new_request.x, new_request.y,
-				   new_request.width, new_request.height);
-        }
-      else  /* only size changed */
-        {
-          gdk_surface_resize (priv->surface,
-			      new_request.width, new_request.height);
-        }
+        g_warning ("configure request position changed. This should not happen. Ignoring the position");
+
+      gdk_surface_resize (priv->surface,
+			  new_request.width, new_request.height);
 
       if (priv->type == GTK_WINDOW_POPUP)
         {
@@ -7167,10 +7161,7 @@ gtk_window_move_resize (GtkWindow *window)
       /* Handle any position changes.
        */
       if (configure_request_pos_changed)
-        {
-          gdk_surface_move (priv->surface,
-			    new_request.x, new_request.y);
-        }
+        g_warning ("configure request position changed. This should not happen. Ignoring the position");
 
       gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, current_height,
                           &min_width, NULL, NULL, NULL);
@@ -7187,7 +7178,7 @@ gtk_window_move_resize (GtkWindow *window)
 
       gtk_widget_size_allocate (widget, &allocation, -1);
     }
-  
+
   /* We have now processed a move/resize since the last position
    * constraint change, setting of the initial position, or resize.
    * (Not resetting these flags here can lead to infinite loops for
