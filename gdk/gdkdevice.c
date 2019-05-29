@@ -528,24 +528,20 @@ gdk_device_get_state (GdkDevice       *device,
     GDK_DEVICE_GET_CLASS (device)->get_state (device, surface, axes, mask);
 }
 
-/**
+/*
  * gdk_device_get_position:
  * @device: pointer device to query status about.
- * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
- * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
+ * @x: (out): location to store root window X coordinate of @device
+ * @y: (out): location to store root window Y coordinate of @device
  *
- * Gets the current location of @device in double precision. As a slave device's
- * coordinates are those of its master pointer, this function
- * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them. See gdk_seat_grab().
- **/
+ * Gets the current location of @device in double precision.
+ */
 void
 gdk_device_get_position (GdkDevice *device,
                          double    *x,
                          double    *y)
 {
   GdkDisplay *display;
-  gdouble tmp_x, tmp_y;
 
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
@@ -555,16 +551,7 @@ gdk_device_get_position (GdkDevice *device,
   g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
                     gdk_display_device_is_grabbed (display, device));
 
-  _gdk_device_query_state (device,
-                           NULL,
-                           NULL,
-                           &tmp_x, &tmp_y,
-                           NULL, NULL, NULL);
-
-  if (x)
-    *x = tmp_x;
-  if (y)
-    *y = tmp_y;
+  _gdk_device_query_state (device, NULL, NULL, x, y, NULL, NULL, NULL);
 }
 
 /**
