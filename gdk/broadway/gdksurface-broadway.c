@@ -559,20 +559,6 @@ gdk_broadway_surface_get_root_coords (GdkSurface *surface,
     *root_y = y + surface->y;
 }
 
-static void
-gdk_broadway_surface_get_frame_extents (GdkSurface   *surface,
-                                        GdkRectangle *rect)
-{
-  g_return_if_fail (rect != NULL);
-
-  /* TODO: This should take wm frame into account */
-
-  rect->x = surface->x;
-  rect->y = surface->y;
-  rect->width = surface->width;
-  rect->height = surface->height;
-}
-
 static gboolean
 gdk_broadway_surface_get_device_state (GdkSurface      *surface,
                                        GdkDevice       *device,
@@ -1132,8 +1118,7 @@ create_moveresize_surface (MoveResizeData *mv_resize,
 static void
 calculate_unmoving_origin (MoveResizeData *mv_resize)
 {
-  GdkRectangle rect;
-  gint width, height;
+  gint x, y, width, height;
 
   if (mv_resize->moveresize_geom_mask & GDK_HINT_WIN_GRAVITY &&
       mv_resize->moveresize_geometry.win_gravity == GDK_GRAVITY_STATIC)
@@ -1144,52 +1129,51 @@ calculate_unmoving_origin (MoveResizeData *mv_resize)
     }
   else
     {
-      gdk_surface_get_frame_extents (mv_resize->moveresize_surface, &rect);
       gdk_surface_get_geometry (mv_resize->moveresize_surface,
-                               NULL, NULL, &width, &height);
+                                &x, &y, &width, &height);
 
       switch (mv_resize->moveresize_geometry.win_gravity)
         {
         case GDK_GRAVITY_NORTH_WEST:
-          mv_resize->moveresize_orig_x = rect.x;
-          mv_resize->moveresize_orig_y = rect.y;
+          mv_resize->moveresize_orig_x = x;
+          mv_resize->moveresize_orig_y = y;
           break;
         case GDK_GRAVITY_NORTH:
-          mv_resize->moveresize_orig_x = rect.x + rect.width / 2 - width / 2;
-          mv_resize->moveresize_orig_y = rect.y;
+          mv_resize->moveresize_orig_x = x + width / 2;
+          mv_resize->moveresize_orig_y = y;
           break;
         case GDK_GRAVITY_NORTH_EAST:
-          mv_resize->moveresize_orig_x = rect.x + rect.width - width;
-          mv_resize->moveresize_orig_y = rect.y;
+          mv_resize->moveresize_orig_x = x = width;
+          mv_resize->moveresize_orig_y = y;
           break;
         case GDK_GRAVITY_WEST:
-          mv_resize->moveresize_orig_x = rect.x;
-          mv_resize->moveresize_orig_y = rect.y + rect.height / 2 - height / 2;
+          mv_resize->moveresize_orig_x = x;
+          mv_resize->moveresize_orig_y = y + height / 2;
           break;
         case GDK_GRAVITY_CENTER:
-          mv_resize->moveresize_orig_x = rect.x + rect.width / 2 - width / 2;
-          mv_resize->moveresize_orig_y = rect.y + rect.height / 2 - height / 2;
+          mv_resize->moveresize_orig_x = x + width / 2;
+          mv_resize->moveresize_orig_y = y + height / 2;
           break;
         case GDK_GRAVITY_EAST:
-          mv_resize->moveresize_orig_x = rect.x + rect.width - width;
-          mv_resize->moveresize_orig_y = rect.y + rect.height / 2 - height / 2;
+          mv_resize->moveresize_orig_x = x + width;
+          mv_resize->moveresize_orig_y = y + height / 2;
           break;
         case GDK_GRAVITY_SOUTH_WEST:
-          mv_resize->moveresize_orig_x = rect.x;
-          mv_resize->moveresize_orig_y = rect.y + rect.height - height;
+          mv_resize->moveresize_orig_x = x + width;
+          mv_resize->moveresize_orig_y = y + height;
           break;
         case GDK_GRAVITY_SOUTH:
-          mv_resize->moveresize_orig_x = rect.x + rect.width / 2 - width / 2;
-          mv_resize->moveresize_orig_y = rect.y + rect.height - height;
+          mv_resize->moveresize_orig_x = x + width / 2;
+          mv_resize->moveresize_orig_y = y + height;
           break;
         case GDK_GRAVITY_SOUTH_EAST:
-          mv_resize->moveresize_orig_x = rect.x + rect.width - width;
-          mv_resize->moveresize_orig_y = rect.y + rect.height - height;
+          mv_resize->moveresize_orig_x = x;
+          mv_resize->moveresize_orig_y = y + height;
           break;
         case GDK_GRAVITY_STATIC:
         default:
-          mv_resize->moveresize_orig_x = rect.x;
-          mv_resize->moveresize_orig_y = rect.y;
+          mv_resize->moveresize_orig_x = x;
+          mv_resize->moveresize_orig_y = y;
           break;
         }
     }
@@ -1343,7 +1327,6 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->set_title = gdk_broadway_surface_set_title;
   impl_class->set_startup_id = gdk_broadway_surface_set_startup_id;
   impl_class->set_transient_for = gdk_broadway_surface_set_transient_for;
-  impl_class->get_frame_extents = gdk_broadway_surface_get_frame_extents;
   impl_class->set_accept_focus = gdk_broadway_surface_set_accept_focus;
   impl_class->set_focus_on_map = gdk_broadway_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_broadway_surface_set_icon_list;

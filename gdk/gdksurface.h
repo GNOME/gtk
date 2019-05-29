@@ -563,10 +563,6 @@ gboolean gdk_surface_translate_coordinates (GdkSurface *from,
                                             double     *y);
 
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_get_frame_extents (GdkSurface     *surface,
-                                             GdkRectangle  *rect);
-
-GDK_AVAILABLE_IN_ALL
 gint          gdk_surface_get_scale_factor  (GdkSurface     *surface);
 
 GDK_AVAILABLE_IN_ALL

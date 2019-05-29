@@ -4134,7 +4134,7 @@ calculate_unmoving_origin (MoveResizeData *mv_resize)
     }
   else
     {
-      gdk_surface_get_frame_extents (mv_resize->moveresize_surface, &rect);
+      gdk_x11_surface_get_frame_extents (mv_resize->moveresize_surface, &rect);
       gdk_surface_get_geometry (mv_resize->moveresize_surface, 
 			       NULL, NULL, &width, &height);
       
@@ -4597,7 +4597,6 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->set_title = gdk_x11_surface_set_title;
   impl_class->set_startup_id = gdk_x11_surface_set_startup_id;
   impl_class->set_transient_for = gdk_x11_surface_set_transient_for;
-  impl_class->get_frame_extents = gdk_x11_surface_get_frame_extents;
   impl_class->set_accept_focus = gdk_x11_surface_set_accept_focus;
   impl_class->set_focus_on_map = gdk_x11_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_x11_surface_set_icon_list;
