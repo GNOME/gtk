@@ -1373,7 +1373,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
                   G_STRUCT_OFFSET (GtkWidgetClass, destroy),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -1389,7 +1389,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, show),
 		  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1405,7 +1405,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, hide),
 		  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1427,7 +1427,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, map),
 		  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1447,7 +1447,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, unmap),
 		  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1464,7 +1464,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, realize),
 		  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1482,7 +1482,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, unrealize),
 		  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1539,7 +1539,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkWidgetClass, style_updated),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**

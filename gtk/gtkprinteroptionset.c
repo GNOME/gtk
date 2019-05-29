@@ -72,7 +72,7 @@ gtk_printer_option_set_class_init (GtkPrinterOptionSetClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrinterOptionSetClass, changed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 }
 

@@ -950,7 +950,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, status_changed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 
 
