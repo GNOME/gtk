@@ -232,7 +232,6 @@ typedef struct
    * Then we set them to TRUE again on unmap (for position)
    * and on unrealize (for size).
    */
-  guint    need_default_position     : 1;
   guint    need_default_size         : 1;
 
   guint    above_initially           : 1;
@@ -1823,7 +1822,6 @@ gtk_window_init (GtkWindow *window)
   priv->resizable = TRUE;
   priv->configure_notify_received = FALSE;
   priv->need_default_size = TRUE;
-  priv->need_default_position = TRUE;
   priv->modal = FALSE;
   priv->gravity = GDK_GRAVITY_NORTH_WEST;
   priv->decorated = TRUE;
@@ -4975,7 +4973,6 @@ gtk_window_map (GtkWidget *widget)
 
   /* No longer use the default settings */
   priv->need_default_size = FALSE;
-  priv->need_default_position = FALSE;
 
   gdk_surface_show (surface);
 
@@ -5032,12 +5029,6 @@ gtk_window_unmap (GtkWidget *widget)
       gdk_surface_thaw_toplevel_updates (priv->surface);
     }
   priv->configure_notify_received = FALSE;
-
-  /* on unmap, we reset the default positioning of the window,
-   * so it's placed again, but we don't reset the default
-   * size of the window, so it's remembered.
-   */
-  priv->need_default_position = TRUE;
 
   info = gtk_window_get_geometry_info (window, FALSE);
   if (info)
