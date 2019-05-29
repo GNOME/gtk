@@ -311,7 +311,7 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkRecentManagerClass, changed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   klass->changed = gtk_recent_manager_real_changed;

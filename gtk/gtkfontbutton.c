@@ -593,7 +593,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                                 G_SIGNAL_RUN_FIRST,
                                                 G_STRUCT_OFFSET (GtkFontButtonClass, font_set),
                                                 NULL, NULL,
-                                                g_cclosure_marshal_VOID__VOID,
+                                                NULL,
                                                 G_TYPE_NONE, 0);
 
   gtk_widget_class_set_css_name (widget_class, I_("fontbutton"));

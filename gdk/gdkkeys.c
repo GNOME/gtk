@@ -185,7 +185,7 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GdkKeymapClass, direction_changed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE,
 		  0);
   /**
@@ -201,7 +201,7 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GdkKeymapClass, keys_changed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE,
 		  0);
 
@@ -219,7 +219,7 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkKeymapClass, state_changed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE,
                   0);
 }

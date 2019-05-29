@@ -465,7 +465,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkDragClass, drop_performed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -482,7 +482,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkDragClass, dnd_finished),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);

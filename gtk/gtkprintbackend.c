@@ -280,7 +280,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintBackendClass, printer_list_changed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
   signals[PRINTER_LIST_DONE] =
     g_signal_new (I_("printer-list-done"),
@@ -288,7 +288,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
 		    G_SIGNAL_RUN_LAST,
 		    G_STRUCT_OFFSET (GtkPrintBackendClass, printer_list_done),
 		    NULL, NULL,
-		    g_cclosure_marshal_VOID__VOID,
+		    NULL,
 		    G_TYPE_NONE, 0);
   signals[PRINTER_ADDED] =
     g_signal_new (I_("printer-added"),

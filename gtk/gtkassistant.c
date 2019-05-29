@@ -545,7 +545,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkAssistantClass, cancel),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -590,7 +590,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkAssistantClass, apply),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -607,7 +607,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkAssistantClass, close),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   signals[ESCAPE] =
@@ -616,7 +616,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                                 G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                                 G_CALLBACK (escape_cb),
                                 NULL, NULL,
-                                g_cclosure_marshal_VOID__VOID,
+                                NULL,
                                 G_TYPE_NONE, 0);
 
   binding_set = gtk_binding_set_by_class (class);
