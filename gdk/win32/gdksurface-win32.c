@@ -4859,9 +4859,9 @@ gdk_win32_surface_show_window_menu (GdkSurface *window,
       return FALSE;
     }
 
-  gdk_event_get_root_coords (event, &event_x, &event_y);
-  x = event_x - _gdk_offset_x;
-  y = event_y - _gdk_offset_y;
+  gdk_event_get_coords (event, &event_x, &event_y);
+  x = round (event_x);
+  y = round (event_y);
 
   SendMessage (GDK_SURFACE_HWND (window),
                WM_SYSMENU,
