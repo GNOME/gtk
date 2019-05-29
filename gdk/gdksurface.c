@@ -3023,24 +3023,6 @@ gdk_surface_set_transient_for (GdkSurface *surface,
 }
 
 /**
- * gdk_surface_get_frame_extents:
- * @surface: a toplevel #GdkSurface
- * @rect: (out): rectangle to fill with bounding box of the surface frame
- *
- * Obtains the bounding box of the surface, including window manager
- * titlebar/borders if any. The frame position is given in root window
- * coordinates. To get the position of the surface itself (rather than
- * the frame) in root window coordinates, use gdk_surface_get_origin().
- *
- **/
-void
-gdk_surface_get_frame_extents (GdkSurface    *surface,
-                               GdkRectangle *rect)
-{
-  GDK_SURFACE_GET_CLASS (surface)->get_frame_extents (surface, rect);
-}
-
-/**
  * gdk_surface_set_accept_focus:
  * @surface: a toplevel #GdkSurface
  * @accept_focus: %TRUE if the surface should receive input focus

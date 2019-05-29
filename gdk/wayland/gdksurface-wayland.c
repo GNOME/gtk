@@ -3181,18 +3181,6 @@ gdk_wayland_surface_set_transient_for (GdkSurface *surface,
 }
 
 static void
-gdk_wayland_surface_get_frame_extents (GdkSurface   *surface,
-                                       GdkRectangle *rect)
-{
-  *rect = (GdkRectangle) {
-    .x = surface->x,
-    .y = surface->y,
-    .width = surface->width,
-    .height = surface->height
-  };
-}
-
-static void
 gdk_wayland_surface_set_accept_focus (GdkSurface *surface,
                                       gboolean    accept_focus)
 {
@@ -3774,7 +3762,6 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->set_title = gdk_wayland_surface_set_title;
   impl_class->set_startup_id = gdk_wayland_surface_set_startup_id;
   impl_class->set_transient_for = gdk_wayland_surface_set_transient_for;
-  impl_class->get_frame_extents = gdk_wayland_surface_get_frame_extents;
   impl_class->set_accept_focus = gdk_wayland_surface_set_accept_focus;
   impl_class->set_focus_on_map = gdk_wayland_surface_set_focus_on_map;
   impl_class->set_icon_list = gdk_wayland_surface_set_icon_list;
