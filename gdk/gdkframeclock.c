@@ -134,8 +134,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -150,8 +149,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -170,8 +168,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -188,8 +185,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -207,8 +203,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -223,8 +218,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
   /**
@@ -240,8 +234,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
                   0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 }
 
