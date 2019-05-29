@@ -406,7 +406,7 @@ gtk_css_token_print (const GtkCssToken *token,
       /* fall through */
     case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
     case GTK_CSS_TOKEN_DIMENSION:
-      g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, token->dimension.value);
+      g_ascii_formatd (buf, G_ASCII_DTOSTR_BUF_SIZE, "%.17f", token->dimension.value);
       g_string_append (string, buf);
       append_ident (string, token->dimension.dimension);
       break;

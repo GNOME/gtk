@@ -1510,7 +1510,7 @@ string_append_double (GString *string,
 {
   char buf[G_ASCII_DTOSTR_BUF_SIZE];
 
-  g_ascii_formatd (buf, G_ASCII_DTOSTR_BUF_SIZE, "%g", d);
+  g_ascii_formatd (buf, G_ASCII_DTOSTR_BUF_SIZE, "%.17f", d);
   g_string_append (string, buf);
 }
 
