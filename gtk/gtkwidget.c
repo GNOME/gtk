@@ -3239,6 +3239,15 @@ gtk_widget_real_hide (GtkWidget *widget)
 
   if (_gtk_widget_get_mapped (widget))
     gtk_widget_unmap (widget);
+
+  g_clear_pointer (&priv->allocated_transform, gsk_transform_unref);
+  priv->allocated_width = 0;
+  priv->allocated_height = 0;
+  priv->allocated_size_baseline = 0;
+  g_clear_pointer (&priv->transform, gsk_transform_unref);
+  priv->width = 0;
+  priv->height = 0;
+  gtk_widget_update_paintables (widget);
 }
 
 static void
