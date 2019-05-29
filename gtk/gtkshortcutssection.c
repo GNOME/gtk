@@ -70,7 +70,6 @@ struct _GtkShortcutsSection
   GList            *groups;
 
   gboolean          has_filtered_group;
-  gboolean          need_reflow;
 };
 
 struct _GtkShortcutsSectionClass
@@ -111,7 +110,6 @@ static void gtk_shortcuts_section_add_group        (GtkShortcutsSection *self,
 static void gtk_shortcuts_section_show_all         (GtkShortcutsSection *self);
 static void gtk_shortcuts_section_filter_groups    (GtkShortcutsSection *self);
 static void gtk_shortcuts_section_reflow_groups    (GtkShortcutsSection *self);
-static void gtk_shortcuts_section_maybe_reflow     (GtkShortcutsSection *self);
 
 static gboolean gtk_shortcuts_section_change_current_page (GtkShortcutsSection *self,
                                                            gint                 offset);
@@ -179,9 +177,6 @@ static void
 gtk_shortcuts_section_map (GtkWidget *widget)
 {
   GtkShortcutsSection *self = GTK_SHORTCUTS_SECTION (widget);
-
-  if (self->need_reflow)
-    gtk_shortcuts_section_reflow_groups (self);
 
   GTK_WIDGET_CLASS (gtk_shortcuts_section_parent_class)->map (widget);
 
@@ -485,7 +480,7 @@ gtk_shortcuts_section_set_max_height (GtkShortcutsSection *self,
 
   self->max_height = max_height;
 
-  gtk_shortcuts_section_maybe_reflow (self);
+  gtk_shortcuts_section_reflow_groups (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MAX_HEIGHT]);
 }
@@ -520,7 +515,7 @@ gtk_shortcuts_section_add_group (GtkShortcutsSection *self,
   gtk_container_add (GTK_CONTAINER (column), GTK_WIDGET (group));
   self->groups = g_list_append (self->groups, group);
 
-  gtk_shortcuts_section_maybe_reflow (self);
+  gtk_shortcuts_section_reflow_groups (self);
 }
 
 static void
@@ -566,15 +561,6 @@ gtk_shortcuts_section_filter_groups (GtkShortcutsSection *self)
   gtk_widget_set_visible (gtk_widget_get_parent (GTK_WIDGET (self->show_all)),
                           gtk_widget_get_visible (GTK_WIDGET (self->show_all)) ||
                           gtk_widget_get_visible (GTK_WIDGET (self->switcher)));
-}
-
-static void
-gtk_shortcuts_section_maybe_reflow (GtkShortcutsSection *self)
-{
-  if (gtk_widget_get_mapped (GTK_WIDGET (self)))
-    gtk_shortcuts_section_reflow_groups (self);
-  else
-    self->need_reflow = TRUE;
 }
 
 static void
@@ -761,8 +747,6 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
   /* clean up */
   g_list_free (groups);
   g_list_free (pages);
-
-  self->need_reflow = FALSE;
 }
 
 static gboolean
