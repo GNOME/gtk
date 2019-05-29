@@ -402,7 +402,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                   G_STRUCT_OFFSET (GtkInfoBarClass, close),
                                   NULL, NULL,
-                                  g_cclosure_marshal_VOID__VOID,
+                                  NULL,
                                   G_TYPE_NONE, 0);
 
   /**

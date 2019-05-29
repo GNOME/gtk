@@ -221,7 +221,7 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkStyleContextClass, changed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   properties[PROP_SCREEN] =

@@ -718,7 +718,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkComboBoxClass, changed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
   /**
    * GtkComboBox::move-active:
@@ -759,7 +759,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gtk_combo_box_real_popup),
                                 NULL, NULL,
-                                g_cclosure_marshal_VOID__VOID,
+                                NULL,
                                 G_TYPE_NONE, 0);
   /**
    * GtkComboBox::popdown:

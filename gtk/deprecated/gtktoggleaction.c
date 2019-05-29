@@ -151,7 +151,7 @@ gtk_toggle_action_class_init (GtkToggleActionClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkToggleActionClass, toggled),
 		  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 }
 

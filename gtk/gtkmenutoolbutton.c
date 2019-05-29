@@ -257,7 +257,7 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkMenuToolButtonClass, show_menu),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   g_object_class_install_property (object_class,
