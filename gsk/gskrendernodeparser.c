@@ -818,7 +818,8 @@ parse_color_node (GtkCssParser *parser)
 }
 
 static GskRenderNode *
-parse_linear_gradient_node (GtkCssParser *parser)
+parse_linear_gradient_node_internal (GtkCssParser *parser,
+                                     gboolean      repeating)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
   graphene_point_t start = GRAPHENE_POINT_INIT (0, 0);
@@ -843,11 +844,26 @@ parse_linear_gradient_node (GtkCssParser *parser)
       g_array_append_val (stops, to);
     }
 
-  result = gsk_linear_gradient_node_new (&bounds, &start, &end, (GskColorStop *) stops->data, stops->len);
+  if (repeating)
+    result = gsk_repeating_linear_gradient_node_new (&bounds, &start, &end, (GskColorStop *) stops->data, stops->len);
+  else
+    result = gsk_linear_gradient_node_new (&bounds, &start, &end, (GskColorStop *) stops->data, stops->len);
 
   g_array_free (stops, TRUE);
 
   return result;
+}
+
+static GskRenderNode *
+parse_linear_gradient_node (GtkCssParser *parser)
+{
+  return parse_linear_gradient_node_internal (parser, FALSE);
+}
+
+static GskRenderNode *
+parse_repeating_linear_gradient_node (GtkCssParser *parser)
+{
+  return parse_linear_gradient_node_internal (parser, TRUE);
 }
 
 static GskRenderNode *
@@ -1356,26 +1372,27 @@ parse_node (GtkCssParser *parser,
     const char *name;
     GskRenderNode * (* func) (GtkCssParser *);
   } node_parsers[] = {
-    { "container", parse_container_node },
-    { "color", parse_color_node },
-    { "linear-gradient", parse_linear_gradient_node },
+    { "blend", parse_blend_node },
+    { "blur", parse_blur_node },
     { "border", parse_border_node },
-    { "texture", parse_texture_node },
-    { "inset-shadow", parse_inset_shadow_node },
-    { "outset-shadow", parse_outset_shadow_node },
-    { "transform", parse_transform_node },
-    { "opacity", parse_opacity_node },
-    { "color-matrix", parse_color_matrix_node },
+    { "cairo", parse_cairo_node },
     { "clip", parse_clip_node },
+    { "color", parse_color_node },
+    { "color-matrix", parse_color_matrix_node },
+    { "container", parse_container_node },
+    { "cross-fade", parse_cross_fade_node },
+    { "debug", parse_debug_node },
+    { "inset-shadow", parse_inset_shadow_node },
+    { "linear-gradient", parse_linear_gradient_node },
+    { "opacity", parse_opacity_node },
+    { "outset-shadow", parse_outset_shadow_node },
+    { "repeat", parse_repeat_node },
+    { "repeating-linear-gradient", parse_repeating_linear_gradient_node },
     { "rounded-clip", parse_rounded_clip_node },
     { "shadow", parse_shadow_node },
-    { "cross-fade", parse_cross_fade_node },
     { "text", parse_text_node },
-    { "blur", parse_blur_node },
-    { "debug", parse_debug_node },
-    { "blend", parse_blend_node },
-    { "repeat", parse_repeat_node },
-    { "cairo", parse_cairo_node },
+    { "texture", parse_texture_node },
+    { "transform", parse_transform_node },
   };
   GskRenderNode **node_p = out_node;
   guint i;
@@ -1796,13 +1813,17 @@ render_node_print (Printer       *p,
       }
       break;
 
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_LINEAR_GRADIENT_NODE:
       {
         const guint n_stops = gsk_linear_gradient_node_get_n_color_stops (node);
         const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node);
         int i;
 
-        start_node (p, "linear-gradient");
+        if (gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE)
+          start_node (p, "repeating-linear-gradient");
+        else
+          start_node (p, "linear-gradient");
 
         append_rect_param (p, "bounds", &node->bounds);
         append_point_param (p, "end", gsk_linear_gradient_node_peek_end (node));
@@ -2260,7 +2281,6 @@ render_node_print (Printer       *p,
       }
       break;
 
-    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     default:
       g_error ("Unhandled node: %s", node->node_class->type_name);
       break;
