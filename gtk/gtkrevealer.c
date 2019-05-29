@@ -458,7 +458,6 @@ gtk_revealer_real_size_allocate (GtkWidget *widget,
     }
 
   gtk_widget_allocate (child, child_width, child_height, -1, transform);
-  gsk_transform_unref (transform);
 }
 
 static void

@@ -4233,8 +4233,6 @@ gtk_widget_size_allocate (GtkWidget           *widget,
                        allocation->height,
                        baseline,
                        transform);
-
-  gsk_transform_unref (transform);
 }
 
 /**
@@ -4243,7 +4241,7 @@ gtk_widget_size_allocate (GtkWidget           *widget,
  * @width: New width of @widget
  * @height: New height of @widget
  * @baseline: New baseline of @widget, or -1
- * @transform: (transfer none) (allow-none): Transformation to be applied to @widget
+ * @transform: (transfer full) (allow-none): Transformation to be applied to @widget
  *
  * This function is only used by #GtkWidget subclasses, to assign a size,
  * position and (optionally) baseline to their child widgets.
@@ -4303,10 +4301,8 @@ gtk_widget_allocate (GtkWidget    *widget,
                   priv->allocated_height != height);
   transform_changed = !gsk_transform_equal (priv->allocated_transform, transform);
 
-  /* order is important, sometimes priv->allocated_transform == transform */
-  gsk_transform_ref (transform);
   gsk_transform_unref (priv->allocated_transform);
-  priv->allocated_transform = transform;
+  priv->allocated_transform = gsk_transform_ref (transform);
   priv->allocated_width = width;
   priv->allocated_height = height;
   priv->allocated_size_baseline = baseline;
@@ -11435,7 +11431,7 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
                            priv->allocated_width,
                            priv->allocated_height,
                            priv->allocated_size_baseline,
-                           priv->allocated_transform);
+                           gsk_transform_ref (priv->allocated_transform));
     }
   else if (priv->alloc_needed_on_child)
     {

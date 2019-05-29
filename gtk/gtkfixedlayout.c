@@ -301,7 +301,7 @@ gtk_fixed_layout_allocate (GtkLayoutManager *layout_manager,
                            child_req.width,
                            child_req.height,
                            -1,
-                           child_info->position);
+                           gsk_transform_ref (child_info->position));
     }
 }
 

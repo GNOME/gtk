@@ -128,8 +128,6 @@ gtk_transform_tester_size_allocate (GtkWidget  *widget,
                        w, h,
                        -1,
                        global_transform);
-
-  gsk_transform_unref (global_transform);
 }
 
 static void
