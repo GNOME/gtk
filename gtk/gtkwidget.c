@@ -2455,8 +2455,6 @@ _gtk_widget_emulate_press (GtkWidget      *widget,
       press = gdk_event_new (GDK_BUTTON_PRESS);
       press->any.surface = g_object_ref (event->any.surface);
       press->button.time = event->motion.time;
-      press->button.x_root = event->motion.x_root;
-      press->button.y_root = event->motion.y_root;
       press->button.state = event->motion.state;
 
       press->button.axes = g_memdup (event->motion.axes,
@@ -8311,8 +8309,6 @@ synth_crossing (GtkWidget       *widget,
   event->any.send_event = TRUE;
   event->crossing.child_surface = g_object_ref (surface);
   event->crossing.time = GDK_CURRENT_TIME;
-  event->crossing.x_root = 0;
-  event->crossing.y_root = 0;
   gdk_surface_get_device_position (surface,
                                    device,
                                    &event->crossing.x,
