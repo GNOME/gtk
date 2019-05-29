@@ -4954,13 +4954,13 @@ gtk_window_show (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
+  _gtk_widget_set_visible_flag (widget, TRUE);
+
   gtk_css_node_validate (gtk_widget_get_css_node (widget));
 
   gtk_widget_realize (widget);
 
   gtk_window_check_resize (window);
-
-  GTK_WIDGET_CLASS (gtk_window_parent_class)->show (widget);
 
   gtk_widget_map (widget);
 
@@ -4982,7 +4982,8 @@ gtk_window_hide (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  GTK_WIDGET_CLASS (gtk_window_parent_class)->hide (widget);
+  _gtk_widget_set_visible_flag (widget, FALSE);
+  gtk_widget_unmap (widget);
 
   if (priv->modal)
     gtk_grab_remove (widget);
