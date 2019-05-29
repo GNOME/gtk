@@ -128,6 +128,9 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals[FLUSH_EVENTS],
+                              G_TYPE_FROM_CLASS (klass),
+                              g_cclosure_marshal_VOID__VOIDv);
 
   /**
    * GdkFrameClock::before-paint:
@@ -144,6 +147,9 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals[BEFORE_PAINT],
+                              G_TYPE_FROM_CLASS (klass),
+                              g_cclosure_marshal_VOID__VOIDv);
 
   /**
    * GdkFrameClock::update:
@@ -164,6 +170,9 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals[UPDATE],
+                              G_TYPE_FROM_CLASS (klass),
+                              g_cclosure_marshal_VOID__VOIDv);
 
   /**
    * GdkFrameClock::layout:
@@ -182,6 +191,9 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals[LAYOUT],
+                              G_TYPE_FROM_CLASS (klass),
+                              g_cclosure_marshal_VOID__VOIDv);
 
   /**
    * GdkFrameClock::paint:
@@ -201,6 +213,9 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals[PAINT],
+                              G_TYPE_FROM_CLASS (klass),
+                              g_cclosure_marshal_VOID__VOIDv);
 
   /**
    * GdkFrameClock::after-paint:
@@ -217,6 +232,9 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals[AFTER_PAINT],
+                              G_TYPE_FROM_CLASS (klass),
+                              g_cclosure_marshal_VOID__VOIDv);
 
   /**
    * GdkFrameClock::resume-events:
@@ -234,6 +252,9 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+  g_signal_set_va_marshaller (signals[RESUME_EVENTS],
+                              G_TYPE_FROM_CLASS (klass),
+                              g_cclosure_marshal_VOID__VOIDv);
 }
 
 static void
