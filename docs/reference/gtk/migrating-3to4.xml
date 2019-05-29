@@ -325,6 +325,21 @@
     </section>
 
     <section>
+      <title>Adapt to event controller API changes</title>
+      <para>
+        A few changes to the event controller and #GtkGesture APIs
+        did not make it back to GTK3, and have to be taken into account
+        when moving to GTK4. One is that the
+        #GtkEventControllerMotion::enter,
+        #GtkEventControllerMotion::leave,
+        #GtkEventControllerKey::focus-in and
+        #GtkEventControllerKey::focus-out signals
+        have gained new arguments. Another is that #GtkGestureMultiPress
+        has been renamed to #GtkGestureClick.
+      </para>
+    </section>
+
+    <section>
       <title>Stop using GtkEventBox</title>
       <para>
         GtkEventBox is no longer needed and has been removed.
