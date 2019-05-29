@@ -384,10 +384,6 @@ struct _GtkWindowGeometryInfo
    */
   gint           default_width; 
   gint           default_height;
-  /* CENTER_ALWAYS or other position constraint changed since
-   * we sent the last configure request.
-   */
-  guint          position_constraints_changed : 1;
 
   GtkWindowLastGeometryInfo last;
 };
@@ -3637,7 +3633,6 @@ gtk_window_get_geometry_info (GtkWindow *window,
       info->default_height = -1;
       info->resize_width = -1;
       info->resize_height = -1;
-      info->position_constraints_changed = FALSE;
       info->last.configure_request.x = 0;
       info->last.configure_request.y = 0;
       info->last.configure_request.width = -1;
@@ -5026,10 +5021,6 @@ gtk_window_unmap (GtkWidget *widget)
   priv->configure_notify_received = FALSE;
 
   info = gtk_window_get_geometry_info (window, FALSE);
-  if (info)
-    {
-      info->position_constraints_changed = FALSE;
-    }
 
   state = gdk_surface_get_state (priv->surface);
   priv->iconify_initially = (state & GDK_SURFACE_STATE_ICONIFIED) != 0;
@@ -7179,12 +7170,6 @@ gtk_window_move_resize (GtkWindow *window)
       gtk_widget_size_allocate (widget, &allocation, -1);
     }
 
-  /* We have now processed a move/resize since the last position
-   * constraint change, setting of the initial position, or resize.
-   * (Not resetting these flags here can lead to infinite loops for
-   * GTK_RESIZE_IMMEDIATE containers)
-   */
-  info->position_constraints_changed = FALSE;
   info->resize_width = -1;
   info->resize_height = -1;
 }
