@@ -207,9 +207,7 @@ gdk_surface_set_fullscreen_mode
 gdk_surface_set_keep_above
 gdk_surface_set_keep_below
 gdk_surface_set_opacity
-gdk_surface_move
 gdk_surface_resize
-gdk_surface_move_resize
 gdk_surface_move_to_rect
 gdk_surface_raise
 gdk_surface_lower

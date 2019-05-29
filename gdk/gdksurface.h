@@ -445,19 +445,8 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_surface_hide                  (GdkSurface     *surface);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_show_unraised         (GdkSurface     *surface);
-
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_move                  (GdkSurface     *surface,
-                                                 gint           x,
-                                                 gint           y);
 GDK_AVAILABLE_IN_ALL
 void          gdk_surface_resize                (GdkSurface     *surface,
-                                                 gint           width,
-                                                 gint           height);
-GDK_AVAILABLE_IN_ALL
-void          gdk_surface_move_resize           (GdkSurface     *surface,
-                                                 gint           x,
-                                                 gint           y,
                                                  gint           width,
                                                  gint           height);
 GDK_AVAILABLE_IN_ALL

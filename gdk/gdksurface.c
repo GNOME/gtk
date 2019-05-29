@@ -2053,7 +2053,7 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
 
 
 
-/**
+/*
  * gdk_surface_move:
  * @surface: a #GdkSurface
  * @x: X coordinate relative to surface’s parent
@@ -2087,10 +2087,7 @@ gdk_surface_move (GdkSurface *surface,
  * use gtk_window_resize() instead of this low-level GDK function.
  *
  * Surfaces may not be resized below 1x1.
- *
- * If you’re also planning to move the surface, use gdk_surface_move_resize()
- * to both move and resize simultaneously, for a nicer visual effect.
- **/
+ */
 void
 gdk_surface_resize (GdkSurface *surface,
                     gint       width,
@@ -2100,7 +2097,7 @@ gdk_surface_resize (GdkSurface *surface,
 }
 
 
-/**
+/*
  * gdk_surface_move_resize:
  * @surface: a #GdkSurface
  * @x: new X position relative to surface’s parent
