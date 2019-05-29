@@ -4649,8 +4649,6 @@ gtk_window_set_modal
 gtk_window_set_default_size
 gtk_window_set_hide_on_close
 gtk_window_get_hide_on_close
-GtkWindowPosition
-gtk_window_set_position
 gtk_window_set_transient_for
 gtk_window_set_attached_to
 gtk_window_set_destroy_with_parent
