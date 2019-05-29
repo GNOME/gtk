@@ -90,6 +90,7 @@
 #include "gtkwindowprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtknative.h"
+#include "gtkstylecontext.h"
 
 #include <string.h>
 
@@ -582,6 +583,9 @@ gtk_entry_completion_constructed (GObject *object)
   /* pack it all */
   priv->popup_window = gtk_popover_new (NULL);
   gtk_popover_set_position (GTK_POPOVER (priv->popup_window), GTK_POS_BOTTOM);
+  gtk_popover_set_autohide (GTK_POPOVER (priv->popup_window), FALSE);
+  gtk_popover_set_has_arrow (GTK_POPOVER (priv->popup_window), FALSE);
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->popup_window), "entry-completion");
 
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "key-pressed",
@@ -1331,17 +1335,11 @@ void
 _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 {
   GtkAllocation allocation;
-  gint x, y;
   gint matches, actions, items, height;
-  GdkDisplay *display;
-  GdkMonitor *monitor;
-  GdkRectangle area;
   GdkSurface *surface;
-  GtkRequisition popup_req;
   GtkRequisition entry_req;
   GtkRequisition tree_req;
   GtkTreePath *path;
-  gboolean above;
   gint width;
   GtkTreeViewColumn *action_column;
   gint action_height;
@@ -1357,10 +1355,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gtk_widget_get_surface_allocation (completion->priv->entry, &allocation);
   gtk_widget_get_preferred_size (completion->priv->entry,
                                  &entry_req, NULL);
-
-  gdk_surface_get_origin (surface, &x, &y);
-  x += allocation.x;
-  y += allocation.y + (allocation.height - entry_req.height) / 2;
 
   matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
   actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
@@ -1378,16 +1372,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 
   gtk_widget_realize (completion->priv->tree_view);
 
-  display = gtk_widget_get_display (GTK_WIDGET (completion->priv->entry));
-  monitor = gdk_display_get_monitor_at_surface (display, surface);
-  gdk_monitor_get_workarea (monitor, &area);
-
-  if (height == 0)
-    items = 0;
-  else if (y > area.height / 2)
-    items = MIN (matches, (((area.y + y) - (actions * action_height)) / height) - 1);
-  else
-    items = MIN (matches, (((area.height - y) - (actions * action_height)) / height) - 1);
+  items = MIN (matches, 10);
 
   if (items <= 0)
     gtk_widget_hide (completion->priv->scrolled_window);
@@ -1395,7 +1380,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
     gtk_widget_show (completion->priv->scrolled_window);
 
   if (completion->priv->popup_set_width)
-    width = MIN (allocation.width, area.width);
+    width = allocation.width;
   else
     width = -1;
 
@@ -1409,33 +1394,14 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   else
     gtk_widget_hide (completion->priv->action_view);
 
-  gtk_widget_get_preferred_size (completion->priv->popup_window,
-                                 &popup_req, NULL);
-
-  if (x < area.x)
-    x = area.x;
-  else if (x + popup_req.width > area.x + area.width)
-    x = area.x + area.width - popup_req.width;
-
-  if (y + entry_req.height + popup_req.height <= area.y + area.height ||
-      y - area.y < (area.y + area.height) - (y + entry_req.height))
-    {
-      y += entry_req.height;
-      above = FALSE;
-    }
-  else
-    {
-      y -= popup_req.height;
-      above = TRUE;
-    }
-
   if (matches > 0)
     {
-      path = gtk_tree_path_new_from_indices (above ? matches - 1 : 0, -1);
+      path = gtk_tree_path_new_from_indices (0, -1);
       gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (completion->priv->tree_view), path,
                                     NULL, FALSE, 0.0, 0.0);
       gtk_tree_path_free (path);
     }
+  gtk_native_check_resize (GTK_NATIVE (completion->priv->popup_window));
 }
 
 static void
