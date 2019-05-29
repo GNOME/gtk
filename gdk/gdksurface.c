@@ -1038,29 +1038,28 @@ gdk_surface_is_destroyed (GdkSurface *surface)
 /**
  * gdk_surface_get_position:
  * @surface: a #GdkSurface
- * @x: (out) (allow-none): X coordinate of surface
- * @y: (out) (allow-none): Y coordinate of surface
+ * @x: (out): X coordinate of surface
+ * @y: (out): Y coordinate of surface
  *
- * Obtains the position of the surface as reported in the
- * most-recently-processed #GdkEventConfigure. Contrast with
- * gdk_surface_get_geometry() which queries the X server for the
- * current surface position, regardless of which events have been
- * received or processed.
- *
- * The position coordinates are relative to the surface’s parent surface.
- *
+ * Obtains the position of the surface relative to its parent.
  **/
 void
 gdk_surface_get_position (GdkSurface *surface,
-                          gint      *x,
-                          gint      *y)
+                          int        *x,
+                          int        *y)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (x)
-    *x = surface->x;
-  if (y)
-    *y = surface->y;
+  if (surface->parent)
+    {
+      *x = surface->x;
+      *y = surface->y;
+    }
+  else
+    {
+      *x = 0;
+      *y = 0;
+    }
 }
 
 /**
