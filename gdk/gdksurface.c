@@ -146,8 +146,6 @@ get_monitor_for_rect (GdkDisplay         *display,
   GdkMonitor *monitor;
   GdkRectangle workarea;
   GdkRectangle intersection;
-  gint x;
-  gint y;
   gint i;
 
   for (i = 0; i < gdk_display_get_n_monitors (display); i++)
@@ -165,13 +163,7 @@ get_monitor_for_rect (GdkDisplay         *display,
         }
     }
 
-  if (best_monitor)
-    return best_monitor;
-
-  x = rect->x + rect->width / 2;
-  y = rect->y + rect->height / 2;
-
-  return gdk_display_get_monitor_at_point (display, x, y);
+  return best_monitor;
 }
 
 static gint

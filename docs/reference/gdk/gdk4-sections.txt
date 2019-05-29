@@ -95,7 +95,6 @@ gdk_display_list_seats
 gdk_display_get_n_monitors
 gdk_display_get_monitor
 gdk_display_get_primary_monitor
-gdk_display_get_monitor_at_point
 gdk_display_get_monitor_at_surface
 gdk_display_get_clipboard
 gdk_display_get_primary_clipboard
