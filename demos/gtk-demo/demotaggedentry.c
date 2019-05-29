@@ -250,11 +250,11 @@ static guint signals[LAST_SIGNAL] = { 0, };
 G_DEFINE_TYPE (DemoTaggedEntryTag, demo_tagged_entry_tag, GTK_TYPE_WIDGET)
 
 static void
-on_released (GtkGestureMultiPress *gesture,
+on_released (GtkGestureClick      *gesture,
              int                   n_press,
              double                x,
              double                y,
-             DemoTaggedEntryTag          *tag)
+             DemoTaggedEntryTag   *tag)
 {
   g_signal_emit (tag, signals[SIGNAL_CLICKED], 0);
 }
@@ -270,7 +270,7 @@ demo_tagged_entry_tag_init (DemoTaggedEntryTag *tag)
   tag->label = gtk_label_new ("");
   gtk_container_add (GTK_CONTAINER (tag->box), tag->label);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "released", G_CALLBACK (on_released), tag);
   gtk_widget_add_controller (GTK_WIDGET (tag), GTK_EVENT_CONTROLLER (gesture));
 

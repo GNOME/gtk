@@ -42,7 +42,7 @@
 #include "gtklistbox.h"
 #include "gtksizegroup.h"
 #include "gtkroot.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkstylecontext.h"
 
 enum
@@ -124,7 +124,7 @@ apply_sort (GtkInspectorPropList *pl,
 }
 
 static void
-sort_changed (GtkGestureMultiPress *gesture,
+sort_changed (GtkGestureClick      *gesture,
               int                   n_press,
               double                x,
               double                y,

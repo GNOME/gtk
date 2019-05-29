@@ -27,7 +27,7 @@
 
 #include <gtk/gtkmenu.h>
 #include <gtk/gtkcssnodeprivate.h>
-#include <gtk/gtkgesturemultipress.h>
+#include <gtk/gtkgestureclick.h>
 
 G_BEGIN_DECLS
 

@@ -38,7 +38,7 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgesturedrag.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
 #include "gtkimageprivate.h"
 #include "gtkimcontextsimple.h"
@@ -443,7 +443,7 @@ static void     gtk_text_motion_controller_motion   (GtkEventControllerMotion *c
                                                      double                    x,
                                                      double                    y,
                                                      GtkText                  *self);
-static void     gtk_text_multipress_gesture_pressed (GtkGestureMultiPress     *gesture,
+static void     gtk_text_click_gesture_pressed (GtkGestureClick     *gesture,
                                                      int                       n_press,
                                                      double                    x,
                                                      double                    y,
@@ -1709,9 +1709,9 @@ gtk_text_init (GtkText *self)
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->drag_gesture), TRUE);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (priv->drag_gesture));
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed",
-                    G_CALLBACK (gtk_text_multipress_gesture_pressed), self);
+                    G_CALLBACK (gtk_text_click_gesture_pressed), self);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
@@ -2449,11 +2449,11 @@ gesture_get_current_point_in_layout (GtkGestureSingle *gesture,
 }
 
 static void
-gtk_text_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
-                                     int                   n_press,
-                                     double                widget_x,
-                                     double                widget_y,
-                                     GtkText              *self)
+gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
+                                int              n_press,
+                                double           widget_x,
+                                double           widget_y,
+                                GtkText         *self)
 {
   GtkWidget *widget = GTK_WIDGET (self);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);

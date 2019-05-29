@@ -32,7 +32,6 @@
 #include "gtkstack.h"
 #include "gtkmain.h"
 #include "gtkwidgetprivate.h"
-#include "gtkgesturemultipress.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtknative.h"

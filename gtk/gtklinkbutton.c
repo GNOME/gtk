@@ -54,7 +54,7 @@
 #include "gtklinkbutton.h"
 
 #include "gtkdragsource.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
@@ -135,7 +135,7 @@ static gboolean gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
                                                   gboolean      keyboard_tip,
                                                   GtkTooltip   *tooltip,
                                                   gpointer      data);
-static void gtk_link_button_pressed_cb (GtkGestureMultiPress *gesture,
+static void gtk_link_button_pressed_cb (GtkGestureClick *gesture,
                                         int                   n_press,
                                         double                x,
                                         double                y,
@@ -249,7 +249,7 @@ gtk_link_button_init (GtkLinkButton *link_button)
   gdk_content_formats_unref (targets);
   gtk_drag_source_set_icon_name (GTK_WIDGET (link_button), "text-x-generic");
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_BUBBLE);
@@ -382,11 +382,11 @@ gtk_link_button_do_popup (GtkLinkButton  *link_button,
 }
 
 static void
-gtk_link_button_pressed_cb (GtkGestureMultiPress *gesture,
-                            int                   n_press,
-                            double                x,
-                            double                y,
-                            gpointer              user_data)
+gtk_link_button_pressed_cb (GtkGestureClick *gesture,
+                            int              n_press,
+                            double           x,
+                            double           y,
+                            gpointer         user_data)
 {
   GtkLinkButton *link_button = user_data;
   GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);

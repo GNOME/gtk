@@ -83,8 +83,8 @@
 #include "gtkentry.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkgesturemultipress.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkgestureclick.h"
 
 #include "gtkprivate.h"
 #include "gtkwindowprivate.h"
@@ -594,7 +594,7 @@ gtk_entry_completion_constructed (GObject *object)
                     G_CALLBACK (propagate_to_entry), completion);
   gtk_widget_add_controller (priv->popup_window, controller);
 
-  controller = GTK_EVENT_CONTROLLER (gtk_gesture_multi_press_new ());
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
   g_signal_connect_swapped (controller, "released",
                             G_CALLBACK (_gtk_entry_completion_popdown),
                             completion);

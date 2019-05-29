@@ -32,11 +32,11 @@ test_widget (const gchar *label, const gchar *color)
 static GtkOrientation o;
 
 static void
-toggle_orientation (GtkGestureMultiPress *gesture,
-                    guint                 n_press,
-                    gdouble               x,
-                    gdouble               y,
-                    GtkGrid              *grid)
+toggle_orientation (GtkGestureClick *gesture,
+                    guint            n_press,
+                    gdouble          x,
+                    gdouble          y,
+                    GtkGrid         *grid)
 {
   o = 1 - o;
   gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), o);
@@ -55,7 +55,7 @@ simple_grid (void)
   grid = gtk_grid_new ();
   gtk_container_add (GTK_CONTAINER (window), grid);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed", G_CALLBACK (toggle_orientation), grid);
   gtk_widget_add_controller (window, GTK_EVENT_CONTROLLER (gesture));
 

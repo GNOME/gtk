@@ -28,7 +28,6 @@
 #include "gtkstack.h"
 #include "gtklabel.h"
 #include "gtkgesturelongpress.h"
-#include "gtkgesturemultipress.h"
 #include "gtkpopover.h"
 #include "gtkscrolledwindow.h"
 #include "gtkintl.h"

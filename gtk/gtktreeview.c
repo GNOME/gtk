@@ -40,7 +40,7 @@
 #include "gtkeventcontrollerscroll.h"
 #include "gtkframe.h"
 #include "gtkgesturedrag.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
@@ -503,7 +503,7 @@ struct _GtkTreeViewPrivate
   GDestroyNotify row_separator_destroy;
 
   /* Gestures */
-  GtkGesture *multipress_gesture;
+  GtkGesture *click_gesture;
   GtkGesture *drag_gesture; /* Rubberbanding, row DnD */
   GtkGesture *column_drag_gesture; /* Column reordering, resizing */
 
@@ -927,18 +927,18 @@ static void     remove_scroll_timeout                (GtkTreeView *tree_view);
 static void     grab_focus_and_unset_draw_keyfocus   (GtkTreeView *tree_view);
 
 /* Gestures */
-static void gtk_tree_view_column_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
+static void gtk_tree_view_column_click_gesture_pressed (GtkGestureClick *gesture,
                                                              gint                  n_press,
                                                              gdouble               x,
                                                              gdouble               y,
                                                              GtkTreeView          *tree_view);
 
-static void gtk_tree_view_multipress_gesture_pressed        (GtkGestureMultiPress *gesture,
+static void gtk_tree_view_click_gesture_pressed        (GtkGestureClick *gesture,
                                                              gint                  n_press,
                                                              gdouble               x,
                                                              gdouble               y,
                                                              GtkTreeView          *tree_view);
-static void gtk_tree_view_multipress_gesture_released       (GtkGestureMultiPress *gesture,
+static void gtk_tree_view_click_gesture_released       (GtkGestureClick *gesture,
                                                              gint                  n_press,
                                                              gdouble               x,
                                                              gdouble               y,
@@ -1763,17 +1763,17 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   gtk_css_node_set_state (priv->header_node, gtk_css_node_get_state (widget_node));
   g_object_unref (priv->header_node);
 
-  priv->multipress_gesture = gtk_gesture_multi_press_new ();
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
-  g_signal_connect (priv->multipress_gesture, "pressed",
-                    G_CALLBACK (gtk_tree_view_multipress_gesture_pressed), tree_view);
-  g_signal_connect (priv->multipress_gesture, "released",
-                    G_CALLBACK (gtk_tree_view_multipress_gesture_released), tree_view);
-  gtk_widget_add_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (priv->multipress_gesture));
+  priv->click_gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->click_gesture), 0);
+  g_signal_connect (priv->click_gesture, "pressed",
+                    G_CALLBACK (gtk_tree_view_click_gesture_pressed), tree_view);
+  g_signal_connect (priv->click_gesture, "released",
+                    G_CALLBACK (gtk_tree_view_click_gesture_released), tree_view);
+  gtk_widget_add_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (priv->click_gesture));
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed",
-                    G_CALLBACK (gtk_tree_view_column_multipress_gesture_pressed), tree_view);
+                    G_CALLBACK (gtk_tree_view_column_click_gesture_pressed), tree_view);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (GTK_WIDGET (tree_view), GTK_EVENT_CONTROLLER (gesture));
@@ -2796,7 +2796,7 @@ get_current_selection_modifiers (GtkWidget *widget,
 }
 
 static void
-gtk_tree_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
+gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
                                           gint                  n_press,
                                           gdouble               x,
                                           gdouble               y,
@@ -3098,7 +3098,7 @@ gtk_tree_view_drag_gesture_begin (GtkGestureDrag *gesture,
 }
 
 static void
-gtk_tree_view_column_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
+gtk_tree_view_column_click_gesture_pressed (GtkGestureClick *gesture,
                                                  gint                  n_press,
                                                  gdouble               x,
                                                  gdouble               y,
@@ -3298,11 +3298,11 @@ gtk_tree_view_drag_gesture_end (GtkGestureDrag *gesture,
 }
 
 static void
-gtk_tree_view_multipress_gesture_released (GtkGestureMultiPress *gesture,
-                                           gint                  n_press,
-                                           gdouble               x,
-                                           gdouble               y,
-                                           GtkTreeView          *tree_view)
+gtk_tree_view_click_gesture_released (GtkGestureClick *gesture,
+                                      gint             n_press,
+                                      gdouble          x,
+                                      gdouble          y,
+                                      GtkTreeView     *tree_view)
 {
   gboolean modify, extend;
   guint button;
@@ -4157,7 +4157,7 @@ gtk_tree_view_motion_controller_motion (GtkEventControllerMotion *controller,
 
       /* If we are currently pressing down a button, we don't want to prelight anything else. */
       if (gtk_gesture_is_active (tree_view->priv->drag_gesture) ||
-          gtk_gesture_is_active (tree_view->priv->multipress_gesture))
+          gtk_gesture_is_active (tree_view->priv->click_gesture))
         node = NULL;
 
       gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
@@ -7043,8 +7043,8 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView *tree_view)
 
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (tree_view->priv->drag_gesture));
 
-  /* Deny the multipress gesture */
-  gtk_gesture_set_state (GTK_GESTURE (tree_view->priv->multipress_gesture),
+  /* Deny the click gesture */
+  gtk_gesture_set_state (GTK_GESTURE (tree_view->priv->click_gesture),
                          GTK_EVENT_SEQUENCE_DENIED);
 
   gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, start_x, start_y,
@@ -10174,7 +10174,7 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
 		    tree_view);
   gtk_widget_add_controller (tree_view->priv->search_window, controller);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_tree_view_search_pressed_cb), tree_view);
   gtk_widget_add_controller (tree_view->priv->search_window, GTK_EVENT_CONTROLLER (gesture));
@@ -11783,7 +11783,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView   *tree_view,
   selection_changed = gtk_tree_view_unref_and_check_selection_tree (tree_view, node->children);
   
   /* Stop a pending double click */
-  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (tree_view->priv->multipress_gesture));
+  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (tree_view->priv->click_gesture));
 
   _gtk_tree_view_accessible_remove (tree_view, node->children, NULL);
   _gtk_tree_view_accessible_remove_state (tree_view,

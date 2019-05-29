@@ -17,7 +17,7 @@
 
 #include "gtk/gtkiconview.h"
 #include "gtk/gtkcssnodeprivate.h"
-#include "gtk/gtkgesturemultipress.h"
+#include "gtk/gtkgestureclick.h"
 #include "gtk/gtkeventcontrollermotion.h"
 
 #ifndef __GTK_ICON_VIEW_PRIVATE_H__

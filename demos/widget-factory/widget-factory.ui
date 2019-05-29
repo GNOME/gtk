@@ -2962,7 +2962,7 @@ microphone-sensitivity-medium-symbolic</property>
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkGestureMultiPress">
+                                  <object class="GtkGestureClick">
                                     <signal name="pressed" handler="osd_frame_pressed" object="osd_frame" swapped="no"/>
                                   </object>
                                 </child>

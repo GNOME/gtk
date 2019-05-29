@@ -6720,23 +6720,23 @@ gtk_gesture_long_press_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkgesturemultipress</FILE>
-<TITLE>GtkGestureMultiPress</TITLE>
-GtkGestureMultiPress
-gtk_gesture_multi_press_new
-gtk_gesture_multi_press_set_area
-gtk_gesture_multi_press_get_area
+<FILE>gtkgestureclick</FILE>
+<TITLE>GtkGestureClick</TITLE>
+GtkGestureClick
+gtk_gesture_click_new
+gtk_gesture_click_set_area
+gtk_gesture_click_get_area
 
 <SUBSECTION Standard>
-GTK_TYPE_GESTURE_MULTI_PRESS
-GTK_GESTURE_MULTI_PRESS
-GTK_GESTURE_MULTI_PRESS_CLASS
-GTK_IS_GESTURE_MULTI_PRESS
-GTK_IS_GESTURE_MULTI_PRESS_CLASS
-GTK_GESTURE_MULTI_PRESS_GET_CLASS
+GTK_TYPE_GESTURE_CLICK
+GTK_GESTURE_CLICK
+GTK_GESTURE_CLICK_CLASS
+GTK_IS_GESTURE_CLICK
+GTK_IS_GESTURE_CLICK_CLASS
+GTK_GESTURE_CLICK_GET_CLASS
 
 <SUBSECTION Private>
-gtk_gesture_multi_press_get_type
+gtk_gesture_click_get_type
 </SECTION>
 
 <SECTION>

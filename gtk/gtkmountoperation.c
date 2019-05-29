@@ -52,7 +52,7 @@
 #include "gtksettings.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkdialogprivate.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 
 #include <glib/gprintf.h>
 
@@ -1342,7 +1342,7 @@ on_popup_menu_for_process_tree_view (GtkWidget *widget,
 }
 
 static void
-multi_press_cb (GtkGesture *gesture,
+click_cb (GtkGesture *gesture,
                 int         n_press,
                 double      x,
                 double      y,
@@ -1470,10 +1470,10 @@ create_show_processes_dialog (GtkMountOperation *op,
                     G_CALLBACK (on_popup_menu_for_process_tree_view),
                     op);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
   g_signal_connect (gesture, "pressed",
-                    G_CALLBACK (multi_press_cb), op);
+                    G_CALLBACK (click_cb), op);
   gtk_widget_add_controller (tree_view, GTK_EVENT_CONTROLLER (gesture));
 
   list_store = gtk_list_store_new (3,

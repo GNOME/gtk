@@ -62,7 +62,7 @@
 #include "gtkmodelbutton.h"
 #include "gtkprivate.h"
 #include "gtkeventcontrollerkey.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkgesturedrag.h"
 #include "gtknative.h"
 
@@ -286,12 +286,12 @@ static void  check_unmount_and_eject       (GMount   *mount,
                                             GDrive   *drive,
                                             gboolean *show_unmount,
                                             gboolean *show_eject);
-static void on_row_pressed  (GtkGestureMultiPress *gesture,
+static void on_row_pressed  (GtkGestureClick *gesture,
                              gint                  n_press,
                              gdouble               x,
                              gdouble               y,
                              GtkSidebarRow        *row);
-static void on_row_released (GtkGestureMultiPress *gesture,
+static void on_row_released (GtkGestureClick *gesture,
                              gint                  n_press,
                              gdouble               x,
                              gdouble               y,
@@ -511,7 +511,7 @@ add_place (GtkPlacesSidebar            *sidebar,
   g_signal_connect_swapped (eject_button, "clicked",
                             G_CALLBACK (eject_or_unmount_bookmark), row);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   g_signal_connect (gesture, "pressed",
                     G_CALLBACK (on_row_pressed), row);
@@ -3731,11 +3731,11 @@ on_row_activated (GtkListBox    *list_box,
 }
 
 static void
-on_row_pressed (GtkGestureMultiPress *gesture,
-                gint                  n_press,
-                gdouble               x,
-                gdouble               y,
-                GtkSidebarRow        *row)
+on_row_pressed (GtkGestureClick *gesture,
+                gint             n_press,
+                gdouble          x,
+                gdouble          y,
+                GtkSidebarRow   *row)
 {
   GtkPlacesSidebar *sidebar;
   GtkPlacesSidebarSectionType section_type;
@@ -3758,11 +3758,11 @@ on_row_pressed (GtkGestureMultiPress *gesture,
 }
 
 static void
-on_row_released (GtkGestureMultiPress *gesture,
-                 gint                  n_press,
-                 gdouble               x,
-                 gdouble               y,
-                 GtkSidebarRow        *row)
+on_row_released (GtkGestureClick *gesture,
+                 gint             n_press,
+                 gdouble          x,
+                 gdouble          y,
+                 GtkSidebarRow   *row)
 {
   GtkPlacesSidebar *sidebar;
   GtkPlacesSidebarSectionType section_type;

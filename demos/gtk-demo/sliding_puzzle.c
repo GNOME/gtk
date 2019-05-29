@@ -218,11 +218,11 @@ puzzle_key_pressed (GtkEventControllerKey *controller,
 }
 
 static void
-puzzle_button_pressed (GtkGestureMultiPress *gesture,
-                       int                   n_press,
-                       double                x,
-                       double                y,
-                       GtkWidget            *grid)
+puzzle_button_pressed (GtkGestureClick *gesture,
+                       int              n_press,
+                       double           x,
+                       double           y,
+                       GtkWidget       *grid)
 {
   GtkWidget *child;
   int l, t, i;
@@ -302,7 +302,7 @@ start_puzzle (GdkPaintable *puzzle)
                     grid);
   gtk_widget_add_controller (GTK_WIDGET (grid), controller);
 
-  controller = GTK_EVENT_CONTROLLER (gtk_gesture_multi_press_new ());
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
   g_signal_connect (controller, "pressed",
                     G_CALLBACK (puzzle_button_pressed),
                     grid);

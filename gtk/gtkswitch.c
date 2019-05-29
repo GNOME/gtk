@@ -55,7 +55,7 @@
 
 #include "gtkactionable.h"
 #include "gtkactionhelperprivate.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkgesturepan.h"
 #include "gtkgesturesingle.h"
 #include "gtkgizmoprivate.h"
@@ -81,7 +81,7 @@ struct _GtkSwitchPrivate
   GtkActionHelper *action_helper;
 
   GtkGesture *pan_gesture;
-  GtkGesture *multipress_gesture;
+  GtkGesture *click_gesture;
 
   double handle_pos;
   guint tick_id;
@@ -206,11 +206,11 @@ gtk_switch_begin_toggle_animation (GtkSwitch *sw)
 }
 
 static void
-gtk_switch_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
-                                       gint                  n_press,
-                                       gdouble               x,
-                                       gdouble               y,
-                                       GtkSwitch            *sw)
+gtk_switch_click_gesture_pressed (GtkGestureClick *gesture,
+                                  gint             n_press,
+                                  gdouble          x,
+                                  gdouble          y,
+                                  GtkSwitch       *sw)
 {
   GtkSwitchPrivate *priv = gtk_switch_get_instance_private (sw);
   graphene_rect_t switch_bounds;
@@ -229,11 +229,11 @@ gtk_switch_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 }
 
 static void
-gtk_switch_multipress_gesture_released (GtkGestureMultiPress *gesture,
-                                        gint                  n_press,
-                                        gdouble               x,
-                                        gdouble               y,
-                                        GtkSwitch            *sw)
+gtk_switch_click_gesture_released (GtkGestureClick *gesture,
+                                   gint             n_press,
+                                   gdouble          x,
+                                   gdouble          y,
+                                   GtkSwitch       *sw)
 {
   GdkEventSequence *sequence;
 
@@ -291,7 +291,7 @@ gtk_switch_pan_gesture_drag_end (GtkGestureDrag *gesture,
        */
       active = priv->handle_pos >= 0.5;
     }
-  else if (!gtk_gesture_handles_sequence (priv->multipress_gesture, sequence))
+  else if (!gtk_gesture_handles_sequence (priv->click_gesture, sequence))
     active = priv->is_active;
   else
     return;
@@ -639,17 +639,17 @@ gtk_switch_init (GtkSwitch *self)
 
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (gesture), TRUE);
   g_signal_connect (gesture, "pressed",
-                    G_CALLBACK (gtk_switch_multipress_gesture_pressed), self);
+                    G_CALLBACK (gtk_switch_click_gesture_pressed), self);
   g_signal_connect (gesture, "released",
-                    G_CALLBACK (gtk_switch_multipress_gesture_released), self);
+                    G_CALLBACK (gtk_switch_click_gesture_released), self);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
-  priv->multipress_gesture = gesture;
+  priv->click_gesture = gesture;
 
   gesture = gtk_gesture_pan_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);

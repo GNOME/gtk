@@ -53,7 +53,7 @@
 #include "gtkdialog.h"
 #include "gtkradiobutton.h"
 #include "gtkcombobox.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkroot.h"
 
@@ -2054,7 +2054,7 @@ add_check_group (GtkFontChooserWidget *fontchooser,
       g_signal_connect_swapped (feat, "notify::inconsistent", G_CALLBACK (update_font_features), fontchooser);
       g_signal_connect (feat, "clicked", G_CALLBACK (feat_clicked), NULL);
 
-      gesture = gtk_gesture_multi_press_new ();
+      gesture = gtk_gesture_click_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
       g_signal_connect (gesture, "pressed", G_CALLBACK (feat_pressed), feat);
       gtk_widget_add_controller (feat, GTK_EVENT_CONTROLLER (gesture));

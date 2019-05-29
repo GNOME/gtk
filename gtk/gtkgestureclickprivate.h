@@ -16,33 +16,33 @@
  *
  * Author(s): Carlos Garnacho <carlosg@gnome.org>
  */
-#ifndef __GTK_GESTURE_MULTI_PRESS_PRIVATE_H__
-#define __GTK_GESTURE_MULTI_PRESS_PRIVATE_H__
+#ifndef __GTK_GESTURE_CLICK_PRIVATE_H__
+#define __GTK_GESTURE_CLICK_PRIVATE_H__
 
 #include "gtkgesturesingleprivate.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 
-struct _GtkGestureMultiPress
+struct _GtkGestureClick
 {
   GtkGestureSingle parent_instance;
 };
 
-struct _GtkGestureMultiPressClass
+struct _GtkGestureClickClass
 {
   GtkGestureSingleClass parent_class;
 
-  void     (* pressed) (GtkGestureMultiPress *gesture,
-                        gint                  n_press,
-                        gdouble               x,
-                        gdouble               y);
-  void     (* released) (GtkGestureMultiPress *gesture,
-                         gint                  n_press,
-                         gdouble               x,
-                         gdouble               y);
-  void     (* stopped) (GtkGestureMultiPress *gesture);
+  void     (* pressed)  (GtkGestureClick *gesture,
+                         gint             n_press,
+                         gdouble          x,
+                         gdouble          y);
+  void     (* released) (GtkGestureClick *gesture,
+                         gint             n_press,
+                         gdouble          x,
+                         gdouble          y);
+  void     (* stopped)  (GtkGestureClick *gesture);
 
   /*<private>*/
   gpointer padding[10];
 };
 
-#endif /* __GTK_GESTURE_MULTI_PRESS_PRIVATE_H__ */
+#endif /* __GTK_GESTURE_CLICK_PRIVATE_H__ */

@@ -35,7 +35,7 @@
 #include "gtkdnd.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgesturedrag.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
@@ -363,7 +363,7 @@ struct _GtkLabelSelectionInfo
   GtkLabelLink *active_link;
 
   GtkGesture *drag_gesture;
-  GtkGesture *multipress_gesture;
+  GtkGesture *click_gesture;
   GtkEventController *motion_controller;
 
   gint drag_start_x;
@@ -553,12 +553,12 @@ static void          emit_activate_link         (GtkLabel     *label,
                                                  GtkLabelLink *link);
 
 /* Event controller callbacks */
-static void   gtk_label_multipress_gesture_pressed  (GtkGestureMultiPress *gesture,
+static void   gtk_label_click_gesture_pressed  (GtkGestureClick *gesture,
                                                      gint                  n_press,
                                                      gdouble               x,
                                                      gdouble               y,
                                                      GtkLabel             *label);
-static void   gtk_label_multipress_gesture_released (GtkGestureMultiPress *gesture,
+static void   gtk_label_click_gesture_released (GtkGestureClick *gesture,
                                                      gint                  n_press,
                                                      gdouble               x,
                                                      gdouble               y,
@@ -4458,11 +4458,11 @@ out:
 }
 
 static void
-gtk_label_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
-                                      gint                  n_press,
-                                      gdouble               widget_x,
-                                      gdouble               widget_y,
-                                      GtkLabel             *label)
+gtk_label_click_gesture_pressed (GtkGestureClick *gesture,
+                                 gint             n_press,
+                                 gdouble          widget_x,
+                                 gdouble          widget_y,
+                                 GtkLabel        *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   GtkLabelSelectionInfo *info = priv->select_info;
@@ -4536,11 +4536,11 @@ gtk_label_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 }
 
 static void
-gtk_label_multipress_gesture_released (GtkGestureMultiPress *gesture,
-                                       gint                  n_press,
-                                       gdouble               x,
-                                       gdouble               y,
-                                       GtkLabel             *label)
+gtk_label_click_gesture_released (GtkGestureClick *gesture,
+                                  gint             n_press,
+                                  gdouble          x,
+                                  gdouble          y,
+                                  GtkLabel        *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
   GtkLabelSelectionInfo *info = priv->select_info;
@@ -4605,9 +4605,9 @@ connect_mnemonics_visible_notify (GtkLabel *label)
 }
 
 static void
-drag_begin_cb (GtkWidget      *widget,
-               GdkDrag        *drag,
-               gpointer        data)
+drag_begin_cb (GtkWidget *widget,
+               GdkDrag   *drag,
+               gpointer   data)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
@@ -5047,14 +5047,14 @@ gtk_label_ensure_select_info (GtkLabel *label)
       gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->select_info->drag_gesture), TRUE);
       gtk_widget_add_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->drag_gesture));
 
-      priv->select_info->multipress_gesture = gtk_gesture_multi_press_new ();
-      g_signal_connect (priv->select_info->multipress_gesture, "pressed",
-                        G_CALLBACK (gtk_label_multipress_gesture_pressed), label);
-      g_signal_connect (priv->select_info->multipress_gesture, "released",
-                        G_CALLBACK (gtk_label_multipress_gesture_released), label);
-      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->select_info->multipress_gesture), 0);
-      gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->select_info->multipress_gesture), TRUE);
-      gtk_widget_add_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->multipress_gesture));
+      priv->select_info->click_gesture = gtk_gesture_click_new ();
+      g_signal_connect (priv->select_info->click_gesture, "pressed",
+                        G_CALLBACK (gtk_label_click_gesture_pressed), label);
+      g_signal_connect (priv->select_info->click_gesture, "released",
+                        G_CALLBACK (gtk_label_click_gesture_released), label);
+      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->select_info->click_gesture), 0);
+      gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->select_info->click_gesture), TRUE);
+      gtk_widget_add_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->click_gesture));
 
       priv->select_info->motion_controller = gtk_event_controller_motion_new ();
       g_signal_connect (priv->select_info->motion_controller, "motion",
@@ -5079,7 +5079,7 @@ gtk_label_clear_select_info (GtkLabel *label)
   if (!priv->select_info->selectable && !priv->select_info->links)
     {
       gtk_widget_remove_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->drag_gesture));
-      gtk_widget_remove_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->multipress_gesture));
+      gtk_widget_remove_controller (GTK_WIDGET (label), GTK_EVENT_CONTROLLER (priv->select_info->click_gesture));
       gtk_widget_remove_controller (GTK_WIDGET (label), priv->select_info->motion_controller);
       GTK_LABEL_CONTENT (priv->select_info->provider)->label = NULL;
       g_object_unref (priv->select_info->provider);

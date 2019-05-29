@@ -378,7 +378,7 @@ static void gtk_text_view_direction_changed    (GtkWidget        *widget,
 static void gtk_text_view_state_flags_changed  (GtkWidget        *widget,
 					        GtkStateFlags     previous_state);
 
-static void gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
+static void gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
                                                       gint                  n_press,
                                                       gdouble               x,
                                                       gdouble               y,
@@ -1669,10 +1669,10 @@ gtk_text_view_init (GtkTextView *text_view)
 
   priv->text_window = text_window_new (GTK_TEXT_WINDOW_TEXT, widget);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   g_signal_connect (gesture, "pressed",
-                    G_CALLBACK (gtk_text_view_multipress_gesture_pressed),
+                    G_CALLBACK (gtk_text_view_click_gesture_pressed),
                     widget);
   gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
 
@@ -5075,11 +5075,11 @@ get_iter_from_gesture (GtkTextView *text_view,
 }
 
 static void
-gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
-                                          gint                  n_press,
-                                          gdouble               x,
-                                          gdouble               y,
-                                          GtkTextView          *text_view)
+gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
+                                     gint             n_press,
+                                     gdouble          x,
+                                     gdouble          y,
+                                     GtkTextView     *text_view)
 {
   GdkEventSequence *sequence;
   GtkTextViewPrivate *priv;

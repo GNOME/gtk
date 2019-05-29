@@ -45,7 +45,7 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgesturedrag.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkgestureprivate.h"
 #include "gtkheaderbarprivate.h"
 #include "gtkicontheme.h"
@@ -269,7 +269,7 @@ typedef struct
 
   GdkSurfaceTypeHint type_hint;
 
-  GtkGesture *multipress_gesture;
+  GtkGesture *click_gesture;
   GtkGesture *drag_gesture;
   GtkGesture *bubble_drag_gesture;
   GtkEventController *key_controller;
@@ -1333,11 +1333,11 @@ gtk_window_titlebar_action (GtkWindow      *window,
 }
 
 static void
-multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
-                               gint                  n_press,
-                               gdouble               x,
-                               gdouble               y,
-                               GtkWindow            *window)
+click_gesture_pressed_cb (GtkGestureClick *gesture,
+                          gint             n_press,
+                          gdouble          x,
+                          gdouble          y,
+                          GtkWindow       *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *event_widget, *widget;
@@ -1548,7 +1548,7 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
 					      gtk_get_current_event_time ());
 
       gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
-      gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->multipress_gesture));
+      gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->click_gesture));
     }
 }
 
@@ -1908,13 +1908,13 @@ gtk_window_constructed (GObject *object)
 
   if (priv->type == GTK_WINDOW_TOPLEVEL)
     {
-      priv->multipress_gesture = gtk_gesture_multi_press_new ();
-      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
-      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+      priv->click_gesture = gtk_gesture_click_new ();
+      gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->click_gesture), 0);
+      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->click_gesture),
                                                   GTK_PHASE_BUBBLE);
-      g_signal_connect (priv->multipress_gesture, "pressed",
-                        G_CALLBACK (multipress_gesture_pressed_cb), object);
-      gtk_widget_add_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER (priv->multipress_gesture));
+      g_signal_connect (priv->click_gesture, "pressed",
+                        G_CALLBACK (click_gesture_pressed_cb), object);
+      gtk_widget_add_controller (GTK_WIDGET (object), GTK_EVENT_CONTROLLER (priv->click_gesture));
 
       priv->drag_gesture = create_drag_gesture (window);
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),

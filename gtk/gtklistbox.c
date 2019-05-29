@@ -26,7 +26,7 @@
 #include "gtkcontainerprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkdnd.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -282,24 +282,24 @@ static void                 gtk_list_box_selected_rows_changed          (GtkList
 static void                 gtk_list_box_set_accept_unpaired_release    (GtkListBox          *box,
                                                                          gboolean             accept);
 
-static void gtk_list_box_multipress_gesture_pressed  (GtkGestureMultiPress *gesture,
-                                                      guint                 n_press,
-                                                      gdouble               x,
-                                                      gdouble               y,
-                                                      GtkListBox           *box);
-static void gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
-                                                      guint                 n_press,
-                                                      gdouble               x,
-                                                      gdouble               y,
-                                                      GtkListBox           *box);
-static void gtk_list_box_multipress_unpaired_release (GtkGestureMultiPress *gesture,
-                                                      gdouble               x,
-                                                      gdouble               y,
-                                                      guint                 button,
-                                                      GdkEventSequence     *sequence,
-                                                      GtkListBox           *box);
-static void gtk_list_box_multipress_gesture_stopped  (GtkGestureMultiPress *gesture,
-                                                      GtkListBox           *box);
+static void gtk_list_box_click_gesture_pressed  (GtkGestureClick  *gesture,
+                                                 guint             n_press,
+                                                 gdouble           x,
+                                                 gdouble           y,
+                                                 GtkListBox       *box);
+static void gtk_list_box_click_gesture_released (GtkGestureClick  *gesture,
+                                                 guint             n_press,
+                                                 gdouble           x,
+                                                 gdouble           y,
+                                                 GtkListBox       *box);
+static void gtk_list_box_click_unpaired_release (GtkGestureClick  *gesture,
+                                                 gdouble           x,
+                                                 gdouble           y,
+                                                 guint             button,
+                                                 GdkEventSequence *sequence,
+                                                 GtkListBox       *box);
+static void gtk_list_box_click_gesture_stopped  (GtkGestureClick  *gesture,
+                                                 GtkListBox       *box);
 
 static void gtk_list_box_update_row_styles (GtkListBox    *box);
 static void gtk_list_box_update_row_style  (GtkListBox    *box,
@@ -658,7 +658,7 @@ gtk_list_box_init (GtkListBox *box)
   priv->children = g_sequence_new (NULL);
   priv->header_hash = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture),
@@ -666,13 +666,13 @@ gtk_list_box_init (GtkListBox *box)
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
                                  GDK_BUTTON_PRIMARY);
   g_signal_connect (gesture, "pressed",
-                    G_CALLBACK (gtk_list_box_multipress_gesture_pressed), box);
+                    G_CALLBACK (gtk_list_box_click_gesture_pressed), box);
   g_signal_connect (gesture, "released",
-                    G_CALLBACK (gtk_list_box_multipress_gesture_released), box);
+                    G_CALLBACK (gtk_list_box_click_gesture_released), box);
   g_signal_connect (gesture, "stopped",
-                    G_CALLBACK (gtk_list_box_multipress_gesture_stopped), box);
+                    G_CALLBACK (gtk_list_box_click_gesture_stopped), box);
   g_signal_connect (gesture, "unpaired-release",
-                    G_CALLBACK (gtk_list_box_multipress_unpaired_release), box);
+                    G_CALLBACK (gtk_list_box_click_unpaired_release), box);
   gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
 
   g_signal_connect (box, "notify::parent", G_CALLBACK (gtk_list_box_parent_cb), NULL);
@@ -1773,11 +1773,11 @@ gtk_list_box_select_and_activate_full (GtkListBox    *box,
 }
 
 static void
-gtk_list_box_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
-                                         guint                 n_press,
-                                         gdouble               x,
-                                         gdouble               y,
-                                         GtkListBox           *box)
+gtk_list_box_click_gesture_pressed (GtkGestureClick *gesture,
+                                    guint            n_press,
+                                    gdouble          x,
+                                    gdouble          y,
+                                    GtkListBox      *box)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
   GtkListBoxRow *row;
@@ -1817,12 +1817,12 @@ get_current_selection_modifiers (GtkWidget *widget,
 }
 
 static void
-gtk_list_box_multipress_unpaired_release (GtkGestureMultiPress *gesture,
-                                          gdouble               x,
-                                          gdouble               y,
-                                          guint                 button,
-                                          GdkEventSequence     *sequence,
-                                          GtkListBox           *box)
+gtk_list_box_click_unpaired_release (GtkGestureClick  *gesture,
+                                     gdouble           x,
+                                     gdouble           y,
+                                     guint             button,
+                                     GdkEventSequence *sequence,
+                                     GtkListBox       *box)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
   GtkListBoxRow *row;
@@ -1837,11 +1837,11 @@ gtk_list_box_multipress_unpaired_release (GtkGestureMultiPress *gesture,
 }
 
 static void
-gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
-                                          guint                 n_press,
-                                          gdouble               x,
-                                          gdouble               y,
-                                          GtkListBox           *box)
+gtk_list_box_click_gesture_released (GtkGestureClick *gesture,
+                                     guint            n_press,
+                                     gdouble          x,
+                                     gdouble          y,
+                                     GtkListBox      *box)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
 
@@ -1890,7 +1890,7 @@ gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
 }
 
 static void
-gtk_list_box_multipress_gesture_stopped (GtkGestureMultiPress *gesture,
+gtk_list_box_click_gesture_stopped (GtkGestureClick *gesture,
                                          GtkListBox           *box)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);

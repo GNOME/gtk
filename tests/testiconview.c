@@ -356,11 +356,11 @@ do_popup_menu (GtkWidget   *icon_list,
 }
 
 static void
-press_handler (GtkGestureMultiPress *gesture,
-               guint                 n_press,
-               gdouble               x,
-               gdouble               y,
-               GtkWidget            *widget)
+press_handler (GtkGestureClick *gesture,
+               guint            n_press,
+               gdouble          x,
+               gdouble          y,
+               GtkWidget       *widget)
 {
   GtkTreePath *path = NULL;
 
@@ -434,7 +434,7 @@ main (gint argc, gchar **argv)
   tvc = gtk_tree_view_column_new ();
   gtk_tree_view_append_column (GTK_TREE_VIEW (tv), tvc);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
                                  GDK_BUTTON_SECONDARY);
   g_signal_connect (gesture, "pressed",

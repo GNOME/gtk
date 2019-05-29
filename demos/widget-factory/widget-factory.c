@@ -1284,11 +1284,11 @@ textbuffer_notify_selection (GObject *object, GParamSpec *pspec, GtkWidget *butt
 }
 
 static gboolean
-osd_frame_pressed (GtkGestureMultiPress *gesture,
-                   int                   press,
-                   double                x,
-                   double                y,
-                   gpointer              data)
+osd_frame_pressed (GtkGestureClick *gesture,
+                   int              press,
+                   double           x,
+                   double           y,
+                   gpointer         data)
 {
   GtkWidget *frame = data;
   GtkWidget *osd;

@@ -166,7 +166,7 @@
                                 <property name="right-margin">8</property>
                                 <property name="cursor-visible">0</property>
                                 <child>
-                                  <object class="GtkGestureMultiPress">
+                                  <object class="GtkGestureClick">
                                     <signal name="released" handler="text_view_released" swapped="no"/>
                                   </object>
                                 </child>
@@ -209,7 +209,7 @@
                                 <property name="right-margin">8</property>
                                 <property name="cursor-visible">0</property>
                                 <child>
-                                  <object class="GtkGestureMultiPress">
+                                  <object class="GtkGestureClick">
                                     <signal name="released" handler="text_view_released" swapped="no"/>
                                   </object>
                                 </child>

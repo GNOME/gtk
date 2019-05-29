@@ -83,7 +83,7 @@
 #include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkgesturedrag.h"
 #include "gtkeventcontrollerscroll.h"
 #include "gtkeventcontrollerkey.h"
@@ -290,18 +290,18 @@ static void     gtk_calendar_size_allocate  (GtkWidget      *widget,
                                              int             width,
                                              int             height,
                                              int             baseline);
-static void     gtk_calendar_snapshot       (GtkWidget        *widget,
-                                             GtkSnapshot      *snapshot);
-static void     gtk_calendar_button_press   (GtkGestureMultiPress *gesture,
-                                             int                   n_press,
-                                             double                x,
-                                             double                y,
-                                             gpointer              user_data);
-static void     gtk_calendar_button_release (GtkGestureMultiPress *gesture,
-                                             int                   n_press,
-                                             double                x,
-                                             double                y,
-                                             gpointer              user_data);
+static void     gtk_calendar_snapshot       (GtkWidget      *widget,
+                                             GtkSnapshot    *snapshot);
+static void     gtk_calendar_button_press   (GtkGestureClick *gesture,
+                                             int              n_press,
+                                             double           x,
+                                             double           y,
+                                             gpointer         user_data);
+static void     gtk_calendar_button_release (GtkGestureClick *gesture,
+                                             int              n_press,
+                                             double           x,
+                                             double           y,
+                                             gpointer         user_data);
 static void     gtk_calendar_drag_begin     (GtkGestureDrag   *gesture,
                                              double            x,
                                              double            y,
@@ -681,7 +681,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (calendar)),
                                GTK_STYLE_CLASS_VIEW);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed", G_CALLBACK (gtk_calendar_button_press), calendar);
   g_signal_connect (gesture, "released", G_CALLBACK (gtk_calendar_button_release), calendar);
   gtk_widget_add_controller (GTK_WIDGET (calendar), GTK_EVENT_CONTROLLER (gesture));
@@ -2602,11 +2602,11 @@ calendar_main_button_press (GtkCalendar *calendar,
 
 
 static void
-gtk_calendar_button_press (GtkGestureMultiPress *gesture,
-                           int                   n_press,
-                           double                x,
-                           double                y,
-                           gpointer              user_data)
+gtk_calendar_button_press (GtkGestureClick *gesture,
+                           int              n_press,
+                           double           x,
+                           double           y,
+                           gpointer         user_data)
 {
   GtkCalendar *calendar = user_data;
   GtkWidget *widget = GTK_WIDGET (calendar);
@@ -2639,11 +2639,11 @@ gtk_calendar_button_press (GtkGestureMultiPress *gesture,
 }
 
 static void
-gtk_calendar_button_release (GtkGestureMultiPress *gesture,
-                             int                   n_press,
-                             double                x,
-                             double                y,
-                             gpointer              user_data)
+gtk_calendar_button_release (GtkGestureClick *gesture,
+                             int              n_press,
+                             double           x,
+                             double           y,
+                             gpointer         user_data)
 {
   GtkCalendar *calendar = user_data;
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);

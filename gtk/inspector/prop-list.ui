@@ -17,7 +17,7 @@
               <object class="GtkBox" id="name_heading">
                 <property name="hexpand">0</property>
                 <child>
-                  <object class="GtkGestureMultiPress">
+                  <object class="GtkGestureClick">
                     <signal name="pressed" handler="sort_changed" swapped="no"/>
 
                   </object>
@@ -48,7 +48,7 @@
               <object class="GtkBox" id="origin_heading">
                 <property name="hexpand">0</property>
                 <child>
-                  <object class="GtkGestureMultiPress">
+                  <object class="GtkGestureClick">
                     <signal name="pressed" handler="sort_changed" swapped="no"/>
 
                   </object>
