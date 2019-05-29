@@ -3137,16 +3137,15 @@ gtk_widget_real_show (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  if (!_gtk_widget_get_visible (widget))
-    {
-      priv->visible = TRUE;
+  g_return_if_fail (!_gtk_widget_get_visible (widget));
 
-      if (priv->parent &&
-	  _gtk_widget_get_mapped (priv->parent) &&
-          _gtk_widget_get_child_visible (widget) &&
-	  !_gtk_widget_get_mapped (widget))
-	gtk_widget_map (widget);
-    }
+  priv->visible = TRUE;
+
+  if (priv->parent &&
+      _gtk_widget_get_mapped (priv->parent) &&
+      _gtk_widget_get_child_visible (widget) &&
+      !_gtk_widget_get_mapped (widget))
+    gtk_widget_map (widget);
 }
 
 /**
@@ -3204,13 +3203,12 @@ gtk_widget_real_hide (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  if (_gtk_widget_get_visible (widget))
-    {
-      priv->visible = FALSE;
+  g_return_if_fail (_gtk_widget_get_visible (widget));
 
-      if (_gtk_widget_get_mapped (widget))
-	gtk_widget_unmap (widget);
-    }
+  priv->visible = FALSE;
+
+  if (_gtk_widget_get_mapped (widget))
+    gtk_widget_unmap (widget);
 }
 
 static void
