@@ -591,7 +591,6 @@ gdk_event_get_click_count
 gdk_event_get_coords
 gdk_event_get_keycode
 gdk_event_get_keyval
-gdk_event_get_root_coords
 gdk_event_get_scroll_direction
 gdk_event_get_scroll_deltas
 gdk_event_is_scroll_stop_event
