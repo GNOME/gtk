@@ -1373,7 +1373,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
                   G_STRUCT_OFFSET (GtkWidgetClass, destroy),
                   NULL, NULL,
-                  NULL,
+                  g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
   /**
@@ -1389,7 +1389,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, show),
 		  NULL, NULL,
-		  NULL,
+                  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1405,7 +1405,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, hide),
 		  NULL, NULL,
-		  NULL,
+                  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1427,7 +1427,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, map),
 		  NULL, NULL,
-		  NULL,
+                  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1447,7 +1447,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, unmap),
 		  NULL, NULL,
-		  NULL,
+                  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1464,7 +1464,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, realize),
 		  NULL, NULL,
-		  NULL,
+                  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1482,7 +1482,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, unrealize),
 		  NULL, NULL,
-		  NULL,
+                  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
   /**
@@ -1498,11 +1498,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, size_allocate),
 		  NULL, NULL,
-		  NULL,
+                  _gtk_marshal_VOID__INT_INT_INT,
 		  G_TYPE_NONE, 3,
                   G_TYPE_INT,
                   G_TYPE_INT,
                   G_TYPE_INT);
+  g_signal_set_va_marshaller (widget_signals[SIZE_ALLOCATE],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_VOID__INT_INT_INTv);
 
   /**
    * GtkWidget::state-flags-changed:
