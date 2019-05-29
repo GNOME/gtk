@@ -110,11 +110,11 @@ drag_end (GtkGestureDrag *gesture,
 }
 
 static void
-pressed (GtkGestureMultiPress *gesture,
-         int                   n_press,
-         double                x,
-         double                y,
-         GtkWidget            *area)
+pressed (GtkGestureClick *gesture,
+         int              n_press,
+         double           x,
+         double           y,
+         GtkWidget       *area)
 {
   clear_surface ();
   gtk_widget_queue_draw (area);
@@ -164,7 +164,7 @@ activate (GtkApplication *app,
   g_signal_connect (drag, "drag-update", G_CALLBACK (drag_update), drawing_area);
   g_signal_connect (drag, "drag-end", G_CALLBACK (drag_end), drawing_area);
 
-  press = gtk_gesture_multi_press_new ();
+  press = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (press), GDK_BUTTON_SECONDARY);
   gtk_widget_add_controller (drawing_area, GTK_EVENT_CONTROLLER (press));
 

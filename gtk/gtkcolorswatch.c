@@ -26,7 +26,7 @@
 #include "gtkdragdest.h"
 #include "gtkdragsource.h"
 #include "gtkgesturelongpress.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
 #include "gtkicontheme.h"
 #include "gtkimage.h"
@@ -324,11 +324,11 @@ hold_action (GtkGestureLongPress *gesture,
 }
 
 static void
-tap_action (GtkGestureMultiPress *gesture,
-            gint                  n_press,
-            gdouble               x,
-            gdouble               y,
-            GtkColorSwatch       *swatch)
+tap_action (GtkGestureClick *gesture,
+            gint             n_press,
+            gdouble          x,
+            gdouble          y,
+            GtkColorSwatch  *swatch)
 {
   GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (swatch);
   guint button;
@@ -580,7 +580,7 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
                     G_CALLBACK (hold_action), swatch);
   gtk_widget_add_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (gesture));
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   g_signal_connect (gesture, "pressed",
                     G_CALLBACK (tap_action), swatch);

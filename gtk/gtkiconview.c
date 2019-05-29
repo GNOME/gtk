@@ -167,12 +167,12 @@ static void             gtk_icon_view_leave                     (GtkEventControl
                                                                  GdkCrossingMode     mode,
                                                                  GdkNotifyType       detail,
                                                                  gpointer            user_data);
-static void             gtk_icon_view_button_press              (GtkGestureMultiPress *gesture,
+static void             gtk_icon_view_button_press              (GtkGestureClick *gesture,
                                                                  int                   n_press,
                                                                  double                x,
                                                                  double                y,
                                                                  gpointer              user_data);
-static void             gtk_icon_view_button_release            (GtkGestureMultiPress *gesture,
+static void             gtk_icon_view_button_release            (GtkGestureClick *gesture,
                                                                  int                   n_press,
                                                                  double                x,
                                                                  double                y,
@@ -958,7 +958,7 @@ gtk_icon_view_init (GtkIconView *icon_view)
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (icon_view)),
                                GTK_STYLE_CLASS_VIEW);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed", G_CALLBACK (gtk_icon_view_button_press),
                     icon_view);
   g_signal_connect (gesture, "released", G_CALLBACK (gtk_icon_view_button_release),
@@ -2101,11 +2101,11 @@ gtk_icon_view_get_cursor (GtkIconView      *icon_view,
 }
 
 static void
-gtk_icon_view_button_press (GtkGestureMultiPress *gesture,
-                            int                   n_press,
-                            double                x,
-                            double                y,
-                            gpointer              user_data)
+gtk_icon_view_button_press (GtkGestureClick *gesture,
+                            int              n_press,
+                            double           x,
+                            double           y,
+                            gpointer         user_data)
 {
   GtkIconView *icon_view = user_data;
   GtkWidget *widget = GTK_WIDGET (icon_view);
@@ -2271,11 +2271,11 @@ button_event_modifies_selection (const GdkEventButton *event)
 }
 
 static void
-gtk_icon_view_button_release (GtkGestureMultiPress *gesture,
-                              int                   n_press,
-                              double                x,
-                              double                y,
-                              gpointer              user_data)
+gtk_icon_view_button_release (GtkGestureClick *gesture,
+                              int              n_press,
+                              double           x,
+                              double           y,
+                              gpointer         user_data)
 {
   GtkIconView *icon_view = user_data;
   int button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));

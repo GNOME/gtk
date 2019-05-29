@@ -26,7 +26,7 @@
 #include "gtkbindings.h"
 #include "gtktextprivate.h"
 #include "gtkeditable.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkbox.h"
 #include "gtkimage.h"
 #include "gtkcheckmenuitem.h"
@@ -475,7 +475,7 @@ gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
       gtk_widget_set_tooltip_text (priv->peek_icon, _("Show text"));
       gtk_widget_set_parent (priv->peek_icon, GTK_WIDGET (entry));
 
-      press = gtk_gesture_multi_press_new ();
+      press = gtk_gesture_click_new ();
       g_signal_connect_swapped (press, "released",
                                 G_CALLBACK (gtk_password_entry_toggle_peek), entry);
       gtk_widget_add_controller (priv->peek_icon, GTK_EVENT_CONTROLLER (press));

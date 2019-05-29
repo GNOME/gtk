@@ -482,11 +482,11 @@ gtk_im_context_wayland_finalize (GObject *object)
 }
 
 static void
-pressed_cb (GtkGestureMultiPress *gesture,
-            gint                  n_press,
-            gdouble               x,
-            gdouble               y,
-            GtkIMContextWayland  *context)
+pressed_cb (GtkGestureClick     *gesture,
+            gint                 n_press,
+            gdouble              x,
+            gdouble              y,
+            GtkIMContextWayland *context)
 {
   if (n_press == 1)
     {
@@ -496,11 +496,11 @@ pressed_cb (GtkGestureMultiPress *gesture,
 }
 
 static void
-released_cb (GtkGestureMultiPress *gesture,
-             gint                  n_press,
-             gdouble               x,
-             gdouble               y,
-             GtkIMContextWayland  *context)
+released_cb (GtkGestureClick     *gesture,
+             gint                 n_press,
+             gdouble              x,
+             gdouble              y,
+             GtkIMContextWayland *context)
 {
   GtkIMContextWaylandGlobal *global;
   GtkInputHints hints;
@@ -547,7 +547,7 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
     {
       GtkGesture *gesture;
 
-      gesture = gtk_gesture_multi_press_new ();
+      gesture = gtk_gesture_click_new ();
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                                   GTK_PHASE_CAPTURE);
       g_signal_connect (gesture, "pressed",

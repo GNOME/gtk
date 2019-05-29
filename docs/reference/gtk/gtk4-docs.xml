@@ -332,7 +332,7 @@
       <xi:include href="xml/gtkgesturesingle.xml" />
       <xi:include href="xml/gtkgesturedrag.xml" />
       <xi:include href="xml/gtkgesturelongpress.xml" />
-      <xi:include href="xml/gtkgesturemultipress.xml" />
+      <xi:include href="xml/gtkgestureclick.xml" />
       <xi:include href="xml/gtkgesturepan.xml" />
       <xi:include href="xml/gtkgestureswipe.xml" />
       <xi:include href="xml/gtkgesturerotate.xml" />

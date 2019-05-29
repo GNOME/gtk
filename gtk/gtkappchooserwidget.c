@@ -37,7 +37,7 @@
 #include "gtkorientable.h"
 #include "gtkscrolledwindow.h"
 #include "gtklabel.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 
 #include <string.h>
 #include <glib/gi18n-lib.h>
@@ -1213,7 +1213,7 @@ gtk_app_chooser_widget_init (GtkAppChooserWidget *self)
   g_signal_connect (priv->monitor, "changed",
 		    G_CALLBACK (app_info_changed), self);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
   g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_app_chooser_row_pressed_cb), self);

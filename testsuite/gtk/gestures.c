@@ -341,7 +341,7 @@ add_gesture (GtkWidget *w, const gchar *name, GtkPropagationPhase phase, GString
   data->str = str;
   data->state = state;
 
-  g = gtk_gesture_multi_press_new ();
+  g = gtk_gesture_click_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (g), FALSE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (g), 1);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (g), phase);

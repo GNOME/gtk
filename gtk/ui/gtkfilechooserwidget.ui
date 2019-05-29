@@ -146,9 +146,9 @@
                                               </object>
                                             </child>
                                             <child>
-                                              <object class="GtkGestureMultiPress">
+                                              <object class="GtkGestureClick">
                                                 <property name="button">3</property>
-                                                <signal name="pressed" handler="multi_press_cb" swapped="no"/>
+                                                <signal name="pressed" handler="click_cb" swapped="no"/>
                                               </object>
                                             </child>
                                             <child>

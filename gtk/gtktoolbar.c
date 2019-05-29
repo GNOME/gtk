@@ -58,7 +58,7 @@
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkbuttonprivate.h"
 
 
@@ -245,7 +245,7 @@ static void       gtk_toolbar_measure              (GtkWidget      *widget,
                                                     int            *natural,
                                                     int            *minimum_baseline,
                                                     int            *natural_baseline);
-static void       gtk_toolbar_pressed_cb           (GtkGestureMultiPress *gesture,
+static void       gtk_toolbar_pressed_cb           (GtkGestureClick *gesture,
                                                     int                   n_press,
                                                     double                x,
                                                     double                y,
@@ -575,7 +575,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   
   priv->timer = g_timer_new ();
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_BUBBLE);
@@ -2206,11 +2206,11 @@ gtk_toolbar_arrow_button_press (GtkGesture     *gesture,
 
 
 static void
-gtk_toolbar_pressed_cb (GtkGestureMultiPress *gesture,
-                        int                   n_press,
-                        double                x,
-                        double                y,
-                        gpointer              user_data)
+gtk_toolbar_pressed_cb (GtkGestureClick *gesture,
+                        int              n_press,
+                        double           x,
+                        double           y,
+                        gpointer         user_data)
 {
   GtkToolbar *toolbar = user_data;
   GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));

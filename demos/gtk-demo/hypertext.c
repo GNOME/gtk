@@ -136,11 +136,11 @@ static void set_cursor_if_appropriate (GtkTextView *text_view,
                                        gint         y);
 
 static void
-released_cb (GtkGestureMultiPress *gesture,
-             guint                 n_press,
-             gdouble               x,
-             gdouble               y,
-             GtkWidget            *text_view)
+released_cb (GtkGestureClick *gesture,
+             guint            n_press,
+             gdouble          x,
+             gdouble          y,
+             GtkWidget       *text_view)
 {
   GtkTextIter start, end, iter;
   GtkTextBuffer *buffer;
@@ -247,7 +247,7 @@ do_hypertext (GtkWidget *do_widget)
       g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), view);
       gtk_widget_add_controller (view, controller);
 
-      controller = GTK_EVENT_CONTROLLER (gtk_gesture_multi_press_new ());
+      controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
       g_signal_connect (controller, "released",
                         G_CALLBACK (released_cb), view);
       gtk_widget_add_controller (view, controller);

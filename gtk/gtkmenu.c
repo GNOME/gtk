@@ -47,7 +47,7 @@
  *
  * |[<!-- language="C" -->
  *   // connect our handler which will popup the menu
- *   gesture = gtk_gesture_multi_press_new (window);
+ *   gesture = gtk_gesture_click_new (window);
  *   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
  *                                  GDK_BUTTON_SECONDARY);
  *   g_signal_connect (gesture, "begin", G_CALLBACK (my_popup_handler), menu);
@@ -281,12 +281,12 @@ static void gtk_menu_measure (GtkWidget      *widget,
                               int            *natural,
                               int            *minimum_baseline,
                               int            *natural_baseline);
-static void gtk_menu_pressed_cb (GtkGestureMultiPress *gesture,
+static void gtk_menu_pressed_cb (GtkGestureClick *gesture,
                                  int                   n_press,
                                  double                x,
                                  double                y,
                                  gpointer              user_data);
-static void gtk_menu_released_cb (GtkGestureMultiPress *gesture,
+static void gtk_menu_released_cb (GtkGestureClick *gesture,
                                   int                   n_press,
                                   double                x,
                                   double                y,
@@ -942,7 +942,7 @@ gtk_menu_init (GtkMenu *menu)
   gtk_widget_set_parent (priv->bottom_arrow_widget, GTK_WIDGET (menu));
   gtk_widget_set_child_visible (priv->bottom_arrow_widget, FALSE);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_BUBBLE);
@@ -2621,7 +2621,7 @@ pointer_in_menu_surface (GtkWidget *widget,
 
 
 static void
-gtk_menu_pressed_cb (GtkGestureMultiPress *gesture,
+gtk_menu_pressed_cb (GtkGestureClick *gesture,
                      int                   n_press,
                      double                x,
                      double                y,
@@ -2660,11 +2660,11 @@ gtk_menu_pressed_cb (GtkGestureMultiPress *gesture,
 }
 
 static void
-gtk_menu_released_cb (GtkGestureMultiPress *gesture,
-                      int                   n_press,
-                      double                x,
-                      double                y,
-                      gpointer              user_data)
+gtk_menu_released_cb (GtkGestureClick *gesture,
+                      int              n_press,
+                      double           x,
+                      double           y,
+                      gpointer         user_data)
 {
   GtkMenu *menu = user_data;
   GtkMenuPrivate *priv = menu->priv;

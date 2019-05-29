@@ -60,7 +60,7 @@
 #include "gtkdialogprivate.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 
 
 /**
@@ -260,7 +260,7 @@ static gboolean             text_view_key_pressed           (GtkEventController 
                                                              guint               keycode,
                                                              GdkModifierType     state,
 							     GtkAboutDialog     *about);
-static void                 text_view_released              (GtkGestureMultiPress *press,
+static void                 text_view_released              (GtkGestureClick *press,
                                                              int                   n,
                                                              double                x,
                                                              double                y,
@@ -1938,7 +1938,7 @@ text_view_key_pressed (GtkEventController *controller,
 }
 
 static void
-text_view_released (GtkGestureMultiPress *gesture,
+text_view_released (GtkGestureClick *gesture,
                     int                   n_press,
                     double                x,
                     double                y,

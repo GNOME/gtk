@@ -319,7 +319,7 @@ do_clipboard (GtkWidget *do_widget)
                         G_CALLBACK (drag_data_received), image);
 
       /* context menu on image */
-      gesture = gtk_gesture_multi_press_new ();
+      gesture = gtk_gesture_click_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
       g_signal_connect (gesture, "pressed", G_CALLBACK (pressed_cb), image);
       gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (gesture));
@@ -344,7 +344,7 @@ do_clipboard (GtkWidget *do_widget)
                         G_CALLBACK (drag_data_received), image);
 
       /* context menu on image */
-      gesture = gtk_gesture_multi_press_new ();
+      gesture = gtk_gesture_click_new ();
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
       g_signal_connect (gesture, "pressed", G_CALLBACK (pressed_cb), image);
       gtk_widget_add_controller (image, GTK_EVENT_CONTROLLER (gesture));

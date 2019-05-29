@@ -58,7 +58,7 @@
 #include "gtkactionhelperprivate.h"
 #include "gtkcheckbutton.h"
 #include "gtkcontainerprivate.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
@@ -287,11 +287,11 @@ gtk_button_class_init (GtkButtonClass *klass)
 }
 
 static void
-multipress_pressed_cb (GtkGestureMultiPress *gesture,
-                       guint                 n_press,
-                       gdouble               x,
-                       gdouble               y,
-                       GtkWidget            *widget)
+click_pressed_cb (GtkGestureClick *gesture,
+                  guint            n_press,
+                  gdouble          x,
+                  gdouble          y,
+                  GtkWidget       *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
@@ -335,11 +335,11 @@ touch_release_in_button (GtkButton *button)
 }
 
 static void
-multipress_released_cb (GtkGestureMultiPress *gesture,
-                        guint                 n_press,
-                        gdouble               x,
-                        gdouble               y,
-                        GtkWidget            *widget)
+click_released_cb (GtkGestureClick *gesture,
+                   guint            n_press,
+                   gdouble          x,
+                   gdouble          y,
+                   GtkWidget       *widget)
 {
   GtkButton *button = GTK_BUTTON (widget);
   GtkButtonPrivate *priv = gtk_button_get_instance_private (button);
@@ -357,9 +357,9 @@ multipress_released_cb (GtkGestureMultiPress *gesture,
 }
 
 static void
-multipress_gesture_cancel_cb (GtkGesture       *gesture,
-                              GdkEventSequence *sequence,
-                              GtkButton        *button)
+click_gesture_cancel_cb (GtkGesture       *gesture,
+                         GdkEventSequence *sequence,
+                         GtkButton        *button)
 {
   gtk_button_do_release (button, FALSE);
 }
@@ -419,13 +419,13 @@ gtk_button_init (GtkButton *button)
   priv->use_underline = FALSE;
   priv->child_type = WIDGET_CHILD;
 
-  priv->gesture = gtk_gesture_multi_press_new ();
+  priv->gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (priv->gesture), FALSE);
   gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->gesture), TRUE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->gesture), GDK_BUTTON_PRIMARY);
-  g_signal_connect (priv->gesture, "pressed", G_CALLBACK (multipress_pressed_cb), button);
-  g_signal_connect (priv->gesture, "released", G_CALLBACK (multipress_released_cb), button);
-  g_signal_connect (priv->gesture, "cancel", G_CALLBACK (multipress_gesture_cancel_cb), button);
+  g_signal_connect (priv->gesture, "pressed", G_CALLBACK (click_pressed_cb), button);
+  g_signal_connect (priv->gesture, "released", G_CALLBACK (click_released_cb), button);
+  g_signal_connect (priv->gesture, "cancel", G_CALLBACK (click_gesture_cancel_cb), button);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->gesture), GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (GTK_WIDGET (button), GTK_EVENT_CONTROLLER (priv->gesture));
 

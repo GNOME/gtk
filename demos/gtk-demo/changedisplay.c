@@ -80,11 +80,11 @@ find_toplevel_at_pointer (GdkDisplay *display)
 }
 
 static void
-released_cb (GtkGestureMultiPress *gesture,
-             guint                 n_press,
-             gdouble               x,
-             gdouble               y,
-             gboolean             *clicked)
+released_cb (GtkGestureClick *gesture,
+             guint            n_press,
+             gdouble          x,
+             gdouble          y,
+             gboolean        *clicked)
 {
   *clicked = TRUE;
 }
@@ -124,7 +124,7 @@ query_for_toplevel (GdkDisplay *display,
                      GDK_SEAT_CAPABILITY_ALL_POINTING,
                      FALSE, cursor, NULL, NULL, NULL) == GDK_GRAB_SUCCESS)
     {
-      GtkGesture *gesture = gtk_gesture_multi_press_new ();
+      GtkGesture *gesture = gtk_gesture_click_new ();
       gboolean clicked = FALSE;
 
       g_signal_connect (gesture, "released",

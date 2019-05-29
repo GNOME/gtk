@@ -40,7 +40,7 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerscroll.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkgestureswipe.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
@@ -773,11 +773,11 @@ start_spinning (GtkSpinButton *spin,
 }
 
 static void
-button_pressed_cb (GtkGestureMultiPress *gesture,
-                   int                   n_pressses,
-                   double                x,
-                   double                y,
-                   gpointer              user_data)
+button_pressed_cb (GtkGestureClick *gesture,
+                   int              n_pressses,
+                   double           x,
+                   double           y,
+                   gpointer         user_data)
 {
   GtkSpinButton *spin_button = user_data;
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
@@ -802,11 +802,11 @@ button_pressed_cb (GtkGestureMultiPress *gesture,
 }
 
 static void
-button_released_cb (GtkGestureMultiPress *gesture,
-                    int                   n_pressses,
-                    double                x,
-                    double                y,
-                    gpointer              user_data)
+button_released_cb (GtkGestureClick *gesture,
+                    int              n_pressses,
+                    double           x,
+                    double           y,
+                    gpointer         user_data)
 {
   GtkSpinButton *spin_button = user_data;
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
@@ -909,7 +909,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->down_button), "down");
   gtk_container_add (GTK_CONTAINER (priv->box), priv->down_button);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
@@ -926,7 +926,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->up_button), "up");
   gtk_container_add (GTK_CONTAINER (priv->box), priv->up_button);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),

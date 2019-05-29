@@ -32,7 +32,7 @@
 #include "gtkeventcontrollerscroll.h"
 #include "gtkgesturedrag.h"
 #include "gtkgesturelongpressprivate.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkgizmoprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
@@ -162,12 +162,12 @@ static void gtk_range_size_allocate  (GtkWidget      *widget,
                                       int             baseline);
 static void gtk_range_unmap          (GtkWidget        *widget);
 
-static void gtk_range_multipress_gesture_pressed  (GtkGestureMultiPress *gesture,
+static void gtk_range_click_gesture_pressed  (GtkGestureClick *gesture,
                                                    guint                 n_press,
                                                    gdouble               x,
                                                    gdouble               y,
                                                    GtkRange             *range);
-static void gtk_range_multipress_gesture_released (GtkGestureMultiPress *gesture,
+static void gtk_range_click_gesture_released (GtkGestureClick *gesture,
                                                    guint                 n_press,
                                                    gdouble               x,
                                                    gdouble               y,
@@ -558,7 +558,7 @@ gtk_range_init (GtkRange *range)
 
   /* Note: Order is important here.
    * The ::drag-begin handler relies on the state set up by the
-   * multipress ::pressed handler. Gestures are handling events
+   * click ::pressed handler. Gestures are handling events
    * in the oppposite order in which they are added to their
    * widget.
    */
@@ -570,12 +570,12 @@ gtk_range_init (GtkRange *range)
                     G_CALLBACK (gtk_range_drag_gesture_update), range);
   gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (priv->drag_gesture));
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   g_signal_connect (gesture, "pressed",
-                    G_CALLBACK (gtk_range_multipress_gesture_pressed), range);
+                    G_CALLBACK (gtk_range_click_gesture_pressed), range);
   g_signal_connect (gesture, "released",
-                    G_CALLBACK (gtk_range_multipress_gesture_released), range);
+                    G_CALLBACK (gtk_range_click_gesture_released), range);
   gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (gesture));
   gtk_gesture_group (priv->drag_gesture, gesture);
 
@@ -1874,11 +1874,11 @@ gtk_range_long_press_gesture_pressed (GtkGestureLongPress *gesture,
 }
 
 static void
-gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
-                                      guint                 n_press,
-                                      gdouble               x,
-                                      gdouble               y,
-                                      GtkRange             *range)
+gtk_range_click_gesture_pressed (GtkGestureClick *gesture,
+                                 guint            n_press,
+                                 gdouble          x,
+                                 gdouble          y,
+                                 GtkRange        *range)
 {
   GtkWidget *widget = GTK_WIDGET (range);
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
@@ -2006,11 +2006,11 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 }
 
 static void
-gtk_range_multipress_gesture_released (GtkGestureMultiPress *gesture,
-                                       guint                 n_press,
-                                       gdouble               x,
-                                       gdouble               y,
-                                       GtkRange             *range)
+gtk_range_click_gesture_released (GtkGestureClick *gesture,
+                                  guint            n_press,
+                                  gdouble          x,
+                                  gdouble          y,
+                                  GtkRange        *range)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 

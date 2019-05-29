@@ -76,7 +76,7 @@
 #include "gtkwindow.h"
 #include "gtkwindowprivate.h"
 #include "gtkeventcontrollerkey.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 
 #include "a11y/gtkmenushellaccessible.h"
 
@@ -119,17 +119,17 @@ static gboolean gtk_menu_shell_key_press     (GtkEventControllerKey *key,
                                               GdkModifierType        modifiers,
                                               GtkWidget             *widget);
 static void gtk_menu_shell_root              (GtkWidget         *widget);
-static void multi_press_pressed  (GtkGestureMultiPress *gesture,
+static void click_pressed  (GtkGestureClick *gesture,
                                   gint                  n_press,
                                   gdouble               x,
                                   gdouble               y,
                                   GtkMenuShell         *menu_shell);
-static void multi_press_released (GtkGestureMultiPress *gesture,
+static void click_released (GtkGestureClick *gesture,
                                   gint                  n_press,
                                   gdouble               x,
                                   gdouble               y,
                                   GtkMenuShell         *menu_shell);
-static void multi_press_stopped  (GtkGestureMultiPress *gesture,
+static void click_stopped  (GtkGestureClick *gesture,
                                   GtkMenuShell         *menu_shell);
 
 
@@ -428,15 +428,15 @@ gtk_menu_shell_init (GtkMenuShell *menu_shell)
                     G_CALLBACK (gtk_menu_shell_key_press), widget);
   gtk_widget_add_controller (widget, controller);
 
-  controller = GTK_EVENT_CONTROLLER (gtk_gesture_multi_press_new ());
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
   gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (controller), 0);
   g_signal_connect (controller, "pressed",
-                    G_CALLBACK (multi_press_pressed), menu_shell);
+                    G_CALLBACK (click_pressed), menu_shell);
   g_signal_connect (controller, "released",
-                    G_CALLBACK (multi_press_released), menu_shell);
+                    G_CALLBACK (click_released), menu_shell);
   g_signal_connect (controller, "stopped",
-                    G_CALLBACK (multi_press_stopped), menu_shell);
+                    G_CALLBACK (click_stopped), menu_shell);
   gtk_widget_add_controller (widget, controller);
 }
 
@@ -622,7 +622,7 @@ gtk_menu_shell_get_toplevel_shell (GtkMenuShell *menu_shell)
 }
 
 static void
-multi_press_stopped (GtkGestureMultiPress *gesture,
+click_stopped (GtkGestureClick *gesture,
                      GtkMenuShell         *menu_shell)
 {
   GtkMenuShellPrivate *priv = menu_shell->priv;
@@ -647,11 +647,11 @@ multi_press_stopped (GtkGestureMultiPress *gesture,
 }
 
 static void
-multi_press_pressed (GtkGestureMultiPress *gesture,
-                     gint                  n_press,
-                     gdouble               x,
-                     gdouble               y,
-                     GtkMenuShell         *menu_shell)
+click_pressed (GtkGestureClick *gesture,
+               gint             n_press,
+               gdouble          x,
+               gdouble          y,
+               GtkMenuShell    *menu_shell)
 {
   GtkMenuShellPrivate *priv = menu_shell->priv;
   GtkWidget *menu_item;
@@ -723,11 +723,11 @@ multi_press_pressed (GtkGestureMultiPress *gesture,
 }
 
 static void
-multi_press_released (GtkGestureMultiPress *gesture,
-                      gint                  n_press,
-                      gdouble               x,
-                      gdouble               y,
-                      GtkMenuShell         *menu_shell)
+click_released (GtkGestureClick *gesture,
+                gint             n_press,
+                gdouble          x,
+                gdouble          y,
+                GtkMenuShell    *menu_shell)
 {
   GtkMenuShellPrivate *priv = menu_shell->priv;
   GtkMenuShell *parent_shell = GTK_MENU_SHELL (priv->parent_menu_shell);

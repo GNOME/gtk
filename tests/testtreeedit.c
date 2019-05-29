@@ -249,7 +249,7 @@ main (gint argc, gchar **argv)
 
   tree_model = create_model ();
   tree_view = gtk_tree_view_new_with_model (tree_model);
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   g_signal_connect (gesture, "pressed", G_CALLBACK (pressed_cb), tree_view);
   gtk_widget_add_controller (tree_view, GTK_EVENT_CONTROLLER (gesture));
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), TRUE);

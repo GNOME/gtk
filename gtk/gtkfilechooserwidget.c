@@ -77,7 +77,7 @@
 #include "gtkseparator.h"
 #include "gtkmodelbutton.h"
 #include "gtkgesturelongpress.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkdebug.h"
 #include "gtkfilechoosererrorstackprivate.h"
@@ -2303,11 +2303,11 @@ file_list_show_popover_in_idle (gpointer data)
 }
 
 static void
-multi_press_cb (GtkGesture           *gesture,
-                int                   n_press,
-                double                x,
-                double                y,
-                GtkFileChooserWidget *impl)
+click_cb (GtkGesture           *gesture,
+          int                   n_press,
+          double                x,
+          double                y,
+          GtkFileChooserWidget *impl)
 {
   PopoverData *pd;
 
@@ -8336,7 +8336,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, rename_file_name_changed);
   gtk_widget_class_bind_template_callback (widget_class, rename_file_rename_clicked);
   gtk_widget_class_bind_template_callback (widget_class, rename_file_end);
-  gtk_widget_class_bind_template_callback (widget_class, multi_press_cb);
+  gtk_widget_class_bind_template_callback (widget_class, click_cb);
   gtk_widget_class_bind_template_callback (widget_class, long_press_cb);
   gtk_widget_class_bind_template_callback (widget_class, key_press_cb);
   gtk_widget_class_bind_template_callback (widget_class, widget_key_press_cb);

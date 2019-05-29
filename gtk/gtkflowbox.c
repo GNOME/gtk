@@ -82,7 +82,7 @@
 #include "gtkcontainerprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkgesturedrag.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -2638,11 +2638,11 @@ gtk_flow_box_drag_gesture_update (GtkGestureDrag *gesture,
 }
 
 static void
-gtk_flow_box_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
-                                         guint                 n_press,
-                                         gdouble               x,
-                                         gdouble               y,
-                                         GtkFlowBox           *box)
+gtk_flow_box_click_gesture_pressed (GtkGestureClick *gesture,
+                                    guint            n_press,
+                                    gdouble          x,
+                                    gdouble          y,
+                                    GtkFlowBox      *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
   GtkFlowBoxChild *child;
@@ -2668,12 +2668,12 @@ gtk_flow_box_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 }
 
 static void
-gtk_flow_box_multipress_unpaired_release (GtkGestureMultiPress *gesture,
-                                          gdouble               x,
-                                          gdouble               y,
-                                          guint                 button,
-                                          GdkEventSequence     *sequence,
-                                          GtkFlowBox           *box)
+gtk_flow_box_click_unpaired_release (GtkGestureClick  *gesture,
+                                     gdouble           x,
+                                     gdouble           y,
+                                     guint             button,
+                                     GdkEventSequence *sequence,
+                                     GtkFlowBox       *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
   GtkFlowBoxChild *child;
@@ -2688,11 +2688,11 @@ gtk_flow_box_multipress_unpaired_release (GtkGestureMultiPress *gesture,
 }
 
 static void
-gtk_flow_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
-                                          guint                 n_press,
-                                          gdouble               x,
-                                          gdouble               y,
-                                          GtkFlowBox           *box)
+gtk_flow_box_click_gesture_released (GtkGestureClick *gesture,
+                                     guint            n_press,
+                                     gdouble          x,
+                                     gdouble          y,
+                                     GtkFlowBox      *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
 
@@ -2732,8 +2732,8 @@ gtk_flow_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
 }
 
 static void
-gtk_flow_box_multipress_gesture_stopped (GtkGestureMultiPress *gesture,
-                                         GtkFlowBox           *box)
+gtk_flow_box_click_gesture_stopped (GtkGestureClick *gesture,
+                                    GtkFlowBox      *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
 
@@ -3728,7 +3728,7 @@ gtk_flow_box_init (GtkFlowBox *box)
 
   priv->children = g_sequence_new (NULL);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture),
                                      FALSE);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
@@ -3736,13 +3736,13 @@ gtk_flow_box_init (GtkFlowBox *box)
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
   g_signal_connect (gesture, "pressed",
-                    G_CALLBACK (gtk_flow_box_multipress_gesture_pressed), box);
+                    G_CALLBACK (gtk_flow_box_click_gesture_pressed), box);
   g_signal_connect (gesture, "released",
-                    G_CALLBACK (gtk_flow_box_multipress_gesture_released), box);
+                    G_CALLBACK (gtk_flow_box_click_gesture_released), box);
   g_signal_connect (gesture, "stopped",
-                    G_CALLBACK (gtk_flow_box_multipress_gesture_stopped), box);
+                    G_CALLBACK (gtk_flow_box_click_gesture_stopped), box);
   g_signal_connect (gesture, "unpaired-release",
-                    G_CALLBACK (gtk_flow_box_multipress_unpaired_release), box);
+                    G_CALLBACK (gtk_flow_box_click_unpaired_release), box);
   gtk_widget_add_controller (GTK_WIDGET (box), GTK_EVENT_CONTROLLER (gesture));
 
   priv->drag_gesture = gtk_gesture_drag_new ();

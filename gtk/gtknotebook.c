@@ -35,7 +35,7 @@
 #include "gtkdnd.h"
 #include "gtkdragdest.h"
 #include "gtkeventcontrollermotion.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkgizmoprivate.h"
 #include "gtkiconprivate.h"
 #include "gtkintl.h"
@@ -844,12 +844,12 @@ static void gtk_notebook_buildable_add_child      (GtkBuildable *buildable,
                                                    GObject      *child,
                                                    const gchar  *type);
 
-static void gtk_notebook_gesture_pressed (GtkGestureMultiPress *gesture,
+static void gtk_notebook_gesture_pressed (GtkGestureClick *gesture,
                                           int                   n_press,
                                           double                x,
                                           double                y,
                                           gpointer              user_data);
-static void gtk_notebook_gesture_released (GtkGestureMultiPress *gesture,
+static void gtk_notebook_gesture_released (GtkGestureClick *gesture,
                                            int                   n_press,
                                            double                x,
                                            double                y,
@@ -1356,7 +1356,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   gtk_widget_set_vexpand (priv->stack_widget, TRUE);
   gtk_container_add (GTK_CONTAINER (priv->box), priv->stack_widget);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture), GTK_PHASE_CAPTURE);
   g_signal_connect (gesture, "pressed", G_CALLBACK (gtk_notebook_gesture_pressed), notebook);
@@ -2488,7 +2488,7 @@ get_tab_at_pos (GtkNotebook *notebook,
 }
 
 static void
-gtk_notebook_gesture_pressed (GtkGestureMultiPress *gesture,
+gtk_notebook_gesture_pressed (GtkGestureClick *gesture,
                               int                   n_press,
                               double                x,
                               double                y,
@@ -2779,11 +2779,11 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
 }
 
 static void
-gtk_notebook_gesture_released (GtkGestureMultiPress *gesture,
-                               int                   n_press,
-                               double                x,
-                               double                y,
-                               gpointer              user_data)
+gtk_notebook_gesture_released (GtkGestureClick *gesture,
+                               int              n_press,
+                               double           x,
+                               double           y,
+                               gpointer         user_data)
 {
   GtkNotebook *notebook = user_data;
   GtkNotebookPrivate *priv = notebook->priv;

@@ -33,7 +33,7 @@
 #include "gtkbindings.h"
 #include "gtkeditable.h"
 #include "gtkbox.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtktextprivate.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
@@ -491,11 +491,11 @@ gtk_search_entry_editable_init (GtkEditableInterface *iface)
 }
 
 static void
-gtk_search_entry_icon_release (GtkGestureMultiPress *press,
-                               int                   n_press,
-                               double                x,
-                               double                y,
-                               GtkSearchEntry       *entry)
+gtk_search_entry_icon_release (GtkGestureClick *press,
+                               int              n_press,
+                               double           x,
+                               double           y,
+                               GtkSearchEntry  *entry)
 {
   GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
 
@@ -595,7 +595,7 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   gtk_widget_set_parent (priv->icon, GTK_WIDGET (entry));
   gtk_widget_set_child_visible (priv->icon, FALSE);
 
-  press = gtk_gesture_multi_press_new ();
+  press = gtk_gesture_click_new ();
   g_signal_connect (press, "released", G_CALLBACK (gtk_search_entry_icon_release), entry);
   gtk_widget_add_controller (priv->icon, GTK_EVENT_CONTROLLER (press));
 

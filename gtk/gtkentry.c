@@ -45,7 +45,6 @@
 #include "gtkemojicompletion.h"
 #include "gtkentrybuffer.h"
 #include "gtkgesturedrag.h"
-#include "gtkgesturemultipress.h"
 #include "gtkimageprivate.h"
 #include "gtkimcontextsimple.h"
 #include "gtkintl.h"
@@ -73,6 +72,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 #include "gtknative.h"
+#include "gtkgestureclick.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -1407,7 +1407,7 @@ get_icon_position_from_controller (GtkEntry           *entry,
 }
 
 static void
-icon_pressed_cb (GtkGestureMultiPress *gesture,
+icon_pressed_cb (GtkGestureClick *gesture,
                  gint                  n_press,
                  gdouble               x,
                  gdouble               y,
@@ -1427,11 +1427,11 @@ icon_pressed_cb (GtkGestureMultiPress *gesture,
 }
 
 static void
-icon_released_cb (GtkGestureMultiPress *gesture,
-                  gint                  n_press,
-                  gdouble               x,
-                  gdouble               y,
-                  GtkEntry             *entry)
+icon_released_cb (GtkGestureClick *gesture,
+                  gint             n_press,
+                  gdouble          x,
+                  gdouble          y,
+                  GtkEntry        *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
   GtkEntryIconPosition pos;
@@ -1497,11 +1497,9 @@ construct_icon_info (GtkWidget            *widget,
   update_icon_style (widget, icon_pos);
   update_node_ordering (entry);
 
-  press = gtk_gesture_multi_press_new ();
-  g_signal_connect (press, "pressed",
-                    G_CALLBACK (icon_pressed_cb), entry);
-  g_signal_connect (press, "released",
-                    G_CALLBACK (icon_released_cb), entry);
+  press = gtk_gesture_click_new ();
+  g_signal_connect (press, "pressed", G_CALLBACK (icon_pressed_cb), entry);
+  g_signal_connect (press, "released", G_CALLBACK (icon_released_cb), entry);
   gtk_widget_add_controller (icon_info->widget, GTK_EVENT_CONTROLLER (press));
 
   drag = gtk_gesture_drag_new ();

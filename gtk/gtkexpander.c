@@ -118,7 +118,7 @@
 #include "gtkdnd.h"
 #include "gtkdragdest.h"
 #include "gtkiconprivate.h"
-#include "gtkgesturemultipress.h"
+#include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
@@ -226,11 +226,11 @@ static void gtk_expander_measure (GtkWidget      *widget,
                                   int            *natural_baseline);
 
 /* Gestures */
-static void     gesture_multipress_released_cb (GtkGestureMultiPress *gesture,
-                                                gint                  n_press,
-                                                gdouble               x,
-                                                gdouble               y,
-                                                GtkExpander          *expander);
+static void     gesture_click_released_cb (GtkGestureClick *gesture,
+                                           gint             n_press,
+                                           gdouble          x,
+                                           gdouble          y,
+                                           GtkExpander     *expander);
 
 G_DEFINE_TYPE_WITH_CODE (GtkExpander, gtk_expander, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkExpander)
@@ -378,13 +378,13 @@ gtk_expander_init (GtkExpander *expander)
   gtk_drag_dest_set (GTK_WIDGET (expander), 0, NULL, 0);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (expander), TRUE);
 
-  gesture = gtk_gesture_multi_press_new ();
+  gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
                                  GDK_BUTTON_PRIMARY);
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture),
                                      FALSE);
   g_signal_connect (gesture, "released",
-                    G_CALLBACK (gesture_multipress_released_cb), expander);
+                    G_CALLBACK (gesture_click_released_cb), expander);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
   gtk_widget_add_controller (GTK_WIDGET (priv->title_widget), GTK_EVENT_CONTROLLER (gesture));
@@ -522,11 +522,11 @@ gtk_expander_size_allocate (GtkWidget *widget,
 }
 
 static void
-gesture_multipress_released_cb (GtkGestureMultiPress *gesture,
-                                gint                  n_press,
-                                gdouble               x,
-                                gdouble               y,
-                                GtkExpander          *expander)
+gesture_click_released_cb (GtkGestureClick *gesture,
+                           gint             n_press,
+                           gdouble          x,
+                           gdouble          y,
+                           GtkExpander     *expander)
 {
   gtk_widget_activate (GTK_WIDGET (expander));
 }
