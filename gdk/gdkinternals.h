@@ -250,6 +250,10 @@ void gdk_surface_get_root_coords (GdkSurface *surface,
                                   gint        y,
                                   gint       *root_x,
                                   gint       *root_y);
+void gdk_surface_get_origin      (GdkSurface *surface,
+                                  gint       *x,
+                                  gint       *y);
+
 
 void gdk_surface_get_geometry (GdkSurface *surface,
                                gint       *x,
