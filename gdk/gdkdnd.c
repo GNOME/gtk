@@ -334,7 +334,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkDragContextClass, dnd_finished),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   /**

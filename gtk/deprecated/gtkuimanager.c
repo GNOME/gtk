@@ -514,7 +514,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkUIManagerClass, actions_changed),  
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
   
   /**

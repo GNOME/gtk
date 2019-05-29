@@ -144,7 +144,7 @@ gtk_toggle_tool_button_class_init (GtkToggleToolButtonClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkToggleToolButtonClass, toggled),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
 }
 

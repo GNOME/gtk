@@ -328,7 +328,7 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
 		  G_STRUCT_OFFSET (GtkToolButtonClass, clicked),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE, 0);
   
   g_type_class_add_private (object_class, sizeof (GtkToolButtonPrivate));

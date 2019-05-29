@@ -119,7 +119,7 @@ gdk_screen_class_init (GdkScreenClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkScreenClass, size_changed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE,
                   0);
 
@@ -138,7 +138,7 @@ gdk_screen_class_init (GdkScreenClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GdkScreenClass, composited_changed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE,
 		  0);
 	
@@ -160,7 +160,7 @@ gdk_screen_class_init (GdkScreenClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GdkScreenClass, monitors_changed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  NULL,
 		  G_TYPE_NONE,
 		  0);
 }

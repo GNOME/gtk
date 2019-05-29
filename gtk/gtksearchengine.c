@@ -184,7 +184,7 @@ _gtk_search_engine_class_init (GtkSearchEngineClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkSearchEngineClass, finished),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
 
   signals[ERROR] =

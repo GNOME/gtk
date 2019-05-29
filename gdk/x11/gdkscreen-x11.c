@@ -1600,7 +1600,7 @@ gdk_x11_screen_class_init (GdkX11ScreenClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkX11ScreenClass, window_manager_changed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE,
                   0);
 }

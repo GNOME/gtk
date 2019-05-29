@@ -631,7 +631,7 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
                   G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkFlowBoxChildClass, activate),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
+                  NULL,
                   G_TYPE_NONE, 0);
   widget_class->activate_signal = child_signals[CHILD_ACTIVATE];
 
@@ -3942,7 +3942,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                                      G_SIGNAL_RUN_FIRST,
                                                      G_STRUCT_OFFSET (GtkFlowBoxClass, selected_children_changed),
                                                      NULL, NULL,
-                                                     g_cclosure_marshal_VOID__VOID,
+                                                     NULL,
                                                      G_TYPE_NONE, 0);
 
   /**
@@ -3958,7 +3958,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                                  G_STRUCT_OFFSET (GtkFlowBoxClass, activate_cursor_child),
                                                  NULL, NULL,
-                                                 g_cclosure_marshal_VOID__VOID,
+                                                 NULL,
                                                  G_TYPE_NONE, 0);
 
   /**
@@ -3976,7 +3976,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                                G_STRUCT_OFFSET (GtkFlowBoxClass, toggle_cursor_child),
                                                NULL, NULL,
-                                               g_cclosure_marshal_VOID__VOID,
+                                               NULL,
                                                G_TYPE_NONE, 0);
 
   /**
@@ -4028,7 +4028,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                       G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                       G_STRUCT_OFFSET (GtkFlowBoxClass, select_all),
                                       NULL, NULL,
-                                      g_cclosure_marshal_VOID__VOID,
+                                      NULL,
                                       G_TYPE_NONE, 0);
 
   /**
@@ -4047,7 +4047,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                         G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                         G_STRUCT_OFFSET (GtkFlowBoxClass, unselect_all),
                                         NULL, NULL,
-                                        g_cclosure_marshal_VOID__VOID,
+                                        NULL,
                                         G_TYPE_NONE, 0);
 
   widget_class->activate_signal = signals[ACTIVATE_CURSOR_CHILD];

@@ -205,7 +205,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkFileChooserIface, current_folder_changed),
 		NULL, NULL,
-		g_cclosure_marshal_VOID__VOID,
+		NULL,
 		G_TYPE_NONE, 0);
 
   /**
@@ -232,7 +232,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkFileChooserIface, selection_changed),
 		NULL, NULL,
-		g_cclosure_marshal_VOID__VOID,
+		NULL,
 		G_TYPE_NONE, 0);
 
   /**
@@ -267,7 +267,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkFileChooserIface, update_preview),
 		NULL, NULL,
-		g_cclosure_marshal_VOID__VOID,
+		NULL,
 		G_TYPE_NONE, 0);
 
   /**
@@ -291,7 +291,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
 		G_SIGNAL_RUN_LAST,
 		G_STRUCT_OFFSET (GtkFileChooserIface, file_activated),
 		NULL, NULL,
-		g_cclosure_marshal_VOID__VOID,
+		NULL,
 		G_TYPE_NONE, 0);
 
   /**
