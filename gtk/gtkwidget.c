@@ -3909,10 +3909,6 @@ gtk_widget_unrealize (GtkWidget *widget)
   g_object_unref (widget);
 }
 
-/*
- * Returns the values you're supposed to pass to gdk_surface_move_resize
- * for a windowed widget.
- */
 void
 gtk_widget_get_surface_allocation (GtkWidget     *widget,
                                   GtkAllocation *allocation)
