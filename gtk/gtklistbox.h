@@ -33,60 +33,11 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_LIST_BOX (gtk_list_box_get_type ())
 #define GTK_LIST_BOX(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LIST_BOX, GtkListBox))
-#define GTK_LIST_BOX_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_LIST_BOX, GtkListBoxClass))
 #define GTK_IS_LIST_BOX(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_LIST_BOX))
-#define GTK_IS_LIST_BOX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LIST_BOX))
-#define GTK_LIST_BOX_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LIST_BOX, GtkListBoxClass))
 
 typedef struct _GtkListBox        GtkListBox;
-typedef struct _GtkListBoxClass   GtkListBoxClass;
-
 typedef struct _GtkListBoxRow        GtkListBoxRow;
 typedef struct _GtkListBoxRowClass   GtkListBoxRowClass;
-
-struct _GtkListBox
-{
-  GtkContainer parent_instance;
-};
-
-/**
- * GtkListBoxClass:
- * @parent_class: The parent class.
- * @row_selected: Class handler for the #GtkListBox::row-selected signal
- * @row_activated: Class handler for the #GtkListBox::row-activated signal
- * @activate_cursor_row: Class handler for the #GtkListBox::activate-cursor-row signal
- * @toggle_cursor_row: Class handler for the #GtkListBox::toggle-cursor-row signal
- * @move_cursor: Class handler for the #GtkListBox::move-cursor signal
- * @selected_rows_changed: Class handler for the #GtkListBox::selected-rows-changed signal
- * @select_all: Class handler for the #GtkListBox::select-all signal
- * @unselect_all: Class handler for the #GtkListBox::unselect-all signal
- */
-struct _GtkListBoxClass
-{
-  GtkContainerClass parent_class;
-
-  /*< public >*/
-
-  void (*row_selected)        (GtkListBox      *box,
-                               GtkListBoxRow   *row);
-  void (*row_activated)       (GtkListBox      *box,
-                               GtkListBoxRow   *row);
-  void (*activate_cursor_row) (GtkListBox      *box);
-  void (*toggle_cursor_row)   (GtkListBox      *box);
-  void (*move_cursor)         (GtkListBox      *box,
-                               GtkMovementStep  step,
-                               gint             count);
-  void (*selected_rows_changed) (GtkListBox    *box);
-  void (*select_all)            (GtkListBox    *box);
-  void (*unselect_all)          (GtkListBox    *box);
-
-  /*< private >*/
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-};
 
 #define GTK_TYPE_LIST_BOX_ROW            (gtk_list_box_row_get_type ())
 #define GTK_LIST_BOX_ROW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LIST_BOX_ROW, GtkListBoxRow))
@@ -115,9 +66,7 @@ struct _GtkListBoxRowClass
 
   /*< private >*/
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
+  gpointer padding[8];
 };
 
 /**

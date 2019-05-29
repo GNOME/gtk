@@ -83,6 +83,31 @@
  * style class added when appropriate.
  */
 
+typedef struct _GtkListBoxClass   GtkListBoxClass;
+
+struct _GtkListBox
+{
+  GtkContainer parent_instance;
+};
+
+struct _GtkListBoxClass
+{
+  GtkContainerClass parent_class;
+
+  void (*row_selected)        (GtkListBox      *box,
+                               GtkListBoxRow   *row);
+  void (*row_activated)       (GtkListBox      *box,
+                               GtkListBoxRow   *row);
+  void (*activate_cursor_row) (GtkListBox      *box);
+  void (*toggle_cursor_row)   (GtkListBox      *box);
+  void (*move_cursor)         (GtkListBox      *box,
+                               GtkMovementStep  step,
+                               gint             count);
+  void (*selected_rows_changed) (GtkListBox    *box);
+  void (*select_all)            (GtkListBox    *box);
+  void (*unselect_all)          (GtkListBox    *box);
+};
+
 typedef struct
 {
   GSequence *children;
