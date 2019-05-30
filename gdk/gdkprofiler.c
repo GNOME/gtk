@@ -30,18 +30,18 @@
 #include "gdkprofilerprivate.h"
 #include "gdkframeclockprivate.h"
 
-#ifndef G_OS_WIN32
+#ifdef HAVE_SYSPROF_CAPTURE
 
-#include "capture/sp-capture-writer.h"
+#include <sysprof-capture.h>
 
-static SpCaptureWriter *writer = NULL;
+static SysprofCaptureWriter *writer = NULL;
 static gboolean running = FALSE;
 
 static void
 profiler_stop (void)
 {
   if (writer)
-    sp_capture_writer_unref (writer);
+    sysprof_capture_writer_unref (writer);
 }
 
 void
@@ -50,7 +50,7 @@ gdk_profiler_start (int fd)
   if (writer)
     return;
 
-  sp_clock_init ();
+  sysprof_clock_init ();
 
   if (fd == -1)
     {
@@ -58,11 +58,11 @@ gdk_profiler_start (int fd)
 
       filename = g_strdup_printf ("gtk.%d.syscap", getpid ());
       g_print ("Writing profiling data to %s\n", filename);
-      writer = sp_capture_writer_new (filename, 16*1024);
+      writer = sysprof_capture_writer_new (filename, 16*1024);
       g_free (filename);
     }
   else if (fd > 2)
-    writer = sp_capture_writer_new_from_fd (fd, 16*1024);
+    writer = sysprof_capture_writer_new_from_fd (fd, 16*1024);
 
   if (writer)
     running = TRUE;
@@ -91,11 +91,11 @@ gdk_profiler_add_mark (gint64      start,
   if (!running)
     return;
 
-  sp_capture_writer_add_mark (writer,
-                              start,
-                              -1, getpid (),
-                              duration,
-                              "gtk", name, message);
+  sysprof_capture_writer_add_mark (writer,
+                                   start,
+                                   -1, getpid (),
+                                   duration,
+                                   "gtk", name, message);
 }
 
 static guint
@@ -103,24 +103,24 @@ define_counter (const char *name,
                 const char *description,
                 int         type)
 {
-  SpCaptureCounter counter;
+  SysprofCaptureCounter counter;
 
   if (!writer)
     return 0;
 
-  counter.id = (guint) sp_capture_writer_request_counter (writer, 1);
+  counter.id = (guint) sysprof_capture_writer_request_counter (writer, 1);
   counter.type = type;
   counter.value.vdbl = 0;
   g_strlcpy (counter.category, "gtk", sizeof counter.category);
   g_strlcpy (counter.name, name, sizeof counter.name);
   g_strlcpy (counter.description, description, sizeof counter.name);
 
-  sp_capture_writer_define_counters (writer,
-                                     SP_CAPTURE_CURRENT_TIME,
-                                     -1,
-                                     getpid (),
-                                     &counter,
-                                     1);
+  sysprof_capture_writer_define_counters (writer,
+                                          SYSPROF_CAPTURE_CURRENT_TIME,
+                                          -1,
+                                          getpid (),
+                                          &counter,
+                                          1);
 
   return counter.id;
 }
@@ -129,14 +129,14 @@ guint
 gdk_profiler_define_counter (const char *name,
                              const char *description)
 {
-  return define_counter (name, description, SP_CAPTURE_COUNTER_DOUBLE);
+  return define_counter (name, description, SYSPROF_CAPTURE_COUNTER_DOUBLE);
 }
 
 guint
 gdk_profiler_define_int_counter (const char *name,
                                  const char *description)
 {
-  return define_counter (name, description, SP_CAPTURE_COUNTER_INT64);
+  return define_counter (name, description, SYSPROF_CAPTURE_COUNTER_INT64);
 }
 
 void
@@ -144,16 +144,16 @@ gdk_profiler_set_counter (guint  id,
                           gint64 time,
                           double val)
 {
-  SpCaptureCounterValue value;
+  SysprofCaptureCounterValue value;
 
   if (!running)
     return;
 
   value.vdbl = val;
-  sp_capture_writer_set_counters (writer,
-                                  time,
-                                  -1, getpid (),
-                                  &id, &value, 1);
+  sysprof_capture_writer_set_counters (writer,
+                                       time,
+                                       -1, getpid (),
+                                       &id, &value, 1);
 }
 
 void
@@ -161,16 +161,16 @@ gdk_profiler_set_int_counter (guint  id,
                               gint64 time,
                               gint64 val)
 {
-  SpCaptureCounterValue value;
+  SysprofCaptureCounterValue value;
 
   if (!running)
     return;
 
   value.v64 = val;
-  sp_capture_writer_set_counters (writer,
-                                  time,
-                                  -1, getpid (),
-                                  &id, &value, 1);
+  sysprof_capture_writer_set_counters (writer,
+                                       time,
+                                       -1, getpid (),
+                                       &id, &value, 1);
 }
 
 #else
