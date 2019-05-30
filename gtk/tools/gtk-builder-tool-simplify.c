@@ -852,6 +852,7 @@ rewrite_assistant_child (Element *child, MyParserData *data)
   new_object->attribute_values = g_new0 (char *, 2);
   new_object->attribute_values[0] = g_strdup ("GtkAssistantPage");
   new_object->children = packing->children;
+  new_object->parent = child;
   packing->children = NULL;
 
   prop = g_new0 (Element, 1);
@@ -861,6 +862,7 @@ rewrite_assistant_child (Element *child, MyParserData *data)
   prop->attribute_values = g_new0 (char *, 2);
   prop->attribute_values[0] = g_strdup ("child");
   prop->children = g_list_append (prop->children, object);
+  prop->parent = new_object;
   new_object->children = g_list_append (new_object->children, prop);
       
   g_list_free (child->children);
