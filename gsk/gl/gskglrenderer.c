@@ -497,7 +497,7 @@ render_fallback_node (GskGLRenderer       *self,
   /* We draw upside down here, so it matches what GL does. */
   cairo_save (cr);
   cairo_scale (cr, 1, -1);
-  cairo_translate (cr, 0, -surface_height);
+  cairo_translate (cr, 0, -surface_height / scale);
   cairo_set_source_surface (cr, rendered_surface, 0, 0);
   cairo_rectangle (cr, 0, 0, surface_width, surface_height);
   cairo_fill (cr);
