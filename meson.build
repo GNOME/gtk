@@ -666,6 +666,16 @@ if cloudproviders_enabled
   endif
 endif
 
+profiler_enabled = get_option('profiler')
+if profiler_enabled
+  profiler_dep = dependency('sysprof-capture-3', static: true, required: true)
+  if profiler_dep.found()
+    cdata.set('HAVE_SYSPROF_CAPTURE', profiler_dep.found())
+  else
+    error('Profiler support not found, but was explicitly requested.')
+  endif
+endif
+
 graphene_dep_type = graphene_dep.type_name()
 if graphene_dep_type == 'pkgconfig'
   graphene_has_sse2 = graphene_dep.get_pkgconfig_variable('graphene_has_sse2') == '1'
@@ -811,6 +821,7 @@ summary = [
   '    Vulkan support: @0@'.format(have_vulkan),
   '     Cloud support: @0@'.format(get_option('cloudproviders')),
   '    Colord support: @0@'.format(get_option('colord')),
+  '          Profiler: @0@'.format(get_option('profiler')),
   '     Introspection: @0@'.format(get_option('introspection')),
   '     Documentation: @0@'.format(get_option('documentation')),
   '         Man pages: @0@'.format(get_option('man-pages')),

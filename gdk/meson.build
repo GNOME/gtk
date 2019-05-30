@@ -47,13 +47,6 @@ gdk_public_sources = files([
   'gdkprofiler.c'
 ])
 
-if not win32_enabled
-  gdk_public_sources += files([
-    'capture/sp-capture-writer.c',
-    'capture/sp-clock.c'
-  ])
-endif
-
 gdk_public_headers = files([
   'gdk-autocleanup.h',
   'gdk.h',
@@ -187,6 +180,12 @@ gdk_deps = [
   pangocairo_dep,
   vulkan_dep,
 ]
+
+if profiler_enabled
+  if profiler_dep.found()
+    gdk_deps += [profiler_dep]
+  endif
+endif
 
 # add generated gdk sources
 gdk_sources += [

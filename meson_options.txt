@@ -21,6 +21,8 @@ option('xinerama', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto
   description : 'Enable support for the Xinerama extension')
 option('cloudproviders', type: 'boolean', value: false,
   description : 'Enable the cloudproviders support')
+option('profiler', type: 'boolean', value: false,
+  description : 'Enable profiler support')
 
 # Print backends
 option('print-backends', type : 'string', value : 'cups,file',

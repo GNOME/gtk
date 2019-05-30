@@ -213,8 +213,8 @@ gdk_pre_parse (void)
                                               (GDebugKey *) gdk_debug_keys,
                                               G_N_ELEMENTS (gdk_debug_keys));
 
-    if (g_getenv ("SYSPROF_TRACE_FD"))
-      gdk_profiler_start (atoi (g_getenv ("SYSPROF_TRACE_FD")));
+    if (g_getenv ("GTK_TRACE_FD"))
+      gdk_profiler_start (atoi (g_getenv ("GTK_TRACE_FD")));
     else if (g_getenv ("GTK_TRACE"))
       gdk_profiler_start (-1);
   }
