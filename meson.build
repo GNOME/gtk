@@ -461,7 +461,8 @@ if cc.get_id() == 'msvc'
   endif
 endif
 
-cairo_csi_dep = cc.find_library('cairo-script-interpreter')
+cairo_csi_dep = cc.find_library('cairo-script-interpreter',
+                                required: get_option('build-tests'))
 
 if not harfbuzz_dep.found()
   harfbuzz_dep = dependency('harfbuzz', version: '>= 0.9', required: false,
