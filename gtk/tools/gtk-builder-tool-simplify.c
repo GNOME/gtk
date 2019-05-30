@@ -528,12 +528,19 @@ set_attribute_value (Element *element,
     }
 }
 
+static gboolean
+element_is_object_or_template (Element *element)
+{
+  return g_str_equal (element->element_name, "object") ||
+         g_str_equal (element->element_name, "template");
+}
+
 static const char *
 get_class_name (Element *element)
 {
   Element *parent = element->parent;
 
-  if (g_str_equal (element->element_name, "object"))
+  if (element_is_object_or_template (element))
     parent = element;
 
   if (g_str_equal (parent->element_name, "packing"))
@@ -1448,48 +1455,48 @@ rewrite_element (Element      *element,
       l = next;
     }
 
-  if (g_str_equal (element->element_name, "object") &&
+  if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkStack"))
     rewrite_stack (element, data);
 
-  if (g_str_equal (element->element_name, "object") &&
+  if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkAssistant"))
     rewrite_assistant (element, data);
 
-  if (g_str_equal (element->element_name, "object") &&
+  if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkNotebook"))
     rewrite_notebook (element, data);
 
-  if (g_str_equal (element->element_name, "object") &&
+  if (element_is_object_or_template (element) &&
       (g_str_equal (get_class_name (element), "GtkActionBar") ||
        g_str_equal (get_class_name (element), "GtkHeaderBar")))
     rewrite_pack_type (element, data);
 
-  if (g_str_equal (element->element_name, "object") &&
+  if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkPopoverMenu"))
     rewrite_child_prop_to_prop (element, data, "submenu", "name");
 
-  if (g_str_equal (element->element_name, "object") &&
+  if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkToolbar"))
     rewrite_child_prop_to_prop (element, data, "expand", "expand-item");
 
-  if (g_str_equal (element->element_name, "object") &&
+  if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkToolbar"))
     rewrite_child_prop_to_prop (element, data, "homogeneous", "homogeneous");
 
-  if (g_str_equal (element->element_name, "object") &&
+  if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkPaned"))
     rewrite_paned (element, data);
 
-  if (g_str_equal (element->element_name, "object") &&
+  if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkOverlay"))
     rewrite_layout_props (element, data);
 
-  if (g_str_equal (element->element_name, "object") &&
+  if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkGrid"))
     rewrite_grid_layout (element, data);
 
-  if (g_str_equal (element->element_name, "object") &&
+  if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkFixed"))
     rewrite_layout_props (element, data);
 
