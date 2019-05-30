@@ -75,6 +75,7 @@ struct _GtkMenuPrivate
    * before operating on these widgets
    */
   GtkWidget *toplevel;
+  GtkWidget *swin;
   GtkWidget *box;
 
   guint needs_destruction_ref : 1;

@@ -90,6 +90,7 @@
 #include "gtkadjustment.h"
 #include "gtkbindings.h"
 #include "gtkbox.h"
+#include "gtkscrolledwindow.h"
 #include "gtkcheckmenuitemprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssstylepropertyprivate.h"
@@ -702,8 +703,18 @@ gtk_menu_init (GtkMenu *menu)
   g_object_force_floating (G_OBJECT (menu));
   priv->needs_destruction_ref = TRUE;
 
+  priv->swin = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_set_parent (priv->swin, GTK_WIDGET (menu));
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->swin),
+                                  GTK_POLICY_NEVER,
+                                  GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_propagate_natural_width (GTK_SCROLLED_WINDOW (priv->swin),
+                                                   TRUE);
+  gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (priv->swin),
+                                                    TRUE);
+
   priv->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_widget_set_parent (priv->box, GTK_WIDGET (menu));
+  gtk_container_add (GTK_CONTAINER (priv->swin), priv->box);
 
   priv->monitor_num = -1;
 
@@ -781,7 +792,7 @@ gtk_menu_finalize (GObject *object)
   GtkMenu *menu = GTK_MENU (object);
   GtkMenuPrivate *priv = menu->priv;
 
-  g_clear_pointer (&priv->box, gtk_widget_unparent);
+  g_clear_pointer (&priv->swin, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_menu_parent_class)->finalize (object);
 }
@@ -1944,7 +1955,6 @@ gtk_menu_size_allocate (GtkWidget *widget,
 {
   GtkMenu *menu = GTK_MENU (widget);
   GtkMenuPrivate *priv = menu->priv;
-  GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
   GList *children, *l;
 
   children = gtk_container_get_children (GTK_CONTAINER (priv->box));
@@ -1957,7 +1967,7 @@ gtk_menu_size_allocate (GtkWidget *widget,
     }
   g_list_free (children);
 
-  gtk_widget_size_allocate (priv->box,
+  gtk_widget_size_allocate (priv->swin,
                             &(GtkAllocation) { 0, 0, width, height },
                             baseline);
 }
@@ -1983,10 +1993,8 @@ gtk_menu_measure (GtkWidget      *widget,
 {
   GtkMenu *menu = GTK_MENU (widget);
   GtkMenuPrivate *priv = gtk_menu_get_instance_private (menu);
-  GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
 
-
-  gtk_widget_measure (priv->box,
+  gtk_widget_measure (priv->swin,
                       orientation,
                       for_size,
                       minimum, natural,
