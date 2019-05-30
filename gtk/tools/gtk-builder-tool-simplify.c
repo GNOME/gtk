@@ -197,7 +197,6 @@ needs_explicit_setting (GParamSpec *pspec,
           strcmp (pspec->name, props[k].property) == 0 &&
           kind == props[k].kind)
         {
-g_print ("explicit: %s::%s\n", class_name, pspec->name);
           found = TRUE;
           break;
         }
