@@ -25,6 +25,10 @@
 
 #include "gsk/gskrendernodeparserprivate.h"
 
+#ifndef NODE_EDITOR_SOURCE_DIR
+#define NODE_EDITOR_SOURCE_DIR "." /* Fallback */
+#endif
+
 typedef struct
 {
   gsize  start_chars;
@@ -40,6 +44,12 @@ struct _NodeEditorWindow
   GtkWidget *text_view;
   GtkTextBuffer *text_buffer;
   GtkTextTagTable *tag_table;
+
+  GtkWidget *testcase_popover;
+  GtkWidget *testcase_error_label;
+  GtkWidget *testcase_cairo_checkbutton;
+  GtkWidget *testcase_name_entry;
+  GtkWidget *testcase_save_button;
 
   GtkWidget *renderer_listbox;
   GListStore *renderers;
@@ -471,6 +481,39 @@ create_texture (NodeEditorWindow *self)
   return texture;
 }
 
+static GdkTexture *
+create_cairo_texture (NodeEditorWindow *self)
+{
+  GdkPaintable *paintable;
+  GtkSnapshot *snapshot;
+  GskRenderer *renderer;
+  GskRenderNode *node;
+  GdkTexture *texture;
+  GdkSurface *surface;
+
+  paintable = gtk_picture_get_paintable (GTK_PICTURE (self->picture));
+  if (paintable == NULL ||
+      gdk_paintable_get_intrinsic_width (paintable) <= 0 ||
+      gdk_paintable_get_intrinsic_height (paintable) <= 0)
+    return NULL;
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (paintable, snapshot, gdk_paintable_get_intrinsic_width (paintable), gdk_paintable_get_intrinsic_height (paintable));
+  node = gtk_snapshot_free_to_node (snapshot);
+  if (node == NULL)
+    return NULL;
+
+  surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (self)));
+  renderer = gsk_cairo_renderer_new ();
+  gsk_renderer_realize (renderer, surface, NULL);
+
+  texture = gsk_renderer_render_texture (renderer, node, NULL);
+  gsk_render_node_unref (node);
+  gsk_renderer_unrealize (renderer);
+  g_object_unref (renderer);
+
+  return texture;
+}
+
 static void
 export_image_response_cb (GtkWidget  *dialog,
                           gint        response,
@@ -525,6 +568,72 @@ export_image_cb (GtkWidget        *button,
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
   g_signal_connect (dialog, "response", G_CALLBACK (export_image_response_cb), texture);
   gtk_widget_show (dialog);
+}
+
+static void
+testcase_name_entry_changed_cb (GtkWidget        *button,
+                                GParamSpec       *pspec,
+                                NodeEditorWindow *self)
+
+{
+  const char *text = gtk_editable_get_text (GTK_EDITABLE (self->testcase_name_entry));
+
+  if (strlen (text) > 0)
+    gtk_widget_set_sensitive (self->testcase_save_button, TRUE);
+  else
+    gtk_widget_set_sensitive (self->testcase_save_button, FALSE);
+}
+
+static void
+testcase_save_clicked_cb (GtkWidget        *button,
+                          NodeEditorWindow *self)
+{
+  const char *testcase_name = gtk_editable_get_text (GTK_EDITABLE (self->testcase_name_entry));
+  char *source_dir = g_canonicalize_filename (NODE_EDITOR_SOURCE_DIR, NULL);
+  char *node_file_name;
+  char *node_file;
+  char *png_file_name;
+  char *png_file;
+  char *text = NULL;
+  GdkTexture *texture;
+  GError *error = NULL;
+
+  node_file_name = g_strconcat (testcase_name, ".node", NULL);
+  node_file = g_build_filename (source_dir, node_file_name, NULL);
+  g_free (node_file_name);
+
+  png_file_name = g_strconcat (testcase_name, ".png", NULL);
+  png_file = g_build_filename (source_dir, png_file_name, NULL);
+  g_free (png_file_name);
+
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->testcase_cairo_checkbutton)))
+    texture = create_cairo_texture (self);
+  else
+    texture = create_texture (self);
+
+  if (!gdk_texture_save_to_png (texture, png_file))
+    {
+      gtk_label_set_label (GTK_LABEL (self->testcase_error_label),
+                           "Could not save texture file");
+      goto out;
+    }
+
+  text = get_current_text (self->text_buffer);
+  if (!g_file_set_contents (node_file, text, -1, &error))
+    {
+      gtk_label_set_label (GTK_LABEL (self->testcase_error_label), error->message);
+      /* TODO: Remove texture file again? */
+      goto out;
+    }
+
+  gtk_editable_set_text (GTK_EDITABLE (self->testcase_name_entry), "");
+  gtk_popover_popdown (GTK_POPOVER (self->testcase_popover));
+
+out:
+  g_free (text);
+  g_free (png_file);
+  g_free (node_file);
+  g_free (source_dir);
 }
 
 static void
@@ -621,11 +730,18 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, text_view);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, picture);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, renderer_listbox);
+  gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_popover);
+  gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_error_label);
+  gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_cairo_checkbutton);
+  gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_name_entry);
+  gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_save_button);
 
   gtk_widget_class_bind_template_callback (widget_class, text_view_query_tooltip_cb);
   gtk_widget_class_bind_template_callback (widget_class, open_cb);
   gtk_widget_class_bind_template_callback (widget_class, save_cb);
   gtk_widget_class_bind_template_callback (widget_class, export_image_cb);
+  gtk_widget_class_bind_template_callback (widget_class, testcase_save_clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, testcase_name_entry_changed_cb);
 }
 
 static GtkWidget *
