@@ -121,16 +121,8 @@
 #include <gobject/gvaluecollector.h>
 #include <string.h>
 
-
-#define MENU_SCROLL_STEP1      8
-#define MENU_SCROLL_STEP2     15
-#define MENU_SCROLL_FAST_ZONE  8
-#define MENU_SCROLL_TIMEOUT1  50
-#define MENU_SCROLL_TIMEOUT2  20
-
 #define MENU_POPUP_DELAY     225
 
-#define ATTACH_INFO_KEY "gtk-menu-child-attach-info-key"
 #define ATTACHED_MENUS "gtk-attached-menus"
 
 typedef struct _GtkMenuAttachData  GtkMenuAttachData;
@@ -148,13 +140,7 @@ struct _GtkMenuPopdownData
   GdkDevice *device;
 };
 
-typedef struct
-{
-  gint effective_top_attach;
-} AttachInfo;
-
 enum {
-  MOVE_SCROLL,
   POPPED_UP,
   LAST_SIGNAL
 };
@@ -250,96 +236,6 @@ menu_queue_resize (GtkMenu *menu)
 
   priv->have_layout = FALSE;
   gtk_widget_queue_resize (GTK_WIDGET (menu));
-}
-
-static void
-attach_info_free (AttachInfo *info)
-{
-  g_slice_free (AttachInfo, info);
-}
-
-static AttachInfo *
-get_attach_info (GtkWidget *child)
-{
-  GObject *object = G_OBJECT (child);
-  AttachInfo *ai = g_object_get_data (object, ATTACH_INFO_KEY);
-
-  if (!ai)
-    {
-      ai = g_slice_new0 (AttachInfo);
-      g_object_set_data_full (object, I_(ATTACH_INFO_KEY), ai,
-                              (GDestroyNotify) attach_info_free);
-    }
-
-  return ai;
-}
-
-static void
-menu_ensure_layout (GtkMenu *menu)
-{
-  GtkMenuPrivate *priv = menu->priv;
-
-  if (!priv->have_layout)
-    {
-      GtkMenuShell *menu_shell = GTK_MENU_SHELL (menu);
-      GList *l;
-      gchar *row_occupied;
-      gint current_row;
-      gint max_bottom_attach;
-
-      /* Find extents of gridded portion
-       */
-      max_bottom_attach = 0;
-
-      /* Find empty rows */
-      row_occupied = g_malloc0 (max_bottom_attach);
-
-      /* Lay non-grid-items out in those rows
-       */
-      current_row = 0;
-      for (l = menu_shell->priv->children; l; l = l->next)
-        {
-          GtkWidget *child = l->data;
-          AttachInfo *ai = get_attach_info (child);
-
-          while (current_row < max_bottom_attach && row_occupied[current_row])
-            current_row++;
-
-          ai->effective_top_attach = current_row;
-
-          current_row++;
-        }
-
-      g_free (row_occupied);
-
-      priv->n_rows = MAX (current_row, max_bottom_attach);
-      priv->have_layout = TRUE;
-    }
-}
-
-static gint
-gtk_menu_get_n_rows (GtkMenu *menu)
-{
-  GtkMenuPrivate *priv = menu->priv;
-
-  menu_ensure_layout (menu);
-
-  return priv->n_rows;
-}
-
-static void
-get_effective_child_attach (GtkWidget *child,
-                            int       *t)
-{
-  GtkMenu *menu = GTK_MENU (gtk_widget_get_parent (child));
-  AttachInfo *ai;
-  
-  menu_ensure_layout (menu);
-
-  ai = get_attach_info (child);
-
-  if (t)
-    *t = ai->effective_top_attach;
 }
 
 static void
@@ -792,6 +688,7 @@ gtk_menu_init (GtkMenu *menu)
   priv->toplevel = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_container_add (GTK_CONTAINER (priv->toplevel), GTK_WIDGET (menu));
   g_signal_connect (priv->toplevel, "destroy", G_CALLBACK (gtk_widget_destroyed), &priv->toplevel);
+
   gtk_window_set_resizable (GTK_WINDOW (priv->toplevel), FALSE);
   gtk_window_set_mnemonic_modifier (GTK_WINDOW (priv->toplevel), 0);
 
@@ -804,6 +701,9 @@ gtk_menu_init (GtkMenu *menu)
    */
   g_object_force_floating (G_OBJECT (menu));
   priv->needs_destruction_ref = TRUE;
+
+  priv->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_widget_set_parent (priv->box, GTK_WIDGET (menu));
 
   priv->monitor_num = -1;
 
@@ -878,6 +778,11 @@ gtk_menu_destroy (GtkWidget *widget)
 static void
 gtk_menu_finalize (GObject *object)
 {
+  GtkMenu *menu = GTK_MENU (object);
+  GtkMenuPrivate *priv = menu->priv;
+
+  g_clear_pointer (&priv->box, gtk_widget_unparent);
+
   G_OBJECT_CLASS (gtk_menu_parent_class)->finalize (object);
 }
 
@@ -1073,9 +978,7 @@ gtk_menu_remove (GtkContainer *container,
   if (priv->old_active_menu_item == widget)
     g_clear_object (&priv->old_active_menu_item);
 
-  GTK_CONTAINER_CLASS (gtk_menu_parent_class)->remove (container, widget);
-
-  g_object_set_data (G_OBJECT (widget), I_(ATTACH_INFO_KEY), NULL);
+  gtk_container_remove (GTK_CONTAINER (priv->box), widget);
 
   menu_queue_resize (menu);
 }
@@ -1099,10 +1002,9 @@ gtk_menu_real_insert (GtkMenuShell *menu_shell,
                       gint          position)
 {
   GtkMenu *menu = GTK_MENU (menu_shell);
+  GtkMenuPrivate *priv = menu->priv;
 
-  gtk_widget_insert_before (child, GTK_WIDGET (menu), NULL);
-
-  GTK_MENU_SHELL_CLASS (gtk_menu_parent_class)->insert (menu_shell, child, position);
+  gtk_container_add (GTK_CONTAINER (priv->box), child);
 
   menu_queue_resize (menu);
 }
@@ -2034,135 +1936,30 @@ gtk_menu_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_menu_parent_class)->unrealize (widget);
 }
 
-static gint
-calculate_line_heights (GtkMenu *menu,
-                        gint     for_width,
-                        guint  **ret_min_heights,
-                        guint  **ret_nat_heights)
-{
-  GtkMenuPrivate *priv;
-  GtkMenuShell   *menu_shell;
-  GtkWidget      *child, *widget;
-  GList          *children;
-  gint            n_heights;
-  guint          *min_heights;
-  guint          *nat_heights;
-  gint            avail_width;
-
-  priv         = menu->priv;
-  widget       = GTK_WIDGET (menu);
-  menu_shell   = GTK_MENU_SHELL (widget);
-
-  min_heights  = g_new0 (guint, gtk_menu_get_n_rows (menu));
-  nat_heights  = g_new0 (guint, gtk_menu_get_n_rows (menu));
-  n_heights    = gtk_menu_get_n_rows (menu);
-  avail_width  = for_width - (2 * priv->toggle_size + priv->accel_size);
-
-  for (children = menu_shell->priv->children; children; children = children->next)
-    {
-      gint part;
-      gint toggle_size;
-      gint t;
-      gint child_min, child_nat;
-
-      child = children->data;
-
-      if (!gtk_widget_get_visible (child))
-        continue;
-
-      get_effective_child_attach (child, &t);
-
-      gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL,
-                          avail_width,
-                          &child_min, &child_nat,
-                          NULL, NULL);
-
-      gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child), &toggle_size);
-
-      part = MAX (child_min, toggle_size);
-      min_heights[t] = MAX (min_heights[t], part);
-
-      part = MAX (child_nat, toggle_size);
-      nat_heights[t] = MAX (nat_heights[t], part);
-    }
-
-  if (ret_min_heights)
-    *ret_min_heights = min_heights;
-  else
-    g_free (min_heights);
-
-  if (ret_nat_heights)
-    *ret_nat_heights = nat_heights;
-  else
-    g_free (nat_heights);
-
-  return n_heights;
-}
-
 static void
 gtk_menu_size_allocate (GtkWidget *widget,
-                        int        widget_width,
-                        int        widget_height,
+                        int        width,
+                        int        height,
                         int        baseline)
 {
-  GtkMenu *menu;
-  GtkMenuPrivate *priv;
-  GtkMenuShell *menu_shell;
-  GtkWidget *child;
-  GtkAllocation child_allocation;
-  GList *children;
-  gint i;
-  int base_width;
+  GtkMenu *menu = GTK_MENU (widget);
+  GtkMenuPrivate *priv = menu->priv;
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
+  GList *children, *l;
 
-  g_return_if_fail (GTK_IS_MENU (widget));
-
-  menu = GTK_MENU (widget);
-  menu_shell = GTK_MENU_SHELL (widget);
-  priv = menu->priv;
-
-  g_free (priv->heights);
-  priv->heights_length = calculate_line_heights (menu,
-                                                 widget_width,
-                                                 &priv->heights,
-                                                 NULL);
-
-  /* refresh our cached height request */
-  priv->requested_height = 0;
-  for (i = 0; i < priv->heights_length; i++)
-    priv->requested_height += priv->heights[i];
-
-  base_width = widget_width;
-  children = menu_shell->priv->children;
-  while (children)
+  children = gtk_container_get_children (GTK_CONTAINER (priv->box));
+  for (l = children; l; l = l->next)
     {
-      child = children->data;
-      children = children->next;
+      GtkWidget *child = l->data;
 
-      if (gtk_widget_get_visible (child))
-        {
-          gint t;
-
-          get_effective_child_attach (child, &t);
-
-          child_allocation.width = base_width;
-          child_allocation.height = 0;
-          child_allocation.x = 0;
-          child_allocation.y = 0;
-
-          for (i = 0; i < t + 1; i++)
-            {
-              if (i < t)
-                child_allocation.y += priv->heights[i];
-              else
-                child_allocation.height += priv->heights[i];
-            }
-
-          gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child),
-                                              priv->toggle_size);
-
-          gtk_widget_size_allocate (child, &child_allocation, -1);
-        }
+      gtk_menu_item_toggle_size_allocate (GTK_MENU_ITEM (child),
+                                          priv->toggle_size);
     }
+  g_list_free (children);
+
+  gtk_widget_size_allocate (priv->box,
+                            &(GtkAllocation) { 0, 0, width, height },
+                            baseline);
 }
 
 static void
@@ -2175,59 +1972,50 @@ gtk_menu_show (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_menu_parent_class)->show (widget);
 }
 
-static void gtk_menu_measure (GtkWidget      *widget,
-                              GtkOrientation  orientation,
-                              int             for_size,
-                              int            *minimum,
-                              int            *natural,
-                              int            *minimum_baseline,
-                              int            *natural_baseline)
+static void
+gtk_menu_measure (GtkWidget      *widget,
+                  GtkOrientation  orientation,
+                  int             for_size,
+                  int            *minimum,
+                  int            *natural,
+                  int            *minimum_baseline,
+                  int            *natural_baseline)
 {
   GtkMenu *menu = GTK_MENU (widget);
-  GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
   GtkMenuPrivate *priv = gtk_menu_get_instance_private (menu);
-  GtkWidget *child;
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
+
+
+  gtk_widget_measure (priv->box,
+                      orientation,
+                      for_size,
+                      minimum, natural,
+                      minimum_baseline, natural_baseline);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      GList          *children;
-      guint           max_toggle_size;
-      guint           max_accel_width;
-      gint            child_min, child_nat;
-      gint            min_width, nat_width;
-
-      min_width = nat_width = 0;
+      GList *children, *l;
+      guint max_toggle_size;
+      guint max_accel_width;
 
       max_toggle_size = 0;
       max_accel_width = 0;
 
-      children = menu_shell->priv->children;
-      while (children)
+      children = gtk_container_get_children (GTK_CONTAINER (priv->box));
+      for (l = children; l; l = l->next)
         {
+          GtkWidget *child = l->data;
           gint toggle_size;
 
-          child = children->data;
-          children = children->next;
-
-          if (! gtk_widget_get_visible (child))
+          if (!gtk_widget_get_visible (child))
             continue;
-
-          /* It's important to size_request the child
-           * before doing the toggle size request, in
-           * case the toggle size request depends on the size
-           * request of a child of the child (e.g. for ImageMenuItem)
-           */
-           gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL,
-                               -1, &child_min, &child_nat, NULL, NULL);
 
            gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child), &toggle_size);
            max_toggle_size = MAX (max_toggle_size, toggle_size);
            max_accel_width = MAX (max_accel_width,
                                   GTK_MENU_ITEM (child)->priv->accelerator_width);
-
-           min_width = MAX (min_width, child_min);
-           nat_width = MAX (nat_width, child_min);
         }
+      g_list_free (children);
 
       /* If the menu doesn't include any images or check items
        * reserve the space so that all menus are consistent.
@@ -2256,60 +2044,11 @@ static void gtk_menu_measure (GtkWidget      *widget,
           g_object_unref (menu_item);
         }
 
-      min_width += 2 * max_toggle_size + max_accel_width;
-      nat_width += 2 * max_toggle_size + max_accel_width;
-
       priv->toggle_size = max_toggle_size;
       priv->accel_size  = max_accel_width;
 
-      *minimum = min_width;
-      *natural = nat_width;
-
-    }
-  else /* VERTICAL */
-    {
-      if (for_size < 0)
-        {
-          gint min_width, nat_width;
-
-          /* Menus are height-for-width only, just return the height
-           * for the minimum width
-           */
-          GTK_WIDGET_GET_CLASS (widget)->measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
-                                                  &min_width, &nat_width, NULL, NULL);
-          GTK_WIDGET_GET_CLASS (widget)->measure (widget, GTK_ORIENTATION_VERTICAL, min_width,
-                                                  minimum, natural,
-                                                  minimum_baseline, natural_baseline);
-        }
-      else
-        {
-          guint          *min_heights, *nat_heights;
-          gint            n_heights, i;
-          gint            min_height, single_height, nat_height;
-
-          min_height = nat_height = 0;
-          single_height = 0;
-
-          n_heights =
-            calculate_line_heights (menu, for_size, &min_heights, &nat_heights);
-
-          for (i = 0; i < n_heights; i++)
-            {
-              min_height += min_heights[i];
-              single_height = MAX (single_height, min_heights[i]);
-              nat_height += nat_heights[i];
-            }
-
-          min_height = MIN (min_height, single_height);
-
-          *minimum = min_height;
-          *natural = nat_height;
-
-          g_free (min_heights);
-          g_free (nat_heights);
-
-
-        }
+      *minimum += 2 * max_toggle_size + max_accel_width;
+      *natural += 2 * max_toggle_size + max_accel_width;
     }
 }
 
