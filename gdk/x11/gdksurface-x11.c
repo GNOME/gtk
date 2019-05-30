@@ -3317,6 +3317,14 @@ gdk_x11_surface_set_keep_below (GdkSurface *surface, gboolean setting)
 				 setting ? GDK_SURFACE_STATE_BELOW : 0);
 }
 
+/**
+ * gdk_x11_surface_get_group:
+ * @surface: The #GdkSurface
+ *
+ * Returns the group this surface belongs to.
+ *
+ * Returns: (transfer none): The group of this surface;
+ */
 GdkSurface *
 gdk_x11_surface_get_group (GdkSurface *surface)
 {

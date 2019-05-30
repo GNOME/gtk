@@ -1306,7 +1306,7 @@ gtk_menu_button_get_icon_name (GtkMenuButton *menu_button)
 /**
  * gtk_menu_button_set_label:
  * @menu_button: a #GtkMenuButton
- * @icon_name: the label
+ * @label: the label
  *
  * Sets the label to show inside the menu button.
  */

@@ -3556,6 +3556,14 @@ gsk_text_node_peek_color (GskRenderNode *node)
   return &self->color;
 }
 
+/**
+ * gsk_text_node_peek_font:
+ * @node: The #GskRenderNode
+ *
+ * Returns the font used by the text node.
+ *
+ * Returns: (transfer none): The used #PangoFont.
+ */
 PangoFont *
 gsk_text_node_peek_font (GskRenderNode *node)
 {
