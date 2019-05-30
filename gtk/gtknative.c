@@ -74,7 +74,7 @@ gtk_native_default_init (GtkNativeInterface *iface)
  *
  * Returns the surface of this #GtkNative.
  *
- * Returns: the surface of @self
+ * Returns: (transfer none): the surface of @self
  */
 GdkSurface *
 gtk_native_get_surface (GtkNative *self)
@@ -90,7 +90,7 @@ gtk_native_get_surface (GtkNative *self)
  *
  * Returns the renderer that is used for this #GtkNative.
  *
- * Returns: the renderer for @self
+ * Returns: (transfer none): the renderer for @self
  */
 GskRenderer *
 gtk_native_get_renderer (GtkNative *self)

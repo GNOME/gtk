@@ -1395,6 +1395,13 @@ size_changed (GtkWidget   *widget,
     gtk_popover_move_resize (popover);
 }
 
+/**
+ * gtk_popover_get_popovers:
+ *
+ * Returns the list of all existing #GtkPopover widgets.
+ *
+ * Returns: (transfer none): The list of existing popovers.
+ */
 GListModel *
 gtk_popover_get_popovers (void)
 {
