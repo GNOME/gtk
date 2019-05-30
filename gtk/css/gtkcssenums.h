@@ -62,6 +62,8 @@ typedef enum
  *     deprecated and will be removed in a future version
  * @GTK_CSS_PARSER_WARNING_SYNTAX: A syntax construct was used
  *     that should be avoided
+ * @GTK_CSS_PARSER_WARNING_UNIMPLEMENTED: A feature is not
+ *     implemented
  *
  * Warnings that can occur while parsing CSS.
  *
