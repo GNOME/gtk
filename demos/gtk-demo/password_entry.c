@@ -11,6 +11,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+#include "award.h"
+
 static GtkWidget *entry;
 static GtkWidget *entry2;
 static GtkWidget *button;
@@ -25,6 +27,18 @@ update_button (GObject    *object,
 
   gtk_widget_set_sensitive (button,
                             text[0] != '\0' && g_str_equal (text, text2));
+
+  if (g_str_equal (text, text2) &&
+      g_ascii_strcasecmp (text, "12345") == 0)
+    award ("password-best");
+}
+
+static void
+button_pressed (GtkButton *button,
+                GtkWidget *window)
+{
+  award ("password-correct");
+  gtk_widget_destroy (window);
 }
 
 GtkWidget *
@@ -72,7 +86,7 @@ do_password_entry (GtkWidget *do_widget)
 
       button = gtk_button_new_with_mnemonic ("_Done");
       gtk_style_context_add_class (gtk_widget_get_style_context (button), "suggested-action");
-      g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_widget_destroy), window);
+      g_signal_connect (button, "clicked", G_CALLBACK (button_pressed), window);
       gtk_widget_set_sensitive (button, FALSE);
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
 
