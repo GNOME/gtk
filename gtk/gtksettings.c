@@ -224,7 +224,8 @@ enum {
   PROP_ENABLE_PRIMARY_PASTE,
   PROP_RECENT_FILES_ENABLED,
   PROP_LONG_PRESS_TIME,
-  PROP_KEYNAV_USE_CARET
+  PROP_KEYNAV_USE_CARET,
+  PROP_OVERLAY_SCROLLING
 };
 
 /* --- prototypes --- */
@@ -1767,6 +1768,24 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_KEYNAV_USE_CARET);
+
+  /**
+   * GtkSettings:gtk-overlay-scrolling:
+   *
+   * Whether scrolled windows may use overlayed scrolling indicators.
+   * If this is set to %FALSE, scrolled windows will have permanent
+   * scrollbars.
+   *
+   * Since: 3.24.9
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-overlay-scrolling",
+                                                                   P_("Whether to use overlay scrollbars"),
+                                                                   P_("Whether to use overlay scrollbars"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_OVERLAY_SCROLLING);
 }
 
 static void
