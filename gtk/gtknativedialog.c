@@ -280,7 +280,7 @@ gtk_native_dialog_class_init (GtkNativeDialogClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkNativeDialogClass, response),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__INT,
+                  NULL,
                   G_TYPE_NONE, 1,
                   G_TYPE_INT);
 }

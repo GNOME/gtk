@@ -179,7 +179,7 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
 		  G_OBJECT_CLASS_TYPE (klass),
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkRadioActionClass, changed),  NULL, NULL,
-		  g_cclosure_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1, GTK_TYPE_RADIO_ACTION);
 }
 

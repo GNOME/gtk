@@ -703,7 +703,7 @@ _gtk_text_handle_class_init (GtkTextHandleClass *klass)
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST, 0,
 		  NULL, NULL,
-                  g_cclosure_marshal_VOID__ENUM,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_TEXT_HANDLE_POSITION);
   signals[DRAG_FINISHED] =
@@ -711,7 +711,7 @@ _gtk_text_handle_class_init (GtkTextHandleClass *klass)
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST, 0,
 		  NULL, NULL,
-                  g_cclosure_marshal_VOID__ENUM,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_TEXT_HANDLE_POSITION);
 

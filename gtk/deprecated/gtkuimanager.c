@@ -493,7 +493,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
 		  G_STRUCT_OFFSET (GtkUIManagerClass, add_widget),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1, 
 		  GTK_TYPE_WIDGET);
 
