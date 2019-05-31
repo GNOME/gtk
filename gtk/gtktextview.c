@@ -1442,12 +1442,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextViewClass, extend_selection),
                   _gtk_boolean_handled_accumulator, NULL,
-                  NULL, /* generic marshaller */
+                  _gtk_marshal_BOOLEAN__ENUM_BOXED_BOXED_BOXED,
                   G_TYPE_BOOLEAN, 4,
                   GTK_TYPE_TEXT_EXTEND_SELECTION,
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals[EXTEND_SELECTION],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__ENUM_BOXED_BOXED_BOXEDv);
 
   /**
    * GtkTextView::insert-emoji:

@@ -124,6 +124,7 @@
 #include "gtkprivate.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 
 typedef struct _GtkGesturePrivate GtkGesturePrivate;
 typedef struct _PointData PointData;
@@ -988,9 +989,13 @@ gtk_gesture_class_init (GtkGestureClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureClass, sequence_state_changed),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__OBJECT_ENUM,
                   G_TYPE_NONE, 2, GDK_TYPE_EVENT_SEQUENCE,
                   GTK_TYPE_EVENT_SEQUENCE_STATE);
+  g_signal_set_va_marshaller (signals[SEQUENCE_STATE_CHANGED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__OBJECT_ENUMv);
 }
 
 static void
