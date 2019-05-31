@@ -8,6 +8,7 @@
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 
+#include "award.h"
 #include "demos.h"
 
 static GtkWidget *info_view;
@@ -111,6 +112,7 @@ activate_inspector (GSimpleAction *action,
                     gpointer       user_data)
 {
   gtk_window_set_interactive_debugging (TRUE);
+  award ("demo-inspector");
 }
 
 static void
@@ -1092,6 +1094,8 @@ activate (GApplication *app)
   gtk_tree_selection_select_iter (GTK_TREE_SELECTION (widget), &iter);
 
   gtk_tree_view_collapse_all (GTK_TREE_VIEW (treeview));
+
+  award ("demo-start");
 
   gtk_widget_show (GTK_WIDGET (window));
 
