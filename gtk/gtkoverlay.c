@@ -827,6 +827,9 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
                   G_TYPE_BOOLEAN, 2,
                   GTK_TYPE_WIDGET,
                   GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals[GET_CHILD_POSITION],
+                              G_TYPE_FROM_CLASS (object_class),
+                              _gtk_marshal_BOOLEAN__OBJECT_BOXEDv);
 
   gtk_widget_class_set_css_name (widget_class, "overlay");
 }
