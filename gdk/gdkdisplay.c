@@ -196,6 +196,9 @@ gdk_display_class_init (GdkDisplayClass *class)
 		  G_TYPE_NONE,
 		  1,
 		  G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (signals[CLOSED],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gdk_marshal_VOID__BOOLEANv);
 
   /**
    * GdkDisplay::seat-added:

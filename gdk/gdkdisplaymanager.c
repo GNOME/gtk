@@ -162,6 +162,9 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
                   G_TYPE_NONE,
                   1,
                   GDK_TYPE_DISPLAY);
+  g_signal_set_va_marshaller (signals[DISPLAY_OPENED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gdk_marshal_VOID__OBJECTv);
 
   g_object_class_install_property (object_class,
                                    PROP_DEFAULT_DISPLAY,

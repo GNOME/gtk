@@ -382,6 +382,9 @@ gdk_window_class_init (GdkWindowClass *klass)
 		  2,
 		  G_TYPE_DOUBLE,
 		  G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[PICK_EMBEDDED_CHILD],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gdk_marshal_OBJECT__DOUBLE_DOUBLEv);
 
   /**
    * GdkWindow::to-embedder:
@@ -413,6 +416,9 @@ gdk_window_class_init (GdkWindowClass *klass)
 		  G_TYPE_DOUBLE,
 		  G_TYPE_POINTER,
 		  G_TYPE_POINTER);
+  g_signal_set_va_marshaller (signals[TO_EMBEDDER],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gdk_marshal_VOID__DOUBLE_DOUBLE_POINTER_POINTERv);
 
   /**
    * GdkWindow::from-embedder:
@@ -444,6 +450,9 @@ gdk_window_class_init (GdkWindowClass *klass)
 		  G_TYPE_DOUBLE,
 		  G_TYPE_POINTER,
 		  G_TYPE_POINTER);
+  g_signal_set_va_marshaller (signals[FROM_EMBEDDER],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gdk_marshal_VOID__DOUBLE_DOUBLE_POINTER_POINTERv);
 
   /**
    * GdkWindow::create-surface:
@@ -477,6 +486,9 @@ gdk_window_class_init (GdkWindowClass *klass)
                   2,
                   G_TYPE_INT,
                   G_TYPE_INT);
+  g_signal_set_va_marshaller (signals[CREATE_SURFACE],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gdk_marshal_BOXED__INT_INTv);
 
   /**
    * GdkWindow::moved-to-rect:
@@ -517,6 +529,9 @@ gdk_window_class_init (GdkWindowClass *klass)
                   G_TYPE_POINTER,
                   G_TYPE_BOOLEAN,
                   G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (signals[MOVED_TO_RECT],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gdk_marshal_VOID__POINTER_POINTER_BOOLEAN_BOOLEANv);
 }
 
 static void
