@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GListStore" id="list">
+    <property name="item-type">GtkAward</property>
+    <child>
+      <object class="GtkAward">
+        <property name="name">demo-inspector</property>
+        <!-- Transformers -->
+        <property name="title" translatable="yes">You got a high-rise double-pump carburetor.</property>
+        <property name="explanation" translatable="yes">Launch the inspector</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAward">
+        <property name="name">demo-start</property>
+        <!-- The Matrix -->
+        <property name="title" translatable="yes">After this, there is no turning back.</property>
+        <property name="explanation" translatable="yes">Start gtk-demo</property>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkAward">
+        <property name="name">listbox-reshare</property>
+        <!-- Mean Girls -->
+        <property name="title" translatable="yes">Trying to make fetch happen</property>
+        <property name="explanation" translatable="yes">Reshare a tweet</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAward">
+        <property name="name">listbox-100th-row</property>
+        <!-- Aladdin -->
+        <property name="title" translatable="yes">The ever impressive, long contained, often imitated, but never duplicated Genie of the lamp.</property>
+        <property name="explanation" translatable="yes">Select a 100th row in a list</property>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkAward">
+        <property name="name">password-best</property>
+        <!-- Spaceballs -->
+        <property name="title" translatable="yes">I've got the same combination on my luggage!</property>
+        <property name="explanation" translatable="yes">Use "12345" as the password</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAward">
+        <property name="name">password-correct</property>
+        <!-- Stanley Parable -->
+        <property name="title" translatable="yes">Night Shark 1-1-5</property>
+        <property name="explanation" translatable="yes">Correctly enter a password</property>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkAward">
+        <property name="name">puzzle-give-up</property>
+        <!-- Pretty Woman -->
+        <property name="title" translatable="yes">Big Mistake. Big. Huge!</property>
+        <property name="explanation" translatable="yes">Close the puzzle without finishing it</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAward">
+        <property name="name">puzzle-solve</property>
+        <!-- The Incredibles -->
+        <property name="title" translatable="yes">That was totally wicked!</property>
+        <property name="explanation" translatable="yes">Solve a puzzle</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAward">
+        <property name="name">puzzle-solve-animated</property>
+        <!-- The Phantom Menace -->
+        <property name="title" translatable="yes">A surprise to be sure but a welcome one.</property>
+        <property name="explanation" translatable="yes">Solve an animated puzzle</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAward">
+        <property name="name">puzzle-solve-large</property>
+        <!-- Portal -->
+        <property name="title" translatable="yes">Science isn't about WHY. It's about WHY NOT?!</property>
+        <property name="explanation" translatable="yes">Solve a puzzle with at least 20 pieces</property>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
+  <gresource prefix="/">
+    <file>awards.ui</file>
+  </gresource>
   <gresource prefix="/ui">
     <file preprocess="xml-stripblanks">main.ui</file>
     <file preprocess="xml-stripblanks">appmenu.ui</file>
@@ -8,6 +11,9 @@
     <file>application.c</file>
     <file>application.ui</file>
     <file>menus.ui</file>
+  </gresource>
+  <gresource prefix="/awardview">
+    <file>awardlistitem.ui</file>
   </gresource>
   <gresource prefix="/builder">
     <file>demo.ui</file>
@@ -144,6 +150,7 @@
   </gresource>
   <gresource prefix="/sources">
     <file>application_demo.c</file>
+    <file>awardview.c</file>
     <file>assistant.c</file>
     <file>builder.c</file>
     <file>changedisplay.c</file>
