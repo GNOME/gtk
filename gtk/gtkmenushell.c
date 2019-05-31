@@ -656,13 +656,16 @@ click_pressed (GtkGestureClick *gesture,
   GtkMenuShellPrivate *priv = menu_shell->priv;
   GtkWidget *menu_item;
   GdkEvent *event;
+  GtkWidget *item_shell;
 
   event = gtk_get_current_event ();
   menu_item = gtk_get_event_target_with_type (event, GTK_TYPE_MENU_ITEM);
+  if (menu_item)
+    item_shell = gtk_widget_get_ancestor (GTK_WIDGET (menu_item), GTK_TYPE_MENU_SHELL);
 
   if (menu_item &&
       _gtk_menu_item_is_selectable (menu_item) &&
-      gtk_widget_get_parent (menu_item) == GTK_WIDGET (menu_shell))
+      item_shell == GTK_WIDGET (menu_shell))
     {
       if (menu_item != menu_shell->priv->active_menu_item)
         {
@@ -699,7 +702,7 @@ click_pressed (GtkGestureClick *gesture,
       if (menu_item)
         {
           if (_gtk_menu_item_is_selectable (menu_item) &&
-              gtk_widget_get_parent (menu_item) == GTK_WIDGET (menu_shell) &&
+              item_shell == GTK_WIDGET (menu_shell) &&
               menu_item != priv->active_menu_item)
             {
               priv->active = TRUE;
@@ -1194,6 +1197,12 @@ gtk_menu_shell_activate_item (GtkMenuShell *menu_shell,
   g_object_unref (menu_item);
 }
 
+static GList *
+gtk_menu_shell_get_items (GtkMenuShell *menu_shell)
+{
+  return GTK_MENU_SHELL_GET_CLASS (menu_shell)->get_items (menu_shell);
+}
+
 /* Distance should be +/- 1 */
 static gboolean
 gtk_menu_shell_real_move_selected (GtkMenuShell  *menu_shell,
@@ -1203,7 +1212,8 @@ gtk_menu_shell_real_move_selected (GtkMenuShell  *menu_shell,
 
   if (priv->active_menu_item)
     {
-      GList *node = g_list_find (priv->children, priv->active_menu_item);
+      GList *children = gtk_menu_shell_get_items (menu_shell);
+      GList *node = g_list_find (children, priv->active_menu_item);
       GList *start_node = node;
 
       if (distance > 0)
@@ -1215,7 +1225,7 @@ gtk_menu_shell_real_move_selected (GtkMenuShell  *menu_shell,
               if (node)
                 node = node->next;
               else
-                node = priv->children;
+                node = children;
             }
         }
       else
@@ -1227,12 +1237,14 @@ gtk_menu_shell_real_move_selected (GtkMenuShell  *menu_shell,
               if (node)
                 node = node->prev;
               else
-                node = g_list_last (priv->children);
+                node = g_list_last (children);
             }
         }
       
       if (node)
         gtk_menu_shell_select_item (menu_shell, node->data);
+
+      g_list_free (children);
     }
 
   return TRUE;
@@ -1264,14 +1276,13 @@ void
 gtk_menu_shell_select_first (GtkMenuShell *menu_shell,
                              gboolean      search_sensitive)
 {
-  GtkMenuShellPrivate *priv;
+  GList *children;
   GList *tmp_list;
 
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
 
-  priv = menu_shell->priv;
-
-  tmp_list = priv->children;
+  children = gtk_menu_shell_get_items (menu_shell);
+  tmp_list = children;
   while (tmp_list)
     {
       GtkWidget *child = tmp_list->data;
@@ -1280,21 +1291,24 @@ gtk_menu_shell_select_first (GtkMenuShell *menu_shell,
           _gtk_menu_item_is_selectable (child))
         {
           gtk_menu_shell_select_item (menu_shell, child);
-          return;
+          break;
         }
 
       tmp_list = tmp_list->next;
     }
+
+  g_list_free (children);
 }
 
 void
 _gtk_menu_shell_select_last (GtkMenuShell *menu_shell,
                              gboolean      search_sensitive)
 {
-  GtkMenuShellPrivate *priv = menu_shell->priv;
   GList *tmp_list;
+  GList *children;
 
-  tmp_list = g_list_last (priv->children);
+  children = gtk_menu_shell_get_items (menu_shell);
+  tmp_list = g_list_last (children);
   while (tmp_list)
     {
       GtkWidget *child = tmp_list->data;
@@ -1303,11 +1317,13 @@ _gtk_menu_shell_select_last (GtkMenuShell *menu_shell,
           _gtk_menu_item_is_selectable (child))
         {
           gtk_menu_shell_select_item (menu_shell, child);
-          return;
+          break;
         }
 
       tmp_list = tmp_list->prev;
     }
+
+  g_list_free (children);
 }
 
 static gboolean
@@ -1805,14 +1821,19 @@ gtk_menu_shell_tracker_remove_func (gint     position,
                                     gpointer user_data)
 {
   GtkMenuShell *menu_shell = user_data;
+  GList *children;
   GtkWidget *child;
 
-  child = g_list_nth_data (menu_shell->priv->children, position);
+  children = gtk_menu_shell_get_items (menu_shell);
+
+  child = g_list_nth_data (children, position);
   /* We use destroy here because in the case of an item with a submenu,
    * the attached-to from the submenu holds a ref on the item and a
    * simple gtk_container_remove() isn't good enough to break that.
    */
   gtk_widget_destroy (child);
+
+  g_list_free (children);
 }
 
 static void
@@ -1956,6 +1977,7 @@ gtk_menu_shell_bind_model (GtkMenuShell *menu_shell,
                            gboolean      with_separators)
 {
   GtkActionMuxer *muxer;
+  GList *children, *l;
 
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
   g_return_if_fail (model == NULL || G_IS_MENU_MODEL (model));
@@ -1964,8 +1986,10 @@ gtk_menu_shell_bind_model (GtkMenuShell *menu_shell,
 
   g_clear_pointer (&menu_shell->priv->tracker, gtk_menu_tracker_free);
 
-  while (menu_shell->priv->children)
-    gtk_container_remove (GTK_CONTAINER (menu_shell), menu_shell->priv->children->data);
+  children = gtk_menu_shell_get_items (menu_shell);
+  for (l = children; l; l = l->next)
+    gtk_widget_destroy (GTK_WIDGET (l->data));
+  g_list_free (children);
 
   if (model)
     menu_shell->priv->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (muxer), model,

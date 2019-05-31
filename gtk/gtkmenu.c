@@ -195,6 +195,8 @@ static void     gtk_menu_move_current      (GtkMenuShell     *menu_shell,
 
 static void gtk_menu_deactivate     (GtkMenuShell      *menu_shell);
 static void gtk_menu_position       (GtkMenu           *menu);
+static void gtk_menu_add            (GtkContainer      *menu,
+                                     GtkWidget         *widget);
 static void gtk_menu_remove         (GtkContainer      *menu,
                                      GtkWidget         *widget);
 
@@ -239,6 +241,14 @@ menu_queue_resize (GtkMenu *menu)
   gtk_widget_queue_resize (GTK_WIDGET (menu));
 }
 
+static GList *
+gtk_menu_get_items (GtkMenuShell *menu_shell)
+{
+  GtkMenuPrivate *priv = GTK_MENU (menu_shell)->priv;
+
+  return gtk_container_get_children (GTK_CONTAINER (priv->box));
+}
+
 static void
 gtk_menu_class_init (GtkMenuClass *class)
 {
@@ -261,6 +271,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->grab_notify = gtk_menu_grab_notify;
   widget_class->measure = gtk_menu_measure;
 
+  container_class->add = gtk_menu_add;
   container_class->remove = gtk_menu_remove;
 
   menu_shell_class->submenu_placement = GTK_LEFT_RIGHT;
@@ -268,6 +279,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   menu_shell_class->insert = gtk_menu_real_insert;
   menu_shell_class->get_popup_delay = gtk_menu_get_popup_delay;
   menu_shell_class->move_current = gtk_menu_move_current;
+  menu_shell_class->get_items = gtk_menu_get_items;
 
   /**
    * GtkMenu::popped-up:
@@ -976,6 +988,18 @@ gtk_menu_detach (GtkMenu *menu)
 
   g_object_notify (G_OBJECT (menu), "attach-widget");
   g_object_unref (menu);
+}
+
+static void
+gtk_menu_add (GtkContainer *container,
+              GtkWidget    *widget)
+{
+  GtkMenu *menu = GTK_MENU (container);
+  GtkMenuPrivate *priv = menu->priv;
+
+  gtk_container_add (GTK_CONTAINER (priv->box), widget);
+
+  menu_queue_resize (menu);
 }
 
 static void
