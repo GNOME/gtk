@@ -79,6 +79,7 @@ demos = files([
 gtkdemo_deps = [ libgtk_dep, ]
 
 extra_demo_sources = files(['main.c',
+                            'award.c',
                             'gtkfishbowl.c',
                             'fontplane.c',
                             'gtkgears.c',
