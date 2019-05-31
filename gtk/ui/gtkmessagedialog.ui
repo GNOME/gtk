@@ -34,6 +34,9 @@
                     <property name="valign">start</property>
                     <property name="wrap">1</property>
                     <property name="max-width-chars">60</property>
+                    <style>
+                      <class name="title-2"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="fill">0</property>
