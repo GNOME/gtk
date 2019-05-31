@@ -652,7 +652,11 @@ gtk_menu_get_property (GObject     *object,
   switch (prop_id)
     {
     case PROP_ACTIVE:
-      g_value_set_int (value, g_list_index (GTK_MENU_SHELL (menu)->priv->children, gtk_menu_get_active (menu)));
+      {
+        GList *children = gtk_menu_shell_get_items (GTK_MENU_SHELL (menu));
+        g_value_set_int (value, g_list_index (children, gtk_menu_get_active (menu)));
+        g_list_free (children);
+      }
       break;
     case PROP_ACCEL_GROUP:
       g_value_set_object (value, gtk_menu_get_accel_group (menu));
@@ -1015,6 +1019,8 @@ gtk_menu_remove (GtkContainer *container,
 
   gtk_container_remove (GTK_CONTAINER (priv->box), widget);
 
+  GTK_CONTAINER_CLASS (gtk_menu_parent_class)->remove (container, widget);
+
   menu_queue_resize (menu);
 }
 
@@ -1040,6 +1046,7 @@ gtk_menu_real_insert (GtkMenuShell *menu_shell,
   GtkMenuPrivate *priv = menu->priv;
 
   gtk_container_add (GTK_CONTAINER (priv->box), child);
+  gtk_menu_reorder_child (menu, child, position);
 
   menu_queue_resize (menu);
 }
@@ -1639,7 +1646,7 @@ gtk_menu_get_active (GtkMenu *menu)
 {
   GtkMenuPrivate *priv;
   GtkWidget *child;
-  GList *children;
+  GList *children, *l;
 
   g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
 
@@ -1647,18 +1654,16 @@ gtk_menu_get_active (GtkMenu *menu)
 
   if (!priv->old_active_menu_item)
     {
-      child = NULL;
-      children = GTK_MENU_SHELL (menu)->priv->children;
-
-      while (children)
+      children = gtk_menu_shell_get_items (GTK_MENU_SHELL (menu));
+      for (l = children; l; l = l->next)
         {
-          child = children->data;
-          children = children->next;
+          child = l->data;
 
           if (gtk_bin_get_child (GTK_BIN (child)))
             break;
           child = NULL;
         }
+      g_list_free (children);
 
       priv->old_active_menu_item = child;
       if (priv->old_active_menu_item)
@@ -1683,13 +1688,15 @@ gtk_menu_set_active (GtkMenu *menu,
 {
   GtkMenuPrivate *priv;
   GtkWidget *child;
+  GList *children;
   GList *tmp_list;
 
   g_return_if_fail (GTK_IS_MENU (menu));
 
   priv = menu->priv;
 
-  tmp_list = g_list_nth (GTK_MENU_SHELL (menu)->priv->children, index);
+  children = gtk_menu_shell_get_items (GTK_MENU_SHELL (menu));
+  tmp_list = g_list_nth (children, index);
   if (tmp_list)
     {
       child = tmp_list->data;
@@ -1702,6 +1709,7 @@ gtk_menu_set_active (GtkMenu *menu,
         }
     }
   g_object_notify (G_OBJECT (menu), "active");
+  g_list_free (children);
 }
 
 /**
@@ -1904,20 +1912,24 @@ gtk_menu_reorder_child (GtkMenu   *menu,
                         GtkWidget *child,
                         gint       position)
 {
-  GtkMenuShell *menu_shell;
+  GtkWidget *sibling = NULL;
+  int i;
 
   g_return_if_fail (GTK_IS_MENU (menu));
   g_return_if_fail (GTK_IS_MENU_ITEM (child));
 
-  menu_shell = GTK_MENU_SHELL (menu);
+  if (position < 0)
+    sibling = gtk_widget_get_last_child (menu->priv->box);
 
-  if (g_list_find (menu_shell->priv->children, child))
+  for (i = 0; i < position; i++)
     {
-      menu_shell->priv->children = g_list_remove (menu_shell->priv->children, child);
-      menu_shell->priv->children = g_list_insert (menu_shell->priv->children, child, position);
-
-      menu_queue_resize (menu);
+      if (sibling == NULL)
+        sibling = gtk_widget_get_first_child (menu->priv->box);
+      else
+        sibling = gtk_widget_get_next_sibling (sibling);
     }
+
+  gtk_box_reorder_child_after (GTK_BOX (menu->priv->box), child, sibling);
 }
 
 static gboolean
