@@ -11,6 +11,9 @@
 #include "puzzlepiece.h"
 #include "paintable.h"
 
+/* Give out awards */
+#include "award.h"
+
 static GtkWidget *window = NULL;
 static GtkWidget *frame = NULL;
 static GtkWidget *choices = NULL;
@@ -155,6 +158,14 @@ check_solved (GtkWidget *grid)
                                 width, height);
   picture = gtk_grid_get_child_at (GTK_GRID (grid), pos_x, pos_y);
   gtk_picture_set_paintable (GTK_PICTURE (picture), piece);
+
+  /* Hand out a bunch of awards
+   */
+  award ("puzzle-solve");
+  if ((gdk_paintable_get_flags (piece) & GDK_PAINTABLE_STATIC_CONTENTS) == 0)
+    award ("puzzle-solve-animated");
+  if (height * width > 20)
+    award ("puzzle-solve-large");
 
   return TRUE;
 }
@@ -401,6 +412,18 @@ add_choice (GtkWidget    *choices,
   gtk_container_add (GTK_CONTAINER (choices), icon);
 }
 
+static void
+widget_destroyed (GtkWidget      *widget,
+		  GtkWidget     **widget_pointer)
+{
+  if (widget_pointer)
+    *widget_pointer = NULL;
+
+  if (!solved)
+    award ("puzzle-give-up");
+}
+
+
 GtkWidget *
 do_sliding_puzzle (GtkWidget *do_widget)
 {
@@ -469,7 +492,7 @@ do_sliding_puzzle (GtkWidget *do_widget)
       gtk_window_set_titlebar (GTK_WINDOW (window), header);
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
       g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed), &window);
+                        G_CALLBACK (widget_destroyed), &window);
 
       frame = gtk_aspect_frame_new (NULL, 0.5, 0.5, (float) gdk_paintable_get_intrinsic_aspect_ratio (puzzle), FALSE);
       gtk_container_add (GTK_CONTAINER (window), frame);
