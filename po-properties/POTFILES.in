@@ -160,9 +160,9 @@ gtk/gtkfontchooserdialog.c
 gtk/gtkfontchooserwidget.c
 gtk/gtkframe.c
 gtk/gtkgesture.c
+gtk/gtkgestureclick.c
 gtk/gtkgesturedrag.c
 gtk/gtkgesturelongpress.c
-gtk/gtkgesturemultipress.c
 gtk/gtkgesturepan.c
 gtk/gtkgesturerotate.c
 gtk/gtkgesturesingle.c
