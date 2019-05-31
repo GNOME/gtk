@@ -870,7 +870,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__ENUM,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_ENTRY_ICON_POSITION);
 
@@ -888,7 +888,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                   G_SIGNAL_RUN_LAST,
                   0,
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__ENUM,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_ENTRY_ICON_POSITION);
 

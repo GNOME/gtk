@@ -223,7 +223,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrinterClass, details_acquired),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__BOOLEAN,
+		  NULL,
 		  G_TYPE_NONE, 1, G_TYPE_BOOLEAN);
 }
 
