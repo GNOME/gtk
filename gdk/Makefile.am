@@ -449,6 +449,7 @@ gdkenumtypes.c: $(gdk_h_sources) gdkenumtypes.c.template
 gdkmarshalers.h: gdkmarshalers.list
 	$(AM_V_GEN) $(GLIB_GENMARSHAL) \
 		--prefix=_gdk_marshal \
+		--valist-marshallers \
 		--header \
 		$(srcdir)/gdkmarshalers.list > gdkmarshalers-h.tmp \
 	&& mv gdkmarshalers-h.tmp gdkmarshalers.h \
@@ -456,6 +457,7 @@ gdkmarshalers.h: gdkmarshalers.list
 gdkmarshalers.c: gdkmarshalers.list
 	$(AM_V_GEN) $(GLIB_GENMARSHAL) \
 		--prefix=_gdk_marshal \
+		--valist-marshallers \
 		--body \
 		$(srcdir)/gdkmarshalers.list > gdkmarshalers-c.tmp	\
 	&& mv gdkmarshalers-c.tmp gdkmarshalers.c \
