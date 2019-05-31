@@ -32,6 +32,7 @@
 #include "config.h"
 
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerprivate.h"
@@ -182,8 +183,12 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
     g_signal_new (I_("key-pressed"),
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
                   G_SIGNAL_RUN_LAST,
-                  0, _gtk_boolean_handled_accumulator, NULL, NULL,
+                  0, _gtk_boolean_handled_accumulator, NULL,
+                  _gtk_marshal_BOOLEAN__UINT_UINT_FLAGS,
                   G_TYPE_BOOLEAN, 3, G_TYPE_UINT, G_TYPE_UINT, GDK_TYPE_MODIFIER_TYPE);
+  g_signal_set_va_marshaller (signals[KEY_PRESSED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__UINT_UINT_FLAGSv);
 
   /**
    * GtkEventControllerKey::key-released:
@@ -200,15 +205,25 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
     g_signal_new (I_("key-released"),
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
+                  0, NULL, NULL,
+                  _gtk_marshal_BOOLEAN__UINT_UINT_FLAGS,
                   G_TYPE_NONE, 3, G_TYPE_UINT, G_TYPE_UINT, GDK_TYPE_MODIFIER_TYPE);
+  g_signal_set_va_marshaller (signals[KEY_RELEASED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__UINT_UINT_FLAGSv);
+
   signals[MODIFIERS] =
     g_signal_new (I_("modifiers"),
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-                  g_cclosure_marshal_BOOLEAN__FLAGS,
+                  0, NULL,
+                  NULL,
+                  _gtk_marshal_BOOLEAN__FLAGS,
                   G_TYPE_BOOLEAN, 1, GDK_TYPE_MODIFIER_TYPE);
+  g_signal_set_va_marshaller (signals[MODIFIERS],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__FLAGSv);
+
   signals[IM_UPDATE] =
     g_signal_new (I_("im-update"),
                   GTK_TYPE_EVENT_CONTROLLER_KEY,
