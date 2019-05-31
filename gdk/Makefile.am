@@ -456,6 +456,7 @@ gdkmarshalers.h: gdkmarshalers.list
 gdkmarshalers.c: gdkmarshalers.list
 	$(AM_V_GEN) $(GLIB_GENMARSHAL) \
 		--prefix=_gdk_marshal \
+		--valist-marshallers \
 		--body \
 		$(srcdir)/gdkmarshalers.list > gdkmarshalers-c.tmp	\
 	&& mv gdkmarshalers-c.tmp gdkmarshalers.c \
