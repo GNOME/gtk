@@ -704,6 +704,9 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * is present. Otherwise, they are overlayed on top of the content,
    * as narrow indicators.
    *
+   * Note that overlay scrolling can also be globally disabled, with
+   * the #GtkSettings::gtk-overlay-scrolling setting.
+   *
    * Since: 3.16
    */
   properties[PROP_OVERLAY_SCROLLING] =
@@ -4163,6 +4166,7 @@ gtk_scrolled_window_map (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->map (widget);
 
   gtk_scrolled_window_update_animating (scrolled_window);
+  gtk_scrolled_window_update_use_indicators (scrolled_window);
 }
 
 static void
@@ -4439,8 +4443,12 @@ gtk_scrolled_window_update_use_indicators (GtkScrolledWindow *scrolled_window)
 {
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   gboolean use_indicators;
+  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (scrolled_window));
+  gboolean overlay_scrolling;
 
-  use_indicators = priv->overlay_scrolling;
+  g_object_get (settings, "gtk-overlay-scrolling", &overlay_scrolling, NULL);
+
+  use_indicators = overlay_scrolling && priv->overlay_scrolling;
 
   if (g_strcmp0 (g_getenv ("GTK_OVERLAY_SCROLLING"), "0") == 0)
     use_indicators = FALSE;
