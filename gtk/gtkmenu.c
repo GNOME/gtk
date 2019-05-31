@@ -1535,9 +1535,7 @@ gtk_menu_popup_at_widget (GtkMenu        *menu,
   if (GTK_IS_MENU_ITEM (priv->widget))
     {
       parent_menu_item = priv->widget;
-
-      if (GTK_IS_MENU_SHELL (gtk_widget_get_parent (parent_menu_item)))
-        parent_menu_shell = gtk_widget_get_parent (parent_menu_item);
+      parent_menu_shell = GTK_WIDGET (gtk_menu_item_get_menu_shell (GTK_MENU_ITEM (parent_menu_item)));
     }
 
   gtk_menu_popup_internal (menu,
