@@ -142,6 +142,7 @@ struct _GtkMenuPopdownData
 };
 
 enum {
+  MOVE_SCROLL,
   POPPED_UP,
   LAST_SIGNAL
 };
@@ -197,6 +198,8 @@ static gboolean gtk_menu_focus             (GtkWidget        *widget,
 static gint     gtk_menu_get_popup_delay   (GtkMenuShell     *menu_shell);
 static void     gtk_menu_move_current      (GtkMenuShell     *menu_shell,
                                             GtkMenuDirectionType direction);
+static void     gtk_menu_real_move_scroll  (GtkMenu          *menu,
+                                            GtkScrollType     type);
 
 static void gtk_menu_deactivate     (GtkMenuShell      *menu_shell);
 static void gtk_menu_position       (GtkMenu           *menu);
@@ -287,6 +290,21 @@ gtk_menu_class_init (GtkMenuClass *class)
   menu_shell_class->get_popup_delay = gtk_menu_get_popup_delay;
   menu_shell_class->move_current = gtk_menu_move_current;
   menu_shell_class->get_items = gtk_menu_get_items;
+
+  /**
+   * GtkMenu::move-scroll:
+   * @menu: a #GtkMenu
+   * @scroll_type: a #GtkScrollType
+   */
+  menu_signals[MOVE_SCROLL] =
+    g_signal_new_class_handler (I_("move-scroll"),
+                                G_OBJECT_CLASS_TYPE (gobject_class),
+                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_CALLBACK (gtk_menu_real_move_scroll),
+                                NULL, NULL,
+                                NULL,
+                                G_TYPE_NONE, 1,
+                                GTK_TYPE_SCROLL_TYPE);
 
   /**
    * GtkMenu::popped-up:
@@ -570,6 +588,46 @@ gtk_menu_class_init (GtkMenuClass *class)
                                 "move-current", 1,
                                 GTK_TYPE_MENU_DIRECTION_TYPE,
                                 GTK_MENU_DIR_CHILD);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_Home, 0,
+                                "move-scroll", 1,
+                                GTK_TYPE_SCROLL_TYPE,
+                                GTK_SCROLL_START);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_KP_Home, 0,
+                                "move-scroll", 1,
+                                GTK_TYPE_SCROLL_TYPE,
+                                GTK_SCROLL_START);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_End, 0,
+                                "move-scroll", 1,
+                                GTK_TYPE_SCROLL_TYPE,
+                                GTK_SCROLL_END);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_KP_End, 0,
+                                "move-scroll", 1,
+                                GTK_TYPE_SCROLL_TYPE,
+                                GTK_SCROLL_END);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_Page_Up, 0,
+                                "move-scroll", 1,
+                                GTK_TYPE_SCROLL_TYPE,
+                                GTK_SCROLL_PAGE_UP);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_KP_Page_Up, 0,
+                                "move-scroll", 1,
+                                GTK_TYPE_SCROLL_TYPE,
+                                GTK_SCROLL_PAGE_UP);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_Page_Down, 0,
+                                "move-scroll", 1,
+                                GTK_TYPE_SCROLL_TYPE,
+                                GTK_SCROLL_PAGE_DOWN);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_KP_Page_Down, 0,
+                                "move-scroll", 1,
+                                GTK_TYPE_SCROLL_TYPE,
+                                GTK_SCROLL_PAGE_DOWN);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("menu"));
@@ -2380,7 +2438,8 @@ gtk_menu_scroll_item_visible (GtkMenuShell *menu_shell,
   GtkAdjustment *adj;
   double value, page;
 
-  gtk_widget_compute_bounds (menu_item, priv->box, &rect);
+  if (!gtk_widget_compute_bounds (menu_item, priv->box, &rect))
+    return;
 
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (priv->swin));
 
@@ -2433,6 +2492,64 @@ gtk_menu_move_current (GtkMenuShell         *menu_shell,
     }
 
   GTK_MENU_SHELL_CLASS (gtk_menu_parent_class)->move_current (menu_shell, direction);
+}
+
+static void
+gtk_menu_real_move_scroll (GtkMenu       *menu,
+                           GtkScrollType  type)
+{
+  GtkMenuPrivate *priv = menu->priv;
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (menu);
+  int menu_size, item_size;
+  int dist;
+  int i;
+  GtkWidget *item, *next;
+
+  if (menu_shell->priv->active_menu_item)
+    item = menu_shell->priv->active_menu_item;
+  else
+    item = gtk_widget_get_first_child (priv->box);
+
+  menu_size = gtk_widget_get_allocated_height (GTK_WIDGET (menu));
+  item_size = gtk_widget_get_allocated_height (GTK_WIDGET (item));
+
+  dist = menu_size / item_size;
+
+  switch ((guint) type)
+    {
+    case GTK_SCROLL_PAGE_UP:
+      i = 0;
+      while (i < dist)
+        {
+          next = gtk_widget_get_prev_sibling (item);
+          if (next == NULL)
+            break;
+          i++;
+          item = next;
+        }
+      break;
+    case GTK_SCROLL_PAGE_DOWN:
+      i = 0;
+      while (i < dist)
+        {
+          next = gtk_widget_get_next_sibling (item);
+          if (next == NULL)
+            break;
+          i++;
+          item = next;
+        }
+      break;
+    case GTK_SCROLL_START:
+      item = gtk_widget_get_first_child (priv->box);
+      break;
+    case GTK_SCROLL_END:
+      item = gtk_widget_get_last_child (priv->box);
+      break;
+    default:
+      return;
+    }
+
+  gtk_menu_shell_select_item (menu_shell, item);
 }
 
 /**
