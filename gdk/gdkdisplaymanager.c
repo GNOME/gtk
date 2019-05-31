@@ -156,7 +156,7 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkDisplayManagerClass, display_opened),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE,
                   1,
                   GDK_TYPE_DISPLAY);

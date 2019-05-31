@@ -410,7 +410,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkToolbarClass, orientation_changed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__ENUM,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_ORIENTATION);
   /**
@@ -426,7 +426,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkToolbarClass, style_changed),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__ENUM,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_TOOLBAR_STYLE);
   /**

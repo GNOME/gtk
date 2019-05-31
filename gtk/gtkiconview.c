@@ -649,7 +649,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkIconViewClass, item_activated),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__BOXED,
+		  NULL,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_TREE_PATH);
 

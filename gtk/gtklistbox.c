@@ -507,7 +507,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkListBoxClass, row_selected),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_LIST_BOX_ROW);
 
@@ -575,7 +575,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkListBoxClass, row_activated),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_LIST_BOX_ROW);
   signals[ACTIVATE_CURSOR_ROW] =

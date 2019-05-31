@@ -3531,7 +3531,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                            G_SIGNAL_RUN_LAST,
                                            G_STRUCT_OFFSET (GtkFlowBoxClass, child_activated),
                                            NULL, NULL,
-                                           g_cclosure_marshal_VOID__OBJECT,
+                                           NULL,
                                            G_TYPE_NONE, 1,
                                            GTK_TYPE_FLOW_BOX_CHILD);
 

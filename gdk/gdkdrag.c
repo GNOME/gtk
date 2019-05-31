@@ -450,7 +450,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkDragClass, cancel),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__ENUM,
+                  NULL,
                   G_TYPE_NONE, 1, GDK_TYPE_DRAG_CANCEL_REASON);
 
   /**

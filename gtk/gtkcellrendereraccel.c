@@ -264,7 +264,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
                                          G_SIGNAL_RUN_LAST,
                                          G_STRUCT_OFFSET (GtkCellRendererAccelClass, accel_cleared),
                                          NULL, NULL,
-                                         g_cclosure_marshal_VOID__STRING,
+                                         NULL,
                                          G_TYPE_NONE, 1,
                                          G_TYPE_STRING);
 }

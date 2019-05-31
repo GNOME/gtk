@@ -773,7 +773,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, done),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__ENUM,
+		  NULL,
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINT_OPERATION_RESULT);
 
   /**
@@ -794,7 +794,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, begin_print),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINT_CONTEXT);
 
    /**
@@ -932,7 +932,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, end_print),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1, GTK_TYPE_PRINT_CONTEXT);
 
   /**
@@ -1018,7 +1018,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, custom_widget_apply),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__OBJECT,
+		  NULL,
 		  G_TYPE_NONE, 1, GTK_TYPE_WIDGET);
 
    /**
