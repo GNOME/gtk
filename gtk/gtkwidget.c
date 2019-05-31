@@ -1971,7 +1971,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		   G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE | G_SIGNAL_DETAILED | G_SIGNAL_NO_HOOKS,
 		   G_STRUCT_OFFSET (GtkWidgetClass, child_notify),
 		   NULL, NULL,
-		   g_cclosure_marshal_VOID__PARAM,
+		   NULL,
 		   G_TYPE_NONE, 1,
 		   G_TYPE_PARAM);
 

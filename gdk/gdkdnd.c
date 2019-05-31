@@ -289,7 +289,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkDragContextClass, cancel),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__ENUM,
+                  NULL,
                   G_TYPE_NONE, 1, GDK_TYPE_DRAG_CANCEL_REASON);
 
   /**
@@ -311,7 +311,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkDragContextClass, drop_performed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__INT,
+                  NULL,
                   G_TYPE_NONE, 1, G_TYPE_INT);
 
   /**
@@ -356,7 +356,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkDragContextClass, action_changed),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__FLAGS,
+                  NULL,
                   G_TYPE_NONE, 1, GDK_TYPE_DRAG_ACTION);
 }
 

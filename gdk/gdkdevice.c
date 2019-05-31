@@ -367,7 +367,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE, 1, GDK_TYPE_DEVICE_TOOL);
 }
 

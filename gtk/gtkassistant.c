@@ -448,7 +448,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkAssistantClass, prepare),
                   NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
+                  NULL,
                   G_TYPE_NONE, 1, GTK_TYPE_WIDGET);
 
   /**
