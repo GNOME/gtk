@@ -1,0 +1,8 @@
+demo-inspector           Launch the inspector
+demo-start               Start gtk-demo
+listbox-reshare          Reshare a tweet
+listbox-100th-row        Select a 100th row in a list
+puzzle-give-up           Give up without finishing the puzzle
+puzzle-solve             Solve a puzzle
+puzzle-solve-animated    Solve an animated puzzle
+puzzle-solve-large       Solve a puzzle with at least 20 pieces
