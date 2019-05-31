@@ -172,6 +172,7 @@ static void     gtk_menu_get_property      (GObject          *object,
                                             GParamSpec       *pspec);
 static void     gtk_menu_finalize          (GObject          *object);
 static void     gtk_menu_destroy           (GtkWidget        *widget);
+static void     gtk_menu_realize           (GtkWidget        *widget);
 static void     gtk_menu_unrealize         (GtkWidget        *widget);
 static void     gtk_menu_size_allocate     (GtkWidget        *widget,
                                             int               widget_width,
@@ -184,6 +185,10 @@ static void     gtk_menu_motion            (GtkEventController *controller,
                                             gpointer            user_data);
 static void     gtk_menu_grab_notify       (GtkWidget        *widget,
                                             gboolean          was_grabbed);
+static void     gtk_menu_scroll_item_visible (GtkMenuShell    *menu_shell,
+                                              GtkWidget       *menu_item);
+static void     gtk_menu_select_item       (GtkMenuShell     *menu_shell,
+                                            GtkWidget        *menu_item);
 static void     gtk_menu_real_insert       (GtkMenuShell     *menu_shell,
                                             GtkWidget        *child,
                                             gint              position);
@@ -263,6 +268,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   gobject_class->finalize = gtk_menu_finalize;
 
   widget_class->destroy = gtk_menu_destroy;
+  widget_class->realize = gtk_menu_realize;
   widget_class->unrealize = gtk_menu_unrealize;
   widget_class->size_allocate = gtk_menu_size_allocate;
   widget_class->show = gtk_menu_show;
@@ -276,6 +282,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 
   menu_shell_class->submenu_placement = GTK_LEFT_RIGHT;
   menu_shell_class->deactivate = gtk_menu_deactivate;
+  menu_shell_class->select_item = gtk_menu_select_item;
   menu_shell_class->insert = gtk_menu_real_insert;
   menu_shell_class->get_popup_delay = gtk_menu_get_popup_delay;
   menu_shell_class->move_current = gtk_menu_move_current;
@@ -1932,6 +1939,16 @@ gtk_menu_reorder_child (GtkMenu   *menu,
   gtk_box_reorder_child_after (GTK_BOX (menu->priv->box), child, sibling);
 }
 
+static void
+gtk_menu_realize (GtkWidget *widget)
+{
+  GTK_WIDGET_CLASS (gtk_menu_parent_class)->realize (widget);
+
+  if (GTK_MENU_SHELL (widget)->priv->active_menu_item)
+    gtk_menu_scroll_item_visible (GTK_MENU_SHELL (widget),
+                                  GTK_MENU_SHELL (widget)->priv->active_menu_item);
+}
+
 static gboolean
 gtk_menu_focus (GtkWidget       *widget,
                 GtkDirectionType direction)
@@ -2353,6 +2370,40 @@ gtk_menu_position (GtkMenu *menu)
                            rect_anchor_dy);
 }
 
+static void
+gtk_menu_scroll_item_visible (GtkMenuShell *menu_shell,
+                              GtkWidget    *menu_item)
+{
+  GtkMenu *menu = GTK_MENU (menu_shell);
+  GtkMenuPrivate *priv = menu->priv;
+  graphene_rect_t rect;
+  GtkAdjustment *adj;
+  double value, page;
+
+  gtk_widget_compute_bounds (menu_item, priv->box, &rect);
+
+  adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (priv->swin));
+
+  page = gtk_adjustment_get_page_size (adj);
+  value = gtk_adjustment_get_value (adj);
+
+  if (rect.origin.y + rect.size.height > value + page)
+    gtk_adjustment_set_value (adj, rect.origin.y + rect.size.height - page);
+  else if (rect.origin.y < value)
+    gtk_adjustment_set_value (adj, rect.origin.y);
+}
+
+static void
+gtk_menu_select_item (GtkMenuShell *menu_shell,
+                      GtkWidget    *menu_item)
+{
+  GtkMenu *menu = GTK_MENU (menu_shell);
+
+  if (gtk_widget_get_realized (GTK_WIDGET (menu)))
+    gtk_menu_scroll_item_visible (menu_shell, menu_item);
+
+  GTK_MENU_SHELL_CLASS (gtk_menu_parent_class)->select_item (menu_shell, menu_item);
+}
 
 static gint
 gtk_menu_get_popup_delay (GtkMenuShell *menu_shell)
