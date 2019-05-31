@@ -1228,7 +1228,7 @@ update_menu_sensitivity (GtkComboBox *combo_box,
   if (!priv->model)
     return;
 
-  children = gtk_container_get_children (GTK_CONTAINER (menu));
+  children = gtk_menu_shell_get_items (GTK_MENU_SHELL (menu));
 
   for (child = children; child; child = child->next)
     {
@@ -1321,20 +1321,24 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box)
 
       if (!(active && gtk_widget_get_visible (active)))
         {
-          for (i = GTK_MENU_SHELL (priv->popup_widget)->priv->children; i && !active; i = i->next)
+          GList *children;
+          children = gtk_menu_shell_get_items (GTK_MENU_SHELL (priv->popup_widget));
+          for (i = children; i && !active; i = i->next)
             {
               child = i->data;
 
               if (child && gtk_widget_get_visible (child))
                 active = child;
             }
+          g_list_free (children);
         }
 
       if (active)
         {
           gint child_height;
-
-          for (i = GTK_MENU_SHELL (priv->popup_widget)->priv->children; i && i->data != active; i = i->next)
+          GList *children;
+          children = gtk_menu_shell_get_items (GTK_MENU_SHELL (priv->popup_widget));
+          for (i = children; i && i->data != active; i = i->next)
             {
               child = i->data;
 
@@ -1345,6 +1349,7 @@ gtk_combo_box_menu_popup (GtkComboBox    *combo_box)
                   rect_anchor_dy -= child_height;
                 }
             }
+          g_list_free (children);
 
           gtk_widget_measure (active, GTK_ORIENTATION_VERTICAL, -1,
                               &child_height, NULL, NULL, NULL);

@@ -351,9 +351,11 @@ _gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
         {
           GtkWidget *next = g_ptr_array_index (menubars, index + 1);
           GtkMenuShell *new_menushell = GTK_MENU_SHELL (next);
+          GList *children = gtk_menu_shell_get_items (new_menushell);
 
-          if (new_menushell->priv->children)
-            to_activate = new_menushell->priv->children->data;
+          if (children)
+            to_activate = children->data;
+          g_list_free (children);
         }
 
       g_ptr_array_free (menubars, TRUE);
@@ -440,6 +442,30 @@ gtk_menu_bar_remove (GtkContainer *container,
   GtkMenuBar *menu_bar = GTK_MENU_BAR (container);
 
   gtk_container_remove (GTK_CONTAINER (menu_bar->box), widget);
+
+  GTK_CONTAINER_CLASS (gtk_menu_bar_parent_class)->remove (container, widget);
+}
+
+static void
+gtk_menu_bar_reorder_child (GtkMenuBar *menu_bar,
+                            GtkWidget  *child,
+                            gint        position)
+{
+  GtkWidget *sibling = NULL;
+  int i;
+
+  if (position < 0)
+    sibling = gtk_widget_get_last_child (menu_bar->box);
+
+  for (i = 0; i < position; i++)
+    {
+      if (sibling == NULL)
+        sibling = gtk_widget_get_first_child (menu_bar->box);
+      else
+        sibling = gtk_widget_get_next_sibling (sibling);
+    }
+
+  gtk_box_reorder_child_after (GTK_BOX (menu_bar->box), child, sibling);
 }
 
 static void
@@ -450,4 +476,5 @@ gtk_menu_bar_insert (GtkMenuShell *menu_shell,
   GtkMenuBar *menu_bar = GTK_MENU_BAR (menu_shell);
 
   gtk_container_add (GTK_CONTAINER (menu_bar->box), child);
+  gtk_menu_bar_reorder_child (menu_bar, child, position);
 }

@@ -800,6 +800,7 @@ row_changed_cb (GtkTreeModel         *model,
   GtkTreeMenuPrivate *priv = menu->priv;
   gboolean            is_separator = FALSE;
   GtkWidget          *item;
+  GList *children;
 
   item = gtk_tree_menu_get_path_item (menu, path);
 
@@ -814,7 +815,9 @@ row_changed_cb (GtkTreeModel         *model,
             {
               /* Destroy the header item and then the following separator */
               gtk_widget_destroy (item);
-              gtk_widget_destroy (GTK_MENU_SHELL (menu)->priv->children->data);
+              children = gtk_menu_shell_get_items (GTK_MENU_SHELL (menu));
+              gtk_widget_destroy (children->data);
+              g_list_free (children);
 
               priv->menu_with_header = FALSE;
             }
@@ -885,6 +888,7 @@ area_apply_attributes_cb (GtkCellArea          *area,
   GtkWidget          *item;
   gboolean            is_header;
   gboolean            sensitive;
+  GList *children;
 
   path = gtk_tree_model_get_path (tree_model, iter);
 
@@ -905,14 +909,14 @@ area_apply_attributes_cb (GtkCellArea          *area,
               /* For header items we need to set the sensitivity
                * of the following separator item
                */
-              if (GTK_MENU_SHELL (menu)->priv->children &&
-                  GTK_MENU_SHELL (menu)->priv->children->next)
+              children = gtk_menu_shell_get_items (GTK_MENU_SHELL (menu));
+              if (children && children->next)
                 {
-                  GtkWidget *separator =
-                    GTK_MENU_SHELL (menu)->priv->children->next->data;
+                  GtkWidget *separator = children->next->data;
 
                   gtk_widget_set_sensitive (separator, sensitive);
                 }
+              g_list_free (children);
             }
         }
     }

@@ -36,8 +36,6 @@ typedef enum
 
 struct _GtkMenuShellPrivate
 {
-  GList *children;
-
   GtkWidget *active_menu_item; /* This is not an "active" menu item
                                 * (there is no such thing) but rather,
                                 * the selected menu item in that MenuShell,
@@ -92,6 +90,7 @@ void       _gtk_menu_shell_update_mnemonics  (GtkMenuShell *menu_shell);
 void       _gtk_menu_shell_set_keyboard_mode (GtkMenuShell *menu_shell,
                                               gboolean      keyboard_mode);
 gboolean   _gtk_menu_shell_get_keyboard_mode (GtkMenuShell *menu_shell);
+GList     *gtk_menu_shell_get_items (GtkMenuShell *menu_shell);
 
 
 G_END_DECLS

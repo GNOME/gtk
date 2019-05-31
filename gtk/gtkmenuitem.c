@@ -262,7 +262,7 @@ gtk_menu_item_actionable_interface_init (GtkActionableInterface *iface)
   iface->get_action_target_value = gtk_menu_item_get_action_target_value;
 }
 
-static GtkMenuShell *
+GtkMenuShell *
 gtk_menu_item_get_menu_shell (GtkMenuItem *item)
 {
   return GTK_MENU_SHELL (gtk_widget_get_ancestor (GTK_WIDGET (item), GTK_TYPE_MENU_SHELL));

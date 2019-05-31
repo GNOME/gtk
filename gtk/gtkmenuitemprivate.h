@@ -19,6 +19,7 @@
 #define __GTK_MENU_ITEM_PRIVATE_H__
 
 #include <gtk/gtkmenuitem.h>
+#include <gtk/gtkmenushell.h>
 #include <gtk/gtkactionhelperprivate.h>
 #include <gtk/gtkcssnodeprivate.h>
 #include <gtk/gtkeventcontrollermotion.h>
@@ -56,6 +57,8 @@ gboolean _gtk_menu_item_is_selectable        (GtkWidget     *menu_item);
 void     _gtk_menu_item_popup_submenu        (GtkWidget     *menu_item,
                                               gboolean       with_delay);
 void     _gtk_menu_item_popdown_submenu      (GtkWidget     *menu_item);
+GtkMenuShell *
+         gtk_menu_item_get_menu_shell        (GtkMenuItem   *menu_item);
 
 G_END_DECLS
 
