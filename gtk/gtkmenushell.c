@@ -137,12 +137,6 @@ static void gtk_menu_shell_add               (GtkContainer      *container,
                                               GtkWidget         *widget);
 static void gtk_menu_shell_remove            (GtkContainer      *container,
                                               GtkWidget         *widget);
-static void gtk_menu_shell_forall            (GtkContainer      *container,
-                                              GtkCallback        callback,
-                                              gpointer           callback_data);
-static void gtk_menu_shell_real_insert       (GtkMenuShell *menu_shell,
-                                              GtkWidget    *child,
-                                              gint          position);
 static void gtk_real_menu_shell_deactivate   (GtkMenuShell      *menu_shell);
 static GType    gtk_menu_shell_child_type  (GtkContainer      *container);
 static void gtk_menu_shell_real_select_item  (GtkMenuShell      *menu_shell,
@@ -191,7 +185,6 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
 
   container_class->add = gtk_menu_shell_add;
   container_class->remove = gtk_menu_shell_remove;
-  container_class->forall = gtk_menu_shell_forall;
   container_class->child_type = gtk_menu_shell_child_type;
 
   klass->submenu_placement = GTK_TOP_BOTTOM;
@@ -201,7 +194,6 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
   klass->activate_current = gtk_real_menu_shell_activate_current;
   klass->cancel = gtk_real_menu_shell_cancel;
   klass->select_item = gtk_menu_shell_real_select_item;
-  klass->insert = gtk_menu_shell_real_insert;
   klass->move_selected = gtk_menu_shell_real_move_selected;
 
   /**
@@ -553,19 +545,6 @@ gtk_menu_shell_insert (GtkMenuShell *menu_shell,
   g_return_if_fail (GTK_IS_MENU_ITEM (child));
 
   g_signal_emit (menu_shell, menu_shell_signals[INSERT], 0, child, position);
-}
-
-static void
-gtk_menu_shell_real_insert (GtkMenuShell *menu_shell,
-                            GtkWidget    *child,
-                            gint          position)
-{
-  GtkMenuShellPrivate *priv = menu_shell->priv;
-
-  priv->children = g_list_insert (priv->children, child, position);
-
-  if (gtk_widget_get_parent (child) == NULL)
-    gtk_widget_set_parent (child, GTK_WIDGET (menu_shell));
 }
 
 /**
@@ -967,45 +946,13 @@ gtk_menu_shell_remove (GtkContainer *container,
 {
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (container);
   GtkMenuShellPrivate *priv = menu_shell->priv;
-  gint was_visible;
-
-  was_visible = gtk_widget_get_visible (widget);
-  priv->children = g_list_remove (priv->children, widget);
 
   if (widget == priv->active_menu_item)
     {
       g_signal_emit_by_name (priv->active_menu_item, "deselect");
       priv->active_menu_item = NULL;
     }
-
-  gtk_widget_unparent (widget);
-
-  /* Queue resize regardless of gtk_widget_get_visible (container),
-   * since that's what is needed by toplevels.
-   */
-  if (was_visible)
-    gtk_widget_queue_resize (GTK_WIDGET (container));
 }
-
-static void
-gtk_menu_shell_forall (GtkContainer *container,
-                       GtkCallback   callback,
-                       gpointer      callback_data)
-{
-  GtkMenuShell *menu_shell = GTK_MENU_SHELL (container);
-  GtkWidget *child;
-  GList *children;
-
-  children = menu_shell->priv->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      (* callback) (child, callback_data);
-    }
-}
-
 
 static void
 gtk_real_menu_shell_deactivate (GtkMenuShell *menu_shell)
@@ -1197,7 +1144,7 @@ gtk_menu_shell_activate_item (GtkMenuShell *menu_shell,
   g_object_unref (menu_item);
 }
 
-static GList *
+GList *
 gtk_menu_shell_get_items (GtkMenuShell *menu_shell)
 {
   return GTK_MENU_SHELL_GET_CLASS (menu_shell)->get_items (menu_shell);
@@ -1440,13 +1387,13 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
 
     case GTK_MENU_DIR_PREV:
       gtk_menu_shell_move_selected (menu_shell, -1);
-      if (!had_selection && !priv->active_menu_item && priv->children)
+      if (!had_selection && !priv->active_menu_item)
         _gtk_menu_shell_select_last (menu_shell, TRUE);
       break;
 
     case GTK_MENU_DIR_NEXT:
       gtk_menu_shell_move_selected (menu_shell, 1);
-      if (!had_selection && !priv->active_menu_item && priv->children)
+      if (!had_selection && !priv->active_menu_item)
         gtk_menu_shell_select_first (menu_shell, TRUE);
       break;
 
