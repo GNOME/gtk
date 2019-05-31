@@ -282,6 +282,7 @@ start_puzzle (GdkPaintable *puzzle)
   GtkWidget *picture, *grid;
   GtkEventController *controller;
   guint x, y;
+  float aspect_ratio;
 
   /* Remove the old grid (if there is one) */
   grid = gtk_bin_get_child (GTK_BIN (frame));
@@ -292,7 +293,10 @@ start_puzzle (GdkPaintable *puzzle)
   grid = gtk_grid_new ();
   gtk_widget_set_can_focus (grid, TRUE);
   gtk_container_add (GTK_CONTAINER (frame), grid);
-  gtk_aspect_frame_set (GTK_ASPECT_FRAME (frame), 0.5, 0.5, (float) gdk_paintable_get_intrinsic_aspect_ratio (puzzle), FALSE);
+  aspect_ratio = gdk_paintable_get_intrinsic_aspect_ratio (puzzle);
+  if (aspect_ratio == 0.0)
+    aspect_ratio = 1.0;
+  gtk_aspect_frame_set (GTK_ASPECT_FRAME (frame), 0.5, 0.5, aspect_ratio, FALSE);
 
   /* Add a key event controller so people can use the arrow
    * keys to move the puzzle */
@@ -449,7 +453,7 @@ do_sliding_puzzle (GtkWidget *do_widget)
 
       tweak = gtk_menu_button_new ();
       gtk_menu_button_set_popover (GTK_MENU_BUTTON (tweak), popover);
-      gtk_button_set_icon_name (GTK_BUTTON (tweak), "emblem-system-symbolic");
+      gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (tweak), "emblem-system-symbolic");
 
       restart = gtk_button_new_from_icon_name ("view-refresh-symbolic");
       g_signal_connect (restart, "clicked", G_CALLBACK (reshuffle), NULL);

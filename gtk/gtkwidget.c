@@ -4382,8 +4382,15 @@ gtk_widget_allocate (GtkWidget    *widget,
     }
 
   style = gtk_css_node_get_style (priv->cssnode);
+  get_box_margin (style, &margin);
+  get_box_border (style, &border);
+  get_box_padding (style, &padding);
 
   /* Apply CSS transformation */
+  adjusted.x += margin.left;
+  adjusted.y += margin.top;
+  adjusted.width -= margin.left + margin.right;
+  adjusted.height -= margin.top + margin.bottom;
   css_transform = gtk_css_transform_value_get_transform (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_TRANSFORM));
 
   if (css_transform)
@@ -4396,18 +4403,15 @@ gtk_widget_allocate (GtkWidget    *widget,
       transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (- adjusted.width / 2, - adjusted.height / 2));
     }
 
-  get_box_margin (style, &margin);
-  get_box_border (style, &border);
-  get_box_padding (style, &padding);
-  adjusted.x += margin.left + border.left + padding.left;
-  adjusted.y += margin.top + border.top + padding.top;
+  adjusted.x += border.left + padding.left;
+  adjusted.y += border.top + padding.top;
 
   /* Since gtk_widget_measure does it for us, we can be sure here that
    * the given alloaction is large enough for the css margin/bordder/padding */
-  adjusted.width -= margin.left + border.left + padding.left +
-                    margin.right + border.right + padding.right;
-  adjusted.height -= margin.top + border.top + padding.top +
-                     margin.bottom + border.bottom + padding.bottom;
+  adjusted.width -= border.left + padding.left +
+                    border.right + padding.right;
+  adjusted.height -= border.top + padding.top +
+                     border.bottom + padding.bottom;
   if (baseline >= 0)
     baseline -= margin.top + border.top + padding.top;
   if (adjusted.x || adjusted.y)
