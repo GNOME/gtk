@@ -62,13 +62,18 @@ struct _GailTextUtilClass
   GObjectClass parent_class;
 };
 
+GDK_AVAILABLE_IN_ALL
 GType         gail_text_util_get_type      (void);
+GDK_AVAILABLE_IN_ALL
 GailTextUtil* gail_text_util_new           (void);
 
+GDK_AVAILABLE_IN_ALL
 void          gail_text_util_text_setup    (GailTextUtil    *textutil,
                                             const gchar     *text);
+GDK_AVAILABLE_IN_ALL
 void          gail_text_util_buffer_setup  (GailTextUtil    *textutil,
                                             GtkTextBuffer   *buffer);
+GDK_AVAILABLE_IN_ALL
 gchar*        gail_text_util_get_text      (GailTextUtil    *textutil,
                                              gpointer        layout,
                                             GailOffsetType  function,
@@ -76,6 +81,7 @@ gchar*        gail_text_util_get_text      (GailTextUtil    *textutil,
                                             gint            offset,
                                             gint            *start_offset,
                                             gint            *end_offset);
+GDK_AVAILABLE_IN_ALL
 gchar*        gail_text_util_get_substring (GailTextUtil    *textutil,
                                             gint            start_pos,
                                             gint            end_pos);
