@@ -281,6 +281,8 @@ testsuite/reftests/label-ellipsize-small.ref.ui
 testsuite/reftests/label-ellipsize-small.ui
 testsuite/reftests/label-ellipsize-with-big.ref.ui
 testsuite/reftests/label-ellipsize-with-big.ui
+testsuite/reftests/label-fonts.ref.ui
+testsuite/reftests/label-fonts.ui
 testsuite/reftests/label-shadows.ref.ui
 testsuite/reftests/label-shadows.ui
 testsuite/reftests/label-sizing.ref.ui
