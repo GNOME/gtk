@@ -123,12 +123,12 @@ static GdkDisplay *
 get_display_for_surface (GdkSurface *primary,
                          GdkSurface *secondary)
 {
-  GdkDisplay *display = gdk_surface_get_display (primary);
+  GdkDisplay *display = primary->display;
 
   if (display)
     return display;
 
-  display = gdk_surface_get_display (secondary);
+  display = secondary->display;
 
   if (display)
     return display;
@@ -606,7 +606,7 @@ gdk_surface_finalize (GObject *object)
 {
   GdkSurface *surface = GDK_SURFACE (object);
 
-  g_signal_handlers_disconnect_by_func (gdk_surface_get_display (surface),
+  g_signal_handlers_disconnect_by_func (surface->display,
                                         seat_removed_cb, surface);
 
   if (!GDK_SURFACE_DESTROYED (surface))
@@ -895,14 +895,10 @@ static void
 _gdk_surface_destroy_hierarchy (GdkSurface *surface,
                                 gboolean   foreign_destroy)
 {
-  GdkDisplay *display;
-
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;
-
-  display = gdk_surface_get_display (surface);
 
   GDK_SURFACE_GET_CLASS (surface)->destroy (surface, foreign_destroy);
 
@@ -926,7 +922,7 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
   surface->state |= GDK_SURFACE_STATE_WITHDRAWN;
   surface->destroyed = TRUE;
 
-  surface_remove_from_pointer_info (surface, display);
+  surface_remove_from_pointer_info (surface, surface->display);
 
   g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_STATE]);
   g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
@@ -1208,7 +1204,7 @@ gdk_surface_create_cairo_context (GdkSurface *surface)
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
 
-  display = gdk_surface_get_display (surface);
+  display = surface->display;
 
   return g_object_new (GDK_DISPLAY_GET_CLASS (display)->cairo_context_type,
                        "surface", surface,
@@ -1243,7 +1239,7 @@ gdk_surface_create_vulkan_context (GdkSurface  *surface,
       return NULL;
     }
 
-  display = gdk_surface_get_display (surface);
+  display = surface->display;
 
   if (GDK_DISPLAY_GET_CLASS (display)->vk_extension_name == NULL)
     {
@@ -1994,7 +1990,7 @@ gdk_surface_hide (GdkSurface *surface)
       GList *devices, *d;
 
       /* May need to break grabs on children */
-      display = gdk_surface_get_display (surface);
+      display = surface->display;
       seat = gdk_display_get_default_seat (display);
 
       devices = gdk_seat_get_slaves (seat, GDK_SEAT_CAPABILITY_ALL);
@@ -2175,19 +2171,16 @@ gdk_surface_set_cursor_internal (GdkSurface *surface,
                                  GdkCursor *cursor)
 {
   GdkPointerSurfaceInfo *pointer_info;
-  GdkDisplay *display;
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  display = gdk_surface_get_display (surface);
+  g_assert (surface->display == gdk_device_get_display (device));
 
-  g_assert (display == gdk_device_get_display (device));
-
-  pointer_info = _gdk_display_get_pointer_info (display, device);
+  pointer_info = _gdk_display_get_pointer_info (surface->display, device);
 
   if (surface == pointer_info->surface_under_pointer)
-    update_cursor (display, device);
+    update_cursor (surface->display, device);
 }
 
 /**
@@ -2231,11 +2224,7 @@ void
 gdk_surface_set_cursor (GdkSurface *surface,
                         GdkCursor *cursor)
 {
-  GdkDisplay *display;
-
   g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  display = gdk_surface_get_display (surface);
 
   if (surface->cursor)
     {
@@ -2251,7 +2240,7 @@ gdk_surface_set_cursor (GdkSurface *surface,
       if (cursor)
         surface->cursor = g_object_ref (cursor);
 
-      seats = gdk_display_list_seats (display);
+      seats = gdk_display_list_seats (surface->display);
 
       for (s = seats; s; s = s->next)
         {
@@ -2616,8 +2605,6 @@ update_cursor (GdkDisplay *display,
 void
 gdk_surface_beep (GdkSurface *surface)
 {
-  GdkDisplay *display;
-
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (GDK_SURFACE_DESTROYED (surface))
@@ -2626,8 +2613,7 @@ gdk_surface_beep (GdkSurface *surface)
   if (GDK_SURFACE_GET_CLASS (surface)->beep (surface))
     return;
 
-  display = gdk_surface_get_display (surface);
-  gdk_display_beep (display);
+  gdk_display_beep (surface->display);
 }
 
 /**
@@ -3244,7 +3230,7 @@ gdk_surface_fullscreen_on_monitor (GdkSurface  *surface,
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (GDK_IS_MONITOR (monitor));
-  g_return_if_fail (gdk_monitor_get_display (monitor) == gdk_surface_get_display (surface));
+  g_return_if_fail (gdk_monitor_get_display (monitor) == surface->display);
   g_return_if_fail (gdk_monitor_is_valid (monitor));
 
   if (GDK_SURFACE_GET_CLASS (surface)->fullscreen_on_monitor != NULL)
@@ -3492,11 +3478,9 @@ gdk_surface_begin_resize_drag (GdkSurface     *surface,
                                gint            y,
                                guint32         timestamp)
 {
-  GdkDisplay *display;
   GdkDevice *device;
 
-  display = gdk_surface_get_display (surface);
-  device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
+  device = gdk_seat_get_pointer (gdk_display_get_default_seat (surface->display));
   gdk_surface_begin_resize_drag_for_device (surface, edge,
                                             device, button, x, y, timestamp);
 }
@@ -3545,11 +3529,9 @@ gdk_surface_begin_move_drag (GdkSurface *surface,
                              gint       y,
                              guint32    timestamp)
 {
-  GdkDisplay *display;
   GdkDevice *device;
 
-  display = gdk_surface_get_display (surface);
-  device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
+  device = gdk_seat_get_pointer (gdk_display_get_default_seat (surface->display));
   gdk_surface_begin_move_drag_for_device (surface, device, button, x, y, timestamp);
 }
 
@@ -3636,7 +3618,7 @@ gdk_drag_begin (GdkSurface          *surface,
 {
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (gdk_surface_get_display (surface) == gdk_device_get_display (device), NULL);
+  g_return_val_if_fail (surface->display == gdk_device_get_display (device), NULL);
   g_return_val_if_fail (GDK_IS_CONTENT_PROVIDER (content), NULL);
 
   return GDK_SURFACE_GET_CLASS (surface)->drag_begin (surface, device, content, actions, dx, dy);
@@ -3646,14 +3628,10 @@ static void
 gdk_surface_flush_events (GdkFrameClock *clock,
                           void          *data)
 {
-  GdkSurface *surface;
-  GdkDisplay *display;
+  GdkSurface *surface = GDK_SURFACE (data);
 
-  surface = GDK_SURFACE (data);
-
-  display = gdk_surface_get_display (surface);
-  _gdk_event_queue_flush (display);
-  _gdk_display_pause_events (display);
+  _gdk_event_queue_flush (surface->display);
+  _gdk_display_pause_events (surface->display);
 
   gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS);
 
@@ -3664,13 +3642,9 @@ static void
 gdk_surface_resume_events (GdkFrameClock *clock,
                            void          *data)
 {
-  GdkSurface *surface;
-  GdkDisplay *display;
+  GdkSurface *surface = GDK_SURFACE (data);
 
-  surface = GDK_SURFACE (data);
-
-  display = gdk_surface_get_display (surface);
-  _gdk_display_unpause_events (display);
+  _gdk_display_unpause_events (surface->display);
 
   surface->frame_clock_events_paused = FALSE;
 }
