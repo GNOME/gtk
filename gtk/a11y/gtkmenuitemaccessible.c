@@ -527,7 +527,7 @@ gtk_menu_item_accessible_get_keybinding (AtkAction *action,
       if (gtk_bin_get_child (GTK_BIN (temp_item)) == NULL)
         return NULL;
 
-      parent = gtk_widget_get_parent (temp_item);
+      parent = gtk_widget_get_ancestor (temp_item, GTK_TYPE_MENU_SHELL);
       if (!parent)
         /* parent can be NULL when activating a window from the panel */
         return NULL;
@@ -586,7 +586,7 @@ gtk_menu_item_accessible_get_keybinding (AtkAction *action,
         }
     }
 
-  parent = gtk_widget_get_parent (item);
+  parent = gtk_widget_get_ancestor (item, GTK_TYPE_MENU_SHELL);
   if (GTK_IS_MENU (parent))
     {
       child = find_item_label (item);
