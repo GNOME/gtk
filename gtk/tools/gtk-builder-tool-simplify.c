@@ -1266,6 +1266,66 @@ rewrite_paned (Element *element,
 }
 
 static void
+rewrite_dialog (Element *element,
+               MyParserData *data)
+{
+  Element *content_area = NULL;
+  Element *vbox = NULL;
+  Element *action_area = NULL;
+  GList *l;
+
+  for (l = element->children; l; l = l->next)
+    {
+      Element *elt = l->data;
+
+      if (g_str_equal (elt->element_name, "child") &&
+          g_strcmp0 (get_attribute_value (elt, "internal-child"), "vbox") == 0)
+        {
+          content_area = elt;
+          break;
+        }
+    }
+
+  if (!content_area || !content_area->children)
+    return;
+
+  vbox = content_area->children->data;
+
+  for (l = vbox->children; l; l = l->next)
+    {
+      Element *elt = l->data;
+
+      if (g_str_equal (elt->element_name, "child") &&
+          g_strcmp0 (get_attribute_value (elt, "internal-child"), "action_area") == 0)
+        {
+          action_area = elt;
+          break;
+        }
+    }
+
+  if (!action_area)
+    return;
+
+  set_attribute_value (content_area, "internal-child", "content_area");
+  vbox->children = g_list_remove (vbox->children, action_area);
+  action_area->parent = element;
+  element->children = g_list_append (element->children, action_area);
+
+  for (l = action_area->children; l; l = l->next)
+    {
+      Element *elt = l->data;
+
+      if (g_str_equal (elt->element_name, "packing"))
+        {
+          action_area->children = g_list_remove (action_area->children, elt);
+          free_element (elt);
+          break;
+        }
+    }
+
+}
+
+static void
 rewrite_layout_props (Element *element,
                       MyParserData *data)
 {
@@ -1486,6 +1546,10 @@ rewrite_element (Element      *element,
   if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkPaned"))
     rewrite_paned (element, data);
+
+  if (element_is_object_or_template (element) &&
+      g_str_equal (get_class_name (element), "GtkDialog"))
+    rewrite_dialog (element, data);
 
   if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkOverlay"))
