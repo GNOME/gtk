@@ -689,6 +689,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_TYPE_NONE, 2,
 		  G_TYPE_STRING,
 		  G_TYPE_STRING);
+  g_signal_set_va_marshaller (text_cell_renderer_signals [EDITED],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gtk_marshal_VOID__STRING_STRINGv);
 
   gtk_cell_renderer_class_set_accessible_type (cell_class, GTK_TYPE_TEXT_CELL_ACCESSIBLE);
 }

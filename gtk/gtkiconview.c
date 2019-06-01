@@ -859,6 +859,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
+  g_signal_set_va_marshaller (icon_view_signals[ACTIVATE_CURSOR_ITEM],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__VOIDv);
   
   /**
    * GtkIconView::move-cursor:
@@ -891,6 +894,9 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 		  G_TYPE_BOOLEAN, 2,
 		  GTK_TYPE_MOVEMENT_STEP,
 		  G_TYPE_INT);
+  g_signal_set_va_marshaller (icon_view_signals[MOVE_CURSOR],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__ENUM_INTv);
 
   /* Key bindings */
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_a, GDK_CONTROL_MASK, 

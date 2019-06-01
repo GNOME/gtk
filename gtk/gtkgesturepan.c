@@ -44,6 +44,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 
 typedef struct _GtkGesturePanPrivate GtkGesturePanPrivate;
 
@@ -256,9 +257,13 @@ gtk_gesture_pan_class_init (GtkGesturePanClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGesturePanClass, pan),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__ENUM_DOUBLE,
                   G_TYPE_NONE, 2, GTK_TYPE_PAN_DIRECTION,
                   G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[PAN],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__ENUM_DOUBLEv);
 }
 
 static void

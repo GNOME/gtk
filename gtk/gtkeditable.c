@@ -74,6 +74,14 @@
 
 static void gtk_editable_base_init (gpointer g_class);
 
+enum {
+  CHANGED,
+  DELETE_TEXT,
+  INSERT_TEXT,
+  N_SIGNALS
+};
+
+static guint signals[N_SIGNALS];
 
 GType
 gtk_editable_get_type (void)
@@ -122,16 +130,20 @@ gtk_editable_base_init (gpointer g_class)
        * is possible to modify the inserted text, or prevent
        * it from being inserted entirely.
        */
-      g_signal_new (I_("insert-text"),
-		    GTK_TYPE_EDITABLE,
-		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkEditableInterface, insert_text),
-		    NULL, NULL,
-		    _gtk_marshal_VOID__STRING_INT_POINTER,
-		    G_TYPE_NONE, 3,
-		    G_TYPE_STRING,
-		    G_TYPE_INT,
-		    G_TYPE_POINTER);
+      signals[INSERT_TEXT] =
+        g_signal_new (I_("insert-text"),
+                      GTK_TYPE_EDITABLE,
+                      G_SIGNAL_RUN_LAST,
+                      G_STRUCT_OFFSET (GtkEditableInterface, insert_text),
+                      NULL, NULL,
+                      _gtk_marshal_VOID__STRING_INT_POINTER,
+                      G_TYPE_NONE, 3,
+                      G_TYPE_STRING,
+                      G_TYPE_INT,
+                      G_TYPE_POINTER);
+      g_signal_set_va_marshaller (signals[INSERT_TEXT],
+                                  G_TYPE_FROM_CLASS (g_class),
+                                  _gtk_marshal_VOID__STRING_INT_POINTERv);
 
       /**
        * GtkEditable::delete-text:
@@ -149,15 +161,19 @@ gtk_editable_base_init (gpointer g_class)
        * and @end_pos parameters are interpreted as for
        * gtk_editable_delete_text().
        */
-      g_signal_new (I_("delete-text"),
-		    GTK_TYPE_EDITABLE,
-		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkEditableInterface, delete_text),
-		    NULL, NULL,
-		    _gtk_marshal_VOID__INT_INT,
-		    G_TYPE_NONE, 2,
-		    G_TYPE_INT,
-		    G_TYPE_INT);
+      signals[DELETE_TEXT] =
+        g_signal_new (I_("delete-text"),
+                      GTK_TYPE_EDITABLE,
+                      G_SIGNAL_RUN_LAST,
+                      G_STRUCT_OFFSET (GtkEditableInterface, delete_text),
+                      NULL, NULL,
+                      _gtk_marshal_VOID__INT_INT,
+                      G_TYPE_NONE, 2,
+                      G_TYPE_INT,
+                      G_TYPE_INT);
+      g_signal_set_va_marshaller (signals[DELETE_TEXT],
+                                  G_TYPE_FROM_CLASS (g_class),
+                                  _gtk_marshal_VOID__INT_INTv);
       /**
        * GtkEditable::changed:
        * @editable: the object which received the signal
@@ -171,13 +187,14 @@ gtk_editable_base_init (gpointer g_class)
        * the new content, and may cause multiple ::notify::text signals
        * to be emitted).
        */ 
-      g_signal_new (I_("changed"),
-		    GTK_TYPE_EDITABLE,
-		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkEditableInterface, changed),
-		    NULL, NULL,
-		    NULL,
-		    G_TYPE_NONE, 0);
+      signals[CHANGED] =
+        g_signal_new (I_("changed"),
+                      GTK_TYPE_EDITABLE,
+                      G_SIGNAL_RUN_LAST,
+                      G_STRUCT_OFFSET (GtkEditableInterface, changed),
+                      NULL, NULL,
+                      NULL,
+                      G_TYPE_NONE, 0);
 
       initialized = TRUE;
     }

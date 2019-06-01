@@ -40,6 +40,7 @@
 #include "gtkgesturemultipressprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 
 typedef struct _GtkGestureMultiPressPrivate GtkGestureMultiPressPrivate;
 
@@ -336,9 +337,13 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureMultiPressClass, pressed),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__INT_DOUBLE_DOUBLE,
                   G_TYPE_NONE, 3, G_TYPE_INT,
                   G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[PRESSED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__INT_DOUBLE_DOUBLEv);
 
   /**
    * GtkGestureMultiPress::released:
@@ -359,9 +364,13 @@ gtk_gesture_multi_press_class_init (GtkGestureMultiPressClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureMultiPressClass, released),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__INT_DOUBLE_DOUBLE,
                   G_TYPE_NONE, 3, G_TYPE_INT,
                   G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[RELEASED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__INT_DOUBLE_DOUBLEv);
   /**
    * GtkGestureMultiPress::stopped:
    * @gesture: the object which received the signal

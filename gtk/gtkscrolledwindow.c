@@ -851,8 +851,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
     g_signal_new (I_("edge-overshot"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST, 0,
-                  NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 1, GTK_TYPE_POSITION_TYPE);
 
   /**
@@ -876,8 +875,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
     g_signal_new (I_("edge-reached"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST, 0,
-                  NULL, NULL,
-                  g_cclosure_marshal_generic,
+                  NULL, NULL, NULL,
                   G_TYPE_NONE, 1, GTK_TYPE_POSITION_TYPE);
 
   binding_set = gtk_binding_set_by_class (class);
