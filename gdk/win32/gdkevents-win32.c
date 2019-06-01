@@ -1647,6 +1647,27 @@ should_window_be_always_on_top (GdkSurface *window)
 }
 
 static void
+restack_children (GdkSurface *window)
+{
+  GList *popup;
+
+  for (popup = window->children; popup; popup = popup->next)
+    {
+      GdkSurface *child = GDK_SURFACE (popup->data);
+      /* Windows doesn't have a function to put window A *above* window B.
+       * Instead we put window A immediately *below* window B,
+       * then put window B immediately below window A.
+       * SWP_NOSENDCHANGING prevents our own handler from triggering.
+       */
+      SetWindowPos (GDK_SURFACE_HWND (child), GDK_SURFACE_HWND (window), 0, 0, 0, 0,
+                    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOSENDCHANGING);
+      g_print ("Put popup %p (%p) above %p (%p)\n", child, GDK_SURFACE_HWND (child), window, GDK_SURFACE_HWND (window));
+      SetWindowPos (GDK_SURFACE_HWND (window), GDK_SURFACE_HWND (child), 0, 0, 0, 0,
+                    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
+    }
+}
+
+static void
 ensure_stacking_on_unminimize (MSG *msg)
 {
   HWND rover;
@@ -1687,7 +1708,7 @@ ensure_stacking_on_unminimize (MSG *msg)
   if (lowest_transient != NULL)
     {
       GDK_NOTE (EVENTS,
-		g_print (" restacking %p above %p",
+		g_print (" restacking %p below %p",
 			 msg->hwnd, lowest_transient));
       SetWindowPos (msg->hwnd, lowest_transient, 0, 0, 0, 0,
 		    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
@@ -1770,8 +1791,20 @@ ensure_stacking_on_activate_app (MSG       *msg,
       impl->type_hint == GDK_SURFACE_TYPE_HINT_DIALOG ||
       impl->transient_owner != NULL)
     {
+      GdkSurface *child = window;
+      GdkSurface *owner = impl->transient_owner;
+
       SetWindowPos (msg->hwnd, HWND_TOP, 0, 0, 0, 0,
 		    SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
+      /* Bing the whole hierarchy of transients back up */
+      while (owner != NULL)
+        {
+          SetWindowPos (GDK_SURFACE_HWND (owner), GDK_SURFACE_HWND (child), 0, 0, 0, 0,
+                        SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
+          restack_children (owner);
+          child = owner;
+          owner = GDK_WIN32_SURFACE (owner)->transient_owner;
+        }
       return;
     }
 
@@ -1810,7 +1843,7 @@ ensure_stacking_on_activate_app (MSG       *msg,
           ((window_ontop && rover_ontop) || (!window_ontop && !rover_ontop)))
         {
 	  GDK_NOTE (EVENTS,
-		    g_print (" restacking %p above %p",
+		    g_print (" restacking %p below %p",
 			     msg->hwnd, rover));
 	  SetWindowPos (msg->hwnd, rover, 0, 0, 0, 0,
 			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
@@ -3090,7 +3123,11 @@ gdk_event_translate (MSG  *msg,
 	     transient-type windows. */
 	  if (!(old_state & GDK_SURFACE_STATE_ICONIFIED) &&
 	      (new_state & GDK_SURFACE_STATE_ICONIFIED))
-	    ensure_stacking_on_unminimize (msg);
+            {
+	      ensure_stacking_on_unminimize (msg);
+	      restack_children (window);
+
+	    }
 	}
 
       /* Show, New size or position => configure event */
@@ -3430,7 +3467,8 @@ gdk_event_translate (MSG  *msg,
 				   (LOWORD (msg->wParam) == WA_INACTIVE ? "INACTIVE" : "???"))),
 				 HIWORD (msg->wParam) ? " minimized" : "",
 				 (HWND) msg->lParam));
-      if (window->surface_type == GDK_SURFACE_POPUP)
+      if (window->surface_type == GDK_SURFACE_POPUP ||
+          window->surface_type == GDK_SURFACE_TEMP)
         {
           /* Popups cannot be activated or de-activated - 
            * they only support keyboard focus, which GTK
@@ -3453,6 +3491,23 @@ gdk_event_translate (MSG  *msg,
 	  break;
 	}
 
+      if (LOWORD (msg->wParam) == WA_INACTIVE && msg->lParam != 0)
+        {
+          GdkSurface *other_surface = gdk_win32_handle_table_lookup ((HWND) msg->lParam);
+          if (other_surface != NULL &&
+              (other_surface->surface_type == GDK_SURFACE_POPUP ||
+               other_surface->surface_type == GDK_SURFACE_TEMP))
+            {
+              /* We're being deactivated in favour of some popup or temp window.
+               * Since only toplevels can have visual focus, pretend that
+               * nothing happened.
+               */
+              *ret_valp = 0;
+              return_val = TRUE;
+              break;
+            }
+        }
+
       if (LOWORD (msg->wParam) == WA_INACTIVE)
 	gdk_synthesize_surface_state (window, GDK_SURFACE_STATE_FOCUSED, 0);
       else
@@ -3472,7 +3527,10 @@ gdk_event_translate (MSG  *msg,
 				 msg->wParam ? "YES" : "NO",
 				 (gint64) msg->lParam));
       if (msg->wParam && GDK_SURFACE_IS_MAPPED (window))
-	ensure_stacking_on_activate_app (msg, window);
+	{
+	  ensure_stacking_on_activate_app (msg, window);
+	  restack_children (window);
+	}
       break;
     case WM_NCHITTEST:
       /* TODO: pass all messages to DwmDefWindowProc() first! */
