@@ -2000,7 +2000,7 @@ get_parent_menubar (GtkWidget *menuitem)
   GtkMenuShell *menu_shell;
   GtkWidget *attach = NULL;
 
-  menu_shell = GTK_MENU_SHELL (gtk_widget_get_parent (menuitem));
+  menu_shell = GTK_MENU_SHELL (gtk_widget_get_ancestor (menuitem, GTK_TYPE_MENU_SHELL));
 
   g_assert (GTK_IS_MENU_SHELL (menu_shell));
 
@@ -2008,7 +2008,7 @@ get_parent_menubar (GtkWidget *menuitem)
     {
       if (GTK_IS_MENU (menu_shell) && 
 	  (attach = gtk_menu_get_attach_widget (GTK_MENU (menu_shell))) != NULL)
-	menu_shell = GTK_MENU_SHELL (gtk_widget_get_parent (attach));
+	menu_shell = GTK_MENU_SHELL (gtk_widget_get_ancestor (attach, GTK_TYPE_MENU_SHELL));
       else
 	menu_shell = NULL;
     }

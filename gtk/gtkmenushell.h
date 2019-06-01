@@ -75,6 +75,7 @@ struct _GtkMenuShellClass
   gint     (*get_popup_delay)  (GtkMenuShell *menu_shell);
   gboolean (*move_selected)    (GtkMenuShell *menu_shell,
                                 gint          distance);
+  GList *  (*get_items)        (GtkMenuShell *menu_shell);
 
   /*< private >*/
   gpointer padding[8];

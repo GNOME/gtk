@@ -364,10 +364,6 @@ void      gdk_event_set_coords          (GdkEvent *event,
                                          gdouble   x,
                                          gdouble   y);
 GDK_AVAILABLE_IN_ALL
-gboolean  gdk_event_get_root_coords	(const GdkEvent *event,
-					 gdouble	*x_root,
-					 gdouble	*y_root);
-GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_button          (const GdkEvent *event,
                                          guint          *button);
 GDK_AVAILABLE_IN_ALL
