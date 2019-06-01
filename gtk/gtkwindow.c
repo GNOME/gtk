@@ -56,7 +56,7 @@
 #include "gtkmessagedialog.h"
 #include "gtkmnemonichash.h"
 #include "gtkmenu.h"
-#include "gtkmenubar.h"
+#include "gtkmenubarprivate.h"
 #include "gtkmenushellprivate.h"
 #include "gtkpointerfocusprivate.h"
 #include "gtkpopoverprivate.h"

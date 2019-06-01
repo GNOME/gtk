@@ -65,7 +65,7 @@
 #include "gtklabelprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkmenubar.h"
+#include "gtkmenubarprivate.h"
 #include "gtkmenuitemprivate.h"
 #include "gtkmnemonichash.h"
 #include "gtkmodelmenuitem.h"

@@ -40,6 +40,7 @@
 #include "config.h"
 
 #include "gtkmenubar.h"
+#include "gtkmenubarprivate.h"
 
 #include "gtkbindings.h"
 #include "gtkmain.h"
