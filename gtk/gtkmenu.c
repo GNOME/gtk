@@ -172,6 +172,7 @@ static void     gtk_menu_get_property      (GObject          *object,
                                             GValue           *value,
                                             GParamSpec       *pspec);
 static void     gtk_menu_finalize          (GObject          *object);
+static void     gtk_menu_dispose           (GObject          *object);
 static void     gtk_menu_destroy           (GtkWidget        *widget);
 static void     gtk_menu_realize           (GtkWidget        *widget);
 static void     gtk_menu_unrealize         (GtkWidget        *widget);
@@ -258,6 +259,17 @@ gtk_menu_get_items (GtkMenuShell *menu_shell)
 }
 
 static void
+gtk_menu_forall (GtkContainer *container,
+                 GtkCallback   callback,
+                 gpointer      data)
+{
+  GtkMenuPrivate *priv = GTK_MENU (container)->priv;
+
+  if (priv->box)
+    gtk_container_forall (GTK_CONTAINER (priv->box), callback, data);
+}
+
+static void
 gtk_menu_class_init (GtkMenuClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
@@ -269,6 +281,7 @@ gtk_menu_class_init (GtkMenuClass *class)
   gobject_class->set_property = gtk_menu_set_property;
   gobject_class->get_property = gtk_menu_get_property;
   gobject_class->finalize = gtk_menu_finalize;
+  gobject_class->dispose = gtk_menu_dispose;
 
   widget_class->destroy = gtk_menu_destroy;
   widget_class->realize = gtk_menu_realize;
@@ -282,6 +295,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 
   container_class->add = gtk_menu_add;
   container_class->remove = gtk_menu_remove;
+  container_class->forall = gtk_menu_forall;
 
   menu_shell_class->submenu_placement = GTK_LEFT_RIGHT;
   menu_shell_class->deactivate = gtk_menu_deactivate;
@@ -870,12 +884,19 @@ gtk_menu_destroy (GtkWidget *widget)
 static void
 gtk_menu_finalize (GObject *object)
 {
+  G_OBJECT_CLASS (gtk_menu_parent_class)->finalize (object);
+}
+
+static void
+gtk_menu_dispose (GObject *object)
+{
   GtkMenu *menu = GTK_MENU (object);
   GtkMenuPrivate *priv = menu->priv;
 
   g_clear_pointer (&priv->swin, gtk_widget_unparent);
+  priv->box = NULL;
 
-  G_OBJECT_CLASS (gtk_menu_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_menu_parent_class)->dispose (object);
 }
 
 static void

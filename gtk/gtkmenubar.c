@@ -113,13 +113,44 @@ gtk_menu_bar_get_items (GtkMenuShell *menu_shell)
 }
 
 static void
+gtk_menu_bar_finalize (GObject *object)
+{
+  G_OBJECT_CLASS (gtk_menu_bar_parent_class)->finalize (object);
+}
+
+static void
+gtk_menu_bar_dispose (GObject *object)
+{
+  GtkMenuBar *menu_bar = GTK_MENU_BAR (object);
+
+  g_clear_pointer (&menu_bar->box, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_menu_bar_parent_class)->dispose (object);
+}
+
+static void
+gtk_menu_bar_forall (GtkContainer *container,
+                     GtkCallback   callback,
+                     gpointer      data)
+{
+  GtkMenuBar *menu_bar = GTK_MENU_BAR (container);
+
+  if (menu_bar->box)
+    gtk_container_forall (GTK_CONTAINER (menu_bar->box), callback, data);
+}
+
+static void
 gtk_menu_bar_class_init (GtkMenuBarClass *class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
   GtkMenuShellClass *menu_shell_class = GTK_MENU_SHELL_CLASS (class);
 
   GtkBindingSet *binding_set;
+
+  object_class->finalize = gtk_menu_bar_finalize;
+  object_class->dispose = gtk_menu_bar_dispose;
 
   widget_class->measure = gtk_menu_bar_measure;
   widget_class->size_allocate = gtk_menu_bar_size_allocate;
@@ -128,6 +159,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 
   container_class->add = gtk_menu_bar_add;
   container_class->remove = gtk_menu_bar_remove;
+  container_class->forall = gtk_menu_bar_forall;
 
   menu_shell_class->insert = gtk_menu_bar_insert;
   menu_shell_class->submenu_placement = GTK_TOP_BOTTOM;
