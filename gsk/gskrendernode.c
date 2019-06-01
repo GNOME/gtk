@@ -145,6 +145,13 @@ gsk_render_node_get_node_type (GskRenderNode *node)
   return node->node_class->node_type;
 }
 
+static inline
+GskRenderNodeType
+_gsk_render_node_get_node_type (GskRenderNode *node)
+{
+  return node->node_class->node_type;
+}
+
 /**
  * gsk_render_node_get_bounds:
  * @node: a #GskRenderNode
@@ -247,7 +254,7 @@ gsk_render_node_can_diff (GskRenderNode *node1,
   if (node1 == node2)
     return TRUE;
 
-  if (gsk_render_node_get_node_type (node1) != gsk_render_node_get_node_type (node2))
+  if (_gsk_render_node_get_node_type (node1) != _gsk_render_node_get_node_type (node2))
     return FALSE;
 
   return node1->node_class->can_diff (node1, node2);
@@ -301,7 +308,7 @@ gsk_render_node_diff (GskRenderNode  *node1,
   if (node1 == node2)
     return;
 
-  if (gsk_render_node_get_node_type (node1) != gsk_render_node_get_node_type (node2))
+  if (_gsk_render_node_get_node_type (node1) != _gsk_render_node_get_node_type (node2))
     return gsk_render_node_diff_impossible (node1, node2, region);
 
   return node1->node_class->diff (node1, node2, region);
