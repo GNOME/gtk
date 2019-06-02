@@ -20,6 +20,17 @@ icon_data_free (gpointer p)
   g_free (p);
 }
 
+static void
+free_atlas (gpointer v)
+{
+  GskGLTextureAtlas *atlas = v;
+
+  g_assert (atlas->image.texture_id == 0);
+  gsk_gl_texture_atlas_free (atlas);
+
+  g_free (atlas);
+}
+
 void
 gsk_gl_icon_cache_init (GskGLIconCache *self,
                         GskRenderer    *renderer,
@@ -28,7 +39,7 @@ gsk_gl_icon_cache_init (GskGLIconCache *self,
   self->renderer = renderer;
   self->gl_driver = gl_driver;
 
-  self->atlases = g_ptr_array_new ();
+  self->atlases = g_ptr_array_new_with_free_func ((GDestroyNotify)free_atlas);
   self->icons = g_hash_table_new_full (NULL, NULL, NULL, icon_data_free);
 }
 
@@ -41,7 +52,14 @@ gsk_gl_icon_cache_free (GskGLIconCache *self)
     {
       GskGLTextureAtlas *atlas = g_ptr_array_index (self->atlases, i);
 
+      if (atlas->image.texture_id != 0)
+        {
+          gsk_gl_image_destroy (&atlas->image, self->gl_driver);
+          atlas->image.texture_id = 0;
+        }
+
       gsk_gl_texture_atlas_free (atlas);
+
       g_free (atlas);
     }
   g_ptr_array_free (self->atlases, TRUE);
@@ -90,6 +108,12 @@ gsk_gl_icon_cache_begin_frame (GskGLIconCache *self)
             {
               if (icon_data->atlas == atlas)
                 g_hash_table_iter_remove (&iter);
+            }
+
+          if (atlas->image.texture_id != 0)
+            {
+              gsk_gl_image_destroy (&atlas->image, self->gl_driver);
+              atlas->image.texture_id = 0;
             }
 
           g_ptr_array_remove_index_fast (self->atlases, i);
