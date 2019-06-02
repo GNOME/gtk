@@ -24,13 +24,11 @@ typedef struct
 
   float dx_before;
   float dy_before;
-
-  GskTransformCategory category;
 } OpsMatrixMetadata;
 
 typedef struct
 {
-  graphene_matrix_t matrix;
+  GskTransform *transform;
   OpsMatrixMetadata metadata;
 } MatrixStackEntry;
 
@@ -236,8 +234,8 @@ typedef struct
 
 typedef struct
 {
+  GskTransform *modelview;
   GskRoundedRect clip;
-  graphene_matrix_t modelview;
   graphene_matrix_t projection;
   int source_texture;
   graphene_rect_t viewport;
@@ -278,11 +276,11 @@ typedef struct
 
   /* Stack of modelview matrices */
   GArray *mv_stack;
-  /* Pointer into mv_stack */
-  const graphene_matrix_t *current_modelview;
+  GskTransform *current_modelview;
 
   /* Same thing */
   GArray *clip_stack;
+  /* Pointer into clip_stack */
   const GskRoundedRect *current_clip;
 } RenderOpBuilder;
 
@@ -298,11 +296,9 @@ void              ops_pop_debug_group     (RenderOpBuilder         *builder);
 
 void              ops_finish             (RenderOpBuilder         *builder);
 void              ops_push_modelview     (RenderOpBuilder         *builder,
-                                          const graphene_matrix_t *mv,
-                                          GskTransformCategory     mv_category);
+                                          GskTransform            *transform);
 void              ops_set_modelview      (RenderOpBuilder         *builder,
-                                          const graphene_matrix_t *mv,
-                                          GskTransformCategory     mv_category);
+                                          GskTransform            *transform);
 void              ops_pop_modelview      (RenderOpBuilder         *builder);
 float             ops_get_scale          (const RenderOpBuilder   *builder);
 
