@@ -381,7 +381,7 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
   GHashTableIter iter;
   GlyphCacheKey *key;
   GskGLCachedGlyph *value;
-  guint dropped = 0;
+  GHashTable *removed = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   self->timestamp++;
 
@@ -421,18 +421,29 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
               atlas->image->texture_id = 0;
             }
 
-          /* Remove all glyphs that point to this atlas */
-          g_hash_table_iter_init (&iter, self->hash_table);
-          while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
-            {
-              if (value->atlas == atlas)
-                g_hash_table_iter_remove (&iter);
-            }
-          /* TODO: The above loop inside this other loop could be slow... */
+          g_hash_table_add (removed, atlas);
 
           g_ptr_array_remove_index (self->atlases, i);
-        }
+       }
     }
 
-  GSK_RENDERER_NOTE(self->renderer, GLYPH_CACHE, g_message ("Dropped %d glyphs", dropped));
+  if (g_hash_table_size (removed) > 0)
+    {
+      guint dropped = 0;
+
+      /* Remove all glyphs whose atlas was removed */
+      g_hash_table_iter_init (&iter, self->hash_table);
+      while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
+        {
+          if (g_hash_table_contains (removed, value->atlas))
+            {
+              g_hash_table_iter_remove (&iter);
+              dropped++;
+            }
+        }
+
+      GSK_RENDERER_NOTE(self->renderer, GLYPH_CACHE, if (dropped > 0) g_message ("Dropped %d glyphs", dropped));
+    }
+
+  g_hash_table_unref (removed);
 }
