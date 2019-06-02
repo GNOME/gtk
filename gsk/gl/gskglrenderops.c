@@ -113,11 +113,16 @@ extract_matrix_metadata (GskTransform      *transform,
       md->scale_y = 1;
     break;
 
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+      gsk_transform_to_affine (transform,
+                               &md->scale_x, &md->scale_y,
+                               &md->translate_x, &md->translate_y);
+    break;
+
     case GSK_TRANSFORM_CATEGORY_UNKNOWN:
     case GSK_TRANSFORM_CATEGORY_ANY:
     case GSK_TRANSFORM_CATEGORY_3D:
     case GSK_TRANSFORM_CATEGORY_2D:
-    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
       {
         graphene_vec3_t col1;
         graphene_vec3_t col2;
@@ -125,8 +130,8 @@ extract_matrix_metadata (GskTransform      *transform,
 
         gsk_transform_to_matrix (transform, &m);
 
-        /* TODO: Is this event possible (or correct) now that we use a GskTransform here? */
-
+        /* TODO: 90% sure this is incorrect. But we should never hit this code
+         * path anyway. */
         md->translate_x = graphene_matrix_get_value (&m, 3, 0);
         md->translate_y = graphene_matrix_get_value (&m, 3, 1);
 
@@ -161,27 +166,7 @@ ops_transform_bounds_modelview (const RenderOpBuilder *builder,
 
   head = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
 
-  switch (gsk_transform_get_category (head->transform))
-    {
-    case GSK_TRANSFORM_CATEGORY_IDENTITY:
-      *dst = *src;
-      break;
-
-    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      *dst = *src;
-      dst->origin.x += head->metadata.translate_x;
-      dst->origin.y += head->metadata.translate_y;
-      break;
-
-    /* TODO: Handle scale */
-    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
-    case GSK_TRANSFORM_CATEGORY_ANY:
-    case GSK_TRANSFORM_CATEGORY_3D:
-    case GSK_TRANSFORM_CATEGORY_2D:
-    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
-    default:
-      gsk_transform_transform_bounds (builder->current_modelview, src, dst);
-    }
+  gsk_transform_transform_bounds (builder->current_modelview, src, dst);
 
   dst->origin.x += builder->dx * head->metadata.scale_x;
   dst->origin.y += builder->dy * head->metadata.scale_y;
@@ -433,14 +418,15 @@ ops_push_modelview (RenderOpBuilder *builder,
   if (G_LIKELY (builder->mv_stack->len >= 2))
     {
       const MatrixStackEntry *cur;
-      GskTransform *t;
+      GskTransform *t = NULL;
 
       cur = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 2);
       /* Multiply given matrix with current modelview */
 
-      t = gsk_transform_transform (cur->transform, transform);
-      t = gsk_transform_translate (t, &(graphene_point_t) { builder->dx * scale, builder->dy * scale });
+      t = gsk_transform_translate (cur->transform, &(graphene_point_t) { builder->dx * scale, builder->dy * scale});
+      t = gsk_transform_transform (t, transform);
       entry->transform = t;
+
     }
   else
     {

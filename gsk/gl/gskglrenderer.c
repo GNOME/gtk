@@ -877,9 +877,6 @@ render_transform_node (GskGLRenderer   *self,
 
     case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
       {
-        graphene_matrix_t mat;
-
-        gsk_transform_to_matrix (node_transform, &mat);
         ops_push_modelview (builder, node_transform);
         gsk_gl_renderer_add_render_ops (self, child, builder);
         ops_pop_modelview (builder);
