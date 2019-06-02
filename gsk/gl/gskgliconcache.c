@@ -89,7 +89,7 @@ gsk_gl_icon_cache_begin_frame (GskGLIconCache *self)
               const int w = icon_data->texture_rect.size.width  * ATLAS_SIZE;
               const int h = icon_data->texture_rect.size.height * ATLAS_SIZE;
 
-              gsk_gl_texture_atlas_mark_unused (icon_data->atlas, w, h);
+              gsk_gl_texture_atlas_mark_unused (icon_data->atlas, w + 2, h + 2);
               icon_data->used = FALSE;
             }
           /* We do NOT remove the icon here. Instead, We wait until we drop the entire atlas.
@@ -138,7 +138,7 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
           const int w = icon_data->texture_rect.size.width  * ATLAS_SIZE;
           const int h = icon_data->texture_rect.size.height * ATLAS_SIZE;
 
-          gsk_gl_texture_atlas_mark_used (icon_data->atlas, w, h);
+          gsk_gl_texture_atlas_mark_used (icon_data->atlas, w + 2, h + 2);
           icon_data->used = TRUE;
         }
 
@@ -164,8 +164,12 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
       {
         atlas = g_ptr_array_index (self->atlases, i);
 
-        if (gsk_gl_texture_atlas_pack (atlas, twidth, theight, &packed_x, &packed_y))
-          break;
+        if (gsk_gl_texture_atlas_pack (atlas, twidth + 2, theight + 2, &packed_x, &packed_y))
+          {
+            packed_x += 1;
+            packed_y += 1;
+            break;
+          }
 
         atlas = NULL;
       }
@@ -177,7 +181,9 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
         gsk_gl_texture_atlas_init (atlas, ATLAS_SIZE, ATLAS_SIZE);
         gsk_gl_image_create (&atlas->image, self->gl_driver, atlas->width, atlas->height);
         /* Pack it onto that one, which surely has enought space... */
-        gsk_gl_texture_atlas_pack (atlas, twidth, theight, &packed_x, &packed_y);
+        gsk_gl_texture_atlas_pack (atlas, twidth + 2, theight + 2, &packed_x, &packed_y);
+        packed_x += 1;
+        packed_y += 1;
 
         g_ptr_array_add (self->atlases, atlas);
       }
