@@ -308,15 +308,15 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache *cache,
     {
       const guint age = cache->timestamp - value->timestamp;
 
-      if (MAX_AGE <= age && age < MAX_AGE + CHECK_INTERVAL)
+      if (MAX_AGE <= age)
         {
           GskGLGlyphAtlas *atlas = value->atlas;
 
           if (atlas)
             atlas->old_pixels -= value->draw_width * value->draw_height;
-
-          value->timestamp = cache->timestamp;
         }
+
+      value->timestamp = cache->timestamp;
     }
 
   if (create && value == NULL)
