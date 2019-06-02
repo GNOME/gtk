@@ -2,6 +2,8 @@
 #include "gskgltextureatlasprivate.h"
 #include "gdk/gdktextureprivate.h"
 
+#include <epoxy/gl.h>
+
 #define ATLAS_SIZE    (1024)
 #define MAX_FRAME_AGE (5 * 60)
 #define MAX_UNUSED_RATIO 0.8
@@ -179,7 +181,7 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
         /* No atlas has enough space, so create a new one... */
         atlas = g_malloc (sizeof (GskGLTextureAtlas));
         gsk_gl_texture_atlas_init (atlas, ATLAS_SIZE, ATLAS_SIZE);
-        gsk_gl_image_create (&atlas->image, self->gl_driver, atlas->width, atlas->height);
+        gsk_gl_image_create (&atlas->image, self->gl_driver, atlas->width, atlas->height, GL_NEAREST, GL_NEAREST);
         /* Pack it onto that one, which surely has enought space... */
         gsk_gl_texture_atlas_pack (atlas, twidth + 2, theight + 2, &packed_x, &packed_y);
         packed_x += 1;
