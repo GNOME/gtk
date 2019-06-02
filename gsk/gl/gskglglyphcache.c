@@ -407,7 +407,7 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
 #if 0
           static int kk;
 
-          g_message ("Dropping cache... Ratio: %f",
+          g_message ("Dropping glyph cache... Ratio: %f",
                      gsk_gl_texture_atlas_get_unused_ratio (atlas));
           gsk_gl_image_write_to_png (&atlas->image, self->gl_driver,
                                      g_strdup_printf ("dropped_%d.png", kk++));
