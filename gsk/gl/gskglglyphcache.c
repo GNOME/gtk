@@ -33,13 +33,15 @@ static void     glyph_cache_key_free   (gpointer      v);
 static void     glyph_cache_value_free (gpointer      v);
 
 static GskGLGlyphAtlas *
-create_atlas (GskGLGlyphCache *cache)
+create_atlas (GskGLGlyphCache *cache,
+              int              width,
+              int              height)
 {
   GskGLGlyphAtlas *atlas;
 
   atlas = g_new0 (GskGLGlyphAtlas, 1);
-  atlas->width = ATLAS_SIZE;
-  atlas->height = ATLAS_SIZE;
+  atlas->width = MAX (width, ATLAS_SIZE);
+  atlas->height = MAX (height, ATLAS_SIZE);
   atlas->y0 = 1;
   atlas->y = 1;
   atlas->x = 1;
@@ -70,7 +72,6 @@ gsk_gl_glyph_cache_init (GskGLGlyphCache *self,
   self->hash_table = g_hash_table_new_full (glyph_cache_hash, glyph_cache_equal,
                                             glyph_cache_key_free, glyph_cache_value_free);
   self->atlases = g_ptr_array_new_with_free_func (free_atlas);
-  g_ptr_array_add (self->atlases, create_atlas (self));
 
   self->renderer = renderer;
   self->gl_driver = gl_driver;
@@ -167,7 +168,7 @@ add_to_cache (GskGLGlyphCache  *cache,
 
   if (i == cache->atlases->len)
     {
-      atlas = create_atlas (cache);
+      atlas = create_atlas (cache, width + 2, height + 2);
       g_ptr_array_add (cache->atlases, atlas);
     }
 
