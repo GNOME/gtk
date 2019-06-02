@@ -17,6 +17,7 @@ typedef struct
 static void
 icon_data_free (gpointer p)
 {
+  g_free (p);
 }
 
 void
