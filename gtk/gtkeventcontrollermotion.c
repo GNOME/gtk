@@ -31,6 +31,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkmarshalers.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtktypebuiltins.h"
@@ -256,13 +257,16 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_MOTION,
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL,
-                  NULL,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE_ENUM_ENUM,
                   G_TYPE_NONE,
                   4,
                   G_TYPE_DOUBLE,
                   G_TYPE_DOUBLE,
                   GDK_TYPE_CROSSING_MODE,
                   GDK_TYPE_NOTIFY_TYPE);
+  g_signal_set_va_marshaller (signals[ENTER],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__DOUBLE_DOUBLE_ENUM_ENUMv);
 
   /**
    * GtkEventControllerMotion::leave:
@@ -277,11 +281,14 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_MOTION,
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL,
-                  NULL,
+                  _gtk_marshal_VOID__ENUM_ENUM,
                   G_TYPE_NONE,
                   2,
                   GDK_TYPE_CROSSING_MODE,
                   GDK_TYPE_NOTIFY_TYPE);
+  g_signal_set_va_marshaller (signals[LEAVE],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__ENUM_ENUMv);
 
   /**
    * GtkEventControllerMotion::motion:
@@ -296,8 +303,11 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_MOTION,
                   G_SIGNAL_RUN_FIRST,
                   0, NULL, NULL,
-                  NULL,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[MOTION],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__DOUBLE_DOUBLEv);
 }
 
 static void
