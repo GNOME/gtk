@@ -18,6 +18,7 @@ node_parser = executable(
 )
 
 compare_render_tests = [
+  'big-glyph',
   'blend-normal',
   'blend-difference',
   'clip-coordinates-3d',
