@@ -33,7 +33,7 @@ static void     glyph_cache_key_free   (gpointer      v);
 static void     glyph_cache_value_free (gpointer      v);
 
 static GskGLGlyphAtlas *
-create_atlas (GskGLGlyphCache *cache,
+create_atlas (GskGLGlyphCache *self,
               int              width,
               int              height)
 {
@@ -46,6 +46,8 @@ create_atlas (GskGLGlyphCache *cache,
   atlas->y = 1;
   atlas->x = 1;
   atlas->image = NULL;
+
+  GSK_RENDERER_NOTE(self->renderer, GLYPH_CACHE, g_message ("Create atlas %d x %d", atlas->width, atlas->height));
 
   return atlas;
 }
