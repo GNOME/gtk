@@ -46,6 +46,7 @@ compare_render_tests = [
   'empty-text',
   'empty-texture',
   'empty-transform',
+  'huge-glyph',
   'opacity_clip',
   'outset_shadow_offset_both',
   'outset_shadow_offset_x',

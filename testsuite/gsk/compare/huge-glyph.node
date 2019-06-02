@@ -1,0 +1,5 @@
+text {
+  font:"Cantarell 1000";
+  glyphs:"ABC";
+  offset: 0 0;
+}
