@@ -158,14 +158,14 @@ add_to_cache (GskGLGlyphCache  *cache,
       g_ptr_array_add (cache->atlases, atlas);
 
       was_packed = gsk_gl_texture_atlas_pack (atlas,
-                                              width, height,
+                                              width + 2, height + 2,
                                               &packed_x, &packed_y);
 
       g_assert (was_packed);
     }
 
-  value->tx = (float)packed_x / atlas->width;
-  value->ty = (float)packed_y / atlas->height;
+  value->tx = (float)(packed_x + 1) / atlas->width;
+  value->ty = (float)(packed_y + 1) / atlas->height;
   value->tw = (float)width    / atlas->width;
   value->th = (float)height   / atlas->height;
   value->used = TRUE;
