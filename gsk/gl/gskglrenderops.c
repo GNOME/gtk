@@ -450,7 +450,7 @@ ops_push_modelview (RenderOpBuilder *builder,
   entry->metadata.dx_before = builder->dx;
   entry->metadata.dy_before = builder->dy;
 
-  extract_matrix_metadata (transform, &entry->metadata);
+  extract_matrix_metadata (entry->transform, &entry->metadata);
 
   builder->dx = 0;
   builder->dy = 0;
