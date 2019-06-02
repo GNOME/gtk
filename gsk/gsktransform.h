@@ -80,37 +80,37 @@ GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_new                       (void);
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_transform                 (GskTransform                   *next,
-                                                                 GskTransform                   *other);
+                                                                 GskTransform                   *other) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
-GskTransform *          gsk_transform_invert                    (GskTransform                   *self);
+GskTransform *          gsk_transform_invert                    (GskTransform                   *self) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_matrix                    (GskTransform                   *next,
-                                                                 const graphene_matrix_t        *matrix);
+                                                                 const graphene_matrix_t        *matrix) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_translate                 (GskTransform                   *next,
-                                                                 const graphene_point_t         *point);
+                                                                 const graphene_point_t         *point) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_translate_3d              (GskTransform                   *next,
-                                                                 const graphene_point3d_t       *point);
+                                                                 const graphene_point3d_t       *point) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_rotate                    (GskTransform                   *next,
-                                                                 float                           angle);
+                                                                 float                           angle) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_rotate_3d                 (GskTransform                   *next,
                                                                  float                           angle,
-                                                                 const graphene_vec3_t          *axis);
+                                                                 const graphene_vec3_t          *axis) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_scale                     (GskTransform                   *next,
                                                                  float                           factor_x,
-                                                                 float                           factor_y);
+                                                                 float                           factor_y) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_scale_3d                  (GskTransform                   *next,
                                                                  float                           factor_x,
                                                                  float                           factor_y,
-                                                                 float                           factor_z);
+                                                                 float                           factor_z) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_perspective               (GskTransform                   *next,
-                                                                 float                           depth);
+                                                                 float                           depth) G_GNUC_WARN_UNUSED_RESULT;
 
 GDK_AVAILABLE_IN_ALL
 void                    gsk_transform_transform_bounds          (GskTransform                   *self,
