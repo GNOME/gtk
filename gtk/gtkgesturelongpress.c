@@ -40,6 +40,7 @@
 #include "gtkdnd.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 
 typedef struct _GtkGestureLongPressPrivate GtkGestureLongPressPrivate;
 
@@ -303,8 +304,12 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureLongPressClass, pressed),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE,
                   G_TYPE_NONE, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[PRESSED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__DOUBLE_DOUBLEv);
   /**
    * GtkGestureLongPress::cancelled:
    * @gesture: the object which received the signal

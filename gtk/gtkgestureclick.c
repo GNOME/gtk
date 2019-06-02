@@ -40,6 +40,7 @@
 #include "gtkgestureclickprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 
 typedef struct _GtkGestureClickPrivate GtkGestureClickPrivate;
 
@@ -365,9 +366,13 @@ gtk_gesture_click_class_init (GtkGestureClickClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureClickClass, pressed),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__INT_DOUBLE_DOUBLE,
                   G_TYPE_NONE, 3, G_TYPE_INT,
                   G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[PRESSED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__INT_DOUBLE_DOUBLEv);
 
   /**
    * GtkGestureClick::released:
@@ -386,9 +391,13 @@ gtk_gesture_click_class_init (GtkGestureClickClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureClickClass, released),
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  _gtk_marshal_VOID__INT_DOUBLE_DOUBLE,
                   G_TYPE_NONE, 3, G_TYPE_INT,
                   G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  g_signal_set_va_marshaller (signals[RELEASED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__INT_DOUBLE_DOUBLEv);
   /**
    * GtkGestureClick::stopped:
    * @gesture: the object which received the signal
@@ -422,10 +431,14 @@ gtk_gesture_click_class_init (GtkGestureClickClass *klass)
     g_signal_new (I_("unpaired-release"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL,
+                  0, NULL, NULL,
+                  _gtk_marshal_VOID__DOUBLE_DOUBLE_UINT_BOXED,
                   G_TYPE_NONE, 4,
                   G_TYPE_DOUBLE, G_TYPE_DOUBLE,
                   G_TYPE_UINT, GDK_TYPE_EVENT_SEQUENCE);
+  g_signal_set_va_marshaller (signals[UNPAIRED_RELEASE],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__DOUBLE_DOUBLE_UINT_BOXEDv);
 }
 
 static void

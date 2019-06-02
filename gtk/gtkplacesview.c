@@ -2234,10 +2234,14 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
                         G_OBJECT_CLASS_TYPE (object_class),
                         G_SIGNAL_RUN_FIRST,
                         G_STRUCT_OFFSET (GtkPlacesViewClass, open_location),
-                        NULL, NULL, NULL,
+                        NULL, NULL,
+                        _gtk_marshal_VOID__OBJECT_FLAGS,
                         G_TYPE_NONE, 2,
                         G_TYPE_OBJECT,
                         GTK_TYPE_PLACES_OPEN_FLAGS);
+  g_signal_set_va_marshaller (places_view_signals [OPEN_LOCATION],
+                              G_TYPE_FROM_CLASS (object_class),
+                              _gtk_marshal_VOID__OBJECT_FLAGSv);
 
   /*
    * GtkPlacesView::show-error-message:
