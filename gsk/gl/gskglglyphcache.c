@@ -446,4 +446,20 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
     }
 
   g_hash_table_unref (removed);
+
+#if 0
+  for (i = 0; i < self->atlases->len; i++)
+    {
+      GskGLGlyphAtlas *atlas = g_ptr_array_index (self->atlases, i);
+
+      if (atlas->image)
+        {
+          char *filename;
+
+          filename = g_strdup_printf ("glyphatlas%d-%ld.png", i, self->timestamp);
+          gsk_gl_image_write_to_png (atlas->image, self->gl_driver, filename);
+          g_free (filename);
+        }
+    }
+#endif
 }
