@@ -756,6 +756,12 @@ gsk_gl_driver_init_texture_empty (GskGLDriver *self,
   glBindTexture (GL_TEXTURE_2D, 0);
 }
 
+static gboolean
+filter_uses_mipmaps (int filter)
+{
+  return filter != GL_NEAREST && filter != GL_LINEAR;
+}
+
 void
 gsk_gl_driver_init_texture_with_surface (GskGLDriver     *self,
                                          int              texture_id,
@@ -791,6 +797,6 @@ gsk_gl_driver_init_texture_with_surface (GskGLDriver     *self,
   t->min_filter = min_filter;
   t->mag_filter = mag_filter;
 
-  if (t->min_filter != GL_NEAREST)
+  if (filter_uses_mipmaps (t->min_filter))
     glGenerateMipmap (GL_TEXTURE_2D);
 }
