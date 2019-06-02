@@ -124,6 +124,36 @@ gsk_gl_icon_cache_begin_frame (GskGLIconCache *self)
     }
 }
 
+/* FIXME: this could probably be done more efficiently */
+static cairo_surface_t *
+pad_surface (cairo_surface_t *surface)
+{
+  cairo_surface_t *padded;
+  cairo_t *cr;
+  cairo_pattern_t *pattern;
+  cairo_matrix_t matrix;
+
+  padded = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                       cairo_image_surface_get_width (surface) + 2,
+                                       cairo_image_surface_get_height (surface) + 2);
+
+  cr = cairo_create (padded);
+
+  pattern = cairo_pattern_create_for_surface (surface);
+  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
+
+  cairo_matrix_init_translate (&matrix, -1, -1);
+  cairo_pattern_set_matrix (pattern, &matrix);
+
+  cairo_set_source (cr, pattern);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
+  cairo_pattern_destroy (pattern);
+
+  return padded;
+}
+
 void
 gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
                                  GdkTexture      *texture,
@@ -158,6 +188,7 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     guint i, p;
     GskImageRegion region;
     cairo_surface_t *surface;
+    cairo_surface_t *padded_surface;
 
     g_assert (twidth  < ATLAS_SIZE);
     g_assert (theight < ATLAS_SIZE);
@@ -204,11 +235,12 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
 
     /* actually upload the texture */
     surface = gdk_texture_download_surface (texture);
-    region.x = packed_x;
-    region.y = packed_y;
-    region.width = twidth;
-    region.height = theight;
-    region.data = cairo_image_surface_get_data (surface);
+    padded_surface = pad_surface (surface);
+    region.x = packed_x - 1;
+    region.y = packed_y - 1;
+    region.width = twidth + 2;
+    region.height = theight + 2;
+    region.data = cairo_image_surface_get_data (padded_surface);
 
     gsk_gl_image_upload_region (&atlas->image, self->gl_driver, &region);
 
@@ -216,6 +248,7 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     *out_texture_rect = icon_data->texture_rect;
 
     cairo_surface_destroy (surface);
+    cairo_surface_destroy (padded_surface);
 
 #if 0
     /* Some obvious debugging */
