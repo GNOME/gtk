@@ -1498,7 +1498,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
 
       texture_id = gsk_gl_driver_create_texture (self->gl_driver, texture_width, texture_height);
       gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
-      gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id);
+      gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id, GL_NEAREST, GL_NEAREST);
       gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
                                           "Outset Shadow Temp %d", texture_id);
       render_target = gsk_gl_driver_create_render_target (self->gl_driver, texture_id, FALSE, FALSE);
@@ -1535,7 +1535,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
 
       blurred_texture_id = gsk_gl_driver_create_permanent_texture (self->gl_driver, texture_width, texture_height);
       gsk_gl_driver_bind_source_texture (self->gl_driver, blurred_texture_id);
-      gsk_gl_driver_init_texture_empty (self->gl_driver, blurred_texture_id);
+      gsk_gl_driver_init_texture_empty (self->gl_driver, blurred_texture_id, GL_NEAREST, GL_NEAREST);
       gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, blurred_texture_id,
                                           "Outset Shadow Cache %d", blurred_texture_id);
       blurred_render_target = gsk_gl_driver_create_render_target (self->gl_driver, blurred_texture_id, TRUE, TRUE);
@@ -2797,7 +2797,7 @@ add_offscreen_ops (GskGLRenderer         *self,
 
   texture_id = gsk_gl_driver_create_texture (self->gl_driver, width, height);
   gsk_gl_driver_bind_source_texture (self->gl_driver, texture_id);
-  gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id);
+  gsk_gl_driver_init_texture_empty (self->gl_driver, texture_id, GL_NEAREST, GL_NEAREST);
   gdk_gl_context_label_object_printf (self->gl_context, GL_TEXTURE, texture_id,
                                       "Offscreen<%s> %d", child_node->node_class->type_name, texture_id);
 

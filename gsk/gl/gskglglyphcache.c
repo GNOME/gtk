@@ -356,7 +356,7 @@ gsk_gl_glyph_cache_get_glyph_image (GskGLGlyphCache        *self,
 
   if (atlas->image.texture_id == 0)
     {
-      gsk_gl_image_create (&atlas->image, self->gl_driver, atlas->width, atlas->height);
+      gsk_gl_image_create (&atlas->image, self->gl_driver, atlas->width, atlas->height, GL_NEAREST, GL_NEAREST);
       gdk_gl_context_label_object_printf (gsk_gl_driver_get_gl_context (self->gl_driver),
                                           GL_TEXTURE, atlas->image.texture_id,
                                           "Glyph atlas %d", atlas->image.texture_id);

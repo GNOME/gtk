@@ -24,7 +24,9 @@ typedef struct
 void gsk_gl_image_create         (GskGLImage           *self,
                                   GskGLDriver          *gl_driver,
                                   int                   width,
-                                  int                   height);
+                                  int                   height,
+                                  int                   min_filter,
+                                  int                   mag_filter);
 void gsk_gl_image_destroy        (GskGLImage           *self,
                                   GskGLDriver          *gl_driver);
 void gsk_gl_image_write_to_png   (const GskGLImage     *self,

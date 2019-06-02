@@ -762,7 +762,9 @@ gsk_gl_driver_destroy_texture (GskGLDriver *self,
 
 void
 gsk_gl_driver_init_texture_empty (GskGLDriver *self,
-                                  int          texture_id)
+                                  int          texture_id,
+                                  int          min_filter,
+                                  int          mag_filter)
 {
   Texture *t;
 
@@ -780,6 +782,9 @@ gsk_gl_driver_init_texture_empty (GskGLDriver *self,
       g_critical ("You must bind the texture before initializing it.");
       return;
     }
+
+  t->min_filter = min_filter;
+  t->mag_filter = mag_filter;
 
   gsk_gl_driver_set_texture_parameters (self, t->min_filter, t->mag_filter);
 
