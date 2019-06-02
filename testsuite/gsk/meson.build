@@ -54,6 +54,8 @@ compare_render_tests = [
   'scaled-cairo',
   'shadow-in-opacity',
   'texture-url',
+  'color-matrix-identity',
+  'clip-nested1',
 ]
 
 renderers = [

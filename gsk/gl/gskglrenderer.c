@@ -1072,13 +1072,14 @@ gsk_rounded_rect_intersection (const GskRoundedRect *outer,
   gboolean contained_x;
   gboolean contained_y;
 
-  if (graphene_rect_contains_rect (outer_bounds, inner_bounds))
+  get_inner_rect (outer, &outer_inner);
+
+  if (graphene_rect_contains_rect (&outer_inner, inner_bounds))
     {
       *out_intersection = *inner;
       return TRUE;
     }
 
-  get_inner_rect (outer, &outer_inner);
   get_inner_rect (inner, &inner_inner);
 
   contained_x = outer_inner.origin.x <= inner_inner.origin.x &&
