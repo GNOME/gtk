@@ -1118,7 +1118,7 @@ gsk_perspective_transform_to_matrix (GskTransform      *transform,
   GskPerspectiveTransform *self = (GskPerspectiveTransform *) transform;
   float f[16] = { 1.f, 0.f, 0.f,  0.f,
                   0.f, 1.f, 0.f,  0.f,
-                  0.f, 0.f, 1.f, -1.f / self->depth,
+                  0.f, 0.f, 1.f, self->depth ? -1.f / self->depth : 0.f,
                   0.f, 0.f, 0.f,  1.f };
 
   graphene_matrix_init_from_float (out_matrix, f);
