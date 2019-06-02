@@ -94,6 +94,13 @@ G_DEFINE_BOXED_TYPE (GskTransform, gsk_transform,
 static gboolean
 gsk_transform_is_identity (GskTransform *self);
 
+static inline gboolean
+gsk_transform_has_class (GskTransform            *self,
+                         const GskTransformClass *transform_class)
+{
+  return self != NULL && self->transform_class == transform_class;
+}
+
 /*< private >
  * gsk_transform_alloc:
  * @transform_class: class structure for this self
@@ -638,6 +645,15 @@ gsk_transform_translate_3d (GskTransform             *next,
 {
   GskTranslateTransform *result;
   
+  if (gsk_transform_has_class (next, &GSK_TRANSLATE_TRANSFORM_CLASS))
+    {
+      GskTranslateTransform *t = (GskTranslateTransform *) next;
+      return gsk_transform_translate_3d (next->next,
+                                         &GRAPHENE_POINT3D_INIT(t->point.x + point->x,
+                                                                t->point.y + point->y,
+                                                                t->point.z + point->z));
+    }
+
   result = gsk_transform_alloc (&GSK_TRANSLATE_TRANSFORM_CLASS,
                                 point->z == 0.0 ? GSK_TRANSFORM_CATEGORY_2D_TRANSLATE
                                                 : GSK_TRANSFORM_CATEGORY_3D,
@@ -777,9 +793,14 @@ GskTransform *
 gsk_transform_rotate (GskTransform *next,
                       float         angle)
 {
-  GskRotateTransform *result = gsk_transform_alloc (&GSK_ROTATE_TRANSFORM_CLASS,
-                                                    GSK_TRANSFORM_CATEGORY_2D,
-                                                    next);
+  GskRotateTransform *result;
+
+  if (gsk_transform_has_class (next, &GSK_ROTATE_TRANSFORM_CLASS))
+    return gsk_transform_rotate (next->next, ((GskRotateTransform *) next)->angle + angle);
+
+  result = gsk_transform_alloc (&GSK_ROTATE_TRANSFORM_CLASS,
+                                GSK_TRANSFORM_CATEGORY_2D,
+                                next);
 
   result->angle = angle;
 
@@ -1083,6 +1104,15 @@ gsk_transform_scale_3d (GskTransform *next,
 {
   GskScaleTransform *result;
   
+  if (gsk_transform_has_class (next, &GSK_SCALE_TRANSFORM_CLASS))
+    {
+      GskScaleTransform *scale = (GskScaleTransform *) next;
+      return gsk_transform_scale_3d (next->next,
+                                     scale->factor_x * factor_x,
+                                     scale->factor_y * factor_y,
+                                     scale->factor_z * factor_z);
+    }
+
   result = gsk_transform_alloc (&GSK_SCALE_TRANSFORM_CLASS,
                                 factor_z != 1.0 ? GSK_TRANSFORM_CATEGORY_3D
                                                 : GSK_TRANSFORM_CATEGORY_2D_AFFINE,
@@ -1200,6 +1230,9 @@ gsk_transform_perspective (GskTransform *next,
 {
   GskPerspectiveTransform *result;
   
+  if (gsk_transform_has_class (next, &GSK_PERSPECTIVE_TRANSFORM_CLASS))
+    return gsk_transform_perspective (next->next, ((GskPerspectiveTransform *) next)->depth + depth);
+
   result = gsk_transform_alloc (&GSK_PERSPECTIVE_TRANSFORM_CLASS,
                                 GSK_TRANSFORM_CATEGORY_ANY,
                                 next);
