@@ -190,11 +190,10 @@ add_to_cache (GskGLGlyphCache  *cache,
 #ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (cache->renderer, GLYPH_CACHE))
     {
-      g_print ("Glyph cache:\n");
       for (i = 0; i < cache->atlases->len; i++)
         {
           atlas = g_ptr_array_index (cache->atlases, i);
-          g_print ("\tGskGLGlyphAtlas %d (%dx%d): %.2g%% old pixels, filled to %d, %d / %d\n",
+          g_message ("atlas %d (%dx%d): %.2g%% old pixels, filled to %d, %d / %d",
                    i, atlas->width, atlas->height,
                    100.0 * (double)atlas->old_pixels / (double)(atlas->width * atlas->height),
                    atlas->x, atlas->y0, atlas->y);
