@@ -53,7 +53,9 @@ void            gsk_gl_driver_bind_source_texture       (GskGLDriver     *driver
                                                          int              texture_id);
 
 void            gsk_gl_driver_init_texture_empty        (GskGLDriver     *driver,
-                                                         int              texture_id);
+                                                         int              texture_id,
+                                                         int              min_filter,
+                                                         int              max_filter);
 void            gsk_gl_driver_init_texture_with_surface (GskGLDriver     *driver,
                                                          int              texture_id,
                                                          cairo_surface_t *surface,
