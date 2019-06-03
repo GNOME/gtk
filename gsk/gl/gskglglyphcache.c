@@ -386,13 +386,14 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
   GHashTableIter iter;
   GlyphCacheKey *key;
   GskGLCachedGlyph *value;
-  GHashTable *removed = g_hash_table_new (g_direct_hash, g_direct_equal);
+  GHashTable *removed;
 
   self->timestamp++;
 
-
   if ((self->timestamp - 1) % CHECK_INTERVAL != 0)
     return;
+
+  removed = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   /* look for glyphs that have grown old since last time */
   g_hash_table_iter_init (&iter, self->hash_table);
