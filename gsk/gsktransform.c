@@ -1412,7 +1412,7 @@ gsk_transform_to_matrix (GskTransform      *self,
  * |[<!-- language="plain" -->
  *   | xx yx |   |  a  b  0 |
  *   | xy yy | = |  c  d  0 |
- *   | x0 y0 |   | tx ty  1 |
+ *   | dx dy |   | tx ty  1 |
  * ]|
  *
  * This function can be used to convert between a #GskTransform
