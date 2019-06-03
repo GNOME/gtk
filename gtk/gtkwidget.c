@@ -8000,6 +8000,8 @@ gtk_widget_finalize (GObject *object)
   g_free (priv->name);
 
   g_clear_object (&priv->accessible);
+  g_clear_pointer (&priv->transform, gsk_transform_unref);
+  g_clear_pointer (&priv->allocated_transform, gsk_transform_unref);
 
   gtk_widget_clear_path (widget);
 
