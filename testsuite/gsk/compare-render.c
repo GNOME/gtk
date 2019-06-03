@@ -4,6 +4,46 @@
 #include <stdlib.h>
 #include "reftest-compare.h"
 
+static char *arg_output_dir = NULL;
+
+static const char *
+get_output_dir (void)
+{
+  static const char *output_dir = NULL;
+  GError *error = NULL;
+
+  if (output_dir)
+    return output_dir;
+
+  if (arg_output_dir)
+    {
+      GFile *file = g_file_new_for_commandline_arg (arg_output_dir);
+      output_dir = g_file_get_path (file);
+      g_object_unref (file);
+    }
+  else
+    {
+      output_dir = g_get_tmp_dir ();
+    }
+
+  if (!g_file_test (output_dir, G_FILE_TEST_EXISTS))
+    {
+      GFile *file;
+
+      file = g_file_new_for_path (output_dir);
+      if (!g_file_make_directory_with_parents (file, NULL, &error))
+        {
+          g_error ("Failed to create output dir: %s", error->message);
+          g_error_free (error);
+          return NULL;
+        }
+
+      g_object_unref (file);
+    }
+
+  return output_dir;
+}
+
 char *
 file_replace_extension (const char *old_file,
                         const char *old_ext,
@@ -30,7 +70,7 @@ get_output_file (const char *file,
   char *result, *base;
   char *name;
 
-  dir = g_get_tmp_dir ();
+  dir = get_output_dir ();
   base = g_path_get_basename (file);
   name = file_replace_extension (base, orig_ext, new_ext);
 
@@ -67,8 +107,14 @@ deserialize_error_func (const GtkCssSection *section,
   free (section_str);
 }
 
+static const GOptionEntry options[] = {
+  { "output", 0, 0, G_OPTION_ARG_FILENAME, &arg_output_dir,
+    "Directory to save image files to", "DIR" },
+  { NULL }
+};
+
 /*
- * Arguments:
+ * Non-option arguments:
  *   1) .node file to compare
  *   2) .png file to compare the rendered .node file to
  */
@@ -85,6 +131,18 @@ main (int argc, char **argv)
   const char *node_file;
   const char *png_file;
   gboolean success = TRUE;
+  GError *error = NULL;
+  GOptionContext *context;
+
+  context = g_option_context_new ("- run GSK node tests");
+  g_option_context_add_main_entries (context, options, NULL);
+  g_option_context_set_ignore_unknown_options (context, TRUE);
+
+  if (!g_option_context_parse (context, &argc, &argv, &error))
+    {
+      g_error ("Option parsing failed: %s\n", error->message);
+      return 1;
+    }
 
   g_assert (argc == 3);
 
