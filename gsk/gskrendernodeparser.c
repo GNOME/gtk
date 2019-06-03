@@ -1903,6 +1903,12 @@ cairo_write_array (void                *closure,
 }
 
 static void
+cairo_destroy_array (gpointer array)
+{
+  g_byte_array_free (array, TRUE);
+}
+
+static void
 render_node_print (Printer       *p,
                    GskRenderNode *node)
 {
@@ -2394,6 +2400,7 @@ render_node_print (Printer       *p,
 #ifdef CAIRO_HAS_SCRIPT_SURFACE
             if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_RECORDING)
               {
+                static const cairo_user_data_key_t cairo_is_stupid_key;
                 cairo_device_t *script;
 
                 array = g_byte_array_new ();
@@ -2407,11 +2414,17 @@ render_node_print (Printer       *p,
                     g_free (b64);
                   }
 
-              cairo_device_destroy (script);
-              g_byte_array_free (array, TRUE);
-            }
+                /* because Cairo is stupid and writes to the device after we finished it,
+                 * we can't just
+                g_byte_array_free (array, TRUE);
+                 * but have to
+                 */
+                g_byte_array_set_size (array, 0);
+                cairo_device_set_user_data (script, &cairo_is_stupid_key, array, cairo_destroy_array);
+                cairo_device_destroy (script);
+              }
 #endif
-        }
+          }
 
         end_node (p);
       }
