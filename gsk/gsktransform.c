@@ -644,7 +644,10 @@ gsk_transform_translate_3d (GskTransform             *next,
                             const graphene_point3d_t *point)
 {
   GskTranslateTransform *result;
-  
+
+  if (graphene_point3d_equal (point, graphene_point3d_zero ()))
+    return gsk_transform_ref (next);
+
   if (gsk_transform_has_class (next, &GSK_TRANSLATE_TRANSFORM_CLASS))
     {
       GskTranslateTransform *t = (GskTranslateTransform *) next;
@@ -797,6 +800,9 @@ gsk_transform_rotate (GskTransform *next,
 {
   GskRotateTransform *result;
 
+  if (angle == 0.0f)
+    return gsk_transform_ref (next);
+
   if (gsk_transform_has_class (next, &GSK_ROTATE_TRANSFORM_CLASS))
     {
       GskTransform *r  = gsk_transform_rotate (gsk_transform_ref (next->next),
@@ -921,9 +927,12 @@ gsk_transform_rotate_3d (GskTransform          *next,
                          const graphene_vec3_t *axis)
 {
   GskRotate3dTransform *result;
-  
+
   if (graphene_vec3_get_x (axis) == 0.0 && graphene_vec3_get_y (axis) == 0.0)
     return gsk_transform_rotate (next, angle);
+
+  if (angle == 0.0f)
+    return gsk_transform_ref (next);
 
   result = gsk_transform_alloc (&GSK_ROTATE3D_TRANSFORM_CLASS,
                                 GSK_TRANSFORM_CATEGORY_3D,
@@ -1110,7 +1119,10 @@ gsk_transform_scale_3d (GskTransform *next,
                         float         factor_z)
 {
   GskScaleTransform *result;
-  
+
+  if (factor_x == 1 && factor_y == 1 && factor_z == 1)
+    return gsk_transform_ref (next);
+
   if (gsk_transform_has_class (next, &GSK_SCALE_TRANSFORM_CLASS))
     {
       GskScaleTransform *scale = (GskScaleTransform *) next;
