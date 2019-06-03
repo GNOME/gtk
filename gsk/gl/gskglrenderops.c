@@ -367,7 +367,7 @@ ops_set_modelview_internal (RenderOpBuilder *builder,
     }
 
   if (builder->current_program != NULL)
-    builder->current_program_state->modelview = gsk_transform_ref (transform);
+    builder->current_program_state->modelview = transform;
 }
 
 /* This sets the modelview to the given one without looking at the
@@ -386,7 +386,7 @@ ops_set_modelview (RenderOpBuilder *builder,
   g_array_set_size (builder->mv_stack, builder->mv_stack->len + 1);
   entry = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
 
-  entry->transform = transform;
+  entry->transform = gsk_transform_ref (transform);
 
   entry->metadata.dx_before = builder->dx;
   entry->metadata.dy_before = builder->dy;
