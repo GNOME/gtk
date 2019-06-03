@@ -18,6 +18,7 @@ node_parser = executable(
 )
 
 compare_render_tests = [
+  'big-glyph',
   'blend-normal',
   'blend-difference',
   'clip-coordinates-3d',
@@ -45,6 +46,7 @@ compare_render_tests = [
   'empty-text',
   'empty-texture',
   'empty-transform',
+  'huge-glyph',
   'opacity_clip',
   'outset_shadow_offset_both',
   'outset_shadow_offset_x',
@@ -69,7 +71,8 @@ foreach renderer : renderers
   foreach test : compare_render_tests
     if (renderer[1] == '' or not test.contains(renderer[1]))
       test(renderer[0] + ' ' + test, compare_render,
-           args: [join_paths(meson.current_source_dir(), 'compare', test + '.node'),
+           args: ['--output', join_paths(meson.current_build_dir(), 'compare', renderer[0]),
+                  join_paths(meson.current_source_dir(), 'compare', test + '.node'),
                   join_paths(meson.current_source_dir(), 'compare', test + '.png')],
            env: [ 'GIO_USE_VOLUME_MONITOR=unix',
                   'GSETTINGS_BACKEND=memory',

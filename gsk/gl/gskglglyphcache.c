@@ -33,17 +33,21 @@ static void     glyph_cache_key_free   (gpointer      v);
 static void     glyph_cache_value_free (gpointer      v);
 
 static GskGLGlyphAtlas *
-create_atlas (GskGLGlyphCache *cache)
+create_atlas (GskGLGlyphCache *self,
+              int              width,
+              int              height)
 {
   GskGLGlyphAtlas *atlas;
 
   atlas = g_new0 (GskGLGlyphAtlas, 1);
-  atlas->width = ATLAS_SIZE;
-  atlas->height = ATLAS_SIZE;
+  atlas->width = MAX (width, ATLAS_SIZE);
+  atlas->height = MAX (height, ATLAS_SIZE);
   atlas->y0 = 1;
   atlas->y = 1;
   atlas->x = 1;
   atlas->image = NULL;
+
+  GSK_RENDERER_NOTE(self->renderer, GLYPH_CACHE, g_message ("Create atlas %d x %d", atlas->width, atlas->height));
 
   return atlas;
 }
@@ -70,7 +74,6 @@ gsk_gl_glyph_cache_init (GskGLGlyphCache *self,
   self->hash_table = g_hash_table_new_full (glyph_cache_hash, glyph_cache_equal,
                                             glyph_cache_key_free, glyph_cache_value_free);
   self->atlases = g_ptr_array_new_with_free_func (free_atlas);
-  g_ptr_array_add (self->atlases, create_atlas (self));
 
   self->renderer = renderer;
   self->gl_driver = gl_driver;
@@ -167,7 +170,7 @@ add_to_cache (GskGLGlyphCache  *cache,
 
   if (i == cache->atlases->len)
     {
-      atlas = create_atlas (cache);
+      atlas = create_atlas (cache, width + 2, height + 2);
       g_ptr_array_add (cache->atlases, atlas);
     }
 
@@ -187,11 +190,10 @@ add_to_cache (GskGLGlyphCache  *cache,
 #ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (cache->renderer, GLYPH_CACHE))
     {
-      g_print ("Glyph cache:\n");
       for (i = 0; i < cache->atlases->len; i++)
         {
           atlas = g_ptr_array_index (cache->atlases, i);
-          g_print ("\tGskGLGlyphAtlas %d (%dx%d): %.2g%% old pixels, filled to %d, %d / %d\n",
+          g_message ("atlas %d (%dx%d): %.2g%% old pixels, filled to %d, %d / %d",
                    i, atlas->width, atlas->height,
                    100.0 * (double)atlas->old_pixels / (double)(atlas->width * atlas->height),
                    atlas->x, atlas->y0, atlas->y);
@@ -223,7 +225,7 @@ render_glyph (const GskGLGlyphAtlas *atlas,
 
   /* TODO: Give glyphs that large their own texture in the proper size. Don't
    *       put them in the atlas at all. */
-  if (surface_width > ATLAS_SIZE || surface_height > ATLAS_SIZE)
+  if (surface_width > atlas->width || surface_height > atlas->height)
     return FALSE;
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, surface_width, surface_height);
@@ -306,15 +308,15 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache *cache,
     {
       const guint age = cache->timestamp - value->timestamp;
 
-      if (MAX_AGE <= age && age < MAX_AGE + CHECK_INTERVAL)
+      if (MAX_AGE <= age)
         {
           GskGLGlyphAtlas *atlas = value->atlas;
 
           if (atlas)
             atlas->old_pixels -= value->draw_width * value->draw_height;
-
-          value->timestamp = cache->timestamp;
         }
+
+      value->timestamp = cache->timestamp;
     }
 
   if (create && value == NULL)
@@ -379,7 +381,7 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
   GHashTableIter iter;
   GlyphCacheKey *key;
   GskGLCachedGlyph *value;
-  guint dropped = 0;
+  GHashTable *removed = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   self->timestamp++;
 
@@ -419,18 +421,45 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
               atlas->image->texture_id = 0;
             }
 
-          /* Remove all glyphs that point to this atlas */
-          g_hash_table_iter_init (&iter, self->hash_table);
-          while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
-            {
-              if (value->atlas == atlas)
-                g_hash_table_iter_remove (&iter);
-            }
-          /* TODO: The above loop inside this other loop could be slow... */
+          g_hash_table_add (removed, atlas);
 
           g_ptr_array_remove_index (self->atlases, i);
-        }
+       }
     }
 
-  GSK_RENDERER_NOTE(self->renderer, GLYPH_CACHE, g_message ("Dropped %d glyphs", dropped));
+  if (g_hash_table_size (removed) > 0)
+    {
+      guint dropped = 0;
+
+      /* Remove all glyphs whose atlas was removed */
+      g_hash_table_iter_init (&iter, self->hash_table);
+      while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
+        {
+          if (g_hash_table_contains (removed, value->atlas))
+            {
+              g_hash_table_iter_remove (&iter);
+              dropped++;
+            }
+        }
+
+      GSK_RENDERER_NOTE(self->renderer, GLYPH_CACHE, if (dropped > 0) g_message ("Dropped %d glyphs", dropped));
+    }
+
+  g_hash_table_unref (removed);
+
+#if 0
+  for (i = 0; i < self->atlases->len; i++)
+    {
+      GskGLGlyphAtlas *atlas = g_ptr_array_index (self->atlases, i);
+
+      if (atlas->image)
+        {
+          char *filename;
+
+          filename = g_strdup_printf ("glyphatlas%d-%ld.png", i, self->timestamp);
+          gsk_gl_image_write_to_png (atlas->image, self->gl_driver, filename);
+          g_free (filename);
+        }
+    }
+#endif
 }
