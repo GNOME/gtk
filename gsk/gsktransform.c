@@ -173,7 +173,7 @@ static void
 gsk_identity_transform_print (GskTransform *transform,
                               GString      *string)
 {
-  g_string_append (string, "identity");
+  g_string_append (string, "none");
 }
 
 static GskTransform *
