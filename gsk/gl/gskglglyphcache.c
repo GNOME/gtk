@@ -215,6 +215,8 @@ render_glyph (const GskGLGlyphAtlas *atlas,
   PangoGlyphString glyph_string;
   PangoGlyphInfo glyph_info;
   int surface_width, surface_height;
+  int stride;
+  unsigned char *data;
 
   scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)key->font);
   if (G_UNLIKELY (!scaled_font || cairo_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS))
@@ -228,7 +230,11 @@ render_glyph (const GskGLGlyphAtlas *atlas,
   if (surface_width > atlas->width || surface_height > atlas->height)
     return FALSE;
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, surface_width, surface_height);
+  stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, surface_width);
+  data = g_malloc0 (stride * surface_height);
+  surface = cairo_image_surface_create_for_data (data, CAIRO_FORMAT_ARGB32,
+                                                 surface_width, surface_height,
+                                                 stride);
   cairo_surface_set_device_scale (surface, key->scale / 1024.0, key->scale / 1024.0);
 
   cr = cairo_create (surface);
@@ -255,8 +261,7 @@ render_glyph (const GskGLGlyphAtlas *atlas,
   region->width = cairo_image_surface_get_width (surface);
   region->height = cairo_image_surface_get_height (surface);
   region->stride = cairo_image_surface_get_stride (surface);
-  region->data = g_memdup (cairo_image_surface_get_data (surface),
-                           region->stride * region->height * sizeof (guchar));
+  region->data = data;
   region->x = (gsize)(value->tx * atlas->width);
   region->y = (gsize)(value->ty * atlas->height);
 
