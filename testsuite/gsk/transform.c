@@ -279,6 +279,59 @@ test_invert (void)
     }
 }
 
+/* some trivialities around identity transforms */
+static void
+test_identity (void)
+{
+  GskTransform *s, *t, *u, *v, *w, *x;
+  char *string;
+  float a, b, c, d, tx, ty;
+  gboolean res;
+
+  s = gsk_transform_new ();
+  t = gsk_transform_new ();
+  u = gsk_transform_transform (gsk_transform_ref (s), NULL);
+
+  g_assert_cmpint (gsk_transform_get_category (s), ==, GSK_TRANSFORM_CATEGORY_IDENTITY);
+  g_assert_cmpint (gsk_transform_get_category (t), ==, GSK_TRANSFORM_CATEGORY_IDENTITY);
+  g_assert_cmpint (gsk_transform_get_category (u), ==, GSK_TRANSFORM_CATEGORY_IDENTITY);
+
+  g_assert_true (gsk_transform_equal (s, t));
+  g_assert_true (gsk_transform_equal (t, u));
+  g_assert_true (gsk_transform_equal (s, u));
+
+  v = gsk_transform_transform (gsk_transform_ref (s), t);
+
+  g_assert_cmpint (gsk_transform_get_category (v), ==, GSK_TRANSFORM_CATEGORY_IDENTITY);
+
+  w = gsk_transform_invert (gsk_transform_ref (v));
+  g_assert_cmpint (gsk_transform_get_category (w), ==, GSK_TRANSFORM_CATEGORY_IDENTITY);
+
+  string = gsk_transform_to_string (s);
+  res = gsk_transform_parse (string, &x);
+
+  g_assert_true (res);
+  g_assert_cmpint (gsk_transform_get_category (x), ==, GSK_TRANSFORM_CATEGORY_IDENTITY);
+
+  gsk_transform_to_2d (s, &a, &b, &c, &d, &tx, &ty);
+
+  g_assert_cmpfloat (a, ==, 1.0f);
+  g_assert_cmpfloat (b, ==, 0.0f);
+  g_assert_cmpfloat (c, ==, 0.0f);
+  g_assert_cmpfloat (d, ==, 1.0f);
+  g_assert_cmpfloat (tx, ==, 0.0f);
+  g_assert_cmpfloat (ty, ==, 0.f);
+
+  gsk_transform_unref (s);
+  gsk_transform_unref (t);
+  gsk_transform_unref (u);
+  gsk_transform_unref (v);
+  gsk_transform_unref (w);
+  gsk_transform_unref (x);
+
+  g_free (string);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -288,6 +341,7 @@ main (int   argc,
   g_test_add_func ("/transform/conversions/simple", test_conversions_simple);
   g_test_add_func ("/transform/conversions/transformed", test_conversions_transformed);
   g_test_add_func ("/transform/invert", test_invert);
+  g_test_add_func ("/transform/identity", test_identity);
 
   return g_test_run ();
 }
