@@ -260,6 +260,15 @@ render_glyph (const GskGLTextureAtlas *atlas,
 }
 
 static void
+upload_region_or_else (guint           texture_id,
+                       GskImageRegion *region)
+{
+  glTextureSubImage2D (texture_id, 0, region->x, region->y, region->width, region->height,
+                   GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, region->data);
+
+}
+
+static void
 upload_dirty_glyph (GskGLGlyphCache   *self,
                     GskGLTextureAtlas *atlas,
                     GskGLDriver       *driver)
@@ -273,8 +282,7 @@ upload_dirty_glyph (GskGLGlyphCache   *self,
 
   if (render_glyph (atlas, (DirtyGlyph *)atlas->user_data, &region))
     {
-
-      gsk_gl_image_upload_region (&atlas->image, driver, &region);
+      upload_region_or_else (atlas->image.texture_id, &region);
 
       g_free (region.data);
     }

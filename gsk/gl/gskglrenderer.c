@@ -335,7 +335,7 @@ struct _GskGLRenderer
   RenderOpBuilder op_builder;
   GArray *render_ops;
 
-  GskGLGlyphCache glyph_cache;
+  GskGLGlyphCache *glyph_cache;
   GskGLIconCache icon_cache;
   GskGLShadowCache shadow_cache;
 
@@ -580,7 +580,7 @@ render_text_node (GskGLRenderer   *self,
       if (gi->glyph == PANGO_GLYPH_EMPTY)
         continue;
 
-      glyph = gsk_gl_glyph_cache_lookup (&self->glyph_cache,
+      glyph = gsk_gl_glyph_cache_lookup (self->glyph_cache,
                                          TRUE,
                                          (PangoFont *)font,
                                          gi->glyph,
@@ -593,7 +593,7 @@ render_text_node (GskGLRenderer   *self,
       cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
       cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
 
-      ops_set_texture (builder, gsk_gl_glyph_cache_get_glyph_texture_id (&self->glyph_cache,
+      ops_set_texture (builder, gsk_gl_glyph_cache_get_glyph_texture_id (self->glyph_cache,
                                                                          self->gl_driver,
                                                                          glyph));
 
@@ -2466,6 +2466,22 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   return TRUE;
 }
 
+static GskGLGlyphCache *
+get_glyph_cache_for_display (GdkDisplay *display)
+{
+  GskGLGlyphCache *glyph_cache;
+
+  glyph_cache = (GskGLGlyphCache*)g_object_get_data (G_OBJECT (display), "gl-glyph-cache");
+  if (glyph_cache == NULL)
+    {
+      glyph_cache = g_new0 (GskGLGlyphCache, 1);
+      gsk_gl_glyph_cache_init (glyph_cache);
+      g_object_set_data (G_OBJECT (display), "gl-glyph-cache", glyph_cache);
+    }
+
+  return glyph_cache;
+}
+
 static gboolean
 gsk_gl_renderer_realize (GskRenderer  *renderer,
                          GdkSurface    *surface,
@@ -2496,7 +2512,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   if (!gsk_gl_renderer_create_programs (self, error))
     return FALSE;
 
-  gsk_gl_glyph_cache_init (&self->glyph_cache);
+  self->glyph_cache = get_glyph_cache_for_display (gdk_surface_get_display (surface));
   gsk_gl_icon_cache_init (&self->icon_cache, renderer, self->gl_driver);
   gsk_gl_shadow_cache_init (&self->shadow_cache);
 
@@ -2522,7 +2538,7 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   for (i = 0; i < GL_N_PROGRAMS; i ++)
     glDeleteProgram (self->programs[i].id);
 
-  gsk_gl_glyph_cache_free (&self->glyph_cache, self->gl_driver);
+  self->glyph_cache = NULL;
   gsk_gl_icon_cache_free (&self->icon_cache);
   gsk_gl_shadow_cache_free (&self->shadow_cache, self->gl_driver);
 
@@ -3089,7 +3105,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
                               ORTHO_FAR_PLANE);
   graphene_matrix_scale (&projection, 1, -1, 1);
 
-  gsk_gl_glyph_cache_begin_frame (&self->glyph_cache, self->gl_driver);
+  gsk_gl_glyph_cache_begin_frame (self->glyph_cache, self->gl_driver);
   gsk_gl_icon_cache_begin_frame (&self->icon_cache);
   gsk_gl_shadow_cache_begin_frame (&self->shadow_cache, self->gl_driver);
 
