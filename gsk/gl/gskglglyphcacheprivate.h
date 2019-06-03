@@ -3,16 +3,12 @@
 
 #include "gskgldriverprivate.h"
 #include "gskglimageprivate.h"
-#include "gskrendererprivate.h"
 #include "gskgltextureatlasprivate.h"
 #include <pango/pango.h>
 #include <gdk/gdk.h>
 
 typedef struct
 {
-  GskGLDriver *gl_driver;
-  GskRenderer *renderer;
-
   GHashTable *hash_table;
   GPtrArray *atlases;
 
@@ -56,12 +52,13 @@ struct _GskGLCachedGlyph
 };
 
 
-void                     gsk_gl_glyph_cache_init            (GskGLGlyphCache        *self,
-                                                             GskRenderer            *renderer,
-                                                             GskGLDriver            *gl_driver);
-void                     gsk_gl_glyph_cache_free            (GskGLGlyphCache        *self);
-void                     gsk_gl_glyph_cache_begin_frame     (GskGLGlyphCache        *self);
-GskGLImage *             gsk_gl_glyph_cache_get_glyph_image (GskGLGlyphCache        *self,
+void                     gsk_gl_glyph_cache_init            (GskGLGlyphCache        *self);
+void                     gsk_gl_glyph_cache_free            (GskGLGlyphCache        *self,
+                                                             GskGLDriver            *driver);
+void                     gsk_gl_glyph_cache_begin_frame     (GskGLGlyphCache        *self,
+                                                             GskGLDriver            *driver);
+guint                    gsk_gl_glyph_cache_get_glyph_texture_id (GskGLGlyphCache        *self,
+                                                             GskGLDriver            *driver,
                                                              const GskGLCachedGlyph *glyph);
 const GskGLCachedGlyph * gsk_gl_glyph_cache_lookup          (GskGLGlyphCache        *self,
                                                              gboolean                create,

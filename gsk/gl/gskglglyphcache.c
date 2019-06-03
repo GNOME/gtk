@@ -40,10 +40,10 @@ create_atlas (GskGLGlyphCache *self,
 {
   GskGLTextureAtlas *atlas;
 
-  GSK_RENDERER_NOTE(self->renderer, GLYPH_CACHE, g_message ("Create atlas %d x %d", atlas->width, atlas->height));
-
   atlas = g_new (GskGLTextureAtlas, 1);
   gsk_gl_texture_atlas_init (atlas, MAX (width, ATLAS_SIZE), MAX (height, ATLAS_SIZE));
+
+  GSK_NOTE(GLYPH_CACHE, g_message ("Create atlas %d x %d", atlas->width, atlas->height));
 
   return atlas;
 }
@@ -60,20 +60,16 @@ free_atlas (gpointer v)
 }
 
 void
-gsk_gl_glyph_cache_init (GskGLGlyphCache *self,
-                         GskRenderer     *renderer,
-                         GskGLDriver     *gl_driver)
+gsk_gl_glyph_cache_init (GskGLGlyphCache *self)
 {
   self->hash_table = g_hash_table_new_full (glyph_cache_hash, glyph_cache_equal,
                                             glyph_cache_key_free, glyph_cache_value_free);
   self->atlases = g_ptr_array_new_with_free_func (free_atlas);
-
-  self->renderer = renderer;
-  self->gl_driver = gl_driver;
 }
 
 void
-gsk_gl_glyph_cache_free (GskGLGlyphCache *self)
+gsk_gl_glyph_cache_free (GskGLGlyphCache *self,
+                         GskGLDriver     *driver)
 {
   guint i;
 
@@ -83,7 +79,7 @@ gsk_gl_glyph_cache_free (GskGLGlyphCache *self)
 
       if (atlas->image.texture_id != 0)
         {
-          gsk_gl_image_destroy (&atlas->image, self->gl_driver);
+          gsk_gl_image_destroy (&atlas->image, driver);
           atlas->image.texture_id = 0;
         }
     }
@@ -183,7 +179,7 @@ add_to_cache (GskGLGlyphCache  *cache,
   ((DirtyGlyph *)atlas->user_data)->value = value;
 
 #ifdef G_ENABLE_DEBUG
-  if (GSK_RENDERER_DEBUG_CHECK (cache->renderer, GLYPH_CACHE))
+  if (GSK_DEBUG_CHECK (GLYPH_CACHE))
     {
       for (i = 0; i < cache->atlases->len; i++)
         {
@@ -265,24 +261,25 @@ render_glyph (const GskGLTextureAtlas *atlas,
 
 static void
 upload_dirty_glyph (GskGLGlyphCache   *self,
-                    GskGLTextureAtlas *atlas)
+                    GskGLTextureAtlas *atlas,
+                    GskGLDriver       *driver)
 {
   GskImageRegion region;
 
   g_assert (atlas->user_data != NULL);
 
-  gdk_gl_context_push_debug_group_printf (gsk_gl_driver_get_gl_context (self->gl_driver),
+  gdk_gl_context_push_debug_group_printf (gsk_gl_driver_get_gl_context (driver),
                                           "Uploading glyph %d", ((DirtyGlyph *)atlas->user_data)->key->glyph);
 
   if (render_glyph (atlas, (DirtyGlyph *)atlas->user_data, &region))
     {
 
-      gsk_gl_image_upload_region (&atlas->image, self->gl_driver, &region);
+      gsk_gl_image_upload_region (&atlas->image, driver, &region);
 
       g_free (region.data);
     }
 
-  gdk_gl_context_pop_debug_group (gsk_gl_driver_get_gl_context (self->gl_driver));
+  gdk_gl_context_pop_debug_group (gsk_gl_driver_get_gl_context (driver));
   /* TODO: This could be unnecessary. We can just reuse the allocated
    *       DirtyGlyph next time. */
   g_clear_pointer (&atlas->user_data, g_free);
@@ -356,9 +353,10 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache *cache,
   return value;
 }
 
-GskGLImage *
-gsk_gl_glyph_cache_get_glyph_image (GskGLGlyphCache        *self,
-                                    const GskGLCachedGlyph *glyph)
+guint
+gsk_gl_glyph_cache_get_glyph_texture_id (GskGLGlyphCache        *self,
+                                         GskGLDriver            *driver,
+                                         const GskGLCachedGlyph *glyph)
 {
   GskGLTextureAtlas *atlas = glyph->atlas;
 
@@ -366,20 +364,21 @@ gsk_gl_glyph_cache_get_glyph_image (GskGLGlyphCache        *self,
 
   if (atlas->image.texture_id == 0)
     {
-      gsk_gl_image_create (&atlas->image, self->gl_driver, atlas->width, atlas->height, GL_LINEAR, GL_LINEAR);
-      gdk_gl_context_label_object_printf (gsk_gl_driver_get_gl_context (self->gl_driver),
+      gsk_gl_image_create (&atlas->image, driver, atlas->width, atlas->height, GL_LINEAR, GL_LINEAR);
+      gdk_gl_context_label_object_printf (gsk_gl_driver_get_gl_context (driver),
                                           GL_TEXTURE, atlas->image.texture_id,
                                           "Glyph atlas %d", atlas->image.texture_id);
     }
 
   if (atlas->user_data != NULL)
-    upload_dirty_glyph (self, atlas);
+    upload_dirty_glyph (self, atlas, driver);
 
-  return &atlas->image;
+  return atlas->image.texture_id;
 }
 
 void
-gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
+gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
+                                GskGLDriver     *driver)
 {
   int i;
   GHashTableIter iter;
@@ -400,7 +399,7 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
 
       if (gsk_gl_texture_atlas_get_unused_ratio (atlas) > MAX_OLD_RATIO)
         {
-          GSK_RENDERER_NOTE(self->renderer, GLYPH_CACHE,
+          GSK_NOTE(GLYPH_CACHE,
                    g_message ("Dropping atlas %d (%g.2%% old)", i,
                               gsk_gl_texture_atlas_get_unused_ratio (atlas)));
 
@@ -409,13 +408,13 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
 
           g_message ("Dropping glyph cache... Ratio: %f",
                      gsk_gl_texture_atlas_get_unused_ratio (atlas));
-          gsk_gl_image_write_to_png (&atlas->image, self->gl_driver,
+          gsk_gl_image_write_to_png (&atlas->image, driver,
                                      g_strdup_printf ("dropped_%d.png", kk++));
 #endif
 
           if (atlas->image.texture_id != 0)
             {
-              gsk_gl_image_destroy (&atlas->image, self->gl_driver);
+              gsk_gl_image_destroy (&atlas->image, driver);
               atlas->image.texture_id = 0;
             }
 
@@ -454,7 +453,7 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
     }
   g_hash_table_unref (removed);
 
-  GSK_RENDERER_NOTE(self->renderer, GLYPH_CACHE, if (dropped > 0) g_message ("Dropped %d glyphs", dropped));
+  GSK_NOTE(GLYPH_CACHE, if (dropped > 0) g_message ("Dropped %d glyphs", dropped));
 
 #if 0
   for (i = 0; i < self->atlases->len; i++)
@@ -466,7 +465,7 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
           char *filename;
 
           filename = g_strdup_printf ("glyphatlas%d-%ld.png", i, self->timestamp);
-          gsk_gl_image_write_to_png (atlas->image, self->gl_driver, filename);
+          gsk_gl_image_write_to_png (atlas->image, driver, filename);
           g_free (filename);
         }
     }
