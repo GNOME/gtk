@@ -423,7 +423,8 @@ ops_push_modelview (RenderOpBuilder *builder,
       cur = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 2);
       /* Multiply given matrix with current modelview */
 
-      t = gsk_transform_translate (cur->transform, &(graphene_point_t) { builder->dx * scale, builder->dy * scale});
+      t = gsk_transform_translate (gsk_transform_ref (cur->transform),
+                                   &(graphene_point_t) { builder->dx * scale, builder->dy * scale});
       t = gsk_transform_transform (t, transform);
       entry->transform = t;
 
