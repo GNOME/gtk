@@ -165,3 +165,36 @@ foreach test : node_parser_tests
          suite: 'gsk')
   endif
 endforeach
+
+tests = [
+  ['transform'],
+]
+
+test_cargs = []
+
+foreach t : tests
+  test_name = t.get(0)
+  test_srcs = ['@0@.c'.format(test_name)] + t.get(1, [])
+  test_extra_cargs = t.get(2, [])
+  test_extra_ldflags = t.get(3, [])
+
+  test_exe = executable(test_name, test_srcs,
+    c_args : test_cargs + test_extra_cargs,
+    link_args : test_extra_ldflags,
+    dependencies : libgtk_dep,
+    install: get_option('install-tests'),
+    install_dir: testexecdir)
+
+  test(test_name, test_exe,
+       args: [ '--tap', '-k' ],
+       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+              'GSETTINGS_BACKEND=memory',
+              'GTK_CSD=1',
+              'G_ENABLE_DIAGNOSTIC=0',
+              'GSK_RENDERER=cairo',
+              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+              'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
+            ],
+       suite: 'gsk')
+endforeach
