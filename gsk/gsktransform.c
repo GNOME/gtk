@@ -1744,6 +1744,7 @@ gsk_transform_parser_parse (GtkCssParser  *parser,
   const GtkCssToken *token;
   GskTransform *transform = NULL;
   float f[16] = { 0, };
+  gboolean parsed_something = FALSE;
 
   token = gtk_css_parser_get_token (parser);
   if (gtk_css_token_is_ident (token, "none"))
@@ -1902,10 +1903,11 @@ gsk_transform_parser_parse (GtkCssParser  *parser,
           break;
         }
 
+      parsed_something = TRUE;
       token = gtk_css_parser_get_token (parser);
     }
 
-  if (transform == NULL)
+  if (!parsed_something)
     {
       gtk_css_parser_error_syntax (parser, "Expected a transform");
       goto fail;
