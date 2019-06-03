@@ -339,11 +339,11 @@ ops_set_modelview_internal (RenderOpBuilder *builder,
   RenderOp op;
   graphene_matrix_t matrix;
 
-  gsk_transform_to_matrix (transform, &matrix);
-
   if (builder->current_program &&
       gsk_transform_equal (builder->current_program_state->modelview, transform))
     return;
+
+  gsk_transform_to_matrix (transform, &matrix);
 
   if (builder->render_ops->len > 0)
     {
