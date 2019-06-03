@@ -332,6 +332,46 @@ test_identity (void)
   g_free (string);
 }
 
+static void
+test_print_parse (void)
+{
+  GskTransform *transform, *parsed;
+  guint i, j, k;
+  char *str1, *str2;
+
+  for (i = 0; i < G_N_ELEMENTS (test_transforms); i++)
+    {
+      for (j = 0; j < G_N_ELEMENTS (test_transforms); j++)
+        {
+          for (k = 0; k < G_N_ELEMENTS (test_transforms); k++)
+            {
+              transform = apply_test_transform (NULL, i);
+              transform = apply_test_transform (transform, j);
+              transform = apply_test_transform (transform, k);
+
+              str1 = gsk_transform_to_string (transform);
+              g_assert (str1);
+              g_assert (strlen (str1) > 0);
+
+              str2 = gsk_transform_to_string (transform);
+              g_assert_cmpstr (str1, ==, str2);
+              g_free (str2);
+
+              g_assert (gsk_transform_parse (str1, &parsed));
+              graphene_assert_fuzzy_transform_equal (parsed, transform, EPSILON);
+
+              str2 = gsk_transform_to_string (parsed);
+              g_assert_cmpstr (str1, ==, str2);
+              g_free (str2);
+
+              g_free (str1);
+              gsk_transform_unref (parsed);
+              gsk_transform_unref (transform);
+            }
+        }
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -340,8 +380,9 @@ main (int   argc,
 
   g_test_add_func ("/transform/conversions/simple", test_conversions_simple);
   g_test_add_func ("/transform/conversions/transformed", test_conversions_transformed);
-  g_test_add_func ("/transform/invert", test_invert);
   g_test_add_func ("/transform/identity", test_identity);
+  g_test_add_func ("/transform/invert", test_invert);
+  g_test_add_func ("/transform/print-parse", test_print_parse);
 
   return g_test_run ();
 }
