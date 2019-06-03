@@ -1129,7 +1129,7 @@ weed_out_neg_zero (gchar *str,
       gchar neg_zero[8];
       g_snprintf (neg_zero, 8, "%0.*f", digits, -0.0);
       if (strcmp (neg_zero, str) == 0)
-        memmove (str, str + 1, strlen (str) - 1);
+        memmove (str, str + 1, strlen (str));
     }
   return str;
 }
