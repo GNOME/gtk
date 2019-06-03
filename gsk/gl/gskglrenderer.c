@@ -593,8 +593,9 @@ render_text_node (GskGLRenderer   *self,
       cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
       cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
 
-      ops_set_texture (builder, gsk_gl_glyph_cache_get_glyph_image (&self->glyph_cache,
-                                                                    glyph)->texture_id);
+      ops_set_texture (builder, gsk_gl_glyph_cache_get_glyph_texture_id (&self->glyph_cache,
+                                                                         self->gl_driver,
+                                                                         glyph));
 
       tx  = glyph->tx;
       ty  = glyph->ty;
@@ -2495,7 +2496,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   if (!gsk_gl_renderer_create_programs (self, error))
     return FALSE;
 
-  gsk_gl_glyph_cache_init (&self->glyph_cache, renderer, self->gl_driver);
+  gsk_gl_glyph_cache_init (&self->glyph_cache);
   gsk_gl_icon_cache_init (&self->icon_cache, renderer, self->gl_driver);
   gsk_gl_shadow_cache_init (&self->shadow_cache);
 
@@ -2521,7 +2522,7 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   for (i = 0; i < GL_N_PROGRAMS; i ++)
     glDeleteProgram (self->programs[i].id);
 
-  gsk_gl_glyph_cache_free (&self->glyph_cache);
+  gsk_gl_glyph_cache_free (&self->glyph_cache, self->gl_driver);
   gsk_gl_icon_cache_free (&self->icon_cache);
   gsk_gl_shadow_cache_free (&self->shadow_cache, self->gl_driver);
 
@@ -3088,7 +3089,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
                               ORTHO_FAR_PLANE);
   graphene_matrix_scale (&projection, 1, -1, 1);
 
-  gsk_gl_glyph_cache_begin_frame (&self->glyph_cache);
+  gsk_gl_glyph_cache_begin_frame (&self->glyph_cache, self->gl_driver);
   gsk_gl_icon_cache_begin_frame (&self->icon_cache);
   gsk_gl_shadow_cache_begin_frame (&self->shadow_cache, self->gl_driver);
 
