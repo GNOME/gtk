@@ -1110,6 +1110,7 @@ gdk_surface_get_state (GdkSurface *surface)
   return surface->state;
 }
 
+
 GdkGLContext *
 gdk_surface_get_paint_gl_context (GdkSurface  *surface,
                                   GError    **error)

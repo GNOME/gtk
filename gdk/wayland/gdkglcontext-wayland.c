@@ -40,6 +40,44 @@ static void gdk_wayland_gl_context_dispose (GObject *gobject);
 
 #define N_EGL_ATTRS     16
 
+static int in_shared_data_creation;
+
+static GdkGLContext *
+ensure_shared_data_context (GdkSurface *surface)
+{ 
+  GdkDisplay *display;
+  GdkGLContext *context;
+
+  in_shared_data_creation = 1;
+
+  display = gdk_surface_get_display (surface);
+  context = (GdkGLContext *)g_object_get_data (G_OBJECT (display), "shared_data_gl_context");
+  if (context == NULL)
+    {
+      GError *error = NULL;
+      context = GDK_SURFACE_GET_CLASS (surface)->create_gl_context (surface, FALSE, NULL, &error);
+      if (context == NULL)
+        {
+          g_warning ("Failed to create shared context: %s", error->message);
+          g_clear_error (&error);
+        }
+
+      gdk_gl_context_realize (context, &error);
+      if (context == NULL)
+        {
+          g_warning ("Failed to realize shared context: %s", error->message);
+          g_clear_error (&error);
+        }
+
+
+      g_object_set_data (G_OBJECT (display), "shared_data_gl_context", context);
+    }
+
+  in_shared_data_creation = 0;
+
+  return context;
+}
+
 static gboolean
 gdk_wayland_gl_context_realize (GdkGLContext *context,
                                 GError      **error)
@@ -47,6 +85,7 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   GdkWaylandGLContext *context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   GdkGLContext *share = gdk_gl_context_get_shared_context (context);
+  GdkGLContext *shared_data_context = in_shared_data_creation ? NULL : ensure_shared_data_context (gdk_gl_context_get_surface (context));
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   EGLContext ctx;
   EGLint context_attribs[N_EGL_ATTRS];
@@ -114,7 +153,8 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   ctx = eglCreateContext (display_wayland->egl_display,
                           context_wayland->egl_config,
                           share != NULL ? GDK_WAYLAND_GL_CONTEXT (share)->egl_context
-                                        : EGL_NO_CONTEXT,
+                             : shared_data_context != NULL ? GDK_WAYLAND_GL_CONTEXT (shared_data_context)->egl_context
+                                                  : EGL_NO_CONTEXT,
                           context_attribs);
 
   /* If context creation failed without the legacy bit, let's try again with it */
@@ -136,7 +176,8 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
       ctx = eglCreateContext (display_wayland->egl_display,
                               context_wayland->egl_config,
                               share != NULL ? GDK_WAYLAND_GL_CONTEXT (share)->egl_context
-                                            : EGL_NO_CONTEXT,
+                                 : shared_data_context != NULL ? GDK_WAYLAND_GL_CONTEXT (shared_data_context)->egl_context
+                                    : EGL_NO_CONTEXT,
                               context_attribs);
     }
 

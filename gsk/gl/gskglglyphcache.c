@@ -53,7 +53,7 @@ free_atlas (gpointer v)
 {
   GskGLTextureAtlas *atlas = v;
 
-  g_assert (atlas->image.texture_id == 0);
+  //g_assert (atlas->image.texture_id == 0);
   gsk_gl_texture_atlas_free (atlas);
 
   g_free (atlas);
@@ -73,6 +73,7 @@ gsk_gl_glyph_cache_free (GskGLGlyphCache *self,
 {
   guint i;
 
+#if 0
   for (i = 0; i < self->atlases->len; i ++)
     {
       GskGLTextureAtlas *atlas = g_ptr_array_index (self->atlases, i);
@@ -83,6 +84,7 @@ gsk_gl_glyph_cache_free (GskGLGlyphCache *self,
           atlas->image.texture_id = 0;
         }
     }
+#endif
 
   g_ptr_array_unref (self->atlases);
   g_hash_table_unref (self->hash_table);
@@ -260,36 +262,72 @@ render_glyph (const GskGLTextureAtlas *atlas,
 }
 
 static void
-upload_region_or_else (guint           texture_id,
+check_gl_error (const char *s)
+{
+  int error = glGetError ();
+
+  switch (error)
+    {
+    case GL_INVALID_OPERATION:
+      g_print ("%s: INVALID_OPERATION\n", s);
+      break;
+    case GL_INVALID_ENUM:
+      g_print ("%s: INVALID_ENUM\n", s);
+      break;
+    case GL_INVALID_VALUE:
+      g_print ("%s: INVALID_VALUE\n", s);
+      break;
+    case GL_OUT_OF_MEMORY:
+      g_print ("%s: OUT_OF_MEMORY\n", s);
+      break;
+    case GL_INVALID_FRAMEBUFFER_OPERATION:
+      g_print ("%s: INVALID_FRAMEBUFFER_OPERATION\n", s);
+      break;
+    case GL_NO_ERROR:
+      break;
+    default:
+      g_print ("%s: error %d\n", s, error);
+    }
+}
+
+static void
+upload_region_or_else (GdkDisplay *display,
+                       guint           texture_id,
                        GskImageRegion *region)
 {
+  GdkGLContext *previous;
+  GdkGLContext *context;
+
+  previous = gdk_gl_context_get_current ();
+
+  context = (GdkGLContext *)g_object_get_data (G_OBJECT (display), "shared_data_gl_context");
+  gdk_gl_context_make_current (context);
+
+  glBindTexture (GL_TEXTURE_2D, texture_id);
   glTextureSubImage2D (texture_id, 0, region->x, region->y, region->width, region->height,
                    GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, region->data);
+  check_gl_error ("upload region");
 
+  gdk_gl_context_make_current (previous);
 }
 
 static void
 upload_dirty_glyph (GskGLGlyphCache   *self,
-                    GskGLTextureAtlas *atlas,
-                    GskGLDriver       *driver)
+                    GskGLDriver       *driver,
+                    GskGLTextureAtlas *atlas)
 {
   GskImageRegion region;
 
   g_assert (atlas->user_data != NULL);
 
-  gdk_gl_context_push_debug_group_printf (gsk_gl_driver_get_gl_context (driver),
-                                          "Uploading glyph %d", ((DirtyGlyph *)atlas->user_data)->key->glyph);
-
   if (render_glyph (atlas, (DirtyGlyph *)atlas->user_data, &region))
     {
-      upload_region_or_else (atlas->image.texture_id, &region);
+      GdkDisplay *display =  gdk_gl_context_get_display (gsk_gl_driver_get_gl_context (driver));
+      upload_region_or_else (display, atlas->image.texture_id, &region);
 
       g_free (region.data);
     }
 
-  gdk_gl_context_pop_debug_group (gsk_gl_driver_get_gl_context (driver));
-  /* TODO: This could be unnecessary. We can just reuse the allocated
-   *       DirtyGlyph next time. */
   g_clear_pointer (&atlas->user_data, g_free);
 }
 
@@ -361,6 +399,44 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache *cache,
   return value;
 }
 
+static guint
+create_shared_texture (GdkDisplay *display,
+                       int width,
+                       int height)
+{
+  GdkGLContext *previous;
+  GdkGLContext *context;
+  guint texture_id;
+
+  previous = gdk_gl_context_get_current ();
+
+  context = (GdkGLContext *)g_object_get_data (G_OBJECT (display), "shared_data_gl_context");
+  gdk_gl_context_make_current (context);
+
+  glGenTextures (1, &texture_id);
+  glBindTexture (GL_TEXTURE_2D, texture_id);
+
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+  if (gdk_gl_context_get_use_es (context))
+    glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+  else
+    glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+
+  glBindTexture (GL_TEXTURE_2D, 0);
+
+  check_gl_error ("create shared texture");
+
+  gdk_gl_context_make_current (previous);
+
+g_print ("shared glyph atlas texture: %d\n", texture_id);
+  return texture_id;
+}
+
 guint
 gsk_gl_glyph_cache_get_glyph_texture_id (GskGLGlyphCache        *self,
                                          GskGLDriver            *driver,
@@ -372,14 +448,18 @@ gsk_gl_glyph_cache_get_glyph_texture_id (GskGLGlyphCache        *self,
 
   if (atlas->image.texture_id == 0)
     {
+#if 1
+      GdkDisplay *display =  gdk_gl_context_get_display (gsk_gl_driver_get_gl_context (driver));
+      atlas->image.texture_id = create_shared_texture (display, atlas->width, atlas->height);
+      atlas->image.width = atlas->width;
+      atlas->image.height = atlas->height;
+#else
       gsk_gl_image_create (&atlas->image, driver, atlas->width, atlas->height, GL_LINEAR, GL_LINEAR);
-      gdk_gl_context_label_object_printf (gsk_gl_driver_get_gl_context (driver),
-                                          GL_TEXTURE, atlas->image.texture_id,
-                                          "Glyph atlas %d", atlas->image.texture_id);
+#endif
     }
 
   if (atlas->user_data != NULL)
-    upload_dirty_glyph (self, atlas, driver);
+    upload_dirty_glyph (self, driver, atlas);
 
   return atlas->image.texture_id;
 }
@@ -420,11 +500,13 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
                                      g_strdup_printf ("dropped_%d.png", kk++));
 #endif
 
+#if 0
           if (atlas->image.texture_id != 0)
             {
               gsk_gl_image_destroy (&atlas->image, driver);
               atlas->image.texture_id = 0;
             }
+#endif
 
           g_hash_table_add (removed, atlas);
 
