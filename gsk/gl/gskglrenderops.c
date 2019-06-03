@@ -219,7 +219,7 @@ ops_set_program (RenderOpBuilder *builder,
       program_state->projection = builder->current_projection;
     }
 
-  if (memcmp (&empty_matrix, &program_state->modelview, sizeof (graphene_matrix_t)) == 0 ||
+  if (program_state->modelview == NULL ||
       !gsk_transform_equal (builder->current_modelview, program_state->modelview))
     {
       op.op = OP_CHANGE_MODELVIEW;
