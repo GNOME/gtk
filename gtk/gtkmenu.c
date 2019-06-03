@@ -242,6 +242,31 @@ static guint menu_signals[LAST_SIGNAL] = { 0 };
 G_DEFINE_TYPE_WITH_PRIVATE (GtkMenu, gtk_menu, GTK_TYPE_MENU_SHELL)
 
 static void
+update_scrollbars (GtkMenu *menu)
+{
+  GtkMenuPrivate *priv = menu->priv;
+  GtkWidget *child;
+  int n = 0;
+  GtkPolicyType policy = GTK_POLICY_NEVER;
+
+  for (child = gtk_widget_get_first_child (priv->box);
+       child;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      n++;
+      if (n == 10)
+        {
+          policy = GTK_POLICY_AUTOMATIC;
+          break;
+        }
+    }
+
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->swin),
+                                  GTK_POLICY_NEVER,
+                                  policy);
+}
+
+static void
 menu_queue_resize (GtkMenu *menu)
 {
   GtkMenuPrivate *priv = menu->priv;
@@ -802,7 +827,7 @@ gtk_menu_init (GtkMenu *menu)
   gtk_widget_set_parent (priv->swin, GTK_WIDGET (menu));
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->swin),
                                   GTK_POLICY_NEVER,
-                                  GTK_POLICY_AUTOMATIC);
+                                  GTK_POLICY_NEVER);
   gtk_scrolled_window_set_propagate_natural_width (GTK_SCROLLED_WINDOW (priv->swin),
                                                    TRUE);
   gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (priv->swin),
@@ -1089,6 +1114,7 @@ gtk_menu_add (GtkContainer *container,
 
   gtk_container_add (GTK_CONTAINER (priv->box), widget);
 
+  update_scrollbars (menu);
   menu_queue_resize (menu);
 }
 
@@ -1107,6 +1133,7 @@ gtk_menu_remove (GtkContainer *container,
 
   GTK_CONTAINER_CLASS (gtk_menu_parent_class)->remove (container, widget);
 
+  update_scrollbars (menu);
   menu_queue_resize (menu);
 }
 
@@ -1134,6 +1161,7 @@ gtk_menu_real_insert (GtkMenuShell *menu_shell,
   gtk_container_add (GTK_CONTAINER (priv->box), child);
   gtk_menu_reorder_child (menu, child, position);
 
+  update_scrollbars (menu);
   menu_queue_resize (menu);
 }
 
