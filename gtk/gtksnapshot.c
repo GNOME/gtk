@@ -1060,10 +1060,7 @@ gtk_snapshot_pop_internal (GtkSnapshot *snapshot)
 
       node = gtk_snapshot_pop_one (snapshot);
       if (node)
-        {
-          gtk_snapshot_append_node_internal (snapshot, node);
-          gsk_render_node_unref (node);
-        }
+        gtk_snapshot_append_node_internal (snapshot, node);
     }
 
   if (forgotten_restores)
@@ -1167,11 +1164,9 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
   GskRenderNode *node;
 
   node = gtk_snapshot_pop_internal (snapshot);
+
   if (node)
-    {
-      gtk_snapshot_append_node_internal (snapshot, node);
-      gsk_render_node_unref (node);
-    }
+    gtk_snapshot_append_node_internal (snapshot, node);
 }
 
 /**
@@ -1219,10 +1214,7 @@ gtk_snapshot_restore (GtkSnapshot *snapshot)
     {
       node = gtk_snapshot_pop_one (snapshot);
       if (node)
-        {
-          gtk_snapshot_append_node_internal (snapshot, node);
-          gsk_render_node_unref (node);
-        }
+        gtk_snapshot_append_node_internal (snapshot, node);
     }
 
   if (state->collect_func != NULL)
@@ -1436,7 +1428,7 @@ gtk_snapshot_append_node_internal (GtkSnapshot   *snapshot,
 
   if (current_state)
     {
-      g_ptr_array_add (snapshot->nodes, gsk_render_node_ref (node));
+      g_ptr_array_add (snapshot->nodes, node);
       current_state->n_nodes ++;
     }
   else
@@ -1464,7 +1456,7 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
 
   gtk_snapshot_ensure_identity (snapshot);
 
-  gtk_snapshot_append_node_internal (snapshot, node);
+  gtk_snapshot_append_node_internal (snapshot, gsk_render_node_ref (node));
 }
 
 /**
@@ -1496,7 +1488,6 @@ gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
   node = gsk_cairo_node_new (&real_bounds);
 
   gtk_snapshot_append_node_internal (snapshot, node);
-  gsk_render_node_unref (node);
 
   cr = gsk_cairo_node_get_draw_context (node);
 
@@ -1533,7 +1524,6 @@ gtk_snapshot_append_texture (GtkSnapshot           *snapshot,
   node = gsk_texture_node_new (texture, &real_bounds);
 
   gtk_snapshot_append_node_internal (snapshot, node);
-  gsk_render_node_unref (node);
 }
 
 /**
@@ -1566,7 +1556,6 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
   node = gsk_color_node_new (color, &real_bounds);
 
   gtk_snapshot_append_node_internal (snapshot, node);
-  gsk_render_node_unref (node);
 }
 
 /**
@@ -1729,7 +1718,6 @@ gtk_snapshot_append_text (GtkSnapshot           *snapshot,
     return;
 
   gtk_snapshot_append_node_internal (snapshot, node);
-  gsk_render_node_unref (node);
 }
 
 /**
@@ -1777,7 +1765,6 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
                                        n_stops);
 
   gtk_snapshot_append_node_internal (snapshot, node);
-  gsk_render_node_unref (node);
 }
 
 /**
@@ -1825,7 +1812,6 @@ gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
                                                  n_stops);
 
   gtk_snapshot_append_node_internal (snapshot, node);
-  gsk_render_node_unref (node);
 }
 
 /**
@@ -1861,7 +1847,6 @@ gtk_snapshot_append_border (GtkSnapshot          *snapshot,
   node = gsk_border_node_new (&real_outline, border_width, border_color);
 
   gtk_snapshot_append_node_internal (snapshot, node);
-  gsk_render_node_unref (node);
 }
 
 /**
@@ -1904,7 +1889,6 @@ gtk_snapshot_append_inset_shadow (GtkSnapshot          *snapshot,
                                     blur_radius);
 
   gtk_snapshot_append_node_internal (snapshot, node);
-  gsk_render_node_unref (node);
 }
 
 /**
@@ -1948,6 +1932,5 @@ gtk_snapshot_append_outset_shadow (GtkSnapshot          *snapshot,
 
 
   gtk_snapshot_append_node_internal (snapshot, node);
-  gsk_render_node_unref (node);
 }
 
