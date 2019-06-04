@@ -925,13 +925,27 @@ _gtk_builder_add (GtkBuilder *builder,
   g_assert (object != NULL);
 
   parent = ((ObjectInfo*)child_info->parent)->object;
-  g_assert (GTK_IS_BUILDABLE (parent));
 
   GTK_NOTE (BUILDER,
             g_message ("adding %s to %s", object_get_name (object), object_get_name (parent)));
 
-  gtk_buildable_add_child (GTK_BUILDABLE (parent), builder, object,
-                           child_info->type);
+  if (G_IS_LIST_STORE (parent))
+    {
+      if (child_info->type != NULL)
+        {
+          GTK_BUILDER_WARN_INVALID_CHILD_TYPE (parent, child_info->type);
+        }
+      else
+        {
+          g_list_store_append (G_LIST_STORE (parent), object);
+        }
+    }
+  else
+    {
+      g_assert (GTK_IS_BUILDABLE (parent));
+      gtk_buildable_add_child (GTK_BUILDABLE (parent), builder, object,
+                               child_info->type);
+    }
 
   child_info->added = TRUE;
 }
@@ -2195,6 +2209,27 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           file = g_file_new_for_uri (string);
           g_value_set_object (value, file);
           g_object_unref (G_OBJECT (file));
+
+          ret = TRUE;
+        }
+      else
+        ret = FALSE;
+      break;
+    case G_TYPE_POINTER:
+      if (G_VALUE_HOLDS (value, G_TYPE_GTYPE))
+        {
+          GType resolved_type;
+
+          resolved_type = gtk_builder_get_type_from_name (builder, string);
+          if (resolved_type == G_TYPE_INVALID)
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Unsupported GType '%s' for value of type 'GType'", string);
+              return FALSE;
+            }
+          g_value_set_gtype (value, resolved_type);
 
           ret = TRUE;
         }

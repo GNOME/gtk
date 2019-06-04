@@ -524,22 +524,6 @@ on_range_to_changed (GtkSpinButton *to)
 }
 
 static void
-update_header (GtkListBoxRow *row,
-               GtkListBoxRow *before,
-               gpointer       data)
-{
-  if (before != NULL &&
-      gtk_list_box_row_get_header (row) == NULL)
-    {
-      GtkWidget *separator;
-
-      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_widget_show (separator);
-      gtk_list_box_row_set_header (row, separator);
-    }
-}
-
-static void
 info_bar_response (GtkWidget *infobar, gint response_id)
 {
   if (response_id == GTK_RESPONSE_CLOSE)
@@ -1731,7 +1715,6 @@ activate (GApplication *app)
   g_signal_connect (adj, "value-changed", G_CALLBACK (spin_value_changed), widget);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "listbox");
-  gtk_list_box_set_header_func (GTK_LIST_BOX (widget), update_header, NULL, NULL);
   g_signal_connect (widget, "row-activated", G_CALLBACK (row_activated), NULL);
 
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "listboxrow1switch");
