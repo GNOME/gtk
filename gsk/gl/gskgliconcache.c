@@ -59,10 +59,6 @@ gsk_gl_icon_cache_free (GskGLIconCache *self)
           gsk_gl_image_destroy (&atlas->image, self->gl_driver);
           atlas->image.texture_id = 0;
         }
-
-      gsk_gl_texture_atlas_free (atlas);
-
-      g_free (atlas);
     }
   g_ptr_array_free (self->atlases, TRUE);
 
