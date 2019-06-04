@@ -73,19 +73,10 @@ gsk_gl_glyph_cache_new (GdkDisplay *display)
   return glyph_cache;
 }
 
-static GdkGLContext *
-get_context (GskGLGlyphCache *cache)
-{
-  return (GdkGLContext *)g_object_get_data (G_OBJECT (cache->display), "shared_data_gl_context");
-}
-
 void
 gsk_gl_glyph_cache_free (GskGLGlyphCache *self)
 {
-  GdkGLContext *context = get_context (self);
   guint i;
-
-  gdk_gl_context_make_current (context);
 
   for (i = 0; i < self->atlases->len; i ++)
     {
@@ -280,16 +271,9 @@ upload_region_or_else (GskGLGlyphCache *self,
                        guint            texture_id,
                        GskImageRegion  *region)
 {
-  GdkGLContext *previous;
-
-  previous = gdk_gl_context_get_current ();
-  gdk_gl_context_make_current (get_context (self));
-
   glBindTexture (GL_TEXTURE_2D, texture_id);
   glTextureSubImage2D (texture_id, 0, region->x, region->y, region->width, region->height,
                    GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, region->data);
-
-  gdk_gl_context_make_current (previous);
 }
 
 static void
@@ -300,10 +284,9 @@ upload_dirty_glyph (GskGLGlyphCache   *self,
 
   g_assert (atlas->user_data != NULL);
 
-  gdk_gl_context_push_debug_group_printf (get_context (self),
-(driver),
--                                         "Uploading glyph %d", ((Dirty
-Glyph *)atlas->user_data)->key->glyph);
+  gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
+                                          "Uploading glyph %d",
+                                         ((DirtyGlyph *)atlas->user_data)->key->glyph);
 
   if (render_glyph (atlas, (DirtyGlyph *)atlas->user_data, &region))
     {
@@ -311,7 +294,7 @@ Glyph *)atlas->user_data)->key->glyph);
       g_free (region.data);
     }
 
-  gdk_gl_context_pop_debug_group (get_context (self));
+  gdk_gl_context_pop_debug_group (gdk_gl_context_get_current ());
 
   /* TODO: This could be unnecessary. We can just reuse the allocated
    * DirtyGlyph next time.
@@ -387,19 +370,16 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache *cache,
   return value;
 }
 
+/* Not using gdk_gl_driver_create_texture here, since we want
+ * this texture to survive the driver and stay around until
+ * the display gets closed.
+ */
 static guint
 create_shared_texture (GskGLGlyphCache *self,
                        int              width,
                        int              height)
 {
-  GdkGLContext *previous;
-  GdkGLContext *context;
   guint texture_id;
-
-  previous = gdk_gl_context_get_current ();
-  context = get_context (self);
-
-  gdk_gl_context_make_current (context);
 
   glGenTextures (1, &texture_id);
   glBindTexture (GL_TEXTURE_2D, texture_id);
@@ -410,14 +390,12 @@ create_shared_texture (GskGLGlyphCache *self,
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-  if (gdk_gl_context_get_use_es (context))
+  if (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
     glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
   else
     glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
 
   glBindTexture (GL_TEXTURE_2D, 0);
-
-  gdk_gl_context_make_current (previous);
 
   return texture_id;
 }
@@ -433,7 +411,7 @@ gsk_gl_glyph_cache_get_glyph_texture_id (GskGLGlyphCache        *self,
   if (atlas->texture_id == 0)
     {
       atlas->texture_id = create_shared_texture (self, atlas->width, atlas->height);
-      gdk_gl_context_label_object_printf (get_context (self),
+      gdk_gl_context_label_object_printf (gdk_gl_context_get_current (),
                                           GL_TEXTURE, atlas->texture_id,
                                           "Glyph atlas %d", atlas->texture_id);
     }
@@ -452,7 +430,6 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
   GlyphCacheKey *key;
   GskGLCachedGlyph *value;
   GHashTable *removed = g_hash_table_new (g_direct_hash, g_direct_equal);
-  GdkGLContext *previous = NULL;
   guint dropped = 0;
 
   self->timestamp++;
@@ -482,10 +459,6 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
 
           if (atlas->texture_id != 0)
             {
-              previous = gdk_gl_context_get_current ();
-              if (previous != get_context (self))
-                gdk_gl_context_make_current (get_context (self));
-
               glDeleteTextures (1, &atlas->texture_id);
               atlas->texture_id = 0;
             }
@@ -495,9 +468,6 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
           g_ptr_array_remove_index (self->atlases, i);
        }
     }
-
-  if (previous)
-    gdk_gl_context_make_current (previous);
 
   /* Remove all glyphs whose atlas was removed, and
    * mark old glyphs as unused

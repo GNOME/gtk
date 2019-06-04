@@ -1,6 +1,7 @@
 #include "gskgliconcacheprivate.h"
 #include "gskgltextureatlasprivate.h"
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdkglcontextprivate.h"
 
 #include <epoxy/gl.h>
 
@@ -47,19 +48,10 @@ gsk_gl_icon_cache_new (GdkDisplay *display)
   return self;
 }
 
-static GdkGLContext *
-get_context (GskGLIconCache *cache)
-{
-  return (GdkGLContext *)g_object_get_data (G_OBJECT (cache->display), "shared_data_gl_context");
-}
-
 void
 gsk_gl_icon_cache_free (GskGLIconCache *self)
 {
-  GdkGLContext *context = get_context (self);
   guint i, p;
-
-  gdk_gl_context_make_current (context);
 
   for (i = 0, p = self->atlases->len; i < p; i ++)
     {
@@ -84,7 +76,6 @@ gsk_gl_icon_cache_begin_frame (GskGLIconCache *self)
   GHashTableIter iter;
   GdkTexture *texture;
   IconData *icon_data;
-  GdkGLContext *previous = NULL;
 
   /* Increase frame age of all icons */
   g_hash_table_iter_init (&iter, self->icons);
@@ -123,10 +114,6 @@ gsk_gl_icon_cache_begin_frame (GskGLIconCache *self)
 
           if (atlas->texture_id != 0)
             {
-              previous = gdk_gl_context_get_current ();
-              if (previous != get_context (self))
-                gdk_gl_context_make_current (get_context (self));
-
               glDeleteTextures (1, &atlas->texture_id);
               atlas->texture_id = 0;
             }
@@ -135,9 +122,6 @@ gsk_gl_icon_cache_begin_frame (GskGLIconCache *self)
           i --; /* Check the current index again */
         }
     }
-
-  if (previous)
-    gdk_gl_context_make_current (previous);
 }
 
 /* FIXME: this could probably be done more efficiently */
@@ -175,14 +159,7 @@ create_shared_texture (GskGLIconCache *self,
                        int             width,
                        int             height)
 {
-  GdkGLContext *previous;
-  GdkGLContext *context;
   guint texture_id;
-
-  previous = gdk_gl_context_get_current ();
-  context = get_context (self);
-
-  gdk_gl_context_make_current (context);
 
   glGenTextures (1, &texture_id);
   glBindTexture (GL_TEXTURE_2D, texture_id);
@@ -193,14 +170,12 @@ create_shared_texture (GskGLIconCache *self,
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-  if (gdk_gl_context_get_use_es (context))
+  if (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
     glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
   else
     glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
 
   glBindTexture (GL_TEXTURE_2D, 0);
-
-  gdk_gl_context_make_current (previous);
 
   return texture_id;
 }
@@ -210,16 +185,9 @@ upload_region_or_else (GskGLIconCache *self,
                        guint           texture_id,
                        GskImageRegion *region)
 {
-  GdkGLContext *previous;
-
-  previous = gdk_gl_context_get_current ();
-  gdk_gl_context_make_current (get_context (self));
-
   glBindTexture (GL_TEXTURE_2D, texture_id);
   glTextureSubImage2D (texture_id, 0, region->x, region->y, region->width, region->height,
                    GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, region->data);
-
-  gdk_gl_context_make_current (previous);
 }
 
 void
@@ -281,7 +249,7 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
         atlas = g_malloc (sizeof (GskGLTextureAtlas));
         gsk_gl_texture_atlas_init (atlas, ATLAS_SIZE, ATLAS_SIZE);
         atlas->texture_id = create_shared_texture (self, atlas->width, atlas->height);
-        gdk_gl_context_label_object_printf (get_context (self),
+        gdk_gl_context_label_object_printf (gdk_gl_context_get_current (),
                                             GL_TEXTURE, atlas->texture_id,
                                             "Icon atlas %d", atlas->texture_id);
 
@@ -314,13 +282,12 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     region.height = theight + 2;
     region.data = cairo_image_surface_get_data (padded_surface);
 
-    gdk_gl_context_push_debug_group_printf (get_context (self),
-(driver),
+    gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
                                             "Uploading texture");
 
     upload_region_or_else (self, atlas->texture_id, &region);
 
-    gdk_gl_context_pop_debug_group (get_context (self));
+    gdk_gl_context_pop_debug_group (gdk_gl_context_get_current ());
 
     *out_texture_id = atlas->texture_id;
     *out_texture_rect = icon_data->texture_rect;
