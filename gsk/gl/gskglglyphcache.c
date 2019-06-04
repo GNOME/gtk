@@ -300,12 +300,22 @@ upload_dirty_glyph (GskGLGlyphCache   *self,
 
   g_assert (atlas->user_data != NULL);
 
+  gdk_gl_context_push_debug_group_printf (get_context (self),
+(driver),
+-                                         "Uploading glyph %d", ((Dirty
+Glyph *)atlas->user_data)->key->glyph);
+
   if (render_glyph (atlas, (DirtyGlyph *)atlas->user_data, &region))
     {
       upload_region_or_else (self, atlas->texture_id, &region);
       g_free (region.data);
     }
 
+  gdk_gl_context_pop_debug_group (get_context (self));
+
+  /* TODO: This could be unnecessary. We can just reuse the allocated
+   * DirtyGlyph next time.
+   */
   g_clear_pointer (&atlas->user_data, g_free);
 }
 
@@ -421,7 +431,12 @@ gsk_gl_glyph_cache_get_glyph_texture_id (GskGLGlyphCache        *self,
   g_assert (atlas != NULL);
 
   if (atlas->texture_id == 0)
-    atlas->texture_id = create_shared_texture (self, atlas->width, atlas->height);
+    {
+      atlas->texture_id = create_shared_texture (self, atlas->width, atlas->height);
+      gdk_gl_context_label_object_printf (get_context (self),
+                                          GL_TEXTURE, atlas->texture_id,
+                                          "Glyph atlas %d", atlas->texture_id);
+    }
 
   if (atlas->user_data != NULL)
     upload_dirty_glyph (self, atlas);
