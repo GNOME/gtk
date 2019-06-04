@@ -2215,6 +2215,27 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
       else
         ret = FALSE;
       break;
+    case G_TYPE_POINTER:
+      if (G_VALUE_HOLDS (value, G_TYPE_GTYPE))
+        {
+          GType resolved_type;
+
+          resolved_type = gtk_builder_get_type_from_name (builder, string);
+          if (resolved_type == G_TYPE_INVALID)
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Unsupported GType '%s' for value of type 'GType'", string);
+              return FALSE;
+            }
+          g_value_set_gtype (value, resolved_type);
+
+          ret = TRUE;
+        }
+      else
+        ret = FALSE;
+      break;
     default:
       ret = FALSE;
       break;
