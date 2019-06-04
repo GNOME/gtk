@@ -49,6 +49,12 @@ void            gtk_list_view_set_functions                     (GtkListView    
                                                                  gpointer                user_data,
                                                                  GDestroyNotify          user_destroy);
 
+GDK_AVAILABLE_IN_ALL
+void            gtk_list_view_set_show_separators               (GtkListView            *self,
+                                                                 gboolean                show_separators);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_list_view_get_show_separators               (GtkListView            *self);
+
 G_END_DECLS
 
 #endif  /* __GTK_LIST_VIEW_H__ */
