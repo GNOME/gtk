@@ -14,7 +14,7 @@ struct _GskGLTextureAtlas
   int width;
   int height;
 
-  GskGLImage image;
+  guint texture_id;
 
   int unused_pixels; /* Pixels of rects that have been used at some point,
                         But are now unused. */
@@ -23,11 +23,33 @@ struct _GskGLTextureAtlas
 };
 typedef struct _GskGLTextureAtlas GskGLTextureAtlas;
 
+struct _GskGLTextureAtlases
+{
+  int ref_count;
+
+  GPtrArray *atlases;
+};
+typedef struct _GskGLTextureAtlases GskGLTextureAtlases;
+
+GskGLTextureAtlases *gsk_gl_texture_atlases_new         (void);
+GskGLTextureAtlases *gsk_gl_texture_atlases_ref         (GskGLTextureAtlases *atlases);
+void                 gsk_gl_texture_atlases_unref       (GskGLTextureAtlases *atlases);
+
+void                 gsk_gl_texture_atlases_begin_frame (GskGLTextureAtlases *atlases);
+gboolean             gsk_gl_texture_atlases_pack        (GskGLTextureAtlases *atlases,
+                                                         int                  width,
+                                                         int                  height,
+                                                         GskGLTextureAtlas  **atlas_out,
+                                                         int                 *out_x,
+                                                         int                 *out_y);
+
 void        gsk_gl_texture_atlas_init              (GskGLTextureAtlas       *self,
                                                     int                      width,
                                                     int                      height);
 
 void        gsk_gl_texture_atlas_free              (GskGLTextureAtlas       *self);
+
+void        gsk_gl_texture_atlas_realize           (GskGLTextureAtlas       *self);
 
 void        gsk_gl_texture_atlas_mark_unused       (GskGLTextureAtlas       *self,
                                                     int                      width,
