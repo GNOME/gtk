@@ -281,6 +281,10 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
         atlas = g_malloc (sizeof (GskGLTextureAtlas));
         gsk_gl_texture_atlas_init (atlas, ATLAS_SIZE, ATLAS_SIZE);
         atlas->texture_id = create_shared_texture (self, atlas->width, atlas->height);
+        gdk_gl_context_label_object_printf (get_context (self),
+                                            GL_TEXTURE, atlas->texture_id,
+                                            "Icon atlas %d", atlas->texture_id);
+
         /* Pack it onto that one, which surely has enought space... */
         gsk_gl_texture_atlas_pack (atlas, twidth + 2, theight + 2, &packed_x, &packed_y);
         packed_x += 1;
@@ -310,7 +314,13 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     region.height = theight + 2;
     region.data = cairo_image_surface_get_data (padded_surface);
 
+    gdk_gl_context_push_debug_group_printf (get_context (self),
+(driver),
+                                            "Uploading texture");
+
     upload_region_or_else (self, atlas->texture_id, &region);
+
+    gdk_gl_context_pop_debug_group (get_context (self));
 
     *out_texture_id = atlas->texture_id;
     *out_texture_rect = icon_data->texture_rect;
