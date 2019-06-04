@@ -29,6 +29,7 @@
 #include "gtkscrollable.h"
 #include "gtkselectionmodel.h"
 #include "gtksingleselection.h"
+#include "gtkstylecontext.h"
 #include "gtkwidgetprivate.h"
 
 /* Maximum number of list items created by the listview.
@@ -57,6 +58,7 @@ struct _GtkListView
   GtkListItemManager *item_manager;
   GtkAdjustment *adjustment[2];
   GtkScrollablePolicy scroll_policy[2];
+  gboolean show_separators;
 
   int list_width;
 
@@ -82,6 +84,7 @@ enum
   PROP_HADJUSTMENT,
   PROP_HSCROLL_POLICY,
   PROP_MODEL,
+  PROP_SHOW_SEPARATORS,
   PROP_VADJUSTMENT,
   PROP_VSCROLL_POLICY,
 
@@ -597,6 +600,10 @@ gtk_list_view_get_property (GObject    *object,
       g_value_set_object (value, self->model);
       break;
 
+    case PROP_SHOW_SEPARATORS:
+      g_value_set_boolean (value, self->show_separators);
+      break;
+
     case PROP_VADJUSTMENT:
       g_value_set_object (value, self->adjustment[GTK_ORIENTATION_VERTICAL]);
       break;
@@ -673,6 +680,10 @@ gtk_list_view_set_property (GObject      *object,
       gtk_list_view_set_model (self, g_value_get_object (value));
       break;
 
+    case PROP_SHOW_SEPARATORS:
+      gtk_list_view_set_show_separators (self, g_value_get_boolean (value));
+      break;
+
     case PROP_VADJUSTMENT:
       gtk_list_view_set_adjustment (self, GTK_ORIENTATION_VERTICAL, g_value_get_object (value));
       break;
@@ -728,6 +739,18 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                          P_("Model for the items displayed"),
                          G_TYPE_LIST_MODEL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkListView:show-separators:
+   *
+   * Show separators between rows
+   */
+  properties[PROP_SHOW_SEPARATORS] =
+    g_param_spec_boolean ("show-separators",
+                          P_("Show separators"),
+                          P_("Show separators between rows"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
@@ -839,3 +862,46 @@ gtk_list_view_set_functions (GtkListView          *self,
   g_object_unref (factory);
 }
 
+/**
+ * gtk_list_view_set_show_separators:
+ * @self: a #GtkListView
+ * @show_separators: %TRUE to show separators
+ *
+ * Sets whether the list box should show separators
+ * between rows.
+ */
+void
+gtk_list_view_set_show_separators (GtkListView *self,
+                                   gboolean     show_separators)
+{
+  g_return_if_fail (GTK_IS_LIST_VIEW (self));
+
+  if (self->show_separators == show_separators)
+    return;
+
+  self->show_separators = show_separators;
+
+  if (show_separators)
+    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self)), "separators");
+  else
+    gtk_style_context_remove_class (gtk_widget_get_style_context (GTK_WIDGET (self)), "separators");
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_SEPARATORS]);
+}
+
+/**
+ * gtk_list_view_get_show_separators:
+ * @box: a #GtkListView
+ *
+ * Returns whether the list box should show separators
+ * between rows.
+ *
+ * Returns: %TRUE if the list box shows separators
+ */
+gboolean
+gtk_list_view_get_show_separators (GtkListView *self)
+{
+  g_return_val_if_fail (GTK_IS_LIST_VIEW (self), FALSE);
+
+  return self->show_separators;
+}

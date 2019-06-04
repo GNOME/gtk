@@ -484,6 +484,8 @@ GtkListView
 gtk_list_view_new
 gtk_list_view_set_model
 gtk_list_view_get_model
+gtk_list_view_set_show_separators
+gtk_list_view_get_show_separators
 <SUBSECTION Standard>
 GTK_LIST_VIEW
 GTK_LIST_VIEW_CLASS
