@@ -54,7 +54,7 @@ gsk_gl_texture_atlases_unref (GskGLTextureAtlases *atlases)
   atlases->ref_count--;
 }
 
-#if 1
+#if 0
 static void
 write_atlas_to_png (GskGLTextureAtlas *atlas,
                     const char        *filename)
@@ -98,7 +98,7 @@ gsk_gl_texture_atlases_begin_frame (GskGLTextureAtlases *atlases)
        }
     }
 
-#if 1
+#if 0
   {
     static guint timestamp;
 
