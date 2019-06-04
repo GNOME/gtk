@@ -15,7 +15,6 @@ struct _GskGLTextureAtlas
   int height;
 
   guint texture_id;
-  GskGLImage image;
 
   int unused_pixels; /* Pixels of rects that have been used at some point,
                         But are now unused. */

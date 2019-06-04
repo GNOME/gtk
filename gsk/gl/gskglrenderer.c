@@ -336,7 +336,7 @@ struct _GskGLRenderer
   GArray *render_ops;
 
   GskGLGlyphCache *glyph_cache;
-  GskGLIconCache icon_cache;
+  GskGLIconCache *icon_cache;
   GskGLShadowCache shadow_cache;
 
 #ifdef G_ENABLE_DEBUG
@@ -832,7 +832,7 @@ render_texture_node (GskGLRenderer       *self,
         {
           graphene_rect_t trect;
 
-          gsk_gl_icon_cache_lookup_or_add (&self->icon_cache,
+          gsk_gl_icon_cache_lookup_or_add (self->icon_cache,
                                            texture,
                                            &texture_id,
                                            &trect);
@@ -2479,6 +2479,21 @@ get_glyph_cache_for_display (GdkDisplay *display)
   return glyph_cache;
 }
 
+static GskGLIconCache *
+get_icon_cache_for_display (GdkDisplay *display)
+{
+  GskGLIconCache *icon_cache;
+
+  icon_cache = (GskGLIconCache*)g_object_get_data (G_OBJECT (display), "gl-icon-cache");
+  if (icon_cache == NULL)
+    {
+      icon_cache = gsk_gl_icon_cache_new (display);
+      g_object_set_data_full (G_OBJECT (display), "gl-icon-cache", icon_cache, (GDestroyNotify) gsk_gl_icon_cache_free);
+    }
+
+  return icon_cache;
+}
+
 static gboolean
 gsk_gl_renderer_realize (GskRenderer  *renderer,
                          GdkSurface    *surface,
@@ -2510,7 +2525,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
     return FALSE;
 
   self->glyph_cache = get_glyph_cache_for_display (gdk_surface_get_display (surface));
-  gsk_gl_icon_cache_init (&self->icon_cache, renderer, self->gl_driver);
+  self->icon_cache = get_icon_cache_for_display (gdk_surface_get_display (surface));
   gsk_gl_shadow_cache_init (&self->shadow_cache);
 
   return TRUE;
@@ -2536,7 +2551,7 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
     glDeleteProgram (self->programs[i].id);
 
   self->glyph_cache = NULL;
-  gsk_gl_icon_cache_free (&self->icon_cache);
+  self->icon_cache = NULL;
   gsk_gl_shadow_cache_free (&self->shadow_cache, self->gl_driver);
 
   g_clear_object (&self->gl_profiler);
@@ -3103,7 +3118,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   graphene_matrix_scale (&projection, 1, -1, 1);
 
   gsk_gl_glyph_cache_begin_frame (self->glyph_cache);
-  gsk_gl_icon_cache_begin_frame (&self->icon_cache);
+  gsk_gl_icon_cache_begin_frame (self->icon_cache);
   gsk_gl_shadow_cache_begin_frame (&self->shadow_cache, self->gl_driver);
 
   ops_set_projection (&self->op_builder, &projection);

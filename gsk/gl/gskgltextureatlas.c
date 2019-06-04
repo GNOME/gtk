@@ -10,7 +10,6 @@ gsk_gl_texture_atlas_init (GskGLTextureAtlas *self,
   memset (self, 0, sizeof (*self));
 
   self->texture_id = 0;
-  self->image.texture_id = 0;
   self->width = width;
   self->height = height;
 
