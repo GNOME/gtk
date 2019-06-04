@@ -10,16 +10,20 @@
 
 typedef struct
 {
+  int ref_count;
+
   GdkDisplay *display;
   GskGLDriver *gl_driver;
 
-  GPtrArray *atlases;
+  GskGLTextureAtlases *atlases;
   GHashTable *icons; /* GdkTexture -> IconData */
 
 } GskGLIconCache;
 
-GskGLIconCache * gsk_gl_icon_cache_new            (GdkDisplay *display);
-void             gsk_gl_icon_cache_free           (GskGLIconCache        *self);
+GskGLIconCache * gsk_gl_icon_cache_new            (GdkDisplay *display,
+                                                   GskGLTextureAtlases *atlases);
+GskGLIconCache * gsk_gl_icon_cache_ref            (GskGLIconCache        *self);
+void             gsk_gl_icon_cache_unref          (GskGLIconCache        *self);
 void             gsk_gl_icon_cache_begin_frame    (GskGLIconCache        *self);
 void             gsk_gl_icon_cache_lookup_or_add  (GskGLIconCache        *self,
                                                    GdkTexture            *texture,

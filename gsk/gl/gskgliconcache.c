@@ -23,56 +23,49 @@ icon_data_free (gpointer p)
   g_free (p);
 }
 
-static void
-free_atlas (gpointer v)
-{
-  GskGLTextureAtlas *atlas = v;
-
-  gsk_gl_texture_atlas_free (atlas);
-
-  g_free (atlas);
-}
-
 GskGLIconCache *
-gsk_gl_icon_cache_new (GdkDisplay *display)
+gsk_gl_icon_cache_new (GdkDisplay *display,
+                       GskGLTextureAtlases *atlases)
 {
   GskGLIconCache *self;
 
   self = g_new0 (GskGLIconCache, 1);
 
   self->display = display;
-
-  self->atlases = g_ptr_array_new_with_free_func ((GDestroyNotify)free_atlas);
   self->icons = g_hash_table_new_full (NULL, NULL, NULL, icon_data_free);
+  self->atlases = gsk_gl_texture_atlases_ref (atlases);
+  self->ref_count = 1;
+
+  return self;
+}
+
+GskGLIconCache *
+gsk_gl_icon_cache_ref (GskGLIconCache *self)
+{
+  self->ref_count++;
 
   return self;
 }
 
 void
-gsk_gl_icon_cache_free (GskGLIconCache *self)
+gsk_gl_icon_cache_unref (GskGLIconCache *self)
 {
-  guint i, p;
+  g_assert (self->ref_count > 0);
 
-  for (i = 0, p = self->atlases->len; i < p; i ++)
+  if (self->ref_count == 1)
     {
-      GskGLTextureAtlas *atlas = g_ptr_array_index (self->atlases, i);
-
-      if (atlas->texture_id != 0)
-        {
-          glDeleteTextures (1, &atlas->texture_id);
-          atlas->texture_id = 0;
-        }
+      gsk_gl_texture_atlases_unref (self->atlases);
+      g_hash_table_unref (self->icons);
+      g_free (self);
+      return;
     }
-  g_ptr_array_free (self->atlases, TRUE);
-  g_hash_table_unref (self->icons);
 
-  g_free (self);
+  self->ref_count--;
 }
 
 void
 gsk_gl_icon_cache_begin_frame (GskGLIconCache *self)
 {
-  gint i, p;
   GHashTableIter iter;
   GdkTexture *texture;
   IconData *icon_data;
@@ -81,45 +74,30 @@ gsk_gl_icon_cache_begin_frame (GskGLIconCache *self)
   g_hash_table_iter_init (&iter, self->icons);
   while (g_hash_table_iter_next (&iter, (gpointer *)&texture, (gpointer *)&icon_data))
     {
-      icon_data->frame_age ++;
+      guint pos;
 
-      if (icon_data->frame_age > MAX_FRAME_AGE)
+      if (!g_ptr_array_find (self->atlases->atlases, icon_data->atlas, &pos))
         {
-
-          if (icon_data->used)
-            {
-              const int w = icon_data->texture_rect.size.width  * ATLAS_SIZE;
-              const int h = icon_data->texture_rect.size.height * ATLAS_SIZE;
-
-              gsk_gl_texture_atlas_mark_unused (icon_data->atlas, w + 2, h + 2);
-              icon_data->used = FALSE;
-            }
-          /* We do NOT remove the icon here. Instead, We wait until we drop the entire atlas.
-           * This way we can revive it when we use it again. */
+          g_hash_table_iter_remove (&iter);
         }
-    }
-
-  for (i = 0, p = self->atlases->len; i < p; i ++)
-    {
-      GskGLTextureAtlas *atlas = g_ptr_array_index (self->atlases, i);
-
-      if (gsk_gl_texture_atlas_get_unused_ratio (atlas) > MAX_UNUSED_RATIO)
+      else
         {
-          g_hash_table_iter_init (&iter, self->icons);
-          while (g_hash_table_iter_next (&iter, (gpointer *)&texture, (gpointer *)&icon_data))
-            {
-              if (icon_data->atlas == atlas)
-                g_hash_table_iter_remove (&iter);
-            }
+          icon_data->frame_age ++;
 
-          if (atlas->texture_id != 0)
+          if (icon_data->frame_age > MAX_FRAME_AGE)
             {
-              glDeleteTextures (1, &atlas->texture_id);
-              atlas->texture_id = 0;
-            }
 
-          g_ptr_array_remove_index_fast (self->atlases, i);
-          i --; /* Check the current index again */
+              if (icon_data->used)
+                {
+                  const int w = icon_data->texture_rect.size.width  * ATLAS_SIZE;
+                  const int h = icon_data->texture_rect.size.height * ATLAS_SIZE;
+
+                  gsk_gl_texture_atlas_mark_unused (icon_data->atlas, w + 2, h + 2);
+                  icon_data->used = FALSE;
+                }
+              /* We do NOT remove the icon here. Instead, We wait until we drop the entire atlas.
+               * This way we can revive it when we use it again. */
+            }
         }
     }
 }
@@ -154,32 +132,6 @@ pad_surface (cairo_surface_t *surface)
   return padded;
 }
 
-static guint
-create_shared_texture (GskGLIconCache *self,
-                       int             width,
-                       int             height)
-{
-  guint texture_id;
-
-  glGenTextures (1, &texture_id);
-  glBindTexture (GL_TEXTURE_2D, texture_id);
-
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-  if (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
-    glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-  else
-    glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
-
-  glBindTexture (GL_TEXTURE_2D, 0);
-
-  return texture_id;
-}
-
 static void
 upload_region_or_else (GskGLIconCache *self,
                        guint           texture_id,
@@ -203,8 +155,8 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
       icon_data->frame_age = 0;
       if (!icon_data->used)
         {
-          const int w = icon_data->texture_rect.size.width  * ATLAS_SIZE;
-          const int h = icon_data->texture_rect.size.height * ATLAS_SIZE;
+          const int w = icon_data->texture_rect.size.width  * icon_data->atlas->width;
+          const int h = icon_data->texture_rect.size.height * icon_data->atlas->height;
 
           gsk_gl_texture_atlas_mark_used (icon_data->atlas, w + 2, h + 2);
           icon_data->used = TRUE;
@@ -225,13 +177,14 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     GskImageRegion region;
     cairo_surface_t *surface;
     cairo_surface_t *padded_surface;
+    GPtrArray *atlases = self->atlases->atlases;
 
     g_assert (twidth  < ATLAS_SIZE);
     g_assert (theight < ATLAS_SIZE);
 
-    for (i = 0, p = self->atlases->len; i < p; i ++)
+    for (i = 0, p = atlases->len; i < p; i ++)
       {
-        atlas = g_ptr_array_index (self->atlases, i);
+        atlas = g_ptr_array_index (atlases, i);
 
         if (gsk_gl_texture_atlas_pack (atlas, twidth + 2, theight + 2, &packed_x, &packed_y))
           {
@@ -248,17 +201,14 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
         /* No atlas has enough space, so create a new one... */
         atlas = g_malloc (sizeof (GskGLTextureAtlas));
         gsk_gl_texture_atlas_init (atlas, ATLAS_SIZE, ATLAS_SIZE);
-        atlas->texture_id = create_shared_texture (self, atlas->width, atlas->height);
-        gdk_gl_context_label_object_printf (gdk_gl_context_get_current (),
-                                            GL_TEXTURE, atlas->texture_id,
-                                            "Icon atlas %d", atlas->texture_id);
+        gsk_gl_texture_atlas_realize (atlas);
 
         /* Pack it onto that one, which surely has enought space... */
         gsk_gl_texture_atlas_pack (atlas, twidth + 2, theight + 2, &packed_x, &packed_y);
         packed_x += 1;
         packed_y += 1;
 
-        g_ptr_array_add (self->atlases, atlas);
+        g_ptr_array_add (atlases, atlas);
       }
 
     icon_data = g_new0 (IconData, 1);
@@ -266,10 +216,10 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     icon_data->frame_age = 0;
     icon_data->used = TRUE;
     graphene_rect_init (&icon_data->texture_rect,
-                        (float)packed_x / ATLAS_SIZE,
-                        (float)packed_y / ATLAS_SIZE,
-                        (float)twidth   / ATLAS_SIZE,
-                        (float)theight  / ATLAS_SIZE);
+                        (float)packed_x / atlas->width,
+                        (float)packed_y / atlas->height,
+                        (float)twidth   / atlas->width,
+                        (float)theight  / atlas->height);
 
     g_hash_table_insert (self->icons, texture, icon_data);
 

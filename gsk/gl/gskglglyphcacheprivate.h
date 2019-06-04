@@ -9,9 +9,11 @@
 
 typedef struct
 {
+  int ref_count;
+
   GdkDisplay *display;
   GHashTable *hash_table;
-  GPtrArray *atlases;
+  GskGLTextureAtlases *atlases;
 
   guint64 timestamp;
 } GskGLGlyphCache;
@@ -23,14 +25,7 @@ typedef struct
   guint scale; /* times 1024 */
 } GlyphCacheKey;
 
-typedef struct _DirtyGlyph DirtyGlyph;
 typedef struct _GskGLCachedGlyph GskGLCachedGlyph;
-
-struct _DirtyGlyph
-{
-  GlyphCacheKey *key;
-  GskGLCachedGlyph *value;
-};
 
 struct _GskGLCachedGlyph
 {
@@ -53,8 +48,10 @@ struct _GskGLCachedGlyph
 };
 
 
-GskGLGlyphCache *        gsk_gl_glyph_cache_new             (GdkDisplay *display);
-void                     gsk_gl_glyph_cache_free            (GskGLGlyphCache        *self);
+GskGLGlyphCache *        gsk_gl_glyph_cache_new             (GdkDisplay *display,
+                                                             GskGLTextureAtlases *atlases);
+GskGLGlyphCache *        gsk_gl_glyph_cache_ref             (GskGLGlyphCache *self);
+void                     gsk_gl_glyph_cache_unref           (GskGLGlyphCache        *self);
 void                     gsk_gl_glyph_cache_begin_frame     (GskGLGlyphCache        *self);
 guint                    gsk_gl_glyph_cache_get_glyph_texture_id (GskGLGlyphCache        *self,
                                                              const GskGLCachedGlyph *glyph);

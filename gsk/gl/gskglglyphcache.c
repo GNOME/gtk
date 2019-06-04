@@ -48,18 +48,9 @@ create_atlas (GskGLGlyphCache *self,
   return atlas;
 }
 
-static void
-free_atlas (gpointer v)
-{
-  GskGLTextureAtlas *atlas = v;
-
-  gsk_gl_texture_atlas_free (atlas);
-
-  g_free (atlas);
-}
-
 GskGLGlyphCache *
-gsk_gl_glyph_cache_new (GdkDisplay *display)
+gsk_gl_glyph_cache_new (GdkDisplay *display,
+                        GskGLTextureAtlases *atlases)
 {
   GskGLGlyphCache *glyph_cache;
 
@@ -68,31 +59,36 @@ gsk_gl_glyph_cache_new (GdkDisplay *display)
   glyph_cache->display = display;
   glyph_cache->hash_table = g_hash_table_new_full (glyph_cache_hash, glyph_cache_equal,
                                                    glyph_cache_key_free, glyph_cache_value_free);
-  glyph_cache->atlases = g_ptr_array_new_with_free_func (free_atlas);
+
+  glyph_cache->atlases = gsk_gl_texture_atlases_ref (atlases);
+
+  glyph_cache->ref_count = 1;
 
   return glyph_cache;
 }
 
-void
-gsk_gl_glyph_cache_free (GskGLGlyphCache *self)
+GskGLGlyphCache *
+gsk_gl_glyph_cache_ref (GskGLGlyphCache *self)
 {
-  guint i;
+  self->ref_count++;
 
-  for (i = 0; i < self->atlases->len; i ++)
+  return self;
+}
+
+void
+gsk_gl_glyph_cache_unref (GskGLGlyphCache *self)
+{
+  g_assert (self->ref_count > 0);
+
+  if (self->ref_count == 1)
     {
-      GskGLTextureAtlas *atlas = g_ptr_array_index (self->atlases, i);
-
-      if (atlas->texture_id != 0)
-        {
-          glDeleteTextures (1, &atlas->texture_id);
-          atlas->texture_id = 0;
-        }
+      gsk_gl_texture_atlases_unref (self->atlases);
+      g_hash_table_unref (self->hash_table);
+      g_free (self);
+      return;
     }
 
-  g_ptr_array_unref (self->atlases);
-  g_hash_table_unref (self->hash_table);
-
-  g_free (self);
+  self->ref_count--;
 }
 
 static gboolean
@@ -129,83 +125,11 @@ glyph_cache_value_free (gpointer v)
   g_free (v);
 }
 
-static void
-add_to_cache (GskGLGlyphCache  *cache,
-              GlyphCacheKey    *key,
-              GskGLCachedGlyph *value)
-{
-  const int width = value->draw_width * key->scale / 1024;
-  const int height = value->draw_height * key->scale / 1024;
-  GskGLTextureAtlas *atlas = NULL;
-  guint i, p;
-  int packed_x, packed_y;
-
-  /* Try all the atlases and pick the first one that can hold
-   * our new glyph */
-  for (i = 0, p = cache->atlases->len; i < p; i ++)
-    {
-      GskGLTextureAtlas *test_atlas = g_ptr_array_index (cache->atlases, i);
-      gboolean was_packed;
-
-      was_packed = gsk_gl_texture_atlas_pack (test_atlas, width + 2, height + 2, &packed_x, &packed_y);
-
-      if (was_packed)
-        {
-          atlas = test_atlas;
-          break;
-        }
-    }
-
-  if (atlas == NULL)
-    {
-      gboolean was_packed;
-
-      atlas = create_atlas (cache, width + 2, height + 2);
-
-      g_ptr_array_add (cache->atlases, atlas);
-
-      was_packed = gsk_gl_texture_atlas_pack (atlas,
-                                              width + 2, height + 2,
-                                              &packed_x, &packed_y);
-
-      g_assert (was_packed);
-    }
-
-  value->tx = (float)(packed_x + 1) / atlas->width;
-  value->ty = (float)(packed_y + 1) / atlas->height;
-  value->tw = (float)width    / atlas->width;
-  value->th = (float)height   / atlas->height;
-  value->used = TRUE;
-
-  value->atlas = atlas;
-
-  if (atlas->user_data == NULL)
-    atlas->user_data = g_new0 (DirtyGlyph, 1);
-
-  ((DirtyGlyph *)atlas->user_data)->key = key;
-  ((DirtyGlyph *)atlas->user_data)->value = value;
-
-#ifdef G_ENABLE_DEBUG
-  if (GSK_DEBUG_CHECK (GLYPH_CACHE))
-    {
-      for (i = 0; i < cache->atlases->len; i++)
-        {
-          atlas = g_ptr_array_index (cache->atlases, i);
-          g_message ("atlas %d (%dx%d): %.2g%% old pixels",
-                   i, atlas->width, atlas->height,
-                   gsk_gl_texture_atlas_get_unused_ratio (atlas));
-        }
-    }
-#endif
-}
-
 static gboolean
-render_glyph (const GskGLTextureAtlas *atlas,
-              const DirtyGlyph        *glyph,
-              GskImageRegion          *region)
+render_glyph (GlyphCacheKey    *key,
+              GskGLCachedGlyph *value,
+              GskImageRegion   *region)
 {
-  GlyphCacheKey *key = glyph->key;
-  GskGLCachedGlyph *value = glyph->value;
   cairo_surface_t *surface;
   cairo_t *cr;
   cairo_scaled_font_t *scaled_font;
@@ -222,9 +146,8 @@ render_glyph (const GskGLTextureAtlas *atlas,
   surface_width = value->draw_width * key->scale / 1024;
   surface_height = value->draw_height * key->scale / 1024;
 
-  /* TODO: Give glyphs that large their own texture in the proper size. Don't
-   *       put them in the atlas at all. */
-  if (surface_width > atlas->width || surface_height > atlas->height)
+  /* XXX should never happen */
+  if (surface_width > value->atlas->width || surface_height > value->atlas->height)
     return FALSE;
 
   stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, surface_width);
@@ -259,17 +182,17 @@ render_glyph (const GskGLTextureAtlas *atlas,
   region->height = cairo_image_surface_get_height (surface);
   region->stride = cairo_image_surface_get_stride (surface);
   region->data = data;
-  region->x = (gsize)(value->tx * atlas->width);
-  region->y = (gsize)(value->ty * atlas->height);
+  region->x = (gsize)(value->tx * value->atlas->width);
+  region->y = (gsize)(value->ty * value->atlas->height);
 
   cairo_surface_destroy (surface);
+
   return TRUE;
 }
 
 static void
-upload_region_or_else (GskGLGlyphCache *self,
-                       guint            texture_id,
-                       GskImageRegion  *region)
+upload_region (guint           texture_id,
+               GskImageRegion *region)
 {
   glBindTexture (GL_TEXTURE_2D, texture_id);
   glTextureSubImage2D (texture_id, 0, region->x, region->y, region->width, region->height,
@@ -277,29 +200,90 @@ upload_region_or_else (GskGLGlyphCache *self,
 }
 
 static void
-upload_dirty_glyph (GskGLGlyphCache   *self,
-                    GskGLTextureAtlas *atlas)
+upload_glyph (GskGLGlyphCache  *self,
+              GlyphCacheKey    *key,
+              GskGLCachedGlyph *value)
 {
   GskImageRegion region;
 
-  g_assert (atlas->user_data != NULL);
-
   gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
                                           "Uploading glyph %d",
-                                         ((DirtyGlyph *)atlas->user_data)->key->glyph);
+                                          key->glyph);
 
-  if (render_glyph (atlas, (DirtyGlyph *)atlas->user_data, &region))
+  if (render_glyph (key, value, &region))
     {
-      upload_region_or_else (self, atlas->texture_id, &region);
+      upload_region (value->atlas->texture_id, &region);
       g_free (region.data);
     }
 
   gdk_gl_context_pop_debug_group (gdk_gl_context_get_current ());
+}
 
-  /* TODO: This could be unnecessary. We can just reuse the allocated
-   * DirtyGlyph next time.
-   */
-  g_clear_pointer (&atlas->user_data, g_free);
+static void
+add_to_cache (GskGLGlyphCache  *self,
+              GlyphCacheKey    *key,
+              GskGLCachedGlyph *value)
+{
+  const int width = value->draw_width * key->scale / 1024;
+  const int height = value->draw_height * key->scale / 1024;
+  GskGLTextureAtlas *atlas = NULL;
+  guint i, p;
+  int packed_x, packed_y;
+  GPtrArray *atlases = self->atlases->atlases;
+
+  /* Try all the atlases and pick the first one that can hold
+   * our new glyph */
+  for (i = 0, p = atlases->len; i < p; i ++)
+    {
+      GskGLTextureAtlas *test_atlas = g_ptr_array_index (atlases, i);
+      gboolean was_packed;
+
+      was_packed = gsk_gl_texture_atlas_pack (test_atlas, width + 2, height + 2, &packed_x, &packed_y);
+
+      if (was_packed)
+        {
+          atlas = test_atlas;
+          break;
+        }
+    }
+
+  if (atlas == NULL)
+    {
+      gboolean was_packed;
+
+      atlas = create_atlas (self, width + 2, height + 2);
+
+      g_ptr_array_add (atlases, atlas);
+
+      was_packed = gsk_gl_texture_atlas_pack (atlas,
+                                              width + 2, height + 2,
+                                              &packed_x, &packed_y);
+
+      g_assert (was_packed);
+    }
+
+  value->tx = (float)(packed_x + 1) / atlas->width;
+  value->ty = (float)(packed_y + 1) / atlas->height;
+  value->tw = (float)width / atlas->width;
+  value->th = (float)height / atlas->height;
+  value->used = TRUE;
+
+  value->atlas = atlas;
+
+  upload_glyph (self, key, value);
+
+#ifdef G_ENABLE_DEBUG
+  if (GSK_DEBUG_CHECK (GLYPH_CACHE))
+    {
+      for (i = 0; i < atlases->len; i++)
+        {
+          atlas = g_ptr_array_index (atlases, i);
+          g_message ("atlas %d (%dx%d): %.2g%% old pixels",
+                   i, atlas->width, atlas->height,
+                   gsk_gl_texture_atlas_get_unused_ratio (atlas));
+        }
+    }
+#endif
 }
 
 const GskGLCachedGlyph *
@@ -370,66 +354,19 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache *cache,
   return value;
 }
 
-/* Not using gdk_gl_driver_create_texture here, since we want
- * this texture to survive the driver and stay around until
- * the display gets closed.
- */
-static guint
-create_shared_texture (GskGLGlyphCache *self,
-                       int              width,
-                       int              height)
-{
-  guint texture_id;
-
-  glGenTextures (1, &texture_id);
-  glBindTexture (GL_TEXTURE_2D, texture_id);
-
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-  if (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
-    glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-  else
-    glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
-
-  glBindTexture (GL_TEXTURE_2D, 0);
-
-  return texture_id;
-}
-
 guint
 gsk_gl_glyph_cache_get_glyph_texture_id (GskGLGlyphCache        *self,
                                          const GskGLCachedGlyph *glyph)
 {
-  GskGLTextureAtlas *atlas = glyph->atlas;
-
-  g_assert (atlas != NULL);
-
-  if (atlas->texture_id == 0)
-    {
-      atlas->texture_id = create_shared_texture (self, atlas->width, atlas->height);
-      gdk_gl_context_label_object_printf (gdk_gl_context_get_current (),
-                                          GL_TEXTURE, atlas->texture_id,
-                                          "Glyph atlas %d", atlas->texture_id);
-    }
-
-  if (atlas->user_data != NULL)
-    upload_dirty_glyph (self, atlas);
-
-  return atlas->texture_id;
+  return glyph->atlas->texture_id;
 }
 
 void
 gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
 {
-  int i;
   GHashTableIter iter;
   GlyphCacheKey *key;
   GskGLCachedGlyph *value;
-  GHashTable *removed = g_hash_table_new (g_direct_hash, g_direct_equal);
   guint dropped = 0;
 
   self->timestamp++;
@@ -437,45 +374,12 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
   if ((self->timestamp - 1) % CHECK_INTERVAL != 0)
     return;
 
-  /* look for atlases to drop, and create a mapping of updated texture indices */
-  for (i = self->atlases->len - 1; i >= 0; i--)
-    {
-      GskGLTextureAtlas *atlas = g_ptr_array_index (self->atlases, i);
-
-      if (gsk_gl_texture_atlas_get_unused_ratio (atlas) > MAX_OLD_RATIO)
-        {
-          GSK_NOTE(GLYPH_CACHE,
-                   g_message ("Dropping atlas %d (%g.2%% old)", i,
-                              gsk_gl_texture_atlas_get_unused_ratio (atlas)));
-
-#if 0
-          static int kk;
-
-          g_message ("Dropping glyph cache... Ratio: %f",
-                     gsk_gl_texture_atlas_get_unused_ratio (atlas));
-          gsk_gl_image_write_to_png (&atlas->image, driver,
-                                     g_strdup_printf ("dropped_%d.png", kk++));
-#endif
-
-          if (atlas->texture_id != 0)
-            {
-              glDeleteTextures (1, &atlas->texture_id);
-              atlas->texture_id = 0;
-            }
-
-          g_hash_table_add (removed, atlas);
-
-          g_ptr_array_remove_index (self->atlases, i);
-       }
-    }
-
-  /* Remove all glyphs whose atlas was removed, and
-   * mark old glyphs as unused
-   */
   g_hash_table_iter_init (&iter, self->hash_table);
   while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
     {
-      if (g_hash_table_contains (removed, value->atlas))
+      guint pos;
+
+      if (!g_ptr_array_find (self->atlases->atlases, value->atlas, &pos))
         {
           g_hash_table_iter_remove (&iter);
           dropped++;
@@ -496,23 +400,6 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
             }
         }
     }
-  g_hash_table_unref (removed);
 
   GSK_NOTE(GLYPH_CACHE, if (dropped > 0) g_message ("Dropped %d glyphs", dropped));
-
-#if 0
-  for (i = 0; i < self->atlases->len; i++)
-    {
-      GskGLGlyphAtlas *atlas = g_ptr_array_index (self->atlases, i);
-
-      if (atlas->texture_id)
-        {
-          char *filename;
-
-          filename = g_strdup_printf ("glyphatlas%d-%ld.png", i, self->timestamp);
-          gsk_gl_image_write_to_png (atlas->image, driver, filename);
-          g_free (filename);
-        }
-    }
-#endif
 }
