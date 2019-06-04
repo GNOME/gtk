@@ -142,7 +142,7 @@ add_to_cache (GskGLGlyphCache  *cache,
       GskGLTextureAtlas *test_atlas = g_ptr_array_index (cache->atlases, i);
       gboolean was_packed;
 
-      was_packed = gsk_gl_texture_atlas_pack (test_atlas, width, height, &packed_x, &packed_y);
+      was_packed = gsk_gl_texture_atlas_pack (test_atlas, width + 2, height + 2, &packed_x, &packed_y);
 
       if (was_packed)
         {
@@ -262,35 +262,6 @@ render_glyph (const GskGLTextureAtlas *atlas,
 }
 
 static void
-check_gl_error (const char *s)
-{
-  int error = glGetError ();
-
-  switch (error)
-    {
-    case GL_INVALID_OPERATION:
-      g_print ("%s: INVALID_OPERATION\n", s);
-      break;
-    case GL_INVALID_ENUM:
-      g_print ("%s: INVALID_ENUM\n", s);
-      break;
-    case GL_INVALID_VALUE:
-      g_print ("%s: INVALID_VALUE\n", s);
-      break;
-    case GL_OUT_OF_MEMORY:
-      g_print ("%s: OUT_OF_MEMORY\n", s);
-      break;
-    case GL_INVALID_FRAMEBUFFER_OPERATION:
-      g_print ("%s: INVALID_FRAMEBUFFER_OPERATION\n", s);
-      break;
-    case GL_NO_ERROR:
-      break;
-    default:
-      g_print ("%s: error %d\n", s, error);
-    }
-}
-
-static void
 upload_region_or_else (GdkDisplay *display,
                        guint           texture_id,
                        GskImageRegion *region)
@@ -306,7 +277,6 @@ upload_region_or_else (GdkDisplay *display,
   glBindTexture (GL_TEXTURE_2D, texture_id);
   glTextureSubImage2D (texture_id, 0, region->x, region->y, region->width, region->height,
                    GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, region->data);
-  check_gl_error ("upload region");
 
   gdk_gl_context_make_current (previous);
 }
@@ -429,11 +399,8 @@ create_shared_texture (GdkDisplay *display,
 
   glBindTexture (GL_TEXTURE_2D, 0);
 
-  check_gl_error ("create shared texture");
-
   gdk_gl_context_make_current (previous);
 
-g_print ("shared glyph atlas texture: %d\n", texture_id);
   return texture_id;
 }
 
