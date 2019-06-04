@@ -576,6 +576,7 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   Display *dpy;
   DrawableInfo *info;
   GdkGLContext *share;
+  GdkGLContext *shared_data_context;
   GdkSurface *surface;
   gboolean debug_bit, compat_bit, legacy_bit, es_bit;
   int major, minor, flags;
@@ -586,6 +587,7 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   context_x11 = GDK_X11_GL_CONTEXT (context);
   display_x11 = GDK_X11_DISPLAY (display);
   share = gdk_gl_context_get_shared_context (context);
+  shared_data_context = gdk_surface_get_shared_data_gl_context (surface);
 
   gdk_gl_context_get_required_version (context, &major, &minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
@@ -625,7 +627,7 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   if (legacy_bit && !GDK_X11_DISPLAY (display)->has_glx_create_context)
     {
       GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating legacy GL context on request"));
-      context_x11->glx_context = create_legacy_context (display, context_x11->glx_config, share);
+      context_x11->glx_context = create_legacy_context (display, context_x11->glx_config, share ? share : shared_data_context);
     }
   else
     {
@@ -650,14 +652,14 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
       GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating GL3 context"));
       context_x11->glx_context = create_gl3_context (display,
                                                      context_x11->glx_config,
-                                                     share,
+                                                     share ? share : shared_data_context,
                                                      profile, flags, major, minor);
 
       /* Fall back to legacy in case the GL3 context creation failed */
       if (context_x11->glx_context == NULL)
         {
           GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating fallback legacy context"));
-          context_x11->glx_context = create_legacy_context (display, context_x11->glx_config, share);
+          context_x11->glx_context = create_legacy_context (display, context_x11->glx_config, share ? share : shared_data_context);
           legacy_bit = TRUE;
           es_bit = FALSE;
         }
