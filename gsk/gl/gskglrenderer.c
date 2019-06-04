@@ -593,9 +593,7 @@ render_text_node (GskGLRenderer   *self,
       cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
       cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
 
-      ops_set_texture (builder, gsk_gl_glyph_cache_get_glyph_texture_id (self->glyph_cache,
-                                                                         self->gl_driver,
-                                                                         glyph));
+      ops_set_texture (builder, gsk_gl_glyph_cache_get_glyph_texture_id (self->glyph_cache, glyph));
 
       tx  = glyph->tx;
       ty  = glyph->ty;
@@ -2474,9 +2472,8 @@ get_glyph_cache_for_display (GdkDisplay *display)
   glyph_cache = (GskGLGlyphCache*)g_object_get_data (G_OBJECT (display), "gl-glyph-cache");
   if (glyph_cache == NULL)
     {
-      glyph_cache = g_new0 (GskGLGlyphCache, 1);
-      gsk_gl_glyph_cache_init (glyph_cache);
-      g_object_set_data (G_OBJECT (display), "gl-glyph-cache", glyph_cache);
+      glyph_cache = gsk_gl_glyph_cache_new (display);
+      g_object_set_data_full (G_OBJECT (display), "gl-glyph-cache", glyph_cache, (GDestroyNotify) gsk_gl_glyph_cache_free);
     }
 
   return glyph_cache;
@@ -3105,7 +3102,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
                               ORTHO_FAR_PLANE);
   graphene_matrix_scale (&projection, 1, -1, 1);
 
-  gsk_gl_glyph_cache_begin_frame (self->glyph_cache, self->gl_driver);
+  gsk_gl_glyph_cache_begin_frame (self->glyph_cache);
   gsk_gl_icon_cache_begin_frame (&self->icon_cache);
   gsk_gl_shadow_cache_begin_frame (&self->shadow_cache, self->gl_driver);
 

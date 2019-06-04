@@ -9,6 +9,7 @@
 
 typedef struct
 {
+  GdkDisplay *display;
   GHashTable *hash_table;
   GPtrArray *atlases;
 
@@ -52,13 +53,10 @@ struct _GskGLCachedGlyph
 };
 
 
-void                     gsk_gl_glyph_cache_init            (GskGLGlyphCache        *self);
-void                     gsk_gl_glyph_cache_free            (GskGLGlyphCache        *self,
-                                                             GskGLDriver            *driver);
-void                     gsk_gl_glyph_cache_begin_frame     (GskGLGlyphCache        *self,
-                                                             GskGLDriver            *driver);
+GskGLGlyphCache *        gsk_gl_glyph_cache_new             (GdkDisplay *display);
+void                     gsk_gl_glyph_cache_free            (GskGLGlyphCache        *self);
+void                     gsk_gl_glyph_cache_begin_frame     (GskGLGlyphCache        *self);
 guint                    gsk_gl_glyph_cache_get_glyph_texture_id (GskGLGlyphCache        *self,
-                                                             GskGLDriver            *driver,
                                                              const GskGLCachedGlyph *glyph);
 const GskGLCachedGlyph * gsk_gl_glyph_cache_lookup          (GskGLGlyphCache        *self,
                                                              gboolean                create,
