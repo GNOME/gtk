@@ -335,8 +335,9 @@ struct _GskGLRenderer
   RenderOpBuilder op_builder;
   GArray *render_ops;
 
-  GskGLGlyphCache glyph_cache;
-  GskGLIconCache icon_cache;
+  GskGLTextureAtlases *atlases;
+  GskGLGlyphCache *glyph_cache;
+  GskGLIconCache *icon_cache;
   GskGLShadowCache shadow_cache;
 
 #ifdef G_ENABLE_DEBUG
@@ -571,7 +572,7 @@ render_text_node (GskGLRenderer   *self,
   for (i = 0; i < num_glyphs; i++)
     {
       const PangoGlyphInfo *gi = &glyphs[i];
-      const GskGLCachedGlyph *glyph;
+      GskGLCachedGlyph glyph;
       float glyph_x, glyph_y, glyph_w, glyph_h;
       float tx, ty, tx2, ty2;
       double cx;
@@ -580,32 +581,41 @@ render_text_node (GskGLRenderer   *self,
       if (gi->glyph == PANGO_GLYPH_EMPTY)
         continue;
 
-      glyph = gsk_gl_glyph_cache_lookup (&self->glyph_cache,
-                                         TRUE,
-                                         (PangoFont *)font,
-                                         gi->glyph,
-                                         text_scale);
+      gsk_gl_glyph_cache_lookup (self->glyph_cache,
+                                 (PangoFont *)font,
+                                 gi->glyph,
+                                 text_scale,
+                                 &glyph);
 
       /* e.g. whitespace */
-      if (glyph->draw_width <= 0 || glyph->draw_height <= 0 || glyph->scale <= 0)
+      if (glyph.draw_width <= 0 || glyph.draw_height <= 0)
         goto next;
+
+      /* big glyphs are not cached */
+      if (!glyph.texture_id)
+        {
+          gsk_gl_glyph_cache_get_texture (self->gl_driver,
+                                          (PangoFont *)font,
+                                          gi->glyph,
+                                          text_scale,
+                                          &glyph);
+          g_assert (glyph.texture_id != 0);
+        }
 
       cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
       cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
 
-      ops_set_texture (builder, gsk_gl_glyph_cache_get_glyph_texture_id (&self->glyph_cache,
-                                                                         self->gl_driver,
-                                                                         glyph));
+      ops_set_texture (builder, glyph.texture_id);
 
-      tx  = glyph->tx;
-      ty  = glyph->ty;
-      tx2 = tx + glyph->tw;
-      ty2 = ty + glyph->th;
+      tx  = glyph.tx;
+      ty  = glyph.ty;
+      tx2 = tx + glyph.tw;
+      ty2 = ty + glyph.th;
 
-      glyph_x = x + cx + glyph->draw_x;
-      glyph_y = y + cy + glyph->draw_y;
-      glyph_w = glyph->draw_width;
-      glyph_h = glyph->draw_height;
+      glyph_x = x + cx + glyph.draw_x;
+      glyph_y = y + cy + glyph.draw_y;
+      glyph_w = glyph.draw_width;
+      glyph_h = glyph.draw_height;
 
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
         { { glyph_x,           glyph_y           }, { tx,  ty  }, },
@@ -829,12 +839,12 @@ render_texture_node (GskGLRenderer       *self,
       int texture_id;
       float tx = 0, ty = 0, tx2 = 1, ty2 = 1;
 
-      if (texture->width <= 64 &&
-          texture->height <= 64)
+      if (texture->width <= 128 &&
+          texture->height <= 128)
         {
           graphene_rect_t trect;
 
-          gsk_gl_icon_cache_lookup_or_add (&self->icon_cache,
+          gsk_gl_icon_cache_lookup_or_add (self->icon_cache,
                                            texture,
                                            &texture_id,
                                            &trect);
@@ -2466,6 +2476,68 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   return TRUE;
 }
 
+static GskGLTextureAtlases *
+get_texture_atlases_for_display (GdkDisplay *display)
+{
+  GskGLTextureAtlases *atlases;
+
+  if (g_getenv ("GSK_NO_SHARED_CACHES"))
+    return gsk_gl_texture_atlases_new ();
+
+  atlases = (GskGLTextureAtlases*)g_object_get_data (G_OBJECT (display), "gsk-gl-texture-atlases");
+  if (atlases == NULL)
+    {
+      atlases = gsk_gl_texture_atlases_new ();
+      g_object_set_data_full (G_OBJECT (display), "gsk-gl-texture-atlases",
+                              gsk_gl_texture_atlases_ref (atlases),
+                              (GDestroyNotify) gsk_gl_texture_atlases_unref);
+    }
+
+  return atlases;
+}
+
+static GskGLGlyphCache *
+get_glyph_cache_for_display (GdkDisplay *display,
+                             GskGLTextureAtlases *atlases)
+{
+  GskGLGlyphCache *glyph_cache;
+
+  if (g_getenv ("GSK_NO_SHARED_CACHES"))
+    return gsk_gl_glyph_cache_new (display, atlases);
+
+  glyph_cache = (GskGLGlyphCache*)g_object_get_data (G_OBJECT (display), "gsk-gl-glyph-cache");
+  if (glyph_cache == NULL)
+    {
+      glyph_cache = gsk_gl_glyph_cache_new (display, atlases);
+      g_object_set_data_full (G_OBJECT (display), "gsk-gl-glyph-cache",
+                              gsk_gl_glyph_cache_ref (glyph_cache),
+                              (GDestroyNotify) gsk_gl_glyph_cache_unref);
+    }
+
+  return glyph_cache;
+}
+
+static GskGLIconCache *
+get_icon_cache_for_display (GdkDisplay *display,
+                            GskGLTextureAtlases *atlases)
+{
+  GskGLIconCache *icon_cache;
+
+  if (g_getenv ("GSK_NO_SHARED_CACHES"))
+    return gsk_gl_icon_cache_new (display, atlases);
+
+  icon_cache = (GskGLIconCache*)g_object_get_data (G_OBJECT (display), "gsk-gl-icon-cache");
+  if (icon_cache == NULL)
+    {
+      icon_cache = gsk_gl_icon_cache_new (display, atlases);
+      g_object_set_data_full (G_OBJECT (display), "gsk-gl-icon-cache",
+                              gsk_gl_icon_cache_ref (icon_cache),
+                              (GDestroyNotify) gsk_gl_icon_cache_unref);
+    }
+
+  return icon_cache;
+}
+
 static gboolean
 gsk_gl_renderer_realize (GskRenderer  *renderer,
                          GdkSurface    *surface,
@@ -2496,8 +2568,9 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   if (!gsk_gl_renderer_create_programs (self, error))
     return FALSE;
 
-  gsk_gl_glyph_cache_init (&self->glyph_cache);
-  gsk_gl_icon_cache_init (&self->icon_cache, renderer, self->gl_driver);
+  self->atlases = get_texture_atlases_for_display (gdk_surface_get_display (surface));
+  self->glyph_cache = get_glyph_cache_for_display (gdk_surface_get_display (surface), self->atlases);
+  self->icon_cache = get_icon_cache_for_display (gdk_surface_get_display (surface), self->atlases);
   gsk_gl_shadow_cache_init (&self->shadow_cache);
 
   return TRUE;
@@ -2522,8 +2595,9 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   for (i = 0; i < GL_N_PROGRAMS; i ++)
     glDeleteProgram (self->programs[i].id);
 
-  gsk_gl_glyph_cache_free (&self->glyph_cache, self->gl_driver);
-  gsk_gl_icon_cache_free (&self->icon_cache);
+  g_clear_pointer (&self->glyph_cache, gsk_gl_glyph_cache_unref);
+  g_clear_pointer (&self->icon_cache, gsk_gl_icon_cache_unref);
+  g_clear_pointer (&self->atlases, gsk_gl_texture_atlases_unref);
   gsk_gl_shadow_cache_free (&self->shadow_cache, self->gl_driver);
 
   g_clear_object (&self->gl_profiler);
@@ -3089,8 +3163,9 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
                               ORTHO_FAR_PLANE);
   graphene_matrix_scale (&projection, 1, -1, 1);
 
-  gsk_gl_glyph_cache_begin_frame (&self->glyph_cache, self->gl_driver);
-  gsk_gl_icon_cache_begin_frame (&self->icon_cache);
+  gsk_gl_texture_atlases_begin_frame (self->atlases);
+  gsk_gl_glyph_cache_begin_frame (self->glyph_cache);
+  gsk_gl_icon_cache_begin_frame (self->icon_cache);
   gsk_gl_shadow_cache_begin_frame (&self->shadow_cache, self->gl_driver);
 
   ops_set_projection (&self->op_builder, &projection);

@@ -9,8 +9,11 @@
 
 typedef struct
 {
+  int ref_count;
+
+  GdkDisplay *display;
   GHashTable *hash_table;
-  GPtrArray *atlases;
+  GskGLTextureAtlases *atlases;
 
   guint64 timestamp;
 } GskGLGlyphCache;
@@ -22,18 +25,12 @@ typedef struct
   guint scale; /* times 1024 */
 } GlyphCacheKey;
 
-typedef struct _DirtyGlyph DirtyGlyph;
 typedef struct _GskGLCachedGlyph GskGLCachedGlyph;
-
-struct _DirtyGlyph
-{
-  GlyphCacheKey *key;
-  GskGLCachedGlyph *value;
-};
 
 struct _GskGLCachedGlyph
 {
   GskGLTextureAtlas *atlas;
+  guint texture_id;
 
   float tx;
   float ty;
@@ -45,25 +42,25 @@ struct _GskGLCachedGlyph
   int draw_width;
   int draw_height;
 
-  float scale;
-
   guint64 timestamp;
   guint used: 1;
 };
 
 
-void                     gsk_gl_glyph_cache_init            (GskGLGlyphCache        *self);
-void                     gsk_gl_glyph_cache_free            (GskGLGlyphCache        *self,
-                                                             GskGLDriver            *driver);
-void                     gsk_gl_glyph_cache_begin_frame     (GskGLGlyphCache        *self,
-                                                             GskGLDriver            *driver);
-guint                    gsk_gl_glyph_cache_get_glyph_texture_id (GskGLGlyphCache        *self,
-                                                             GskGLDriver            *driver,
-                                                             const GskGLCachedGlyph *glyph);
-const GskGLCachedGlyph * gsk_gl_glyph_cache_lookup          (GskGLGlyphCache        *self,
-                                                             gboolean                create,
+GskGLGlyphCache *        gsk_gl_glyph_cache_new             (GdkDisplay *display,
+                                                             GskGLTextureAtlases *atlases);
+GskGLGlyphCache *        gsk_gl_glyph_cache_ref             (GskGLGlyphCache *self);
+void                     gsk_gl_glyph_cache_unref           (GskGLGlyphCache        *self);
+void                     gsk_gl_glyph_cache_begin_frame     (GskGLGlyphCache        *self);
+gboolean                 gsk_gl_glyph_cache_lookup          (GskGLGlyphCache        *self,
                                                              PangoFont              *font,
                                                              PangoGlyph              glyph,
-                                                             float                   scale);
+                                                             float                   scale,
+                                                             GskGLCachedGlyph *cached_glyph_out);
+void                    gsk_gl_glyph_cache_get_texture      (GskGLDriver *driver,
+                                                             PangoFont   *font,
+                                                             PangoGlyph   glyph,
+                                                             float        scale,
+                                                             GskGLCachedGlyph *glyph_out);
 
 #endif
