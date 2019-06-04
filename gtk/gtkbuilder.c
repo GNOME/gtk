@@ -925,13 +925,27 @@ _gtk_builder_add (GtkBuilder *builder,
   g_assert (object != NULL);
 
   parent = ((ObjectInfo*)child_info->parent)->object;
-  g_assert (GTK_IS_BUILDABLE (parent));
 
   GTK_NOTE (BUILDER,
             g_message ("adding %s to %s", object_get_name (object), object_get_name (parent)));
 
-  gtk_buildable_add_child (GTK_BUILDABLE (parent), builder, object,
-                           child_info->type);
+  if (G_IS_LIST_STORE (parent))
+    {
+      if (child_info->type != NULL)
+        {
+          GTK_BUILDER_WARN_INVALID_CHILD_TYPE (parent, child_info->type);
+        }
+      else
+        {
+          g_list_store_append (G_LIST_STORE (parent), object);
+        }
+    }
+  else
+    {
+      g_assert (GTK_IS_BUILDABLE (parent));
+      gtk_buildable_add_child (GTK_BUILDABLE (parent), builder, object,
+                               child_info->type);
+    }
 
   child_info->added = TRUE;
 }
