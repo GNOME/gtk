@@ -116,8 +116,7 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
  * The draw function is normally called when a drawing area first comes
  * onscreen, or when it’s covered by another window and then uncovered.
  * You can also force a redraw by adding to the “damage region” of the
- * drawing area’s window using gtk_widget_queue_draw_region(),
- * gtk_widget_queue_draw_area() or gtk_widget_queue_draw().
+ * drawing area’s window using gtk_widget_queue_draw().
  * This will cause the drawing area to call the draw function again.
  *
  * The available routines for drawing are documented on the
