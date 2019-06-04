@@ -48,6 +48,9 @@ ensure_shared_data_context (GdkSurface *surface)
   GdkDisplay *display;
   GdkGLContext *context;
 
+  if (in_shared_data_creation)
+    return NULL;
+
   in_shared_data_creation = 1;
 
   display = gdk_surface_get_display (surface);
@@ -85,7 +88,7 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   GdkWaylandGLContext *context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   GdkGLContext *share = gdk_gl_context_get_shared_context (context);
-  GdkGLContext *shared_data_context = in_shared_data_creation ? NULL : ensure_shared_data_context (gdk_gl_context_get_surface (context));
+  GdkGLContext *shared_data_context = gdk_surface_get_shared_data_gl_context (gdk_gl_context_get_surface (context));
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   EGLContext ctx;
   EGLint context_attribs[N_EGL_ATTRS];
