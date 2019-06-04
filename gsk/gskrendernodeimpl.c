@@ -1776,23 +1776,6 @@ gsk_container_node_diff (GskRenderNode  *node1,
   gsk_render_node_diff_impossible (node1, node2, region);
 }
 
-static void
-gsk_container_node_get_bounds (GskContainerNode *container,
-                               graphene_rect_t *bounds)
-{
-  guint i;
-
-  if (container->n_children == 0)
-    {
-      graphene_rect_init_from_rect (bounds, graphene_rect_zero());
-      return;
-    }
-
-  graphene_rect_init_from_rect (bounds, &container->children[0]->bounds);
-  for (i = 1; i < container->n_children; i++)
-    graphene_rect_union (bounds, &container->children[i]->bounds, bounds);
-}
-
 static const GskRenderNodeClass GSK_CONTAINER_NODE_CLASS = {
   GSK_CONTAINER_NODE,
   sizeof (GskContainerNode),
@@ -1824,10 +1807,24 @@ gsk_container_node_new (GskRenderNode **children,
 
   container->n_children = n_children;
 
-  for (i = 0; i < container->n_children; i++)
-    container->children[i] = gsk_render_node_ref (children[i]);
+  if (n_children == 0)
+    {
+      graphene_rect_init_from_rect (&container->render_node.bounds, graphene_rect_zero());
+    }
+  else
+    {
+      graphene_rect_t bounds;
 
-  gsk_container_node_get_bounds (container, &container->render_node.bounds);
+      container->children[0] = gsk_render_node_ref (children[0]);
+      graphene_rect_init_from_rect (&bounds, &container->children[0]->bounds);
+      for (i = 1; i < n_children; i++)
+        {
+          container->children[i] = gsk_render_node_ref (children[i]);
+          graphene_rect_union (&bounds, &children[i]->bounds, &bounds);
+        }
+
+      graphene_rect_init_from_rect (&container->render_node.bounds, &bounds);
+    }
 
   return &container->render_node;
 }
