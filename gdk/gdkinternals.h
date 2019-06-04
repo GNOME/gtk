@@ -274,6 +274,8 @@ void gdk_surface_move_resize  (GdkSurface     *surface,
                                gint           width,
                                gint           height);
 
+GdkGLContext *gdk_surface_get_shared_data_gl_context (GdkSurface *surface);
+
 G_END_DECLS
 
 #endif /* __GDK_INTERNALS_H__ */
