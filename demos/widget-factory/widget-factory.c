@@ -118,6 +118,8 @@ activate_delete (GSimpleAction *action,
   GtkWidget *window = user_data;
   GtkWidget *infobar;
 
+  g_print ("Activate action delete\n");
+
   if (!on_page (2))
     return;
 
@@ -1634,6 +1636,7 @@ activate (GApplication *app)
   } accels[] = {
     { "app.about", { "F1", NULL } },
     { "app.quit", { "<Primary>q", NULL } },
+    { "app.open-in", { "<Primary>n", NULL } },
     { "win.dark", { "<Primary>d", NULL } },
     { "win.search", { "<Primary>s", NULL } },
     { "win.delete", { "Delete", NULL } },
@@ -1921,6 +1924,41 @@ local_options (GApplication *app,
   return -1;
 }
 
+static void
+activate_action (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
+{
+  g_print ("Activate action %s\n", g_action_get_name (G_ACTION (action)));
+}
+
+static void
+select_action (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  g_print ("Set action %s to %s\n",
+           g_action_get_name (G_ACTION (action)),
+           g_variant_get_string (parameter, NULL));
+
+  g_simple_action_set_state (action, parameter);
+}
+
+static void
+toggle_action (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  GVariant *state = g_action_get_state (G_ACTION (action));
+
+  g_print ("Toggle action %s to %s\n",
+           g_action_get_name (G_ACTION (action)),
+           g_variant_get_boolean (state) ? "false" : "true");
+
+  g_simple_action_set_state (action,
+                             g_variant_new_boolean (!g_variant_get_boolean (state)));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -1935,7 +1973,20 @@ main (int argc, char *argv[])
     { "beer", NULL, NULL, "false", NULL },
     { "water", NULL, NULL, "true", NULL },
     { "dessert", NULL, "s", "'bars'", NULL },
-    { "pay", NULL, "s", NULL, NULL }
+    { "pay", NULL, "s", NULL, NULL },
+    { "print", activate_action, NULL, NULL, NULL },
+    { "share", activate_action, NULL, NULL, NULL },
+    { "labels", activate_action, NULL, NULL, NULL },
+    { "open-in", activate_action, NULL, NULL, NULL },
+    { "cut", activate_action, NULL, NULL, NULL },
+    { "copy", activate_action, NULL, NULL, NULL },
+    { "paste", activate_action, NULL, NULL, NULL },
+    { "pin", toggle_action, NULL, "true", NULL },
+    { "size", select_action, "s", "'medium'", NULL },
+    { "berk", toggle_action, NULL, "true", NULL },
+    { "broni", toggle_action, NULL, "true", NULL },
+    { "drutt", toggle_action, NULL, "true", NULL },
+    { "upstairs", toggle_action, NULL, "true", NULL },
   };
   gint status;
 
