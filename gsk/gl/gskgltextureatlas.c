@@ -136,6 +136,8 @@ gsk_gl_texture_atlases_pack (GskGLTextureAtlases *atlases,
   g_assert (width  < ATLAS_SIZE);
   g_assert (height < ATLAS_SIZE);
 
+  atlas = NULL;
+
   for (i = 0; i < atlases->atlases->len; i++)
     {
       atlas = g_ptr_array_index (atlases->atlases, i);
