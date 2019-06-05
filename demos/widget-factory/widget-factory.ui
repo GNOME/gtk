@@ -2433,11 +2433,12 @@ microphone-sensitivity-medium-symbolic</property>
                         <property name="spacing">10</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="halign">start</property>
+                            <property name="halign">fill</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkBox" id="lockbox">
-                                <property name="halign">start</property>
+                                <property name="halign">fill</property>
+                                <property name="hexpand">1</property>
                                 <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkMenuButton" id="open_menubutton">
@@ -2508,6 +2509,12 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <child>
                               <object class="GtkLockButton" id="lockbutton"/>
+                            </child>
+                            <child>
+                              <object class="GtkMenuButton">
+                                <property name="icon-name">view-more-symbolic</property>
+                                <property name="popover">new_style_menu</property>
+                              </object>
                             </child>
                           </object>
                         </child>
@@ -3504,6 +3511,190 @@ bad things might happen.</property>
             <style>
               <class name="circular"/>
             </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkPopoverMenu" id="new_style_menu">
+    <child>
+      <object class="GtkBox">
+        <property name="name">main</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkBox">
+            <property name="halign">fill</property>
+            <child>
+              <object class="GtkModelButton">
+                <property name="icon"><object class="GThemedIcon"><property name="name">printer-symbolic</property></object></property>
+                <property name="iconic">1</property>
+                <property name="action-name">app.print</property>
+                <property name="hexpand">1</property>
+                <property name="halign">center</property>
+                <style>
+                  <class name="circular"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="icon"><object class="GThemedIcon"><property name="name">emblem-shared-symbolic</property></object></property>
+                <property name="iconic">1</property>
+                <property name="action-name">app.share</property>
+                <property name="hexpand">1</property>
+                <property name="halign">center</property>
+                <style>
+                  <class name="circular"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Open in New Window</property>
+            <property name="action-name">app.open-in</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Edit</property>
+                <property name="xalign">0</property>
+                <property name="hexpand">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="icon"><object class="GThemedIcon"><property name="name">edit-cut-symbolic</property></object></property>
+                <property name="iconic">1</property>
+                <property name="relief">none</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="icon"><object class="GThemedIcon"><property name="name">edit-copy-symbolic</property></object></property>
+                <property name="iconic">1</property>
+                <property name="relief">none</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="icon"><object class="GThemedIcon"><property name="name">edit-paste-symbolic</property></object></property>
+                <property name="iconic">1</property>
+                <property name="relief">none</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Pin</property>
+            <property name="action-name">app.pin</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Select Labels…</property>
+            <property name="action-name">app.labels</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Share…</property>
+            <property name="action-name">app.share</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Basement</property>
+            <property name="menu-name">basement</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Large</property>
+            <property name="action-name">app.size</property>
+            <property name="action-target">'large'</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Medium</property>
+            <property name="action-name">app.size</property>
+            <property name="action-target">'medium'</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Small</property>
+            <property name="action-name">app.size</property>
+            <property name="action-target">'small'</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Move to Trash</property>
+            <property name="action-name">win.delete</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="name">basement</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Basement</property>
+            <property name="inverted">1</property>
+            <property name="menu-name">main</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Berk</property>
+            <property name="action-name">app.berk</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Broni</property>
+            <property name="action-name">app.broni</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Drutt</property>
+            <property name="action-name">app.drutt</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">The Thing Upstairs</property>
+            <property name="action-name">app.upstairs</property>
           </object>
         </child>
       </object>
