@@ -37,6 +37,9 @@
   <gresource prefix="/theming_style_classes">
     <file>theming.ui</file>
   </gresource>
+  <gresource prefix="/themes">
+    <file>themes.ui</file>
+  </gresource>
   <gresource prefix="/css_pixbufs">
     <file alias="gtk.css">css_pixbufs.css</file>
     <file>cssview.css</file>
@@ -200,6 +203,7 @@
     <file>textscroll.c</file>
     <file>theming_style_classes.c</file>
     <file>toolpalette.c</file>
+    <file>themes.c</file>
     <file>transparent.c</file>
     <file>tree_store.c</file>
     <file>textmask.c</file>
