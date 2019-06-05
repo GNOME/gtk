@@ -21,37 +21,37 @@ free_atlas (gpointer v)
 GskGLTextureAtlases *
 gsk_gl_texture_atlases_new (void)
 {
-  GskGLTextureAtlases *atlases;
+  GskGLTextureAtlases *self;
 
-  atlases = g_new (GskGLTextureAtlases, 1);
-  atlases->atlases = g_ptr_array_new_with_free_func (free_atlas);
+  self = g_new (GskGLTextureAtlases, 1);
+  self->atlases = g_ptr_array_new_with_free_func (free_atlas);
 
-  atlases->ref_count = 1;
+  self->ref_count = 1;
 
-  return atlases;
+  return self;
 }
 
 GskGLTextureAtlases *
-gsk_gl_texture_atlases_ref (GskGLTextureAtlases *atlases)
+gsk_gl_texture_atlases_ref (GskGLTextureAtlases *self)
 {
-  atlases->ref_count++;
+  self->ref_count++;
 
-  return atlases;
+  return self;
 }
 
 void
-gsk_gl_texture_atlases_unref (GskGLTextureAtlases *atlases)
+gsk_gl_texture_atlases_unref (GskGLTextureAtlases *self)
 {
-  g_assert (atlases->ref_count > 0);
+  g_assert (self->ref_count > 0);
 
-  if (atlases->ref_count == 1)
+  if (self->ref_count == 1)
     {
-      g_ptr_array_unref (atlases->atlases);
-      g_free (atlases);
+      g_ptr_array_unref (self->atlases);
+      g_free (self);
       return;
     }
 
-  atlases->ref_count--;
+  self->ref_count--;
 }
 
 #if 0
@@ -74,13 +74,13 @@ write_atlas_to_png (GskGLTextureAtlas *atlas,
 #endif
 
 void
-gsk_gl_texture_atlases_begin_frame (GskGLTextureAtlases *atlases)
+gsk_gl_texture_atlases_begin_frame (GskGLTextureAtlases *self)
 {
   int i;
 
-  for (i = atlases->atlases->len - 1; i >= 0; i--)
+  for (i = self->atlases->len - 1; i >= 0; i--)
     {
-      GskGLTextureAtlas *atlas = g_ptr_array_index (atlases->atlases, i);
+      GskGLTextureAtlas *atlas = g_ptr_array_index (self->atlases, i);
 
       if (gsk_gl_texture_atlas_get_unused_ratio (atlas) > MAX_OLD_RATIO)
         {
@@ -94,7 +94,7 @@ gsk_gl_texture_atlases_begin_frame (GskGLTextureAtlases *atlases)
               atlas->texture_id = 0;
             }
 
-          g_ptr_array_remove_index (atlases->atlases, i);
+          g_ptr_array_remove_index (self->atlases, i);
        }
     }
 
@@ -104,9 +104,9 @@ gsk_gl_texture_atlases_begin_frame (GskGLTextureAtlases *atlases)
 
     timestamp++;
     if (timestamp % 10 == 0)
-      for (i = 0; i < atlases->atlases->len; i++)
+      for (i = 0; i < self->atlases->len; i++)
         {
-          GskGLTextureAtlas *atlas = g_ptr_array_index (atlases->atlases, i);
+          GskGLTextureAtlas *atlas = g_ptr_array_index (self->atlases, i);
 
           if (atlas->texture_id)
             {
@@ -122,7 +122,7 @@ gsk_gl_texture_atlases_begin_frame (GskGLTextureAtlases *atlases)
 }
 
 gboolean
-gsk_gl_texture_atlases_pack (GskGLTextureAtlases *atlases,
+gsk_gl_texture_atlases_pack (GskGLTextureAtlases *self,
                              int                  width,
                              int                  height,
                              GskGLTextureAtlas  **atlas_out,
@@ -138,9 +138,9 @@ gsk_gl_texture_atlases_pack (GskGLTextureAtlases *atlases,
 
   atlas = NULL;
 
-  for (i = 0; i < atlases->atlases->len; i++)
+  for (i = 0; i < self->atlases->len; i++)
     {
-      atlas = g_ptr_array_index (atlases->atlases, i);
+      atlas = g_ptr_array_index (self->atlases, i);
 
       if (gsk_gl_texture_atlas_pack (atlas, width, height, &x, &y))
         break;
@@ -154,7 +154,7 @@ gsk_gl_texture_atlases_pack (GskGLTextureAtlases *atlases,
       atlas = g_malloc (sizeof (GskGLTextureAtlas));
       gsk_gl_texture_atlas_init (atlas, ATLAS_SIZE, ATLAS_SIZE);
       gsk_gl_texture_atlas_realize (atlas);
-      g_ptr_array_add (atlases->atlases, atlas);
+      g_ptr_array_add (self->atlases, atlas);
 
       /* Pack it onto that one, which surely has enough space... */
       gsk_gl_texture_atlas_pack (atlas, width, height, &x, &y);
