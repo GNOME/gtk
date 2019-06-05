@@ -370,6 +370,8 @@ update_visibility (GtkModelButton *button)
 
   gtk_widget_set_visible (button->image, has_icon && (button->iconic || !has_text));
   gtk_widget_set_visible (button->label, has_text && (!button->iconic || !has_icon));
+  gtk_widget_set_hexpand (button->image, has_icon && !has_text);
+  gtk_widget_set_hexpand (button->box, FALSE);
 }
 
 static void
