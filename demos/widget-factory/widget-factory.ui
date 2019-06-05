@@ -3666,7 +3666,7 @@ bad things might happen.</property>
         <child>
           <object class="GtkModelButton">
             <property name="text">Basement</property>
-            <property name="inverted">1</property>
+            <property name="role">title</property>
             <property name="menu-name">main</property>
           </object>
         </child>
