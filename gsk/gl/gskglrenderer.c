@@ -2522,11 +2522,11 @@ get_texture_atlases_for_display (GdkDisplay *display)
     {
       atlases = gsk_gl_texture_atlases_new ();
       g_object_set_data_full (G_OBJECT (display), "gsk-gl-texture-atlases",
-                              gsk_gl_texture_atlases_ref (atlases),
+                              atlases,
                               (GDestroyNotify) gsk_gl_texture_atlases_unref);
     }
 
-  return atlases;
+  return gsk_gl_texture_atlases_ref (atlases);
 }
 
 static GskGLGlyphCache *
@@ -2543,11 +2543,11 @@ get_glyph_cache_for_display (GdkDisplay *display,
     {
       glyph_cache = gsk_gl_glyph_cache_new (display, atlases);
       g_object_set_data_full (G_OBJECT (display), "gsk-gl-glyph-cache",
-                              gsk_gl_glyph_cache_ref (glyph_cache),
+                              glyph_cache,
                               (GDestroyNotify) gsk_gl_glyph_cache_unref);
     }
 
-  return glyph_cache;
+  return gsk_gl_glyph_cache_ref (glyph_cache);
 }
 
 static GskGLIconCache *
@@ -2564,11 +2564,11 @@ get_icon_cache_for_display (GdkDisplay *display,
     {
       icon_cache = gsk_gl_icon_cache_new (display, atlases);
       g_object_set_data_full (G_OBJECT (display), "gsk-gl-icon-cache",
-                              gsk_gl_icon_cache_ref (icon_cache),
+                              icon_cache,
                               (GDestroyNotify) gsk_gl_icon_cache_unref);
     }
 
-  return icon_cache;
+  return gsk_gl_icon_cache_ref (icon_cache);
 }
 
 static gboolean
