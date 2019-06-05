@@ -6,14 +6,16 @@ void
 gsk_gl_image_create (GskGLImage  *self,
                      GskGLDriver *gl_driver,
                      int          width,
-                     int          height)
+                     int          height,
+                     int          min_filter,
+                     int          mag_filter)
 {
   self->texture_id = gsk_gl_driver_create_texture (gl_driver, width, height);
   self->width = width;
   self->height = height;
 
   gsk_gl_driver_bind_source_texture (gl_driver, self->texture_id);
-  gsk_gl_driver_init_texture_empty (gl_driver, self->texture_id);
+  gsk_gl_driver_init_texture_empty (gl_driver, self->texture_id, min_filter, mag_filter);
   gsk_gl_driver_mark_texture_permanent (gl_driver, self->texture_id);
 }
 
@@ -22,6 +24,7 @@ gsk_gl_image_destroy (GskGLImage  *self,
                       GskGLDriver *gl_driver)
 {
   gsk_gl_driver_destroy_texture (gl_driver, self->texture_id);
+  self->texture_id = 0;
 }
 
 void
@@ -43,23 +46,15 @@ gsk_gl_image_write_to_png (const GskGLImage *self,
 }
 
 void
-gsk_gl_image_upload_regions (GskGLImage           *self,
-                             GskGLDriver          *gl_driver,
-                             guint                 n_regions,
-                             const GskImageRegion *regions)
+gsk_gl_image_upload_region (GskGLImage           *self,
+                            GskGLDriver          *gl_driver,
+                            const GskImageRegion *region)
 {
-  guint i;
+  gsk_gl_driver_bind_source_texture (gl_driver, self->texture_id);
+  glBindTexture (GL_TEXTURE_2D, self->texture_id);
 
-  for (i = 0; i < n_regions; i ++)
-    {
-      const GskImageRegion *region = &regions[i];
-
-      gsk_gl_driver_bind_source_texture (gl_driver, self->texture_id);
-      glBindTexture (GL_TEXTURE_2D, self->texture_id);
-
-      glTexSubImage2D (GL_TEXTURE_2D, 0, region->x, region->y, region->width, region->height,
-                       GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, region->data);
-    }
+  glTexSubImage2D (GL_TEXTURE_2D, 0, region->x, region->y, region->width, region->height,
+                   GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, region->data);
 
 #ifdef G_ENABLE_DEBUG
   /*gsk_gl_driver_bind_source_texture (gl_driver, self->texture_id);*/
