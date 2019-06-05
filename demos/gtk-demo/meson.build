@@ -70,6 +70,7 @@ demos = files([
   'textmask.c',
   'textview.c',
   'textscroll.c',
+  'themes.c',
   'theming_style_classes.c',
   'transparent.c',
   'tree_store.c',
