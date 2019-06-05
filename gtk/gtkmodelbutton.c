@@ -174,8 +174,6 @@ enum
   PROP_USE_MARKUP,
   PROP_ACTIVE,
   PROP_MENU_NAME,
-  PROP_INVERTED,
-  PROP_CENTERED,
   PROP_ICONIC,
   LAST_PROPERTY
 };
@@ -189,75 +187,6 @@ indicator_is_left (GtkWidget *widget)
 
   return ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL && !button->inverted) ||
           (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR && button->inverted));
-}
-
-static void
-gtk_model_button_update_state (GtkModelButton *button)
-{
-  GtkStateFlags state;
-  GtkStateFlags indicator_state;
-  GtkCssImageBuiltinType image_type;
-
-  state = gtk_widget_get_state_flags (GTK_WIDGET (button));
-  indicator_state = state;
-  image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
-
-  switch (button->role)
-    {
-    case GTK_BUTTON_ROLE_CHECK:
-      if (button->active && !button->menu_name)
-        {
-          indicator_state |= GTK_STATE_FLAG_CHECKED;
-          image_type = GTK_CSS_IMAGE_BUILTIN_CHECK;
-        }
-      else
-        {
-          indicator_state &= ~GTK_STATE_FLAG_CHECKED;
-        }
-      break;
-
-    case GTK_BUTTON_ROLE_RADIO:
-      if (button->active && !button->menu_name)
-        {
-          indicator_state |= GTK_STATE_FLAG_CHECKED;
-          image_type = GTK_CSS_IMAGE_BUILTIN_OPTION;
-        }
-      else
-        {
-          indicator_state &= ~GTK_STATE_FLAG_CHECKED;
-        }
-      break;
-
-    case GTK_BUTTON_ROLE_TITLE:
-      g_object_set (button,
-                    "inverted", TRUE,
-                    "centered", TRUE,
-                    NULL);
-      /* fall through */
-
-    case GTK_BUTTON_ROLE_NORMAL:
-      if (button->menu_name != NULL)
-        {
-          if (indicator_is_left (GTK_WIDGET (button)))
-            image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT;
-          else
-            image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT;
-        }
-
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
-
-  gtk_icon_set_image (GTK_ICON (button->indicator_widget), image_type);
-
-  if (button->iconic)
-    gtk_widget_set_state_flags (GTK_WIDGET (button), indicator_state, TRUE);
-  else
-    gtk_widget_set_state_flags (GTK_WIDGET (button), state, TRUE);
-
-  gtk_widget_set_state_flags (button->indicator_widget, indicator_state, TRUE);
 }
 
 static void
@@ -286,6 +215,92 @@ update_node_ordering (GtkModelButton *button)
       if (child != button->indicator_widget)
         gtk_widget_insert_after (button->indicator_widget, GTK_WIDGET (button), child);
     }
+}
+
+static void
+gtk_model_button_update_state (GtkModelButton *button)
+{
+  GtkStateFlags state;
+  GtkStateFlags indicator_state;
+  GtkCssImageBuiltinType image_type;
+  gboolean inverted;
+  gboolean centered;
+
+  state = gtk_widget_get_state_flags (GTK_WIDGET (button));
+  indicator_state = state;
+  image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
+  inverted = FALSE;
+  centered = FALSE;
+
+  switch (button->role)
+    {
+    case GTK_BUTTON_ROLE_CHECK:
+      if (button->active && !button->menu_name)
+        {
+          indicator_state |= GTK_STATE_FLAG_CHECKED;
+          image_type = GTK_CSS_IMAGE_BUILTIN_CHECK;
+        }
+      else
+        {
+          indicator_state &= ~GTK_STATE_FLAG_CHECKED;
+        }
+      break;
+
+    case GTK_BUTTON_ROLE_RADIO:
+      if (button->active && !button->menu_name)
+        {
+          indicator_state |= GTK_STATE_FLAG_CHECKED;
+          image_type = GTK_CSS_IMAGE_BUILTIN_OPTION;
+        }
+      else
+        {
+          indicator_state &= ~GTK_STATE_FLAG_CHECKED;
+        }
+      break;
+
+    case GTK_BUTTON_ROLE_TITLE:
+      inverted = TRUE;
+      centered = TRUE;
+      /* fall through */
+
+    case GTK_BUTTON_ROLE_NORMAL:
+      if (button->menu_name != NULL)
+        {
+          if (indicator_is_left (GTK_WIDGET (button)))
+            image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT;
+          else
+            image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT;
+        }
+      if (!centered)
+        centered = button->iconic;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  if (button->inverted != inverted)
+    {
+      button->inverted = inverted;
+      update_node_ordering (button);
+      gtk_widget_queue_draw (GTK_WIDGET (button));
+    }
+
+  if (button->centered != centered)
+    {
+      button->centered = centered;
+      gtk_widget_set_halign (button->box, button->centered ? GTK_ALIGN_CENTER : GTK_ALIGN_FILL);
+      gtk_widget_queue_resize (GTK_WIDGET (button));
+    }
+
+  gtk_icon_set_image (GTK_ICON (button->indicator_widget), image_type);
+
+  if (button->iconic)
+    gtk_widget_set_state_flags (GTK_WIDGET (button), indicator_state, TRUE);
+  else
+    gtk_widget_set_state_flags (GTK_WIDGET (button), state, TRUE);
+
+  gtk_widget_set_state_flags (button->indicator_widget, indicator_state, TRUE);
 }
 
 static void
@@ -451,35 +466,6 @@ gtk_model_button_set_menu_name (GtkModelButton *button,
 }
 
 static void
-gtk_model_button_set_inverted (GtkModelButton *button,
-                               gboolean        inverted)
-{
-  inverted = !!inverted;
-  if (button->inverted == inverted)
-    return;
-
-  button->inverted = inverted;
-  gtk_model_button_update_state (button);
-  update_node_ordering (button);
-  gtk_widget_queue_resize (GTK_WIDGET (button));
-  g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_INVERTED]);
-}
-
-static void
-gtk_model_button_set_centered (GtkModelButton *button,
-                               gboolean        centered)
-{
-  centered = !!centered;
-  if (button->centered == centered)
-    return;
-
-  button->centered = centered;
-  gtk_widget_set_halign (button->box, button->centered ? GTK_ALIGN_CENTER : GTK_ALIGN_FILL);
-  gtk_widget_queue_draw (GTK_WIDGET (button));
-  g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_CENTERED]);
-}
-
-static void
 gtk_model_button_set_iconic (GtkModelButton *button,
                              gboolean        iconic)
 {
@@ -512,6 +498,10 @@ gtk_model_button_set_iconic (GtkModelButton *button,
                               button->role != GTK_BUTTON_ROLE_NORMAL ||
                               button->menu_name == NULL);
     }
+
+  button->centered = iconic;
+
+  gtk_widget_set_halign (button->box, button->centered ? GTK_ALIGN_CENTER : GTK_ALIGN_FILL);
 
   update_visibility (button);
   gtk_widget_queue_resize (GTK_WIDGET (button));
@@ -550,14 +540,6 @@ gtk_model_button_get_property (GObject    *object,
 
     case PROP_MENU_NAME:
       g_value_set_string (value, button->menu_name);
-      break;
-
-    case PROP_INVERTED:
-      g_value_set_boolean (value, button->inverted);
-      break;
-
-    case PROP_CENTERED:
-      g_value_set_boolean (value, button->centered);
       break;
 
     case PROP_ICONIC:
@@ -602,14 +584,6 @@ gtk_model_button_set_property (GObject      *object,
 
     case PROP_MENU_NAME:
       gtk_model_button_set_menu_name (button, g_value_get_string (value));
-      break;
-
-    case PROP_INVERTED:
-      gtk_model_button_set_inverted (button, g_value_get_boolean (value));
-      break;
-
-    case PROP_CENTERED:
-      gtk_model_button_set_centered (button, g_value_get_boolean (value));
       break;
 
     case PROP_ICONIC:
@@ -1014,33 +988,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
                          P_("The name of the menu to open"),
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-
-  /**
-   * GtkModelButton:inverted:
-   *
-   * Whether to show the submenu indicator at the opposite side than normal.
-   * This property should be set for model buttons that 'go back' to a parent
-   * menu.
-   */
-  properties[PROP_INVERTED] =
-    g_param_spec_boolean ("inverted",
-                          P_("Inverted"),
-                          P_("Whether the menu is a parent"),
-                          FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-
-  /**
-   * GtkModelButton:centered:
-   *
-   * Whether to render the button contents centered instead of left-aligned.
-   * This property should be set for title-like items.
-   */
-  properties[PROP_CENTERED] =
-    g_param_spec_boolean ("centered",
-                          P_("Centered"),
-                          P_("Whether to center the contents"),
-                          FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkModelButton:iconic:
