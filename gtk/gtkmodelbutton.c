@@ -196,13 +196,15 @@ gtk_model_button_update_state (GtkModelButton *button)
 {
   GtkStateFlags state;
   GtkStateFlags indicator_state;
-  GtkCssImageBuiltinType image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
+  GtkCssImageBuiltinType image_type;
 
   state = gtk_widget_get_state_flags (GTK_WIDGET (button));
   indicator_state = state;
+  image_type = GTK_CSS_IMAGE_BUILTIN_NONE;
 
-  if (button->role == GTK_BUTTON_ROLE_CHECK)
+  switch (button->role)
     {
+    case GTK_BUTTON_ROLE_CHECK:
       if (button->active && !button->menu_name)
         {
           indicator_state |= GTK_STATE_FLAG_CHECKED;
@@ -212,9 +214,9 @@ gtk_model_button_update_state (GtkModelButton *button)
         {
           indicator_state &= ~GTK_STATE_FLAG_CHECKED;
         }
-    }
-  if (button->role == GTK_BUTTON_ROLE_RADIO)
-    {
+      break;
+
+    case GTK_BUTTON_ROLE_RADIO:
       if (button->active && !button->menu_name)
         {
           indicator_state |= GTK_STATE_FLAG_CHECKED;
@@ -224,14 +226,28 @@ gtk_model_button_update_state (GtkModelButton *button)
         {
           indicator_state &= ~GTK_STATE_FLAG_CHECKED;
         }
-    }
+      break;
 
-  if (button->menu_name)
-    {
-      if (indicator_is_left (GTK_WIDGET (button)))
-        image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT;
-      else
-        image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT;
+    case GTK_BUTTON_ROLE_TITLE:
+      g_object_set (button,
+                    "inverted", TRUE,
+                    "centered", TRUE,
+                    NULL);
+      /* fall through */
+
+    case GTK_BUTTON_ROLE_NORMAL:
+      if (button->menu_name != NULL)
+        {
+          if (indicator_is_left (GTK_WIDGET (button)))
+            image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT;
+          else
+            image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT;
+        }
+
+      break;
+
+    default:
+      g_assert_not_reached ();
     }
 
   gtk_icon_set_image (GTK_ICON (button->indicator_widget), image_type);
@@ -305,6 +321,7 @@ update_node_name (GtkModelButton *button)
   switch (button->role)
     {
     case GTK_BUTTON_ROLE_NORMAL:
+    case GTK_BUTTON_ROLE_TITLE:
       a11y_role = ATK_ROLE_PUSH_BUTTON;
       if (button->menu_name)
         {
@@ -353,8 +370,8 @@ gtk_model_button_set_role (GtkModelButton *button,
   button->role = role;
 
   update_node_name (button);
-
   gtk_model_button_update_state (button);
+
   gtk_widget_queue_draw (GTK_WIDGET (button));
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_ROLE]);
 }

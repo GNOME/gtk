@@ -454,8 +454,7 @@ gtk_menu_section_box_new_submenu (GtkMenuTrackerItem *item,
 
   button = g_object_new (GTK_TYPE_MODEL_BUTTON,
                          "menu-name", name,
-                         "inverted", TRUE,
-                         "centered", TRUE,
+                         "role", GTK_BUTTON_ROLE_TITLE,
                          NULL);
 
   g_object_bind_property (item, "label", button, "text", G_BINDING_SYNC_CREATE);
