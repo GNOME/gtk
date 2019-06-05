@@ -4265,6 +4265,7 @@ gtk_widget_allocate (GtkWidget    *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkRectangle adjusted;
+  gboolean alloc_needed;
   gboolean size_changed;
   gboolean baseline_changed;
   gboolean transform_changed;
@@ -4297,6 +4298,7 @@ gtk_widget_allocate (GtkWidget    *widget,
     }
 #endif /* G_ENABLE_DEBUG */
 
+  alloc_needed = priv->alloc_needed;
   /* Preserve request/allocate ordering */
   priv->alloc_needed = FALSE;
 
@@ -4420,6 +4422,9 @@ gtk_widget_allocate (GtkWidget    *widget,
   if (priv->surface_transform_data)
     sync_widget_surface_transform (widget);
 
+  if (!alloc_needed && !size_changed && !baseline_changed)
+    goto skip_allocate;
+
   priv->width = adjusted.width;
   priv->height = adjusted.height;
   priv->baseline = baseline;
@@ -4461,6 +4466,7 @@ gtk_widget_allocate (GtkWidget    *widget,
 
   gtk_widget_update_paintables (widget);
 
+skip_allocate:
   if (size_changed || baseline_changed)
     gtk_widget_queue_draw (widget);
   else if (transform_changed && priv->parent)
