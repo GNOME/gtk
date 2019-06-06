@@ -46,6 +46,7 @@ struct _GtkMenuSectionBox
   guint              separator_sync_idle;
   gboolean           iconic;
   gint               depth;
+  GtkSizeGroup      *indicators;
 };
 
 typedef struct
@@ -297,6 +298,7 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
 
       widget = g_object_new (GTK_TYPE_MODEL_BUTTON,
                              "menu-name", gtk_menu_tracker_item_get_label (item),
+                             "indicator-size-group", box->indicators,
                              NULL);
       g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
       g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
@@ -309,7 +311,9 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
     }
   else
     {
-      widget = gtk_model_button_new ();
+      widget = g_object_new (GTK_TYPE_MODEL_BUTTON,
+                             "indicator-size-group", box->indicators,
+                             NULL);
       g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
 
       if (box->iconic)
@@ -383,6 +387,8 @@ gtk_menu_section_box_dispose (GObject *object)
       box->tracker = NULL;
     }
 
+  g_clear_object (&box->indicators);
+
   G_OBJECT_CLASS (gtk_menu_section_box_parent_class)->dispose (object);
 }
 
@@ -431,6 +437,8 @@ gtk_menu_section_box_new_toplevel (GtkStack    *stack,
   GtkMenuSectionBox *box;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX,  NULL);
+  box->indicators = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+
   gtk_stack_add_named (stack, GTK_WIDGET (box), "main");
 
   box->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (_gtk_widget_get_action_muxer (GTK_WIDGET (box), TRUE)),
@@ -451,6 +459,7 @@ gtk_menu_section_box_new_submenu (GtkMenuTrackerItem *item,
   GtkWidget *button;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
+  box->indicators = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
   button = g_object_new (GTK_TYPE_MODEL_BUTTON,
                          "menu-name", name,
@@ -487,6 +496,7 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
   const gchar *text_direction;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
+  box->indicators = g_object_ref (parent->indicators);
   box->toplevel = parent->toplevel;
   box->depth = parent->depth + 1;
 
