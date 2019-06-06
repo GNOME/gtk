@@ -2513,7 +2513,10 @@ microphone-sensitivity-medium-symbolic</property>
                             <child>
                               <object class="GtkMenuButton">
                                 <property name="icon-name">view-more-symbolic</property>
+                                <property name="popover">new_style_menu</property>
+<!--
                                 <property name="menu-model">new_style_menu_model</property>
+-->
                               </object>
                             </child>
                           </object>
@@ -3524,6 +3527,9 @@ bad things might happen.</property>
         <child>
           <object class="GtkBox">
             <property name="halign">fill</property>
+            <style>
+              <class name="circular-buttons"/>
+            </style>
             <child>
               <object class="GtkModelButton">
                 <property name="icon"><object class="GThemedIcon"><property name="name">printer-symbolic</property></object></property>
@@ -3557,6 +3563,8 @@ bad things might happen.</property>
           <object class="GtkModelButton">
             <property name="text">Open in New Window</property>
             <property name="action-name">app.open-in</property>
+            <property name="indicator-size-group">main-indicators</property>
+            <property name="accel">&lt;Primary&gt;n</property>
           </object>
         </child>
         <child>
@@ -3564,6 +3572,13 @@ bad things might happen.</property>
         </child>
         <child>
           <object class="GtkBox">
+            <style>
+              <class name="inline-buttons"/>
+            </style>
+            <child>
+              <object class="GtkLabel" id="cut_copy_paste_filler">
+            </object>
+            </child>
             <child>
               <object class="GtkLabel">
                 <property name="label">Edit</property>
@@ -3601,18 +3616,21 @@ bad things might happen.</property>
           <object class="GtkModelButton">
             <property name="text">Pin</property>
             <property name="action-name">app.pin</property>
+            <property name="indicator-size-group">main-indicators</property>
           </object>
         </child>
         <child>
           <object class="GtkModelButton">
             <property name="text">Select Labels…</property>
             <property name="action-name">app.labels</property>
+            <property name="indicator-size-group">main-indicators</property>
           </object>
         </child>
         <child>
           <object class="GtkModelButton">
             <property name="text">Share…</property>
             <property name="action-name">app.share</property>
+            <property name="indicator-size-group">main-indicators</property>
           </object>
         </child>
         <child>
@@ -3622,6 +3640,7 @@ bad things might happen.</property>
           <object class="GtkModelButton">
             <property name="text">Basement</property>
             <property name="menu-name">basement</property>
+            <property name="indicator-size-group">main-indicators</property>
           </object>
         </child>
         <child>
@@ -3632,6 +3651,7 @@ bad things might happen.</property>
             <property name="text">Large</property>
             <property name="action-name">app.size</property>
             <property name="action-target">'large'</property>
+            <property name="indicator-size-group">main-indicators</property>
           </object>
         </child>
         <child>
@@ -3639,6 +3659,7 @@ bad things might happen.</property>
             <property name="text">Medium</property>
             <property name="action-name">app.size</property>
             <property name="action-target">'medium'</property>
+            <property name="indicator-size-group">main-indicators</property>
           </object>
         </child>
         <child>
@@ -3646,6 +3667,7 @@ bad things might happen.</property>
             <property name="text">Small</property>
             <property name="action-name">app.size</property>
             <property name="action-target">'small'</property>
+            <property name="indicator-size-group">main-indicators</property>
           </object>
         </child>
         <child>
@@ -3655,6 +3677,8 @@ bad things might happen.</property>
           <object class="GtkModelButton">
             <property name="text">Move to Trash</property>
             <property name="action-name">win.delete</property>
+            <property name="indicator-size-group">main-indicators</property>
+            <property name="accel">Delete</property>
           </object>
         </child>
       </object>
@@ -3677,28 +3701,41 @@ bad things might happen.</property>
           <object class="GtkModelButton">
             <property name="text">Berk</property>
             <property name="action-name">app.berk</property>
+            <property name="indicator-size-group">basement-indicators</property>
           </object>
         </child>
         <child>
           <object class="GtkModelButton">
             <property name="text">Broni</property>
             <property name="action-name">app.broni</property>
+            <property name="indicator-size-group">basement-indicators</property>
           </object>
         </child>
         <child>
           <object class="GtkModelButton">
             <property name="text">Drutt</property>
             <property name="action-name">app.drutt</property>
+            <property name="indicator-size-group">basement-indicators</property>
           </object>
         </child>
         <child>
           <object class="GtkModelButton">
             <property name="text">The Thing Upstairs</property>
             <property name="action-name">app.upstairs</property>
+            <property name="indicator-size-group">basement-indicators</property>
           </object>
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkSizeGroup" id="main-indicators">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="cut_copy_paste_filler"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="basement-indicators">
+    <property name="mode">horizontal</property>
   </object>
   <menu id="new_style_menu_model">
     <section>
