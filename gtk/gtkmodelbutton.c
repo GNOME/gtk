@@ -155,7 +155,7 @@ struct _GtkModelButton
   GtkWidget *box;
   GtkWidget *image;
   GtkWidget *label;
-  GtkWidget *accel;
+  GtkWidget *accel_label;
   GtkWidget *start_indicator;
   GtkWidget *end_indicator;
   gboolean active;
@@ -164,6 +164,7 @@ struct _GtkModelButton
   gchar *menu_name;
   GtkButtonRole role;
   GtkSizeGroup *indicators;
+  char *accel;
 };
 
 typedef GtkButtonClass GtkModelButtonClass;
@@ -522,8 +523,8 @@ gtk_model_button_set_iconic (GtkModelButton *button,
 }
 
 static void
-gtk_model_button_set_accel (GtkModelButton *button,
-                            const char     *accel)
+update_accel (GtkModelButton *button,
+              const char     *accel)
 {
   if (accel)
     {
@@ -536,14 +537,27 @@ gtk_model_button_set_accel (GtkModelButton *button,
 
       accel_class = g_type_class_ref (GTK_TYPE_ACCEL_LABEL);
       str = _gtk_accel_label_class_get_accelerator_label (accel_class, key, mods);
-      gtk_label_set_label (GTK_LABEL (button->accel), str);
+      gtk_label_set_label (GTK_LABEL (button->accel_label), str);
       g_free (str);
       g_type_class_unref (accel_class);
 
-      gtk_widget_show (button->accel);
+      gtk_widget_show (button->accel_label);
     }
   else
-    gtk_widget_hide (button->accel);
+    {
+      gtk_widget_hide (button->accel_label);
+    }
+}
+
+static void
+gtk_model_button_set_accel (GtkModelButton *button,
+                            const char     *accel)
+{
+  g_free (button->accel);
+  button->accel = g_strdup (accel);
+  update_accel (button, button->accel);
+
+  g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_ACCEL]);
 }
 
 static void
@@ -585,7 +599,7 @@ gtk_model_button_get_property (GObject    *object,
       break;
 
     case PROP_ACCEL:
-      g_value_set_string (value, gtk_label_get_label (GTK_LABEL (button->accel)));
+      g_value_set_string (value, button->accel);
       break;
 
     case PROP_INDICATOR_SIZE_GROUP:
@@ -935,8 +949,47 @@ gtk_model_button_finalize (GObject *object)
 
   gtk_widget_unparent (button->start_indicator);
   gtk_widget_unparent (button->end_indicator);
+  g_free (button->accel);
 
   G_OBJECT_CLASS (gtk_model_button_parent_class)->finalize (object);
+}
+
+static void
+gtk_model_button_map (GtkWidget *widget)
+{
+  GtkModelButton *button = GTK_MODEL_BUTTON (widget);
+  GtkWindow *window;
+  GtkApplication *app;
+  const char *action_name;
+  GVariant *action_target;
+
+  GTK_WIDGET_CLASS (gtk_model_button_parent_class)->map (widget);
+
+  if (button->accel)
+    return;
+
+  window = GTK_WINDOW (gtk_widget_get_root (widget));
+  app = gtk_window_get_application (window);
+
+  if (!app)
+    return;
+
+  action_name = gtk_actionable_get_action_name (GTK_ACTIONABLE (widget));
+  action_target = gtk_actionable_get_action_target_value (GTK_ACTIONABLE (widget));
+
+  if (action_name)
+    {
+      char *detailed;
+      char **accels;
+
+      detailed = g_action_print_detailed_name (action_name, action_target);
+      accels = gtk_application_get_accels_for_action (app, detailed);
+
+      update_accel (button, accels[0]);
+
+      g_strfreev (accels);
+      g_free (detailed);
+    }
 }
 
 static void
@@ -953,6 +1006,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   widget_class->measure = gtk_model_button_measure;
   widget_class->size_allocate = gtk_model_button_size_allocate;
   widget_class->destroy = gtk_model_button_destroy;
+  widget_class->map = gtk_model_button_map;
   widget_class->state_flags_changed = gtk_model_button_state_flags_changed;
   widget_class->direction_changed = gtk_model_button_direction_changed;
 
@@ -1069,7 +1123,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
     g_param_spec_string ("accel",
                          P_("Accel"),
                          P_("The accelerator"),
-                         "",
+                         NULL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 
@@ -1088,16 +1142,16 @@ gtk_model_button_init (GtkModelButton *button)
   gtk_widget_hide (button->image);
   button->label = gtk_label_new ("");
   gtk_widget_hide (button->label);
-  button->accel = g_object_new (GTK_TYPE_LABEL,
-                                "css-name", "accelerator",
-                                NULL);
-  gtk_widget_set_hexpand (button->accel, TRUE);
-  gtk_label_set_xalign (GTK_LABEL (button->accel), 0.0f);
-  gtk_widget_set_halign (button->accel, GTK_ALIGN_END);
-  gtk_widget_hide (button->accel);
+  button->accel_label = g_object_new (GTK_TYPE_LABEL,
+                                      "css-name", "accelerator",
+                                      NULL);
+  gtk_widget_set_hexpand (button->accel_label, TRUE);
+  gtk_label_set_xalign (GTK_LABEL (button->accel_label), 0.0f);
+  gtk_widget_set_halign (button->accel_label, GTK_ALIGN_END);
+  gtk_widget_hide (button->accel_label);
   gtk_container_add (GTK_CONTAINER (button->box), button->image);
   gtk_container_add (GTK_CONTAINER (button->box), button->label);
-  gtk_container_add (GTK_CONTAINER (button->box), button->accel);
+  gtk_container_add (GTK_CONTAINER (button->box), button->accel_label);
   gtk_container_add (GTK_CONTAINER (button), button->box);
 
   button->start_indicator = gtk_icon_new ("none");
