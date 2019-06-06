@@ -2513,7 +2513,7 @@ microphone-sensitivity-medium-symbolic</property>
                             <child>
                               <object class="GtkMenuButton">
                                 <property name="icon-name">view-more-symbolic</property>
-                                <property name="popover">new_style_menu</property>
+                                <property name="menu-model">new_style_menu_model</property>
                               </object>
                             </child>
                           </object>
@@ -3700,4 +3700,99 @@ bad things might happen.</property>
       </object>
     </child>
   </object>
+  <menu id="new_style_menu_model">
+    <section>
+      <attribute name="display-hint">circular-buttons</attribute>
+      <item>
+        <attribute name="verb-icon">printer-symbolic</attribute>
+        <attribute name="action">app.print</attribute>
+      </item>
+      <item>
+        <attribute name="verb-icon">emblem-shared-symbolic</attribute>
+        <attribute name="action">app.share</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Open in New Window</attribute>
+        <attribute name="action">app.open-in</attribute>
+      </item>
+    </section>
+    <section>
+      <attribute name="display-hint">inline-buttons</attribute>
+      <attribute name="label" translatable="yes">Edit</attribute>
+      <item>
+        <attribute name="verb-icon">edit-cut-symbolic</attribute>
+        <attribute name="action">app.cut</attribute>
+      </item>
+      <item>
+        <attribute name="verb-icon">edit-copy-symbolic</attribute>
+        <attribute name="action">app.copy</attribute>
+      </item>
+      <item>
+        <attribute name="verb-icon">edit-paste-symbolic</attribute>
+        <attribute name="action">app.paste</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Pin</attribute>
+        <attribute name="action">app.pin</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Select Labels…</attribute>
+        <attribute name="action">app.labels</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Share…</attribute>
+        <attribute name="action">app.share</attribute>
+      </item>
+    </section>
+    <section>
+      <submenu>
+        <attribute name="label" translatable="yes">Basement</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">Berk</attribute>
+            <attribute name="action">app.berk</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Broni</attribute>
+            <attribute name="action">app.broni</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Drutt</attribute>
+            <attribute name="action">app.drutt</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">The Thing Upstairs</attribute>
+            <attribute name="action">app.upstairs</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Large</attribute>
+        <attribute name="action">app.size</attribute>
+        <attribute name="target">large</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Medium</attribute>
+        <attribute name="action">app.size</attribute>
+        <attribute name="target">medium</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Small</attribute>
+        <attribute name="action">app.size</attribute>
+        <attribute name="target">small</attribute>
+      </item>
+    </section>
+    <section>
+        <item>
+          <attribute name="label" translatable="yes">Move to Trash</attribute>
+          <attribute name="action">win.delete</attribute>
+        </item>
+    </section>
+  </menu>
 </interface>
