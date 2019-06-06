@@ -3564,7 +3564,6 @@ bad things might happen.</property>
             <property name="text">Open in New Window</property>
             <property name="action-name">app.open-in</property>
             <property name="indicator-size-group">main-indicators</property>
-            <property name="accel">&lt;Primary&gt;n</property>
           </object>
         </child>
         <child>
@@ -3678,7 +3677,6 @@ bad things might happen.</property>
             <property name="text">Move to Trash</property>
             <property name="action-name">win.delete</property>
             <property name="indicator-size-group">main-indicators</property>
-            <property name="accel">Delete</property>
           </object>
         </child>
       </object>
