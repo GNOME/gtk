@@ -1036,6 +1036,9 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  GTK_TYPE_MOVEMENT_STEP, 
 		  G_TYPE_INT, 
 		  G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (signals[MOVE_CURSOR],
+                              G_OBJECT_CLASS_TYPE (gobject_class),
+                              _gtk_marshal_VOID__ENUM_INT_BOOLEANv);
 
   /**
    * GtkTextView::move-viewport:
@@ -1061,6 +1064,9 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                 G_TYPE_NONE, 2,
                                 GTK_TYPE_SCROLL_STEP,
                                 G_TYPE_INT);
+  g_signal_set_va_marshaller (signals[MOVE_VIEWPORT],
+                              G_OBJECT_CLASS_TYPE (gobject_class),
+                              _gtk_marshal_VOID__ENUM_INTv);
 
   /**
    * GtkTextView::set-anchor:
@@ -1134,6 +1140,9 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_DELETE_TYPE,
 		  G_TYPE_INT);
+  g_signal_set_va_marshaller (signals[DELETE_FROM_CURSOR],
+                              G_OBJECT_CLASS_TYPE (gobject_class),
+                              _gtk_marshal_VOID__ENUM_INTv);
 
   /**
    * GtkTextView::backspace:

@@ -1258,6 +1258,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_TREE_PATH,
 		  GTK_TYPE_TREE_VIEW_COLUMN);
+  g_signal_set_va_marshaller (tree_view_signals[ROW_ACTIVATED],
+                              G_TYPE_FROM_CLASS (o_class),
+                              _gtk_marshal_VOID__BOXED_OBJECTv);
 
   /**
    * GtkTreeView::test-expand-row:
@@ -1280,6 +1283,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_BOOLEAN, 2,
 		  GTK_TYPE_TREE_ITER,
 		  GTK_TYPE_TREE_PATH);
+  g_signal_set_va_marshaller (tree_view_signals[TEST_EXPAND_ROW],
+                              G_TYPE_FROM_CLASS (o_class),
+                              _gtk_marshal_BOOLEAN__BOXED_BOXEDv);
 
   /**
    * GtkTreeView::test-collapse-row:
@@ -1302,6 +1308,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_BOOLEAN, 2,
 		  GTK_TYPE_TREE_ITER,
 		  GTK_TYPE_TREE_PATH);
+  g_signal_set_va_marshaller (tree_view_signals[TEST_COLLAPSE_ROW],
+                              G_TYPE_FROM_CLASS (o_class),
+                              _gtk_marshal_BOOLEAN__BOXED_BOXEDv);
 
   /**
    * GtkTreeView::row-expanded:
@@ -1321,6 +1330,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_TREE_ITER,
 		  GTK_TYPE_TREE_PATH);
+  g_signal_set_va_marshaller (tree_view_signals[ROW_EXPANDED],
+                              G_TYPE_FROM_CLASS (o_class),
+                              _gtk_marshal_VOID__BOXED_BOXEDv);
 
   /**
    * GtkTreeView::row-collapsed:
@@ -1340,6 +1352,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_TREE_ITER,
 		  GTK_TYPE_TREE_PATH);
+  g_signal_set_va_marshaller (tree_view_signals[ROW_COLLAPSED],
+                              G_TYPE_FROM_CLASS (o_class),
+                              _gtk_marshal_VOID__BOXED_BOXEDv);
 
   /**
    * GtkTreeView::columns-changed:
@@ -1406,6 +1421,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_BOOLEAN, 2,
 		  GTK_TYPE_MOVEMENT_STEP,
 		  G_TYPE_INT);
+  g_signal_set_va_marshaller (tree_view_signals[MOVE_CURSOR],
+                              G_TYPE_FROM_CLASS (o_class),
+                              _gtk_marshal_BOOLEAN__ENUM_INTv);
 
   tree_view_signals[SELECT_ALL] =
     g_signal_new (I_("select-all"),
@@ -1415,6 +1433,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
+  g_signal_set_va_marshaller (tree_view_signals[SELECT_ALL],
+                              G_TYPE_FROM_CLASS (o_class),
+                              _gtk_marshal_BOOLEAN__VOIDv);
 
   tree_view_signals[UNSELECT_ALL] =
     g_signal_new (I_("unselect-all"),
@@ -1424,6 +1445,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
+  g_signal_set_va_marshaller (tree_view_signals[UNSELECT_ALL],
+                              G_TYPE_FROM_CLASS (o_class),
+                              _gtk_marshal_BOOLEAN__VOIDv);
 
   tree_view_signals[SELECT_CURSOR_ROW] =
     g_signal_new (I_("select-cursor-row"),
@@ -1434,6 +1458,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  _gtk_marshal_BOOLEAN__BOOLEAN,
 		  G_TYPE_BOOLEAN, 1,
 		  G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (tree_view_signals[SELECT_CURSOR_ROW],
+                              G_TYPE_FROM_CLASS (o_class),
+                              _gtk_marshal_BOOLEAN__BOOLEANv);
 
   tree_view_signals[TOGGLE_CURSOR_ROW] =
     g_signal_new (I_("toggle-cursor-row"),
@@ -1443,6 +1470,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
+  g_signal_set_va_marshaller (tree_view_signals[TOGGLE_CURSOR_ROW],
+                              G_TYPE_FROM_CLASS (o_class),
+                              _gtk_marshal_BOOLEAN__VOIDv);
 
   tree_view_signals[EXPAND_COLLAPSE_CURSOR_ROW] =
     g_signal_new (I_("expand-collapse-cursor-row"),
@@ -1455,6 +1485,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  G_TYPE_BOOLEAN,
 		  G_TYPE_BOOLEAN,
 		  G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (tree_view_signals[EXPAND_COLLAPSE_CURSOR_ROW],
+                              G_TYPE_FROM_CLASS (o_class),
+                              _gtk_marshal_BOOLEAN__BOOLEAN_BOOLEAN_BOOLEANv);
 
   tree_view_signals[SELECT_CURSOR_PARENT] =
     g_signal_new (I_("select-cursor-parent"),
@@ -1464,6 +1497,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
+  g_signal_set_va_marshaller (tree_view_signals[SELECT_CURSOR_PARENT],
+                              G_TYPE_FROM_CLASS (o_class),
+                              _gtk_marshal_BOOLEAN__VOIDv);
 
   tree_view_signals[START_INTERACTIVE_SEARCH] =
     g_signal_new (I_("start-interactive-search"),
@@ -1473,6 +1509,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
+  g_signal_set_va_marshaller (tree_view_signals[START_INTERACTIVE_SEARCH],
+                              G_TYPE_FROM_CLASS (o_class),
+                              _gtk_marshal_BOOLEAN__VOIDv);
 
   /* Key bindings */
   gtk_tree_view_add_move_binding (binding_set, GDK_KEY_Up, 0, TRUE,

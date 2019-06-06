@@ -3621,6 +3621,9 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                                        _gtk_marshal_BOOLEAN__ENUM_INT,
                                        G_TYPE_BOOLEAN, 2,
                                        GTK_TYPE_MOVEMENT_STEP, G_TYPE_INT);
+  g_signal_set_va_marshaller (signals[MOVE_CURSOR],
+                              G_TYPE_FROM_CLASS (class),
+                              _gtk_marshal_BOOLEAN__ENUM_INTv);
   /**
    * GtkFlowBox::select-all:
    * @box: the #GtkFlowBox on which the signal is emitted

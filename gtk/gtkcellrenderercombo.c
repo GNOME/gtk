@@ -207,6 +207,9 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
 		  G_TYPE_NONE, 2,
 		  G_TYPE_STRING,
 		  GTK_TYPE_TREE_ITER);
+  g_signal_set_va_marshaller (cell_renderer_combo_signals[CHANGED],
+                              G_TYPE_FROM_CLASS (object_class),
+                              _gtk_marshal_VOID__STRING_BOXEDv);
 }
 
 static void
