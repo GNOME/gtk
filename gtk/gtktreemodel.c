@@ -365,6 +365,9 @@ gtk_tree_model_base_init (gpointer g_class)
                       G_TYPE_NONE, 2,
                       GTK_TYPE_TREE_PATH | G_SIGNAL_TYPE_STATIC_SCOPE,
                       GTK_TYPE_TREE_ITER);
+      g_signal_set_va_marshaller (tree_model_signals[ROW_CHANGED],
+                                  G_TYPE_FROM_CLASS (g_class),
+                                  _gtk_marshal_VOID__BOXED_BOXEDv);
 
       /* We need to get notification about structure changes
        * to update row references., so instead of using the
@@ -403,6 +406,9 @@ gtk_tree_model_base_init (gpointer g_class)
                        _gtk_marshal_VOID__BOXED_BOXED,
                        G_TYPE_NONE, 2,
                        row_inserted_params);
+      g_signal_set_va_marshaller (tree_model_signals[ROW_INSERTED],
+                                  G_TYPE_FROM_CLASS (g_class),
+                                  _gtk_marshal_VOID__BOXED_BOXEDv);
 
       /**
        * GtkTreeModel::row-has-child-toggled:
@@ -423,6 +429,9 @@ gtk_tree_model_base_init (gpointer g_class)
                       G_TYPE_NONE, 2,
                       GTK_TYPE_TREE_PATH | G_SIGNAL_TYPE_STATIC_SCOPE,
                       GTK_TYPE_TREE_ITER);
+      g_signal_set_va_marshaller (tree_model_signals[ROW_HAS_CHILD_TOGGLED],
+                                  G_TYPE_FROM_CLASS (g_class),
+                                  _gtk_marshal_VOID__BOXED_BOXEDv);
 
       /**
        * GtkTreeModel::row-deleted:
@@ -479,6 +488,9 @@ gtk_tree_model_base_init (gpointer g_class)
                        _gtk_marshal_VOID__BOXED_BOXED_POINTER,
                        G_TYPE_NONE, 3,
                        rows_reordered_params);
+      g_signal_set_va_marshaller (tree_model_signals[ROWS_REORDERED],
+                                  G_TYPE_FROM_CLASS (g_class),
+                                  _gtk_marshal_VOID__BOXED_BOXED_POINTERv);
       initialized = TRUE;
     }
 }

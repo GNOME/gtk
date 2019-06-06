@@ -136,6 +136,9 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   2,
                   GTK_TYPE_TEXT_TAG,
                   G_TYPE_BOOLEAN);  
+  g_signal_set_va_marshaller (signals[TAG_CHANGED],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gtk_marshal_VOID__OBJECT_BOOLEANv);
 
   /**
    * GtkTextTagTable::tag-added:

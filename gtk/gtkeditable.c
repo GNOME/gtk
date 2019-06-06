@@ -156,7 +156,15 @@
 
 G_DEFINE_INTERFACE (GtkEditable, gtk_editable, GTK_TYPE_WIDGET)
 
+enum {
+  CHANGED,
+  DELETE_TEXT,
+  INSERT_TEXT,
+  N_SIGNALS
+};
+
 static GQuark quark_editable_data;
+static guint signals[N_SIGNALS];
 
 static GtkEditable *
 get_delegate (GtkEditable *editable)
@@ -175,7 +183,7 @@ gtk_editable_default_do_insert_text (GtkEditable *editable,
                                      int          length,
                                      int         *position)
 {
-  g_signal_emit_by_name (editable, "insert-text", text, length, position);
+  g_signal_emit (editable, signals[INSERT_TEXT], 0, text, length, position);
 }
 
 #define warn_no_delegate(func) \
@@ -200,7 +208,7 @@ gtk_editable_default_do_delete_text (GtkEditable *editable,
                                      int          start_pos,
                                      int          end_pos)
 {
-  g_signal_emit_by_name (editable, "delete-text", start_pos, end_pos);
+  g_signal_emit (editable, signals[DELETE_TEXT], 0, start_pos, end_pos);
 }
 
 static void
@@ -289,16 +297,20 @@ gtk_editable_default_init (GtkEditableInterface *iface)
    * is possible to modify the inserted text, or prevent
    * it from being inserted entirely.
    */
-  g_signal_new (I_("insert-text"),
-                GTK_TYPE_EDITABLE,
-                G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (GtkEditableInterface, insert_text),
-                NULL, NULL,
-                _gtk_marshal_VOID__STRING_INT_POINTER,
-                G_TYPE_NONE, 3,
-                G_TYPE_STRING,
-                G_TYPE_INT,
-                G_TYPE_POINTER);
+  signals[INSERT_TEXT] =
+    g_signal_new (I_("insert-text"),
+                  GTK_TYPE_EDITABLE,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkEditableInterface, insert_text),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__STRING_INT_POINTER,
+                  G_TYPE_NONE, 3,
+                  G_TYPE_STRING,
+                  G_TYPE_INT,
+                  G_TYPE_POINTER);
+  g_signal_set_va_marshaller (signals[INSERT_TEXT],
+                              G_TYPE_FROM_INTERFACE (iface),
+                              _gtk_marshal_VOID__STRING_INT_POINTERv);
 
   /**
    * GtkEditable::delete-text:
@@ -316,15 +328,19 @@ gtk_editable_default_init (GtkEditableInterface *iface)
    * and @end_pos parameters are interpreted as for
    * gtk_editable_delete_text().
    */
-  g_signal_new (I_("delete-text"),
-                GTK_TYPE_EDITABLE,
-                G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (GtkEditableInterface, delete_text),
-                NULL, NULL,
-                _gtk_marshal_VOID__INT_INT,
-                G_TYPE_NONE, 2,
-                G_TYPE_INT,
-                G_TYPE_INT);
+  signals[DELETE_TEXT] =
+    g_signal_new (I_("delete-text"),
+                  GTK_TYPE_EDITABLE,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkEditableInterface, delete_text),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__INT_INT,
+                  G_TYPE_NONE, 2,
+                  G_TYPE_INT,
+                  G_TYPE_INT);
+  g_signal_set_va_marshaller (signals[DELETE_TEXT],
+                              G_TYPE_FROM_INTERFACE (iface),
+                              _gtk_marshal_VOID__INT_INTv);
 
   /**
    * GtkEditable::changed:
@@ -339,13 +355,14 @@ gtk_editable_default_init (GtkEditableInterface *iface)
    * the new content, and may cause multiple ::notify::text signals
    * to be emitted).
    */ 
-  g_signal_new (I_("changed"),
-                GTK_TYPE_EDITABLE,
-                G_SIGNAL_RUN_LAST,
-                G_STRUCT_OFFSET (GtkEditableInterface, changed),
-                NULL, NULL,
-                NULL,
-                G_TYPE_NONE, 0);
+  signals[CHANGED] =
+    g_signal_new (I_("changed"),
+                  GTK_TYPE_EDITABLE,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkEditableInterface, changed),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
 
   g_object_interface_install_property (iface,
       g_param_spec_string ("text",
@@ -860,7 +877,7 @@ static void
 delegate_changed (GtkEditable *delegate,
                   gpointer     editable)
 {
-  g_signal_emit_by_name (editable, "changed");
+  g_signal_emit (editable, signals[CHANGED], 0);
 }
 
 static void

@@ -1088,6 +1088,9 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_TYPE_NONE, 2,
                   GTK_TYPE_WIDGET,
                   G_TYPE_UINT);
+  g_signal_set_va_marshaller (notebook_signals[SWITCH_PAGE],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_VOID__OBJECT_UINTv);
   notebook_signals[FOCUS_TAB] =
     g_signal_new (I_("focus-tab"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -1097,6 +1100,9 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   _gtk_marshal_BOOLEAN__ENUM,
                   G_TYPE_BOOLEAN, 1,
                   GTK_TYPE_NOTEBOOK_TAB);
+  g_signal_set_va_marshaller (notebook_signals[FOCUS_TAB],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_BOOLEAN__ENUMv);
   notebook_signals[SELECT_PAGE] =
     g_signal_new (I_("select-page"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -1106,6 +1112,9 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   _gtk_marshal_BOOLEAN__BOOLEAN,
                   G_TYPE_BOOLEAN, 1,
                   G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (notebook_signals[SELECT_PAGE],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_BOOLEAN__BOOLEANv);
   notebook_signals[CHANGE_CURRENT_PAGE] =
     g_signal_new (I_("change-current-page"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -1115,6 +1124,9 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   _gtk_marshal_BOOLEAN__INT,
                   G_TYPE_BOOLEAN, 1,
                   G_TYPE_INT);
+  g_signal_set_va_marshaller (notebook_signals[CHANGE_CURRENT_PAGE],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_BOOLEAN__INTv);
   notebook_signals[MOVE_FOCUS_OUT] =
     g_signal_new (I_("move-focus-out"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -1134,6 +1146,9 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_TYPE_BOOLEAN, 2,
                   GTK_TYPE_DIRECTION_TYPE,
                   G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (notebook_signals[REORDER_TAB],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_BOOLEAN__ENUM_BOOLEANv);
   /**
    * GtkNotebook::page-reordered:
    * @notebook: the #GtkNotebook
@@ -1153,6 +1168,9 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_TYPE_NONE, 2,
                   GTK_TYPE_WIDGET,
                   G_TYPE_UINT);
+  g_signal_set_va_marshaller (notebook_signals[PAGE_REORDERED],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_VOID__OBJECT_UINTv);
   /**
    * GtkNotebook::page-removed:
    * @notebook: the #GtkNotebook
@@ -1172,6 +1190,9 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_TYPE_NONE, 2,
                   GTK_TYPE_WIDGET,
                   G_TYPE_UINT);
+  g_signal_set_va_marshaller (notebook_signals[PAGE_REMOVED],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_VOID__OBJECT_UINTv);
   /**
    * GtkNotebook::page-added:
    * @notebook: the #GtkNotebook
@@ -1191,6 +1212,9 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_TYPE_NONE, 2,
                   GTK_TYPE_WIDGET,
                   G_TYPE_UINT);
+  g_signal_set_va_marshaller (notebook_signals[PAGE_ADDED],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_VOID__OBJECT_UINTv);
 
   /**
    * GtkNotebook::create-window:
@@ -1215,9 +1239,12 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkNotebookClass, create_window),
                   gtk_object_handled_accumulator, NULL,
-                  NULL,
+                  _gtk_marshal_OBJECT__OBJECT,
                   GTK_TYPE_NOTEBOOK, 1,
                   GTK_TYPE_WIDGET);
+  g_signal_set_va_marshaller (notebook_signals[CREATE_WINDOW],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_OBJECT__OBJECTv);
 
   binding_set = gtk_binding_set_by_class (class);
   gtk_binding_entry_add_signal (binding_set,

@@ -282,6 +282,9 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_CELL_EDITABLE,
 		  G_TYPE_STRING);
+  g_signal_set_va_marshaller (cell_renderer_signals[EDITING_STARTED],
+                              G_TYPE_FROM_CLASS (object_class),
+                              _gtk_marshal_VOID__OBJECT_STRINGv);
 
   g_object_class_install_property (object_class,
 				   PROP_MODE,

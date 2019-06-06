@@ -620,6 +620,9 @@ gtk_switch_class_init (GtkSwitchClass *klass)
                   _gtk_marshal_BOOLEAN__BOOLEAN,
                   G_TYPE_BOOLEAN, 1,
                   G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (signals[STATE_SET],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_BOOLEAN__BOOLEANv);
 
   g_object_class_override_property (gobject_class, PROP_ACTION_NAME, "action-name");
   g_object_class_override_property (gobject_class, PROP_ACTION_TARGET, "action-target");

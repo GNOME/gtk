@@ -1605,6 +1605,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_BOOLEAN__BOOLEAN,
 		  G_TYPE_BOOLEAN, 1,
 		  G_TYPE_BOOLEAN);
+  g_signal_set_va_marshaller (widget_signals[MNEMONIC_ACTIVATE],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_BOOLEAN__BOOLEANv);
 
   /**
    * GtkWidget::move-focus:
@@ -1643,6 +1646,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_marshal_BOOLEAN__ENUM,
                   G_TYPE_BOOLEAN, 1,
                   GTK_TYPE_DIRECTION_TYPE);
+  g_signal_set_va_marshaller (widget_signals[KEYNAV_FAILED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__ENUMv);
 
   /**
    * GtkWidget::drag-leave:
@@ -1756,6 +1762,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_BOOLEAN, 2,
 		  GDK_TYPE_DRAG,
 		  GTK_TYPE_DRAG_RESULT);
+  g_signal_set_va_marshaller (widget_signals[DRAG_FAILED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__OBJECT_ENUMv);
 
   /**
    * GtkWidget::drag-motion:
@@ -1857,6 +1866,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GDK_TYPE_DROP,
 		  G_TYPE_INT,
 		  G_TYPE_INT);
+  g_signal_set_va_marshaller (widget_signals[DRAG_MOTION],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__OBJECT_INT_INTv);
 
   /**
    * GtkWidget::drag-drop:
@@ -1889,6 +1901,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  GDK_TYPE_DROP,
 		  G_TYPE_INT,
 		  G_TYPE_INT);
+  g_signal_set_va_marshaller (widget_signals[DRAG_DROP],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__OBJECT_INT_INTv);
 
   /**
    * GtkWidget::drag-data-get:
@@ -1914,6 +1929,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_NONE, 2,
 		  GDK_TYPE_DRAG,
 		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (widget_signals[DRAG_DATA_GET],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__OBJECT_BOXEDv);
 
   /**
    * GtkWidget::drag-data-received:
@@ -1990,6 +2008,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_NONE, 2,
 		  GDK_TYPE_DROP,
 		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (widget_signals[DRAG_DATA_RECEIVED],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__OBJECT_BOXEDv);
 
   /**
    * GtkWidget::query-tooltip:
@@ -2028,6 +2049,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_INT,
 		  G_TYPE_BOOLEAN,
 		  GTK_TYPE_TOOLTIP);
+  g_signal_set_va_marshaller (widget_signals[QUERY_TOOLTIP],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__INT_INT_BOOLEAN_OBJECTv);
 
   /**
    * GtkWidget::popup-menu:
@@ -2051,6 +2075,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
+  g_signal_set_va_marshaller (widget_signals[POPUP_MENU],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__VOIDv);
 
   /**
    * GtkWidget::accel-closures-changed:
@@ -2089,6 +2116,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__UINT,
                   G_TYPE_BOOLEAN, 1, G_TYPE_UINT);
+  g_signal_set_va_marshaller (widget_signals[CAN_ACTIVATE_ACCEL],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__UINTv);
 
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_F10, GDK_SHIFT_MASK,

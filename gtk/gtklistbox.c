@@ -603,6 +603,9 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                   _gtk_marshal_VOID__ENUM_INT,
                   G_TYPE_NONE, 2,
                   GTK_TYPE_MOVEMENT_STEP, G_TYPE_INT);
+  g_signal_set_va_marshaller (signals[MOVE_CURSOR],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_VOID__ENUM_INTv);
 
   widget_class->activate_signal = signals[ACTIVATE_CURSOR_ROW];
 

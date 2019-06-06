@@ -302,6 +302,9 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   _gtk_marshal_BOOLEAN__VOID,
                   G_TYPE_BOOLEAN, 0);
+  g_signal_set_va_marshaller (im_context_signals[RETRIEVE_SURROUNDING],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__VOIDv);
   /**
    * GtkIMContext::delete-surrounding:
    * @context: the object on which the signal is emitted
@@ -324,7 +327,10 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
                   _gtk_marshal_BOOLEAN__INT_INT,
                   G_TYPE_BOOLEAN, 2,
                   G_TYPE_INT,
-		  G_TYPE_INT);
+                  G_TYPE_INT);
+  g_signal_set_va_marshaller (im_context_signals[DELETE_SURROUNDING],
+                              G_TYPE_FROM_CLASS (klass),
+                              _gtk_marshal_BOOLEAN__INT_INTv);
 
   properties[PROP_INPUT_PURPOSE] =
     g_param_spec_enum ("input-purpose",
