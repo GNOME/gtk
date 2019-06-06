@@ -1,5 +1,6 @@
 #include "config.h"
 #include "gdk-private.h"
+#include "gdkprofilerprivate.h"
 
 GdkPrivateVTable *
 gdk__private__ (void)
@@ -19,6 +20,9 @@ gdk__private__ (void)
     gdk_display_set_debug_updates,
     gdk_get_desktop_startup_id,
     gdk_get_desktop_autostart_id,
+    gdk_profiler_is_running,
+    gdk_profiler_start,
+    gdk_profiler_stop
   };
 
   return &table;

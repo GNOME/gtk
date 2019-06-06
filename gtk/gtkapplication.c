@@ -21,6 +21,11 @@
 #include "config.h"
 
 #include "gtkapplication.h"
+#include "gdkprivate.h"
+
+#ifdef G_OS_UNIX
+#include <gio/gunixfdlist.h>
+#endif
 
 #include <stdlib.h>
 
@@ -165,6 +170,7 @@ struct _GtkApplicationPrivate
   GtkActionMuxer  *muxer;
   GtkBuilder      *menus_builder;
   gchar           *help_overlay_path;
+  guint            profiler_id;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
@@ -593,6 +599,153 @@ gtk_application_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_application_parent_class)->finalize (object);
 }
 
+#ifdef G_OS_UNIX
+
+static const gchar org_gnome_Sysprof3_Profiler_xml[] =
+  "<node>"
+    "<interface name='org.gnome.Sysprof3.Profiler'>"
+      "<property name='Capabilities' type='a{sv}' access='read'/>"
+      "<method name='Start'>"
+        "<arg type='a{sv}' name='options' direction='in'/>"
+        "<arg type='h' name='fd' direction='in'/>"
+      "</method>"
+      "<method name='Stop'>"
+      "</method>"
+    "</interface>"
+  "</node>";
+
+static GDBusInterfaceInfo *org_gnome_Sysprof3_Profiler;
+
+static void
+sysprof_profiler_method_call (GDBusConnection       *connection,
+                              const gchar           *sender,
+                              const gchar           *object_path,
+                              const gchar           *interface_name,
+                              const gchar           *method_name,
+                              GVariant              *parameters,
+                              GDBusMethodInvocation *invocation,
+                              gpointer               user_data)
+{
+  if (strcmp (method_name, "Start") == 0)
+    {
+      GDBusMessage *message;
+      GUnixFDList *fd_list;
+      GVariant *options;
+      int fd = -1;
+      int idx;
+
+      if (GDK_PRIVATE_CALL (gdk_profiler_is_running) ())
+        {
+          g_dbus_method_invocation_return_error (invocation,
+                                                 G_DBUS_ERROR,
+                                                 G_DBUS_ERROR_FAILED,
+                                                 "Profiler already running");
+          return;
+        }
+
+      g_variant_get (parameters, "(@a{sv}h)", &options, &idx);
+
+      message = g_dbus_method_invocation_get_message (invocation);
+      fd_list = g_dbus_message_get_unix_fd_list (message);
+      if (fd_list)
+        fd = g_unix_fd_list_get (fd_list, idx, NULL);
+
+      GDK_PRIVATE_CALL (gdk_profiler_start) (fd);
+
+      g_variant_unref (options);
+    }
+  else if (strcmp (method_name, "Stop") == 0)
+    {
+      if (!GDK_PRIVATE_CALL (gdk_profiler_is_running) ())
+        {
+          g_dbus_method_invocation_return_error (invocation,
+                                                 G_DBUS_ERROR,
+                                                 G_DBUS_ERROR_FAILED,
+                                                 "Profiler not running");
+          return;
+        }
+
+      GDK_PRIVATE_CALL (gdk_profiler_stop) ();
+    }
+  else
+    {
+      g_dbus_method_invocation_return_error (invocation,
+                                             G_DBUS_ERROR,
+                                             G_DBUS_ERROR_UNKNOWN_METHOD,
+                                             "Unknown method");
+      return;
+    }
+
+  g_dbus_method_invocation_return_value (invocation, NULL);
+}
+
+static gboolean
+gtk_application_dbus_register (GApplication     *application,
+                               GDBusConnection  *connection,
+                               const char       *obect_path,
+                               GError          **error)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (GTK_APPLICATION (application));
+  GDBusInterfaceVTable vtable = {
+    sysprof_profiler_method_call,
+    NULL,
+    NULL
+  };
+
+  if (org_gnome_Sysprof3_Profiler == NULL)
+    {
+      GDBusNodeInfo *info;
+
+      info = g_dbus_node_info_new_for_xml (org_gnome_Sysprof3_Profiler_xml, error);
+      if (info == NULL)
+        return FALSE;
+
+      org_gnome_Sysprof3_Profiler = g_dbus_node_info_lookup_interface (info, "org.gnome.Sysprof3.Profiler");
+      g_dbus_interface_info_ref (org_gnome_Sysprof3_Profiler);
+      g_dbus_node_info_unref (info);
+    }
+
+  priv->profiler_id = g_dbus_connection_register_object (connection,
+                                                         "/org/gtk/Profiler",
+                                                         org_gnome_Sysprof3_Profiler,
+                                                         &vtable,
+                                                         NULL,
+                                                         NULL,
+                                                         error);
+
+  return TRUE;
+}
+
+static void
+gtk_application_dbus_unregister (GApplication     *application,
+                                 GDBusConnection  *connection,
+                                 const char       *obect_path)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (GTK_APPLICATION (application));
+
+  g_dbus_connection_unregister_object (connection, priv->profiler_id);
+}
+
+#else
+
+static gboolean
+gtk_application_dbus_register (GApplication     *application,
+                               GDBusConnection  *connection,
+                               const char       *obect_path,
+                               GError          **error)
+{
+  return TRUE;
+}
+
+static void
+gtk_application_dbus_unregister (GApplication     *application,
+                                 GDBusConnection  *connection,
+                                 const char       *obect_path)
+{
+}
+
+#endif
+
 static void
 gtk_application_class_init (GtkApplicationClass *class)
 {
@@ -609,6 +762,8 @@ gtk_application_class_init (GtkApplicationClass *class)
   application_class->after_emit = gtk_application_after_emit;
   application_class->startup = gtk_application_startup;
   application_class->shutdown = gtk_application_shutdown;
+  application_class->dbus_register = gtk_application_dbus_register;
+  application_class->dbus_unregister = gtk_application_dbus_unregister;
 
   class->window_added = gtk_application_window_added;
   class->window_removed = gtk_application_window_removed;

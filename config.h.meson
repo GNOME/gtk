@@ -149,6 +149,9 @@
 /* Define to 1 if you have the <sys/param.h> header file. */
 #mesondefine HAVE_SYS_PARAM_H
 
+/* Have the sysprof-capture library */
+#mesondefine HAVE_SYSPROF_CAPTURE
+
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #mesondefine HAVE_SYS_STAT_H
 
