@@ -146,7 +146,7 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   g_signal_connect (stack, "notify::visible-child-name",
                     G_CALLBACK (visible_submenu_changed), popover);
 
-  style_context = gtk_widget_get_style_context (gtk_popover_get_contents_widget (GTK_POPOVER (popover)));
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (popover));
   gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_MENU);
 }
 
