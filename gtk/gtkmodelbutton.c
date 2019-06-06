@@ -39,6 +39,8 @@
 #include "gtkcontainerprivate.h"
 #include "gtkiconprivate.h"
 #include "gtksizegroup.h"
+#include "gtkaccellabelprivate.h"
+#include "gtkactionable.h"
 
 /**
  * SECTION:gtkmodelbutton
@@ -153,6 +155,7 @@ struct _GtkModelButton
   GtkWidget *box;
   GtkWidget *image;
   GtkWidget *label;
+  GtkWidget *accel;
   GtkWidget *start_indicator;
   GtkWidget *end_indicator;
   gboolean active;
@@ -177,6 +180,7 @@ enum
   PROP_ACTIVE,
   PROP_MENU_NAME,
   PROP_ICONIC,
+  PROP_ACCEL,
   PROP_INDICATOR_SIZE_GROUP,
   LAST_PROPERTY
 };
@@ -518,6 +522,31 @@ gtk_model_button_set_iconic (GtkModelButton *button,
 }
 
 static void
+gtk_model_button_set_accel (GtkModelButton *button,
+                            const char     *accel)
+{
+  if (accel)
+    {
+      guint key;
+      GdkModifierType mods;
+      GtkAccelLabelClass *accel_class;
+      char *str;
+
+      gtk_accelerator_parse (accel, &key, &mods);
+
+      accel_class = g_type_class_ref (GTK_TYPE_ACCEL_LABEL);
+      str = _gtk_accel_label_class_get_accelerator_label (accel_class, key, mods);
+      gtk_label_set_label (GTK_LABEL (button->accel), str);
+      g_free (str);
+      g_type_class_unref (accel_class);
+
+      gtk_widget_show (button->accel);
+    }
+  else
+    gtk_widget_hide (button->accel);
+}
+
+static void
 gtk_model_button_get_property (GObject    *object,
                                guint       prop_id,
                                GValue     *value,
@@ -553,6 +582,10 @@ gtk_model_button_get_property (GObject    *object,
 
     case PROP_ICONIC:
       g_value_set_boolean (value, button->iconic);
+      break;
+
+    case PROP_ACCEL:
+      g_value_set_string (value, gtk_label_get_label (GTK_LABEL (button->accel)));
       break;
 
     case PROP_INDICATOR_SIZE_GROUP:
@@ -601,6 +634,10 @@ gtk_model_button_set_property (GObject      *object,
 
     case PROP_ICONIC:
       gtk_model_button_set_iconic (button, g_value_get_boolean (value));
+      break;
+
+    case PROP_ACCEL:
+      gtk_model_button_set_accel (button, g_value_get_string (value));
       break;
 
     case PROP_INDICATOR_SIZE_GROUP:
@@ -1021,6 +1058,12 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
                           P_("Size group"),
                           GTK_TYPE_SIZE_GROUP,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  properties[PROP_ACCEL] =
+    g_param_spec_string ("accel",
+                         P_("Accel"),
+                         P_("The accelerator"),
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 
   gtk_widget_class_set_accessible_role (GTK_WIDGET_CLASS (class), ATK_ROLE_PUSH_BUTTON);
@@ -1038,8 +1081,16 @@ gtk_model_button_init (GtkModelButton *button)
   gtk_widget_hide (button->image);
   button->label = gtk_label_new ("");
   gtk_widget_hide (button->label);
+  button->accel = g_object_new (GTK_TYPE_LABEL,
+                                "css-name", "accelerator",
+                                NULL);
+  gtk_widget_set_hexpand (button->accel, TRUE);
+  gtk_label_set_xalign (GTK_LABEL (button->accel), 0.0f);
+  gtk_widget_set_halign (button->accel, GTK_ALIGN_END);
+  gtk_widget_hide (button->accel);
   gtk_container_add (GTK_CONTAINER (button->box), button->image);
   gtk_container_add (GTK_CONTAINER (button->box), button->label);
+  gtk_container_add (GTK_CONTAINER (button->box), button->accel);
   gtk_container_add (GTK_CONTAINER (button), button->box);
 
   button->start_indicator = gtk_icon_new ("none");
