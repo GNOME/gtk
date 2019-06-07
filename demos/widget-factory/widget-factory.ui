@@ -3033,7 +3033,7 @@ microphone-sensitivity-medium-symbolic</property>
                               <object class="GtkNotebookPage">
                                 <property name="tab-expand">1</property>
                                 <property name="child">
-                                  <object class="GtkBox">
+                                  <object class="GtkBox" id="box_for_context">
                                     <property name="height-request">120</property>
                                   </object>
                                 </property>
@@ -3828,6 +3828,63 @@ bad things might happen.</property>
           <attribute name="label" translatable="yes">Move to Trash</attribute>
           <attribute name="action">win.delete</attribute>
         </item>
+    </section>
+  </menu>
+  <menu id="new_style_context_menu_model">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Open</attribute>
+        <attribute name="action">app.open</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Open in New Tab</attribute>
+        <attribute name="action">app.open-tab</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Open in New Window</attribute>
+        <attribute name="action">app.open-window</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Cut</attribute>
+        <attribute name="action">app.cut</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Copy</attribute>
+        <attribute name="action">app.copy</attribute>
+      </item>
+    </section>
+    <section>
+      <submenu>
+        <attribute name="label" translatable="yes">Options</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">Option A</attribute>
+            <attribute name="action">app.option-a</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Option B</attribute>
+            <attribute name="action">app.option-b</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Option C</attribute>
+            <attribute name="action">app.option-c</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Option D</attribute>
+            <attribute name="action">app.option-d</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Move to Trash</attribute>
+        <attribute name="action">win.delete</attribute>
+      </item>
     </section>
   </menu>
 </interface>
