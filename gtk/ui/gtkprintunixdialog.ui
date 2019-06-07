@@ -229,7 +229,7 @@
                                         <property name="tooltip-text" translatable="yes">Specify one or more page ranges,
  e.g. 1–3, 7, 11</property>
                                         <property name="activates-default">1</property>
-                                        <signal name="focus-in-event" handler="page_range_entry_focus_in" swapped="no"/>
+                                        <signal name="notify::has-focus" handler="page_range_entry_focus_changed" swapped="no"/>
                                         <child internal-child="accessible">
                                           <object class="AtkObject" id="page_range_entry-atkobject">
                                             <property name="AtkObject::accessible-name" translatable="yes">Pages</property>

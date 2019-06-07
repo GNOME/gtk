@@ -157,8 +157,8 @@ static void     emit_ok_response                   (GtkTreeView        *tree_vie
 						    GtkTreePath        *path,
 						    GtkTreeViewColumn  *column,
 						    gpointer           *user_data);
-static gboolean page_range_entry_focus_in          (GtkWidget          *entry,
-                                                    GdkEventFocus      *event,
+static gboolean page_range_entry_focus_changed     (GtkWidget          *entry,
+                                                    GdkEventFocus      *pspec,
                                                     GtkPrintUnixDialog *dialog);
 static void     update_page_range_entry_sensitivity(GtkWidget          *button,
 						    GtkPrintUnixDialog *dialog);
@@ -565,7 +565,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   gtk_widget_class_bind_template_callback (widget_class, error_dialogs);
   gtk_widget_class_bind_template_callback (widget_class, emit_ok_response);
   gtk_widget_class_bind_template_callback (widget_class, selected_printer_changed);
-  gtk_widget_class_bind_template_callback (widget_class, page_range_entry_focus_in);
+  gtk_widget_class_bind_template_callback (widget_class, page_range_entry_focus_changed);
   gtk_widget_class_bind_template_callback (widget_class, update_page_range_entry_sensitivity);
   gtk_widget_class_bind_template_callback (widget_class, update_print_at_entry_sensitivity);
   gtk_widget_class_bind_template_callback (widget_class, update_print_at_option);
@@ -2313,13 +2313,14 @@ draw_collate (GtkDrawingArea *da,
 }
 
 static gboolean
-page_range_entry_focus_in (GtkWidget          *entry,
-                           GdkEventFocus      *event,
-                           GtkPrintUnixDialog *dialog)
+page_range_entry_focus_changed (GtkWidget          *entry,
+                                GParamSpec         *pspec,
+                                GtkPrintUnixDialog *dialog)
 {
   GtkPrintUnixDialogPrivate *priv = gtk_print_unix_dialog_get_instance_private (dialog);
 
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->page_range_radio), TRUE);
+  if (gtk_widget_has_focus (entry))
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->page_range_radio), TRUE);
 
   return FALSE;
 }
