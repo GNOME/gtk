@@ -1627,7 +1627,7 @@ static void
 set_up_context_popover (GtkWidget *widget,
                         GMenuModel *model)
 {
-  GtkWidget *popover = gtk_popover_new_from_model (widget, model);
+  GtkWidget *popover = gtk_popover_menu_new_from_model (widget, model);
   GtkGesture *gesture;
 
   g_object_set (popover, "has-arrow", FALSE, NULL);

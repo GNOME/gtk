@@ -59,41 +59,37 @@ GDK_AVAILABLE_IN_ALL
 GType           gtk_popover_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_popover_new      (GtkWidget *relative_to);
-
-GDK_AVAILABLE_IN_ALL
-GtkWidget *     gtk_popover_new_from_model  (GtkWidget  *relative_to,
-                                             GMenuModel *model);
+GtkWidget *     gtk_popover_new             (GtkWidget    *relative_to);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_popover_set_relative_to (GtkPopover   *popover,
-                                           GtkWidget  *relative_to);
+                                             GtkWidget    *relative_to);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_popover_get_relative_to (GtkPopover   *popover);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_popover_set_pointing_to (GtkPopover           *popover,
-                                           const GdkRectangle *rect);
+void            gtk_popover_set_pointing_to (GtkPopover         *popover,
+                                             const GdkRectangle *rect);
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_popover_get_pointing_to (GtkPopover           *popover,
-                                           GdkRectangle       *rect);
+gboolean        gtk_popover_get_pointing_to (GtkPopover         *popover,
+                                             GdkRectangle       *rect);
 GDK_AVAILABLE_IN_ALL
-void            gtk_popover_set_position    (GtkPopover           *popover,
-                                           GtkPositionType     position);
+void            gtk_popover_set_position    (GtkPopover         *popover,
+                                             GtkPositionType     position);
 GDK_AVAILABLE_IN_ALL
-GtkPositionType gtk_popover_get_position    (GtkPopover           *popover);
+GtkPositionType gtk_popover_get_position    (GtkPopover         *popover);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_popover_set_autohide    (GtkPopover           *popover,
-                                             gboolean              autohide);
+void            gtk_popover_set_autohide    (GtkPopover         *popover,
+                                             gboolean            autohide);
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_popover_get_autohide    (GtkPopover           *popover);
+gboolean        gtk_popover_get_autohide    (GtkPopover         *popover);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_popover_set_has_arrow   (GtkPopover           *popover,
-                                             gboolean              has_arrow);
+void            gtk_popover_set_has_arrow   (GtkPopover         *popover,
+                                             gboolean            has_arrow);
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_popover_get_has_arrow   (GtkPopover           *popover);
+gboolean        gtk_popover_get_has_arrow   (GtkPopover         *popover);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_popover_popup (GtkPopover *popover);

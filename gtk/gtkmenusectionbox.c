@@ -30,7 +30,7 @@
 #include "gtksizegroup.h"
 #include "gtkstack.h"
 #include "gtkstylecontext.h"
-#include "gtkpopover.h"
+#include "gtkpopovermenu.h"
 #include "gtkorientable.h"
 #include "gtkiconprivate.h"
 
@@ -453,20 +453,18 @@ update_popover_position_cb (GObject    *source,
 }
 
 void
-gtk_menu_section_box_new_toplevel (GtkStack    *stack,
-                                   GMenuModel  *model,
-                                   const gchar *action_namespace,
-                                   GtkPopover  *popover)
+gtk_menu_section_box_new_toplevel (GtkPopoverMenu *popover,
+                                   GMenuModel     *model)
 {
   GtkMenuSectionBox *box;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX,  NULL);
   box->indicators = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
-  gtk_stack_add_named (stack, GTK_WIDGET (box), "main");
+  gtk_popover_menu_add_submenu (popover, GTK_WIDGET (box), "main");
 
   box->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (_gtk_widget_get_action_muxer (GTK_WIDGET (box), TRUE)),
-                                       model, TRUE, FALSE, FALSE, action_namespace,
+                                       model, TRUE, FALSE, FALSE, NULL,
                                        gtk_menu_section_box_insert_func,
                                        gtk_menu_section_box_remove_func, box);
 
