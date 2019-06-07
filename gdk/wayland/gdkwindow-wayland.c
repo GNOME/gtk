@@ -29,6 +29,7 @@
 #include "gdkglcontext-wayland.h"
 #include "gdkframeclockprivate.h"
 #include "gdkprivate-wayland.h"
+#include "gdkprofilerprivate.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkprivate-wayland.h"
@@ -560,6 +561,9 @@ frame_callback (void               *data,
 #ifdef G_ENABLE_DEBUG
   if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
     _gdk_frame_clock_debug_print_timings (clock, timings);
+
+  if (gdk_profiler_is_running ())
+    _gdk_frame_clock_add_timings_to_profiler (clock, timings);
 #endif
 }
 

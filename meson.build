@@ -798,6 +798,16 @@ if cloudproviders_enabled
   endif
 endif
 
+profiler_enabled = get_option('profiler')
+if profiler_enabled
+  profiler_dep = dependency('sysprof-capture-3', static: true, required: true)
+  if profiler_dep.found()
+    cdata.set('HAVE_SYSPROF_CAPTURE', profiler_dep.found())
+  else
+    error('Profiler support not found, but was explicitly requested.')
+  endif
+endif
+
 build_gir = get_option('introspection')
 subdir('gdk')
 subdir('gtk')
@@ -956,6 +966,7 @@ summary = [
   '    Print backends: @0@'.format(' '.join(print_backends)),
   '     Cloud support: @0@'.format(get_option('cloudproviders')),
   '    Colord support: @0@'.format(get_option('colord')),
+  '          Profiler: @0@'.format(get_option('profiler')),
   '     Introspection: @0@'.format(get_option('introspection')),
   '     Documentation: @0@'.format(get_option('gtk_doc')),
   '         Man pages: @0@'.format(get_option('man')),

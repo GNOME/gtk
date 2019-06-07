@@ -39,6 +39,7 @@
 #include "gdkscreen-x11.h"
 #include "gdkglcontext-x11.h"
 #include "gdk-private.h"
+#include "gdkprofilerprivate.h"
 
 #include <glib.h>
 #include <glib/gprintf.h>
@@ -1426,6 +1427,9 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
 #ifdef G_ENABLE_DEBUG
               if (GDK_DEBUG_CHECK (FRAMES))
                 _gdk_frame_clock_debug_print_timings (clock, timings);
+
+              if (gdk_profiler_is_running ())
+                _gdk_frame_clock_add_timings_to_profiler (clock, timings);
 #endif /* G_ENABLE_DEBUG */
             }
         }

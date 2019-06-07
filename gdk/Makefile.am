@@ -129,6 +129,7 @@ gdk_private_headers = 				\
 	gdkframeclockprivate.h			\
 	gdkglcontextprivate.h			\
 	gdkmonitorprivate.h			\
+	gdkprofilerprivate.h			\
 	gdkscreenprivate.h			\
 	gdkseatprivate.h			\
 	gdkseatdefaultprivate.h			\
@@ -170,6 +171,7 @@ gdk_c_sources = 				\
 	gdkframeclockidle.c			\
 	gdkpango.c				\
 	gdkpixbuf-drawable.c			\
+	gdkprofiler.c				\
 	gdkproperty.c				\
 	gdkrectangle.c				\
 	gdkrgba.c				\

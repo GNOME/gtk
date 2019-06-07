@@ -24,6 +24,7 @@ gdk_sources = files(
   'gdkframeclockidle.c',
   'gdkpango.c',
   'gdkpixbuf-drawable.c',
+  'gdkprofiler.c',
   'gdkproperty.c',
   'gdkrectangle.c',
   'gdkrgba.c',
@@ -224,6 +225,12 @@ if win32_enabled
   )
   gdk_res = import('windows').compile_resources(gdk_rc, include_directories: include_directories('win32/rc'))
   gdk_sources += gdk_res
+endif
+
+if profiler_enabled
+  if profiler_dep.found()
+    gdk_deps += [profiler_dep]
+  endif
 endif
 
 gdk_sources = [
