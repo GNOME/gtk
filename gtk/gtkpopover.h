@@ -66,11 +66,6 @@ GtkWidget *     gtk_popover_new_from_model  (GtkWidget  *relative_to,
                                              GMenuModel *model);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_popover_bind_model      (GtkPopover  *popover,
-                                             GMenuModel  *model,
-                                             const gchar *action_namespace);
-
-GDK_AVAILABLE_IN_ALL
 void            gtk_popover_set_relative_to (GtkPopover   *popover,
                                            GtkWidget  *relative_to);
 GDK_AVAILABLE_IN_ALL
