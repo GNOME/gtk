@@ -3887,4 +3887,142 @@ bad things might happen.</property>
       </item>
     </section>
   </menu>
+  <menu id="menu_bar_model">
+    <submenu>
+      <attribute name="label" translatable="yes">File</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_New</attribute>
+          <attribute name="action">app.new</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Open</attribute>
+          <attribute name="action">app.open</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Save</attribute>
+          <attribute name="action">app.save</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Save _As</attribute>
+          <attribute name="action">app.save-as</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Quit</attribute>
+          <attribute name="action">app.quit</attribute>
+        </item>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">Edit</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">Cu_t</attribute>
+          <attribute name="action">app.cut</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Copy</attribute>
+          <attribute name="action">app.copy</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Paste</attribute>
+          <attribute name="action">app.paste</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Delete</attribute>
+          <attribute name="action">win.delete</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Search</attribute>
+          <attribute name="action">win.search</attribute>
+        </item>
+      </section>
+      <section>
+        <submenu>
+          <attribute name="label" translatable="yes">Checks &amp; Radios</attribute>
+          <section>
+            <item>
+              <attribute name="label" translatable="yes">Check</attribute>
+              <attribute name="action">app.check-on</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Check</attribute>
+              <attribute name="action">app.check-off</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Check</attribute>
+              <attribute name="action">app.check-on-disabled</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Check</attribute>
+              <attribute name="action">app.check-off-disabled</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Check</attribute>
+              <attribute name="action">app.check-no-action</attribute>
+              <attribute name="hidden-when">action-missing</attribute>
+            </item>
+          </section>
+          <section>
+            <item>
+              <attribute name="label" translatable="yes">Radio</attribute>
+              <attribute name="action">app.radio-x</attribute>
+              <attribute name="target">x</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Radio</attribute>
+              <attribute name="action">app.radio-x</attribute>
+              <attribute name="target">y</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Radio</attribute>
+              <attribute name="action">app.radio-x-disabled</attribute>
+              <attribute name="target">x</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Radio</attribute>
+              <attribute name="action">app.radio-x-disabled</attribute>
+              <attribute name="target">y</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Radio</attribute>
+              <attribute name="action">app.radio-no-action</attribute>
+              <attribute name="hidden-when">action-missing</attribute>
+            </item>
+          </section>
+        </submenu>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">View</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">Dark Theme</attribute>
+          <attribute name="action">win.dark</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Toolbar</attribute>
+          <attribute name="action">win.toolbar</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Statusbar</attribute>
+          <attribute name="action">win.statusbar</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Select Background</attribute>
+          <attribute name="action">win.background</attribute>
+        </item>
+      </section>
+
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">Help</attribute>
+        <item>
+          <attribute name="label" translatable="yes">About</attribute>
+          <attribute name="action">app.about</attribute>
+        </item>
+    </submenu>
+  </menu>
 </interface>

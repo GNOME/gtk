@@ -1932,6 +1932,12 @@ activate (GApplication *app)
   model = (GMenuModel *)gtk_builder_get_object (builder, "new_style_context_menu_model");
   set_up_context_popover (widget, model);
 
+  widget = gtk_bin_get_child (GTK_BIN (gtk_builder_get_object (builder, "page2frame2")));
+  model = (GMenuModel *)gtk_builder_get_object (builder, "menu_bar_model");
+  widget2 = gtk_popover_bar_new_from_model (model);
+  gtk_container_add (GTK_CONTAINER (widget), widget2);
+  gtk_box_reorder_child_after (GTK_BOX (widget), widget2, NULL);
+
   gtk_widget_show (GTK_WIDGET (window));
 
   g_object_unref (builder);
@@ -2017,10 +2023,13 @@ main (int argc, char *argv[])
     { "print", activate_action, NULL, NULL, NULL },
     { "share", activate_action, NULL, NULL, NULL },
     { "labels", activate_action, NULL, NULL, NULL },
+    { "new", activate_action, NULL, NULL, NULL },
     { "open", activate_action, NULL, NULL, NULL },
     { "open-in", activate_action, NULL, NULL, NULL },
     { "open-tab", activate_action, NULL, NULL, NULL },
     { "open-window", activate_action, NULL, NULL, NULL },
+    { "save", activate_action, NULL, NULL, NULL },
+    { "save-as", activate_action, NULL, NULL, NULL },
     { "cut", activate_action, NULL, NULL, NULL },
     { "copy", activate_action, NULL, NULL, NULL },
     { "paste", activate_action, NULL, NULL, NULL },
@@ -2034,6 +2043,12 @@ main (int argc, char *argv[])
     { "option-b", activate_action, NULL, NULL, NULL },
     { "option-c", activate_action, NULL, NULL, NULL },
     { "option-d", activate_action, NULL, NULL, NULL },
+    { "check-on", NULL, NULL, "true", NULL },
+    { "check-off", NULL, NULL, "false", NULL },
+    { "radio-x", NULL, "s", "'x'", NULL },
+    { "check-on-disabled", NULL, NULL, "true", NULL },
+    { "check-off-disabled", NULL, NULL, "false", NULL },
+    { "radio-x-disabled", NULL, "s", "'x'", NULL },
   };
   gint status;
 
@@ -2043,6 +2058,12 @@ main (int argc, char *argv[])
                                    app_entries, G_N_ELEMENTS (app_entries),
                                    app);
   action = g_action_map_lookup_action (G_ACTION_MAP (app), "wine");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (app), "check-on-disabled");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (app), "check-off-disabled");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (app), "radio-x-disabled");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
 
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
