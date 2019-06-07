@@ -28,6 +28,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtknative.h"
 
 /**
  * SECTION:gtkboxlayout
@@ -173,6 +174,9 @@ count_expand_children (GtkWidget *widget,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
+      if (GTK_IS_NATIVE (child))
+        continue;
+
       if (_gtk_widget_get_visible (child))
         {
           *visible_children += 1;
@@ -218,6 +222,9 @@ gtk_box_layout_compute_size (GtkBoxLayout *self,
     {
       int child_min = 0;
       int child_nat = 0;
+
+      if (GTK_IS_NATIVE (child))
+        continue;
 
       if (!_gtk_widget_get_visible (child))
         continue;
@@ -293,6 +300,9 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
+      if (GTK_IS_NATIVE (child))
+        continue;
+
       if (_gtk_widget_get_visible (child))
         {
           gtk_widget_measure (child,
@@ -341,6 +351,9 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
+      if (GTK_IS_NATIVE (child))
+        continue;
+
       /* If widget is not visible, skip it. */
       if (!_gtk_widget_get_visible (child))
         continue;
@@ -481,6 +494,15 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
   gint child_size;
   gint spacing;
 
+  /* Handle native children first, and skip them in everything below */
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    {
+      if (GTK_IS_NATIVE (child))
+        gtk_native_check_resize (GTK_NATIVE (child));
+    }
+
   count_expand_children (widget, self->orientation, &nvis_children, &nexpand_children);
 
   /* If there is no visible child, simply return. */
@@ -505,6 +527,9 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
+      if (GTK_IS_NATIVE (child))
+        continue;
+
       if (!_gtk_widget_get_visible (child))
         continue;
 
@@ -556,6 +581,9 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
+      if (GTK_IS_NATIVE (child))
+        continue;
+
       /* If widget is not visible, skip it. */
       if (!_gtk_widget_get_visible (child))
         continue;
@@ -661,6 +689,9 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
+      if (GTK_IS_NATIVE (child))
+        continue;
+
       /* If widget is not visible, skip it. */
       if (!_gtk_widget_get_visible (child))
         continue;
