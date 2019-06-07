@@ -296,6 +296,7 @@ gtk_public_sources = files([
   'gtkpasswordentry.c',
   'gtkpicture.c',
   'gtkpopover.c',
+  'gtkpopoverbar.c',
   'gtkpopovermenu.c',
   'gtkprintcontext.c',
   'gtkprintoperation.c',
