@@ -533,6 +533,7 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
       gtk_box_set_homogeneous (box->item_box, TRUE);
       gtk_orientable_set_orientation (GTK_ORIENTABLE (box->item_box), GTK_ORIENTATION_HORIZONTAL);
       gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box->item_box)), GTK_STYLE_CLASS_LINKED);
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box->item_box)), "horizontal-buttons");
       box->iconic = TRUE;
 
       if (text_direction)
@@ -555,6 +556,7 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
       box->inline_buttons = TRUE;
 
       gtk_orientable_set_orientation (GTK_ORIENTABLE (box->item_box), GTK_ORIENTATION_HORIZONTAL);
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box->item_box)), "inline-buttons");
 
       spacer = gtk_icon_new ("none");
       gtk_icon_set_image (GTK_ICON (spacer), GTK_CSS_IMAGE_BUILTIN_NONE);
@@ -580,6 +582,7 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
     {
       gtk_box_set_homogeneous (box->item_box, TRUE);
       gtk_orientable_set_orientation (GTK_ORIENTABLE (box->item_box), GTK_ORIENTATION_HORIZONTAL);
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box->item_box)), "circular-buttons");
       box->circular = TRUE;
     }
 
