@@ -157,6 +157,9 @@ static void     emit_ok_response                   (GtkTreeView        *tree_vie
 						    GtkTreePath        *path,
 						    GtkTreeViewColumn  *column,
 						    gpointer           *user_data);
+static gboolean page_range_entry_focus_in          (GtkWidget          *entry,
+                                                    GdkEventFocus      *event,
+                                                    GtkPrintUnixDialog *dialog);
 static void     update_page_range_entry_sensitivity(GtkWidget          *button,
 						    GtkPrintUnixDialog *dialog);
 static void     update_print_at_entry_sensitivity  (GtkWidget          *button,
@@ -562,6 +565,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   gtk_widget_class_bind_template_callback (widget_class, error_dialogs);
   gtk_widget_class_bind_template_callback (widget_class, emit_ok_response);
   gtk_widget_class_bind_template_callback (widget_class, selected_printer_changed);
+  gtk_widget_class_bind_template_callback (widget_class, page_range_entry_focus_in);
   gtk_widget_class_bind_template_callback (widget_class, update_page_range_entry_sensitivity);
   gtk_widget_class_bind_template_callback (widget_class, update_print_at_entry_sensitivity);
   gtk_widget_class_bind_template_callback (widget_class, update_print_at_option);
@@ -2308,6 +2312,16 @@ draw_collate (GtkDrawingArea *da,
     }
 }
 
+static gboolean
+page_range_entry_focus_in (GtkWidget          *entry,
+                           GdkEventFocus      *event,
+                           GtkPrintUnixDialog *dialog)
+{
+  GtkPrintUnixDialogPrivate *priv = dialog->priv;
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->page_range_radio), TRUE);
+  return FALSE;
+}
+
 static void
 update_page_range_entry_sensitivity (GtkWidget *button,
 				     GtkPrintUnixDialog *dialog)
@@ -2316,8 +2330,6 @@ update_page_range_entry_sensitivity (GtkWidget *button,
   gboolean active;
 
   active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
-
-  gtk_widget_set_sensitive (priv->page_range_entry, active);
 
   if (active)
     gtk_widget_grab_focus (priv->page_range_entry);
