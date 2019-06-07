@@ -770,17 +770,17 @@ treeview.view.expander:checked { -gtk-icon-source: -gtk-icontheme("pan-down-symb
 
 treeview.view.expander:backdrop { color: #747473; }
 
-treeview.view.progressbar { border: 1px solid #030c17; border-radius: 4px; background-color: #15539e; background-image: linear-gradient(to bottom, #15539e, #0f3b71); box-shadow: inset 0 1px rgba(255, 255, 255, 0.15), 0 1px rgba(0, 0, 0, 0.1); }
+treeview.view.progressbar { background-color: #15539e; background-image: image(#15539e); box-shadow: none; }
 
-treeview.view.progressbar:selected:focus, treeview.view.progressbar:selected { border-radius: 4px; box-shadow: inset 0 1px rgba(255, 255, 255, 0.05); background-image: linear-gradient(to bottom, #2d2d2d, #141414); }
+treeview.view.progressbar:selected:focus, treeview.view.progressbar:selected { box-shadow: inset 0 1px rgba(255, 255, 255, 0.05); background-image: image(#2d2d2d); }
 
-treeview.view.progressbar:selected:focus:backdrop, treeview.view.progressbar:selected:backdrop { border-color: #303030; background-color: #303030; }
+treeview.view.progressbar:selected:focus:backdrop, treeview.view.progressbar:selected:backdrop { background-color: #303030; }
 
-treeview.view.progressbar:backdrop { border-color: #303030; background-image: none; box-shadow: none; }
+treeview.view.progressbar:backdrop { background-image: none; box-shadow: none; }
 
-treeview.view.trough { background-color: rgba(238, 238, 236, 0.1); border-radius: 4px; }
+treeview.view.trough { background-color: rgba(238, 238, 236, 0.1); }
 
-treeview.view.trough:selected:focus, treeview.view.trough:selected { background-color: #0f3b71; border-radius: 4px; }
+treeview.view.trough:selected:focus, treeview.view.trough:selected { background-color: #0f3b71; }
 
 treeview.view header button { color: #8e8e8d; background-color: #2d2d2d; font-weight: bold; text-shadow: none; box-shadow: none; }
 
