@@ -901,7 +901,7 @@ gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
         {
           GtkWidget *popover;
 
-          popover = gtk_popover_new_from_model (GTK_WIDGET (menu_button), menu_model);
+          popover = gtk_popover_menu_new_from_model (GTK_WIDGET (menu_button), menu_model);
           gtk_menu_button_set_popover (menu_button, popover);
         }
       else

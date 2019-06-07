@@ -21,9 +21,8 @@
 #define __GTK_MENU_SECTION_BOX_H__
 
 #include <gtk/gtkmenutrackeritem.h>
-#include <gtk/gtkstack.h>
 #include <gtk/gtkbox.h>
-#include <gtk/gtkpopover.h>
+#include <gtk/gtkpopovermenu.h>
 
 G_BEGIN_DECLS
 
@@ -42,10 +41,8 @@ G_BEGIN_DECLS
 typedef struct _GtkMenuSectionBox                           GtkMenuSectionBox;
 
 GType                   gtk_menu_section_box_get_type                   (void) G_GNUC_CONST;
-void                    gtk_menu_section_box_new_toplevel               (GtkStack    *stack,
-                                                                         GMenuModel  *model,
-                                                                         const gchar *action_namespace,
-                                                                         GtkPopover  *popover);
+void                    gtk_menu_section_box_new_toplevel               (GtkPopoverMenu *popover,
+                                                                         GMenuModel     *model);
 
 G_END_DECLS
 
