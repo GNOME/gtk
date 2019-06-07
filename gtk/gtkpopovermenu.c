@@ -20,6 +20,7 @@
 #include "gtkstack.h"
 #include "gtkstylecontext.h"
 #include "gtkintl.h"
+#include "gtkmenusectionbox.h"
 #include "gtkpopoverprivate.h"
 
 
@@ -276,15 +277,23 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
 
 /**
  * gtk_popover_menu_new:
+ * @relative_to: (allow-none): #GtkWidget the popover is related to
  *
  * Creates a new popover menu.
  *
  * Returns: a new #GtkPopoverMenu
  */
 GtkWidget *
-gtk_popover_menu_new (void)
+gtk_popover_menu_new (GtkWidget *relative_to)
 {
-  return g_object_new (GTK_TYPE_POPOVER_MENU, NULL);
+  GtkWidget *popover;
+
+  g_return_val_if_fail (relative_to == NULL || GTK_IS_WIDGET (relative_to), NULL);
+
+  popover = g_object_new (GTK_TYPE_POPOVER_MENU, NULL);
+  gtk_popover_set_relative_to (GTK_POPOVER (popover), relative_to);
+
+  return popover;
 }
 
 /**
@@ -332,4 +341,37 @@ gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
   stack = gtk_bin_get_child (GTK_BIN (popover));
 
   gtk_stack_add_named (GTK_STACK (stack), submenu, name);
-} 
+}
+
+/**
+ * gtk_popover_menu_new_from_model:
+ * @relative_to: (allow-none): #GtkWidget the popover is related to
+ * @model: a #GMenuModel
+ *
+ * Creates a #GtkPopoverMenu and populates it according to
+ * @model. The popover is pointed to the @relative_to widget.
+ *
+ * The created buttons are connected to actions found in the
+ * #GtkApplicationWindow to which the popover belongs - typically
+ * by means of being attached to a widget that is contained within
+ * the #GtkApplicationWindows widget hierarchy.
+ *
+ * Actions can also be added using gtk_widget_insert_action_group()
+ * on the menus attach widget or on any of its parent widgets.
+ *
+ * Returns: the new #GtkPopoverMenu
+ */
+GtkWidget *
+gtk_popover_menu_new_from_model (GtkWidget  *relative_to,
+                                 GMenuModel *model)
+{
+  GtkWidget *popover;
+
+  g_return_val_if_fail (relative_to == NULL || GTK_IS_WIDGET (relative_to), NULL);
+  g_return_val_if_fail (G_IS_MENU_MODEL (model), NULL);
+
+  popover = gtk_popover_menu_new (relative_to);
+  gtk_menu_section_box_new_toplevel (GTK_POPOVER_MENU (popover), model);
+
+  return popover;
+}

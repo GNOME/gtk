@@ -44,10 +44,10 @@
  *
  * GtkPopover is often used to replace menus. To facilitate this, it
  * supports being populated from a #GMenuModel, using
- * gtk_popover_new_from_model(). In addition to all the regular menu
- * model features, this function supports rendering sections in the
- * model in a more compact form, as a row of icon buttons instead of
- * menu items.
+ * gtk_popover_menu_new_from_model(). In addition to all the regular
+ * menu model features, this function supports rendering sections in
+ * the model in a more compact form, as a row of icon buttons instead
+ * of menu items.
  *
  * To use this rendering, set the ”display-hint” attribute of the
  * section to ”horizontal-buttons” and set the icons of your items
@@ -77,23 +77,23 @@
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
- * popover
+ * popover[.menu]
  * ├── arrow
- * ╰── contents.background[.menu]
+ * ╰── contents.background
  *     ╰── <child>
  * ]|
  *
- * The contents child node always gets the .background style class and it
- * gets the .menu style class if the popover is menu-like (e.g. #GtkPopoverMenu
- * or created using gtk_popover_new_from_model()).
+ * The contents child node always gets the .background style class and
+ * the popover itself gets the .menu style class if the popover is
+ * menu-like (ie #GtkPopoverMenu).
  *
  * Particular uses of GtkPopover, such as touch selection popups
  * or magnifiers in #GtkEntry or #GtkTextView get style classes
  * like .touch-selection or .magnifier to differentiate from
  * plain popovers.
  *
- * When styling a popover directly, the popover node should usually not have any
- * background.
+ * When styling a popover directly, the popover node should usually
+ * not have any background.
  *
  * Note that, in order to accomplish appropriate arrow visuals, #GtkPopover uses
  * custom drawing for the arrow node. This makes it possible for the arrow to change
@@ -1707,92 +1707,6 @@ gtk_popover_popdown (GtkPopover *popover)
 
   gtk_widget_hide (GTK_WIDGET (popover));
 }
-
-static void
-back_to_main (GtkWidget *popover)
-{
-  GtkWidget *stack;
-
-  stack = gtk_bin_get_child (GTK_BIN (popover));
-  gtk_stack_set_visible_child_name (GTK_STACK (stack), "main");
-}
-
-static void
-gtk_popover_bind_model (GtkPopover  *popover,
-                        GMenuModel  *model,
-                        const gchar *action_namespace)
-{
-  GtkWidget *child;
-  GtkWidget *stack;
-  GtkStyleContext *style_context;
-
-  g_return_if_fail (GTK_IS_POPOVER (popover));
-  g_return_if_fail (model == NULL || G_IS_MENU_MODEL (model));
-
-  child = gtk_bin_get_child (GTK_BIN (popover));
-  if (child)
-    gtk_widget_destroy (child);
-
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (popover));
-
-  if (model)
-    {
-      stack = gtk_stack_new ();
-      gtk_stack_set_vhomogeneous (GTK_STACK (stack), FALSE);
-      gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
-      gtk_stack_set_interpolate_size (GTK_STACK (stack), TRUE);
-      gtk_container_add (GTK_CONTAINER (popover), stack);
-
-      gtk_menu_section_box_new_toplevel (GTK_STACK (stack),
-                                         model,
-                                         action_namespace,
-                                         popover);
-      gtk_stack_set_visible_child_name (GTK_STACK (stack), "main");
-
-      g_signal_connect (popover, "unmap", G_CALLBACK (back_to_main), NULL);
-      g_signal_connect (popover, "map", G_CALLBACK (back_to_main), NULL);
-
-      gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_MENU);
-    }
-  else
-    {
-      gtk_style_context_remove_class (style_context, GTK_STYLE_CLASS_MENU);
-    }
-}
-
-/**
- * gtk_popover_new_from_model:
- * @relative_to: (allow-none): #GtkWidget the popover is related to
- * @model: a #GMenuModel
- *
- * Creates a #GtkPopover and populates it according to
- * @model. The popover is pointed to the @relative_to widget.
- *
- * The created buttons are connected to actions found in the
- * #GtkApplicationWindow to which the popover belongs - typically
- * by means of being attached to a widget that is contained within
- * the #GtkApplicationWindows widget hierarchy.
- *
- * Actions can also be added using gtk_widget_insert_action_group()
- * on the menus attach widget or on any of its parent widgets.
- *
- * Returns: the new #GtkPopover
- */
-GtkWidget *
-gtk_popover_new_from_model (GtkWidget  *relative_to,
-                            GMenuModel *model)
-{
-  GtkWidget *popover;
-
-  g_return_val_if_fail (relative_to == NULL || GTK_IS_WIDGET (relative_to), NULL);
-  g_return_val_if_fail (G_IS_MENU_MODEL (model), NULL);
-
-  popover = gtk_popover_new (relative_to);
-  gtk_popover_bind_model (GTK_POPOVER (popover), model, NULL);
-
-  return popover;
-}
-
 
 GtkWidget *
 gtk_popover_get_contents_widget (GtkPopover *popover)
