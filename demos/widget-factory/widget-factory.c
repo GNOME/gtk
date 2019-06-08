@@ -1931,12 +1931,6 @@ activate (GApplication *app)
   model = (GMenuModel *)gtk_builder_get_object (builder, "new_style_context_menu_model");
   set_up_context_popover (widget, model);
 
-  widget = gtk_bin_get_child (GTK_BIN (gtk_builder_get_object (builder, "page2frame2")));
-  model = (GMenuModel *)gtk_builder_get_object (builder, "menu_bar_model");
-  widget2 = gtk_popover_bar_new_from_model (model);
-  gtk_container_add (GTK_CONTAINER (widget), widget2);
-  gtk_box_reorder_child_after (GTK_BOX (widget), widget2, NULL);
-
   gtk_widget_show (GTK_WIDGET (window));
 
   g_object_unref (builder);
