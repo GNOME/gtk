@@ -1668,7 +1668,6 @@ activate (GApplication *app)
   } accels[] = {
     { "app.about", { "F1", NULL } },
     { "app.quit", { "<Primary>q", NULL } },
-    { "app.open", { "Return", NULL } },
     { "app.open-in", { "<Primary>n", NULL } },
     { "app.cut", { "<Primary>x", NULL } },
     { "app.copy", { "<Primary>c", NULL } },

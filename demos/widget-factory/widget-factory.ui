@@ -3834,7 +3834,7 @@ bad things might happen.</property>
     <section>
       <item>
         <attribute name="label" translatable="yes">Open</attribute>
-        <attribute name="action">app.open</attribute>
+        <attribute name="action">win.open</attribute>
       </item>
     </section>
     <section>
