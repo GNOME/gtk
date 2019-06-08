@@ -259,14 +259,50 @@ move_to_rect (GtkPopover *popover)
       break;
 
     case GTK_POS_TOP:
-      parent_anchor = GDK_GRAVITY_NORTH;
-      surface_anchor = GDK_GRAVITY_SOUTH;
+      switch (gtk_widget_get_halign (GTK_WIDGET (popover)))
+        {
+        case GTK_ALIGN_START:
+          parent_anchor = GDK_GRAVITY_NORTH_WEST;
+          surface_anchor = GDK_GRAVITY_SOUTH_WEST;
+          break;
+
+        case GTK_ALIGN_END:
+          parent_anchor = GDK_GRAVITY_NORTH_EAST;
+          surface_anchor = GDK_GRAVITY_SOUTH_EAST;
+          break;
+
+        case GTK_ALIGN_FILL:
+        case GTK_ALIGN_CENTER:
+        case GTK_ALIGN_BASELINE:
+        default:
+          parent_anchor = GDK_GRAVITY_NORTH;
+          surface_anchor = GDK_GRAVITY_SOUTH;
+          break;
+        }
       anchor_hints = GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X;
       break;
 
     case GTK_POS_BOTTOM:
-      parent_anchor = GDK_GRAVITY_SOUTH;
-      surface_anchor = GDK_GRAVITY_NORTH;
+      switch (gtk_widget_get_halign (GTK_WIDGET (popover)))
+        {
+        case GTK_ALIGN_START:
+          parent_anchor = GDK_GRAVITY_SOUTH_WEST;
+          surface_anchor = GDK_GRAVITY_NORTH_WEST;
+          break;
+
+        case GTK_ALIGN_END:
+          parent_anchor = GDK_GRAVITY_SOUTH_EAST;
+          surface_anchor = GDK_GRAVITY_NORTH_EAST;
+          break;
+
+        case GTK_ALIGN_FILL:
+        case GTK_ALIGN_CENTER:
+        case GTK_ALIGN_BASELINE:
+        default:
+          parent_anchor = GDK_GRAVITY_SOUTH;
+          surface_anchor = GDK_GRAVITY_NORTH;
+          break;
+        }
       anchor_hints = GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X;
       break;
 
