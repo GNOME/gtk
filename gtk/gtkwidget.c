@@ -10906,6 +10906,9 @@ gtk_widget_pick (GtkWidget    *widget,
       GtkWidget *picked;
       graphene_point3d_t p0, p1, res;
 
+      if (GTK_IS_NATIVE (child))
+        continue;
+
       if (child_priv->transform)
         {
           transform = gsk_transform_invert (gsk_transform_ref (child_priv->transform));
