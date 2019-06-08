@@ -2053,6 +2053,32 @@ menubar,
   .csd.popup decoration {border-radius:0;}
 }
 
+// popover menu bar
+
+menubar {
+  padding: 0px;
+  box-shadow: inset 0 -1px transparentize(black, 0.9);
+
+  &:backdrop { background-color: $backdrop_bg_color; }
+
+  > box > item {
+    min-height: 16px;
+    padding: 4px 8px;
+
+    &.active { //Seems like it :hover even with keyboard focus
+      box-shadow: inset 0 -3px $selected_bg_color;
+      color: $link_color;
+    }
+
+    &:disabled {
+      color: $insensitive_fg_color;
+      box-shadow: none;
+    }
+  }
+  // remove padding and rounding from menubar submenu decoration
+  .csd.popup decoration { border-radius:0; }
+}
+
 // Needed to make the border-radius of menus work
 // otherwise the background bleeds out of the menu edges
 .background.popup { background-color: transparent; }
