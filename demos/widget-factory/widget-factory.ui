@@ -33,12 +33,12 @@
   <menu id="dinner_menu">
     <section>
       <item>
-        <attribute name="label" translatable="yes">Steak</attribute>
+        <attribute name="label" translatable="yes">_Steak</attribute>
         <attribute name="action">app.main</attribute>
         <attribute name="target">steak</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Pizza</attribute>
+        <attribute name="label" translatable="yes">_Pizza</attribute>
         <attribute name="action">app.main</attribute>
         <attribute name="target">pizza</attribute>
       </item>
@@ -1825,7 +1825,7 @@ microphone-sensitivity-medium-symbolic</property>
                                       <object class="GtkMenuBar">
                                         <child>
                                           <object class="GtkMenuItem" id="menuitem1">
-                                            <property name="label" translatable="yes">_File</property>
+                                            <property name="label" translatable="yes">File</property>
                                             <property name="use-underline">1</property>
                                             <child type="submenu">
                                               <object class="GtkMenu" id="menu1">
@@ -1869,7 +1869,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         </child>
                                         <child>
                                           <object class="GtkMenuItem" id="menuitem2">
-                                            <property name="label" translatable="yes">_Edit</property>
+                                            <property name="label" translatable="yes">Edit</property>
                                             <property name="use-underline">1</property>
                                             <child type="submenu">
                                               <object class="GtkMenu" id="menu2">
@@ -2011,7 +2011,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         </child>
                                         <child>
                                           <object class="GtkMenuItem" id="menuitem3">
-                                            <property name="label" translatable="yes">_View</property>
+                                            <property name="label" translatable="yes">View</property>
                                             <property name="use-underline">1</property>
                                             <child type="submenu">
                                               <object class="GtkMenu" id="view-menu">
@@ -2051,7 +2051,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         </child>
                                         <child>
                                           <object class="GtkMenuItem" id="menuitem4">
-                                            <property name="label" translatable="yes">_Help</property>
+                                            <property name="label" translatable="yes">Help</property>
                                             <property name="use-underline">1</property>
                                             <child type="submenu">
                                               <object class="GtkMenu" id="menu3">
@@ -3889,7 +3889,7 @@ bad things might happen.</property>
   </menu>
   <menu id="menu_bar_model">
     <submenu>
-      <attribute name="label" translatable="yes">File</attribute>
+      <attribute name="label" translatable="yes">_File</attribute>
       <section>
         <item>
           <attribute name="label" translatable="yes">_New</attribute>
@@ -3916,7 +3916,7 @@ bad things might happen.</property>
       </section>
     </submenu>
     <submenu>
-      <attribute name="label" translatable="yes">Edit</attribute>
+      <attribute name="label" translatable="yes">_Edit</attribute>
       <section>
         <item>
           <attribute name="label" translatable="yes">Cu_t</attribute>
@@ -3996,7 +3996,7 @@ bad things might happen.</property>
       </section>
     </submenu>
     <submenu>
-      <attribute name="label" translatable="yes">View</attribute>
+      <attribute name="label" translatable="yes">_View</attribute>
       <section>
         <item>
           <attribute name="label" translatable="yes">Dark Theme</attribute>
@@ -4018,7 +4018,7 @@ bad things might happen.</property>
 
     </submenu>
     <submenu>
-      <attribute name="label" translatable="yes">Help</attribute>
+      <attribute name="label" translatable="yes">_Help</attribute>
         <item>
           <attribute name="label" translatable="yes">About</attribute>
           <attribute name="action">app.about</attribute>
