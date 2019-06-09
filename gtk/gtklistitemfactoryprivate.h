@@ -36,6 +36,21 @@ G_BEGIN_DECLS
 typedef struct _GtkListItemFactory GtkListItemFactory;
 typedef struct _GtkListItemFactoryClass GtkListItemFactoryClass;
 
+struct _GtkListItemFactory
+{
+  GObject parent_instance;
+
+  GtkListItemSetupFunc setup_func;
+  GtkListItemBindFunc bind_func;
+  gpointer user_data;
+  GDestroyNotify user_destroy;
+};
+
+struct _GtkListItemFactoryClass
+{
+  GObjectClass parent_class;
+};
+
 GType                   gtk_list_item_factory_get_type          (void) G_GNUC_CONST;
 
 GtkListItemFactory *    gtk_list_item_factory_new               (GtkListItemSetupFunc    setup_func,
@@ -45,8 +60,15 @@ GtkListItemFactory *    gtk_list_item_factory_new               (GtkListItemSetu
 
 void                    gtk_list_item_factory_setup             (GtkListItemFactory     *self,
                                                                  GtkListItem            *list_item);
+void                    gtk_list_item_factory_teardown          (GtkListItemFactory     *self,
+                                                                 GtkListItem            *list_item);
 
 void                    gtk_list_item_factory_bind              (GtkListItemFactory     *self,
+                                                                 GtkListItem            *list_item,
+                                                                 guint                   position,
+                                                                 gpointer                item,
+                                                                 gboolean                selected);
+void                    gtk_list_item_factory_rebind            (GtkListItemFactory     *self,
                                                                  GtkListItem            *list_item,
                                                                  guint                   position,
                                                                  gpointer                item,
