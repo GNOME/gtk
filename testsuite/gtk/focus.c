@@ -32,10 +32,19 @@ focus_in (GtkEventController *controller,
           GString *s)
 {
   GtkWidget *widget = gtk_event_controller_get_widget (controller);
-  g_string_append_printf (s, "%s: focus-in %s %s\n",
+  gboolean is_focus;
+  gboolean contains_focus;
+
+  g_object_get (controller,
+                "is-focus", &is_focus,
+                "contains-focus", &contains_focus,
+                NULL);
+  g_string_append_printf (s, "%s: focus-in %s %s is-focus: %d contains-focus: %d\n",
                           widget_name (widget),
                           mode_to_string (mode),
-                          detail_to_string (detail));
+                          detail_to_string (detail),
+                          is_focus,
+                          contains_focus);
 }
 
 static void
@@ -45,10 +54,19 @@ focus_out (GtkEventController *controller,
            GString *s)
 {
   GtkWidget *widget = gtk_event_controller_get_widget (controller);
-  g_string_append_printf (s, "%s: focus-out %s %s\n",
+  gboolean is_focus;
+  gboolean contains_focus;
+
+  g_object_get (controller,
+                "is-focus", &is_focus,
+                "contains-focus", &contains_focus,
+                NULL);
+  g_string_append_printf (s, "%s: focus-out %s %s is-focus: %d contains-focus: %d\n",
                           widget_name (widget),
                           mode_to_string (mode),
-                          detail_to_string (detail));
+                          detail_to_string (detail),
+                          is_focus,
+                          contains_focus);
 }
 
 static void
@@ -132,8 +150,8 @@ test_window_focus (void)
     g_print ("-> box\n%s\n", s->str);
 
   g_assert_cmpstr (s->str, ==,
-"window: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL\n"
-"box: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR\n");
+"window: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL is-focus: 0 contains-focus: 1\n"
+"box: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 1 contains-focus: 0\n");
   g_string_truncate (s, 0);
 
   gtk_widget_grab_focus (entry1);
@@ -142,9 +160,9 @@ test_window_focus (void)
     g_print ("box -> entry1\n%s\n", s->str);
 
   g_assert_cmpstr (s->str, ==,
-"box: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_INFERIOR\n"
-"box1: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL\n"
-"entry1: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR\n");
+"box: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_INFERIOR is-focus: 0 contains-focus: 1\n"
+"box1: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL is-focus: 0 contains-focus: 1\n"
+"entry1: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 1 contains-focus: 0\n");
 
   g_string_truncate (s, 0);
 
@@ -156,10 +174,10 @@ test_window_focus (void)
     g_print ("entry1 -> entry2\n%s\n", s->str);
 
   g_assert_cmpstr (s->str, ==,
-"entry1: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR\n"
-"box1: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR_VIRTUAL\n"
-"box2: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR_VIRTUAL\n"
-"entry2: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR\n");
+"entry1: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR is-focus: 0 contains-focus: 0\n"
+"box1: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR_VIRTUAL is-focus: 0 contains-focus: 0\n"
+"box2: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR_VIRTUAL is-focus: 0 contains-focus: 1\n"
+"entry2: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_NONLINEAR is-focus: 1 contains-focus: 0\n");
 
   g_string_truncate (s, 0);
 
@@ -171,9 +189,9 @@ test_window_focus (void)
     g_print ("entry2 -> box\n%s", s->str);
 
   g_assert_cmpstr (s->str, ==,
-"entry2: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR\n"
-"box2: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL\n"
-"box: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_INFERIOR\n");
+"entry2: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 0 contains-focus: 0\n"
+"box2: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL is-focus: 0 contains-focus: 0\n"
+"box: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_INFERIOR is-focus: 1 contains-focus: 0\n");
 
   g_string_truncate (s, 0);
 
