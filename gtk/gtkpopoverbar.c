@@ -123,7 +123,7 @@ set_active_item (GtkPopoverBar     *bar,
     {
       if (popup || (was_popup && changed))
         gtk_popover_popup (bar->active_item->popover);
-      else
+      else if (changed)
         gtk_widget_grab_focus (GTK_WIDGET (bar->active_item));
     }
 }
