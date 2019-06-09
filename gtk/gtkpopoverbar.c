@@ -23,7 +23,7 @@
 #include "gtkpopoverbar.h"
 #include "gtkpopovermenu.h"
 
-#include "gtkbox.h"
+#include "gtkboxlayout.h"
 #include "gtklabel.h"
 #include "gtkmenubutton.h"
 #include "gtkintl.h"
@@ -53,7 +53,6 @@ struct _GtkPopoverBar
 
   GMenuModel *model;
   GtkMenuTracker *tracker;
-  GtkWidget *box;
 
   GtkPopoverBarItem *active_item;
 };
@@ -183,7 +182,7 @@ gtk_popover_bar_focus (GtkWidget        *widget,
         next = NULL;
 
       if (next == NULL)
-        next = gtk_widget_get_last_child (GTK_WIDGET (bar->box));
+        next = gtk_widget_get_last_child (GTK_WIDGET (bar));
     }
   else if (direction == GTK_DIR_RIGHT)
     {
@@ -193,7 +192,7 @@ gtk_popover_bar_focus (GtkWidget        *widget,
         next = NULL;
 
       if (next == NULL)
-        next = gtk_widget_get_first_child (GTK_WIDGET (bar->box));
+        next = gtk_widget_get_first_child (GTK_WIDGET (bar));
     }
   else
     return FALSE;
@@ -231,6 +230,7 @@ gtk_popover_bar_item_dispose (GObject *object)
   GtkPopoverBarItem *item = GTK_POPOVER_BAR_ITEM (object);
 
   g_clear_pointer (&item->label, gtk_widget_unparent);
+  g_clear_pointer ((GtkWidget **)&item->popover, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_popover_bar_item_parent_class)->dispose (object);
 }
@@ -318,11 +318,11 @@ static void
 tracker_remove (gint     position,
                 gpointer user_data)
 {
-  GtkPopoverBar *bar = user_data;
+  GtkWidget *bar = user_data;
   GtkWidget *child;
   int i;
 
-  for (child = gtk_widget_get_first_child (bar->box), i = 0;
+  for (child = gtk_widget_get_first_child (bar), i = 0;
        child;
        child = gtk_widget_get_next_sibling (child), i++)
     {
@@ -374,7 +374,7 @@ tracker_insert (GtkMenuTrackerItem *item,
       widget->popover = popover;
 
       sibling = NULL;
-      for (child = gtk_widget_get_first_child (bar->box), i = 1;
+      for (child = gtk_widget_get_first_child (GTK_WIDGET (bar)), i = 1;
            child;
            child = gtk_widget_get_next_sibling (child), i++)
         {
@@ -384,7 +384,7 @@ tracker_insert (GtkMenuTrackerItem *item,
               break;
             }
         }
-      gtk_box_insert_child_after (GTK_BOX (bar->box), GTK_WIDGET (widget), sibling);
+      gtk_widget_insert_after (GTK_WIDGET (widget), GTK_WIDGET (bar), sibling);
     }
   else
     g_warning ("Don't know how to handle this item");
@@ -399,7 +399,7 @@ gtk_popover_bar_set_menu_model (GtkPopoverBar *bar,
       GtkWidget *child;
       GtkActionMuxer *muxer;
 
-      while ((child = gtk_widget_get_first_child (GTK_WIDGET (bar->box))))
+      while ((child = gtk_widget_get_first_child (GTK_WIDGET (bar))))
         gtk_widget_destroy (child);
 
       g_clear_pointer (&bar->tracker, gtk_menu_tracker_free);
@@ -462,47 +462,15 @@ static void
 gtk_popover_bar_dispose (GObject *object)
 {
   GtkPopoverBar *bar = GTK_POPOVER_BAR (object);
+  GtkWidget *child;
 
   g_clear_pointer (&bar->tracker, gtk_menu_tracker_free);
-  g_clear_pointer (&bar->box, gtk_widget_unparent);
   g_clear_object (&bar->model);
 
-  G_OBJECT_CLASS (gtk_popover_bar_parent_class)->dispose (object);
-}
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (bar))))
+    gtk_widget_destroy (child);
 
-static void
-gtk_popover_bar_finalize (GObject *object)
-{
-  G_OBJECT_CLASS (gtk_popover_bar_parent_class)->finalize (object);
-}
-
-static void
-gtk_popover_bar_measure (GtkWidget      *widget,
-                         GtkOrientation  orientation,
-                         int             for_size,
-                         int            *minimum,
-                         int            *natural,
-                         int            *minimum_baseline,
-                         int            *natural_baseline)
-{
-  GtkPopoverBar *bar = GTK_POPOVER_BAR (widget);
-
-  gtk_widget_measure (bar->box, orientation, for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_popover_bar_size_allocate (GtkWidget *widget,
-                               int        width,
-                               int        height,
-                               int        baseline)
-{
-  GtkPopoverBar *bar = GTK_POPOVER_BAR (widget);
-
-  gtk_widget_size_allocate (bar->box,
-                            &(GtkAllocation) { 0, 0, width, height },
-                            baseline);
+  G_OBJECT_CLASS (gtk_popover_menu_bar_parent_class)->dispose (object);
 }
 
 static void
@@ -512,14 +480,27 @@ gtk_popover_bar_class_init (GtkPopoverBarClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->dispose = gtk_popover_bar_dispose;
-  object_class->finalize = gtk_popover_bar_finalize;
   object_class->set_property = gtk_popover_bar_set_property;
   object_class->get_property = gtk_popover_bar_get_property;
 
-  widget_class->measure = gtk_popover_bar_measure;
-  widget_class->size_allocate = gtk_popover_bar_size_allocate;
   widget_class->focus = gtk_popover_bar_focus;
 
+=======
+  object_class->dispose = gtk_popover_menu_bar_dispose;
+  object_class->set_property = gtk_popover_menu_bar_set_property;
+  object_class->get_property = gtk_popover_menu_bar_get_property;
+
+  widget_class->focus = gtk_popover_menu_bar_focus;
+
+  /**
+   * GtkPopoverMenuBar:menu-model:
+   *
+   * The #GMenuModel from which the menu bar is created.
+   *
+   * The model should only contain submenus as toplevel
+   * items.
+   */
+>>>>>>> 2cfe644c96... fix up finalization:gtk/gtkpopovermenubar.c
   bar_props[PROP_MENU_MODEL] =
       g_param_spec_object ("menu-model",
                            P_("Menu model"),
@@ -529,14 +510,13 @@ gtk_popover_bar_class_init (GtkPopoverBarClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, bar_props);
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("menubar"));
 }
 
 static void
 gtk_popover_bar_init (GtkPopoverBar *bar)
 {
-  bar->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_widget_set_parent (bar->box, GTK_WIDGET (bar));
 }
 
 GtkWidget *
