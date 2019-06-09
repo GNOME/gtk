@@ -1023,7 +1023,7 @@ gtk_list_item_manager_move_list_item (GtkListItemManager     *self,
 
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
   selected = gtk_selection_model_is_selected (self->model, position);
-  gtk_list_item_factory_bind (self->factory, GTK_LIST_ITEM (list_item), position, item, selected);
+  gtk_list_item_factory_rebind (self->factory, GTK_LIST_ITEM (list_item), position, item, selected);
   gtk_widget_insert_after (list_item, _gtk_widget_get_parent (list_item), prev_sibling);
   g_object_unref (item);
 }
@@ -1079,6 +1079,7 @@ gtk_list_item_manager_release_list_item (GtkListItemManager *self,
     }
 
   gtk_list_item_factory_unbind (self->factory, GTK_LIST_ITEM (item));
+  gtk_list_item_factory_teardown (self->factory, GTK_LIST_ITEM (item));
   gtk_widget_unparent (item);
 }
 
