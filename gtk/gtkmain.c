@@ -1658,6 +1658,20 @@ is_key_event (GdkEvent *event)
     }
 }
 
+static gboolean
+is_focus_event (GdkEvent *event)
+{
+  switch ((guint) event->any.type)
+    {
+    case GDK_FOCUS_CHANGE:
+      return TRUE;
+      break;
+    default:
+      return FALSE;
+    }
+}
+
+
 static inline void
 set_widget_active_state (GtkWidget       *target,
                          const gboolean   release)
@@ -1886,6 +1900,14 @@ gtk_main_do_event (GdkEvent *event)
         goto cleanup;
 
       target_widget = handle_key_event (event);
+    }
+  else if (is_focus_event (event))
+    {
+      if (!GTK_IS_WINDOW (target_widget))
+        {
+          g_message ("Ignoring an unexpected focus event from GDK on a non-toplevel surface.");
+          goto cleanup;
+        }
     }
 
   if (!target_widget)
