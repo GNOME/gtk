@@ -33,12 +33,12 @@
   <menu id="dinner_menu">
     <section>
       <item>
-        <attribute name="label" translatable="yes">Steak</attribute>
+        <attribute name="label" translatable="yes">_Steak</attribute>
         <attribute name="action">app.main</attribute>
         <attribute name="target">steak</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Pizza</attribute>
+        <attribute name="label" translatable="yes">_Pizza</attribute>
         <attribute name="action">app.main</attribute>
         <attribute name="target">pizza</attribute>
       </item>
@@ -1822,10 +1822,15 @@ microphone-sensitivity-medium-symbolic</property>
                                   <object class="GtkBox">
                                     <property name="orientation">vertical</property>
                                     <child>
+                                      <object class="GtkPopoverMenuBar">
+                                        <property name="menu-model">menu_bar_model</property>
+                                      </object>
+                                    </child>
+                                    <child>
                                       <object class="GtkMenuBar">
                                         <child>
                                           <object class="GtkMenuItem" id="menuitem1">
-                                            <property name="label" translatable="yes">_File</property>
+                                            <property name="label" translatable="yes">File</property>
                                             <property name="use-underline">1</property>
                                             <child type="submenu">
                                               <object class="GtkMenu" id="menu1">
@@ -1869,7 +1874,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         </child>
                                         <child>
                                           <object class="GtkMenuItem" id="menuitem2">
-                                            <property name="label" translatable="yes">_Edit</property>
+                                            <property name="label" translatable="yes">Edit</property>
                                             <property name="use-underline">1</property>
                                             <child type="submenu">
                                               <object class="GtkMenu" id="menu2">
@@ -2011,7 +2016,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         </child>
                                         <child>
                                           <object class="GtkMenuItem" id="menuitem3">
-                                            <property name="label" translatable="yes">_View</property>
+                                            <property name="label" translatable="yes">View</property>
                                             <property name="use-underline">1</property>
                                             <child type="submenu">
                                               <object class="GtkMenu" id="view-menu">
@@ -2051,7 +2056,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         </child>
                                         <child>
                                           <object class="GtkMenuItem" id="menuitem4">
-                                            <property name="label" translatable="yes">_Help</property>
+                                            <property name="label" translatable="yes">Help</property>
                                             <property name="use-underline">1</property>
                                             <child type="submenu">
                                               <object class="GtkMenu" id="menu3">
@@ -2433,11 +2438,12 @@ microphone-sensitivity-medium-symbolic</property>
                         <property name="spacing">10</property>
                         <child>
                           <object class="GtkBox">
-                            <property name="halign">start</property>
+                            <property name="halign">fill</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkBox" id="lockbox">
-                                <property name="halign">start</property>
+                                <property name="halign">fill</property>
+                                <property name="hexpand">1</property>
                                 <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkMenuButton" id="open_menubutton">
@@ -2508,6 +2514,15 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <child>
                               <object class="GtkLockButton" id="lockbutton"/>
+                            </child>
+                            <child>
+                              <object class="GtkMenuButton">
+                                <property name="icon-name">view-more-symbolic</property>
+                                <property name="popover">new_style_menu</property>
+<!--
+                                <property name="menu-model">new_style_menu_model</property>
+-->
+                              </object>
                             </child>
                           </object>
                         </child>
@@ -3023,7 +3038,7 @@ microphone-sensitivity-medium-symbolic</property>
                               <object class="GtkNotebookPage">
                                 <property name="tab-expand">1</property>
                                 <property name="child">
-                                  <object class="GtkBox">
+                                  <object class="GtkBox" id="box_for_context">
                                     <property name="height-request">120</property>
                                   </object>
                                 </property>
@@ -3509,4 +3524,510 @@ bad things might happen.</property>
       </object>
     </child>
   </object>
+  <object class="GtkPopoverMenu" id="new_style_menu">
+    <child>
+      <object class="GtkBox">
+        <property name="name">main</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkBox">
+            <property name="halign">fill</property>
+            <style>
+              <class name="circular-buttons"/>
+            </style>
+            <child>
+              <object class="GtkModelButton">
+                <property name="icon"><object class="GThemedIcon"><property name="name">printer-symbolic</property></object></property>
+                <property name="iconic">1</property>
+                <property name="action-name">app.print</property>
+                <property name="hexpand">1</property>
+                <property name="halign">center</property>
+                <style>
+                  <class name="circular"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="icon"><object class="GThemedIcon"><property name="name">emblem-shared-symbolic</property></object></property>
+                <property name="iconic">1</property>
+                <property name="action-name">app.share</property>
+                <property name="hexpand">1</property>
+                <property name="halign">center</property>
+                <style>
+                  <class name="circular"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Open in New Window</property>
+            <property name="action-name">app.open-in</property>
+            <property name="indicator-size-group">main-indicators</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <style>
+              <class name="inline-buttons"/>
+            </style>
+            <child>
+              <object class="GtkLabel" id="cut_copy_paste_filler">
+            </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Edit</property>
+                <property name="xalign">0</property>
+                <property name="hexpand">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="icon"><object class="GThemedIcon"><property name="name">edit-cut-symbolic</property></object></property>
+                <property name="iconic">1</property>
+                <property name="relief">none</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="icon"><object class="GThemedIcon"><property name="name">edit-copy-symbolic</property></object></property>
+                <property name="iconic">1</property>
+                <property name="relief">none</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="icon"><object class="GThemedIcon"><property name="name">edit-paste-symbolic</property></object></property>
+                <property name="iconic">1</property>
+                <property name="relief">none</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Pin</property>
+            <property name="action-name">app.pin</property>
+            <property name="indicator-size-group">main-indicators</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Select Labels…</property>
+            <property name="action-name">app.labels</property>
+            <property name="indicator-size-group">main-indicators</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Share…</property>
+            <property name="action-name">app.share</property>
+            <property name="indicator-size-group">main-indicators</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Basement</property>
+            <property name="menu-name">basement</property>
+            <property name="indicator-size-group">main-indicators</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Large</property>
+            <property name="action-name">app.size</property>
+            <property name="action-target">'large'</property>
+            <property name="indicator-size-group">main-indicators</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Medium</property>
+            <property name="action-name">app.size</property>
+            <property name="action-target">'medium'</property>
+            <property name="indicator-size-group">main-indicators</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Small</property>
+            <property name="action-name">app.size</property>
+            <property name="action-target">'small'</property>
+            <property name="indicator-size-group">main-indicators</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Move to Trash</property>
+            <property name="action-name">win.delete</property>
+            <property name="indicator-size-group">main-indicators</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="name">basement</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Basement</property>
+            <property name="role">title</property>
+            <property name="menu-name">main</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Berk</property>
+            <property name="action-name">app.berk</property>
+            <property name="indicator-size-group">basement-indicators</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Broni</property>
+            <property name="action-name">app.broni</property>
+            <property name="indicator-size-group">basement-indicators</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">Drutt</property>
+            <property name="action-name">app.drutt</property>
+            <property name="indicator-size-group">basement-indicators</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="text">The Thing Upstairs</property>
+            <property name="action-name">app.upstairs</property>
+            <property name="indicator-size-group">basement-indicators</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkSizeGroup" id="main-indicators">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="cut_copy_paste_filler"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup" id="basement-indicators">
+    <property name="mode">horizontal</property>
+  </object>
+  <menu id="new_style_menu_model">
+    <section>
+      <attribute name="display-hint">circular-buttons</attribute>
+      <item>
+        <attribute name="verb-icon">printer-symbolic</attribute>
+        <attribute name="action">app.print</attribute>
+      </item>
+      <item>
+        <attribute name="verb-icon">emblem-shared-symbolic</attribute>
+        <attribute name="action">app.share</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Open in New Window</attribute>
+        <attribute name="action">app.open-in</attribute>
+      </item>
+    </section>
+    <section>
+      <attribute name="display-hint">inline-buttons</attribute>
+      <attribute name="label" translatable="yes">Edit</attribute>
+      <item>
+        <attribute name="verb-icon">edit-cut-symbolic</attribute>
+        <attribute name="action">app.cut</attribute>
+      </item>
+      <item>
+        <attribute name="verb-icon">edit-copy-symbolic</attribute>
+        <attribute name="action">app.copy</attribute>
+      </item>
+      <item>
+        <attribute name="verb-icon">edit-paste-symbolic</attribute>
+        <attribute name="action">app.paste</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Pin</attribute>
+        <attribute name="action">app.pin</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Select Labels…</attribute>
+        <attribute name="action">app.labels</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Share…</attribute>
+        <attribute name="action">app.share</attribute>
+      </item>
+    </section>
+    <section>
+      <submenu>
+        <attribute name="label" translatable="yes">Basement</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">Berk</attribute>
+            <attribute name="action">app.berk</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Broni</attribute>
+            <attribute name="action">app.broni</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Drutt</attribute>
+            <attribute name="action">app.drutt</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">The Thing Upstairs</attribute>
+            <attribute name="action">app.upstairs</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Large</attribute>
+        <attribute name="action">app.size</attribute>
+        <attribute name="target">large</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Medium</attribute>
+        <attribute name="action">app.size</attribute>
+        <attribute name="target">medium</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Small</attribute>
+        <attribute name="action">app.size</attribute>
+        <attribute name="target">small</attribute>
+      </item>
+    </section>
+    <section>
+        <item>
+          <attribute name="label" translatable="yes">Move to Trash</attribute>
+          <attribute name="action">win.delete</attribute>
+        </item>
+    </section>
+  </menu>
+  <menu id="new_style_context_menu_model">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Open</attribute>
+        <attribute name="action">win.open</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Open in New Tab</attribute>
+        <attribute name="action">app.open-tab</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Open in New Window</attribute>
+        <attribute name="action">app.open-window</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Cut</attribute>
+        <attribute name="action">app.cut</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Copy</attribute>
+        <attribute name="action">app.copy</attribute>
+      </item>
+    </section>
+    <section>
+      <submenu>
+        <attribute name="label" translatable="yes">Options</attribute>
+        <section>
+          <item>
+            <attribute name="label" translatable="yes">Option A</attribute>
+            <attribute name="action">app.option-a</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Option B</attribute>
+            <attribute name="action">app.option-b</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Option C</attribute>
+            <attribute name="action">app.option-c</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Option D</attribute>
+            <attribute name="action">app.option-d</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Move to Trash</attribute>
+        <attribute name="action">win.delete</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="menu_bar_model">
+    <submenu>
+      <attribute name="label" translatable="yes">_File</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_New</attribute>
+          <attribute name="action">app.new</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Open</attribute>
+          <attribute name="action">app.open</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Save</attribute>
+          <attribute name="action">app.save</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Save _As</attribute>
+          <attribute name="action">app.save-as</attribute>
+        </item>
+      </section>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">_Quit</attribute>
+          <attribute name="action">app.quit</attribute>
+        </item>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">_Edit</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">Cu_t</attribute>
+          <attribute name="action">app.cut</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Copy</attribute>
+          <attribute name="action">app.copy</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">_Paste</attribute>
+          <attribute name="action">app.paste</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Delete</attribute>
+          <attribute name="action">win.delete</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Search</attribute>
+          <attribute name="action">win.search</attribute>
+        </item>
+      </section>
+      <section>
+        <submenu>
+          <attribute name="label" translatable="yes">Checks &amp; Radios</attribute>
+          <section>
+            <item>
+              <attribute name="label" translatable="yes">Check</attribute>
+              <attribute name="action">app.check-on</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Check</attribute>
+              <attribute name="action">app.check-off</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Check</attribute>
+              <attribute name="action">app.check-on-disabled</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Check</attribute>
+              <attribute name="action">app.check-off-disabled</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Check</attribute>
+              <attribute name="action">app.check-no-action</attribute>
+              <attribute name="hidden-when">action-missing</attribute>
+            </item>
+          </section>
+          <section>
+            <item>
+              <attribute name="label" translatable="yes">Radio</attribute>
+              <attribute name="action">app.radio-x</attribute>
+              <attribute name="target">x</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Radio</attribute>
+              <attribute name="action">app.radio-x</attribute>
+              <attribute name="target">y</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Radio</attribute>
+              <attribute name="action">app.radio-x-disabled</attribute>
+              <attribute name="target">x</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Radio</attribute>
+              <attribute name="action">app.radio-x-disabled</attribute>
+              <attribute name="target">y</attribute>
+            </item>
+            <item>
+              <attribute name="label" translatable="yes">Radio</attribute>
+              <attribute name="action">app.radio-no-action</attribute>
+              <attribute name="hidden-when">action-missing</attribute>
+            </item>
+          </section>
+        </submenu>
+      </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">_View</attribute>
+      <section>
+        <item>
+          <attribute name="label" translatable="yes">Dark Theme</attribute>
+          <attribute name="action">win.dark</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Toolbar</attribute>
+          <attribute name="action">win.toolbar</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Statusbar</attribute>
+          <attribute name="action">win.statusbar</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">Select Background</attribute>
+          <attribute name="action">win.background</attribute>
+        </item>
+      </section>
+
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">_Help</attribute>
+        <item>
+          <attribute name="label" translatable="yes">About</attribute>
+          <attribute name="action">app.about</attribute>
+        </item>
+    </submenu>
+  </menu>
 </interface>

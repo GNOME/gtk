@@ -118,6 +118,8 @@ activate_delete (GSimpleAction *action,
   GtkWidget *window = user_data;
   GtkWidget *infobar;
 
+  g_print ("Activate action delete\n");
+
   if (!on_page (2))
     return;
 
@@ -1605,6 +1607,37 @@ adjustment3_value_changed (GtkAdjustment *adj, GtkProgressBar *pbar)
 }
 
 static void
+clicked_cb (GtkGesture *gesture,
+            int         n_press,
+            double      x,
+            double      y,
+            GtkPopover *popover)
+{
+  GdkRectangle rect;
+
+  rect.x = x;
+  rect.y = y;
+  rect.width = 1;
+  rect.height = 1;
+  gtk_popover_set_pointing_to (popover, &rect);
+  gtk_popover_popup (popover);
+}
+
+static void
+set_up_context_popover (GtkWidget *widget,
+                        GMenuModel *model)
+{
+  GtkWidget *popover = gtk_popover_menu_new_from_model (widget, model);
+  GtkGesture *gesture;
+
+  g_object_set (popover, "has-arrow", FALSE, NULL);
+  gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
+  g_signal_connect (gesture, "pressed", G_CALLBACK (clicked_cb), popover);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -1617,6 +1650,7 @@ activate (GApplication *app)
   GtkWidget *dialog;
   GtkAdjustment *adj;
   GtkCssProvider *provider;
+  GMenuModel *model;
   static GActionEntry win_entries[] = {
     { "dark", NULL, NULL, "false", change_theme_state },
     { "transition", NULL, NULL, "false", change_transition_state },
@@ -1634,6 +1668,10 @@ activate (GApplication *app)
   } accels[] = {
     { "app.about", { "F1", NULL } },
     { "app.quit", { "<Primary>q", NULL } },
+    { "app.open-in", { "<Primary>n", NULL } },
+    { "app.cut", { "<Primary>x", NULL } },
+    { "app.copy", { "<Primary>c", NULL } },
+    { "app.paste", { "<Primary>v", NULL } },
     { "win.dark", { "<Primary>d", NULL } },
     { "win.search", { "<Primary>s", NULL } },
     { "win.delete", { "Delete", NULL } },
@@ -1889,6 +1927,10 @@ activate (GApplication *app)
   widget = (GtkWidget *)gtk_builder_get_object (builder, "extra_info_entry");
   g_timeout_add (100, (GSourceFunc)pulse_it, widget);
 
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "box_for_context");
+  model = (GMenuModel *)gtk_builder_get_object (builder, "new_style_context_menu_model");
+  set_up_context_popover (widget, model);
+
   gtk_widget_show (GTK_WIDGET (window));
 
   g_object_unref (builder);
@@ -1921,6 +1963,41 @@ local_options (GApplication *app,
   return -1;
 }
 
+static void
+activate_action (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
+{
+  g_print ("Activate action %s\n", g_action_get_name (G_ACTION (action)));
+}
+
+static void
+select_action (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  g_print ("Select action %s value %s\n",
+           g_action_get_name (G_ACTION (action)),
+           g_variant_get_string (parameter, NULL));
+
+  g_simple_action_set_state (action, parameter);
+}
+
+static void
+toggle_action (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  GVariant *state = g_action_get_state (G_ACTION (action));
+
+  g_print ("Toggle action %s to %s\n",
+           g_action_get_name (G_ACTION (action)),
+           g_variant_get_boolean (state) ? "false" : "true");
+
+  g_simple_action_set_state (action,
+                             g_variant_new_boolean (!g_variant_get_boolean (state)));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -1935,7 +2012,36 @@ main (int argc, char *argv[])
     { "beer", NULL, NULL, "false", NULL },
     { "water", NULL, NULL, "true", NULL },
     { "dessert", NULL, "s", "'bars'", NULL },
-    { "pay", NULL, "s", NULL, NULL }
+    { "pay", NULL, "s", NULL, NULL },
+    { "print", activate_action, NULL, NULL, NULL },
+    { "share", activate_action, NULL, NULL, NULL },
+    { "labels", activate_action, NULL, NULL, NULL },
+    { "new", activate_action, NULL, NULL, NULL },
+    { "open", activate_action, NULL, NULL, NULL },
+    { "open-in", activate_action, NULL, NULL, NULL },
+    { "open-tab", activate_action, NULL, NULL, NULL },
+    { "open-window", activate_action, NULL, NULL, NULL },
+    { "save", activate_action, NULL, NULL, NULL },
+    { "save-as", activate_action, NULL, NULL, NULL },
+    { "cut", activate_action, NULL, NULL, NULL },
+    { "copy", activate_action, NULL, NULL, NULL },
+    { "paste", activate_action, NULL, NULL, NULL },
+    { "pin", toggle_action, NULL, "true", NULL },
+    { "size", select_action, "s", "'medium'", NULL },
+    { "berk", toggle_action, NULL, "true", NULL },
+    { "broni", toggle_action, NULL, "true", NULL },
+    { "drutt", toggle_action, NULL, "true", NULL },
+    { "upstairs", toggle_action, NULL, "true", NULL },
+    { "option-a", activate_action, NULL, NULL, NULL },
+    { "option-b", activate_action, NULL, NULL, NULL },
+    { "option-c", activate_action, NULL, NULL, NULL },
+    { "option-d", activate_action, NULL, NULL, NULL },
+    { "check-on", NULL, NULL, "true", NULL },
+    { "check-off", NULL, NULL, "false", NULL },
+    { "radio-x", NULL, "s", "'x'", NULL },
+    { "check-on-disabled", NULL, NULL, "true", NULL },
+    { "check-off-disabled", NULL, NULL, "false", NULL },
+    { "radio-x-disabled", NULL, "s", "'x'", NULL },
   };
   gint status;
 
@@ -1945,6 +2051,12 @@ main (int argc, char *argv[])
                                    app_entries, G_N_ELEMENTS (app_entries),
                                    app);
   action = g_action_map_lookup_action (G_ACTION_MAP (app), "wine");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (app), "check-on-disabled");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (app), "check-off-disabled");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  action = g_action_map_lookup_action (G_ACTION_MAP (app), "radio-x-disabled");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
 
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);

@@ -30,8 +30,9 @@
 #include "gtksizegroup.h"
 #include "gtkstack.h"
 #include "gtkstylecontext.h"
-#include "gtkpopover.h"
+#include "gtkpopovermenu.h"
 #include "gtkorientable.h"
+#include "gtkiconprivate.h"
 
 typedef GtkBoxClass GtkMenuSectionBoxClass;
 
@@ -45,7 +46,10 @@ struct _GtkMenuSectionBox
   GtkWidget         *separator;
   guint              separator_sync_idle;
   gboolean           iconic;
+  gboolean           inline_buttons;
+  gboolean           circular;
   gint               depth;
+  GtkSizeGroup      *indicators;
 };
 
 typedef struct
@@ -124,7 +128,7 @@ gtk_menu_section_box_sync_separators (GtkMenuSectionBox *box,
   should_have_separator = separator_condition && is_not_empty_item;
 
   should_have_top_margin = !should_have_separator &&
-                           (box->depth <= 1 || box->iconic) &&
+                           (box->depth <= 1 || box->iconic || box->circular) &&
                            n_items_before > 0 &&
                            is_not_empty_item;
 
@@ -297,6 +301,7 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
 
       widget = g_object_new (GTK_TYPE_MODEL_BUTTON,
                              "menu-name", gtk_menu_tracker_item_get_label (item),
+                             "indicator-size-group", box->indicators,
                              NULL);
       g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
       g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
@@ -309,13 +314,27 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
     }
   else
     {
-      widget = gtk_model_button_new ();
+      widget = g_object_new (GTK_TYPE_MODEL_BUTTON,
+                             "indicator-size-group", box->indicators,
+                             NULL);
       g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
 
       if (box->iconic)
         {
           g_object_bind_property (item, "verb-icon", widget, "icon", G_BINDING_SYNC_CREATE);
-          g_object_set (widget, "iconic", TRUE, "centered", TRUE, NULL);
+          g_object_set (widget, "iconic", TRUE, NULL);
+        }
+      else if (box->inline_buttons)
+        {
+          g_object_bind_property (item, "verb-icon", widget, "icon", G_BINDING_SYNC_CREATE);
+          g_object_set (widget, "iconic", TRUE, NULL);
+          gtk_style_context_add_class (gtk_widget_get_style_context (widget), "flat");
+        }
+      else if (box->circular)
+        {
+          g_object_bind_property (item, "verb-icon", widget, "icon", G_BINDING_SYNC_CREATE);
+          g_object_set (widget, "iconic", TRUE, NULL);
+          gtk_style_context_add_class (gtk_widget_get_style_context (widget), "circular");
         }
       else
         g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
@@ -323,12 +342,21 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
       g_object_bind_property (item, "sensitive", widget, "sensitive", G_BINDING_SYNC_CREATE);
       g_object_bind_property (item, "role", widget, "role", G_BINDING_SYNC_CREATE);
       g_object_bind_property (item, "toggled", widget, "active", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "accel", widget, "accel", G_BINDING_SYNC_CREATE);
       g_signal_connect (widget, "clicked", G_CALLBACK (gtk_popover_item_activate), item);
     }
 
   g_object_set_data_full (G_OBJECT (widget), "GtkMenuTrackerItem", g_object_ref (item), g_object_unref);
 
-  gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
+  if (box->circular)
+    {
+      gtk_widget_set_hexpand (widget, TRUE);
+      gtk_widget_set_halign (widget, GTK_ALIGN_CENTER);
+    }
+  else
+    {
+      gtk_widget_set_halign (widget, GTK_ALIGN_FILL);
+    }
   gtk_container_add (GTK_CONTAINER (box->item_box), widget);
 
   if (position == 0)
@@ -383,6 +411,8 @@ gtk_menu_section_box_dispose (GObject *object)
       box->tracker = NULL;
     }
 
+  g_clear_object (&box->indicators);
+
   G_OBJECT_CLASS (gtk_menu_section_box_parent_class)->dispose (object);
 }
 
@@ -423,18 +453,18 @@ update_popover_position_cb (GObject    *source,
 }
 
 void
-gtk_menu_section_box_new_toplevel (GtkStack    *stack,
-                                   GMenuModel  *model,
-                                   const gchar *action_namespace,
-                                   GtkPopover  *popover)
+gtk_menu_section_box_new_toplevel (GtkPopoverMenu *popover,
+                                   GMenuModel     *model)
 {
   GtkMenuSectionBox *box;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX,  NULL);
-  gtk_stack_add_named (stack, GTK_WIDGET (box), "main");
+  box->indicators = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+
+  gtk_popover_menu_add_submenu (popover, GTK_WIDGET (box), "main");
 
   box->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (_gtk_widget_get_action_muxer (GTK_WIDGET (box), TRUE)),
-                                       model, TRUE, FALSE, FALSE, action_namespace,
+                                       model, TRUE, FALSE, FALSE, NULL,
                                        gtk_menu_section_box_insert_func,
                                        gtk_menu_section_box_remove_func, box);
 
@@ -451,11 +481,11 @@ gtk_menu_section_box_new_submenu (GtkMenuTrackerItem *item,
   GtkWidget *button;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
+  box->indicators = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
   button = g_object_new (GTK_TYPE_MODEL_BUTTON,
                          "menu-name", name,
-                         "inverted", TRUE,
-                         "centered", TRUE,
+                         "role", GTK_BUTTON_ROLE_TITLE,
                          NULL);
 
   g_object_bind_property (item, "label", button, "text", G_BINDING_SYNC_CREATE);
@@ -488,6 +518,7 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
   const gchar *text_direction;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
+  box->indicators = g_object_ref (parent->indicators);
   box->toplevel = parent->toplevel;
   box->depth = parent->depth + 1;
 
@@ -500,6 +531,7 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
       gtk_box_set_homogeneous (box->item_box, TRUE);
       gtk_orientable_set_orientation (GTK_ORIENTABLE (box->item_box), GTK_ORIENTATION_HORIZONTAL);
       gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box->item_box)), GTK_STYLE_CLASS_LINKED);
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box->item_box)), "horizontal-buttons");
       box->iconic = TRUE;
 
       if (text_direction)
@@ -514,8 +546,45 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
           gtk_widget_set_direction (GTK_WIDGET (box->item_box), dir);
         }
     }
+  else if (hint && g_str_equal (hint, "inline-buttons"))
+    {
+      GtkWidget *item_box;
+      GtkWidget *spacer;
 
-  if (label != NULL)
+      box->inline_buttons = TRUE;
+
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (box->item_box), GTK_ORIENTATION_HORIZONTAL);
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box->item_box)), "inline-buttons");
+
+      spacer = gtk_icon_new ("none");
+      gtk_icon_set_image (GTK_ICON (spacer), GTK_CSS_IMAGE_BUILTIN_NONE);
+      gtk_container_add (GTK_CONTAINER (box->item_box), spacer);
+      gtk_size_group_add_widget (box->indicators, spacer);
+
+      if (label != NULL)
+        {
+          GtkWidget *title;
+
+          title = gtk_label_new (label);
+          gtk_widget_set_hexpand (title, TRUE);
+          gtk_widget_set_halign (title, GTK_ALIGN_START);
+          g_object_bind_property (item, "label", title, "label", G_BINDING_SYNC_CREATE);
+          gtk_container_add (GTK_CONTAINER (box->item_box), title);
+        }
+
+      item_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      gtk_container_add (GTK_CONTAINER (box->item_box), item_box);
+      box->item_box = GTK_BOX (item_box);
+    }
+  else if (hint && g_str_equal (hint, "circular-buttons"))
+    {
+      gtk_box_set_homogeneous (box->item_box, TRUE);
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (box->item_box), GTK_ORIENTATION_HORIZONTAL);
+      gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box->item_box)), "circular-buttons");
+      box->circular = TRUE;
+    }
+
+  if (label != NULL && !box->inline_buttons)
     {
       GtkWidget *separator;
       GtkWidget *title;

@@ -6438,8 +6438,6 @@ gtk_flow_box_child_get_type
 <TITLE>GtkPopover</TITLE>
 GtkPopover
 gtk_popover_new
-gtk_popover_new_from_model
-gtk_popover_bind_model
 gtk_popover_popup
 gtk_popover_popdown
 gtk_popover_set_relative_to
@@ -6477,6 +6475,7 @@ gtk_popover_get_type
 <TITLE>GtkPopoverMenu</TITLE>
 GtkPopoverMenu
 gtk_popover_menu_new
+gtk_popover_menu_new_from_model
 gtk_popover_menu_add_submenu
 gtk_popover_menu_open_submenu
 
@@ -6490,6 +6489,23 @@ GTK_POPOVER_MENU_GET_CLASS
 
 <SUBSECTION Private>
 gtk_popover_menu_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkpopovermenubar</FILE>
+<TITLE>GtkPopoverMenuBar</TITLE>
+GtkPopoverMenuBar
+gtk_popover_menu_bar_new_from_model
+gtk_popover_menu_bar_set_menu_model
+gtk_popover_menu_bar_get_menu_model
+
+<SUBSECTION Standard>
+GTK_TYPE_POPOVER_MENU_BAR
+GTK_IS_POPOVER_MENU_BAR
+GTK_POPOVER_MENU_BAR
+
+<SUBSECTION Private>
+gtk_popover_menu_bar_get_type
 </SECTION>
 
 <SECTION>

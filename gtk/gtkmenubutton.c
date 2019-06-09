@@ -118,6 +118,7 @@
 #include "gtkmenubutton.h"
 #include "gtkmenubuttonprivate.h"
 #include "gtkpopover.h"
+#include "gtkpopovermenu.h"
 #include "gtkprivate.h"
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
@@ -520,9 +521,9 @@ gtk_menu_button_focus (GtkWidget        *widget,
   GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (button);
 
   if (priv->menu && gtk_widget_get_visible (priv->menu))
-    return gtk_widget_focus_move (priv->menu, direction);
+    return gtk_widget_child_focus (priv->menu, direction);
   else if (priv->popover && gtk_widget_get_visible (priv->popover))
-    return gtk_widget_focus_move (priv->popover, direction);
+    return gtk_widget_child_focus (priv->popover, direction);
   else
     return GTK_WIDGET_CLASS (gtk_menu_button_parent_class)->focus (widget, direction);
 }
@@ -901,7 +902,7 @@ gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
         {
           GtkWidget *popover;
 
-          popover = gtk_popover_new_from_model (GTK_WIDGET (menu_button), menu_model);
+          popover = gtk_popover_menu_new_from_model (GTK_WIDGET (menu_button), menu_model);
           gtk_menu_button_set_popover (menu_button, popover);
         }
       else

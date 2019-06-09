@@ -4703,3 +4703,80 @@ popover.emoji-completion .emoji:hover {
 popover.entry-completion contents {
   padding: 0;
 }
+
+// initial styling for popover menu and bar
+menubar {
+  padding: 0px;
+  box-shadow: inset 0 -1px transparentize(black, 0.9);
+
+  &:backdrop { background-color: $backdrop_bg_color; }
+
+  > item {
+    min-height: 16px;
+    padding: 4px 8px;
+
+    &.active { //Seems like it :hover even with keyboard focus
+      box-shadow: inset 0 -3px $selected_bg_color;
+      color: $link_color;
+    }
+
+    &:disabled {
+      color: $insensitive_fg_color;
+      box-shadow: none;
+    }
+  }
+  // remove padding and rounding from menubar submenu decoration
+  .csd.popup decoration { border-radius:0; }
+}
+
+popover.menu {
+  & .flat.image-button.model {
+    padding: 0;
+    border: none;
+  }
+  & .flat.image-button.model:hover {
+    border: none;
+    color: gray;
+  }
+
+  & box.inline-buttons {
+    border-radius: 5px;
+    border-style: none;
+    border-width: 0;
+    border-image-source: none;
+    border-image-width: 1px;
+  }
+
+  & box.circular-buttons {
+    padding-bottom: 5px;
+  }
+
+  &.background contents {
+    background: white;
+  }
+
+  &.background separator {
+    margin: 5px 0px;
+  }
+
+  & accelerator {
+    margin-left: 20px;
+    color: gray;
+  }
+
+  & box.inline-buttons {
+    padding: 0 5px;
+  }
+
+  & radio.left,
+  & check.left {
+    margin-left: 0;
+    margin-right: 12px;
+  }
+
+  radio.right,
+  check.right {
+    margin-left: 12px;
+    margin-right: 0;
+  }
+}

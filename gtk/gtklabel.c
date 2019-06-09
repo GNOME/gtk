@@ -1904,42 +1904,32 @@ gtk_label_unroot (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_label_parent_class)->unroot (widget);
 }
 
-static void
-mnemonics_visible_apply (GtkWidget *widget,
-                         gboolean   mnemonics_visible)
-{
-  GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-
-  mnemonics_visible = mnemonics_visible != FALSE;
-
-  if (priv->mnemonics_visible != mnemonics_visible)
-    {
-      priv->mnemonics_visible = mnemonics_visible;
-
-      gtk_label_recalculate (label);
-    }
-}
-
-static void
-label_mnemonics_visible_traverse_container (GtkWidget *widget,
-                                            gpointer   data)
-{
-  gboolean mnemonics_visible = GPOINTER_TO_INT (data);
-
-  _gtk_label_mnemonics_visible_apply_recursively (widget, mnemonics_visible);
-}
-
 void
 _gtk_label_mnemonics_visible_apply_recursively (GtkWidget *widget,
-                                                gboolean   mnemonics_visible)
+                                                gboolean   visible)
 {
   if (GTK_IS_LABEL (widget))
-    mnemonics_visible_apply (widget, mnemonics_visible);
-  else if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget),
-                          label_mnemonics_visible_traverse_container,
-                          GINT_TO_POINTER (mnemonics_visible));
+    {
+      GtkLabel *label = GTK_LABEL (widget);
+      GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
+
+      if (priv->mnemonics_visible != visible)
+        {
+          priv->mnemonics_visible = visible;
+          gtk_label_recalculate (label);
+        }
+    }
+  else
+    {
+      GtkWidget *child;
+
+      for (child = gtk_widget_get_first_child (widget);
+           child;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          _gtk_label_mnemonics_visible_apply_recursively (child, visible);
+        }
+    }
 }
 
 static void
@@ -1947,13 +1937,10 @@ label_mnemonics_visible_changed (GtkWindow  *window,
                                  GParamSpec *pspec,
                                  gpointer    data)
 {
-  gboolean mnemonics_visible;
+  gboolean visible;
 
-  g_object_get (window, "mnemonics-visible", &mnemonics_visible, NULL);
-
-  gtk_container_forall (GTK_CONTAINER (window),
-                        label_mnemonics_visible_traverse_container,
-                        GINT_TO_POINTER (mnemonics_visible));
+  g_object_get (window, "mnemonics-visible", &visible, NULL);
+  _gtk_label_mnemonics_visible_apply_recursively (GTK_WIDGET (window), visible);
 }
 
 static void

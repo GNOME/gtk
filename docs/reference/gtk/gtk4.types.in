@@ -129,6 +129,7 @@ gtk_password_entry_get_type
 gtk_picture_get_type
 gtk_popover_get_type
 gtk_popover_menu_get_type
+gtk_popover_menu_bar_get_type
 @DISABLE_ON_W32@gtk_printer_get_type
 gtk_print_context_get_type
 @DISABLE_ON_W32@gtk_print_job_get_type

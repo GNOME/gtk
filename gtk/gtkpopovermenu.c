@@ -20,7 +20,14 @@
 #include "gtkstack.h"
 #include "gtkstylecontext.h"
 #include "gtkintl.h"
+#include "gtkmenusectionbox.h"
+#include "gtkmenubutton.h"
+#include "gtkactionmuxerprivate.h"
+#include "gtkmenutracker.h"
 #include "gtkpopoverprivate.h"
+#include "gtkwidgetprivate.h"
+#include "gtkeventcontrollerkey.h"
+#include "gtkmain.h"
 
 
 /**
@@ -133,10 +140,25 @@ visible_submenu_changed (GObject        *object,
 }
 
 static void
+focus_out (GtkEventController *controller,
+           GdkCrossingMode     mode,
+           GdkNotifyType       detail,
+           GtkPopover         *popover)
+{
+  gboolean contains_focus;
+
+  g_object_get (controller, "contains-focus", &contains_focus, NULL);
+
+  if (!contains_focus)
+    gtk_popover_popdown (popover);
+}
+
+static void
 gtk_popover_menu_init (GtkPopoverMenu *popover)
 {
   GtkWidget *stack;
   GtkStyleContext *style_context;
+  GtkEventController *controller;
 
   stack = gtk_stack_new ();
   gtk_stack_set_vhomogeneous (GTK_STACK (stack), FALSE);
@@ -146,8 +168,12 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   g_signal_connect (stack, "notify::visible-child-name",
                     G_CALLBACK (visible_submenu_changed), popover);
 
-  style_context = gtk_widget_get_style_context (gtk_popover_get_contents_widget (GTK_POPOVER (popover)));
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (popover));
   gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_MENU);
+
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "focus-out", G_CALLBACK (focus_out), popover);
+  gtk_widget_add_controller (GTK_WIDGET (popover), controller);
 }
 
 static void
@@ -249,6 +275,38 @@ gtk_popover_menu_set_property (GObject      *object,
     }
 }
 
+static gboolean
+gtk_popover_menu_focus (GtkWidget        *widget,
+                        GtkDirectionType  direction)
+{
+  if (gtk_widget_get_first_child (widget) == NULL)
+    {
+      return FALSE;
+    }
+  else
+    {
+      if (gtk_widget_focus_move (widget, direction))
+        return TRUE;
+
+      if (direction == GTK_DIR_UP || direction == GTK_DIR_DOWN)
+        {
+          GtkWidget *p;
+
+          /* cycle around */
+          for (p = gtk_window_get_focus (GTK_WINDOW (gtk_widget_get_root (widget)));
+               p != widget;
+               p = gtk_widget_get_parent (p))
+            {
+              gtk_widget_set_focus_child (p, NULL);
+            }
+          if (gtk_widget_focus_move (widget, direction))
+            return TRUE;
+       }
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
 {
@@ -261,6 +319,7 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
 
   widget_class->map = gtk_popover_menu_map;
   widget_class->unmap = gtk_popover_menu_unmap;
+  widget_class->focus = gtk_popover_menu_focus;
 
   container_class->add = gtk_popover_menu_add;
   container_class->remove = gtk_popover_menu_remove;
@@ -276,15 +335,23 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
 
 /**
  * gtk_popover_menu_new:
+ * @relative_to: (allow-none): #GtkWidget the popover is related to
  *
  * Creates a new popover menu.
  *
  * Returns: a new #GtkPopoverMenu
  */
 GtkWidget *
-gtk_popover_menu_new (void)
+gtk_popover_menu_new (GtkWidget *relative_to)
 {
-  return g_object_new (GTK_TYPE_POPOVER_MENU, NULL);
+  GtkWidget *popover;
+
+  g_return_val_if_fail (relative_to == NULL || GTK_IS_WIDGET (relative_to), NULL);
+
+  popover = g_object_new (GTK_TYPE_POPOVER_MENU, NULL);
+  gtk_popover_set_relative_to (GTK_POPOVER (popover), relative_to);
+
+  return popover;
 }
 
 /**
@@ -332,4 +399,37 @@ gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
   stack = gtk_bin_get_child (GTK_BIN (popover));
 
   gtk_stack_add_named (GTK_STACK (stack), submenu, name);
-} 
+}
+
+/**
+ * gtk_popover_menu_new_from_model:
+ * @relative_to: (allow-none): #GtkWidget the popover is related to
+ * @model: a #GMenuModel
+ *
+ * Creates a #GtkPopoverMenu and populates it according to
+ * @model. The popover is pointed to the @relative_to widget.
+ *
+ * The created buttons are connected to actions found in the
+ * #GtkApplicationWindow to which the popover belongs - typically
+ * by means of being attached to a widget that is contained within
+ * the #GtkApplicationWindows widget hierarchy.
+ *
+ * Actions can also be added using gtk_widget_insert_action_group()
+ * on the menus attach widget or on any of its parent widgets.
+ *
+ * Returns: the new #GtkPopoverMenu
+ */
+GtkWidget *
+gtk_popover_menu_new_from_model (GtkWidget  *relative_to,
+                                 GMenuModel *model)
+{
+  GtkWidget *popover;
+
+  g_return_val_if_fail (relative_to == NULL || GTK_IS_WIDGET (relative_to), NULL);
+  g_return_val_if_fail (G_IS_MENU_MODEL (model), NULL);
+
+  popover = gtk_popover_menu_new (relative_to);
+  gtk_menu_section_box_new_toplevel (GTK_POPOVER_MENU (popover), model);
+
+  return popover;
+}

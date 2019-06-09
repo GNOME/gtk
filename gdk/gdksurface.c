@@ -4030,6 +4030,32 @@ check_autohide (GdkEvent *event)
   return FALSE;
 }
 
+static gboolean
+is_key_event (GdkEvent *event)
+{
+  switch ((guint) gdk_event_get_event_type (event))
+    {
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      return TRUE;
+    default:;
+    }
+
+  return FALSE;
+}
+
+static void
+rewrite_event_for_toplevel (GdkEvent *event)
+{
+  GdkSurface *surface;
+
+  surface = gdk_event_get_surface (event);
+  while (surface->parent)
+    surface = surface->parent;
+
+  g_set_object (&event->any.surface, surface);
+}
+
 gboolean
 gdk_surface_handle_event (GdkEvent *event)
 {
@@ -4046,6 +4072,8 @@ gdk_surface_handle_event (GdkEvent *event)
     }
   else
     {
+      if (is_key_event (event))
+        rewrite_event_for_toplevel (event);
       g_signal_emit (gdk_event_get_surface (event), signals[EVENT], 0, event, &handled);
     }
 

@@ -36,7 +36,11 @@ GDK_AVAILABLE_IN_ALL
 GType       gtk_popover_menu_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget * gtk_popover_menu_new      (void);
+GtkWidget * gtk_popover_menu_new            (GtkWidget   *relative_to);
+
+GDK_AVAILABLE_IN_ALL
+GtkWidget * gtk_popover_menu_new_from_model (GtkWidget  *relative_to,
+                                             GMenuModel *model);
 
 GDK_AVAILABLE_IN_ALL
 void        gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
