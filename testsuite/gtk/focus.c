@@ -80,6 +80,27 @@ add_controller (GtkWidget *widget, GString *s)
   gtk_widget_add_controller (widget, controller);
 }
 
+static gboolean
+stop_loop (gpointer data)
+{
+  GMainLoop *loop = data;
+
+  g_main_loop_quit (loop);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+wait (void)
+{
+  GMainLoop *loop;
+
+  loop = g_main_loop_new (NULL, FALSE);
+  g_timeout_add (1000, stop_loop, loop);
+  g_main_loop_run (loop);
+  g_main_loop_unref (loop);
+}
+
 static void
 test_window_focus (void)
 {
@@ -91,6 +112,9 @@ test_window_focus (void)
   GtkWidget *label2;
   GtkWidget *entry1;
   GtkWidget *entry2;
+  GtkWidget *menubutton;
+  GtkWidget *popover;
+  GtkWidget *button;
   GString *s = g_string_new ("");
 
   /*
@@ -99,11 +123,13 @@ test_window_focus (void)
    *
    *       window
    *         |
-   *  +----[box]-----+
-   *  |      |       |
-   * label1 box1    box2------+
-   *         |       |        |
-   *      [entry1]  label2  [entry2]
+   *  +----[box]-----+-------------------+
+   *  |      |       |                   |
+   * label1 box1    box2------+       menubutton
+   *         |       |        |          |
+   *      [entry1]  label2  [entry2]  popover
+   *                                     |
+   *                                  [button]
    */
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -138,10 +164,24 @@ test_window_focus (void)
   gtk_widget_set_name (entry2, "entry2");
   add_controller (entry2, s);
   gtk_container_add (GTK_CONTAINER (box2), entry2);
+  popover = gtk_popover_new (NULL);
+  add_controller (popover, s);
+  gtk_widget_set_name (popover, "popover");
+  button = gtk_button_new ();
+  add_controller (button, s);
+  gtk_widget_set_name (button, "button");
+  gtk_container_add (GTK_CONTAINER (popover), button);
+  menubutton = gtk_menu_button_new ();
+  add_controller (menubutton, s);
+  gtk_widget_set_name (menubutton, "menubutton");
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (menubutton), popover);
+  gtk_container_add (GTK_CONTAINER (box), menubutton);
 
   g_assert_null (gtk_window_get_focus (GTK_WINDOW (window)));
 
   gtk_widget_show (window);
+
+  wait ();
 
   /* show puts the initial focus on box */
   g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == box);
@@ -151,8 +191,11 @@ test_window_focus (void)
 
   g_assert_cmpstr (s->str, ==,
 "window: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL is-focus: 0 contains-focus: 1\n"
-"box: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 1 contains-focus: 0\n");
+"box: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 1 contains-focus: 0\n"
+"window: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 1 contains-focus: 0\n");
   g_string_truncate (s, 0);
+
+  wait ();
 
   gtk_widget_grab_focus (entry1);
 
@@ -167,6 +210,8 @@ test_window_focus (void)
   g_string_truncate (s, 0);
 
   g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == entry1);
+
+  wait ();
 
   gtk_widget_grab_focus (entry2);
 
@@ -183,6 +228,8 @@ test_window_focus (void)
 
   g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == entry2);
 
+  wait ();
+
   gtk_widget_grab_focus (box);
 
   if (g_test_verbose ())
@@ -195,10 +242,42 @@ test_window_focus (void)
 
   g_string_truncate (s, 0);
 
+  wait ();
+
+  gtk_menu_button_popup (GTK_MENU_BUTTON (menubutton));
+
+  if (g_test_verbose ())
+    g_print ("box -> button\n%s", s->str);
+
+  g_assert_cmpstr (s->str, ==,
+"box: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_INFERIOR is-focus: 0 contains-focus: 1\n"
+"menubutton: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL is-focus: 0 contains-focus: 1\n"
+"popover: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL is-focus: 0 contains-focus: 1\n"
+"button: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 1 contains-focus: 0\n");
+
+  g_string_truncate (s, 0);
+
+  wait ();
+
+  gtk_widget_grab_focus (box);
+
+  if (g_test_verbose ())
+    g_print ("button -> box\n%s", s->str);
+
+  g_assert_cmpstr (s->str, ==,
+"button: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_ANCESTOR is-focus: 0 contains-focus: 0\n"
+"popover: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL is-focus: 0 contains-focus: 0\n"
+"menubutton: focus-out GDK_CROSSING_NORMAL GDK_NOTIFY_VIRTUAL is-focus: 0 contains-focus: 0\n"
+"box: focus-in GDK_CROSSING_NORMAL GDK_NOTIFY_INFERIOR is-focus: 1 contains-focus: 0\n");
+
+  g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == box);
+
+  wait ();
+
   gtk_widget_hide (window);
 
   g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == box);
-   
+
   gtk_window_set_focus (GTK_WINDOW (window), entry1);
 
   g_assert (gtk_window_get_focus (GTK_WINDOW (window)) == entry1);
