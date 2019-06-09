@@ -26,6 +26,8 @@
 #include "gtkmenutracker.h"
 #include "gtkpopoverprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkeventcontrollerkey.h"
+#include "gtkmain.h"
 
 
 /**
@@ -138,10 +140,25 @@ visible_submenu_changed (GObject        *object,
 }
 
 static void
+focus_out (GtkEventController *controller,
+           GdkCrossingMode     mode,
+           GdkNotifyType       detail,
+           GtkPopover         *popover)
+{
+  gboolean contains_focus;
+
+  g_object_get (controller, "contains-focus", &contains_focus, NULL);
+
+  if (!contains_focus)
+    gtk_popover_popdown (popover);
+}
+
+static void
 gtk_popover_menu_init (GtkPopoverMenu *popover)
 {
   GtkWidget *stack;
   GtkStyleContext *style_context;
+  GtkEventController *controller;
 
   stack = gtk_stack_new ();
   gtk_stack_set_vhomogeneous (GTK_STACK (stack), FALSE);
@@ -153,6 +170,10 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
 
   style_context = gtk_widget_get_style_context (GTK_WIDGET (popover));
   gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_MENU);
+
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "focus-out", G_CALLBACK (focus_out), popover);
+  gtk_widget_add_controller (GTK_WIDGET (popover), controller);
 }
 
 static void
