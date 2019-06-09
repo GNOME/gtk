@@ -95,24 +95,27 @@ get_output_dir (GError **error)
 
   if (arg_output_dir)
     {
-      GFile *file = g_file_new_for_commandline_arg (arg_output_dir);
+      GError *err = NULL;
+      GFile *file;
+
+      file = g_file_new_for_commandline_arg (arg_output_dir);
+      if (!g_file_make_directory_with_parents (file, NULL, &err))
+        {
+          if (!g_error_matches (err, G_IO_ERROR, G_IO_ERROR_EXISTS))
+            {
+              g_propagate_error (error, err);
+              g_object_unref (file);
+              return NULL;
+            }
+          g_clear_error (&err);
+        }
+
       output_dir = g_file_get_path (file);
       g_object_unref (file);
     }
   else
     {
       output_dir = g_get_tmp_dir ();
-    }
-
-  if (!g_file_test (output_dir, G_FILE_TEST_EXISTS))
-    {
-      GFile *file;
-
-      file = g_file_new_for_path (output_dir);
-      if (!g_file_make_directory_with_parents (file, NULL, error))
-        return NULL;
-
-      g_object_unref (file);
     }
 
   return output_dir;

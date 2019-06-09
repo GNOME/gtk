@@ -11,6 +11,7 @@ get_output_dir (void)
 {
   static const char *output_dir = NULL;
   GError *error = NULL;
+  GFile *file;
 
   if (output_dir)
     return output_dir;
@@ -26,20 +27,25 @@ get_output_dir (void)
       output_dir = g_get_tmp_dir ();
     }
 
-  if (!g_file_test (output_dir, G_FILE_TEST_EXISTS))
+  /* Just try to create the output directory.
+   * If it already exists, that's exactly what we wanted to check,
+   * so we can happily skip that error.
+   */
+  file = g_file_new_for_path (output_dir);
+  if (!g_file_make_directory_with_parents (file, NULL, &error))
     {
-      GFile *file;
+      g_object_unref (file);
 
-      file = g_file_new_for_path (output_dir);
-      if (!g_file_make_directory_with_parents (file, NULL, &error))
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
         {
           g_error ("Failed to create output dir: %s", error->message);
           g_error_free (error);
           return NULL;
         }
-
-      g_object_unref (file);
+      g_error_free (error);
     }
+
+  g_object_unref (file);
 
   return output_dir;
 }
