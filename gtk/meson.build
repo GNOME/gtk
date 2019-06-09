@@ -551,6 +551,7 @@ gtk_public_headers = files([
   'gtkpicture.h',
   'gtkpopover.h',
   'gtkpopovermenu.h',
+  'gtkpopovermenubar.h',
   'gtkprintcontext.h',
   'gtkprintoperation.h',
   'gtkprintoperationpreview.h',
