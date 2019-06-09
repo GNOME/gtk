@@ -871,25 +871,37 @@ gtk_model_button_destroy (GtkWidget *widget)
 }
 
 static void
+switch_menu (GtkModelButton *button)
+{
+  GtkWidget *stack;
+
+  stack = gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_STACK);
+  if (stack != NULL)
+    gtk_stack_set_visible_child_name (GTK_STACK (stack), button->menu_name);
+}
+
+static void
+close_menu (GtkModelButton *button)
+{
+  GtkWidget *popover;
+
+  popover = gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_POPOVER);
+  if (popover != NULL)
+    gtk_popover_popdown (GTK_POPOVER (popover));
+}
+
+static void
 gtk_model_button_clicked (GtkButton *button)
 {
   GtkModelButton *model_button = GTK_MODEL_BUTTON (button);
 
   if (model_button->menu_name != NULL)
     {
-      GtkWidget *stack;
-
-      stack = gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_STACK);
-      if (stack != NULL)
-        gtk_stack_set_visible_child_name (GTK_STACK (stack), model_button->menu_name);
+      switch_menu (model_button);
     }
   else if (model_button->role == GTK_BUTTON_ROLE_NORMAL)
     {
-      GtkWidget *popover;
-
-      popover = gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_POPOVER);
-      if (popover != NULL)
-        gtk_popover_popdown (GTK_POPOVER (popover));
+      close_menu (model_button);
     }
 }
 
@@ -943,6 +955,38 @@ gtk_model_button_map (GtkWidget *widget)
     }
 }
 
+static gboolean
+gtk_model_button_focus (GtkWidget        *widget,
+                        GtkDirectionType  direction)
+{
+  GtkModelButton *button = GTK_MODEL_BUTTON (widget);
+
+  if (gtk_widget_is_focus (widget))
+    {
+      if (direction == GTK_DIR_LEFT &&
+          button->role == GTK_BUTTON_ROLE_TITLE &&
+          button->menu_name != NULL)
+        {
+          switch_menu (button);
+          return TRUE;
+        }
+      else if (direction == GTK_DIR_RIGHT &&
+               button->role == GTK_BUTTON_ROLE_NORMAL &&
+               button->menu_name != NULL)
+        {
+          switch_menu (button);
+          return TRUE;
+        }
+    }
+  else
+    {
+      gtk_widget_grab_focus (widget);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_model_button_class_init (GtkModelButtonClass *class)
 {
@@ -960,6 +1004,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   widget_class->map = gtk_model_button_map;
   widget_class->state_flags_changed = gtk_model_button_state_flags_changed;
   widget_class->direction_changed = gtk_model_button_direction_changed;
+  widget_class->focus = gtk_model_button_focus;
 
   button_class->clicked = gtk_model_button_clicked;
 
