@@ -36,10 +36,16 @@ G_BEGIN_DECLS
 typedef struct _GtkPopoverBar GtkPopoverBar;
 
 GDK_AVAILABLE_IN_ALL
-GType      gtk_popover_bar_get_type        (void) G_GNUC_CONST;
+GType        gtk_popover_bar_get_type       (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget* gtk_popover_bar_new_from_model  (GMenuModel *model);
+GtkWidget *  gtk_popover_bar_new_from_model (GMenuModel    *model);
+
+GDK_AVAILABLE_IN_ALL
+void         gtk_popover_bar_set_menu_model (GtkPopoverBar *bar,
+                                             GMenuModel    *model);
+GDK_AVAILABLE_IN_ALL
+GMenuModel * gtk_popover_bar_get_menu_model (GtkPopoverBar *bar);
 
 G_END_DECLS
 

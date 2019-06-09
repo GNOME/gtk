@@ -391,35 +391,6 @@ tracker_insert (GtkMenuTrackerItem *item,
 }
 
 static void
-gtk_popover_bar_set_menu_model (GtkPopoverBar *bar,
-                                GMenuModel    *model)
-{
-  if (g_set_object (&bar->model, model))
-    {
-      GtkWidget *child;
-      GtkActionMuxer *muxer;
-
-      while ((child = gtk_widget_get_first_child (GTK_WIDGET (bar))))
-        gtk_widget_destroy (child);
-
-      g_clear_pointer (&bar->tracker, gtk_menu_tracker_free);
-
-      muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (bar), TRUE);
-      bar->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (muxer),
-                                           model,
-                                           FALSE,
-                                           TRUE,
-                                           FALSE,
-                                           NULL,
-                                           tracker_insert,
-                                           tracker_remove,
-                                           bar);
-
-      g_object_notify_by_pspec (G_OBJECT (bar), bar_props[PROP_MENU_MODEL]);
-    }
-}
-
-static void
 gtk_popover_bar_set_property (GObject      *object,
                               guint         property_id,
                               const GValue *value,
@@ -525,4 +496,44 @@ gtk_popover_bar_new_from_model (GMenuModel *model)
   return g_object_new (GTK_TYPE_POPOVER_BAR,
                        "menu-model", model,
                        NULL);
+}
+
+void
+gtk_popover_bar_set_menu_model (GtkPopoverBar *bar,
+                                GMenuModel    *model)
+{
+  g_return_if_fail (GTK_IS_POPOVER_BAR (bar));
+  g_return_if_fail (G_IS_MENU_MODEL (model));
+
+  if (g_set_object (&bar->model, model))
+    {
+      GtkWidget *child;
+      GtkActionMuxer *muxer;
+
+      while ((child = gtk_widget_get_first_child (GTK_WIDGET (bar))))
+        gtk_widget_destroy (child);
+
+      g_clear_pointer (&bar->tracker, gtk_menu_tracker_free);
+
+      muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (bar), TRUE);
+      bar->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (muxer),
+                                           model,
+                                           FALSE,
+                                           TRUE,
+                                           FALSE,
+                                           NULL,
+                                           tracker_insert,
+                                           tracker_remove,
+                                           bar);
+
+      g_object_notify_by_pspec (G_OBJECT (bar), bar_props[PROP_MENU_MODEL]);
+    }
+}
+
+GMenuModel *
+gtk_popover_bar_get_menu_model (GtkPopoverBar *bar)
+{
+  g_return_val_if_fail (GTK_IS_POPOVER_BAR (bar), NULL);
+
+  return bar->model;
 }
