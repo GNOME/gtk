@@ -254,6 +254,38 @@ gtk_popover_menu_set_property (GObject      *object,
     }
 }
 
+static gboolean
+gtk_popover_menu_focus (GtkWidget        *widget,
+                        GtkDirectionType  direction)
+{
+  if (gtk_widget_get_first_child (widget) == NULL)
+    {
+      return FALSE;
+    }
+  else
+    {
+      if (gtk_widget_focus_move (widget, direction))
+        return TRUE;
+
+      if (direction == GTK_DIR_UP || direction == GTK_DIR_DOWN)
+        {
+          GtkWidget *p;
+
+          /* cycle around */
+          for (p = gtk_window_get_focus (GTK_WINDOW (gtk_widget_get_root (widget)));
+               p != widget;
+               p = gtk_widget_get_parent (p))
+            {
+              gtk_widget_set_focus_child (p, NULL);
+            }
+          if (gtk_widget_focus_move (widget, direction))
+            return TRUE;
+       }
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
 {
@@ -266,6 +298,7 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
 
   widget_class->map = gtk_popover_menu_map;
   widget_class->unmap = gtk_popover_menu_unmap;
+  widget_class->focus = gtk_popover_menu_focus;
 
   container_class->add = gtk_popover_menu_add;
   container_class->remove = gtk_popover_menu_remove;
