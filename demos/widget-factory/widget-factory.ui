@@ -1822,7 +1822,7 @@ microphone-sensitivity-medium-symbolic</property>
                                   <object class="GtkBox">
                                     <property name="orientation">vertical</property>
                                     <child>
-                                      <object class="GtkPopoverBar">
+                                      <object class="GtkPopoverMenuBar">
                                         <property name="menu-model">menu_bar_model</property>
                                       </object>
                                     </child>

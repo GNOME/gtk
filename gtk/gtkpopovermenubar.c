@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include "gtkpopoverbar.h"
+#include "gtkpopovermenubar.h"
 #include "gtkpopovermenu.h"
 
 #include "gtkboxlayout.h"
@@ -39,31 +39,31 @@
 #include "gtkmain.h"
 #include "gtknative.h"
 
-#define GTK_TYPE_POPOVER_BAR_ITEM    (gtk_popover_bar_item_get_type ())
-#define GTK_POPOVER_BAR_ITEM(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_POPOVER_BAR_ITEM, GtkPopoverBarItem))
-#define GTK_IS_POPOVER_BAR_ITEM(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_POPOVER_BAR_ITEM))
+#define GTK_TYPE_POPOVER_MENU_BAR_ITEM    (gtk_popover_menu_bar_item_get_type ())
+#define GTK_POPOVER_MENU_BAR_ITEM(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_POPOVER_MENU_BAR_ITEM, GtkPopoverMenuBarItem))
+#define GTK_IS_POPOVER_MENU_BAR_ITEM(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_POPOVER_MENU_BAR_ITEM))
 
-GType gtk_popover_bar_item_get_type (void) G_GNUC_CONST;
+GType gtk_popover_menu_bar_item_get_type (void) G_GNUC_CONST;
 
-typedef struct _GtkPopoverBarItem GtkPopoverBarItem;
+typedef struct _GtkPopoverMenuBarItem GtkPopoverMenuBarItem;
 
-struct _GtkPopoverBar
+struct _GtkPopoverMenuBar
 {
   GtkWidget parent;
 
   GMenuModel *model;
   GtkMenuTracker *tracker;
 
-  GtkPopoverBarItem *active_item;
+  GtkPopoverMenuBarItem *active_item;
 };
 
-typedef struct _GtkPopoverBarClass GtkPopoverBarClass;
-struct _GtkPopoverBarClass
+typedef struct _GtkPopoverMenuBarClass GtkPopoverMenuBarClass;
+struct _GtkPopoverMenuBarClass
 {
   GtkWidgetClass parent_class;
 };
 
-struct _GtkPopoverBarItem
+struct _GtkPopoverMenuBarItem
 {
   GtkWidget parent;
 
@@ -71,20 +71,20 @@ struct _GtkPopoverBarItem
   GtkPopover *popover;
 };
 
-typedef struct _GtkPopoverBarItemClass GtkPopoverBarItemClass;
-struct _GtkPopoverBarItemClass
+typedef struct _GtkPopoverMenuBarItemClass GtkPopoverMenuBarItemClass;
+struct _GtkPopoverMenuBarItemClass
 {
   GtkWidgetClass parent_class;
 
-  void (* activate) (GtkPopoverBarItem *item);
+  void (* activate) (GtkPopoverMenuBarItem *item);
 };
 
-G_DEFINE_TYPE (GtkPopoverBarItem, gtk_popover_bar_item, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE (GtkPopoverMenuBarItem, gtk_popover_menu_bar_item, GTK_TYPE_WIDGET)
 
 static void
-set_active_item (GtkPopoverBar     *bar,
-                 GtkPopoverBarItem *item,
-                 gboolean           popup)
+set_active_item (GtkPopoverMenuBar     *bar,
+                 GtkPopoverMenuBarItem *item,
+                 gboolean               popup)
 {
   gboolean changed;
   gboolean was_popup;
@@ -135,12 +135,12 @@ clicked_cb (GtkGesture *gesture,
             gpointer    data)
 {
   GtkWidget *target;
-  GtkPopoverBar *bar;
+  GtkPopoverMenuBar *bar;
 
   target = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
-  bar = GTK_POPOVER_BAR (gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_BAR));
+  bar = GTK_POPOVER_MENU_BAR (gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU_BAR));
 
-  set_active_item (bar, GTK_POPOVER_BAR_ITEM (target), TRUE);
+  set_active_item (bar, GTK_POPOVER_MENU_BAR_ITEM (target), TRUE);
 }
 
 static void
@@ -152,20 +152,20 @@ enter_cb (GtkEventController *controller,
           gpointer            data)
 {
   GtkWidget *target;
-  GtkPopoverBar *bar;
+  GtkPopoverMenuBar *bar;
 
   target = gtk_event_controller_get_widget (controller);
 
-  bar = GTK_POPOVER_BAR (gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_BAR));
+  bar = GTK_POPOVER_MENU_BAR (gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU_BAR));
 
-  set_active_item (bar, GTK_POPOVER_BAR_ITEM (target), FALSE);
+  set_active_item (bar, GTK_POPOVER_MENU_BAR_ITEM (target), FALSE);
 }
 
 static gboolean
-gtk_popover_bar_focus (GtkWidget        *widget,
-                       GtkDirectionType  direction)
+gtk_popover_menu_bar_focus (GtkWidget        *widget,
+                            GtkDirectionType  direction)
 {
-  GtkPopoverBar *bar = GTK_POPOVER_BAR (widget);
+  GtkPopoverMenuBar *bar = GTK_POPOVER_MENU_BAR (widget);
   GtkWidget *next;
   if (bar->active_item &&
       gtk_widget_get_mapped (GTK_WIDGET (bar->active_item->popover)))
@@ -197,13 +197,13 @@ gtk_popover_bar_focus (GtkWidget        *widget,
   else
     return FALSE;
 
-  set_active_item (bar, GTK_POPOVER_BAR_ITEM (next), FALSE);
+  set_active_item (bar, GTK_POPOVER_MENU_BAR_ITEM (next), FALSE);
 
   return TRUE;
 }
 
 static void
-gtk_popover_bar_item_init (GtkPopoverBarItem *item)
+gtk_popover_menu_bar_item_init (GtkPopoverMenuBarItem *item)
 {
   GtkEventController *controller;
 
@@ -225,32 +225,32 @@ gtk_popover_bar_item_init (GtkPopoverBarItem *item)
 }
 
 static void
-gtk_popover_bar_item_dispose (GObject *object)
+gtk_popover_menu_bar_item_dispose (GObject *object)
 {
-  GtkPopoverBarItem *item = GTK_POPOVER_BAR_ITEM (object);
+  GtkPopoverMenuBarItem *item = GTK_POPOVER_MENU_BAR_ITEM (object);
 
   g_clear_pointer (&item->label, gtk_widget_unparent);
   g_clear_pointer ((GtkWidget **)&item->popover, gtk_widget_unparent);
 
-  G_OBJECT_CLASS (gtk_popover_bar_item_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gtk_popover_menu_bar_item_parent_class)->dispose (object);
 }
 
 static void
-gtk_popover_bar_item_finalize (GObject *object)
+gtk_popover_menu_bar_item_finalize (GObject *object)
 {
-  G_OBJECT_CLASS (gtk_popover_bar_item_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_popover_menu_bar_item_parent_class)->finalize (object);
 }
 
 static void
-gtk_popover_bar_item_measure (GtkWidget      *widget,
-                              GtkOrientation  orientation,
-                              int             for_size,
-                              int            *minimum,
-                              int            *natural,
-                              int            *minimum_baseline,
-                              int            *natural_baseline)
+gtk_popover_menu_bar_item_measure (GtkWidget      *widget,
+                                   GtkOrientation  orientation,
+                                   int             for_size,
+                                   int            *minimum,
+                                   int            *natural,
+                                   int            *minimum_baseline,
+                                   int            *natural_baseline)
 {
-  GtkPopoverBarItem *item = GTK_POPOVER_BAR_ITEM (widget);
+  GtkPopoverMenuBarItem *item = GTK_POPOVER_MENU_BAR_ITEM (widget);
 
   gtk_widget_measure (item->label, orientation, for_size,
                       minimum, natural,
@@ -258,12 +258,12 @@ gtk_popover_bar_item_measure (GtkWidget      *widget,
 }
 
 static void
-gtk_popover_bar_item_size_allocate (GtkWidget *widget,
-                                    int        width,
-                                    int        height,
-                                    int        baseline)
+gtk_popover_menu_bar_item_size_allocate (GtkWidget *widget,
+                                         int        width,
+                                         int        height,
+                                         int        baseline)
 {
-  GtkPopoverBarItem *item = GTK_POPOVER_BAR_ITEM (widget);
+  GtkPopoverMenuBarItem *item = GTK_POPOVER_MENU_BAR_ITEM (widget);
 
   gtk_widget_size_allocate (item->label,
                             &(GtkAllocation) { 0, 0, width, height },
@@ -273,30 +273,30 @@ gtk_popover_bar_item_size_allocate (GtkWidget *widget,
 }
 
 static void
-gtk_popover_bar_item_activate (GtkPopoverBarItem *item)
+gtk_popover_menu_bar_item_activate (GtkPopoverMenuBarItem *item)
 {
   gtk_popover_popup (GTK_POPOVER (item->popover));
 }
 
 static void
-gtk_popover_bar_item_class_init (GtkPopoverBarItemClass *klass)
+gtk_popover_menu_bar_item_class_init (GtkPopoverMenuBarItemClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = gtk_popover_bar_item_dispose;
-  object_class->finalize = gtk_popover_bar_item_finalize;
+  object_class->dispose = gtk_popover_menu_bar_item_dispose;
+  object_class->finalize = gtk_popover_menu_bar_item_finalize;
 
-  widget_class->measure = gtk_popover_bar_item_measure;
-  widget_class->size_allocate = gtk_popover_bar_item_size_allocate;
+  widget_class->measure = gtk_popover_menu_bar_item_measure;
+  widget_class->size_allocate = gtk_popover_menu_bar_item_size_allocate;
 
-  klass->activate = gtk_popover_bar_item_activate;
+  klass->activate = gtk_popover_menu_bar_item_activate;
 
   widget_class->activate_signal =
     g_signal_new (I_("activate"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_FIRST,
-                  G_STRUCT_OFFSET (GtkPopoverBarItemClass, activate),
+                  G_STRUCT_OFFSET (GtkPopoverMenuBarItemClass, activate),
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
@@ -312,7 +312,7 @@ enum
 
 static GParamSpec * bar_props[LAST_PROP];
 
-G_DEFINE_TYPE (GtkPopoverBar, gtk_popover_bar, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE (GtkPopoverMenuBar, gtk_popover_menu_bar, GTK_TYPE_WIDGET)
 
 static void
 tracker_remove (gint     position,
@@ -335,8 +335,8 @@ tracker_remove (gint     position,
 }
 
 static void
-popover_unmap (GtkPopover    *popover,
-               GtkPopoverBar *bar)
+popover_unmap (GtkPopover        *popover,
+               GtkPopoverMenuBar *bar)
 {
   if (bar->active_item && bar->active_item->popover == popover)
     set_active_item (bar, NULL, FALSE);
@@ -347,18 +347,18 @@ tracker_insert (GtkMenuTrackerItem *item,
                 gint                position,
                 gpointer            user_data)
 {
-  GtkPopoverBar *bar = user_data;
+  GtkPopoverMenuBar *bar = user_data;
 
   if (gtk_menu_tracker_item_get_has_link (item, G_MENU_LINK_SUBMENU))
     {
-      GtkPopoverBarItem *widget;
+      GtkPopoverMenuBarItem *widget;
       GMenuModel *model;
       GtkWidget *sibling;
       GtkWidget *child;
       GtkPopover *popover;
       int i;
 
-      widget = g_object_new (GTK_TYPE_POPOVER_BAR_ITEM, NULL);
+      widget = g_object_new (GTK_TYPE_POPOVER_MENU_BAR_ITEM, NULL);
       g_object_bind_property (item, "label",
                               widget->label, "label",
                               G_BINDING_SYNC_CREATE);
@@ -391,17 +391,17 @@ tracker_insert (GtkMenuTrackerItem *item,
 }
 
 static void
-gtk_popover_bar_set_property (GObject      *object,
-                              guint         property_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
+gtk_popover_menu_bar_set_property (GObject      *object,
+                                   guint         property_id,
+                                   const GValue *value,
+                                   GParamSpec   *pspec)
 {
-  GtkPopoverBar *bar = GTK_POPOVER_BAR (object);
+  GtkPopoverMenuBar *bar = GTK_POPOVER_MENU_BAR (object);
 
   switch (property_id)
     {
       case PROP_MENU_MODEL:
-        gtk_popover_bar_set_menu_model (bar, g_value_get_object (value));
+        gtk_popover_menu_bar_set_menu_model (bar, g_value_get_object (value));
         break;
 
       default:
@@ -410,12 +410,12 @@ gtk_popover_bar_set_property (GObject      *object,
 }
 
 static void
-gtk_popover_bar_get_property (GObject    *object,
-                              guint       property_id,
-                              GValue     *value,
-                              GParamSpec *pspec)
+gtk_popover_menu_bar_get_property (GObject    *object,
+                                   guint       property_id,
+                                   GValue     *value,
+                                   GParamSpec *pspec)
 {
-  GtkPopoverBar *bar = GTK_POPOVER_BAR (object);
+  GtkPopoverMenuBar *bar = GTK_POPOVER_MENU_BAR (object);
 
   switch (property_id)
     {
@@ -430,9 +430,9 @@ gtk_popover_bar_get_property (GObject    *object,
 
 
 static void
-gtk_popover_bar_dispose (GObject *object)
+gtk_popover_menu_bar_dispose (GObject *object)
 {
-  GtkPopoverBar *bar = GTK_POPOVER_BAR (object);
+  GtkPopoverMenuBar *bar = GTK_POPOVER_MENU_BAR (object);
   GtkWidget *child;
 
   g_clear_pointer (&bar->tracker, gtk_menu_tracker_free);
@@ -445,18 +445,11 @@ gtk_popover_bar_dispose (GObject *object)
 }
 
 static void
-gtk_popover_bar_class_init (GtkPopoverBarClass *klass)
+gtk_popover_menu_bar_class_init (GtkPopoverMenuBarClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = gtk_popover_bar_dispose;
-  object_class->set_property = gtk_popover_bar_set_property;
-  object_class->get_property = gtk_popover_bar_get_property;
-
-  widget_class->focus = gtk_popover_bar_focus;
-
-=======
   object_class->dispose = gtk_popover_menu_bar_dispose;
   object_class->set_property = gtk_popover_menu_bar_set_property;
   object_class->get_property = gtk_popover_menu_bar_get_property;
@@ -471,7 +464,6 @@ gtk_popover_bar_class_init (GtkPopoverBarClass *klass)
    * The model should only contain submenus as toplevel
    * items.
    */
->>>>>>> 2cfe644c96... fix up finalization:gtk/gtkpopovermenubar.c
   bar_props[PROP_MENU_MODEL] =
       g_param_spec_object ("menu-model",
                            P_("Menu model"),
@@ -486,23 +478,23 @@ gtk_popover_bar_class_init (GtkPopoverBarClass *klass)
 }
 
 static void
-gtk_popover_bar_init (GtkPopoverBar *bar)
+gtk_popover_menu_bar_init (GtkPopoverMenuBar *bar)
 {
 }
 
 GtkWidget *
-gtk_popover_bar_new_from_model (GMenuModel *model)
+gtk_popover_menu_bar_new_from_model (GMenuModel *model)
 {
-  return g_object_new (GTK_TYPE_POPOVER_BAR,
+  return g_object_new (GTK_TYPE_POPOVER_MENU_BAR,
                        "menu-model", model,
                        NULL);
 }
 
 void
-gtk_popover_bar_set_menu_model (GtkPopoverBar *bar,
-                                GMenuModel    *model)
+gtk_popover_menu_bar_set_menu_model (GtkPopoverMenuBar *bar,
+                                     GMenuModel        *model)
 {
-  g_return_if_fail (GTK_IS_POPOVER_BAR (bar));
+  g_return_if_fail (GTK_IS_POPOVER_MENU_BAR (bar));
   g_return_if_fail (G_IS_MENU_MODEL (model));
 
   if (g_set_object (&bar->model, model))
@@ -531,9 +523,9 @@ gtk_popover_bar_set_menu_model (GtkPopoverBar *bar,
 }
 
 GMenuModel *
-gtk_popover_bar_get_menu_model (GtkPopoverBar *bar)
+gtk_popover_menu_bar_get_menu_model (GtkPopoverMenuBar *bar)
 {
-  g_return_val_if_fail (GTK_IS_POPOVER_BAR (bar), NULL);
+  g_return_val_if_fail (GTK_IS_POPOVER_MENU_BAR (bar), NULL);
 
   return bar->model;
 }

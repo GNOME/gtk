@@ -15,8 +15,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_POPOVER_BAR_H__
-#define __GTK_POPOVER_BAR_H__
+#ifndef __GTK_POPOVER_MENU_BAR_H__
+#define __GTK_POPOVER_MENU_BAR_H__
 
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
@@ -29,25 +29,25 @@
 G_BEGIN_DECLS
 
 
-#define	GTK_TYPE_POPOVER_BAR               (gtk_popover_bar_get_type ())
-#define GTK_POPOVER_BAR(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_POPOVER_BAR, GtkPopoverBar))
-#define GTK_IS_POPOVER_BAR(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_POPOVER_BAR))
+#define	GTK_TYPE_POPOVER_MENU_BAR               (gtk_popover_menu_bar_get_type ())
+#define GTK_POPOVER_MENU_BAR(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_POPOVER_MENU_BAR, GtkPopoverMenuBar))
+#define GTK_IS_POPOVER_MENU_BAR(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_POPOVER_MENU_BAR))
 
-typedef struct _GtkPopoverBar GtkPopoverBar;
-
-GDK_AVAILABLE_IN_ALL
-GType        gtk_popover_bar_get_type       (void) G_GNUC_CONST;
+typedef struct _GtkPopoverMenuBar GtkPopoverMenuBar;
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *  gtk_popover_bar_new_from_model (GMenuModel    *model);
+GType        gtk_popover_menu_bar_get_type       (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-void         gtk_popover_bar_set_menu_model (GtkPopoverBar *bar,
-                                             GMenuModel    *model);
+GtkWidget *  gtk_popover_menu_bar_new_from_model (GMenuModel        *model);
+
 GDK_AVAILABLE_IN_ALL
-GMenuModel * gtk_popover_bar_get_menu_model (GtkPopoverBar *bar);
+void         gtk_popover_menu_bar_set_menu_model (GtkPopoverMenuBar *bar,
+                                                  GMenuModel        *model);
+GDK_AVAILABLE_IN_ALL
+GMenuModel * gtk_popover_menu_bar_get_menu_model (GtkPopoverMenuBar *bar);
 
 G_END_DECLS
 
 
-#endif /* __GTK_POPOVER_BAR_H__ */
+#endif /* __GTK_POPOVER_MENU_BAR_H__ */
