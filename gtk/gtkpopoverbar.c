@@ -163,29 +163,35 @@ enter_cb (GtkEventController *controller,
 }
 
 static gboolean
-key_pressed_cb (GtkEventController *controller,
-                guint keyval,
-                guint keycode,
-                GdkModifierType state,
-                gpointer data)
+gtk_popover_bar_focus (GtkWidget        *widget,
+                       GtkDirectionType  direction)
 {
-  GtkWidget *target;
-  GtkPopoverBar *bar;
+  GtkPopoverBar *bar = GTK_POPOVER_BAR (widget);
   GtkWidget *next;
-
-  target = gtk_event_controller_get_widget (controller);
-
-  bar = GTK_POPOVER_BAR (gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_BAR));
-
-  if (keyval == GDK_KEY_Left)
+  if (bar->active_item &&
+      gtk_widget_get_mapped (GTK_WIDGET (bar->active_item->popover)))
     {
-      next = gtk_widget_get_prev_sibling (target);
+      if (gtk_widget_child_focus (GTK_WIDGET (bar->active_item->popover), direction))
+        return TRUE;
+    }
+
+  if (direction == GTK_DIR_LEFT)
+    {
+      if (bar->active_item)
+        next = gtk_widget_get_prev_sibling (GTK_WIDGET (bar->active_item));
+      else
+        next = NULL;
+
       if (next == NULL)
         next = gtk_widget_get_last_child (GTK_WIDGET (bar->box));
     }
-  else if (keyval == GDK_KEY_Right)
+  else if (direction == GTK_DIR_RIGHT)
     {
-      next = gtk_widget_get_next_sibling (target);
+      if (bar->active_item)
+        next = gtk_widget_get_next_sibling (GTK_WIDGET (bar->active_item));
+      else
+        next = NULL;
+
       if (next == NULL)
         next = gtk_widget_get_first_child (GTK_WIDGET (bar->box));
     }
@@ -216,11 +222,6 @@ gtk_popover_bar_item_init (GtkPopoverBarItem *item)
   controller = gtk_event_controller_motion_new ();
   gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
   g_signal_connect (controller, "enter", G_CALLBACK (enter_cb), NULL);
-  gtk_widget_add_controller (GTK_WIDGET (item), controller);
-
-  controller = gtk_event_controller_key_new ();
-  gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
-  g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed_cb), NULL);
   gtk_widget_add_controller (GTK_WIDGET (item), controller);
 }
 
@@ -517,6 +518,7 @@ gtk_popover_bar_class_init (GtkPopoverBarClass *klass)
 
   widget_class->measure = gtk_popover_bar_measure;
   widget_class->size_allocate = gtk_popover_bar_size_allocate;
+  widget_class->focus = gtk_popover_bar_focus;
 
   bar_props[PROP_MENU_MODEL] =
       g_param_spec_object ("menu-model",
