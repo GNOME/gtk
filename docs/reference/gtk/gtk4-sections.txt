@@ -6492,6 +6492,23 @@ gtk_popover_menu_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkpopovermenubar</FILE>
+<TITLE>GtkPopoverMenuBar</TITLE>
+GtkPopoverMenuBar
+gtk_popover_menu_bar_new_from_model
+gtk_popover_menu_bar_set_menu_model
+gtk_popover_menu_bar_get_menu_model
+
+<SUBSECTION Standard>
+GTK_TYPE_POPOVER_MENU_BAR
+GTK_IS_POPOVER_MENU_BAR
+GTK_POPOVER_MENU_BAR
+
+<SUBSECTION Private>
+gtk_popover_menu_bar_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkmodelbutton</FILE>
 <TITLE>GtkModelButton</TITLE>
 GtkModelButton

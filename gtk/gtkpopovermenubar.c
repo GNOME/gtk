@@ -18,6 +18,35 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * SECTION:gtkpopovermenubar
+ * @Title: GtkPopoverMenuBar
+ * @Short_description: A menu bar with popovers
+ * @See_also: #GtkPopover, #GtkPopoverMenu, #GMenuModel
+ *
+ * The #GtkPopoverBar presents a horizontal bar of items that pop
+ * up popover menus when clicked. The only way to create instances
+ * of GtkPopoverBar is from a #GMenuModel.
+ *
+ * # CSS nodes
+ *
+ * |[<!-- language="plain" -->
+ * menubar
+ * ├── item[.active]
+ * ┊   ╰── popover
+ * ╰── item
+ *     ╰── popover
+ * ]|
+ *
+ * GtkMenuBar has a single CSS node with name menubar, below which
+ * each item has its CSS node, and below that the corresponding
+ * popover.
+ *
+ * The item whose popover is currently open gets the .active
+ * style class.
+ */
+
+
 #include "config.h"
 
 #include "gtkpopovermenubar.h"
@@ -482,6 +511,14 @@ gtk_popover_menu_bar_init (GtkPopoverMenuBar *bar)
 {
 }
 
+/**
+ * gtk_popover_menu_bar_new_from_model:
+ * @model: a #GMenuModel
+ *
+ * Creates a #GtkPopoverMenuBar from a #GMenuModel.
+ *
+ * Returns: a new #GtkPopoverMenuBar
+ */
 GtkWidget *
 gtk_popover_menu_bar_new_from_model (GMenuModel *model)
 {
@@ -490,6 +527,14 @@ gtk_popover_menu_bar_new_from_model (GMenuModel *model)
                        NULL);
 }
 
+/**
+ * gtk_popover_menu_bar_set_menu_model:
+ * @bar: a #GtkPopoverMenuBar
+ * @model: a #GMenuModel
+ *
+ * Sets a menu model from which @bar should take
+ * its contents.
+ */
 void
 gtk_popover_menu_bar_set_menu_model (GtkPopoverMenuBar *bar,
                                      GMenuModel        *model)
@@ -522,6 +567,14 @@ gtk_popover_menu_bar_set_menu_model (GtkPopoverMenuBar *bar,
     }
 }
 
+/**
+ * gtk_popover_menu_bar_get_menu_model:
+ * @bar: a #GtkPopoverMenuBar
+ *
+ * Returns the model from which the contents of @bar are taken.
+ *
+ * Returns: (transfer none): a #GMenuModel
+ */
 GMenuModel *
 gtk_popover_menu_bar_get_menu_model (GtkPopoverMenuBar *bar)
 {
