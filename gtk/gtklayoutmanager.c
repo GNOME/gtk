@@ -91,12 +91,23 @@
 
 typedef struct {
   GtkWidget *widget;
+  GtkRoot *root;
 
   /* HashTable<Widget, LayoutChild> */
   GHashTable *layout_children;
 } GtkLayoutManagerPrivate;
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkLayoutManager, gtk_layout_manager, G_TYPE_OBJECT)
+
+static void
+gtk_layout_manager_real_root (GtkLayoutManager *manager)
+{
+}
+
+static void
+gtk_layout_manager_real_unroot (GtkLayoutManager *manager)
+{
+}
 
 static GtkSizeRequestMode
 gtk_layout_manager_real_get_request_mode (GtkLayoutManager *manager,
@@ -195,6 +206,8 @@ gtk_layout_manager_class_init (GtkLayoutManagerClass *klass)
   klass->measure = gtk_layout_manager_real_measure;
   klass->allocate = gtk_layout_manager_real_allocate;
   klass->create_layout_child = gtk_layout_manager_real_create_layout_child;
+  klass->root = gtk_layout_manager_real_root;
+  klass->unroot = gtk_layout_manager_real_unroot;
 }
 
 static void
@@ -226,6 +239,38 @@ gtk_layout_manager_set_widget (GtkLayoutManager *layout_manager,
     }
 
   priv->widget = widget;
+
+  if (widget != NULL)
+    gtk_layout_manager_set_root (layout_manager, gtk_widget_get_root (widget));
+}
+
+/*< private >
+ * gtk_layout_manager_set_root:
+ * @layout_manager: a #GtkLayoutManager
+ * @root: (nullable): a #GtkWidget implementing #GtkRoot
+ *
+ * Sets a back pointer from @root to @layout_manager.
+ *
+ * This function is called by #GtkWidget when getting rooted and unrooted,
+ * and will call #GtkLayoutManagerClass.root() or #GtkLayoutManagerClass.unroot()
+ * depending on whether @root is a #GtkWidget or %NULL.
+ */
+void
+gtk_layout_manager_set_root (GtkLayoutManager *layout_manager,
+                             GtkRoot          *root)
+{
+  GtkLayoutManagerPrivate *priv = gtk_layout_manager_get_instance_private (layout_manager);
+  GtkRoot *old_root = priv->root;
+
+  priv->root = root;
+
+  if (old_root != root)
+    {
+      if (priv->root != NULL)
+        GTK_LAYOUT_MANAGER_GET_CLASS (layout_manager)->root (layout_manager);
+      else
+        GTK_LAYOUT_MANAGER_GET_CLASS (layout_manager)->unroot (layout_manager);
+    }
 }
 
 /**

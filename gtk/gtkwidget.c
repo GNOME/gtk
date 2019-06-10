@@ -2890,6 +2890,9 @@ gtk_widget_root (GtkWidget *widget)
   if (priv->surface_transform_data)
     add_parent_surface_transform_changed_listener (widget);
 
+  if (priv->layout_manager)
+    gtk_layout_manager_set_root (priv->layout_manager, priv->root);
+
   GTK_WIDGET_GET_CLASS (widget)->root (widget);
 
   if (!GTK_IS_ROOT (widget))
@@ -2914,6 +2917,9 @@ gtk_widget_unroot (GtkWidget *widget)
 
   if (priv->context)
     gtk_style_context_set_display (priv->context, gdk_display_get_default ());
+
+  if (priv->layout_manager)
+    gtk_layout_manager_set_root (priv->layout_manager, NULL);
 
   if (g_object_get_qdata (G_OBJECT (widget), quark_pango_context))
     g_object_set_qdata (G_OBJECT (widget), quark_pango_context, NULL);
