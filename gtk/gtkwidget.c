@@ -53,6 +53,7 @@
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkpopover.h"
+#include "gtkpopovermenu.h"
 #include "gtkprivate.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
@@ -864,20 +865,10 @@ gtk_widget_real_unroot (GtkWidget *widget)
   gtk_widget_forall (widget, (GtkCallback) gtk_widget_unroot, NULL);
 }
 
-static void
-popup_menu_detach (GtkWidget *widget,
-                   GtkMenu   *menu)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  priv->popup_menu = NULL;
-}
-
 static gboolean
 gtk_widget_real_popup_menu (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GtkWidget *menu;
   const GdkEvent *event;
 
   if (!gtk_widget_get_realized (widget))
@@ -886,25 +877,46 @@ gtk_widget_real_popup_menu (GtkWidget *widget)
   if (!priv->context_menu)
     return FALSE;
 
-  if (priv->popup_menu)
-    gtk_widget_destroy (priv->popup_menu);
+  if (!priv->popup_menu)
+    {
+      priv->popup_menu = gtk_popover_menu_new_from_model (widget, priv->context_menu);
+      gtk_popover_set_position (GTK_POPOVER (priv->popup_menu), GTK_POS_BOTTOM);
 
-  priv->popup_menu = menu = gtk_menu_new_from_model (priv->context_menu);
-  gtk_style_context_add_class (gtk_widget_get_style_context (menu), GTK_STYLE_CLASS_CONTEXT_MENU);
-  gtk_menu_attach_to_widget (GTK_MENU (menu), widget, popup_menu_detach);
+      gtk_popover_set_has_arrow (GTK_POPOVER (priv->popup_menu), FALSE);
+      gtk_widget_set_halign (priv->popup_menu, GTK_ALIGN_START);
+    }
 
   event = gtk_get_current_event ();
   if (event && gdk_event_triggers_context_menu (event))
-    gtk_menu_popup_at_pointer (GTK_MENU (menu), event);
-  else
     {
-      gtk_menu_popup_at_widget (GTK_MENU (menu),
-                                widget,
-                                GDK_GRAVITY_SOUTH_EAST,
-                                GDK_GRAVITY_NORTH_WEST,
-                                event);
-      gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
+      GdkDevice *device;
+      GdkRectangle rect = { 0, 0, 1, 1 };
+
+      device = gdk_event_get_device (event);
+
+      if (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+        device = gdk_device_get_associated_device (device);
+
+      if (device)
+        {
+          GdkSurface *surface;
+          double px, py;
+
+          surface = gtk_native_get_surface (gtk_widget_get_native (widget));
+          gdk_surface_get_device_position (surface, device, &px, &py, NULL);
+          rect.x = round (px);
+          rect.y = round (py);
+
+          gtk_widget_translate_coordinates (GTK_WIDGET (gtk_widget_get_native (widget)),
+                                           widget,
+                                           rect.x, rect.y,
+                                           &rect.x, &rect.y);
+        }
+
+      gtk_popover_set_pointing_to (GTK_POPOVER (priv->popup_menu), &rect);
     }
+
+  gtk_popover_popup (GTK_POPOVER (priv->popup_menu));
 
   return TRUE;
 }
@@ -8299,11 +8311,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
   g_clear_object (&priv->surface);
 
-  if (priv->popup_menu)
-    {
-      gtk_widget_destroy (priv->popup_menu);
-      priv->popup_menu = NULL;
-    }
+  g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
 }
 
 void
