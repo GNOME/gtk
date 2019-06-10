@@ -1763,7 +1763,7 @@ gtk_text_finalize (GObject *object)
 
   g_clear_object (&priv->cached_layout);
   g_clear_object (&priv->im_context);
-  g_clear_pointer (&priv->selection_bubble, gtk_widget_destroy);
+  g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
   g_clear_pointer (&priv->magnifier_popover, gtk_widget_destroy);
   g_clear_object (&priv->text_handle);
   g_free (priv->im_module);
@@ -5876,8 +5876,7 @@ gtk_text_selection_bubble_popup_show (gpointer user_data)
       return G_SOURCE_REMOVE;
     }
 
-  if (priv->selection_bubble)
-    gtk_widget_destroy (priv->selection_bubble);
+  g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
 
   priv->selection_bubble = gtk_popover_new (GTK_WIDGET (self));
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->selection_bubble),
