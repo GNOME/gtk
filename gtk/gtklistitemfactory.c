@@ -29,8 +29,6 @@ static void
 gtk_list_item_factory_default_setup (GtkListItemFactory *self,
                                      GtkListItem        *list_item)
 {
-  if (self->setup_func)
-    self->setup_func (list_item, self->user_data);
 }
 
 static void
@@ -57,9 +55,6 @@ gtk_list_item_factory_default_bind (GtkListItemFactory *self,
   gtk_list_item_set_item (list_item, item);
   gtk_list_item_set_position (list_item, position);
   gtk_list_item_set_selected (list_item, selected);
-
-  if (self->bind_func)  
-    self->bind_func (list_item, self->user_data);
 }
 
 static void
@@ -72,9 +67,6 @@ gtk_list_item_factory_default_rebind (GtkListItemFactory *self,
   gtk_list_item_set_item (list_item, item);
   gtk_list_item_set_position (list_item, position);
   gtk_list_item_set_selected (list_item, selected);
-
-  if (self->bind_func)  
-    self->bind_func (list_item, self->user_data);
 }
 
 static void
@@ -97,23 +89,8 @@ gtk_list_item_factory_default_unbind (GtkListItemFactory *self,
 }
 
 static void
-gtk_list_item_factory_finalize (GObject *object)
-{
-  GtkListItemFactory *self = GTK_LIST_ITEM_FACTORY (object);
-
-  if (self->user_destroy)
-    self->user_destroy (self->user_data);
-
-  G_OBJECT_CLASS (gtk_list_item_factory_parent_class)->finalize (object);
-}
-
-static void
 gtk_list_item_factory_class_init (GtkListItemFactoryClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = gtk_list_item_factory_finalize;
-
   klass->setup = gtk_list_item_factory_default_setup;
   klass->teardown = gtk_list_item_factory_default_teardown;
   klass->bind = gtk_list_item_factory_default_bind;
@@ -125,27 +102,6 @@ gtk_list_item_factory_class_init (GtkListItemFactoryClass *klass)
 static void
 gtk_list_item_factory_init (GtkListItemFactory *self)
 {
-}
-
-GtkListItemFactory *
-gtk_list_item_factory_new (GtkListItemSetupFunc setup_func,
-                           GtkListItemBindFunc  bind_func,
-                           gpointer             user_data,
-                           GDestroyNotify       user_destroy)
-{
-  GtkListItemFactory *self;
-
-  g_return_val_if_fail (setup_func || bind_func, NULL);
-  g_return_val_if_fail (user_data != NULL || user_destroy == NULL, NULL);
-
-  self = g_object_new (GTK_TYPE_LIST_ITEM_FACTORY, NULL);
-
-  self->setup_func = setup_func;
-  self->bind_func = bind_func;
-  self->user_data = user_data;
-  self->user_destroy = user_destroy;
-
-  return self;
 }
 
 void

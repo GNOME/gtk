@@ -23,9 +23,9 @@
 
 #include "gtkadjustment.h"
 #include "gtkintl.h"
-#include "gtkrbtreeprivate.h"
-#include "gtklistitemfactoryprivate.h"
+#include "gtkfunctionslistitemfactoryprivate.h"
 #include "gtklistitemmanagerprivate.h"
+#include "gtkrbtreeprivate.h"
 #include "gtkscrollable.h"
 #include "gtkselectionmodel.h"
 #include "gtksingleselection.h"
@@ -857,7 +857,7 @@ gtk_list_view_set_functions (GtkListView          *self,
   g_return_if_fail (setup_func || bind_func);
   g_return_if_fail (user_data != NULL || user_destroy == NULL);
 
-  factory = gtk_list_item_factory_new (setup_func, bind_func, user_data, user_destroy);
+  factory = gtk_functions_list_item_factory_new (setup_func, bind_func, user_data, user_destroy);
   gtk_list_item_manager_set_factory (self->item_manager, factory);
   g_object_unref (factory);
 }
