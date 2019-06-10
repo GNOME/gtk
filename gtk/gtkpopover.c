@@ -2069,6 +2069,7 @@ gtk_popover_update_relative_to (GtkPopover *popover,
                                 GtkWidget  *relative_to)
 {
   GtkPopoverPrivate *priv = popover->priv;
+  GtkStateFlags old_state = 0;
 
   if (priv->widget == relative_to)
     return;
@@ -2085,6 +2086,7 @@ gtk_popover_update_relative_to (GtkPopover *popover,
 
   if (priv->widget)
     {
+      old_state = gtk_widget_get_state_flags (priv->widget);
       if (g_signal_handler_is_connected (priv->widget, priv->hierarchy_changed_id))
         g_signal_handler_disconnect (priv->widget, priv->hierarchy_changed_id);
       if (g_signal_handler_is_connected (priv->widget, priv->size_allocate_id))
@@ -2140,6 +2142,9 @@ gtk_popover_update_relative_to (GtkPopover *popover,
 
   if (priv->widget)
     gtk_popover_update_scrollable (popover);
+
+  if (priv->widget)
+    _gtk_popover_parent_state_changed (priv->widget, old_state, popover);
 
   _gtk_widget_update_parent_muxer (GTK_WIDGET (popover));
   g_object_unref (popover);
