@@ -251,6 +251,7 @@ gtk_public_sources = files([
   'gtkfontchooserwidget.c',
   'gtkfontlist.c',
   'gtkframe.c',
+  'gtkfunctionslistitemfactory.c',
   'gtkgesture.c',
   'gtkgesturedrag.c',
   'gtkgesturelongpress.c',
