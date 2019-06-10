@@ -39,11 +39,6 @@ typedef struct _GtkListItemFactoryClass GtkListItemFactoryClass;
 struct _GtkListItemFactory
 {
   GObject parent_instance;
-
-  GtkListItemSetupFunc setup_func;
-  GtkListItemBindFunc bind_func;
-  gpointer user_data;
-  GDestroyNotify user_destroy;
 };
 
 struct _GtkListItemFactoryClass
@@ -80,11 +75,6 @@ struct _GtkListItemFactoryClass
 };
 
 GType                   gtk_list_item_factory_get_type          (void) G_GNUC_CONST;
-
-GtkListItemFactory *    gtk_list_item_factory_new               (GtkListItemSetupFunc    setup_func,
-                                                                 GtkListItemBindFunc     bind_func,
-                                                                 gpointer                user_data,
-                                                                 GDestroyNotify          user_destroy);
 
 void                    gtk_list_item_factory_setup             (GtkListItemFactory     *self,
                                                                  GtkListItem            *list_item);
