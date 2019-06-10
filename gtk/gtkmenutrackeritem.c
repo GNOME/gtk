@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkmenutrackeritem.h"
+#include "gtkmenutrackeritemprivate.h"
 #include "gtkactionmuxerprivate.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"

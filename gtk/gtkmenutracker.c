@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkmenutracker.h"
+#include "gtkmenutrackerprivate.h"
 
 /*< private >
  * SECTION:gtkmenutracker

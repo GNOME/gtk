@@ -68,7 +68,7 @@
 #include "gtkmenubarprivate.h"
 #include "gtkmenuitemprivate.h"
 #include "gtkmnemonichash.h"
-#include "gtkmodelmenuitem.h"
+#include "gtkmodelmenuitemprivate.h"
 #include "gtkprivate.h"
 #include "gtkseparatormenuitem.h"
 #include "gtktypebuiltins.h"

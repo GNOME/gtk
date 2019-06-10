@@ -21,8 +21,8 @@
 
 #include "gtkactionmuxerprivate.h"
 
-#include "gtkactionobservable.h"
-#include "gtkactionobserver.h"
+#include "gtkactionobservableprivate.h"
+#include "gtkactionobserverprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 

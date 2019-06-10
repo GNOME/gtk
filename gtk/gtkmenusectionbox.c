@@ -20,11 +20,11 @@
 
 #include "config.h"
 
-#include "gtkmenusectionbox.h"
+#include "gtkmenusectionboxprivate.h"
 
 #include "gtkwidgetprivate.h"
 #include "gtklabel.h"
-#include "gtkmenutracker.h"
+#include "gtkmenutrackerprivate.h"
 #include "gtkmodelbutton.h"
 #include "gtkseparator.h"
 #include "gtksizegroup.h"

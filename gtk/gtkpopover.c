@@ -120,7 +120,7 @@
 #include "gtkprivate.h"
 #include "gtkmain.h"
 #include "gtkstack.h"
-#include "gtkmenusectionbox.h"
+#include "gtkmenusectionboxprivate.h"
 #include "gdk/gdkeventsprivate.h"
 #include "gtkpointerfocusprivate.h"
 #include "gtkcssnodeprivate.h"

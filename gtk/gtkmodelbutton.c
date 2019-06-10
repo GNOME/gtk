@@ -24,7 +24,7 @@
 #include "gtkbutton.h"
 #include "gtkbuttonprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkmenutrackeritem.h"
+#include "gtkmenutrackeritemprivate.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkbox.h"

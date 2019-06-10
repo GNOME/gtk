@@ -17,8 +17,8 @@
  * Authors: Ryan Lortie <desrt@desrt.ca>
  */
 
-#ifndef __GTK_ACTION_OBSERVER_H__
-#define __GTK_ACTION_OBSERVER_H__
+#ifndef __GTK_ACTION_OBSERVER_PRIVATE_H__
+#define __GTK_ACTION_OBSERVER_PRIVATE_H__
 
 #include <gio/gio.h>
 
@@ -88,4 +88,4 @@ void                    gtk_action_observer_primary_accel_changed       (GtkActi
 
 G_END_DECLS
 
-#endif /* __GTK_ACTION_OBSERVER_H__ */
+#endif /* __GTK_ACTION_OBSERVER_PRIVATE_H__ */

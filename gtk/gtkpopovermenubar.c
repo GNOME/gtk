@@ -63,7 +63,7 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkactionmuxerprivate.h"
-#include "gtkmenutracker.h"
+#include "gtkmenutrackerprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkmain.h"
 #include "gtknative.h"

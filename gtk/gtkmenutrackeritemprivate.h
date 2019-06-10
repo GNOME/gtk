@@ -17,10 +17,10 @@
  * Author: Ryan Lortie <desrt@desrt.ca>
  */
 
-#ifndef __GTK_MENU_TRACKER_ITEM_H__
-#define __GTK_MENU_TRACKER_ITEM_H__
+#ifndef __GTK_MENU_TRACKER_ITEM_PRIVATE_H__
+#define __GTK_MENU_TRACKER_ITEM_PRIVATE_H__
 
-#include "gtkactionobservable.h"
+#include "gtkactionobservableprivate.h"
 
 #define GTK_TYPE_MENU_TRACKER_ITEM                          (gtk_menu_tracker_item_get_type ())
 #define GTK_MENU_TRACKER_ITEM(inst)                         (G_TYPE_CHECK_INSTANCE_CAST ((inst), \

@@ -22,7 +22,7 @@
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkmnemonichash.h>
 #include <gtk/gtkkeyhash.h>
-#include <gtk/gtkmenutracker.h>
+#include <gtk/gtkmenutrackerprivate.h>
 #include <gtk/gtkeventcontroller.h>
 
 G_BEGIN_DECLS

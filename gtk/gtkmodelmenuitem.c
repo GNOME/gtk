@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkmodelmenuitem.h"
+#include "gtkmodelmenuitemprivate.h"
 
 #include "gtkaccellabel.h"
 #include "gtklabel.h"

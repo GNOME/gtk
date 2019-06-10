@@ -17,11 +17,11 @@
  * Author: Ryan Lortie <desrt@desrt.ca>
  */
 
-#ifndef __GTK_MODEL_MENU_ITEM_H__
-#define __GTK_MODEL_MENU_ITEM_H__
+#ifndef __GTK_MODEL_MENU_ITEM_PRIVATE_H__
+#define __GTK_MODEL_MENU_ITEM_PRIVATE_H__
 
 #include <gtk/gtkcheckmenuitem.h>
-#include <gtk/gtkmenutrackeritem.h>
+#include <gtk/gtkmenutrackeritemprivate.h>
 
 #define GTK_TYPE_MODEL_MENU_ITEM                            (gtk_model_menu_item_get_type ())
 #define GTK_MODEL_MENU_ITEM(inst)                           (G_TYPE_CHECK_INSTANCE_CAST ((inst),                      \
@@ -37,4 +37,4 @@ GType                   gtk_model_menu_item_get_type                    (void) G
 G_GNUC_INTERNAL
 GtkWidget *             gtk_model_menu_item_new                         (void);
 
-#endif /* __GTK_MODEL_MENU_ITEM_H__ */
+#endif /* __GTK_MODEL_MENU_ITEM_PRIVATE_H__ */

@@ -17,10 +17,10 @@
  * Author: Ryan Lortie <desrt@desrt.ca>
  */
 
-#ifndef __GTK_MENU_SECTION_BOX_H__
-#define __GTK_MENU_SECTION_BOX_H__
+#ifndef __GTK_MENU_SECTION_BOX_PRIVATE_H__
+#define __GTK_MENU_SECTION_BOX_PRIVATE_H__
 
-#include <gtk/gtkmenutrackeritem.h>
+#include <gtk/gtkmenutrackeritemprivate.h>
 #include <gtk/gtkbox.h>
 #include <gtk/gtkpopovermenu.h>
 
@@ -46,4 +46,4 @@ void                    gtk_menu_section_box_new_toplevel               (GtkPopo
 
 G_END_DECLS
 
-#endif /* __GTK_MENU_SECTION_BOX_H__ */
+#endif /* __GTK_MENU_SECTION_BOX_PRIVATE_H__ */
