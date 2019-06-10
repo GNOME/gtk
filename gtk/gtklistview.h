@@ -48,6 +48,12 @@ void            gtk_list_view_set_functions                     (GtkListView    
                                                                  GtkListItemBindFunc     bind_func,
                                                                  gpointer                user_data,
                                                                  GDestroyNotify          user_destroy);
+GDK_AVAILABLE_IN_ALL
+void            gtk_list_view_set_factory_from_bytes            (GtkListView            *self,
+                                                                 GBytes                 *bytes);
+GDK_AVAILABLE_IN_ALL
+void            gtk_list_view_set_factory_from_resource         (GtkListView            *self,
+                                                                 const char             *resource_path);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_list_view_set_show_separators               (GtkListView            *self,
