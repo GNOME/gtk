@@ -10,4 +10,7 @@ void gtk_layout_manager_set_widget (GtkLayoutManager *manager,
 void gtk_layout_manager_remove_layout_child (GtkLayoutManager *manager,
                                              GtkWidget        *widget);
 
+void gtk_layout_manager_set_root (GtkLayoutManager *manager,
+                                  GtkRoot          *root);
+
 G_END_DECLS
