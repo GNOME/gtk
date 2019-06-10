@@ -4552,6 +4552,7 @@ gtk_widget_insert_before
 gtk_widget_insert_after
 gtk_widget_set_layout_manager
 gtk_widget_get_layout_manager
+gtk_widget_should_layout
 
 <SUBSECTION>
 gtk_widget_get_path

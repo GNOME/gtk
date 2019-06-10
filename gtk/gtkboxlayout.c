@@ -174,16 +174,13 @@ count_expand_children (GtkWidget *widget,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      if (GTK_IS_NATIVE (child))
+      if (!gtk_widget_should_layout (child))
         continue;
 
-      if (_gtk_widget_get_visible (child))
-        {
-          *visible_children += 1;
+      *visible_children += 1;
 
-          if (gtk_widget_compute_expand (child, orientation))
-            *expand_children += 1;
-        }
+      if (gtk_widget_compute_expand (child, orientation))
+        *expand_children += 1;
     }
 }
 
@@ -223,10 +220,7 @@ gtk_box_layout_compute_size (GtkBoxLayout *self,
       int child_min = 0;
       int child_nat = 0;
 
-      if (GTK_IS_NATIVE (child))
-        continue;
-
-      if (!_gtk_widget_get_visible (child))
+      if (!gtk_widget_should_layout (child))
         continue;
 
       gtk_widget_measure (child, self->orientation,
@@ -300,20 +294,17 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      if (GTK_IS_NATIVE (child))
+      if (!gtk_widget_should_layout (child))
         continue;
 
-      if (_gtk_widget_get_visible (child))
-        {
-          gtk_widget_measure (child,
-                              self->orientation,
-                              -1,
-                              &sizes[i].minimum_size, &sizes[i].natural_size,
-                              NULL, NULL);
+      gtk_widget_measure (child,
+                          self->orientation,
+                          -1,
+                          &sizes[i].minimum_size, &sizes[i].natural_size,
+                          NULL, NULL);
 
-          children_minimum_size += sizes[i].minimum_size;
-          i += 1;
-        }
+      children_minimum_size += sizes[i].minimum_size;
+      i += 1;
     }
 
   if (self->homogeneous)
@@ -351,11 +342,7 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      if (GTK_IS_NATIVE (child))
-        continue;
-
-      /* If widget is not visible, skip it. */
-      if (!_gtk_widget_get_visible (child))
+      if (!gtk_widget_should_layout (child))
         continue;
 
       /* Assign the child's size. */
@@ -494,15 +481,6 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
   gint child_size;
   gint spacing;
 
-  /* Handle native children first, and skip them in everything below */
-  for (child = _gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    {
-      if (GTK_IS_NATIVE (child))
-        gtk_native_check_resize (GTK_NATIVE (child));
-    }
-
   count_expand_children (widget, self->orientation, &nvis_children, &nexpand_children);
 
   /* If there is no visible child, simply return. */
@@ -527,10 +505,7 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      if (GTK_IS_NATIVE (child))
-        continue;
-
-      if (!_gtk_widget_get_visible (child))
+      if (!gtk_widget_should_layout (child))
         continue;
 
       gtk_widget_measure (child,
@@ -581,11 +556,7 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      if (GTK_IS_NATIVE (child))
-        continue;
-
-      /* If widget is not visible, skip it. */
-      if (!_gtk_widget_get_visible (child))
+      if (!gtk_widget_should_layout (child))
         continue;
 
       /* Assign the child's size. */
@@ -689,11 +660,7 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      if (GTK_IS_NATIVE (child))
-        continue;
-
-      /* If widget is not visible, skip it. */
-      if (!_gtk_widget_get_visible (child))
+      if (!gtk_widget_should_layout (child))
         continue;
 
       child_size = sizes[i].natural_size;

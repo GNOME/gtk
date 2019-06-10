@@ -13454,3 +13454,28 @@ gtk_widget_get_layout_manager (GtkWidget *widget)
 
   return priv->layout_manager;
 }
+
+/**
+ * gtk_widget_should_layout:
+ * @widget: a widget
+ *
+ * Returns whether @widget should contribute to
+ * the measuring and allocation of its parent.
+ * This is %FALSE for invisible children, but also
+ * for children that have their own surface.
+ *
+ * Returns: %TRUE if child should be included in
+ *   measuring and allocating
+ */
+gboolean
+gtk_widget_should_layout (GtkWidget *widget)
+{
+  if (!_gtk_widget_get_visible (widget))
+    return FALSE;
+
+  if (GTK_IS_NATIVE (widget))
+    return FALSE;
+
+  return TRUE;
+}
+
