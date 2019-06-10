@@ -159,7 +159,6 @@
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkmenutoolbutton.h>
 #include <gtk/gtkmessagedialog.h>
-#include <gtk/gtkmodelbutton.h>
 #include <gtk/gtkmountoperation.h>
 #include <gtk/gtknative.h>
 #include <gtk/gtknativedialog.h>

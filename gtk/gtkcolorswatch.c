@@ -32,7 +32,7 @@
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
-#include "gtkmodelbutton.h"
+#include "gtkmodelbuttonprivate.h"
 #include "gtkpopover.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"

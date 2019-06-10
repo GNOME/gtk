@@ -590,10 +590,6 @@ test_type (gconstpointer data)
 	  g_str_equal (pspec->name, "use-header-bar"))
 	continue;
 
-      if (type == GTK_TYPE_MODEL_BUTTON &&
-          pspec->owner_type == GTK_TYPE_BUTTON)
-        continue;
-
       if (g_type_is_a (type, GTK_TYPE_SHORTCUTS_SHORTCUT) &&
 	  g_str_equal (pspec->name, "accelerator"))
 	continue;

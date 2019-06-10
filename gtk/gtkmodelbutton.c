@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkmodelbutton.h"
+#include "gtkmodelbuttonprivate.h"
 
 #include "gtkbutton.h"
 #include "gtkbuttonprivate.h"
@@ -172,6 +172,30 @@ struct _GtkModelButton
 typedef GtkButtonClass GtkModelButtonClass;
 
 G_DEFINE_TYPE (GtkModelButton, gtk_model_button, GTK_TYPE_BUTTON)
+
+GType
+gtk_button_role_get_type (void)
+{
+  static gsize gtk_button_role_type;
+
+  if (g_once_init_enter (&gtk_button_role_type))
+    {
+      static const GEnumValue values[] = {
+        { GTK_BUTTON_ROLE_NORMAL, "GTK_BUTTON_ROLE_NORMAL", "normal" },
+        { GTK_BUTTON_ROLE_CHECK, "GTK_BUTTON_ROLE_CHECK", "check" },
+        { GTK_BUTTON_ROLE_RADIO, "GTK_BUTTON_ROLE_RADIO", "radio" },
+        { GTK_BUTTON_ROLE_TITLE, "GTK_BUTTON_ROLE_RADIO", "title" },
+        { 0, NULL, NULL }
+      };
+      GType type;
+
+      type = g_enum_register_static (I_("GtkButtonRole"), values);
+
+      g_once_init_leave (&gtk_button_role_type, type);
+    }
+
+  return gtk_button_role_type;
+}
 
 enum
 {

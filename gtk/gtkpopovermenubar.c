@@ -513,7 +513,7 @@ gtk_popover_menu_bar_init (GtkPopoverMenuBar *bar)
 
 /**
  * gtk_popover_menu_bar_new_from_model:
- * @model: a #GMenuModel
+ * @model: (allow-none): a #GMenuModel, or %NULL
  *
  * Creates a #GtkPopoverMenuBar from a #GMenuModel.
  *
@@ -530,7 +530,7 @@ gtk_popover_menu_bar_new_from_model (GMenuModel *model)
 /**
  * gtk_popover_menu_bar_set_menu_model:
  * @bar: a #GtkPopoverMenuBar
- * @model: a #GMenuModel
+ * @model: (allow-none): a #GMenuModel, or %NULL
  *
  * Sets a menu model from which @bar should take
  * its contents.
@@ -552,16 +552,19 @@ gtk_popover_menu_bar_set_menu_model (GtkPopoverMenuBar *bar,
 
       g_clear_pointer (&bar->tracker, gtk_menu_tracker_free);
 
-      muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (bar), TRUE);
-      bar->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (muxer),
-                                           model,
-                                           FALSE,
-                                           TRUE,
-                                           FALSE,
-                                           NULL,
-                                           tracker_insert,
-                                           tracker_remove,
-                                           bar);
+      if (model)
+        {
+          muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (bar), TRUE);
+          bar->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (muxer),
+                                               model,
+                                               FALSE,
+                                               TRUE,
+                                               FALSE,
+                                               NULL,
+                                               tracker_insert,
+                                               tracker_remove,
+                                               bar);
+        }
 
       g_object_notify_by_pspec (G_OBJECT (bar), bar_props[PROP_MENU_MODEL]);
     }

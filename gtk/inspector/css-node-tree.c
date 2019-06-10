@@ -40,7 +40,6 @@
 #include "gtktreeview.h"
 #include "gtktreeselection.h"
 #include "gtktypebuiltins.h"
-#include "gtkmodelbutton.h"
 #include "gtkstack.h"
 
 #include <glib/gi18n-lib.h>
