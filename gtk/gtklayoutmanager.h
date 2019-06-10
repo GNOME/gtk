@@ -108,5 +108,7 @@ void                    gtk_layout_manager_layout_changed       (GtkLayoutManage
 GDK_AVAILABLE_IN_ALL
 GtkLayoutChild *        gtk_layout_manager_get_layout_child     (GtkLayoutManager *manager,
                                                                  GtkWidget        *child);
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_layout_manager_should_layout        (GtkWidget        *child);
 
 G_END_DECLS

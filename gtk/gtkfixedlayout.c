@@ -238,7 +238,7 @@ gtk_fixed_layout_measure (GtkLayoutManager *layout_manager,
       int child_min_opp = 0, child_nat_opp = 0;
       graphene_rect_t min_rect, nat_rect;
 
-      if (!gtk_widget_get_visible (child))
+      if (!gtk_layout_manager_should_layout (child))
         continue;
 
       child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout_manager, child));
@@ -291,7 +291,7 @@ gtk_fixed_layout_allocate (GtkLayoutManager *layout_manager,
     {
       GtkRequisition child_req;
 
-      if (!gtk_widget_get_visible (child))
+      if (!gtk_layout_manager_should_layout (child))
         continue;
 
       child_info = GTK_FIXED_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout_manager, child));

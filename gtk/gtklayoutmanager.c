@@ -76,6 +76,7 @@
 #include "gtklayoutmanagerprivate.h"
 #include "gtklayoutchild.h"
 #include "gtkwidgetprivate.h"
+#include "gtknative.h"
 
 #ifdef G_ENABLE_DEBUG
 #define LAYOUT_MANAGER_WARN_NOT_IMPLEMENTED(m,method)   G_STMT_START {  \
@@ -293,6 +294,20 @@ gtk_layout_manager_measure (GtkLayoutManager *manager,
     *natural_baseline = nat_baseline;
 }
 
+static void
+allocate_native_children (GtkWidget *widget)
+{
+  GtkWidget *child;
+
+  for (child = _gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    {
+      if (GTK_IS_NATIVE (child))
+        gtk_native_check_resize (GTK_NATIVE (child));
+    }
+}
+
 /**
  * gtk_layout_manager_allocate:
  * @manager: a #GtkLayoutManager
@@ -317,6 +332,8 @@ gtk_layout_manager_allocate (GtkLayoutManager *manager,
   g_return_if_fail (GTK_IS_LAYOUT_MANAGER (manager));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (baseline >= -1);
+
+  allocate_native_children (widget);
 
   klass = GTK_LAYOUT_MANAGER_GET_CLASS (manager);
 
@@ -476,4 +493,28 @@ gtk_layout_manager_get_layout_child (GtkLayoutManager *manager,
   g_hash_table_insert (priv->layout_children, child, res);
 
   return res;
+}
+
+/**
+ * gtk_layout_manager_should_layout:
+ * @child: a child of @manager's widget
+ *
+ * Returns whether @child should be included
+ * in measuring and allocating. This is
+ * %FALSE for invisible children, but also
+ * for children that have their own surface.
+ *
+ * Returns: %TRUE if child should be included in
+ *   measuring and allocating
+ */
+gboolean
+gtk_layout_manager_should_layout (GtkWidget *child)
+{
+  if (!_gtk_widget_get_visible (child))
+    return FALSE;
+
+  if (GTK_IS_NATIVE (child))
+    return FALSE;
+
+  return TRUE;
 }
