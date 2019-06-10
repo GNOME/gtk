@@ -172,6 +172,7 @@ gtk_public_sources = files([
   'gtkbox.c',
   'gtkbuildable.c',
   'gtkbuilder.c',
+  'gtkbuilderlistitemfactory.c',
   'gtkbuilderparser.c',
   'gtkbuilderscope.c',
   'gtkbutton.c',
