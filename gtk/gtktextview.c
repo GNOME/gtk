@@ -3635,8 +3635,7 @@ gtk_text_view_finalize (GObject *object)
   if (priv->bottom_window)
     text_window_free (priv->bottom_window);
 
-  if (priv->selection_bubble)
-    gtk_widget_destroy (priv->selection_bubble);
+  g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
 
   if (priv->magnifier_popover)
     gtk_widget_destroy (priv->magnifier_popover);
@@ -8796,8 +8795,7 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
   all_selected = gtk_text_iter_equal (&start, &sel_start) &&
                  gtk_text_iter_equal (&end, &sel_end);
 
-  if (priv->selection_bubble)
-    gtk_widget_destroy (priv->selection_bubble);
+  g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
 
   priv->selection_bubble = gtk_popover_new (GTK_WIDGET (text_view));
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->selection_bubble),
