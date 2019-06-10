@@ -4774,9 +4774,18 @@ popover.menu {
     margin-right: 12px;
   }
 
-  radio.right,
-  check.right {
+  & radio.right,
+  & check.right {
     margin-left: 12px;
     margin-right: 0;
+  }
+
+  & modelbutton:hover {
+    color: $selected_fg_color;
+    background-color: $selected_bg_color;
+  }
+
+  & modelbutton:hover accelerator {
+    color: mix($selected_fg_color, gray, 50%);
   }
 }
