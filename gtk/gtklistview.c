@@ -22,8 +22,9 @@
 #include "gtklistview.h"
 
 #include "gtkadjustment.h"
-#include "gtkintl.h"
+#include "gtkbuilderlistitemfactoryprivate.h"
 #include "gtkfunctionslistitemfactoryprivate.h"
+#include "gtkintl.h"
 #include "gtklistitemmanagerprivate.h"
 #include "gtkrbtreeprivate.h"
 #include "gtkscrollable.h"
@@ -858,6 +859,34 @@ gtk_list_view_set_functions (GtkListView          *self,
   g_return_if_fail (user_data != NULL || user_destroy == NULL);
 
   factory = gtk_functions_list_item_factory_new (setup_func, bind_func, user_data, user_destroy);
+  gtk_list_item_manager_set_factory (self->item_manager, factory);
+  g_object_unref (factory);
+}
+
+void
+gtk_list_view_set_factory_from_bytes (GtkListView *self,
+                                      GBytes      *bytes)
+{
+  GtkListItemFactory *factory;
+
+  g_return_if_fail (GTK_IS_LIST_VIEW (self));
+  g_return_if_fail (bytes != NULL);
+
+  factory = gtk_builder_list_item_factory_new_from_bytes (bytes);
+  gtk_list_item_manager_set_factory (self->item_manager, factory);
+  g_object_unref (factory);
+}
+
+void
+gtk_list_view_set_factory_from_resource (GtkListView *self,
+                                         const char  *resource_path)
+{
+  GtkListItemFactory *factory;
+
+  g_return_if_fail (GTK_IS_LIST_VIEW (self));
+  g_return_if_fail (resource_path != NULL);
+
+  factory = gtk_builder_list_item_factory_new_from_resource (resource_path);
   gtk_list_item_manager_set_factory (self->item_manager, factory);
   g_object_unref (factory);
 }
