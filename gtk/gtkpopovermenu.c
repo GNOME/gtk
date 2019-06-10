@@ -348,8 +348,10 @@ gtk_popover_menu_new (GtkWidget *relative_to)
 
   g_return_val_if_fail (relative_to == NULL || GTK_IS_WIDGET (relative_to), NULL);
 
-  popover = g_object_new (GTK_TYPE_POPOVER_MENU, NULL);
-  gtk_popover_set_relative_to (GTK_POPOVER (popover), relative_to);
+  popover = g_object_new (GTK_TYPE_POPOVER_MENU,
+                          "relative-to", relative_to,
+                          "autohide", TRUE,
+                          NULL);
 
   return popover;
 }
