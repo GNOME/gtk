@@ -5630,30 +5630,78 @@ gtk_widget_real_style_updated (GtkWidget *widget)
 }
 
 static gboolean
+direction_is_forward (GtkDirectionType direction)
+{
+  switch (direction)
+    {
+    case GTK_DIR_TAB_FORWARD:
+    case GTK_DIR_RIGHT:
+    case GTK_DIR_DOWN:
+      return TRUE;
+    case GTK_DIR_TAB_BACKWARD:
+    case GTK_DIR_LEFT:
+    case GTK_DIR_UP:
+      return FALSE;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static gboolean
 gtk_widget_real_focus (GtkWidget         *widget,
                        GtkDirectionType   direction)
 {
-  if (gtk_widget_get_can_focus (widget))
+  GtkWidget *focus;
+
+  /* The easy case: not focusable. Just try the children */
+  if (!gtk_widget_get_can_focus (widget))
     {
-      if (!gtk_widget_is_focus (widget))
+      if (gtk_widget_focus_move (widget, direction))
+        return TRUE;
+
+      return FALSE;
+    }
+
+  /* For focusable widgets, we want to focus the widget
+   * before its children. We differentiate 3 cases:
+   * 1) focus is currently on widget
+   * 2) focus is on some child
+   * 3) focus is outside
+   */
+
+  if (gtk_widget_is_focus (widget))
+    {
+      if (direction_is_forward (direction) &&
+          gtk_widget_focus_move (widget, direction))
+        return TRUE;
+
+      return FALSE;
+    }
+
+  focus = gtk_window_get_focus (GTK_WINDOW (gtk_widget_get_root (widget)));
+
+  if (focus && gtk_widget_is_ancestor (focus, widget))
+    {
+      if (gtk_widget_focus_move (widget, direction))
+        return TRUE;
+
+      if (direction_is_forward (direction))
+        return FALSE;
+      else
         {
           gtk_widget_grab_focus (widget);
           return TRUE;
         }
     }
-  else if (_gtk_widget_get_first_child (widget) == NULL)
+
+  if (!direction_is_forward (direction))
     {
-      /* No children, no possibility to focus anything */
-      return FALSE;
-    }
-  else
-    {
-      /* Try focusing any of the child widgets, depending on the given direction */
       if (gtk_widget_focus_move (widget, direction))
         return TRUE;
     }
 
-  return FALSE;
+  gtk_widget_grab_focus (widget);
+  return TRUE;
 }
 
 static void
