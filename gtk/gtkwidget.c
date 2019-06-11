@@ -4584,6 +4584,9 @@ gtk_widget_allocate (GtkWidget    *widget,
                                                       baseline);
     }
 
+  if (priv->popup_menu)
+    gtk_native_check_resize (GTK_NATIVE (priv->popup_menu));
+
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
 #ifdef G_ENABLE_DEBUG
   if (GTK_DISPLAY_DEBUG_CHECK (_gtk_widget_get_display (widget), GEOMETRY) &&
