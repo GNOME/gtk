@@ -123,10 +123,16 @@ generate_focus_chain (GtkWidget        *window,
         name = g_strdup ("NONE");
 
       if (first && g_str_equal (name, first))
-        break; /* cycle completed */
+        {
+          g_string_append (output, "WRAP\n");
+          break; /* cycle completed */
+        }
 
       if (last && g_str_equal (name, last))
-        break; /* dead end */
+        {
+          g_string_append (output, "STOP\n");
+          break; /* dead end */
+        }
 
       g_string_append_printf (output, "%s\n", name);
 

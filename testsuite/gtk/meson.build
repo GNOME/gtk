@@ -134,6 +134,8 @@ focus_chain_tests = [
   # test     direction
   [ 'basic', 'tab' ],
   [ 'basic', 'tab-backward' ],
+  [ 'basic', 'left' ],
+  [ 'basic', 'right' ],
 ]
 
 focus_chain = executable(
