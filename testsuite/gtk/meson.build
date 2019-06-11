@@ -130,6 +130,35 @@ if add_languages('cpp', required: false)
   endif
 endif
 
+focus_chain_tests = [
+  # test     direction
+  [ 'basic', 'tab' ],
+  [ 'basic', 'tab-backward' ],
+]
+
+focus_chain = executable(
+  'test-focus-chain',
+  ['test-focus-chain.c'],
+  dependencies: libgtk_dep,
+  install: get_option('install-tests'),
+  install_dir: testexecdir
+)
+
+foreach test : focus_chain_tests
+  test(test[0] + ' ' + test[1], focus_chain,
+       args: [ join_paths(meson.current_source_dir(), 'focus-chain', test[0] + '.ui'),
+               join_paths(meson.current_source_dir(), 'focus-chain', test[0] + '.' + test[1]) ],
+       env: [ 'GIO_USE_VOLUME_MONITOR=unix',
+              'GSETTINGS_BACKEND=memory',
+              'GTK_CSD=1',
+              'G_ENABLE_DIAGNOSTIC=0',
+              'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+              'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+             ],
+       suite: [ 'gtk', 'focus' ])
+endforeach
+
+
 if get_option('install-tests')
   foreach t : tests
     test_name = t.get(0)
