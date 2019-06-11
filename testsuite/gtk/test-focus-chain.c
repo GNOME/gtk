@@ -92,9 +92,10 @@ generate_focus_chain (GtkWidget        *window,
 {
   char *first = NULL;
   char *last = NULL;
-  char *name;
+  char *name = NULL;
   GString *output = g_string_new ("");
   GtkWidget *focus;
+  int count = 0;
 
   gtk_widget_show (window);
 
@@ -135,6 +136,7 @@ generate_focus_chain (GtkWidget        *window,
         }
 
       g_string_append_printf (output, "%s\n", name);
+      count++;
 
       if (!first)
         first = g_strdup (name);
@@ -142,9 +144,16 @@ generate_focus_chain (GtkWidget        *window,
       g_free (last);
       last = g_strdup (name);
 
+      if (count == 100)
+        {
+          g_string_append (output, "ABORT\n");
+          break;
+        }
+
       g_free (name);
     }
 
+  g_free (name);
   g_free (first);
   g_free (last);
 
