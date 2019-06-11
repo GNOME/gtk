@@ -5633,6 +5633,12 @@ static gboolean
 gtk_widget_real_focus (GtkWidget         *widget,
                        GtkDirectionType   direction)
 {
+  /* Try focusing any of the child widgets,
+   * depending on the given direction
+   */
+  if (gtk_widget_focus_move (widget, direction))
+    return TRUE;
+
   if (gtk_widget_get_can_focus (widget))
     {
       if (!gtk_widget_is_focus (widget))
@@ -5640,17 +5646,6 @@ gtk_widget_real_focus (GtkWidget         *widget,
           gtk_widget_grab_focus (widget);
           return TRUE;
         }
-    }
-  else if (_gtk_widget_get_first_child (widget) == NULL)
-    {
-      /* No children, no possibility to focus anything */
-      return FALSE;
-    }
-  else
-    {
-      /* Try focusing any of the child widgets, depending on the given direction */
-      if (gtk_widget_focus_move (widget, direction))
-        return TRUE;
     }
 
   return FALSE;
