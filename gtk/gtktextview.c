@@ -4150,6 +4150,9 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   if (priv->magnifier_popover)
     gtk_native_check_resize (GTK_NATIVE (priv->magnifier_popover));
+
+  if (priv->popup_menu)
+    gtk_native_check_resize (GTK_NATIVE (priv->popup_menu));
 }
 
 static void
