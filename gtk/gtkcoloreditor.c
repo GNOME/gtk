@@ -433,6 +433,9 @@ gtk_color_editor_dispose (GObject *object)
 
   dismiss_current_popup (editor);
   g_clear_object (&editor->priv->picker);
+  g_clear_object (&editor->priv->h_adj);
+  g_clear_object (&editor->priv->s_adj);
+  g_clear_object (&editor->priv->v_adj);
 
   G_OBJECT_CLASS (gtk_color_editor_parent_class)->dispose (object);
 }
