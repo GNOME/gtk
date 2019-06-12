@@ -1444,7 +1444,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             P_("Handle Context Menu"),
                             P_("Whether the context menu should be handled automatically"),
                             TRUE,
-                            GTK_PARAM_READWRITE);
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, widget_props);
 
@@ -2389,7 +2389,11 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_context_menu (widget, g_value_get_object (value));
       break;
     case PROP_HANDLE_CONTEXT_MENU:
-      priv->handle_context_menu = g_value_get_boolean (value);
+      if (priv->handle_context_menu != g_value_get_boolean (value))
+        {
+          priv->handle_context_menu = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
