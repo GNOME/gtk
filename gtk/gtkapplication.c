@@ -614,7 +614,9 @@ gtk_application_finalize (GObject *object)
 static const gchar org_gnome_Sysprof3_Profiler_xml[] =
   "<node>"
     "<interface name='org.gnome.Sysprof3.Profiler'>"
+      "<property name='Capabilities' type='a{sv}' access='read'/>"
       "<method name='Start'>"
+        "<arg type='a{sv}' name='options' direction='in'/>"
         "<arg type='h' name='fd' direction='in'/>"
       "</method>"
       "<method name='Stop'>"
@@ -638,6 +640,7 @@ sysprof_profiler_method_call (GDBusConnection       *connection,
     {
       GDBusMessage *message;
       GUnixFDList *fd_list;
+      GVariant *options;
       int fd = -1;
       int idx;
 
@@ -650,7 +653,7 @@ sysprof_profiler_method_call (GDBusConnection       *connection,
           return;
         }
 
-      g_variant_get (parameters, "(h)", &idx);
+      g_variant_get (parameters, "(@a{sv}h)", &options, &idx);
 
       message = g_dbus_method_invocation_get_message (invocation);
       fd_list = g_dbus_message_get_unix_fd_list (message);
@@ -658,6 +661,8 @@ sysprof_profiler_method_call (GDBusConnection       *connection,
         fd = g_unix_fd_list_get (fd_list, idx, NULL);
 
       gdk_profiler_start (fd);
+
+      g_variant_unref (options);
     }
   else if (strcmp (method_name, "Stop") == 0)
     {
