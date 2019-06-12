@@ -696,6 +696,10 @@ is_realized_popup (GdkSurface *surface)
           impl->display_server.zxdg_popup_v6);
 }
 
+static void gdk_wayland_surface_show (GdkSurface *surface,
+                                      gboolean    already_mapped);
+static void gdk_wayland_surface_hide (GdkSurface *surface);
+
 static void
 gdk_wayland_surface_maybe_configure (GdkSurface *surface,
                                      int         width,
@@ -721,12 +725,12 @@ gdk_wayland_surface_maybe_configure (GdkSurface *surface,
   is_visible = gdk_surface_is_visible (surface);
 
   if (is_xdg_popup && is_visible && !impl->initial_configure_received)
-    gdk_surface_hide (surface);
+    gdk_wayland_surface_hide (surface);
 
   gdk_wayland_surface_configure (surface, width, height, scale);
 
   if (is_xdg_popup && is_visible && !impl->initial_configure_received)
-    gdk_surface_show (surface);
+    gdk_wayland_surface_show (surface, FALSE);
 }
 
 static void
