@@ -28,6 +28,8 @@
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkmain.h"
+#include "gtktypebuiltins.h"
+#include "gtkbindings.h"
 
 
 /**
@@ -307,12 +309,48 @@ gtk_popover_menu_focus (GtkWidget        *widget,
   return FALSE;
 }
 
+
+static void
+add_tab_bindings (GtkBindingSet    *binding_set,
+                  GdkModifierType   modifiers,
+                  GtkDirectionType  direction)
+{
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Tab, modifiers,
+                                "move-focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Tab, modifiers,
+                                "move-focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+}
+
+static void
+add_arrow_bindings (GtkBindingSet    *binding_set,
+                    guint             keysym,
+                    GtkDirectionType  direction)
+{
+  guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
+ 
+  gtk_binding_entry_add_signal (binding_set, keysym, 0,
+                                "move-focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_binding_entry_add_signal (binding_set, keysym, GDK_CONTROL_MASK,
+                                "move-focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_binding_entry_add_signal (binding_set, keypad_keysym, 0,
+                                "move-focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+  gtk_binding_entry_add_signal (binding_set, keypad_keysym, GDK_CONTROL_MASK,
+                                "move-focus", 1,
+                                GTK_TYPE_DIRECTION_TYPE, direction);
+}
+
 static void
 gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
 {
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkBindingSet *binding_set;
 
   object_class->set_property = gtk_popover_menu_set_property;
   object_class->get_property = gtk_popover_menu_get_property;
@@ -331,6 +369,18 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                                         P_("The name of the visible submenu"),
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  binding_set = gtk_binding_set_by_class (klass);
+
+  add_arrow_bindings (binding_set, GDK_KEY_Up, GTK_DIR_UP);
+  add_arrow_bindings (binding_set, GDK_KEY_Down, GTK_DIR_DOWN);
+  add_arrow_bindings (binding_set, GDK_KEY_Left, GTK_DIR_LEFT);
+  add_arrow_bindings (binding_set, GDK_KEY_Right, GTK_DIR_RIGHT);
+
+  add_tab_bindings (binding_set, 0, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
+  add_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+  add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 }
 
 /**
