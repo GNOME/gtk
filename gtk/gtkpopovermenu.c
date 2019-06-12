@@ -381,6 +381,17 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
   add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
   add_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
   add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0,
+                                "activate-default", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_ISO_Enter, 0,
+                                "activate-default", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0,
+                                "activate-default", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_space, 0,
+                                "activate-default", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Space, 0,
+                                "activate-default", 0);
 }
 
 /**
