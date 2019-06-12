@@ -774,7 +774,8 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
   /**
    * GtkOverlay:pass-through:
    *
-   * Pass through input, does not affect main child.
+   * Whether to pass input through the overlay child to the main child.
+   * (Of course, this has no effect when set on the main child itself.)
    *
    * Since: 3.18
    */
@@ -786,7 +787,8 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
   /**
    * GtkOverlay:index:
    *
-   * The index of the overlay in the parent, -1 for the main child.
+   * The index of the overlay child in the parent (or -1 for the main child).
+   * See gtk_overlay_reorder_overlay().
    *
    * Since: 3.18
    */
