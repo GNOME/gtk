@@ -166,6 +166,7 @@ typedef struct {
 
 enum {
   CLOSED,
+  ACTIVATE_DEFAULT,
   LAST_SIGNAL
 };
 
@@ -489,11 +490,8 @@ allocate_contents (GtkGizmo *gizmo,
 }
 
 static void
-activate_default_cb (GSimpleAction *action,
-                     GVariant      *parameter,
-                     gpointer       data)
+gtk_popover_activate_default (GtkPopover *popover)
 {
-  GtkPopover *popover = data;
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *focus_widget;
 
@@ -507,6 +505,14 @@ activate_default_cb (GSimpleAction *action,
     gtk_widget_activate (priv->default_widget);
   else if (focus_widget && gtk_widget_is_sensitive (focus_widget))
     gtk_widget_activate (focus_widget);
+}
+
+static void
+activate_default_cb (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       data)
+{
+  gtk_popover_activate_default (GTK_POPOVER (data));
 }
 
 static void
@@ -1353,6 +1359,8 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   container_class->add = gtk_popover_add;
   container_class->remove = gtk_popover_remove;
 
+  klass->activate_default = gtk_popover_activate_default;
+
   properties[PROP_RELATIVE_TO] =
       g_param_spec_object ("relative-to",
                            P_("Relative to"),
@@ -1402,6 +1410,16 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkPopoverClass, closed),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE,
+                  0);
+
+  signals[ACTIVATE_DEFAULT] =
+    g_signal_new (I_("activate-default"),
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkPopoverClass, activate_default),
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE,

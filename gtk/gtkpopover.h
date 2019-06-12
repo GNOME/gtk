@@ -48,7 +48,8 @@ struct _GtkPopoverClass
 {
   GtkBinClass parent_class;
 
-  void (* closed) (GtkPopover *popover);
+  void (* closed)           (GtkPopover *popover);
+  void (* activate_default) (GtkPopover *popover);
 
   /*< private >*/
 
