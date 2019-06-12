@@ -57,7 +57,7 @@ gtk_bin_layout_measure (GtkLayoutManager *layout_manager,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      if (gtk_widget_get_visible (child))
+      if (gtk_widget_should_layout (child))
         {
           int child_min = 0;
           int child_nat = 0;
@@ -92,7 +92,7 @@ gtk_bin_layout_allocate (GtkLayoutManager *layout_manager,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      if (child && gtk_widget_get_visible (child))
+      if (child && gtk_widget_should_layout (child))
         gtk_widget_allocate (child, width, height, baseline, NULL);
     }
 }

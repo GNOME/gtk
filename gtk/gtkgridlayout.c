@@ -640,7 +640,7 @@ grid_request_non_spanning (GridRequest    *request,
       GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
       GridChildAttach *attach;
 
-      if (!_gtk_widget_get_visible (child))
+      if (!gtk_widget_should_layout (child))
         continue;
 
       attach = &grid_child->attach[orientation];
@@ -778,7 +778,7 @@ grid_request_spanning (GridRequest    *request,
     {
       GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
 
-      if (!_gtk_widget_get_visible (child))
+      if (!gtk_widget_should_layout (child))
         continue;
 
       attach = &grid_child->attach[orientation];
@@ -917,7 +917,7 @@ grid_request_compute_expand (GridRequest    *request,
     {
       GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
 
-      if (!_gtk_widget_get_visible (child))
+      if (!gtk_widget_should_layout (child))
         continue;
 
       attach = &grid_child->attach[orientation];
@@ -939,7 +939,7 @@ grid_request_compute_expand (GridRequest    *request,
     {
       GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
 
-      if (!_gtk_widget_get_visible (child))
+      if (!gtk_widget_should_layout (child))
         continue;
 
       attach = &grid_child->attach[orientation];
@@ -1497,7 +1497,7 @@ grid_request_allocate_children (GridRequest *request,
     {
       GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
 
-      if (!_gtk_widget_get_visible (child))
+      if (!gtk_widget_should_layout (child))
         continue;
 
       allocate_child (request, GTK_ORIENTATION_HORIZONTAL, child, grid_child, &x, &width, &ignore);

@@ -252,6 +252,9 @@ gtk_overlay_layout_measure (GtkLayoutManager *layout_manager,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
+      if (!gtk_widget_should_layout (child))
+        continue;
+
       child_info = GTK_OVERLAY_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (layout_manager, child));
 
       if (child == main_widget || child_info->measure)
@@ -376,7 +379,7 @@ gtk_overlay_child_allocate (GtkOverlay            *overlay,
 {
   GtkAllocation child_allocation;
 
-  if (!gtk_widget_get_visible (widget))
+  if (!gtk_widget_should_layout (widget))
     return;
 
   gtk_overlay_compute_child_allocation (overlay, widget, child, &child_allocation);

@@ -1026,6 +1026,9 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_snapshot_child       (GtkWidget   *widget,
                                                          GtkWidget   *child,
                                                          GtkSnapshot *snapshot);
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_widget_should_layout        (GtkWidget   *widget);
+
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)
