@@ -190,6 +190,24 @@ enter_cb (GtkEventController *controller,
   set_active_item (bar, GTK_POPOVER_MENU_BAR_ITEM (target), FALSE);
 }
 
+static void
+leave_cb (GtkEventController *controller,
+          GdkCrossingMode     mode,
+          GdkNotifyType       type,
+          gpointer            data)
+{
+  GtkWidget *target;
+  GtkPopoverMenuBar *bar;
+
+  target = gtk_event_controller_get_widget (controller);
+
+  bar = GTK_POPOVER_MENU_BAR (gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU_BAR));
+
+  if (bar->active_item &&
+      !gtk_widget_get_mapped (GTK_WIDGET (bar->active_item->popover)))
+    set_active_item (bar, NULL, FALSE);
+}
+
 static gboolean
 gtk_popover_menu_bar_focus (GtkWidget        *widget,
                             GtkDirectionType  direction)
@@ -509,6 +527,12 @@ gtk_popover_menu_bar_class_init (GtkPopoverMenuBarClass *klass)
 static void
 gtk_popover_menu_bar_init (GtkPopoverMenuBar *bar)
 {
+  GtkEventController *controller;
+
+  controller = gtk_event_controller_motion_new ();
+  gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
+  g_signal_connect (controller, "leave", G_CALLBACK (leave_cb), NULL);
+  gtk_widget_add_controller (GTK_WIDGET (bar), controller);
 }
 
 /**
