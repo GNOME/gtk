@@ -253,6 +253,7 @@ gtk_print_operation_init (GtkPrintOperation *operation)
    * by the job number.
    */
   priv->job_name = g_strdup_printf (_("%s job #%d"), appname, ++job_nr);
+  operation->priv = priv;
 }
 
 static void
