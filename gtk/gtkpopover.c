@@ -639,12 +639,9 @@ gtk_popover_unrealize (GtkWidget *widget)
 
 static void
 gtk_popover_move_focus (GtkWidget        *widget,
-                        GtkDirectionType  dir)
+                        GtkDirectionType  direction)
 {
-  gtk_widget_child_focus (widget, dir);
-
-  if (!gtk_widget_get_focus_child (widget))
-    gtk_root_set_focus (GTK_ROOT (widget), NULL);
+  g_signal_emit_by_name (gtk_widget_get_root (widget), "move-focus", direction);
 }
 
 static void
