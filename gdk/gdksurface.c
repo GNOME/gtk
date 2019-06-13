@@ -29,6 +29,7 @@
 
 #include "gdksurface.h"
 
+#include "gdkeventsprivate.h"
 #include "gdkrectangle.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
@@ -4056,9 +4057,122 @@ rewrite_event_for_toplevel (GdkEvent *event)
   g_set_object (&event->any.surface, surface);
 }
 
+#ifdef G_ENABLE_DEBUG
+static void
+add_event_mark (GdkEvent *event,
+                gint64    time,
+                guint64   duration)
+{
+  gchar *message = NULL;
+  const gchar *kind;
+  GEnumValue *value;
+  GdkEventType event_type;
+
+  event_type = gdk_event_get_event_type (event);
+  value = g_enum_get_value (g_type_class_peek_static (GDK_TYPE_EVENT_TYPE), event_type);
+  kind = value ? value->value_nick : NULL;
+
+  switch (event_type)
+    {
+    case GDK_MOTION_NOTIFY:
+      {
+        GdkEventMotion *motion = (GdkEventMotion *)event;
+        message = g_strdup_printf ("{x=%lf, y=%lf, state=0x%x}",
+                                   motion->x, motion->y, motion->state);
+        break;
+      }
+
+    case GDK_BUTTON_PRESS:
+      {
+        GdkEventButton *button = (GdkEventButton *)event;
+        message = g_strdup_printf ("{button=%u, x=%lf, y=%lf, state=0x%x}",
+                                   button->button, button->x, button->y, button->state);
+        break;
+      }
+
+    case GDK_BUTTON_RELEASE:
+      {
+        GdkEventButton *button = (GdkEventButton *)event;
+        message = g_strdup_printf ("{button=%u, x=%lf, y=%lf, state=0x%x}",
+                                   button->button, button->x, button->y, button->state);
+        break;
+      }
+
+    case GDK_KEY_PRESS:
+      {
+        GdkEventKey *key = (GdkEventKey *)event;
+        message = g_strdup_printf ("{keyval=%u, state=0x%x, hardware_keycode=%u key_scancode=%u group=%u is_modifier=%u}",
+                                   key->keyval, key->state, key->hardware_keycode, key->key_scancode, key->group, key->is_modifier);
+        break;
+      }
+
+    case GDK_KEY_RELEASE:
+      {
+        GdkEventKey *key = (GdkEventKey *)event;
+        message = g_strdup_printf ("{keyval=%u, state=0x%x, hardware_keycode=%u key_scancode=%u group=%u is_modifier=%u}",
+                                   key->keyval, key->state, key->hardware_keycode, key->key_scancode, key->group, key->is_modifier);
+        break;
+      }
+
+    case GDK_CONFIGURE:
+      {
+        GdkEventConfigure *config = (GdkEventConfigure *)event;
+        message = g_strdup_printf ("{x=%d, y=%d, width=%d, height=%d}",
+                                   config->x, config->y, config->width, config->height);
+        break;
+      }
+
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+    case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_PINCH:
+    case GDK_SCROLL:
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DROP_START:
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+    case GDK_PAD_BUTTON_PRESS:
+    case GDK_PAD_BUTTON_RELEASE:
+    case GDK_PAD_RING:
+    case GDK_PAD_STRIP:
+    case GDK_PAD_GROUP_MODE:
+    case GDK_GRAB_BROKEN:
+    case GDK_DELETE:
+    case GDK_DESTROY:
+    case GDK_FOCUS_CHANGE:
+    case GDK_PROXIMITY_IN:
+    case GDK_PROXIMITY_OUT:
+    case GDK_NOTHING:
+    case GDK_EVENT_LAST:
+    default:
+      break;
+    }
+
+  if (kind != NULL && message != NULL)
+    {
+      gchar *full_message = g_strdup_printf ("%s %s", kind, message);
+      gdk_profiler_add_mark (time * 1000L, duration * 1000L, "event", full_message);
+      g_free (full_message);
+    }
+  else
+    {
+      gdk_profiler_add_mark (time * 1000L, duration * 1000L, "event", message);
+    }
+
+  g_free (message);
+}
+#endif
+
 gboolean
 gdk_surface_handle_event (GdkEvent *event)
 {
+#ifdef G_ENABLE_DEBUG
+  gint64 begin_time = g_get_monotonic_time ();
+#endif
   gboolean handled = FALSE;
 
   if (check_autohide (event))
@@ -4076,6 +4190,11 @@ gdk_surface_handle_event (GdkEvent *event)
         rewrite_event_for_toplevel (event);
       g_signal_emit (gdk_event_get_surface (event), signals[EVENT], 0, event, &handled);
     }
+
+#ifdef G_ENABLE_DEBUG
+  if (gdk_profiler_is_running ())
+    add_event_mark (event, begin_time, g_get_monotonic_time () - begin_time);
+#endif
 
   return handled;
 }
