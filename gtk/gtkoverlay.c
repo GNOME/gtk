@@ -46,6 +46,9 @@
  * More complicated placement of overlays is possible by connecting
  * to the #GtkOverlay::get-child-position signal.
  *
+ * An overlay’s minimum and natural sizes are those of its main child. The sizes
+ * of overlay children are not considered when measuring these preferred sizes.
+ *
  * # GtkOverlay as GtkBuildable
  *
  * The GtkOverlay implementation of the GtkBuildable interface
