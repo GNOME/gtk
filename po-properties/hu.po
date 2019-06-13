@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-properties master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-01 11:37+0000\n"
-"PO-Revision-Date: 2019-06-01 14:12+0200\n"
+"POT-Creation-Date: 2019-06-13 07:17+0000\n"
+"PO-Revision-Date: 2019-06-13 22:16+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -1468,43 +1468,43 @@ msgstr "A felületi elem alap szövege"
 msgid "The default text appearing when there are no applications"
 msgstr "A megjelenítendő alapszöveg, ha nincsenek alkalmazások"
 
-#: gtk/gtkapplication.c:678
+#: gtk/gtkapplication.c:833
 msgid "Register session"
 msgstr "Munkamenet regisztrálása"
 
-#: gtk/gtkapplication.c:679
+#: gtk/gtkapplication.c:834
 msgid "Register with the session manager"
 msgstr "Regisztrálás a munkamenet-kezelőnél"
 
-#: gtk/gtkapplication.c:696
+#: gtk/gtkapplication.c:851
 msgid "Screensaver Active"
 msgstr "Képernyővédő aktív"
 
-#: gtk/gtkapplication.c:697
+#: gtk/gtkapplication.c:852
 msgid "Whether the screensaver is active"
 msgstr "A képernyővédő aktív-e"
 
-#: gtk/gtkapplication.c:703
+#: gtk/gtkapplication.c:858
 msgid "Application menu"
 msgstr "Alkalmazásmenü"
 
-#: gtk/gtkapplication.c:704
+#: gtk/gtkapplication.c:859
 msgid "The GMenuModel for the application menu"
 msgstr "Az alkalmazásmenü GMenuModel-je"
 
-#: gtk/gtkapplication.c:710
+#: gtk/gtkapplication.c:865
 msgid "Menubar"
 msgstr "Menüsáv"
 
-#: gtk/gtkapplication.c:711
+#: gtk/gtkapplication.c:866
 msgid "The GMenuModel for the menubar"
 msgstr "A menüsáv GMenuModel-je"
 
-#: gtk/gtkapplication.c:717
+#: gtk/gtkapplication.c:872
 msgid "Active window"
 msgstr "Aktív ablak"
 
-#: gtk/gtkapplication.c:718
+#: gtk/gtkapplication.c:873
 msgid "The window which most recently had focus"
 msgstr "A fókusszal legutóbb rendelkező ablak"
 
@@ -4919,7 +4919,7 @@ msgstr "Popover"
 
 #: gtk/gtkmenubutton.c:565
 msgid "The popover"
-msgstr "a popover"
+msgstr "A popover"
 
 #: gtk/gtkmenu.c:640
 msgid "The currently selected menu item"
@@ -6714,7 +6714,7 @@ msgstr "Átfedő görgetés"
 
 #: gtk/gtkscrolledwindow.c:715
 msgid "Overlay scrolling mode"
-msgstr "Átfedő görgetés mód."
+msgstr "Átfedő görgetés mód"
 
 #: gtk/gtkscrolledwindow.c:728
 msgid "Maximum Content Width"
@@ -7287,7 +7287,7 @@ msgstr "Az alkalmazás a sötét témát kedveli"
 
 #: gtk/gtksettings.c:1337
 msgid "Whether the application prefers to have a dark theme."
-msgstr "Az alkalmazás a sötét témát kedveli-e?"
+msgstr "Az alkalmazás a sötét témát részesíti-e előnyben."
 
 #: gtk/gtksettings.c:1358
 msgid "Show button images"
@@ -7515,7 +7515,7 @@ msgstr "Megjelenjen-e a kurzor a szövegben"
 
 #: gtk/gtksettings.c:1783 gtk/gtksettings.c:1784
 msgid "Whether to use overlay scrollbars"
-msgstr "Használjon-e rátét görgetősávokat"
+msgstr "Használjon-e átfedő görgetősávokat"
 
 #: gtk/gtkshortcutlabel.c:479 gtk/gtkshortcutsshortcut.c:536
 msgid "Accelerator"
