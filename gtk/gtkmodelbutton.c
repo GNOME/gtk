@@ -31,7 +31,7 @@
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
 #include "gtkstack.h"
-#include "gtkpopover.h"
+#include "gtkpopovermenuprivate.h"
 #include "gtkintl.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcsstypesprivate.h"
@@ -41,6 +41,8 @@
 #include "gtksizegroup.h"
 #include "gtkaccellabelprivate.h"
 #include "gtkactionable.h"
+#include "gtkeventcontrollermotion.h"
+#include "gtkeventcontrollerkey.h"
 
 /**
  * SECTION:gtkmodelbutton
@@ -1128,8 +1130,74 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
 }
 
 static void
+enter_cb (GtkEventController *controller,
+          double              x,
+          double              y,
+          GdkCrossingMode     mode,
+          GdkNotifyType       type,
+          gpointer            data)
+{
+  GtkWidget *target;
+  GtkWidget *popover;
+  gboolean is;
+  gboolean contains;
+
+  target = gtk_event_controller_get_widget (controller);
+  popover = gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU);
+
+  g_object_get (controller,
+                "is-pointer-focus", &is,
+                "contains-pointer-focus", &contains,
+                NULL);
+
+  if (popover && (is || contains))
+    gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (popover), target);
+}
+
+static void
+leave_cb (GtkEventController *controller,
+          GdkCrossingMode     mode,
+          GdkNotifyType       type,
+          gpointer            data)
+{
+  GtkWidget *target;
+  GtkWidget *popover;
+  gboolean is;
+  gboolean contains;
+
+  target = gtk_event_controller_get_widget (controller);
+  popover = gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU);
+
+  g_object_get (controller,
+                "is-pointer-focus", &is,
+                "contains-pointer-focus", &contains,
+                NULL);
+
+  if (popover && !(is || contains))
+    gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (popover), NULL);
+}
+
+static void
+focus_in_cb (GtkEventController *controller,
+             GdkCrossingMode     mode,
+             GdkNotifyType       type,
+             gpointer            data)
+{
+  GtkWidget *target;
+  GtkWidget *popover;
+
+  target = gtk_event_controller_get_widget (controller);
+  popover = gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU);
+
+  if (popover)
+    gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (popover), target);
+}
+
+static void
 gtk_model_button_init (GtkModelButton *button)
 {
+  GtkEventController *controller;
+
   button->role = GTK_BUTTON_ROLE_NORMAL;
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
   button->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
@@ -1161,6 +1229,15 @@ gtk_model_button_init (GtkModelButton *button)
   gtk_widget_hide (button->start_indicator);
   gtk_widget_hide (button->end_indicator);
   update_node_ordering (button);
+
+  controller = gtk_event_controller_motion_new ();
+  g_signal_connect (controller, "enter", G_CALLBACK (enter_cb), NULL);
+  g_signal_connect (controller, "leave", G_CALLBACK (leave_cb), NULL);
+  gtk_widget_add_controller (GTK_WIDGET (button), controller);
+
+  controller = gtk_event_controller_key_new ();
+  g_signal_connect (controller, "focus-in", G_CALLBACK (focus_in_cb), NULL);
+  gtk_widget_add_controller (GTK_WIDGET (button), controller);
 }
 
 /**
