@@ -1434,3 +1434,17 @@ gtk_menu_button_popdown (GtkMenuButton *menu_button)
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->button), FALSE);
 }
+
+void
+gtk_menu_button_add_child (GtkMenuButton *menu_button,
+                           GtkWidget     *new_child)
+{
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
+  GtkWidget *child;
+
+  child = gtk_bin_get_child (GTK_BIN (priv->button));
+  if (child)
+    gtk_container_remove (GTK_CONTAINER (priv->button), child);
+
+  gtk_container_add (GTK_CONTAINER (priv->button), new_child);
+}

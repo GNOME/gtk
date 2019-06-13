@@ -1657,11 +1657,19 @@ headerbar {
     min-height: 28px;
     padding: 4px;
 
-    button.titlebutton {
+    button.titlebutton,
+    menubutton.titlebutton {
       min-height: 26px;
       min-width: 26px;
       margin: 0;
       padding: 0;
+    }
+
+    menubutton.titlebutton button {
+      min-height: 20px;
+      min-width: 20px;
+      margin: 0;
+      padding: 4px;
     }
   }
 

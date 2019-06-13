@@ -32,6 +32,9 @@ void       _gtk_menu_button_set_popup_with_func (GtkMenuButton                 *
                                                  GtkMenuButtonShowMenuCallback  func,
                                                  gpointer                       user_data);
 
+void   gtk_menu_button_add_child (GtkMenuButton *button,
+                                  GtkWidget     *child);
+
 G_END_DECLS
 
 #endif /* __GTK_MENU_BUTTON_PRIVATE_H__ */

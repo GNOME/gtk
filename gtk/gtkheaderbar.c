@@ -37,6 +37,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtknative.h"
+#include "gtkmenubuttonprivate.h"
 
 #include "a11y/gtkcontaineraccessible.h"
 
@@ -388,7 +389,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "appmenu");
                   image = gtk_image_new ();
-                  gtk_container_add (GTK_CONTAINER (button), image);
+                  gtk_menu_button_add_child (GTK_MENU_BUTTON (button), image);
                   gtk_widget_set_can_focus (button, FALSE);
 
                   accessible = gtk_widget_get_accessible (button);
