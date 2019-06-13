@@ -17,6 +17,8 @@
 
 #include "config.h"
 #include "gtkpopovermenu.h"
+#include "gtkpopovermenuprivate.h"
+
 #include "gtkstack.h"
 #include "gtkstylecontext.h"
 #include "gtkintl.h"
@@ -120,6 +122,8 @@ typedef struct _GtkPopoverMenuClass GtkPopoverMenuClass;
 struct _GtkPopoverMenu
 {
   GtkPopover parent_instance;
+
+  GtkWidget *active_item;
 };
 
 struct _GtkPopoverMenuClass
@@ -132,6 +136,25 @@ enum {
 };
 
 G_DEFINE_TYPE (GtkPopoverMenu, gtk_popover_menu, GTK_TYPE_POPOVER)
+
+void
+gtk_popover_menu_set_active_item (GtkPopoverMenu *menu,
+                                  GtkWidget      *item)
+{
+  if (menu->active_item != item)
+    {
+      if (menu->active_item)
+        gtk_widget_unset_state_flags (menu->active_item, GTK_STATE_FLAG_SELECTED);
+
+      menu->active_item = item;
+
+      if (menu->active_item)
+        {
+          gtk_widget_set_state_flags (menu->active_item, GTK_STATE_FLAG_SELECTED, FALSE);
+          gtk_widget_grab_focus (menu->active_item);
+       }
+    }
+}
 
 static void
 visible_submenu_changed (GObject        *object,
