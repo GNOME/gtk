@@ -226,6 +226,7 @@ gtk/gtkplacessidebar.c
 gtk/gtkplacesview.c
 gtk/gtkplacesviewrow.c
 gtk/gtkpopover.c
+gtk/gtkpopovermenubar.c
 gtk/gtkpopovermenu.c
 gtk/gtkprintbackend.c
 gtk/gtkprinter.c
