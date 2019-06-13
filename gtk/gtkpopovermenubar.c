@@ -60,7 +60,6 @@
 #include "gtkmarshalers.h"
 #include "gtkstylecontext.h"
 #include "gtkgestureclick.h"
-#include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkactionmuxerprivate.h"
 #include "gtkmenutrackerprivate.h"
@@ -130,21 +129,13 @@ set_active_item (GtkPopoverMenuBar     *bar,
 
   if (changed)
     {
-      GtkStyleContext *context;
-
       if (bar->active_item)
-        {
-          context = gtk_widget_get_style_context (GTK_WIDGET (bar->active_item));
-          gtk_style_context_remove_class (context, "active");
-        }
+        gtk_widget_unset_state_flags (GTK_WIDGET (bar->active_item), GTK_STATE_FLAG_SELECTED);
 
       bar->active_item = item;
 
       if (bar->active_item)
-        {
-          context = gtk_widget_get_style_context (GTK_WIDGET (bar->active_item));
-          gtk_style_context_add_class (context, "active");
-        }
+        gtk_widget_set_state_flags (GTK_WIDGET (bar->active_item), GTK_STATE_FLAG_SELECTED, FALSE);
     }
 
   if (bar->active_item)
@@ -214,6 +205,7 @@ gtk_popover_menu_bar_focus (GtkWidget        *widget,
 {
   GtkPopoverMenuBar *bar = GTK_POPOVER_MENU_BAR (widget);
   GtkWidget *next;
+
   if (bar->active_item &&
       gtk_widget_get_mapped (GTK_WIDGET (bar->active_item->popover)))
     {
