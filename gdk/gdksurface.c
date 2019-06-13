@@ -29,6 +29,7 @@
 
 #include "gdksurface.h"
 
+#include "gdkeventsprivate.h"
 #include "gdkrectangle.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
@@ -4056,9 +4057,181 @@ rewrite_event_for_toplevel (GdkEvent *event)
   g_set_object (&event->any.surface, surface);
 }
 
+#ifdef G_ENABLE_DEBUG
+static void
+add_event_mark (GdkEvent *event,
+                gint64    time,
+                guint64   duration)
+{
+  g_autofree gchar *message = NULL;
+  const gchar *kind = NULL;
+
+  switch (gdk_event_get_event_type (event))
+    {
+    case GDK_MOTION_NOTIFY:
+      {
+        GdkEventMotion *motion = (GdkEventMotion *)event;
+        message = g_strdup_printf ("motion-notify {x=%lf, y=%lf, state=0x%x}",
+                                   motion->x, motion->y, motion->state);
+        break;
+      }
+
+    case GDK_BUTTON_PRESS:
+      {
+        GdkEventButton *button = (GdkEventButton *)event;
+        message = g_strdup_printf ("button-press {button=%u, x=%lf, y=%lf, state=0x%x}",
+                                   button->button, button->x, button->y, button->state);
+        break;
+      }
+
+    case GDK_BUTTON_RELEASE:
+      {
+        GdkEventButton *button = (GdkEventButton *)event;
+        message = g_strdup_printf ("button-release {button=%u, x=%lf, y=%lf, state=0x%x}",
+                                   button->button, button->x, button->y, button->state);
+        break;
+      }
+
+    case GDK_KEY_PRESS:
+      {
+        GdkEventKey *key = (GdkEventKey *)event;
+        message = g_strdup_printf ("key-press {keyval=%u, state=0x%x, hardware_keycode=%u key_scancode=%u group=%u is_modifier=%u}",
+                                   key->keyval, key->state, key->hardware_keycode, key->key_scancode, key->group, key->is_modifier);
+        break;
+      }
+
+    case GDK_KEY_RELEASE:
+      {
+        GdkEventKey *key = (GdkEventKey *)event;
+        message = g_strdup_printf ("key-release{keyval=%u, state=0x%x, hardware_keycode=%u key_scancode=%u group=%u is_modifier=%u}",
+                                   key->keyval, key->state, key->hardware_keycode, key->key_scancode, key->group, key->is_modifier);
+        break;
+      }
+
+    case GDK_ENTER_NOTIFY:
+      kind = "enter-notify";
+      break;
+
+    case GDK_LEAVE_NOTIFY:
+      kind = "leave-notify";
+      break;
+
+    case GDK_TOUCHPAD_SWIPE:
+      kind = "touchpad-swipe";
+      break;
+
+    case GDK_TOUCHPAD_PINCH:
+      kind = "touchpad-pinch";
+      break;
+
+    case GDK_CONFIGURE:
+      {
+        GdkEventConfigure *config = (GdkEventConfigure *)event;
+        message = g_strdup_printf ("configure {x=%d, y=%d, width=%d, height=%d}",
+                                   config->x, config->y, config->width, config->height);
+        break;
+      }
+
+    case GDK_SCROLL:
+      kind = "scroll";
+      break;
+
+    case GDK_DRAG_ENTER:
+      kind = "drag-enter";
+      break;
+
+    case GDK_DRAG_LEAVE:
+      kind = "drag-leave";
+      break;
+
+    case GDK_DRAG_MOTION:
+      kind = "drag-motion";
+      break;
+
+    case GDK_DROP_START:
+      kind = "drop-start";
+      break;
+
+    case GDK_TOUCH_BEGIN:
+      kind = "touch-begin";
+      break;
+
+    case GDK_TOUCH_UPDATE:
+      kind = "touch-update";
+      break;
+
+    case GDK_TOUCH_END:
+      kind = "touch-end";
+      break;
+
+    case GDK_TOUCH_CANCEL:
+      kind = "touch-cancel";
+      break;
+
+    case GDK_PAD_BUTTON_PRESS:
+      kind = "pad-button-press";
+      break;
+
+    case GDK_PAD_BUTTON_RELEASE:
+      kind = "pad-button-release";
+      break;
+
+    case GDK_PAD_RING:
+      kind = "pad-ring";
+      break;
+
+    case GDK_PAD_STRIP:
+      kind = "pad-strip";
+      break;
+
+    case GDK_PAD_GROUP_MODE:
+      kind = "pad-group-mode";
+      break;
+
+    case GDK_GRAB_BROKEN:
+      kind = "grab-broken";
+      break;
+
+    case GDK_DELETE:
+      kind = "delete-event";
+      break;
+
+    case GDK_DESTROY:
+      kind = "destroy-event";
+      break;
+
+    case GDK_FOCUS_CHANGE:
+      kind = "focus-change";
+      break;
+
+    case GDK_PROXIMITY_IN:
+      kind = "proximity-in";
+      break;
+
+    case GDK_PROXIMITY_OUT:
+      kind = "proximity-out";
+      break;
+
+    case GDK_NOTHING:
+    case GDK_EVENT_LAST:
+    default:
+      break;
+    }
+
+  if (kind || message)
+    gdk_profiler_add_mark (time * 1000L,
+                           duration * 1000L,
+                           "event",
+                           message ? message : kind);
+}
+#endif
+
 gboolean
 gdk_surface_handle_event (GdkEvent *event)
 {
+#ifdef G_ENABLE_DEBUG
+  gint64 begin_time = g_get_monotonic_time ();
+#endif
   gboolean handled = FALSE;
 
   if (check_autohide (event))
@@ -4076,6 +4249,11 @@ gdk_surface_handle_event (GdkEvent *event)
         rewrite_event_for_toplevel (event);
       g_signal_emit (gdk_event_get_surface (event), signals[EVENT], 0, event, &handled);
     }
+
+#ifdef G_ENABLE_DEBUG
+  if (gdk_profiler_is_running ())
+    add_event_mark (event, begin_time, g_get_monotonic_time () - begin_time);
+#endif
 
   return handled;
 }
