@@ -90,6 +90,8 @@ struct _GtkColorChooserWidgetPrivate
   gboolean has_default_palette;
 
   GSettings *settings;
+
+  GActionMap *context_actions;
 };
 
 enum
@@ -135,31 +137,6 @@ select_swatch (GtkColorChooserWidget *cc,
 }
 
 static void
-swatch_activate (GtkColorSwatch        *swatch,
-                 GtkColorChooserWidget *cc)
-{
-  GdkRGBA color;
-
-  gtk_color_swatch_get_rgba (swatch, &color);
-  _gtk_color_chooser_color_activated (GTK_COLOR_CHOOSER (cc), &color);
-}
-
-static void
-swatch_customize (GtkColorSwatch        *swatch,
-                  GtkColorChooserWidget *cc)
-{
-  GtkColorChooserWidgetPrivate *priv = gtk_color_chooser_widget_get_instance_private (cc);
-  GdkRGBA color;
-
-  gtk_color_swatch_get_rgba (swatch, &color);
-  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (priv->editor), &color);
-
-  gtk_widget_hide (priv->palette);
-  gtk_widget_show (priv->editor);
-  g_object_notify (G_OBJECT (cc), "show-editor");
-}
-
-static void
 swatch_selected (GtkColorSwatch        *swatch,
                  GtkStateFlags          previous,
                  GtkColorChooserWidget *cc)
@@ -176,31 +153,14 @@ static void
 connect_swatch_signals (GtkWidget *p,
                         gpointer   data)
 {
-  g_signal_connect (p, "activate", G_CALLBACK (swatch_activate), data);
-  g_signal_connect (p, "customize", G_CALLBACK (swatch_customize), data);
   g_signal_connect (p, "state-flags-changed", G_CALLBACK (swatch_selected), data);
-}
-
-static void
-button_activate (GtkColorSwatch        *swatch,
-                 GtkColorChooserWidget *cc)
-{
-  GtkColorChooserWidgetPrivate *priv = gtk_color_chooser_widget_get_instance_private (cc);
-  /* somewhat random, makes the hairline nicely visible */
-  GdkRGBA color = { 0.75, 0.25, 0.25, 1.0 };
-
-  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (priv->editor), &color);
-
-  gtk_widget_hide (priv->palette);
-  gtk_widget_show (priv->editor);
-  g_object_notify (G_OBJECT (cc), "show-editor");
 }
 
 static void
 connect_button_signals (GtkWidget *p,
                         gpointer   data)
 {
-  g_signal_connect (p, "activate", G_CALLBACK (button_activate), data);
+//  g_signal_connect (p, "activate", G_CALLBACK (button_activate), data);
 }
 
 static void
@@ -533,6 +493,57 @@ add_default_palette (GtkColorChooserWidget *cc)
 }
 
 static void
+customize_color (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
+{
+  GtkColorChooserWidget *cc = user_data;
+  GtkColorChooserWidgetPrivate *priv = gtk_color_chooser_widget_get_instance_private (cc);
+  GdkRGBA color;
+
+  g_variant_get (parameter, "(dddd)", &color.red, &color.green, &color.blue, &color.alpha);
+
+  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (priv->editor), &color);
+
+  gtk_widget_hide (priv->palette);
+  gtk_widget_show (priv->editor);
+  g_object_notify (G_OBJECT (cc), "show-editor");
+}
+
+static void
+select_color (GSimpleAction *action,
+              GVariant      *parameter,
+              gpointer       user_data)
+{
+  GtkColorChooserWidget *cc = user_data;
+  GdkRGBA color;
+
+  g_variant_get (parameter, "(dddd)", &color.red, &color.green, &color.blue, &color.alpha);
+
+  _gtk_color_chooser_color_activated (GTK_COLOR_CHOOSER (cc), &color);
+}
+
+static void
+gtk_color_chooser_widget_add_context_actions (GtkColorChooserWidget *cc)
+{
+  GtkColorChooserWidgetPrivate *priv = gtk_color_chooser_widget_get_instance_private (cc);
+
+  GActionEntry entries[] = {
+    { "select", select_color, "(dddd)", NULL, NULL },
+    { "customize", customize_color, "(dddd)", NULL, NULL },
+  };
+
+  GSimpleActionGroup *actions = g_simple_action_group_new ();
+
+  priv->context_actions = G_ACTION_MAP (actions);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), cc);
+
+  gtk_widget_insert_action_group (GTK_WIDGET (cc), "color", G_ACTION_GROUP (actions));
+}
+
+
+static void
 gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 {
   GtkColorChooserWidgetPrivate *priv = gtk_color_chooser_widget_get_instance_private (cc);
@@ -623,6 +634,8 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   priv->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   gtk_size_group_add_widget (priv->size_group, priv->palette);
   gtk_size_group_add_widget (priv->size_group, box);
+
+  gtk_color_chooser_widget_add_context_actions (cc);
 }
 
 /* GObject implementation {{{1 */

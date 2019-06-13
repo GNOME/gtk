@@ -205,7 +205,6 @@ struct _GtkCellRendererTextPrivate
   guint align_set         : 1;
 
   gulong focus_out_id;
-  gulong populate_popup_id;
   gulong entry_menu_popdown_timeout;
 };
 
@@ -1778,12 +1777,6 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
       priv->focus_out_id = 0;
     }
 
-  if (priv->populate_popup_id > 0)
-    {
-      g_signal_handler_disconnect (entry, priv->populate_popup_id);
-      priv->populate_popup_id = 0;
-    }
-
   if (priv->entry_menu_popdown_timeout)
     {
       g_source_remove (priv->entry_menu_popdown_timeout);
@@ -1804,68 +1797,12 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
   g_signal_emit (data, text_cell_renderer_signals[EDITED], 0, path, new_text);
 }
 
-static gboolean
-popdown_timeout (gpointer data)
-{
-  GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (data);
-  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
-
-  priv->entry_menu_popdown_timeout = 0;
-
-  if (!gtk_widget_has_focus (priv->entry))
-    gtk_cell_renderer_text_editing_done (GTK_CELL_EDITABLE (priv->entry), data);
-
-  return FALSE;
-}
-
-static void
-gtk_cell_renderer_text_popup_unmap (GtkMenu *menu,
-                                    gpointer data)
-{
-  GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (data);
-  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
-
-  priv->in_entry_menu = FALSE;
-
-  if (priv->entry_menu_popdown_timeout)
-    return;
-
-  priv->entry_menu_popdown_timeout = g_timeout_add (500, popdown_timeout, data);
-  g_source_set_name_by_id (priv->entry_menu_popdown_timeout, "[gtk] popdown_timeout");
-}
-
-static void
-gtk_cell_renderer_text_populate_popup (GtkEntry *entry,
-                                       GtkMenu  *menu,
-                                       gpointer  data)
-{
-  GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (data);
-  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
-
-  if (priv->entry_menu_popdown_timeout)
-    {
-      g_source_remove (priv->entry_menu_popdown_timeout);
-      priv->entry_menu_popdown_timeout = 0;
-    }
-
-  priv->in_entry_menu = TRUE;
-
-  g_signal_connect (menu, "unmap",
-                    G_CALLBACK (gtk_cell_renderer_text_popup_unmap), data);
-}
-
 static void
 gtk_cell_renderer_text_focus_changed (GtkWidget  *entry,
                                       GParamSpec *pspec,
                                       gpointer    data)
 {
-  GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (data);
-  GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
-
   if (gtk_widget_has_focus (entry))
-    return;
-
-  if (priv->in_entry_menu)
     return;
 
   g_object_set (entry,
@@ -1921,11 +1858,6 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
   priv->focus_out_id = g_signal_connect_after (priv->entry, "notify::has-focus",
 					       G_CALLBACK (gtk_cell_renderer_text_focus_changed),
 					       celltext);
-  priv->populate_popup_id =
-    g_signal_connect (priv->entry, "populate-popup",
-                      G_CALLBACK (gtk_cell_renderer_text_populate_popup),
-                      celltext);
- 
   gtk_widget_show (priv->entry);
 
   return GTK_CELL_EDITABLE (priv->entry);

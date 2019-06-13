@@ -176,6 +176,13 @@ void         gtk_label_set_yalign (GtkLabel *label,
 GDK_AVAILABLE_IN_ALL
 gfloat       gtk_label_get_yalign (GtkLabel *label);
 
+GDK_AVAILABLE_IN_ALL
+void         gtk_label_set_extra_menu (GtkLabel   *label,
+                                       GMenuModel *model);
+GDK_AVAILABLE_IN_ALL
+GMenuModel * gtk_label_get_extra_menu (GtkLabel   *label);
+
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkLabel, g_object_unref)
 
 G_END_DECLS

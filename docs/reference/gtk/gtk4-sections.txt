@@ -893,6 +893,8 @@ gtk_text_get_attributes
 gtk_text_set_tabs
 gtk_text_get_tabs
 gtk_text_grab_focus_without_selecting
+gtk_text_set_extra_menu
+gtk_text_get_extra_menu
 <SUBSECTION Private>
 gtk_text_get_type
 </SECTION>
@@ -963,6 +965,8 @@ GtkInputHints
 gtk_entry_set_input_hints
 gtk_entry_get_input_hints
 gtk_entry_grab_focus_without_selecting
+gtk_entry_set_extra_menu
+gtk_entry_get_extra_menu
 
 <SUBSECTION Standard>
 GTK_ENTRY
@@ -985,6 +989,8 @@ GtkPasswordEntry
 gtk_password_entry_new
 gtk_password_entry_set_show_peek_icon
 gtk_password_entry_get_show_peek_icon
+gtk_password_entry_set_extra_menu
+gtk_password_entry_get_extra_menu
 <SUBSECTION Private>
 gtk_password_entry_get_type
 </SECTION>
@@ -1713,6 +1719,9 @@ gtk_label_set_single_line_mode
 gtk_label_get_current_uri
 gtk_label_set_track_visited_links
 gtk_label_get_track_visited_links
+gtk_label_set_extra_menu
+gtk_label_get_extra_menu
+
 <SUBSECTION Standard>
 GTK_LABEL
 GTK_IS_LABEL
@@ -3089,6 +3098,9 @@ gtk_text_view_set_input_hints
 gtk_text_view_get_input_hints
 gtk_text_view_set_monospace
 gtk_text_view_get_monospace
+gtk_text_view_set_extra_menu
+gtk_text_view_get_extra_menu
+
 GTK_TEXT_VIEW_PRIORITY_VALIDATE
 <SUBSECTION Standard>
 GTK_TEXT_VIEW
