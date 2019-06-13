@@ -8,6 +8,7 @@ demos = files([
   'clipboard.c',
   'colorsel.c',
   'combobox.c',
+  'constraints.c',
   'css_accordion.c',
   'css_basics.c',
   'css_blendmodes.c',
