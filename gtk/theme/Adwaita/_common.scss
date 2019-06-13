@@ -3822,6 +3822,11 @@ messagedialog { // Message Dialog styling
     border-spacing: 10px;
   }
 
+  & label.title {
+    font-weight: 800;
+    font-size: 15pt;
+  }
+
   &.csd { // rounded bottom border styling for csd version
     &.background {
       // bigger radius for better antialiasing
