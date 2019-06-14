@@ -1030,6 +1030,85 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gtk_widget_should_layout        (GtkWidget   *widget);
 
 
+/**
+ * GtkWidgetActionActivate:
+ * @widget: the widget to which the action belongs
+ * @action_name: the (unprefixed) action name
+ * @parameter: parameter for activation
+ *
+ * The type of the callback functions used for activating
+ * actions installed with gtk_widget_class_install_action().
+ *
+ * The @parameter must match the @parameter_type of the action.
+ */
+typedef void     (* GtkWidgetActionActivate)   (GtkWidget           *widget,
+                                                const char          *action_name,
+                                                GVariant            *parameter);
+/**
+ * GtkWidgetActionQuery:
+ * @widget: the widget to which the action belongs
+ * @action_name: the (unprefixed) action name
+ * @enabled: (out) (optional): return location for the enabled state
+ * @parameter_type: (out) (optional): return location for the parameter type
+ * @state_type: (out) (optional): return location for the state type
+ * @state_hint: (out) (optional): return location for the state hint
+ * @state: (out) (optional): return location for the state
+ *
+ * The type of the callback functions used to query
+ * the properties of actions installed with gtk_widget_class_install_action().
+ *
+ * See the #GAction documentation for more details about the
+ * meaning of these properties.
+ *
+ * Returns: %TRUE if the action was found
+ */
+typedef gboolean (* GtkWidgetActionQuery)      (GtkWidget           *widget,
+                                                const char          *action_name,
+                                                gboolean            *enabled,
+                                                const GVariantType **parameter_type,
+                                                const GVariantType **state_type,
+                                                GVariant           **state_hint,
+                                                GVariant           **state);
+
+/**
+ * GtkWidgetActionChange:
+ * @widget: the widget to which the action belongs
+ * @action_name: the (unprefixed) action name
+ * @state: the new state
+ *
+ * The type of the callback functions used to change the
+ * state of actions installed with gtk_widget_class_install_action().
+ *
+ * The @state must match the @state_type of the action.
+ *
+ * Note that you can change the enabledness and state
+ * of widget actions by other means, as long as you
+ * emit the required #GActionGroup notification signals,
+ * which can be done with GtkWidget convenience API.
+ * This callback is used when the action state is
+ * changed via the #GActionGroup API.
+ */
+typedef void     (*GtkWidgetActionChange)      (GtkWidget           *widget,
+                                                const char          *action_name,
+                                                GVariant            *state);
+
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_class_install_action (GtkWidgetClass            *widget_class,
+                                                         const char                *prefixed_name,
+                                                         GtkWidgetActionActivate    activate,
+                                                         GtkWidgetActionQuery       query,
+                                                         GtkWidgetActionChange      change);
+
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_add_class_actions (GtkWidget *widget);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_notify_class_action_enabled (GtkWidget  *widget,
+                                                                const char *prefixed_name);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_notify_class_action_state (GtkWidget  *widget,
+                                                              const char *prefixed_name);
+
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)
 
