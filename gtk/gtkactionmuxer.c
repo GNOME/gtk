@@ -166,6 +166,18 @@ gtk_action_muxer_find_group (GtkActionMuxer  *muxer,
   return group;
 }
 
+GActionGroup *
+gtk_action_muxer_find (GtkActionMuxer  *muxer,
+                       const char      *action_name,
+                       const char     **unprefixed_name)
+{
+  Group *group;
+
+  group = gtk_action_muxer_find_group (muxer, action_name, unprefixed_name);
+
+  return group->group;
+}
+
 static void
 gtk_action_muxer_action_enabled_changed (GtkActionMuxer *muxer,
                                          const gchar    *action_name,
@@ -959,3 +971,4 @@ gtk_normalise_detailed_action_name (const gchar *detailed_action_name)
 
   return action_and_target;
 }
+
