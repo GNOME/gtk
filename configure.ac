@@ -1525,7 +1525,7 @@ else
     CUPS_CFLAGS=`$CUPS_CONFIG --cflags | sed 's/-O[0-9]*//' | sed 's/-m[^\t]*//g'`
     CUPS_LIBS=`$CUPS_CONFIG --libs`
 
-    CUPS_API_VERSION=`$CUPS_CONFIG --api-version`
+    CUPS_API_VERSION=`$CUPS_CONFIG --version`
     CUPS_API_MAJOR=`echo $ECHO_N $CUPS_API_VERSION | awk -F. '{print $1}'`
     CUPS_API_MINOR=`echo $ECHO_N $CUPS_API_VERSION | awk -F. '{print $2}'`
 
