@@ -4549,10 +4549,6 @@ gtk_widget_get_opacity
 gtk_widget_set_opacity
 gtk_widget_get_overflow
 gtk_widget_set_overflow
-gtk_widget_insert_action_group
-gtk_widget_list_action_prefixes
-gtk_widget_activate_action
-gtk_widget_activate_default
 gtk_widget_measure
 gtk_widget_snapshot_child
 gtk_widget_get_next_sibling
@@ -4628,6 +4624,18 @@ gtk_widget_class_set_connect_func
 <SUBSECTION>
 gtk_widget_observe_children
 gtk_widget_observe_controllers
+
+<SUBSECTION Actions>
+gtk_widget_insert_action_group
+gtk_widget_activate_action
+gtk_widget_activate_default
+GtkWidgetActionActivateFunc
+GtkWidgetActionSetStateFunc
+GtkWidgetActionGetStateFunc
+gtk_widget_class_install_action
+gtk_widget_class_install_stateful_action
+gtk_widget_notify_class_action_enabled
+gtk_widget_notify_class_action_state
 
 <SUBSECTION Standard>
 GTK_WIDGET

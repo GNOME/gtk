@@ -1023,6 +1023,76 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gtk_widget_should_layout        (GtkWidget   *widget);
 
 
+/**
+ * GtkWidgetActionActivateFunc:
+ * @widget: the widget to which the action belongs
+ * @action_name: the action name
+ * @parameter: parameter for activation
+ *
+ * The type of the callback functions used for activating
+ * actions installed with gtk_widget_class_install_action().
+ *
+ * The @parameter must match the @parameter_type of the action.
+ */
+typedef void (* GtkWidgetActionActivateFunc) (GtkWidget  *widget,
+                                              const char *action_name,
+                                              GVariant   *parameter);
+
+/**
+ * GtkWidgetActionGetStateFunc:
+ * @widget: the widget to which the action belongs
+ * @action_name: the action name
+ *
+ * The type of the callback functions used to query the state
+ * of stateful actions installed with gtk_widget_class_install_action().
+ *
+ * See the #GAction documentation for more details about the
+ * meaning of these properties.
+ */
+typedef GVariant * (* GtkWidgetActionGetStateFunc) (GtkWidget  *widget,
+                                                    const char *action_name);
+
+/**
+ * GtkWidgetActionSetStateFunc:
+ * @widget: the widget to which the action belongs
+ * @action_name: the action name
+ * @state: the new state
+ *
+ * The type of the callback functions used to change the
+ * state of actions installed with gtk_widget_class_install_action().
+ *
+ * The @state must match the @state_type of the action.
+ *
+ * This callback is used when the action state is
+ * changed via the #GActionGroup API.
+ */
+typedef void (*GtkWidgetActionSetStateFunc) (GtkWidget  *widget,
+                                             const char *action_name,
+                                             GVariant   *state);
+
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_class_install_action (GtkWidgetClass              *widget_class,
+                                                         const char                  *action_name,
+                                                         GtkWidgetActionActivateFunc  activate);
+
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_class_install_stateful_action (GtkWidgetClass              *widget_class,
+                                                                  const char                  *action_name,
+                                                                  GtkWidgetActionActivateFunc  activate,
+                                                                  const char                  *parameter_type,
+                                                                  GtkWidgetActionSetStateFunc  set_state,
+                                                                  GtkWidgetActionGetStateFunc  get_state);
+
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_notify_class_action_enabled (GtkWidget  *widget,
+                                                                const char *action_name,
+                                                                gboolean    enabled);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_notify_class_action_state (GtkWidget  *widget,
+                                                              const char *action_name,
+                                                              GVariant   *state);
+
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)
 
