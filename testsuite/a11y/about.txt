@@ -126,8 +126,7 @@ window1
         <AtkText>
         text: FancyPants
         character count: 10
-        caret offset: 10
-        selection 0: (0, 10) FancyPants
+        caret offset: 0
         default attributes: bg-color: <omitted>
                             bg-full-height: 0
                             direction: <omitted>
