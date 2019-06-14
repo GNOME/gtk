@@ -501,6 +501,7 @@ struct _GtkWidgetClassPrivate
   AtkRole accessible_role;
   const char *css_name;
   GType layout_manager_type;
+  GPtrArray *actions;
 };
 
 enum {
@@ -11897,14 +11898,16 @@ _gtk_widget_get_action_muxer (GtkWidget *widget,
                               gboolean   create)
 {
   GtkActionMuxer *muxer;
+  GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (widget);
+  GtkWidgetClassPrivate *priv = widget_class->priv;
 
   muxer = (GtkActionMuxer*)g_object_get_qdata (G_OBJECT (widget), quark_action_muxer);
   if (muxer)
     return muxer;
 
-  if (create)
+  if (create || priv->actions)
     {
-      muxer = gtk_action_muxer_new (widget);
+      muxer = gtk_action_muxer_new (widget, priv->actions);
       g_object_set_qdata_full (G_OBJECT (widget),
                                quark_action_muxer,
                                muxer,
@@ -13427,3 +13430,133 @@ gtk_widget_should_layout (GtkWidget *widget)
   return TRUE;
 }
 
+/*
+ * gtk_widget_class_install_action:
+ * @widget_class: a #GtkWidgetClass
+ * @action_name: a prefixed action name, such as "clipboard.paste"
+ * @activate: callback to use when the action is activated
+ *
+ * This should be called at class initialization time to specify
+ * actions to be added for all instances of this class.
+ *
+ * Actions installed by this function are stateless. The only state
+ * they have is whether they are enabled or not. For more complicated
+ * actions, see gtk_widget_class_install_stateful_action().
+ */
+void
+gtk_widget_class_install_action (GtkWidgetClass              *widget_class,
+                                 const char                  *action_name,
+                                 GtkWidgetActionActivateFunc  activate)
+{
+  gtk_widget_class_install_stateful_action (widget_class, action_name, activate,
+                                            NULL, NULL, NULL);
+}
+
+/*
+ * gtk_widget_class_install_stateful_action:
+ * @widget_class: a #GtkWidgetClass
+ * @action_name: a prefixed action name, such as "clipboard.paste"
+ * @activate: callback to use when the action is activated
+ * @parameter_type: (allow-none): the parameter type, or %NULL
+ * @query: (allow-none): callback to use when the action properties
+       are queried, or %NULL for always-enabled stateless actions
+ * @query_state: (allow-none): callback to use when the action state
+       is queried, or %NULL for stateless actions
+ *
+ * This should be called at class initialization time to specify
+ * actions to be added for all instances of this class.
+ *
+ * Actions installed in this way can be simple or stateful.
+ * See the #GAction documentation for more information.
+ */
+void
+gtk_widget_class_install_stateful_action (GtkWidgetClass              *widget_class,
+                                          const char                  *action_name,
+                                          GtkWidgetActionActivateFunc  activate,
+                                          const char                  *parameter_type,
+                                          GtkWidgetActionSetStateFunc  set_state,
+                                          GtkWidgetActionGetStateFunc  get_state)
+{
+  GtkWidgetClassPrivate *priv = widget_class->priv;
+  GtkWidgetAction *action;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+
+  if (priv->actions == NULL)
+    priv->actions = g_ptr_array_new ();
+  else if (GTK_IS_WIDGET_CLASS (&widget_class->parent_class))
+    {
+      GtkWidgetClass *parent_class = GTK_WIDGET_CLASS (&widget_class->parent_class);
+      GtkWidgetClassPrivate *parent_priv = parent_class->priv;
+      GPtrArray *parent_actions = parent_priv->actions;
+
+      if (priv->actions == parent_actions)
+        {
+          int i;
+
+          priv->actions = g_ptr_array_new ();
+          for (i = 0; i < parent_actions->len; i++)
+            g_ptr_array_add (priv->actions, g_ptr_array_index (parent_actions, i));
+        }
+    }
+
+  action = g_new0 (GtkWidgetAction, 1);
+  action->name = g_strdup (action_name);
+  action->activate = activate;
+  action->parameter_type = parameter_type ? g_variant_type_new (parameter_type) : NULL;
+  action->set_state = set_state;
+  action->get_state = get_state;
+
+  GTK_NOTE(ACTIONS,
+           g_message ("%sClass: Adding %s action\n",
+                      g_type_name (G_TYPE_FROM_CLASS (widget_class)),
+                      action_name));
+
+  g_ptr_array_add (priv->actions, action);
+}
+
+/**
+ * gtk_widget_action_enabled_changed:
+ * @widget: a #GtkWidget
+ * @action_name: action name, such as "clipboard.paste"
+ * @enabled: whether the action is now enabled
+ *
+ * Notify when an action installed with
+ * gtk_widget_class_install_action() changes its
+ * enabled state.
+ */
+void
+gtk_widget_action_enabled_changed (GtkWidget  *widget,
+                                   const char *action_name,
+                                   gboolean    enabled)
+{
+  GtkActionMuxer *muxer;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  muxer = _gtk_widget_get_action_muxer (widget, TRUE);
+  gtk_action_muxer_action_enabled_changed (muxer, action_name, enabled);
+}
+
+/**
+ * gtk_widget_action_state_changed:
+ * @widget: a #GtkWidget
+ * @action_name: action name, such as "clipboard.paste"
+ * @state: the new state
+ *
+ * Notify when an action installed with
+ * gtk_widget_class_install_stateful_action() changes
+ * its state.
+ */
+void
+gtk_widget_action_state_changed (GtkWidget  *widget,
+                                 const char *action_name,
+                                 GVariant   *state)
+{
+  GtkActionMuxer *muxer;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  muxer = _gtk_widget_get_action_muxer (widget, TRUE);
+  gtk_action_muxer_action_state_changed (muxer, action_name, state);
+}
