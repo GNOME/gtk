@@ -3477,8 +3477,6 @@ set_show_emoji_icon (GtkEntry *entry,
                      gboolean  value)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
-  GActionGroup *actions;
-  GAction *action;
 
   if (priv->show_emoji_icon == value)
     return;
@@ -3520,12 +3518,6 @@ set_show_emoji_icon (GtkEntry *entry,
 
   g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_SHOW_EMOJI_ICON]);
   gtk_widget_queue_resize (GTK_WIDGET (entry));
-
-  actions = gtk_widget_get_action_group (priv->text, "context");
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "insert-emoji");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
-                               priv->show_emoji_icon ||
-                               (gtk_entry_get_input_hints (entry) & GTK_INPUT_HINT_NO_EMOJI) == 0);
 }
 
 GtkEventController *
