@@ -72,6 +72,7 @@ struct _GtkActionMuxer
   GtkActionMuxer *parent;
 
   GtkWidget *widget;
+  GPtrArray *widget_actions;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkActionMuxer, gtk_action_muxer, G_TYPE_OBJECT,
@@ -83,6 +84,7 @@ enum
   PROP_0,
   PROP_PARENT,
   PROP_WIDGET,
+  PROP_WIDGET_ACTIONS,
   NUM_PROPERTIES
 };
 
@@ -108,7 +110,7 @@ typedef struct
 static void
 gtk_action_muxer_append_group_actions (const char *prefix,
                                        Group      *group,
-                                       GArray     *actions)
+                                       GHashTable *actions)
 {
   gchar **group_actions;
   gchar **action;
@@ -116,10 +118,8 @@ gtk_action_muxer_append_group_actions (const char *prefix,
   group_actions = g_action_group_list_actions (group->group);
   for (action = group_actions; *action; action++)
     {
-      gchar *fullname;
-
-      fullname = g_strconcat (prefix, ".", *action, NULL);
-      g_array_append_val (actions, fullname);
+      char *name = g_strconcat (prefix, ".", *action, NULL);
+      g_hash_table_add (actions, name);
     }
 
   g_strfreev (group_actions);
@@ -129,9 +129,11 @@ static gchar **
 gtk_action_muxer_list_actions (GActionGroup *action_group)
 {
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (action_group);
-  GArray *actions;
+  GHashTable *actions;
+  char **keys;
 
-  actions = g_array_new (TRUE, FALSE, sizeof (gchar *));
+  actions = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                   g_free, NULL);
 
   for ( ; muxer != NULL; muxer = muxer->parent)
     {
@@ -139,12 +141,28 @@ gtk_action_muxer_list_actions (GActionGroup *action_group)
       const char *prefix;
       Group *group;
 
+      if (muxer->widget_actions)
+        {
+          int i;
+
+          for (i = 0; i < muxer->widget_actions->len; i++)
+            {
+              GtkWidgetAction *action = g_ptr_array_index (muxer->widget_actions, i);
+              g_hash_table_add (actions, g_strdup (action->name));
+            }
+        }
+
       g_hash_table_iter_init (&iter, muxer->groups);
       while (g_hash_table_iter_next (&iter, (gpointer *)&prefix, (gpointer *)&group))
         gtk_action_muxer_append_group_actions (prefix, group, actions);
     }
 
-  return (gchar **)(void *) g_array_free (actions, FALSE);
+  keys = (char **)g_hash_table_get_keys_as_array (actions, NULL);
+
+  g_hash_table_steal_all (actions);
+  g_hash_table_unref (actions);
+
+  return (char **)keys;
 }
 
 static Group *
@@ -183,7 +201,7 @@ gtk_action_muxer_find (GtkActionMuxer  *muxer,
   return group->group;
 }
 
-static void
+void
 gtk_action_muxer_action_enabled_changed (GtkActionMuxer *muxer,
                                          const gchar    *action_name,
                                          gboolean        enabled)
@@ -223,7 +241,7 @@ gtk_action_muxer_parent_action_enabled_changed (GActionGroup *action_group,
   gtk_action_muxer_action_enabled_changed (muxer, action_name, enabled);
 }
 
-static void
+void
 gtk_action_muxer_action_state_changed (GtkActionMuxer *muxer,
                                        const gchar    *action_name,
                                        GVariant       *state)
@@ -401,6 +419,53 @@ gtk_action_muxer_query_action (GActionGroup        *action_group,
   Group *group;
   const gchar *unprefixed_name;
 
+  if (muxer->widget_actions)
+    {
+      int i;
+
+      for (i = 0; i < muxer->widget_actions->len; i++)
+        {
+          GtkWidgetAction *action = g_ptr_array_index (muxer->widget_actions, i);
+          if (strcmp (action->name, action_name) == 0)
+            {
+              if (action->query)
+                {
+                  action->query (muxer->widget,
+                                 action->name,
+                                 enabled,
+                                 parameter_type);
+                }
+              else
+                {
+                  if (enabled)
+                    *enabled = TRUE;
+                  if (parameter_type)
+                    *parameter_type = NULL;
+                }
+
+              if (action->query_state)
+                {
+                  action->query_state (muxer->widget,
+                                       action->name,
+                                       state_type,
+                                       state_hint,
+                                       state);
+                }
+              else
+                {
+                  if (state_type)
+                    *state_type = NULL;
+                  if (state_hint)
+                    *state_hint = NULL;
+                  if (state)
+                    *state = NULL;
+                }
+
+              return TRUE;
+            }
+       }
+    }
+
   group = gtk_action_muxer_find_group (muxer, action_name, &unprefixed_name);
 
   if (group)
@@ -424,6 +489,22 @@ gtk_action_muxer_activate_action (GActionGroup *action_group,
   Group *group;
   const gchar *unprefixed_name;
 
+  if (muxer->widget_actions)
+    {
+      int i;
+
+      for (i = 0; i < muxer->widget_actions->len; i++)
+        {
+          GtkWidgetAction *action = g_ptr_array_index (muxer->widget_actions, i);
+          if (strcmp (action->name, action_name) == 0)
+            {
+              action->activate (muxer->widget, action->name, parameter);
+
+              return;
+            }
+        }
+    }
+
   group = gtk_action_muxer_find_group (muxer, action_name, &unprefixed_name);
 
   if (group)
@@ -440,6 +521,23 @@ gtk_action_muxer_change_action_state (GActionGroup *action_group,
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (action_group);
   Group *group;
   const gchar *unprefixed_name;
+
+  if (muxer->widget_actions)
+    {
+      int i;
+
+      for (i = 0; i < muxer->widget_actions->len; i++)
+        {
+          GtkWidgetAction *action = g_ptr_array_index (muxer->widget_actions, i);
+          if (strcmp (action->name, action_name) == 0)
+            {
+              if (action->change_state)
+                action->change_state (muxer->widget, action->name, state);
+
+              return;
+            }
+        }
+    }
 
   group = gtk_action_muxer_find_group (muxer, action_name, &unprefixed_name);
 
@@ -600,6 +698,10 @@ gtk_action_muxer_get_property (GObject    *object,
       g_value_set_object (value, muxer->widget);
       break;
 
+    case PROP_WIDGET_ACTIONS:
+      g_value_set_boxed (value, muxer->widget_actions);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -621,6 +723,10 @@ gtk_action_muxer_set_property (GObject      *object,
 
     case PROP_WIDGET:
       muxer->widget = g_value_get_object (value);
+      break;
+
+    case PROP_WIDGET_ACTIONS:
+      muxer->widget_actions = g_value_get_boxed (value);
       break;
 
     default:
@@ -682,6 +788,13 @@ gtk_action_muxer_class_init (GObjectClass *class)
                                                  G_PARAM_READWRITE |
                                                  G_PARAM_CONSTRUCT_ONLY |
                                                  G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_WIDGET_ACTIONS] = g_param_spec_boxed ("widget-actions", "Widget actions",
+                                                        "Widget actions",
+                                                        G_TYPE_PTR_ARRAY,
+                                                        G_PARAM_READWRITE |
+                                                        G_PARAM_CONSTRUCT_ONLY |
+                                                        G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (class, NUM_PROPERTIES, properties);
 }
@@ -791,14 +904,17 @@ gtk_action_muxer_lookup (GtkActionMuxer *muxer,
 /*< private >
  * gtk_action_muxer_new:
  * @widget: the widget to which the muxer belongs
+ * @actions: widget actions
  *
  * Creates a new #GtkActionMuxer.
  */
 GtkActionMuxer *
-gtk_action_muxer_new (GtkWidget *widget)
+gtk_action_muxer_new (GtkWidget *widget,
+                      GPtrArray *actions)
 {
   return g_object_new (GTK_TYPE_ACTION_MUXER,
                        "widget", widget,
+                       "widget-actions", actions,
                        NULL);
 }
 
