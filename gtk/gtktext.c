@@ -68,6 +68,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 #include "gtknative.h"
+#include "gtkactionmuxerprivate.h"
 
 #include "a11y/gtktextaccessible.h"
 
@@ -174,7 +175,6 @@ struct _GtkTextPrivate
   GtkCssNode    *block_cursor_node;
   GtkCssNode    *undershoot_node[2];
 
-  GActionMap    *context_actions;
   GtkWidget     *popup_menu;
   GMenuModel    *extra_menu;
 
@@ -542,10 +542,43 @@ static void         begin_change                       (GtkText *self);
 static void         end_change                         (GtkText *self);
 static void         emit_changed                       (GtkText *self);
 
-static void         gtk_text_add_context_actions      (GtkText *self);
 static void         gtk_text_update_clipboard_actions (GtkText *self);
 static void         gtk_text_update_emoji_action      (GtkText *self);
 
+static void gtk_text_activate_clipboard_cut        (GtkWidget *widget,
+                                                    const char *action_name,
+                                                    GVariant  *parameter);
+static void gtk_text_activate_clipboard_copy       (GtkWidget *widget,
+                                                    const char *action_name,
+                                                    GVariant  *parameter);
+static void gtk_text_activate_clipboard_paste      (GtkWidget *widget,
+                                                    const char *action_name,
+                                                    GVariant  *parameter);
+static void gtk_text_activate_selection_delete     (GtkWidget *widget,
+                                                    const char *action_name,
+                                                    GVariant  *parameter);
+static void gtk_text_activate_selection_select_all (GtkWidget *widget,
+                                                    const char *action_name,
+                                                    GVariant  *parameter);
+static void gtk_text_activate_misc_insert_emoji    (GtkWidget *widget,
+                                                    const char *action_name,
+                                                    GVariant  *parameter);
+static void gtk_text_activate_misc_toggle_visibility (GtkWidget *widget,
+                                                      const char *action_name,
+                                                      GVariant  *parameter);
+static void gtk_text_change_misc_toggle_visibility   (GtkWidget *widget,
+                                                      const char *action_name,
+                                                      GVariant  *state);
+static void     gtk_text_query_misc_toggle_visibility (GtkWidget *widget,
+                                                       const char *action_name,
+                                                       const GVariantType **state_type,
+                                                       GVariant           **state_hint,
+                                                       GVariant           **state);
+
+static void     gtk_text_query_action (GtkWidget           *widget,
+                                       const char          *action_name,
+                                       gboolean            *enabled,
+                                       const GVariantType **parameter_type);
 
 /* GtkTextContent implementation
  */
@@ -706,7 +739,7 @@ gtk_text_class_init (GtkTextClass *class)
   class->toggle_overwrite = gtk_text_toggle_overwrite;
   class->insert_emoji = gtk_text_insert_emoji;
   class->activate = gtk_text_real_activate;
-  
+ 
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
   quark_gtk_signal = g_quark_from_static_string ("gtk-signal");
 
@@ -1336,6 +1369,30 @@ gtk_text_class_init (GtkTextClass *class)
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("text"));
+
+  gtk_widget_class_install_action (widget_class, "clipboard.cut",
+                                   gtk_text_activate_clipboard_cut,
+                                   gtk_text_query_action);
+  gtk_widget_class_install_action (widget_class, "clipboard.copy",
+                                   gtk_text_activate_clipboard_copy,
+                                   gtk_text_query_action);
+  gtk_widget_class_install_action (widget_class, "clipboard.paste",
+                                   gtk_text_activate_clipboard_paste,
+                                   gtk_text_query_action);
+  gtk_widget_class_install_action (widget_class, "selection.delete",
+                                   gtk_text_activate_selection_delete,
+                                   gtk_text_query_action);
+  gtk_widget_class_install_action (widget_class, "selection.select-all",
+                                   gtk_text_activate_selection_select_all,
+                                   gtk_text_query_action);
+  gtk_widget_class_install_action (widget_class, "misc.insert-emoji",
+                                   gtk_text_activate_misc_insert_emoji,
+                                   gtk_text_query_action);
+  gtk_widget_class_install_stateful_action (widget_class, "misc.toggle-visibility",
+                                            gtk_text_activate_misc_toggle_visibility,
+                                            gtk_text_query_action,
+                                            gtk_text_change_misc_toggle_visibility,
+                                            gtk_text_query_misc_toggle_visibility);
 }
 
 static void
@@ -1720,7 +1777,6 @@ gtk_text_init (GtkText *self)
     }
 
   set_text_cursor (GTK_WIDGET (self));
-  gtk_text_add_context_actions (self);
 }
 
 static void
@@ -1766,7 +1822,7 @@ gtk_text_dispose (GObject *object)
   keymap = gdk_display_get_keymap (gtk_widget_get_display (GTK_WIDGET (object)));
   g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, self);
 
-  g_clear_object (&priv->context_actions);
+  g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
   g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
   g_clear_object (&priv->extra_menu);
 
@@ -1783,7 +1839,6 @@ gtk_text_finalize (GObject *object)
 
   g_clear_object (&priv->cached_layout);
   g_clear_object (&priv->im_context);
-  g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
   g_clear_pointer (&priv->magnifier_popover, gtk_widget_destroy);
   g_clear_object (&priv->text_handle);
   g_free (priv->im_module);
@@ -2176,6 +2231,9 @@ gtk_text_size_allocate (GtkWidget *widget,
 
   if (priv->popup_menu)
     gtk_native_check_resize (GTK_NATIVE (priv->popup_menu));
+
+  if (priv->selection_bubble)
+    gtk_native_check_resize (GTK_NATIVE (priv->selection_bubble));
 }
 
 static void
@@ -4047,6 +4105,7 @@ gtk_text_set_positions (GtkText *self,
 
   if (changed)
     {
+      gtk_text_update_clipboard_actions (self);
       gtk_text_recompute (self);
     }
 }
@@ -5261,15 +5320,14 @@ gtk_text_set_visibility (GtkText  *self,
 
   if (priv->visible != visible)
     {
-      GAction *action;
-
       priv->visible = visible;
 
       g_object_notify (G_OBJECT (self), "visibility");
       gtk_text_recompute (self);
 
-      action = g_action_map_lookup_action (priv->context_actions, "toggle-visibility");
-      g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (visible));
+      gtk_text_update_clipboard_actions (self);
+      gtk_widget_notify_class_action_state (GTK_WIDGET (self), "misc.toggle-visibility",
+                                            g_variant_new_boolean (visible));
     }
 }
 
@@ -5615,152 +5673,187 @@ hide_selection_bubble (GtkText *self)
 }
 
 static void
-cut_clipboard_activated (GSimpleAction *action,
-                         GVariant      *parameter,
-                         gpointer       user_data)
+gtk_text_query_action (GtkWidget           *widget,
+                       const char          *action_name,
+                       gboolean            *enabled,
+                       const GVariantType **parameter_type)
 {
-  g_signal_emit_by_name (user_data, "cut-clipboard");
-  hide_selection_bubble (GTK_TEXT (user_data));
-}
-
-static void
-copy_clipboard_activated (GSimpleAction *action,
-                          GVariant      *parameter,
-                          gpointer       user_data)
-{
-  g_signal_emit_by_name (user_data, "copy-clipboard");
-  hide_selection_bubble (GTK_TEXT (user_data));
-}
-
-static void
-paste_clipboard_activated (GSimpleAction *action,
-                           GVariant      *parameter,
-                           gpointer       user_data)
-{
-  g_signal_emit_by_name (user_data, "paste-clipboard");
-  hide_selection_bubble (GTK_TEXT (user_data));
-}
-
-static void
-delete_selection_activated (GSimpleAction *action,
-                            GVariant      *parameter,
-                            gpointer       user_data)
-{
-  gtk_text_delete_cb (GTK_TEXT (user_data));
-  hide_selection_bubble (GTK_TEXT (user_data));
-}
-
-static void
-select_all_activated (GSimpleAction *action,
-                      GVariant      *parameter,
-                      gpointer       user_data)
-{
-  gtk_text_select_all (GTK_TEXT (user_data));
-}
-
-static void
-insert_emoji_activated (GSimpleAction *action,
-                        GVariant      *parameter,
-                        gpointer       user_data)
-{
-  gtk_text_insert_emoji (GTK_TEXT (user_data));
-  hide_selection_bubble (GTK_TEXT (user_data));
-}
-
-static void
-toggle_visibility (GSimpleAction *action,
-                   GVariant      *parameter,
-                   gpointer       user_data)
-{
-  GtkText *text = GTK_TEXT (user_data);
-  gtk_text_set_visibility (text, !gtk_text_get_visibility (text));
-}
-
-static void
-gtk_text_add_context_actions (GtkText *self)
-{
+  GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  GdkClipboard *clipboard;
+  DisplayMode mode;
+  gboolean has_clipboard;
+  gboolean has_selection;
+  gboolean has_content;
+  gboolean visible;
+  gboolean enable = FALSE;
 
-  GActionEntry entries[] = {
-    { "cut-clipboard", cut_clipboard_activated, NULL, NULL, NULL },
-    { "copy-clipboard", copy_clipboard_activated, NULL, NULL, NULL },
-    { "paste-clipboard", paste_clipboard_activated, NULL, NULL, NULL },
-    { "delete-selection", delete_selection_activated, NULL, NULL, NULL },
-    { "select-all", select_all_activated, NULL, NULL, NULL },
-    { "insert-emoji", insert_emoji_activated, NULL, NULL, NULL },
-    { "toggle-visibility", toggle_visibility, NULL, "true", NULL },
-  };
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (self));
+  mode = gtk_text_get_display_mode (self);
+  has_clipboard = gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), G_TYPE_STRING);
+  has_selection = priv->current_pos != priv->selection_bound;
+  has_content = priv->buffer && (gtk_entry_buffer_get_length (priv->buffer) > 0);
+  visible = mode == DISPLAY_NORMAL;
 
-  GSimpleActionGroup *actions = g_simple_action_group_new ();
-  GAction *action;
+  if (strcmp (action_name, "clipboard.cut") == 0)
+    enable = visible && priv->editable && has_selection;
+  else if (strcmp (action_name, "clipboard.copy") == 0)
+    enable = visible && has_selection;
+  else if (strcmp (action_name, "clipboard.paste") == 0)
+    enable = priv->editable && has_clipboard;
+  else if (strcmp (action_name, "selection.delete") == 0)
+    enable = priv->editable && has_selection;
+  else if (strcmp (action_name, "selection.select-all") == 0)
+    enable = has_content;
+  else if (strcmp (action_name, "misc.insert-emoji") == 0)
+    enable = (gtk_text_get_input_hints (self) & GTK_INPUT_HINT_NO_EMOJI) == 0;
+  else if (strcmp (action_name, "misc.toggle-visibility") == 0)
+    enable = TRUE;
+  else
+    enable = FALSE;
 
-  priv->context_actions = G_ACTION_MAP (actions);
+  if (enabled)
+    *enabled = enable;
+  if (parameter_type)
+    *parameter_type = NULL;
+}
 
-  g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), self);
+static void
+gtk_text_query_misc_toggle_visibility (GtkWidget *widget,
+                                       const char *action_name,
+                                       const GVariantType **state_type,
+                                       GVariant           **state_hint,
+                                       GVariant           **state)
+{
+  GtkText *self = GTK_TEXT (widget);
+  DisplayMode mode;
+  gboolean visible;
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "cut-clipboard");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "copy-clipboard");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "paste-clipboard");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "delete-selection");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "select-all");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "insert-emoji");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
+  mode = gtk_text_get_display_mode (self);
+  visible = mode == DISPLAY_NORMAL;
 
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "context", G_ACTION_GROUP (actions));
+  if (state_type)
+    *state_type = G_VARIANT_TYPE_BOOLEAN;
+  if (state_hint)
+    *state_hint = NULL;
+  if (state)
+    *state = g_variant_new_boolean (visible);
+}
+
+static void
+gtk_text_activate_clipboard_cut (GtkWidget *widget,
+                                 const char *action_name,
+                                 GVariant  *parameter)
+{
+  GtkText *self = GTK_TEXT (widget);
+  g_signal_emit_by_name (self, "cut-clipboard");
+  hide_selection_bubble (self);
+}
+
+static void
+gtk_text_activate_clipboard_copy (GtkWidget *widget,
+                                  const char *action_name,
+                                  GVariant  *parameter)
+{
+  GtkText *self = GTK_TEXT (widget);
+  g_signal_emit_by_name (self, "copy-clipboard");
+  hide_selection_bubble (self);
+}
+
+static void
+gtk_text_activate_clipboard_paste (GtkWidget *widget,
+                                   const char *action_name,
+                                   GVariant  *parameter)
+{
+  GtkText *self = GTK_TEXT (widget);
+  g_signal_emit_by_name (self, "paste-clipboard");
+  hide_selection_bubble (self);
+}
+
+static void
+gtk_text_activate_selection_delete (GtkWidget *widget,
+                                    const char *action_name,
+                                    GVariant  *parameter)
+{
+  GtkText *self = GTK_TEXT (widget);
+  gtk_text_delete_cb (self);
+  hide_selection_bubble (self);
+}
+
+static void
+gtk_text_activate_selection_select_all (GtkWidget *widget,
+                                        const char *action_name,
+                                        GVariant  *parameter)
+{
+  GtkText *self = GTK_TEXT (widget);
+  gtk_text_select_all (self);
+}
+
+static void
+gtk_text_activate_misc_insert_emoji (GtkWidget *widget,
+                                     const char *action_name,
+                                     GVariant  *parameter)
+{
+  GtkText *self = GTK_TEXT (widget);
+  gtk_text_insert_emoji (self);
+  hide_selection_bubble (self);
+}
+
+static void
+gtk_text_activate_misc_toggle_visibility (GtkWidget *widget,
+                                          const char *action_name,
+                                          GVariant  *parameter)
+{
+  GtkText *self = GTK_TEXT (widget);
+  gtk_text_set_visibility (self, !gtk_text_get_visibility (self));
+}
+
+static void
+gtk_text_change_misc_toggle_visibility (GtkWidget  *widget,
+                                        const char *action_name,
+                                        GVariant   *state)
+{
+  GtkText *self = GTK_TEXT (widget);
+  gboolean visible = g_variant_get_boolean (state);
+  gtk_text_set_visibility (self, visible);
 }
 
 static void
 gtk_text_update_clipboard_actions (GtkText *self)
- {
+{
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   DisplayMode mode;
   GdkClipboard *clipboard;
   gboolean has_clipboard;
-  GAction *action;
- 
+  gboolean has_selection;
+  gboolean has_content;
+  gboolean visible;
+
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (self));
-  has_clipboard = gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), G_TYPE_STRING);
   mode = gtk_text_get_display_mode (self);
+  has_clipboard = gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), G_TYPE_STRING);
+  has_selection = priv->current_pos != priv->selection_bound;
+  has_content = priv->buffer && (gtk_entry_buffer_get_length (priv->buffer) > 0);
+  visible = mode == DISPLAY_NORMAL;
 
-  action = g_action_map_lookup_action (priv->context_actions, "cut-clipboard");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
-                               mode == DISPLAY_NORMAL &&
-                               priv->editable &&
-                               priv->current_pos != priv->selection_bound);
+  gtk_widget_notify_class_action_enabled (GTK_WIDGET (self), "clipboard.cut",
+                                          visible && priv->editable && has_selection);
+  gtk_widget_notify_class_action_enabled (GTK_WIDGET (self), "clipboard.copy",
+                                          visible && has_selection);
+  gtk_widget_notify_class_action_enabled (GTK_WIDGET (self), "clipboard.paste",
+                                          priv->editable && has_clipboard);
 
-  action = g_action_map_lookup_action (priv->context_actions, "copy-clipboard");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
-                               mode == DISPLAY_NORMAL &&
-                               priv->current_pos != priv->selection_bound);
-
-  action = g_action_map_lookup_action (priv->context_actions, "paste-clipboard");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
-                               priv->editable && has_clipboard);
-
-  action = g_action_map_lookup_action (priv->context_actions, "delete-selection");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
-                               priv->editable &&
-                               priv->current_pos != priv->selection_bound);
-
-  action = g_action_map_lookup_action (priv->context_actions, "select-all");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
-                               priv->buffer && (gtk_entry_buffer_get_length (priv->buffer) > 0));
+  gtk_widget_notify_class_action_enabled (GTK_WIDGET (self), "selection.delete",
+                                          priv->editable && has_selection);
+  gtk_widget_notify_class_action_enabled (GTK_WIDGET (self), "selection.select-all",
+                                          has_content);
 }
 
 static void
 gtk_text_update_emoji_action (GtkText *self)
 {
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GAction *action;
-
-  action = g_action_map_lookup_action (priv->context_actions, "insert-emoji");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
-                               (gtk_text_get_input_hints (self) & GTK_INPUT_HINT_NO_EMOJI) == 0);
+  gtk_widget_notify_class_action_enabled (GTK_WIDGET (self), "misc.insert-emoji",
+                                          (gtk_text_get_input_hints (self) & GTK_INPUT_HINT_NO_EMOJI) == 0);
 }
 
 static GMenuModel *
@@ -5773,19 +5866,19 @@ gtk_text_get_menu_model (GtkText *self)
   menu = g_menu_new ();
 
   section = g_menu_new ();
-  item = g_menu_item_new (_("Cu_t"), "context.cut-clipboard");
+  item = g_menu_item_new (_("Cu_t"), "clipboard.cut");
   g_menu_item_set_attribute (item, "touch-icon", "s", "edit-cut-symbolic");
   g_menu_append_item (section, item);
   g_object_unref (item);
-  item = g_menu_item_new (_("_Copy"), "context.copy-clipboard");
+  item = g_menu_item_new (_("_Copy"), "clipboard.copy");
   g_menu_item_set_attribute (item, "touch-icon", "s", "edit-copy-symbolic");
   g_menu_append_item (section, item);
   g_object_unref (item);
-  item = g_menu_item_new (_("_Paste"), "context.paste-clipboard");
+  item = g_menu_item_new (_("_Paste"), "clipboard.paste");
   g_menu_item_set_attribute (item, "touch-icon", "s", "edit-paste-symbolic");
   g_menu_append_item (section, item);
   g_object_unref (item);
-  item = g_menu_item_new (_("_Delete"), "context.delete-selection");
+  item = g_menu_item_new (_("_Delete"), "selection.delete");
   g_menu_item_set_attribute (item, "touch-icon", "s", "edit-delete-symbolic");
   g_menu_append_item (section, item);
   g_object_unref (item);
@@ -5794,12 +5887,12 @@ gtk_text_get_menu_model (GtkText *self)
 
   section = g_menu_new ();
 
-  item = g_menu_item_new (_("Select _All"), "context.select-all");
+  item = g_menu_item_new (_("Select _All"), "selection.select-all");
   g_menu_item_set_attribute (item, "touch-icon", "s", "edit-select-all-symbolic");
   g_menu_append_item (section, item);
   g_object_unref (item);
 
-  item = g_menu_item_new ( _("Insert _Emoji"), "context.insert-emoji");
+  item = g_menu_item_new ( _("Insert _Emoji"), "misc.insert-emoji");
   g_menu_item_set_attribute (item, "hidden-when", "s", "action-disabled");
   g_menu_item_set_attribute (item, "touch-icon", "s", "face-smile-symbolic");
   g_menu_append_item (section, item);
@@ -5860,12 +5953,11 @@ append_bubble_item (GtkText    *self,
                     GMenuModel *model,
                     int         index)
 {
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  GtkActionMuxer *muxer;
   GtkWidget *item, *image;
   GVariant *att;
   const char *icon_name;
   const char *action_name;
-  GAction *action;
   GMenuModel *link;
 
   link = g_menu_model_get_item_link (model, index, "section");
@@ -5891,12 +5983,9 @@ append_bubble_item (GtkText    *self,
   action_name = g_variant_get_string (att, NULL);
   g_variant_unref (att);
 
-  if (g_str_has_prefix (action_name, "context."))
-    {
-      action = g_action_map_lookup_action (priv->context_actions, action_name + strlen ("context."));
-      if (action && !g_action_get_enabled (action))
-        return;
-    }
+  muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (self), FALSE);
+  if (!g_action_group_get_action_enabled (G_ACTION_GROUP (muxer), action_name))
+    return;
 
   item = gtk_button_new ();
   gtk_widget_set_focus_on_click (item, FALSE);
@@ -5990,7 +6079,7 @@ gtk_text_selection_bubble_popup_show (gpointer user_data)
   rect.height += 10;
 
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->selection_bubble), &rect);
-  gtk_widget_show (priv->selection_bubble);
+  gtk_popover_popup (GTK_POPOVER (priv->selection_bubble));
 
   priv->selection_bubble_timeout_id = 0;
 
