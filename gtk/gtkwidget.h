@@ -1030,6 +1030,36 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gtk_widget_should_layout        (GtkWidget   *widget);
 
 
+typedef void (*GtkWidgetActionActivate) (GtkWidget *widget,
+                                         const char *action_name,
+                                         GVariant  *parameter);
+typedef gboolean (* GtkWidgetActionQuery) (GtkWidget *widget,
+                                           const char *action_name,
+                                           gboolean  *enabled,
+                                           const GVariantType **parameter_type,
+                                           const GVariantType **state_type,
+                                           GVariant           **state_hint,
+                                           GVariant           **state);
+typedef void (*GtkWidgetActionChange) (GtkWidget  *widget,
+                                       const char *action_name,
+                                       GVariant   *state);
+
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_class_install_action (GtkWidgetClass *widget_class,
+                                                         const char     *prefixed_name,
+                                                         GtkWidgetActionActivate activate,
+                                                         GtkWidgetActionQuery    query);
+
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_add_class_actions (GtkWidget *widget);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_notify_class_action_enabled (GtkWidget  *widget,
+                                                                const char *prefixed_name);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_notify_class_action_state (GtkWidget  *widget,
+                                                              const char *prefixed_name);
+
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)
 
