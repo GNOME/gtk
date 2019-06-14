@@ -13481,12 +13481,30 @@ gtk_widget_should_layout (GtkWidget *widget)
   return TRUE;
 }
 
+/**
+ * gtk_widget_class_install_action:
+ * @widget_class: a #GtkWidgetClass
+ * @prefixed_name: a prefixed action name, such as "clipboard.paste"
+ * @activate: callback to use when the action is activated
+ * @query: callback to use when the action properties are queried
+ * @change: (allow-none): callback to use when the action state is
+ *     changed, or %NULL for stateless actions
+ *
+ * This should be called at class initialization time to specify
+ * actions to be added for all instances of this class.
+ *
+ * Actions installed in this way can be simple or stateful.
+ * See the #GAction documentation for more information.
+ *
+ * Note that any class that installs actions must call
+ * gtk_widget_add_class_actions() in the widget’s instance initializer.
+ */
 void
-gtk_widget_class_install_action (GtkWidgetClass             *widget_class,
-                                 const char                 *prefixed_name,
-                                 GtkWidgetActionActivate     activate,
-                                 GtkWidgetActionQuery        query,
-                                 GtkWidgetActionChange       change)
+gtk_widget_class_install_action (GtkWidgetClass          *widget_class,
+                                 const char              *prefixed_name,
+                                 GtkWidgetActionActivate  activate,
+                                 GtkWidgetActionQuery     query,
+                                 GtkWidgetActionChange    change)
 {
   GtkWidgetClassPrivate *priv = widget_class->priv;
   GtkWidgetAction *action;
@@ -13538,6 +13556,16 @@ gtk_widget_class_install_action (GtkWidgetClass             *widget_class,
   g_ptr_array_add (priv->actions, action);
 }
 
+/**
+ * gtk_widget_add_class_actions:
+ * @widget: a #GtkWidget
+ *
+ * Creates and adds any actions that are associated with the widget's class.
+ *
+ * This function must be called in the instance initializer for any
+ * class which installs actions with gtk_widget_class_install_action()
+ * at class initialization time.
+ */
 void
 gtk_widget_add_class_actions (GtkWidget *widget)
 {
@@ -13575,8 +13603,23 @@ gtk_widget_add_class_actions (GtkWidget *widget)
   g_hash_table_unref (prefixes);
 }
 
+/**
+ * gtk_widget_notify_class_action_enabled:
+ * @widget: a #GtkWidget
+ * @prefixed_name: a prefixed action name, such as "clipboard.paste"
+ *
+ * Convenience API to notify when an action installed
+ * with gtk_widget_class_install_action() changes its
+ * enabled state. It must be called after the change
+ * has taken place (we expect the @query callback to
+ * already return the new state).
+ *
+ * This function is a more convenient alternative
+ * to calling g_action_group_action_enabled_changed()
+ * directly.
+ */
 void
-gtk_widget_notify_class_action_enabled (GtkWidget *widget,
+gtk_widget_notify_class_action_enabled (GtkWidget  *widget,
                                         const char *prefixed_name)
 {
   GtkActionMuxer *muxer;
@@ -13595,6 +13638,21 @@ gtk_widget_notify_class_action_enabled (GtkWidget *widget,
   g_action_group_action_enabled_changed (group, name, enabled);
 }
 
+/**
+ * gtk_widget_notify_class_action_state:
+ * @widget: a #GtkWidget
+ * @prefixed_name: a prefixed action name, such as "clipboard.paste"
+ *
+ * Convenience API to notify when an action installed
+ * with gtk_widget_class_install_action() changes its
+ * state. It must be called after the change has taken
+ * place (we expect the @query callback to already
+ * return the new state).
+ *
+ * This function is a more convenient alternative
+ * to calling g_action_group_action_state_changed()
+ * directly.
+ */
 void
 gtk_widget_notify_class_action_state (GtkWidget  *widget,
                                       const char *prefixed_name)
