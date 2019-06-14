@@ -70,6 +70,7 @@
 #include "gtkversion.h"
 #include "gtkwidgetpaintableprivate.h"
 #include "gtkwidgetpathprivate.h"
+#include "gtkwidgetactiongroupprivate.h"
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
 #include "gtknativeprivate.h"
@@ -501,6 +502,7 @@ struct _GtkWidgetClassPrivate
   AtkRole accessible_role;
   const char *css_name;
   GType layout_manager_type;
+  GPtrArray *actions;
 };
 
 enum {
@@ -13479,3 +13481,157 @@ gtk_widget_should_layout (GtkWidget *widget)
   return TRUE;
 }
 
+void
+gtk_widget_class_install_action (GtkWidgetClass             *widget_class,
+                                 const char                 *prefixed_name,
+                                 GtkWidgetActionActivate     activate,
+                                 GtkWidgetActionQuery        query,
+                                 GtkWidgetActionChange       change)
+{
+  GtkWidgetClassPrivate *priv = widget_class->priv;
+  GtkWidgetAction *action;
+  int i;
+  char *p;
+  char *prefix;
+  char *name;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+
+  p = strchr (prefixed_name, '.');
+  if (p == 0)
+    {
+      g_warning ("Action name %s does not contain a '.'", prefixed_name);
+      return;
+    }
+  prefix = g_strndup (prefixed_name, p - prefixed_name);
+  name = g_strdup (p + 1);
+
+  if (priv->actions == NULL)
+    priv->actions = g_ptr_array_new ();
+
+  for (i = 0; i < priv->actions->len; i++)
+    {
+      action = g_ptr_array_index (priv->actions, i);
+
+      if (strcmp (action->prefix, prefix) == 0 &&
+          strcmp (action->name, name) == 0)
+        {
+          g_warning ("Duplicate action name %s.%s", prefix, name);
+          g_free (prefix);
+          g_free (name);
+          return;
+        }
+    }
+
+  action = g_new0 (GtkWidgetAction, 1);
+  action->prefix = prefix;
+  action->name = name;
+  action->activate = activate;
+  action->query = query;
+  action->change = change;
+
+  GTK_NOTE(ACTIONS,
+           g_message ("%sClass: Adding %s.%s action\n",
+                      g_type_name (G_TYPE_FROM_CLASS (widget_class)),
+                      prefix, name));
+
+  g_ptr_array_add (priv->actions, action);
+}
+
+void
+gtk_widget_add_class_actions (GtkWidget *widget)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (widget);
+  GtkWidgetClassPrivate *priv = widget_class->priv;
+  int i;
+  GHashTable *prefixes;
+  GHashTableIter iter;
+  const char *prefix;
+
+  if (priv->actions == NULL)
+    {
+      g_warning ("No class actions registered for %s", G_OBJECT_TYPE_NAME (widget));
+      return;
+    }
+
+  prefixes = g_hash_table_new (g_str_hash, g_str_equal);
+
+  for (i = 0; i < priv->actions->len; i++)
+    {
+      GtkWidgetAction *action = g_ptr_array_index (priv->actions, i);
+      g_hash_table_add (prefixes, action->prefix);
+    }
+
+  g_hash_table_iter_init (&iter, prefixes);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&prefix, NULL))
+    {
+      GActionGroup *group;
+
+      group = gtk_widget_action_group_new (widget, prefix, priv->actions);
+      gtk_widget_insert_action_group (widget, prefix, group);
+      g_object_unref (group);
+    }
+
+  g_hash_table_unref (prefixes);
+}
+
+void
+gtk_widget_notify_class_action_enabled (GtkWidget *widget,
+                                        const char *prefixed_name)
+{
+  GActionGroup *group;
+  gboolean enabled;
+  char *p;
+  char *prefix;
+  const char *name;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  p = strchr (prefixed_name, '.');
+  if (p == 0)
+    {
+      g_warning ("Action name %s does not contain a '.'", prefixed_name);
+      return;
+    }
+  prefix = g_strndup (prefixed_name, p - prefixed_name);
+  name = p + 1;
+
+  group = gtk_widget_get_action_group (widget, prefix);
+  g_return_if_fail (group != NULL);
+
+  enabled = g_action_group_get_action_enabled (group, name);
+  g_action_group_action_enabled_changed (group, name, enabled);
+
+  g_free (prefix);
+}
+
+void
+gtk_widget_notify_class_action_state (GtkWidget  *widget,
+                                      const char *prefixed_name)
+{
+  GActionGroup *group;
+  GVariant *state;
+  char *p;
+  char *prefix;
+  const char *name;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  p = strchr (prefixed_name, '.');
+  if (p == 0)
+    {
+      g_warning ("Action name %s does not contain a '.'", prefixed_name);
+      return;
+    }
+  prefix = g_strndup (prefixed_name, p - prefixed_name);
+  name = p + 1;
+
+  group = gtk_widget_get_action_group (widget, prefix);
+
+  g_return_if_fail (group != NULL);
+
+  state = g_action_group_get_action_state (group, name);
+  g_action_group_action_state_changed (group, name, state);
+
+  g_free (prefix);
+}

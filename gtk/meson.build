@@ -394,6 +394,7 @@ gtk_public_sources = files([
   'gtkviewport.c',
   'gtkvolumebutton.c',
   'gtkwidget.c',
+  'gtkwidgetactiongroup.c',
   'gtkwidgetfocus.c',
   'gtkwidgetpaintable.c',
   'gtkwidgetpath.c',
