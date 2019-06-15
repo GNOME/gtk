@@ -21,6 +21,7 @@
 #define __GTK_ACTION_MUXER_H__
 
 #include <gio/gio.h>
+#include "gtkwidget.h"
 
 G_BEGIN_DECLS
 
@@ -33,7 +34,7 @@ G_BEGIN_DECLS
 typedef struct _GtkActionMuxer                              GtkActionMuxer;
 
 GType                   gtk_action_muxer_get_type                       (void);
-GtkActionMuxer *        gtk_action_muxer_new                            (void);
+GtkActionMuxer *        gtk_action_muxer_new                            (GtkWidget      *widget);
 
 void                    gtk_action_muxer_insert                         (GtkActionMuxer *muxer,
                                                                          const gchar    *prefix,
