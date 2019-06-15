@@ -112,18 +112,28 @@ static void
 gtk_password_entry_toggle_peek (GtkPasswordEntry *entry)
 {
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+  gboolean visibility;
+
+  visibility = gtk_text_get_visibility (GTK_TEXT (priv->entry));
+  gtk_text_set_visibility (GTK_TEXT (priv->entry), !visibility);
+}
+
+static void
+visibility_toggled (GObject          *object,
+                    GParamSpec       *pspec,
+                    GtkPasswordEntry *entry)
+{
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
 
   if (gtk_text_get_visibility (GTK_TEXT (priv->entry)))
     {
-      gtk_text_set_visibility (GTK_TEXT (priv->entry), FALSE);
-      gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "eye-not-looking-symbolic");
-      gtk_widget_set_tooltip_text (priv->peek_icon, _("Show text"));
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "eye-open-negative-filled-symbolic");
+      gtk_widget_set_tooltip_text (priv->peek_icon, _("Hide text"));
     }
   else
     {
-      gtk_text_set_visibility (GTK_TEXT (priv->entry), TRUE);
-      gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "eye-open-negative-filled-symbolic");
-      gtk_widget_set_tooltip_text (priv->peek_icon, _("Hide text"));
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->peek_icon), "eye-not-looking-symbolic");
+      gtk_widget_set_tooltip_text (priv->peek_icon, _("Show text"));
     }
 }
 
@@ -482,11 +492,18 @@ gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
       g_signal_connect_swapped (press, "released",
                                 G_CALLBACK (gtk_password_entry_toggle_peek), entry);
       gtk_widget_add_controller (priv->peek_icon, GTK_EVENT_CONTROLLER (press));
+
+      g_signal_connect (priv->entry, "notify::visibility",
+                        G_CALLBACK (visibility_toggled), entry);
+      visibility_toggled (G_OBJECT (priv->entry), NULL, entry);
     }
   else
     {
       g_clear_pointer (&priv->peek_icon, gtk_widget_unparent);
       gtk_text_set_visibility (GTK_TEXT (priv->entry), FALSE);
+      g_signal_handlers_disconnect_by_func (priv->entry,
+                                            visibility_toggled,
+                                            entry);
     }
 
   keymap_state_changed (priv->keymap, GTK_WIDGET (entry));
@@ -532,13 +549,17 @@ gtk_password_entry_set_extra_menu (GtkPasswordEntry *entry,
 
   g_return_if_fail (GTK_IS_PASSWORD_ENTRY (entry));
 
-  if (!g_set_object (&priv->extra_menu, model))
-    return;
+  /* bypass this check for the initial call from init */
+  if (priv->extra_menu)
+    {
+      if (!g_set_object (&priv->extra_menu, model))
+        return;
+    }
 
   menu = g_menu_new ();
 
   section = g_menu_new ();
-  item = g_menu_item_new (_("_Show Text"), "context.toggle-visibility");
+  item = g_menu_item_new (_("_Show Text"), "misc.toggle-visibility");
   g_menu_item_set_attribute (item, "touch-icon", "s", "eye-not-looking-symbolic");
   g_menu_append_item (section, item);
   g_object_unref (item);
