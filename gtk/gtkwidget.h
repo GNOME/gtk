@@ -971,10 +971,6 @@ void    gtk_widget_class_bind_template_child_full       (GtkWidgetClass        *
                                                          gssize                 struct_offset);
 
 GDK_AVAILABLE_IN_ALL
-GActionGroup           *gtk_widget_get_action_group     (GtkWidget             *widget,
-                                                         const gchar           *prefix);
-
-GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_insert_action_group  (GtkWidget    *widget,
                                                          const gchar  *name,
                                                          GActionGroup *group);
