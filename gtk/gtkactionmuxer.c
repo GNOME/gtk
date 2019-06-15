@@ -102,13 +102,10 @@ typedef struct
 } Group;
 
 static void
-gtk_action_muxer_append_group_actions (gpointer key,
-                                       gpointer value,
-                                       gpointer user_data)
+gtk_action_muxer_append_group_actions (const char *prefix,
+                                       Group      *group,
+                                       GArray     *actions)
 {
-  const gchar *prefix = key;
-  Group *group = value;
-  GArray *actions = user_data;
   gchar **group_actions;
   gchar **action;
 
@@ -134,9 +131,13 @@ gtk_action_muxer_list_actions (GActionGroup *action_group)
 
   for ( ; muxer != NULL; muxer = muxer->parent)
     {
-      g_hash_table_foreach (muxer->groups,
-                            gtk_action_muxer_append_group_actions,
-                            actions);
+      GHashTableIter iter;
+      const char *prefix;
+      Group *group;
+
+      g_hash_table_iter_init (&iter, muxer->groups);
+      while (g_hash_table_iter_next (&iter, (gpointer *)&prefix, (gpointer *)&group))
+        gtk_action_muxer_append_group_actions (prefix, group, actions);
     }
 
   return (gchar **)(void *) g_array_free (actions, FALSE);
