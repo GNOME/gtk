@@ -74,12 +74,6 @@
 /* Define if gio-unix is available */
 /* #undef HAVE_GIO_UNIX */
 
-/* Define to 1 if you have the `httpGetAuthString' function. */
-/* #undef HAVE_HTTPGETAUTHSTRING */
-
-/* Define if cups http_t authstring field is accessible */
-/* #undef HAVE_HTTP_AUTHSTRING */
-
 /* Define to 1 if you have the <inttypes.h> header file. */
 #if !defined (_MSC_VER) || (_MSC_VER >= 1800)
 #define HAVE_INTTYPES_H 1
