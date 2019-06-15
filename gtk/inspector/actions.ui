@@ -21,12 +21,6 @@
           <class name="header"/>
         </style>
         <child>
-          <object class="GtkLabel" id="prefix_heading">
-            <property name="label" translatable="yes">Prefix</property>
-            <property name="xalign">0</property>
-          </object>
-        </child>
-        <child>
           <object class="GtkLabel" id="name_heading">
             <property name="label" translatable="yes">Name</property>
             <property name="xalign">0</property>
@@ -73,12 +67,6 @@
       </object>
     </child>
   </template>
-  <object class="GtkSizeGroup" id="prefix">
-    <property name="mode">horizontal</property>
-    <widgets>
-      <widget name="prefix_heading"/>
-    </widgets>
-  </object>
   <object class="GtkSizeGroup" id="name">
     <property name="mode">horizontal</property>
     <widgets>
