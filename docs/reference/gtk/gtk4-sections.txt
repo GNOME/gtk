@@ -4551,7 +4551,6 @@ gtk_widget_get_overflow
 gtk_widget_set_overflow
 gtk_widget_insert_action_group
 gtk_widget_list_action_prefixes
-gtk_widget_get_action_group
 gtk_widget_activate_action
 gtk_widget_activate_default
 gtk_widget_measure
