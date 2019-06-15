@@ -11904,7 +11904,7 @@ _gtk_widget_get_action_muxer (GtkWidget *widget,
 
   if (create)
     {
-      muxer = gtk_action_muxer_new ();
+      muxer = gtk_action_muxer_new (widget);
       g_object_set_qdata_full (G_OBJECT (widget),
                                quark_action_muxer,
                                muxer,
