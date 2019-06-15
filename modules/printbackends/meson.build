@@ -73,9 +73,10 @@ if enabled_print_backends.contains('cups')
   if cc.has_header('cups/cups.h')
     cups_major_version = cc.compute_int('CUPS_VERSION_MAJOR', prefix : '#include <cups/cups.h>')
     cups_minor_version = cc.compute_int('CUPS_VERSION_MINOR', prefix : '#include <cups/cups.h>')
-    message('Found CUPS version: @0@.@1@'.format(cups_major_version, cups_minor_version))
-    if cups_major_version < 2
-      cups_error = 'Need CUPS version >= 2.0'
+    cups_version = '@0@.@1@'.format(cups_major_version, cups_minor_version)
+    message('Found CUPS version: @0@'.format(cups_version))
+    if cups_version.version_compare('<1.7')
+      cups_error = 'Need CUPS version >= 1.7'
     else
       libcups = cc.find_library('cups', required : true)
     endif
