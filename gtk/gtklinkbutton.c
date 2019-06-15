@@ -96,7 +96,6 @@ struct _GtkLinkButtonPrivate
 
   gboolean visited;
 
-  GActionMap *context_actions;
   GtkWidget *popup_menu;
 };
 
@@ -151,6 +150,17 @@ static const char *link_drop_types[] = {
 static guint link_signals[LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkLinkButton, gtk_link_button, GTK_TYPE_BUTTON)
+
+static void
+gtk_link_button_activate_clipboard_copy (GtkWidget  *widget,
+                                         const char *name,
+                                         GVariant   *parameter)
+{
+  GtkLinkButton *link_button = GTK_LINK_BUTTON (widget);
+  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
+
+  gdk_clipboard_set_text (gtk_widget_get_clipboard (widget), priv->uri);
+}
 
 static void
 gtk_link_button_class_init (GtkLinkButtonClass *klass)
@@ -221,28 +231,9 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LINK_BUTTON_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("button"));
-}
 
-static void copy_activate_cb (GSimpleAction *action,
-                              GVariant      *parameter,
-                              gpointer       user_data);
-
-static void
-gtk_link_button_add_context_actions (GtkLinkButton *link_button)
-{
-  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
-
-  GActionEntry entries[] = {
-    { "copy-clipboard", copy_activate_cb, NULL, NULL, NULL },
-  };
-
-  GSimpleActionGroup *actions = g_simple_action_group_new ();
-
-  priv->context_actions = G_ACTION_MAP (actions);
-
-  g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), link_button);
-
-  gtk_widget_insert_action_group (GTK_WIDGET (link_button), "context", G_ACTION_GROUP (actions));
+  gtk_widget_class_install_action (widget_class, "clipboard.copy",
+                                   gtk_link_button_activate_clipboard_copy);
 }
 
 static GMenuModel *
@@ -298,7 +289,6 @@ gtk_link_button_init (GtkLinkButton *link_button)
   gtk_style_context_add_class (context, "link");
 
   gtk_widget_set_cursor_from_name (GTK_WIDGET (link_button), "pointer");
-  gtk_link_button_add_context_actions (link_button);
 }
 
 static void
@@ -309,7 +299,6 @@ gtk_link_button_finalize (GObject *object)
 
   g_free (priv->uri);
 
-  g_clear_object (&priv->context_actions);
   g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_link_button_parent_class)->finalize (object);
@@ -358,18 +347,6 @@ gtk_link_button_set_property (GObject      *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-copy_activate_cb (GSimpleAction *action,
-                  GVariant      *parameter,
-                  gpointer       user_data)
-{
-  GtkLinkButton *link_button = user_data;
-  GtkLinkButtonPrivate *priv = gtk_link_button_get_instance_private (link_button);
-
-  gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (link_button)),
-		  	  priv->uri);
 }
 
 static void
