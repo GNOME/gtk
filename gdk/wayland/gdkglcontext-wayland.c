@@ -429,8 +429,18 @@ find_eglconfig_for_window (GdkWindow  *window,
       return FALSE;
     }
 
-  /* Pick first valid configuration i guess? */
+  /* Pick first valid configuration.. */
   chosen_config = configs[0];
+
+  /* ..but prefer 8b alpha + 8b color to 2b alpha + 10b color to avoid ugly shadows */
+  for (EGLint i = 0; i < count; i++) {
+    EGLint alphaSize;
+    eglGetConfigAttrib(display_wayland->egl_display, configs[i], EGL_ALPHA_SIZE, &alphaSize);
+    if (alphaSize > 2) {
+      chosen_config = configs[i];
+      break;
+    }
+  }
 
   if (!eglGetConfigAttrib (display_wayland->egl_display, chosen_config,
                            EGL_MIN_SWAP_INTERVAL, min_swap_interval_out))
