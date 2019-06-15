@@ -492,6 +492,10 @@ static void        gtk_window_on_theme_variant_changed (GtkSettings *settings,
 #endif
 static void        gtk_window_set_theme_variant         (GtkWindow  *window);
 
+static void gtk_window_activate_default_activate (GtkWidget *widget,
+                                                  const char *action_name,
+                                                  GVariant *parameter);
+
 static void        gtk_window_do_popup         (GtkWindow      *window,
                                                 GdkEventButton *event);
 static void gtk_window_style_updated (GtkWidget     *widget);
@@ -1196,6 +1200,10 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_WINDOW_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("window"));
+
+  gtk_widget_class_install_action (widget_class, "default.activate",
+                                   gtk_window_activate_default_activate,
+                                   NULL, NULL);
 }
 
 /**
@@ -1766,28 +1774,11 @@ gtk_window_capture_motion (GtkWidget *widget,
 }
 
 static void
-activate_default_cb (GSimpleAction *action,
-                     GVariant      *parameter,
-                     gpointer       data)
+gtk_window_activate_default_activate (GtkWidget  *widget,
+                                      const char *name,
+                                      GVariant   *parameter)
 {
-  gtk_window_real_activate_default (GTK_WINDOW (data));
-}
-
-static void
-add_actions (GtkWindow *window)
-{
-  GActionEntry entries[] = {
-    { "activate", activate_default_cb, NULL, NULL, NULL },
-  };
-
-  GActionGroup *actions;
-
-  actions = G_ACTION_GROUP (g_simple_action_group_new ());
-  g_action_map_add_action_entries (G_ACTION_MAP (actions),
-                                   entries, G_N_ELEMENTS (entries),
-                                   window);
-  gtk_widget_insert_action_group (GTK_WIDGET (window), "default", actions);
-  g_object_unref (actions);
+  gtk_window_real_activate_default (GTK_WINDOW (widget));
 }
 
 static void
@@ -1880,7 +1871,7 @@ gtk_window_init (GtkWindow *window)
                             G_CALLBACK (gtk_window_focus_out), window);
   gtk_widget_add_controller (widget, priv->key_controller);
 
-  add_actions (window);
+  gtk_widget_add_class_actions (GTK_WIDGET (window));
 }
 
 static GtkGesture *
