@@ -39,6 +39,8 @@ option('examples', type: 'boolean', value: 'true',
   description : 'Build examples')
 option('tests', type: 'boolean', value: 'true',
   description : 'Build tests')
+option('installed_tests', type: 'boolean', value: 'false',
+  description : 'enable installed tests')
 
 # input modules
 option('builtin_immodules', type: 'combo', choices : ['yes', 'no', 'auto'],
