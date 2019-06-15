@@ -90,8 +90,6 @@ struct _GtkColorChooserWidgetPrivate
   gboolean has_default_palette;
 
   GSettings *settings;
-
-  GActionMap *context_actions;
 };
 
 enum
@@ -493,11 +491,11 @@ add_default_palette (GtkColorChooserWidget *cc)
 }
 
 static void
-customize_color (GSimpleAction *action,
-                 GVariant      *parameter,
-                 gpointer       user_data)
+gtk_color_chooser_widget_activate_color_customize (GtkWidget *widget,
+                                            const char *name,
+                                            GVariant      *parameter)
 {
-  GtkColorChooserWidget *cc = user_data;
+  GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (widget);
   GtkColorChooserWidgetPrivate *priv = gtk_color_chooser_widget_get_instance_private (cc);
   GdkRGBA color;
 
@@ -511,11 +509,11 @@ customize_color (GSimpleAction *action,
 }
 
 static void
-select_color (GSimpleAction *action,
-              GVariant      *parameter,
-              gpointer       user_data)
+gtk_color_chooser_widget_activate_color_select (GtkWidget *widget,
+                                                const char *name,
+                                                GVariant      *parameter)
 {
-  GtkColorChooserWidget *cc = user_data;
+  GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (widget);
   GdkRGBA color;
 
   g_variant_get (parameter, "(dddd)", &color.red, &color.green, &color.blue, &color.alpha);
@@ -523,25 +521,28 @@ select_color (GSimpleAction *action,
   _gtk_color_chooser_color_activated (GTK_COLOR_CHOOSER (cc), &color);
 }
 
-static void
-gtk_color_chooser_widget_add_context_actions (GtkColorChooserWidget *cc)
+static gboolean
+gtk_color_chooser_widget_query_action (GtkWidget *widget,
+                                       const char *name,
+                                       gboolean *enabled,
+                                       const GVariantType **parameter_type,
+                                       const GVariantType **state_type,
+                                       GVariant **state_hint,
+                                       GVariant **state)
 {
-  GtkColorChooserWidgetPrivate *priv = gtk_color_chooser_widget_get_instance_private (cc);
+  if (enabled)
+    *enabled = TRUE;
+  if (parameter_type)
+    *parameter_type = G_VARIANT_TYPE ("(dddd)");
+  if (state_type)
+    *state_type = NULL;
+  if (state_hint)
+    *state_hint = NULL;
+  if (state)
+    *state = NULL;
 
-  GActionEntry entries[] = {
-    { "select", select_color, "(dddd)", NULL, NULL },
-    { "customize", customize_color, "(dddd)", NULL, NULL },
-  };
-
-  GSimpleActionGroup *actions = g_simple_action_group_new ();
-
-  priv->context_actions = G_ACTION_MAP (actions);
-
-  g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), cc);
-
-  gtk_widget_insert_action_group (GTK_WIDGET (cc), "color", G_ACTION_GROUP (actions));
+  return TRUE;
 }
-
 
 static void
 gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
@@ -635,7 +636,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   gtk_size_group_add_widget (priv->size_group, priv->palette);
   gtk_size_group_add_widget (priv->size_group, box);
 
-  gtk_color_chooser_widget_add_context_actions (cc);
+  gtk_widget_add_class_actions (GTK_WIDGET (cc));
 }
 
 /* GObject implementation {{{1 */
@@ -736,6 +737,15 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
                             FALSE, GTK_PARAM_READWRITE));
 
   gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), I_("colorchooser"));
+
+  gtk_widget_class_install_action (GTK_WIDGET_CLASS (class), "color.select",
+                                   gtk_color_chooser_widget_activate_color_select,
+                                   gtk_color_chooser_widget_query_action,
+                                   NULL);
+  gtk_widget_class_install_action (GTK_WIDGET_CLASS (class), "color.customize",
+                                   gtk_color_chooser_widget_activate_color_customize,
+                                   gtk_color_chooser_widget_query_action,
+                                   NULL);
 }
 
 /* GtkColorChooser implementation {{{1 */
