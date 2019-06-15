@@ -25,6 +25,7 @@
 #include "gtkactionobserverprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkwidget.h"
 
 #include <string.h>
 
@@ -69,6 +70,8 @@ struct _GtkActionMuxer
   GHashTable *groups;
   GHashTable *primary_accels;
   GtkActionMuxer *parent;
+
+  GtkWidget *widget;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkActionMuxer, gtk_action_muxer, G_TYPE_OBJECT,
@@ -79,6 +82,7 @@ enum
 {
   PROP_0,
   PROP_PARENT,
+  PROP_WIDGET,
   NUM_PROPERTIES
 };
 
@@ -592,6 +596,10 @@ gtk_action_muxer_get_property (GObject    *object,
       g_value_set_object (value, gtk_action_muxer_get_parent (muxer));
       break;
 
+    case PROP_WIDGET:
+      g_value_set_object (value, muxer->widget);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -609,6 +617,10 @@ gtk_action_muxer_set_property (GObject      *object,
     {
     case PROP_PARENT:
       gtk_action_muxer_set_parent (muxer, g_value_get_object (value));
+      break;
+
+    case PROP_WIDGET:
+      muxer->widget = g_value_get_object (value);
       break;
 
     default:
@@ -662,6 +674,13 @@ gtk_action_muxer_class_init (GObjectClass *class)
                                                  "The parent muxer",
                                                  GTK_TYPE_ACTION_MUXER,
                                                  G_PARAM_READWRITE |
+                                                 G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_WIDGET] = g_param_spec_object ("widget", "Widget",
+                                                 "The widget that owns the muxer",
+                                                 GTK_TYPE_WIDGET,
+                                                 G_PARAM_READWRITE |
+                                                 G_PARAM_CONSTRUCT_ONLY |
                                                  G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (class, NUM_PROPERTIES, properties);
@@ -771,13 +790,16 @@ gtk_action_muxer_lookup (GtkActionMuxer *muxer,
 
 /*< private >
  * gtk_action_muxer_new:
+ * @widget: the widget to which the muxer belongs
  *
  * Creates a new #GtkActionMuxer.
  */
 GtkActionMuxer *
-gtk_action_muxer_new (void)
+gtk_action_muxer_new (GtkWidget *widget)
 {
-  return g_object_new (GTK_TYPE_ACTION_MUXER, NULL);
+  return g_object_new (GTK_TYPE_ACTION_MUXER,
+                       "widget", widget,
+                       NULL);
 }
 
 /*< private >
