@@ -1543,22 +1543,6 @@ else
     PRINT_BACKENDS="$PRINT_BACKENDS cups"
     AM_CONDITIONAL(HAVE_CUPS, true)
     have_cups=yes
-
-    gtk_save_cflags="$CFLAGS"
-    CFLAGS="$CUPS_CFLAGS"
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <cups/http.h>]],
-                                       [[http_t http; char *s = http.authstring;]])],
-                      [AC_DEFINE([HAVE_HTTP_AUTHSTRING], [],
-                                 [Define if cups http_t authstring field is accessible])],
-                      [])
-    CFLAGS="$gtk_save_cflags"
-
-    AC_SUBST(HAVE_HTTP_AUTHSTRING)
-
-    gtk_save_libs="$LIBS"
-    LIBS="$CUPS_LIBS"
-    AC_CHECK_FUNCS(httpGetAuthString)
-    LIBS="$gtk_save_libs"
   fi
 fi
 

@@ -62,12 +62,6 @@
 /* defines whether we have HarfBuzz */
 #mesondefine HAVE_HARFBUZZ
 
-/* Define to 1 if you have the `httpGetAuthString' function. */
-#mesondefine HAVE_HTTPGETAUTHSTRING
-
-/* Define if cups http_t authstring field is accessible */
-#mesondefine HAVE_HTTP_AUTHSTRING
-
 /* Define to 1 if you have the <inttypes.h> header file. */
 #mesondefine HAVE_INTTYPES_H
 
