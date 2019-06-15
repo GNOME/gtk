@@ -49,7 +49,6 @@ G_BEGIN_DECLS
 
 GType      gtk_inspector_action_editor_get_type (void);
 GtkWidget *gtk_inspector_action_editor_new      (GActionGroup *group,
-                                                 const gchar  *prefix,
                                                  const gchar  *name,
                                                  GtkSizeGroup *activate);
 
