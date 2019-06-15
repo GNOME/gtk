@@ -907,11 +907,14 @@ gtk_pcs = ['gtk+-3.0.pc']
 gdk_pcs = ['gdk-3.0.pc']
 
 pkg_targets = ''
+disabled_backends = []
 foreach backend: [ 'broadway', 'quartz', 'wayland', 'win32', 'x11', ]
   if get_variable('@0@_enabled'.format(backend))
     gtk_pcs += ['gtk+-@0@-3.0.pc'.format(backend)]
     gdk_pcs += ['gdk-@0@-3.0.pc'.format(backend)]
     pkg_targets += ' ' + backend
+  else
+    disabled_backends += [backend]
   endif
 endforeach
 pkgconf.set('GDK_BACKENDS', pkg_targets.strip())
@@ -962,8 +965,8 @@ summary = [
   '------',
   'GTK+ @0@ (@1@)'.format(gtk_version, gtk_api_version),
   '',
-  '  Display backends: @0@'.format(pkg_targets.strip()),
-  '    Print backends: @0@'.format(' '.join(print_backends)),
+  '  Display backends: @0@ [disabled: @1@]'.format(pkg_targets.strip(), ' '.join(disabled_backends)),
+  '    Print backends: @0@ [disabled: @1@]'.format(' '.join(print_backends), ' '.join(disabled_print_backends)),
   '     Cloud support: @0@'.format(get_option('cloudproviders')),
   '    Colord support: @0@'.format(get_option('colord')),
   '          Profiler: @0@'.format(get_option('profiler')),

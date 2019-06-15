@@ -112,6 +112,13 @@ endif
 
 cdata.set_quoted('GTK_PRINT_BACKENDS', ','.join(print_backends))
 
+disabled_print_backends = []
+foreach backend : all_print_backends
+  if not print_backends.contains(backend)
+    disabled_print_backends += [backend]
+  endif
+endforeach
+
 # Building
 
 printbackends_args = [
