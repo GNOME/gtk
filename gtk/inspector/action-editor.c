@@ -29,7 +29,6 @@
 struct _GtkInspectorActionEditorPrivate
 {
   GActionGroup *group;
-  gchar *prefix;
   gchar *name;
   gboolean enabled;
   const GVariantType *parameter_type;
@@ -319,7 +318,6 @@ finalize (GObject *object)
 {
   GtkInspectorActionEditor *r = GTK_INSPECTOR_ACTION_EDITOR (object);
 
-  g_free (r->priv->prefix);
   g_free (r->priv->name);
   g_object_unref (r->priv->sg);
   if (r->priv->state_type)
@@ -342,10 +340,6 @@ get_property (GObject    *object,
     {
     case PROP_GROUP:
       g_value_set_object (value, r->priv->group);
-      break;
-
-    case PROP_PREFIX:
-      g_value_set_string (value, r->priv->prefix);
       break;
 
     case PROP_NAME:
@@ -376,18 +370,13 @@ set_property (GObject      *object,
       r->priv->group = g_value_get_object (value);
       break;
 
-    case PROP_PREFIX:
-      g_free (r->priv->prefix);
-      r->priv->prefix = g_value_dup_string (value);
-      break;
-
     case PROP_NAME:
       g_free (r->priv->name);
       r->priv->name = g_value_dup_string (value);
       break;
 
     case PROP_SIZEGROUP:
-      r->priv->sg = g_value_get_object (value);
+      r->priv->sg = g_value_dup_object (value);
       break;
 
     default:
@@ -410,10 +399,6 @@ gtk_inspector_action_editor_class_init (GtkInspectorActionEditorClass *klass)
       g_param_spec_object ("group", "Action Group", "The Action Group containing the action",
                            G_TYPE_ACTION_GROUP, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 
-  g_object_class_install_property (object_class, PROP_PREFIX,
-      g_param_spec_string ("prefix", "Prefix", "The action name prefix",
-                           NULL, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
-
   g_object_class_install_property (object_class, PROP_NAME,
       g_param_spec_string ("name", "Name", "The action name",
                            NULL, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
@@ -424,13 +409,11 @@ gtk_inspector_action_editor_class_init (GtkInspectorActionEditorClass *klass)
 
 GtkWidget *
 gtk_inspector_action_editor_new (GActionGroup *group,
-                                 const gchar  *prefix,
                                  const gchar  *name,
                                  GtkSizeGroup *activate)
 {
   return g_object_new (GTK_TYPE_INSPECTOR_ACTION_EDITOR,
                        "group", group,
-                       "prefix", prefix,
                        "name", name,
                        "sizegroup", activate,
                        NULL);

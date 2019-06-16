@@ -228,6 +228,8 @@ struct _GtkFileChooserWidgetPrivate {
 
   GtkWidget *box;
 
+  GActionGroup *item_actions;
+
   /* Save mode widgets */
   GtkWidget *save_widgets;
   GtkWidget *save_widgets_table;
@@ -677,6 +679,8 @@ gtk_file_chooser_widget_finalize (GObject *object)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (object);
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
+
+  g_clear_object (&priv->item_actions);
 
   g_clear_pointer (&priv->choices, g_hash_table_unref);
 
@@ -2004,28 +2008,25 @@ check_file_list_popover_sensitivity (GtkFileChooserWidget *impl)
   gboolean all_files;
   gboolean all_folders;
   gboolean active;
-  GActionGroup *actions;
   GAction *action, *action2;
-
-  actions = gtk_widget_get_action_group (priv->browse_files_tree_view, "item");
 
   selection_check (impl, &num_selected, &all_files, &all_folders);
 
   active = (num_selected != 0);
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "copy-location");
+  action = g_action_map_lookup_action (G_ACTION_MAP (priv->item_actions), "copy-location");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), active);
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "add-shortcut");
+  action = g_action_map_lookup_action (G_ACTION_MAP (priv->item_actions), "add-shortcut");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), active && all_folders);
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "visit");
+  action = g_action_map_lookup_action (G_ACTION_MAP (priv->item_actions), "visit");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), active);
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "open");
+  action = g_action_map_lookup_action (G_ACTION_MAP (priv->item_actions), "open");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (num_selected == 1) && all_folders);
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "rename");
+  action = g_action_map_lookup_action (G_ACTION_MAP (priv->item_actions), "rename");
   if (num_selected == 1)
     {
       GSList *infos;
@@ -2042,8 +2043,8 @@ check_file_list_popover_sensitivity (GtkFileChooserWidget *impl)
   else
     g_simple_action_set_enabled (G_SIMPLE_ACTION (action), FALSE);
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "delete");
-  action2 = g_action_map_lookup_action (G_ACTION_MAP (actions), "trash");
+  action = g_action_map_lookup_action (G_ACTION_MAP (priv->item_actions), "delete");
+  action2 = g_action_map_lookup_action (G_ACTION_MAP (priv->item_actions), "trash");
 
   if (num_selected == 1)
     {
@@ -2100,14 +2101,13 @@ static void
 add_actions (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-  GActionGroup *actions;
 
-  actions = G_ACTION_GROUP (g_simple_action_group_new ());
-  g_action_map_add_action_entries (G_ACTION_MAP (actions),
+  priv->item_actions = G_ACTION_GROUP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (priv->item_actions),
                                    entries, G_N_ELEMENTS (entries),
                                    impl);
-  gtk_widget_insert_action_group (GTK_WIDGET (priv->browse_files_tree_view), "item", actions);
-  g_object_unref (actions);
+  gtk_widget_insert_action_group (GTK_WIDGET (priv->browse_files_tree_view), "item",
+                                  priv->item_actions);
 }
 
 static GtkWidget *
@@ -2181,7 +2181,6 @@ static void
 file_list_update_popover (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-  GActionGroup *actions;
   GAction *action;
 
   file_list_build_popover (impl);
@@ -2202,17 +2201,16 @@ file_list_update_popover (GtkFileChooserWidget *impl)
 
   gtk_widget_set_visible (priv->visit_file_item, (priv->operation_mode != OPERATION_MODE_BROWSE));
 
-  actions = gtk_widget_get_action_group (priv->browse_files_tree_view, "item");
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "toggle-show-hidden");
+  action = g_action_map_lookup_action (G_ACTION_MAP (priv->item_actions), "toggle-show-hidden");
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (priv->show_hidden));
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "toggle-show-size");
+  action = g_action_map_lookup_action (G_ACTION_MAP (priv->item_actions), "toggle-show-size");
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (priv->show_size_column));
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "toggle-show-time");
+  action = g_action_map_lookup_action (G_ACTION_MAP (priv->item_actions), "toggle-show-time");
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (priv->show_time));
 
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "toggle-sort-dirs-first");
+  action = g_action_map_lookup_action (G_ACTION_MAP (priv->item_actions), "toggle-sort-dirs-first");
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (priv->sort_directories_first));
 }
 

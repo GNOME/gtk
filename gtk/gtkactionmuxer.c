@@ -102,13 +102,10 @@ typedef struct
 } Group;
 
 static void
-gtk_action_muxer_append_group_actions (gpointer key,
-                                       gpointer value,
-                                       gpointer user_data)
+gtk_action_muxer_append_group_actions (const char *prefix,
+                                       Group      *group,
+                                       GArray     *actions)
 {
-  const gchar *prefix = key;
-  Group *group = value;
-  GArray *actions = user_data;
   gchar **group_actions;
   gchar **action;
 
@@ -134,9 +131,13 @@ gtk_action_muxer_list_actions (GActionGroup *action_group)
 
   for ( ; muxer != NULL; muxer = muxer->parent)
     {
-      g_hash_table_foreach (muxer->groups,
-                            gtk_action_muxer_append_group_actions,
-                            actions);
+      GHashTableIter iter;
+      const char *prefix;
+      Group *group;
+
+      g_hash_table_iter_init (&iter, muxer->groups);
+      while (g_hash_table_iter_next (&iter, (gpointer *)&prefix, (gpointer *)&group))
+        gtk_action_muxer_append_group_actions (prefix, group, actions);
     }
 
   return (gchar **)(void *) g_array_free (actions, FALSE);
@@ -164,6 +165,18 @@ gtk_action_muxer_find_group (GtkActionMuxer  *muxer,
     *action_name = dot + 1;
 
   return group;
+}
+
+GActionGroup *
+gtk_action_muxer_find (GtkActionMuxer  *muxer,
+                       const char      *action_name,
+                       const char     **unprefixed_name)
+{
+  Group *group;
+
+  group = gtk_action_muxer_find_group (muxer, action_name, unprefixed_name);
+
+  return group->group;
 }
 
 static void
@@ -742,12 +755,6 @@ gtk_action_muxer_remove (GtkActionMuxer *muxer,
     }
 }
 
-const gchar **
-gtk_action_muxer_list_prefixes (GtkActionMuxer *muxer)
-{
-  return (const gchar **) g_hash_table_get_keys_as_array (muxer->groups, NULL);
-}
-
 GActionGroup *
 gtk_action_muxer_lookup (GtkActionMuxer *muxer,
                          const gchar    *prefix)
@@ -959,3 +966,4 @@ gtk_normalise_detailed_action_name (const gchar *detailed_action_name)
 
   return action_and_target;
 }
+

@@ -128,6 +128,8 @@ struct _GtkPlacesSidebar {
 
   GtkBookmarksManager     *bookmarks_manager;
 
+  GActionGroup *row_actions;
+
 #ifdef HAVE_CLOUDPROVIDERS
   CloudProvidersCollector *cloud_manager;
   GList *unready_accounts;
@@ -2247,8 +2249,7 @@ check_popover_sensitivity (GtkSidebarRow *row,
   GDrive *drive;
   GVolume *volume;
   GMount *mount;
-  GtkWidget *sidebar;
-  GActionGroup *actions;
+  GtkPlacesSidebar *sidebar;
   GAction *action;
 
   g_object_get (row,
@@ -2261,13 +2262,12 @@ check_popover_sensitivity (GtkSidebarRow *row,
 
   gtk_widget_set_visible (data->add_shortcut_item, (type == PLACES_MOUNTED_VOLUME));
 
-  actions = gtk_widget_get_action_group (sidebar, "row");
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "remove");
+  action = g_action_map_lookup_action (G_ACTION_MAP (sidebar->row_actions), "remove");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (type == PLACES_BOOKMARK));
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "rename");
+  action = g_action_map_lookup_action (G_ACTION_MAP (sidebar->row_actions), "rename");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (type == PLACES_BOOKMARK ||
                                                           type == PLACES_XDG_DIR));
-  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "open");
+  action = g_action_map_lookup_action (G_ACTION_MAP (sidebar->row_actions), "open");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !gtk_list_box_row_is_selected (GTK_LIST_BOX_ROW (row)));
 
   check_visibility (mount, volume, drive,
@@ -3479,14 +3479,11 @@ static GActionEntry entries[] = {
 static void
 add_actions (GtkPlacesSidebar *sidebar)
 {
-  GActionGroup *actions;
-
-  actions = G_ACTION_GROUP (g_simple_action_group_new ());
-  g_action_map_add_action_entries (G_ACTION_MAP (actions),
+  sidebar->row_actions = G_ACTION_GROUP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (sidebar->row_actions),
                                    entries, G_N_ELEMENTS (entries),
                                    sidebar);
-  gtk_widget_insert_action_group (GTK_WIDGET (sidebar), "row", actions);
-  g_object_unref (actions);
+  gtk_widget_insert_action_group (GTK_WIDGET (sidebar), "row", sidebar->row_actions);
 }
 
 static GtkWidget *
@@ -4374,6 +4371,8 @@ static void
 gtk_places_sidebar_finalize (GObject *object)
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (object);
+
+  g_clear_object (&sidebar->row_actions);
 
 #ifdef HAVE_CLOUDPROVIDERS
   g_clear_object (&sidebar->cloud_manager);

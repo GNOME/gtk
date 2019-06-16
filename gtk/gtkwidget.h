@@ -834,11 +834,6 @@ GdkModifierType   gtk_widget_get_modifier_mask (GtkWidget         *widget,
                                                 GdkModifierIntent  intent);
 
 GDK_AVAILABLE_IN_ALL
-void              gtk_widget_insert_action_group (GtkWidget    *widget,
-                                                  const gchar  *name,
-                                                  GActionGroup *group);
-
-GDK_AVAILABLE_IN_ALL
 guint gtk_widget_add_tick_callback (GtkWidget       *widget,
                                     GtkTickCallback  callback,
                                     gpointer         user_data,
@@ -976,11 +971,9 @@ void    gtk_widget_class_bind_template_child_full       (GtkWidgetClass        *
                                                          gssize                 struct_offset);
 
 GDK_AVAILABLE_IN_ALL
-GActionGroup           *gtk_widget_get_action_group     (GtkWidget             *widget,
-                                                         const gchar           *prefix);
-
-GDK_AVAILABLE_IN_ALL
-const gchar **          gtk_widget_list_action_prefixes (GtkWidget             *widget);
+void                    gtk_widget_insert_action_group  (GtkWidget    *widget,
+                                                         const gchar  *name,
+                                                         GActionGroup *group);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_activate_action      (GtkWidget  *widget,

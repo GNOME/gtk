@@ -1255,8 +1255,6 @@ action_ancestor (GtkWidget *widget)
 {
   if (GTK_IS_MENU (widget))
     return gtk_menu_get_attach_widget (GTK_MENU (widget));
-  else if (GTK_IS_POPOVER (widget))
-    return gtk_popover_get_relative_to (GTK_POPOVER (widget));
   else
     return gtk_widget_get_parent (widget);
 }
@@ -1266,41 +1264,36 @@ find_action_owner (GtkActionable *actionable)
 {
   GtkWidget *widget = GTK_WIDGET (actionable);
   const gchar *full_name;
-  const gchar *dot;
-  const gchar *name;
-  gchar *prefix;
   GtkWidget *win;
-  GActionGroup *group;
 
   full_name = gtk_actionable_get_action_name (actionable);
   if (!full_name)
     return NULL;
 
-  dot = strchr (full_name, '.');
-  prefix = g_strndup (full_name, dot - full_name);
-  name = dot + 1;
-
   win = gtk_widget_get_ancestor (widget, GTK_TYPE_APPLICATION_WINDOW);
-  if (g_strcmp0 (prefix, "win") == 0)
+  if (g_str_has_prefix (full_name, "win.") == 0)
     {
       if (G_IS_OBJECT (win))
         return (GObject *)win;
     }
-  else if (g_strcmp0 (prefix, "app") == 0)
-    {  
+  else if (g_str_has_prefix (full_name, "app.") == 0)
+    {
       if (GTK_IS_WINDOW (win))
         return (GObject *)gtk_window_get_application (GTK_WINDOW (win));
     }
 
   while (widget != NULL)
     {
-      group = gtk_widget_get_action_group (widget, prefix);
-      if (group && g_action_group_has_action (group, name))
+      GtkActionMuxer *muxer;
+
+      muxer = _gtk_widget_get_action_muxer (widget, FALSE);
+      if (muxer && gtk_action_muxer_find (muxer, full_name, NULL))
         return (GObject *)widget;
+
       widget = action_ancestor (widget);
     }
 
-  return NULL;  
+  return NULL;
 }
 
 static void
