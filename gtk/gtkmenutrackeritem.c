@@ -551,7 +551,7 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
       if (found)
         {
           GTK_NOTE(ACTIONS, g_message ("menutracker: action %s existed from the start", action_name));
-          gtk_menu_tracker_item_action_added (GTK_ACTION_OBSERVER (self), observable, NULL, parameter_type, enabled, state);
+          gtk_menu_tracker_item_action_added (GTK_ACTION_OBSERVER (self), observable, action_name, parameter_type, enabled, state);
         }
       else
         {
