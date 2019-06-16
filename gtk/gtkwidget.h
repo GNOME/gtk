@@ -975,9 +975,6 @@ GActionGroup           *gtk_widget_get_action_group     (GtkWidget             *
                                                          const gchar           *prefix);
 
 GDK_AVAILABLE_IN_ALL
-const gchar **          gtk_widget_list_action_prefixes (GtkWidget             *widget);
-
-GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_insert_action_group  (GtkWidget    *widget,
                                                          const gchar  *name,
                                                          GActionGroup *group);
