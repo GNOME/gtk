@@ -43,11 +43,6 @@ skipped_tests = [
   'colorchooser',
 ]
 
-a11y_testfocus_bin = executable('testfocus',
-  'testfocus.c',
-  dependencies: libgtk_dep,
-)
-
 a11y_dump_bin = executable('accessibility-dump',
   'accessibility-dump.c',
   dependencies: libgtk_dep,
