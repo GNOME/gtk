@@ -200,8 +200,23 @@ gtk_layout_manager_real_create_layout_child (GtkLayoutManager *manager,
 }
 
 static void
+gtk_layout_manager_finalize (GObject *gobject)
+{
+  GtkLayoutManager *self = GTK_LAYOUT_MANAGER (gobject);
+  GtkLayoutManagerPrivate *priv = gtk_layout_manager_get_instance_private (self);
+
+  g_clear_pointer (&priv->layout_children, g_hash_table_unref);
+
+  G_OBJECT_CLASS (gtk_layout_manager_parent_class)->finalize (gobject);
+}
+
+static void
 gtk_layout_manager_class_init (GtkLayoutManagerClass *klass)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->finalize = gtk_layout_manager_finalize;
+
   klass->get_request_mode = gtk_layout_manager_real_get_request_mode;
   klass->measure = gtk_layout_manager_real_measure;
   klass->allocate = gtk_layout_manager_real_allocate;
