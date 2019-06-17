@@ -495,6 +495,14 @@ static void        gtk_window_set_theme_variant         (GtkWindow  *window);
 static void gtk_window_activate_default_activate (GtkWidget *widget,
                                                   const char *action_name,
                                                   GVariant *parameter);
+static void gtk_window_activate_focus_move (GtkWidget *widget,
+                                            const char *action_name,
+                                            GVariant  *parameter);
+
+static void gtk_window_query_action (GtkWidget           *widget,
+                                     const char          *action_name,
+                                     gboolean            *enabled,
+                                     const GVariantType **parameter_type);
 
 static void        gtk_window_do_popup         (GtkWindow      *window,
                                                 GdkEventButton *event);
@@ -1204,6 +1212,9 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_widget_class_install_action (widget_class, "default.activate",
                                    gtk_window_activate_default_activate,
                                    NULL);
+  gtk_widget_class_install_action (widget_class, "focus.move",
+                                   gtk_window_activate_focus_move,
+                                   gtk_window_query_action);
 }
 
 /**
@@ -1779,6 +1790,32 @@ gtk_window_activate_default_activate (GtkWidget  *widget,
                                       GVariant   *parameter)
 {
   gtk_window_real_activate_default (GTK_WINDOW (widget));
+}
+
+static void
+gtk_window_activate_focus_move (GtkWidget  *widget,
+                                const char *action_name,
+                                GVariant   *parameter)
+{
+  gtk_window_move_focus (widget,
+                         CLAMP (g_variant_get_int32 (parameter),
+                                GTK_DIR_TAB_FORWARD,
+                                GTK_DIR_RIGHT));
+}
+
+static void
+gtk_window_query_action (GtkWidget           *widget,
+                         const char          *action_name,
+                         gboolean            *enabled,
+                         const GVariantType **parameter_type)
+{
+  if (strcmp (action_name, "focus.move") == 0)
+    {
+      if (enabled)
+        *enabled = TRUE;
+      if (parameter_type)
+        *parameter_type = G_VARIANT_TYPE_INT32;
+    }
 }
 
 static void
