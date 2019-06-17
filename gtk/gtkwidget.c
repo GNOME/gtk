@@ -73,6 +73,7 @@
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
 #include "gtknativeprivate.h"
+#include "gtkapplicationaccelsprivate.h"
 
 #include "a11y/gtkwidgetaccessible.h"
 #include "inspector/window.h"
@@ -502,6 +503,7 @@ struct _GtkWidgetClassPrivate
   const char *css_name;
   GType layout_manager_type;
   GPtrArray *actions;
+  GtkApplicationAccels *accels;
 };
 
 enum {
@@ -712,6 +714,9 @@ static gboolean gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_
 
 static void remove_parent_surface_transform_changed_listener (GtkWidget *widget);
 static void add_parent_surface_transform_changed_listener (GtkWidget *widget);
+
+static gboolean gtk_widget_activate_accels (GtkWidget      *widget,
+                                            const GdkEvent *event);
 
 
 /* --- variables --- */
@@ -5359,6 +5364,11 @@ gtk_widget_event_internal (GtkWidget      *widget,
       (event->any.type == GDK_KEY_PRESS ||
        event->any.type == GDK_KEY_RELEASE))
     return_val |= gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *) event);
+
+  if (return_val == FALSE &&
+      (event->any.type == GDK_KEY_PRESS ||
+       event->any.type == GDK_KEY_RELEASE))
+    return_val = gtk_widget_activate_accels (widget, event);
 
   return return_val;
 }
@@ -13571,4 +13581,141 @@ gtk_widget_notify_class_action_state (GtkWidget  *widget,
 
   muxer = _gtk_widget_get_action_muxer (widget, TRUE);
   gtk_action_muxer_action_state_changed (muxer, action_name, state);
+}
+
+static void
+gtk_widget_class_add_accel_for_action (GtkWidgetClass *widget_class,
+                                       const char     *detailed_action,
+                                       const char     *accel)
+{
+  GtkWidgetClassPrivate *priv = widget_class->priv;
+  char **accels;
+  int n;
+
+  if (priv->accels == NULL)
+    priv->accels = gtk_application_accels_new ();
+
+  accels = gtk_application_accels_get_accels_for_action (priv->accels, detailed_action);
+
+  if (accels)
+    {
+      n = g_strv_length (accels);
+      accels = g_renew (char *, accels, n + 2);
+    }
+  else
+    {
+      n = 0;
+      accels = g_new (char *, 2);
+    }
+
+  accels[n] = g_strdup (accel);
+  accels[n + 1] = NULL;
+
+  gtk_application_accels_set_accels_for_action (priv->accels, detailed_action, (const char **)accels);
+}
+
+/**
+ * gtk_widget_class_bind_action:
+ * @widget_class: a #GtkWidgetClass
+ * @keyval: key value of the binding
+ * @modifiers: key modifiers of the binding
+ * @action_name: the name of the action to bind
+ * @format_string: (allow-none): GVariant format string for
+ *     the parameters, or %NULL
+ *
+ * Binds the @keyval, @modifiers shortcut to
+ * trigger the action named @action_name with the
+ * given parameters.
+ *
+ * This function should be called at class-init time.
+ *
+ * The action must be defined using
+ * gtk_widget_class_install_action() and the parameters
+ * must match the @parameter_type passed to that function.
+ */
+void
+gtk_widget_class_bind_action (GtkWidgetClass  *widget_class,
+                              guint            keyval,
+                              GdkModifierType  modifiers,
+                              const char      *action_name,
+                              const char      *format_string,
+                              ...)
+{
+  GtkWidgetClassPrivate *priv = widget_class->priv;
+  gboolean found = FALSE;
+  GVariantType *type = NULL;
+  GVariant *parameters = NULL;
+  char *detailed_action = NULL;
+  char *accel = NULL;
+
+  if (priv->actions)
+    {
+      int i;
+      for (i = 0; i < priv->actions->len; i++)
+        {
+          GtkWidgetAction *action = g_ptr_array_index (priv->actions, i);
+          if (strcmp (action->name, action_name) == 0)
+            {
+              type = action->parameter_type;
+              found = TRUE;
+              break;
+            }
+        }
+    }
+
+  if (!found)
+    {
+      g_warning ("Widget action %s not found", action_name);
+      return;
+    }
+
+  if (format_string)
+    {
+      va_list args;
+      va_start (args, format_string);
+      parameters = g_variant_ref_sink (g_variant_new_va (format_string, NULL, &args));
+      va_end (args);
+    }
+
+  if (parameters && !g_variant_is_of_type (parameters, type))
+    {
+      g_warning ("Parameters don't match expected type for action %s", action_name);
+      g_variant_unref (parameters);
+      return;
+    }
+
+  detailed_action = g_action_print_detailed_name (action_name, parameters);
+
+  accel = gtk_accelerator_name (keyval, modifiers);
+
+  gtk_widget_class_add_accel_for_action (widget_class, detailed_action, accel);
+
+  g_free (detailed_action);
+  g_free (accel);
+}
+
+static gboolean
+gtk_widget_activate_accels (GtkWidget      *widget,
+                            const GdkEvent *event)
+{
+  GtkWidgetClass *class = GTK_WIDGET_GET_CLASS (widget);
+  GtkWidgetClassPrivate *priv = class->priv;
+  GtkApplicationAccels *accels = priv->accels;
+  GtkActionMuxer *muxer;
+  guint keyval;
+  GdkModifierType modifiers;
+
+  if (!accels)
+    return FALSE;
+
+  muxer = _gtk_widget_get_action_muxer (widget, FALSE);
+  if (!muxer)
+    return FALSE;
+
+  gdk_event_get_keyval ((GdkEvent *)event, &keyval);
+  gdk_event_get_state ((GdkEvent *)event, &modifiers);
+
+  return gtk_application_accels_activate (accels,
+                                          G_ACTION_GROUP (muxer),
+                                          keyval, modifiers);
 }

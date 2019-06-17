@@ -4636,6 +4636,7 @@ gtk_widget_class_install_action
 gtk_widget_class_install_stateful_action
 gtk_widget_notify_class_action_enabled
 gtk_widget_notify_class_action_state
+gtk_widget_class_bind_action
 
 <SUBSECTION Standard>
 GTK_WIDGET
