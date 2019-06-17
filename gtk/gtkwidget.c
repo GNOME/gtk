@@ -73,6 +73,7 @@
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
 #include "gtknativeprivate.h"
+#include "gtkapplicationaccelsprivate.h"
 
 #include "a11y/gtkwidgetaccessible.h"
 #include "inspector/window.h"
@@ -502,6 +503,7 @@ struct _GtkWidgetClassPrivate
   const char *css_name;
   GType layout_manager_type;
   GPtrArray *actions;
+  GtkApplicationAccels *accels;
 };
 
 enum {
@@ -712,6 +714,9 @@ static gboolean gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_
 
 static void remove_parent_surface_transform_changed_listener (GtkWidget *widget);
 static void add_parent_surface_transform_changed_listener (GtkWidget *widget);
+
+static gboolean gtk_widget_activate_accels (GtkWidget      *widget,
+                                            const GdkEvent *event);
 
 
 /* --- variables --- */
@@ -5359,6 +5364,11 @@ gtk_widget_event_internal (GtkWidget      *widget,
       (event->any.type == GDK_KEY_PRESS ||
        event->any.type == GDK_KEY_RELEASE))
     return_val |= gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *) event);
+
+  if (return_val == FALSE &&
+      (event->any.type == GDK_KEY_PRESS ||
+       event->any.type == GDK_KEY_RELEASE))
+    return_val = gtk_widget_activate_accels (widget, event);
 
   return return_val;
 }
@@ -13571,4 +13581,75 @@ gtk_widget_notify_class_action_state (GtkWidget  *widget,
 
   muxer = _gtk_widget_get_action_muxer (widget, TRUE);
   gtk_action_muxer_action_state_changed (muxer, action_name, state);
+}
+
+void
+gtk_widget_class_set_accels_for_actionv (GtkWidgetClass     *widget_class,
+                                         const char         *detailed_action_name,
+                                         const char * const *accelerators)
+{
+  GtkWidgetClassPrivate *priv = widget_class->priv;
+
+  if (priv->accels == NULL)
+    priv->accels = gtk_application_accels_new ();
+
+  gtk_application_accels_set_accels_for_action (priv->accels,
+                                                detailed_action_name,
+                                                accelerators);
+}
+
+void
+gtk_widget_class_set_accels_for_action (GtkWidgetClass *widget_class,
+                                        const char     *detailed_action_name,
+                                        ...)
+{
+  va_list var_args;
+  GPtrArray *accels;
+
+  accels = g_ptr_array_sized_new (4);
+
+  va_start (var_args, detailed_action_name);
+  while (TRUE)
+    {
+      char *arg = va_arg (var_args, char *);
+
+      if (arg == NULL)
+        break;
+
+      g_ptr_array_add (accels, arg);
+    }
+  va_end (var_args);
+  g_ptr_array_add (accels, NULL);
+
+  gtk_widget_class_set_accels_for_actionv (widget_class,
+                                           detailed_action_name,
+                                           (const char * const *)accels->pdata);
+
+  g_ptr_array_free (accels, TRUE);
+}
+
+static gboolean
+gtk_widget_activate_accels (GtkWidget      *widget,
+                            const GdkEvent *event)
+{
+  GtkWidgetClass *class = GTK_WIDGET_GET_CLASS (widget);
+  GtkWidgetClassPrivate *priv = class->priv;
+  GtkApplicationAccels *accels = priv->accels;
+  GtkActionMuxer *muxer;
+  guint keyval;
+  GdkModifierType modifiers;
+
+  if (!accels)
+    return FALSE;
+
+  muxer = _gtk_widget_get_action_muxer (widget, FALSE);
+  if (!muxer)
+    return FALSE;
+
+  gdk_event_get_keyval ((GdkEvent *)event, &keyval);
+  gdk_event_get_state ((GdkEvent *)event, &modifiers);
+
+  return gtk_application_accels_activate (accels,
+                                          G_ACTION_GROUP (muxer),
+                                          keyval, modifiers);
 }

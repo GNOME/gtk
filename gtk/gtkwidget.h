@@ -1092,6 +1092,15 @@ void                    gtk_widget_notify_class_action_state (GtkWidget  *widget
                                                               const char *action_name,
                                                               GVariant   *state);
 
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_class_set_accels_for_actionv (GtkWidgetClass     *widget_class,
+                                                                 const char         *detailed_action_name,
+                                                                 const char * const *accelerators);
+
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_class_set_accels_for_action (GtkWidgetClass     *widget_class,
+                                                                const char         *detailed_action_name,
+                                                                ...);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)
