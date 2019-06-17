@@ -39,4 +39,7 @@ libgdk_mir_la_SOURCES =	\
 libgdkinclude_HEADERS = \
 	gdkmir.h
 
+EXTRA_DIST += \
+	meson.build
+
 -include $(top_srcdir)/git.mk
