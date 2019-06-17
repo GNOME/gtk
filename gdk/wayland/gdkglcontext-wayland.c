@@ -391,13 +391,13 @@ find_eglconfig_for_surface (GdkSurface  *surface,
   attrs[i++] = EGL_RGB_BUFFER;
 
   attrs[i++] = EGL_RED_SIZE;
-  attrs[i++] = 1;
+  attrs[i++] = 8;
   attrs[i++] = EGL_GREEN_SIZE;
-  attrs[i++] = 1;
+  attrs[i++] = 8;
   attrs[i++] = EGL_BLUE_SIZE;
-  attrs[i++] = 1;
+  attrs[i++] = 8;
   attrs[i++] = EGL_ALPHA_SIZE;
-  attrs[i++] = 1;
+  attrs[i++] = 8;
 
   attrs[i++] = EGL_NONE;
   g_assert (i < MAX_EGL_ATTRS);
