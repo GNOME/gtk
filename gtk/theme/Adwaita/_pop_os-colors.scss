@@ -2,13 +2,14 @@
 // it gets @if ed depending on $variant
 
 
-$base_color: if($variant == 'light', #ffffff, lighten(desaturate(#241f31, 100%), 2%));
+$base_color: if($variant == 'light', #ffffff, darken(desaturate(#554741, 2%), 8%)); 
 $text_color: if($variant == 'light', black, white);
-$bg_color: if($variant == 'light', #f6f5f4, darken(desaturate(#3d3846, 100%), 4%));
+$bg_color: if($variant == 'light', lighten(#bbb5b3,25%), darken(#554741, 5%));
 $fg_color: if($variant == 'light', #2e3436, #eeeeec);
 
 $selected_fg_color: #ffffff;
-$selected_bg_color: if($variant == 'light', #3584e4, darken(#3584e4, 20%));
+$selected_bg_color: if($variant == 'light', #faa41a, darken(#faa41a, 10%));
+
 $selected_borders_color: if($variant== 'light', darken($selected_bg_color, 15%), darken($selected_bg_color, 30%));
 $borders_color: if($variant == 'light', darken($bg_color, 18%), darken($bg_color, 10%));
 $alt_borders_color: if($variant == 'light', darken($bg_color, 24%), darken($bg_color, 18%));
@@ -70,9 +71,9 @@ $backdrop_menu_color: if($variant == 'light', $backdrop_base_color, mix($backdro
 
 //special cased widget colors
 $suggested_bg_color: $selected_bg_color;
-$suggested_border_color: $selected_borders_color;
-$progress_bg_color: $selected_bg_color;
+$suggested_border_color: if($variant=='light', darken($suggested_bg_color, 15%), $suggested_bg_color);
+$progress_bg_color: #48b9c7;
 $progress_border_color: if($variant=='light', darken($progress_bg_color, 15%), darken($progress_bg_color, 30%));
-$checkradio_bg_color: $bg_color;
-$checkradio_fg_color: $fg_color;
+$checkradio_bg_color: $suggested_bg_color;
+$checkradio_fg_color: #ffffff;
 $spinner_fg_color: $fg_color;
