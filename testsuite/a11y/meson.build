@@ -25,7 +25,6 @@ a11y_state_tests = [
   'entries',
   'scale-drawvalue',
   'placeholder-text',
-  'menus',
   'menu',
   'menubutton',
   'menubutton2',
