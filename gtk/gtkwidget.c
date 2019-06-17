@@ -718,6 +718,10 @@ static void add_parent_surface_transform_changed_listener (GtkWidget *widget);
 static gboolean gtk_widget_activate_accels (GtkWidget      *widget,
                                             const GdkEvent *event);
 
+static void gtk_widget_activate_menu_popup (GtkWidget  *widget,
+                                            const char *action_name,
+                                            GVariant   *parameter);
+
 
 /* --- variables --- */
 static gint             GtkWidget_private_offset = 0;
@@ -870,7 +874,6 @@ static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkBindingSet *binding_set;
 
   g_type_class_adjust_private_offset (klass, &GtkWidget_private_offset);
   gtk_widget_parent_class = g_type_class_peek_parent (klass);
@@ -2126,11 +2129,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__UINTv);
 
-  binding_set = gtk_binding_set_by_class (klass);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_F10, GDK_SHIFT_MASK,
-                                "popup-menu", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Menu, 0,
-                                "popup-menu", 0);
+  gtk_widget_class_install_action (klass, "menu.popup",
+                                   gtk_widget_activate_menu_popup);
+
+  gtk_widget_class_set_accels_for_action (klass, "menu.popup", "Menu", "<Shift>Menu", NULL);
 
   gtk_widget_class_set_accessible_type (klass, GTK_TYPE_WIDGET_ACCESSIBLE);
   gtk_widget_class_set_css_name (klass, I_("widget"));
@@ -13652,4 +13654,14 @@ gtk_widget_activate_accels (GtkWidget      *widget,
   return gtk_application_accels_activate (accels,
                                           G_ACTION_GROUP (muxer),
                                           keyval, modifiers);
+}
+
+static void
+gtk_widget_activate_menu_popup (GtkWidget  *widget,
+                                const char *action_name,
+                                GVariant   *parameter)
+{
+  gboolean handled;
+
+  g_signal_emit (widget, widget_signals[POPUP_MENU], 0, &handled);
 }
