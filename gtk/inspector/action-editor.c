@@ -43,7 +43,6 @@ enum
 {
   PROP_0,
   PROP_GROUP,
-  PROP_PREFIX,
   PROP_NAME,
   PROP_SIZEGROUP
 };
@@ -232,6 +231,20 @@ state_changed (GtkWidget *editor,
 }
 
 static void
+update_enabled (GtkInspectorActionEditor *r,
+                gboolean                  enabled)
+{
+  r->priv->enabled = enabled;
+  if (r->priv->parameter_entry)
+    {
+      gtk_widget_set_sensitive (r->priv->parameter_entry, enabled);
+      parameter_changed (r->priv->parameter_entry, r);
+    }
+  if (r->priv->activate_button)
+    gtk_widget_set_sensitive (r->priv->activate_button, enabled);
+}
+
+static void
 action_enabled_changed_cb (GActionGroup             *group,
                            const gchar              *action_name,
                            gboolean                  enabled,
@@ -240,12 +253,15 @@ action_enabled_changed_cb (GActionGroup             *group,
   if (!g_str_equal (action_name, r->priv->name))
     return;
 
-  r->priv->enabled = enabled;
-  if (r->priv->parameter_entry)
-    {
-      gtk_widget_set_sensitive (r->priv->parameter_entry, enabled);
-      parameter_changed (r->priv->parameter_entry, r);
-    }
+  update_enabled (r, enabled);
+}
+
+static void
+update_state (GtkInspectorActionEditor *r,
+              GVariant                 *state)
+{
+  if (r->priv->state_entry)
+    variant_editor_set_value (r->priv->state_entry, state);
 }
 
 static void
@@ -257,8 +273,7 @@ action_state_changed_cb (GActionGroup             *group,
   if (!g_str_equal (action_name, r->priv->name))
     return;
 
-  if (r->priv->state_entry)
-    variant_editor_set_value (r->priv->state_entry, state);
+  update_state (r, state);
 }
 
 static void
@@ -417,4 +432,13 @@ gtk_inspector_action_editor_new (GActionGroup *group,
                        "name", name,
                        "sizegroup", activate,
                        NULL);
+}
+
+void
+gtk_inspector_action_editor_update (GtkInspectorActionEditor *r,
+                                    gboolean                  enabled,
+                                    GVariant                 *state)
+{
+  update_enabled (r, enabled);
+  update_state (r, state);
 }

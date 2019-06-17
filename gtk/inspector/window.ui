@@ -226,13 +226,12 @@
                               <object class="GtkCenterBox">
                                 <child type="start">
                                   <object class="GtkBox">
-                                    <property name="spacing">10</property>
                                     <child>
                                       <object class="GtkButton">
                                         <property name="icon-name">go-previous-symbolic</property>
                                         <property name="tooltip-text" translatable="yes">Toggle Sidebar</property>
                                         <property name="relief">none</property>
-                                        <property name="margin-start">6</property>
+                                        <property name="margin">6</property>
                                         <property name="halign">center</property>
                                         <property name="valign">center</property>
                                         <signal name="clicked" handler="toggle_sidebar"/>
@@ -240,6 +239,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkStack" id="object_start_stack">
+                                        <property name="homogeneous">0</property>
                                         <child>
                                           <object class="GtkStackPage">
                                             <property name="name">empty</property>
@@ -250,9 +250,23 @@
                                         </child>
                                         <child>
                                           <object class="GtkStackPage">
+                                            <property name="name">actions</property>
+                                            <property name="child">
+                                              <object class="GtkButton" id="refresh_actions_button">
+                                                <property name="margin">6</property>
+                                                <property name="icon-name">view-refresh-symbolic</property>
+                                                <property name="tooltip-text" translatable="yes">Refresh action state</property>
+                                                <property name="relief">none</property>
+                                              </object>
+                                            </property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkStackPage">
                                             <property name="name">magnifier</property>
                                             <property name="child">
                                               <object class="GtkScale">
+                                                <property name="margin">6</property>
                                                 <property name="width-request">150</property>
                                                 <property name="draw-value">0</property>
                                                 <property name="adjustment">magnification_adjustment</property>
@@ -276,6 +290,7 @@
                                     <property name="transition-type">crossfade</property>
                                     <property name="hexpand">1</property>
                                     <property name="halign">center</property>
+                                    <property name="homogeneous">0</property>
                                     <child>
                                       <object class="GtkStackPage">
                                         <property name="name">title</property>
@@ -382,7 +397,9 @@
                                     <property name="name">actions</property>
                                     <property name="title" translatable="yes">Actions</property>
                                     <property name="child">
-                                      <object class="GtkInspectorActions" id="actions"/>
+                                      <object class="GtkInspectorActions" id="actions">
+                                        <property name="button">refresh_actions_button</property>
+                                      </object>
                                     </property>
                                   </object>
                                 </child>

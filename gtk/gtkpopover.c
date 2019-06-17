@@ -140,8 +140,6 @@
 
 #define POS_IS_VERTICAL(p) ((p) == GTK_POS_TOP || (p) == GTK_POS_BOTTOM)
 
-static GListStore *popover_list = NULL;
-
 typedef struct {
   GdkSurface *surface;
   GskRenderer *renderer;
@@ -743,20 +741,7 @@ gtk_popover_dispose (GObject *object)
 {
   GtkPopover *popover = GTK_POPOVER (object);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  guint i;
   GtkWidget *child;
-
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (popover_list)); i++)
-    {
-      gpointer item = g_list_model_get_item (G_LIST_MODEL (popover_list), i);
-      if (item == object)
-        {
-          g_list_store_remove (popover_list, i);
-          break;
-        }
-      else
-        g_object_unref (item);
-    }
 
   child = gtk_bin_get_child (GTK_BIN (popover));
 
@@ -776,13 +761,6 @@ static void
 gtk_popover_finalize (GObject *object)
 {
   G_OBJECT_CLASS (gtk_popover_parent_class)->finalize (object);
-}
-
-static void
-gtk_popover_constructed (GObject *object)
-{
-  g_list_store_append (popover_list, object);
-  g_object_unref (object);
 }
 
 static void
@@ -1333,10 +1311,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
-  if (popover_list == NULL)
-    popover_list = g_list_store_new (GTK_TYPE_WIDGET);
-
-  object_class->constructed = gtk_popover_constructed;
   object_class->dispose = gtk_popover_dispose;
   object_class->finalize = gtk_popover_finalize;
   object_class->set_property = gtk_popover_set_property;
@@ -1444,22 +1418,6 @@ size_changed (GtkWidget   *widget,
 
   if (priv->surface)
     gtk_popover_move_resize (popover);
-}
-
-/**
- * gtk_popover_get_popovers:
- *
- * Returns the list of all existing #GtkPopover widgets.
- *
- * Returns: (transfer none): The list of existing popovers.
- */
-GListModel *
-gtk_popover_get_popovers (void)
-{
-  if (popover_list == NULL)
-    popover_list = g_list_store_new (GTK_TYPE_WIDGET);
-
-  return G_LIST_MODEL (popover_list);
 }
 
 void

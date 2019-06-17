@@ -43,6 +43,12 @@ struct _GtkInspectorActionsPrivate
   GtkSizeGroup *state;
   GtkSizeGroup *activate;
   GActionGroup *group;
+  GtkWidget *button;
+};
+
+enum {
+  PROP_0,
+  PROP_BUTTON
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorActions, gtk_inspector_actions, GTK_TYPE_BOX)
@@ -93,6 +99,7 @@ add_action (GtkInspectorActions *sl,
   label = gtk_label_new (enabled ? "+" : "-");
   gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
   gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
   gtk_size_group_add_widget (sl->priv->enabled, label);
   gtk_container_add (GTK_CONTAINER (box), label);
 
@@ -114,6 +121,7 @@ add_action (GtkInspectorActions *sl,
   editor = gtk_inspector_action_editor_new (group, name, sl->priv->activate);
   gtk_style_context_add_class (gtk_widget_get_style_context (editor), "cell");
   gtk_container_add (GTK_CONTAINER (box), editor);
+  g_object_set_data (G_OBJECT (row), "editor", editor);
 
   gtk_container_add (GTK_CONTAINER (sl->priv->list), row);
 
@@ -163,17 +171,41 @@ action_removed_cb (GActionGroup        *group,
 }
 
 static void
+set_row_enabled (GtkWidget *row,
+                 gboolean   enabled)
+{
+  GtkWidget *label;
+
+  label = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "enabled"));
+  gtk_label_set_label (GTK_LABEL (label), enabled ? "+" : "-" );
+}
+
+static void
 action_enabled_changed_cb (GActionGroup        *group,
                            const gchar         *action_name,
                            gboolean             enabled,
                            GtkInspectorActions *sl)
 {
   GtkWidget *row;
-  GtkWidget *label;
 
   row = find_row (sl, action_name);
-  label = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "enabled"));
-  gtk_label_set_label (GTK_LABEL (label), enabled ? "+" : "-" );
+  set_row_enabled (row, enabled);
+}
+
+static void
+set_row_state (GtkWidget *row,
+               GVariant  *state)
+{
+  gchar *state_string;
+  GtkWidget *label;
+
+  if (state)
+    state_string = g_variant_print (state, FALSE);
+  else
+    state_string = g_strdup ("");
+  label = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "state"));
+  gtk_label_set_label (GTK_LABEL (label), state_string);
+  g_free (state_string);
 }
 
 static void
@@ -182,18 +214,35 @@ action_state_changed_cb (GActionGroup        *group,
                          GVariant            *state,
                          GtkInspectorActions *sl)
 {
-  gchar *state_string;
   GtkWidget *row;
-  GtkWidget *label;
 
   row = find_row (sl, action_name);
-  if (state)
-    state_string = g_variant_print (state, FALSE);
-  else
-    state_string = g_strdup ("");
-  label = GTK_WIDGET (g_object_get_data (G_OBJECT (row), "state"));
-  gtk_label_set_label (GTK_LABEL (label), state_string);
-  g_free (state_string);
+  set_row_state (row, state);
+}
+
+static void
+refresh_all (GtkInspectorActions *sl)
+{
+  GtkWidget *widget;
+
+  for (widget = gtk_widget_get_first_child (sl->priv->list);
+       widget;
+       widget = gtk_widget_get_next_sibling (widget))
+    {
+      const char *name = g_object_get_data (G_OBJECT (widget), "key");
+      gboolean enabled;
+      GVariant *state;
+      GtkInspectorActionEditor *r;
+
+      enabled = g_action_group_get_action_enabled (sl->priv->group, name);
+      state = g_action_group_get_action_state (sl->priv->group, name);
+
+      set_row_enabled (widget, enabled);
+      set_row_state (widget, state);
+
+      r = (GtkInspectorActionEditor*)g_object_get_data (G_OBJECT (widget), "editor");
+      gtk_inspector_action_editor_update (r, enabled, state);
+    }
 }
 
 static void
@@ -259,7 +308,8 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
   stack = gtk_widget_get_parent (GTK_WIDGET (sl));
   page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (sl));
 
-  remove_group (sl, page, sl->priv->group);
+  if (sl->priv->group)
+    remove_group (sl, page, sl->priv->group);
 
   while ((child = gtk_widget_get_first_child (sl->priv->list)))
     gtk_widget_destroy (child);
@@ -277,9 +327,67 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
 }
 
 static void
+get_property (GObject    *object,
+              guint       param_id,
+              GValue     *value,
+              GParamSpec *pspec)
+{
+  GtkInspectorActions *sl = GTK_INSPECTOR_ACTIONS (object);
+
+  switch (param_id)
+    {
+    case PROP_BUTTON:
+      g_value_set_object (value, sl->priv->button);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
+}
+
+static void
+set_property (GObject      *object,
+              guint         param_id,
+              const GValue *value,
+              GParamSpec   *pspec)
+{
+  GtkInspectorActions *sl = GTK_INSPECTOR_ACTIONS (object);
+
+  switch (param_id)
+    {
+    case PROP_BUTTON:
+      sl->priv->button = g_value_get_object (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
+}
+
+static void
+constructed (GObject *object)
+{
+  GtkInspectorActions *sl = GTK_INSPECTOR_ACTIONS (object);
+
+  g_signal_connect_swapped (sl->priv->button, "clicked",
+                            G_CALLBACK (refresh_all), sl);
+}
+
+static void
 gtk_inspector_actions_class_init (GtkInspectorActionsClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  
+  object_class->get_property = get_property;
+  object_class->set_property = set_property;
+  object_class->constructed = constructed;
+
+  g_object_class_install_property (object_class, PROP_BUTTON,
+      g_param_spec_object ("button", NULL, NULL,
+                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/actions.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, list);
