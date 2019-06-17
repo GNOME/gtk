@@ -9,6 +9,8 @@ option('win32_backend', type: 'boolean', value: true,
   description : 'Enable the Windows gdk backend (only when building on Windows)')
 option('quartz_backend', type: 'boolean', value: true,
   description : 'Enable the macOS gdk backend (only when building on macOS)')
+option('mir_backend', type: 'boolean', value: false,
+  description : 'Enable the Mir gdk backend')
 
 # Optional dependencies
 option('xinerama', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
@@ -39,6 +41,8 @@ option('examples', type: 'boolean', value: 'true',
   description : 'Build examples')
 option('tests', type: 'boolean', value: 'true',
   description : 'Build tests')
+option('installed_tests', type: 'boolean', value: 'false',
+  description : 'enable installed tests')
 
 # input modules
 option('builtin_immodules', type: 'combo', choices : ['yes', 'no', 'auto'],
