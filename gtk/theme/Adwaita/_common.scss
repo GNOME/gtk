@@ -4192,39 +4192,43 @@ infobar {
   &.warning,
   &.error {
     &:backdrop, & {
-      label, & { color: $selected_fg_color; }
-      background-color: $selected_bg_color;
-      border-color: darken($selected_bg_color, 10%);
+      label, & { color: $fg_color; }
+      background-color: if($variant == 'light', desaturate(lighten(invert($selected_bg_color), 45%), 30%), 
+                        desaturate(darken(invert($selected_bg_color),40%), 70%));
+      border-color: lighten($borders_color, 10%);
     }
 
-    text-shadow: 0 1px darken($selected_bg_color, 10%);
+    text-shadow: none;
 
     &:backdrop { text-shadow: none; }
 
     button {
       // FIXME: extend selection mode buttons
-      @include button(normal, $selected_bg_color, $selected_fg_color, none);
+      @include button(normal, $bg_color, $fg_color, none);
 
-      &:hover { @include button(hover, $selected_bg_color, $selected_fg_color, none); }
+      &:hover { @include button(hover, $bg_color, $fg_color, none); }
 
       &:active,
-      &:checked { @include button(active, $selected_bg_color, $selected_fg_color, none); }
+      &:checked { @include button(active, $bg_color, $fg_color, none); }
 
-      &:disabled { @include button(insensitive,$selected_bg_color,$selected_fg_color,none); }
+      &:disabled { @include button(insensitive,$bg_color,$fg_color,none); }
 
       &:backdrop {
-        @include button(backdrop, $selected_bg_color, $selected_fg_color, none);
-        border-color: _border_color($selected_bg_color);
+        @include button(backdrop, $bg_color, $fg_color, none);
+        border-color: _border_color($bg_color);
 
         &:disabled {
-          @include button(backdrop-insensitive, $selected_bg_color,
-                          $selected_fg_color, none);
-          border-color: _border_color($selected_bg_color);
+          @include button(backdrop-insensitive, $bg_color,
+                          $fg_color, none);
+          border-color: _border_color($bg_color);
         }
+      }
+      &:backdrop, & {
+        label, & { color: $fg_color; }
       }
     }
 
-    selection { background-color: darken($selected_bg_color, 10%); }
+    selection { background-color: darken($bg_color, 10%); }
 
     *:link { @extend %link_selected; }
   }
