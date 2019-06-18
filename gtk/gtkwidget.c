@@ -13448,8 +13448,7 @@ gtk_widget_should_layout (GtkWidget *widget)
  * @widget_class: a #GtkWidgetClass
  * @action_name: a prefixed action name, such as "clipboard.paste"
  * @activate: callback to use when the action is activated
- * @query: (allow-none): callback to use when the action properties
-       are queried, or %NULL for always-enabled, parameterless actions
+ * @parameter_type: (allow-none): the parameter type, or %NULL
  *
  * This should be called at class initialization time to specify
  * actions to be added for all instances of this class.
@@ -13462,10 +13461,10 @@ void
 gtk_widget_class_install_action (GtkWidgetClass              *widget_class,
                                  const char                  *action_name,
                                  GtkWidgetActionActivateFunc  activate,
-                                 GtkWidgetActionQueryFunc     query)
+                                 const char                  *parameter_type)
 {
   gtk_widget_class_install_stateful_action (widget_class, action_name,
-                                            activate, query,
+                                            activate, parameter_type,
                                             NULL, NULL);
 }
 
@@ -13474,10 +13473,9 @@ gtk_widget_class_install_action (GtkWidgetClass              *widget_class,
  * @widget_class: a #GtkWidgetClass
  * @action_name: a prefixed action name, such as "clipboard.paste"
  * @activate: callback to use when the action is activated
+ * @parameter_type: (allow-none): the parameter type, or %NULL
  * @query: (allow-none): callback to use when the action properties
        are queried, or %NULL for always-enabled stateless actions
- * @change: (allow-none): callback to use when the action state is
- *     changed, or %NULL for stateless actions
  * @query_state: (allow-none): callback to use when the action state
        is queried, or %NULL for stateless actions
  *
@@ -13491,9 +13489,9 @@ void
 gtk_widget_class_install_stateful_action (GtkWidgetClass                 *widget_class,
                                           const char                     *action_name,
                                           GtkWidgetActionActivateFunc     activate,
-                                          GtkWidgetActionQueryFunc        query,
-                                          GtkWidgetActionChangeStateFunc  change_state,
-                                          GtkWidgetActionQueryStateFunc   query_state)
+                                          const char *parameter_type,
+                                          GtkWidgetActionSetStateFunc  set_state,
+                                          GtkWidgetActionGetStateFunc  get_state)
 {
   GtkWidgetClassPrivate *priv = widget_class->priv;
   GtkWidgetAction *action;
@@ -13521,9 +13519,9 @@ gtk_widget_class_install_stateful_action (GtkWidgetClass                 *widget
   action = g_new0 (GtkWidgetAction, 1);
   action->name = g_strdup (action_name);
   action->activate = activate;
-  action->query = query;
-  action->change_state = change_state;
-  action->query_state = query_state;
+  action->parameter_type = parameter_type ? g_variant_type_new (parameter_type) : NULL;
+  action->set_state = set_state;
+  action->get_state = get_state;
 
   GTK_NOTE(ACTIONS,
            g_message ("%sClass: Adding %s action\n",

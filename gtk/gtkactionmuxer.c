@@ -73,6 +73,7 @@ struct _GtkActionMuxer
 
   GtkWidget *widget;
   GPtrArray *widget_actions;
+  gboolean *widget_actions_enabled;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkActionMuxer, gtk_action_muxer, G_TYPE_OBJECT,
@@ -209,6 +210,19 @@ gtk_action_muxer_action_enabled_changed (GtkActionMuxer *muxer,
   Action *action;
   GSList *node;
 
+  if (muxer->widget_actions)
+    {
+      int i;
+      for (i = 0; i < muxer->widget_actions->len; i++)
+        {
+          GtkWidgetAction *a = g_ptr_array_index (muxer->widget_actions, i);
+          if (strcmp (a->name, action_name) == 0)
+            {
+              muxer->widget_actions_enabled[i] = enabled;
+              break;
+            }
+        }
+    }
   action = g_hash_table_lookup (muxer->observed_actions, action_name);
   for (node = action ? action->watchers : NULL; node; node = node->next)
     gtk_action_observer_action_enabled_changed (node->data, GTK_ACTION_OBSERVABLE (muxer), action_name, enabled);
@@ -428,39 +442,32 @@ gtk_action_muxer_query_action (GActionGroup        *action_group,
           GtkWidgetAction *action = g_ptr_array_index (muxer->widget_actions, i);
           if (strcmp (action->name, action_name) == 0)
             {
-              if (action->query)
-                {
-                  action->query (muxer->widget,
-                                 action->name,
-                                 enabled,
-                                 parameter_type);
-                }
-              else
-                {
-                  if (enabled)
-                    *enabled = TRUE;
-                  if (parameter_type)
-                    *parameter_type = NULL;
-                }
+              if (enabled)
+                *enabled = muxer->widget_actions_enabled[i];
+              if (parameter_type)
+                *parameter_type = action->parameter_type;
 
-              if (action->query_state)
+              if (state_hint)
+                *state_hint = NULL;
+              if (state_type)
+                *state_type = NULL;
+              if (state)
+                *state = NULL;
+
+              if (action->get_state)
                 {
-                  action->query_state (muxer->widget,
-                                       action->name,
-                                       state_type,
-                                       state_hint,
-                                       state);
-                }
-              else
-                {
+                  GVariant *s;
+
+                  s = g_variant_ref_sink (action->get_state (muxer->widget, action->name));
+
                   if (state_type)
-                    *state_type = NULL;
-                  if (state_hint)
-                    *state_hint = NULL;
+                    *state_type = g_variant_get_type (s);
                   if (state)
-                    *state = NULL;
-                }
+                    *state = g_variant_ref (s);
 
+                  g_variant_unref (s);
+                }
+         
               return TRUE;
             }
        }
@@ -531,8 +538,8 @@ gtk_action_muxer_change_action_state (GActionGroup *action_group,
           GtkWidgetAction *action = g_ptr_array_index (muxer->widget_actions, i);
           if (strcmp (action->name, action_name) == 0)
             {
-              if (action->change_state)
-                action->change_state (muxer->widget, action->name, state);
+              if (action->set_state)
+                action->set_state (muxer->widget, action->name, state);
 
               return;
             }
@@ -727,6 +734,14 @@ gtk_action_muxer_set_property (GObject      *object,
 
     case PROP_WIDGET_ACTIONS:
       muxer->widget_actions = g_value_get_boxed (value);
+      if (muxer->widget_actions)
+        {
+          int i;
+
+          muxer->widget_actions_enabled = g_new (gboolean, muxer->widget_actions->len);
+          for (i = 0; i < muxer->widget_actions->len; i++)
+            muxer->widget_actions_enabled[i] = TRUE;
+        }
       break;
 
     default:

@@ -1026,7 +1026,7 @@ gboolean                gtk_widget_should_layout        (GtkWidget   *widget);
 /**
  * GtkWidgetActionActivateFunc:
  * @widget: the widget to which the action belongs
- * @action_name: the (unprefixed) action name
+ * @action_name: the action name
  * @parameter: parameter for activation
  *
  * The type of the callback functions used for activating
@@ -1039,31 +1039,9 @@ typedef void (* GtkWidgetActionActivateFunc) (GtkWidget  *widget,
                                               GVariant   *parameter);
 
 /**
- * GtkWidgetActionQueryFunc:
+ * GtkWidgetActionGetStateFunc:
  * @widget: the widget to which the action belongs
- * @action_name: the (unprefixed) action name
- * @enabled: (out) (optional): return location for the enabled state
- * @parameter_type: (out) (optional): return location for the parameter type
- *
- * The type of the callback functions used to query
- * the enabledness and parameter type of actions installed with
- * gtk_widget_class_install_action().
- *
- * See the #GAction documentation for more details about the
- * meaning of these properties.
- */
-typedef void (* GtkWidgetActionQueryFunc) (GtkWidget           *widget,
-                                           const char          *action_name,
-                                           gboolean            *enabled,
-                                           const GVariantType **parameter_type);
-
-/**
- * GtkWidgetActionQueryStateFunc:
- * @widget: the widget to which the action belongs
- * @action_name: the (unprefixed) action name
- * @state_type: (out) (optional): return location for the state type
- * @state_hint: (out) (optional): return location for the state hint
- * @state: (out) (optional): return location for the state
+ * @action_name: the action name
  *
  * The type of the callback functions used to query the state
  * of stateful actions installed with gtk_widget_class_install_action().
@@ -1071,16 +1049,13 @@ typedef void (* GtkWidgetActionQueryFunc) (GtkWidget           *widget,
  * See the #GAction documentation for more details about the
  * meaning of these properties.
  */
-typedef void (* GtkWidgetActionQueryStateFunc) (GtkWidget           *widget,
-                                                const char          *action_name,
-                                                const GVariantType **state_type,
-                                                GVariant           **state_hint,
-                                                GVariant           **state);
+typedef GVariant * (* GtkWidgetActionGetStateFunc) (GtkWidget  *widget,
+                                                    const char *action_name);
 
 /**
- * GtkWidgetActionChangeStateFunc:
+ * GtkWidgetActionSetStateFunc:
  * @widget: the widget to which the action belongs
- * @action_name: the (unprefixed) action name
+ * @action_name: the action name
  * @state: the new state
  *
  * The type of the callback functions used to change the
@@ -1088,30 +1063,26 @@ typedef void (* GtkWidgetActionQueryStateFunc) (GtkWidget           *widget,
  *
  * The @state must match the @state_type of the action.
  *
- * Note that you can change the enabledness and state
- * of widget actions by other means, as long as you
- * emit the required #GActionGroup notification signals,
- * which can be done with GtkWidget convenience API.
  * This callback is used when the action state is
  * changed via the #GActionGroup API.
  */
-typedef void (*GtkWidgetActionChangeStateFunc) (GtkWidget  *widget,
-                                                const char *action_name,
-                                                GVariant   *state);
+typedef void (*GtkWidgetActionSetStateFunc) (GtkWidget  *widget,
+                                             const char *action_name,
+                                             GVariant   *state);
 
 GDK_AVAILABLE_IN_ALL
-void                    gtk_widget_class_install_action (GtkWidgetClass                *widget_class,
-                                                         const char                    *action_name,
-                                                         GtkWidgetActionActivateFunc    activate,
-                                                         GtkWidgetActionQueryFunc       query);
+void                    gtk_widget_class_install_action (GtkWidgetClass              *widget_class,
+                                                         const char                  *action_name,
+                                                         GtkWidgetActionActivateFunc  activate,
+                                                         const char                  *parameter_type);
 
 GDK_AVAILABLE_IN_ALL
-void                    gtk_widget_class_install_stateful_action (GtkWidgetClass                *widget_class,
-                                                                  const char                    *action_name,
-                                                                  GtkWidgetActionActivateFunc    activate,
-                                                                  GtkWidgetActionQueryFunc       query,
-                                                                  GtkWidgetActionChangeStateFunc change_state,
-                                                                  GtkWidgetActionQueryStateFunc  query_state);
+void                    gtk_widget_class_install_stateful_action (GtkWidgetClass              *widget_class,
+                                                                  const char                  *action_name,
+                                                                  GtkWidgetActionActivateFunc  activate,
+                                                                  const char                  *parameter_type,
+                                                                  GtkWidgetActionSetStateFunc  set_state,
+                                                                  GtkWidgetActionGetStateFunc  get_state);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_notify_class_action_enabled (GtkWidget  *widget,

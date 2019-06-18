@@ -34,10 +34,11 @@ G_BEGIN_DECLS
 typedef struct {
   char *name;
 
-  GtkWidgetActionActivateFunc    activate;
-  GtkWidgetActionQueryFunc       query;
-  GtkWidgetActionChangeStateFunc change_state;
-  GtkWidgetActionQueryStateFunc  query_state;
+  GVariantType *parameter_type;
+
+  GtkWidgetActionActivateFunc activate;
+  GtkWidgetActionSetStateFunc set_state;
+  GtkWidgetActionGetStateFunc get_state;
 } GtkWidgetAction;
 
 typedef struct _GtkActionMuxer                              GtkActionMuxer;
