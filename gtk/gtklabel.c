@@ -592,15 +592,6 @@ static void      gtk_label_nop                           (GtkWidget  *label,
                                                           const char *name,
                                                           GVariant   *parameter);
 
-static void      gtk_label_query_clipboard_action (GtkWidget           *label,
-                                                   const char          *name,
-                                                   gboolean            *enabled,
-                                                   const GVariantType **parameter_type);
-
-static void      gtk_label_query_link_action      (GtkWidget           *label,
-                                                   const char          *name,
-                                                   gboolean            *enabled,
-                                                   const GVariantType **parameter_type);
 static void gtk_label_update_actions (GtkLabel *label);
 
 static GtkSizeRequestMode gtk_label_get_request_mode                (GtkWidget           *widget);
@@ -1171,25 +1162,25 @@ gtk_label_class_init (GtkLabelClass *class)
 
   gtk_widget_class_install_action (widget_class, "clipboard.cut",
                                    gtk_label_nop,
-                                   gtk_label_query_clipboard_action);
+                                   NULL);
   gtk_widget_class_install_action (widget_class, "clipboard.copy",
                                    gtk_label_activate_clipboard_copy,
-                                   gtk_label_query_clipboard_action);
+                                   NULL);
   gtk_widget_class_install_action (widget_class, "clipboard.paste",
                                    gtk_label_nop,
-                                   gtk_label_query_clipboard_action);
+                                   NULL);
   gtk_widget_class_install_action (widget_class, "selection.delete",
                                    gtk_label_nop,
-                                   gtk_label_query_clipboard_action);
+                                   NULL);
   gtk_widget_class_install_action (widget_class, "selection.select-all",
                                    gtk_label_activate_selection_select_all,
-                                   gtk_label_query_clipboard_action);
+                                   NULL);
   gtk_widget_class_install_action (widget_class, "link.open",
                                    gtk_label_activate_link_open,
-                                   gtk_label_query_link_action);
+                                   NULL);
   gtk_widget_class_install_action (widget_class, "link.copy",
                                    gtk_label_activate_link_copy,
-                                   gtk_label_query_link_action);
+                                   NULL);
 }
 
 static void 
@@ -6069,76 +6060,6 @@ gtk_label_nop (GtkWidget  *widget,
                const char *name,
                GVariant   *parameter)
 {
-}
-
-static void
-gtk_label_query_clipboard_action (GtkWidget           *widget,
-                                  const char          *name,
-                                  gboolean            *enabled,
-                                  const GVariantType **parameter_type)
-{
-  GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  gboolean has_selection = FALSE;
-  gboolean enable;
-
-  if (priv->select_info)
-    has_selection = priv->select_info->selection_anchor != priv->select_info->selection_end;
-  else
-    has_selection = FALSE;
-
-  if (strcmp (name, "clipboard.cut") == 0)
-    enable = FALSE;
-  else if (strcmp (name, "clipboard.copy") == 0)
-    enable = has_selection;
-  else if (strcmp (name, "clipboard.paste") == 0)
-    enable = FALSE;
-  else if (strcmp (name, "selection.delete") == 0)
-    enable = FALSE;
-  else if (strcmp (name, "selection.select-all") == 0)
-    enable = gtk_label_get_selectable (label);
-  else
-    enable = FALSE;
-
-  if (enabled)
-    *enabled = enable;
-  if (parameter_type)
-    *parameter_type = NULL;
-}
-
-static void
-gtk_label_query_link_action (GtkWidget           *widget,
-                             const char          *name,
-                             gboolean            *enabled,
-                             const GVariantType **parameter_type)
-{
-  GtkLabel *label = GTK_LABEL (widget);
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  gboolean has_selection = FALSE;
-  GtkLabelLink *link;
-  gboolean enable;
-
-  if (priv->select_info)
-    has_selection = priv->select_info->selection_anchor != priv->select_info->selection_end;
-  else
-    has_selection = FALSE;
-
-  if (priv->select_info->link_clicked)
-    link = priv->select_info->active_link;
-  else
-    link = gtk_label_get_focus_link (label);
-
-  if (strcmp (name, "link.copy") == 0)
-    enable = !has_selection && link;
-  else if (strcmp (name, "link.open") == 0)
-    enable = !has_selection && link;
-  else
-    enable = FALSE;
-
-  if (enabled)
-    *enabled = enable;
-  if (parameter_type)
-    *parameter_type = NULL;
 }
 
 static void
