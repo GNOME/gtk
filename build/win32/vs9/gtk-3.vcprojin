@@ -252,33 +252,33 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File RelativePath="..\gentypefuncs.py">
+			<File RelativePath="..\..\..\gtk\gentypefuncs.py">
 				<FileConfiguration Name="Debug|Win32">
 				<Tool Name="VCCustomBuildTool"
-						Description="Generating ..\..\..\gtk\gtktypefuncs.c..."
+						Description="Generating ..\..\..\gtk\gtktypefuncs.inc..."
 						CommandLine="$(GenerateTypeFuncs)"
-						Outputs="..\..\..\gtk\gtktypefuncs.c"
+						Outputs="..\..\..\gtk\gtktypefuncs.inc"
 					/>
 				</FileConfiguration>
 				<FileConfiguration Name="Release|Win32">
 					<Tool Name="VCCustomBuildTool"
-						Description="Generating ..\..\..\gtk\gtktypefuncs.c..."
+						Description="Generating ..\..\..\gtk\gtktypefuncs.inc..."
 						CommandLine="$(GenerateTypeFuncs)"
-						Outputs="..\..\..\gtk\gtktypefuncs.c"
+						Outputs="..\..\..\gtk\gtktypefuncs.inc"
 					/>
 				</FileConfiguration>
 				<FileConfiguration Name="Debug|x64">
 					<Tool Name="VCCustomBuildTool"
-						Description="Generating ..\..\..\gtk\gtktypefuncs.c..."
+						Description="Generating ..\..\..\gtk\gtktypefuncs.inc..."
 						CommandLine="$(GenerateTypeFuncsX64)"
-						Outputs="..\..\..\gtk\gtktypefuncs.c"
+						Outputs="..\..\..\gtk\gtktypefuncs.inc"
 					/>
 				</FileConfiguration>
 				<FileConfiguration Name="Release|x64">
 					<Tool Name="VCCustomBuildTool"
-						Description="Generating ..\..\..\gtk\gtktypefuncs.c..."
+						Description="Generating ..\..\..\gtk\gtktypefuncs.inc..."
 						CommandLine="$(GenerateTypeFuncsX64)"
-						Outputs="..\..\..\gtk\gtktypefuncs.c"
+						Outputs="..\..\..\gtk\gtktypefuncs.inc"
 					/>
 				</FileConfiguration>
 			</File>

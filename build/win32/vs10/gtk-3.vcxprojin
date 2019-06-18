@@ -178,10 +178,10 @@
       <Command>$(GenerateGtkWin32Manifest)</Command>
       <Outputs>..\..\..\gtk\libgtk3.manifest;%(Outputs)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="..\gentypefuncs.py">
-      <Message>Generating ..\..\..\gtk\gtktypefuncs.c</Message>
+    <CustomBuild Include="..\..\..\gtk\gentypefuncs.py">
+      <Message>Generating ..\..\..\gtk\gtktypefuncs.inc</Message>
       <Command>$(GenerateTypeFuncs)</Command>
-      <Outputs>..\..\..\gtk\gtktypefuncs.c</Outputs>
+      <Outputs>..\..\..\gtk\gtktypefuncs.inc</Outputs>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
