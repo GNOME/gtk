@@ -64,6 +64,12 @@
  *
  * The GtkListBox widget was added in GTK+ 3.10.
  *
+ * # GtkListBox as GtkBuildable
+ *
+ * The GtkListBox implementation of the #GtkBuildable interface supports
+ * setting a child as the placeholder by specifying “placeholder” as the “type”
+ * attribute of a <child> element. See gtk_list_box_set_placeholder() for info.
+ *
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
