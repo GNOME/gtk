@@ -53,7 +53,7 @@ VSVER = 0
 !if "$(VSVER)" == "0"
 MSG = ^
 This NMake Makefile set supports Visual Studio^
-9 (2008) through 14 (2015).  Your Visual Studio^
+9 (2008) through 16 (2019).  Your Visual Studio^
 version is not supported.
 !error $(MSG)
 !endif
