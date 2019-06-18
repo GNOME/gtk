@@ -616,11 +616,6 @@ static void gtk_text_view_activate_misc_insert_emoji    (GtkWidget *widget,
                                                          const char *action_name,
                                                          GVariant  *parameter);
 
-static void     gtk_text_view_query_action (GtkWidget           *widget,
-                                            const char          *action_name,
-                                            gboolean            *enabled,
-                                            const GVariantType **parameter_type);
-
 
 /* FIXME probably need the focus methods. */
 
@@ -1609,22 +1604,22 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   gtk_widget_class_install_action (widget_class, "clipboard.cut",
                                    gtk_text_view_activate_clipboard_cut,
-                                   gtk_text_view_query_action);
+                                   NULL);
   gtk_widget_class_install_action (widget_class, "clipboard.copy",
                                    gtk_text_view_activate_clipboard_copy,
-                                   gtk_text_view_query_action);
+                                   NULL);
   gtk_widget_class_install_action (widget_class, "clipboard.paste",
                                    gtk_text_view_activate_clipboard_paste,
-                                   gtk_text_view_query_action);
+                                   NULL);
   gtk_widget_class_install_action (widget_class, "selection.delete",
                                    gtk_text_view_activate_selection_delete,
-                                   gtk_text_view_query_action);
+                                   NULL);
   gtk_widget_class_install_action (widget_class, "selection.select-all",
                                    gtk_text_view_activate_selection_select_all,
-                                   gtk_text_view_query_action);
+                                   NULL);
   gtk_widget_class_install_action (widget_class, "misc.insert-emoji",
                                    gtk_text_view_activate_misc_insert_emoji,
-                                   gtk_text_view_query_action);
+                                   NULL);
 }
 
 static void
