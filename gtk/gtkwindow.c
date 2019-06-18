@@ -101,7 +101,7 @@
  *
  * # GtkWindow as GtkBuildable
  *
- * The GtkWindow implementation of the GtkBuildable interface supports a
+ * The GtkWindow implementation of the #GtkBuildable interface supports a
  * custom <accel-groups> element, which supports any number of <group>
  * elements representing the #GtkAccelGroup objects you want to add to
  * your window (synonymous with gtk_window_add_accel_group().
@@ -123,7 +123,7 @@
  * <object class="GtkAccelGroup" id="accelgroup1"/>
  * ]|
  * 
- * The GtkWindow implementation of the GtkBuildable interface supports
+ * The GtkWindow implementation of the #GtkBuildable interface supports
  * setting a child as the titlebar by specifying “titlebar” as the “type”
  * attribute of a <child> element.
  *
