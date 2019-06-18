@@ -258,9 +258,11 @@
      </para>
 
      <para>
-       Actions are added to their relevant scope (application or
-       window) either using the GActionMap interface, or by using
-       gtk_widget_insert_action_group().
+       Actions are added to their relevant scope (application,
+       window or widget) either using the GActionMap interface,
+       or by using gtk_widget_insert_action_group(). Actions that
+       will be the same for all instances of a widget class can
+       be added globally using gtk_widget_class_install_action().
      </para>
 
   </refsect2>
@@ -317,8 +319,8 @@
     </para>
 
     <para>
-      Another of obtaining widgets that are connected to actions is
-      to create a menu using a GMenu menu model. GMenu provides an
+      Another way of obtaining widgets that are connected to actions
+      is to create a menu using a GMenu menu model. GMenu provides an
       abstract way to describe typical menus: nested groups of items
       where each item can have a label, and icon, and an action.
     </para>
@@ -362,6 +364,25 @@
           <term>default.activate</term>
           <listitem><para>Activates the default widget in a context
              (typically a GtkWindow, GtkDialog or GtkPopover)
+          </para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>clipboard.cut, clipboard.copy, clipboard.paste</term>
+          <listitem><para>Clipboard operations on entries, text view
+            and labels, typically used in the context menu
+          </para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>selection.delete, selection.select-all</term>
+          <listitem><para>Selection operations on entries, text view
+            and labels
+          </para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term>color.select, color.customize</term>
+          <listitem><para>Operations on colors in GtkColorChooserWidget.
+            These actions are unusual in that they have the non-trivial
+            parameter type (dddd).
           </para></listitem>
         </varlistentry>
       </variablelist>

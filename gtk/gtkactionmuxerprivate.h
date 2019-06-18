@@ -21,6 +21,7 @@
 #define __GTK_ACTION_MUXER_H__
 
 #include <gio/gio.h>
+#include "gtkwidget.h"
 
 G_BEGIN_DECLS
 
@@ -30,10 +31,21 @@ G_BEGIN_DECLS
 #define GTK_IS_ACTION_MUXER(inst)                           (G_TYPE_CHECK_INSTANCE_TYPE ((inst),                     \
                                                              GTK_TYPE_ACTION_MUXER))
 
+typedef struct {
+  char *name;
+
+  GVariantType *parameter_type;
+
+  GtkWidgetActionActivateFunc activate;
+  GtkWidgetActionSetStateFunc set_state;
+  GtkWidgetActionGetStateFunc get_state;
+} GtkWidgetAction;
+
 typedef struct _GtkActionMuxer                              GtkActionMuxer;
 
 GType                   gtk_action_muxer_get_type                       (void);
-GtkActionMuxer *        gtk_action_muxer_new                            (void);
+GtkActionMuxer *        gtk_action_muxer_new                            (GtkWidget      *widget,
+                                                                         GPtrArray      *actions);
 
 void                    gtk_action_muxer_insert                         (GtkActionMuxer *muxer,
                                                                          const gchar    *prefix,
@@ -57,6 +69,16 @@ void                    gtk_action_muxer_set_primary_accel              (GtkActi
 
 const gchar *           gtk_action_muxer_get_primary_accel              (GtkActionMuxer *muxer,
                                                                          const gchar    *action_and_target);
+
+void
+gtk_action_muxer_action_enabled_changed (GtkActionMuxer *muxer,
+                                         const char     *action_name,
+                                         gboolean        enabled);
+void
+gtk_action_muxer_action_state_changed (GtkActionMuxer *muxer,
+                                       const gchar    *action_name,
+                                       GVariant       *state);
+
 
 /* No better place for these... */
 gchar *                 gtk_print_action_and_target                     (const gchar    *action_namespace,
