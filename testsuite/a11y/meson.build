@@ -25,7 +25,6 @@ a11y_state_tests = [
   'entries',
   'scale-drawvalue',
   'placeholder-text',
-  'menus',
   'menu',
   'menubutton',
   'menubutton2',
@@ -43,11 +42,6 @@ skipped_tests = [
   # gtk_color_picker_new() in CI returns NULL which changes the UI
   'colorchooser',
 ]
-
-a11y_testfocus_bin = executable('testfocus',
-  'testfocus.c',
-  dependencies: libgtk_dep,
-)
 
 a11y_dump_bin = executable('accessibility-dump',
   'accessibility-dump.c',

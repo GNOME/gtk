@@ -1970,6 +1970,7 @@ build/win32/vs11/Makefile
 build/win32/vs12/Makefile
 build/win32/vs14/Makefile
 build/win32/vs15/Makefile
+build/win32/vs16/Makefile
 gdk/Makefile
 gdk/broadway/Makefile
 gdk/x11/Makefile

@@ -32,11 +32,11 @@ SUBDIRS =	\
 	vs11	\
 	vs12	\
 	vs14	\
-	vs15
+	vs15	\
+	vs16
 
 EXTRA_DIST +=	\
 	detectenv-msvc.mak		\
-	gentypefuncs.py			\
 	gtk-introspection-msvc.mak	\
 	introspection-msvc.mak		\
 	replace.py			\

@@ -1,9 +1,65 @@
+Overview of Changes in GTK+ 3.24.9
+==================================
+
+* GTK can now be built with the meson build system
+
+* Quartz:
+ - Build fixes
+ - Fix a crash with DND
+
+* Win32:
+ - Enable GLES via libANGLE
+ - Fix preedit window placement on hi-dpi screens
+
+* Wayland:
+ - Support the xdg-output protocol for correct
+   monitor sizes with scaled displays
+ - Fix handling of cursor hotspots that was reading
+   uninitialized memory
+ - Update tablet cursors when scale changes
+
+* CSS:
+ - Use multiple font-family values
+
+* Emoji:
+ - Populate the Emoji chooser incrementally
+
+* Printing:
+ - Require CUPS 1.7
+
+* Scrolling:
+ - Add a gtk-overlay-scrolling setting that can be
+   used to force traditional (non-overlay) scrollbars
+
+* GtkTreeView:
+ - Update rubberband rectangles more often
+ - Remove the pixel cache, to avoid the redraw
+   issues that it causes
+
+* Tooling:
+ - Support sysprof profiling
+
+* Themes:
+ - Adwaita: Small tweaks to the theme refresh
+ - Adwaita: Update treeview progress bars
+ - HighContrast: Improve notebook tabs
+
+* Translation updates:
+ Brazilian Portuguese
+ Friulian
+ Hungarian
+ Indonesian
+ Italian
+ Lithuanian
+
+
 Overview of Changes in GTK+ 3.24.8
 ==================================
 
 * Color editor: don't warn if editing is cancelled
 
 * Always redraw on allocate - not doing so is
+
   not safe when any widget can have a background
 
 * Use GLSL 3.30 for shaders
