@@ -1214,7 +1214,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                    NULL);
   gtk_widget_class_install_action (widget_class, "focus.move",
                                    gtk_window_activate_focus_move,
-                                   gtk_window_query_action);
+                                   "i");
 }
 
 /**
@@ -1801,21 +1801,6 @@ gtk_window_activate_focus_move (GtkWidget  *widget,
                          CLAMP (g_variant_get_int32 (parameter),
                                 GTK_DIR_TAB_FORWARD,
                                 GTK_DIR_RIGHT));
-}
-
-static void
-gtk_window_query_action (GtkWidget           *widget,
-                         const char          *action_name,
-                         gboolean            *enabled,
-                         const GVariantType **parameter_type)
-{
-  if (strcmp (action_name, "focus.move") == 0)
-    {
-      if (enabled)
-        *enabled = TRUE;
-      if (parameter_type)
-        *parameter_type = G_VARIANT_TYPE_INT32;
-    }
 }
 
 static void
