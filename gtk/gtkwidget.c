@@ -4913,6 +4913,103 @@ gtk_widget_class_add_binding_signal (GtkWidgetClass  *widget_class,
 }
 
 /**
+ * gtk_widget_class_bind_action: (skip)
+ * @widget_class: the class to add the binding to
+ * @keyval: key value of binding to install
+ * @mods: key modifier of binding to install
+ * @action_name: the name of the action to activate
+ * @format_string: GVariant format string for arguments or %NULL for
+ *     no arguments
+ * @...: arguments, as given by format string.
+ *
+ * Creates a new shortcut for @widget_class that activates the
+ * given action @action_name with arguments read according to
+ * @format_string. The arguments and format string must be provided
+ * in the same way as with g_variant_new().
+ *
+ * This function is a convenience wrapper around
+ * gtk_widget_class_add_shortcut() and must be called during class
+ * initialization.
+ **/
+void
+gtk_widget_class_bind_action (GtkWidgetClass  *widget_class,
+                              guint            keyval,
+                              GdkModifierType  mods,
+                              const gchar     *action_name,
+                              const gchar     *format_string,
+                              ...)
+{
+  GtkWidgetClassPrivate *priv = widget_class->priv;
+  gboolean found = FALSE;
+  GVariantType *type = NULL;
+  GVariant *parameters = NULL;
+  GtkShortcut *shortcut;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+
+  if (priv->actions)
+    {
+      int i;
+      for (i = 0; i < priv->actions->len; i++)
+        {
+          GtkWidgetAction *action = g_ptr_array_index (priv->actions, i);
+          if (strcmp (action->name, action_name) == 0)
+            {
+              type = action->parameter_type;
+              found = TRUE;
+              break;
+            }
+        }
+    }
+
+  if (!found)
+    {
+      g_warning ("Widget action %s not found", action_name);
+      return;
+    }
+
+  if (format_string != NULL)
+    {
+      va_list args;
+
+      va_start (args, format_string);
+      parameters = g_variant_new_va (format_string, NULL, &args);
+      va_end (args);
+    }
+
+  if (parameters != NULL)
+    {
+      if (type == NULL)
+        {
+          g_warning ("Widget action %s does not accept parameters", action_name);
+          g_variant_unref (parameters);
+          return;
+        }
+      else if (!g_variant_is_of_type (parameters, type))
+        {
+          g_warning ("Parameters don't match expected type for widget action %s", action_name);
+          g_variant_unref (parameters);
+          return;
+        }
+    }
+  else if (type != NULL)
+    {
+      g_warning ("Widget action %s requires parameters", action_name);
+      return;
+    }
+
+  shortcut = gtk_shortcut_new (gtk_keyval_trigger_new (keyval, mods),
+                               gtk_action_action_new (action_name));
+
+  if (parameters)
+    gtk_shortcut_set_arguments (shortcut, parameters);
+
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
+
+  g_object_unref (shortcut);
+}
+
+/**
  * gtk_widget_class_add_shortcut:
  * @widget_class: the class to add the shortcut to
  * @shortcut: (transfer none): the #GtkShortcut to add
