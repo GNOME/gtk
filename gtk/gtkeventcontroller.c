@@ -46,6 +46,7 @@ enum {
   PROP_WIDGET = 1,
   PROP_PROPAGATION_PHASE,
   PROP_PROPAGATION_LIMIT,
+  PROP_NAME,
   LAST_PROP
 };
 
@@ -56,6 +57,7 @@ struct _GtkEventControllerPrivate
   GtkWidget *widget;
   GtkPropagationPhase phase;
   GtkPropagationLimit limit;
+  char *name;
 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkEventController, gtk_event_controller, G_TYPE_OBJECT)
@@ -130,6 +132,7 @@ gtk_event_controller_set_property (GObject      *object,
                                    GParamSpec   *pspec)
 {
   GtkEventController *self = GTK_EVENT_CONTROLLER (object);
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
 
   switch (prop_id)
     {
@@ -141,6 +144,11 @@ gtk_event_controller_set_property (GObject      *object,
       gtk_event_controller_set_propagation_limit (self,
                                                   g_value_get_enum (value));
       break;
+    case PROP_NAME:
+      g_free (priv->name);
+      priv->name = g_value_dup_string (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -166,9 +174,23 @@ gtk_event_controller_get_property (GObject    *object,
     case PROP_PROPAGATION_LIMIT:
       g_value_set_enum (value, priv->limit);
       break;
+    case PROP_NAME:
+      g_value_set_string (value, priv->name);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
+}
+
+static void
+gtk_event_controller_finalize (GObject *object)
+{
+  GtkEventController *self = GTK_EVENT_CONTROLLER (object);
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
+  
+  g_free (priv->name);
+
+  G_OBJECT_CLASS (gtk_event_controller_parent_class)->finalize (object);
 }
 
 static void
@@ -181,6 +203,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
   klass->filter_event = gtk_event_controller_filter_event_default;
   klass->handle_event = gtk_event_controller_handle_event_default;
 
+  object_class->finalize = gtk_event_controller_finalize;
   object_class->set_property = gtk_event_controller_set_property;
   object_class->get_property = gtk_event_controller_get_property;
 
@@ -221,6 +244,13 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                          GTK_TYPE_PROPAGATION_LIMIT,
                          GTK_LIMIT_SAME_NATIVE,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_NAME] =
+      g_param_spec_string ("name",
+                           P_("Name"),
+                           P_("Name for this controller"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
@@ -392,4 +422,26 @@ gtk_event_controller_set_propagation_limit (GtkEventController  *controller,
   priv->limit = limit;
 
   g_object_notify_by_pspec (G_OBJECT (controller), properties[PROP_PROPAGATION_LIMIT]);
+}
+
+const char *
+gtk_event_controller_get_name (GtkEventController *controller)
+{
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (controller);
+
+  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER (controller), NULL);
+
+  return priv->name;
+}
+
+void
+gtk_event_controller_set_name (GtkEventController *controller,
+                               const char         *name)
+{
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (controller);
+
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+
+  g_free (priv->name);
+  priv->name = g_strdup (priv->name);
 }
