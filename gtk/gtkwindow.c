@@ -1181,12 +1181,12 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, 0,
                                        "activate-focus", NULL);
   
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0,
-                                       "activate-default", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, 0,
-                                       "activate-default", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, 0,
-                                       "activate-default", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Return, 0,
+                                       "default.activate", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_ISO_Enter, 0,
+                                       "default.activate", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_KP_Enter, 0,
+                                       "default.activate", NULL);
 
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_I, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
                                        "enable-debugging", "(b)", FALSE);
