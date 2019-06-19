@@ -53,6 +53,7 @@ struct _GtkShortcutController
   GListModel *shortcuts;
   GtkShortcutScope scope;
   GdkModifierType mnemonics_modifiers;
+  guint last_activated;
 
   guint custom_shortcuts : 1;
 };
@@ -247,7 +248,8 @@ gtk_shortcut_controller_trigger_shortcut (GtkShortcutController *self,
                                           GtkShortcut           *shortcut,
                                           guint                  position,
                                           const GdkEvent        *event,
-                                          gboolean               enable_mnemonics)
+                                          gboolean               enable_mnemonics,
+                                          gboolean               exclusive)
 {
   GtkWidget *widget;
 
@@ -263,8 +265,10 @@ gtk_shortcut_controller_trigger_shortcut (GtkShortcutController *self,
         widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (model));
     }
 
+  self->last_activated = position;
+
   return gtk_shortcut_action_activate (gtk_shortcut_get_action (shortcut),
-                                       GTK_SHORTCUT_ACTION_EXCLUSIVE, /* FIXME */
+                                       exclusive ? GTK_SHORTCUT_ACTION_EXCLUSIVE : 0,
                                        widget,
                                        gtk_shortcut_get_arguments (shortcut));
 }
@@ -275,19 +279,44 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
                                          gboolean            enable_mnemonics)
 {
   GtkShortcutController *self = GTK_SHORTCUT_CONTROLLER (controller);
+  guint n_items;
   guint i;
+  guint n_triggered;
+  gboolean exclusive;
 
-  for (i = 0; i < g_list_model_get_n_items (self->shortcuts); i++)
+  n_items = g_list_model_get_n_items (self->shortcuts);
+  n_triggered = 0;
+
+  for (i = 0; i < n_items; i++)
     {
       GtkShortcut *shortcut = g_list_model_get_item (self->shortcuts, i);
+      g_object_unref (shortcut);
+
+      if (gtk_shortcut_trigger_trigger (gtk_shortcut_get_trigger (shortcut), event, enable_mnemonics))
+        n_triggered++;
+
+      if (n_triggered > 1)
+        break;
+    }
+
+  if (n_triggered == 0)
+    return FALSE;
+
+  exclusive = n_triggered == 1;
+
+  for (i = 0; i < n_items; i++)
+    {
+      guint position = (self->last_activated + 1 + i) % n_items;
+      GtkShortcut *shortcut = g_list_model_get_item (self->shortcuts, position);
 
       g_object_unref (shortcut);
 
       if (gtk_shortcut_controller_trigger_shortcut (self,
                                                     shortcut,
-                                                    i,
+                                                    position,
                                                     event,
-                                                    enable_mnemonics))
+                                                    enable_mnemonics,
+                                                    exclusive))
         return TRUE;
     }
 
