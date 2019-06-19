@@ -1798,6 +1798,7 @@ gtk_label_setup_mnemonic (GtkLabel *label)
   if (priv->mnemonic_controller == NULL)
     {
       priv->mnemonic_controller = gtk_shortcut_controller_new ();
+      gtk_event_controller_set_name (priv->mnemonic_controller, "mnemonic");
       gtk_event_controller_set_propagation_phase (priv->mnemonic_controller, GTK_PHASE_CAPTURE);
       gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (priv->mnemonic_controller), GTK_SHORTCUT_SCOPE_MANAGED);
 
