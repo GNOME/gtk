@@ -148,6 +148,36 @@ gtk_shortcut_controller_is_rooted (GtkShortcutController *self)
   return gtk_widget_get_root (widget) != NULL;
 }
 
+static GtkShortcutManager *
+gtk_shortcut_controller_get_manager (GtkShortcutController *self)
+{
+  switch (self->scope)
+    {
+    case GTK_SHORTCUT_SCOPE_LOCAL:
+      return NULL;
+
+    case GTK_SHORTCUT_SCOPE_MANAGED:
+      {
+        GtkWidget *widget;
+
+        for (widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
+             !GTK_IS_SHORTCUT_MANAGER (widget);
+             widget = _gtk_widget_get_parent (widget)) ;
+        return GTK_SHORTCUT_MANAGER (widget);
+      }
+      break;
+
+    case GTK_SHORTCUT_SCOPE_GLOBAL:
+      return GTK_SHORTCUT_MANAGER (gtk_widget_get_root (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self))));
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return NULL;
+}
+
 static void
 gtk_shortcut_controller_set_property (GObject      *object,
                                       guint         prop_id,
@@ -436,67 +466,19 @@ gtk_shortcut_controller_init (GtkShortcutController *self)
 void
 gtk_shortcut_controller_root (GtkShortcutController *self)
 {
-  GtkShortcutManager *manager;
+  GtkShortcutManager *manager = gtk_shortcut_controller_get_manager (self);
 
-  switch (self->scope)
-    {
-    case GTK_SHORTCUT_SCOPE_LOCAL:
-      return;
-
-    case GTK_SHORTCUT_SCOPE_MANAGED:
-      {
-        GtkWidget *widget;
-        
-        for (widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
-             !GTK_IS_SHORTCUT_MANAGER (widget);
-             widget = _gtk_widget_get_parent (widget));
-        manager = GTK_SHORTCUT_MANAGER (widget);
-      }
-      break;
-
-    case GTK_SHORTCUT_SCOPE_GLOBAL:
-      manager = GTK_SHORTCUT_MANAGER (gtk_widget_get_root (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self))));
-      break;
-
-    default:
-      g_assert_not_reached ();
-      return;
-    }
-
-  GTK_SHORTCUT_MANAGER_GET_IFACE (manager)->add_controller (manager, self);
+  if (manager)
+    GTK_SHORTCUT_MANAGER_GET_IFACE (manager)->add_controller (manager, self);
 }
 
 void
 gtk_shortcut_controller_unroot (GtkShortcutController *self)
 {
-  GtkShortcutManager *manager;
+  GtkShortcutManager *manager = gtk_shortcut_controller_get_manager (self);
 
-  switch (self->scope)
-    {
-    case GTK_SHORTCUT_SCOPE_LOCAL:
-      return;
-
-    case GTK_SHORTCUT_SCOPE_MANAGED:
-      {
-        GtkWidget *widget;
-        
-        for (widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self));
-             !GTK_IS_SHORTCUT_MANAGER (widget);
-             widget = _gtk_widget_get_parent (widget));
-        manager = GTK_SHORTCUT_MANAGER (widget);
-      }
-      break;
-
-    case GTK_SHORTCUT_SCOPE_GLOBAL:
-      manager = GTK_SHORTCUT_MANAGER (gtk_widget_get_root (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (self))));
-      break;
-
-    default:
-      g_assert_not_reached ();
-      return;
-    }
-
-  GTK_SHORTCUT_MANAGER_GET_IFACE (manager)->remove_controller (manager, self);
+  if (manager)
+    GTK_SHORTCUT_MANAGER_GET_IFACE (manager)->remove_controller (manager, self);
 }
 
 GtkEventController *
