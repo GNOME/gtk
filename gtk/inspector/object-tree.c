@@ -673,6 +673,11 @@ gtk_inspector_get_object_name (GObject *object)
         return id;
     }
 
+  if (GTK_IS_EVENT_CONTROLLER (object))
+    {
+      return gtk_event_controller_get_name (GTK_EVENT_CONTROLLER (object));
+    }
+
   return NULL;
 }
 
