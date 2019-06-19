@@ -32,6 +32,7 @@
 #include "gtkshortcuttrigger.h"
 #include "gtkshortcutcontroller.h"
 #include "gtkshortcut.h"
+#include "gtkconcatmodelprivate.h"
 
 struct _GtkInspectorShortcuts
 {
@@ -67,6 +68,29 @@ create_row (gpointer item,
   GtkWidget *box;
   GtkWidget *label;
   char *str;
+  GListModel *model;
+  GtkWidget *owner = NULL;
+
+  g_object_get (sl->controller, "model", &model, NULL);
+  if (GTK_IS_CONCAT_MODEL (model))
+    {
+      int i;
+      for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (sl->controller)); i++)
+        {
+          gpointer obj = g_list_model_get_item (G_LIST_MODEL (sl->controller), i);
+          g_object_unref (obj);
+          if (obj == item)
+            {
+              GListModel *submodel;
+
+              submodel = gtk_concat_model_get_model_for_item (GTK_CONCAT_MODEL (model), i);
+              if (GTK_IS_EVENT_CONTROLLER (submodel))
+                owner = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (submodel));
+              break;
+            }
+        }
+    }
+  g_object_unref (model);
 
   trigger = gtk_shortcut_get_trigger (shortcut);
   action = gtk_shortcut_get_action (shortcut);
@@ -98,6 +122,7 @@ create_row (gpointer item,
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
   gtk_size_group_add_widget (sl->action, label);
   gtk_container_add (GTK_CONTAINER (box), label);
+  g_free (str);
 
   if (arguments)
     str = g_variant_print (arguments, FALSE);
@@ -108,6 +133,25 @@ create_row (gpointer item,
   gtk_label_set_xalign (GTK_LABEL (label), 0);
   gtk_size_group_add_widget (sl->arguments, label);
   gtk_container_add (GTK_CONTAINER (box), label);
+  g_free (str);
+
+  if (owner)
+    {
+      if (GTK_IS_LABEL (owner))
+        {
+          str = g_strdup_printf ("%s: '%s'\n", gtk_widget_get_name (owner),
+                                 gtk_label_get_label (GTK_LABEL (owner)));
+        }
+      else
+        str = g_strdup (gtk_widget_get_name (owner));
+    }
+  else
+    str = NULL;
+  label = gtk_label_new (str);
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), "cell");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_container_add (GTK_CONTAINER (box), label);
+  g_free (str);
 
   return row;
 }
