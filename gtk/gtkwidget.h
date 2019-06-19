@@ -439,6 +439,14 @@ void       gtk_widget_class_add_binding_signal
                                            ...);
 
 GDK_AVAILABLE_IN_ALL
+void       gtk_widget_class_bind_action   (GtkWidgetClass      *widget_class,
+                                           guint                keyval,
+                                           GdkModifierType      mods,
+                                           const gchar         *action_name,
+                                           const gchar         *format_string,
+                                           ...);
+
+GDK_AVAILABLE_IN_ALL
 void       gtk_widget_class_add_shortcut  (GtkWidgetClass      *widget_class,
                                            GtkShortcut         *shortcut);
 
