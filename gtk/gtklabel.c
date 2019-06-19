@@ -482,6 +482,8 @@ static void gtk_label_set_markup_internal        (GtkLabel      *label,
 						  gboolean       with_uline);
 static void gtk_label_recalculate                (GtkLabel      *label);
 static void gtk_label_root                       (GtkWidget     *widget);
+static void gtk_label_map                        (GtkWidget     *widget);
+static void gtk_label_unmap                      (GtkWidget     *widget);
 static gboolean gtk_label_popup_menu             (GtkWidget     *widget);
 static void gtk_label_do_popup                   (GtkLabel      *label,
                                                   double         x,
@@ -649,6 +651,8 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->realize = gtk_label_realize;
   widget_class->unrealize = gtk_label_unrealize;
   widget_class->root = gtk_label_root;
+  widget_class->map = gtk_label_map;
+  widget_class->unmap = gtk_label_unmap;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
   widget_class->popup_menu = gtk_label_popup_menu;
   widget_class->drag_data_get = gtk_label_drag_data_get;
@@ -1785,7 +1789,8 @@ gtk_label_setup_mnemonic (GtkLabel *label)
   GtkWidget *widget = GTK_WIDGET (label);
   GtkShortcut *shortcut;
   
-  if (priv->mnemonic_keyval == GDK_KEY_VoidSymbol)
+  if (!gtk_widget_get_mapped (GTK_WIDGET (label)) ||
+      priv->mnemonic_keyval == GDK_KEY_VoidSymbol)
     {
       if (priv->mnemonic_controller)
         {
@@ -1863,10 +1868,8 @@ gtk_label_root (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->root (widget);
 
-  gtk_label_setup_mnemonic (label);
-
   /* The PangoContext is replaced when the display changes, so clear the layouts */
-  gtk_label_clear_layout (GTK_LABEL (widget));
+  gtk_label_clear_layout (label);
 
   settings = gtk_widget_get_settings (widget);
 
@@ -1883,7 +1886,27 @@ gtk_label_root (GtkWidget *widget)
                          GINT_TO_POINTER (TRUE));
     }
 
-  label_shortcut_setting_apply (GTK_LABEL (widget));
+  label_shortcut_setting_apply (label);
+}
+
+static void
+gtk_label_map (GtkWidget *widget)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->map (widget);
+
+  gtk_label_setup_mnemonic (label);
+}
+
+static void
+gtk_label_unmap (GtkWidget *widget)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+
+  GTK_WIDGET_CLASS (gtk_label_parent_class)->unmap (widget);
+
+  gtk_label_setup_mnemonic (label);
 }
 
 void
