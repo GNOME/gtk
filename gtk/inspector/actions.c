@@ -290,8 +290,6 @@ remove_group (GtkInspectorActions *sl,
               GtkStackPage        *page,
               GActionGroup        *group)
 {
-  g_object_set (page, "visible", FALSE, NULL);
-
   disconnect_group (group, sl);
 
   g_set_object (&sl->priv->group, NULL);
@@ -307,6 +305,8 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
 
   stack = gtk_widget_get_parent (GTK_WIDGET (sl));
   page = gtk_stack_get_page (GTK_STACK (stack), GTK_WIDGET (sl));
+
+  g_object_set (page, "visible", FALSE, NULL);
 
   if (sl->priv->group)
     remove_group (sl, page, sl->priv->group);
