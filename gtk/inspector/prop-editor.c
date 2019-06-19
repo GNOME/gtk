@@ -46,6 +46,8 @@
 #include "gtklistbox.h"
 #include "gtkcomboboxtext.h"
 #include "gtkmenubutton.h"
+#include "gtkshortcutaction.h"
+#include "gtkshortcuttrigger.h"
 
 struct _GtkInspectorPropEditorPrivate
 {
@@ -1094,6 +1096,47 @@ property_editor (GObject                *object,
 
       gtk_widget_set_halign (prop_edit, GTK_ALIGN_START);
       gtk_widget_set_valign (prop_edit, GTK_ALIGN_CENTER);
+    }
+  else if (type == G_TYPE_PARAM_BOXED &&
+           G_PARAM_SPEC_VALUE_TYPE (spec) == GTK_TYPE_SHORTCUT_ACTION)
+    {
+      GtkShortcutAction *action;
+      g_object_get (object, spec->name, &action, NULL);
+      if (action)
+        {
+          msg = gtk_shortcut_action_to_string (action);
+          gtk_shortcut_action_unref (action);
+        }
+      else
+        msg = NULL;
+      prop_edit = gtk_label_new (msg);
+    }
+  else if (type == G_TYPE_PARAM_BOXED &&
+           G_PARAM_SPEC_VALUE_TYPE (spec) == GTK_TYPE_SHORTCUT_TRIGGER)
+    {
+      GtkShortcutTrigger *trigger;
+      g_object_get (object, spec->name, &trigger, NULL);
+      if (trigger)
+        {
+          msg = gtk_shortcut_trigger_to_string (trigger);
+          gtk_shortcut_trigger_unref (trigger);
+        }
+      else
+        msg = NULL;
+      prop_edit = gtk_label_new (msg);
+    }
+  else if (type == G_TYPE_PARAM_VARIANT)
+    {
+      GVariant *variant;
+      g_object_get (object, spec->name, &variant, NULL);
+      if (variant)
+        {
+          msg = g_variant_print (variant, FALSE);
+          g_variant_unref (variant);
+        }
+      else
+        msg = NULL;
+      prop_edit = gtk_label_new (msg);
     }
   else
     {
