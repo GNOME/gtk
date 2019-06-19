@@ -65,6 +65,12 @@ GtkPropagationLimit gtk_event_controller_get_propagation_limit (GtkEventControll
 GDK_AVAILABLE_IN_ALL
 void                gtk_event_controller_set_propagation_limit (GtkEventController  *controller,
                                                                 GtkPropagationLimit  limit);
+GDK_AVAILABLE_IN_ALL
+const char *        gtk_event_controller_get_name              (GtkEventController *controller);
+GDK_AVAILABLE_IN_ALL
+void                gtk_event_controller_set_name              (GtkEventController *controller,
+                                                                const char         *name);
+
 G_END_DECLS
 
 #endif /* __GTK_EVENT_CONTROLLER_H__ */
