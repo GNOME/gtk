@@ -207,6 +207,10 @@ gtk_shortcut_controller_get_property (GObject    *object,
       g_value_set_flags (value, self->mnemonics_modifiers);
       break;
 
+    case PROP_MODEL:
+      g_value_set_object (value, self->shortcuts);
+      break;
+
     case PROP_SCOPE:
       g_value_set_enum (value, self->scope);
       break;
@@ -376,7 +380,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
                            P_("Model"),
                            P_("A list model to take shortcuts from"),
                            G_TYPE_LIST_MODEL,
-                           G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkShortcutController:scope:
