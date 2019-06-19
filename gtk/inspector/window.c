@@ -36,6 +36,7 @@
 #include "size-groups.h"
 #include "data-list.h"
 #include "actions.h"
+#include "shortcuts.h"
 #include "menu.h"
 #include "misc-info.h"
 #include "magnifier.h"
@@ -80,6 +81,7 @@ set_selected_object (GtkInspectorWindow *iw,
   gtk_inspector_size_groups_set_object (GTK_INSPECTOR_SIZE_GROUPS (iw->size_groups), selected);
   gtk_inspector_data_list_set_object (GTK_INSPECTOR_DATA_LIST (iw->data_list), selected);
   gtk_inspector_actions_set_object (GTK_INSPECTOR_ACTIONS (iw->actions), selected);
+  gtk_inspector_shortcuts_set_object (GTK_INSPECTOR_SHORTCUTS (iw->shortcuts), selected);
   gtk_inspector_menu_set_object (GTK_INSPECTOR_MENU (iw->menu), selected);
   gtk_inspector_controllers_set_object (GTK_INSPECTOR_CONTROLLERS (iw->controllers), selected);
   gtk_inspector_magnifier_set_object (GTK_INSPECTOR_MAGNIFIER (iw->magnifier), selected);
@@ -349,6 +351,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, size_groups);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, data_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, actions);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, shortcuts);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, menu);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, misc_info);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, controllers);
