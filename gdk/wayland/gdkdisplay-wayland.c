@@ -531,8 +531,11 @@ gdk_registry_handle_global (void               *data,
     }
   else if (strcmp(interface, "zxdg_output_manager_v1") == 0)
     {
+      display_wayland->xdg_output_manager_version = MIN (version, 2);
       display_wayland->xdg_output_manager =
-            wl_registry_bind (registry, id, &zxdg_output_manager_v1_interface, 1);
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &zxdg_output_manager_v1_interface,
+                          display_wayland->xdg_output_manager_version);
       gdk_wayland_display_init_xdg_output (display_wayland);
       _gdk_wayland_display_async_roundtrip (display_wayland);
     }
@@ -2222,6 +2225,7 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
 
   gdk_monitor_set_position (GDK_MONITOR (monitor), monitor->x, monitor->y);
   gdk_monitor_set_size (GDK_MONITOR (monitor), monitor->width, monitor->height);
+  gdk_monitor_set_connector (GDK_MONITOR (monitor), monitor->name);
   monitor->wl_output_done = FALSE;
   monitor->xdg_output_done = FALSE;
 
@@ -2272,10 +2276,36 @@ xdg_output_handle_done (void                  *data,
     apply_monitor_change (monitor);
 }
 
+static void
+xdg_output_handle_name (void                  *data,
+                        struct zxdg_output_v1 *xdg_output,
+                        const char            *name)
+{
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
+
+  GDK_NOTE (MISC,
+            g_message ("handle name xdg-output %d", monitor->id));
+
+  monitor->name = g_strdup (name);
+}
+
+static void
+xdg_output_handle_description (void                  *data,
+                               struct zxdg_output_v1 *xdg_output,
+                               const char            *description)
+{
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
+
+  GDK_NOTE (MISC,
+            g_message ("handle description xdg-output %d", monitor->id));
+}
+
 static const struct zxdg_output_v1_listener xdg_output_listener = {
     xdg_output_handle_logical_position,
     xdg_output_handle_logical_size,
     xdg_output_handle_done,
+    xdg_output_handle_name,
+    xdg_output_handle_description,
 };
 
 static void
