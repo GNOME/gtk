@@ -25,5 +25,6 @@ xvfb-run -a -s "-screen 0 1024x768x24" \
         --timeout-multiplier 4 \
         --print-errorlogs \
         --suite=gtk+-3.0 \
+        --no-suite=gtk+-3.0:a11y
 
 ninja gail-libgail-util3-doc gdk3-doc gtk3-doc
