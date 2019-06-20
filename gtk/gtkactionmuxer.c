@@ -742,10 +742,32 @@ gtk_action_muxer_remove (GtkActionMuxer *muxer,
     }
 }
 
+static void
+gtk_action_muxer_append_prefixes (gpointer key,
+                                  gpointer value,
+                                  gpointer user_data)
+{
+  const gchar *prefix = key;
+  GArray *prefixes= user_data;
+
+  g_array_append_val (prefixes, prefix);
+}
+
 const gchar **
 gtk_action_muxer_list_prefixes (GtkActionMuxer *muxer)
 {
-  return (const gchar **) g_hash_table_get_keys_as_array (muxer->groups, NULL);
+  GArray *prefixes;
+
+  prefixes = g_array_new (TRUE, FALSE, sizeof (gchar *));
+
+  for ( ; muxer != NULL; muxer = muxer->parent)
+    {
+      g_hash_table_foreach (muxer->groups,
+                            gtk_action_muxer_append_prefixes,
+                            prefixes);
+    }
+
+  return (const gchar **)(void *) g_array_free (prefixes, FALSE);
 }
 
 GActionGroup *
@@ -754,10 +776,13 @@ gtk_action_muxer_lookup (GtkActionMuxer *muxer,
 {
   Group *group;
 
-  group = g_hash_table_lookup (muxer->groups, prefix);
+  for ( ; muxer != NULL; muxer = muxer->parent)
+    {
+      group = g_hash_table_lookup (muxer->groups, prefix);
 
-  if (group != NULL)
-    return group->group;
+      if (group != NULL)
+        return group->group;
+    }
 
   return NULL;
 }

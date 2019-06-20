@@ -72,6 +72,146 @@ menu_item_label_notify_count (ActionTest    *fixture,
   g_object_unref (item);
 }
 
+#if !GLIB_CHECK_VERSION(2,60,0)
+gboolean
+g_strv_equal (const gchar * const *strv1,
+              const gchar * const *strv2)
+{
+  g_return_val_if_fail (strv1 != NULL, FALSE);
+  g_return_val_if_fail (strv2 != NULL, FALSE);
+
+  if (strv1 == strv2)
+    return TRUE;
+
+  for (; *strv1 != NULL && *strv2 != NULL; strv1++, strv2++)
+    {
+      if (!g_str_equal (*strv1, *strv2))
+        return FALSE;
+    }
+
+  return (*strv1 == NULL && *strv2 == NULL);
+}
+#endif
+
+static void
+g_test_action_muxer (void)
+{
+  GtkWidget *window;
+  GtkWidget *box;
+  GtkWidget *button;
+  const char **prefixes;
+  const char * const expected[] = { "win", NULL };
+  const char * const expected1[] = { "group1", "win", NULL };
+  const char * const expected2[] = { "group2", "win", NULL };
+  const char * const expected3[] = { "group1", "group2", "win", NULL };
+  GActionGroup *win;
+  GActionGroup *group1;
+  GActionGroup *group2;
+  GActionGroup *grp;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  button = gtk_button_new_with_label ("test");
+
+  gtk_container_add (GTK_CONTAINER (window), box);
+  gtk_container_add (GTK_CONTAINER (box), button);
+
+  win = G_ACTION_GROUP (g_simple_action_group_new ());
+  gtk_widget_insert_action_group (window, "win", win);
+
+  prefixes = gtk_widget_list_action_prefixes (window);
+  g_assert (g_strv_equal ((const char * const *)prefixes, expected));
+  g_free (prefixes);
+
+  prefixes = gtk_widget_list_action_prefixes (box);
+  g_assert (g_strv_equal ((const char * const *)prefixes, expected));
+  g_free (prefixes);
+
+  prefixes = gtk_widget_list_action_prefixes (button);
+  g_assert (g_strv_equal ((const char * const *)prefixes, expected));
+  g_free (prefixes);
+
+  grp = gtk_widget_get_action_group (window, "win");
+  g_assert (grp == win);
+  grp = gtk_widget_get_action_group (window, "bla");
+  g_assert (grp == NULL);
+
+  grp = gtk_widget_get_action_group (box, "win");
+  g_assert (grp == win);
+  grp = gtk_widget_get_action_group (box, "bla");
+  g_assert (grp == NULL);
+
+  grp = gtk_widget_get_action_group (button, "win");
+  g_assert (grp == win);
+  grp = gtk_widget_get_action_group (button, "bla");
+  g_assert (grp == NULL);
+
+  group1 = G_ACTION_GROUP (g_simple_action_group_new ());
+  gtk_widget_insert_action_group (button, "group1", group1);
+
+  prefixes = gtk_widget_list_action_prefixes (window);
+  g_assert (g_strv_equal ((const char * const *)prefixes, expected));
+  g_free (prefixes);
+
+  prefixes = gtk_widget_list_action_prefixes (box);
+  g_assert (g_strv_equal ((const char * const *)prefixes, expected));
+  g_free (prefixes);
+
+  prefixes = gtk_widget_list_action_prefixes (button);
+  g_assert (g_strv_equal ((const char * const *)prefixes, expected1));
+  g_free (prefixes);
+
+  grp = gtk_widget_get_action_group (window, "win");
+  g_assert (grp == win);
+  grp = gtk_widget_get_action_group (window, "group1");
+  g_assert (grp == NULL);
+
+  grp = gtk_widget_get_action_group (box, "win");
+  g_assert (grp == win);
+  grp = gtk_widget_get_action_group (box, "group1");
+  g_assert (grp == NULL);
+
+  grp = gtk_widget_get_action_group (button, "win");
+  g_assert (grp == win);
+  grp = gtk_widget_get_action_group (button, "group1");
+  g_assert (grp == group1);
+
+  group2 = G_ACTION_GROUP (g_simple_action_group_new ());
+  gtk_widget_insert_action_group (box, "group2", group2);
+
+  prefixes = gtk_widget_list_action_prefixes (window);
+  g_assert (g_strv_equal ((const char * const *)prefixes, expected));
+  g_free (prefixes);
+
+  prefixes = gtk_widget_list_action_prefixes (box);
+  g_assert (g_strv_equal ((const char * const *)prefixes, expected2));
+  g_free (prefixes);
+
+  prefixes = gtk_widget_list_action_prefixes (button);
+  g_assert (g_strv_equal ((const char * const *)prefixes, expected3));
+  g_free (prefixes);
+
+  grp = gtk_widget_get_action_group (window, "win");
+  g_assert (grp == win);
+  grp = gtk_widget_get_action_group (window, "group2");
+  g_assert (grp == NULL);
+
+  grp = gtk_widget_get_action_group (box, "win");
+  g_assert (grp == win);
+  grp = gtk_widget_get_action_group (box, "group2");
+  g_assert (grp == group2);
+
+  grp = gtk_widget_get_action_group (button, "win");
+  g_assert (grp == win);
+  grp = gtk_widget_get_action_group (button, "group2");
+  g_assert (grp == group2);
+
+  gtk_widget_destroy (window);
+  g_object_unref (win);
+  g_object_unref (group1);
+  g_object_unref (group2);
+}
+
 /* main */
 
 int
@@ -86,6 +226,7 @@ main (int    argc,
               menu_item_label_notify_count,
               action_test_teardown);
 
+  g_test_add_func ("/action/muxer/update-parent", g_test_action_muxer);
+
   return g_test_run ();
 }
-
