@@ -21,8 +21,10 @@
 
 #include "config.h"
 
-#include "gdkinternals.h"
 #include "gdkscreenprivate.h"
+
+#include "gdkinternals.h"
+#include "gdkmonitorprivate.h"
 #include "gdkrectangle.h"
 #include "gdkwindow.h"
 #include "gdkintl.h"
@@ -821,7 +823,7 @@ gdk_screen_get_monitor_plug_name (GdkScreen *screen,
 
   g_return_val_if_fail (monitor != NULL, NULL);
 
-  return g_strdup (gdk_monitor_get_model (monitor));
+  return g_strdup (gdk_monitor_get_connector (monitor));
 }
 
 /**
