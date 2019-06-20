@@ -37,6 +37,7 @@ struct _GdkWaylandMonitor {
   int32_t y;
   int32_t width;
   int32_t height;
+  char *name;
   gboolean wl_output_done;
   gboolean xdg_output_done;
 };
