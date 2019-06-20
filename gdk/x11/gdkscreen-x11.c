@@ -524,6 +524,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
       gdk_monitor_set_refresh_rate (GDK_MONITOR (monitor), refresh_rate);
       gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), x11_screen->window_scale);
       gdk_monitor_set_model (GDK_MONITOR (monitor), name);
+      gdk_monitor_set_connector (GDK_MONITOR (monitor), name);
       g_free (name);
 
       if (rr_monitors[i].primary)
