@@ -3777,6 +3777,26 @@ row {
   }
 
   &:selected { @extend %selected_items; }
+  
+  &.sidebar-row { // https://gitlab.gnome.org/Teams/Design/os-mockups/issues/16
+
+    &:selected {
+      color: $text_color;
+      background-color: darken($sidebar_bg_color, 10%);
+      label { color: $text_color; }
+            
+      &.has-open-popup,
+        &:hover { 
+          background-color: if(variant == light, transparentize($fg_color, 0.7), transparentize($fg_color, 0.75));
+      }
+      &:backdrop { 
+        color: $backdrop_text_color;
+        background-color: darken($backdrop_sidebar_bg_color, 10%); 
+        label { color: $backdrop_text_color; }
+      }
+
+    }
+  }
 }
 
 

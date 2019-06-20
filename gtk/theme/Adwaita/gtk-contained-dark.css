@@ -1600,6 +1600,16 @@ row.activatable:selected.has-open-popup, row.activatable:selected:hover { backgr
 
 row.activatable:selected:backdrop { background-color: #15539e; }
 
+row.sidebar-row:selected { color: white; background-color: #181818; }
+
+row.sidebar-row:selected label { color: white; }
+
+row.sidebar-row:selected.has-open-popup, row.sidebar-row:selected:hover { background-color: rgba(238, 238, 236, 0.25); }
+
+row.sidebar-row:selected:backdrop { color: #d6d6d6; background-color: #191919; }
+
+row.sidebar-row:selected:backdrop label { color: #d6d6d6; }
+
 /********************* App Notifications * */
 .app-notification, .app-notification.frame { padding: 10px; border-radius: 0 0 5px 5px; background-color: rgba(53, 53, 53, 0.7); background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 2px); background-clip: padding-box; }
 

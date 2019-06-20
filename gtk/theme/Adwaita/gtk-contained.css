@@ -1616,6 +1616,16 @@ row.activatable:selected.has-open-popup, row.activatable:selected:hover { backgr
 
 row.activatable:selected:backdrop { background-color: #3584e4; }
 
+row.sidebar-row:selected { color: black; background-color: #e4dede; }
+
+row.sidebar-row:selected label { color: black; }
+
+row.sidebar-row:selected.has-open-popup, row.sidebar-row:selected:hover { background-color: rgba(46, 52, 54, 0.25); }
+
+row.sidebar-row:selected:backdrop { color: #323232; background-color: #e1e1dd; }
+
+row.sidebar-row:selected:backdrop label { color: #323232; }
+
 /********************* App Notifications * */
 .app-notification, .app-notification.frame { padding: 10px; border-radius: 0 0 5px 5px; background-color: rgba(53, 53, 53, 0.7); background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent 2px); background-clip: padding-box; }
 
