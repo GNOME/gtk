@@ -1128,6 +1128,7 @@ gdk_monitor_get_width_mm
 gdk_monitor_get_height_mm
 gdk_monitor_get_manufacturer
 gdk_monitor_get_model
+gdk_monitor_get_connector
 gdk_monitor_get_scale_factor
 gdk_monitor_get_refresh_rate
 GdkSubpixelLayout
