@@ -96,6 +96,10 @@
  * > gtk_file_chooser_button_set_width_chars(), or pack the button in
  * > such a way that other interface elements give space to the
  * > widget.
+ *
+ * # CSS nodes
+ *
+ * GtkFileChooserButton has a single CSS node with the name “filechooserbutton”.
  */
 
 

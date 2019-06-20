@@ -46,8 +46,8 @@
  * can be made round by adding the .circular style class.
  *
  * Button-like widgets like #GtkToggleButton, #GtkMenuButton, #GtkVolumeButton,
- * #GtkLockButton, #GtkColorButton, #GtkFontButton or #GtkFileChooserButton use
- * style classes such as .toggle, .popup, .scale, .lock, .color, .file
+ * #GtkLockButton, #GtkColorButton or #GtkFontButton use style classes such as
+ * .toggle, .popup, .scale, .lock, .color on the button node
  * to differentiate themselves from a plain GtkButton.
  */
 
