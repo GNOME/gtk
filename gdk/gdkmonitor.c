@@ -155,6 +155,7 @@ gdk_monitor_finalize (GObject *object)
 {
   GdkMonitor *monitor = GDK_MONITOR (object);
 
+  g_free (monitor->connector);
   g_free (monitor->manufacturer);
   g_free (monitor->model);
 
@@ -354,6 +355,22 @@ gdk_monitor_get_height_mm (GdkMonitor *monitor)
   return monitor->height_mm;
 }
 
+/*< private >
+ * gdk_monitor_get_connector:
+ * @monitor: a #GdkMonitor
+ *
+ * Gets the name of the monitor's connector, if available.
+ *
+ * Returns: (transfer none) (nullable): the name of the connector
+ */
+const char *
+gdk_monitor_get_connector (GdkMonitor *monitor)
+{
+  g_return_val_if_fail (GDK_IS_MONITOR (monitor), NULL);
+
+  return monitor->connector;
+}
+
 /**
  * gdk_monitor_get_manufacturer:
  * @monitor: a #GdkMonitor
@@ -491,6 +508,16 @@ gdk_monitor_set_model (GdkMonitor *monitor,
   monitor->model = g_strdup (model);
 
   g_object_notify (G_OBJECT (monitor), "model");
+}
+
+void
+gdk_monitor_set_connector (GdkMonitor *monitor,
+                           const char *connector)
+{
+  g_free (monitor->connector);
+  monitor->connector = g_strdup (connector);
+
+  /* g_object_notify (G_OBJECT (monitor), "connector"); */
 }
 
 void
