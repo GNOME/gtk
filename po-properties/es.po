@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-18 20:49+0000\n"
-"PO-Revision-Date: 2019-06-19 09:48+0200\n"
+"POT-Creation-Date: 2019-06-21 02:49+0000\n"
+"PO-Revision-Date: 2019-06-21 09:35+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: es <gnome-es-list@gnome.org>\n"
 "Language: es\n"
@@ -31,7 +31,7 @@ msgstr ""
 #: gdk/gdkapplaunchcontext.c:133 gdk/gdkdrawcontext.c:155 gdk/gdkseat.c:199
 #: gdk/gdkseat.c:200 gdk/gdksurface.c:437 gdk/gdksurface.c:438
 #: gdk/win32/gdkcursor-win32.c:234 gtk/gtkmountoperation.c:181
-#: gtk/gtkstylecontext.c:206 gtk/gtkwindow.c:930
+#: gtk/gtkstylecontext.c:206 gtk/gtkwindow.c:939
 msgid "Display"
 msgstr "Pantalla"
 
@@ -59,8 +59,8 @@ msgstr "Punto de acceso Y"
 msgid "Vertical offset of the cursor hotspot"
 msgstr "Desplazamiento vertical del punto de acceso del cursor"
 
-#: gdk/gdkcursor.c:204 gtk/gtkcssnode.c:638 gtk/gtkprinter.c:121
-#: gtk/gtkstack.c:379 gtk/gtktextmark.c:135
+#: gdk/gdkcursor.c:204 gtk/gtkcssnode.c:638 gtk/gtkeventcontroller.c:250
+#: gtk/gtkprinter.c:121 gtk/gtkstack.c:379 gtk/gtktextmark.c:135
 msgid "Name"
 msgstr "Nombre"
 
@@ -469,7 +469,7 @@ msgstr ""
 "Si se establece, un subrayado en el texto indica que el siguiente carácter "
 "se utiliza como el nemotécnico de la teclas aceleradora"
 
-#: gtk/gtkaccessible.c:153 gtk/gtkeventcontroller.c:194
+#: gtk/gtkaccessible.c:153 gtk/gtkeventcontroller.c:217
 #: gtk/gtktreeviewcolumn.c:363 gtk/gtkwidgetpaintable.c:242
 msgid "Widget"
 msgstr "Widget"
@@ -837,7 +837,7 @@ msgid "The border relief style"
 msgstr "Estilo del relieve del borde"
 
 #: gtk/gtkbutton.c:240 gtk/gtkcellrendererpixbuf.c:211 gtk/gtkimage.c:208
-#: gtk/gtkmenubutton.c:628 gtk/gtkprinter.c:170 gtk/gtkwindow.c:923
+#: gtk/gtkmenubutton.c:628 gtk/gtkprinter.c:170 gtk/gtkwindow.c:932
 msgid "Icon Name"
 msgstr "Nombre del icono"
 
@@ -1550,7 +1550,7 @@ msgstr ""
 "El lugar preferido para la elipsis de la cadena, si el renderizador de la "
 "celda no tiene espacio suficiente para mostrar la cadena completa"
 
-#: gtk/gtkcellrenderertext.c:461 gtk/gtkfilechooserbutton.c:431
+#: gtk/gtkcellrenderertext.c:461 gtk/gtkfilechooserbutton.c:435
 #: gtk/gtklabel.c:953
 msgid "Width In Characters"
 msgstr "Anchura en caracteres"
@@ -1851,7 +1851,7 @@ msgid "Whether to give the color an alpha value"
 msgstr "Indica si se debe dar un valor alfa al color"
 
 # components/music/nautilus-music-view.c:198
-#: gtk/gtkcolorbutton.c:223 gtk/gtkfilechooserbutton.c:419
+#: gtk/gtkcolorbutton.c:223 gtk/gtkfilechooserbutton.c:423
 #: gtk/gtkfontbutton.c:546 gtk/gtkheaderbar.c:1774 gtk/gtkprintjob.c:150
 #: gtk/gtkshortcutsgroup.c:306 gtk/gtkshortcutssection.c:361
 #: gtk/gtkshortcutsshortcut.c:616 gtk/gtkstack.c:386
@@ -2472,12 +2472,10 @@ msgstr "Indica si se debe mostrar un icono para el emoticono"
 
 #: gtk/gtkentry.c:834 gtk/gtklabel.c:1031 gtk/gtkpasswordentry.c:422
 #: gtk/gtktext.c:934 gtk/gtktextview.c:1001
-#| msgid "Extra widget"
 msgid "Extra menu"
 msgstr "Menú extra"
 
 #: gtk/gtkentry.c:835 gtk/gtkpasswordentry.c:423
-#| msgid "Model column used to retrieve the text from"
 msgid "Model menu to append to the context menu"
 msgstr "Modelo de menú que añadir al menú contextual"
 
@@ -2554,25 +2552,30 @@ msgstr "Selección en línea"
 msgid "Your description here"
 msgstr "Aquí su descripción"
 
-#: gtk/gtkeventcontroller.c:195
+#: gtk/gtkeventcontroller.c:218
 msgid "Widget the gesture relates to"
 msgstr "Widget al que se refiere el gesto"
 
-#: gtk/gtkeventcontroller.c:206
+#: gtk/gtkeventcontroller.c:229
 msgid "Propagation phase"
 msgstr "Fase de propagación"
 
-#: gtk/gtkeventcontroller.c:207
+#: gtk/gtkeventcontroller.c:230
 msgid "Propagation phase at which this controller is run"
 msgstr "Fase de propagación en la que se ejecuta el controlador"
 
-#: gtk/gtkeventcontroller.c:219
+#: gtk/gtkeventcontroller.c:242
 msgid "Propagation limit"
 msgstr "Límite de propagación"
 
-#: gtk/gtkeventcontroller.c:220
+#: gtk/gtkeventcontroller.c:243
 msgid "Propagation limit for events handled by this controller"
 msgstr "Límite de propagación para eventos manejados por este controlador"
+
+#: gtk/gtkeventcontroller.c:251
+#| msgid "Name of this cursor"
+msgid "Name for this controller"
+msgstr "Nombre de este controlador"
 
 #: gtk/gtkeventcontrollerkey.c:269
 msgid "Is Focus"
@@ -2650,19 +2653,19 @@ msgstr ""
 "Indica si el expansor redimensionará la ventana de nivel superior al "
 "expandirse y contraerse"
 
-#: gtk/gtkfilechooserbutton.c:406
+#: gtk/gtkfilechooserbutton.c:410
 msgid "Dialog"
 msgstr "Diálogo"
 
-#: gtk/gtkfilechooserbutton.c:407
+#: gtk/gtkfilechooserbutton.c:411
 msgid "The file chooser dialog to use."
 msgstr "El diálogo del selector de archivos que se va a usar."
 
-#: gtk/gtkfilechooserbutton.c:420
+#: gtk/gtkfilechooserbutton.c:424
 msgid "The title of the file chooser dialog."
 msgstr "El título del diálogo de selección de archivos."
 
-#: gtk/gtkfilechooserbutton.c:432
+#: gtk/gtkfilechooserbutton.c:436
 msgid "The desired width of the button widget, in characters."
 msgstr "La anchura del widget del botón, en caracteres."
 
@@ -3502,7 +3505,6 @@ msgid "The desired number of lines, when ellipsizing a wrapping label"
 msgstr "El número requerido de líneas, al recortar una etiqueta envolvente"
 
 #: gtk/gtklabel.c:1032 gtk/gtktext.c:935 gtk/gtktextview.c:1002
-#| msgid "The model for the tree menu"
 msgid "Menu model to append to the context menu"
 msgstr "Modelo de menú que añadir al menú contextual"
 
@@ -4063,7 +4065,7 @@ msgstr "Título del diálogo"
 msgid "The title of the file chooser dialog"
 msgstr "El título del diálogo de selección de archivos"
 
-#: gtk/gtknativedialog.c:224 gtk/gtkwindow.c:851
+#: gtk/gtknativedialog.c:224 gtk/gtkwindow.c:860
 msgid "Modal"
 msgstr "Modal"
 
@@ -4079,11 +4081,11 @@ msgstr ""
 msgid "Whether the dialog is currently visible"
 msgstr "Indica si el diálogo es visible actualmente"
 
-#: gtk/gtknativedialog.c:248 gtk/gtkwindow.c:1006
+#: gtk/gtknativedialog.c:248 gtk/gtkwindow.c:1015
 msgid "Transient for Window"
 msgstr "Transitorio para la ventana"
 
-#: gtk/gtknativedialog.c:249 gtk/gtkwindow.c:1007
+#: gtk/gtknativedialog.c:249 gtk/gtkwindow.c:1016
 msgid "The transient parent of the dialog"
 msgstr "El padre transitorio del diálogo"
 
@@ -4555,11 +4557,11 @@ msgstr ""
 "Indica si se debe descartar la ventana emergente en las pulsaciones fuera de "
 "área"
 
-#: gtk/gtkpopover.c:1365 gtk/gtkwindow.c:1058
+#: gtk/gtkpopover.c:1365 gtk/gtkwindow.c:1067
 msgid "Default widget"
 msgstr "Widget predeterminado"
 
-#: gtk/gtkpopover.c:1366 gtk/gtkwindow.c:1059
+#: gtk/gtkpopover.c:1366 gtk/gtkwindow.c:1068
 msgid "The default widget"
 msgstr "El widget predeterminado"
 
@@ -4572,7 +4574,6 @@ msgid "Whether to draw an arrow"
 msgstr "Indica si se debe dibujar una flecha"
 
 #: gtk/gtkpopovermenubar.c:509
-#| msgid "The model from which the popup is made."
 msgid "The model from which the bar is made."
 msgstr "El modelo a partir del cual se crea la barra."
 
@@ -6953,7 +6954,7 @@ msgstr ""
 msgid "Whether to display the column"
 msgstr "Indica si se debe mostrar la columna"
 
-#: gtk/gtktreeviewcolumn.c:279 gtk/gtkwindow.c:844
+#: gtk/gtktreeviewcolumn.c:279 gtk/gtkwindow.c:853
 msgid "Resizable"
 msgstr "Redimensionable"
 
@@ -7364,36 +7365,36 @@ msgstr "El gestor de la distribución usado para mostrar el hijo del widget"
 msgid "Observed widget"
 msgstr "Widget observado"
 
-#: gtk/gtkwindow.c:815
+#: gtk/gtkwindow.c:824
 msgid "Window Type"
 msgstr "Tipo de ventana"
 
-#: gtk/gtkwindow.c:816
+#: gtk/gtkwindow.c:825
 msgid "The type of the window"
 msgstr "El tipo de la ventana"
 
-#: gtk/gtkwindow.c:823
+#: gtk/gtkwindow.c:832
 msgid "Window Title"
 msgstr "Título de la ventana"
 
-#: gtk/gtkwindow.c:824
+#: gtk/gtkwindow.c:833
 msgid "The title of the window"
 msgstr "El título de la ventana"
 
-#: gtk/gtkwindow.c:837
+#: gtk/gtkwindow.c:846
 msgid "Startup ID"
 msgstr "ID de inicio"
 
-#: gtk/gtkwindow.c:838
+#: gtk/gtkwindow.c:847
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr ""
 "Identificador único de inicio para la ventana usado por startup-notification"
 
-#: gtk/gtkwindow.c:845
+#: gtk/gtkwindow.c:854
 msgid "If TRUE, users can resize the window"
 msgstr "Si es TRUE los usuario pueden redimensionar la ventana"
 
-#: gtk/gtkwindow.c:852
+#: gtk/gtkwindow.c:861
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -7401,82 +7402,82 @@ msgstr ""
 "Si es TRUE, esta ventana es modal (no se pueden utilizar otras ventanas "
 "mientras ésta este encima)"
 
-#: gtk/gtkwindow.c:858
+#: gtk/gtkwindow.c:867
 msgid "Default Width"
 msgstr "Anchura predeterminada"
 
-#: gtk/gtkwindow.c:859
+#: gtk/gtkwindow.c:868
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "El ancho predeterminado de la ventana, utilizado cuando se muestra "
 "inicialmente la ventana"
 
-#: gtk/gtkwindow.c:866
+#: gtk/gtkwindow.c:875
 msgid "Default Height"
 msgstr "Altura predeterminada"
 
-#: gtk/gtkwindow.c:867
+#: gtk/gtkwindow.c:876
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "La altura predeterminada de la ventana, utilizado cuando se muestra "
 "inicialmente la ventana"
 
-#: gtk/gtkwindow.c:874
+#: gtk/gtkwindow.c:883
 msgid "Destroy with Parent"
 msgstr "Destruir con el padre"
 
-#: gtk/gtkwindow.c:875
+#: gtk/gtkwindow.c:884
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Indica si esta ventana debe ser destruida cuando el padre se destruye"
 
-#: gtk/gtkwindow.c:881
+#: gtk/gtkwindow.c:890
 msgid "Hide on close"
 msgstr "Ocultar al cerrar"
 
-#: gtk/gtkwindow.c:882
+#: gtk/gtkwindow.c:891
 msgid "If this window should be hidden when the user clicks the close button"
 msgstr ""
 "Si se debe ocultar esta ventana cuando el usuario pulsa el botón de cerrar"
 
-#: gtk/gtkwindow.c:895
+#: gtk/gtkwindow.c:904
 msgid "Mnemonics Visible"
 msgstr "Mnemónicos visibles"
 
-#: gtk/gtkwindow.c:896
+#: gtk/gtkwindow.c:905
 msgid "Whether mnemonics are currently visible in this window"
 msgstr "Indica si los mnemónicos son visibles actualmente en esta ventana"
 
-#: gtk/gtkwindow.c:910
+#: gtk/gtkwindow.c:919
 msgid "Focus Visible"
 msgstr "Foco visible"
 
-#: gtk/gtkwindow.c:911
+#: gtk/gtkwindow.c:920
 msgid "Whether focus rectangles are currently visible in this window"
 msgstr ""
 "Indica si los rectángulos de foco están visibles actualmente en esta ventana"
 
-#: gtk/gtkwindow.c:924
+#: gtk/gtkwindow.c:933
 msgid "Name of the themed icon for this window"
 msgstr "Nombre del icono del tema para esta ventana"
 
-#: gtk/gtkwindow.c:931
+#: gtk/gtkwindow.c:940
 msgid "The display that will display this window"
 msgstr "La pantalla que mostrará esta ventana"
 
-#: gtk/gtkwindow.c:937
+#: gtk/gtkwindow.c:946
 msgid "Is Active"
 msgstr "Está activo"
 
-#: gtk/gtkwindow.c:938
+#: gtk/gtkwindow.c:947
 msgid "Whether the toplevel is the current active window"
 msgstr "Indica si el nivel superior es la ventana activa actual"
 
-#: gtk/gtkwindow.c:944
+#: gtk/gtkwindow.c:953
 msgid "Type hint"
 msgstr "Pista de tipo"
 
-#: gtk/gtkwindow.c:945
+#: gtk/gtkwindow.c:954
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -7484,59 +7485,59 @@ msgstr ""
 "Pista para ayudar al entorno de escritorio a entender qué clase de ventana "
 "es ésta y cómo tratar con ella."
 
-#: gtk/gtkwindow.c:957
+#: gtk/gtkwindow.c:966
 msgid "Accept focus"
 msgstr "Aceptar foco"
 
-#: gtk/gtkwindow.c:958
+#: gtk/gtkwindow.c:967
 msgid "TRUE if the window should receive the input focus."
 msgstr "TRUE si la ventana no debe recibir el foco de entrada."
 
-#: gtk/gtkwindow.c:969
+#: gtk/gtkwindow.c:978
 msgid "Focus on map"
 msgstr "Foco en el mapa"
 
-#: gtk/gtkwindow.c:970
+#: gtk/gtkwindow.c:979
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "TRUE si la ventana debe recibir el foco de entrada al ser mapeada."
 
-#: gtk/gtkwindow.c:981
+#: gtk/gtkwindow.c:990
 msgid "Decorated"
 msgstr "Decorado"
 
-#: gtk/gtkwindow.c:982
+#: gtk/gtkwindow.c:991
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Indica si la ventana debe ser decorada por el gestor de ventanas"
 
-#: gtk/gtkwindow.c:993
+#: gtk/gtkwindow.c:1002
 msgid "Deletable"
 msgstr "Eliminable"
 
-#: gtk/gtkwindow.c:994
+#: gtk/gtkwindow.c:1003
 msgid "Whether the window frame should have a close button"
 msgstr "Indica si el marco de la ventana debe tener un botón de cierre"
 
-#: gtk/gtkwindow.c:1024
+#: gtk/gtkwindow.c:1033
 msgid "Attached to Widget"
 msgstr "Acoplado al widget"
 
-#: gtk/gtkwindow.c:1025
+#: gtk/gtkwindow.c:1034
 msgid "The widget where the window is attached"
 msgstr "El widget al que está acoplada la ventana"
 
-#: gtk/gtkwindow.c:1031
+#: gtk/gtkwindow.c:1040
 msgid "Is maximized"
 msgstr "Está maximizada"
 
-#: gtk/gtkwindow.c:1032
+#: gtk/gtkwindow.c:1041
 msgid "Whether the window is maximized"
 msgstr "Indica si la ventana está maximizada"
 
-#: gtk/gtkwindow.c:1051
+#: gtk/gtkwindow.c:1060
 msgid "GtkApplication"
 msgstr "GtkApplication"
 
-#: gtk/gtkwindow.c:1052
+#: gtk/gtkwindow.c:1061
 msgid "The GtkApplication for the window"
 msgstr "El GtkApplication para la ventana"
 
