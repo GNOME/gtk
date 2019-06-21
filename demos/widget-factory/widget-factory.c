@@ -1050,25 +1050,33 @@ row_activated (GtkListBox *box, GtkListBoxRow *row)
     }
 }
 
+typedef struct {
+  const gchar *action_and_target;
+  const gchar *accelerators[2];
+} Accel;
+
 static void
-set_accel (GtkApplication *app, GtkWidget *widget)
+set_accel (GtkWidget *widget, Accel *accels, int n_accels)
 {
   GtkWidget *accel_label;
   const gchar *action;
-  gchar **accels;
   guint key;
   GdkModifierType mods;
+  int i;
 
   accel_label = gtk_bin_get_child (GTK_BIN (widget));
   g_assert (GTK_IS_ACCEL_LABEL (accel_label));
 
   action = gtk_actionable_get_action_name (GTK_ACTIONABLE (widget));
-  accels = gtk_application_get_accels_for_action (app, action);
-
-  gtk_accelerator_parse (accels[0], &key, &mods);
-  gtk_accel_label_set_accel (GTK_ACCEL_LABEL (accel_label), key, mods);
-
-  g_strfreev (accels);
+  for (i = 0; i < n_accels; i++)
+    {
+      if (strcmp (accels[i].action_and_target, action) == 0)
+        {
+          if (gtk_accelerator_parse (accels[i].accelerators[0], &key, &mods))
+            gtk_accel_label_set_accel (GTK_ACCEL_LABEL (accel_label), key, mods);
+          break;
+        }
+    }
 }
 
 typedef struct
@@ -1679,10 +1687,7 @@ activate (GApplication *app)
     { "record", activate_record, NULL, NULL, NULL },
     { "lock", activate_lock, NULL, NULL, NULL },
   };
-  struct {
-    const gchar *action_and_target;
-    const gchar *accelerators[2];
-  } accels[] = {
+  Accel accels[] = {
     { "app.about", { "F1", NULL } },
     { "app.quit", { "<Primary>q", NULL } },
     { "app.open-in", { "<Primary>n", NULL } },
@@ -1700,6 +1705,7 @@ activate (GApplication *app)
   gint i;
   GPermission *permission;
   GAction *action;
+  GtkEventController *controller;
 
   g_type_ensure (my_text_view_get_type ());
 
@@ -1734,8 +1740,27 @@ activate (GApplication *app)
                                    win_entries, G_N_ELEMENTS (win_entries),
                                    window);
 
+  controller = gtk_shortcut_controller_new ();
+  gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (controller),
+                                     GTK_SHORTCUT_SCOPE_GLOBAL);
+
   for (i = 0; i < G_N_ELEMENTS (accels); i++)
-    gtk_application_set_accels_for_action (GTK_APPLICATION (app), accels[i].action_and_target, accels[i].accelerators);
+    {
+      GtkShortcutTrigger *trigger;
+      GtkShortcutAction *action;
+      GtkShortcut *shortcut;
+      guint keyval;
+      GdkModifierType modifiers;
+
+      gtk_accelerator_parse (accels[i].accelerators[0], &keyval, &modifiers);
+      trigger = gtk_keyval_trigger_new (keyval, modifiers);
+      action = gtk_action_action_new (accels[i].action_and_target);
+      shortcut = gtk_shortcut_new (trigger, action);
+      gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+      g_object_unref (shortcut);
+    }
+
+  gtk_widget_add_controller (GTK_WIDGET (window), controller);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "statusbar");
   gtk_statusbar_push (GTK_STATUSBAR (widget), 0, "All systems are operating normally.");
@@ -1855,12 +1880,12 @@ activate (GApplication *app)
   g_object_set_data (G_OBJECT (widget2), "range_to_spin", widget3);
   g_object_set_data (G_OBJECT (widget), "print_button", widget4);
 
-  set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "quitmenuitem")));
-  set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "deletemenuitem")));
-  set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "searchmenuitem")));
-  set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "darkmenuitem")));
-  set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "aboutmenuitem")));
-  set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "bgmenuitem")));
+  set_accel (GTK_WIDGET (gtk_builder_get_object (builder, "quitmenuitem")), accels, G_N_ELEMENTS (accels));
+  set_accel (GTK_WIDGET (gtk_builder_get_object (builder, "deletemenuitem")), accels, G_N_ELEMENTS (accels));
+  set_accel (GTK_WIDGET (gtk_builder_get_object (builder, "searchmenuitem")), accels, G_N_ELEMENTS (accels));
+  set_accel (GTK_WIDGET (gtk_builder_get_object (builder, "darkmenuitem")), accels, G_N_ELEMENTS (accels));
+  set_accel (GTK_WIDGET (gtk_builder_get_object (builder, "aboutmenuitem")), accels, G_N_ELEMENTS (accels));
+  set_accel (GTK_WIDGET (gtk_builder_get_object (builder, "bgmenuitem")), accels, G_N_ELEMENTS (accels));
 
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "tooltextview");
 
