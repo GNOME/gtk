@@ -5702,7 +5702,7 @@ gtk_text_activate_clipboard_cut (GtkWidget  *widget,
                                  GVariant   *parameter)
 {
   GtkText *self = GTK_TEXT (widget);
-  g_signal_emit_by_name (self, "cut-clipboard");
+  gtk_text_cut_clipboard (self);
   hide_selection_bubble (self);
 }
 
@@ -5712,7 +5712,7 @@ gtk_text_activate_clipboard_copy (GtkWidget  *widget,
                                   GVariant   *parameter)
 {
   GtkText *self = GTK_TEXT (widget);
-  g_signal_emit_by_name (self, "copy-clipboard");
+  gtk_text_copy_clipboard (self);
   hide_selection_bubble (self);
 }
 
@@ -5722,7 +5722,7 @@ gtk_text_activate_clipboard_paste (GtkWidget  *widget,
                                    GVariant   *parameter)
 {
   GtkText *self = GTK_TEXT (widget);
-  g_signal_emit_by_name (self, "paste-clipboard");
+  gtk_text_paste_clipboard (self);
   hide_selection_bubble (self);
 }
 
