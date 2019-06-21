@@ -524,16 +524,7 @@ update_accel (GtkModelButton *button,
 {
   if (accel)
     {
-      guint key;
-      GdkModifierType mods;
-      char *str;
-
-      gtk_accelerator_parse (accel, &key, &mods);
-
-      str = gtk_accelerator_get_label (key, mods);
-      gtk_label_set_label (GTK_LABEL (button->accel_label), str);
-      g_free (str);
-
+      gtk_label_set_label (GTK_LABEL (button->accel_label), accel);
       gtk_widget_show (button->accel_label);
     }
   else
