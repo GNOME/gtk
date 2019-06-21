@@ -50,6 +50,6 @@ for f in funcs:
 
 if debug: print (len(funcs), 'functions')
 
-ofile = open(out_file, "w")
+ofile = open(out_file, "w", encoding="utf-8")
 ofile.write(file_output)
 ofile.close()
