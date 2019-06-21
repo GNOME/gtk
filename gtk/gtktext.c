@@ -236,16 +236,7 @@ struct _GtkTextPasswordHint
 
 enum {
   ACTIVATE,
-  MOVE_CURSOR,
-  INSERT_AT_CURSOR,
-  DELETE_FROM_CURSOR,
-  BACKSPACE,
-  CUT_CLIPBOARD,
-  COPY_CLIPBOARD,
-  PASTE_CLIPBOARD,
-  TOGGLE_OVERWRITE,
   PREEDIT_CHANGED,
-  INSERT_EMOJI,
   LAST_SIGNAL
 };
 
@@ -723,15 +714,6 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->drag_data_get = gtk_text_drag_data_get;
   widget_class->drag_data_delete = gtk_text_drag_data_delete;
 
-  class->move_cursor = gtk_text_move_cursor;
-  class->insert_at_cursor = gtk_text_insert_at_cursor;
-  class->delete_from_cursor = gtk_text_delete_from_cursor;
-  class->backspace = gtk_text_backspace;
-  class->cut_clipboard = gtk_text_cut_clipboard;
-  class->copy_clipboard = gtk_text_copy_clipboard;
-  class->paste_clipboard = gtk_text_paste_clipboard;
-  class->toggle_overwrite = gtk_text_toggle_overwrite;
-  class->insert_emoji = gtk_text_insert_emoji;
   class->activate = gtk_text_real_activate;
  
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
@@ -962,194 +944,6 @@ gtk_text_class_init (GtkTextClass *class)
                   G_TYPE_NONE, 0);
 
   /**
-   * GtkText::move-cursor:
-   * @self: the object which received the signal
-   * @step: the granularity of the move, as a #GtkMovementStep
-   * @count: the number of @step units to move
-   * @extend: %TRUE if the move should extend the selection
-   *
-   * The ::move-cursor signal is a
-   * [keybinding signal][GtkBindingSignal]
-   * which gets emitted when the user initiates a cursor movement.
-   * If the cursor is not visible in @self, this signal causes
-   * the viewport to be moved instead.
-   *
-   * Applications should not connect to it, but may emit it with
-   * g_signal_emit_by_name() if they need to control the cursor
-   * programmatically.
-   *
-   * The default bindings for this signal come in two variants,
-   * the variant with the Shift modifier extends the selection,
-   * the variant without the Shift modifer does not.
-   * There are too many key combinations to list them all here.
-   * - Arrow keys move by individual characters/lines
-   * - Ctrl-arrow key combinations move by words/paragraphs
-   * - Home/End keys move to the ends of the buffer
-   */
-  signals[MOVE_CURSOR] = 
-    g_signal_new (I_("move-cursor"),
-                  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkTextClass, move_cursor),
-                  NULL, NULL,
-                  _gtk_marshal_VOID__ENUM_INT_BOOLEAN,
-                  G_TYPE_NONE, 3,
-                  GTK_TYPE_MOVEMENT_STEP,
-                  G_TYPE_INT,
-                  G_TYPE_BOOLEAN);
-
-  /**
-   * GtkText::insert-at-cursor:
-   * @self: the object which received the signal
-   * @string: the string to insert
-   *
-   * The ::insert-at-cursor signal is a
-   * [keybinding signal][GtkBindingSignal]
-   * which gets emitted when the user initiates the insertion of a
-   * fixed string at the cursor.
-   *
-   * This signal has no default bindings.
-   */
-  signals[INSERT_AT_CURSOR] = 
-    g_signal_new (I_("insert-at-cursor"),
-                  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkTextClass, insert_at_cursor),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 1,
-                  G_TYPE_STRING);
-
-  /**
-   * GtkText::delete-from-cursor:
-   * @self: the object which received the signal
-   * @type: the granularity of the deletion, as a #GtkDeleteType
-   * @count: the number of @type units to delete
-   *
-   * The ::delete-from-cursor signal is a
-   * [keybinding signal][GtkBindingSignal]
-   * which gets emitted when the user initiates a text deletion.
-   *
-   * If the @type is %GTK_DELETE_CHARS, GTK deletes the selection
-   * if there is one, otherwise it deletes the requested number
-   * of characters.
-   *
-   * The default bindings for this signal are
-   * Delete for deleting a character and Ctrl-Delete for
-   * deleting a word.
-   */
-  signals[DELETE_FROM_CURSOR] = 
-    g_signal_new (I_("delete-from-cursor"),
-                  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkTextClass, delete_from_cursor),
-                  NULL, NULL,
-                  _gtk_marshal_VOID__ENUM_INT,
-                  G_TYPE_NONE, 2,
-                  GTK_TYPE_DELETE_TYPE,
-                  G_TYPE_INT);
-
-  /**
-   * GtkText::backspace:
-   * @self: the object which received the signal
-   *
-   * The ::backspace signal is a
-   * [keybinding signal][GtkBindingSignal]
-   * which gets emitted when the user asks for it.
-   *
-   * The default bindings for this signal are
-   * Backspace and Shift-Backspace.
-   */
-  signals[BACKSPACE] =
-    g_signal_new (I_("backspace"),
-                  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkTextClass, backspace),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
-
-  /**
-   * GtkText::cut-clipboard:
-   * @self: the object which received the signal
-   *
-   * The ::cut-clipboard signal is a
-   * [keybinding signal][GtkBindingSignal]
-   * which gets emitted to cut the selection to the clipboard.
-   *
-   * The default bindings for this signal are
-   * Ctrl-x and Shift-Delete.
-   */
-  signals[CUT_CLIPBOARD] =
-    g_signal_new (I_("cut-clipboard"),
-                  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkTextClass, cut_clipboard),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
-
-  /**
-   * GtkText::copy-clipboard:
-   * @self: the object which received the signal
-   *
-   * The ::copy-clipboard signal is a
-   * [keybinding signal][GtkBindingSignal]
-   * which gets emitted to copy the selection to the clipboard.
-   *
-   * The default bindings for this signal are
-   * Ctrl-c and Ctrl-Insert.
-   */
-  signals[COPY_CLIPBOARD] =
-    g_signal_new (I_("copy-clipboard"),
-                  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkTextClass, copy_clipboard),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
-
-  /**
-   * GtkText::paste-clipboard:
-   * @self: the object which received the signal
-   *
-   * The ::paste-clipboard signal is a
-   * [keybinding signal][GtkBindingSignal]
-   * which gets emitted to paste the contents of the clipboard
-   * into the text view.
-   *
-   * The default bindings for this signal are
-   * Ctrl-v and Shift-Insert.
-   */
-  signals[PASTE_CLIPBOARD] =
-    g_signal_new (I_("paste-clipboard"),
-                  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkTextClass, paste_clipboard),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
-
-  /**
-   * GtkText::toggle-overwrite:
-   * @self: the object which received the signal
-   *
-   * The ::toggle-overwrite signal is a
-   * [keybinding signal][GtkBindingSignal]
-   * which gets emitted to toggle the overwrite mode of the self.
-   *
-   * The default bindings for this signal is Insert.
-   */
-  signals[TOGGLE_OVERWRITE] =
-    g_signal_new (I_("toggle-overwrite"),
-                  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkTextClass, toggle_overwrite),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
-
-  /**
    * GtkText::preedit-changed:
    * @self: the object which received the signal
    * @preedit: the current preedit string
@@ -1168,25 +962,6 @@ gtk_text_class_init (GtkTextClass *class)
                                 G_TYPE_NONE, 1,
                                 G_TYPE_STRING);
 
-
-  /**
-   * GtkText::insert-emoji:
-   * @self: the object which received the signal
-   *
-   * The ::insert-emoji signal is a
-   * [keybinding signal][GtkBindingSignal]
-   * which gets emitted to present the Emoji chooser for the @self.
-   *
-   * The default bindings for this signal are Ctrl-. and Ctrl-;
-   */
-  signals[INSERT_EMOJI] =
-    g_signal_new (I_("insert-emoji"),
-                  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkTextClass, insert_emoji),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
 
   /* Actions */
 
