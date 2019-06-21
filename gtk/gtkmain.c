@@ -1998,30 +1998,6 @@ gtk_main_do_event (GdkEvent *event)
 
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      /* Catch alt press to enable auto-mnemonics;
-       * menus are handled elsewhere
-       * FIXME: this does not work with mnemonic modifiers other than Alt
-       */
-      if ((event->key.keyval == GDK_KEY_Alt_L || event->key.keyval == GDK_KEY_Alt_R) &&
-          ((event->key.state & (gtk_accelerator_get_default_mod_mask ()) & ~(GDK_RELEASE_MASK|GDK_MOD1_MASK)) == 0) &&
-          !GTK_IS_MENU_SHELL (grab_widget))
-        {
-          gboolean mnemonics_visible;
-          GtkRoot *root;
-
-          mnemonics_visible = (event->any.type == GDK_KEY_PRESS);
-
-          root = gtk_widget_get_root (grab_widget);
-          if (GTK_IS_WINDOW (root))
-            {
-              if (mnemonics_visible)
-                _gtk_window_schedule_mnemonics_visible (GTK_WINDOW (root));
-              else
-                gtk_window_set_mnemonics_visible (GTK_WINDOW (root), FALSE);
-            }
-        }
-      G_GNUC_FALLTHROUGH;
-
     case GDK_SCROLL:
     case GDK_BUTTON_PRESS:
     case GDK_TOUCH_BEGIN:

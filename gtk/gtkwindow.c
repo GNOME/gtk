@@ -406,7 +406,16 @@ static void gtk_window_size_allocate      (GtkWidget         *widget,
 static gboolean gtk_window_close_request  (GtkWindow         *window);
 static void gtk_window_focus_in           (GtkWidget         *widget);
 static void gtk_window_focus_out          (GtkWidget         *widget);
-static gboolean gtk_window_key_press      (GtkWidget         *widget);
+static gboolean gtk_window_key_press      (GtkWidget         *widget,
+                                           guint              keyval,
+                                           guint              keycode,
+                                           GdkModifierType    state,
+                                           gpointer           data);
+static gboolean gtk_window_key_released   (GtkWidget         *widget,
+                                           guint              keyval,
+                                           guint              keycode,
+                                           GdkModifierType    state,
+                                           gpointer           data);
 
 static void     surface_state_changed     (GtkWidget          *widget);
 static void     surface_size_changed      (GtkWidget          *widget,
@@ -1873,6 +1882,8 @@ gtk_window_init (GtkWindow *window)
                             G_CALLBACK (gtk_window_focus_out), window);
   g_signal_connect_swapped (priv->key_controller, "key-pressed",
                             G_CALLBACK (gtk_window_key_press), window);
+  g_signal_connect_swapped (priv->key_controller, "key-released",
+                            G_CALLBACK (gtk_window_key_released), window);
   gtk_widget_add_controller (widget, priv->key_controller);
 }
 
@@ -6212,12 +6223,48 @@ gtk_window_focus_out (GtkWidget *widget)
   gtk_window_set_mnemonics_visible (window, FALSE);
 }
 
+static void
+update_mnemonics_visible (GtkWindow       *window,
+                          guint            keyval,
+                          GdkModifierType  state,
+                          gboolean         visible)
+{
+  if ((keyval == GDK_KEY_Alt_L || keyval == GDK_KEY_Alt_R) &&
+      ((state & (gtk_accelerator_get_default_mod_mask ()) & ~(GDK_MOD1_MASK)) == 0))
+    {
+      if (visible)
+        _gtk_window_schedule_mnemonics_visible (window);
+      else
+        gtk_window_set_mnemonics_visible (window, FALSE);
+    }
+}
+
 static gboolean
-gtk_window_key_press (GtkWidget *widget)
+gtk_window_key_press (GtkWidget       *widget,
+                      guint            keyval,
+                      guint            keycode,
+                      GdkModifierType  state,
+                      gpointer         data)
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
   gtk_window_set_focus_visible (window, TRUE);
+
+  update_mnemonics_visible (window, keyval, state, TRUE);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_window_key_released (GtkWidget       *widget,
+                         guint            keyval,
+                         guint            keycode,
+                         GdkModifierType  state,
+                         gpointer         data)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+
+  update_mnemonics_visible (window, keyval, state, FALSE);
 
   return FALSE;
 }
