@@ -2881,12 +2881,14 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
       g_object_set_data_full (G_OBJECT (widget), "gtk-shortcut-manager-bubble", model, g_object_unref);
       controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (model));
       gtk_event_controller_set_name (controller, "shortcut manager bubble");
+      gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
       gtk_widget_add_controller (widget, controller);
 
       model = gtk_concat_model_new (GTK_TYPE_SHORTCUT);
       g_object_set_data_full (G_OBJECT (widget), "gtk-shortcut-manager-capture", model, g_object_unref);
       controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (model));
       gtk_event_controller_set_name (controller, "shortcut manager capture");
+      gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
       gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
       gtk_widget_add_controller (widget, controller);
     }
