@@ -34,6 +34,11 @@ box_activate (GSimpleAction *action,
   box_activated++;
 }
 
+/* Test that inheriting actions along the widget
+ * hierarchy works as expected. Since GtkWidget does
+ * not expose the actions, we test this by observing
+ * the effect of activating them.
+ */
 static void
 test_action (void)
 {
@@ -99,6 +104,91 @@ test_action (void)
   g_object_unref (box_actions);
 }
 
+static int cut_activated;
+static int copy_activated;
+static int paste_activated;
+static int visibility_changed;
+
+static void
+cut_activate (GSimpleAction *action,
+              GVariant      *parameter,
+              gpointer       user_data)
+{
+  cut_activated++;
+}
+
+static void
+copy_activate (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  copy_activated++;
+}
+
+static void
+paste_activate (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
+{
+  paste_activated++;
+}
+
+static void
+visibility_changed_cb (GObject    *object,
+                       GParamSpec *pspec,
+                       gpointer    user_data)
+{
+  visibility_changed++;
+}
+
+/* Spot-check that GtkText has the class actions
+ * for the context menu. Here we test that the clipboard
+ * actions are present, and that toggling visibility
+ * via the action works.
+ */
+static void
+test_text (void)
+{
+  GtkWidget *box;
+  GtkWidget *text;
+  GSimpleActionGroup *clipboard_actions;
+  GActionEntry clipboard_entries[] = {
+    { "cut", cut_activate, NULL, NULL, NULL },
+    { "copy", copy_activate, NULL, NULL, NULL },
+    { "paste", paste_activate, NULL, NULL, NULL },
+  };
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  text = gtk_text_new ();
+
+  gtk_container_add (GTK_CONTAINER (box), text);
+
+  clipboard_actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (clipboard_actions),
+                                   clipboard_entries,
+                                   G_N_ELEMENTS (clipboard_entries),
+                                   NULL);
+
+  gtk_widget_insert_action_group (box, "clipboard", G_ACTION_GROUP (clipboard_actions));
+
+  gtk_widget_activate_action (text, "cut.clipboard", NULL);
+  gtk_widget_activate_action (text, "copy.clipboard", NULL);
+  gtk_widget_activate_action (text, "paste.clipboard", NULL);
+
+  g_assert_cmpint (cut_activated, ==, 0);
+  g_assert_cmpint (copy_activated, ==, 0);
+  g_assert_cmpint (paste_activated, ==, 0);
+
+  g_signal_connect (text, "notify::visibility",
+                    G_CALLBACK (visibility_changed_cb), NULL);
+
+  gtk_widget_activate_action (text, "misc.toggle-visibility", NULL);
+
+  g_assert_cmpint (visibility_changed, ==, 1);
+
+  gtk_widget_destroy (box);
+  g_object_unref (clipboard_actions);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -106,6 +196,7 @@ main (int   argc,
   gtk_test_init (&argc, &argv);
 
   g_test_add_func ("/action/inheritance", test_action);
+  g_test_add_func ("/action/text", test_text);
 
   return g_test_run();
 }
