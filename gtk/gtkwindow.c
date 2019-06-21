@@ -1873,8 +1873,7 @@ gtk_window_init (GtkWindow *window)
   gtk_widget_add_controller (widget, motion_controller);
 
   priv->key_controller = gtk_event_controller_key_new ();
-  gtk_event_controller_set_name (controller, "window focus");
-  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  gtk_event_controller_set_propagation_phase (priv->key_controller, GTK_PHASE_CAPTURE);
   g_signal_connect_swapped (priv->key_controller, "focus-in",
                             G_CALLBACK (gtk_window_focus_in), window);
   g_signal_connect_swapped (priv->key_controller, "focus-out",
