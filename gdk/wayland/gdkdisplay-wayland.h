@@ -121,6 +121,7 @@ struct _GdkWaylandDisplay
   int seat_version;
   int data_device_manager_version;
   int gtk_shell_version;
+  int xdg_output_manager_version;
 
   uint32_t server_decoration_mode;
 
