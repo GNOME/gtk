@@ -35,6 +35,7 @@
 #include "gtkshortcutcontroller.h"
 #include "gtkshortcuttrigger.h"
 #include "gtkshortcutmanager.h"
+#include "gtklabelprivate.h"
 
 
 /**
@@ -189,6 +190,17 @@ focus_out (GtkEventController *controller,
     gtk_popover_popdown (popover);
 }
 
+static gboolean
+key_pressed (GtkEventController *controller,
+             guint               keyval,
+             guint               keycode,
+             GdkModifierType     state,
+             GtkWidget          *widget)
+{
+  _gtk_label_mnemonics_visible_apply_recursively (widget, TRUE);
+  return FALSE;
+}
+
 static void
 gtk_popover_menu_init (GtkPopoverMenu *popover)
 {
@@ -209,7 +221,9 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_MENU);
 
   controller = gtk_event_controller_key_new ();
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   g_signal_connect (controller, "focus-out", G_CALLBACK (focus_out), popover);
+  g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
 
   /* Trigger mnemonics without Alt */
@@ -234,6 +248,7 @@ gtk_popover_menu_unmap (GtkWidget *widget)
 {
   gtk_popover_menu_open_submenu (GTK_POPOVER_MENU (widget), "main");
   GTK_WIDGET_CLASS (gtk_popover_menu_parent_class)->unmap (widget);
+  _gtk_label_mnemonics_visible_apply_recursively (widget, FALSE);
 }
 
 static void
