@@ -406,6 +406,7 @@ static void gtk_window_size_allocate      (GtkWidget         *widget,
 static gboolean gtk_window_close_request  (GtkWindow         *window);
 static void gtk_window_focus_in           (GtkWidget         *widget);
 static void gtk_window_focus_out          (GtkWidget         *widget);
+static gboolean gtk_window_key_press      (GtkWidget         *widget);
 
 static void     surface_state_changed     (GtkWidget          *widget);
 static void     surface_size_changed      (GtkWidget          *widget,
@@ -1864,10 +1865,14 @@ gtk_window_init (GtkWindow *window)
   gtk_widget_add_controller (widget, motion_controller);
 
   priv->key_controller = gtk_event_controller_key_new ();
+  gtk_event_controller_set_name (controller, "window focus");
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   g_signal_connect_swapped (priv->key_controller, "focus-in",
                             G_CALLBACK (gtk_window_focus_in), window);
   g_signal_connect_swapped (priv->key_controller, "focus-out",
                             G_CALLBACK (gtk_window_focus_out), window);
+  g_signal_connect_swapped (priv->key_controller, "key-pressed",
+                            G_CALLBACK (gtk_window_key_press), window);
   gtk_widget_add_controller (widget, priv->key_controller);
 }
 
@@ -6205,6 +6210,16 @@ gtk_window_focus_out (GtkWidget *widget)
 
   /* set the mnemonic-visible property to false */
   gtk_window_set_mnemonics_visible (window, FALSE);
+}
+
+static gboolean
+gtk_window_key_press (GtkWidget *widget)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+
+  gtk_window_set_focus_visible (window, TRUE);
+
+  return FALSE;
 }
 
 static GtkWindowPopover *

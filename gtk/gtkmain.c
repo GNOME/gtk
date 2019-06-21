@@ -1998,15 +1998,6 @@ gtk_main_do_event (GdkEvent *event)
 
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      /* make focus visible in a window that receives a key event */
-      {
-        GtkRoot *root;
-
-        root = gtk_widget_get_root (grab_widget);
-        if (GTK_IS_WINDOW (root))
-          gtk_window_set_focus_visible (GTK_WINDOW (root), TRUE);
-      }
-
       /* Catch alt press to enable auto-mnemonics;
        * menus are handled elsewhere
        * FIXME: this does not work with mnemonic modifiers other than Alt
