@@ -34,6 +34,7 @@
 #include "gtkshortcut.h"
 #include "gtkshortcutcontroller.h"
 #include "gtkshortcuttrigger.h"
+#include "gtkshortcutmanager.h"
 
 
 /**
@@ -137,7 +138,15 @@ enum {
   PROP_VISIBLE_SUBMENU = 1
 };
 
-G_DEFINE_TYPE (GtkPopoverMenu, gtk_popover_menu, GTK_TYPE_POPOVER)
+static void
+gtk_popover_menu_shortcut_manager_interface_init (GtkShortcutManagerInterface *iface)
+{
+}
+
+G_DEFINE_TYPE_WITH_CODE (GtkPopoverMenu, gtk_popover_menu, GTK_TYPE_POPOVER,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SHORTCUT_MANAGER,
+                                                gtk_popover_menu_shortcut_manager_interface_init))
+
 
 void
 gtk_popover_menu_set_active_item (GtkPopoverMenu *menu,
@@ -186,6 +195,7 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   GtkWidget *stack;
   GtkStyleContext *style_context;
   GtkEventController *controller;
+  GList *controllers, *l;
 
   stack = gtk_stack_new ();
   gtk_stack_set_vhomogeneous (GTK_STACK (stack), FALSE);
@@ -201,6 +211,15 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   controller = gtk_event_controller_key_new ();
   g_signal_connect (controller, "focus-out", G_CALLBACK (focus_out), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
+
+  /* Trigger mnemonics without Alt */
+  controllers = _gtk_widget_list_controllers (GTK_WIDGET (popover), GTK_PHASE_CAPTURE);
+  for (l = controllers; l; l = l->next)
+    {
+      if (GTK_IS_SHORTCUT_CONTROLLER (l->data))
+        gtk_shortcut_controller_set_mnemonics_modifiers (l->data, 0);
+    }
+  g_list_free (controllers);
 }
 
 static void
