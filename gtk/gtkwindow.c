@@ -405,7 +405,7 @@ static void gtk_window_size_allocate      (GtkWidget         *widget,
 static gboolean gtk_window_close_request  (GtkWindow         *window);
 static void gtk_window_focus_in           (GtkWidget         *widget);
 static void gtk_window_focus_out          (GtkWidget         *widget);
-static gboolean gtk_window_key_press      (GtkWidget         *widget,
+static gboolean gtk_window_key_pressed    (GtkWidget         *widget,
                                            guint              keyval,
                                            guint              keycode,
                                            GdkModifierType    state,
@@ -1879,7 +1879,7 @@ gtk_window_init (GtkWindow *window)
   g_signal_connect_swapped (priv->key_controller, "focus-out",
                             G_CALLBACK (gtk_window_focus_out), window);
   g_signal_connect_swapped (priv->key_controller, "key-pressed",
-                            G_CALLBACK (gtk_window_key_press), window);
+                            G_CALLBACK (gtk_window_key_pressed), window);
   g_signal_connect_swapped (priv->key_controller, "key-released",
                             G_CALLBACK (gtk_window_key_released), window);
   gtk_widget_add_controller (widget, priv->key_controller);
@@ -6232,11 +6232,11 @@ update_mnemonics_visible (GtkWindow       *window,
 }
 
 static gboolean
-gtk_window_key_press (GtkWidget       *widget,
-                      guint            keyval,
-                      guint            keycode,
-                      GdkModifierType  state,
-                      gpointer         data)
+gtk_window_key_pressed (GtkWidget       *widget,
+                        guint            keyval,
+                        guint            keycode,
+                        GdkModifierType  state,
+                        gpointer         data)
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
