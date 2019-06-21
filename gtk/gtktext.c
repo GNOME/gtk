@@ -544,6 +544,9 @@ static void         emit_changed                       (GtkText *self);
 static void         gtk_text_update_clipboard_actions (GtkText *self);
 static void         gtk_text_update_emoji_action      (GtkText *self);
 
+static void gtk_text_activate_default_activate       (GtkWidget  *widget,
+                                                      const char *action_name,
+                                                      GVariant   *parameter);
 static void gtk_text_activate_clipboard_cut          (GtkWidget  *widget,
                                                       const char *action_name,
                                                       GVariant   *parameter);
@@ -559,6 +562,18 @@ static void gtk_text_activate_selection_delete       (GtkWidget  *widget,
 static void gtk_text_activate_selection_select_all   (GtkWidget  *widget,
                                                       const char *action_name,
                                                       GVariant   *parameter);
+static void gtk_text_activate_edit_move_cursor       (GtkWidget  *widget,
+                                                      const char *action_name,
+                                                      GVariant   *parameter);
+static void gtk_text_activate_edit_insert_at_cursor  (GtkWidget  *widget,
+                                                       const char *action_name,
+                                                       GVariant   *parameter);
+static void gtk_text_activate_edit_delete_from_cursor (GtkWidget  *widget,
+                                                       const char *action_name,
+                                                       GVariant   *parameter);
+static void gtk_text_activate_edit_backspace          (GtkWidget  *widget,
+                                                       const char *action_name,
+                                                       GVariant   *parameter);
 static void gtk_text_activate_misc_insert_emoji      (GtkWidget  *widget,
                                                       const char *action_name,
                                                       GVariant   *parameter);
@@ -570,6 +585,16 @@ static void      gtk_text_set_misc_toggle_visibility (GtkWidget  *widget,
                                                       const char *action_name,
                                                       GVariant   *state);
 static GVariant *gtk_text_get_misc_toggle_visibility (GtkWidget  *widget,
+                                                      const char *action_name);
+
+static void gtk_text_activate_misc_toggle_overwrite  (GtkWidget  *widget,
+                                                      const char *action_name,
+                                                      GVariant   *parameter);
+
+static void      gtk_text_set_misc_toggle_overwrite  (GtkWidget  *widget,
+                                                      const char *action_name,
+                                                      GVariant   *state);
+static GVariant *gtk_text_get_misc_toggle_overwrite  (GtkWidget  *widget,
                                                       const char *action_name);
 
 /* GtkTextContent implementation
@@ -1184,6 +1209,8 @@ gtk_text_class_init (GtkTextClass *class)
 
   /* Actions */
 
+  gtk_widget_class_install_action (widget_class, "default.activate",
+                                   gtk_text_activate_default_activate);
   gtk_widget_class_install_action (widget_class, "clipboard.cut",
                                    gtk_text_activate_clipboard_cut);
   gtk_widget_class_install_action (widget_class, "clipboard.copy",
@@ -1194,6 +1221,7 @@ gtk_text_class_init (GtkTextClass *class)
                                    gtk_text_activate_selection_delete);
   gtk_widget_class_install_action (widget_class, "selection.select-all",
                                    gtk_text_activate_selection_select_all);
+
   gtk_widget_class_install_action (widget_class, "misc.insert-emoji",
                                    gtk_text_activate_misc_insert_emoji);
   gtk_widget_class_install_stateful_action (widget_class, "misc.toggle-visibility",
@@ -1201,6 +1229,25 @@ gtk_text_class_init (GtkTextClass *class)
                                             NULL, "b",
                                             gtk_text_set_misc_toggle_visibility,
                                             gtk_text_get_misc_toggle_visibility);
+  gtk_widget_class_install_stateful_action (widget_class, "misc.toggle-overwrite",
+                                            gtk_text_activate_misc_toggle_overwrite,
+                                            NULL, "b",
+                                            gtk_text_set_misc_toggle_overwrite,
+                                            gtk_text_get_misc_toggle_overwrite);
+  gtk_widget_class_install_stateful_action (widget_class, "edit.move-cursor",
+                                            gtk_text_activate_edit_move_cursor,
+                                            "(iib)", NULL,
+                                            NULL, NULL);
+  gtk_widget_class_install_stateful_action (widget_class, "edit.insert-at-cursor",
+                                            gtk_text_activate_edit_insert_at_cursor,
+                                            "s", NULL,
+                                            NULL, NULL);
+  gtk_widget_class_install_stateful_action (widget_class, "edit.delete-from-cursor",
+                                            gtk_text_activate_edit_delete_from_cursor,
+                                            "(ii)", NULL,
+                                            NULL, NULL);
+  gtk_widget_class_install_action (widget_class, "edit.backspace",
+                                   gtk_text_activate_edit_backspace);
 
   /* Key bindings */
 
@@ -1263,7 +1310,7 @@ gtk_text_class_init (GtkTextClass *class)
                                 "selection.select-all",
                                 NULL);
 
-  /* Unselect all 
+  /* Unselect all
    */
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_backslash, GDK_CONTROL_MASK,
@@ -1296,7 +1343,7 @@ gtk_text_class_init (GtkTextClass *class)
                                        GDK_KEY_KP_Delete, 0,
                                        "delete-from-cursor",
                                        "(ii)", GTK_DELETE_CHARS, 1);
-  
+
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_BackSpace, 0,
                                        "backspace",
@@ -5670,6 +5717,18 @@ hide_selection_bubble (GtkText *self)
 }
 
 static void
+gtk_text_activate_default_activate (GtkWidget  *widget,
+                                    const char *action_name,
+                                    GVariant   *parameter)
+{
+  GtkText *self = GTK_TEXT (widget);
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  if (priv->activates_default)
+    gtk_widget_activate_default (gtk_widget_get_parent (widget));
+}
+
+static void
 gtk_text_activate_clipboard_cut (GtkWidget  *widget,
                                  const char *action_name,
                                  GVariant   *parameter)
@@ -5714,8 +5773,59 @@ gtk_text_activate_selection_select_all (GtkWidget  *widget,
                                         const char *action_name,
                                         GVariant   *parameter)
 {
-  GtkText *self = GTK_TEXT (widget);
-  gtk_text_select_all (self);
+  gtk_text_select_all (GTK_TEXT (widget));
+}
+
+static void
+gtk_text_activate_edit_move_cursor (GtkWidget  *widget,
+                                    const char *action_name,
+                                    GVariant   *parameter)
+{
+  GtkMovementStep step;
+  int count;
+  gboolean extend;
+
+  g_variant_get (parameter, "(iib)", &step, &count, &extend);
+
+  step = CLAMP (step, GTK_MOVEMENT_LOGICAL_POSITIONS,
+                      GTK_MOVEMENT_HORIZONTAL_PAGES);
+
+  gtk_text_move_cursor (GTK_TEXT (widget), step, count, extend);
+}
+
+static void
+gtk_text_activate_edit_insert_at_cursor (GtkWidget  *widget,
+                                         const char *action_name,
+                                         GVariant   *parameter)
+{
+  const char *str;
+
+  g_variant_get (parameter, "(&s)", &str);
+  gtk_text_insert_at_cursor (GTK_TEXT (widget), str);
+}
+
+static void
+gtk_text_activate_edit_delete_from_cursor (GtkWidget  *widget,
+                                           const char *action_name,
+                                           GVariant   *parameter)
+{
+  GtkDeleteType type;
+  int count;
+
+  g_variant_get (parameter, "(ii)", &type, &count);
+
+  type = CLAMP (type, GTK_DELETE_CHARS,
+                      GTK_DELETE_WHITESPACE);
+
+  gtk_text_delete_from_cursor (GTK_TEXT (widget), type, count);
+}
+
+static void
+gtk_text_activate_edit_backspace (GtkWidget  *widget,
+                                  const char *action_name,
+                                  GVariant   *parameter)
+{
+  gtk_text_backspace (GTK_TEXT (widget));
 }
 
 static void
@@ -5755,6 +5865,31 @@ gtk_text_set_misc_toggle_visibility (GtkWidget  *widget,
   GtkText *self = GTK_TEXT (widget);
   gboolean visible = g_variant_get_boolean (state);
   gtk_text_set_visibility (self, visible);
+}
+
+static void
+gtk_text_activate_misc_toggle_overwrite (GtkWidget  *widget,
+                                         const char *action_name,
+                                         GVariant   *parameter)
+{
+  gtk_text_toggle_overwrite (GTK_TEXT (widget));
+}
+
+static GVariant *
+gtk_text_get_misc_toggle_overwrite (GtkWidget  *widget,
+                                    const char *action_name)
+{
+  GtkText *self = GTK_TEXT (widget);
+  return g_variant_new_boolean (gtk_text_get_overwrite_mode (self));
+}
+
+static void
+gtk_text_set_misc_toggle_overwrite (GtkWidget  *widget,
+                                    const char *action_name,
+                                    GVariant   *state)
+{
+  GtkText *self = GTK_TEXT (widget);
+  gtk_text_set_overwrite_mode (self, g_variant_get_boolean (state));
 }
 
 static void
