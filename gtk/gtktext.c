@@ -1182,9 +1182,27 @@ gtk_text_class_init (GtkTextClass *class)
                   NULL,
                   G_TYPE_NONE, 0);
 
-  /*
-   * Key bindings
-   */
+  /* Actions */
+
+  gtk_widget_class_install_action (widget_class, "clipboard.cut",
+                                   gtk_text_activate_clipboard_cut);
+  gtk_widget_class_install_action (widget_class, "clipboard.copy",
+                                   gtk_text_activate_clipboard_copy);
+  gtk_widget_class_install_action (widget_class, "clipboard.paste",
+                                   gtk_text_activate_clipboard_paste);
+  gtk_widget_class_install_action (widget_class, "selection.delete",
+                                   gtk_text_activate_selection_delete);
+  gtk_widget_class_install_action (widget_class, "selection.select-all",
+                                   gtk_text_activate_selection_select_all);
+  gtk_widget_class_install_action (widget_class, "misc.insert-emoji",
+                                   gtk_text_activate_misc_insert_emoji);
+  gtk_widget_class_install_stateful_action (widget_class, "misc.toggle-visibility",
+                                            gtk_text_activate_misc_toggle_visibility,
+                                            NULL, "b",
+                                            gtk_text_set_misc_toggle_visibility,
+                                            gtk_text_get_misc_toggle_visibility);
+
+  /* Key bindings */
 
   /* Moving the insertion point */
   add_move_binding (widget_class, GDK_KEY_Right, 0,
@@ -1235,16 +1253,14 @@ gtk_text_class_init (GtkTextClass *class)
   add_move_binding (widget_class, GDK_KEY_KP_End, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_BUFFER_ENDS, 1);
 
-  /* Select all
-   */
-  gtk_widget_class_add_binding (widget_class,
+  gtk_widget_class_bind_action (widget_class,
                                 GDK_KEY_a, GDK_CONTROL_MASK,
-                                (GtkShortcutFunc) gtk_text_select_all,
+                                "selection.select-all",
                                 NULL);
 
-  gtk_widget_class_add_binding (widget_class,
+  gtk_widget_class_bind_action (widget_class,
                                 GDK_KEY_slash, GDK_CONTROL_MASK,
-                                (GtkShortcutFunc) gtk_text_select_all,
+                                "selection.select-all",
                                 NULL);
 
   /* Unselect all 
@@ -1313,44 +1329,44 @@ gtk_text_class_init (GtkTextClass *class)
                                        "(ii)", GTK_DELETE_WORD_ENDS, -1);
 
   /* Cut/copy/paste */
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_x, GDK_CONTROL_MASK,
-                                       "cut-clipboard",
-                                       NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_c, GDK_CONTROL_MASK,
-                                       "copy-clipboard",
-                                       NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_v, GDK_CONTROL_MASK,
-                                       "paste-clipboard",
-                                       NULL);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_x, GDK_CONTROL_MASK,
+                                "clipboard.cut",
+                                NULL);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_c, GDK_CONTROL_MASK,
+                                "clipboard.copy",
+                                NULL);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_v, GDK_CONTROL_MASK,
+                                "clipboard.paste",
+                                NULL);
 
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Delete, GDK_SHIFT_MASK,
-                                       "cut-clipboard",
-                                       NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Insert, GDK_CONTROL_MASK,
-                                       "copy-clipboard",
-                                       NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Insert, GDK_SHIFT_MASK,
-                                       "paste-clipboard",
-                                       NULL);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_Delete, GDK_SHIFT_MASK,
+                                "clipboard.cut",
+                                NULL);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_Insert, GDK_CONTROL_MASK,
+                                "clipboard.copy",
+                                NULL);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_Insert, GDK_SHIFT_MASK,
+                                "clipboard.paste",
+                                NULL);
 
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Delete, GDK_SHIFT_MASK,
-                                       "cut-clipboard",
-                                       NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Insert, GDK_CONTROL_MASK,
-                                       "copy-clipboard",
-                                       NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Insert, GDK_SHIFT_MASK,
-                                       "paste-clipboard",
-                                       NULL);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_KP_Delete, GDK_SHIFT_MASK,
+                                "clipboard.cut",
+                                NULL);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_KP_Insert, GDK_CONTROL_MASK,
+                                "clipboard.copy",
+                                NULL);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_KP_Insert, GDK_SHIFT_MASK,
+                                "clipboard.paste",
+                                NULL);
 
   /* Overwrite */
   gtk_widget_class_add_binding_signal (widget_class,
@@ -1363,35 +1379,17 @@ gtk_text_class_init (GtkTextClass *class)
                                        NULL);
 
   /* Emoji */
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_period, GDK_CONTROL_MASK,
-                                       "insert-emoji",
-                                       NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_semicolon, GDK_CONTROL_MASK,
-                                       "insert-emoji",
-                                       NULL);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_period, GDK_CONTROL_MASK,
+                                "misc.insert-emoji",
+                                NULL);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_semicolon, GDK_CONTROL_MASK,
+                                "misc.insert-emoji",
+                                NULL);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("text"));
-
-  gtk_widget_class_install_action (widget_class, "clipboard.cut",
-                                   gtk_text_activate_clipboard_cut);
-  gtk_widget_class_install_action (widget_class, "clipboard.copy",
-                                   gtk_text_activate_clipboard_copy);
-  gtk_widget_class_install_action (widget_class, "clipboard.paste",
-                                   gtk_text_activate_clipboard_paste);
-  gtk_widget_class_install_action (widget_class, "selection.delete",
-                                   gtk_text_activate_selection_delete);
-  gtk_widget_class_install_action (widget_class, "selection.select-all",
-                                   gtk_text_activate_selection_select_all);
-  gtk_widget_class_install_action (widget_class, "misc.insert-emoji",
-                                   gtk_text_activate_misc_insert_emoji);
-  gtk_widget_class_install_stateful_action (widget_class, "misc.toggle-visibility",
-                                            gtk_text_activate_misc_toggle_visibility,
-                                            NULL, "b",
-                                            gtk_text_set_misc_toggle_visibility,
-                                            gtk_text_get_misc_toggle_visibility);
 }
 
 static void
