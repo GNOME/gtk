@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-21 02:47+0000\n"
-"PO-Revision-Date: 2019-06-21 12:48+0200\n"
+"POT-Creation-Date: 2019-06-21 22:07+0000\n"
+"PO-Revision-Date: 2019-06-22 00:39+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -876,15 +876,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Zatvori"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:421 gtk/gtkwindow.c:6722
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:421 gtk/gtkwindow.c:6721
 msgid "Minimize"
 msgstr "Smanji"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:444 gtk/gtkwindow.c:6731
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:444 gtk/gtkwindow.c:6730
 msgid "Maximize"
 msgstr "Uvećaj"
 
-#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:444 gtk/gtkwindow.c:6688
+#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:444 gtk/gtkwindow.c:6687
 msgid "Restore"
 msgstr "Vrati"
 
@@ -2055,7 +2055,7 @@ msgstr "Datoteka s tim nazivom već postoji"
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:210
 #: gtk/gtkprintbackend.c:657 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:680 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:9010 gtk/inspector/css-editor.c:237
+#: gtk/gtkwindow.c:9009 gtk/inspector/css-editor.c:237
 #: gtk/inspector/recorder.c:1026 gtk/ui/gtkappchooserdialog.ui:46
 #: gtk/ui/gtkassistant.ui:50 gtk/ui/gtkcolorchooserdialog.ui:28
 #: gtk/ui/gtkfontchooserdialog.ui:22
@@ -2395,7 +2395,7 @@ msgstr "Neuspjelo stvaranje OpenGL sadržaja"
 msgid "Application menu"
 msgstr "Izbornik aplikacije"
 
-#: gtk/gtkheaderbar.c:462 gtk/gtkwindow.c:6758
+#: gtk/gtkheaderbar.c:462 gtk/gtkwindow.c:6757
 msgid "Close"
 msgstr "Zatvori"
 
@@ -2546,7 +2546,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:783 gtk/gtkmessagedialog.c:801
-#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:9011
+#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:9010
 msgid "_OK"
 msgstr "_U redu"
 
@@ -3460,24 +3460,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6706
+#: gtk/gtkwindow.c:6705
 msgid "Move"
 msgstr "Pomakni"
 
-#: gtk/gtkwindow.c:6714
+#: gtk/gtkwindow.c:6713
 msgid "Resize"
 msgstr "Promijeni veličinu"
 
-#: gtk/gtkwindow.c:6745
+#: gtk/gtkwindow.c:6744
 msgid "Always on Top"
 msgstr "Uvijek na vrhu"
 
-#: gtk/gtkwindow.c:8998
+#: gtk/gtkwindow.c:8997
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Želite li koristiti GTK Inspektora?"
 
-#: gtk/gtkwindow.c:9000
+#: gtk/gtkwindow.c:8999
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3488,7 +3488,7 @@ msgstr ""
 "otkrivanje i promjenu unutrašnjosti bilo koje GTK aplikacije. Njegovo "
 "korištenje može uzrokovati rušenje ili prekid u radu aplikacije."
 
-#: gtk/gtkwindow.c:9005
+#: gtk/gtkwindow.c:9004
 msgid "Don’t show this message again"
 msgstr "Ne prikazuj više ovu poruku"
 
@@ -5879,7 +5879,7 @@ msgstr "Orijski"
 #: gtk/script-names.c:46
 msgctxt "Script"
 msgid "Runic"
-msgstr ""
+msgstr "Runsko"
 
 #: gtk/script-names.c:47
 msgctxt "Script"
@@ -5904,7 +5904,7 @@ msgstr "Teluški"
 #: gtk/script-names.c:51
 msgctxt "Script"
 msgid "Thaana"
-msgstr ""
+msgstr "Thaansko"
 
 #: gtk/script-names.c:52
 msgctxt "Script"
@@ -5917,15 +5917,14 @@ msgid "Tibetan"
 msgstr "Tibetski"
 
 #: gtk/script-names.c:54
-#, fuzzy
 msgctxt "Script"
 msgid "Canadian Aboriginal"
-msgstr "Kanadski višejezični"
+msgstr "Kanadsko urođeničko"
 
 #: gtk/script-names.c:55
 msgctxt "Script"
 msgid "Yi"
-msgstr ""
+msgstr "Ji"
 
 #: gtk/script-names.c:56
 msgctxt "Script"
@@ -5935,17 +5934,17 @@ msgstr "Tagaloški"
 #: gtk/script-names.c:57
 msgctxt "Script"
 msgid "Hanunoo"
-msgstr ""
+msgstr "Hanunoško"
 
 #: gtk/script-names.c:58
 msgctxt "Script"
 msgid "Buhid"
-msgstr ""
+msgstr "Buhidsko"
 
 #: gtk/script-names.c:59
 msgctxt "Script"
 msgid "Tagbanwa"
-msgstr ""
+msgstr "Tagbanvasko"
 
 #: gtk/script-names.c:60
 msgctxt "Script"
@@ -5955,17 +5954,17 @@ msgstr "Brajica"
 #: gtk/script-names.c:61
 msgctxt "Script"
 msgid "Cypriot"
-msgstr ""
+msgstr "Ciparsko"
 
 #: gtk/script-names.c:62
 msgctxt "Script"
 msgid "Limbu"
-msgstr ""
+msgstr "Limbuško"
 
 #: gtk/script-names.c:63
 msgctxt "Script"
 msgid "Osmanya"
-msgstr ""
+msgstr "Somalsko"
 
 #: gtk/script-names.c:64
 msgctxt "Script"
@@ -5973,18 +5972,14 @@ msgid "Shavian"
 msgstr "Šavijanski"
 
 #: gtk/script-names.c:65
-#, fuzzy
-#| msgctxt "output-bin"
-#| msgid "Rear Bin"
 msgctxt "Script"
 msgid "Linear B"
-msgstr "<b>Na:</b>"
+msgstr "Linearno B"
 
 #: gtk/script-names.c:66
-#, fuzzy
 msgctxt "Script"
 msgid "Tai Le"
-msgstr "Unikôd (UTF-1_6 LE)"
+msgstr "Tai Le"
 
 #: gtk/script-names.c:67
 msgctxt "Script"
@@ -5992,20 +5987,19 @@ msgid "Ugaritic"
 msgstr "Ugaritski"
 
 #: gtk/script-names.c:68
-#, fuzzy
 msgctxt "Script"
 msgid "New Tai Lue"
-msgstr "Nova"
+msgstr "Novi Tai Lue"
 
 #: gtk/script-names.c:69
 msgctxt "Script"
 msgid "Buginese"
-msgstr ""
+msgstr "Buginsko"
 
 #: gtk/script-names.c:70
 msgctxt "Script"
 msgid "Glagolitic"
-msgstr ""
+msgstr "Glagoljično"
 
 #: gtk/script-names.c:71
 msgctxt "Script"
@@ -6015,7 +6009,7 @@ msgstr "Tifinagh"
 #: gtk/script-names.c:72
 msgctxt "Script"
 msgid "Syloti Nagri"
-msgstr ""
+msgstr "Siletsko Nagri"
 
 #: gtk/script-names.c:73
 msgctxt "Script"
@@ -6025,7 +6019,7 @@ msgstr "Staro perzijski"
 #: gtk/script-names.c:74
 msgctxt "Script"
 msgid "Kharoshthi"
-msgstr ""
+msgstr "Karoštsko"
 
 #: gtk/script-names.c:75
 msgctxt "Script"
@@ -6035,64 +6029,59 @@ msgstr "Nepoznato"
 #: gtk/script-names.c:76
 msgctxt "Script"
 msgid "Balinese"
-msgstr ""
+msgstr "Balijsko"
 
 #: gtk/script-names.c:77
 msgctxt "Script"
 msgid "Cuneiform"
-msgstr ""
+msgstr "Klinasto pismo"
 
 #: gtk/script-names.c:78
 msgctxt "Script"
 msgid "Phoenician"
-msgstr ""
+msgstr "Feničansko"
 
 #: gtk/script-names.c:79
-#, fuzzy
 msgctxt "Script"
 msgid "Phags-pa"
-msgstr "pa"
+msgstr "Phags-pa"
 
 #: gtk/script-names.c:80
 msgctxt "Script"
 msgid "N'Ko"
-msgstr ""
+msgstr "N'Ko"
 
 #: gtk/script-names.c:81
 msgctxt "Script"
 msgid "Kayah Li"
-msgstr ""
+msgstr "Kayah Li"
 
 #: gtk/script-names.c:82
 msgctxt "Script"
 msgid "Lepcha"
-msgstr ""
+msgstr "Lepčansko"
 
 #: gtk/script-names.c:83
 msgctxt "Script"
 msgid "Rejang"
-msgstr ""
+msgstr "Rejangsko"
 
 #: gtk/script-names.c:84
 msgctxt "Script"
 msgid "Sundanese"
-msgstr ""
+msgstr "Sudansko"
 
 #: gtk/script-names.c:85
 msgctxt "Script"
 msgid "Saurashtra"
-msgstr ""
+msgstr "Sauraštrijsko"
 
 #: gtk/script-names.c:86
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Chameleon"
 msgctxt "Script"
 msgid "Cham"
-msgstr "Kameleon"
+msgstr "Čamsko"
 
 #: gtk/script-names.c:87
-#, fuzzy
 msgctxt "Script"
 msgid "Ol Chiki"
 msgstr "Ol Chiki"
@@ -6100,22 +6089,22 @@ msgstr "Ol Chiki"
 #: gtk/script-names.c:88
 msgctxt "Script"
 msgid "Vai"
-msgstr ""
+msgstr "Vaisko"
 
 #: gtk/script-names.c:89
 msgctxt "Script"
 msgid "Carian"
-msgstr ""
+msgstr "Karijansko"
 
 #: gtk/script-names.c:90
 msgctxt "Script"
 msgid "Lycian"
-msgstr ""
+msgstr "Licijsko"
 
 #: gtk/script-names.c:91
 msgctxt "Script"
 msgid "Lydian"
-msgstr ""
+msgstr "Lidijsko"
 
 #: gtk/script-names.c:92
 msgctxt "Script"
@@ -6125,7 +6114,7 @@ msgstr "Avestički"
 #: gtk/script-names.c:93
 msgctxt "Script"
 msgid "Bamum"
-msgstr ""
+msgstr "Bamumsko"
 
 #: gtk/script-names.c:94
 msgctxt "Script"
@@ -6135,37 +6124,37 @@ msgstr "Egipatski hijeroglifi"
 #: gtk/script-names.c:95
 msgctxt "Script"
 msgid "Imperial Aramaic"
-msgstr ""
+msgstr "Carsko armejsko"
 
 #: gtk/script-names.c:96
 msgctxt "Script"
 msgid "Inscriptional Pahlavi"
-msgstr ""
+msgstr "Pahlavisjki zapis"
 
 #: gtk/script-names.c:97
 msgctxt "Script"
 msgid "Inscriptional Parthian"
-msgstr ""
+msgstr "Parćanski zapis"
 
 #: gtk/script-names.c:98
 msgctxt "Script"
 msgid "Javanese"
-msgstr ""
+msgstr "Javansko"
 
 #: gtk/script-names.c:99
 msgctxt "Script"
 msgid "Kaithi"
-msgstr ""
+msgstr "Kajtsko"
 
 #: gtk/script-names.c:100
 msgctxt "Script"
 msgid "Lisu"
-msgstr ""
+msgstr "Lisusko"
 
 #: gtk/script-names.c:101
 msgctxt "Script"
 msgid "Meetei Mayek"
-msgstr ""
+msgstr "Meetei Mayek"
 
 #: gtk/script-names.c:102
 msgctxt "Script"
@@ -6180,212 +6169,202 @@ msgstr "Staro turski"
 #: gtk/script-names.c:104
 msgctxt "Script"
 msgid "Samaritan"
-msgstr ""
+msgstr "Samaritansko"
 
 #: gtk/script-names.c:105
 msgctxt "Script"
 msgid "Tai Tham"
-msgstr ""
+msgstr "Tai Tham"
 
 #: gtk/script-names.c:106
 msgctxt "Script"
 msgid "Tai Viet"
-msgstr ""
+msgstr "Tai Viet"
 
 #: gtk/script-names.c:107
 msgctxt "Script"
 msgid "Batak"
-msgstr ""
+msgstr "Batačko"
 
 #: gtk/script-names.c:108
 msgctxt "Script"
 msgid "Brahmi"
-msgstr ""
+msgstr "Brahmansko"
 
 #: gtk/script-names.c:109
 msgctxt "Script"
 msgid "Mandaic"
-msgstr ""
+msgstr "Mandejsko"
 
 #: gtk/script-names.c:110
 msgctxt "Script"
 msgid "Chakma"
-msgstr ""
+msgstr "Čakmansko"
 
 #: gtk/script-names.c:111
-#, fuzzy
 msgctxt "Script"
 msgid "Meroitic Cursive"
-msgstr "Ukošeno određivanje"
+msgstr "Meriotski pisani"
 
 #: gtk/script-names.c:112
 msgctxt "Script"
 msgid "Meroitic Hieroglyphs"
-msgstr ""
+msgstr "Meroitski hijeroglifi"
 
 #: gtk/script-names.c:113
 msgctxt "Script"
 msgid "Miao"
-msgstr ""
+msgstr "Miaoško"
 
 #: gtk/script-names.c:114
 msgctxt "Script"
 msgid "Sharada"
-msgstr ""
+msgstr "Šaradsko"
 
 #: gtk/script-names.c:115
 msgctxt "Script"
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "Sorsko Sompeng"
 
 #: gtk/script-names.c:116
 msgctxt "Script"
 msgid "Takri"
-msgstr ""
+msgstr "Takrijsko"
 
 #: gtk/script-names.c:117
 msgctxt "Script"
 msgid "Bassa"
-msgstr ""
+msgstr "Basavaško"
 
 #: gtk/script-names.c:118
-#, fuzzy
 msgctxt "Script"
 msgid "Caucasian Albanian"
-msgstr "Albanski"
+msgstr "Kavkaski albansko"
 
 #: gtk/script-names.c:119
 msgctxt "Script"
 msgid "Duployan"
-msgstr ""
+msgstr "Duplojska stenografija"
 
 #: gtk/script-names.c:120
 msgctxt "Script"
 msgid "Elbasan"
-msgstr ""
+msgstr "Albansko"
 
 #: gtk/script-names.c:121
 msgctxt "Script"
 msgid "Grantha"
-msgstr ""
+msgstr "Granthsko"
 
 #: gtk/script-names.c:122
 msgctxt "Script"
 msgid "Khojki"
-msgstr ""
+msgstr "Khojsko"
 
 #: gtk/script-names.c:123
-#, fuzzy
 msgctxt "Script"
 msgid "Khudawadi, Sindhi"
-msgstr "Sindski"
+msgstr "Khudavadsko, Sindhi"
 
 #: gtk/script-names.c:124
 msgctxt "Script"
 msgid "Linear A"
-msgstr ""
+msgstr "Linerno A"
 
 #: gtk/script-names.c:125
 msgctxt "Script"
 msgid "Mahajani"
-msgstr ""
+msgstr "Mahajansko"
 
 #: gtk/script-names.c:126
 msgctxt "Script"
 msgid "Manichaean"
-msgstr ""
+msgstr "Manihejsko"
 
 #: gtk/script-names.c:127
 msgctxt "Script"
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "Mende kikakuijsko"
 
 #: gtk/script-names.c:128
-#, fuzzy
-#| msgid "Modified"
 msgctxt "Script"
 msgid "Modi"
-msgstr "Mijenjano"
+msgstr "Modsko"
 
 #: gtk/script-names.c:129
 msgctxt "Script"
 msgid "Mro"
-msgstr ""
+msgstr "Mroško"
 
 #: gtk/script-names.c:130
 msgctxt "Script"
 msgid "Nabataean"
-msgstr ""
+msgstr "Nabatejsko"
 
 #: gtk/script-names.c:131
-#, fuzzy
 msgctxt "Script"
 msgid "Old North Arabian"
-msgstr "Macintosh zastarjelo"
+msgstr "Staro sjevernoarapsko"
 
 #: gtk/script-names.c:132
-#, fuzzy
 msgctxt "Script"
 msgid "Old Permic"
-msgstr "Staro talijanski"
+msgstr "Staro permsko"
 
 #: gtk/script-names.c:133
 msgctxt "Script"
 msgid "Pahawh Hmong"
-msgstr ""
+msgstr "Pahavhmongško"
 
 #: gtk/script-names.c:134
 msgctxt "Script"
 msgid "Palmyrene"
-msgstr ""
+msgstr "Palmirsko"
 
 #: gtk/script-names.c:135
 msgctxt "Script"
 msgid "Pau Cin Hau"
-msgstr ""
+msgstr "Pau Cin Hau"
 
 #: gtk/script-names.c:136
 msgctxt "Script"
 msgid "Psalter Pahlavi"
-msgstr ""
+msgstr "Brevijar pahlavijsko"
 
 #: gtk/script-names.c:137
 msgctxt "Script"
 msgid "Siddham"
-msgstr ""
+msgstr "Sidhamsko"
 
 #: gtk/script-names.c:138
 msgctxt "Script"
 msgid "Tirhuta"
-msgstr ""
+msgstr "Tirhutsko"
 
 #: gtk/script-names.c:139
 msgctxt "Script"
 msgid "Warang Citi"
-msgstr ""
+msgstr "Warang Citi"
 
 #: gtk/script-names.c:140
 msgctxt "Script"
 msgid "Ahom"
-msgstr ""
+msgstr "Ahomsko"
 
 #: gtk/script-names.c:141
 msgctxt "Script"
 msgid "Anatolian Hieroglyphs"
-msgstr ""
+msgstr "Anatolijski hijeroglifi"
 
 #: gtk/script-names.c:142
 msgctxt "Script"
 msgid "Hatran"
-msgstr ""
+msgstr "Hatransko"
 
 #: gtk/script-names.c:143
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Multi_key"
 msgctxt "Script"
 msgid "Multani"
-msgstr "Multi_tipka"
+msgstr "Multansko"
 
 #: gtk/script-names.c:144
 msgctxt "Script"
@@ -6393,65 +6372,59 @@ msgid "Old Hungarian"
 msgstr "Staro mađarski"
 
 #: gtk/script-names.c:145
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Printing"
 msgctxt "Script"
 msgid "Signwriting"
-msgstr "Ispisivanje"
+msgstr "Znakovno pismo"
 
 #: gtk/script-names.c:146
 msgctxt "Script"
 msgid "Adlam"
-msgstr ""
+msgstr "Adlamsko"
 
 #: gtk/script-names.c:147
 msgctxt "Script"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "Bhaiksukisko"
 
 #: gtk/script-names.c:148
-#, fuzzy
-#| msgid "Searching"
 msgctxt "Script"
 msgid "Marchen"
-msgstr "Pretraživanje"
+msgstr "Marćensko"
 
 #: gtk/script-names.c:149
 msgctxt "Script"
 msgid "Newa"
-msgstr ""
+msgstr "Nevarsko"
 
 #: gtk/script-names.c:150
 msgctxt "Script"
 msgid "Osage"
-msgstr ""
+msgstr "Osageško"
 
 #: gtk/script-names.c:151
 msgctxt "Script"
 msgid "Tangut"
-msgstr ""
+msgstr "Tangutski"
 
 #: gtk/script-names.c:152
 msgctxt "Script"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "Masaram Gondi"
 
 #: gtk/script-names.c:153
 msgctxt "Script"
 msgid "Nushu"
-msgstr ""
+msgstr "Nushusko"
 
 #: gtk/script-names.c:154
 msgctxt "Script"
 msgid "Soyombo"
-msgstr ""
+msgstr "Sojomboško"
 
 #: gtk/script-names.c:155
-#, fuzzy
 msgctxt "Script"
 msgid "Zanabazar Square"
-msgstr "Kvadrat"
+msgstr "Zanabazar kvadratno"
 
 #: gtk/tools/encodesymbolic.c:39
 msgid "Output to this directory instead of cwd"
