@@ -89,6 +89,9 @@ gchar *                 gtk_print_action_and_target                     (const g
 
 gchar *                 gtk_normalise_detailed_action_name              (const gchar *detailed_action_name);
 
+void                    gtk_action_muxer_add_shortcuts (GtkActionMuxer *muxer,
+                                                        GListModel     *shortcuts);
+
 G_END_DECLS
 
 #endif /* __GTK_ACTION_MUXER_H__ */
