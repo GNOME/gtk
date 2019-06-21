@@ -8,9 +8,9 @@ if cc.get_id() != 'msvc'
 endif
 
 tests = [
-  ['popover'],
   ['accel'],
   ['accessible'],
+  ['action'],
   ['adjustment'],
   ['bitmask', ['../../gtk/gtkallocatedbitmask.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ['builder', [], [], gtk_tests_export_dynamic_ldflag],
@@ -39,6 +39,7 @@ tests = [
   ['object'],
   ['objects-finalize'],
   ['papersize'],
+  ['popover'],
   ['propertylookuplistmodel', ['../../gtk/gtkpropertylookuplistmodel.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ['rbtree', ['../../gtk/gtktreerbtree.c'], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG']],
   ['recentmanager'],
