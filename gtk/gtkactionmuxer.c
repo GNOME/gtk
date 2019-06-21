@@ -26,6 +26,10 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkwidget.h"
+#include "gtkshortcut.h"
+#include "gtkshortcuttrigger.h"
+#include "gtkshortcutaction.h"
+#include "gtkconcatmodelprivate.h"
 
 #include <string.h>
 
@@ -74,6 +78,8 @@ struct _GtkActionMuxer
   GtkWidget *widget;
   GPtrArray *widget_actions;
   gboolean *widget_actions_enabled;
+
+  GListModel *shortcuts;
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkActionMuxer, gtk_action_muxer, G_TYPE_OBJECT,
@@ -405,6 +411,9 @@ gtk_action_muxer_primary_accel_changed (GtkActionMuxer *muxer,
   g_signal_emit (muxer, accel_signal, 0, action_name, action_and_target);
 }
 
+static const char * find_primary_accel (GtkActionMuxer *muxer,
+                                        const char     *action_and_target);
+
 static void
 gtk_action_muxer_parent_primary_accel_changed (GtkActionMuxer *parent,
                                                const gchar    *action_name,
@@ -414,7 +423,7 @@ gtk_action_muxer_parent_primary_accel_changed (GtkActionMuxer *parent,
   GtkActionMuxer *muxer = user_data;
 
   /* If it's in our table then don't let the parent one filter through */
-  if (muxer->primary_accels && g_hash_table_lookup (muxer->primary_accels, action_and_target))
+  if (find_primary_accel (muxer, action_and_target))
     return;
 
   gtk_action_muxer_primary_accel_changed (muxer, action_name, action_and_target);
@@ -660,6 +669,8 @@ gtk_action_muxer_finalize (GObject *object)
   g_hash_table_unref (muxer->groups);
   if (muxer->primary_accels)
     g_hash_table_unref (muxer->primary_accels);
+
+  g_object_unref (muxer->shortcuts);
 
   G_OBJECT_CLASS (gtk_action_muxer_parent_class)
     ->finalize (object);
@@ -947,25 +958,8 @@ gtk_action_muxer_get_parent (GtkActionMuxer *muxer)
   return muxer->parent;
 }
 
-static void
-emit_changed_accels (GtkActionMuxer  *muxer,
-                     GtkActionMuxer  *parent)
-{
-  while (parent)
-    {
-      if (parent->primary_accels)
-        {
-          GHashTableIter iter;
-          gpointer key;
-
-          g_hash_table_iter_init (&iter, parent->primary_accels);
-          while (g_hash_table_iter_next (&iter, &key, NULL))
-            gtk_action_muxer_primary_accel_changed (muxer, NULL, key);
-        }
-
-      parent = parent->parent;
-    }
-}
+static void emit_changed_accels (GtkActionMuxer  *muxer,
+                                 GtkActionMuxer  *parent);
 
 /*< private >
  * gtk_action_muxer_set_parent:
@@ -1036,40 +1030,143 @@ gtk_action_muxer_set_parent (GtkActionMuxer *muxer,
   g_object_notify_by_pspec (G_OBJECT (muxer), properties[PROP_PARENT]);
 }
 
+typedef struct {
+  char *action_and_target;
+  char *primary_accel;
+  int shortcut_position;
+} Accel;
+
+static Accel *
+accel_new (const char *action_and_target,
+           const char *primary_accel,
+           int         shortcut_position)
+{
+  Accel *accel = g_new (Accel, 1);
+  accel->action_and_target = g_strdup (action_and_target);
+  accel->primary_accel = g_strdup (primary_accel);
+  accel->shortcut_position = -1;
+
+  return accel;
+}
+
+static void
+accel_free (gpointer data)
+{
+  Accel *accel = data;
+
+  g_free (accel->action_and_target);
+  g_free (accel->primary_accel);
+  g_free (accel);
+}
+
+static guint
+accel_hash (gconstpointer v)
+{
+  const Accel *accel = v;
+
+  return g_str_hash (accel->action_and_target);
+}
+
+static gboolean
+accel_equal (gconstpointer v1,
+             gconstpointer v2)
+{
+  const Accel *a1 = v1;
+  const Accel *a2 = v2;
+
+  return g_str_equal (a1->action_and_target, a2->action_and_target);
+}
+
+static void
+emit_changed_accels (GtkActionMuxer  *muxer,
+                     GtkActionMuxer  *parent)
+{
+  while (parent)
+    {
+      if (parent->primary_accels)
+        {
+          GHashTableIter iter;
+          Accel *accel;
+
+          g_hash_table_iter_init (&iter, parent->primary_accels);
+          while (g_hash_table_iter_next (&iter, (gpointer *)&accel, NULL))
+            gtk_action_muxer_primary_accel_changed (muxer, NULL, accel->action_and_target);
+        }
+
+      parent = parent->parent;
+    }
+}
+
+static void
+set_primary_accel (GtkActionMuxer *muxer,
+                   const char     *action_and_target,
+                   const char     *primary_accel,
+                   int             shortcut_position)
+{
+  if (!muxer->primary_accels)
+    muxer->primary_accels = g_hash_table_new_full (accel_hash, accel_equal, accel_free, NULL);
+
+  if (primary_accel)
+    {
+      Accel *accel = accel_new (action_and_target, primary_accel, shortcut_position);
+      g_hash_table_add (muxer->primary_accels, accel);
+    }
+  else
+    {
+      Accel accel;
+      accel.action_and_target = (char *)action_and_target;
+      accel.primary_accel = NULL;
+      accel.shortcut_position = -1;
+      g_hash_table_remove (muxer->primary_accels, &accel);
+    }
+
+  gtk_action_muxer_primary_accel_changed (muxer, NULL, action_and_target);
+}
+
 void
 gtk_action_muxer_set_primary_accel (GtkActionMuxer *muxer,
                                     const gchar    *action_and_target,
                                     const gchar    *primary_accel)
 {
-  if (!muxer->primary_accels)
-    muxer->primary_accels = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+  set_primary_accel (muxer, action_and_target, primary_accel, -1);
+}
 
-  if (primary_accel)
-    g_hash_table_insert (muxer->primary_accels, g_strdup (action_and_target), g_strdup (primary_accel));
-  else
-    g_hash_table_remove (muxer->primary_accels, action_and_target);
+static const char *
+find_primary_accel (GtkActionMuxer *muxer,
+                    const char     *action_and_target)
+{
+  if (muxer->primary_accels)
+    {
+      Accel key;
+      Accel *value;
 
-  gtk_action_muxer_primary_accel_changed (muxer, NULL, action_and_target);
+      key.action_and_target = (char *)action_and_target;
+      key.primary_accel = NULL;
+      key.shortcut_position = -1;
+
+      value = g_hash_table_lookup (muxer->primary_accels, &key);
+
+      if (value)
+        return value->primary_accel;
+    }
+
+  return NULL;
 }
 
 const gchar *
 gtk_action_muxer_get_primary_accel (GtkActionMuxer *muxer,
                                     const gchar    *action_and_target)
 {
-  if (muxer->primary_accels)
-    {
-      const gchar *primary_accel;
+  const char *accel;
 
-      primary_accel = g_hash_table_lookup (muxer->primary_accels, action_and_target);
+  accel = find_primary_accel (muxer, action_and_target);
+  if (accel)
+    return accel;
 
-      if (primary_accel)
-        return primary_accel;
-    }
+  if (muxer->parent)
+    return gtk_action_muxer_get_primary_accel (muxer->parent, action_and_target);
 
-  if (!muxer->parent)
-    return NULL;
-
-  return gtk_action_muxer_get_primary_accel (muxer->parent, action_and_target);
+  return NULL;
 }
 
 gchar *
@@ -1120,3 +1217,88 @@ gtk_normalise_detailed_action_name (const gchar *detailed_action_name)
   return action_and_target;
 }
 
+static void
+gtk_action_muxer_set_primary_accel_from_shortcut (GtkActionMuxer *muxer,
+                                                  GtkShortcut    *shortcut,
+                                                  int             position)
+{
+  GtkShortcutAction *action = gtk_shortcut_get_action (shortcut);
+  GtkShortcutTrigger *trigger = gtk_shortcut_get_trigger (shortcut);
+  GVariant *arguments = gtk_shortcut_get_arguments (shortcut);
+  const char *name;
+  char *action_and_target;
+  char *accel;
+
+  if (gtk_shortcut_action_get_action_type (action) != GTK_SHORTCUT_ACTION_ACTION)
+    return;
+
+  name = gtk_action_action_get_name (action);
+  action_and_target = gtk_print_action_and_target (NULL, name, arguments);
+  if (find_primary_accel (muxer, action_and_target))
+    {
+      g_free (action_and_target);
+      return;
+    }
+
+  /* FIXME: which display */
+  accel = gtk_shortcut_trigger_to_label (trigger, gdk_display_get_default ());
+
+  set_primary_accel (muxer, action_and_target, accel, position);
+
+  g_free (action_and_target);
+  g_free (accel);
+}
+
+static void
+shortcut_items_changed (GListModel     *model,
+                        guint           position,
+                        guint           removed,
+                        guint           added,
+                        GtkActionMuxer *muxer)
+{
+  if (removed && muxer->primary_accels)
+    {
+      GHashTableIter iter;
+      Accel *accel;
+
+      g_hash_table_iter_init (&iter, muxer->primary_accels);
+      while (g_hash_table_iter_next (&iter, (gpointer*)&accel, NULL))
+        {
+          if (accel->shortcut_position >= position &&
+              accel->shortcut_position < position + removed)
+            {
+              gtk_action_muxer_primary_accel_changed (muxer, NULL, accel->action_and_target);
+              g_hash_table_iter_remove (&iter);
+            }
+        }
+    }
+
+  if (added)
+    {
+      guint i;
+
+      for (i = 0; i < added; i++)
+        {
+          GtkShortcut *shortcut = g_list_model_get_item (model, position + i);
+          gtk_action_muxer_set_primary_accel_from_shortcut (muxer,
+                                                            shortcut,
+                                                            position + i);
+        }
+    }
+}
+
+void
+gtk_action_muxer_add_shortcuts (GtkActionMuxer *muxer,
+                                GListModel     *shortcuts)
+{
+  g_return_if_fail (g_list_model_get_item_type (shortcuts) == GTK_TYPE_SHORTCUT);
+
+  if (muxer->shortcuts == NULL)
+    {
+      muxer->shortcuts = G_LIST_MODEL (gtk_concat_model_new (GTK_TYPE_SHORTCUT));
+      g_signal_connect (muxer->shortcuts, "items-changed",
+                        G_CALLBACK (shortcut_items_changed), muxer);
+    }
+
+  gtk_concat_model_append (GTK_CONCAT_MODEL (muxer->shortcuts), shortcuts);
+}
