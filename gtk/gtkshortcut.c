@@ -200,8 +200,8 @@ gtk_shortcut_init (GtkShortcut *self)
 
 /**
  * gtk_shortcut_new:
- * @trigger: (tranfer full) (allow-none): The trigger that will trigger the shortcut
- * @action: (tranfer full) (allow-none): The action that will be activated upon
+ * @trigger: (transfer full) (allow-none): The trigger that will trigger the shortcut
+ * @action: (transfer full) (allow-none): The action that will be activated upon
  *    triggering
  *
  * Creates a new #GtkShortcut that is triggered by @trigger and then activates
@@ -230,8 +230,8 @@ gtk_shortcut_new (GtkShortcutTrigger *trigger,
 
 /**
  * gtk_shortcut_new_with_arguments: (skip)
- * @trigger: (tranfer full) (allow-none): The trigger that will trigger the shortcut
- * @action: (tranfer full) (allow-none): The action that will be activated upon
+ * @trigger: (transfer full) (allow-none): The trigger that will trigger the shortcut
+ * @action: (transfer full) (allow-none): The action that will be activated upon
  *    triggering
  * @format_string: (allow-none): GVariant format string for arguments or %NULL for
  *     no arguments
