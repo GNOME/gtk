@@ -1360,7 +1360,7 @@ gtk_label_init (GtkLabel *label)
   priv->mnemonic_widget = NULL;
   priv->mnemonic_window = NULL;
 
-  priv->mnemonics_visible = TRUE;
+  priv->mnemonics_visible = FALSE;
 }
 
 

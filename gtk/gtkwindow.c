@@ -249,7 +249,6 @@ typedef struct
   guint    is_active                 : 1;
   guint    maximize_initially        : 1;
   guint    mnemonics_visible         : 1;
-  guint    mnemonics_visible_set     : 1;
   guint    focus_visible             : 1;
   guint    modal                     : 1;
   guint    resizable                 : 1;
@@ -1827,7 +1826,7 @@ gtk_window_init (GtkWindow *window)
   priv->type_hint = GDK_SURFACE_TYPE_HINT_NORMAL;
   priv->startup_id = NULL;
   priv->initial_timestamp = GDK_CURRENT_TIME;
-  priv->mnemonics_visible = TRUE;
+  priv->mnemonics_visible = FALSE;
   priv->focus_visible = TRUE;
   priv->initial_fullscreen_monitor = NULL;
 
@@ -4986,12 +4985,6 @@ gtk_window_map (GtkWidget *widget)
        else
          gdk_display_notify_startup_complete (gtk_widget_get_display (widget), NULL);
     }
-
-  /* if mnemonics visible is not already set
-   * (as in the case of popup menus), then hide mnemonics initially
-   */
-  if (!priv->mnemonics_visible_set)
-    gtk_window_set_mnemonics_visible (window, FALSE);
 
   /* inherit from transient parent, so that a dialog that is
    * opened via keynav shows focus initially
@@ -8623,8 +8616,6 @@ gtk_window_set_mnemonics_visible (GtkWindow *window,
       g_source_remove (priv->mnemonics_display_timeout_id);
       priv->mnemonics_display_timeout_id = 0;
     }
-
-  priv->mnemonics_visible_set = TRUE;
 }
 
 static gboolean
