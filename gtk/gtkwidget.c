@@ -11738,6 +11738,19 @@ _gtk_widget_get_action_muxer (GtkWidget *widget,
   if (create || priv->actions)
     {
       muxer = gtk_action_muxer_new (widget, priv->actions);
+
+      gtk_action_muxer_add_shortcuts (muxer, G_LIST_MODEL (GTK_WIDGET_GET_CLASS (widget)->priv->shortcuts));
+      if (GTK_IS_SHORTCUT_MANAGER (widget))
+        {
+          GListModel *shortcuts;
+
+          shortcuts = G_LIST_MODEL (g_object_get_data (G_OBJECT (widget), "gtk-shortcut-manager-bubble"));
+          gtk_action_muxer_add_shortcuts (muxer, shortcuts);
+
+          shortcuts = G_LIST_MODEL (g_object_get_data (G_OBJECT (widget), "gtk-shortcut-manager-capture"));
+          gtk_action_muxer_add_shortcuts (muxer, shortcuts);
+        }
+
       g_object_set_qdata_full (G_OBJECT (widget),
                                quark_action_muxer,
                                muxer,
