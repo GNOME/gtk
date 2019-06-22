@@ -58,11 +58,17 @@ typedef struct {
   GtkWidget *peek_icon;
   GdkKeymap *keymap;
   GMenuModel *extra_menu;
+  gboolean activates_default;
 } GtkPasswordEntryPrivate;
 
 struct _GtkPasswordEntryClass
 {
   GtkWidgetClass parent_class;
+};
+
+enum {
+  ACTIVATE,
+  LAST_SIGNAL
 };
 
 enum {
@@ -75,11 +81,27 @@ enum {
 
 static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
 
+static guint signals[LAST_SIGNAL] = { 0 };
+
 static void gtk_password_entry_editable_init (GtkEditableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkPasswordEntry, gtk_password_entry, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkPasswordEntry)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE, gtk_password_entry_editable_init))
+
+static void
+gtk_password_entry_activate (GtkWidget  *widget,
+                             const char *action_name,
+                             GVariant   *parameters)
+{
+  GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (widget);
+  GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
+
+  if (priv->activates_default)
+    gtk_widget_activate_default (widget);
+  else
+    g_signal_emit (entry, signals[ACTIVATE], 0);
+}
 
 static void
 keymap_state_changed (GdkKeymap *keymap,
@@ -216,9 +238,9 @@ gtk_password_entry_set_property (GObject      *object,
       break;
 
     case PROP_ACTIVATES_DEFAULT:
-      if (gtk_text_get_activates_default (GTK_TEXT (priv->entry)) != g_value_get_boolean (value))
+      if (priv->activates_default != g_value_get_boolean (value))
         {
-          gtk_text_set_activates_default (GTK_TEXT (priv->entry), g_value_get_boolean (value));
+          priv->activates_default = g_value_get_boolean (value);
           g_object_notify_by_pspec (object, pspec);
         }
       break;
@@ -256,7 +278,7 @@ gtk_password_entry_get_property (GObject    *object,
       break;
 
     case PROP_ACTIVATES_DEFAULT:
-      g_value_set_boolean (value, gtk_text_get_activates_default (GTK_TEXT (priv->entry)));
+      g_value_set_boolean (value, priv->activates_default);
       break;
 
     case PROP_SHOW_PEEK_ICON:
@@ -425,6 +447,27 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
   gtk_editable_install_properties (object_class, NUM_PROPERTIES);
+
+  signals[ACTIVATE] =
+    g_signal_new (I_("activate"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
+  gtk_widget_class_install_action (widget_class, "activate", gtk_password_entry_activate);
+
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_Return, 0,
+                                "activate",
+                                NULL);
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_ISO_Enter, 0,
+                                "activate",
+                                NULL);
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_KP_Enter, 0,
+                                "activate",
+                                NULL);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));

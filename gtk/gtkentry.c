@@ -162,6 +162,7 @@ struct _GtkEntryPrivate
   GtkWidget     *progress_widget;
   GtkWidget     *emoji_chooser;
 
+  guint         activates_default       : 1;
   guint         show_emoji_icon         : 1;
   guint         editing_canceled        : 1; /* Only used by GtkCellRendererText */
 };
@@ -288,6 +289,10 @@ static GtkEntryBuffer *get_buffer                      (GtkEntry       *entry);
 static void         set_show_emoji_icon                (GtkEntry       *entry,
                                                         gboolean        value);
 
+static void gtk_entry_activate (GtkWidget  *widget,
+                                const char *action_name,
+                                GVariant   *parameters);
+
 static void     gtk_entry_measure (GtkWidget           *widget,
                                    GtkOrientation       orientation,
                                    int                  for_size,
@@ -344,7 +349,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->direction_changed = gtk_entry_direction_changed;
   widget_class->grab_focus = gtk_entry_grab_focus;
   widget_class->mnemonic_activate = gtk_entry_mnemonic_activate;
-  
+
   quark_entry_completion = g_quark_from_static_string ("gtk-entry-completion-key");
 
   entry_props[PROP_BUFFER] =
@@ -849,7 +854,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   signals[ACTIVATE] =
     g_signal_new (I_("activate"),
                   G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkEntryClass, activate),
                   NULL, NULL,
                   NULL,
@@ -890,6 +895,18 @@ gtk_entry_class_init (GtkEntryClass *class)
                   NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_ENTRY_ICON_POSITION);
+
+  gtk_widget_class_install_action (widget_class, "activate", gtk_entry_activate);
+
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_Return, 0,
+                                "activate",
+                                NULL);
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_ISO_Enter, 0,
+                                "activate",
+                                NULL);
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_KP_Enter, 0,
+                                "activate",
+                                NULL);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
@@ -935,7 +952,6 @@ gtk_entry_set_property (GObject         *object,
     case PROP_VISIBILITY:
     case PROP_INVISIBLE_CHAR:
     case PROP_INVISIBLE_CHAR_SET:
-    case PROP_ACTIVATES_DEFAULT:
     case PROP_TRUNCATE_MULTILINE:
     case PROP_OVERWRITE_MODE:
     case PROP_PLACEHOLDER_TEXT:
@@ -946,6 +962,10 @@ gtk_entry_set_property (GObject         *object,
     case PROP_TABS:
     case PROP_ENABLE_EMOJI_COMPLETION:
       g_object_set_property (G_OBJECT (priv->text), pspec->name, value);
+      break;
+
+    case PROP_ACTIVATES_DEFAULT:
+      gtk_entry_set_activates_default (entry, g_value_get_boolean (value));
       break;
 
     case PROP_HAS_FRAME:
@@ -1090,7 +1110,6 @@ gtk_entry_get_property (GObject         *object,
     case PROP_VISIBILITY:
     case PROP_INVISIBLE_CHAR:
     case PROP_INVISIBLE_CHAR_SET:
-    case PROP_ACTIVATES_DEFAULT:
     case PROP_SCROLL_OFFSET:
     case PROP_TRUNCATE_MULTILINE:
     case PROP_OVERWRITE_MODE:
@@ -1101,6 +1120,10 @@ gtk_entry_get_property (GObject         *object,
     case PROP_TABS:
     case PROP_ENABLE_EMOJI_COMPLETION:
       g_object_get_property (G_OBJECT (priv->text), pspec->name, value);
+      break;
+
+    case PROP_ACTIVATES_DEFAULT:
+      g_value_set_boolean (value, gtk_entry_get_activates_default (entry));
       break;
 
     case PROP_HAS_FRAME:
@@ -1231,9 +1254,21 @@ gtk_entry_get_property (GObject         *object,
 }
 
 static void
-activate_cb (GtkText *text, GtkEntry  *entry)
+gtk_entry_activate (GtkWidget  *widget,
+                    const char *action_name,
+                    GVariant   *parameters)
 {
-  g_signal_emit (entry, signals[ACTIVATE], 0);
+  GtkEntry *entry = GTK_ENTRY (widget);
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  GtkEntryCompletion *completion = gtk_entry_get_completion (entry);
+
+  if (completion && _gtk_entry_completion_accept (completion))
+    return;
+
+  if (priv->activates_default)
+    gtk_widget_activate_default (widget);
+  else
+    g_signal_emit (entry, signals[ACTIVATE], 0);
 }
 
 static void
@@ -1257,7 +1292,6 @@ connect_text_signals (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
-  g_signal_connect (priv->text, "activate", G_CALLBACK (activate_cb), entry);
   g_signal_connect (priv->text, "notify", G_CALLBACK (notify_cb), entry);
 }
 
@@ -1266,7 +1300,6 @@ disconnect_text_signals (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
-  g_signal_handlers_disconnect_by_func (priv->text, activate_cb, entry);
   g_signal_handlers_disconnect_by_func (priv->text, notify_cb, entry);
 }
 
@@ -2141,7 +2174,12 @@ gtk_entry_set_activates_default (GtkEntry *entry,
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  gtk_text_set_activates_default (GTK_TEXT (priv->text), setting);
+  if (priv->activates_default == setting)
+    return;
+
+  priv->activates_default = setting;
+
+  g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_ACTIVATES_DEFAULT]);
 }
 
 /**
@@ -2159,7 +2197,7 @@ gtk_entry_get_activates_default (GtkEntry *entry)
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
 
-  return gtk_text_get_activates_default (GTK_TEXT (priv->text));
+  return priv->activates_default;
 }
 
 /**

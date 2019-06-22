@@ -208,7 +208,6 @@ struct _GtkTextPrivate
   guint         overwrite_mode          : 1;
   guint         visible                 : 1;
 
-  guint         activates_default       : 1;
   guint         cache_includes_preedit  : 1;
   guint         change_count            : 8;
   guint         cursor_visible          : 1;
@@ -247,7 +246,6 @@ enum {
   PROP_VISIBILITY,
   PROP_INVISIBLE_CHAR,
   PROP_INVISIBLE_CHAR_SET,
-  PROP_ACTIVATES_DEFAULT,
   PROP_SCROLL_OFFSET,
   PROP_TRUNCATE_MULTILINE,
   PROP_OVERWRITE_MODE,
@@ -394,7 +392,6 @@ static void     gtk_text_paste_clipboard    (GtkText         *self);
 static void     gtk_text_toggle_overwrite   (GtkText         *self);
 static void     gtk_text_insert_emoji       (GtkText         *self);
 static void     gtk_text_select_all         (GtkText         *self);
-static void     gtk_text_real_activate      (GtkText         *self);
  
 static void     keymap_direction_changed    (GdkKeymap       *keymap,
                                              GtkText         *self);
@@ -535,9 +532,6 @@ static void         emit_changed                       (GtkText *self);
 static void         gtk_text_update_clipboard_actions (GtkText *self);
 static void         gtk_text_update_emoji_action      (GtkText *self);
 
-static void gtk_text_activate_default_activate       (GtkWidget  *widget,
-                                                      const char *action_name,
-                                                      GVariant   *parameter);
 static void gtk_text_activate_clipboard_cut          (GtkWidget  *widget,
                                                       const char *action_name,
                                                       GVariant   *parameter);
@@ -733,8 +727,6 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->drag_data_get = gtk_text_drag_data_get;
   widget_class->drag_data_delete = gtk_text_drag_data_delete;
 
-  class->activate = gtk_text_real_activate;
- 
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
   quark_gtk_signal = g_quark_from_static_string ("gtk-signal");
 
@@ -758,13 +750,6 @@ gtk_text_class_init (GtkTextClass *class)
                             P_("Invisible character"),
                             P_("The character to use when masking self contents (in “password mode”)"),
                             '*',
-                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
-  text_props[PROP_ACTIVATES_DEFAULT] =
-      g_param_spec_boolean ("activates-default",
-                            P_("Activates default"),
-                            P_("Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"),
-                            FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   text_props[PROP_SCROLL_OFFSET] =
@@ -942,26 +927,6 @@ gtk_text_class_init (GtkTextClass *class)
 
   gtk_editable_install_properties (gobject_class, NUM_PROPERTIES);
 
- /* Action signals */
-  
-  /**
-   * GtkText::activate:
-   * @self: The self on which the signal is emitted
-   *
-   * The ::activate signal is emitted when the user hits
-   * the Enter key.
-   *
-   * The default bindings for this signal are all forms of the Enter key.
-   */
-  signals[ACTIVATE] =
-    g_signal_new (I_("activate"),
-                  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkTextClass, activate),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
-
   /**
    * GtkText::preedit-changed:
    * @self: the object which received the signal
@@ -974,7 +939,7 @@ gtk_text_class_init (GtkTextClass *class)
   signals[PREEDIT_CHANGED] =
     g_signal_new_class_handler (I_("preedit-changed"),
                                 G_OBJECT_CLASS_TYPE (gobject_class),
-                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                G_SIGNAL_RUN_LAST,
                                 NULL,
                                 NULL, NULL,
                                 NULL,
@@ -983,9 +948,6 @@ gtk_text_class_init (GtkTextClass *class)
 
 
   /* Actions */
-
-  gtk_widget_class_install_action (widget_class, "default.activate",
-                                   gtk_text_activate_default_activate);
   gtk_widget_class_install_action (widget_class, "clipboard.cut",
                                    gtk_text_activate_clipboard_cut);
   gtk_widget_class_install_action (widget_class, "clipboard.copy",
@@ -1096,18 +1058,6 @@ gtk_text_class_init (GtkTextClass *class)
                                 "edit.move-cursor",
                                 "(iib)", GTK_MOVEMENT_VISUAL_POSITIONS, 0, FALSE);
 
-  /* Activate
-   */
-  gtk_widget_class_bind_action (widget_class, GDK_KEY_Return, 0,
-                                "default.activate",
-                                NULL);
-  gtk_widget_class_bind_action (widget_class, GDK_KEY_ISO_Enter, 0,
-                                "default.activate",
-                                NULL);
-  gtk_widget_class_bind_action (widget_class, GDK_KEY_KP_Enter, 0,
-                                "default.activate",
-                                NULL);
-  
   /* Deleting text */
   gtk_widget_class_bind_action (widget_class,
                                 GDK_KEY_Delete, 0,
@@ -1312,10 +1262,6 @@ gtk_text_set_property (GObject      *object,
       gtk_text_set_invisible_char (self, g_value_get_uint (value));
       break;
 
-    case PROP_ACTIVATES_DEFAULT:
-      gtk_text_set_activates_default (self, g_value_get_boolean (value));
-      break;
-
     case PROP_TRUNCATE_MULTILINE:
       if (priv->truncate_multiline != g_value_get_boolean (value))
         {
@@ -1441,10 +1387,6 @@ gtk_text_get_property (GObject    *object,
 
     case PROP_INVISIBLE_CHAR:
       g_value_set_uint (value, priv->invisible_char);
-      break;
-
-    case PROP_ACTIVATES_DEFAULT:
-      g_value_set_boolean (value, priv->activates_default);
       break;
 
     case PROP_SCROLL_OFFSET:
@@ -3742,15 +3684,6 @@ gtk_text_select_all (GtkText *self)
 }
 
 static void
-gtk_text_real_activate (GtkText *self)
-{
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-
-  if (priv->activates_default)
-    gtk_widget_activate_default (GTK_WIDGET (self));
-}
-
-static void
 keymap_direction_changed (GdkKeymap *keymap,
                           GtkText   *self)
 {
@@ -5368,51 +5301,6 @@ gtk_text_get_text_length (GtkText *self)
   return gtk_entry_buffer_get_length (get_buffer (self));
 }
 
-/**
- * gtk_text_set_activates_default:
- * @self: a #GtkText
- * @activates: %TRUE to activate window’s default widget on Enter keypress
- *
- * If @activates is %TRUE, pressing Enter in the @self will activate the default
- * widget for the window containing the self. This usually means that
- * the dialog box containing the self will be closed, since the default
- * widget is usually one of the dialog buttons.
- **/
-void
-gtk_text_set_activates_default (GtkText  *self,
-                                gboolean  activates)
-{
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-
-  g_return_if_fail (GTK_IS_TEXT (self));
-
-  activates = activates != FALSE;
-
-  if (priv->activates_default != activates)
-    {
-      priv->activates_default = activates;
-      g_object_notify_by_pspec (G_OBJECT (self), text_props[PROP_ACTIVATES_DEFAULT]);
-    }
-}
-
-/**
- * gtk_text_get_activates_default:
- * @self: a #GtkText
- *
- * Retrieves the value set by gtk_text_set_activates_default().
- *
- * Returns: %TRUE if the self will activate the default widget
- */
-gboolean
-gtk_text_get_activates_default (GtkText *self)
-{
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-
-  g_return_val_if_fail (GTK_IS_TEXT (self), FALSE);
-
-  return priv->activates_default;
-}
-
 static void
 gtk_text_set_width_chars (GtkText *self,
                           int      n_chars)
@@ -5489,18 +5377,6 @@ hide_selection_bubble (GtkText *self)
 
   if (priv->selection_bubble && gtk_widget_get_visible (priv->selection_bubble))
     gtk_widget_hide (priv->selection_bubble);
-}
-
-static void
-gtk_text_activate_default_activate (GtkWidget  *widget,
-                                    const char *action_name,
-                                    GVariant   *parameter)
-{
-  GtkText *self = GTK_TEXT (widget);
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-
-  if (priv->activates_default)
-    gtk_widget_activate_default (gtk_widget_get_parent (widget));
 }
 
 static void
