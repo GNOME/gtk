@@ -1055,7 +1055,7 @@ gboolean               gtk_widget_class_query_action  (GtkWidgetClass      *widg
                                                        GType               *owner,
                                                        const char         **action_name,
                                                        const GVariantType **parameter_type,
-                                                       const GVariantType **state_type);
+                                                       const char         **property_name);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_action_set_enabled (GtkWidget  *widget,

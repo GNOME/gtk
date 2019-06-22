@@ -13595,7 +13595,7 @@ gtk_widget_action_set_enabled (GtkWidget  *widget,
  * @owner: the type where the action was defined
  * @action_name: return location for the action name
  * @parameter_type: return location for the parameter type
- * @state_type: return location for the state type
+ * @property_name: return location for the property name
  *
  * Queries the actions that have been installed for
  * a widget class using gtk_widget_class_install_action()
@@ -13614,7 +13614,7 @@ gtk_widget_class_query_action (GtkWidgetClass      *widget_class,
                                GType               *owner,
                                const char         **action_name,
                                const GVariantType **parameter_type,
-                               const GVariantType **state_type)
+                               const char         **property_name)
 {
   GtkWidgetClassPrivate *priv = widget_class->priv;
 
@@ -13625,7 +13625,10 @@ gtk_widget_class_query_action (GtkWidgetClass      *widget_class,
       *owner = action->owner;
       *action_name = action->name;
       *parameter_type = action->parameter_type;
-      *state_type = action->state_type;
+      if (action->pspec)
+        *property_name = action->pspec->name;
+      else
+        *property_name = NULL;
 
       return TRUE;
     }
