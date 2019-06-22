@@ -34,6 +34,7 @@ G_BEGIN_DECLS
 typedef struct {
   char *name;
 
+  GType owner;
   GVariantType *parameter_type;
   GVariantType *state_type;
 

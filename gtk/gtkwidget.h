@@ -1087,6 +1087,7 @@ void                    gtk_widget_class_install_stateful_action (GtkWidgetClass
 GDK_AVAILABLE_IN_ALL
 gboolean               gtk_widget_class_query_action  (GtkWidgetClass      *widget_class,
                                                        guint                index_,
+                                                       GType               *owner,
                                                        const char         **action_name,
                                                        const GVariantType **parameter_type,
                                                        const GVariantType **state_type);

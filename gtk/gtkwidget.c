@@ -13503,6 +13503,7 @@ gtk_widget_class_install_stateful_action (GtkWidgetClass              *widget_cl
     }
 
   action = g_new0 (GtkWidgetAction, 1);
+  action->owner = G_TYPE_FROM_CLASS (widget_class);
   action->name = g_strdup (action_name);
   action->activate = activate;
   action->parameter_type = parameter_type ? g_variant_type_new (parameter_type) : NULL;
@@ -13568,6 +13569,7 @@ gtk_widget_action_state_changed (GtkWidget  *widget,
  * gtk_widget_class_query_action:
  * @widget_class: a #GtkWidgetClass
  * @index_: position of the action to query
+ * @owner: the type where the action was defined
  * @action_name: return location for the action name
  * @parameter_type: return location for the parameter type
  * @state_type: return location for the state type
@@ -13576,12 +13578,17 @@ gtk_widget_action_state_changed (GtkWidget  *widget,
  * a widget class using gtk_widget_class_install_action()
  * during class initialization.
  *
+ * Note that this function will also return actions defined
+ * by parent classes. You can identify those by looking
+ * at @owner.
+ *
  * Returns: %TRUE if the action was found,
  *     %FALSE if @index_ is out of range
  */
 gboolean
 gtk_widget_class_query_action (GtkWidgetClass      *widget_class,
                                guint                index_,
+                               GType               *owner,
                                const char         **action_name,
                                const GVariantType **parameter_type,
                                const GVariantType **state_type)
@@ -13592,6 +13599,7 @@ gtk_widget_class_query_action (GtkWidgetClass      *widget_class,
     {
       GtkWidgetAction *action = g_ptr_array_index (priv->actions, index_);
 
+      *owner = action->owner;
       *action_name = action->name;
       *parameter_type = action->parameter_type;
       *state_type = action->state_type;
