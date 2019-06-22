@@ -930,31 +930,131 @@ gtk_text_class_init (GtkTextClass *class)
 
   /* Actions */
 
+  /**
+   * GtkText|clipboard.cut:
+   *
+   * The clipboard.cut action removes the current selection
+   * and puts it on the clipboard. It is enabled when the
+   * selection is nonempty.
+   *
+   * The default binding for this action is Ctrl-x.
+   */
   gtk_widget_class_install_action (widget_class, "clipboard.cut", NULL,
                                    gtk_text_activate_clipboard_cut);
+
+  /**
+   * GtkText|clipboard.copy:
+   *
+   * The clipboard.copy action puts the current selection
+   * on the clipboard. It is enabled when the selection is nonempty.
+   *
+   * The default binding for this action is Ctrl-c.
+   */
   gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL,
                                    gtk_text_activate_clipboard_copy);
+
+  /**
+   * GtkText|clipboard.paste:
+   *
+   * The clipboard.paste action inserts the contents of the
+   * clipboard at the cursor position. It is enabled when the
+   * clipboard contains text.
+   * 
+   * The default binding for this action is Ctrl-v.
+   */
   gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL,
                                    gtk_text_activate_clipboard_paste);
+
+  /**
+   * GtkText|selection.delete:
+   *
+   * The selection.delete action deletes the current selection.
+   * It is enabled when the selection is not empty.
+   */
   gtk_widget_class_install_action (widget_class, "selection.delete", NULL,
                                    gtk_text_activate_selection_delete);
+
+  /**
+   * GtkText|selection.select-all:
+   *
+   * The selection.select-all action selects all the text.
+   * It is enabled when the GtkText contains text.
+   *
+   * The default binding for this action is Ctrl-a.
+   */
   gtk_widget_class_install_action (widget_class, "selection.select-all", NULL,
                                    gtk_text_activate_selection_select_all);
+
+  /**
+   * GtkText|misc.insert-emoji:
+   *
+   * The misc.insert-emoji action opens the Emoji chooser.
+   *
+   * The default binding for this action is Ctrl-..
+   */
   gtk_widget_class_install_action (widget_class, "misc.insert-emoji", NULL,
                                    gtk_text_activate_misc_insert_emoji);
+
   gtk_widget_class_install_property_action (widget_class,
                                             "misc.toggle-visibility",
                                             "visibility");
+
   gtk_widget_class_install_property_action (widget_class,
                                             "misc.toggle-overwrite",
                                             "overwrite-mode");
+
+  /**
+   * GtkText|edit.move-cursor:
+   * @granularity: a #GtkMovementStep defining the granularity of movement
+   * @count: the number of steps to move the cursor
+   * @extend: %TRUE to extend the selection
+   *
+   * The edit.move-cursor action changes the position of the
+   * text caret in the text, and may extend the selection while
+   * doing so.
+   *
+   * The default bindings for this action include
+   * the Left and Right arrow keys, Home and End.
+   *
+   * All bindings can be used with the Shift modifier
+   * to extend the selection.
+   */
   gtk_widget_class_install_action (widget_class, "edit.move-cursor", "(iib)",
                                    gtk_text_activate_edit_move_cursor);
+
+  /**
+   * GtkText|edit.insert-at-cursor:
+   * @text: the text to insert
+   *
+   * The edit.insert-at-cursor action inserts a string
+   * at the current cursor position.
+   */
   gtk_widget_class_install_action (widget_class, "edit.insert-at-cursor", "s",
                                    gtk_text_activate_edit_insert_at_cursor);
+
+  /**
+   * GtkText|edit.delete-from-cursor:
+   * @type: a #DeleteType defining the granularity of the deletion
+   * @count: how many items to delete
+   *
+   * The edit.delete-from-cursor action deletes text
+   * from the current cursor position.
+   *
+   * The default binding for this action is Delete.
+   */
   gtk_widget_class_install_action (widget_class, "edit.delete-from-cursor", "(ii)",
                                    gtk_text_activate_edit_delete_from_cursor);
+
+  /**
+   * GtkText|edit.backspace:
+   *
+   * The edit.backspace action deletes one character backwards
+   * from the cursor position.
+   *
+   * The default binding for this action is Backspace.
+   */
   gtk_widget_class_install_action (widget_class, "edit.backspace", NULL,
+
                                    gtk_text_activate_edit_backspace);
 
   /* Key bindings */
