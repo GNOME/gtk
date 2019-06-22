@@ -33,14 +33,13 @@ G_BEGIN_DECLS
 
 typedef struct {
   char *name;
-
   GType owner;
-  GVariantType *parameter_type;
-  GVariantType *state_type;
 
+  const GVariantType *parameter_type;
   GtkWidgetActionActivateFunc activate;
-  GtkWidgetActionSetStateFunc set_state;
-  GtkWidgetActionGetStateFunc get_state;
+
+  const GVariantType *state_type;
+  GParamSpec *pspec;
 } GtkWidgetAction;
 
 typedef struct _GtkActionMuxer                              GtkActionMuxer;

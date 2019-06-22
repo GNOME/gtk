@@ -26,6 +26,7 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkwidget.h"
+#include "gsettings-mapping.h"
 
 #include <string.h>
 
@@ -420,6 +421,145 @@ gtk_action_muxer_parent_primary_accel_changed (GtkActionMuxer *parent,
   gtk_action_muxer_primary_accel_changed (muxer, action_name, action_and_target);
 }
 
+static GVariant *
+prop_action_get_state (GtkWidget       *widget,
+                       GtkWidgetAction *action)
+{
+  GValue value = G_VALUE_INIT;
+  GVariant *result;
+
+  g_value_init (&value, action->pspec->value_type);
+  g_object_get_property (G_OBJECT (widget), action->pspec->name, &value);
+
+  result = g_settings_set_mapping (&value, action->state_type, NULL);
+  g_value_unset (&value);
+
+  return g_variant_ref_sink (result);
+}
+
+static GVariant *
+prop_action_get_state_hint (GtkWidget       *widget,
+                            GtkWidgetAction *action)
+{
+  if (action->pspec->value_type == G_TYPE_INT)
+    {
+      GParamSpecInt *pspec = (GParamSpecInt *)action->pspec;
+      return g_variant_new ("(ii)", pspec->minimum, pspec->maximum);
+    }
+  else if (action->pspec->value_type == G_TYPE_UINT)
+    {
+      GParamSpecUInt *pspec = (GParamSpecUInt *)action->pspec;
+      return g_variant_new ("(uu)", pspec->minimum, pspec->maximum);
+    }
+  else if (action->pspec->value_type == G_TYPE_FLOAT)
+    {
+      GParamSpecFloat *pspec = (GParamSpecFloat *)action->pspec;
+      return g_variant_new ("(dd)", (double)pspec->minimum, (double)pspec->maximum);
+    }
+  else if (action->pspec->value_type == G_TYPE_DOUBLE)
+    {
+      GParamSpecDouble *pspec = (GParamSpecDouble *)action->pspec;
+      return g_variant_new ("(dd)", pspec->minimum, pspec->maximum);
+    }
+
+  return NULL;
+}
+
+static void
+prop_action_set_state (GtkWidget       *widget,
+                       GtkWidgetAction *action,
+                       GVariant        *state)
+{
+  GValue value = G_VALUE_INIT;
+
+  g_value_init (&value, action->pspec->value_type);
+  g_settings_get_mapping (&value, state, NULL);
+
+  g_object_set_property (G_OBJECT (widget), action->pspec->name, &value);
+  g_value_unset (&value);
+}
+
+static void
+prop_action_activate (GtkWidget       *widget,
+                      GtkWidgetAction *action,
+                      GVariant        *parameter)
+{
+  if (action->pspec->value_type == G_TYPE_BOOLEAN)
+    {
+      gboolean value;
+
+      g_return_if_fail (parameter == NULL);
+
+      g_object_get (G_OBJECT (widget), action->pspec->name, &value, NULL);
+      value = !value;
+      g_object_set (G_OBJECT (widget), action->pspec->name, value, NULL);
+    }
+  else
+    {
+      g_return_if_fail (parameter != NULL && g_variant_is_of_type (parameter, action->state_type));
+
+      prop_action_set_state (widget, action, parameter);
+    }
+}
+
+static void
+prop_action_notify (GObject    *object,
+                    GParamSpec *pspec,
+                    gpointer    user_data)
+{
+  GtkActionMuxer *muxer = user_data;
+  int i;
+  GtkWidgetAction *action = NULL;
+  GVariant *state;
+
+  g_assert ((GObject *)muxer->widget == object);
+
+  for (i = 0; i < muxer->widget_actions->len; i++)
+    {
+      action = g_ptr_array_index (muxer->widget_actions, i);
+      if (action->pspec == pspec)
+        break;
+      action = NULL;
+    }
+
+  g_assert (action != NULL);
+
+  state = prop_action_get_state (muxer->widget, action);
+  gtk_action_muxer_action_state_changed (muxer, action->name, state);
+  g_variant_unref (state);
+}
+
+static void
+prop_actions_connect (GtkActionMuxer *muxer)
+{
+  int i;
+
+  if (!muxer->widget || !muxer->widget_actions)
+    return;
+
+  for (i = 0; i < muxer->widget_actions->len; i++)
+    {
+      GtkWidgetAction *action = g_ptr_array_index (muxer->widget_actions, i);
+      char *detailed;
+
+      if (!action->pspec)
+        continue;
+
+      detailed = g_strconcat ("notify::", action->pspec->name, NULL);
+      g_signal_connect (muxer->widget, detailed,
+                        G_CALLBACK (prop_action_notify), muxer);
+      g_free (detailed);
+    }
+}
+
+static void
+prop_actions_disconnect (GtkActionMuxer *muxer)
+{
+  if (muxer->widget)
+    g_signal_handlers_disconnect_by_func (muxer->widget,
+                                          prop_action_notify, muxer);
+}
+
 static gboolean
 gtk_action_muxer_query_action (GActionGroup        *action_group,
                                const gchar         *action_name,
@@ -454,16 +594,12 @@ gtk_action_muxer_query_action (GActionGroup        *action_group,
               if (state)
                 *state = NULL;
 
-              if (action->get_state)
+              if (action->pspec)
                 {
-                  GVariant *s;
-
-                  s = g_variant_ref_sink (action->get_state (muxer->widget, action->name));
-
                   if (state)
-                    *state = g_variant_ref (s);
-
-                  g_variant_unref (s);
+                    *state = prop_action_get_state (muxer->widget, action);
+                  if (state_hint)
+                    *state_hint = prop_action_get_state_hint (muxer->widget, action);
                 }
 
               return TRUE;
@@ -503,7 +639,10 @@ gtk_action_muxer_activate_action (GActionGroup *action_group,
           GtkWidgetAction *action = g_ptr_array_index (muxer->widget_actions, i);
           if (strcmp (action->name, action_name) == 0)
             {
-              action->activate (muxer->widget, action->name, parameter);
+              if (action->activate)
+                action->activate (muxer->widget, action->name, parameter);
+              else if (action->pspec)
+                prop_action_activate (muxer->widget, action, parameter);
 
               return;
             }
@@ -536,8 +675,8 @@ gtk_action_muxer_change_action_state (GActionGroup *action_group,
           GtkWidgetAction *action = g_ptr_array_index (muxer->widget_actions, i);
           if (strcmp (action->name, action_name) == 0)
             {
-              if (action->set_state)
-                action->set_state (muxer->widget, action->name, state);
+              if (action->pspec)
+                prop_action_set_state (muxer->widget, action, state);
 
               return;
             }
@@ -668,6 +807,8 @@ gtk_action_muxer_dispose (GObject *object)
 {
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (object);
 
+  prop_actions_disconnect (muxer);
+
   if (muxer->parent)
   {
     g_signal_handlers_disconnect_by_func (muxer->parent, gtk_action_muxer_action_added_to_parent, muxer);
@@ -683,6 +824,16 @@ gtk_action_muxer_dispose (GObject *object)
 
   G_OBJECT_CLASS (gtk_action_muxer_parent_class)
     ->dispose (object);
+}
+
+static void
+gtk_action_muxer_constructed (GObject *object)
+{
+  GtkActionMuxer *muxer = GTK_ACTION_MUXER (object);
+
+  prop_actions_connect (muxer);
+
+  G_OBJECT_CLASS (gtk_action_muxer_parent_class)->constructed (object);
 }
 
 static void
@@ -775,6 +926,7 @@ gtk_action_muxer_class_init (GObjectClass *class)
 {
   class->get_property = gtk_action_muxer_get_property;
   class->set_property = gtk_action_muxer_set_property;
+  class->constructed = gtk_action_muxer_constructed;
   class->finalize = gtk_action_muxer_finalize;
   class->dispose = gtk_action_muxer_dispose;
 

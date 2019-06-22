@@ -563,15 +563,6 @@ static void gtk_text_activate_selection_select_all   (GtkWidget  *widget,
 static void gtk_text_activate_misc_insert_emoji      (GtkWidget  *widget,
                                                       const char *action_name,
                                                       GVariant   *parameter);
-static void gtk_text_activate_misc_toggle_visibility (GtkWidget  *widget,
-                                                      const char *action_name,
-                                                      GVariant   *parameter);
-
-static void      gtk_text_set_misc_toggle_visibility (GtkWidget  *widget,
-                                                      const char *action_name,
-                                                      GVariant   *state);
-static GVariant *gtk_text_get_misc_toggle_visibility (GtkWidget  *widget,
-                                                      const char *action_name);
 
 /* GtkTextContent implementation
  */
@@ -1375,11 +1366,9 @@ gtk_text_class_init (GtkTextClass *class)
                                    gtk_text_activate_selection_select_all);
   gtk_widget_class_install_action (widget_class, "misc.insert-emoji", NULL,
                                    gtk_text_activate_misc_insert_emoji);
-  gtk_widget_class_install_stateful_action (widget_class, "misc.toggle-visibility", NULL,
-                                            gtk_text_activate_misc_toggle_visibility,
-                                            "b",
-                                            gtk_text_set_misc_toggle_visibility,
-                                            gtk_text_get_misc_toggle_visibility);
+  gtk_widget_class_install_property_action (widget_class,
+                                            "misc.toggle-visibility",
+                                            "visibility");
 }
 
 static void
@@ -5313,8 +5302,6 @@ gtk_text_set_visibility (GtkText  *self,
       gtk_text_recompute (self);
 
       gtk_text_update_clipboard_actions (self);
-      gtk_widget_action_state_changed (GTK_WIDGET (self), "misc.toggle-visibility",
-                                       g_variant_new_boolean (visible));
     }
 }
 
@@ -5716,35 +5703,6 @@ gtk_text_activate_misc_insert_emoji (GtkWidget  *widget,
   GtkText *self = GTK_TEXT (widget);
   gtk_text_insert_emoji (self);
   hide_selection_bubble (self);
-}
-
-static void
-gtk_text_activate_misc_toggle_visibility (GtkWidget  *widget,
-                                          const char *action_name,
-                                          GVariant   *parameter)
-{
-  GtkText *self = GTK_TEXT (widget);
-  gtk_text_set_visibility (self, !gtk_text_get_visibility (self));
-}
-
-static GVariant *
-gtk_text_get_misc_toggle_visibility (GtkWidget  *widget,
-                                     const char *action_name)
-{
-  GtkText *self = GTK_TEXT (widget);
-  DisplayMode mode = gtk_text_get_display_mode (self);
-
-  return g_variant_new_boolean (mode == DISPLAY_NORMAL);
-}
-
-static void
-gtk_text_set_misc_toggle_visibility (GtkWidget  *widget,
-                                     const char *action_name,
-                                     GVariant   *state)
-{
-  GtkText *self = GTK_TEXT (widget);
-  gboolean visible = g_variant_get_boolean (state);
-  gtk_text_set_visibility (self, visible);
 }
 
 static void

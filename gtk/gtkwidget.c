@@ -13430,6 +13430,37 @@ gtk_widget_should_layout (GtkWidget *widget)
   return TRUE;
 }
 
+static void
+gtk_widget_class_add_action (GtkWidgetClass  *widget_class,
+                             GtkWidgetAction *action)
+{
+  GtkWidgetClassPrivate *priv = widget_class->priv;
+
+  if (priv->actions == NULL)
+    priv->actions = g_ptr_array_new ();
+  else if (GTK_IS_WIDGET_CLASS (&widget_class->parent_class))
+    {
+      GtkWidgetClass *parent_class = GTK_WIDGET_CLASS (&widget_class->parent_class);
+      GtkWidgetClassPrivate *parent_priv = parent_class->priv;
+      GPtrArray *parent_actions = parent_priv->actions;
+
+      if (priv->actions == parent_actions)
+        {
+          int i;
+
+          priv->actions = g_ptr_array_new ();
+          for (i = 0; i < parent_actions->len; i++)
+            g_ptr_array_add (priv->actions, g_ptr_array_index (parent_actions, i));
+        }
+    }
+
+  GTK_NOTE(ACTIONS, g_message ("%sClass: Adding %s action\n",
+                               g_type_name (G_TYPE_FROM_CLASS (widget_class)),
+                               action->name));
+
+  g_ptr_array_add (priv->actions, action);
+}
+
 /*
  * gtk_widget_class_install_action:
  * @widget_class: a #GtkWidgetClass
@@ -13450,76 +13481,89 @@ gtk_widget_class_install_action (GtkWidgetClass              *widget_class,
                                  const char                  *parameter_type,
                                  GtkWidgetActionActivateFunc  activate)
 {
-  gtk_widget_class_install_stateful_action (widget_class, action_name,
-                                            parameter_type, activate,
-                                            NULL, NULL, NULL);
+  GtkWidgetAction *action;
+
+  action = g_new0 (GtkWidgetAction, 1);
+  action->owner = G_TYPE_FROM_CLASS (widget_class);
+  action->name = g_strdup (action_name);
+  if (parameter_type)
+    action->parameter_type = g_variant_type_new (parameter_type);
+  else
+    action->parameter_type = NULL;
+  action->activate = activate;
+
+  gtk_widget_class_add_action (widget_class, action);
 }
 
-/*
- * gtk_widget_class_install_stateful_action:
- * @widget_class: a #GtkWidgetClass
- * @action_name: a prefixed action name, such as "clipboard.paste"
- * @parameter_type: (allow-none): the parameter type, or %NULL
- * @activate: callback to use when the action is activated
- * @state_type: (allow-none): the state type, or %NULL
- * @set_state: (allow-none): callback to use when the action state
-       is set, or %NULL for stateless actions
- * @get_state: (allow-none): callback to use when the action state
-       is queried, or %NULL for stateless actions
- *
- * This should be called at class initialization time to specify
- * actions to be added for all instances of this class.
- *
- * Actions installed in this way can be simple or stateful.
- * See the #GAction documentation for more information.
- */
-void
-gtk_widget_class_install_stateful_action (GtkWidgetClass              *widget_class,
-                                          const char                  *action_name,
-                                          const char                  *parameter_type,
-                                          GtkWidgetActionActivateFunc  activate,
-                                          const char                  *state_type,
-                                          GtkWidgetActionSetStateFunc  set_state,
-                                          GtkWidgetActionGetStateFunc  get_state)
+static const GVariantType *
+determine_type (GParamSpec *pspec)
 {
-  GtkWidgetClassPrivate *priv = widget_class->priv;
+  if (G_TYPE_IS_ENUM (pspec->value_type))
+    return G_VARIANT_TYPE_STRING;
+
+  switch (pspec->value_type)
+    {
+    case G_TYPE_BOOLEAN:
+      return G_VARIANT_TYPE_BOOLEAN;
+
+    case G_TYPE_INT:
+      return G_VARIANT_TYPE_INT32;
+
+    case G_TYPE_UINT:
+      return G_VARIANT_TYPE_UINT32;
+
+    case G_TYPE_DOUBLE:
+    case G_TYPE_FLOAT:
+      return G_VARIANT_TYPE_DOUBLE;
+
+    case G_TYPE_STRING:
+      return G_VARIANT_TYPE_STRING;
+
+    default:
+      g_critical ("Unable to use gtk_widget_class_install_property_action with property '%s::%s' of type '%s'",
+                  g_type_name (pspec->owner_type), pspec->name, g_type_name (pspec->value_type));
+      return NULL;
+    }
+}
+
+void
+gtk_widget_class_install_property_action (GtkWidgetClass *widget_class,
+                                          const char     *action_name,
+                                          const char     *property_name)
+{
+  GParamSpec *pspec;
   GtkWidgetAction *action;
 
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
 
-  if (priv->actions == NULL)
-    priv->actions = g_ptr_array_new ();
-  else if (GTK_IS_WIDGET_CLASS (&widget_class->parent_class))
+  pspec = g_object_class_find_property (G_OBJECT_CLASS (widget_class), property_name);
+
+  if (pspec == NULL)
     {
-      GtkWidgetClass *parent_class = GTK_WIDGET_CLASS (&widget_class->parent_class);
-      GtkWidgetClassPrivate *parent_priv = parent_class->priv;
-      GPtrArray *parent_actions = parent_priv->actions;
+      g_critical ("Attempted to use non-existent property '%s::%s' for dgtk_widget_class_install_property_action",
+                  g_type_name (G_TYPE_FROM_CLASS (widget_class)), property_name);
+      return;
+    }
 
-      if (priv->actions == parent_actions)
-        {
-          int i;
-
-          priv->actions = g_ptr_array_new ();
-          for (i = 0; i < parent_actions->len; i++)
-            g_ptr_array_add (priv->actions, g_ptr_array_index (parent_actions, i));
-        }
+  if (~pspec->flags & G_PARAM_READABLE || ~pspec->flags & G_PARAM_WRITABLE || pspec->flags & G_PARAM_CONSTRUCT_ONLY)
+    {
+      g_critical ("Property '%s::%s' used with gtk_widget_class_install_property_action must be readable, writable, and not construct-only",
+                  g_type_name (G_TYPE_FROM_CLASS (widget_class)), property_name);
+      return;
     }
 
   action = g_new0 (GtkWidgetAction, 1);
   action->owner = G_TYPE_FROM_CLASS (widget_class);
   action->name = g_strdup (action_name);
-  action->parameter_type = parameter_type ? g_variant_type_new (parameter_type) : NULL;
-  action->activate = activate;
-  action->state_type = state_type ? g_variant_type_new (state_type) : NULL;
-  action->set_state = set_state;
-  action->get_state = get_state;
+  action->pspec = pspec;
+  action->state_type = determine_type (action->pspec);
+  if (action->pspec->value_type == G_TYPE_BOOLEAN)
+    action->parameter_type = NULL;
+  else
+    action->parameter_type = action->state_type;
+  action->activate = NULL;
 
-  GTK_NOTE(ACTIONS,
-           g_message ("%sClass: Adding %s action\n",
-                      g_type_name (G_TYPE_FROM_CLASS (widget_class)),
-                      action_name));
-
-  g_ptr_array_add (priv->actions, action);
+  gtk_widget_class_add_action (widget_class, action);
 }
 
 /**
@@ -13543,29 +13587,6 @@ gtk_widget_action_enabled_changed (GtkWidget  *widget,
 
   muxer = _gtk_widget_get_action_muxer (widget, TRUE);
   gtk_action_muxer_action_enabled_changed (muxer, action_name, enabled);
-}
-
-/**
- * gtk_widget_action_state_changed:
- * @widget: a #GtkWidget
- * @action_name: action name, such as "clipboard.paste"
- * @state: the new state
- *
- * Notify when an action installed with
- * gtk_widget_class_install_stateful_action() changes
- * its state.
- */
-void
-gtk_widget_action_state_changed (GtkWidget  *widget,
-                                 const char *action_name,
-                                 GVariant   *state)
-{
-  GtkActionMuxer *muxer;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  muxer = _gtk_widget_get_action_muxer (widget, TRUE);
-  gtk_action_muxer_action_state_changed (muxer, action_name, state);
 }
 
 /**
