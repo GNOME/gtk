@@ -8849,7 +8849,6 @@ append_bubble_item (GtkTextView *text_view,
   const char *icon_name;
   const char *action_name;
   GMenuModel *link;
-  char **split = NULL;
   gboolean is_toggle_action = FALSE;
   GActionGroup *group = NULL;
   gboolean enabled;
