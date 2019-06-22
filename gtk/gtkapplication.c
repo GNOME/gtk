@@ -465,68 +465,6 @@ gtk_application_window_removed (GtkApplication *application,
 }
 
 static void
-extract_accel_from_menu_item (GMenuModel     *model,
-                              gint            item,
-                              GtkApplication *app)
-{
-  GMenuAttributeIter *iter;
-  const gchar *key;
-  GVariant *value;
-  const gchar *accel = NULL;
-  const gchar *action = NULL;
-  GVariant *target = NULL;
-
-  iter = g_menu_model_iterate_item_attributes (model, item);
-  while (g_menu_attribute_iter_get_next (iter, &key, &value))
-    {
-      if (g_str_equal (key, "action") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
-        action = g_variant_get_string (value, NULL);
-      else if (g_str_equal (key, "accel") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
-        accel = g_variant_get_string (value, NULL);
-      else if (g_str_equal (key, "target"))
-        target = g_variant_ref (value);
-      g_variant_unref (value);
-    }
-  g_object_unref (iter);
-
-  if (accel && action)
-    {
-      const gchar *accels[2] = { accel, NULL };
-      gchar *detailed_action_name;
-
-      detailed_action_name = g_action_print_detailed_name (action, target);
-      gtk_application_set_accels_for_action (app, detailed_action_name, accels);
-      g_free (detailed_action_name);
-    }
-
-  if (target)
-    g_variant_unref (target);
-}
-
-static void
-extract_accels_from_menu (GMenuModel     *model,
-                          GtkApplication *app)
-{
-  gint i;
-
-  for (i = 0; i < g_menu_model_get_n_items (model); i++)
-    {
-      GMenuLinkIter *iter;
-      GMenuModel *sub_model;
-
-      extract_accel_from_menu_item (model, i, app);
-
-      iter = g_menu_model_iterate_item_links (model, i);
-      while (g_menu_link_iter_get_next (iter, NULL, &sub_model))
-        {
-          extract_accels_from_menu (sub_model, app);
-          g_object_unref (sub_model);
-        }
-      g_object_unref (iter);
-    }
-}
-
-static void
 gtk_application_get_property (GObject    *object,
                               guint       prop_id,
                               GValue     *value,
@@ -1175,9 +1113,6 @@ gtk_application_set_app_menu (GtkApplication *application,
 
   if (g_set_object (&priv->app_menu, app_menu))
     {
-      if (app_menu)
-        extract_accels_from_menu (app_menu, application);
-
       gtk_application_impl_set_app_menu (priv->impl, app_menu);
 
       g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_APP_MENU]);
@@ -1241,9 +1176,6 @@ gtk_application_set_menubar (GtkApplication *application,
 
   if (g_set_object (&priv->menubar, menubar))
     {
-      if (menubar)
-        extract_accels_from_menu (menubar, application);
-
       gtk_application_impl_set_menubar (priv->impl, menubar);
 
       g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_MENUBAR]);
