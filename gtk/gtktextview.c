@@ -59,7 +59,6 @@
 #include "gtkpango.h"
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
-#include "gtkactionmuxerprivate.h"
 
 #include "a11y/gtktextviewaccessibleprivate.h"
 
@@ -8818,6 +8817,10 @@ append_bubble_item (GtkTextView *text_view,
   GMenuModel *link;
   char **split = NULL;
   gboolean is_toggle_action = FALSE;
+  GActionGroup *group = NULL;
+  gboolean enabled;
+  const GVariantType *param_type;
+  const GVariantType *state_type;
 
   link = g_menu_model_get_item_link (model, index, "section");
   if (link)
@@ -8842,32 +8845,19 @@ append_bubble_item (GtkTextView *text_view,
   action_name = g_variant_get_string (att, NULL);
   g_variant_unref (att);
 
-  split = g_strsplit (action_name, ".", 2);
-  if (split[0] && split[1])
+  group = G_ACTION_GROUP (_gtk_widget_get_action_muxer (GTK_WIDGET (text_view), FALSE));
+  if (group)
     {
-      GActionGroup *group = NULL;
-      gboolean enabled;
-      const GVariantType *param_type;
-      const GVariantType *state_type;
-      GtkActionMuxer *muxer;
-     
-      muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (text_view), FALSE);
-      if (muxer)
-        group = gtk_action_muxer_lookup (muxer, split[0]);
-      if (group)
-        {
-          g_action_group_query_action (group, split[1], &enabled, &param_type, &state_type, NULL, NULL);
+      g_action_group_query_action (group, action_name, &enabled, &param_type, &state_type, NULL, NULL);
 
-          if (!enabled)
-            return;
+      if (!enabled)
+        return;
 
-          if (param_type == NULL &&
-              state_type != NULL &&
-              g_variant_type_equal (state_type, G_VARIANT_TYPE_BOOLEAN))
-            is_toggle_action = TRUE;
-        }
+      if (param_type == NULL &&
+          state_type != NULL &&
+          g_variant_type_equal (state_type, G_VARIANT_TYPE_BOOLEAN))
+        is_toggle_action = TRUE;
     }
-  g_strfreev (split);
 
   if (is_toggle_action)
     item = gtk_toggle_button_new ();
