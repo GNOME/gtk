@@ -189,6 +189,63 @@ test_text (void)
   g_object_unref (clipboard_actions);
 }
 
+/* Test that inheritance works for individual actions
+ * even if they are in groups with the same prefix.
+ * This is a change from the way things work in GTK3.
+ */
+static void
+test_overlap (void)
+{
+  GtkWidget *window;
+  GtkWidget *box;
+  GActionEntry win_entries[] = {
+    { "win", win_activate, NULL, NULL, NULL },
+  };
+  GActionEntry box_entries[] = {
+    { "box", box_activate, NULL, NULL, NULL },
+  };
+  GSimpleActionGroup *win_actions;
+  GSimpleActionGroup *box_actions;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+
+  gtk_container_add (GTK_CONTAINER (window), box);
+
+  win_actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (win_actions),
+                                   win_entries,
+                                   G_N_ELEMENTS (win_entries),
+                                   NULL);
+
+  box_actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (box_actions),
+                                   box_entries,
+                                   G_N_ELEMENTS (box_entries),
+                                   NULL);
+
+  gtk_widget_insert_action_group (window, "actions", G_ACTION_GROUP (win_actions));
+  gtk_widget_insert_action_group (box, "actions", G_ACTION_GROUP (box_actions));
+
+  win_activated = 0;
+  box_activated = 0;
+
+  gtk_widget_activate_action (box, "actions.win", NULL);
+
+  g_assert_cmpint (win_activated, ==, 1);
+  g_assert_cmpint (box_activated, ==, 0);
+
+  gtk_widget_activate_action (box, "actions.box", NULL);
+
+  g_assert_cmpint (win_activated, ==, 1);
+  g_assert_cmpint (box_activated, ==, 1);
+
+
+  gtk_widget_destroy (window);
+  g_object_unref (win_actions);
+  g_object_unref (box_actions);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -197,6 +254,7 @@ main (int   argc,
 
   g_test_add_func ("/action/inheritance", test_action);
   g_test_add_func ("/action/text", test_text);
+  g_test_add_func ("/action/overlap", test_overlap);
 
   return g_test_run();
 }
