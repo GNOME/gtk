@@ -11928,11 +11928,15 @@ _gtk_widget_get_action_muxer (GtkWidget *widget,
  *
  * Inserts @group into @widget. Children of @widget that implement
  * #GtkActionable can then be associated with actions in @group by
- * setting their “action-name” to
- * @prefix.`action-name`.
+ * setting their “action-name” to @prefix.`action-name`.
  *
- * If @group is %NULL, a previously inserted group for @name is removed
- * from @widget.
+ * Note that inheritance is defined for individual actions. I.e.
+ * even if you insert a group with prefix @prefix, actions with
+ * the same prefix will still be inherited from the parent, unless
+ * the group contains an action with the same name.
+ *
+ * If @group is %NULL, a previously inserted group for @name is
+ * removed from @widget.
  */
 void
 gtk_widget_insert_action_group (GtkWidget    *widget,
