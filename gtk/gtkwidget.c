@@ -13563,3 +13563,41 @@ gtk_widget_action_state_changed (GtkWidget  *widget,
   muxer = _gtk_widget_get_action_muxer (widget, TRUE);
   gtk_action_muxer_action_state_changed (muxer, action_name, state);
 }
+
+/**
+ * gtk_widget_class_query_action:
+ * @widget_class: a #GtkWidgetClass
+ * @index_: position of the action to query
+ * @action_name: return location for the action name
+ * @parameter_type: return location for the parameter type
+ * @state_type: return location for the state type
+ *
+ * Queries the actions that have been installed for
+ * a widget class using gtk_widget_class_install_action()
+ * during class initialization.
+ *
+ * Returns: %TRUE if the action was found,
+ *     %FALSE if @index_ is out of range
+ */
+gboolean
+gtk_widget_class_query_action (GtkWidgetClass      *widget_class,
+                               guint                index_,
+                               const char         **action_name,
+                               const GVariantType **parameter_type,
+                               const GVariantType **state_type)
+{
+  GtkWidgetClassPrivate *priv = widget_class->priv;
+
+  if (priv->actions && index_ < priv->actions->len)
+    {
+      GtkWidgetAction *action = g_ptr_array_index (priv->actions, index_);
+
+      *action_name = action->name;
+      *parameter_type = action->parameter_type;
+      *state_type = action->state_type;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}

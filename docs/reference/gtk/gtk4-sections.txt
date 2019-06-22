@@ -4634,6 +4634,7 @@ GtkWidgetActionSetStateFunc
 GtkWidgetActionGetStateFunc
 gtk_widget_class_install_action
 gtk_widget_class_install_stateful_action
+gtk_widget_class_query_action
 gtk_widget_action_enabled_changed
 gtk_widget_action_state_changed
 
