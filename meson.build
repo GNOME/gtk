@@ -471,7 +471,8 @@ if cc.get_id() == 'msvc' and not harfbuzz_dep.found()
   endif
 endif
 
-if not harfbuzz_dep.found()
+require_harfbuzz = wayland_enabled or x11_enabled
+if require_harfbuzz and not harfbuzz_dep.found()
   harfbuzz_dep   = dependency('harfbuzz', version: '>= 0.9', required: false,
                               fallback: ['harfbuzz', 'libharfbuzz_dep'])
 endif
