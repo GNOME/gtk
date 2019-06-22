@@ -3596,7 +3596,7 @@ gtk_entry_set_extra_menu (GtkEntry   *entry,
 
 /**
  * gtk_entry_get_extra_menu:
- * @self: a #GtkText
+ * @entry: a #GtkText
  *
  * Gets the menu model set with gtk_entry_set_extra_menu().
  *
