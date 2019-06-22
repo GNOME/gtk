@@ -348,7 +348,6 @@
       <xi:include href="xml/gtkshortcut.xml" />
       <xi:include href="xml/gtkshortcuttrigger.xml" />
       <xi:include href="xml/gtkshortcutaction.xml" />
-      <xi:include href="xml/gtkshortcutmanager.xml" />
     </chapter>
   </part>
 
