@@ -78,33 +78,7 @@ struct _GtkEntry
  * GtkEntryClass:
  * @parent_class: The parent class.
  * @activate: Class handler for the #GtkEntry::activate signal. The default
- *   implementation activates the gtk.activate-default action.
- * @move_cursor: Class handler for the #GtkEntry::move-cursor signal. The
- *   default implementation specifies the standard #GtkEntry cursor movement
- *   behavior.
- * @insert_at_cursor: Class handler for the #GtkEntry::insert-at-cursor signal.
- *   The default implementation inserts text at the cursor.
- * @delete_from_cursor: Class handler for the #GtkEntry::delete-from-cursor
- *   signal. The default implementation deletes the selection or the specified
- *   number of characters or words.
- * @backspace: Class handler for the #GtkEntry::backspace signal. The default
- *   implementation deletes the selection or a single character or word.
- * @cut_clipboard: Class handler for the #GtkEntry::cut-clipboard signal. The
- *   default implementation cuts the selection, if one exists.
- * @copy_clipboard: Class handler for the #GtkEntry::copy-clipboard signal. The
- *   default implementation copies the selection, if one exists.
- * @paste_clipboard: Class handler for the #GtkEntry::paste-clipboard signal.
- *   The default implementation pastes at the current cursor position or over
- *   the current selection if one exists.
- * @toggle_overwrite: Class handler for the #GtkEntry::toggle-overwrite signal.
- *   The default implementation toggles overwrite mode and blinks the cursor.
- * @insert_emoji: Class handler for the #GtkEntry::insert-emoji signal.
- *
- * Class structure for #GtkEntry. All virtual functions have a default
- * implementation. Derived classes may set the virtual function pointers for the
- * signal handlers to %NULL, but must keep @get_text_area_size and
- * @get_frame_size non-%NULL; either use the default implementation, or provide
- * a custom one.
+ *   implementation activates the default.activate action.
  */
 struct _GtkEntryClass
 {
