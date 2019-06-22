@@ -39,7 +39,7 @@ G_BEGIN_DECLS
  *     modifiers and keyval is received.
  * @GTK_SHORTCUT_TRIGGER_MNEMONIC: Trigger if a key event with matching
  *     keyval is received and mnemonics are enabled for this event.
- * @GTK_SHORTCUT_TRIGGER_ALTERNAITVE: Trigger if either if two
+ * @GTK_SHORTCUT_TRIGGER_ALTERNATIVE: Trigger if either of two
  *     alternatives triggers
  *
  * The type of a trigger determines what the trigger triggers on.
@@ -109,12 +109,12 @@ GDK_AVAILABLE_IN_ALL
 guint                   gtk_mnemonic_trigger_get_keyval         (GtkShortcutTrigger *self);
 
 GDK_AVAILABLE_IN_ALL
-GtkShortcutTrigger *    gtk_alternative_trigger_new             (GtkShortcutTrigger *one,
-                                                                 GtkShortcutTrigger *two);
+GtkShortcutTrigger *    gtk_alternative_trigger_new             (GtkShortcutTrigger *first,
+                                                                 GtkShortcutTrigger *second);
 GDK_AVAILABLE_IN_ALL
-GtkShortcutTrigger *    gtk_alternative_trigger_get_first       (GtkShortcutTrigger *trigger);
+GtkShortcutTrigger *    gtk_alternative_trigger_get_first       (GtkShortcutTrigger *self);
 GDK_AVAILABLE_IN_ALL
-GtkShortcutTrigger *    gtk_alternative_trigger_get_second      (GtkShortcutTrigger *trigger);
+GtkShortcutTrigger *    gtk_alternative_trigger_get_second      (GtkShortcutTrigger *self);
 
 G_END_DECLS
 
