@@ -240,10 +240,104 @@ test_overlap (void)
   g_assert_cmpint (win_activated, ==, 1);
   g_assert_cmpint (box_activated, ==, 1);
 
-
   gtk_widget_destroy (window);
   g_object_unref (win_actions);
   g_object_unref (box_actions);
+}
+
+static int toggled;
+static int act1;
+static int act2;
+
+static void
+visibility_toggled (GObject *object,
+                    GParamSpec *pspec,
+                    gpointer data)
+{
+  toggled++;
+}
+
+static void
+activate1 (GSimpleAction *action,
+           GVariant      *parameter,
+           gpointer       user_data)
+{
+  act1++;
+}
+
+static void
+activate2 (GSimpleAction *action,
+           GVariant      *parameter,
+           gpointer       user_data)
+{
+  act2++;
+}
+
+/* Test that overlap also works as expected between
+ * class action and inserted groups. Class actions
+ * take precedence over inserted groups in the same
+ * muxer, but inheritance works as normal between
+ * muxers.
+ */
+static void
+test_overlap2 (void)
+{
+  GtkWidget *text;
+  GtkWidget *child;
+  GSimpleActionGroup *group1;
+  GSimpleActionGroup *group2;
+  GActionEntry entries1[] = {
+    { "toggle-visibility", activate1, NULL, NULL, NULL },
+  };
+  GActionEntry entries2[] = {
+    { "toggle-visibility", activate2, NULL, NULL, NULL },
+  };
+
+  text = gtk_text_new ();
+  g_signal_connect (text, "notify::visibility",
+                    G_CALLBACK (visibility_toggled), NULL);
+
+  child = gtk_label_new ("");
+  gtk_widget_set_parent (child, text);
+
+  g_assert_cmpint (toggled, ==, 0);
+  g_assert_cmpint (act1, ==, 0);
+  g_assert_cmpint (act2, ==, 0);
+
+  gtk_widget_activate_action (child, "misc.toggle-visibility", NULL);
+
+  g_assert_cmpint (toggled, ==, 1);
+  g_assert_cmpint (act1, ==, 0);
+  g_assert_cmpint (act2, ==, 0);
+
+  group1 = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group1),
+                                   entries1,
+                                   G_N_ELEMENTS (entries1),
+                                   NULL);
+  gtk_widget_insert_action_group (text, "misc", G_ACTION_GROUP (group1));
+  gtk_widget_activate_action (child, "misc.toggle-visibility", NULL);
+
+  g_assert_cmpint (toggled, ==, 2);
+  g_assert_cmpint (act1, ==, 0);
+  g_assert_cmpint (act2, ==, 0);
+
+  group2 = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group2),
+                                   entries2,
+                                   G_N_ELEMENTS (entries2),
+                                   NULL);
+  gtk_widget_insert_action_group (child, "misc", G_ACTION_GROUP (group2));
+
+  gtk_widget_activate_action (child, "misc.toggle-visibility", NULL);
+
+  g_assert_cmpint (toggled, ==, 2);
+  g_assert_cmpint (act1, ==, 0);
+  g_assert_cmpint (act2, ==, 1);
+
+  gtk_widget_destroy (text);
+  g_object_unref (group1);
+  g_object_unref (group2);
 }
 
 /* Test that gtk_widget_class_query_action
@@ -303,6 +397,7 @@ main (int   argc,
   g_test_add_func ("/action/inheritance", test_action);
   g_test_add_func ("/action/text", test_text);
   g_test_add_func ("/action/overlap", test_overlap);
+  g_test_add_func ("/action/overlap2", test_overlap2);
   g_test_add_func ("/action/introspection", test_introspection);
 
   return g_test_run();
