@@ -174,6 +174,7 @@ gtk_action_muxer_find_group (GtkActionMuxer  *muxer,
 {
   const gchar *dot;
   gchar *prefix;
+  const char *name;
   Group *group;
 
   dot = strchr (full_name, '.');
@@ -181,14 +182,20 @@ gtk_action_muxer_find_group (GtkActionMuxer  *muxer,
   if (!dot)
     return NULL;
 
+  name = dot + 1;
+
   prefix = g_strndup (full_name, dot - full_name);
   group = g_hash_table_lookup (muxer->groups, prefix);
   g_free (prefix);
 
   if (action_name)
-    *action_name = dot + 1;
+    *action_name = name;
 
-  return group;
+  if (group &&
+      g_action_group_has_action (group->group, name))
+    return group;
+
+  return NULL;
 }
 
 GActionGroup *
@@ -199,8 +206,10 @@ gtk_action_muxer_find (GtkActionMuxer  *muxer,
   Group *group;
 
   group = gtk_action_muxer_find_group (muxer, action_name, unprefixed_name);
+  if (group)
+    return group->group;
 
-  return group->group;
+  return NULL;
 }
 
 void
