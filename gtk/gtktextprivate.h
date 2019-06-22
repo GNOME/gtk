@@ -66,10 +66,6 @@ typedef struct _GtkTextClass         GtkTextClass;
 struct _GtkTextClass
 {
   GtkWidgetClass parent_class;
-
-  /* Action signals
-   */
-  void (* activate)           (GtkText         *self);
 };
 
 char *              gtk_text_get_display_text   (GtkText    *entry,

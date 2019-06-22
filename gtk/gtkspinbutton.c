@@ -292,8 +292,9 @@ static gboolean gtk_spin_button_stop_spinning  (GtkSpinButton      *spin);
 static void gtk_spin_button_value_changed  (GtkAdjustment      *adjustment,
                                             GtkSpinButton      *spin_button);
 
-static void gtk_spin_button_activate       (GtkText            *entry,
-                                            gpointer            user_data);
+static void gtk_spin_button_activate       (GtkWidget  *widget,
+                                            const char *action_name,
+                                            GVariant   *parameters);
 static void gtk_spin_button_unset_adjustment (GtkSpinButton *spin_button);
 static void gtk_spin_button_set_orientation (GtkSpinButton     *spin_button,
                                              GtkOrientation     orientation);
@@ -551,6 +552,16 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                   NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_SCROLL_TYPE);
+
+  gtk_widget_class_install_action (widget_class, "activate", NULL,
+                                   gtk_spin_button_activate);
+
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_Return, 0,
+                                "activate", NULL);
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_ISO_Enter, 0,
+                                "activate", NULL);
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_KP_Enter, 0,
+                                "activate", NULL);
 
   add_spin_binding (widget_class, GDK_KEY_Up, 0, GTK_SCROLL_STEP_UP);
   add_spin_binding (widget_class, GDK_KEY_KP_Up, 0, GTK_SCROLL_STEP_UP);
@@ -895,7 +906,6 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_editable_set_max_width_chars (GTK_EDITABLE (priv->entry), 0);
   gtk_widget_set_hexpand (priv->entry, TRUE);
   gtk_widget_set_vexpand (priv->entry, TRUE);
-  g_signal_connect (priv->entry, "activate", G_CALLBACK (gtk_spin_button_activate), spin_button);
   gtk_container_add (GTK_CONTAINER (priv->box), priv->entry);
 
   priv->down_button = gtk_button_new ();
@@ -1358,10 +1368,11 @@ gtk_spin_button_snap (GtkSpinButton *spin_button,
 }
 
 static void
-gtk_spin_button_activate (GtkText *entry,
-                          gpointer  user_data)
+gtk_spin_button_activate (GtkWidget  *widget,
+                          const char *action_name,
+                          GVariant   *parameters)
 {
-  GtkSpinButton *spin_button = user_data;
+  GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
 
   if (gtk_editable_get_editable (GTK_EDITABLE (priv->entry)))

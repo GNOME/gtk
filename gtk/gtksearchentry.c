@@ -124,6 +124,7 @@ typedef struct {
   guint delayed_changed_id;
   gboolean content_changed;
   gboolean search_stopped;
+  gboolean activates_default;
 } GtkSearchEntryPrivate;
 
 static void gtk_search_entry_editable_init (GtkEditableInterface *iface);
@@ -135,6 +136,20 @@ G_DEFINE_TYPE_WITH_CODE (GtkSearchEntry, gtk_search_entry, GTK_TYPE_WIDGET,
 
 /* 150 mseconds of delay */
 #define DELAYED_TIMEOUT_ID 150
+
+static void
+gtk_search_entry_activate (GtkWidget  *widget,
+                           const char *action_name,
+                           GVariant   *parameters)
+{
+  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (widget);
+  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
+
+  if (priv->activates_default)
+    gtk_widget_activate_default (widget);
+  else
+    g_signal_emit (entry, signals[ACTIVATE], 0);
+}
 
 static void
 text_changed (GtkSearchEntry *entry)
@@ -190,9 +205,9 @@ gtk_search_entry_set_property (GObject      *object,
       break;
 
     case PROP_ACTIVATES_DEFAULT:
-      if (gtk_text_get_activates_default (GTK_TEXT (priv->entry)) != g_value_get_boolean (value))
+      if (priv->activates_default != g_value_get_boolean (value))
         {
-          gtk_text_set_activates_default (GTK_TEXT (priv->entry), g_value_get_boolean (value));
+          priv->activates_default = g_value_get_boolean (value);
           g_object_notify_by_pspec (object, pspec);
         }
       break;
@@ -221,7 +236,7 @@ gtk_search_entry_get_property (GObject    *object,
       break;
 
     case PROP_ACTIVATES_DEFAULT:
-      g_value_set_boolean (value, gtk_text_get_activates_default (GTK_TEXT (priv->entry)));
+      g_value_set_boolean (value, priv->activates_default);
       break;
 
     default:
@@ -358,7 +373,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
   signals[ACTIVATE] =
     g_signal_new (I_("activate"),
                   G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkSearchEntryClass, activate),
                   NULL, NULL,
                   NULL,
@@ -459,6 +474,16 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
+
+  gtk_widget_class_install_action (widget_class, "activate", NULL,
+                                   gtk_search_entry_activate);
+
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_Return, 0,
+                                "activate", NULL);
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_ISO_Enter, 0,
+                                "activate", NULL);
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_KP_Enter, 0,
+                                "activate", NULL);
 
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_g, GDK_CONTROL_MASK,
@@ -565,16 +590,8 @@ notify_cb (GObject    *object,
            gpointer    data)
 {
   /* The editable interface properties are already forwarded by the editable delegate setup */
-  if (g_str_equal (pspec->name, "placeholder-text") ||
-      g_str_equal (pspec->name, "activates-default"))
+  if (g_str_equal (pspec->name, "placeholder-text"))
     g_object_notify (data, pspec->name);
-}
-
-static void
-activate_cb (GtkText  *text,
-             gpointer  data)
-{
-  g_signal_emit (data, signals[ACTIVATE], 0);
 }
 
 static void
@@ -590,7 +607,6 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   g_signal_connect_after (priv->entry, "changed", G_CALLBACK (gtk_search_entry_changed), entry);
   g_signal_connect_swapped (priv->entry, "preedit-changed", G_CALLBACK (text_changed), entry);
   g_signal_connect (priv->entry, "notify", G_CALLBACK (notify_cb), entry);
-  g_signal_connect (priv->entry, "activate", G_CALLBACK (activate_cb), entry);
 
   priv->icon = gtk_image_new_from_icon_name ("edit-clear-symbolic");
   gtk_widget_set_tooltip_text (priv->icon, _("Clear entry"));

@@ -2294,8 +2294,8 @@ clear_completion_callback (GObject            *text,
     completion->priv->has_completion = FALSE;
 }
 
-static gboolean
-accept_completion_callback (GtkEntryCompletion *completion)
+gboolean
+_gtk_entry_completion_accept (GtkEntryCompletion *completion)
 {
   if (!completion->priv->inline_completion)
     return FALSE;
@@ -2313,7 +2313,7 @@ text_focus_out (GtkEntryCompletion *completion)
   if (gtk_widget_get_mapped (completion->priv->popup_window))
     return FALSE;
 
-  return accept_completion_callback (completion);
+  return _gtk_entry_completion_accept (completion);
 }
 
 static void
@@ -2358,7 +2358,6 @@ connect_completion_signals (GtkEntryCompletion *completion)
     completion->priv->insert_text_id =
       g_signal_connect (text, "insert-text", G_CALLBACK (completion_insert_text_callback), completion);
     g_signal_connect (text, "notify", G_CALLBACK (clear_completion_callback), completion);
-    g_signal_connect_swapped (text, "activate", G_CALLBACK (accept_completion_callback), completion);
 }
 
 static void
@@ -2412,7 +2411,6 @@ disconnect_completion_signals (GtkEntryCompletion *completion)
     }
   g_signal_handlers_disconnect_by_func (text, G_CALLBACK (completion_insert_text_callback), completion);
   g_signal_handlers_disconnect_by_func (text, G_CALLBACK (clear_completion_callback), completion);
-  g_signal_handlers_disconnect_by_func (text, G_CALLBACK (accept_completion_callback), completion);
 }
 
 void
