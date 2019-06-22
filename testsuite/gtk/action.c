@@ -246,6 +246,54 @@ test_overlap (void)
   g_object_unref (box_actions);
 }
 
+/* Test that gtk_widget_class_query_action
+ * yields the expected results
+ */
+static void
+test_introspection (void)
+{
+  GtkWidgetClass *class = g_type_class_ref (GTK_TYPE_TEXT);
+  guint i;
+  GType owner;
+  const char *name;
+  const GVariantType *params;
+  const char *property;
+  struct {
+    GType owner;
+    const char *name;
+    const char *params;
+    const char *property;
+  } expected[] = {
+    { GTK_TYPE_TEXT, "clipboard.cut", NULL, NULL },
+    { GTK_TYPE_TEXT, "clipboard.copy", NULL, NULL },
+    { GTK_TYPE_TEXT, "clipboard.paste", NULL, NULL },
+    { GTK_TYPE_TEXT, "selection.delete", NULL, NULL },
+    { GTK_TYPE_TEXT, "selection.select-all", NULL, NULL },
+    { GTK_TYPE_TEXT, "misc.insert-emoji", NULL, NULL },
+    { GTK_TYPE_TEXT, "misc.toggle-visibility", NULL, "visibility" },
+  };
+
+  i = 0;
+  while (gtk_widget_class_query_action (class,
+                                        i,
+                                        &owner,
+                                        &name,
+                                        &params,
+                                        &property))
+    {
+      g_assert (expected[i].owner == owner);
+      g_assert (strcmp (expected[i].name, name) == 0);
+      g_assert ((expected[i].params == NULL && params == NULL) ||
+                strcmp (expected[i].params, g_variant_type_peek_string (params)) == 0);
+      g_assert ((expected[i].property == NULL && property == NULL) ||
+                strcmp (expected[i].property, property) == 0);
+      i++;
+    }
+  g_assert (i == G_N_ELEMENTS (expected));
+
+  g_type_class_unref (class);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -255,6 +303,7 @@ main (int   argc,
   g_test_add_func ("/action/inheritance", test_action);
   g_test_add_func ("/action/text", test_text);
   g_test_add_func ("/action/overlap", test_overlap);
+  g_test_add_func ("/action/introspection", test_introspection);
 
   return g_test_run();
 }
