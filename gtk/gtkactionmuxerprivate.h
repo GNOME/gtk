@@ -35,6 +35,7 @@ typedef struct {
   char *name;
 
   GVariantType *parameter_type;
+  GVariantType *state_type;
 
   GtkWidgetActionActivateFunc activate;
   GtkWidgetActionSetStateFunc set_state;

@@ -446,11 +446,11 @@ gtk_action_muxer_query_action (GActionGroup        *action_group,
                 *enabled = muxer->widget_actions_enabled[i];
               if (parameter_type)
                 *parameter_type = action->parameter_type;
+              if (state_type)
+                *state_type = action->state_type;
 
               if (state_hint)
                 *state_hint = NULL;
-              if (state_type)
-                *state_type = NULL;
               if (state)
                 *state = NULL;
 
@@ -460,8 +460,6 @@ gtk_action_muxer_query_action (GActionGroup        *action_group,
 
                   s = g_variant_ref_sink (action->get_state (muxer->widget, action->name));
 
-                  if (state_type)
-                    *state_type = g_variant_get_type (s);
                   if (state)
                     *state = g_variant_ref (s);
 

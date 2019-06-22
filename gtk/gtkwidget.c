@@ -13449,7 +13449,7 @@ gtk_widget_class_install_action (GtkWidgetClass              *widget_class,
                                  GtkWidgetActionActivateFunc  activate)
 {
   gtk_widget_class_install_stateful_action (widget_class, action_name, activate,
-                                            NULL, NULL, NULL);
+                                            NULL, NULL, NULL, NULL);
 }
 
 /*
@@ -13458,9 +13458,10 @@ gtk_widget_class_install_action (GtkWidgetClass              *widget_class,
  * @action_name: a prefixed action name, such as "clipboard.paste"
  * @activate: callback to use when the action is activated
  * @parameter_type: (allow-none): the parameter type, or %NULL
- * @query: (allow-none): callback to use when the action properties
-       are queried, or %NULL for always-enabled stateless actions
- * @query_state: (allow-none): callback to use when the action state
+ * @state_type: (allow-none): the state type, or %NULL
+ * @set_state: (allow-none): callback to use when the action state
+       is set, or %NULL for stateless actions
+ * @get_state: (allow-none): callback to use when the action state
        is queried, or %NULL for stateless actions
  *
  * This should be called at class initialization time to specify
@@ -13474,6 +13475,7 @@ gtk_widget_class_install_stateful_action (GtkWidgetClass              *widget_cl
                                           const char                  *action_name,
                                           GtkWidgetActionActivateFunc  activate,
                                           const char                  *parameter_type,
+                                          const char                  *state_type,
                                           GtkWidgetActionSetStateFunc  set_state,
                                           GtkWidgetActionGetStateFunc  get_state)
 {
@@ -13504,6 +13506,7 @@ gtk_widget_class_install_stateful_action (GtkWidgetClass              *widget_cl
   action->name = g_strdup (action_name);
   action->activate = activate;
   action->parameter_type = parameter_type ? g_variant_type_new (parameter_type) : NULL;
+  action->state_type = state_type ? g_variant_type_new (state_type) : NULL;
   action->set_state = set_state;
   action->get_state = get_state;
 

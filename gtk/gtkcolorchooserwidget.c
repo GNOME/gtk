@@ -715,10 +715,10 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
 
   gtk_widget_class_install_stateful_action (GTK_WIDGET_CLASS (class), "color.select",
                                             gtk_color_chooser_widget_activate_color_select,
-                                            "(dddd)", NULL, NULL);
+                                            "(dddd)", NULL, NULL, NULL);
   gtk_widget_class_install_stateful_action (GTK_WIDGET_CLASS (class), "color.customize",
                                             gtk_color_chooser_widget_activate_color_customize,
-                                            "(dddd)", NULL, NULL);
+                                            "(dddd)", NULL, NULL, NULL);
 }
 
 /* GtkColorChooser implementation {{{1 */

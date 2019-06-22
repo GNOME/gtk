@@ -1377,7 +1377,7 @@ gtk_text_class_init (GtkTextClass *class)
                                    gtk_text_activate_misc_insert_emoji);
   gtk_widget_class_install_stateful_action (widget_class, "misc.toggle-visibility",
                                             gtk_text_activate_misc_toggle_visibility,
-                                            NULL,
+                                            NULL, "b",
                                             gtk_text_set_misc_toggle_visibility,
                                             gtk_text_get_misc_toggle_visibility);
 }

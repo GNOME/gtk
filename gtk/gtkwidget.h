@@ -1080,6 +1080,7 @@ void                    gtk_widget_class_install_stateful_action (GtkWidgetClass
                                                                   const char                  *action_name,
                                                                   GtkWidgetActionActivateFunc  activate,
                                                                   const char                  *parameter_type,
+                                                                  const char                  *state_type,
                                                                   GtkWidgetActionSetStateFunc  set_state,
                                                                   GtkWidgetActionGetStateFunc  get_state);
 
