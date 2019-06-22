@@ -1073,13 +1073,14 @@ typedef void (*GtkWidgetActionSetStateFunc) (GtkWidget  *widget,
 GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_class_install_action (GtkWidgetClass              *widget_class,
                                                          const char                  *action_name,
+                                                         const char                  *parameter_type,
                                                          GtkWidgetActionActivateFunc  activate);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_class_install_stateful_action (GtkWidgetClass              *widget_class,
                                                                   const char                  *action_name,
-                                                                  GtkWidgetActionActivateFunc  activate,
                                                                   const char                  *parameter_type,
+                                                                  GtkWidgetActionActivateFunc  activate,
                                                                   const char                  *state_type,
                                                                   GtkWidgetActionSetStateFunc  set_state,
                                                                   GtkWidgetActionGetStateFunc  get_state);

@@ -13434,6 +13434,7 @@ gtk_widget_should_layout (GtkWidget *widget)
  * gtk_widget_class_install_action:
  * @widget_class: a #GtkWidgetClass
  * @action_name: a prefixed action name, such as "clipboard.paste"
+ * @parameter_type: (allow-none): the parameter type, or %NULL
  * @activate: callback to use when the action is activated
  *
  * This should be called at class initialization time to specify
@@ -13446,18 +13447,20 @@ gtk_widget_should_layout (GtkWidget *widget)
 void
 gtk_widget_class_install_action (GtkWidgetClass              *widget_class,
                                  const char                  *action_name,
+                                 const char                  *parameter_type,
                                  GtkWidgetActionActivateFunc  activate)
 {
-  gtk_widget_class_install_stateful_action (widget_class, action_name, activate,
-                                            NULL, NULL, NULL, NULL);
+  gtk_widget_class_install_stateful_action (widget_class, action_name,
+                                            parameter_type, activate,
+                                            NULL, NULL, NULL);
 }
 
 /*
  * gtk_widget_class_install_stateful_action:
  * @widget_class: a #GtkWidgetClass
  * @action_name: a prefixed action name, such as "clipboard.paste"
- * @activate: callback to use when the action is activated
  * @parameter_type: (allow-none): the parameter type, or %NULL
+ * @activate: callback to use when the action is activated
  * @state_type: (allow-none): the state type, or %NULL
  * @set_state: (allow-none): callback to use when the action state
        is set, or %NULL for stateless actions
@@ -13473,8 +13476,8 @@ gtk_widget_class_install_action (GtkWidgetClass              *widget_class,
 void
 gtk_widget_class_install_stateful_action (GtkWidgetClass              *widget_class,
                                           const char                  *action_name,
-                                          GtkWidgetActionActivateFunc  activate,
                                           const char                  *parameter_type,
+                                          GtkWidgetActionActivateFunc  activate,
                                           const char                  *state_type,
                                           GtkWidgetActionSetStateFunc  set_state,
                                           GtkWidgetActionGetStateFunc  get_state)
@@ -13505,8 +13508,8 @@ gtk_widget_class_install_stateful_action (GtkWidgetClass              *widget_cl
   action = g_new0 (GtkWidgetAction, 1);
   action->owner = G_TYPE_FROM_CLASS (widget_class);
   action->name = g_strdup (action_name);
-  action->activate = activate;
   action->parameter_type = parameter_type ? g_variant_type_new (parameter_type) : NULL;
+  action->activate = activate;
   action->state_type = state_type ? g_variant_type_new (state_type) : NULL;
   action->set_state = set_state;
   action->get_state = get_state;

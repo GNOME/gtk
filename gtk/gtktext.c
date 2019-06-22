@@ -1363,21 +1363,21 @@ gtk_text_class_init (GtkTextClass *class)
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("text"));
 
-  gtk_widget_class_install_action (widget_class, "clipboard.cut",
+  gtk_widget_class_install_action (widget_class, "clipboard.cut", NULL,
                                    gtk_text_activate_clipboard_cut);
-  gtk_widget_class_install_action (widget_class, "clipboard.copy",
+  gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL,
                                    gtk_text_activate_clipboard_copy);
-  gtk_widget_class_install_action (widget_class, "clipboard.paste",
+  gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL,
                                    gtk_text_activate_clipboard_paste);
-  gtk_widget_class_install_action (widget_class, "selection.delete",
+  gtk_widget_class_install_action (widget_class, "selection.delete", NULL,
                                    gtk_text_activate_selection_delete);
-  gtk_widget_class_install_action (widget_class, "selection.select-all",
+  gtk_widget_class_install_action (widget_class, "selection.select-all", NULL,
                                    gtk_text_activate_selection_select_all);
-  gtk_widget_class_install_action (widget_class, "misc.insert-emoji",
+  gtk_widget_class_install_action (widget_class, "misc.insert-emoji", NULL,
                                    gtk_text_activate_misc_insert_emoji);
-  gtk_widget_class_install_stateful_action (widget_class, "misc.toggle-visibility",
+  gtk_widget_class_install_stateful_action (widget_class, "misc.toggle-visibility", NULL,
                                             gtk_text_activate_misc_toggle_visibility,
-                                            NULL, "b",
+                                            "b",
                                             gtk_text_set_misc_toggle_visibility,
                                             gtk_text_get_misc_toggle_visibility);
 }

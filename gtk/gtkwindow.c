@@ -1176,7 +1176,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    * Key bindings
    */
 
-  gtk_widget_class_install_action (widget_class, "default.activate",
+  gtk_widget_class_install_action (widget_class, "default.activate", NULL,
                                    gtk_window_activate_default_activate);
 
   binding_set = gtk_binding_set_by_class (klass);

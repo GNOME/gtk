@@ -1602,17 +1602,17 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   quark_gtk_signal = g_quark_from_static_string ("gtk-signal");
   quark_text_view_child = g_quark_from_static_string ("gtk-text-view-child");
 
-  gtk_widget_class_install_action (widget_class, "clipboard.cut",
+  gtk_widget_class_install_action (widget_class, "clipboard.cut", NULL,
                                    gtk_text_view_activate_clipboard_cut);
-  gtk_widget_class_install_action (widget_class, "clipboard.copy",
+  gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL,
                                    gtk_text_view_activate_clipboard_copy);
-  gtk_widget_class_install_action (widget_class, "clipboard.paste",
+  gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL,
                                    gtk_text_view_activate_clipboard_paste);
-  gtk_widget_class_install_action (widget_class, "selection.delete",
+  gtk_widget_class_install_action (widget_class, "selection.delete", NULL,
                                    gtk_text_view_activate_selection_delete);
-  gtk_widget_class_install_action (widget_class, "selection.select-all",
+  gtk_widget_class_install_action (widget_class, "selection.select-all", NULL,
                                    gtk_text_view_activate_selection_select_all);
-  gtk_widget_class_install_action (widget_class, "misc.insert-emoji",
+  gtk_widget_class_install_action (widget_class, "misc.insert-emoji", NULL,
                                    gtk_text_view_activate_misc_insert_emoji);
 }
 
