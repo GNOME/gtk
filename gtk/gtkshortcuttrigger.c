@@ -18,7 +18,7 @@
  */
 
 /**
- * SECTION:GtkShortcutTrigger
+ * SECTION:gtkshortcuttrigger
  * @Title: GtkShortcutTrigger
  * @Short_description: Triggers to track if shortcuts should be activated
  * @See_also: #GtkShortcut
@@ -108,38 +108,38 @@ gtk_shortcut_trigger_new (const GtkShortcutTriggerClass *trigger_class)
 
 /**
  * gtk_shortcut_trigger_ref:
- * @trigger: a #GtkShortcutTrigger
+ * @self: a #GtkShortcutTrigger
  *
  * Acquires a reference on the given #GtkShortcutTrigger.
  *
  * Returns: (transfer full): the #GtkShortcutTrigger with an additional reference
  */
 GtkShortcutTrigger *
-gtk_shortcut_trigger_ref (GtkShortcutTrigger *trigger)
+gtk_shortcut_trigger_ref (GtkShortcutTrigger *self)
 {
-  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (trigger), NULL);
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER (self), NULL);
 
-  g_atomic_int_inc (&trigger->ref_count);
+  g_atomic_int_inc (&self->ref_count);
 
-  return trigger;
+  return self;
 }
 
 /**
  * gtk_shortcut_trigger_unref:
- * @trigger: (transfer full): a #GtkShortcutTrigger
+ * @self: (transfer full): a #GtkShortcutTrigger
  *
  * Releases a reference on the given #GtkShortcutTrigger.
  *
- * If the reference was the last, the resources associated to the @trigger are
+ * If the reference was the last, the resources associated to @self are
  * freed.
  */
 void
-gtk_shortcut_trigger_unref (GtkShortcutTrigger *trigger)
+gtk_shortcut_trigger_unref (GtkShortcutTrigger *self)
 {
-  g_return_if_fail (GTK_IS_SHORTCUT_TRIGGER (trigger));
+  g_return_if_fail (GTK_IS_SHORTCUT_TRIGGER (self));
 
-  if (g_atomic_int_dec_and_test (&trigger->ref_count))
-    gtk_shortcut_trigger_finalize (trigger);
+  if (g_atomic_int_dec_and_test (&self->ref_count))
+    gtk_shortcut_trigger_finalize (self);
 }
 
 /**
@@ -330,7 +330,7 @@ gtk_shortcut_trigger_print_label (GtkShortcutTrigger *self,
  * architectures or even different versions of GTK.  Do not use this
  * function as a basis for building protocols or file formats.
  *
- * The types of @trigger is #gconstpointer only to allow use of this
+ * The type of @trigger is #gconstpointer only to allow use of this
  * function with #GHashTable. They must each be a #GtkShortcutTrigger.
  *
  * Returns: a hash value corresponding to @trigger
@@ -614,38 +614,38 @@ gtk_keyval_trigger_new (guint           keyval,
 
 /**
  * gtk_keyval_trigger_get_modifiers:
- * @trigger: a keyval #GtkShortcutTrigger
+ * @self: a keyval #GtkShortcutTrigger
  *
  * Gets the modifiers that must be present to succeed triggering @self.
  *
  * Returns: the modifiers
  **/
 GdkModifierType
-gtk_keyval_trigger_get_modifiers (GtkShortcutTrigger *trigger)
+gtk_keyval_trigger_get_modifiers (GtkShortcutTrigger *self)
 {
-  GtkKeyvalTrigger *self = (GtkKeyvalTrigger *) trigger;
+  GtkKeyvalTrigger *t = (GtkKeyvalTrigger *) self;
 
-  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER_TYPE (trigger, GTK_SHORTCUT_TRIGGER_KEYVAL), 0);
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER_TYPE (self, GTK_SHORTCUT_TRIGGER_KEYVAL), 0);
 
-  return self->modifiers;
+  return t->modifiers;
 }
 
 /**
  * gtk_keyval_trigger_get_keyval:
- * @trigger: a keyval #GtkShortcutTrigger
+ * @self: a keyval #GtkShortcutTrigger
  *
  * Gets the keyval that must be pressed to succeed triggering @self.
  *
  * Returns: the keyval
  **/
 guint
-gtk_keyval_trigger_get_keyval (GtkShortcutTrigger *trigger)
+gtk_keyval_trigger_get_keyval (GtkShortcutTrigger *self)
 {
-  GtkKeyvalTrigger *self = (GtkKeyvalTrigger *) trigger;
+  GtkKeyvalTrigger *t = (GtkKeyvalTrigger *) self;
 
-  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER_TYPE (trigger, GTK_SHORTCUT_TRIGGER_KEYVAL), 0);
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER_TYPE (self, GTK_SHORTCUT_TRIGGER_KEYVAL), 0);
 
-  return self->keyval;
+  return t->keyval;
 }
 
 /*** GTK_MNEMONIC_TRIGGER ***/
@@ -783,20 +783,20 @@ gtk_mnemonic_trigger_new (guint keyval)
 
 /**
  * gtk_mnemonic_trigger_get_keyval:
- * @trigger: a mnemonic #GtkShortcutTrigger
+ * @self: a mnemonic #GtkShortcutTrigger
  *
  * Gets the keyval that must be pressed to succeed triggering @self.
  *
  * Returns: the keyval
  **/
 guint
-gtk_mnemonic_trigger_get_keyval (GtkShortcutTrigger *trigger)
+gtk_mnemonic_trigger_get_keyval (GtkShortcutTrigger *self)
 {
-  GtkMnemonicTrigger *self = (GtkMnemonicTrigger *) trigger;
+  GtkMnemonicTrigger *t = (GtkMnemonicTrigger *) self;
 
-  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER_TYPE (trigger, GTK_SHORTCUT_TRIGGER_MNEMONIC), 0);
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER_TYPE (self, GTK_SHORTCUT_TRIGGER_MNEMONIC), 0);
 
-  return self->keyval;
+  return t->keyval;
 }
 
 /*** GTK_ALTERNATIVE_TRIGGER ***/
@@ -951,13 +951,13 @@ gtk_alternative_trigger_new (GtkShortcutTrigger *first,
  * Returns: (transfer none): the first alternative trigger
  **/
 GtkShortcutTrigger *
-gtk_alternative_trigger_get_first (GtkShortcutTrigger *trigger)
+gtk_alternative_trigger_get_first (GtkShortcutTrigger *self)
 {
-  GtkAlternativeTrigger *self = (GtkAlternativeTrigger *) trigger;
+  GtkAlternativeTrigger *t = (GtkAlternativeTrigger *) self;
 
-  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER_TYPE (trigger, GTK_SHORTCUT_TRIGGER_ALTERNATIVE), 0);
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER_TYPE (self, GTK_SHORTCUT_TRIGGER_ALTERNATIVE), 0);
 
-  return self->first;
+  return t->first;
 }
 
 /**
@@ -970,12 +970,12 @@ gtk_alternative_trigger_get_first (GtkShortcutTrigger *trigger)
  * Returns: (transfer none): the second alternative trigger
  **/
 GtkShortcutTrigger *
-gtk_alternative_trigger_get_second (GtkShortcutTrigger *trigger)
+gtk_alternative_trigger_get_second (GtkShortcutTrigger *self)
 {
-  GtkAlternativeTrigger *self = (GtkAlternativeTrigger *) trigger;
+  GtkAlternativeTrigger *t = (GtkAlternativeTrigger *) self;
 
-  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER_TYPE (trigger, GTK_SHORTCUT_TRIGGER_ALTERNATIVE), 0);
+  g_return_val_if_fail (GTK_IS_SHORTCUT_TRIGGER_TYPE (self, GTK_SHORTCUT_TRIGGER_ALTERNATIVE), 0);
 
-  return self->second;
+  return t->second;
 }
 
