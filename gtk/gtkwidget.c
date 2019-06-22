@@ -4950,7 +4950,7 @@ gtk_widget_class_bind_action (GtkWidgetClass  *widget_class,
 {
   GtkWidgetClassPrivate *priv = widget_class->priv;
   gboolean found = FALSE;
-  GVariantType *type = NULL;
+  const GVariantType *type = NULL;
   GVariant *parameters = NULL;
   GtkShortcut *shortcut;
 
