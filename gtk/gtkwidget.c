@@ -13567,19 +13567,18 @@ gtk_widget_class_install_property_action (GtkWidgetClass *widget_class,
 }
 
 /**
- * gtk_widget_action_enabled_changed:
+ * gtk_widget_action_set_enabled:
  * @widget: a #GtkWidget
  * @action_name: action name, such as "clipboard.paste"
  * @enabled: whether the action is now enabled
  *
- * Notify when an action installed with
- * gtk_widget_class_install_action() changes its
- * enabled state.
+ * Enable or disable an action installed with
+ * gtk_widget_class_install_action().
  */
 void
-gtk_widget_action_enabled_changed (GtkWidget  *widget,
-                                   const char *action_name,
-                                   gboolean    enabled)
+gtk_widget_action_set_enabled (GtkWidget  *widget,
+                               const char *action_name,
+                               gboolean    enabled)
 {
   GtkActionMuxer *muxer;
 

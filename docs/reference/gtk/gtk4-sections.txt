@@ -4633,7 +4633,7 @@ GtkWidgetActionActivateFunc
 gtk_widget_class_install_action
 gtk_widget_class_install_property_action
 gtk_widget_class_query_action
-gtk_widget_action_enabled_changed
+gtk_widget_action_set_enabled
 
 <SUBSECTION Standard>
 GTK_WIDGET

@@ -1058,9 +1058,9 @@ gboolean               gtk_widget_class_query_action  (GtkWidgetClass      *widg
                                                        const GVariantType **state_type);
 
 GDK_AVAILABLE_IN_ALL
-void                    gtk_widget_action_enabled_changed (GtkWidget  *widget,
-                                                           const char *action_name,
-                                                           gboolean    enabled);
+void                    gtk_widget_action_set_enabled (GtkWidget  *widget,
+                                                       const char *action_name,
+                                                       gboolean    enabled);
 
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)

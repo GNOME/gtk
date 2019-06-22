@@ -6073,11 +6073,11 @@ gtk_label_update_actions (GtkLabel *label)
   else
     link = gtk_label_get_focus_link (label);
 
-  gtk_widget_action_enabled_changed (widget, "clipboard.copy", has_selection);
-  gtk_widget_action_enabled_changed (widget, "selection.select-all",
-                                     gtk_label_get_selectable (label));
-  gtk_widget_action_enabled_changed (widget, "link.open", !has_selection && link);
-  gtk_widget_action_enabled_changed (widget, "link.copy", !has_selection && link);
+  gtk_widget_action_set_enabled (widget, "clipboard.copy", has_selection);
+  gtk_widget_action_set_enabled (widget, "selection.select-all",
+                                 gtk_label_get_selectable (label));
+  gtk_widget_action_set_enabled (widget, "link.open", !has_selection && link);
+  gtk_widget_action_set_enabled (widget, "link.copy", !has_selection && link);
 }
 
 static GMenuModel *

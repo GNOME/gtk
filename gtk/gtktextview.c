@@ -8583,25 +8583,25 @@ gtk_text_view_update_clipboard_actions (GtkTextView *text_view)
 
   can_insert = gtk_text_iter_can_insert (&iter, priv->editable);
 
-  gtk_widget_action_enabled_changed (GTK_WIDGET (text_view), "clipboard.cut",
-			             have_selection &&
-                                     range_contains_editable_text (&sel_start, &sel_end, priv->editable));
-  gtk_widget_action_enabled_changed (GTK_WIDGET (text_view), "clipboard.copy",
-                                     have_selection);
-  gtk_widget_action_enabled_changed (GTK_WIDGET (text_view), "clipboard.paste",
-                                     can_insert && can_paste);
-  gtk_widget_action_enabled_changed (GTK_WIDGET (text_view), "selection.delete",
-			             have_selection &&
-                                     range_contains_editable_text (&sel_start, &sel_end, priv->editable));
-  gtk_widget_action_enabled_changed (GTK_WIDGET (text_view), "selection.select-all",
-                                     gtk_text_buffer_get_char_count (priv->buffer) > 0);
+  gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "clipboard.cut",
+                                 have_selection &&
+                                 range_contains_editable_text (&sel_start, &sel_end, priv->editable));
+  gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "clipboard.copy",
+                                 have_selection);
+  gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "clipboard.paste",
+                                 can_insert && can_paste);
+  gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "selection.delete",
+                                 have_selection &&
+                                 range_contains_editable_text (&sel_start, &sel_end, priv->editable));
+  gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "selection.select-all",
+                                 gtk_text_buffer_get_char_count (priv->buffer) > 0);
 }
 
 static void
 gtk_text_view_update_emoji_action (GtkTextView *text_view)
 {
-  gtk_widget_action_enabled_changed (GTK_WIDGET (text_view), "misc.insert-emoji",
-                                     (gtk_text_view_get_input_hints (text_view) & GTK_INPUT_HINT_NO_EMOJI) == 0);
+  gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "misc.insert-emoji",
+                                 (gtk_text_view_get_input_hints (text_view) & GTK_INPUT_HINT_NO_EMOJI) == 0);
 }
 
 static GMenuModel *

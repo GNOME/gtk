@@ -5723,24 +5723,24 @@ gtk_text_update_clipboard_actions (GtkText *self)
   has_content = priv->buffer && (gtk_entry_buffer_get_length (priv->buffer) > 0);
   visible = mode == DISPLAY_NORMAL;
 
-  gtk_widget_action_enabled_changed (GTK_WIDGET (self), "clipboard.cut",
-                                     visible && priv->editable && has_selection);
-  gtk_widget_action_enabled_changed (GTK_WIDGET (self), "clipboard.copy",
-                                     visible && has_selection);
-  gtk_widget_action_enabled_changed (GTK_WIDGET (self), "clipboard.paste",
-                                     priv->editable && has_clipboard);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "clipboard.cut",
+                                 visible && priv->editable && has_selection);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "clipboard.copy",
+                                 visible && has_selection);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "clipboard.paste",
+                                 priv->editable && has_clipboard);
 
-  gtk_widget_action_enabled_changed (GTK_WIDGET (self), "selection.delete",
-                                     priv->editable && has_selection);
-  gtk_widget_action_enabled_changed (GTK_WIDGET (self), "selection.select-all",
-                                     has_content);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "selection.delete",
+                                 priv->editable && has_selection);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "selection.select-all",
+                                 has_content);
 }
 
 static void
 gtk_text_update_emoji_action (GtkText *self)
 {
-  gtk_widget_action_enabled_changed (GTK_WIDGET (self), "misc.insert-emoji",
-                                     (gtk_text_get_input_hints (self) & GTK_INPUT_HINT_NO_EMOJI) == 0);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "misc.insert-emoji",
+                                 (gtk_text_get_input_hints (self) & GTK_INPUT_HINT_NO_EMOJI) == 0);
 }
 
 static GMenuModel *
