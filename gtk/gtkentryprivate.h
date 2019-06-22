@@ -112,6 +112,7 @@ void     _gtk_entry_completion_popdown      (GtkEntryCompletion *completion);
 void     _gtk_entry_completion_connect      (GtkEntryCompletion *completion,
                                              GtkEntry           *entry);
 void     _gtk_entry_completion_disconnect   (GtkEntryCompletion *completion);
+gboolean _gtk_entry_completion_accept       (GtkEntryCompletion *completion);
 
 GtkIMContext* _gtk_entry_get_im_context    (GtkEntry  *entry);
 void     gtk_entry_enter_text              (GtkEntry   *entry,
