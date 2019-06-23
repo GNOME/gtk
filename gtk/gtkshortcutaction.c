@@ -970,7 +970,7 @@ gtk_action_action_activate (GtkShortcutAction      *action,
                             GtkWidget              *widget,
                             GVariant               *args)
 {
-  GtkSignalAction *self = (GtkSignalAction *) action;
+  GtkActionAction *self = (GtkActionAction *) action;
   GActionGroup *action_group;
   const GVariantType *parameter_type;
   gboolean enabled;
