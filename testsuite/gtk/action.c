@@ -388,6 +388,31 @@ test_introspection (void)
   g_type_class_unref (class);
 }
 
+/* Test that disabled actions don't get activated */
+static void
+test_enabled (void)
+{
+  GtkWidget *text;
+
+  text = gtk_text_new ();
+  g_signal_connect (text, "notify::visibility",
+                    G_CALLBACK (visibility_toggled), NULL);
+
+  toggled = 0;
+
+  gtk_widget_activate_action (text, "misc.toggle-visibility", NULL);
+
+  g_assert_cmpint (toggled, ==, 1);
+
+  gtk_widget_action_set_enabled (text, "misc.toggle-visibility", FALSE);
+
+  gtk_widget_activate_action (text, "misc.toggle-visibility", NULL);
+
+  g_assert_cmpint (toggled, ==, 1);
+
+  gtk_widget_destroy (text);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -399,6 +424,7 @@ main (int   argc,
   g_test_add_func ("/action/overlap", test_overlap);
   g_test_add_func ("/action/overlap2", test_overlap2);
   g_test_add_func ("/action/introspection", test_introspection);
+  g_test_add_func ("/action/enabled", test_enabled);
 
   return g_test_run();
 }
