@@ -692,7 +692,9 @@ static void gtk_notebook_size_allocate       (GtkWidget           *widget,
                                               int                  width,
                                               int                  height,
                                               int                  baseline);
-static gboolean gtk_notebook_popup_menu      (GtkWidget        *widget);
+static gboolean gtk_notebook_popup_menu      (GtkWidget        *widget,
+                                              GVariant         *args,
+                                              gpointer          user_data);
 static void gtk_notebook_motion              (GtkEventController *controller,
                                               double              x,
                                               double              y,
@@ -977,7 +979,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->unmap = gtk_notebook_unmap;
   widget_class->measure = gtk_notebook_measure;
   widget_class->size_allocate = gtk_notebook_size_allocate;
-  widget_class->popup_menu = gtk_notebook_popup_menu;
   widget_class->grab_notify = gtk_notebook_grab_notify;
   widget_class->state_flags_changed = gtk_notebook_state_flags_changed;
   widget_class->focus = gtk_notebook_focus;
@@ -1308,6 +1309,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 
   add_tab_bindings (widget_class, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
   add_tab_bindings (widget_class, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+
+  /* Context menu */
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_F10, GDK_SHIFT_MASK,
+                                gtk_notebook_popup_menu, NULL);
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_Menu, 0,
+                                gtk_notebook_popup_menu, NULL);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_NOTEBOOK_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("notebook"));
@@ -2596,7 +2605,9 @@ gtk_notebook_gesture_pressed (GtkGestureClick *gesture,
 
 
 static gboolean
-gtk_notebook_popup_menu (GtkWidget *widget)
+gtk_notebook_popup_menu (GtkWidget *widget,
+                         GVariant  *args,
+                         gpointer   data)
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;

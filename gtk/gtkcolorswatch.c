@@ -422,10 +422,10 @@ gtk_color_swatch_measure (GtkWidget *widget,
   *natural = MAX (*natural, min);
 }
 
-
-
 static gboolean
-swatch_popup_menu (GtkWidget *widget)
+gtk_color_swatch_popup_menu (GtkWidget *widget,
+                             GVariant  *args,
+                             gpointer   user_data)
 {
   do_popup (GTK_COLOR_SWATCH (widget));
   return TRUE;
@@ -551,7 +551,6 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   widget_class->drag_begin = swatch_drag_begin;
   widget_class->drag_data_get = swatch_drag_data_get;
   widget_class->drag_data_received = swatch_drag_data_received;
-  widget_class->popup_menu = swatch_popup_menu;
   widget_class->size_allocate = swatch_size_allocate;
   widget_class->state_flags_changed = swatch_state_flags_changed;
 
@@ -564,6 +563,14 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   g_object_class_install_property (object_class, PROP_HAS_MENU,
       g_param_spec_boolean ("has-menu", P_("Has Menu"), P_("Whether the swatch should offer customization"),
                             TRUE, GTK_PARAM_READWRITE));
+
+    /* Context menu */
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_F10, GDK_SHIFT_MASK,
+                                gtk_color_swatch_popup_menu, NULL);
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_Menu, 0,
+                                gtk_color_swatch_popup_menu, NULL);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COLOR_SWATCH_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("colorswatch"));

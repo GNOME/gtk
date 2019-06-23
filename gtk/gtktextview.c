@@ -441,7 +441,9 @@ static void     gtk_text_view_drag_data_received (GtkWidget        *widget,
                                                   GdkDrop          *drop,
                                                   GtkSelectionData *selection_data);
 
-static gboolean gtk_text_view_popup_menu         (GtkWidget     *widget);
+static gboolean gtk_text_view_popup_menu    (GtkWidget     *widget,
+                                             GVariant      *args,
+                                             gpointer       data);
 static void gtk_text_view_move_cursor       (GtkTextView           *text_view,
                                              GtkMovementStep        step,
                                              gint                   count,
@@ -724,8 +726,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->drag_motion = gtk_text_view_drag_motion;
   widget_class->drag_drop = gtk_text_view_drag_drop;
   widget_class->drag_data_received = gtk_text_view_drag_data_received;
-
-  widget_class->popup_menu = gtk_text_view_popup_menu;
 
   container_class->add = gtk_text_view_add;
   container_class->remove = gtk_text_view_remove;
@@ -1627,6 +1627,14 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                        GDK_KEY_KP_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
                                        "move-focus",
                                        "(i)", GTK_DIR_TAB_BACKWARD);
+
+  /* Context menu */
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_F10, GDK_SHIFT_MASK,
+                                gtk_text_view_popup_menu, NULL);
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_Menu, 0,
+                                gtk_text_view_popup_menu, NULL);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_VIEW_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("textview"));
@@ -8780,7 +8788,9 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
 }
 
 static gboolean
-gtk_text_view_popup_menu (GtkWidget *widget)
+gtk_text_view_popup_menu (GtkWidget *widget,
+                          GVariant  *args,
+                          gpointer   data)
 {
   gtk_text_view_do_popup (GTK_TEXT_VIEW (widget), NULL);
   return TRUE;

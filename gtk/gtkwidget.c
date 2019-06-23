@@ -533,7 +533,6 @@ enum {
   DRAG_DROP,
   DRAG_DATA_GET,
   DRAG_DATA_RECEIVED,
-  POPUP_MENU,
   ACCEL_CLOSURES_CHANGED,
   DISPLAY_CHANGED,
   CAN_ACTIVATE_ACCEL,
@@ -2092,32 +2091,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                               _gtk_marshal_BOOLEAN__INT_INT_BOOLEAN_OBJECTv);
 
   /**
-   * GtkWidget::popup-menu:
-   * @widget: the object which received the signal
-   *
-   * This signal gets emitted whenever a widget should pop up a context
-   * menu. This usually happens through the standard key binding mechanism;
-   * by pressing a certain key while a widget is focused, the user can cause
-   * the widget to pop up a menu.  For example, the #GtkEntry widget creates
-   * a menu with clipboard commands. See the
-   * [Popup Menu Migration Checklist][checklist-popup-menu]
-   * for an example of how to use this signal.
-   *
-   * Returns: %TRUE if a menu was activated
-   */
-  widget_signals[POPUP_MENU] =
-    g_signal_new (I_("popup-menu"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-		  G_STRUCT_OFFSET (GtkWidgetClass, popup_menu),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__VOID,
-		  G_TYPE_BOOLEAN, 0);
-  g_signal_set_va_marshaller (widget_signals[POPUP_MENU],
-                              G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__VOIDv);
-
-  /**
    * GtkWidget::accel-closures-changed:
    * @widget: the object which received the signal.
    *
@@ -2157,15 +2130,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   g_signal_set_va_marshaller (widget_signals[CAN_ACTIVATE_ACCEL],
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__UINTv);
-
-  gtk_widget_class_add_binding_signal (klass,
-                                       GDK_KEY_F10, GDK_SHIFT_MASK,
-                                       "popup-menu",
-                                       NULL);
-  gtk_widget_class_add_binding_signal (klass,
-                                       GDK_KEY_Menu, 0,
-                                       "popup-menu",
-                                       NULL);
 
   gtk_widget_class_set_accessible_type (klass, GTK_TYPE_WIDGET_ACCESSIBLE);
   gtk_widget_class_set_css_name (klass, I_("widget"));

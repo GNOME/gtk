@@ -207,8 +207,6 @@ struct _GtkWidget
  *   dragged data has been received.
  * @drag_failed: Signal emitted on the drag source when a drag has
  *   failed.
- * @popup_menu: Signal emitted whenever a widget should pop up a
- *   context menu.
  * @get_accessible: Returns the accessible object that describes the
  *   widget to an assistive technology.
  * @can_activate_accel: Signal allows applications and derived widgets
@@ -306,9 +304,6 @@ struct _GtkWidgetClass
   gboolean (* drag_failed)         (GtkWidget          *widget,
                                     GdkDrag            *drag,
                                     GtkDragResult       result);
-
-  /* Signals used only for keybindings */
-  gboolean (* popup_menu)          (GtkWidget          *widget);
 
   /* accessibility support
    */
