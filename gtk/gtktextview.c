@@ -1610,23 +1610,23 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                        NULL);
 
   /* Control-tab focus motion */
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Tab, GDK_CONTROL_MASK,
-                                       "move-focus",
-                                       "(i)", GTK_DIR_TAB_FORWARD);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Tab, GDK_CONTROL_MASK,
-                                       "move-focus",
-                                       "(i)", GTK_DIR_TAB_FORWARD);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_Tab, GDK_CONTROL_MASK,
+                                "focus.move", "i",
+                                GTK_DIR_TAB_FORWARD);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_KP_Tab, GDK_CONTROL_MASK,
+                                "focus.move", "i",
+                                GTK_DIR_TAB_FORWARD);
   
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-                                       "move-focus",
-                                       "(i)", GTK_DIR_TAB_BACKWARD);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-                                       "move-focus",
-                                       "(i)", GTK_DIR_TAB_BACKWARD);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                "focus.move", "i",
+                                GTK_DIR_TAB_BACKWARD);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_KP_Tab, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                "focus.move", "i",
+                                GTK_DIR_TAB_BACKWARD);
 
   /* Context menu */
   gtk_widget_class_add_binding (widget_class,
@@ -5052,9 +5052,10 @@ gtk_text_view_key_controller_key_pressed (GtkEventControllerKey *controller,
 	  gtk_text_view_commit_text (text_view, "\t");
 	}
       else
-	g_signal_emit_by_name (text_view, "move-focus",
-                               (state & GDK_SHIFT_MASK) ?
-                               GTK_DIR_TAB_BACKWARD : GTK_DIR_TAB_FORWARD);
+        gtk_widget_activate_action (GTK_WIDGET (text_view), "focus.move",
+                                    "i", (state & GDK_SHIFT_MASK)
+                                         ? GTK_DIR_TAB_BACKWARD
+                                         : GTK_DIR_TAB_FORWARD);
 
       retval = TRUE;
     }
@@ -5956,7 +5957,8 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
           !gtk_widget_keynav_failed (GTK_WIDGET (text_view),
                                      leave_direction))
         {
-          g_signal_emit_by_name (text_view, "move-focus", leave_direction);
+          gtk_widget_activate_action (GTK_WIDGET (text_view), "focus.move",
+                                      "i", leave_direction);
         }
 
       return;
@@ -6141,7 +6143,8 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
       if (!gtk_widget_keynav_failed (GTK_WIDGET (text_view),
                                      leave_direction))
         {
-          g_signal_emit_by_name (text_view, "move-focus", leave_direction);
+          gtk_widget_activate_action (GTK_WIDGET (text_view), "focus.move",
+                                      "i", leave_direction);
         }
     }
   else if (! cancel_selection)

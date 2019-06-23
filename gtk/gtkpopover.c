@@ -610,13 +610,6 @@ gtk_popover_unrealize (GtkWidget *widget)
 }
 
 static void
-gtk_popover_move_focus (GtkWidget        *widget,
-                        GtkDirectionType  direction)
-{
-  g_signal_emit_by_name (gtk_widget_get_root (widget), "move-focus", direction);
-}
-
-static void
 gtk_popover_show (GtkWidget *widget)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
@@ -1299,7 +1292,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->measure = gtk_popover_measure;
   widget_class->size_allocate = gtk_popover_size_allocate;
   widget_class->snapshot = gtk_popover_snapshot;
-  widget_class->move_focus = gtk_popover_move_focus;
 
   container_class->add = gtk_popover_add;
   container_class->remove = gtk_popover_remove;

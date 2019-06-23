@@ -507,6 +507,9 @@ static void gtk_window_activate_default_activate (GtkWidget  *widget,
 static void gtk_window_activate_focus_activate   (GtkWidget  *widget,
                                                   const char *action_name,
                                                   GVariant   *parameter);
+static void gtk_window_activate_focus_move       (GtkWidget  *widget,
+                                                  const char *action_name,
+                                                  GVariant   *parameter);
 
 static void        gtk_window_do_popup         (GtkWindow      *window,
                                                 GdkEventButton *event);
@@ -594,8 +597,8 @@ add_tab_bindings (GtkWidgetClass   *widget_class,
   shortcut = gtk_shortcut_new_with_arguments (
                  gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_Tab, modifiers),
                                               gtk_keyval_trigger_new (GDK_KEY_KP_Tab, modifiers)),
-                 gtk_signal_action_new ("move-focus"),
-                 "(i)", direction);
+                 gtk_action_action_new ("focus.move"),
+                 "i", direction);
 
   gtk_widget_class_add_shortcut (widget_class, shortcut);
 
@@ -609,22 +612,18 @@ add_arrow_bindings (GtkWidgetClass   *widget_class,
 {
   guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
   
-  gtk_widget_class_add_binding_signal (widget_class, keysym, 0,
-                                       "move-focus",
-                                       "(i)",
-                                       direction);
-  gtk_widget_class_add_binding_signal (widget_class, keysym, GDK_CONTROL_MASK,
-                                       "move-focus",
-                                       "(i)",
-                                       direction);
-  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, 0,
-                                       "move-focus",
-                                       "(i)",
-                                       direction);
-  gtk_widget_class_add_binding_signal (widget_class, keypad_keysym, GDK_CONTROL_MASK,
-                                       "move-focus",
-                                       "(i)",
-                                       direction);
+  gtk_widget_class_bind_action (widget_class, keysym, 0,
+                                "focus.move", "i",
+                                direction);
+  gtk_widget_class_bind_action (widget_class, keysym, GDK_CONTROL_MASK,
+                                "focus.move", "i",
+                                direction);
+  gtk_widget_class_bind_action (widget_class, keypad_keysym, 0,
+                                "focus.move", "i",
+                                direction);
+  gtk_widget_class_bind_action (widget_class, keypad_keysym, GDK_CONTROL_MASK,
+                                "focus.move", "i",
+                                direction);
 }
 
 static guint32
@@ -1133,6 +1132,16 @@ gtk_window_class_init (GtkWindowClass *klass)
    */
   gtk_widget_class_install_action (widget_class, "focus.activate", NULL,
                                    gtk_window_activate_focus_activate);
+
+
+  /**
+   * GtkWindow|focus.move:
+   * @direction: a #GtkDirectionType indicating the direction to move fous in
+   *
+   * The focus.move action moves the focus in the given direction.
+   */
+  gtk_widget_class_install_action (widget_class, "focus.move", "i",
+                                   gtk_window_activate_focus_move);
 
   /**
    * GtkWindow|debugging.enable:
@@ -6027,6 +6036,18 @@ gtk_window_move_focus (GtkWidget        *widget,
 
   if (!gtk_widget_get_focus_child (widget))
     gtk_window_set_focus (GTK_WINDOW (widget), NULL);
+}
+
+static void
+gtk_window_activate_focus_move (GtkWidget  *widget,
+                                const char *action_name,
+                                GVariant   *parameter)
+{
+  GtkDirectionType dir;
+
+  dir = g_variant_get_int32 (parameter);
+  dir = CLAMP (dir, GTK_DIR_TAB_FORWARD, GTK_DIR_RIGHT);
+  gtk_window_move_focus (widget, dir);
 }
 
 /**

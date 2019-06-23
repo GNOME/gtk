@@ -1632,7 +1632,8 @@ gtk_notebook_move_focus_out (GtkNotebook      *notebook,
   g_object_ref (notebook);
 
   priv->focus_out = TRUE;
-  g_signal_emit_by_name (toplevel, "move-focus", direction_type);
+  gtk_widget_activate_action (GTK_WIDGET (notebook), "focus.move",
+                              "i", direction_type);
   priv->focus_out = FALSE;
 
   g_object_unref (notebook);
