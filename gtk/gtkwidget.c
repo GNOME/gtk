@@ -2891,6 +2891,8 @@ gtk_widget_root (GtkWidget *widget)
   if (priv->surface_transform_data)
     add_parent_surface_transform_changed_listener (widget);
 
+  _gtk_widget_update_parent_muxer (widget);
+
   GTK_WIDGET_GET_CLASS (widget)->root (widget);
 
   if (!GTK_IS_ROOT (widget))
@@ -2910,6 +2912,8 @@ gtk_widget_unroot (GtkWidget *widget)
   if (surface_transform_data &&
       surface_transform_data->tracked_parent)
     remove_parent_surface_transform_changed_listener (widget);
+
+  _gtk_widget_update_parent_muxer (widget);
 
   GTK_WIDGET_GET_CLASS (widget)->unroot (widget);
 
@@ -11862,7 +11866,7 @@ gtk_widget_get_modifier_mask (GtkWidget         *widget,
 
 static GtkActionMuxer *
 gtk_widget_get_parent_muxer (GtkWidget *widget,
-                              gboolean   create)
+                             gboolean   create)
 {
   GtkWidget *parent;
 
@@ -11890,7 +11894,7 @@ _gtk_widget_update_parent_muxer (GtkWidget *widget)
     return;
 
   gtk_action_muxer_set_parent (muxer,
-                               gtk_widget_get_parent_muxer (widget, TRUE));
+                               gtk_widget_get_parent_muxer (widget, FALSE));
 }
 
 GtkActionMuxer *
