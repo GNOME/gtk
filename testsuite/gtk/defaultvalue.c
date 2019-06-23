@@ -320,6 +320,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
            strcmp (pspec->name, "trigger") == 0))
         continue;
 
+      if (g_type_is_a (type, GTK_TYPE_SHORTCUT_CONTROLLER) &&
+	  strcmp (pspec->name, "model") == 0)
+        continue;
+
       if (g_type_is_a (type, GTK_TYPE_SPIN_BUTTON) &&
           (strcmp (pspec->name, "adjustment") == 0))
         continue;
