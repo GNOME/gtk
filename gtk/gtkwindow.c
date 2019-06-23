@@ -903,7 +903,7 @@ gtk_window_class_init (GtkWindowClass *klass)
       g_param_spec_boolean ("mnemonics-visible",
                             P_("Mnemonics Visible"),
                             P_("Whether mnemonics are currently visible in this window"),
-                            TRUE,
+                            FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
