@@ -2920,19 +2920,16 @@ gtk_scrolled_window_move_focus_out (GtkScrolledWindow *scrolled_window,
 				    GtkDirectionType   direction_type)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-  GtkWidget *toplevel;
 
   /* Focus out of the scrolled window entirely. We do this by setting
    * a flag, then propagating the focus motion to the notebook.
    */
-  toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (scrolled_window)));
-  if (!GTK_IS_ROOT (toplevel))
-    return;
 
   g_object_ref (scrolled_window);
 
   priv->focus_out = TRUE;
-  g_signal_emit_by_name (toplevel, "move-focus", direction_type);
+  gtk_widget_activate_action (GTK_WIDGET (scrolled_window),
+                              "focus.move", "i", direction_type);
   priv->focus_out = FALSE;
 
   g_object_unref (scrolled_window);

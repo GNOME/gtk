@@ -104,7 +104,7 @@ generate_focus_chain (GtkWidget        *window,
 
   while (TRUE)
     {
-      g_signal_emit_by_name (window, "move-focus", dir);
+      gtk_widget_activate_action (window, "focus.move", "i", dir);
 
       focus = gtk_window_get_focus (GTK_WINDOW (window));
 

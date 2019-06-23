@@ -206,8 +206,6 @@ static void       gtk_toolbar_size_allocate        (GtkWidget           *widget,
 static void       gtk_toolbar_style_updated        (GtkWidget           *widget);
 static gboolean   gtk_toolbar_focus                (GtkWidget           *widget,
 						    GtkDirectionType     dir);
-static void       gtk_toolbar_move_focus           (GtkWidget           *widget,
-						    GtkDirectionType     dir);
 static void       gtk_toolbar_root                 (GtkWidget           *widget);
 static void       gtk_toolbar_unroot               (GtkWidget           *widget);
 static void       gtk_toolbar_finalize             (GObject             *object);
@@ -312,6 +310,9 @@ static void            toolbar_tool_shell_iface_init        (GtkToolShellIface  
 static GtkOrientation  toolbar_get_orientation              (GtkToolShell        *shell);
 static GtkToolbarStyle toolbar_get_style                    (GtkToolShell        *shell);
 static void            toolbar_rebuild_menu                 (GtkToolShell        *shell);
+static void gtk_toolbar_activate_focus_move (GtkWidget  *widget,
+                                             const char *action_name,
+                                             GVariant   *parameter);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkToolbar, gtk_toolbar, GTK_TYPE_CONTAINER,
@@ -327,18 +328,16 @@ static guint toolbar_signals[LAST_SIGNAL] = { 0 };
 static void
 add_arrow_bindings (GtkWidgetClass  *widget_class,
 		    guint            keysym,
-		    GtkDirectionType dir)
+		    GtkDirectionType direction)
 {
   guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
   
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       keysym, 0,
-                                       "move-focus",
-                                       "(i)", dir);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       keypad_keysym, 0,
-                                       "move-focus",
-                                       "(i)", dir);
+  gtk_widget_class_bind_action (widget_class,
+                                keysym, 0,
+                                "focus.move", "i", direction);
+  gtk_widget_class_bind_action (widget_class,
+                                keypad_keysym, 0,
+                                "focus.move", "i", direction);
 }
 
 static void
@@ -346,14 +345,12 @@ add_ctrl_tab_bindings (GtkWidgetClass  *widget_class,
 		       GdkModifierType   modifiers,
 		       GtkDirectionType  direction)
 {
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Tab, GDK_CONTROL_MASK | modifiers,
-                                       "move-focus",
-                                       "(i)", direction);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Tab, GDK_CONTROL_MASK | modifiers,
-                                       "move-focus",
-                                       "(i)", direction);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_Tab, GDK_CONTROL_MASK | modifiers,
+                                "focus.move", "i", direction);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_KP_Tab, GDK_CONTROL_MASK | modifiers,
+                                "focus.move", "i", direction);
 }
 
 static void
@@ -380,12 +377,14 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TOOL_BAR);
 
-  /* need to override the base class function via override_class_handler,
-   * because the signal slot is not available in GtkWidgetClass
+  /**
+   * GtkToolbar|focus.move:
+   * @direction: a #GtkDirectionType indicating the direction to move fous in
+   *
+   * The focus.move action moves the focus in the given direction.
    */
-  g_signal_override_class_handler ("move-focus",
-                                   GTK_TYPE_TOOLBAR,
-                                   G_CALLBACK (gtk_toolbar_move_focus));
+  gtk_widget_class_install_action (widget_class, "focus.move", "i",
+                                   gtk_toolbar_activate_focus_move);
 
   widget_class->root = gtk_toolbar_root;
   widget_class->unroot = gtk_toolbar_unroot;
@@ -1579,10 +1578,12 @@ gtk_toolbar_focus_home_or_end (GtkToolbar *toolbar,
  * Ctrl TAB or an arrow key.
  */
 static void
-gtk_toolbar_move_focus (GtkWidget        *widget,
-			GtkDirectionType  dir)
+gtk_toolbar_activate_focus_move (GtkWidget  *widget,
+                                 const char *action_name,
+                                 GVariant   *parameter)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
+  GtkDirectionType dir = g_variant_get_int32 (parameter);
   GtkWidget *focus_child;
   GList *list;
   gboolean try_focus = FALSE;
