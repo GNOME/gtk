@@ -1,3 +1,6 @@
+#include <gtk/gtk.h>
+#include <gtk/gtkunixprint.h>
+
 gtk_about_dialog_get_type
 gtk_accel_group_get_type
 gtk_accel_label_get_type
