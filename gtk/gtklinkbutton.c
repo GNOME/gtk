@@ -123,7 +123,9 @@ static void     gtk_link_button_set_property (GObject          *object,
 					      const GValue     *value,
 					      GParamSpec       *pspec);
 static void     gtk_link_button_clicked      (GtkButton        *button);
-static gboolean gtk_link_button_popup_menu   (GtkWidget        *widget);
+static gboolean gtk_link_button_popup_menu   (GtkWidget        *widget,
+                                              GVariant         *args,
+                                              gpointer          user_data);
 static void gtk_link_button_drag_data_get_cb (GtkWidget        *widget,
 					      GdkDrag          *drag,
 					      GtkSelectionData *selection,
@@ -172,8 +174,6 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   gobject_class->set_property = gtk_link_button_set_property;
   gobject_class->get_property = gtk_link_button_get_property;
   gobject_class->finalize = gtk_link_button_finalize;
-
-  widget_class->popup_menu = gtk_link_button_popup_menu;
 
   button_class->clicked = gtk_link_button_clicked;
 
@@ -229,11 +229,19 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
                   _gtk_marshal_BOOLEAN__VOID,
                   G_TYPE_BOOLEAN, 0);
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LINK_BUTTON_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, I_("button"));
-
   gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL,
                                    gtk_link_button_activate_clipboard_copy);
+
+  /* Context menu */
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_F10, GDK_SHIFT_MASK,
+                                gtk_link_button_popup_menu, NULL);
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_Menu, 0,
+                                gtk_link_button_popup_menu, NULL);
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LINK_BUTTON_ACCESSIBLE);
+  gtk_widget_class_set_css_name (widget_class, I_("button"));
 }
 
 static GMenuModel *
@@ -443,7 +451,9 @@ gtk_link_button_clicked (GtkButton *button)
 }
 
 static gboolean
-gtk_link_button_popup_menu (GtkWidget *widget)
+gtk_link_button_popup_menu (GtkWidget *widget,
+                            GVariant  *args,
+                            gpointer   user_data)
 {
   gtk_link_button_do_popup (GTK_LINK_BUTTON (widget), -1, -1);
   return TRUE;

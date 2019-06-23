@@ -375,7 +375,9 @@ static void        gtk_text_set_alignment        (GtkText    *self,
 /* Default signal handlers
  */
 static GMenuModel *gtk_text_get_menu_model  (GtkText         *self);
-static gboolean gtk_text_popup_menu         (GtkWidget       *widget);
+static gboolean gtk_text_popup_menu         (GtkWidget       *widget,
+                                             GVariant        *args,
+                                             gpointer         user_data);
 static void     gtk_text_move_cursor        (GtkText         *self,
                                              GtkMovementStep  step,
                                              int              count,
@@ -700,7 +702,6 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->state_flags_changed = gtk_text_state_flags_changed;
   widget_class->root = gtk_text_root;
   widget_class->mnemonic_activate = gtk_text_mnemonic_activate;
-  widget_class->popup_menu = gtk_text_popup_menu;
   widget_class->drag_drop = gtk_text_drag_drop;
   widget_class->drag_motion = gtk_text_drag_motion;
   widget_class->drag_leave = gtk_text_drag_leave;
@@ -1230,6 +1231,14 @@ gtk_text_class_init (GtkTextClass *class)
                                 GDK_KEY_semicolon, GDK_CONTROL_MASK,
                                 "misc.insert-emoji",
                                 NULL);
+
+  /* Context menu */
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_F10, GDK_SHIFT_MASK,
+                                gtk_text_popup_menu, NULL);
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_Menu, 0,
+                                gtk_text_popup_menu, NULL);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_ACCESSIBLE);
   gtk_widget_class_set_css_name (widget_class, I_("text"));
@@ -5655,7 +5664,9 @@ gtk_text_mnemonic_activate (GtkWidget *widget,
 }
 
 static gboolean
-gtk_text_popup_menu (GtkWidget *widget)
+gtk_text_popup_menu (GtkWidget *widget,
+                     GVariant  *args,
+                     gpointer   user_data)
 {
   gtk_text_do_popup (GTK_TEXT (widget), -1, -1);
   return TRUE;

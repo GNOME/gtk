@@ -484,7 +484,9 @@ static void gtk_label_recalculate                (GtkLabel      *label);
 static void gtk_label_root                       (GtkWidget     *widget);
 static void gtk_label_map                        (GtkWidget     *widget);
 static void gtk_label_unmap                      (GtkWidget     *widget);
-static gboolean gtk_label_popup_menu             (GtkWidget     *widget);
+static gboolean gtk_label_popup_menu             (GtkWidget     *widget,
+                                                  GVariant      *args,
+                                                  gpointer       user_data);
 static void gtk_label_do_popup                   (GtkLabel      *label,
                                                   double         x,
                                                   double         y);
@@ -654,7 +656,6 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->map = gtk_label_map;
   widget_class->unmap = gtk_label_unmap;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
-  widget_class->popup_menu = gtk_label_popup_menu;
   widget_class->drag_data_get = gtk_label_drag_data_get;
   widget_class->grab_focus = gtk_label_grab_focus;
   widget_class->focus = gtk_label_focus;
@@ -1136,6 +1137,14 @@ gtk_label_class_init (GtkLabelClass *class)
                                        GDK_KEY_KP_Enter, 0,
 				       "activate-current-link",
                                        NULL);
+
+  /* Context menu */
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_F10, GDK_SHIFT_MASK,
+                                gtk_label_popup_menu, NULL);
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_Menu, 0,
+                                gtk_label_popup_menu, NULL);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LABEL_ACCESSIBLE);
 
@@ -6133,11 +6142,11 @@ gtk_label_do_popup (GtkLabel *label,
 }
 
 static gboolean
-gtk_label_popup_menu (GtkWidget *widget)
+gtk_label_popup_menu (GtkWidget *widget,
+                      GVariant  *args,
+                      gpointer   user_data)
 {
-  GtkLabel *label = GTK_LABEL (widget);
-
-  gtk_label_do_popup (label, -1, -1);
+  gtk_label_do_popup (GTK_LABEL (widget), -1, -1);
   return TRUE;
 }
 

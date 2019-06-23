@@ -234,7 +234,9 @@ static void       gtk_toolbar_arrow_button_press   (GtkGesture          *gesture
 						    GtkToolbar          *toolbar);
 static void       gtk_toolbar_arrow_button_clicked (GtkWidget           *button,
 						    GtkToolbar          *toolbar);
-static gboolean   gtk_toolbar_popup_menu           (GtkWidget           *toolbar);
+static gboolean   gtk_toolbar_popup_menu           (GtkWidget           *toolbar,
+                                                    GVariant            *args,
+                                                    gpointer             data);
 static void       gtk_toolbar_reconfigured         (GtkToolbar          *toolbar);
 
 static void       gtk_toolbar_measure              (GtkWidget      *widget,
@@ -387,7 +389,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 
   widget_class->root = gtk_toolbar_root;
   widget_class->unroot = gtk_toolbar_unroot;
-  widget_class->popup_menu = gtk_toolbar_popup_menu;
 
   container_class->add    = gtk_toolbar_add;
   container_class->remove = gtk_toolbar_remove;
@@ -523,6 +524,14 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 
   add_ctrl_tab_bindings (widget_class, 0, GTK_DIR_TAB_FORWARD);
   add_ctrl_tab_bindings (widget_class, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
+
+  /* Context menu */
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_F10, GDK_SHIFT_MASK,
+                                gtk_toolbar_popup_menu, NULL);
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_Menu, 0,
+                                gtk_toolbar_popup_menu, NULL);
 
   gtk_widget_class_set_css_name (widget_class, I_("toolbar"));
 }
@@ -2234,7 +2243,9 @@ gtk_toolbar_pressed_cb (GtkGestureClick *gesture,
 }
 
 static gboolean
-gtk_toolbar_popup_menu (GtkWidget *toolbar)
+gtk_toolbar_popup_menu (GtkWidget *toolbar,
+                        GVariant  *args,
+                        gpointer   data)
 {
   gboolean return_value;
   /* This function is the handler for the "popup menu" keybinding,
