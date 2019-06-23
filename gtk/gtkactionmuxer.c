@@ -648,10 +648,13 @@ gtk_action_muxer_activate_action (GActionGroup *action_group,
           GtkWidgetAction *action = g_ptr_array_index (muxer->widget_actions, i);
           if (strcmp (action->name, action_name) == 0)
             {
-              if (action->activate)
-                action->activate (muxer->widget, action->name, parameter);
-              else if (action->pspec)
-                prop_action_activate (muxer->widget, action, parameter);
+              if (muxer->widget_actions_enabled[i])
+                {
+                  if (action->activate)
+                    action->activate (muxer->widget, action->name, parameter);
+                  else if (action->pspec)
+                    prop_action_activate (muxer->widget, action, parameter);
+                }
 
               return;
             }
