@@ -291,7 +291,6 @@ static const char *dnd_dest_targets [] = {
 enum {
   SET_FOCUS,
   ACTIVATE_FOCUS,
-  ACTIVATE_DEFAULT,
   KEYS_CHANGED,
   ENABLE_DEBUGGING,
   CLOSE_REQUEST,
@@ -436,7 +435,6 @@ static gint gtk_window_focus              (GtkWidget        *widget,
 static void gtk_window_move_focus         (GtkWidget         *widget,
                                            GtkDirectionType   dir);
 
-static void gtk_window_real_activate_default (GtkWindow         *window);
 static void gtk_window_real_activate_focus   (GtkWindow         *window);
 static void gtk_window_keys_changed          (GtkWindow         *window);
 static gboolean gtk_window_enable_debugging  (GtkWindow         *window,
@@ -819,7 +817,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   container_class->remove = gtk_window_remove;
   container_class->forall = gtk_window_forall;
 
-  klass->activate_default = gtk_window_real_activate_default;
   klass->activate_focus = gtk_window_real_activate_focus;
   klass->keys_changed = gtk_window_keys_changed;
   klass->enable_debugging = gtk_window_enable_debugging;
@@ -1092,25 +1089,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkWindowClass, activate_focus),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE,
-                  0);
-
-  /**
-   * GtkWindow::activate-default:
-   * @window: the window which received the signal
-   *
-   * The ::activate-default signal is a
-   * [keybinding signal][GtkBindingSignal]
-   * which gets emitted when the user activates the default widget
-   * of @window.
-   */
-  window_signals[ACTIVATE_DEFAULT] =
-    g_signal_new (I_("activate-default"),
-                  G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkWindowClass, activate_default),
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE,
@@ -1788,7 +1766,14 @@ gtk_window_activate_default_activate (GtkWidget  *widget,
                                       const char *name,
                                       GVariant   *parameter)
 {
-  gtk_window_real_activate_default (GTK_WINDOW (widget));
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  if (priv->default_widget && gtk_widget_is_sensitive (priv->default_widget) &&
+      (!priv->focus_widget || !gtk_widget_get_receives_default (priv->focus_widget)))
+    gtk_widget_activate (priv->default_widget);
+  else if (priv->focus_widget && gtk_widget_is_sensitive (priv->focus_widget))
+    gtk_widget_activate (priv->focus_widget);
 }
 
 static void
@@ -2571,18 +2556,6 @@ gtk_window_get_focus (GtkWindow *window)
     return priv->initial_focus;
   else
     return priv->focus_widget;
-}
-
-static void
-gtk_window_real_activate_default (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (priv->default_widget && gtk_widget_is_sensitive (priv->default_widget) &&
-      (!priv->focus_widget || !gtk_widget_get_receives_default (priv->focus_widget)))
-    gtk_widget_activate (priv->default_widget);
-  else if (priv->focus_widget && gtk_widget_is_sensitive (priv->focus_widget))
-    gtk_widget_activate (priv->focus_widget);
 }
 
 /**
