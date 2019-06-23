@@ -436,8 +436,9 @@ static void gtk_window_move_focus         (GtkWidget         *widget,
                                            GtkDirectionType   dir);
 
 static void gtk_window_keys_changed          (GtkWindow         *window);
-static gboolean gtk_window_enable_debugging  (GtkWindow         *window,
-                                              gboolean           toggle);
+static void gtk_window_activate_debugging_enable (GtkWidget  *widget,
+                                                  const char *action_name,
+                                                  GVariant   *parameter);
 static void gtk_window_snapshot                    (GtkWidget   *widget,
                                                     GtkSnapshot *snapshot);
 static void gtk_window_unset_transient_for         (GtkWindow  *window);
@@ -820,7 +821,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   container_class->forall = gtk_window_forall;
 
   klass->keys_changed = gtk_window_keys_changed;
-  klass->enable_debugging = gtk_window_enable_debugging;
   klass->close_request = gtk_window_close_request;
 
   window_props[PROP_TYPE] =
@@ -1094,32 +1094,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                   0);
 
   /**
-   * GtkWindow::enable-debugging:
-   * @window: the window on which the signal is emitted
-   * @toggle: toggle the debugger
-   *
-   * The ::enable-debugging signal is a [keybinding signal][GtkBindingSignal]
-   * which gets emitted when the user enables or disables interactive
-   * debugging. When @toggle is %TRUE, interactive debugging is toggled
-   * on or off, when it is %FALSE, the debugger will be pointed at the
-   * widget under the pointer.
-   *
-   * The default bindings for this signal are Ctrl-Shift-I
-   * and Ctrl-Shift-D.
-   *
-   * Return: %TRUE if the key binding was handled
-   */
-  window_signals[ENABLE_DEBUGGING] =
-    g_signal_new (I_("enable-debugging"),
-                  G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkWindowClass, enable_debugging),
-                  NULL, NULL,
-                  _gtk_marshal_BOOLEAN__BOOLEAN,
-                  G_TYPE_BOOLEAN,
-                  1, G_TYPE_BOOLEAN);
-
-  /**
    * GtkWindow::close-request:
    * @window: the window on which the signal is emitted
    *
@@ -1160,6 +1134,23 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_widget_class_install_action (widget_class, "focus.activate", NULL,
                                    gtk_window_activate_focus_activate);
 
+  /**
+   * GtkWindow|debugging.enable:
+   * @toggle: whether to toggle or enable
+   *
+   * The debugging.enable action enables or disables interactive
+   * debugging.
+   *
+   * When @toggle is %TRUE, interactive debugging is toggled
+   * on or off, when it is %FALSE, the debugger will be pointed
+   * at the widget under the pointer.
+   *
+   * The default bindings for this action are Ctrl-Shift-I
+   * and Ctrl-Shift-D.
+   */
+  gtk_widget_class_install_action (widget_class, "debugging.enable", "b",
+                                   gtk_window_activate_debugging_enable);
+
   /*
    * Key bindings
    */
@@ -1176,10 +1167,10 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_widget_class_bind_action (widget_class, GDK_KEY_KP_Enter, 0,
                                 "default.activate", NULL);
 
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_I, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
-                                       "enable-debugging", "(b)", FALSE);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_D, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
-                                       "enable-debugging", "(b)", TRUE);
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_I, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
+                                "debugging.enable", "b", FALSE);
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_D, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
+                                "debugging.enable", "b", TRUE);
 
   add_arrow_bindings (widget_class, GDK_KEY_Up, GTK_DIR_UP);
   add_arrow_bindings (widget_class, GDK_KEY_Down, GTK_DIR_DOWN);
@@ -8507,14 +8498,18 @@ set_warn_again (gboolean warn)
     }
 }
 
-static gboolean
-gtk_window_enable_debugging (GtkWindow *window,
-                             gboolean   toggle)
+static void
+gtk_window_activate_debugging_enable (GtkWidget  *widget,
+                                      const char *action_name,
+                                      GVariant   *parameter)
 {
+  gboolean toggle;
   gboolean warn;
 
+  toggle = g_variant_get_boolean (parameter);
+
   if (!inspector_keybinding_enabled (&warn))
-    return FALSE;
+    return;
 
   if (toggle)
     {
@@ -8526,8 +8521,6 @@ gtk_window_enable_debugging (GtkWindow *window,
     }
   else
     gtk_window_set_debugging (TRUE, TRUE, warn);
-
-  return TRUE;
 }
 
 void
