@@ -226,12 +226,11 @@ activate_color (GtkColorSwatch *swatch)
 {
   GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (swatch);
   gtk_widget_activate_action (GTK_WIDGET (swatch),
-                              "color.select",
-                              g_variant_new ("(dddd)",
-                                             priv->color.red,
-                                             priv->color.green,
-                                             priv->color.blue,
-                                             priv->color.alpha));
+                              "color.select", "(dddd)",
+                              priv->color.red,
+                              priv->color.green,
+                              priv->color.blue,
+                              priv->color.alpha);
 }
 
 static void
@@ -239,12 +238,11 @@ customize_color (GtkColorSwatch *swatch)
 {
   GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (swatch);
   gtk_widget_activate_action (GTK_WIDGET (swatch),
-                              "color.customize",
-                              g_variant_new ("(dddd)",
-                                             priv->color.red,
-                                             priv->color.green,
-                                             priv->color.blue,
-                                             priv->color.alpha));
+                              "color.customize", "(dddd)",
+                              priv->color.red,
+                              priv->color.green,
+                              priv->color.blue,
+                              priv->color.alpha);
 }
 
 static gboolean

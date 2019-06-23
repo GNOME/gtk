@@ -12428,7 +12428,9 @@ gtk_widget_get_template_child (GtkWidget   *widget,
  * gtk_widget_activate_action:
  * @widget: a #GtkWidget
  * @name: a prefixed action name
- * @parameter: parameters that required by the action
+ * @format_string: GVariant format string for arguments or %NULL
+ *    for no arguments
+ * @...: arguments, as given by format string
  *
  * Looks up the action in the action groups associated
  * with @widget and its ancestors, and activates it.
@@ -12437,21 +12439,39 @@ gtk_widget_get_template_child (GtkWidget   *widget,
  * prefix that was used when adding the action group
  * with gtk_widget_insert_action_group().
  *
- * The @parameter must match the actions expected parameter
+ * The arguments must match the actions expected parameter
  * type, as returned by g_action_get_parameter_type().
  */
 void
 gtk_widget_activate_action (GtkWidget  *widget,
                             const char *name,
-                            GVariant   *parameter)
+                            const char *format_string,
+                            ...)
 {
   GtkActionMuxer *muxer;
 
   muxer = _gtk_widget_get_action_muxer (widget, FALSE);
   if (muxer)
-    g_action_group_activate_action (G_ACTION_GROUP (muxer),
-                                    name,
-                                    parameter);
+    {
+      GVariant *parameters = NULL;
+
+      if (format_string != NULL)
+        {
+          va_list args;
+
+          va_start (args, format_string);
+          parameters = g_variant_new_va (format_string, NULL, &args);
+          va_end (args);
+
+          g_variant_ref_sink (parameters);
+        }
+
+      g_action_group_activate_action (G_ACTION_GROUP (muxer),
+                                      name,
+                                      parameters);
+
+      g_clear_pointer (&parameters, g_variant_unref);
+    }
 }
 
 /**

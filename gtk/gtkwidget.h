@@ -978,7 +978,8 @@ void                    gtk_widget_insert_action_group  (GtkWidget    *widget,
 GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_activate_action      (GtkWidget  *widget,
                                                          const char *name,
-                                                         GVariant   *parameter);
+                                                         const char *format_string,
+                                                         ...);
 
 GDK_AVAILABLE_IN_ALL
 void                   gtk_widget_activate_default      (GtkWidget *widget);
