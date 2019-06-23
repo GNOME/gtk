@@ -2997,10 +2997,18 @@ gtk_flow_box_add_move_binding (GtkWidgetClass  *widget_class,
   GdkModifierType modify_mod_mask = GDK_CONTROL_MASK;
 
   display = gdk_display_get_default ();
-  extend_mod_mask = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
-                                                  GDK_MODIFIER_INTENT_EXTEND_SELECTION);
-  modify_mod_mask = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
-                                                  GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+  if (display)
+    {
+      extend_mod_mask = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
+                                                      GDK_MODIFIER_INTENT_EXTEND_SELECTION);
+      modify_mod_mask = gdk_keymap_get_modifier_mask (gdk_display_get_keymap (display),
+                                                      GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+    }
+  else
+    {
+      extend_mod_mask = GDK_SHIFT_MASK;
+      modify_mod_mask = GDK_CONTROL_MASK;
+    }
 
   gtk_widget_class_add_binding_signal (widget_class,
                                        keyval, modmask,
