@@ -435,7 +435,6 @@ static gint gtk_window_focus              (GtkWidget        *widget,
 static void gtk_window_move_focus         (GtkWidget         *widget,
                                            GtkDirectionType   dir);
 
-static void gtk_window_real_activate_focus   (GtkWindow         *window);
 static void gtk_window_keys_changed          (GtkWindow         *window);
 static gboolean gtk_window_enable_debugging  (GtkWindow         *window,
                                               gboolean           toggle);
@@ -501,9 +500,12 @@ static void        gtk_window_on_theme_variant_changed (GtkSettings *settings,
 #endif
 static void        gtk_window_set_theme_variant         (GtkWindow  *window);
 
-static void gtk_window_activate_default_activate (GtkWidget *widget,
+static void gtk_window_activate_default_activate (GtkWidget  *widget,
                                                   const char *action_name,
-                                                  GVariant *parameter);
+                                                  GVariant   *parameter);
+static void gtk_window_activate_focus_activate   (GtkWidget  *widget,
+                                                  const char *action_name,
+                                                  GVariant   *parameter);
 
 static void        gtk_window_do_popup         (GtkWindow      *window,
                                                 GdkEventButton *event);
@@ -817,7 +819,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   container_class->remove = gtk_window_remove;
   container_class->forall = gtk_window_forall;
 
-  klass->activate_focus = gtk_window_real_activate_focus;
   klass->keys_changed = gtk_window_keys_changed;
   klass->enable_debugging = gtk_window_enable_debugging;
   klass->close_request = gtk_window_close_request;
@@ -1076,25 +1077,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_root_install_properties (gobject_class, LAST_ARG);
 
   /**
-   * GtkWindow::activate-focus:
-   * @window: the window which received the signal
-   *
-   * The ::activate-focus signal is a
-   * [keybinding signal][GtkBindingSignal]
-   * which gets emitted when the user activates the currently
-   * focused widget of @window.
-   */
-  window_signals[ACTIVATE_FOCUS] =
-    g_signal_new (I_("activate-focus"),
-                  G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkWindowClass, activate_focus),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE,
-                  0);
-
-  /**
    * GtkWindow::keys-changed:
    * @window: the window which received the signal
    *
@@ -1162,19 +1144,30 @@ gtk_window_class_init (GtkWindowClass *klass)
    * GtkWindow|default.activate:
    *
    * The default.activate action activates the default
-   * widget in the window.
+   * widget in the window, if there is one.
+   *
+   * See the #GtkWindow:default-widget property.
    */
   gtk_widget_class_install_action (widget_class, "default.activate", NULL,
                                    gtk_window_activate_default_activate);
+
+  /**
+   * GtkWindow|focus.activate:
+   *
+   * The focus.activate action activates the focus
+   * widget in the window, if it is activatable.
+   */
+  gtk_widget_class_install_action (widget_class, "focus.activate", NULL,
+                                   gtk_window_activate_focus_activate);
 
   /*
    * Key bindings
    */
 
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, 0,
-                                       "activate-focus", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, 0,
-                                       "activate-focus", NULL);
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_space, 0,
+                                "focus.activate", NULL);
+  gtk_widget_class_bind_action (widget_class, GDK_KEY_KP_Space, 0,
+                                "focus.activate", NULL);
   
   gtk_widget_class_bind_action (widget_class, GDK_KEY_Return, 0,
                                 "default.activate", NULL);
@@ -1781,6 +1774,18 @@ gtk_window_activate_default_activate (GtkWidget  *widget,
       (!priv->focus_widget || !gtk_widget_get_receives_default (priv->focus_widget)))
     gtk_widget_activate (priv->default_widget);
   else if (priv->focus_widget && gtk_widget_is_sensitive (priv->focus_widget))
+    gtk_widget_activate (priv->focus_widget);
+}
+
+static void
+gtk_window_activate_focus_activate (GtkWidget  *widget,
+                                    const char *name,
+                                    GVariant   *parameter)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  if (priv->focus_widget && gtk_widget_is_sensitive (priv->focus_widget))
     gtk_widget_activate (priv->focus_widget);
 }
 
@@ -5781,15 +5786,6 @@ get_active_region_type (GtkWindow *window, gint x, gint y)
     }
 
   return GTK_WINDOW_REGION_CONTENT;
-}
-
-static void
-gtk_window_real_activate_focus (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (priv->focus_widget && gtk_widget_is_sensitive (priv->focus_widget))
-    gtk_widget_activate (priv->focus_widget);
 }
 
 static gboolean
