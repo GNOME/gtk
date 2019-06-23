@@ -71,11 +71,7 @@ struct _GtkWindowClass
 
   /*< public >*/
 
-  /* G_SIGNAL_ACTION signals for keybindings */
-
   void	   (* keys_changed)     (GtkWindow *window);
-  gboolean (* enable_debugging) (GtkWindow *window,
-                                 gboolean   toggle);
   gboolean (* close_request)    (GtkWindow *window);
 
   /*< private >*/
