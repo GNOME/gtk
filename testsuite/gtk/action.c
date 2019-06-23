@@ -214,6 +214,26 @@ g_test_action_muxer (void)
 
 /* main */
 
+static void
+test_reinsert (void)
+{
+  GtkWidget *widget;
+  GActionGroup *group;
+
+  widget = gtk_label_new ("");
+  group = G_ACTION_GROUP (g_simple_action_group_new ());
+
+  gtk_widget_insert_action_group (widget, "test", group);
+  g_assert (gtk_widget_get_action_group (widget, "test") == group);
+
+  g_clear_object (&group);
+
+  group = gtk_widget_get_action_group (widget, "test");
+  gtk_widget_insert_action_group (widget, "test", group);
+
+  gtk_widget_destroy (widget);
+}
+
 int
 main (int    argc,
       char **argv)
@@ -227,6 +247,7 @@ main (int    argc,
               action_test_teardown);
 
   g_test_add_func ("/action/muxer/update-parent", g_test_action_muxer);
+  g_test_add_func ("/action/reinsert", test_reinsert);
 
   return g_test_run ();
 }
