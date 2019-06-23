@@ -971,31 +971,11 @@ gtk_action_action_activate (GtkShortcutAction      *action,
                             GVariant               *args)
 {
   GtkActionAction *self = (GtkActionAction *) action;
-  GActionGroup *action_group;
-  const GVariantType *parameter_type;
-  gboolean enabled;
+  GActionGroup *group;
 
-  action_group = G_ACTION_GROUP (_gtk_widget_get_action_muxer (widget, FALSE));
-  if (action_group == NULL)
-    return FALSE;
-
-  if (!g_action_group_query_action (action_group, self->name, &enabled, &parameter_type, NULL, NULL, NULL))
-    return FALSE;
-
-  if (!enabled)
-    return FALSE;
-
-  /* We found an action with the correct name and it's enabled.
-   * This is the action that we are going to try to invoke.
-   *
-   * There is still the possibility that the args don't
-   * match the expected parameter type.  In that case, we will print
-   * a warning.
-   */
-  if (!gtk_shortcut_trigger_check_parameter_type (args, parameter_type))
-    return FALSE;
-
-  g_action_group_activate_action (action_group, self->name, args);
+  group = G_ACTION_GROUP (_gtk_widget_get_action_muxer (widget, FALSE));
+  if (group)
+    g_action_group_activate_action (group, self->name, args);
 
   return TRUE;
 }
