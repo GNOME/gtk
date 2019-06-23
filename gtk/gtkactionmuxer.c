@@ -683,12 +683,14 @@ gtk_action_muxer_insert (GtkActionMuxer *muxer,
   Group *group;
   gint i;
 
+  g_object_ref (action_group);
+
   /* TODO: diff instead of ripout and replace */
   gtk_action_muxer_remove (muxer, prefix);
 
   group = g_slice_new (Group);
   group->muxer = muxer;
-  group->group = g_object_ref (action_group);
+  group->group = action_group;
   group->prefix = g_strdup (prefix);
 
   g_hash_table_insert (muxer->groups, group->prefix, group);
