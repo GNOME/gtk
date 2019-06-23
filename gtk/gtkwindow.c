@@ -1156,12 +1156,20 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_TYPE_BOOLEAN,
                   0);
 
+  /* Actions */
+
+  /**
+   * GtkWindow|default.activate:
+   *
+   * The default.activate action activates the default
+   * widget in the window.
+   */
+  gtk_widget_class_install_action (widget_class, "default.activate", NULL,
+                                   gtk_window_activate_default_activate);
+
   /*
    * Key bindings
    */
-
-  gtk_widget_class_install_action (widget_class, "default.activate", NULL,
-                                   gtk_window_activate_default_activate);
 
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, 0,
                                        "activate-focus", NULL);
