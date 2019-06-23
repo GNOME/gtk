@@ -365,6 +365,11 @@ test_introspection (void)
     { GTK_TYPE_TEXT, "selection.select-all", NULL, NULL },
     { GTK_TYPE_TEXT, "misc.insert-emoji", NULL, NULL },
     { GTK_TYPE_TEXT, "misc.toggle-visibility", NULL, "visibility" },
+    { GTK_TYPE_TEXT, "misc.toggle-overwrite", NULL, "overwrite-mode" },
+    { GTK_TYPE_TEXT, "edit.move-cursor", "(iib)", NULL },
+    { GTK_TYPE_TEXT, "edit.insert-at-cursor", "s", NULL },
+    { GTK_TYPE_TEXT, "edit.delete-from-cursor", "(ii)", NULL },
+    { GTK_TYPE_TEXT, "edit.backspace", NULL, NULL },
   };
 
   i = 0;
@@ -375,12 +380,16 @@ test_introspection (void)
                                         &params,
                                         &property))
     {
+      const char *p;
+      if (params)
+        p = g_variant_type_peek_string (params);
+      else
+        p = NULL;
+      g_assert (i < G_N_ELEMENTS (expected));
       g_assert (expected[i].owner == owner);
-      g_assert (strcmp (expected[i].name, name) == 0);
-      g_assert ((expected[i].params == NULL && params == NULL) ||
-                strcmp (expected[i].params, g_variant_type_peek_string (params)) == 0);
-      g_assert ((expected[i].property == NULL && property == NULL) ||
-                strcmp (expected[i].property, property) == 0);
+      g_assert_cmpstr (expected[i].name, ==, name);
+      g_assert_cmpstr (expected[i].params, ==, p);
+      g_assert_cmpstr (expected[i].property, ==, property);
       i++;
     }
   g_assert (i == G_N_ELEMENTS (expected));
