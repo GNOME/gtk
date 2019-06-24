@@ -188,15 +188,17 @@ dismiss_current_popup (GtkColorEditor *editor)
     }
 }
 
-static void
-popup_edit (GtkWidget      *widget,
-            GtkColorEditor *editor)
+void
+gtk_color_editor_popup_menu (GtkWidget *widget)
 {
+  GtkColorEditor *editor;
   GtkWidget *popup = NULL;
   GtkRoot *root;
   GtkWidget *focus;
   gint position;
   gint s, e;
+
+  editor = GTK_COLOR_EDITOR (gtk_widget_get_ancestor (widget, GTK_TYPE_COLOR_EDITOR));
 
   if (widget == editor->priv->sv_plane)
     {
@@ -546,7 +548,6 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   gtk_widget_class_bind_template_callback (widget_class, entry_text_changed);
   gtk_widget_class_bind_template_callback (widget_class, entry_apply);
   gtk_widget_class_bind_template_callback (widget_class, entry_focus_changed);
-  gtk_widget_class_bind_template_callback (widget_class, popup_edit);
   gtk_widget_class_bind_template_callback (widget_class, pick_color);
 }
 

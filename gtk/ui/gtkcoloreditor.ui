@@ -88,7 +88,6 @@
                 <property name="adjustment">h_adj</property>
                 <property name="draw-value">False</property>
                 <property name="has-origin">False</property>
-                <signal name="popup-menu" handler="popup_edit" swapped="no"/>
                 <layout>
                   <property name="left-attach">0</property>
                   <property name="top-attach">1</property>
@@ -105,7 +104,6 @@
                 <style>
                   <class name="marks-before"/>
                 </style>
-                <signal name="popup-menu" handler="popup_edit" swapped="no"/>
                 <layout>
                   <property name="left-attach">1</property>
                   <property name="top-attach">2</property>
@@ -121,7 +119,6 @@
                 <property name="h-adjustment">h_adj</property>
                 <property name="s-adjustment">s_adj</property>
                 <property name="v-adjustment">v_adj</property>
-                <signal name="popup-menu" handler="popup_edit" swapped="no"/>
                 <layout>
                   <property name="left-attach">1</property>
                   <property name="top-attach">1</property>

@@ -28,6 +28,7 @@
 #include "gtksnapshot.h"
 #include "gtkprivate.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkcoloreditorprivate.h"
 
 struct _GtkColorPlanePrivate
 {
@@ -244,11 +245,18 @@ static void
 hold_action (GtkGestureLongPress *gesture,
              gdouble              x,
              gdouble              y,
-             GtkColorPlane       *plane)
+             GtkWidget           *plane)
 {
-  gboolean handled;
+  gtk_color_editor_popup_menu (plane);
+}
 
-  g_signal_emit_by_name (plane, "popup-menu", &handled);
+static gboolean
+popup_menu (GtkWidget *widget,
+            GVariant  *args,
+            gpointer   user_data)
+{
+  gtk_color_editor_popup_menu (widget);
+  return TRUE;
 }
 
 static void
@@ -530,6 +538,13 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
 							GTK_TYPE_ADJUSTMENT,
 							GTK_PARAM_WRITABLE |
 							G_PARAM_CONSTRUCT_ONLY));
+
+  gtk_widget_class_add_binding (GTK_WIDGET_CLASS (class),
+                                GDK_KEY_F10, GDK_SHIFT_MASK,
+                                popup_menu, NULL);
+  gtk_widget_class_add_binding (GTK_WIDGET_CLASS (class),
+                                GDK_KEY_Menu, 0,
+                                popup_menu, NULL);
 }
 
 GtkWidget *
