@@ -57,6 +57,7 @@ void               gtk_places_view_row_set_path_size_group       (GtkPlacesViewR
 
 void               gtk_places_view_row_set_space_size_group      (GtkPlacesViewRow   *row,
                                                                   GtkSizeGroup       *group);
+void               gtk_places_view_row_popup_menu                (GtkPlacesViewRow  *row);
 
 G_END_DECLS
 
