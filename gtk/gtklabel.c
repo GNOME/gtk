@@ -6016,7 +6016,7 @@ gtk_label_activate_clipboard_copy (GtkWidget  *widget,
                                    const char *name,
                                    GVariant   *parameter)
 {
-  g_signal_emit_by_name (widget, "copy-clipboard");
+  gtk_label_copy_clipboard (GTK_LABEL (widget));
 }
 
 static void
