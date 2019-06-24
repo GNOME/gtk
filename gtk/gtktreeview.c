@@ -5426,18 +5426,9 @@ gtk_tree_view_forward_controller_key_pressed (GtkEventControllerKey *key,
         }
       else
         {
-          gulong popup_menu_id;
-
-          popup_menu_id = g_signal_connect (tree_view->priv->search_entry,
-                                            "popup-menu", G_CALLBACK (no_popup),
-                                            NULL);
-
           /* Because we keep the focus on the treeview, we need to forward the
            * key events to the entry, when it is visible. */
           gtk_event_controller_key_forward (key, search_window);
-
-          g_signal_handler_disconnect (tree_view->priv->search_entry,
-                                       popup_menu_id);
         }
     }
 
