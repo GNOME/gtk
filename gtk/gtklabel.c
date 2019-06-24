@@ -589,6 +589,9 @@ static void      gtk_label_activate_link_open            (GtkWidget  *label,
 static void      gtk_label_activate_link_copy            (GtkWidget  *label,
                                                           const char *name,
                                                           GVariant   *parameter);
+static void      gtk_label_activate_edit_move_cursor     (GtkWidget  *label,
+                                                          const char *name,
+                                                          GVariant   *parameter);
 static void      gtk_label_nop                           (GtkWidget  *label,
                                                           const char *name,
                                                           GVariant   *parameter);
@@ -1083,6 +1086,25 @@ gtk_label_class_init (GtkLabelClass *class)
    */
   gtk_widget_class_install_action (widget_class, "link.copy", NULL,
                                    gtk_label_activate_link_copy);
+
+  /**
+   * GtkLabel|edit.move-cursor:
+   * @granularity: a #GtkMovementStep defining the granularity of movement
+   * @count: the number of steps to move the cursor
+   * @extend: %TRUE to extend the selection
+   *
+   * The edit.move-cursor action changes the position of the
+   * text caret in the text, and may extend the selection while
+   * doing so.
+   *
+   * The default bindings for this action include
+   * the Left and Right arrow keys, Home and End.
+   *
+   * All bindings can be used with the Shift modifier
+   * to extend the selection.
+   */
+  gtk_widget_class_install_action (widget_class, "edit.move-cursor", "(iib)",
+                                   gtk_label_activate_edit_move_cursor);
 
   /*
    * Key bindings
@@ -6061,6 +6083,23 @@ gtk_label_activate_selection_select_all (GtkWidget  *widget,
                                          GVariant   *parameter)
 {
   gtk_label_select_all (GTK_LABEL (widget));
+}
+
+static void
+gtk_label_activate_edit_move_cursor (GtkWidget  *widget,
+                                     const char *name,
+                                     GVariant   *parameter)
+{
+  GtkMovementStep step;
+  int count;
+  gboolean extend;
+
+  g_variant_get (parameter, "(iib)", &step, &count, &extend);
+
+  step = CLAMP (step, GTK_MOVEMENT_LOGICAL_POSITIONS,
+                      GTK_MOVEMENT_HORIZONTAL_PAGES);
+
+  gtk_label_move_cursor (GTK_LABEL (widget), step, count, extend);
 }
 
 static void
