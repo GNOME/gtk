@@ -161,7 +161,6 @@
                                             <signal name="drag-begin" handler="file_list_drag_begin_cb" swapped="no"/>
                                             <signal name="drag-motion" handler="file_list_drag_motion_cb" swapped="no"/>
                                             <signal name="drag-end" handler="file_list_drag_end_cb" swapped="no"/>
-                                            <signal name="popup-menu" handler="list_popup_menu_cb" swapped="no"/>
                                             <signal name="query-tooltip" handler="file_list_query_tooltip_cb" swapped="no"/>
                                             <signal name="row-activated" handler="list_row_activated" swapped="no"/>
                                             <signal name="cursor-changed" handler="list_cursor_changed" swapped="no"/>

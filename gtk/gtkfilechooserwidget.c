@@ -83,6 +83,10 @@
 #include "gtkentryprivate.h"
 #include "gtkroot.h"
 #include "gtkbinlayout.h"
+#include "gtkshortcutcontroller.h"
+#include "gtkshortcuttrigger.h"
+#include "gtkshortcutaction.h"
+#include "gtkshortcut.h"
 
 #include <cairo-gobject.h>
 
@@ -2234,9 +2238,11 @@ file_list_show_popover (GtkFileChooserWidget *impl,
 
 /* Callback used for the GtkWidget::popup-menu signal of the file list */
 static gboolean
-list_popup_menu_cb (GtkWidget            *widget,
-                    GtkFileChooserWidget *impl)
+list_popup_menu_cb (GtkWidget *widget,
+                    GVariant  *args,
+                    gpointer   data)
 {
+  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (data);
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
   graphene_rect_t bounds;
 
@@ -8445,7 +8451,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   /* And a *lot* of callbacks to bind ... */
   gtk_widget_class_bind_template_callback (widget_class, file_list_drag_drop_cb);
   gtk_widget_class_bind_template_callback (widget_class, file_list_drag_data_received_cb);
-  gtk_widget_class_bind_template_callback (widget_class, list_popup_menu_cb);
   gtk_widget_class_bind_template_callback (widget_class, file_list_query_tooltip_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, file_list_drag_begin_cb);
@@ -8485,8 +8490,23 @@ post_process_ui (GtkFileChooserWidget *impl)
   GtkCellRenderer  *cell;
   GList            *cells;
   GFile            *file;
+  GtkEventController *controller;
+  GtkShortcutTrigger *trigger;
+  GtkShortcutAction *action;
+  GtkShortcut *shortcut;
 
   /* Setup file list treeview */
+  controller = gtk_shortcut_controller_new ();
+  trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK),
+                                         gtk_keyval_trigger_new (GDK_KEY_Menu, 0));
+
+  action = gtk_callback_action_new (list_popup_menu_cb, impl, NULL);
+  shortcut = gtk_shortcut_new (trigger, action);
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller),
+                                        shortcut);
+  g_object_unref (shortcut);
+  gtk_widget_add_controller (priv->browse_files_tree_view, controller);
+
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
   gtk_tree_selection_set_select_function (selection,
                                           list_select_func,
