@@ -245,16 +245,6 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
   gtk_widget_class_set_css_name (widget_class, I_("scrollbar"));
 }
 
-static gboolean
-emit_popup_menu (GtkWidget *self)
-{
-  gboolean handled;
-
-  g_signal_emit_by_name (self, "popup-menu", &handled);
-
-  return handled;
-}
-
 static void
 gtk_scrollbar_init (GtkScrollbar *self)
 {
@@ -265,7 +255,6 @@ gtk_scrollbar_init (GtkScrollbar *self)
   priv->box = gtk_box_new (priv->orientation, 0);
   gtk_widget_set_parent (priv->box, GTK_WIDGET (self));
   priv->range = g_object_new (GTK_TYPE_RANGE, NULL);
-  g_signal_connect_swapped (priv->range, "popup-menu", G_CALLBACK (emit_popup_menu), self);
   gtk_widget_set_hexpand (priv->range, TRUE);
   gtk_widget_set_vexpand (priv->range, TRUE);
   gtk_container_add (GTK_CONTAINER (priv->box), priv->range);
