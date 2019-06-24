@@ -523,7 +523,6 @@ enum {
   GRAB_NOTIFY,
   CHILD_NOTIFY,
   MNEMONIC_ACTIVATE,
-  MOVE_FOCUS,
   KEYNAV_FAILED,
   DRAG_BEGIN,
   DRAG_END,
@@ -635,8 +634,6 @@ static void     gtk_widget_real_style_updated    (GtkWidget         *widget);
 
 static gboolean		gtk_widget_real_focus			(GtkWidget        *widget,
 								 GtkDirectionType  direction);
-static void             gtk_widget_real_move_focus              (GtkWidget        *widget,
-                                                                 GtkDirectionType  direction);
 static gboolean		gtk_widget_real_keynav_failed		(GtkWidget        *widget,
 								 GtkDirectionType  direction);
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
@@ -947,7 +944,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_real_grab_focus;
   klass->focus = gtk_widget_real_focus;
-  klass->move_focus = gtk_widget_real_move_focus;
   klass->keynav_failed = gtk_widget_real_keynav_failed;
   klass->drag_begin = NULL;
   klass->drag_end = NULL;
@@ -1645,22 +1641,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   g_signal_set_va_marshaller (widget_signals[MNEMONIC_ACTIVATE],
                               G_TYPE_FROM_CLASS (gobject_class),
                               _gtk_marshal_BOOLEAN__BOOLEANv);
-
-  /**
-   * GtkWidget::move-focus:
-   * @widget: the object which received the signal.
-   * @direction:
-   */
-  widget_signals[MOVE_FOCUS] =
-    g_signal_new (I_("move-focus"),
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkWidgetClass, move_focus),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE,
-                  1,
-                  GTK_TYPE_DIRECTION_TYPE);
 
   /**
    * GtkWidget::keynav-failed:
@@ -5545,17 +5525,6 @@ gtk_widget_real_focus (GtkWidget         *widget,
 
   gtk_widget_grab_focus (widget);
   return TRUE;
-}
-
-static void
-gtk_widget_real_move_focus (GtkWidget         *widget,
-                            GtkDirectionType   direction)
-{
-  GtkRoot *root;
-
-  root = _gtk_widget_get_root (widget);
-  if (widget != GTK_WIDGET (root))
-    g_signal_emit (root, widget_signals[MOVE_FOCUS], 0, direction);
 }
 
 static gboolean
