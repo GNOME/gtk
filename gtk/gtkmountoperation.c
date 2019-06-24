@@ -53,6 +53,10 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkdialogprivate.h"
 #include "gtkgestureclick.h"
+#include "gtkshortcutcontroller.h"
+#include "gtkshortcuttrigger.h"
+#include "gtkshortcutaction.h"
+#include "gtkshortcut.h"
 
 #include <glib/gprintf.h>
 
@@ -1335,6 +1339,7 @@ do_popup_menu_for_process_tree_view (GtkWidget         *widget,
 
 static gboolean
 on_popup_menu_for_process_tree_view (GtkWidget *widget,
+                                     GVariant  *args,
                                      gpointer   user_data)
 {
   GtkMountOperation *op = GTK_MOUNT_OPERATION (user_data);
@@ -1380,6 +1385,10 @@ create_show_processes_dialog (GtkMountOperation *op,
   gchar *s;
   gboolean use_header;
   GtkGesture *gesture;
+  GtkEventController *controller;
+  GtkShortcutTrigger *trigger;
+  GtkShortcutAction *action;
+  GtkShortcut *shortcut;
 
   priv = op->priv;
 
@@ -1466,9 +1475,15 @@ create_show_processes_dialog (GtkMountOperation *op,
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
   gtk_container_add (GTK_CONTAINER (vbox), scrolled_window);
 
-  g_signal_connect (tree_view, "popup-menu",
-                    G_CALLBACK (on_popup_menu_for_process_tree_view),
-                    op);
+  controller = gtk_shortcut_controller_new ();
+  trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (GDK_KEY_F10, GDK_SHIFT_MASK),
+                                         gtk_keyval_trigger_new (GDK_KEY_Menu, 0));
+  action = gtk_callback_action_new (on_popup_menu_for_process_tree_view, op, NULL);
+  shortcut = gtk_shortcut_new (trigger, action);
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller),
+                                        shortcut);
+  g_object_unref (shortcut);
+  gtk_widget_add_controller (tree_view, controller);
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), GDK_BUTTON_SECONDARY);
