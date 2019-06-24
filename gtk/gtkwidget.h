@@ -980,6 +980,10 @@ void                    gtk_widget_activate_action      (GtkWidget  *widget,
                                                          const char *name,
                                                          const char *format_string,
                                                          ...);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_widget_activate_action_variant (GtkWidget  *widget,
+                                                            const char *name,
+                                                            GVariant   *args);
 
 GDK_AVAILABLE_IN_ALL
 void                   gtk_widget_activate_default      (GtkWidget *widget);

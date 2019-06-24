@@ -4628,6 +4628,7 @@ gtk_widget_observe_controllers
 <SUBSECTION Actions>
 gtk_widget_insert_action_group
 gtk_widget_activate_action
+gtk_widget_activate_action_variant
 gtk_widget_activate_default
 GtkWidgetActionActivateFunc
 gtk_widget_class_install_action
