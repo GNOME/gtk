@@ -1033,6 +1033,23 @@ gtk_label_class_init (GtkLabelClass *class)
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, label_props);
 
+  /* Actions */
+
+  gtk_widget_class_install_action (widget_class, "clipboard.cut", NULL,
+                                   gtk_label_nop);
+  gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL,
+                                   gtk_label_activate_clipboard_copy);
+  gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL,
+                                   gtk_label_nop);
+  gtk_widget_class_install_action (widget_class, "selection.delete", NULL,
+                                   gtk_label_nop);
+  gtk_widget_class_install_action (widget_class, "selection.select-all", NULL,
+                                   gtk_label_activate_selection_select_all);
+  gtk_widget_class_install_action (widget_class, "link.open", NULL,
+                                   gtk_label_activate_link_open);
+  gtk_widget_class_install_action (widget_class, "link.copy", NULL,
+                                   gtk_label_activate_link_copy);
+
   /*
    * Key bindings
    */
@@ -1154,21 +1171,6 @@ gtk_label_class_init (GtkLabelClass *class)
   quark_mnemonics_visible_connected = g_quark_from_static_string ("gtk-label-mnemonics-visible-connected");
   quark_gtk_signal = g_quark_from_static_string ("gtk-signal");
   quark_link = g_quark_from_static_string ("link");
-
-  gtk_widget_class_install_action (widget_class, "clipboard.cut", NULL,
-                                   gtk_label_nop);
-  gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL,
-                                   gtk_label_activate_clipboard_copy);
-  gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL,
-                                   gtk_label_nop);
-  gtk_widget_class_install_action (widget_class, "selection.delete", NULL,
-                                   gtk_label_nop);
-  gtk_widget_class_install_action (widget_class, "selection.select-all", NULL,
-                                   gtk_label_activate_selection_select_all);
-  gtk_widget_class_install_action (widget_class, "link.open", NULL,
-                                   gtk_label_activate_link_open);
-  gtk_widget_class_install_action (widget_class, "link.copy", NULL,
-                                   gtk_label_activate_link_copy);
 }
 
 static void 
