@@ -694,7 +694,7 @@ if graphene_has_sse2 or graphene_has_gcc
   message('Need aligned memory due to the use of SSE2 or GCC vector instructions')
 
   if os_win32 and cc.get_id() == 'gcc'
-    add_global_arguments(['-mstackrealign'], language: 'c')
+    add_project_arguments(['-mstackrealign'], language: 'c')
   endif
 endif
 
