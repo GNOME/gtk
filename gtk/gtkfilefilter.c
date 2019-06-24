@@ -299,7 +299,7 @@ parser_end_element (GMarkupParseContext *context,
 {
   SubParserData *data = (SubParserData*)user_data;
 
-  if (data->string)
+  if (data->string != NULL && data->string->len != 0)
     {
       switch (data->type)
         {
