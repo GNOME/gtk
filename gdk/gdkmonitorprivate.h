@@ -36,6 +36,7 @@ struct _GdkMonitor {
   GdkDisplay *display;
   char *manufacturer;
   char *model;
+  char *connector;
   GdkRectangle geometry;
   int width_mm;
   int height_mm;
@@ -58,6 +59,8 @@ void            gdk_monitor_set_manufacturer    (GdkMonitor *monitor,
                                                  const char *manufacturer);
 void            gdk_monitor_set_model           (GdkMonitor *monitor,
                                                  const char *model);
+void            gdk_monitor_set_connector       (GdkMonitor *monitor,
+                                                 const char *connector);
 void            gdk_monitor_set_position        (GdkMonitor *monitor,
                                                  int         x,
                                                  int         y);
