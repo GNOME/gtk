@@ -2414,7 +2414,6 @@ gtk_menu_position (GtkMenu *menu)
   GdkAnchorHints anchor_hints;
   gint rect_anchor_dx, rect_anchor_dy;
   GdkSurface *toplevel;
-  gboolean emulated_move_to_rect = FALSE;
 
   rect_anchor = priv->rect_anchor;
   menu_anchor = priv->menu_anchor;
@@ -2461,10 +2460,8 @@ gtk_menu_position (GtkMenu *menu)
 
   g_signal_handlers_disconnect_by_func (toplevel, moved_to_rect_cb, menu);
 
-  if (!emulated_move_to_rect)
-    g_signal_connect (toplevel, "moved-to-rect", G_CALLBACK (moved_to_rect_cb),
-                      menu);
-
+  g_signal_connect (toplevel, "moved-to-rect", G_CALLBACK (moved_to_rect_cb),
+                    menu);
 
   gdk_surface_move_to_rect (toplevel,
                            &rect,
