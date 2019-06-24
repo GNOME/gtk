@@ -198,10 +198,6 @@ struct _GtkSpinButtonClass
   gint (*output) (GtkSpinButton *spin_button);
   void (*value_changed) (GtkSpinButton *spin_button);
 
-  /* Action signals for keybindings, do not connect to these */
-  void (*change_value) (GtkSpinButton *spin_button,
-                        GtkScrollType  scroll);
-
   void (*wrapped) (GtkSpinButton *spin_button);
 };
 
@@ -255,7 +251,6 @@ enum
   INPUT,
   OUTPUT,
   VALUE_CHANGED,
-  CHANGE_VALUE,
   WRAPPED,
   LAST_SIGNAL
 };
@@ -312,7 +307,9 @@ static void gtk_spin_button_real_change_value (GtkSpinButton   *spin,
 static gint gtk_spin_button_default_input  (GtkSpinButton      *spin_button,
                                             gdouble            *new_val);
 static void gtk_spin_button_default_output (GtkSpinButton      *spin_button);
-
+static void gtk_spin_button_activate_value_change (GtkWidget  *widget,
+                                                   const char *action_name,
+                                                   GVariant   *parameter);
 
 static guint spinbutton_signals[LAST_SIGNAL] = {0};
 static GParamSpec *spinbutton_props[NUM_SPINBUTTON_PROPS] = {NULL, };
@@ -323,10 +320,9 @@ G_DEFINE_TYPE_WITH_CODE (GtkSpinButton, gtk_spin_button, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
                                                 gtk_spin_button_editable_init))
 
-#define add_spin_binding(widget_class, keyval, mask, scroll)            \
-  gtk_widget_class_add_binding_signal (widget_class, keyval, mask,      \
-                                       "change-value",                  \
-                                       "(i)", scroll)
+#define add_spin_binding(widget_class, keyval, mask, scroll)     \
+  gtk_widget_class_bind_action (widget_class, keyval, mask,      \
+                                "value.change", "i", scroll)
 
 
 static void
@@ -371,7 +367,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 
   class->input = NULL;
   class->output = NULL;
-  class->change_value = gtk_spin_button_real_change_value;
 
   spinbutton_props[PROP_ADJUSTMENT] =
     g_param_spec_object ("adjustment",
@@ -528,33 +523,23 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                   NULL,
                   G_TYPE_NONE, 0);
 
-  /* Action signals */
+  /* Actions */
+
   /**
-   * GtkSpinButton::change-value:
-   * @spin_button: the object on which the signal was emitted
+   * GtkSpinButton|value.change:
    * @scroll: a #GtkScrollType to specify the speed and amount of change
    *
-   * The ::change-value signal is a [keybinding signal][GtkBindingSignal] 
-   * which gets emitted when the user initiates a value change. 
+   * The value.change action changes the value according to the
+   * provided @scroll granularity.
    *
-   * Applications should not connect to it, but may emit it with 
-   * g_signal_emit_by_name() if they need to control the cursor
-   * programmatically.
-   *
-   * The default bindings for this signal are Up/Down and PageUp and/PageDown.
+   * The default bindings for this action are Up/Down and PageUp and/PageDown.
    */
-  spinbutton_signals[CHANGE_VALUE] =
-    g_signal_new (I_("change-value"),
-                  G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkSpinButtonClass, change_value),
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 1,
-                  GTK_TYPE_SCROLL_TYPE);
-
+  gtk_widget_class_install_action (widget_class, "value.change", "i",
+                                   gtk_spin_button_activate_value_change);
   gtk_widget_class_install_action (widget_class, "activate", NULL,
                                    gtk_spin_button_activate);
+
+  /* Key bindings */
 
   gtk_widget_class_bind_action (widget_class, GDK_KEY_Return, 0,
                                 "activate", NULL);
@@ -1344,6 +1329,18 @@ gtk_spin_button_real_change_value (GtkSpinButton *spin,
 
   if (gtk_adjustment_get_value (priv->adjustment) == old_value)
     gtk_widget_error_bell (GTK_WIDGET (spin));
+}
+
+static void
+gtk_spin_button_activate_value_change (GtkWidget  *widget,
+                                       const char *action_name,
+                                       GVariant   *parameter)
+{
+  GtkScrollType scroll = g_variant_get_int32 (parameter);
+
+  scroll = CLAMP (scroll, GTK_SCROLL_NONE, GTK_SCROLL_END);
+
+  gtk_spin_button_real_change_value (GTK_SPIN_BUTTON (widget), scroll);
 }
 
 static void
