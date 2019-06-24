@@ -1037,16 +1037,50 @@ gtk_label_class_init (GtkLabelClass *class)
 
   gtk_widget_class_install_action (widget_class, "clipboard.cut", NULL,
                                    gtk_label_nop);
+
+  /**
+   * GtkLabel|clipboard.copy:
+   *
+   * The clipboard.copy action puts the current selection
+   * on the clipboard. It is enabled when the selection is nonempty.
+   *
+   * The default binding for this action is Ctrl-c.
+   */
   gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL,
                                    gtk_label_activate_clipboard_copy);
   gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL,
                                    gtk_label_nop);
   gtk_widget_class_install_action (widget_class, "selection.delete", NULL,
                                    gtk_label_nop);
+
+  /**
+   * GtkLabel|selection.select-all:
+   *
+   * The selection.select-all action selects all the text.
+   * It is enabled when the GtkLabel contains text.
+   *
+   * The default binding for this action is Ctrl-a.
+   */
   gtk_widget_class_install_action (widget_class, "selection.select-all", NULL,
                                    gtk_label_activate_selection_select_all);
+
+  /**
+   * GtkLabel|link.open:
+   *
+   * The link.open action calls gtk_show_uri() on the currently
+   * focused link. It is enabled when a link is focused and there
+   * is no selection.
+   */
   gtk_widget_class_install_action (widget_class, "link.open", NULL,
                                    gtk_label_activate_link_open);
+
+  /**
+   * GtkLabel|link.copy:
+   *
+   * The link.copy action copies the currently focused link to
+   * the clipboard. It is enabled when a link is focused and
+   * there is no selection.
+   */
   gtk_widget_class_install_action (widget_class, "link.copy", NULL,
                                    gtk_label_activate_link_copy);
 
