@@ -625,16 +625,16 @@ add_move_binding (GtkWidgetClass *widget_class,
 {
   g_return_if_fail ((modmask & GDK_SHIFT_MASK) == 0);
   
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       keyval, modmask,
-				       "move-cursor",
-                                       "(iib)", step, count, FALSE);
+  gtk_widget_class_bind_action (widget_class,
+                                keyval, modmask,
+				"edit.move-cursor", "(iib)",
+                                step, count, FALSE);
 
   /* Selection-extending version */
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       keyval, modmask | GDK_SHIFT_MASK,
-				       "move-cursor",
-                                       "(iib)", step, count, TRUE);
+  gtk_widget_class_bind_action (widget_class,
+                                keyval, modmask | GDK_SHIFT_MASK,
+				"edit.move-cursor", "(iib)",
+                                step, count, TRUE);
 }
 
 static void
@@ -1142,25 +1142,23 @@ gtk_label_class_init (GtkLabelClass *class)
 		    GTK_MOVEMENT_WORDS, -1);
 
   /* select all */
-  gtk_widget_class_add_binding (widget_class,
+  gtk_widget_class_bind_action (widget_class,
                                 GDK_KEY_a, GDK_CONTROL_MASK,
-                                (GtkShortcutFunc) gtk_label_select_all,
-                                NULL);
-  gtk_widget_class_add_binding (widget_class,
+                                "selection.select-all", NULL);
+  gtk_widget_class_bind_action (widget_class,
                                 GDK_KEY_slash, GDK_CONTROL_MASK,
-                                (GtkShortcutFunc) gtk_label_select_all,
-                                NULL);
+                                "selection.select-all", NULL);
 
   /* unselect all */
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_a, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
-				       "move-cursor",
-                                       "(iib)", GTK_MOVEMENT_PARAGRAPH_ENDS, 0, FALSE);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_a, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+				"edit.move-cursor", "(iib)",
+                                GTK_MOVEMENT_PARAGRAPH_ENDS, 0, FALSE);
 
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_backslash, GDK_CONTROL_MASK,
-				       "move-cursor",
-                                       "(iib)", GTK_MOVEMENT_PARAGRAPH_ENDS, 0, FALSE);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_backslash, GDK_CONTROL_MASK,
+				"edit.move-cursor", "(iib)",
+                                GTK_MOVEMENT_PARAGRAPH_ENDS, 0, FALSE);
 
   add_move_binding (widget_class, GDK_KEY_f, GDK_MOD1_MASK,
 		    GTK_MOVEMENT_WORDS, 1);
@@ -1193,23 +1191,19 @@ gtk_label_class_init (GtkLabelClass *class)
 		    GTK_MOVEMENT_BUFFER_ENDS, 1);
 
   /* copy */
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_c, GDK_CONTROL_MASK,
-				       "copy-clipboard",
-                                       NULL);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_c, GDK_CONTROL_MASK,
+				"clipboard.copy", NULL);
 
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Return, 0,
-				       "activate-current-link",
-                                       NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_ISO_Enter, 0,
-				       "activate-current-link",
-                                       NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_KP_Enter, 0,
-				       "activate-current-link",
-                                       NULL);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_Return, 0,
+				"link.open", NULL);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_ISO_Enter, 0,
+				"link.open", NULL);
+  gtk_widget_class_bind_action (widget_class,
+                                GDK_KEY_KP_Enter, 0,
+				"link.open", NULL);
 
   /* Context menu */
   gtk_widget_class_add_binding (widget_class,
