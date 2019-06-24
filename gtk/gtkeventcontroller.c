@@ -270,7 +270,7 @@ gtk_event_controller_init (GtkEventController *controller)
  * @controller: a #GtkEventController
  * @event: a #GdkEvent
  *
- * Feeds an events into @controller, so it can be interpreted
+ * Feeds an event into @controller, so it can be interpreted
  * and the controller actions triggered.
  *
  * Returns: %TRUE if the event was potentially useful to trigger the
