@@ -383,7 +383,7 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
    * The maximum number of lines to allow per column. This property can
    * be used to influence how the groups in this section are distributed
    * across pages and columns. The default value of 15 should work in
-   * for most cases.
+   * most cases.
    */
   properties[PROP_MAX_HEIGHT] =
     g_param_spec_uint ("max-height", P_("Maximum Height"), P_("Maximum Height"),
