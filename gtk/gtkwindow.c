@@ -809,7 +809,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->unrealize = gtk_window_unrealize;
   widget_class->size_allocate = gtk_window_size_allocate;
   widget_class->focus = gtk_window_focus;
-  widget_class->move_focus = gtk_window_move_focus;
   widget_class->measure = gtk_window_measure;
   widget_class->state_flags_changed = gtk_window_state_flags_changed;
   widget_class->style_updated = gtk_window_style_updated;
