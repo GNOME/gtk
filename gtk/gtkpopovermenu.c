@@ -381,6 +381,7 @@ add_tab_bindings (GtkWidgetClass   *widget_class,
                                               gtk_keyval_trigger_new (GDK_KEY_KP_Tab, modifiers)),
                  gtk_action_action_new ("focus.move"),
                  "i", direction);
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
 
   g_object_unref (shortcut);
 }
