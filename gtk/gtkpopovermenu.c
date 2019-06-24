@@ -222,8 +222,12 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
 
   controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
-  g_signal_connect (controller, "focus-out", G_CALLBACK (focus_out), popover);
   g_signal_connect (controller, "key-pressed", G_CALLBACK (key_pressed), popover);
+  gtk_widget_add_controller (GTK_WIDGET (popover), controller);
+
+  controller = gtk_event_controller_key_new ();
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_BUBBLE);
+  g_signal_connect (controller, "focus-out", G_CALLBACK (focus_out), popover);
   gtk_widget_add_controller (GTK_WIDGET (popover), controller);
 
   /* Trigger mnemonics without Alt */
