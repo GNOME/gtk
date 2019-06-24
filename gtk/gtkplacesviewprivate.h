@@ -81,6 +81,8 @@ gboolean           gtk_places_view_get_loading                   (GtkPlacesView 
 
 GtkWidget *        gtk_places_view_new                           (void);
 
+
+
 G_END_DECLS
 
 #endif /* GTK_PLACES_VIEW_H */

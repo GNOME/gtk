@@ -200,7 +200,7 @@ pressed_cb (GtkGesture       *gesture,
             double            y,
             GtkPlacesViewRow *row)
 {
-  g_signal_emit_by_name (row, "popup-menu", 0);
+  gtk_places_view_row_popup_menu (row);
 }
 
 static void

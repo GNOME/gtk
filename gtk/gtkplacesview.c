@@ -666,8 +666,6 @@ insert_row (GtkPlacesView *view,
 
   g_object_set_data (G_OBJECT (row), "is-network", GINT_TO_POINTER (is_network));
 
-  g_signal_connect (row, "popup-menu", G_CALLBACK (on_row_popup_menu), row);
-
   g_signal_connect (gtk_places_view_row_get_eject_button (GTK_PLACES_VIEW_ROW (row)),
                     "clicked",
                     G_CALLBACK (on_eject_button_clicked),
@@ -1733,11 +1731,10 @@ popup_menu (GtkPlacesViewRow *row,
   gtk_menu_popup_at_pointer (GTK_MENU (priv->popup_menu), (GdkEvent *) event);
 }
 
-static gboolean
-on_row_popup_menu (GtkPlacesViewRow *row)
+void
+gtk_places_view_row_popup_menu (GtkPlacesViewRow *row)
 {
   popup_menu (row, NULL);
-  return TRUE;
 }
 
 static gboolean
