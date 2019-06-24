@@ -357,7 +357,8 @@ AC_ARG_ENABLE(cloudproviders,
 AC_ARG_ENABLE(profiler,
               [AS_HELP_STRING([--enable-profiler],
                               [enable profiler integration])],
-                              [profiler_set=yes])
+              [profiler_set=yes],
+              [profiler_set=no])
 
 if test -z "$backend_set"; then
   if test "$platform_win32" = yes; then
