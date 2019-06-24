@@ -29,6 +29,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtksnapshot.h"
+#include "gtkcoloreditorprivate.h"
 
 #include <math.h>
 
@@ -48,7 +49,7 @@ enum
 static void hold_action (GtkGestureLongPress *gesture,
                          gdouble              x,
                          gdouble              y,
-                         GtkColorScale       *scale);
+                         GtkWidget           *scale);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkColorScale, gtk_color_scale, GTK_TYPE_SCALE)
 
@@ -250,11 +251,18 @@ static void
 hold_action (GtkGestureLongPress *gesture,
              gdouble              x,
              gdouble              y,
-             GtkColorScale       *scale)
+             GtkWidget           *scale)
 {
-  gboolean handled;
+  gtk_color_editor_popup_menu (scale);
+}
 
-  g_signal_emit_by_name (scale, "popup-menu", &handled);
+static gboolean
+popup_menu (GtkWidget *widget,
+            GVariant  *args,
+            gpointer   user_data)
+{
+  gtk_color_editor_popup_menu (widget);
+  return TRUE;
 }
 
 static void
@@ -280,6 +288,13 @@ gtk_color_scale_class_init (GtkColorScaleClass *class)
       g_param_spec_int ("scale-type", P_("Scale type"), P_("Scale type"),
                         0, 1, 0,
                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+  gtk_widget_class_add_binding (GTK_WIDGET_CLASS (class),
+                                GDK_KEY_F10, GDK_SHIFT_MASK,
+                                popup_menu, NULL);
+  gtk_widget_class_add_binding (GTK_WIDGET_CLASS (class),
+                                GDK_KEY_Menu, 0,
+                                popup_menu, NULL);
 }
 
 void
