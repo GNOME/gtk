@@ -266,12 +266,6 @@ struct _GtkLabelClass
 {
   GtkWidgetClass parent_class;
 
-  void (* move_cursor)     (GtkLabel       *label,
-                            GtkMovementStep step,
-                            gint            count,
-                            gboolean        extend_selection);
-  void (* copy_clipboard)  (GtkLabel       *label);
-
   gboolean (*activate_link) (GtkLabel       *label,
                              const gchar    *uri);
 };
@@ -379,10 +373,7 @@ struct _GtkLabelSelectionInfo
 };
 
 enum {
-  MOVE_CURSOR,
-  COPY_CLIPBOARD,
   ACTIVATE_LINK,
-  ACTIVATE_CURRENT_LINK,
   LAST_SIGNAL
 };
 
@@ -550,7 +541,6 @@ static gint gtk_label_move_backward_word (GtkLabel        *label,
 static void          gtk_label_clear_links      (GtkLabel  *label);
 static gboolean      gtk_label_activate_link    (GtkLabel    *label,
                                                  const gchar *uri);
-static void          gtk_label_activate_current_link (GtkLabel *label);
 static GtkLabelLink *gtk_label_get_current_link (GtkLabel  *label);
 static void          emit_activate_link         (GtkLabel     *label,
                                                  GtkLabelLink *link);
@@ -665,86 +655,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->get_request_mode = gtk_label_get_request_mode;
   widget_class->measure = gtk_label_measure;
 
-  class->move_cursor = gtk_label_move_cursor;
-  class->copy_clipboard = gtk_label_copy_clipboard;
   class->activate_link = gtk_label_activate_link;
-
-  /**
-   * GtkLabel::move-cursor:
-   * @entry: the object which received the signal
-   * @step: the granularity of the move, as a #GtkMovementStep
-   * @count: the number of @step units to move
-   * @extend_selection: %TRUE if the move should extend the selection
-   *
-   * The ::move-cursor signal is a
-   * [keybinding signal][GtkBindingSignal]
-   * which gets emitted when the user initiates a cursor movement.
-   * If the cursor is not visible in @entry, this signal causes
-   * the viewport to be moved instead.
-   *
-   * Applications should not connect to it, but may emit it with
-   * g_signal_emit_by_name() if they need to control the cursor
-   * programmatically.
-   *
-   * The default bindings for this signal come in two variants,
-   * the variant with the Shift modifier extends the selection,
-   * the variant without the Shift modifer does not.
-   * There are too many key combinations to list them all here.
-   * - Arrow keys move by individual characters/lines
-   * - Ctrl-arrow key combinations move by words/paragraphs
-   * - Home/End keys move to the ends of the buffer
-   */
-  signals[MOVE_CURSOR] = 
-    g_signal_new (I_("move-cursor"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-		  G_STRUCT_OFFSET (GtkLabelClass, move_cursor),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__ENUM_INT_BOOLEAN,
-		  G_TYPE_NONE, 3,
-		  GTK_TYPE_MOVEMENT_STEP,
-		  G_TYPE_INT,
-		  G_TYPE_BOOLEAN);
-
-   /**
-   * GtkLabel::copy-clipboard:
-   * @label: the object which received the signal
-   *
-   * The ::copy-clipboard signal is a
-   * [keybinding signal][GtkBindingSignal]
-   * which gets emitted to copy the selection to the clipboard.
-   *
-   * The default binding for this signal is Ctrl-c.
-   */ 
-  signals[COPY_CLIPBOARD] =
-    g_signal_new (I_("copy-clipboard"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-		  G_STRUCT_OFFSET (GtkLabelClass, copy_clipboard),
-		  NULL, NULL,
-		  NULL,
-		  G_TYPE_NONE, 0);
-  
-    /**
-     * GtkLabel::activate-current-link:
-     * @label: The label on which the signal was emitted
-     *
-     * A [keybinding signal][GtkBindingSignal]
-     * which gets emitted when the user activates a link in the label.
-     *
-     * Applications may also emit the signal with g_signal_emit_by_name()
-     * if they need to control activation of URIs programmatically.
-     *
-     * The default bindings for this signal are all forms of the Enter key.
-     */
-    signals[ACTIVATE_CURRENT_LINK] =
-      g_signal_new_class_handler (I_("activate-current-link"),
-                                  G_TYPE_FROM_CLASS (gobject_class),
-                                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                                  G_CALLBACK (gtk_label_activate_current_link),
-                                  NULL, NULL,
-                                  NULL,
-                                  G_TYPE_NONE, 0);
 
     /**
      * GtkLabel::activate-link:
@@ -6278,20 +6189,6 @@ emit_activate_link (GtkLabel     *label,
       /* FIXME: shouldn't have to redo everything here */
       gtk_label_clear_layout (label);
     }
-}
-
-static void
-gtk_label_activate_current_link (GtkLabel *label)
-{
-  GtkLabelLink *link;
-  GtkWidget *widget = GTK_WIDGET (label);
-
-  link = gtk_label_get_focus_link (label);
-
-  if (link)
-    emit_activate_link (label, link);
-  else
-    gtk_widget_activate_default (widget);
 }
 
 static GtkLabelLink *
