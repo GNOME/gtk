@@ -1163,6 +1163,7 @@ allocate_variables (GtkConstraintSolver *solver,
   return vars;
 }
 
+#if 0
 static void
 add_ordering_constraints (GtkConstraintSolver    *solver,
                           GtkConstraintVariable **vars,
@@ -1179,10 +1180,11 @@ add_ordering_constraints (GtkConstraintSolver    *solver,
                                                   vars[i],
                                                   GTK_CONSTRAINT_RELATION_GE,
                                                   gtk_constraint_expression_new_from_variable (vars[i - 1]),
-                                                  GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                                  GTK_CONSTRAINT_WEIGHT_MEDIUM);
       g_ptr_array_add (refs, ref);      
     }
 }
+#endif
 
 static void
 add_homogeneous_constraints (GtkConstraintSolver    *solver,
@@ -1307,8 +1309,12 @@ layout_add_grid_constraint (GtkConstraintLayout *manager,
   rows = allocate_variables (solver, "row", n_rows);
   cols = allocate_variables (solver, "col", n_cols);
 
+#if 0
+  //FIXME for some reason, these 'obvious' constraints
+  // make things unstable (and they are not really needed)
   add_ordering_constraints (solver, rows, n_rows, refs);
   add_ordering_constraints (solver, cols, n_cols, refs);
+#endif
 
   if (constraint->row_homogeneous)
     add_homogeneous_constraints (solver, rows, n_rows, refs);
