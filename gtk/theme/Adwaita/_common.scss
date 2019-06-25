@@ -4189,11 +4189,11 @@ infobar {
   &.question,
   &.warning,
   &.error {
-    &:backdrop, & {
+    &:backdrop > revealer > box, & > revealer > box {
       label, & { color: $fg_color; }
       background-color: if($variant == 'light', desaturate(lighten(invert($selected_bg_color), 45%), 30%), 
                         desaturate(darken(invert($selected_bg_color),40%), 70%));
-      border-color: lighten($borders_color, 10%);
+      border-bottom: 1px solid lighten($borders_color, 5%);
     }
 
     text-shadow: none;
