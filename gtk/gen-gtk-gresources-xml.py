@@ -82,7 +82,7 @@ xml += '''
 
 if len(sys.argv) > 2:
   outfile = sys.argv[2]
-  f = open(outfile, 'w')
+  f = open(outfile, 'w', encoding='utf-8')
   f.write(xml)
   f.close()
 else:
