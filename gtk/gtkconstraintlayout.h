@@ -25,6 +25,10 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_CONSTRAINT_LAYOUT (gtk_constraint_layout_get_type ())
 #define GTK_TYPE_CONSTRAINT_LAYOUT_CHILD (gtk_constraint_layout_child_get_type ())
+#define GTK_TYPE_CONSTRAINT_GUIDE (gtk_constraint_guide_get_type ())
+
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (GtkConstraintGuide, gtk_constraint_guide, GTK, CONSTRAINT_GUIDE, GObject)
 
 /**
  * GtkConstraintLayout:
@@ -38,9 +42,13 @@ G_DECLARE_FINAL_TYPE (GtkConstraintLayout, gtk_constraint_layout, GTK, CONSTRAIN
 GDK_AVAILABLE_IN_ALL
 GtkLayoutManager *      gtk_constraint_layout_new               (void);
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_ALL 
 void                    gtk_constraint_layout_add_constraint    (GtkConstraintLayout *manager,
                                                                  GtkConstraint       *constraint);
+
+GDK_AVAILABLE_IN_ALL
+void                    gtk_constraint_layout_add_guide         (GtkConstraintLayout *manager,
+                                                                 GtkConstraintGuide  *guide);
 
 /**
  * GtkConstraintLayoutChild:
@@ -49,5 +57,8 @@ void                    gtk_constraint_layout_add_constraint    (GtkConstraintLa
  */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkConstraintLayoutChild, gtk_constraint_layout_child, GTK, CONSTRAINT_LAYOUT_CHILD, GtkLayoutChild)
+
+GDK_AVAILABLE_IN_ALL
+GtkConstraintGuide *gtk_constraint_guide_new (void);
 
 G_END_DECLS
