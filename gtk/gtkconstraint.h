@@ -24,6 +24,13 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GtkConstraintTarget GtkConstraintTarget;
+
+#define GTK_TYPE_CONSTRAINT_TARGET (gtk_constraint_target_get_type ())
+
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_INTERFACE (GtkConstraintTarget, gtk_constraint_target, GTK, CONSTRAINT_TARGET, GObject)
+
 #define GTK_TYPE_CONSTRAINT (gtk_constraint_get_type ())
 
 /**
