@@ -543,3 +543,17 @@ gtk_constraint_detach (GtkConstraint *constraint)
   constraint->constraint_ref = NULL;
   constraint->solver = NULL;
 }
+
+typedef struct _GtkConstraintTargetInterface GtkConstraintTargetInterface;
+
+struct _GtkConstraintTargetInterface
+{
+  GTypeInterface g_iface;
+};
+
+G_DEFINE_INTERFACE (GtkConstraintTarget, gtk_constraint_target, G_TYPE_OBJECT)
+
+static void
+gtk_constraint_target_default_init (GtkConstraintTargetInterface *iface)
+{
+}
