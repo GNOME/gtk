@@ -84,13 +84,13 @@ if enabled_print_backends.contains('cups')
     cups_error = 'Cannot find CUPS headers in default prefix.'
   endif
 
+  cups_extra_deps = []
   enable_colord = get_option('colord')
   if enable_colord != 'no'
     want_colord = enable_colord == 'yes'
     colord_dep = dependency('colord', version: '>= 0.1.9', required: want_colord)
     cdata.set('HAVE_COLORD', colord_dep.found() ? 1 : false)
-  else
-    cups_colord_dep = []
+    cups_extra_deps += [colord_dep]
   endif
 
   if cups_error != ''
@@ -168,7 +168,7 @@ if print_backends.contains('cups')
                 'cups/gtkcupsutils.c',
                 'cups/gtkcupssecretsutils.c',
                 c_args: printbackends_args,
-                dependencies: [libgtk_dep, libcups, colord_dep],
+                dependencies: [libgtk_dep, libcups] + cups_extra_deps,
                 install_dir: printbackends_install_dir,
                 install : true)
 endif
