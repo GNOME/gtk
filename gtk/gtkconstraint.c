@@ -572,7 +572,7 @@ gtk_constraint_is_constant (GtkConstraint *constraint)
 {
   g_return_val_if_fail (GTK_IS_CONSTRAINT (constraint), FALSE);
 
-  return constraint->source_widget == NULL &&
+  return constraint->source == NULL &&
          constraint->source_attribute == GTK_CONSTRAINT_ATTRIBUTE_NONE;
 }
 
