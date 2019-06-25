@@ -132,6 +132,7 @@
 #include <gtk/gtkgesturezoom.h>
 #include <gtk/gtkglarea.h>
 #include <gtk/gtkgrid.h>
+#include <gtk/gtkgridconstraint.h>
 #include <gtk/gtkgridlayout.h>
 #include <gtk/gtkheaderbar.h>
 #include <gtk/gtkicontheme.h>

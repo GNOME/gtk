@@ -63,6 +63,7 @@
 #include "gtkconstraintlayoutprivate.h"
 
 #include "gtkconstraintprivate.h"
+#include "gtkgridconstraintprivate.h"
 #include "gtkconstraintexpressionprivate.h"
 #include "gtkconstraintsolverprivate.h"
 #include "gtklayoutchild.h"
@@ -110,6 +111,9 @@ struct _GtkConstraintLayout
 
   /* HashSet<GtkConstraintGuide> */
   GHashTable *guides;
+
+  /* HashSet<GtkGridConstraint> */
+  GHashTable *grid_constraints;
 };
 
 G_DEFINE_TYPE (GtkConstraintLayoutChild, gtk_constraint_layout_child, GTK_TYPE_LAYOUT_CHILD)
@@ -391,6 +395,7 @@ gtk_constraint_layout_finalize (GObject *gobject)
   g_clear_pointer (&self->bound_attributes, g_hash_table_unref);
   g_clear_pointer (&self->constraints, g_hash_table_unref);
   g_clear_pointer (&self->guides, g_hash_table_unref);
+  g_clear_pointer (&self->grid_constraints, g_hash_table_unref);
 
   G_OBJECT_CLASS (gtk_constraint_layout_parent_class)->finalize (gobject);
 }
@@ -1012,6 +1017,9 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
   gtk_constraint_solver_remove_constraint (solver, stay_l);
 }
 
+static void layout_add_grid_constraint (GtkConstraintLayout *manager,
+                                        GtkGridConstraint   *constraint);
+
 static void
 gtk_constraint_layout_root (GtkLayoutManager *manager)
 {
@@ -1040,6 +1048,13 @@ gtk_constraint_layout_root (GtkLayoutManager *manager)
       GtkConstraintGuide *guide = key;
       gtk_constraint_guide_update (guide);
     }
+
+  g_hash_table_iter_init (&iter, self->grid_constraints);
+  while (g_hash_table_iter_next (&iter, &key, NULL))
+    {
+      GtkGridConstraint *constraint = key;
+      layout_add_grid_constraint (self, constraint);
+    }
 }
 
 static void
@@ -1065,6 +1080,13 @@ gtk_constraint_layout_unroot (GtkLayoutManager *manager)
     {
       GtkConstraintGuide *guide = key;
       gtk_constraint_guide_detach (guide);
+    }
+
+  g_hash_table_iter_init (&iter, self->grid_constraints);
+  while (g_hash_table_iter_next (&iter, &key, NULL))
+    {
+      GtkGridConstraint *constraint = key;
+      gtk_grid_constraint_detach (constraint);
     }
 
   self->solver = NULL;
@@ -1101,6 +1123,11 @@ gtk_constraint_layout_init (GtkConstraintLayout *self)
                            NULL);
 
   self->guides =
+    g_hash_table_new_full (NULL, NULL,
+                           (GDestroyNotify) g_object_unref,
+                           NULL);
+
+  self->grid_constraints =
     g_hash_table_new_full (NULL, NULL,
                            (GDestroyNotify) g_object_unref,
                            NULL);
@@ -1222,4 +1249,210 @@ gtk_constraint_layout_remove_guide (GtkConstraintLayout *layout,
   g_hash_table_remove (layout->guides, guide);
 
   gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
+}
+
+void
+gtk_constraint_layout_add_grid_constraint (GtkConstraintLayout *manager,
+                                           GtkGridConstraint   *constraint)
+{
+  g_return_if_fail (GTK_IS_CONSTRAINT_LAYOUT (manager));
+  g_return_if_fail (GTK_IS_GRID_CONSTRAINT (constraint));
+  g_return_if_fail (!gtk_grid_constraint_is_attached (constraint));
+
+  layout_add_grid_constraint (manager, constraint);
+
+  g_hash_table_add (manager->grid_constraints, constraint);
+}
+
+static GtkConstraintVariable **
+allocate_variables (GtkConstraintSolver *solver,
+                    const char          *name,
+                    int                  n)
+{
+  GtkConstraintVariable **vars;
+  int i;
+
+  vars = g_new (GtkConstraintVariable *, n);
+  for (i = 0; i < n; i++)
+    {
+      char *vname = g_strdup_printf ("%s%d", name, i);
+      vars[i] = gtk_constraint_solver_create_variable (solver, NULL, vname, 0.0);
+    }
+
+  return vars;
+}
+
+#if 0
+static void
+add_ordering_constraints (GtkConstraintSolver    *solver,
+                          GtkConstraintVariable **vars,
+                          int                     n_vars,
+                          GPtrArray              *refs)
+{
+  int i;
+
+  for (i = 1; i < n_vars; i++)
+    {
+      GtkConstraintRef *ref;
+
+      ref = gtk_constraint_solver_add_constraint (solver,
+                                                  vars[i],
+                                                  GTK_CONSTRAINT_RELATION_GE,
+                                                  gtk_constraint_expression_new_from_variable (vars[i - 1]),
+                                                  GTK_CONSTRAINT_WEIGHT_MEDIUM);
+      g_ptr_array_add (refs, ref);
+    }
+}
+#endif
+
+static void
+add_homogeneous_constraints (GtkConstraintSolver    *solver,
+                             GtkConstraintVariable **vars,
+                             int                     n_vars,
+                             GPtrArray              *refs)
+{
+  int i;
+
+  for (i = 2; i < n_vars; i++)
+    {
+      GtkConstraintExpressionBuilder builder;
+      GtkConstraintRef *ref;
+
+      gtk_constraint_expression_builder_init (&builder, solver);
+      gtk_constraint_expression_builder_term (&builder, vars[i]);
+      gtk_constraint_expression_builder_plus (&builder);
+      gtk_constraint_expression_builder_term (&builder, vars[i - 2]);
+      gtk_constraint_expression_builder_divide_by (&builder);
+      gtk_constraint_expression_builder_constant (&builder, 2.0);
+
+      ref = gtk_constraint_solver_add_constraint (solver,
+                                                  vars[i - 1],
+                                                  GTK_CONSTRAINT_RELATION_EQ,
+                                                  gtk_constraint_expression_builder_finish (&builder),
+                                                  GTK_CONSTRAINT_WEIGHT_REQUIRED);
+      g_ptr_array_add (refs, ref);
+    }
+}
+
+static void
+add_child_constraints (GtkConstraintLayout     *self,
+                       GtkConstraintSolver     *solver,
+                       GtkGridConstraintChild  *child,
+                       GtkConstraintVariable  **rows,
+                       GtkConstraintVariable  **cols,
+                       GPtrArray               *refs)
+{
+  GtkConstraintLayoutChild *info;
+  GtkConstraintVariable *var;
+  GtkConstraintVariable *var1;
+  GtkConstraintRef *ref;
+
+  info = GTK_CONSTRAINT_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (GTK_LAYOUT_MANAGER (self), child->child));
+
+  var = get_child_attribute (self, child->child, GTK_CONSTRAINT_ATTRIBUTE_LEFT);
+  var1 = cols[child->left];
+
+  ref = gtk_constraint_solver_add_constraint (solver,
+                                              var,
+                                              GTK_CONSTRAINT_RELATION_EQ,
+                                              gtk_constraint_expression_new_from_variable (var1),
+                                              GTK_CONSTRAINT_WEIGHT_REQUIRED);
+  g_ptr_array_add (refs, ref);
+
+  var = get_child_attribute (self, child->child, GTK_CONSTRAINT_ATTRIBUTE_RIGHT);
+  var1 = cols[child->right];
+
+  ref = gtk_constraint_solver_add_constraint (solver,
+                                              var,
+                                              GTK_CONSTRAINT_RELATION_EQ,
+                                              gtk_constraint_expression_new_from_variable (var1),
+                                              GTK_CONSTRAINT_WEIGHT_REQUIRED);
+  g_ptr_array_add (refs, ref);
+
+  var = get_child_attribute (self, child->child, GTK_CONSTRAINT_ATTRIBUTE_TOP);
+  var1 = rows[child->top];
+
+  ref = gtk_constraint_solver_add_constraint (solver,
+                                              var,
+                                              GTK_CONSTRAINT_RELATION_EQ,
+                                              gtk_constraint_expression_new_from_variable (var1),
+                                              GTK_CONSTRAINT_WEIGHT_REQUIRED);
+  g_ptr_array_add (refs, ref);
+
+  var = get_child_attribute (self, child->child, GTK_CONSTRAINT_ATTRIBUTE_BOTTOM);
+  var1 = rows[child->bottom];
+
+  ref = gtk_constraint_solver_add_constraint (solver,
+                                              var,
+                                              GTK_CONSTRAINT_RELATION_EQ,
+                                              gtk_constraint_expression_new_from_variable (var1),
+                                              GTK_CONSTRAINT_WEIGHT_REQUIRED);
+  g_ptr_array_add (refs, ref);
+}
+
+static void
+layout_add_grid_constraint (GtkConstraintLayout *manager,
+                            GtkGridConstraint   *constraint)
+{
+  GtkWidget *layout_widget;
+  GtkConstraintSolver *solver;
+  GtkConstraintVariable **rows;
+  GtkConstraintVariable **cols;
+  int n_rows, n_cols;
+  GPtrArray *refs;
+  int i;
+
+  if (gtk_grid_constraint_is_attached (constraint))
+    return;
+
+  layout_widget = gtk_layout_manager_get_widget (GTK_LAYOUT_MANAGER (manager));
+  if (layout_widget == NULL)
+    return;
+
+  solver = gtk_constraint_layout_get_solver (manager);
+  if (solver == NULL)
+    return;
+
+  gtk_constraint_solver_freeze (solver);
+
+  refs = g_ptr_array_new ();
+
+  n_rows = n_cols = 0;
+  for (i = 0; i < constraint->children->len; i++)
+    {
+      GtkGridConstraintChild *child = g_ptr_array_index (constraint->children, i);
+      n_rows = MAX (n_rows, child->bottom);
+      n_cols = MAX (n_cols, child->right);
+    }
+  n_rows++;
+  n_cols++;
+
+  rows = allocate_variables (solver, "row", n_rows);
+  cols = allocate_variables (solver, "col", n_cols);
+
+#if 0
+  //FIXME for some reason, these 'obvious' constraints
+  // make things unstable (and they are not really needed)
+  add_ordering_constraints (solver, rows, n_rows, refs);
+  add_ordering_constraints (solver, cols, n_cols, refs);
+#endif
+
+  if (constraint->row_homogeneous)
+    add_homogeneous_constraints (solver, rows, n_rows, refs);
+  if (constraint->column_homogeneous)
+    add_homogeneous_constraints (solver, cols, n_cols, refs);
+
+  for (i = 0; i < constraint->children->len; i++)
+    {
+      GtkGridConstraintChild *child = g_ptr_array_index (constraint->children, i);
+      add_child_constraints (manager, solver, child, rows, cols, refs);
+    }
+
+  gtk_grid_constraint_attach (constraint, solver, refs);
+
+  g_free (rows);
+  g_free (cols);
+  g_ptr_array_unref (refs);
+
+  gtk_constraint_solver_thaw (solver);
 }
