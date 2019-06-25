@@ -46,10 +46,10 @@
 #include "gtkwidget.h"
 
 enum {
-  PROP_TARGET_WIDGET = 1,
+  PROP_TARGET = 1,
   PROP_TARGET_ATTRIBUTE,
   PROP_RELATION,
-  PROP_SOURCE_WIDGET,
+  PROP_SOURCE,
   PROP_SOURCE_ATTRIBUTE,
   PROP_MULTIPLIER,
   PROP_CONSTANT,
@@ -72,8 +72,8 @@ gtk_constraint_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
-    case PROP_TARGET_WIDGET:
-      self->target_widget = g_value_get_object (value);
+    case PROP_TARGET:
+      self->target = g_value_get_object (value);
       break;
 
     case PROP_TARGET_ATTRIBUTE:
@@ -84,8 +84,8 @@ gtk_constraint_set_property (GObject      *gobject,
       self->relation = g_value_get_enum (value);
       break;
 
-    case PROP_SOURCE_WIDGET:
-      self->source_widget = g_value_get_object (value);
+    case PROP_SOURCE:
+      self->source = g_value_get_object (value);
       break;
 
     case PROP_SOURCE_ATTRIBUTE:
@@ -120,8 +120,8 @@ gtk_constraint_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_TARGET_WIDGET:
-      g_value_set_object (value, self->target_widget);
+    case PROP_TARGET:
+      g_value_set_object (value, self->target);
       break;
 
     case PROP_TARGET_ATTRIBUTE:
@@ -132,8 +132,8 @@ gtk_constraint_get_property (GObject    *gobject,
       g_value_set_enum (value, self->relation);
       break;
 
-    case PROP_SOURCE_WIDGET:
-      g_value_set_object (value, self->source_widget);
+    case PROP_SOURCE:
+      g_value_set_object (value, self->source);
       break;
 
     case PROP_SOURCE_ATTRIBUTE:
@@ -178,31 +178,31 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
   gobject_class->finalize = gtk_constraint_finalize;
 
   /**
-   * GtkConstraint:target-widget:
+   * GtkConstraint:target:
    *
-   * The target widget of the constraint.
+   * The target of the constraint.
    *
    * The constraint will set the #GtkConstraint:target-attribute of the
-   * target widget using the #GtkConstraint:source-attribute of the source
+   * target using the #GtkConstraint:source-attribute of the source
    * widget.
    */
-  obj_props[PROP_TARGET_WIDGET] =
-    g_param_spec_object ("target-widget",
-                         P_("Target Widget"),
-                         P_("The target widget of the constraint"),
-                         GTK_TYPE_WIDGET,
+  obj_props[PROP_TARGET] =
+    g_param_spec_object ("target",
+                         P_("Target"),
+                         P_("The target of the constraint"),
+                         GTK_TYPE_CONSTRAINT_TARGET,
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_CONSTRUCT_ONLY);
   /**
    * GtkConstraint:target-attribute:
    *
-   * The attribute of the #GtkConstraint:target-widget set by the constraint.
+   * The attribute of the #GtkConstraint:target set by the constraint.
    */
   obj_props[PROP_TARGET_ATTRIBUTE] =
     g_param_spec_enum ("target-attribute",
                        P_("Target Attribute"),
-                       P_("The attribute of the target widget set by the constraint"),
+                       P_("The attribute of the target set by the constraint"),
                        GTK_TYPE_CONSTRAINT_ATTRIBUTE,
                        GTK_CONSTRAINT_ATTRIBUTE_NONE,
                        G_PARAM_READWRITE |
@@ -223,26 +223,25 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
                        G_PARAM_STATIC_STRINGS |
                        G_PARAM_CONSTRUCT_ONLY);
   /**
-   * GtkConstraint:source-widget:
+   * GtkConstraint:source:
    *
-   * The source widget of the constraint.
+   * The source of the constraint.
    *
    * The constraint will set the #GtkConstraint:target-attribute of the
-   * target widget using the #GtkConstraint:source-attribute of the source
-   * widget.
+   * target using the #GtkConstraint:source-attribute of the source.
    */
-  obj_props[PROP_SOURCE_WIDGET] =
-    g_param_spec_object ("source-widget",
-                         P_("Source Widget"),
-                         P_("The source widget of the constraint"),
-                         GTK_TYPE_WIDGET,
+  obj_props[PROP_SOURCE] =
+    g_param_spec_object ("source",
+                         P_("Source"),
+                         P_("The source of the constraint"),
+                         GTK_TYPE_CONSTRAINT_TARGET,
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_CONSTRUCT_ONLY);
   /**
    * GtkConstraint:source-attribute:
    *
-   * The attribute of the #GtkConstraint:source-widget read by the constraint.
+   * The attribute of the #GtkConstraint:source read by the constraint.
    */
   obj_props[PROP_SOURCE_ATTRIBUTE] =
     g_param_spec_enum ("source-attribute",
@@ -316,39 +315,38 @@ gtk_constraint_init (GtkConstraint *self)
 
 /**
  * gtk_constraint_new:
- * @target_widget: (nullable): a #GtkWidget
+ * @target: (nullable): a #GtkConstraintTarget
  * @target_attribute: the attribute of @target_widget to be set
  * @relation: the relation equivalence between @target_attribute and @source_attribute
- * @source_widget: (nullable): a #GtkWidget
+ * @source: (nullable): a #GtkConstraintTarget
  * @source_attribute: the attribute of @source_widget to be read
  * @multiplier: a multiplication factor to be applied to @source_attribute
  * @constant: a constant factor to be added to @source_attribute
  * @strength: the strength of the constraint
  *
  * Creates a new #GtkConstraint representing a relation between a layout
- * attribute on a source #GtkWidget and a layout attribute on a target
- * #GtkWidget.
+ * attribute on a source and a layout attribute on a target.
  *
  * Returns: the newly created #GtkConstraint
  */
 GtkConstraint *
-gtk_constraint_new (GtkWidget              *target_widget,
+gtk_constraint_new (GtkConstraintTarget    *target,
                     GtkConstraintAttribute  target_attribute,
                     GtkConstraintRelation   relation,
-                    GtkWidget              *source_widget,
+                    GtkConstraintTarget    *source,
                     GtkConstraintAttribute  source_attribute,
                     double                  multiplier,
                     double                  constant,
                     int                     strength)
 {
-  g_return_val_if_fail (target_widget == NULL || GTK_IS_WIDGET (target_widget), NULL);
-  g_return_val_if_fail (source_widget == NULL || GTK_IS_WIDGET (source_widget), NULL);
+  g_return_val_if_fail (target == NULL || GTK_IS_CONSTRAINT_TARGET (target), NULL);
+  g_return_val_if_fail (source == NULL || GTK_IS_CONSTRAINT_TARGET (source), NULL);
 
   return g_object_new (GTK_TYPE_CONSTRAINT,
-                       "target-widget", target_widget,
+                       "target", target,
                        "target-attribute", target_attribute,
                        "relation", relation,
-                       "source-widget", source_widget,
+                       "source", source,
                        "source-attribute", source_attribute,
                        "multiplier", multiplier,
                        "constant", constant,
@@ -358,28 +356,28 @@ gtk_constraint_new (GtkWidget              *target_widget,
 
 /**
  * gtk_constraint_new_constant:
- * @target_widget: (nullable): a #GtkWidget
+ * @target: (nullable): a #GtkConstraintTarget
  * @target_attribute: the attribute of @target_widget to be set
  * @relation: the relation equivalence between @target_attribute and @constant
  * @constant: a constant factor to be set on @target_attribute
  * @strength: the strength of the constraint
  *
  * Creates a new #GtkConstraint representing a relation between a layout
- * attribute on a target #GtkWidget and a constant value.
+ * attribute on a target and a constant value.
  *
  * Returns: the newly created #GtkConstraint
  */
 GtkConstraint *
-gtk_constraint_new_constant (GtkWidget              *target_widget,
+gtk_constraint_new_constant (GtkConstraintTarget    *target,
                              GtkConstraintAttribute  target_attribute,
                              GtkConstraintRelation   relation,
                              double                  constant,
                              int                     strength)
 {
-  g_return_val_if_fail (target_widget == NULL || GTK_IS_WIDGET (target_widget), NULL);
+  g_return_val_if_fail (target == NULL || GTK_IS_CONSTRAINT_TARGET (target), NULL);
 
   return g_object_new (GTK_TYPE_CONSTRAINT,
-                       "target-widget", target_widget,
+                       "target", target,
                        "target-attribute", target_attribute,
                        "relation", relation,
                        "source-attribute", GTK_CONSTRAINT_ATTRIBUTE_NONE,
@@ -401,7 +399,18 @@ gtk_constraint_get_target_widget (GtkConstraint *constraint)
 {
   g_return_val_if_fail (GTK_IS_CONSTRAINT (constraint), NULL);
 
-  return constraint->target_widget;
+  if (GTK_IS_WIDGET (constraint->target))
+    return GTK_WIDGET (constraint->target);
+
+  return NULL;
+}
+
+GtkConstraintTarget *
+gtk_constraint_get_target (GtkConstraint *constraint)
+{
+  g_return_val_if_fail (GTK_IS_CONSTRAINT (constraint), NULL);
+
+  return constraint->target;
 }
 
 GtkConstraintAttribute
@@ -425,7 +434,18 @@ gtk_constraint_get_source_widget (GtkConstraint *constraint)
 {
   g_return_val_if_fail (GTK_IS_CONSTRAINT (constraint), NULL);
 
-  return constraint->source_widget;
+  if (GTK_IS_WIDGET (constraint->source))
+    return GTK_WIDGET (constraint->source);
+
+  return NULL;
+}
+
+GtkConstraintTarget *
+gtk_constraint_get_source (GtkConstraint *constraint)
+{
+  g_return_val_if_fail (GTK_IS_CONSTRAINT (constraint), NULL);
+
+  return constraint->source;
 }
 
 GtkConstraintAttribute
