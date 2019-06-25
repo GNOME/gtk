@@ -1083,7 +1083,7 @@ gtk_constraint_layout_new (void)
  *
  * Adds a #GtkConstraint to the layout manager.
  *
- * The #GtkConstraint:source-widget and #GtkConstraint:target-widget
+ * The #GtkConstraint:source and #GtkConstraint:target
  * properties of @constraint can be:
  *
  *  - set to %NULL to indicate that the constraint refers to the

@@ -58,16 +58,16 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkConstraint, gtk_constraint, GTK, CONSTRAINT, GObject)
 
 GDK_AVAILABLE_IN_ALL
-GtkConstraint *         gtk_constraint_new                      (GtkWidget              *target_widget,
+GtkConstraint *         gtk_constraint_new                      (GtkConstraintTarget    *target_widget,
                                                                  GtkConstraintAttribute  target_attribute,
                                                                  GtkConstraintRelation   relation,
-                                                                 GtkWidget              *source_widget,
+                                                                 GtkConstraintTarget    *source_widget,
                                                                  GtkConstraintAttribute  source_attribute,
                                                                  double                  multiplier,
                                                                  double                  constant,
                                                                  int                     strength);
 GDK_AVAILABLE_IN_ALL
-GtkConstraint *         gtk_constraint_new_constant             (GtkWidget              *target_widget,
+GtkConstraint *         gtk_constraint_new_constant             (GtkConstraintTarget    *target_widget,
                                                                  GtkConstraintAttribute  target_attribute,
                                                                  GtkConstraintRelation   relation,
                                                                  double                  constant,
@@ -76,9 +76,13 @@ GtkConstraint *         gtk_constraint_new_constant             (GtkWidget      
 GDK_AVAILABLE_IN_ALL
 GtkWidget *             gtk_constraint_get_target_widget        (GtkConstraint          *constraint);
 GDK_AVAILABLE_IN_ALL
+GtkConstraintTarget *   gtk_constraint_get_target               (GtkConstraint          *constraint);
+GDK_AVAILABLE_IN_ALL
 GtkConstraintAttribute  gtk_constraint_get_target_attribute     (GtkConstraint          *constraint);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *             gtk_constraint_get_source_widget        (GtkConstraint          *constraint);
+GDK_AVAILABLE_IN_ALL
+GtkConstraintTarget *   gtk_constraint_get_source               (GtkConstraint          *constraint);
 GDK_AVAILABLE_IN_ALL
 GtkConstraintAttribute  gtk_constraint_get_source_attribute     (GtkConstraint          *constraint);
 GDK_AVAILABLE_IN_ALL
