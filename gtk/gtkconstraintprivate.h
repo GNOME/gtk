@@ -31,8 +31,8 @@ struct _GtkConstraint
   GtkConstraintAttribute target_attribute;
   GtkConstraintAttribute source_attribute;
 
-  GtkWidget *target_widget;
-  GtkWidget *source_widget;
+  GtkConstraintTarget *target;
+  GtkConstraintTarget *source;
 
   GtkConstraintRelation relation;
 
