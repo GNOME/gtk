@@ -25,6 +25,30 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_CONSTRAINT_LAYOUT (gtk_constraint_layout_get_type ())
 #define GTK_TYPE_CONSTRAINT_LAYOUT_CHILD (gtk_constraint_layout_child_get_type ())
+#define GTK_TYPE_CONSTRAINT_GUIDE (gtk_constraint_guide_get_type ())
+
+/**
+ * GtkConstraintLayoutChild:
+ *
+ * A #GtkLayoutChild in a #GtkConstraintLayout.
+ */
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (GtkConstraintLayoutChild, gtk_constraint_layout_child, GTK, CONSTRAINT_LAYOUT_CHILD, GtkLayoutChild)
+
+/**
+ * GtkConstraintGuide:
+ *
+ * An object that can be added to a #GtkConstraintLayout and be
+ * used in constraints like a widget, without being drawn. Guides
+ * have a minimal and natural size. Depending on the constraints
+ * that are applied, they can act like a guideline that widgets
+ * can be aligned to, or like 'flexible space'.
+ */
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (GtkConstraintGuide, gtk_constraint_guide, GTK, CONSTRAINT_GUIDE, GObject)
+
+GDK_AVAILABLE_IN_ALL
+GtkConstraintGuide *    gtk_constraint_guide_new                (void);
 
 /**
  * GtkConstraintLayout:
@@ -45,12 +69,11 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_constraint_layout_remove_constraint (GtkConstraintLayout *manager,
                                                                  GtkConstraint       *constraint);
 
-/**
- * GtkConstraintLayoutChild:
- *
- * A #GtkLayoutChild in a #GtkConstraintLayout.
- */
 GDK_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (GtkConstraintLayoutChild, gtk_constraint_layout_child, GTK, CONSTRAINT_LAYOUT_CHILD, GtkLayoutChild)
+void                    gtk_constraint_layout_add_guide         (GtkConstraintLayout *manager,
+                                                                 GtkConstraintGuide  *guide);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_constraint_layout_remove_guide      (GtkConstraintLayout *manager,
+                                                                 GtkConstraintGuide  *guide);
 
 G_END_DECLS

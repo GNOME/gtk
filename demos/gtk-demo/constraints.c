@@ -74,6 +74,16 @@ static void
 build_constraints (SimpleGrid          *self,
                    GtkConstraintLayout *manager)
 {
+  GtkConstraintGuide *guide;
+
+  guide = g_object_new (GTK_TYPE_CONSTRAINT_GUIDE,
+                        "min-width", 10,
+                        "min-height", 10,
+                        "nat-width", 100,
+                        "nat-height", 10,
+                        NULL);
+  gtk_constraint_layout_add_guide (manager, guide);
+
   gtk_constraint_layout_add_constraint (manager,
     gtk_constraint_new (NULL,
                         GTK_CONSTRAINT_ATTRIBUTE_START,
@@ -96,10 +106,19 @@ build_constraints (SimpleGrid          *self,
     gtk_constraint_new (self->button1,
                         GTK_CONSTRAINT_ATTRIBUTE_END,
                         GTK_CONSTRAINT_RELATION_EQ,
+                        guide,
+                        GTK_CONSTRAINT_ATTRIBUTE_START,
+                        1.0,
+                        0.0,
+                        GTK_CONSTRAINT_STRENGTH_REQUIRED));
+  gtk_constraint_layout_add_constraint (manager,
+    gtk_constraint_new (guide,
+                        GTK_CONSTRAINT_ATTRIBUTE_END,
+                        GTK_CONSTRAINT_RELATION_EQ,
                         self->button2,
                         GTK_CONSTRAINT_ATTRIBUTE_START,
                         1.0,
-                        -12.0,
+                        0.0,
                         GTK_CONSTRAINT_STRENGTH_REQUIRED));
   gtk_constraint_layout_add_constraint (manager,
     gtk_constraint_new (self->button2,
