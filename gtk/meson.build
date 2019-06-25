@@ -252,6 +252,7 @@ gtk_public_sources = files([
   'gtkgesturezoom.c',
   'gtkglarea.c',
   'gtkgrid.c',
+  'gtkgridconstraint.c',
   'gtkgridlayout.c',
   'gtkheaderbar.c',
   'gtkicontheme.c',

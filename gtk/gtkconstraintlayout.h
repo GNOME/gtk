@@ -20,6 +20,7 @@
 
 #include <gtk/gtklayoutmanager.h>
 #include <gtk/gtkconstraint.h>
+#include <gtk/gtkgridconstraint.h>
 
 G_BEGIN_DECLS
 
@@ -44,6 +45,10 @@ void                    gtk_constraint_layout_add_constraint    (GtkConstraintLa
 GDK_AVAILABLE_IN_ALL
 void                    gtk_constraint_layout_remove_constraint (GtkConstraintLayout *manager,
                                                                  GtkConstraint       *constraint);
+
+GDK_AVAILABLE_IN_ALL
+void                    gtk_constraint_layout_add_grid_constraint (GtkConstraintLayout *manager,
+                                                                   GtkGridConstraint   *constraint);
 
 /**
  * GtkConstraintLayoutChild:
