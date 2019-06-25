@@ -357,7 +357,8 @@ AC_ARG_ENABLE(cloudproviders,
 AC_ARG_ENABLE(profiler,
               [AS_HELP_STRING([--enable-profiler],
                               [enable profiler integration])],
-                              [profiler_set=yes])
+              [enable_profiler=$enableval],
+              [enable_profiler=no])
 
 if test -z "$backend_set"; then
   if test "$platform_win32" = yes; then
@@ -1343,7 +1344,7 @@ fi
 # Check for profiler support
 
 PROFILER_PACKAGES=""
-if test "x$profiler_set" = "xyes"; then
+if test "x$enable_profiler" = "xyes"; then
   PROFILER_PACKAGES="sysprof-capture-3 >= sysprof_required_version"
   if $PKG_CONFIG --exists $PROFILER_PACKAGES; then
     AC_DEFINE(HAVE_SYSPROF_CAPTURE, [1],
