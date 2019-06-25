@@ -73,6 +73,7 @@
 #include "gtkwindowgroup.h"
 #include "gtkwindowprivate.h"
 #include "gtknativeprivate.h"
+#include "gtkconstraint.h"
 
 #include "a11y/gtkwidgetaccessible.h"
 #include "inspector/window.h"
@@ -769,6 +770,13 @@ gtk_widget_get_type (void)
 	NULL /* interface data */
       };
 
+      const GInterfaceInfo constraint_target_info =
+      {
+	(GInterfaceInitFunc) NULL,
+	(GInterfaceFinalizeFunc) NULL,
+	NULL /* interface data */
+      };
+
       widget_type = g_type_register_static (G_TYPE_INITIALLY_UNOWNED, g_intern_static_string ("GtkWidget"),
                                             &widget_info, G_TYPE_FLAG_ABSTRACT);
 
@@ -781,6 +789,8 @@ gtk_widget_get_type (void)
                                    &accessibility_info) ;
       g_type_add_interface_static (widget_type, GTK_TYPE_BUILDABLE,
                                    &buildable_info) ;
+      g_type_add_interface_static (widget_type, GTK_TYPE_CONSTRAINT_TARGET,
+                                   &constraint_target_info) ;
     }
 
   return widget_type;
