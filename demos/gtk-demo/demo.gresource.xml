@@ -151,6 +151,7 @@
     <file>colorsel.c</file>
     <file>combobox.c</file>
     <file>constraints.c</file>
+    <file>constraints2.c</file>
     <file>css_accordion.c</file>
     <file>css_basics.c</file>
     <file>css_blendmodes.c</file>
