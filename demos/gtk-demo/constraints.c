@@ -85,6 +85,12 @@ build_constraints (SimpleGrid          *self,
   gtk_constraint_layout_add_guide (manager, guide);
 
   gtk_constraint_layout_add_constraint (manager,
+    gtk_constraint_new_constant (GTK_CONSTRAINT_TARGET (self->button1),
+                        GTK_CONSTRAINT_ATTRIBUTE_WIDTH,
+                        GTK_CONSTRAINT_RELATION_LE,
+                        200.0,
+                        GTK_CONSTRAINT_STRENGTH_REQUIRED));
+  gtk_constraint_layout_add_constraint (manager,
     gtk_constraint_new (NULL,
                         GTK_CONSTRAINT_ATTRIBUTE_START,
                         GTK_CONSTRAINT_RELATION_EQ,
