@@ -1,133 +1,91 @@
-/* Constraints/Simple
+/* Constraints/Interactive
  *
- * GtkConstraintLayout provides a layout manager that uses relations
- * between widgets (also known as "constraints") to compute the position
- * and size of each child.
+ * Demonstrate how constraints can be updates during
+ * user interaction.
  */
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-G_DECLARE_FINAL_TYPE (SimpleGrid, simple_grid, SIMPLE, GRID, GtkWidget)
+G_DECLARE_FINAL_TYPE (InteractiveGrid, interactive_grid, INTERACTIVE, GRID, GtkWidget)
 
-struct _SimpleGrid
+struct _InteractiveGrid
 {
   GtkWidget parent_instance;
 
   GtkWidget *button1, *button2;
   GtkWidget *button3;
+  GtkConstraintGuide *guide;
+  GtkConstraint *constraint;
 };
 
-G_DEFINE_TYPE (SimpleGrid, simple_grid, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE (InteractiveGrid, interactive_grid, GTK_TYPE_WIDGET)
 
 static void
-simple_grid_destroy (GtkWidget *widget)
+interactive_grid_destroy (GtkWidget *widget)
 {
-  SimpleGrid *self = SIMPLE_GRID (widget);
+  InteractiveGrid *self = INTERACTIVE_GRID (widget);
 
   g_clear_pointer (&self->button1, gtk_widget_destroy);
   g_clear_pointer (&self->button2, gtk_widget_destroy);
   g_clear_pointer (&self->button3, gtk_widget_destroy);
 
-  GTK_WIDGET_CLASS (simple_grid_parent_class)->destroy (widget);
+  GTK_WIDGET_CLASS (interactive_grid_parent_class)->destroy (widget);
 }
 
 static void
-simple_grid_class_init (SimpleGridClass *klass)
+interactive_grid_class_init (InteractiveGridClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  widget_class->destroy = simple_grid_destroy;
+  widget_class->destroy = interactive_grid_destroy;
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_CONSTRAINT_LAYOUT);
 }
 
-/* Layout:
- *
- *   +-----------------------------+
- *   | +-----------+ +-----------+ |
- *   | |  Child 1  | |  Child 2  | |
- *   | +-----------+ +-----------+ |
- *   | +-------------------------+ |
- *   | |         Child 3         | |
- *   | +-------------------------+ |
- *   +-----------------------------+
- *
- * Constraints:
- *
- *   super.start = child1.start - 8
- *   child1.width = child2.width
- *   child1.end = child2.start - 12
- *   child2.end = super.end - 8
- *   super.start = child3.start - 8
- *   child3.end = super.end - 8
- *   super.top = child1.top - 8
- *   super.top = child2.top - 8
- *   child1.bottom = child3.top - 12
- *   child2.bottom = child3.top - 12
- *   child3.height = child1.height
- *   child3.height = child2.height
- *   child3.bottom = super.bottom - 8
- *
- */
 static void
-build_constraints (SimpleGrid          *self,
+build_constraints (InteractiveGrid          *self,
                    GtkConstraintLayout *manager)
 {
-  GtkConstraintGuide *guide;
-
-  guide = g_object_new (GTK_TYPE_CONSTRAINT_GUIDE,
-                        "min-width", 10,
-                        "min-height", 10,
-                        "nat-width", 100,
-                        "nat-height", 10,
-                        NULL);
-  gtk_constraint_layout_add_guide (manager, guide);
+  self->guide = g_object_new (GTK_TYPE_CONSTRAINT_GUIDE, NULL);
+  gtk_constraint_layout_add_guide (manager, self->guide);
 
   gtk_constraint_layout_add_constraint (manager,
-    gtk_constraint_new_constant (GTK_CONSTRAINT_TARGET (self->button1),
+    gtk_constraint_new_constant (GTK_CONSTRAINT_TARGET (self->guide),
                         GTK_CONSTRAINT_ATTRIBUTE_WIDTH,
-                        GTK_CONSTRAINT_RELATION_LE,
-                        200.0,
+                        GTK_CONSTRAINT_RELATION_EQ,
+                        0.0,
                         GTK_CONSTRAINT_STRENGTH_REQUIRED));
+
   gtk_constraint_layout_add_constraint (manager,
     gtk_constraint_new (NULL,
                         GTK_CONSTRAINT_ATTRIBUTE_START,
                         GTK_CONSTRAINT_RELATION_EQ,
-                        self->button1,
+                        GTK_CONSTRAINT_TARGET (self->button1),
                         GTK_CONSTRAINT_ATTRIBUTE_START,
                         1.0,
                         -8.0,
                         GTK_CONSTRAINT_STRENGTH_REQUIRED));
   gtk_constraint_layout_add_constraint (manager,
-    gtk_constraint_new (self->button1,
-                        GTK_CONSTRAINT_ATTRIBUTE_WIDTH,
-                        GTK_CONSTRAINT_RELATION_EQ,
-                        self->button2,
-                        GTK_CONSTRAINT_ATTRIBUTE_WIDTH,
-                        1.0,
-                        0.0,
-                        GTK_CONSTRAINT_STRENGTH_REQUIRED));
-  gtk_constraint_layout_add_constraint (manager,
-    gtk_constraint_new (self->button1,
+    gtk_constraint_new (GTK_CONSTRAINT_TARGET (self->button1),
                         GTK_CONSTRAINT_ATTRIBUTE_END,
                         GTK_CONSTRAINT_RELATION_EQ,
-                        guide,
+                        GTK_CONSTRAINT_TARGET (self->guide),
                         GTK_CONSTRAINT_ATTRIBUTE_START,
                         1.0,
                         0.0,
                         GTK_CONSTRAINT_STRENGTH_REQUIRED));
   gtk_constraint_layout_add_constraint (manager,
-    gtk_constraint_new (guide,
-                        GTK_CONSTRAINT_ATTRIBUTE_END,
-                        GTK_CONSTRAINT_RELATION_EQ,
-                        self->button2,
+    gtk_constraint_new (GTK_CONSTRAINT_TARGET (self->button2),
                         GTK_CONSTRAINT_ATTRIBUTE_START,
+                        GTK_CONSTRAINT_RELATION_EQ,
+                        GTK_CONSTRAINT_TARGET (self->guide),
+                        GTK_CONSTRAINT_ATTRIBUTE_END,
                         1.0,
                         0.0,
                         GTK_CONSTRAINT_STRENGTH_REQUIRED));
   gtk_constraint_layout_add_constraint (manager,
-    gtk_constraint_new (self->button2,
+    gtk_constraint_new (GTK_CONSTRAINT_TARGET (self->button2),
                         GTK_CONSTRAINT_ATTRIBUTE_END,
                         GTK_CONSTRAINT_RELATION_EQ,
                         NULL,
@@ -139,76 +97,51 @@ build_constraints (SimpleGrid          *self,
     gtk_constraint_new (NULL,
                         GTK_CONSTRAINT_ATTRIBUTE_START,
                         GTK_CONSTRAINT_RELATION_EQ,
-                        self->button3,
+                        GTK_CONSTRAINT_TARGET (self->button3),
                         GTK_CONSTRAINT_ATTRIBUTE_START,
                         1.0,
                         -8.0,
                         GTK_CONSTRAINT_STRENGTH_REQUIRED));
+
   gtk_constraint_layout_add_constraint (manager,
-    gtk_constraint_new (self->button3,
+    gtk_constraint_new (GTK_CONSTRAINT_TARGET (self->button3),
                         GTK_CONSTRAINT_ATTRIBUTE_END,
                         GTK_CONSTRAINT_RELATION_EQ,
-                        NULL,
-                        GTK_CONSTRAINT_ATTRIBUTE_END,
+                        GTK_CONSTRAINT_TARGET (self->guide),
+                        GTK_CONSTRAINT_ATTRIBUTE_START,
                         1.0,
-                        -8.0,
+                        0.0,
                         GTK_CONSTRAINT_STRENGTH_REQUIRED));
+
   gtk_constraint_layout_add_constraint (manager,
     gtk_constraint_new (NULL,
                         GTK_CONSTRAINT_ATTRIBUTE_TOP,
                         GTK_CONSTRAINT_RELATION_EQ,
-                        self->button1,
+                        GTK_CONSTRAINT_TARGET (self->button1),
                         GTK_CONSTRAINT_ATTRIBUTE_TOP,
                         1.0,
                         -8.0,
                         GTK_CONSTRAINT_STRENGTH_REQUIRED));
   gtk_constraint_layout_add_constraint (manager,
-    gtk_constraint_new (NULL,
+    gtk_constraint_new (GTK_CONSTRAINT_TARGET (self->button2),
                         GTK_CONSTRAINT_ATTRIBUTE_TOP,
                         GTK_CONSTRAINT_RELATION_EQ,
-                        self->button2,
-                        GTK_CONSTRAINT_ATTRIBUTE_TOP,
-                        1.0,
-                        -8.0,
-                        GTK_CONSTRAINT_STRENGTH_REQUIRED));
-  gtk_constraint_layout_add_constraint (manager,
-    gtk_constraint_new (self->button1,
+                        GTK_CONSTRAINT_TARGET (self->button1),
                         GTK_CONSTRAINT_ATTRIBUTE_BOTTOM,
-                        GTK_CONSTRAINT_RELATION_EQ,
-                        self->button3,
-                        GTK_CONSTRAINT_ATTRIBUTE_TOP,
-                        1.0,
-                        -12.0,
-                        GTK_CONSTRAINT_STRENGTH_REQUIRED));
-  gtk_constraint_layout_add_constraint (manager,
-    gtk_constraint_new (self->button2,
-                        GTK_CONSTRAINT_ATTRIBUTE_BOTTOM,
-                        GTK_CONSTRAINT_RELATION_EQ,
-                        self->button3,
-                        GTK_CONSTRAINT_ATTRIBUTE_TOP,
-                        1.0,
-                        -12.0,
-                        GTK_CONSTRAINT_STRENGTH_REQUIRED));
-  gtk_constraint_layout_add_constraint (manager,
-    gtk_constraint_new (self->button3,
-                        GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
-                        GTK_CONSTRAINT_RELATION_EQ,
-                        self->button1,
-                        GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
                         1.0,
                         0.0,
                         GTK_CONSTRAINT_STRENGTH_REQUIRED));
   gtk_constraint_layout_add_constraint (manager,
-    gtk_constraint_new (self->button3,
-                        GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
+    gtk_constraint_new (GTK_CONSTRAINT_TARGET (self->button3),
+                        GTK_CONSTRAINT_ATTRIBUTE_TOP,
                         GTK_CONSTRAINT_RELATION_EQ,
-                        self->button2,
-                        GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
+                        GTK_CONSTRAINT_TARGET (self->button2),
+                        GTK_CONSTRAINT_ATTRIBUTE_BOTTOM,
                         1.0,
                         0.0,
                         GTK_CONSTRAINT_STRENGTH_REQUIRED));
   gtk_constraint_layout_add_constraint (manager,
-    gtk_constraint_new (self->button3,
+    gtk_constraint_new (GTK_CONSTRAINT_TARGET (self->button3),
                         GTK_CONSTRAINT_ATTRIBUTE_BOTTOM,
                         GTK_CONSTRAINT_RELATION_EQ,
                         NULL,
@@ -219,9 +152,35 @@ build_constraints (SimpleGrid          *self,
 }
 
 static void
-simple_grid_init (SimpleGrid *self)
+drag_cb (GtkGestureDrag  *drag,
+         double           offset_x,
+         double           offset_y,
+         InteractiveGrid *self)
+{
+  GtkConstraintLayout *layout = GTK_CONSTRAINT_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (self)));
+  double x, y;
+
+  if (self->constraint)
+    {
+      gtk_constraint_layout_remove_constraint (layout, self->constraint);
+      g_clear_object (&self->constraint);
+    }
+
+  gtk_gesture_drag_get_start_point (drag, &x, &y);
+  self->constraint = gtk_constraint_new_constant (GTK_CONSTRAINT_TARGET (self->guide),
+                                                  GTK_CONSTRAINT_ATTRIBUTE_LEFT,
+                                                  GTK_CONSTRAINT_RELATION_EQ,
+                                                  x + offset_x,
+                                                  GTK_CONSTRAINT_STRENGTH_REQUIRED);
+  gtk_constraint_layout_add_constraint (layout, g_object_ref (self->constraint));
+  gtk_widget_queue_allocate (GTK_WIDGET (self));
+}
+
+static void
+interactive_grid_init (InteractiveGrid *self)
 {
   GtkWidget *widget = GTK_WIDGET (self);
+  GtkGesture *drag;
 
   self->button1 = gtk_button_new_with_label ("Child 1");
   gtk_widget_set_parent (self->button1, widget);
@@ -237,10 +196,14 @@ simple_grid_init (SimpleGrid *self)
 
   GtkLayoutManager *manager = gtk_widget_get_layout_manager (GTK_WIDGET (self));
   build_constraints (self, GTK_CONSTRAINT_LAYOUT (manager));
+
+  drag = gtk_gesture_drag_new ();
+  g_signal_connect (drag, "drag-update", G_CALLBACK (drag_cb), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (drag));
 }
 
 GtkWidget *
-do_constraints (GtkWidget *do_widget)
+do_constraints2 (GtkWidget *do_widget)
 {
  static GtkWidget *window;
 
@@ -261,7 +224,7 @@ do_constraints (GtkWidget *do_widget)
      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
      gtk_container_add (GTK_CONTAINER (window), box);
 
-     grid = g_object_new (simple_grid_get_type (), NULL);
+     grid = g_object_new (interactive_grid_get_type (), NULL);
      gtk_widget_set_hexpand (grid, TRUE);
      gtk_widget_set_vexpand (grid, TRUE);
      gtk_container_add (GTK_CONTAINER (box), grid);
