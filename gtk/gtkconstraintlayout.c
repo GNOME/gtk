@@ -1216,6 +1216,26 @@ gtk_constraint_layout_add_constraint (GtkConstraintLayout *manager,
   g_hash_table_add (manager->constraints, constraint);
 }
 
+/**
+ * gtk_constraint_layout_remove_constraint:
+ * @manager: a #GtkConstraintLayout
+ * @constraint: a #GtkConstraint
+ *
+ * Removes @constraint from the layout manager,
+ * so that it no longer influences the layout.
+ */
+void
+gtk_constraint_layout_remove_constraint (GtkConstraintLayout *manager,
+                                         GtkConstraint       *constraint)
+{
+  g_return_if_fail (GTK_IS_CONSTRAINT_LAYOUT (manager));
+  g_return_if_fail (GTK_IS_CONSTRAINT (constraint));
+  g_return_if_fail (gtk_constraint_is_attached (constraint));
+
+  gtk_constraint_detach (constraint);
+  g_hash_table_remove (manager->constraints, constraint);
+}
+
 static void
 gtk_constraint_guide_constraint_target_iface_init (GtkConstraintTargetInterface *iface)
 {

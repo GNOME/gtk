@@ -54,6 +54,9 @@ GtkLayoutManager *      gtk_constraint_layout_new               (void);
 GDK_AVAILABLE_IN_ALL 
 void                    gtk_constraint_layout_add_constraint    (GtkConstraintLayout *manager,
                                                                  GtkConstraint       *constraint);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_constraint_layout_remove_constraint (GtkConstraintLayout *manager,
+                                                                 GtkConstraint       *constraint);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_constraint_layout_add_guide         (GtkConstraintLayout *manager,
