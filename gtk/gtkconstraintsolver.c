@@ -741,6 +741,10 @@ gtk_constraint_solver_optimize (GtkConstraintSolver *self,
     str = gtk_constraint_variable_to_string (z);
     g_debug ("optimize: %s\n", str);
     g_free (str);
+
+    str = gtk_constraint_solver_to_string (self);
+    g_debug ("%s\n", str);
+    g_free (str);
   }
 #endif
 
@@ -1404,7 +1408,7 @@ void
 gtk_constraint_solver_thaw (GtkConstraintSolver *solver)
 {
   g_return_if_fail (GTK_IS_CONSTRAINT_SOLVER (solver));
-  g_return_if_fail (solver->freeze_count == 0);
+  g_return_if_fail (solver->freeze_count > 0);
 
   solver->freeze_count -= 1;
 
