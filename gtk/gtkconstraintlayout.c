@@ -1294,6 +1294,8 @@ layout_add_grid_constraint (GtkConstraintLayout *manager,
   if (solver == NULL)
     return;
 
+  gtk_constraint_solver_freeze (solver);
+
   refs = g_ptr_array_new ();
 
   n_rows = n_cols = 0;
@@ -1332,4 +1334,6 @@ layout_add_grid_constraint (GtkConstraintLayout *manager,
   g_free (rows);
   g_free (cols);
   g_ptr_array_unref (refs);
+
+  gtk_constraint_solver_thaw (solver);
 }
