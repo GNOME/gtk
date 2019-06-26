@@ -219,7 +219,7 @@ get_attribute (ConstraintSolverChildData *self,
 
         gtk_constraint_solver_add_constraint (solver,
                                               res, GTK_CONSTRAINT_RELATION_EQ, expr,
-                                              GTK_CONSTRAINT_WEIGHT_MEDIUM);
+                                              GTK_CONSTRAINT_WEIGHT_REQUIRED);
       }
       break;
 
@@ -241,7 +241,7 @@ get_attribute (ConstraintSolverChildData *self,
 
         gtk_constraint_solver_add_constraint (solver,
                                               res, GTK_CONSTRAINT_RELATION_EQ, expr,
-                                              GTK_CONSTRAINT_WEIGHT_MEDIUM);
+                                              GTK_CONSTRAINT_WEIGHT_REQUIRED);
       }
       break;
 
