@@ -10,6 +10,7 @@ demos = files([
   'combobox.c',
   'constraints.c',
   'constraints2.c',
+  'constraints3.c',
   'css_accordion.c',
   'css_basics.c',
   'css_blendmodes.c',
