@@ -1067,9 +1067,12 @@ button.color {
 
 /* list buttons */
 /* tone down as per new designs, see issue #1473 */
-list row button {
+list row button.image-button:not(.flat) {
   @extend %undecorated_button;
   border: 1px solid transparentize($borders_color, .5);
+  &:hover { @include button(hover); }
+  &:active,
+  &:checked { @include button(active); }
 }
 
 /*********
