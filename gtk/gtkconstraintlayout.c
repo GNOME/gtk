@@ -696,6 +696,8 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
   if (solver == NULL)
     return;
 
+  gtk_constraint_solver_freeze (solver);
+
   /* We measure each child in the layout and impose restrictions on the
    * minimum and natural size, so we can solve the size of the overall
    * layout later on
@@ -772,6 +774,8 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
         }
     }
 
+  gtk_constraint_solver_thaw (solver);
+
   switch (orientation)
     {
     case GTK_ORIENTATION_HORIZONTAL:
@@ -843,6 +847,8 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
   solver = gtk_constraint_layout_get_solver (self);
   if (solver == NULL)
     return;
+
+  gtk_constraint_solver_freeze (solver);
 
   /* We add required stay constraints to ensure that the layout remains
    * within the bounds of the allocation
@@ -938,6 +944,8 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
                                               gtk_constraint_expression_new (nat_req.height),
                                               GTK_CONSTRAINT_WEIGHT_MEDIUM);
     }
+
+  gtk_constraint_solver_thaw (solver);
 
   for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
