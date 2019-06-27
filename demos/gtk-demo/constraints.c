@@ -76,12 +76,10 @@ build_constraints (SimpleGrid          *self,
 {
   GtkConstraintGuide *guide;
 
-  guide = g_object_new (GTK_TYPE_CONSTRAINT_GUIDE,
-                        "min-width", 10,
-                        "min-height", 10,
-                        "nat-width", 100,
-                        "nat-height", 10,
-                        NULL);
+  guide = gtk_constraint_guide_new ();
+  gtk_constraint_guide_set_min_size (guide, 10, 10);
+  gtk_constraint_guide_set_nat_size (guide, 100, 10);
+  gtk_constraint_guide_set_max_size (guide, 200, 20);
   gtk_constraint_layout_add_guide (manager, guide);
 
   gtk_constraint_layout_add_constraint (manager,
