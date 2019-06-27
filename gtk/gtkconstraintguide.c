@@ -118,10 +118,10 @@ gtk_constraint_guide_update_constraint (GtkConstraintGuide *guide,
 void
 gtk_constraint_guide_update (GtkConstraintGuide *guide)
 {
-  gtk_constraint_guide_update_constraint (guide, GUIDE_MIN_WIDTH);
-  gtk_constraint_guide_update_constraint (guide, GUIDE_MIN_HEIGHT);
-  gtk_constraint_guide_update_constraint (guide, GUIDE_NAT_WIDTH);
-  gtk_constraint_guide_update_constraint (guide, GUIDE_NAT_HEIGHT);
+  int i;
+
+  for (i = 0; i < LAST_GUIDE_VALUE; i++)
+    gtk_constraint_guide_update_constraint (guide, i);
 }
 
 void
