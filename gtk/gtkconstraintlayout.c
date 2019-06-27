@@ -1069,6 +1069,7 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
 
 static void gtk_constraint_guide_update (GtkConstraintGuide *guide,
                                          GuideValue          index);
+static void gtk_constraint_guide_detach (GtkConstraintGuide *guide);
 
 static void
 gtk_constraint_layout_root (GtkLayoutManager *manager)
@@ -1119,6 +1120,13 @@ gtk_constraint_layout_unroot (GtkLayoutManager *manager)
     {
       GtkConstraint *constraint = key;
       gtk_constraint_detach (constraint);
+    }
+
+  g_hash_table_iter_init (&iter, self->guides);
+  while (g_hash_table_iter_next (&iter, &key, NULL))
+    {
+      GtkConstraintGuide *guide = key;
+      gtk_constraint_guide_detach (guide);
     }
 
   self->solver = NULL;
@@ -1306,6 +1314,28 @@ gtk_constraint_guide_update (GtkConstraintGuide *guide,
 }
 
 static void
+gtk_constraint_guide_detach (GtkConstraintGuide *guide)
+{
+  GtkConstraintSolver *solver;
+  int i;
+
+  if (!guide->layout)
+    return;
+
+  solver = guide->layout->solver;
+  if (!solver)
+    return;
+
+  for (i = 0; i < LAST_GUIDE_VALUE; i++)
+    {
+      gtk_constraint_solver_remove_constraint (solver, guide->constraints[i]);
+      guide->constraints[i] = NULL;
+    }
+
+  g_hash_table_remove_all (guide->data.bound_attributes);
+}
+
+static void
 gtk_constraint_guide_set_property (GObject      *gobject,
                                    guint         prop_id,
                                    const GValue *value,
@@ -1455,14 +1485,11 @@ void
 gtk_constraint_layout_remove_guide (GtkConstraintLayout *layout,
                                     GtkConstraintGuide  *guide)
 {
-  GtkConstraintSolver *solver;
-
   g_return_if_fail (GTK_IS_CONSTRAINT_LAYOUT (layout));
   g_return_if_fail (GTK_IS_CONSTRAINT_GUIDE (guide));
   g_return_if_fail (guide->layout == layout);
 
-  solver = gtk_constraint_layout_get_solver (guide->layout);
-  clear_constraint_solver_data (solver, &guide->data);
+  gtk_constraint_guide_detach (guide);
   guide->layout = NULL;
 
   g_hash_table_remove (layout->guides, guide);
