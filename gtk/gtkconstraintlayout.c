@@ -89,21 +89,25 @@ struct _GtkConstraintLayoutChild
   ConstraintSolverChildData data;
 };
 
+typedef enum {
+  GUIDE_MIN_WIDTH,
+  GUIDE_MIN_HEIGHT,
+  GUIDE_NAT_WIDTH,
+  GUIDE_NAT_HEIGHT,
+  LAST_GUIDE_VALUE
+} GuideValue;
+
 struct _GtkConstraintGuide
 {
   GObject parent_instance;
 
-  int min_width;
-  int min_height;
-  int nat_width;
-  int nat_height;
+  int values[LAST_GUIDE_VALUE];
 
   GtkConstraintLayout *layout;
 
   ConstraintSolverChildData data;
 
-  GtkConstraintRef *width_constraint[2];
-  GtkConstraintRef *height_constraint[2];
+  GtkConstraintRef *constraints[LAST_GUIDE_VALUE];
 };
 
 struct _GtkConstraintLayout
@@ -1063,10 +1067,8 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
   gtk_constraint_solver_remove_constraint (solver, stay_l);
 }
 
-static void update_min_width (GtkConstraintGuide *guide);
-static void update_nat_width (GtkConstraintGuide *guide);
-static void update_min_height (GtkConstraintGuide *guide);
-static void update_nat_height (GtkConstraintGuide *guide);
+static void gtk_constraint_guide_update (GtkConstraintGuide *guide,
+                                         GuideValue          index);
 
 static void
 gtk_constraint_layout_root (GtkLayoutManager *manager)
@@ -1094,10 +1096,10 @@ gtk_constraint_layout_root (GtkLayoutManager *manager)
   while (g_hash_table_iter_next (&iter, &key, NULL))
     {
       GtkConstraintGuide *guide = key;
-      update_min_width (guide);
-      update_nat_width (guide);
-      update_min_height (guide);
-      update_nat_height (guide);
+      gtk_constraint_guide_update (guide, GUIDE_MIN_WIDTH);
+      gtk_constraint_guide_update (guide, GUIDE_MIN_HEIGHT);
+      gtk_constraint_guide_update (guide, GUIDE_NAT_WIDTH);
+      gtk_constraint_guide_update (guide, GUIDE_NAT_HEIGHT);
     }
 }
 
@@ -1236,14 +1238,14 @@ struct _GtkConstraintGuideClass {
 };
 
 enum {
-  PROP_MIN_WIDTH = 1,
-  PROP_MIN_HEIGHT,
-  PROP_NAT_WIDTH,
-  PROP_NAT_HEIGHT,
-  LAST_PROP
+  GUIDE_PROP_MIN_WIDTH = 1,
+  GUIDE_PROP_MIN_HEIGHT,
+  GUIDE_PROP_NAT_WIDTH,
+  GUIDE_PROP_NAT_HEIGHT,
+  LAST_GUIDE_PROP
 };
 
-static GParamSpec *guide_props[LAST_PROP];
+static GParamSpec *guide_props[LAST_GUIDE_PROP];
 
 G_DEFINE_TYPE_WITH_CODE (GtkConstraintGuide, gtk_constraint_guide, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CONSTRAINT_TARGET,
@@ -1259,10 +1261,29 @@ gtk_constraint_guide_init (GtkConstraintGuide *guide)
 }
 
 static void
-update_min_width (GtkConstraintGuide *guide)
+gtk_constraint_guide_update (GtkConstraintGuide *guide,
+                             GuideValue          index)
 {
   GtkConstraintSolver *solver;
   GtkConstraintVariable *var;
+  int attr[LAST_GUIDE_VALUE] = {
+    GTK_CONSTRAINT_ATTRIBUTE_WIDTH,
+    GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
+    GTK_CONSTRAINT_ATTRIBUTE_WIDTH,
+    GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
+  };
+  int relation[LAST_GUIDE_VALUE] = {
+    GTK_CONSTRAINT_RELATION_GE,
+    GTK_CONSTRAINT_RELATION_GE,
+    GTK_CONSTRAINT_RELATION_EQ,
+    GTK_CONSTRAINT_RELATION_EQ,
+  };
+  double weight[LAST_GUIDE_VALUE] = {
+    GTK_CONSTRAINT_WEIGHT_REQUIRED,
+    GTK_CONSTRAINT_WEIGHT_REQUIRED,
+    GTK_CONSTRAINT_WEIGHT_MEDIUM,
+    GTK_CONSTRAINT_WEIGHT_MEDIUM,
+  };
 
   if (!guide->layout)
     return;
@@ -1272,149 +1293,16 @@ update_min_width (GtkConstraintGuide *guide)
   if (!solver)
     return;
 
-  if (guide->width_constraint[0] != NULL)
-    gtk_constraint_solver_remove_constraint (solver, guide->width_constraint[0]);
+  if (guide->constraints[index] != NULL)
+    gtk_constraint_solver_remove_constraint (solver, guide->constraints[index]);
 
-  var = get_guide_attribute (guide->layout, guide, solver, GTK_CONSTRAINT_ATTRIBUTE_WIDTH);
-  guide->width_constraint[0] =
+  var = get_guide_attribute (guide->layout, guide, solver, attr[index]);
+  guide->constraints[index] =
     gtk_constraint_solver_add_constraint (solver,
                                           var,
-                                          GTK_CONSTRAINT_RELATION_GE,
-                                          gtk_constraint_expression_new (guide->min_width),
-                                          GTK_CONSTRAINT_WEIGHT_REQUIRED);
-}
-
-static void
-update_min_height (GtkConstraintGuide *guide)
-{
-  GtkConstraintSolver *solver;
-  GtkConstraintVariable *var;
-
-  if (!guide->layout)
-    return;
-
-  solver = guide->layout->solver;
-
-  if (!solver)
-    return;
-
-  if (guide->height_constraint[0] != NULL)
-    gtk_constraint_solver_remove_constraint (solver, guide->height_constraint[0]);
-
-  var = get_guide_attribute (guide->layout, guide, solver, GTK_CONSTRAINT_ATTRIBUTE_HEIGHT);
-  guide->height_constraint[0] =
-    gtk_constraint_solver_add_constraint (solver,
-                                          var,
-                                          GTK_CONSTRAINT_RELATION_GE,
-                                          gtk_constraint_expression_new (guide->min_height),
-                                          GTK_CONSTRAINT_WEIGHT_REQUIRED);
-}
-
-static void
-update_nat_width (GtkConstraintGuide *guide)
-{
-  GtkConstraintSolver *solver;
-  GtkConstraintVariable *var;
-
-  if (!guide->layout)
-    return;
-
-  solver = guide->layout->solver;
-
-  if (!solver)
-    return;
-
-  if (guide->width_constraint[1] != NULL)
-    gtk_constraint_solver_remove_constraint (solver, guide->width_constraint[1]);
-
-  var = get_guide_attribute (guide->layout, guide, solver, GTK_CONSTRAINT_ATTRIBUTE_WIDTH);
-  guide->width_constraint[1] =
-    gtk_constraint_solver_add_constraint (solver,
-                                          var,
-                                          GTK_CONSTRAINT_RELATION_EQ,
-                                          gtk_constraint_expression_new (guide->nat_width),
-                                          GTK_CONSTRAINT_WEIGHT_MEDIUM);
-}
-
-static void
-update_nat_height (GtkConstraintGuide *guide)
-{
-  GtkConstraintSolver *solver;
-  GtkConstraintVariable *var;
-
-  if (!guide->layout)
-    return;
-
-  solver = guide->layout->solver;
-
-  if (!solver)
-    return;
-
-  if (guide->height_constraint[1] != NULL)
-    gtk_constraint_solver_remove_constraint (solver, guide->height_constraint[1]);
-
-  var = get_guide_attribute (guide->layout, guide, solver, GTK_CONSTRAINT_ATTRIBUTE_HEIGHT);
-  guide->height_constraint[1] =
-    gtk_constraint_solver_add_constraint (solver,
-                                          var,
-                                          GTK_CONSTRAINT_RELATION_EQ,
-                                          gtk_constraint_expression_new (guide->nat_height),
-                                          GTK_CONSTRAINT_WEIGHT_MEDIUM);
-}
-
-static void
-set_min_width (GtkConstraintGuide *guide,
-               int                 min_width)
-{
-  if (guide->min_width == min_width)
-    return;
-
-  guide->min_width = min_width;
-  g_object_notify_by_pspec (G_OBJECT (guide),
-                            guide_props[PROP_MIN_WIDTH]);
-
-  update_min_width (guide);
-}
-
-static void
-set_min_height (GtkConstraintGuide *guide,
-                int                 min_height)
-{
-  if (guide->min_height == min_height)
-    return;
-
-  guide->min_height = min_height;
-  g_object_notify_by_pspec (G_OBJECT (guide),
-                            guide_props[PROP_MIN_HEIGHT]);
-
-  update_min_height (guide);
-}
-
-static void
-set_nat_width (GtkConstraintGuide *guide,
-               int                 nat_width)
-{
-  if (guide->nat_width == nat_width)
-    return;
-
-  guide->nat_width = nat_width;
-  g_object_notify_by_pspec (G_OBJECT (guide),
-                            guide_props[PROP_NAT_WIDTH]);
-
-  update_nat_width (guide);
-}
-static void
-set_nat_height (GtkConstraintGuide *guide,
-                int                 nat_height)
-{
-  if (guide->nat_height == nat_height)
-    return;
-
-  guide->nat_height = nat_height;
-  g_object_notify_by_pspec (G_OBJECT (guide),
-                            guide_props[PROP_NAT_HEIGHT]);
-
-  update_nat_height (guide);
+                                          relation[index],
+                                          gtk_constraint_expression_new (guide->values[index]),
+                                          weight[index]);
 }
 
 static void
@@ -1424,23 +1312,23 @@ gtk_constraint_guide_set_property (GObject      *gobject,
                                    GParamSpec   *pspec)
 {
   GtkConstraintGuide *self = GTK_CONSTRAINT_GUIDE (gobject);
+  int val;
+  GuideValue index;
 
   switch (prop_id)
     {
-    case PROP_MIN_WIDTH:
-      set_min_width (self, g_value_get_int (value));
-      break;
-
-    case PROP_MIN_HEIGHT:
-      set_min_height (self, g_value_get_int (value));
-      break;
-
-    case PROP_NAT_WIDTH:
-      set_nat_width (self, g_value_get_int (value));
-      break;
-
-    case PROP_NAT_HEIGHT:
-      set_nat_height (self, g_value_get_int (value));
+    case GUIDE_PROP_MIN_WIDTH:
+    case GUIDE_PROP_MIN_HEIGHT:
+    case GUIDE_PROP_NAT_WIDTH:
+    case GUIDE_PROP_NAT_HEIGHT:
+      val = g_value_get_int (value);
+      index = prop_id - 1;
+      if (self->values[index] != val)
+        {
+          self->values[index] = val;
+          g_object_notify_by_pspec (gobject, pspec);
+          gtk_constraint_guide_update (self, index);
+        }
       break;
 
     default:
@@ -1459,20 +1347,11 @@ gtk_constraint_guide_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_MIN_WIDTH:
-      g_value_set_int (value, self->min_width);
-      break;
-
-    case PROP_MIN_HEIGHT:
-      g_value_set_int (value, self->min_height);
-      break;
-
-    case PROP_NAT_WIDTH:
-      g_value_set_int (value, self->nat_width);
-      break;
-
-    case PROP_NAT_HEIGHT:
-      g_value_set_int (value, self->nat_height);
+    case GUIDE_PROP_MIN_WIDTH:
+    case GUIDE_PROP_MIN_HEIGHT:
+    case GUIDE_PROP_NAT_WIDTH:
+    case GUIDE_PROP_NAT_HEIGHT:
+      g_value_set_int (value, self->values[prop_id - 1]);
       break;
 
     default:
@@ -1505,28 +1384,28 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
   object_class->set_property = gtk_constraint_guide_set_property;
   object_class->get_property = gtk_constraint_guide_get_property;
 
-  guide_props[PROP_MIN_WIDTH] =
+  guide_props[GUIDE_PROP_MIN_WIDTH] =
       g_param_spec_int ("min-width",
                         "Minimum width",
                         "Minimum width",
                         0, G_MAXINT, 0,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
-  guide_props[PROP_MIN_HEIGHT] =
+  guide_props[GUIDE_PROP_MIN_HEIGHT] =
       g_param_spec_int ("min-height",
                         "Minimum height",
                         "Minimum height",
                         0, G_MAXINT, 0,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
-  guide_props[PROP_NAT_WIDTH] =
+  guide_props[GUIDE_PROP_NAT_WIDTH] =
       g_param_spec_int ("nat-width",
                         "Natural width",
                         "Natural width",
                         0, G_MAXINT, 0,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
-  guide_props[PROP_NAT_HEIGHT] =
+  guide_props[GUIDE_PROP_NAT_HEIGHT] =
       g_param_spec_int ("nat-height",
                         "Natural height",
                         "Natural height",
@@ -1534,7 +1413,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_properties (object_class, LAST_PROP, guide_props);
+  g_object_class_install_properties (object_class, LAST_GUIDE_PROP, guide_props);
 }
 
 /**
