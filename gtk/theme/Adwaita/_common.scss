@@ -2270,10 +2270,12 @@ menuitem {
 
 popover.background {
   padding: 2px;
-  border-radius: $popover_radius;
   background-color: $popover_bg_color;
 
-  .csd &, & { border: 1px solid $borders_color; }
+  .csd &, & {
+    border: 1px solid $borders_color;
+    border-radius: $popover_radius;
+  }
 
   box-shadow: 0 1px 2px transparentize(black, 0.7);
 
