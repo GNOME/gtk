@@ -719,23 +719,17 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
                           &min_size, &nat_size,
                           NULL, NULL);
 
-      if (child_info->width_constraint[0] != NULL)
-        {
-          gtk_constraint_solver_remove_constraint (solver, child_info->width_constraint[0]);
-          gtk_constraint_solver_remove_constraint (solver, child_info->width_constraint[1]);
-        }
-
-      if (child_info->height_constraint[0] != NULL)
-        {
-          gtk_constraint_solver_remove_constraint (solver, child_info->height_constraint[0]);
-          gtk_constraint_solver_remove_constraint (solver, child_info->height_constraint[1]);
-        }
-
       switch (orientation)
         {
         case GTK_ORIENTATION_HORIZONTAL:
           width_var = get_child_attribute (child_info, solver, child,
                                            GTK_CONSTRAINT_ATTRIBUTE_WIDTH);
+
+          if (child_info->width_constraint[0] != NULL)
+            {
+              gtk_constraint_solver_remove_constraint (solver, child_info->width_constraint[0]);
+              gtk_constraint_solver_remove_constraint (solver, child_info->width_constraint[1]);
+            }
 
           child_info->width_constraint[0] =
             gtk_constraint_solver_add_constraint (solver,
@@ -754,6 +748,12 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
         case GTK_ORIENTATION_VERTICAL:
           height_var = get_child_attribute (child_info, solver, child,
                                             GTK_CONSTRAINT_ATTRIBUTE_HEIGHT);
+
+          if (child_info->height_constraint[0] != NULL)
+            {
+              gtk_constraint_solver_remove_constraint (solver, child_info->height_constraint[0]);
+              gtk_constraint_solver_remove_constraint (solver, child_info->height_constraint[1]);
+            }
 
           child_info->height_constraint[0] =
             gtk_constraint_solver_add_constraint (solver,
