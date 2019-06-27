@@ -94,6 +94,8 @@ typedef enum {
   GUIDE_MIN_HEIGHT,
   GUIDE_NAT_WIDTH,
   GUIDE_NAT_HEIGHT,
+  GUIDE_MAX_WIDTH,
+  GUIDE_MAX_HEIGHT,
   LAST_GUIDE_VALUE
 } GuideValue;
 
@@ -1250,6 +1252,8 @@ enum {
   GUIDE_PROP_MIN_HEIGHT,
   GUIDE_PROP_NAT_WIDTH,
   GUIDE_PROP_NAT_HEIGHT,
+  GUIDE_PROP_MAX_WIDTH,
+  GUIDE_PROP_MAX_HEIGHT,
   LAST_GUIDE_PROP
 };
 
@@ -1279,18 +1283,24 @@ gtk_constraint_guide_update (GtkConstraintGuide *guide,
     GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
     GTK_CONSTRAINT_ATTRIBUTE_WIDTH,
     GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
+    GTK_CONSTRAINT_ATTRIBUTE_WIDTH,
+    GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
   };
   int relation[LAST_GUIDE_VALUE] = {
     GTK_CONSTRAINT_RELATION_GE,
     GTK_CONSTRAINT_RELATION_GE,
     GTK_CONSTRAINT_RELATION_EQ,
     GTK_CONSTRAINT_RELATION_EQ,
+    GTK_CONSTRAINT_RELATION_LE,
+    GTK_CONSTRAINT_RELATION_LE,
   };
   double weight[LAST_GUIDE_VALUE] = {
     GTK_CONSTRAINT_WEIGHT_REQUIRED,
     GTK_CONSTRAINT_WEIGHT_REQUIRED,
     GTK_CONSTRAINT_WEIGHT_MEDIUM,
     GTK_CONSTRAINT_WEIGHT_MEDIUM,
+    GTK_CONSTRAINT_WEIGHT_REQUIRED,
+    GTK_CONSTRAINT_WEIGHT_REQUIRED,
   };
 
   if (!guide->layout)
@@ -1351,6 +1361,8 @@ gtk_constraint_guide_set_property (GObject      *gobject,
     case GUIDE_PROP_MIN_HEIGHT:
     case GUIDE_PROP_NAT_WIDTH:
     case GUIDE_PROP_NAT_HEIGHT:
+    case GUIDE_PROP_MAX_WIDTH:
+    case GUIDE_PROP_MAX_HEIGHT:
       val = g_value_get_int (value);
       index = prop_id - 1;
       if (self->values[index] != val)
@@ -1381,6 +1393,8 @@ gtk_constraint_guide_get_property (GObject    *gobject,
     case GUIDE_PROP_MIN_HEIGHT:
     case GUIDE_PROP_NAT_WIDTH:
     case GUIDE_PROP_NAT_HEIGHT:
+    case GUIDE_PROP_MAX_WIDTH:
+    case GUIDE_PROP_MAX_HEIGHT:
       g_value_set_int (value, self->values[prop_id - 1]);
       break;
 
@@ -1440,6 +1454,20 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
                         "Natural height",
                         "Natural height",
                         0, G_MAXINT, 0,
+                        G_PARAM_READWRITE|
+                        G_PARAM_EXPLICIT_NOTIFY);
+  guide_props[GUIDE_PROP_MAX_WIDTH] =
+      g_param_spec_int ("max-width",
+                        "Maximum width",
+                        "Maximum width",
+                        0, G_MAXINT, G_MAXINT,
+                        G_PARAM_READWRITE|
+                        G_PARAM_EXPLICIT_NOTIFY);
+  guide_props[GUIDE_PROP_MAX_HEIGHT] =
+      g_param_spec_int ("max-height",
+                        "Maximum height",
+                        "Maximum height",
+                        0, G_MAXINT, G_MAXINT,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
 
