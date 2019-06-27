@@ -814,9 +814,7 @@ menubar:backdrop, .menubar:backdrop { background-color: #353535; }
 
 menubar > box > menuitem, .menubar > box > menuitem { min-height: 16px; padding: 4px 8px; }
 
-menubar > box > menuitem menu, .menubar > box > menuitem menu { border-radius: 0; padding: 0; }
-
-menubar > box > menuitem menu menu, .menubar > box > menuitem menu menu { border-radius: 0; padding: 0; }
+.csd menubar > box > menuitem menu, menubar > box > menuitem menu, .csd .menubar > box > menuitem menu, .menubar > box > menuitem menu { border-radius: 0; padding: 0; }
 
 menubar > box > menuitem:hover, .menubar > box > menuitem:hover { box-shadow: inset 0 -3px #15539e; color: #3584e4; }
 

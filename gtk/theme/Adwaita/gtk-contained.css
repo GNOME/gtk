@@ -822,9 +822,7 @@ menubar:backdrop, .menubar:backdrop { background-color: #f6f5f4; }
 
 menubar > box > menuitem, .menubar > box > menuitem { min-height: 16px; padding: 4px 8px; }
 
-menubar > box > menuitem menu, .menubar > box > menuitem menu { border-radius: 0; padding: 0; }
-
-menubar > box > menuitem menu menu, .menubar > box > menuitem menu menu { border-radius: 0; padding: 0; }
+.csd menubar > box > menuitem menu, menubar > box > menuitem menu, .csd .menubar > box > menuitem menu, .menubar > box > menuitem menu { border-radius: 0; padding: 0; }
 
 menubar > box > menuitem:hover, .menubar > box > menuitem:hover { box-shadow: inset 0 -3px #3584e4; color: #1b6acb; }
 

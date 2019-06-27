@@ -2019,11 +2019,9 @@ menubar,
 
     // remove padding and rounding from menubar submenus
     menu {
-      border-radius: 0;
-      padding:0;
-      menu {
+      .csd &, & {
         border-radius: 0;
-        padding:0;
+        padding: 0;
       }
     }
 
