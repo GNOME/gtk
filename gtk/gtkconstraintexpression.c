@@ -982,9 +982,6 @@ gtk_constraint_expression_add_variable (GtkConstraintExpression *expression,
                 gtk_constraint_solver_note_removed_variable (solver, variable, subject);
 
               gtk_constraint_expression_remove_term (expression, variable);
-
-              if (subject != NULL)
-                gtk_constraint_variable_unref (subject);
             }
           else
             {
