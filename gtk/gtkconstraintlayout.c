@@ -1096,6 +1096,8 @@ gtk_constraint_layout_add_constraint (GtkConstraintLayout *manager,
   layout_add_constraint (manager, constraint);
 
   g_hash_table_add (manager->constraints, constraint);
+
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (manager));
 }
 
 /**
@@ -1116,4 +1118,6 @@ gtk_constraint_layout_remove_constraint (GtkConstraintLayout *manager,
 
   gtk_constraint_detach (constraint);
   g_hash_table_remove (manager->constraints, constraint);
+
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (manager));
 }
