@@ -25,37 +25,14 @@
 
 G_BEGIN_DECLS
 
-typedef enum {
-  GUIDE_MIN_WIDTH,
-  GUIDE_MIN_HEIGHT,
-  GUIDE_NAT_WIDTH,
-  GUIDE_NAT_HEIGHT,
-  GUIDE_MAX_WIDTH,
-  GUIDE_MAX_HEIGHT,
-  LAST_GUIDE_VALUE
-} GuideValue;
+void                   gtk_constraint_guide_update        (GtkConstraintGuide     *guide);
+void                   gtk_constraint_guide_detach        (GtkConstraintGuide     *guide);
 
-struct _GtkConstraintGuide
-{
-  GObject parent_instance;
+GtkConstraintVariable *gtk_constraint_guide_get_attribute (GtkConstraintGuide      *guide,
+                                                           GtkConstraintAttribute  attr);
 
-  int values[LAST_GUIDE_VALUE];
-
-  GtkConstraintLayout *layout;
-
-  /* HashTable<static string, Variable>; a hash table of variables,
-   * one for each attribute; we use these to query and suggest the
-   * values for the solver. The string is static and does not need
-   * to be freed.
-   */
-  GHashTable *bound_attributes;
-
-  GtkConstraintRef *constraints[LAST_GUIDE_VALUE];
-};
-
-void gtk_constraint_guide_update (GtkConstraintGuide *guide,
-                                  GuideValue          index);
-void gtk_constraint_guide_detach (GtkConstraintGuide *guide);
-
+GtkConstraintLayout   *gtk_constraint_guide_get_layout    (GtkConstraintGuide     *guide);
+void                   gtk_constraint_guide_set_layout    (GtkConstraintGuide     *guide,
+                                                           GtkConstraintLayout    *layout);
 
 G_END_DECLS

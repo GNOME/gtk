@@ -354,17 +354,6 @@ get_child_attribute (GtkConstraintLayout    *layout,
   return gtk_constraint_layout_get_attribute (layout, attr, prefix, widget, child_info->bound_attributes);
 }
 
-static GtkConstraintVariable *
-get_guide_attribute (GtkConstraintLayout    *layout,
-                     GtkConstraintGuide     *guide,
-                     GtkConstraintAttribute  attr)
-{
-  GtkLayoutManager *manager = GTK_LAYOUT_MANAGER (layout);
-  GtkWidget *widget = gtk_layout_manager_get_widget (manager);
-
-  return gtk_constraint_layout_get_attribute (layout, attr, "guide", widget, guide->bound_attributes);
-}
-
 static void
 gtk_constraint_layout_child_finalize (GObject *gobject)
 {
@@ -629,7 +618,7 @@ layout_add_constraint (GtkConstraintLayout *self,
       GtkConstraintGuide *guide;
 
       guide = (GtkConstraintGuide*)g_hash_table_lookup (self->guides, target);
-      target_attr = get_guide_attribute (self, guide, attr);
+      target_attr = gtk_constraint_guide_get_attribute (guide, attr);
     }
   else
     {
@@ -664,7 +653,7 @@ layout_add_constraint (GtkConstraintLayout *self,
           GtkConstraintGuide *guide;
 
           guide = (GtkConstraintGuide*)g_hash_table_lookup (self->guides, source);
-          source_attr = get_guide_attribute (self, guide, attr);
+          source_attr = gtk_constraint_guide_get_attribute (guide, attr);
         }
       else
         {
@@ -1034,10 +1023,7 @@ gtk_constraint_layout_root (GtkLayoutManager *manager)
   while (g_hash_table_iter_next (&iter, &key, NULL))
     {
       GtkConstraintGuide *guide = key;
-      gtk_constraint_guide_update (guide, GUIDE_MIN_WIDTH);
-      gtk_constraint_guide_update (guide, GUIDE_MIN_HEIGHT);
-      gtk_constraint_guide_update (guide, GUIDE_NAT_WIDTH);
-      gtk_constraint_guide_update (guide, GUIDE_NAT_HEIGHT);
+      gtk_constraint_guide_update (guide);
     }
 }
 
@@ -1191,10 +1177,9 @@ gtk_constraint_layout_add_guide (GtkConstraintLayout *layout,
 {
   g_return_if_fail (GTK_IS_CONSTRAINT_LAYOUT (layout));
   g_return_if_fail (GTK_IS_CONSTRAINT_GUIDE (guide));
-  g_return_if_fail (guide->layout == NULL);
+  g_return_if_fail (gtk_constraint_guide_get_layout (guide) == NULL);
 
-  guide->layout = layout;
-
+  gtk_constraint_guide_set_layout (guide, layout);
   g_hash_table_add (layout->guides, guide);
 
   gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
@@ -1214,11 +1199,11 @@ gtk_constraint_layout_remove_guide (GtkConstraintLayout *layout,
 {
   g_return_if_fail (GTK_IS_CONSTRAINT_LAYOUT (layout));
   g_return_if_fail (GTK_IS_CONSTRAINT_GUIDE (guide));
-  g_return_if_fail (guide->layout == layout);
+  g_return_if_fail (gtk_constraint_guide_get_layout (guide) == layout);
 
   gtk_constraint_guide_detach (guide);
-  guide->layout = NULL;
 
+  gtk_constraint_guide_set_layout (guide, NULL);
   g_hash_table_remove (layout->guides, guide);
 
   gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
