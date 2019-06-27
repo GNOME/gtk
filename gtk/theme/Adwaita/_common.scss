@@ -2717,12 +2717,24 @@ switch {
     border-radius: 50%;
     transition: $button_transition;
 
-    @include button(normal-alt, $edge: $shadow_color);
+    @if $variant == 'light' {
+      @include button(normal-alt, $edge: $shadow_color);
+    } 
+    @else {
+      @include button(normal-alt, $c: lighten($bg_color,6%), $edge: $shadow_color);
+    }
   }
-
+  
   image { color: transparent; } /* only show i / o for the accessible theme */
 
-  &:hover slider { @include button(hover-alt, $edge: $shadow_color); }
+  &:hover slider {
+    @if $variant == 'light' {
+      @include button(hover-alt, $edge: $shadow_color);
+    }
+    @else {
+      @include button(hover-alt, $c: lighten($bg_color,6%), $edge: $shadow_color);
+    }
+  }
 
   &:checked slider { border: 1px solid $selected_borders_color; }
 
