@@ -693,57 +693,47 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
 
       child_info = GTK_CONSTRAINT_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (manager, child));
 
-      gtk_widget_measure (child, orientation, for_size,
+      gtk_widget_measure (child, orientation, -1,
                           &min_size, &nat_size,
                           NULL, NULL);
 
-      switch (orientation)
-        {
-        case GTK_ORIENTATION_HORIZONTAL:
-          width_var = get_child_attribute (child_info, solver, child,
-                                           GTK_CONSTRAINT_ATTRIBUTE_WIDTH);
+      width_var = get_child_attribute (child_info, solver, child,
+                                       GTK_CONSTRAINT_ATTRIBUTE_WIDTH);
 
-          constraint =
-            gtk_constraint_solver_add_constraint (solver,
-                                                  width_var,
-                                                  GTK_CONSTRAINT_RELATION_GE,
-                                                  gtk_constraint_expression_new (min_size),
-                                                  GTK_CONSTRAINT_WEIGHT_REQUIRED);
-          g_ptr_array_add (size_constraints, constraint);
+      constraint =
+        gtk_constraint_solver_add_constraint (solver,
+                                              width_var,
+                                              GTK_CONSTRAINT_RELATION_GE,
+                                              gtk_constraint_expression_new (min_size),
+                                              GTK_CONSTRAINT_WEIGHT_REQUIRED);
+      g_ptr_array_add (size_constraints, constraint);
 
-          constraint =
-            gtk_constraint_solver_add_constraint (solver,
-                                                  width_var,
-                                                  GTK_CONSTRAINT_RELATION_EQ,
-                                                  gtk_constraint_expression_new (nat_size),
-                                                  GTK_CONSTRAINT_WEIGHT_MEDIUM);
-          g_ptr_array_add (size_constraints, constraint);
-          break;
+      constraint =
+        gtk_constraint_solver_add_constraint (solver,
+                                              width_var,
+                                              GTK_CONSTRAINT_RELATION_EQ,
+                                              gtk_constraint_expression_new (nat_size),
+                                              GTK_CONSTRAINT_WEIGHT_MEDIUM);
+      g_ptr_array_add (size_constraints, constraint);
 
-        case GTK_ORIENTATION_VERTICAL:
-          height_var = get_child_attribute (child_info, solver, child,
-                                            GTK_CONSTRAINT_ATTRIBUTE_HEIGHT);
+      height_var = get_child_attribute (child_info, solver, child,
+                                        GTK_CONSTRAINT_ATTRIBUTE_HEIGHT);
 
-          constraint =
-            gtk_constraint_solver_add_constraint (solver,
-                                                  height_var,
-                                                  GTK_CONSTRAINT_RELATION_GE,
-                                                  gtk_constraint_expression_new (min_size),
-                                                  GTK_CONSTRAINT_WEIGHT_REQUIRED);
-          g_ptr_array_add (size_constraints, constraint);
+      constraint =
+        gtk_constraint_solver_add_constraint (solver,
+                                              height_var,
+                                              GTK_CONSTRAINT_RELATION_GE,
+                                              gtk_constraint_expression_new (min_size),
+                                              GTK_CONSTRAINT_WEIGHT_REQUIRED);
+      g_ptr_array_add (size_constraints, constraint);
 
-          constraint =
-            gtk_constraint_solver_add_constraint (solver,
-                                                  height_var,
-                                                  GTK_CONSTRAINT_RELATION_EQ,
-                                                  gtk_constraint_expression_new (nat_size),
-                                                  GTK_CONSTRAINT_WEIGHT_MEDIUM);
-          g_ptr_array_add (size_constraints, constraint);
-          break;
-
-        default:
-          break;
-        }
+      constraint =
+        gtk_constraint_solver_add_constraint (solver,
+                                              height_var,
+                                              GTK_CONSTRAINT_RELATION_EQ,
+                                              gtk_constraint_expression_new (nat_size),
+                                              GTK_CONSTRAINT_WEIGHT_MEDIUM);
+      g_ptr_array_add (size_constraints, constraint);
     }
 
   switch (orientation)
@@ -769,15 +759,22 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
    * natural state of the system. Once we get the value out, we can
    * remove these constraints
    */
-  gtk_constraint_solver_add_edit_variable (solver, size, GTK_CONSTRAINT_WEIGHT_WEAK + 1);
-  gtk_constraint_solver_add_edit_variable (solver, opposite_size, GTK_CONSTRAINT_WEIGHT_WEAK + 2);
+  if (for_size > 0)
+    {
+      gtk_constraint_solver_add_edit_variable (solver, opposite_size, GTK_CONSTRAINT_WEIGHT_MEDIUM * 2.0);
+      gtk_constraint_solver_begin_edit (solver);
+      gtk_constraint_solver_suggest_value (solver, opposite_size, for_size);
+      gtk_constraint_solver_resolve (solver);
 
-  gtk_constraint_solver_begin_edit (solver);
+      value = gtk_constraint_variable_get_value (size);
 
-  gtk_constraint_solver_suggest_value (solver, size, 0.0);
-  gtk_constraint_solver_suggest_value (solver, opposite_size, for_size >= 0 ? for_size : 0.0);
-
-  gtk_constraint_solver_resolve (solver);
+      gtk_constraint_solver_remove_edit_variable (solver, opposite_size);
+      gtk_constraint_solver_end_edit (solver);
+    }
+  else
+    {
+      value = gtk_constraint_variable_get_value (size);
+    }
 
   GTK_NOTE (LAYOUT,
             g_print ("layout %p preferred %s size: %.3f (for opposite size: %d)\n",
@@ -785,13 +782,6 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
                      orientation == GTK_ORIENTATION_HORIZONTAL ? "horizontal" : "vertical",
                      gtk_constraint_variable_get_value (size),
                      for_size));
-
-  value = gtk_constraint_variable_get_value (size);
-
-  gtk_constraint_solver_remove_edit_variable (solver, size);
-  gtk_constraint_solver_remove_edit_variable (solver, opposite_size);
-
-  gtk_constraint_solver_end_edit (solver);
 
   for (guint i = 0; i < size_constraints->len; i++)
     {
