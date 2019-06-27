@@ -31,15 +31,41 @@ G_BEGIN_DECLS
  * GtkConstraintGuide:
  *
  * An object that can be added to a #GtkConstraintLayout and be
- * used in constraints like a widget, without being drawn. Guides
- * have a minimal and natural size. Depending on the constraints
- * that are applied, they can act like a guideline that widgets
- * can be aligned to, or like 'flexible space'.
+ * used in constraints like a widget, without being drawn.
+ *
+ * Guides have a minimum, maximum and natural size. Depending
+ * on the constraints that are applied, they can act like a
+ * guideline that widgets can be aligned to, or like 'flexible space'.
  */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkConstraintGuide, gtk_constraint_guide, GTK, CONSTRAINT_GUIDE, GObject)
 
 GDK_AVAILABLE_IN_ALL
 GtkConstraintGuide *    gtk_constraint_guide_new                (void);
+
+GDK_AVAILABLE_IN_ALL
+void                    gtk_constraint_guide_set_min_size       (GtkConstraintGuide *guide,
+                                                                 int                 width,
+                                                                 int                 height);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_constraint_guide_get_min_size       (GtkConstraintGuide *guide,
+                                                                 int                *width,
+                                                                 int                *height);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_constraint_guide_set_nat_size       (GtkConstraintGuide *guide,
+                                                                 int                 width,
+                                                                 int                 height);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_constraint_guide_get_nat_size       (GtkConstraintGuide *guide,
+                                                                 int                *width,
+                                                                 int                *height);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_constraint_guide_set_max_size       (GtkConstraintGuide *guide,
+                                                                 int                 width,
+                                                                 int                 height);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_constraint_guide_get_max_size       (GtkConstraintGuide *guide,
+                                                                 int                *width,
+                                                                 int                *height);
 
 G_END_DECLS

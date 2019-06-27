@@ -65,9 +65,9 @@ gtk_constraint_guide_init (GtkConstraintGuide *guide)
                            (GDestroyNotify) gtk_constraint_variable_unref);
 }
 
-void
-gtk_constraint_guide_update (GtkConstraintGuide *guide,
-                             GuideValue          index)
+static void
+gtk_constraint_guide_update_constraint (GtkConstraintGuide *guide,
+                                        GuideValue          index)
 {
   GtkConstraintSolver *solver;
   GtkConstraintVariable *var;
@@ -116,6 +116,15 @@ gtk_constraint_guide_update (GtkConstraintGuide *guide,
 }
 
 void
+gtk_constraint_guide_update (GtkConstraintGuide *guide)
+{
+  gtk_constraint_guide_update_constraint (guide, GUIDE_MIN_WIDTH);
+  gtk_constraint_guide_update_constraint (guide, GUIDE_MIN_HEIGHT);
+  gtk_constraint_guide_update_constraint (guide, GUIDE_NAT_WIDTH);
+  gtk_constraint_guide_update_constraint (guide, GUIDE_NAT_HEIGHT);
+}
+
+void
 gtk_constraint_guide_detach (GtkConstraintGuide *guide)
 {
   GtkConstraintSolver *solver;
@@ -161,7 +170,7 @@ gtk_constraint_guide_set_property (GObject      *gobject,
         {
           self->values[index] = val;
           g_object_notify_by_pspec (gobject, pspec);
-          gtk_constraint_guide_update (self, index);
+          gtk_constraint_guide_update_constraint (self, index);
         }
       break;
 
@@ -274,4 +283,164 @@ gtk_constraint_guide_new (void)
   return g_object_new (GTK_TYPE_CONSTRAINT_GUIDE, NULL);
 }
 
+/**
+ * gtk_constraint_guide_set_min_size:
+ * @guide: a #GtkConstraintGuide object
+ * @width: the new minimum width, or -1 to not change it
+ * @height: the new minimum height, or -1 to not change it
+ *
+ * Sets the minimum size of @guide.
+ *
+ * If @guide is attached to a #GtkConstraintLayout,
+ * the constraints will be updated to reflect the new size.
+ */
+void
+gtk_constraint_guide_set_min_size (GtkConstraintGuide *guide,
+                                   int                 width,
+                                   int                 height)
+{
+  g_return_if_fail (GTK_IS_CONSTRAINT_GUIDE (guide));
+  g_return_if_fail (width >= -1);
+  g_return_if_fail (height >= -1);
 
+  g_object_freeze_notify (G_OBJECT (guide));
+
+  if (width != -1)
+    g_object_set (guide, "min-width", width, NULL);
+
+  if (height != -1)
+    g_object_set (guide, "min-height", height, NULL);
+
+  g_object_thaw_notify (G_OBJECT (guide));
+}
+
+/**
+ * gtk_constraint_guide_get_min_size:
+ * @guide: a #GtkContraintGuide object
+ * @width: (allow-none): return location for the minimum width,
+ *     or %NULL
+ * @height: (allow-none): return location for the minimum height,
+ *     or %NULL
+ *
+ * Gets the minimum size of @guide.
+ */
+void
+gtk_constraint_guide_get_min_size (GtkConstraintGuide *guide,
+                                   int                *width,
+                                   int                *height)
+{
+  g_return_if_fail (GTK_IS_CONSTRAINT_GUIDE (guide));
+
+  if (width)
+    *width = guide->values[GUIDE_MIN_WIDTH];
+  if (height)
+    *height = guide->values[GUIDE_MIN_HEIGHT];
+}
+
+/**
+ * gtk_constraint_guide_set_nat_size:
+ * @guide: a #GtkConstraintGuide object
+ * @width: the new natural width, or -1 to not change it
+ * @height: the new natural height, or -1 to not change it
+ *
+ * Sets the natural size of @guide.
+ *
+ * If @guide is attached to a #GtkConstraintLayout,
+ * the constraints will be updated to reflect the new size.
+ */
+void
+gtk_constraint_guide_set_nat_size (GtkConstraintGuide *guide,
+                                   int                 width,
+                                   int                 height)
+{
+  g_return_if_fail (GTK_IS_CONSTRAINT_GUIDE (guide));
+  g_return_if_fail (width >= -1);
+  g_return_if_fail (height >= -1);
+
+  g_object_freeze_notify (G_OBJECT (guide));
+
+  if (width != -1)
+    g_object_set (guide, "nat-width", width, NULL);
+
+  if (height != -1)
+    g_object_set (guide, "nat-height", height, NULL);
+
+  g_object_thaw_notify (G_OBJECT (guide));
+}
+
+/**
+ * gtk_constraint_guide_get_nat_size:
+ * @guide: a #GtkContraintGuide object
+ * @width: (allow-none): return location for the natural width,
+ *     or %NULL
+ * @height: (allow-none): return location for the natural height,
+ *     or %NULL
+ *
+ * Gets the natural size of @guide.
+ */
+void
+gtk_constraint_guide_get_nat_size (GtkConstraintGuide *guide,
+                                   int                *width,
+                                   int                *height)
+{
+  g_return_if_fail (GTK_IS_CONSTRAINT_GUIDE (guide));
+
+  if (width)
+    *width = guide->values[GUIDE_NAT_WIDTH];
+  if (height)
+    *height = guide->values[GUIDE_NAT_HEIGHT];
+}
+
+/**
+ * gtk_constraint_guide_set_max_size:
+ * @guide: a #GtkConstraintGuide object
+ * @width: the new maximum width, or -1 to not change it
+ * @height: the new maximum height, or -1 to not change it
+ *
+ * Sets the maximum size of @guide.
+ *
+ * If @guide is attached to a #GtkConstraintLayout,
+ * the constraints will be updated to reflect the new size.
+ */
+void
+gtk_constraint_guide_set_max_size (GtkConstraintGuide *guide,
+                                   int                 width,
+                                   int                 height)
+{
+  g_return_if_fail (GTK_IS_CONSTRAINT_GUIDE (guide));
+  g_return_if_fail (width >= -1);
+  g_return_if_fail (height >= -1);
+
+  g_object_freeze_notify (G_OBJECT (guide));
+
+  if (width != -1)
+    g_object_set (guide, "max-width", width, NULL);
+
+  if (height != -1)
+    g_object_set (guide, "max-height", height, NULL);
+
+  g_object_thaw_notify (G_OBJECT (guide));
+}
+
+/**
+ * gtk_constraint_guide_get_max_size:
+ * @guide: a #GtkContraintGuide object
+ * @width: (allow-none): return location for the maximum width,
+ *     or %NULL
+ * @height: (allow-none): return location for the maximum height,
+ *     or %NULL
+ *
+ * Gets the maximum size of @guide.
+ */
+void
+gtk_constraint_guide_get_max_size (GtkConstraintGuide *guide,
+                                   int                *width,
+                                   int                *height)
+{
+  g_return_if_fail (GTK_IS_CONSTRAINT_GUIDE (guide));
+
+  if (width)
+    *width = guide->values[GUIDE_MAX_WIDTH];
+  if (height)
+    *height = guide->values[GUIDE_MAX_HEIGHT];
+}
