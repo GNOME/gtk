@@ -265,6 +265,7 @@ gtk_constraint_solver_finalize (GObject *gobject)
 {
   GtkConstraintSolver *self = GTK_CONSTRAINT_SOLVER (gobject);
 
+  g_hash_table_remove_all (self->constraints);
   g_clear_pointer (&self->constraints, g_hash_table_unref);
 
   g_clear_pointer (&self->stay_error_vars, g_ptr_array_unref);
