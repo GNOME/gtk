@@ -315,11 +315,11 @@ gtk_constraint_init (GtkConstraint *self)
 
 /**
  * gtk_constraint_new:
- * @target: (nullable): a #GtkConstraintTarget
- * @target_attribute: the attribute of @target_widget to be set
+ * @target: (nullable) (type GtkConstraintTarget): a #GtkConstraintTarget
+ * @target_attribute: the attribute of @target to be set
  * @relation: the relation equivalence between @target_attribute and @source_attribute
- * @source: (nullable): a #GtkConstraintTarget
- * @source_attribute: the attribute of @source_widget to be read
+ * @source: (nullable) (type GtkConstraintTarget): a #GtkConstraintTarget
+ * @source_attribute: the attribute of @source to be read
  * @multiplier: a multiplication factor to be applied to @source_attribute
  * @constant: a constant factor to be added to @source_attribute
  * @strength: the strength of the constraint
@@ -330,10 +330,10 @@ gtk_constraint_init (GtkConstraint *self)
  * Returns: the newly created #GtkConstraint
  */
 GtkConstraint *
-gtk_constraint_new (GtkConstraintTarget    *target,
+gtk_constraint_new (gpointer                target,
                     GtkConstraintAttribute  target_attribute,
                     GtkConstraintRelation   relation,
-                    GtkConstraintTarget    *source,
+                    gpointer                source,
                     GtkConstraintAttribute  source_attribute,
                     double                  multiplier,
                     double                  constant,
@@ -356,8 +356,8 @@ gtk_constraint_new (GtkConstraintTarget    *target,
 
 /**
  * gtk_constraint_new_constant:
- * @target: (nullable): a #GtkConstraintTarget
- * @target_attribute: the attribute of @target_widget to be set
+ * @target: (nullable) (type GtkConstraintTarget): a #GtkConstraintTarget
+ * @target_attribute: the attribute of @target to be set
  * @relation: the relation equivalence between @target_attribute and @constant
  * @constant: a constant factor to be set on @target_attribute
  * @strength: the strength of the constraint
@@ -368,7 +368,7 @@ gtk_constraint_new (GtkConstraintTarget    *target,
  * Returns: the newly created #GtkConstraint
  */
 GtkConstraint *
-gtk_constraint_new_constant (GtkConstraintTarget    *target,
+gtk_constraint_new_constant (gpointer                target,
                              GtkConstraintAttribute  target_attribute,
                              GtkConstraintRelation   relation,
                              double                  constant,
