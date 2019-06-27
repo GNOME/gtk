@@ -260,3 +260,9 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
 
   g_object_class_install_properties (object_class, LAST_GUIDE_PROP, guide_props);
 }
+
+GtkConstraintsGuide *
+gtk_constraints_guide_new (void)
+{
+  return g_object_new (GTK_TYPE_CONSTRAINTS_GUIDE, NULL);
+}
