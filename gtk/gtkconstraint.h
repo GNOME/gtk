@@ -58,16 +58,16 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkConstraint, gtk_constraint, GTK, CONSTRAINT, GObject)
 
 GDK_AVAILABLE_IN_ALL
-GtkConstraint *         gtk_constraint_new                      (GtkConstraintTarget    *target_widget,
+GtkConstraint *         gtk_constraint_new                      (gpointer                target,
                                                                  GtkConstraintAttribute  target_attribute,
                                                                  GtkConstraintRelation   relation,
-                                                                 GtkConstraintTarget    *source_widget,
+                                                                 gpointer                source,
                                                                  GtkConstraintAttribute  source_attribute,
                                                                  double                  multiplier,
                                                                  double                  constant,
                                                                  int                     strength);
 GDK_AVAILABLE_IN_ALL
-GtkConstraint *         gtk_constraint_new_constant             (GtkConstraintTarget    *target_widget,
+GtkConstraint *         gtk_constraint_new_constant             (gpointer                target,
                                                                  GtkConstraintAttribute  target_attribute,
                                                                  GtkConstraintRelation   relation,
                                                                  double                  constant,
