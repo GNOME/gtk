@@ -1,0 +1,45 @@
+/* gtkconstraintguide.h: Flexible space for constraints
+ * Copyright 2019 Red Hat, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Author: Matthias Clasen
+ */
+
+#pragma once
+
+#include <gtk/gtktypes.h>
+#include <gtk/gtkenums.h>
+
+G_BEGIN_DECLS
+
+
+#define GTK_TYPE_CONSTRAINT_GUIDE (gtk_constraint_guide_get_type ())
+
+/**
+ * GtkConstraintGuide:
+ *
+ * An object that can be added to a #GtkConstraintLayout and be
+ * used in constraints like a widget, without being drawn. Guides
+ * have a minimal and natural size. Depending on the constraints
+ * that are applied, they can act like a guideline that widgets
+ * can be aligned to, or like 'flexible space'.
+ */
+GDK_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (GtkConstraintGuide, gtk_constraint_guide, GTK, CONSTRAINT_GUIDE, GObject)
+
+GDK_AVAILABLE_IN_ALL
+GtkConstraintGuide *    gtk_constraint_guide_new                (void);
+
+G_END_DECLS
