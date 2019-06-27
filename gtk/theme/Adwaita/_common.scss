@@ -9,6 +9,7 @@ $button_transition: all 200ms $ease-out-quad;
 $button_radius: 5px;
 $menu_radius: 5px;
 $window_radius: $button_radius + 3;
+$popover_radius: $button_radius + 4;
 
 * {
   padding: 0;
@@ -2175,10 +2176,13 @@ popover>contents {
 }
 
 popover>contents.background {
-  border-radius: $menu_radius + 4px;
+
   background-color: $popover_bg_color;
   box-shadow: 0 1px 2px transparentize(black, 0.7);
-  .csd &, & { border: 1px solid $borders_color; }
+  .csd &, & { 
+    border: 1px solid $borders_color;
+    border-radius: $popover_radius;
+  }
 
   &:backdrop {
     background-color: $backdrop_bg_color;
