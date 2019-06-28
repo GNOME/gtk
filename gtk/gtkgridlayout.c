@@ -212,6 +212,8 @@ gtk_grid_layout_child_class_init (GtkGridLayoutChildClass *klass)
 static void
 gtk_grid_layout_child_init (GtkGridLayoutChild *self)
 {
+  CHILD_ROW_SPAN (self) = 1;
+  CHILD_COL_SPAN (self) = 1;
 }
 
 /**
