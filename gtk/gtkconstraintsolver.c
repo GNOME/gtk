@@ -1054,7 +1054,10 @@ gtk_constraint_solver_dual_optimize (GtkConstraintSolver *self)
         }
 
       if (ratio == DBL_MAX)
-        g_critical ("INTERNAL: ratio == DBL_MAX in dual_optimize");
+        {
+          g_critical ("INTERNAL: ratio == DBL_MAX in dual_optimize");
+          break;
+        }
 
       gtk_constraint_solver_pivot (self, entry_var, exit_var);
     }
