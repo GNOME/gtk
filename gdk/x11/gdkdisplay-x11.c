@@ -874,7 +874,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
               surface_impl->toplevel->frame_pending)
             {
               surface_impl->toplevel->frame_pending = FALSE;
-              _gdk_frame_clock_thaw (gdk_surface_get_frame_clock (event->any.surface));
+              gdk_surface_thaw_updates (event->any.surface);
             }
 
 	  if (toplevel)
@@ -1238,7 +1238,7 @@ _gdk_wm_protocols_filter (const XEvent *xevent,
           if (surface_impl->toplevel->frame_pending)
             {
               surface_impl->toplevel->frame_pending = FALSE;
-              _gdk_frame_clock_thaw (clock);
+              gdk_surface_thaw_updates (event->any.surface);
             }
 
           gdk_frame_clock_get_refresh_info (clock,
