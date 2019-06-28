@@ -553,6 +553,118 @@ test_homogeneous (void)
   gtk_widget_destroy (parent);
 }
 
+/* Create a layout with three children
+ *
+ * +--------+--------+
+ * | child1 | child2 |
+ * +--------+--------+
+ * |      child3     |
+ * +-----------------+
+ *
+ * This is a layout that we also reproduce with
+ * constraints, for comparison. Among the contraints:
+ * - child1.width == child2.width
+ * - child1.height == child2.height == child3.height
+ */
+static void
+test_simple_layout (void)
+{
+  GtkWidget *window;
+  GtkWidget *parent;
+  GtkLayoutManager *layout;
+  GtkLayoutChild *lc;
+  GtkGizmo *child1;
+  GtkGizmo *child2;
+  GtkGizmo *child3;
+  int minimum, natural;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  parent = g_object_new (GTK_TYPE_GIZMO, NULL);
+  gtk_container_add (GTK_CONTAINER (window), parent);
+
+  layout = gtk_grid_layout_new ();
+  gtk_grid_layout_set_row_homogeneous (GTK_GRID_LAYOUT (layout), TRUE);
+  gtk_grid_layout_set_column_homogeneous (GTK_GRID_LAYOUT (layout), TRUE);
+  gtk_widget_set_layout_manager (parent, layout);
+
+  child1 = g_object_new (GTK_TYPE_GIZMO, NULL);
+  child2 = g_object_new (GTK_TYPE_GIZMO, NULL);
+  child3 = g_object_new (GTK_TYPE_GIZMO, NULL);
+
+  child1->name = "child1";
+  child1->min_width = 10;
+  child1->min_height = 10;
+  child1->nat_width = 50;
+  child1->nat_height = 50;
+  child2->name = "child2";
+  child2->min_width = 20;
+  child2->min_height = 20;
+  child2->nat_width = 50;
+  child2->nat_height = 50;
+  child3->name = "child3";
+  child3->min_width = 50;
+  child3->min_height = 10;
+  child3->nat_width = 50;
+  child3->nat_height = 50;
+
+  gtk_widget_set_parent (GTK_WIDGET (child1), parent);
+  gtk_widget_set_parent (GTK_WIDGET (child2), parent);
+  gtk_widget_set_parent (GTK_WIDGET (child3), parent);
+
+  lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child1));
+  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+
+  lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child2));
+  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
+
+  lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child3));
+  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_column_span (GTK_GRID_LAYOUT_CHILD (lc), 2);
+
+  gtk_layout_manager_measure (layout,
+                              parent,
+                              GTK_ORIENTATION_HORIZONTAL,
+                              -1,
+                              &minimum,
+                              &natural,
+                              NULL,
+                              NULL);
+
+  g_assert_cmpint (minimum, ==, 50);
+  g_assert_cmpint (natural, ==, 100);
+
+  gtk_layout_manager_measure (layout,
+                              parent,
+                              GTK_ORIENTATION_VERTICAL,
+                              -1,
+                              &minimum,
+                              &natural,
+                              NULL,
+                              NULL);
+
+  g_assert_cmpint (minimum, ==, 40);
+  g_assert_cmpint (natural, ==, 100);
+
+  gtk_layout_manager_allocate (layout, parent, 100, 100, 0);
+
+  g_assert_cmpint (child1->width, ==, 50);
+  g_assert_cmpint (child2->width, ==, 50);
+  g_assert_cmpint (child3->width, ==, 100);
+
+  g_assert_cmpint (child1->height, ==, 50);
+  g_assert_cmpint (child2->height, ==, 50);
+  g_assert_cmpint (child3->height, ==, 50);
+
+  gtk_widget_unparent (GTK_WIDGET (child1));
+  gtk_widget_unparent (GTK_WIDGET (child2));
+  gtk_widget_unparent (GTK_WIDGET (child3));
+
+  gtk_widget_destroy (parent);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -563,6 +675,7 @@ main (int   argc,
   g_test_add_func ("/grid-layout/column", test_simple_column);
   g_test_add_func ("/grid-layout/span", test_spans);
   g_test_add_func ("/grid-layout/homogeneous", test_homogeneous);
+  g_test_add_func ("/grid-layout/simple", test_simple_layout);
 
   return g_test_run();
 }
