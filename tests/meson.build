@@ -1,5 +1,10 @@
 gtk_tests = [
   # testname, optional extra sources
+  ['constrainttree', [
+      '../gtk/gtkconstraintsolver.c',
+      '../gtk/gtkconstraintexpression.c',
+    ], ['-DGTK_COMPILATION', '-UG_ENABLE_DEBUG', '-DGTK_TEST_EXTERNAL']
+  ],
   ['rendernode'],
   ['rendernode-create-tests'],
   ['overlayscroll'],
@@ -142,9 +147,12 @@ test_args = ['-DGTK_SRCDIR="@0@"'.format(meson.current_source_dir())]
 foreach t: gtk_tests
   test_name = t.get(0)
   test_srcs = ['@0@.c'.format(test_name), t.get(1, [])]
+  test_extra_cargs = t.get(2, [])
+  test_extra_ldflags = t.get(3, [])
   executable(test_name, test_srcs,
              include_directories: [confinc, gdkinc],
-             c_args: test_args,
+             c_args: test_args + test_extra_cargs,
+             link_args : test_extra_ldflags,
              dependencies: [libgtk_dep, libm])
 endforeach
 
