@@ -1973,6 +1973,7 @@ gtk_constraint_solver_suggest_value (GtkConstraintSolver *self,
                                      double value)
 {
   EditInfo *ei = g_hash_table_lookup (self->edit_var_map, variable);
+  double delta;
   if (ei == NULL)
     {
       g_critical ("Suggesting value '%g' but variable %p is not editable",
@@ -1988,9 +1989,10 @@ gtk_constraint_solver_suggest_value (GtkConstraintSolver *self,
       return;
     }
 
-  ei->prev_constant = value - ei->prev_constant;
+  delta = value - ei->prev_constant;
+  ei->prev_constant = value;
 
-  gtk_constraint_solver_delta_edit_constant (self, ei->prev_constant, ei->eplus, ei->eminus);
+  gtk_constraint_solver_delta_edit_constant (self, delta, ei->eplus, ei->eminus);
 }
 
 /*< private >
