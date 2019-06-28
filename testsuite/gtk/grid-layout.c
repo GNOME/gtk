@@ -166,8 +166,8 @@ test_simple_row (void)
                               NULL,
                               NULL);
 
-  g_assert (minimum == 10 + 20 + 30);
-  g_assert (natural == 20 + 30 + 40);
+  g_assert_cmpint (minimum, ==, 10 + 20 + 30);
+  g_assert_cmpint (natural, ==, 20 + 30 + 40);
 
   gtk_layout_manager_measure (layout,
                               parent,
@@ -178,18 +178,18 @@ test_simple_row (void)
                               NULL,
                               NULL);
 
-  g_assert (minimum == 30);
-  g_assert (natural == 40);
+  g_assert_cmpint (minimum, ==, 30);
+  g_assert_cmpint (natural, ==, 40);
 
   gtk_layout_manager_allocate (layout, parent, 90, 40, 0);
 
-  g_assert (child1->width == 20);
-  g_assert (child2->width == 30);
-  g_assert (child3->width == 40);
+  g_assert_cmpint (child1->width, ==, 20);
+  g_assert_cmpint (child2->width, ==, 30);
+  g_assert_cmpint (child3->width, ==, 40);
 
-  g_assert (child1->height == 40);
-  g_assert (child2->height == 40);
-  g_assert (child3->height == 40);
+  g_assert_cmpint (child1->height, ==, 40);
+  g_assert_cmpint (child2->height, ==, 40);
+  g_assert_cmpint (child3->height, ==, 40);
 
   gtk_widget_unparent (GTK_WIDGET (child1));
   gtk_widget_unparent (GTK_WIDGET (child2));
@@ -266,8 +266,8 @@ test_simple_column (void)
                               NULL,
                               NULL);
 
-  g_assert (minimum == 30);
-  g_assert (natural == 40);
+  g_assert_cmpint (minimum, ==, 30);
+  g_assert_cmpint (natural, ==, 40);
 
   gtk_layout_manager_measure (layout,
                               parent,
@@ -278,22 +278,277 @@ test_simple_column (void)
                               NULL,
                               NULL);
 
-  g_assert (minimum == 10 + 20 + 30);
-  g_assert (natural == 20 + 30 + 40);
+  g_assert_cmpint (minimum, ==, 10 + 20 + 30);
+  g_assert_cmpint (natural, ==, 20 + 30 + 40);
 
   gtk_layout_manager_allocate (layout, parent, 40, 90, 0);
 
-  g_assert (child1->width == 40);
-  g_assert (child2->width == 40);
-  g_assert (child3->width == 40);
+  g_assert_cmpint (child1->width, ==, 40);
+  g_assert_cmpint (child2->width, ==, 40);
+  g_assert_cmpint (child3->width, ==, 40);
 
-  g_assert (child1->height == 20);
-  g_assert (child2->height == 30);
-  g_assert (child3->height == 40);
+  g_assert_cmpint (child1->height, ==, 20);
+  g_assert_cmpint (child2->height, ==, 30);
+  g_assert_cmpint (child3->height, ==, 40);
 
   gtk_widget_unparent (GTK_WIDGET (child1));
   gtk_widget_unparent (GTK_WIDGET (child2));
   gtk_widget_unparent (GTK_WIDGET (child3));
+
+  gtk_widget_destroy (parent);
+}
+
+/* Create a grid with spanning children
+ *
+ * +--------+-----------------+
+ * | child1 |      child2     |
+ * +--------+--------+--------+
+ * |      child3     | child4 |
+ * +-----------------+--------+
+ *
+ * Verify that
+ * - the layout has the expected min and nat sizes
+ * - the children get their nat width when the layout does
+ */
+static void
+test_spans (void)
+{
+  GtkWidget *window;
+  GtkWidget *parent;
+  GtkLayoutManager *layout;
+  GtkGizmo *child1;
+  GtkGizmo *child2;
+  GtkGizmo *child3;
+  GtkGizmo *child4;
+  GtkLayoutChild *lc;
+  int minimum, natural;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  parent = g_object_new (GTK_TYPE_GIZMO, NULL);
+  gtk_container_add (GTK_CONTAINER (window), parent);
+
+  layout = gtk_grid_layout_new ();
+  gtk_widget_set_layout_manager (parent, layout);
+
+  child1 = g_object_new (GTK_TYPE_GIZMO, NULL);
+  child2 = g_object_new (GTK_TYPE_GIZMO, NULL);
+  child3 = g_object_new (GTK_TYPE_GIZMO, NULL);
+  child4 = g_object_new (GTK_TYPE_GIZMO, NULL);
+
+  child1->name = "child1";
+  child1->min_width = 10;
+  child1->min_height = 10;
+  child1->nat_width = 20;
+  child1->nat_height = 20;
+  child2->name = "child2";
+  child2->min_width = 20;
+  child2->min_height = 20;
+  child2->nat_width = 30;
+  child2->nat_height = 30;
+  child3->name = "child3";
+  child3->min_width = 30;
+  child3->min_height = 30;
+  child3->nat_width = 40;
+  child3->nat_height = 40;
+  child4->name = "child4";
+  child4->min_width = 30;
+  child4->min_height = 30;
+  child4->nat_width = 40;
+  child4->nat_height = 40;
+
+  gtk_widget_set_parent (GTK_WIDGET (child1), parent);
+  gtk_widget_set_parent (GTK_WIDGET (child2), parent);
+  gtk_widget_set_parent (GTK_WIDGET (child3), parent);
+  gtk_widget_set_parent (GTK_WIDGET (child4), parent);
+
+  lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child1));
+  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+
+  lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child2));
+  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_column_span (GTK_GRID_LAYOUT_CHILD (lc), 2);
+
+  lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child3));
+  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_column_span (GTK_GRID_LAYOUT_CHILD (lc), 2);
+
+  lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child4));
+  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 2);
+
+#if 0
+  gtk_widget_show (window);
+
+  g_timeout_add (1000, (GSourceFunc)gtk_main_quit, NULL);
+  gtk_main ();
+#endif
+
+  gtk_layout_manager_measure (layout,
+                              parent,
+                              GTK_ORIENTATION_HORIZONTAL,
+                              -1,
+                              &minimum,
+                              &natural,
+                              NULL,
+                              NULL);
+
+  g_assert_cmpint (minimum, ==, 60);
+  g_assert_cmpint (natural, ==, 80);
+
+  gtk_layout_manager_measure (layout,
+                              parent,
+                              GTK_ORIENTATION_VERTICAL,
+                              -1,
+                              &minimum,
+                              &natural,
+                              NULL,
+                              NULL);
+
+  g_assert_cmpint (minimum, ==, 50);
+  g_assert_cmpint (natural, ==, 70);
+
+  gtk_layout_manager_allocate (layout, parent, 80, 70, 0);
+
+  g_assert_cmpint (child1->width, ==, 30);
+  g_assert_cmpint (child2->width, ==, 50);
+  g_assert_cmpint (child3->width, ==, 40);
+  g_assert_cmpint (child4->width, ==, 40);
+
+  g_assert_cmpint (child1->height, ==, 30);
+  g_assert_cmpint (child2->height, ==, 30);
+  g_assert_cmpint (child3->height, ==, 40);
+  g_assert_cmpint (child4->height, ==, 40);
+
+  gtk_widget_unparent (GTK_WIDGET (child1));
+  gtk_widget_unparent (GTK_WIDGET (child2));
+  gtk_widget_unparent (GTK_WIDGET (child3));
+  gtk_widget_unparent (GTK_WIDGET (child4));
+
+  gtk_widget_destroy (parent);
+}
+
+/* Create a 2x2 homogeneous grid and verify
+ * all children get the same size.
+ */
+static void
+test_homogeneous (void)
+{
+  GtkWidget *window;
+  GtkWidget *parent;
+  GtkLayoutManager *layout;
+  GtkGizmo *child1;
+  GtkGizmo *child2;
+  GtkGizmo *child3;
+  GtkGizmo *child4;
+  GtkLayoutChild *lc;
+  int minimum, natural;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  parent = g_object_new (GTK_TYPE_GIZMO, NULL);
+  gtk_container_add (GTK_CONTAINER (window), parent);
+
+  layout = gtk_grid_layout_new ();
+  gtk_grid_layout_set_row_homogeneous (GTK_GRID_LAYOUT (layout), TRUE);
+  gtk_grid_layout_set_column_homogeneous (GTK_GRID_LAYOUT (layout), TRUE);
+  gtk_widget_set_layout_manager (parent, layout);
+
+  child1 = g_object_new (GTK_TYPE_GIZMO, NULL);
+  child2 = g_object_new (GTK_TYPE_GIZMO, NULL);
+  child3 = g_object_new (GTK_TYPE_GIZMO, NULL);
+  child4 = g_object_new (GTK_TYPE_GIZMO, NULL);
+
+  child1->name = "child1";
+  child1->min_width = 10;
+  child1->min_height = 10;
+  child1->nat_width = 20;
+  child1->nat_height = 20;
+  child2->name = "child2";
+  child2->min_width = 20;
+  child2->min_height = 20;
+  child2->nat_width = 30;
+  child2->nat_height = 30;
+  child3->name = "child3";
+  child3->min_width = 30;
+  child3->min_height = 30;
+  child3->nat_width = 40;
+  child3->nat_height = 40;
+  child4->name = "child4";
+  child4->min_width = 30;
+  child4->min_height = 30;
+  child4->nat_width = 40;
+  child4->nat_height = 40;
+
+  gtk_widget_set_parent (GTK_WIDGET (child1), parent);
+  gtk_widget_set_parent (GTK_WIDGET (child2), parent);
+  gtk_widget_set_parent (GTK_WIDGET (child3), parent);
+  gtk_widget_set_parent (GTK_WIDGET (child4), parent);
+
+  lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child1));
+  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+
+  lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child2));
+  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
+
+  lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child3));
+  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 0);
+
+  lc = gtk_layout_manager_get_layout_child (layout, GTK_WIDGET (child4));
+  gtk_grid_layout_child_set_top_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
+  gtk_grid_layout_child_set_left_attach (GTK_GRID_LAYOUT_CHILD (lc), 1);
+
+#if 0
+  gtk_widget_show (window);
+
+  g_timeout_add (1000, (GSourceFunc)gtk_main_quit, NULL);
+  gtk_main ();
+#endif
+
+  gtk_layout_manager_measure (layout,
+                              parent,
+                              GTK_ORIENTATION_HORIZONTAL,
+                              -1,
+                              &minimum,
+                              &natural,
+                              NULL,
+                              NULL);
+
+  g_assert_cmpint (minimum, ==, 60);
+  g_assert_cmpint (natural, ==, 80);
+
+  gtk_layout_manager_measure (layout,
+                              parent,
+                              GTK_ORIENTATION_VERTICAL,
+                              -1,
+                              &minimum,
+                              &natural,
+                              NULL,
+                              NULL);
+
+  g_assert_cmpint (minimum, ==, 60);
+  g_assert_cmpint (natural, ==, 80);
+
+  gtk_layout_manager_allocate (layout, parent, 80, 80, 0);
+
+  g_assert_cmpint (child1->width, ==, 40);
+  g_assert_cmpint (child2->width, ==, 40);
+  g_assert_cmpint (child3->width, ==, 40);
+  g_assert_cmpint (child4->width, ==, 40);
+
+  g_assert_cmpint (child1->height, ==, 40);
+  g_assert_cmpint (child2->height, ==, 40);
+  g_assert_cmpint (child3->height, ==, 40);
+  g_assert_cmpint (child4->height, ==, 40);
+
+  gtk_widget_unparent (GTK_WIDGET (child1));
+  gtk_widget_unparent (GTK_WIDGET (child2));
+  gtk_widget_unparent (GTK_WIDGET (child3));
+  gtk_widget_unparent (GTK_WIDGET (child4));
 
   gtk_widget_destroy (parent);
 }
@@ -306,7 +561,8 @@ main (int   argc,
 
   g_test_add_func ("/grid-layout/row", test_simple_row);
   g_test_add_func ("/grid-layout/column", test_simple_column);
-
+  g_test_add_func ("/grid-layout/span", test_spans);
+  g_test_add_func ("/grid-layout/homogeneous", test_homogeneous);
 
   return g_test_run();
 }
