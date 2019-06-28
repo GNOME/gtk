@@ -105,8 +105,8 @@ struct _GdkFrameTimings
   guint slept_before : 1;
 };
 
-void _gdk_frame_clock_freeze (GdkFrameClock *clock);
-void _gdk_frame_clock_thaw   (GdkFrameClock *clock);
+void _gdk_frame_clock_inc_consumer (GdkFrameClock *clock);
+void _gdk_frame_clock_dec_consumer (GdkFrameClock *clock);
 
 void _gdk_frame_clock_begin_frame         (GdkFrameClock   *clock);
 void _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,

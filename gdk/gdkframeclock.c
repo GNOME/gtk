@@ -97,9 +97,13 @@ struct _GdkFrameClockPrivate
   gint n_timings;
   gint current;
   GdkFrameTimings *timings[FRAME_HISTORY_MAX_LENGTH];
+  gint n_consumers;
 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
+
+static void
+_gdk_frame_clock_freeze (GdkFrameClock *clock);
 
 static void
 gdk_frame_clock_finalize (GObject *object)
@@ -115,11 +119,20 @@ gdk_frame_clock_finalize (GObject *object)
 }
 
 static void
+gdk_frame_clock_constructed (GObject *object)
+{
+  G_OBJECT_CLASS (gdk_frame_clock_parent_class)->constructed (object);
+
+  _gdk_frame_clock_freeze (GDK_FRAME_CLOCK (object));
+}
+
+static void
 gdk_frame_clock_class_init (GdkFrameClockClass *klass)
 {
   GObjectClass *gobject_class = (GObjectClass*) klass;
 
   gobject_class->finalize     = gdk_frame_clock_finalize;
+  gobject_class->constructed  = gdk_frame_clock_constructed;
 
   /**
    * GdkFrameClock::flush-events:
@@ -335,7 +348,7 @@ gdk_frame_clock_end_updating (GdkFrameClock *frame_clock)
   GDK_FRAME_CLOCK_GET_CLASS (frame_clock)->end_updating (frame_clock);
 }
 
-void
+static void
 _gdk_frame_clock_freeze (GdkFrameClock *clock)
 {
   g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
@@ -344,12 +357,41 @@ _gdk_frame_clock_freeze (GdkFrameClock *clock)
 }
 
 
-void
+static void
 _gdk_frame_clock_thaw (GdkFrameClock *clock)
 {
   g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
 
   GDK_FRAME_CLOCK_GET_CLASS (clock)->thaw (clock);
+}
+
+void
+_gdk_frame_clock_inc_consumer (GdkFrameClock *clock)
+{
+  GdkFrameClockPrivate *priv;
+
+  g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
+
+  priv = clock->priv;
+
+  priv->n_consumers++;
+  if (priv->n_consumers == 1)
+    _gdk_frame_clock_thaw (clock);
+}
+
+
+void
+_gdk_frame_clock_dec_consumer (GdkFrameClock *clock)
+{
+  GdkFrameClockPrivate *priv;
+
+  g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
+
+  priv = clock->priv;
+
+  priv->n_consumers--;
+  if (priv->n_consumers == 0)
+    _gdk_frame_clock_freeze (clock);
 }
 
 /**

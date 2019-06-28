@@ -397,7 +397,7 @@ gdk_x11_surface_end_frame (GdkSurface *surface)
 					       g_intern_static_string ("_NET_WM_FRAME_DRAWN")))
         {
           impl->toplevel->frame_pending = TRUE;
-          _gdk_frame_clock_freeze (gdk_surface_get_frame_clock (surface));
+          gdk_surface_freeze_updates (surface);
           timings->cookie = impl->toplevel->current_counter_value;
         }
     }

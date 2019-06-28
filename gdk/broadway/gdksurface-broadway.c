@@ -88,10 +88,10 @@ gdk_broadway_surface_finalize (GObject *object)
 }
 
 static gboolean
-thaw_clock_cb (GdkFrameClock *clock)
+thaw_updates_cb (GdkSurface *surface)
 {
-  _gdk_frame_clock_thaw (clock);
-  g_object_unref (clock);
+  gdk_surface_thaw_updates (surface);
+  g_object_unref (surface);
   return G_SOURCE_REMOVE;
 }
 
@@ -109,9 +109,9 @@ _gdk_broadway_roundtrip_notify (GdkSurface  *surface,
 
   /* If there is no remote web client, rate limit update to once a second */
   if (local_reply)
-    g_timeout_add_seconds (1, (GSourceFunc)thaw_clock_cb, g_object_ref (clock));
+    g_timeout_add_seconds (1, (GSourceFunc)thaw_updates_cb, g_object_ref (surface));
   else
-    _gdk_frame_clock_thaw (clock);
+    gdk_surface_thaw_updates (surface);
 
   if (timings)
     {
@@ -140,7 +140,7 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   GdkBroadwayDisplay *broadway_display;
 
   impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
-  _gdk_frame_clock_freeze (gdk_surface_get_frame_clock (surface));
+  gdk_surface_freeze_updates (surface);
 
   broadway_display = GDK_BROADWAY_DISPLAY (display);
 
