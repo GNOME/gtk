@@ -944,8 +944,6 @@ gtk_constraint_solver_new_expression (GtkConstraintSolver *self,
 
           gtk_constraint_expression_set_variable (expr, dummy_var, 1.0);
           g_hash_table_insert (self->marker_vars, constraint, dummy_var);
-
-          gtk_constraint_variable_unref (dummy_var);
         }
       else
         {
