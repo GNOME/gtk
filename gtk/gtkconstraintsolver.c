@@ -1736,7 +1736,7 @@ gtk_constraint_solver_remove_edit_variable (GtkConstraintSolver *self,
     {
       char *str = gtk_constraint_variable_to_string (variable);
 
-      g_critical ("Unknown stay variable '%s'", str);
+      g_critical ("Unknown edit variable '%s'", str);
 
       g_free (str);
 
