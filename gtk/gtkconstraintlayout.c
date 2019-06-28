@@ -973,6 +973,30 @@ gtk_constraint_solver_add_constraint (solver,
                                 child_baseline);
     }
 
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (LAYOUT))
+    {
+      GHashTableIter iter;
+      gpointer key;
+      g_hash_table_iter_init (&iter, self->guides);
+      while (g_hash_table_iter_next (&iter, &key, NULL))
+        {
+          GtkConstraintGuide *guide = key;
+          GtkConstraintVariable *var_top, *var_left, *var_width, *var_height;
+          var_top = gtk_constraint_guide_get_attribute (guide, GTK_CONSTRAINT_ATTRIBUTE_TOP);
+          var_left = gtk_constraint_guide_get_attribute (guide, GTK_CONSTRAINT_ATTRIBUTE_LEFT);
+          var_width = gtk_constraint_guide_get_attribute (guide, GTK_CONSTRAINT_ATTRIBUTE_WIDTH);
+          var_height = gtk_constraint_guide_get_attribute (guide, GTK_CONSTRAINT_ATTRIBUTE_HEIGHT);
+          g_print ("Allocating guide '%s'[%p] with { .x: %g .y: %g .w: %g .h: %g }\n",
+                   gtk_constraint_guide_get_name (guide), guide,
+                   gtk_constraint_variable_get_value (var_left),
+                   gtk_constraint_variable_get_value (var_top),
+                   gtk_constraint_variable_get_value (var_width),
+                   gtk_constraint_variable_get_value (var_height));
+        }
+    }
+#endif
+
   /* The constraints on the children sizes can be removed now */
   for (guint i = 0; i < size_constraints->len; i++)
     {
