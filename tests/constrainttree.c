@@ -214,10 +214,10 @@ drag_begin (GtkGestureDrag *drag,
 
   gtk_constraint_solver_add_edit_variable (solver,
                                            drag_node->x_var,
-                                           GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                           GTK_CONSTRAINT_WEIGHT_STRONG);
   gtk_constraint_solver_add_edit_variable (solver,
                                            drag_node->y_var,
-                                           GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                           GTK_CONSTRAINT_WEIGHT_STRONG);
   gtk_constraint_solver_begin_edit (solver);
 }
 
