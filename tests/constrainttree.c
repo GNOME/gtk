@@ -211,6 +211,14 @@ drag_begin (GtkGestureDrag *drag,
   drag_start_x = start_x;
   drag_start_y = start_y;
   gtk_widget_queue_draw (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (drag)));
+
+  gtk_constraint_solver_add_edit_variable (solver,
+                                           drag_node->x_var,
+                                           GTK_CONSTRAINT_WEIGHT_REQUIRED);
+  gtk_constraint_solver_add_edit_variable (solver,
+                                           drag_node->y_var,
+                                           GTK_CONSTRAINT_WEIGHT_REQUIRED);
+  gtk_constraint_solver_begin_edit (solver);
 }
 
 static void
@@ -235,13 +243,6 @@ drag_update (GtkGestureDrag *drag,
   if (!drag_node)
     return;
 
-  gtk_constraint_solver_add_edit_variable (solver,
-                                           drag_node->x_var,
-                                           GTK_CONSTRAINT_WEIGHT_REQUIRED);
-  gtk_constraint_solver_add_edit_variable (solver,
-                                           drag_node->y_var,
-                                           GTK_CONSTRAINT_WEIGHT_REQUIRED);
-  gtk_constraint_solver_begin_edit (solver);
   gtk_constraint_solver_suggest_value (solver,
                                        drag_node->x_var,
                                        drag_start_x + offset_x);
@@ -252,9 +253,6 @@ drag_update (GtkGestureDrag *drag,
 
   update_tree (tree);
 
-  gtk_constraint_solver_remove_edit_variable (solver, drag_node->x_var);
-  gtk_constraint_solver_remove_edit_variable (solver, drag_node->y_var);
-  gtk_constraint_solver_end_edit (solver);
   gtk_widget_queue_draw (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (drag)));
 }
 
@@ -267,6 +265,9 @@ drag_end (GtkGestureDrag *drag,
   if (!drag_node)
     return;
 
+  gtk_constraint_solver_remove_edit_variable (solver, drag_node->x_var);
+  gtk_constraint_solver_remove_edit_variable (solver, drag_node->y_var);
+  gtk_constraint_solver_end_edit (solver);
 
   drag_node = NULL;
 
