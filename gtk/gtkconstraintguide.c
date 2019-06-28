@@ -119,14 +119,6 @@ gtk_constraint_guide_update_constraint (GtkConstraintGuide *guide,
     GTK_CONSTRAINT_RELATION_LE,
     GTK_CONSTRAINT_RELATION_LE,
   };
-  double weight[LAST_GUIDE_VALUE] = {
-    GTK_CONSTRAINT_WEIGHT_REQUIRED,
-    GTK_CONSTRAINT_WEIGHT_REQUIRED,
-    GTK_CONSTRAINT_WEIGHT_MEDIUM,
-    GTK_CONSTRAINT_WEIGHT_MEDIUM,
-    GTK_CONSTRAINT_WEIGHT_REQUIRED,
-    GTK_CONSTRAINT_WEIGHT_REQUIRED,
-  };
 
   if (!guide->layout)
     return;
@@ -139,12 +131,23 @@ gtk_constraint_guide_update_constraint (GtkConstraintGuide *guide,
     gtk_constraint_solver_remove_constraint (solver, guide->constraints[index]);
 
   var = gtk_constraint_layout_get_attribute (guide->layout, attr[index], "guide", NULL, guide->bound_attributes);
-  guide->constraints[index] =
-    gtk_constraint_solver_add_constraint (solver,
-                                          var,
-                                          relation[index],
-                                          gtk_constraint_expression_new (guide->values[index]),
-                                          weight[index]);
+  if (relation[index] == GTK_CONSTRAINT_RELATION_EQ)
+    {
+      gtk_constraint_variable_set_value (var, guide->values[index]);
+      guide->constraints[index] =
+        gtk_constraint_solver_add_stay_variable (solver,
+                                                 var,
+                                                 GTK_CONSTRAINT_WEIGHT_MEDIUM);
+    }
+  else
+    {
+      guide->constraints[index] =
+        gtk_constraint_solver_add_constraint (solver,
+                                              var,
+                                              relation[index],
+                                              gtk_constraint_expression_new (guide->values[index]),
+                                              GTK_CONSTRAINT_WEIGHT_REQUIRED);
+    }
 }
 
 void

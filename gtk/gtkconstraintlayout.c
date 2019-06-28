@@ -736,12 +736,11 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
       g_ptr_array_add (size_constraints, constraint);
 
+      gtk_constraint_variable_set_value (width_var, nat_req.width);
       constraint =
-gtk_constraint_solver_add_constraint (solver,
-                                              width_var,
-                                              GTK_CONSTRAINT_RELATION_EQ,
-                                              gtk_constraint_expression_new (nat_req.width),
-                                              GTK_CONSTRAINT_WEIGHT_MEDIUM);
+        gtk_constraint_solver_add_stay_variable (solver,
+                                                 width_var,
+                                                 GTK_CONSTRAINT_WEIGHT_MEDIUM);
       g_ptr_array_add (size_constraints, constraint);
 
       height_var = get_child_attribute (self, child, GTK_CONSTRAINT_ATTRIBUTE_HEIGHT);
@@ -754,12 +753,11 @@ gtk_constraint_solver_add_constraint (solver,
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
       g_ptr_array_add (size_constraints, constraint);
 
+      gtk_constraint_variable_set_value (height_var, nat_req.height);
       constraint =
-        gtk_constraint_solver_add_constraint (solver,
-                                              height_var,
-                                              GTK_CONSTRAINT_RELATION_EQ,
-                                              gtk_constraint_expression_new (nat_req.height),
-                                              GTK_CONSTRAINT_WEIGHT_MEDIUM);
+        gtk_constraint_solver_add_stay_variable (solver,
+                                                 height_var,
+                                                 GTK_CONSTRAINT_WEIGHT_MEDIUM);
       g_ptr_array_add (size_constraints, constraint);
     }
 
@@ -905,12 +903,11 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
       g_ptr_array_add (size_constraints, constraint);
 
+      gtk_constraint_variable_set_value (width_var, nat_req.width);
       constraint =
-gtk_constraint_solver_add_constraint (solver,
-                                              width_var,
-                                              GTK_CONSTRAINT_RELATION_EQ,
-                                              gtk_constraint_expression_new (nat_req.width),
-                                              GTK_CONSTRAINT_WEIGHT_MEDIUM);
+        gtk_constraint_solver_add_stay_variable (solver,
+                                                 width_var,
+                                                 GTK_CONSTRAINT_WEIGHT_MEDIUM);
       g_ptr_array_add (size_constraints, constraint);
 
       height_var = get_child_attribute (self, child, GTK_CONSTRAINT_ATTRIBUTE_HEIGHT);
@@ -923,12 +920,11 @@ gtk_constraint_solver_add_constraint (solver,
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
       g_ptr_array_add (size_constraints, constraint);
 
+      gtk_constraint_variable_set_value (height_var, nat_req.height);
       constraint =
-        gtk_constraint_solver_add_constraint (solver,
-                                              height_var,
-                                              GTK_CONSTRAINT_RELATION_EQ,
-                                              gtk_constraint_expression_new (nat_req.height),
-                                              GTK_CONSTRAINT_WEIGHT_MEDIUM);
+        gtk_constraint_solver_add_stay_variable (solver,
+                                                 height_var,
+                                                 GTK_CONSTRAINT_WEIGHT_MEDIUM);
       g_ptr_array_add (size_constraints, constraint);
     }
 
