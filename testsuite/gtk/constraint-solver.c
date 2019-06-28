@@ -254,14 +254,26 @@ constraint_solver_edit_var_suggest (void)
   gtk_constraint_solver_suggest_value (solver, a, 2.0);
   gtk_constraint_solver_resolve (solver);
 
+  g_test_message ("Check values after first edit");
+
   g_assert_cmpfloat_with_epsilon (gtk_constraint_variable_get_value (a), 2.0, 0.001);
   g_assert_cmpfloat_with_epsilon (gtk_constraint_variable_get_value (b), 2.0, 0.001);
 
   gtk_constraint_solver_suggest_value (solver, a, 10.0);
   gtk_constraint_solver_resolve (solver);
 
+  g_test_message ("Check values after second edit");
+
   g_assert_cmpfloat_with_epsilon (gtk_constraint_variable_get_value (a), 10.0, 0.001);
   g_assert_cmpfloat_with_epsilon (gtk_constraint_variable_get_value (b), 10.0, 0.001);
+
+  gtk_constraint_solver_suggest_value (solver, a, 12.0);
+  gtk_constraint_solver_resolve (solver);
+
+  g_test_message ("Check values after third edit");
+
+  g_assert_cmpfloat_with_epsilon (gtk_constraint_variable_get_value (a), 12.0, 0.001);
+  g_assert_cmpfloat_with_epsilon (gtk_constraint_variable_get_value (b), 12.0, 0.001);
 
   gtk_constraint_variable_unref (a);
   gtk_constraint_variable_unref (b);
