@@ -25,9 +25,29 @@
 
 G_BEGIN_DECLS
 
+#ifdef GTK_TEST_EXTERNAL
+
+#define GTK_TYPE_CONSTRAINT_SOLVER (g_type_from_name ("GtkConstraintSolver"))
+#define GTK_CONSTRAINT_SOLVER(solver)                (G_TYPE_CHECK_INSTANCE_CAST ((solver), GTK_TYPE_CONSTRAINT_SOLVER, GtkConstraintSolver))
+#define GTK_CONSTRAINT_SOLVER_CLASS(klass)           (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CONSTRAINT_SOLVER, GtkConstraintSolverClass))
+#define GTK_IS_CONSTRAINT_SOLVER(solver)             (G_TYPE_CHECK_INSTANCE_TYPE ((solver), GTK_TYPE_CONSTRAINT_SOLVER))
+#define GTK_IS_CONSTRAINT_SOLVER_CLASS(klass)        (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CONSTRAINT_SOLVER))
+#define GTK_CONSTRAINT_SOLVER_GET_CLASS(obj)         (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CONSTRAINT_SOLVER, GtkConstraintSolverClass))
+
+typedef struct _GtkConstraintSolver GtkConstraintSolver;
+typedef struct _GtkConstraintSolverClass GtkConstraintSolverClass;
+
+struct _GtkConstraintSolverClass {
+  GObjectClass parent_class;
+};
+
+#else
+
 #define GTK_TYPE_CONSTRAINT_SOLVER (gtk_constraint_solver_get_type())
 
 G_DECLARE_FINAL_TYPE (GtkConstraintSolver, gtk_constraint_solver, GTK, CONSTRAINT_SOLVER, GObject)
+
+#endif
 
 /* Symbolic weight thresholds
  *
