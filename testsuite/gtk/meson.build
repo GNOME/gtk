@@ -17,6 +17,7 @@ tests = [
   ['builderparser'],
   ['cellarea'],
   ['check-icon-names'],
+  ['constraint-layout'],
   ['constraint-solver', [
       '../../gtk/gtkconstraintsolver.c',
       '../../gtk/gtkconstraintexpression.c',
