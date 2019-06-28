@@ -719,14 +719,12 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
     {
       GtkConstraintVariable *width_var, *height_var;
       GtkConstraintRef *constraint;
-      int min_size = 0, nat_size = 0;
+      GtkRequisition min_req, nat_req;
 
       if (!gtk_widget_should_layout (child))
         continue;
 
-      gtk_widget_measure (child, orientation, -1,
-                          &min_size, &nat_size,
-                          NULL, NULL);
+      gtk_widget_get_preferred_size (child, &min_req, &nat_req);
 
       width_var = get_child_attribute (self, child, GTK_CONSTRAINT_ATTRIBUTE_WIDTH);
 
@@ -734,15 +732,15 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
         gtk_constraint_solver_add_constraint (solver,
                                               width_var,
                                               GTK_CONSTRAINT_RELATION_GE,
-                                              gtk_constraint_expression_new (min_size),
+                                              gtk_constraint_expression_new (min_req.width),
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
       g_ptr_array_add (size_constraints, constraint);
 
       constraint =
-        gtk_constraint_solver_add_constraint (solver,
+gtk_constraint_solver_add_constraint (solver,
                                               width_var,
                                               GTK_CONSTRAINT_RELATION_EQ,
-                                              gtk_constraint_expression_new (nat_size),
+                                              gtk_constraint_expression_new (nat_req.width),
                                               GTK_CONSTRAINT_WEIGHT_MEDIUM);
       g_ptr_array_add (size_constraints, constraint);
 
@@ -752,7 +750,7 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
         gtk_constraint_solver_add_constraint (solver,
                                               height_var,
                                               GTK_CONSTRAINT_RELATION_GE,
-                                              gtk_constraint_expression_new (min_size),
+                                              gtk_constraint_expression_new (min_req.height),
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
       g_ptr_array_add (size_constraints, constraint);
 
@@ -760,7 +758,7 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
         gtk_constraint_solver_add_constraint (solver,
                                               height_var,
                                               GTK_CONSTRAINT_RELATION_EQ,
-                                              gtk_constraint_expression_new (nat_size),
+                                              gtk_constraint_expression_new (nat_req.height),
                                               GTK_CONSTRAINT_WEIGHT_MEDIUM);
       g_ptr_array_add (size_constraints, constraint);
     }
