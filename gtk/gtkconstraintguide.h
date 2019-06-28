@@ -67,5 +67,10 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_constraint_guide_get_max_size       (GtkConstraintGuide *guide,
                                                                  int                *width,
                                                                  int                *height);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_constraint_guide_set_name           (GtkConstraintGuide *guide,
+                                                                 const char         *name);
+GDK_AVAILABLE_IN_ALL
+const char *            gtk_constraint_guide_get_name           (GtkConstraintGuide *guide);
 
 G_END_DECLS

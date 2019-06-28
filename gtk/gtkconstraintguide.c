@@ -45,6 +45,8 @@ struct _GtkConstraintGuide
 { 
   GObject parent_instance;
 
+  char *name;
+
   int values[LAST_VALUE];
 
   GtkConstraintLayout *layout;
@@ -71,6 +73,7 @@ enum {
   PROP_NAT_HEIGHT,
   PROP_MAX_WIDTH,
   PROP_MAX_HEIGHT,
+  PROP_NAME,
   LAST_PROP
 };
 
@@ -226,6 +229,10 @@ gtk_constraint_guide_set_property (GObject      *gobject,
         }
       break;
 
+    case PROP_NAME:
+      gtk_constraint_guide_set_name (self, g_value_get_string (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
@@ -251,6 +258,10 @@ gtk_constraint_guide_get_property (GObject    *gobject,
       g_value_set_int (value, self->values[prop_id - 1]);
       break;
 
+    case PROP_NAME:
+      g_value_set_string (value, self->name);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
@@ -261,6 +272,8 @@ static void
 gtk_constraint_guide_finalize (GObject *object)
 {
   GtkConstraintGuide *self = GTK_CONSTRAINT_GUIDE (object);
+
+  g_free (self->name);
 
   g_clear_pointer (&self->bound_attributes, g_hash_table_unref);
 
@@ -318,6 +331,13 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
                         0, G_MAXINT, G_MAXINT,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
+
+  guide_props[PROP_NAME] =
+      g_param_spec_string ("name",
+                           "Name",
+                           "A name to use in debug message",
+                           NULL,
+                           G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, LAST_PROP, guide_props);
 }
@@ -495,4 +515,23 @@ gtk_constraint_guide_get_max_size (GtkConstraintGuide *guide,
     *width = guide->values[MAX_WIDTH];
   if (height)
     *height = guide->values[MAX_HEIGHT];
+}
+
+const char *
+gtk_constraint_guide_get_name (GtkConstraintGuide *guide)
+{
+  g_return_val_if_fail (GTK_IS_CONSTRAINT_GUIDE (guide), NULL);
+
+  return guide->name;
+}
+
+void
+gtk_constraint_guide_set_name (GtkConstraintGuide *guide,
+                               const char         *name)
+{
+  g_return_if_fail (GTK_IS_CONSTRAINT_GUIDE (guide));
+
+  g_free (guide->name);
+  guide->name = g_strdup (name);
+  g_object_notify_by_pspec (G_OBJECT (guide), guide_props[PROP_NAME]);
 }
