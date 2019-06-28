@@ -702,7 +702,8 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
   GtkConstraintSolver *solver;
   GPtrArray *size_constraints;
   GtkWidget *child;
-  int value;
+  int min_value;
+  int nat_value;
 
   solver = gtk_constraint_layout_get_solver (self);
   if (solver == NULL)
@@ -780,33 +781,34 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
 
   g_assert (size != NULL && opposite_size != NULL);
 
+  nat_value = gtk_constraint_variable_get_value (size);
+
   /* We impose a temporary value on the size and opposite size of the
    * layout, with a low weight to let the solver settle towards the
    * natural state of the system. Once we get the value out, we can
    * remove these constraints
    */
+  gtk_constraint_solver_add_edit_variable (solver, size, GTK_CONSTRAINT_WEIGHT_STRONG);
   if (for_size > 0)
-    {
-      gtk_constraint_solver_add_edit_variable (solver, opposite_size, GTK_CONSTRAINT_WEIGHT_MEDIUM * 2.0);
-      gtk_constraint_solver_begin_edit (solver);
-      gtk_constraint_solver_suggest_value (solver, opposite_size, for_size);
-      gtk_constraint_solver_resolve (solver);
+    gtk_constraint_solver_add_edit_variable (solver, opposite_size, GTK_CONSTRAINT_WEIGHT_STRONG);
+  gtk_constraint_solver_begin_edit (solver);
+  gtk_constraint_solver_suggest_value (solver, size, 0.0);
+  if (for_size > 0)
+    gtk_constraint_solver_suggest_value (solver, opposite_size, for_size);
+  gtk_constraint_solver_resolve (solver);
 
-      value = gtk_constraint_variable_get_value (size);
+  min_value = gtk_constraint_variable_get_value (size);
 
-      gtk_constraint_solver_remove_edit_variable (solver, opposite_size);
-      gtk_constraint_solver_end_edit (solver);
-    }
-  else
-    {
-      value = gtk_constraint_variable_get_value (size);
-    }
+  gtk_constraint_solver_remove_edit_variable (solver, size);
+  if (for_size > 0)
+    gtk_constraint_solver_remove_edit_variable (solver, opposite_size);
+  gtk_constraint_solver_end_edit (solver);
 
   GTK_NOTE (LAYOUT,
-            g_print ("layout %p preferred %s size: %.3f (for opposite size: %d)\n",
+            g_print ("layout %p %s size: min %d nat %d (for opposite size: %d)\n",
                      self,
                      orientation == GTK_ORIENTATION_HORIZONTAL ? "horizontal" : "vertical",
-                     gtk_constraint_variable_get_value (size),
+                     min_value, nat_value,
                      for_size));
 
   for (guint i = 0; i < size_constraints->len; i++)
@@ -819,10 +821,10 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
   g_ptr_array_unref (size_constraints);
 
   if (minimum != NULL)
-    *minimum = value;
+    *minimum = min_value;
 
   if (natural != NULL)
-    *natural = value;
+    *natural = nat_value;
 }
 
 static void
