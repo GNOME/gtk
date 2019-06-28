@@ -28,6 +28,7 @@ tests = [
   ['focus'],
   ['gestures'],
   ['grid'],
+  ['grid-layout'],
   ['gtkmenu'],
   ['icontheme'],
   ['keyhash', ['../../gtk/gtkkeyhash.c', gtkresources, '../../gtk/gtkprivate.c'], gtk_cargs],
