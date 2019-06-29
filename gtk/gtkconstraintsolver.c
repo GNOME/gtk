@@ -1483,6 +1483,8 @@ gtk_constraint_solver_create_variable (GtkConstraintSolver *self,
 {
   GtkConstraintVariable *res;
 
+  self->var_counter++;
+
   res = gtk_constraint_variable_new (name);
   gtk_constraint_variable_set_prefix (res, prefix);
   gtk_constraint_variable_set_value (res, value);
@@ -2206,6 +2208,21 @@ gtk_constraint_solver_to_string (GtkConstraintSolver *solver)
           g_free (c);
         }
     }
+
+  return g_string_free (buf, FALSE);
+}
+
+char *
+gtk_constraint_solver_statistics (GtkConstraintSolver *solver)
+{
+  GString *buf = g_string_new (NULL);
+
+  g_string_append_printf (buf, "Variables: %d\n", solver->var_counter);
+  g_string_append_printf (buf, "Slack vars: %d\n", solver->slack_counter);
+  g_string_append_printf (buf, "Artificial vars: %d\n", solver->artificial_counter);
+  g_string_append_printf (buf, "Dummy vars: %d\n", solver->dummy_counter);
+  g_string_append_printf (buf, "Stay vars: %d\n", g_hash_table_size (solver->stay_var_map));
+  g_string_append_printf (buf, "Optimize count: %d\n", solver->optimize_count);
 
   return g_string_free (buf, FALSE);
 }

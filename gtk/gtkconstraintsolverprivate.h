@@ -162,4 +162,7 @@ gtk_constraint_solver_clear (GtkConstraintSolver *solver);
 char *
 gtk_constraint_solver_to_string (GtkConstraintSolver *solver);
 
+char *
+gtk_constraint_solver_statistics (GtkConstraintSolver *solver);
+
 G_END_DECLS
