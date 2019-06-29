@@ -11,6 +11,7 @@ demos = files([
   'constraints.c',
   'constraints2.c',
   'constraints3.c',
+  'constraints4.c',
   'css_accordion.c',
   'css_basics.c',
   'css_blendmodes.c',
