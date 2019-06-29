@@ -2178,11 +2178,11 @@ popover>contents {
   margin: 0px;
 }
 
-popover>contents.background {
+popover.background>contents {
 
   background-color: $popover_bg_color;
   box-shadow: 0 1px 2px transparentize(black, 0.7);
-  .csd &, & { 
+  .csd &, & {
     border: 1px solid $borders_color;
     border-radius: $popover_radius;
   }
