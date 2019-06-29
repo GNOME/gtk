@@ -76,4 +76,13 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_constraint_layout_remove_guide      (GtkConstraintLayout *manager,
                                                                  GtkConstraintGuide  *guide);
 
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_constraint_layout_add_constraints_from_description  (GtkConstraintLayout *manager,
+                                                                                 const char * const   lines[],
+                                                                                 gsize                n_lines,
+                                                                                 int                  hspacing,
+                                                                                 int                  vspacing,
+                                                                                 GHashTable          *views,
+                                                                                 GError             **error);
+
 G_END_DECLS
