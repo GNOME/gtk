@@ -94,6 +94,12 @@ gboolean
 gtk_constraint_variable_set_remove (GtkConstraintVariableSet *set,
                                     GtkConstraintVariable *variable);
 
+gboolean
+gtk_constraint_variable_set_is_empty (GtkConstraintVariableSet *set);
+
+gboolean
+gtk_constraint_variable_set_is_singleton (GtkConstraintVariableSet *set);
+
 int
 gtk_constraint_variable_set_size (GtkConstraintVariableSet *set);
 

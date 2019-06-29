@@ -1168,7 +1168,7 @@ gtk_constraint_solver_choose_subject (GtkConstraintSolver *self,
                   GtkConstraintVariableSet *cset = g_hash_table_lookup (self->columns, t_v);
 
                   if (cset == NULL ||
-                      (gtk_constraint_variable_set_size (cset) == 1 &&
+                      (gtk_constraint_variable_set_is_singleton (cset) &&
                        g_hash_table_contains (self->columns, self->objective)))
                     {
                       subject = t_v;
@@ -1865,7 +1865,7 @@ gtk_constraint_solver_remove_constraint (GtkConstraintSolver *self,
 
       if (exit_var == NULL)
         {
-          if (gtk_constraint_variable_set_size (set) == 0)
+          if (gtk_constraint_variable_set_is_empty (set))
             gtk_constraint_solver_remove_column (self, marker);
           else
             {

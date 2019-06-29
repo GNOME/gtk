@@ -505,6 +505,18 @@ gtk_constraint_variable_set_size (GtkConstraintVariableSet *set)
   return g_sequence_get_length (set->set);
 }
 
+gboolean
+gtk_constraint_variable_set_is_empty (GtkConstraintVariableSet *set)
+{
+  return g_sequence_is_empty (set->set);
+}
+
+gboolean
+gtk_constraint_variable_set_is_singleton (GtkConstraintVariableSet *set)
+{
+  return g_sequence_iter_next (g_sequence_get_begin_iter (set->set)) == g_sequence_get_end_iter (set->set);
+}
+
 /*< private >
  * GtkConstraintVariableSetIter:
  *
