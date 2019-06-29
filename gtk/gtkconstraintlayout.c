@@ -64,9 +64,10 @@
 #include "gtkconstraintprivate.h"
 #include "gtkconstraintexpressionprivate.h"
 #include "gtkconstraintsolverprivate.h"
-#include "gtklayoutchild.h"
+#include "gtkconstraintvflparserprivate.h"
 
 #include "gtkdebug.h"
+#include "gtklayoutchild.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
@@ -1584,4 +1585,220 @@ gtk_constraint_layout_remove_guide (GtkConstraintLayout *layout,
   g_hash_table_remove (layout->guides, guide);
 
   gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
+}
+
+static GtkConstraintAttribute
+attribute_from_name (const char *name)
+{
+  if (name == NULL || *name == '\0')
+    return GTK_CONSTRAINT_ATTRIBUTE_NONE;
+
+  /* We sadly need to special case these two because the name does
+   * not match the VFL grammar rules
+   */
+  if (strcmp (name, "centerX") == 0)
+    return GTK_CONSTRAINT_ATTRIBUTE_CENTER_X;
+
+  if (strcmp (name, "centerY") == 0)
+    return GTK_CONSTRAINT_ATTRIBUTE_CENTER_Y;
+
+  for (int i = 0; i < G_N_ELEMENTS (attribute_names); i++)
+    {
+      if (strcmp (attribute_names[i], name) == 0)
+        return i;
+    }
+
+  return GTK_CONSTRAINT_ATTRIBUTE_NONE;
+}
+
+/**
+ * gtk_constraint_layout_add_constraints_from_description:
+ * @layout: a #GtkConstraintLayout
+ * @lines: (array length=n_lines): an array of Visual Format Language lines
+ *   defining a set of constraints
+ * @n_lines: the number of lines
+ * @hspacing: default horizontal spacing value, or -1 for the fallback value
+ * @vspacing: default vertical spacing value, or -1 for the fallback value
+ * @views: (element-type utf8 Gtk.Widget): a dictionary of [ name, widget ]
+ *   pairs; the `name` keys map to the view names in the VFL lines, while
+ *   the `widget` values map to children of the widget using a #GtkConstraintLayout
+ *
+ * Creates a list of constraints they formal description using a compact
+ * description syntax called VFL, or "Visual Format Language".
+ *
+ * The Visual Format Language is based on Apple's AutoLayout [VFL](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html).
+ *
+ * The @views dictionary is used to match widgets to the symbolic view name
+ * inside the VFL.
+ *
+ * The VFL grammar is:
+ *
+ * |[<!-- language="plain" -->
+ *        <visualFormatString> = (<orientation>)?
+ *                               (<superview><connection>)?
+ *                               <view>(<connection><view>)*
+ *                               (<connection><superview>)?
+ *               <orientation> = 'H' | 'V'
+ *                 <superview> = '|'
+ *                <connection> = '' | '-' <predicateList> '-' | '-'
+ *             <predicateList> = <simplePredicate> | <predicateListWithParens>
+ *           <simplePredicate> = <metricName> | <positiveNumber>
+ *   <predicateListWithParens> = '(' <predicate> (',' <predicate>)* ')'
+ *                 <predicate> = (<relation>)? <objectOfPredicate> (<operatorList>)? ('@' <priority>)?
+ *                  <relation> = '==' | '<=' | '>='
+ *         <objectOfPredicate> = <constant> | <viewName> | ('.' <attributeName>)?
+ *                  <priority> = <positiveNumber> | 'required' | 'strong' | 'medium' | 'weak'
+ *                  <constant> = <number>
+ *              <operatorList> = (<multiplyOperator>)? (<addOperator>)?
+ *          <multiplyOperator> = [ '*' | '/' ] <positiveNumber>
+ *               <addOperator> = [ '+' | '-' ] <positiveNumber>
+ *                  <viewName> = [A-Za-z_]([A-Za-z0-9_]*) // A C identifier
+ *                <metricName> = [A-Za-z_]([A-Za-z0-9_]*) // A C identifier
+ *             <attributeName> = 'top' | 'bottom' | 'left' | 'right' | 'width' | 'height' |
+ *                               'start' | 'end' | 'centerX' | 'centerY' | 'baseline'
+ *            <positiveNumber> // A positive real number parseable by g_ascii_strtod()
+ *                    <number> // A real number parseable by g_ascii_strtod()
+ * ]|
+ *
+ * **Note**: The VFL grammar used by GTK is slightly different than the one
+ * defined by Apple, as it can use symbolic values for the constraint's
+ * strength instead of numeric values; additionally, GTK allows adding
+ * simple arithmetic operations inside predicates.
+ *
+ * Examples of VFL descriptions are:
+ *
+ * |[<!-- language="plain" -->
+ *   // Default spacing
+ *   [button]-[textField]
+ *
+ *   // Width constraint
+ *   [button(>=50)]
+ *
+ *   // Connection to super view
+ *   |-50-[purpleBox]-50-|
+ *
+ *   // Vertical layout
+ *   V:[topField]-10-[bottomField]
+ *
+ *   // Flush views
+ *   [maroonView][blueView]
+ *
+ *   // Priority
+ *   [button(100@strong)]
+ *
+ *   // Equal widths
+ *   [button1(==button2)]
+ *
+ *   // Multiple predicates
+ *   [flexibleButton(>=70,<=100)]
+ *
+ *   // A complete line of layout
+ *   |-[find]-[findNext]-[findField(>=20)]-|
+ *
+ *   // Operators
+ *   [button1(button2 / 3 + 50)]
+ *
+ *   // Named attributes
+ *   [button1(==button2.height)]
+ * ]|
+ *
+ * Returns: %TRUE if the constraints were added to the layout
+ */
+gboolean
+gtk_constraint_layout_add_constraints_from_description (GtkConstraintLayout *layout,
+                                                        const char * const   lines[],
+                                                        gsize                n_lines,
+                                                        int                  hspacing,
+                                                        int                  vspacing,
+                                                        GHashTable          *views,
+                                                        GError             **error)
+{
+  GtkConstraintVflParser *parser;
+
+  g_return_val_if_fail (GTK_IS_CONSTRAINT_LAYOUT (layout), FALSE);
+  g_return_val_if_fail (lines != NULL, FALSE);
+  g_return_val_if_fail (views != NULL, FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+  parser = gtk_constraint_vfl_parser_new ();
+  gtk_constraint_vfl_parser_set_default_spacing (parser, hspacing, vspacing);
+  gtk_constraint_vfl_parser_set_views (parser, views);
+
+  for (gsize i = 0; i < n_lines; i++)
+    {
+      const char *line = lines[i];
+      GError *internal_error = NULL;
+
+      gtk_constraint_vfl_parser_parse_line (parser, line, -1, &internal_error);
+      if (internal_error != NULL)
+        {
+          int offset = gtk_constraint_vfl_parser_get_error_offset (parser);
+          int range = gtk_constraint_vfl_parser_get_error_range (parser);
+          char *squiggly = NULL;
+
+          if (range > 0)
+            {
+              squiggly = g_new (char, range + 1);
+
+              for (int r = 0; r < range; i++)
+                squiggly[r] = '~';
+
+              squiggly[range] = '\0';
+            }
+
+          g_set_error (error, GTK_CONSTRAINT_VFL_PARSER_ERROR,
+                       internal_error->code,
+                       "%" G_GSIZE_FORMAT ":%d: %s\n"
+                       "%s\n"
+                       "%*s^%s",
+                       i, offset + 1,
+                       internal_error->message,
+                       line,
+                       offset, " ", squiggly != NULL ? squiggly : "");
+
+          g_free (squiggly);
+          g_error_free (internal_error);
+          gtk_constraint_vfl_parser_free (parser);
+          return FALSE;
+        }
+
+      int n_constraints = 0;
+      GtkConstraintVfl *constraints = gtk_constraint_vfl_parser_get_constraints (parser, &n_constraints);
+      for (int j = 0; j < n_constraints; j++)
+        {
+          const GtkConstraintVfl *c = &constraints[j];
+          gpointer source, target;
+          GtkConstraintAttribute source_attr, target_attr;
+
+          target = g_hash_table_lookup (views, c->view1);
+          target_attr = attribute_from_name (c->attr1);
+
+          if (c->view2 != NULL)
+            source = g_hash_table_lookup (views, c->view2);
+          else
+            source = NULL;
+
+          if (c->attr2 != NULL)
+            source_attr = attribute_from_name (c->attr2);
+          else
+            source_attr = GTK_CONSTRAINT_ATTRIBUTE_NONE;
+
+          GtkConstraint *constraint =
+            gtk_constraint_new (target, target_attr,
+                                c->relation,
+                                source, source_attr,
+                                c->multiplier,
+                                c->constant,
+                                c->strength);
+
+          layout_add_constraint (layout, constraint);
+          g_hash_table_add (layout->constraints, constraint);
+        }
+
+      g_free (constraints);
+    }
+
+  gtk_constraint_vfl_parser_free (parser);
+
+  return TRUE;
 }
