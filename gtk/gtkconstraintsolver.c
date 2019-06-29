@@ -1482,8 +1482,7 @@ gtk_constraint_solver_create_variable (GtkConstraintSolver *self,
 {
   GtkConstraintVariable *res;
 
-  res = gtk_constraint_variable_new (name);
-  gtk_constraint_variable_set_prefix (res, prefix);
+  res = gtk_constraint_variable_new (prefix, name);
   gtk_constraint_variable_set_value (res, value);
 
   return res;

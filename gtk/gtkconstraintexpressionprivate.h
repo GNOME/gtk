@@ -26,7 +26,8 @@
 G_BEGIN_DECLS
 
 GtkConstraintVariable *
-gtk_constraint_variable_new (const char *name);
+gtk_constraint_variable_new (const char *prefix,
+                             const char *name);
 
 GtkConstraintVariable *
 gtk_constraint_variable_new_dummy (const char *name);
@@ -49,10 +50,6 @@ gtk_constraint_variable_set_value (GtkConstraintVariable *variable,
 
 double
 gtk_constraint_variable_get_value (const GtkConstraintVariable *variable);
-
-void
-gtk_constraint_variable_set_prefix (GtkConstraintVariable *variable,
-                                    const char *prefix);
 
 char *
 gtk_constraint_variable_to_string (const GtkConstraintVariable *variable);

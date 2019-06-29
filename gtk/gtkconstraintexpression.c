@@ -55,9 +55,12 @@ static guint64 gtk_constraint_variable_next_id;
 
 static void
 gtk_constraint_variable_init (GtkConstraintVariable *variable,
+                              const char *prefix,
                               const char *name)
 {
   variable->_id = gtk_constraint_variable_next_id++;
+
+  variable->prefix = g_intern_string (prefix);
   variable->name = g_intern_string (name);
   variable->prefix = NULL;
   variable->value = 0.0;
@@ -81,7 +84,7 @@ gtk_constraint_variable_new_dummy (const char *name)
 {
   GtkConstraintVariable *res = g_rc_box_new (GtkConstraintVariable);
 
-  gtk_constraint_variable_init (res, name);
+  gtk_constraint_variable_init (res, NULL, name);
 
   res->_type = GTK_CONSTRAINT_SYMBOL_DUMMY;
   res->is_external = FALSE;
@@ -108,7 +111,7 @@ gtk_constraint_variable_new_objective (const char *name)
 {
   GtkConstraintVariable *res = g_rc_box_new (GtkConstraintVariable);
 
-  gtk_constraint_variable_init (res, name);
+  gtk_constraint_variable_init (res, NULL, name);
 
   res->_type = GTK_CONSTRAINT_SYMBOL_OBJECTIVE;
   res->is_external = FALSE;
@@ -145,7 +148,7 @@ gtk_constraint_variable_new_slack (const char *name)
 {
   GtkConstraintVariable *res = g_rc_box_new (GtkConstraintVariable);
 
-  gtk_constraint_variable_init (res, name);
+  gtk_constraint_variable_init (res, NULL, name);
 
   res->_type = GTK_CONSTRAINT_SYMBOL_SLACK;
   res->is_external = FALSE;
@@ -157,7 +160,8 @@ gtk_constraint_variable_new_slack (const char *name)
 
 /*< private >
  * gtk_constraint_variable_new:
- * @name: the name of the variable
+ * @prefix: (nullable): an optional prefix string for @name
+ * @name: (nullable): an optional name for the variable
  *
  * Allocates and initializes a new #GtkConstraintVariable for a regular
  * symbol. All variables introduced by constraints are regular variables.
@@ -170,11 +174,12 @@ gtk_constraint_variable_new_slack (const char *name)
  * Returns: a newly allocated #GtkConstraintVariable
  */
 GtkConstraintVariable *
-gtk_constraint_variable_new (const char *name)
+gtk_constraint_variable_new (const char *prefix,
+                             const char *name)
 {
   GtkConstraintVariable *res = g_rc_box_new (GtkConstraintVariable);
 
-  gtk_constraint_variable_init (res, name);
+  gtk_constraint_variable_init (res, prefix, name);
 
   res->_type = GTK_CONSTRAINT_SYMBOL_REGULAR;
   res->is_external = TRUE;
@@ -182,24 +187,6 @@ gtk_constraint_variable_new (const char *name)
   res->is_restricted = FALSE;
 
   return res;
-}
-
-/*< private >
- * gtk_constraint_variable_set_prefix:
- * @variable: a #GtkConstraintVariable
- * @prefix: a prefix string
- *
- * Sets the prefix to the @variable's name.
- *
- * This function is useful when debugging the variable contents.
- */
-void
-gtk_constraint_variable_set_prefix (GtkConstraintVariable *variable,
-                                    const char *prefix)
-{
-  g_return_if_fail (variable != NULL);
-
-  variable->prefix = g_intern_string (prefix);
 }
 
 /*< private >
