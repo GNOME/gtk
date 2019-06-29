@@ -222,6 +222,7 @@ gtk_constraint_layout_get_attribute (GtkConstraintLayout    *layout,
   if (res != NULL)
     return res;
 
+  //g_print ("create variable %s.%s\n", prefix, attr_name);
   res = gtk_constraint_solver_create_variable (solver, prefix, attr_name, 0.0);
   g_hash_table_insert (bound_attributes, (gpointer) attr_name, res);
 
@@ -247,6 +248,7 @@ gtk_constraint_layout_get_attribute (GtkConstraintLayout    *layout,
         gtk_constraint_expression_builder_term (&builder, width);
         expr = gtk_constraint_expression_builder_finish (&builder);
 
+        //g_print ("add constraint %s.right = %s.left + %s.width\n", prefix, prefix, prefix);
         gtk_constraint_solver_add_constraint (solver,
                                               res, GTK_CONSTRAINT_RELATION_EQ, expr,
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
@@ -269,6 +271,7 @@ gtk_constraint_layout_get_attribute (GtkConstraintLayout    *layout,
         gtk_constraint_expression_builder_term (&builder, height);
         expr = gtk_constraint_expression_builder_finish (&builder);
 
+        //g_print ("add constraint %s.bottom = %s.top + %s.height\n", prefix, prefix, prefix);
         gtk_constraint_solver_add_constraint (solver,
                                               res, GTK_CONSTRAINT_RELATION_EQ, expr,
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
@@ -293,6 +296,7 @@ gtk_constraint_layout_get_attribute (GtkConstraintLayout    *layout,
         gtk_constraint_expression_builder_term (&builder, left);
         expr = gtk_constraint_expression_builder_finish (&builder);
 
+        //g_print ("add constraint %s.centerx = %s.width/2 + %s.left\n", prefix, prefix, prefix);
         gtk_constraint_solver_add_constraint (solver,
                                               res, GTK_CONSTRAINT_RELATION_EQ, expr,
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
@@ -317,6 +321,7 @@ gtk_constraint_layout_get_attribute (GtkConstraintLayout    *layout,
         gtk_constraint_expression_builder_term (&builder, top);
         expr = gtk_constraint_expression_builder_finish (&builder);
 
+        //g_print ("add constraint %s.centery = %s.height/2 + %s.top\n", prefix, prefix, prefix);
         gtk_constraint_solver_add_constraint (solver,
                                               res, GTK_CONSTRAINT_RELATION_EQ, expr,
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
@@ -330,6 +335,7 @@ gtk_constraint_layout_get_attribute (GtkConstraintLayout    *layout,
         GtkConstraintExpression *expr;
 
         expr = gtk_constraint_expression_new (0.0);
+        //g_print ("add constraint %s.%s >= 0\n", prefix, attr == GTK_CONSTRAINT_ATTRIBUTE_WIDTH ? "width" : "height");
         gtk_constraint_solver_add_constraint (solver,
                                               res, GTK_CONSTRAINT_RELATION_GE, expr,
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
@@ -443,6 +449,7 @@ get_layout_attribute (GtkConstraintLayout    *self,
   if (res != NULL)
     return res;
 
+  //g_print ("create variable super.%s\n", attr_name);
   res = gtk_constraint_solver_create_variable (self->solver, "super", attr_name, 0.0);
   g_hash_table_insert (self->bound_attributes, (gpointer) attr_name, res);
 
@@ -468,6 +475,7 @@ get_layout_attribute (GtkConstraintLayout    *self,
         gtk_constraint_expression_builder_term (&builder, width);
         expr = gtk_constraint_expression_builder_finish (&builder);
 
+        //g_print ("add constraint super.right = super.left + super.width\n");
         gtk_constraint_solver_add_constraint (self->solver,
                                               res, GTK_CONSTRAINT_RELATION_EQ, expr,
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
@@ -490,6 +498,7 @@ get_layout_attribute (GtkConstraintLayout    *self,
         gtk_constraint_expression_builder_term (&builder, height);
         expr = gtk_constraint_expression_builder_finish (&builder);
 
+        //g_print ("add constraint super.bottom = super.top + super.height\n");
         gtk_constraint_solver_add_constraint (self->solver,
                                               res, GTK_CONSTRAINT_RELATION_EQ, expr,
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
@@ -514,6 +523,7 @@ get_layout_attribute (GtkConstraintLayout    *self,
         gtk_constraint_expression_builder_term (&builder, left);
         expr = gtk_constraint_expression_builder_finish (&builder);
 
+        //g_print ("add constraint super.centerx = super.left + super.width/2\n");
         gtk_constraint_solver_add_constraint (self->solver,
                                               res, GTK_CONSTRAINT_RELATION_EQ, expr,
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
@@ -538,6 +548,7 @@ get_layout_attribute (GtkConstraintLayout    *self,
         gtk_constraint_expression_builder_term (&builder, top);
         expr = gtk_constraint_expression_builder_finish (&builder);
 
+        //g_print ("add constraint super.centery = super.top + super.height/2\n");
         gtk_constraint_solver_add_constraint (self->solver,
                                               res, GTK_CONSTRAINT_RELATION_EQ, expr,
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
@@ -551,6 +562,7 @@ get_layout_attribute (GtkConstraintLayout    *self,
         GtkConstraintExpression *expr;
 
         expr = gtk_constraint_expression_new (0.0);
+        //g_print ("add constraint super.%s >= 0\n", attr == GTK_CONSTRAINT_ATTRIBUTE_WIDTH ? "width" : "height");
         gtk_constraint_solver_add_constraint (self->solver,
                                               res, GTK_CONSTRAINT_RELATION_GE, expr,
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
@@ -694,6 +706,7 @@ layout_add_constraint (GtkConstraintLayout *self,
   expr = gtk_constraint_expression_builder_finish (&builder);
 
   constraint->solver = solver;
+  //g_print ("add constraint\n");
   constraint->constraint_ref =
     gtk_constraint_solver_add_constraint (self->solver,
                                           target_attr,
@@ -729,14 +742,19 @@ update_child_constraint (GtkConstraintLayout       *self,
       child_info->values[index] = value;
 
       if (child_info->constraints[index])
-        gtk_constraint_solver_remove_constraint (self->solver,
-                                                 child_info->constraints[index]);
+        {
+          g_print ("remove constraint\n");
+          gtk_constraint_solver_remove_constraint (self->solver,
+                                                   child_info->constraints[index]);
+        }
 
       var = get_child_attribute (self, child, attr[index]);
 
       if (relation[index] == GTK_CONSTRAINT_RELATION_EQ)
         {
+          g_print ("set variable\n");
           gtk_constraint_variable_set_value (var, value);
+          g_print ("add stay variable\n");
           child_info->constraints[index] =
             gtk_constraint_solver_add_stay_variable (self->solver,
                                                      var,
@@ -744,6 +762,7 @@ update_child_constraint (GtkConstraintLayout       *self,
         }
       else
         {
+          g_print ("add constraint\n");
           child_info->constraints[index] =
             gtk_constraint_solver_add_constraint (self->solver,
                                                   var,
@@ -770,11 +789,15 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
   GtkWidget *child;
   int min_value;
   int nat_value;
+  gint64 start, end;
 
   solver = gtk_constraint_layout_get_solver (self);
   if (solver == NULL)
     return;
 
+  start = g_get_monotonic_time ();
+  g_print ("start measure %s\n", orientation ? "v" : "h");
+  g_print ("freeze\n");
   gtk_constraint_solver_freeze (solver);
 
   /* We measure each child in the layout and impose restrictions on the
@@ -801,6 +824,7 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
       update_child_constraint (self, info, child, NAT_HEIGHT, nat_req.height);
     }
 
+  g_print ("thaw\n");
   gtk_constraint_solver_thaw (solver);
 
   switch (orientation)
@@ -828,20 +852,35 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
    * natural state of the system. Once we get the value out, we can
    * remove these constraints
    */
-  gtk_constraint_solver_add_edit_variable (solver, size, GTK_CONSTRAINT_WEIGHT_STRONG);
+  g_print ("add edit variable\n");
+  gtk_constraint_solver_add_edit_variable (solver, size, GTK_CONSTRAINT_WEIGHT_STRONG * 2);
   if (for_size > 0)
-    gtk_constraint_solver_add_edit_variable (solver, opposite_size, GTK_CONSTRAINT_WEIGHT_STRONG);
+    {
+      g_print ("add edit variable\n");
+      gtk_constraint_solver_add_edit_variable (solver, opposite_size, GTK_CONSTRAINT_WEIGHT_STRONG * 2);
+    }
+  g_print ("begin edit\n");
   gtk_constraint_solver_begin_edit (solver);
+  g_print ("suggest value\n");
   gtk_constraint_solver_suggest_value (solver, size, 0.0);
   if (for_size > 0)
-    gtk_constraint_solver_suggest_value (solver, opposite_size, for_size);
+    {
+      g_print ("suggest value\n");
+      gtk_constraint_solver_suggest_value (solver, opposite_size, for_size);
+    }
+  g_print ("resolve\n");
   gtk_constraint_solver_resolve (solver);
 
   min_value = gtk_constraint_variable_get_value (size);
 
+  g_print ("remove edit variable\n");
   gtk_constraint_solver_remove_edit_variable (solver, size);
   if (for_size > 0)
-    gtk_constraint_solver_remove_edit_variable (solver, opposite_size);
+    {
+      g_print ("remove edit variable\n");
+      gtk_constraint_solver_remove_edit_variable (solver, opposite_size);
+    }
+  g_print ("end edit\n");
   gtk_constraint_solver_end_edit (solver);
 
   GTK_NOTE (LAYOUT,
@@ -856,6 +895,9 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
 
   if (natural != NULL)
     *natural = nat_value;
+
+  end = g_get_monotonic_time ();
+  g_print ("end measure (%ld ms)\n", (end - start) / 1000);
 }
 
 static void
@@ -871,6 +913,10 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
   GtkConstraintVariable *layout_top, *layout_height;
   GtkConstraintVariable *layout_left, *layout_width;
   GtkWidget *child;
+  gint64 start, end;
+
+  start = g_get_monotonic_time ();
+  g_print ("start allocate\n");
 
   solver = gtk_constraint_layout_get_solver (self);
   if (solver == NULL)
@@ -884,19 +930,27 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
   layout_width = get_layout_attribute (self, widget, GTK_CONSTRAINT_ATTRIBUTE_WIDTH);
   layout_height = get_layout_attribute (self, widget, GTK_CONSTRAINT_ATTRIBUTE_HEIGHT);
 
+  g_print ("set variable\n");
   gtk_constraint_variable_set_value (layout_top, 0.0);
+  g_print ("add stay variable\n");
   stay_t = gtk_constraint_solver_add_stay_variable (solver,
                                                     layout_top,
                                                     GTK_CONSTRAINT_WEIGHT_REQUIRED);
+  g_print ("set variable\n");
   gtk_constraint_variable_set_value (layout_left, 0.0);
+  g_print ("add stay variable\n");
   stay_l = gtk_constraint_solver_add_stay_variable (solver,
                                                     layout_left,
                                                     GTK_CONSTRAINT_WEIGHT_REQUIRED);
+  g_print ("set variable\n");
   gtk_constraint_variable_set_value (layout_width, width);
+  g_print ("add stay variable\n");
   stay_w = gtk_constraint_solver_add_stay_variable (solver,
                                                     layout_width,
                                                     GTK_CONSTRAINT_WEIGHT_REQUIRED);
+  g_print ("set variable\n");
   gtk_constraint_variable_set_value (layout_height, height);
+  g_print ("add stay variable\n");
   stay_h = gtk_constraint_solver_add_stay_variable (solver,
                                                     layout_height,
                                                     GTK_CONSTRAINT_WEIGHT_REQUIRED);
@@ -974,10 +1028,22 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
 #endif
 
   /* The allocation stay constraints are not needed any more */
+  g_print ("remove constraint\n");
   gtk_constraint_solver_remove_constraint (solver, stay_w);
+  g_print ("remove constraint\n");
   gtk_constraint_solver_remove_constraint (solver, stay_h);
+  g_print ("remove constraint\n");
   gtk_constraint_solver_remove_constraint (solver, stay_t);
+  g_print ("remove constraint\n");
   gtk_constraint_solver_remove_constraint (solver, stay_l);
+
+  end = g_get_monotonic_time ();
+  g_print ("end allocate (%ld ms)\n", (end - start) / 1000);
+
+  {
+    g_autofree char *stats = gtk_constraint_solver_statistics (solver);
+    g_print ("Stats: %s\n", stats);
+  }
 }
 
 static void layout_add_grid_constraint (GtkConstraintLayout *manager,
@@ -991,6 +1057,7 @@ gtk_constraint_layout_root (GtkLayoutManager *manager)
   GtkWidget *widget;
   GtkRoot *root;
   gpointer key;
+  gint64 start = g_get_monotonic_time ();
 
   widget = gtk_layout_manager_get_widget (manager);
   root = gtk_widget_get_root (widget);
@@ -1018,6 +1085,8 @@ gtk_constraint_layout_root (GtkLayoutManager *manager)
       GtkGridConstraint *constraint = key;
       layout_add_grid_constraint (self, constraint);
     }
+
+  g_print ("root (%ld ms)\n", (g_get_monotonic_time () - start) / 1000);
 }
 
 static void
@@ -1245,29 +1314,6 @@ allocate_variables (GtkConstraintSolver *solver,
   return vars;
 }
 
-#if 0
-static void
-add_ordering_constraints (GtkConstraintSolver    *solver,
-                          GtkConstraintVariable **vars,
-                          int                     n_vars,
-                          GPtrArray              *refs)
-{
-  int i;
-
-  for (i = 1; i < n_vars; i++)
-    {
-      GtkConstraintRef *ref;
-
-      ref = gtk_constraint_solver_add_constraint (solver,
-                                                  vars[i],
-                                                  GTK_CONSTRAINT_RELATION_GE,
-                                                  gtk_constraint_expression_new_from_variable (vars[i - 1]),
-                                                  GTK_CONSTRAINT_WEIGHT_MEDIUM);
-      g_ptr_array_add (refs, ref);
-    }
-}
-#endif
-
 static void
 add_homogeneous_constraints (GtkConstraintSolver    *solver,
                              GtkConstraintVariable **vars,
@@ -1389,13 +1435,6 @@ layout_add_grid_constraint (GtkConstraintLayout *manager,
 
   rows = allocate_variables (solver, "row", n_rows);
   cols = allocate_variables (solver, "col", n_cols);
-
-#if 0
-  //FIXME for some reason, these 'obvious' constraints
-  // make things unstable (and they are not really needed)
-  add_ordering_constraints (solver, rows, n_rows, refs);
-  add_ordering_constraints (solver, cols, n_cols, refs);
-#endif
 
   if (constraint->row_homogeneous)
     add_homogeneous_constraints (solver, rows, n_rows, refs);
