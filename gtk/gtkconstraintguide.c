@@ -94,6 +94,15 @@ G_DEFINE_TYPE_WITH_CODE (GtkConstraintGuide, gtk_constraint_guide, G_TYPE_OBJECT
 static void
 gtk_constraint_guide_init (GtkConstraintGuide *guide)
 {
+  guide->strength = GTK_CONSTRAINT_STRENGTH_MEDIUM;
+
+  guide->values[MIN_WIDTH] = 0;
+  guide->values[MIN_HEIGHT] = 0;
+  guide->values[NAT_WIDTH] = 0;
+  guide->values[NAT_HEIGHT] = 0;
+  guide->values[MAX_WIDTH] = G_MAXINT;
+  guide->values[MAX_HEIGHT] = G_MAXINT;
+
   guide->bound_attributes =
     g_hash_table_new_full (g_str_hash, g_str_equal,
                            NULL,
