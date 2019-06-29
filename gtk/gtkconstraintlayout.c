@@ -791,9 +791,9 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
    * natural state of the system. Once we get the value out, we can
    * remove these constraints
    */
-  gtk_constraint_solver_add_edit_variable (solver, size, GTK_CONSTRAINT_WEIGHT_STRONG);
+  gtk_constraint_solver_add_edit_variable (solver, size, GTK_CONSTRAINT_WEIGHT_STRONG * 2);
   if (for_size > 0)
-    gtk_constraint_solver_add_edit_variable (solver, opposite_size, GTK_CONSTRAINT_WEIGHT_STRONG);
+    gtk_constraint_solver_add_edit_variable (solver, opposite_size, GTK_CONSTRAINT_WEIGHT_STRONG * 2);
   gtk_constraint_solver_begin_edit (solver);
   gtk_constraint_solver_suggest_value (solver, size, 0.0);
   if (for_size > 0)
