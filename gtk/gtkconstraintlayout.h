@@ -94,4 +94,7 @@ gboolean                gtk_constraint_layout_add_constraints_from_descriptionv 
                                                                                  GHashTable          *views,
                                                                                  GError             **error);
 
+GDK_AVAILABLE_IN_ALL
+void                    gtk_constraint_layout_remove_all_constraints (GtkConstraintLayout *manager);
+
 G_END_DECLS

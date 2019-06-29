@@ -1881,3 +1881,28 @@ gtk_constraint_layout_add_constraints_from_description (GtkConstraintLayout *lay
 
   return res;
 }
+
+/**
+ * gtk_constraint_layout_remove_all_constraints:
+ * @manager: a #GtkConstraintLayout
+ *
+ * Removes all constraints from @manager.
+ */
+void
+gtk_constraint_layout_remove_all_constraints (GtkConstraintLayout *manager)
+{
+  GHashTableIter iter;
+  gpointer key;
+
+  g_return_if_fail (GTK_IS_CONSTRAINT_LAYOUT (manager));
+
+  g_hash_table_iter_init (&iter, manager->constraints);
+  while (g_hash_table_iter_next (&iter, &key, NULL))
+    {
+      GtkConstraint *constraint = key;
+      gtk_constraint_detach (constraint);
+      g_hash_table_iter_remove (&iter);
+    }
+
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (manager));
+}
