@@ -1485,6 +1485,8 @@ gtk_constraint_solver_create_variable (GtkConstraintSolver *self,
   res = gtk_constraint_variable_new (prefix, name);
   gtk_constraint_variable_set_value (res, value);
 
+  self->var_counter++;
+
   return res;
 }
 
@@ -2204,6 +2206,42 @@ gtk_constraint_solver_to_string (GtkConstraintSolver *solver)
           g_free (c);
         }
     }
+
+  return g_string_free (buf, FALSE);
+}
+
+char *
+gtk_constraint_solver_statistics (GtkConstraintSolver *solver)
+{
+  GString *buf = g_string_new (NULL);
+
+  g_string_append_printf (buf, "Variables: %d\n", solver->var_counter);
+  g_string_append_printf (buf, "Slack vars: %d\n", solver->slack_counter);
+  g_string_append_printf (buf, "Artificial vars: %d\n", solver->artificial_counter);
+  g_string_append_printf (buf, "Dummy vars: %d\n", solver->dummy_counter);
+  g_string_append_printf (buf, "Stay vars: %d\n", g_hash_table_size (solver->stay_var_map));
+  g_string_append_printf (buf, "Optimize count: %d\n", solver->optimize_count);
+  g_string_append_printf (buf, "Rows: %d\n", g_hash_table_size (solver->rows));
+  g_string_append_printf (buf, "Columns: %d\n", g_hash_table_size (solver->columns));
+
+  if (g_hash_table_size (solver->columns) > 0)
+    {
+      GHashTableIter iter;
+      gpointer val;
+      double sum = 0;
+
+      g_hash_table_iter_init (&iter, solver->columns);
+      while (g_hash_table_iter_next (&iter, NULL, &val))
+        {
+          GtkConstraintVariableSet *set = val;
+          sum += gtk_constraint_variable_set_size (set);
+        }
+      g_string_append_printf (buf, "Avg column size: %g\n", sum / g_hash_table_size (solver->columns));
+    }
+
+  g_string_append_printf (buf, "Infeasible rows: %d\n", solver->infeasible_rows->len);
+  g_string_append_printf (buf, "External basic variables: %d\n", g_hash_table_size (solver->external_rows));
+  g_string_append_printf (buf, "External parametric variables: %d\n", g_hash_table_size (solver->external_parametric_vars));
 
   return g_string_free (buf, FALSE);
 }
