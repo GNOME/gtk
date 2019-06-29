@@ -1612,7 +1612,7 @@ attribute_from_name (const char *name)
 }
 
 /**
- * gtk_constraint_layout_add_constraints_from_description:
+ * gtk_constraint_layout_add_constraints_from_descriptionv: (rename-to gtk_constraint_layout_add_constraints_from_description)
  * @layout: a #GtkConstraintLayout
  * @lines: (array length=n_lines): an array of Visual Format Language lines
  *   defining a set of constraints
@@ -1622,14 +1622,15 @@ attribute_from_name (const char *name)
  * @views: (element-type utf8 Gtk.Widget): a dictionary of [ name, widget ]
  *   pairs; the `name` keys map to the view names in the VFL lines, while
  *   the `widget` values map to children of the widget using a #GtkConstraintLayout
+ * @error: return location for a #GError
  *
  * Creates a list of constraints they formal description using a compact
  * description syntax called VFL, or "Visual Format Language".
  *
  * The Visual Format Language is based on Apple's AutoLayout [VFL](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html).
  *
- * The @views dictionary is used to match widgets to the symbolic view name
- * inside the VFL.
+ * The @views dictionary is used to match #GtkConstraintTargets to the symbolic
+ * view name inside the VFL.
  *
  * The VFL grammar is:
  *
@@ -1705,13 +1706,13 @@ attribute_from_name (const char *name)
  * Returns: %TRUE if the constraints were added to the layout
  */
 gboolean
-gtk_constraint_layout_add_constraints_from_description (GtkConstraintLayout *layout,
-                                                        const char * const   lines[],
-                                                        gsize                n_lines,
-                                                        int                  hspacing,
-                                                        int                  vspacing,
-                                                        GHashTable          *views,
-                                                        GError             **error)
+gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *layout,
+                                                         const char * const   lines[],
+                                                         gsize                n_lines,
+                                                         int                  hspacing,
+                                                         int                  vspacing,
+                                                         GHashTable          *views,
+                                                         GError             **error)
 {
   GtkConstraintVflParser *parser;
 
@@ -1801,4 +1802,80 @@ gtk_constraint_layout_add_constraints_from_description (GtkConstraintLayout *lay
   gtk_constraint_vfl_parser_free (parser);
 
   return TRUE;
+}
+
+/**
+ * gtk_constraint_layout_add_constraints_from_description:
+ * @layout: a #GtkConstraintLayout
+ * @lines: (array length=n_lines): an array of Visual Format Language lines
+ *   defining a set of constraints
+ * @n_lines: the number of lines
+ * @hspacing: default horizontal spacing value, or -1 for the fallback value
+ * @vspacing: default vertical spacing value, or -1 for the fallback value
+ * @error: return location for a #GError
+ * @first_view: the name of a view in the VFL description, followed by the
+ *   #GtkConstraintTarget to which it maps
+ * @...: a %NULL-terminated list of view names and #GtkConstraintTargets
+ *
+ * Creates a list of constraints they formal description using a compact
+ * description syntax called VFL, or "Visual Format Language".
+ *
+ * This function is a convenience wrapper around
+ * gtk_constraint_layout_add_constraints_from_descriptionv(), using
+ * variadic arguments to populate the view/target map.
+ *
+ * Returns: %TRUE if the constraints were added to the layout
+ */
+gboolean
+gtk_constraint_layout_add_constraints_from_description (GtkConstraintLayout *layout,
+                                                        const char * const   lines[],
+                                                        gsize                n_lines,
+                                                        int                  hspacing,
+                                                        int                  vspacing,
+                                                        GError             **error,
+                                                        const char          *first_view,
+                                                        ...)
+{
+  GtkConstraintVflParser *parser;
+  GHashTable *views;
+  const char *view;
+  gboolean res;
+  va_list args;
+
+  g_return_val_if_fail (GTK_IS_CONSTRAINT_LAYOUT (layout), FALSE);
+  g_return_val_if_fail (lines != NULL, FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  g_return_val_if_fail (first_view != NULL, FALSE);
+
+  parser = gtk_constraint_vfl_parser_new ();
+  gtk_constraint_vfl_parser_set_default_spacing (parser, hspacing, vspacing);
+
+  views = g_hash_table_new (g_str_hash, g_str_equal);
+
+  va_start (args, first_view);
+
+  view = first_view;
+  while (view != NULL)
+    {
+      GtkConstraintTarget *target = va_arg (args, GtkConstraintTarget *);
+
+      if (target == NULL)
+        break;
+
+      g_hash_table_insert (views, (gpointer) view, target);
+
+      view = va_arg (args, const char *);
+    }
+
+  va_end (args);
+
+  res =
+    gtk_constraint_layout_add_constraints_from_descriptionv (layout, lines, n_lines,
+                                                             hspacing, vspacing,
+                                                             views,
+                                                             error);
+
+  g_hash_table_unref (views);
+
+  return res;
 }

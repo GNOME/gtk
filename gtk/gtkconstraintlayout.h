@@ -82,6 +82,15 @@ gboolean                gtk_constraint_layout_add_constraints_from_description  
                                                                                  gsize                n_lines,
                                                                                  int                  hspacing,
                                                                                  int                  vspacing,
+                                                                                 GError             **error,
+                                                                                 const char          *first_view,
+                                                                                 ...) G_GNUC_NULL_TERMINATED;
+GDK_AVAILABLE_IN_ALL
+gboolean                gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *manager,
+                                                                                 const char * const   lines[],
+                                                                                 gsize                n_lines,
+                                                                                 int                  hspacing,
+                                                                                 int                  vspacing,
                                                                                  GHashTable          *views,
                                                                                  GError             **error);
 
