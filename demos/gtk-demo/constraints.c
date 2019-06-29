@@ -88,6 +88,7 @@ build_constraints (SimpleGrid          *self,
   gtk_constraint_guide_set_min_size (guide, 10, 10);
   gtk_constraint_guide_set_nat_size (guide, 100, 10);
   gtk_constraint_guide_set_max_size (guide, 200, 20);
+  gtk_constraint_guide_set_strength (guide, GTK_CONSTRAINT_STRENGTH_STRONG);
   gtk_constraint_layout_add_guide (manager, guide);
 
   gtk_constraint_layout_add_constraint (manager,

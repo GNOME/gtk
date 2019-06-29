@@ -21,6 +21,7 @@
 
 #include <gtk/gtktypes.h>
 #include <gtk/gtkenums.h>
+#include <gtk/gtktypebuiltins.h>
 
 G_BEGIN_DECLS
 
@@ -67,6 +68,13 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_constraint_guide_get_max_size       (GtkConstraintGuide *guide,
                                                                  int                *width,
                                                                  int                *height);
+
+GDK_AVAILABLE_IN_ALL
+GtkConstraintStrength   gtk_constraint_guide_get_strength       (GtkConstraintGuide *guide);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_constraint_guide_set_strength       (GtkConstraintGuide    *guide,
+                                                                 GtkConstraintStrength  strength);
+
 GDK_AVAILABLE_IN_ALL
 void                    gtk_constraint_guide_set_name           (GtkConstraintGuide *guide,
                                                                  const char         *name);
