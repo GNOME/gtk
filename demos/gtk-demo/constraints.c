@@ -44,20 +44,21 @@ simple_grid_class_init (SimpleGridClass *klass)
 
 /* Layout:
  *
- *   +-----------------------------+
- *   | +-----------+ +-----------+ |
- *   | |  Child 1  | |  Child 2  | |
- *   | +-----------+ +-----------+ |
- *   | +-------------------------+ |
- *   | |         Child 3         | |
- *   | +-------------------------+ |
- *   +-----------------------------+
+ *   +-------------------------------------+
+ *   | +-----------++-------++-----------+ |
+ *   | |  Child 1  || Space ||  Child 2  | |
+ *   | +-----------++-------++-----------+ |
+ *   | +---------------------------------+ |
+ *   | |             Child 3             | |
+ *   | +---------------------------------+ |
+ *   +-------------------------------------+
  *
  * Constraints:
  *
  *   super.start = child1.start - 8
  *   child1.width = child2.width
- *   child1.end = child2.start - 12
+ *   child1.end = space.start
+ *   space.end = child2.start
  *   child2.end = super.end - 8
  *   super.start = child3.start - 8
  *   child3.end = super.end - 8
@@ -69,6 +70,12 @@ simple_grid_class_init (SimpleGridClass *klass)
  *   child3.height = child2.height
  *   child3.bottom = super.bottom - 8
  *
+ * To add some flexibility, we make the space
+ * stretchable:
+ *
+ *   space.width >= 10
+ *   space.width = 100
+ *   space.width <= 200
  */
 static void
 build_constraints (SimpleGrid          *self,
