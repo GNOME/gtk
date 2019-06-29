@@ -944,11 +944,9 @@ render_transform_node (GskGLRenderer   *self,
     case GSK_TRANSFORM_CATEGORY_2D:
     default:
       {
-        graphene_matrix_t mat;
 
         if (node_supports_transform (child))
           {
-            gsk_transform_to_matrix (node_transform, &mat);
             ops_push_modelview (builder, node_transform);
             gsk_gl_renderer_add_render_ops (self, child, builder);
             ops_pop_modelview (builder);
@@ -973,7 +971,6 @@ render_transform_node (GskGLRenderer   *self,
                                &region, &is_offscreen,
                                RESET_CLIP | RESET_OPACITY);
 
-            gsk_transform_to_matrix (node_transform, &mat);
             ops_push_modelview (builder, node_transform);
             ops_set_texture (builder, region.texture_id);
             ops_set_program (builder, &self->blit_program);
