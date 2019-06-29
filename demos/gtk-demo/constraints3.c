@@ -85,25 +85,20 @@ build_constraints (VflGrid          *self,
     "V:|-[button1]-12-[button3(==button1)]-|",
     "V:|-[button2]-12-[button3(==button2)]-|",
   };
-  GHashTable *views;
   GError *error = NULL;
-
-  views = g_hash_table_new (g_str_hash, g_str_equal);
-  g_hash_table_insert (views, "button1", self->button1);
-  g_hash_table_insert (views, "button2", self->button2);
-  g_hash_table_insert (views, "button3", self->button3);
 
   gtk_constraint_layout_add_constraints_from_description (manager, vfl, G_N_ELEMENTS (vfl),
                                                           8, 8,
-                                                          views,
-                                                          &error);
+                                                          &error,
+                                                          "button1", self->button1,
+                                                          "button2", self->button2,
+                                                          "button3", self->button3,
+                                                          NULL);
   if (error != NULL)
     {
       g_printerr ("VFL parsing error:\n%s", error->message);
       g_error_free (error);
     }
-
-  g_hash_table_unref (views);
 }
 
 static void
