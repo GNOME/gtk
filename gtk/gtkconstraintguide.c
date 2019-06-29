@@ -47,6 +47,8 @@ struct _GtkConstraintGuide
 
   char *name;
 
+  int strength;
+
   int values[LAST_VALUE];
 
   GtkConstraintLayout *layout;
@@ -73,6 +75,7 @@ enum {
   PROP_NAT_HEIGHT,
   PROP_MAX_WIDTH,
   PROP_MAX_HEIGHT,
+  PROP_STRENGTH,
   PROP_NAME,
   LAST_PROP
 };
@@ -137,7 +140,7 @@ gtk_constraint_guide_update_constraint (GtkConstraintGuide *guide,
       guide->constraints[index] =
         gtk_constraint_solver_add_stay_variable (solver,
                                                  var,
-                                                 GTK_CONSTRAINT_WEIGHT_MEDIUM);
+                                                 guide->strength);
     }
   else
     {
@@ -232,6 +235,10 @@ gtk_constraint_guide_set_property (GObject      *gobject,
         }
       break;
 
+    case PROP_STRENGTH:
+      gtk_constraint_guide_set_strength (self, g_value_get_enum (value));
+      break;
+
     case PROP_NAME:
       gtk_constraint_guide_set_name (self, g_value_get_string (value));
       break;
@@ -259,6 +266,10 @@ gtk_constraint_guide_get_property (GObject    *gobject,
     case PROP_MAX_WIDTH:
     case PROP_MAX_HEIGHT:
       g_value_set_int (value, self->values[prop_id - 1]);
+      break;
+
+    case PROP_STRENGTH:
+      g_value_set_int (value, self->strength);
       break;
 
     case PROP_NAME:
@@ -334,6 +345,15 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
                         0, G_MAXINT, G_MAXINT,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
+
+  guide_props[PROP_STRENGTH] =
+      g_param_spec_enum ("strength",
+                         "Strength",
+                         "The strength to use for natural size",
+                         GTK_TYPE_CONSTRAINT_STRENGTH,
+                         GTK_CONSTRAINT_STRENGTH_MEDIUM,
+                         G_PARAM_READWRITE|
+                         G_PARAM_EXPLICIT_NOTIFY);
 
   guide_props[PROP_NAME] =
       g_param_spec_string ("name",
@@ -537,4 +557,28 @@ gtk_constraint_guide_set_name (GtkConstraintGuide *guide,
   g_free (guide->name);
   guide->name = g_strdup (name);
   g_object_notify_by_pspec (G_OBJECT (guide), guide_props[PROP_NAME]);
+}
+
+GtkConstraintStrength
+gtk_constraint_guide_get_strength (GtkConstraintGuide *guide)
+{
+  g_return_val_if_fail (GTK_IS_CONSTRAINT_GUIDE (guide),
+                        GTK_CONSTRAINT_STRENGTH_MEDIUM);
+
+  return guide->strength;
+}
+
+void
+gtk_constraint_guide_set_strength (GtkConstraintGuide    *guide,
+                                   GtkConstraintStrength  strength)
+{
+  g_return_if_fail (GTK_IS_CONSTRAINT_GUIDE (guide));
+
+  if (guide->strength == strength)
+    return;
+
+  guide->strength = strength;
+  g_object_notify_by_pspec (G_OBJECT (guide), guide_props[PROP_STRENGTH]);
+  gtk_constraint_guide_update_constraint (guide, NAT_WIDTH);
+  gtk_constraint_guide_update_constraint (guide, NAT_HEIGHT);
 }
