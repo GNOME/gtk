@@ -371,11 +371,8 @@ gtk_constraint_variable_is_dummy (const GtkConstraintVariable *variable)
  * A set of variables.
  */
 struct _GtkConstraintVariableSet {
-  /* HashSet<Variable>, owns a reference */
-  GHashTable *set;
-
-  /* List<Variable>, used for iterating */
-  GList *ordered_set;
+  /* List<Variable>, owns a reference */
+  GSequence *set;
 
   /* Age of the set, to guard against mutations while iterating */
   gint64 age;
@@ -392,8 +389,7 @@ gtk_constraint_variable_set_free (GtkConstraintVariableSet *set)
 {
   g_return_if_fail (set != NULL);
 
-  g_list_free (set->ordered_set);
-  g_hash_table_unref (set->set);
+  g_sequence_free (set->set);
 
   g_free (set);
 }
@@ -410,10 +406,7 @@ gtk_constraint_variable_set_new (void)
 {
   GtkConstraintVariableSet *res = g_new (GtkConstraintVariableSet, 1);
 
-  res->set = g_hash_table_new_full (NULL, NULL,
-                                    (GDestroyNotify) gtk_constraint_variable_unref,
-                                    NULL);
-  res->ordered_set = NULL;
+  res->set = g_sequence_new ((GDestroyNotify) gtk_constraint_variable_unref);
 
   res->age = 0;
 
@@ -422,7 +415,8 @@ gtk_constraint_variable_set_new (void)
 
 static int
 sort_by_variable_id (gconstpointer a,
-                     gconstpointer b)
+                     gconstpointer b,
+                     gpointer      data)
 {
   const GtkConstraintVariable *va = a, *vb = b;
 
@@ -450,16 +444,17 @@ gboolean
 gtk_constraint_variable_set_add (GtkConstraintVariableSet *set,
                                  GtkConstraintVariable *variable)
 {
-  if (g_hash_table_contains (set->set, variable))
-    return FALSE;
+  GSequenceIter *iter;
 
-  g_hash_table_add (set->set, gtk_constraint_variable_ref (variable));
+  iter = g_sequence_search (set->set, variable, sort_by_variable_id, NULL);
+  if (!g_sequence_iter_is_end (iter))
+    {
+      GtkConstraintVariable *v = g_sequence_get (iter);
+      if (v->_id == variable->_id)
+        return FALSE;
+    }
 
-  /* This is a tricky bit; the variables in the set must be ordered
-   * not by insertion, but by the incremental id of each variable,
-   * as that's the expected iteration order
-   */
-  set->ordered_set = g_list_insert_sorted (set->ordered_set, variable, sort_by_variable_id);
+  g_sequence_insert_before (iter, gtk_constraint_variable_ref (variable));
 
   set->age += 1;
 
@@ -482,10 +477,12 @@ gboolean
 gtk_constraint_variable_set_remove (GtkConstraintVariableSet *set,
                                     GtkConstraintVariable *variable)
 {
-  if (g_hash_table_contains (set->set, variable))
+  GSequenceIter *iter;
+
+  iter = g_sequence_lookup (set->set, variable, sort_by_variable_id, NULL);
+  if (iter != NULL)
     {
-      set->ordered_set = g_list_remove (set->ordered_set, variable);
-      g_hash_table_remove (set->set, variable);
+      g_sequence_remove (iter);
       set->age += 1;
 
       return TRUE;
@@ -505,7 +502,7 @@ gtk_constraint_variable_set_remove (GtkConstraintVariableSet *set,
 int
 gtk_constraint_variable_set_size (GtkConstraintVariableSet *set)
 {
-  return g_hash_table_size (set->set);
+  return g_sequence_get_length (set->set);
 }
 
 /*< private >
@@ -516,7 +513,7 @@ gtk_constraint_variable_set_size (GtkConstraintVariableSet *set)
 /* Keep in sync with GtkConstraintVariableSetIter */
 typedef struct {
   GtkConstraintVariableSet *set;
-  GList *current;
+  GSequenceIter *iter;
   gint64 age;
 } RealVariableSetIter;
 
@@ -539,7 +536,7 @@ gtk_constraint_variable_set_iter_init (GtkConstraintVariableSetIter *iter,
   g_return_if_fail (set != NULL);
 
   riter->set = set;
-  riter->current = NULL;
+  riter->iter = g_sequence_get_begin_iter (set->set);
   riter->age = set->age;
 }
 
@@ -563,15 +560,13 @@ gtk_constraint_variable_set_iter_next (GtkConstraintVariableSetIter *iter,
 
   g_assert (riter->age == riter->set->age);
 
-  if (riter->current == NULL)
-    riter->current = riter->set->ordered_set;
-  else
-    riter->current = riter->current->next;
+  if (g_sequence_iter_is_end (riter->iter))
+    return FALSE;
 
-  if (riter->current != NULL)
-    *variable_p = riter->current->data;
+  *variable_p = g_sequence_get (riter->iter);
+  riter->iter = g_sequence_iter_next (riter->iter);
 
-  return riter->current != NULL;
+  return TRUE;
 }
 
 /*< private >
