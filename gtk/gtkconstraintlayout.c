@@ -842,7 +842,6 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
   GtkConstraintSolver *solver;
   GtkConstraintVariable *layout_top, *layout_height;
   GtkConstraintVariable *layout_left, *layout_width;
-  GPtrArray *size_constraints;
   GtkWidget *child;
 
   solver = gtk_constraint_layout_get_solver (self);
@@ -880,62 +879,6 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
                      gtk_constraint_variable_get_value (layout_top),
                      gtk_constraint_variable_get_value (layout_width),
                      gtk_constraint_variable_get_value (layout_height)));
-
-  size_constraints = g_ptr_array_new ();
-  gtk_constraint_solver_freeze (solver);
-
-  /* We reset the constraints on the size of each child, so we are sure the
-   * layout is up to date
-   */
-  for (child = _gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    {
-      GtkConstraintVariable *width_var, *height_var;
-      GtkRequisition min_req, nat_req;
-      GtkConstraintRef *constraint;
-
-      if (!gtk_widget_should_layout (child))
-        continue;
-
-      gtk_widget_get_preferred_size (child, &min_req, &nat_req);
-
-      width_var = get_child_attribute (self, child, GTK_CONSTRAINT_ATTRIBUTE_WIDTH);
-
-      constraint =
-        gtk_constraint_solver_add_constraint (solver,
-                                              width_var,
-                                              GTK_CONSTRAINT_RELATION_GE,
-                                              gtk_constraint_expression_new (min_req.width),
-                                              GTK_CONSTRAINT_WEIGHT_REQUIRED);
-      g_ptr_array_add (size_constraints, constraint);
-
-      gtk_constraint_variable_set_value (width_var, nat_req.width);
-      constraint =
-        gtk_constraint_solver_add_stay_variable (solver,
-                                                 width_var,
-                                                 GTK_CONSTRAINT_WEIGHT_MEDIUM);
-      g_ptr_array_add (size_constraints, constraint);
-
-      height_var = get_child_attribute (self, child, GTK_CONSTRAINT_ATTRIBUTE_HEIGHT);
-
-      constraint =
-        gtk_constraint_solver_add_constraint (solver,
-                                              height_var,
-                                              GTK_CONSTRAINT_RELATION_GE,
-                                              gtk_constraint_expression_new (min_req.height),
-                                              GTK_CONSTRAINT_WEIGHT_REQUIRED);
-      g_ptr_array_add (size_constraints, constraint);
-
-      gtk_constraint_variable_set_value (height_var, nat_req.height);
-      constraint =
-        gtk_constraint_solver_add_stay_variable (solver,
-                                                 height_var,
-                                                 GTK_CONSTRAINT_WEIGHT_MEDIUM);
-      g_ptr_array_add (size_constraints, constraint);
-    }
-
-  gtk_constraint_solver_thaw (solver);
 
   for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
@@ -1001,16 +944,6 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
         }
     }
 #endif
-
-  /* The constraints on the children sizes can be removed now */
-  for (guint i = 0; i < size_constraints->len; i++)
-    {
-      GtkConstraintRef *ref = g_ptr_array_index (size_constraints, i);
-
-      gtk_constraint_solver_remove_constraint (solver, ref);
-    }
-
-  g_ptr_array_unref (size_constraints);
 
   /* The allocation stay constraints are not needed any more */
   gtk_constraint_solver_remove_constraint (solver, stay_w);
