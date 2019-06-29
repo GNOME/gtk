@@ -908,33 +908,6 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
                      gtk_constraint_variable_get_value (layout_width),
                      gtk_constraint_variable_get_value (layout_height)));
 
-  gtk_constraint_solver_freeze (solver);
-
-  /* We reset the constraints on the size of each child, so we are sure the
-   * layout is up to date
-   */
-  for (child = _gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    {
-      GtkRequisition min_req, nat_req;
-      GtkConstraintLayoutChild *info;
-
-      if (!gtk_widget_should_layout (child))
-        continue;
-
-      gtk_widget_get_preferred_size (child, &min_req, &nat_req);
-
-      info = GTK_CONSTRAINT_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (manager, child));
-
-      update_child_constraint (self, info, child, MIN_WIDTH, min_req.width);
-      update_child_constraint (self, info, child, MIN_HEIGHT, min_req.height);
-      update_child_constraint (self, info, child, NAT_WIDTH, nat_req.width);
-      update_child_constraint (self, info, child, NAT_HEIGHT, nat_req.height);
-    }
-
-  gtk_constraint_solver_thaw (solver);
-
   for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
