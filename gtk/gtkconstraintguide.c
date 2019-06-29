@@ -115,22 +115,6 @@ gtk_constraint_guide_update_constraint (GtkConstraintGuide *guide,
 {
   GtkConstraintSolver *solver;
   GtkConstraintVariable *var;
-  int attr[LAST_VALUE] = {
-    GTK_CONSTRAINT_ATTRIBUTE_WIDTH,
-    GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
-    GTK_CONSTRAINT_ATTRIBUTE_WIDTH,
-    GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
-    GTK_CONSTRAINT_ATTRIBUTE_WIDTH,
-    GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
-  };
-  int relation[LAST_VALUE] = {
-    GTK_CONSTRAINT_RELATION_GE,
-    GTK_CONSTRAINT_RELATION_GE,
-    GTK_CONSTRAINT_RELATION_EQ,
-    GTK_CONSTRAINT_RELATION_EQ,
-    GTK_CONSTRAINT_RELATION_LE,
-    GTK_CONSTRAINT_RELATION_LE,
-  };
 
   if (!guide->layout)
     return;
@@ -140,10 +124,31 @@ gtk_constraint_guide_update_constraint (GtkConstraintGuide *guide,
     return;
 
   if (guide->constraints[index] != NULL)
-    gtk_constraint_solver_remove_constraint (solver, guide->constraints[index]);
+    {
+      gtk_constraint_solver_remove_constraint (solver, guide->constraints[index]);
+      guide->constraints[index] = NULL;
+    }
 
-  var = gtk_constraint_layout_get_attribute (guide->layout, attr[index], "guide", NULL, guide->bound_attributes);
-  if (relation[index] == GTK_CONSTRAINT_RELATION_EQ)
+  if (index == MIN_WIDTH || index == NAT_WIDTH || index == MAX_WIDTH)
+    var = gtk_constraint_layout_get_attribute (guide->layout, GTK_CONSTRAINT_ATTRIBUTE_WIDTH, "guide", NULL, guide->bound_attributes);
+  else
+    var = gtk_constraint_layout_get_attribute (guide->layout, GTK_CONSTRAINT_ATTRIBUTE_HEIGHT, "guide", NULL, guide->bound_attributes);
+
+  /* We always install min-size constraints,
+   * but we avoid nat-size constraints if min == max
+   * and we avoid max-size constraints if max == G_MAXINT
+   */
+  if (index == MIN_WIDTH || index == MIN_HEIGHT)
+    {
+      guide->constraints[index] =
+        gtk_constraint_solver_add_constraint (solver,
+                                              var,
+                                              GTK_CONSTRAINT_RELATION_GE,
+                                              gtk_constraint_expression_new (guide->values[index]),
+                                              GTK_CONSTRAINT_WEIGHT_REQUIRED);
+    }
+  else if ((index == NAT_WIDTH && guide->values[MIN_WIDTH] != guide->values[MAX_WIDTH]) ||
+      (index == NAT_HEIGHT && guide->values[MIN_HEIGHT] != guide->values[MAX_HEIGHT]))
     {
       gtk_constraint_variable_set_value (var, guide->values[index]);
       guide->constraints[index] =
@@ -151,12 +156,13 @@ gtk_constraint_guide_update_constraint (GtkConstraintGuide *guide,
                                                  var,
                                                  guide->strength);
     }
-  else
+  else if ((index == MAX_WIDTH || index == MAX_HEIGHT) &&
+           guide->values[index] < G_MAXINT)
     {
       guide->constraints[index] =
         gtk_constraint_solver_add_constraint (solver,
                                               var,
-                                              relation[index],
+                                              GTK_CONSTRAINT_RELATION_LE,
                                               gtk_constraint_expression_new (guide->values[index]),
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
     }
@@ -186,8 +192,11 @@ gtk_constraint_guide_detach (GtkConstraintGuide *guide)
 
   for (i = 0; i < LAST_VALUE; i++)
     {
-      gtk_constraint_solver_remove_constraint (solver, guide->constraints[i]);
-      guide->constraints[i] = NULL;
+      if (guide->constraints[i])
+        {
+          gtk_constraint_solver_remove_constraint (solver, guide->constraints[i]);
+          guide->constraints[i] = NULL;
+        }
     }
 
   g_hash_table_remove_all (guide->bound_attributes);
@@ -240,7 +249,12 @@ gtk_constraint_guide_set_property (GObject      *gobject,
         {
           self->values[index] = val;
           g_object_notify_by_pspec (gobject, pspec);
+
           gtk_constraint_guide_update_constraint (self, index);
+          if (index == MIN_WIDTH || index == MAX_WIDTH)
+            gtk_constraint_guide_update_constraint (self, NAT_WIDTH);
+          if (index == MIN_HEIGHT || index == MAX_HEIGHT)
+            gtk_constraint_guide_update_constraint (self, NAT_HEIGHT);
         }
       break;
 
