@@ -736,17 +736,12 @@ gtk_constraint_solver_optimize (GtkConstraintSolver *self,
   self->optimize_count += 1;
 
 #ifdef G_ENABLE_DEBUG
-  {
-    char *str;
-
-    str = gtk_constraint_variable_to_string (z);
-    g_debug ("optimize: %s\n", str);
-    g_free (str);
-
-    str = gtk_constraint_solver_to_string (self);
-    g_debug ("%s\n", str);
-    g_free (str);
-  }
+  if (GTK_DEBUG_CHECK (CONSTRAINTS))
+    {
+      char *str = gtk_constraint_variable_to_string (z);
+      g_message ("optimize: %s", str);
+      g_free (str);
+    }
 #endif
 
   while (TRUE)
@@ -802,28 +797,28 @@ gtk_constraint_solver_optimize (GtkConstraintSolver *self,
 
       if (min_ratio == DBL_MAX)
         {
-          g_debug ("Unbounded objective variable during optimization");
+          GTK_NOTE (CONSTRAINTS, g_message ("Unbounded objective variable during optimization"));
           break;
         }
 
 #ifdef G_ENABLE_DEBUG
-      {
-        char *entry_s = gtk_constraint_variable_to_string (entry);
-        char *exit_s = gtk_constraint_variable_to_string (exit);
-        g_debug ("pivot(entry: %s, exit: %s)", entry_s, exit_s);
-        g_free (entry_s);
-        g_free (exit_s);
-      }
+      if (GTK_DEBUG_CHECK (CONSTRAINTS))
+        {
+          char *entry_s = gtk_constraint_variable_to_string (entry);
+          char *exit_s = gtk_constraint_variable_to_string (exit);
+          g_message ("pivot(entry: %s, exit: %s)", entry_s, exit_s);
+          g_free (entry_s);
+          g_free (exit_s);
+        }
 #endif
 
       gtk_constraint_solver_pivot (self, entry, exit);
     }
 
-#ifdef G_ENABLE_DEBUG
-  g_debug ("solver.optimize.time := %.3f ms (pass: %d)",
-           (float) (g_get_monotonic_time () - start_time) / 1000.f,
-           self->optimize_count);
-#endif
+  GTK_NOTE (CONSTRAINTS,
+            g_message ("solver.optimize.time := %.3f ms (pass: %d)",
+                       (float) (g_get_monotonic_time () - start_time) / 1000.f,
+                       self->optimize_count));
 }
 
 /*< private >
@@ -1061,10 +1056,9 @@ gtk_constraint_solver_dual_optimize (GtkConstraintSolver *self)
       gtk_constraint_solver_pivot (self, entry_var, exit_var);
     }
 
-#ifdef G_ENABLE_DEBUG
-  g_debug ("dual_optimize.time := %.3f ms",
-           (float) (g_get_monotonic_time () - start_time) / 1000.f);
-#endif
+  GTK_NOTE (CONSTRAINTS,
+            g_message ("dual_optimize.time := %.3f ms",
+                       (float) (g_get_monotonic_time () - start_time) / 1000.f));
 }
 
 static void
@@ -1205,7 +1199,8 @@ gtk_constraint_solver_choose_subject (GtkConstraintSolver *self,
 
   if (!G_APPROX_VALUE (gtk_constraint_expression_get_constant (expression), 0.0, 0.001))
     {
-      g_debug ("Unable to satisfy required constraint (choose_subject)");
+      GTK_NOTE (CONSTRAINTS,
+                g_message ("Unable to satisfy required constraint (choose_subject)"));
       return NULL;
     }
 
@@ -1266,14 +1261,17 @@ gtk_constraint_solver_add_with_artificial_variable (GtkConstraintSolver *self,
   az_tableau_row = g_hash_table_lookup (self->rows, az);
   if (!G_APPROX_VALUE (gtk_constraint_expression_get_constant (az_tableau_row), 0.0, 0.001))
     {
-      char *str = gtk_constraint_expression_to_string (expression);
-
       gtk_constraint_solver_remove_column (self, av);
       gtk_constraint_solver_remove_row (self, az, TRUE);
 
-      g_debug ("Unable to satisfy a required constraint (add): %s", str);
-
-      g_free (str);
+#ifdef G_ENABLE_DEBUG
+      if (GTK_DEBUG_CHECK (CONSTRAINTS))
+        {
+          char *str = gtk_constraint_expression_to_string (expression);
+          g_message ("Unable to satisfy a required constraint (add): %s", str);
+          g_free (str);
+        }
+#endif
 
       return;
     }
@@ -1318,15 +1316,14 @@ gtk_constraint_solver_add_constraint_internal (GtkConstraintSolver *self,
                                                &prev_constant);
 
 #ifdef G_ENABLE_DEBUG
-  {
-    char *expr_s = gtk_constraint_expression_to_string (expr);
-    char *ref_s = gtk_constraint_ref_to_string (constraint);
-
-    g_debug ("Adding constraint '%s' (normalized expression: '%s')\n", ref_s, expr_s);
-
-    g_free (ref_s);
-    g_free (expr_s);
-  }
+  if (GTK_DEBUG_CHECK (CONSTRAINTS))
+    {
+      char *expr_s = gtk_constraint_expression_to_string (expr);
+      char *ref_s = gtk_constraint_ref_to_string (constraint);
+      g_message ("Adding constraint '%s' (normalized expression: '%s')", ref_s, expr_s);
+      g_free (ref_s);
+      g_free (expr_s);
+    }
 #endif
 
   if (constraint->is_stay)
@@ -1512,10 +1509,9 @@ gtk_constraint_solver_resolve (GtkConstraintSolver *solver)
 
   gtk_constraint_solver_reset_stay_constants (solver);
 
-#ifdef G_ENABLE_DEBUG
-  g_debug ("resolve.time := %.3f ms",
-           (float) (g_get_monotonic_time () - start_time) / 1000.f);
-#endif
+  GTK_NOTE (CONSTRAINTS,
+            g_message ("resolve.time := %.3f ms",
+                       (float) (g_get_monotonic_time () - start_time) / 1000.f));
 
   solver->needs_solving = FALSE;
 }
@@ -1634,11 +1630,12 @@ gtk_constraint_solver_add_stay_variable (GtkConstraintSolver *self,
                                           self);
 
 #ifdef G_ENABLE_DEBUG
-  {
-    char *str = gtk_constraint_expression_to_string (res->expression);
-    g_debug ("Adding stay variable: %s", str);
-    g_free (str);
-  }
+  if (GTK_DEBUG_CHECK (CONSTRAINTS))
+    {
+      char *str = gtk_constraint_expression_to_string (res->expression);
+      g_message ("Adding stay variable: %s", str);
+      g_free (str);
+    }
 #endif
 
   gtk_constraint_solver_add_constraint_internal (self, res);
