@@ -339,9 +339,12 @@ ops_set_modelview_internal (RenderOpBuilder *builder,
   RenderOp op;
   graphene_matrix_t matrix;
 
+#if 0
+  XXX This is not possible if we want pop() to work.
   if (builder->current_program &&
       gsk_transform_equal (builder->current_program_state->modelview, transform))
     return;
+#endif
 
   gsk_transform_to_matrix (transform, &matrix);
 
