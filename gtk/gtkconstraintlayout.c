@@ -1408,6 +1408,8 @@ gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *la
 
   gtk_constraint_vfl_parser_free (parser);
 
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
+
   return res;
 }
 
