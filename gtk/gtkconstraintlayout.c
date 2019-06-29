@@ -710,6 +710,7 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
     return;
 
   size_constraints = g_ptr_array_new ();
+  gtk_constraint_solver_freeze (solver);
 
   /* We measure each child in the layout and impose restrictions on the
    * minimum and natural size, so we can solve the size of the overall
@@ -762,6 +763,8 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
                                                  GTK_CONSTRAINT_WEIGHT_MEDIUM);
       g_ptr_array_add (size_constraints, constraint);
     }
+
+  gtk_constraint_solver_thaw (solver);
 
   switch (orientation)
     {
@@ -879,6 +882,7 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
                      gtk_constraint_variable_get_value (layout_height)));
 
   size_constraints = g_ptr_array_new ();
+  gtk_constraint_solver_freeze (solver);
 
   /* We reset the constraints on the size of each child, so we are sure the
    * layout is up to date
@@ -930,6 +934,8 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
                                                  GTK_CONSTRAINT_WEIGHT_MEDIUM);
       g_ptr_array_add (size_constraints, constraint);
     }
+
+  gtk_constraint_solver_thaw (solver);
 
   for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
