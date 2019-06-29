@@ -808,7 +808,8 @@ upload_texture (GskGLRenderer *self,
   int texture_id;
 
   if (texture->width <= 128 &&
-      texture->height <= 128)
+      texture->height <= 128 &&
+      !GDK_IS_GL_TEXTURE (texture))
     {
       graphene_rect_t trect;
 
