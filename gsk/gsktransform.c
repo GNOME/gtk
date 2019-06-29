@@ -1690,11 +1690,26 @@ gsk_transform_transform_bounds (GskTransform          *self,
       }
     break;
 
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+      {
+        float dx, dy, scale_x, scale_y;
+
+        gsk_transform_to_affine (self, &scale_x, &scale_y, &dx, &dy);
+
+        *out_rect = *rect;
+        out_rect->origin.x *= scale_x;
+        out_rect->origin.y *= scale_y;
+        out_rect->size.width *= scale_x;
+        out_rect->size.height *= scale_y;
+        out_rect->origin.x += dx;
+        out_rect->origin.y += dy;
+      }
+    break;
+
     case GSK_TRANSFORM_CATEGORY_UNKNOWN:
     case GSK_TRANSFORM_CATEGORY_ANY:
     case GSK_TRANSFORM_CATEGORY_3D:
     case GSK_TRANSFORM_CATEGORY_2D:
-    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
     default:
       {
         graphene_matrix_t mat;
