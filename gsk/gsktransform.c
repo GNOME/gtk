@@ -1886,18 +1886,43 @@ gsk_transform_parser_parse (GtkCssParser  *parser,
 
           transform = gsk_transform_translate_3d (transform, &GRAPHENE_POINT3D_INIT (0.f, 0.f, f[0]));
         }
-#if 0
-      /* FIXME: add these */
       else if (gtk_css_token_is_function (token, "skew"))
         {
+          graphene_matrix_t matrix;
+
+          if (!gtk_css_parser_consume_function (parser, 2, 2, gsk_transform_parse_float, f))
+            goto fail;
+
+          f[0] = f[0] / 180.0 * G_PI;
+          f[1] = f[1] / 180.0 * G_PI;
+
+          graphene_matrix_init_skew (&matrix, f[0], f[1]);
+          transform = gsk_transform_matrix (transform, &matrix);
         }
       else if (gtk_css_token_is_function (token, "skewX"))
         {
+          graphene_matrix_t matrix;
+
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gsk_transform_parse_float, f))
+            goto fail;
+
+          f[0] = f[0] / 180.0 * G_PI;
+
+          graphene_matrix_init_skew (&matrix, f[0], 0);
+          transform = gsk_transform_matrix (transform, &matrix);
         }
       else if (gtk_css_token_is_function (token, "skewY"))
         {
+          graphene_matrix_t matrix;
+
+          if (!gtk_css_parser_consume_function (parser, 1, 1, gsk_transform_parse_float, f))
+            goto fail;
+
+          f[0] = f[0] / 180.0 * G_PI;
+
+          graphene_matrix_init_skew (&matrix, 0, f[0]);
+          transform = gsk_transform_matrix (transform, &matrix);
         }
-#endif
       else
         {
           break;
