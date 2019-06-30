@@ -25,17 +25,6 @@
 
 G_BEGIN_DECLS
 
-#define GTK_CONSTRAINT_VFL_PARSER_ERROR (gtk_constraint_vfl_parser_error_quark ())
-
-typedef enum {
-  GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_SYMBOL,
-  GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_ATTRIBUTE,
-  GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_VIEW,
-  GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_METRIC,
-  GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_PRIORITY,
-  GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_RELATION
-} VflError;
-
 typedef struct _GtkConstraintVflParser       GtkConstraintVflParser;
 
 typedef struct {
@@ -48,8 +37,6 @@ typedef struct {
   double multiplier;
   double strength;
 } GtkConstraintVfl;
-
-GQuark gtk_constraint_vfl_parser_error_quark (void);
 
 GtkConstraintVflParser *
 gtk_constraint_vfl_parser_new (void);

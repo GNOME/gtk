@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_CONSTRAINT_LAYOUT (gtk_constraint_layout_get_type ())
 #define GTK_TYPE_CONSTRAINT_LAYOUT_CHILD (gtk_constraint_layout_child_get_type ())
+#define GTK_CONSTRAINT_VFL_PARSER_ERROR (gtk_constraint_vfl_parser_error_quark ())
 
 /**
  * GtkConstraintLayoutChild:
@@ -43,6 +44,9 @@ G_DECLARE_FINAL_TYPE (GtkConstraintLayoutChild, gtk_constraint_layout_child, GTK
  */
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkConstraintLayout, gtk_constraint_layout, GTK, CONSTRAINT_LAYOUT, GtkLayoutManager)
+
+GDK_AVAILABLE_IN_ALL
+GQuark                  gtk_constraint_vfl_parser_error_quark   (void);
 
 GDK_AVAILABLE_IN_ALL
 GtkLayoutManager *      gtk_constraint_layout_new               (void);

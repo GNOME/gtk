@@ -1214,6 +1214,12 @@ attribute_from_name (const char *name)
   return GTK_CONSTRAINT_ATTRIBUTE_NONE;
 }
 
+GQuark
+gtk_constraint_vfl_parser_error_quark (void)
+{
+  return g_quark_from_static_string ("gtk-constraint-vfl-parser-error-quark");
+}
+
 /**
  * gtk_constraint_layout_add_constraints_from_descriptionv: (rename-to gtk_constraint_layout_add_constraints_from_description)
  * @layout: a #GtkConstraintLayout

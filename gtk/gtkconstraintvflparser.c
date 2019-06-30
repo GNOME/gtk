@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "gtkconstraintvflparserprivate.h"
+#include "gtkenums.h"
 
 #include <string.h>
 
@@ -101,11 +102,11 @@ struct _GtkConstraintVflParser
   VflView *views;
 };
 
-GQuark
-gtk_constraint_vfl_parser_error_quark (void)
-{
-  return g_quark_from_static_string ("gtk-constraint-vfl-parser-error-quark");
-}
+/* NOTE: These two symbols are defined in gtkconstraintlayout.h, but we
+ * cannot include that header here
+ */
+#define GTK_CONSTRAINT_VFL_PARSER_ERROR (gtk_constraint_vfl_parser_error_quark ())
+GQuark gtk_constraint_vfl_parser_error_quark (void);
 
 GtkConstraintVflParser *
 gtk_constraint_vfl_parser_new (void)
