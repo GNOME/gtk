@@ -4767,7 +4767,7 @@ popover.menu {
   }
 
   &.background contents {
-    background: white;
+    background-color: $menu_color;
   }
 
   &.background separator {
