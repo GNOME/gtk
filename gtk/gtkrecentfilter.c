@@ -746,11 +746,12 @@ gtk_recent_filter_filter (GtkRecentFilter           *filter,
           if (filter_info->mime_type != NULL)
             {
               gchar *filter_content_type, *rule_content_type;
-              gboolean match;
+              gboolean match = FALSE;
 
               filter_content_type = g_content_type_from_mime_type (filter_info->mime_type);
               rule_content_type = g_content_type_from_mime_type (rule->u.mime_type);
-              match = g_content_type_is_a (filter_content_type, rule_content_type);
+              if (filter_content_type != NULL && rule_content_type != NULL)
+                match = g_content_type_is_a (filter_content_type, rule_content_type);
               g_free (filter_content_type);
               g_free (rule_content_type);
 
