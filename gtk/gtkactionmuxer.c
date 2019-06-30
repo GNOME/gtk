@@ -561,13 +561,6 @@ prop_actions_connect (GtkActionMuxer *muxer)
     }
 }
 
-static void
-prop_actions_disconnect (GtkActionMuxer *muxer)
-{
-  if (muxer->widget)
-    g_signal_handlers_disconnect_by_func (muxer->widget,
-                                          prop_action_notify, muxer);
-}
 
 static gboolean
 gtk_action_muxer_query_action (GActionGroup        *action_group,
@@ -818,8 +811,6 @@ static void
 gtk_action_muxer_dispose (GObject *object)
 {
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (object);
-
-  prop_actions_disconnect (muxer);
 
   if (muxer->parent)
   {
