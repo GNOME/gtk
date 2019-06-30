@@ -79,7 +79,7 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_constraint_layout_remove_all_constraints            (GtkConstraintLayout *manager);
 
 GDK_AVAILABLE_IN_ALL
-gboolean                gtk_constraint_layout_add_constraints_from_description  (GtkConstraintLayout *manager,
+GList *                 gtk_constraint_layout_add_constraints_from_description  (GtkConstraintLayout *manager,
                                                                                  const char * const   lines[],
                                                                                  gsize                n_lines,
                                                                                  int                  hspacing,
@@ -88,7 +88,7 @@ gboolean                gtk_constraint_layout_add_constraints_from_description  
                                                                                  const char          *first_view,
                                                                                  ...) G_GNUC_NULL_TERMINATED;
 GDK_AVAILABLE_IN_ALL
-gboolean                gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *manager,
+GList *                 gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *manager,
                                                                                  const char * const   lines[],
                                                                                  gsize                n_lines,
                                                                                  int                  hspacing,

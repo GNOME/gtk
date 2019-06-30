@@ -1729,9 +1729,10 @@ attribute_from_name (const char *name)
  *   [button1(==button2.height)]
  * ]|
  *
- * Returns: %TRUE if the constraints were added to the layout
+ * Returns: (transfer container) (element-type GtkConstraint): the list of
+ *   #GtkConstraints that were added to the layout
  */
-gboolean
+GList *
 gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *layout,
                                                          const char * const   lines[],
                                                          gsize                n_lines,
@@ -1741,11 +1742,12 @@ gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *la
                                                          GError             **error)
 {
   GtkConstraintVflParser *parser;
+  GList *res = NULL;
 
-  g_return_val_if_fail (GTK_IS_CONSTRAINT_LAYOUT (layout), FALSE);
-  g_return_val_if_fail (lines != NULL, FALSE);
-  g_return_val_if_fail (views != NULL, FALSE);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CONSTRAINT_LAYOUT (layout), NULL);
+  g_return_val_if_fail (lines != NULL, NULL);
+  g_return_val_if_fail (views != NULL, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   parser = gtk_constraint_vfl_parser_new ();
   gtk_constraint_vfl_parser_set_default_spacing (parser, hspacing, vspacing);
@@ -1786,7 +1788,7 @@ gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *la
           g_free (squiggly);
           g_error_free (internal_error);
           gtk_constraint_vfl_parser_free (parser);
-          return FALSE;
+          return res;
         }
 
       int n_constraints = 0;
@@ -1820,6 +1822,8 @@ gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *la
 
           layout_add_constraint (layout, constraint);
           g_hash_table_add (layout->constraints, constraint);
+
+          res = g_list_prepend (res, constraint);
         }
 
       g_free (constraints);
@@ -1827,7 +1831,7 @@ gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *la
 
   gtk_constraint_vfl_parser_free (parser);
 
-  return TRUE;
+  return res;
 }
 
 /**
@@ -1850,9 +1854,10 @@ gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *la
  * gtk_constraint_layout_add_constraints_from_descriptionv(), using
  * variadic arguments to populate the view/target map.
  *
- * Returns: %TRUE if the constraints were added to the layout
+ * Returns: (transfer container) (element-type GtkConstraint): the list of
+ *   #GtkConstraints that were added to the layout
  */
-gboolean
+GList *
 gtk_constraint_layout_add_constraints_from_description (GtkConstraintLayout *layout,
                                                         const char * const   lines[],
                                                         gsize                n_lines,
@@ -1865,13 +1870,13 @@ gtk_constraint_layout_add_constraints_from_description (GtkConstraintLayout *lay
   GtkConstraintVflParser *parser;
   GHashTable *views;
   const char *view;
-  gboolean res;
+  GList *res;
   va_list args;
 
-  g_return_val_if_fail (GTK_IS_CONSTRAINT_LAYOUT (layout), FALSE);
-  g_return_val_if_fail (lines != NULL, FALSE);
-  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-  g_return_val_if_fail (first_view != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CONSTRAINT_LAYOUT (layout), NULL);
+  g_return_val_if_fail (lines != NULL, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+  g_return_val_if_fail (first_view != NULL, NULL);
 
   parser = gtk_constraint_vfl_parser_new ();
   gtk_constraint_vfl_parser_set_default_spacing (parser, hspacing, vspacing);
