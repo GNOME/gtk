@@ -4766,8 +4766,9 @@ popover.menu {
     padding-bottom: 5px;
   }
 
+  arrow,
   &.background contents {
-    background: white;
+    background-color: $menu_color;
   }
 
   &.background separator {
