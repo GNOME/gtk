@@ -1278,6 +1278,7 @@ update_min_width (GtkConstraintGuide *guide)
                                           GTK_CONSTRAINT_RELATION_GE,
                                           gtk_constraint_expression_new (guide->min_width),
                                           GTK_CONSTRAINT_WEIGHT_REQUIRED);
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (guide->layout));
 }
 
 static void
@@ -1304,6 +1305,7 @@ update_min_height (GtkConstraintGuide *guide)
                                           GTK_CONSTRAINT_RELATION_GE,
                                           gtk_constraint_expression_new (guide->min_height),
                                           GTK_CONSTRAINT_WEIGHT_REQUIRED);
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (guide->layout));
 }
 
 static void
@@ -1330,6 +1332,7 @@ update_nat_width (GtkConstraintGuide *guide)
                                           GTK_CONSTRAINT_RELATION_EQ,
                                           gtk_constraint_expression_new (guide->nat_width),
                                           GTK_CONSTRAINT_WEIGHT_MEDIUM);
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (guide->layout));
 }
 
 static void
@@ -1356,6 +1359,7 @@ update_nat_height (GtkConstraintGuide *guide)
                                           GTK_CONSTRAINT_RELATION_EQ,
                                           gtk_constraint_expression_new (guide->nat_height),
                                           GTK_CONSTRAINT_WEIGHT_MEDIUM);
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (guide->layout));
 }
 
 static void
