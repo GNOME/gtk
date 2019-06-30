@@ -2079,7 +2079,7 @@ popover.menu box.inline-buttons { border-radius: 5px; border-style: none; border
 
 popover.menu box.circular-buttons { padding-bottom: 5px; }
 
-popover.menu.background contents, popover.menu arrow { background-color: #ffffff; }
+popover.menu arrow, popover.menu.background contents { background-color: #ffffff; }
 
 popover.menu.background separator { margin: 5px 0px; }
 
