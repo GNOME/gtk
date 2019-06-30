@@ -17,6 +17,18 @@
  * Author: Matthias Clasen
  */
 
+/**
+ * SECTION:gtkconstraintguide
+ * @Title: GtkConstraintGuide
+ * @Short_description: An invisible constraint target
+ *
+ * #GtkConstraintGuide is an invisible layout element that can be used by
+ * widgets inside a #GtkConstraintLayout as a source or a target of a
+ * #GtkConstraint.
+ *
+ * Unlike a #GtkWidget, a #GtkConstraintGuide will not be drawn.
+ */
+
 #include "config.h"
 
 #include "gtkconstraintguide.h"
@@ -328,6 +340,11 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
   object_class->set_property = gtk_constraint_guide_set_property;
   object_class->get_property = gtk_constraint_guide_get_property;
 
+  /**
+   * GtkConstraintGuide:min-width:
+   *
+   * The minimum width of the guide.
+   */
   guide_props[PROP_MIN_WIDTH] =
       g_param_spec_int ("min-width",
                         "Minimum width",
@@ -335,6 +352,11 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
                         0, G_MAXINT, 0,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
+  /**
+   * GtkConstraintGuide:min-height:
+   *
+   * The minimum height of the guide.
+   */
   guide_props[PROP_MIN_HEIGHT] =
       g_param_spec_int ("min-height",
                         "Minimum height",
@@ -342,6 +364,11 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
                         0, G_MAXINT, 0,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
+  /**
+   * GtkConstraintGuide:nat-width:
+   *
+   * The preferred, or natural, width of the guide.
+   */
   guide_props[PROP_NAT_WIDTH] =
       g_param_spec_int ("nat-width",
                         "Natural width",
@@ -349,6 +376,11 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
                         0, G_MAXINT, 0,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
+  /**
+   * GtkConstraintGuide:nat-height:
+   *
+   * The preferred, or natural, height of the guide.
+   */
   guide_props[PROP_NAT_HEIGHT] =
       g_param_spec_int ("nat-height",
                         "Natural height",
@@ -356,6 +388,11 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
                         0, G_MAXINT, 0,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
+  /**
+   * GtkConstraintGuide:max-width:
+   *
+   * The maximum width of the guide.
+   */
   guide_props[PROP_MAX_WIDTH] =
       g_param_spec_int ("max-width",
                         "Maximum width",
@@ -363,6 +400,11 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
                         0, G_MAXINT, G_MAXINT,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
+  /**
+   * GtkConstraintGuide:max-height:
+   *
+   * The maximum height of the guide.
+   */
   guide_props[PROP_MAX_HEIGHT] =
       g_param_spec_int ("max-height",
                         "Maximum height",
@@ -370,7 +412,12 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
                         0, G_MAXINT, G_MAXINT,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
-
+  /**
+   * GtkConstraintGuide:strength:
+   *
+   * The #GtkConstraintStrength to be used for the constraint on
+   * the natural size of the guide.
+   */
   guide_props[PROP_STRENGTH] =
       g_param_spec_enum ("strength",
                          "Strength",
@@ -379,7 +426,11 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
                          GTK_CONSTRAINT_STRENGTH_MEDIUM,
                          G_PARAM_READWRITE|
                          G_PARAM_EXPLICIT_NOTIFY);
-
+  /**
+   * GtkConstraintGuide:name:
+   *
+   * A name that identifies the #GtkConstraintGuide, for debugging.
+   */
   guide_props[PROP_NAME] =
       g_param_spec_string ("name",
                            "Name",
@@ -565,6 +616,14 @@ gtk_constraint_guide_get_max_size (GtkConstraintGuide *guide,
     *height = guide->values[MAX_HEIGHT];
 }
 
+/**
+ * gtk_constraint_guide_get_name:
+ * @guide: a #GtkConstraintGuide
+ *
+ * Retrieves the name set using gtk_constraint_guide_set_name().
+ *
+ * Returns: (transfer none) (nullable): the name of the guide
+ */
 const char *
 gtk_constraint_guide_get_name (GtkConstraintGuide *guide)
 {
@@ -573,6 +632,15 @@ gtk_constraint_guide_get_name (GtkConstraintGuide *guide)
   return guide->name;
 }
 
+/**
+ * gtk_constraint_guide_set_name:
+ * @guide: a #GtkConstraintGuide
+ * @name: (nullable): a name for the @guide
+ *
+ * Sets a name for the given #GtkConstraintGuide.
+ *
+ * The name is useful for debugging purposes.
+ */
 void
 gtk_constraint_guide_set_name (GtkConstraintGuide *guide,
                                const char         *name)
@@ -584,6 +652,14 @@ gtk_constraint_guide_set_name (GtkConstraintGuide *guide,
   g_object_notify_by_pspec (G_OBJECT (guide), guide_props[PROP_NAME]);
 }
 
+/**
+ * gtk_constraint_guide_get_strength:
+ * @guide: a #GtkConstraintGuide
+ *
+ * Retrieves the strength set using gtk_constraint_guide_set_strength().
+ *
+ * Returns: the strength of the constraint on the natural size
+ */
 GtkConstraintStrength
 gtk_constraint_guide_get_strength (GtkConstraintGuide *guide)
 {
@@ -593,6 +669,14 @@ gtk_constraint_guide_get_strength (GtkConstraintGuide *guide)
   return guide->strength;
 }
 
+/**
+ * gtk_constraint_guide_set_strength:
+ * @guide: a #GtkConstraintGuide
+ * @strength: the strength of the constraint
+ *
+ * Sets the strength of the constraint on the natural size of the
+ * given #GtkConstraintGuide.
+ */
 void
 gtk_constraint_guide_set_strength (GtkConstraintGuide    *guide,
                                    GtkConstraintStrength  strength)
