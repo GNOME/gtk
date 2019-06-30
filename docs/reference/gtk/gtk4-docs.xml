@@ -109,6 +109,9 @@
       <xi:include href="xml/gtkcustomlayout.xml" />
       <xi:include href="xml/gtkfixedlayout.xml" />
       <xi:include href="xml/gtkgridlayout.xml" />
+      <xi:include href="xml/gtkconstraintlayout.xml" />
+      <xi:include href="xml/gtkconstraint.xml" />
+      <xi:include href="xml/gtkconstraintguide.xml" />
     </chapter>
 
     <chapter id="DisplayWidgets">
