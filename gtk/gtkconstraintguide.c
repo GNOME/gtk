@@ -166,6 +166,8 @@ gtk_constraint_guide_update_constraint (GtkConstraintGuide *guide,
                                               gtk_constraint_expression_new (guide->values[index]),
                                               GTK_CONSTRAINT_WEIGHT_REQUIRED);
     }
+
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (guide->layout));
 }
 
 void
