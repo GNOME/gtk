@@ -1222,6 +1222,22 @@ gtk_constraint_layout_remove_constraint (GtkConstraintLayout *manager,
   gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (manager));
 }
 
+/**
+ * gtk_constraint_layout_remove_all_constraints:
+ * @manager: a #GtkConstraintLayout
+ *
+ * Removes all constraints from the layout manager.
+ */
+void
+gtk_constraint_layout_remove_all_constraints (GtkConstraintLayout *manager)
+{
+  g_return_if_fail (GTK_IS_CONSTRAINT_LAYOUT (manager));
+
+  g_hash_table_remove_all (manager->constraints);
+
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (manager));
+}
+
 static void
 gtk_constraint_guide_constraint_target_iface_init (GtkConstraintTargetInterface *iface)
 {
