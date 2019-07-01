@@ -158,7 +158,7 @@ gtk_constraint_guide_update_constraint (GtkConstraintGuide *guide,
                                               var,
                                               GTK_CONSTRAINT_RELATION_GE,
                                               gtk_constraint_expression_new (guide->values[index]),
-                                              GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                              GTK_CONSTRAINT_STRENGTH_REQUIRED);
     }
   else if ((index == NAT_WIDTH && guide->values[MIN_WIDTH] != guide->values[MAX_WIDTH]) ||
       (index == NAT_HEIGHT && guide->values[MIN_HEIGHT] != guide->values[MAX_HEIGHT]))
@@ -177,7 +177,7 @@ gtk_constraint_guide_update_constraint (GtkConstraintGuide *guide,
                                               var,
                                               GTK_CONSTRAINT_RELATION_LE,
                                               gtk_constraint_expression_new (guide->values[index]),
-                                              GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                              GTK_CONSTRAINT_STRENGTH_REQUIRED);
     }
 
   gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (guide->layout));

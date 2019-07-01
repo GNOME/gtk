@@ -73,14 +73,14 @@
  *   e = gtk_constraint_expression_builder_finish (&builder);
  *   gtk_constraint_solver_add_constraint (solver,
  *                                         right, GTK_CONSTRAINT_RELATION_EQ, e,
- *                                         GTK_CONSTRAINT_WEIGHT_REQUIRED);
+ *                                         GTK_CONSTRAINT_STRENGTH_REQUIRED);
  *
  *   // right ≤ 100
  *   gtk_constraint_expression_builder_constant (&builder, 100.0);
  *   e = gtk_constraint_expression_builder_finish (&builder);
  *   gtk_constraint_solver_add_constraint (solver,
  *                                         right, GTK_CONSTRAINT_RELATION_LE, e,
- *                                         GTK_CONSTRAINT_WEIGHT_REQUIRED);
+ *                                         GTK_CONSTRAINT_STRENGTH_REQUIRED);
  *
  *   // middle = (left + right) / 2
  *   gtk_constraint_expression_builder_term (&builder, left);
@@ -91,14 +91,14 @@
  *   e = gtk_constraint_expression_builder_finish (&builder);
  *   gtk_constraint_solver_add_constraint (solver
  *                                         middle, GTK_CONSTRAINT_RELATION_EQ, e,
- *                                         GTK_CONSTRAINT_WEIGHT_REQUIRED);
+ *                                         GTK_CONSTRAINT_STRENGTH_REQUIRED);
  *
  *   // left ≥ 0
  *   gtk_constraint_expression_builder_constant (&builder, 0.0);
  *   e = gtk_constraint_expression_builder_finish (&builder);
  *   gtk_constraint_solver_add_constraint (solver,
  *                                         left, GTK_CONSTRAINT_RELATION_GE, e,
- *                                         GTK_CONSTRAINT_WEIGHT_REQUIRED);
+ *                                         GTK_CONSTRAINT_STRENGTH_REQUIRED);
  * ]|
  *
  * Now that we have all our constraints in place, suppose we wish to find
@@ -110,8 +110,8 @@
  * |[
  *   // Set the value first
  *   gtk_constraint_variable_set_value (middle, 45.0);
- *   // and then add the stay constraint, with a weak weight
- *   gtk_constraint_solver_add_stay_variable (solver, middle, GTK_CONSTRAINT_WEIGHT_WEAK);
+ *   // and then add the stay constraint, with a weak strength
+ *   gtk_constraint_solver_add_stay_variable (solver, middle, GTK_CONSTRAINT_STRENGTH_WEAK);
  * ]|
  *
  * GtkConstraintSolver incrementally solves the system every time a constraint
@@ -185,8 +185,11 @@ struct _GtkConstraintRef
   /* The original relation used when creating the constraint */
   GtkConstraintRelation relation;
 
-  /* The weight, or strength, of the constraint */
-  double weight;
+  /* The strength of the constraint; this value is used to strengthen
+   * or weaken a constraint weight in the tableau when coming to a
+   * solution
+   */
+  int strength;
 
   GtkConstraintSolver *solver;
 
@@ -374,7 +377,7 @@ gtk_constraint_ref_is_inequality (const GtkConstraintRef *self)
 static gboolean
 gtk_constraint_ref_is_required (const GtkConstraintRef *self)
 {
-  return self->weight >= GTK_CONSTRAINT_WEIGHT_REQUIRED;
+  return self->strength == GTK_CONSTRAINT_STRENGTH_REQUIRED;
 }
 
 static const char *relations[] = {
@@ -390,15 +393,12 @@ relation_to_string (GtkConstraintRelation r)
 }
 
 static const char *
-weight_to_string (double s)
+strength_to_string (int s)
 {
-  if (s >= GTK_CONSTRAINT_WEIGHT_REQUIRED)
-    return "required";
-
-  if (s >= GTK_CONSTRAINT_WEIGHT_STRONG)
+  if (s >= GTK_CONSTRAINT_STRENGTH_STRONG)
     return "strong";
 
-  if (s >= GTK_CONSTRAINT_WEIGHT_MEDIUM)
+  if (s >= GTK_CONSTRAINT_STRENGTH_MEDIUM)
     return "medium";
 
   return "weak";
@@ -423,9 +423,12 @@ gtk_constraint_ref_to_string (const GtkConstraintRef *self)
   g_string_append (buf, relation_to_string (self->relation));
   g_string_append (buf, " 0.0");
 
-  g_string_append_printf (buf, " [weight:%s (%g)]",
-                          weight_to_string (self->weight),
-                          self->weight);
+  if (gtk_constraint_ref_is_required (self))
+    g_string_append (buf, " [strength:required]");
+  else
+    g_string_append_printf (buf, " [strength:%d (%s)]",
+                            self->strength,
+                            strength_to_string (self->strength));
 
   return g_string_free (buf, FALSE);
 }
@@ -909,7 +912,7 @@ gtk_constraint_solver_new_expression (GtkConstraintSolver *self,
           gtk_constraint_variable_unref (eminus);
 
           z_row = g_hash_table_lookup (self->rows, self->objective);
-          gtk_constraint_expression_set_variable (z_row, eminus, constraint->weight);
+          gtk_constraint_expression_set_variable (z_row, eminus, constraint->strength);
 
           gtk_constraint_solver_insert_error_variable (self, constraint, eminus);
           gtk_constraint_solver_note_added_variable (self, eminus, self->objective);
@@ -968,8 +971,8 @@ gtk_constraint_solver_new_expression (GtkConstraintSolver *self,
 
           z_row = g_hash_table_lookup (self->rows, self->objective);
 
-          gtk_constraint_expression_set_variable (z_row, eplus, constraint->weight);
-          gtk_constraint_expression_set_variable (z_row, eminus, constraint->weight);
+          gtk_constraint_expression_set_variable (z_row, eplus, constraint->strength);
+          gtk_constraint_expression_set_variable (z_row, eminus, constraint->strength);
           gtk_constraint_solver_note_added_variable (self, eplus, self->objective);
           gtk_constraint_solver_note_added_variable (self, eminus, self->objective);
 
@@ -1522,7 +1525,7 @@ gtk_constraint_solver_resolve (GtkConstraintSolver *solver)
  * @variable: the subject of the constraint
  * @relation: the relation of the constraint
  * @expression: the expression of the constraint
- * @strength: the weight of the constraint
+ * @strength: the strength of the constraint
  *
  * Adds a new constraint in the form of:
  *
@@ -1541,12 +1544,12 @@ gtk_constraint_solver_add_constraint (GtkConstraintSolver *self,
                                       GtkConstraintVariable *variable,
                                       GtkConstraintRelation relation,
                                       GtkConstraintExpression *expression,
-                                      double strength)
+                                      int strength)
 {
   GtkConstraintRef *res = g_new0 (GtkConstraintRef, 1);
 
   res->solver = self;
-  res->weight = strength;
+  res->strength = strength;
   res->is_edit = FALSE;
   res->is_stay = FALSE;
   res->relation = relation;
@@ -1598,7 +1601,7 @@ gtk_constraint_solver_add_constraint (GtkConstraintSolver *self,
  * gtk_constraint_solver_add_stay_variable:
  * @self: a #GtkConstraintSolver
  * @variable: a stay #GtkConstraintVariable
- * @strength: the weight of the constraint
+ * @strength: the strength of the constraint
  *
  * Adds a constraint on a stay @variable with the given @strength.
  *
@@ -1612,14 +1615,14 @@ gtk_constraint_solver_add_constraint (GtkConstraintSolver *self,
 GtkConstraintRef *
 gtk_constraint_solver_add_stay_variable (GtkConstraintSolver *self,
                                          GtkConstraintVariable *variable,
-                                         double strength)
+                                         int strength)
 {
   GtkConstraintRef *res = g_new0 (GtkConstraintRef, 1);
 
   res->solver = self;
   res->variable = gtk_constraint_variable_ref (variable);
   res->relation = GTK_CONSTRAINT_RELATION_EQ;
-  res->weight = strength;
+  res->strength = strength;
   res->is_stay = TRUE;
   res->is_edit = FALSE;
 
@@ -1692,14 +1695,14 @@ gtk_constraint_solver_remove_stay_variable (GtkConstraintSolver *self,
 GtkConstraintRef *
 gtk_constraint_solver_add_edit_variable (GtkConstraintSolver *self,
                                          GtkConstraintVariable *variable,
-                                         double strength)
+                                         int strength)
 {
   GtkConstraintRef *res = g_new0 (GtkConstraintRef, 1);
 
   res->solver = self;
   res->variable = gtk_constraint_variable_ref (variable);
   res->relation = GTK_CONSTRAINT_RELATION_EQ;
-  res->weight = strength;
+  res->strength = strength;
   res->is_stay = FALSE;
   res->is_edit = TRUE;
 
@@ -1782,7 +1785,7 @@ gtk_constraint_solver_remove_constraint (GtkConstraintSolver *self,
             {
               gtk_constraint_expression_add_variable (z_row,
                                                       v,
-                                                      constraint->weight,
+                                                      constraint->strength,
                                                       self->objective,
                                                       self);
             }
@@ -1790,7 +1793,7 @@ gtk_constraint_solver_remove_constraint (GtkConstraintSolver *self,
             {
               gtk_constraint_expression_add_expression (z_row,
                                                         e,
-                                                        constraint->weight,
+                                                        constraint->strength,
                                                         self->objective,
                                                         self);
             }

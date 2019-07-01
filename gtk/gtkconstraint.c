@@ -292,7 +292,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
     g_param_spec_int ("strength",
                       P_("Strength"),
                       P_("The strength of the constraint"),
-                      GTK_CONSTRAINT_STRENGTH_WEAK, G_MAXINT,
+                      0, GTK_CONSTRAINT_STRENGTH_REQUIRED,
                       GTK_CONSTRAINT_STRENGTH_REQUIRED,
                       G_PARAM_READWRITE |
                       G_PARAM_STATIC_STRINGS |
@@ -519,42 +519,6 @@ gtk_constraint_get_strength (GtkConstraint *constraint)
   g_return_val_if_fail (GTK_IS_CONSTRAINT (constraint), GTK_CONSTRAINT_STRENGTH_REQUIRED);
 
   return constraint->strength;
-}
-
-/*< private >
- * gtk_constraint_get_weight:
- * @constraint: a #GtkConstraint
- *
- * Computes the weight of the @constraint to be used with
- * #GtkConstraintSolver.
- *
- * Returns: the weight of the constraint
- */
-double
-gtk_constraint_get_weight (GtkConstraint *constraint)
-{
-  if (constraint->strength > 0)
-    return constraint->strength;
-
-  switch (constraint->strength)
-    {
-    case GTK_CONSTRAINT_STRENGTH_REQUIRED:
-      return GTK_CONSTRAINT_WEIGHT_REQUIRED;
-
-    case GTK_CONSTRAINT_STRENGTH_STRONG:
-      return GTK_CONSTRAINT_WEIGHT_STRONG;
-
-    case GTK_CONSTRAINT_STRENGTH_MEDIUM:
-      return GTK_CONSTRAINT_WEIGHT_MEDIUM;
-
-    case GTK_CONSTRAINT_STRENGTH_WEAK:
-      return GTK_CONSTRAINT_WEIGHT_WEAK;
-
-    default:
-      g_assert_not_reached ();
-    }
-
-  return 0;
 }
 
 /**

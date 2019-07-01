@@ -16,7 +16,7 @@ constraint_solver_simple (void)
 
   gtk_constraint_solver_add_constraint (solver,
                                         x, GTK_CONSTRAINT_RELATION_EQ, e,
-                                        GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                        GTK_CONSTRAINT_STRENGTH_REQUIRED);
 
   double x_value = gtk_constraint_variable_get_value (x);
   double y_value = gtk_constraint_variable_get_value (y);
@@ -39,8 +39,8 @@ constraint_solver_stay (void)
   GtkConstraintVariable *x = gtk_constraint_solver_create_variable (solver, NULL, "x", 5.0);
   GtkConstraintVariable *y = gtk_constraint_solver_create_variable (solver, NULL, "y", 10.0);
 
-  gtk_constraint_solver_add_stay_variable (solver, x, GTK_CONSTRAINT_WEIGHT_WEAK);
-  gtk_constraint_solver_add_stay_variable (solver, y, GTK_CONSTRAINT_WEIGHT_WEAK);
+  gtk_constraint_solver_add_stay_variable (solver, x, GTK_CONSTRAINT_STRENGTH_WEAK);
+  gtk_constraint_solver_add_stay_variable (solver, y, GTK_CONSTRAINT_STRENGTH_WEAK);
 
   double x_value = gtk_constraint_variable_get_value (x);
   double y_value = gtk_constraint_variable_get_value (y);
@@ -64,7 +64,7 @@ constraint_solver_variable_geq_constant (void)
 
   gtk_constraint_solver_add_constraint (solver,
                                         x, GTK_CONSTRAINT_RELATION_GE, e,
-                                        GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                        GTK_CONSTRAINT_STRENGTH_REQUIRED);
 
   double x_value = gtk_constraint_variable_get_value (x);
 
@@ -85,7 +85,7 @@ constraint_solver_variable_leq_constant (void)
 
   gtk_constraint_solver_add_constraint (solver,
                                         x, GTK_CONSTRAINT_RELATION_LE, e,
-                                        GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                        GTK_CONSTRAINT_STRENGTH_REQUIRED);
 
   double x_value = gtk_constraint_variable_get_value (x);
 
@@ -106,7 +106,7 @@ constraint_solver_variable_eq_constant (void)
 
   gtk_constraint_solver_add_constraint (solver,
                                         x, GTK_CONSTRAINT_RELATION_EQ, e,
-                                        GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                        GTK_CONSTRAINT_STRENGTH_REQUIRED);
 
   double x_value = gtk_constraint_variable_get_value (x);
 
@@ -133,11 +133,11 @@ constraint_solver_eq_with_stay (void)
   gtk_constraint_expression_builder_term (&builder, width);
   GtkConstraintExpression *right = gtk_constraint_expression_builder_finish (&builder);
 
-  gtk_constraint_solver_add_stay_variable (solver, width, GTK_CONSTRAINT_WEIGHT_WEAK);
-  gtk_constraint_solver_add_stay_variable (solver, right_min, GTK_CONSTRAINT_WEIGHT_WEAK);
+  gtk_constraint_solver_add_stay_variable (solver, width, GTK_CONSTRAINT_STRENGTH_WEAK);
+  gtk_constraint_solver_add_stay_variable (solver, right_min, GTK_CONSTRAINT_STRENGTH_WEAK);
   gtk_constraint_solver_add_constraint (solver,
                                         right_min, GTK_CONSTRAINT_RELATION_EQ, right,
-                                        GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                        GTK_CONSTRAINT_STRENGTH_REQUIRED);
 
   double x_value = gtk_constraint_variable_get_value (x);
   double width_value = gtk_constraint_variable_get_value (width);
@@ -165,22 +165,22 @@ constraint_solver_cassowary (void)
   e = gtk_constraint_expression_new_from_variable (y);
   gtk_constraint_solver_add_constraint (solver,
                                         x, GTK_CONSTRAINT_RELATION_LE, e,
-                                        GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                        GTK_CONSTRAINT_STRENGTH_REQUIRED);
 
   e = gtk_constraint_expression_plus_constant (gtk_constraint_expression_new_from_variable (x), 3.0);
   gtk_constraint_solver_add_constraint (solver,
                                         y, GTK_CONSTRAINT_RELATION_EQ, e,
-                                        GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                        GTK_CONSTRAINT_STRENGTH_REQUIRED);
 
   e = gtk_constraint_expression_new (10.0);
   gtk_constraint_solver_add_constraint (solver,
                                         x, GTK_CONSTRAINT_RELATION_EQ, e,
-                                        GTK_CONSTRAINT_WEIGHT_WEAK);
+                                        GTK_CONSTRAINT_STRENGTH_WEAK);
 
   e = gtk_constraint_expression_new (10.0);
   gtk_constraint_solver_add_constraint (solver,
                                         y, GTK_CONSTRAINT_RELATION_EQ, e,
-                                        GTK_CONSTRAINT_WEIGHT_WEAK);
+                                        GTK_CONSTRAINT_STRENGTH_WEAK);
 
   double x_val = gtk_constraint_variable_get_value (x);
   double y_val = gtk_constraint_variable_get_value (y);
@@ -205,11 +205,11 @@ constraint_solver_edit_var_required (void)
   GtkConstraintSolver *solver = gtk_constraint_solver_new ();
 
   GtkConstraintVariable *a = gtk_constraint_solver_create_variable (solver, NULL, "a", 0.0);
-  gtk_constraint_solver_add_stay_variable (solver, a, GTK_CONSTRAINT_WEIGHT_STRONG);
+  gtk_constraint_solver_add_stay_variable (solver, a, GTK_CONSTRAINT_STRENGTH_STRONG);
 
   g_assert_cmpfloat_with_epsilon (gtk_constraint_variable_get_value (a), 0.0, 0.001);
 
-  gtk_constraint_solver_add_edit_variable (solver, a, GTK_CONSTRAINT_WEIGHT_REQUIRED);
+  gtk_constraint_solver_add_edit_variable (solver, a, GTK_CONSTRAINT_STRENGTH_REQUIRED);
   gtk_constraint_solver_begin_edit (solver);
   gtk_constraint_solver_suggest_value (solver, a, 2.0);
   gtk_constraint_solver_resolve (solver);
@@ -236,19 +236,19 @@ constraint_solver_edit_var_suggest (void)
   GtkConstraintVariable *a = gtk_constraint_solver_create_variable (solver, NULL, "a", 0.0);
   GtkConstraintVariable *b = gtk_constraint_solver_create_variable (solver, NULL, "b", 0.0);
 
-  gtk_constraint_solver_add_stay_variable (solver, a, GTK_CONSTRAINT_WEIGHT_STRONG);
+  gtk_constraint_solver_add_stay_variable (solver, a, GTK_CONSTRAINT_STRENGTH_STRONG);
 
   GtkConstraintExpression *e = gtk_constraint_expression_new_from_variable (b);
   gtk_constraint_solver_add_constraint (solver,
                                         a, GTK_CONSTRAINT_RELATION_EQ, e,
-                                        GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                        GTK_CONSTRAINT_STRENGTH_REQUIRED);
 
   gtk_constraint_solver_resolve (solver);
 
   g_assert_cmpfloat_with_epsilon (gtk_constraint_variable_get_value (a), 0.0, 0.001);
   g_assert_cmpfloat_with_epsilon (gtk_constraint_variable_get_value (b), 0.0, 0.001);
 
-  gtk_constraint_solver_add_edit_variable (solver, a, GTK_CONSTRAINT_WEIGHT_REQUIRED);
+  gtk_constraint_solver_add_edit_variable (solver, a, GTK_CONSTRAINT_STRENGTH_REQUIRED);
   gtk_constraint_solver_begin_edit (solver);
 
   gtk_constraint_solver_suggest_value (solver, a, 2.0);
@@ -302,7 +302,7 @@ constraint_solver_paper (void)
   expr = gtk_constraint_expression_builder_finish (&builder);
   gtk_constraint_solver_add_constraint (solver,
                                         middle, GTK_CONSTRAINT_RELATION_EQ, expr,
-                                        GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                        GTK_CONSTRAINT_STRENGTH_REQUIRED);
 
   gtk_constraint_expression_builder_init (&builder, solver);
   gtk_constraint_expression_builder_term (&builder, left);
@@ -311,17 +311,17 @@ constraint_solver_paper (void)
   expr = gtk_constraint_expression_builder_finish (&builder);
   gtk_constraint_solver_add_constraint (solver,
                                         right, GTK_CONSTRAINT_RELATION_EQ, expr,
-                                        GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                        GTK_CONSTRAINT_STRENGTH_REQUIRED);
 
   expr = gtk_constraint_expression_new (100.0);
   gtk_constraint_solver_add_constraint (solver,
                                         right, GTK_CONSTRAINT_RELATION_LE, expr,
-                                        GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                        GTK_CONSTRAINT_STRENGTH_REQUIRED);
 
   expr = gtk_constraint_expression_new (0.0);
   gtk_constraint_solver_add_constraint (solver,
                                         left, GTK_CONSTRAINT_RELATION_GE, expr,
-                                        GTK_CONSTRAINT_WEIGHT_REQUIRED);
+                                        GTK_CONSTRAINT_STRENGTH_REQUIRED);
 
   g_test_message ("Check constraints hold");
 
@@ -335,7 +335,7 @@ constraint_solver_paper (void)
   g_assert_cmpfloat (gtk_constraint_variable_get_value (left), >=, 0.0);
 
   gtk_constraint_variable_set_value (middle, 45.0);
-  gtk_constraint_solver_add_stay_variable (solver, middle, GTK_CONSTRAINT_WEIGHT_WEAK);
+  gtk_constraint_solver_add_stay_variable (solver, middle, GTK_CONSTRAINT_STRENGTH_WEAK);
 
   g_test_message ("Check constraints hold after setting middle");
 

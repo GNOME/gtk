@@ -52,8 +52,6 @@ struct _GtkConstraint
   guint active : 1;
 };
 
-double  gtk_constraint_get_weight       (GtkConstraint       *constraint);
-
 void    gtk_constraint_attach           (GtkConstraint       *constraint,
                                          GtkConstraintSolver *solver,
                                          GtkConstraintRef    *ref);
