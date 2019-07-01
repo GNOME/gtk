@@ -17,24 +17,8 @@ print_backends = ['file']
 # Checks to see if we should compile with CUPS backend for GTK
 enable_cups = enabled_print_backends.contains('cups')
 if enable_cups
-  #cups_config = find_program('cups-config', required : true)
-  #if cups_config.found()
-  # FIXME: eek, see configure.ac (we're just not going to support non-standar prefix for now)
-  #endif
-  if cc.has_header('cups/cups.h')
-    # TODO: include_directories from cups-config
-    cups_major_version = cc.compute_int('CUPS_VERSION_MAJOR', prefix : '#include <cups/cups.h>')
-    cups_minor_version = cc.compute_int('CUPS_VERSION_MINOR', prefix : '#include <cups/cups.h>')
-    message('Found CUPS version: @0@.@1@'.format(cups_major_version, cups_minor_version))
-    if cups_major_version < 2
-      cups_error = 'Need CUPS version >= 2.0'
-    else
-      libcups = cc.find_library('cups', required : true)
-      print_backends += ['cups']
-    endif
-  else
-    error('Cannot find CUPS headers in default prefix.')
-  endif
+  cups_dep = dependency('cups', version : '>=2.0', required: true)
+  print_backends += ['cups']
 endif
 
 # Checks to see if we should compile with cloudprint backend for GTK
@@ -93,7 +77,7 @@ if print_backends.contains('cups')
                 'gtkcupsutils.c',
                 'gtkcupssecretsutils.c',
                 c_args: printbackends_args,
-                dependencies: [libgtk_dep, libcups, colord_dep],
+                dependencies: [libgtk_dep, cups_dep, colord_dep],
                 install_dir: printbackends_install_dir,
                 install : true)
 endif
