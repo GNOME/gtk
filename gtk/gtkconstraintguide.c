@@ -307,7 +307,7 @@ gtk_constraint_guide_get_property (GObject    *gobject,
       break;
 
     case PROP_STRENGTH:
-      g_value_set_int (value, self->strength);
+      g_value_set_enum (value, self->strength);
       break;
 
     case PROP_NAME:
