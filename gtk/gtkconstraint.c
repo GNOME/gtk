@@ -387,25 +387,6 @@ gtk_constraint_new_constant (gpointer                target,
 }
 
 /**
- * gtk_constraint_get_target_widget:
- * @constraint: a #GtkConstraint
- *
- * Retrieves the target widget for the @constraint.
- *
- * Returns: (transfer none) (nullable): a #GtkWidget
- */
-GtkWidget *
-gtk_constraint_get_target_widget (GtkConstraint *constraint)
-{
-  g_return_val_if_fail (GTK_IS_CONSTRAINT (constraint), NULL);
-
-  if (GTK_IS_WIDGET (constraint->target))
-    return GTK_WIDGET (constraint->target);
-
-  return NULL;
-}
-
-/**
  * gtk_constraint_get_target:
  * @constraint: a #GtkConstraint
  *
@@ -438,25 +419,6 @@ gtk_constraint_get_target_attribute (GtkConstraint *constraint)
   g_return_val_if_fail (GTK_IS_CONSTRAINT (constraint), GTK_CONSTRAINT_ATTRIBUTE_NONE);
 
   return constraint->target_attribute;
-}
-
-/**
- * gtk_constraint_get_source_widget:
- * @constraint: a #GtkConstraint
- *
- * Retrieves the source widget for the @constraint.
- *
- * Returns: (transfer none) (nullable): a #GtkWidget
- */
-GtkWidget *
-gtk_constraint_get_source_widget (GtkConstraint *constraint)
-{
-  g_return_val_if_fail (GTK_IS_CONSTRAINT (constraint), NULL);
-
-  if (GTK_IS_WIDGET (constraint->source))
-    return GTK_WIDGET (constraint->source);
-
-  return NULL;
 }
 
 /**

@@ -74,13 +74,9 @@ GtkConstraint *         gtk_constraint_new_constant             (gpointer       
                                                                  int                     strength);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *             gtk_constraint_get_target_widget        (GtkConstraint          *constraint);
-GDK_AVAILABLE_IN_ALL
 GtkConstraintTarget *   gtk_constraint_get_target               (GtkConstraint          *constraint);
 GDK_AVAILABLE_IN_ALL
 GtkConstraintAttribute  gtk_constraint_get_target_attribute     (GtkConstraint          *constraint);
-GDK_AVAILABLE_IN_ALL
-GtkWidget *             gtk_constraint_get_source_widget        (GtkConstraint          *constraint);
 GDK_AVAILABLE_IN_ALL
 GtkConstraintTarget *   gtk_constraint_get_source               (GtkConstraint          *constraint);
 GDK_AVAILABLE_IN_ALL
