@@ -1,4 +1,4 @@
-if get_option('documentation')
+if get_option('gtk_doc')
   glib_prefix = dependency('glib-2.0').get_pkgconfig_variable('prefix')
   glib_docpath = join_paths(glib_prefix, 'share', 'gtk-doc', 'html')
 

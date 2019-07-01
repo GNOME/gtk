@@ -355,8 +355,8 @@ How to compile GTK itself
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">-Ddocumentation=true</arg>
-            <arg choice="plain">-Ddocumentation=false</arg>
+            <arg choice="plain">-Dgtk_doc=true</arg>
+            <arg choice="plain">-Dgtk_doc=false</arg>
           </group>
           <sbr/>
           <group>
@@ -382,7 +382,7 @@ How to compile GTK itself
       </formalpara>
 
       <formalpara>
-        <title><systemitem>documentation</systemitem> and
+        <title><systemitem>gtk_doc</systemitem> and
           <systemitem>man-pages</systemitem></title>
 
         <para>
@@ -394,7 +394,7 @@ How to compile GTK itself
           <application>gtk-doc</application> installed and
           are modifying GTK, you may want to enable
           <application>gtk-doc</application> support by passing
-          in <systemitem>documentation</systemitem>.
+          in <systemitem>gtk_doc</systemitem>.
         </para>
         <para>
           Additionally, some tools provided by GTK have their own

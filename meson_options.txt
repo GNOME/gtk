@@ -31,7 +31,7 @@ option('colord', type: 'combo', choices : ['yes', 'no', 'auto'], value : 'auto',
   description : 'Build colord support for the CUPS printing backend')
 
 # Documentation and introspection
-option('documentation', type: 'boolean', value: 'false',
+option('gtk_doc', type: 'boolean', value: 'false',
   description : 'Build API reference and tools documentation')
 option('man-pages', type: 'boolean', value: 'false',
   description : 'Build man pages for installed tools')

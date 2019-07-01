@@ -99,7 +99,7 @@ if wayland_enabled
   src_dir += [ gdkwayland_inc ]
 endif
 
-if get_option('documentation')
+if get_option('gtk_doc')
   configure_file(input: 'version.xml.in', output: 'version.xml', configuration: version_conf)
 
   gnome.gtkdoc('gdk4',

@@ -394,7 +394,7 @@ else
   types_conf.set('DISABLE_ON_QUARTZ', '')
 endif
 
-if get_option('documentation')
+if get_option('gtk_doc')
   configure_file(input: 'version.xml.in', output: 'version.xml', configuration: version_conf)
   configure_file(input: 'getting_started.xml.in', output: 'getting_started.xml', configuration: src_dir_conf)
 
