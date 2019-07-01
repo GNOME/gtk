@@ -22,6 +22,8 @@ struct _ConstraintView
   GtkWidget parent;
 
   GListStore *store;
+
+  GtkWidget *drag_widget;
 };
 
 G_DEFINE_TYPE (ConstraintView, constraint_view, GTK_TYPE_WIDGET);
@@ -52,12 +54,108 @@ constraint_view_class_init (ConstraintViewClass *klass)
 }
 
 static void
+update_weak_position (ConstraintView *self,
+                      GtkWidget      *child,
+                      double          x,
+                      double          y)
+{
+  GtkLayoutManager *manager;
+  GtkConstraint *constraint;
+
+  manager = gtk_widget_get_layout_manager (GTK_WIDGET (self));
+  constraint = (GtkConstraint *)g_object_get_data (G_OBJECT (child), "x-constraint");
+  if (constraint)
+    {
+      gtk_constraint_layout_remove_constraint (GTK_CONSTRAINT_LAYOUT (manager),
+                                               constraint);
+      g_object_set_data (G_OBJECT (child), "x-constraint", NULL);
+    }
+  constraint = gtk_constraint_new_constant (child,
+                                            GTK_CONSTRAINT_ATTRIBUTE_CENTER_X,
+                                            GTK_CONSTRAINT_RELATION_EQ,
+                                            x,
+                                            GTK_CONSTRAINT_STRENGTH_WEAK);
+  gtk_constraint_layout_add_constraint (GTK_CONSTRAINT_LAYOUT (manager),
+                                        constraint);
+  g_object_set_data (G_OBJECT (child), "x-constraint", constraint);
+
+  constraint = (GtkConstraint *)g_object_get_data (G_OBJECT (child), "y-constraint");
+  if (constraint)
+    {
+      gtk_constraint_layout_remove_constraint (GTK_CONSTRAINT_LAYOUT (manager),
+                                               constraint);
+      g_object_set_data (G_OBJECT (child), "y-constraint", NULL);
+    }
+  constraint = gtk_constraint_new_constant (child,
+                                            GTK_CONSTRAINT_ATTRIBUTE_CENTER_Y,
+                                            GTK_CONSTRAINT_RELATION_EQ,
+                                            y,
+                                            GTK_CONSTRAINT_STRENGTH_WEAK);
+  gtk_constraint_layout_add_constraint (GTK_CONSTRAINT_LAYOUT (manager),
+                                        constraint);
+  g_object_set_data (G_OBJECT (child), "y-constraint", constraint);
+}
+
+static void
+drag_begin (GtkGestureDrag *drag,
+            double          start_x,
+            double          start_y,
+            ConstraintView *self)
+{
+  GtkWidget *widget;
+
+  widget = gtk_widget_pick (GTK_WIDGET (self), start_x, start_y, GTK_PICK_DEFAULT);
+
+  if (GTK_IS_LABEL (widget))
+    {
+      widget = gtk_widget_get_ancestor (widget, GTK_TYPE_FRAME);
+      if (widget &&
+          gtk_widget_get_parent (widget) == (GtkWidget *)self)
+        {
+          self->drag_widget = widget;
+        }
+    }
+}
+
+static void
+drag_update (GtkGestureDrag *drag,
+             double          offset_x,
+             double          offset_y,
+             ConstraintView *self)
+{
+  double x, y;
+
+  if (!self->drag_widget)
+    return;
+
+  gtk_gesture_drag_get_start_point (drag, &x, &y);
+  update_weak_position (self, self->drag_widget, x + offset_x, y + offset_y);
+}
+
+static void
+drag_end (GtkGestureDrag *drag,
+          double          offset_x,
+          double          offset_y,
+          ConstraintView *self)
+{
+  self->drag_widget = NULL;
+}
+
+static void
 constraint_view_init (ConstraintView *self)
 {
+  GtkEventController *controller;
+
   gtk_widget_set_layout_manager (GTK_WIDGET (self),
                                  gtk_constraint_layout_new ());
 
   self->store = g_list_store_new (G_TYPE_OBJECT);
+
+  controller = (GtkEventController *)gtk_gesture_drag_new ();
+  g_signal_connect (controller, "drag-begin", G_CALLBACK (drag_begin), self);
+  g_signal_connect (controller, "drag-update", G_CALLBACK (drag_update), self);
+  g_signal_connect (controller, "drag-end", G_CALLBACK (drag_end), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 }
 
 ConstraintView *
@@ -79,6 +177,8 @@ constraint_view_add_child (ConstraintView *view,
   g_object_set_data_full (G_OBJECT (frame), "name", g_strdup (name), g_free);
   gtk_container_add (GTK_CONTAINER (frame), label);
   gtk_widget_set_parent (frame, GTK_WIDGET (view));
+
+  update_weak_position (view, frame, 100, 100);
 
   g_list_store_append (view->store, frame);
 }
@@ -118,7 +218,7 @@ constraint_view_add_guide (ConstraintView *view,
   gtk_style_context_add_class (gtk_widget_get_style_context (frame), "guide");
   g_object_set_data_full (G_OBJECT (frame), "name", g_strdup (name), g_free);
   gtk_container_add (GTK_CONTAINER (frame), label);
-  gtk_widget_set_parent (frame, GTK_WIDGET (view));
+  gtk_widget_insert_after (frame, GTK_WIDGET (view), NULL);
 
   g_object_set_data (G_OBJECT (guide), "frame", frame);
   g_object_set_data (G_OBJECT (guide), "label", label);
@@ -169,8 +269,9 @@ constraint_view_add_guide (ConstraintView *view,
                                    GTK_CONSTRAINT_STRENGTH_REQUIRED);
   gtk_constraint_layout_add_constraint (GTK_CONSTRAINT_LAYOUT (manager),
                                         constraint);
-
   g_object_set_data (G_OBJECT (guide), "height-constraint", constraint);
+
+  update_weak_position (view, frame, 150, 150);
 
   g_list_store_append (view->store, guide);
 }
