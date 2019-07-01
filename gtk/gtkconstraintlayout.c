@@ -103,6 +103,27 @@
  * The "source" and "target" attributes can be set to "super" to indicate
  * that the constraint target is the widget using the GtkConstraintLayout.
  *
+ * Additionally, the "constraints" element can also contain a description
+ * of the #GtkConstraintGuides used by the layout:
+ *
+ * |[
+ *   <constraints>
+ *     <guide min-width="100" max-width="500" name="hspace"/>
+ *     <guide min-height="64" nat-height="128" name="vspace" strength="strong"/>
+ *   </constraints>
+ * ]|
+ *
+ * The "guide" element has the following optional attributes:
+ *
+ *   - "min-width", "nat-width", and "max-width", describe the minimum,
+ *     natural, and maximum width of the guide, respectively
+ *   - "min-height", "nat-height", and "max-height", describe the minimum,
+ *     natural, and maximum height of the guide, respectively
+ *   - "strength" describes the strength of the constraint on the natural
+ *     size of the guide; if not specified, the constraint is assumed to
+ *     have a medium strength
+ *   - "name" describes a name for the guide, useful when debugging
+ *
  * # Using the Visual Format Language
  *
  * Complex constraints can be described using a compact syntax called VFL,
@@ -1187,6 +1208,7 @@ typedef struct {
   GtkConstraintLayout *layout;
   GtkBuilder *builder;
   GList *constraints;
+  GList *guides;
 } ConstraintsParserData;
 
 typedef struct {
@@ -1200,6 +1222,14 @@ typedef struct {
   double multiplier;
 } ConstraintData;
 
+typedef struct {
+  char *name;
+  char *strength;
+  struct {
+    int min, nat, max;
+  } sizes[2];
+} GuideData;
+
 static void
 constraint_data_free (gpointer _data)
 {
@@ -1210,6 +1240,17 @@ constraint_data_free (gpointer _data)
   g_free (data->target_name);
   g_free (data->target_attr);
   g_free (data->relation);
+  g_free (data->strength);
+
+  g_free (data);
+}
+
+static void
+guide_data_free (gpointer _data)
+{
+  GuideData *data = _data;
+
+  g_free (data->name);
   g_free (data->strength);
 
   g_free (data);
@@ -1235,6 +1276,32 @@ parse_double (const char *string,
   value = g_ascii_strtod (string, &endptr);
   if (errno == 0 && endptr != string)
     *value_p = value;
+  else
+    *value_p = default_value;
+
+  errno = saved_errno;
+}
+
+static void
+parse_int (const char *string,
+           int        *value_p,
+           int         default_value)
+{
+  gint64 value;
+  char *endptr;
+  int saved_errno;
+
+  if (string == NULL || string[0] == '\0')
+    {
+      *value_p = default_value;
+      return;
+    }
+
+  saved_errno = errno;
+  errno = 0;
+  value = g_ascii_strtoll (string, &endptr, 10);
+  if (errno == 0 && endptr != string)
+    *value_p = (int) value;
   else
     *value_p = default_value;
 
@@ -1322,6 +1389,8 @@ constraint_data_to_constraint (const ConstraintData *data,
                                            data->strength,
                                            &strength,
                                            error);
+      if (!res)
+        return NULL;
     }
   else
     strength = GTK_CONSTRAINT_STRENGTH_REQUIRED;
@@ -1338,6 +1407,38 @@ constraint_data_to_constraint (const ConstraintData *data,
                                       relation,
                                       data->constant,
                                       strength);
+}
+
+static GtkConstraintGuide *
+guide_data_to_guide (const GuideData *data,
+                     GtkBuilder      *builder,
+                     GError         **error)
+{
+  int strength;
+  gboolean res;
+
+  if (data->strength != NULL)
+    {
+      res = _gtk_builder_enum_from_string (GTK_TYPE_CONSTRAINT_STRENGTH,
+                                           data->strength,
+                                           &strength,
+                                           error);
+      if (!res)
+        return NULL;
+    }
+  else
+    strength = GTK_CONSTRAINT_STRENGTH_MEDIUM;
+
+  return g_object_new (GTK_TYPE_CONSTRAINT_GUIDE,
+                       "min-width", data->sizes[GTK_ORIENTATION_HORIZONTAL].min,
+                       "nat-width", data->sizes[GTK_ORIENTATION_HORIZONTAL].nat,
+                       "max-width", data->sizes[GTK_ORIENTATION_HORIZONTAL].max,
+                       "min-height", data->sizes[GTK_ORIENTATION_VERTICAL].min,
+                       "nat-height", data->sizes[GTK_ORIENTATION_VERTICAL].nat,
+                       "max-height", data->sizes[GTK_ORIENTATION_VERTICAL].max,
+                       "strength", strength,
+                       "name", data->name,
+                       NULL);
 }
 
 static void
@@ -1399,6 +1500,44 @@ constraints_start_element (GMarkupParseContext  *context,
 
       data->constraints = g_list_prepend (data->constraints, cdata);
     }
+  else if (strcmp (element_name, "guide") == 0)
+    {
+      const char *min_width, *nat_width, *max_width;
+      const char *min_height, *nat_height, *max_height;
+      const char *strength_str;
+      const char *name;
+      GuideData *gdata;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "constraints", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, attr_names, attr_values, error,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "min-width", &min_width,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "nat-width", &nat_width,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "max-width", &max_width,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "min-height", &min_height,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "nat-height", &nat_height,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "max-height", &max_height,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "strength", &strength_str,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "name", &name,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      gdata = g_new0 (GuideData, 1);
+      parse_int (min_width, &(gdata->sizes[GTK_ORIENTATION_HORIZONTAL].min), 0);
+      parse_int (nat_width, &(gdata->sizes[GTK_ORIENTATION_HORIZONTAL].nat), 0);
+      parse_int (max_width, &(gdata->sizes[GTK_ORIENTATION_HORIZONTAL].max), G_MAXINT);
+      parse_int (min_height, &(gdata->sizes[GTK_ORIENTATION_VERTICAL].min), 0);
+      parse_int (nat_height, &(gdata->sizes[GTK_ORIENTATION_VERTICAL].nat), 0);
+      parse_int (max_height, &(gdata->sizes[GTK_ORIENTATION_VERTICAL].max), G_MAXINT);
+      gdata->name = g_strdup (name);
+      gdata->strength = g_strdup (strength_str);
+
+      data->guides = g_list_prepend (data->guides, gdata);
+    }
   else
     {
       _gtk_builder_error_unhandled_tag (data->builder, context,
@@ -1436,6 +1575,7 @@ gtk_constraint_layout_custom_tag_start (GtkBuildable  *buildable,
       data->layout = g_object_ref (GTK_CONSTRAINT_LAYOUT (buildable));
       data->builder = builder;
       data->constraints = NULL;
+      data->guides = NULL;
 
       *parser = constraints_parser;
       *parser_data = data;
@@ -1468,6 +1608,25 @@ gtk_constraint_layout_custom_finished (GtkBuildable *buildable,
     {
       GList *l;
 
+      data->guides = g_list_reverse (data->guides);
+      for (l = data->guides; l != NULL; l = l->next)
+        {
+          const GuideData *gdata = l->data;
+          GtkConstraintGuide *g;
+          GError *error = NULL;
+
+          g = guide_data_to_guide (gdata, builder, &error);
+          if (error != NULL)
+            {
+              g_critical ("Unable to parse guide definition: %s",
+                          error->message);
+              g_error_free (error);
+              continue;
+            }
+
+          gtk_constraint_layout_add_guide (data->layout, g);
+        }
+
       data->constraints = g_list_reverse (data->constraints);
       for (l = data->constraints; l != NULL; l = l->next)
         {
@@ -1493,6 +1652,7 @@ gtk_constraint_layout_custom_finished (GtkBuildable *buildable,
         }
 
       g_list_free_full (data->constraints, constraint_data_free);
+      g_list_free_full (data->guides, guide_data_free);
       g_object_unref (data->layout);
       g_free (data);
     }
