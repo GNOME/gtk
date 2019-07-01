@@ -53,8 +53,113 @@
  * is undefined.
  *
  * A constraint-based layout with conflicting constraints may be unsolvable,
- * and lead to an unstable layout.
+ * and lead to an unstable layout. You can use the #GtkConstraint:strength
+ * property of #GtkConstraint to "nudge" the layout towards a solution.
  *
+ * # GtkConstraintLayout as GtkBuildable
+ *
+ * GtkConstraintLayout implements the #GtkBuildable interface and has a
+ * custom "constraints" element which allows describing constraints in a
+ * GtkBuilder UI file.
+ *
+ * An example of a UI definition fragment specifying a constraint:
+ *
+ * |[
+ *   <object class="GtkConstraintLayout">
+ *     <constraints>
+ *       <constraint target="button" target-attribute="start"
+ *                   relation="eq"
+ *                   source="super" source-attribute="start"
+ *                   constant="12"
+ *                   strength="required" />
+ *       <constraint target="button" target-attribute="width"
+ *                   relation="ge"
+ *                   constant="250"
+ *                   strength="strong" />
+ *     </constraints>
+ *   </object>
+ * ]|
+ *
+ * The definition above will add two constraints to the GtkConstraintLayout:
+ *
+ *  - a required constraint between the leading edge of "button" and
+ *    the leading edge of the widget using the constraint layout, plus
+ *    12 pixels
+ *  - a strong, constant constraint making the width of "button" greater
+ *    than, or equal to 250 pixels
+ *
+ * The "target" and "target-attribute" attributes are required.
+ *
+ * The "source" and "source-attribute" attributes of the "constraint"
+ * element are optional; if they are not specified, the constraint is
+ * assumed to be a constant.
+ *
+ * The "relation" attribute is optional; if not specified, the constraint
+ * is assumed to be an equality.
+ *
+ * The "strength" attribute is optional; if not specified, the constraint
+ * is assumed to be required.
+ *
+ * The "source" and "target" attributes can be set to "super" to indicate
+ * that the constraint target is the widget using the GtkConstraintLayout.
+ *
+ * # Using the Visual Format Language
+ *
+ * Complex constraints can be described using a compact syntax called VFL,
+ * or *Visual Format Language*.
+ *
+ * The Visual Format Language describes all the constraints on a row or
+ * column, typically starting from the leading edge towards the trailing
+ * one. Each element of the layout is composed by "views", which identify
+ * a #GtkConstraintTarget.
+ *
+ * For instance:
+ *
+ * |[
+ *   [button]-[textField]
+ * ]|
+ *
+ * Describes a constraint that binds the trailing edge of "button" to the
+ * leading edge of "textField", leaving a default space between the two.
+ *
+ * Using VFL is also possible to specify predicates that describe constraints
+ * on attributes like width and height:
+ *
+ * |[
+ *   // Width must be greater than, or equal to 50
+ *   [button(>=50)]
+ *
+ *   // Width of button1 must be equal to width of button2
+ *   [button1(==button2)]
+ * ]|
+ *
+ * The default orientation for a VFL description is horizontal, unless
+ * otherwise specified:
+ *
+ * |[
+ *   // horizontal orientation, default attribute: width
+ *   H:[button(>=150)]
+ *
+ *   // vertical orientation, default attribute: height
+ *   V:[button1(==button2)]
+ * ]|
+ *
+ * It's also possible to specify multiple predicates, as well as their
+ * strength:
+ *
+ * |[
+ *   // minimum width of button must be 150
+ *   // natural width of button can be 250
+ *   [button(>=150@required, ==250@medium)]
+ * ]|
+ *
+ * Finally, it's also possible to use simple arithmetic operators:
+ *
+ * |[
+ *   // width of button1 must be equal to width of button2
+ *   // divided by 2 plus 12
+ *   [button1(button2 / 2 + 12)]
+ * ]|
  */
 
 #include "config.h"
@@ -68,12 +173,17 @@
 #include "gtkconstraintsolverprivate.h"
 #include "gtkconstraintvflparserprivate.h"
 
+#include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkdebug.h"
 #include "gtklayoutchild.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
 #include "gtkwidgetprivate.h"
+
+#include <string.h>
+#include <errno.h>
 
 enum {
   MIN_WIDTH,
@@ -393,7 +503,10 @@ gtk_constraint_layout_child_init (GtkConstraintLayoutChild *self)
                            (GDestroyNotify) gtk_constraint_variable_unref);
 }
 
-G_DEFINE_TYPE (GtkConstraintLayout, gtk_constraint_layout, GTK_TYPE_LAYOUT_MANAGER)
+static void gtk_buildable_interface_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkConstraintLayout, gtk_constraint_layout, GTK_TYPE_LAYOUT_MANAGER,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_buildable_interface_init))
 
 static void
 gtk_constraint_layout_finalize (GObject *gobject)
@@ -1068,6 +1181,329 @@ gtk_constraint_layout_init (GtkConstraintLayout *self)
     g_hash_table_new_full (NULL, NULL,
                            (GDestroyNotify) g_object_unref,
                            NULL);
+}
+
+typedef struct {
+  GtkConstraintLayout *layout;
+  GtkBuilder *builder;
+  GList *constraints;
+} ConstraintsParserData;
+
+typedef struct {
+  char *source_name;
+  char *source_attr;
+  char *target_name;
+  char *target_attr;
+  char *relation;
+  char *strength;
+  double constant;
+  double multiplier;
+} ConstraintData;
+
+static void
+constraint_data_free (gpointer _data)
+{
+  ConstraintData *data = _data;
+
+  g_free (data->source_name);
+  g_free (data->source_attr);
+  g_free (data->target_name);
+  g_free (data->target_attr);
+  g_free (data->relation);
+  g_free (data->strength);
+
+  g_free (data);
+}
+
+static void
+parse_double (const char *string,
+              double     *value_p,
+              double      default_value)
+{
+  double value;
+  char *endptr;
+  int saved_errno;
+
+  if (string == NULL || string[0] == '\0')
+    {
+      *value_p = default_value;
+      return;
+    }
+
+  saved_errno = errno;
+  errno = 0;
+  value = g_ascii_strtod (string, &endptr);
+  if (errno == 0 && endptr != string)
+    *value_p = value;
+  else
+    *value_p = default_value;
+
+  errno = saved_errno;
+}
+
+static GtkConstraint *
+constraint_data_to_constraint (const ConstraintData *data,
+                               GtkBuilder           *builder,
+                               GError              **error)
+{
+  gpointer source, target;
+  int source_attr, target_attr;
+  int relation, strength;
+  gboolean res;
+
+  if (g_strcmp0 (data->source_name, "super") == 0)
+    source = NULL;
+  else if (data->source_name == NULL)
+    {
+      if (data->source_attr != NULL)
+        {
+          g_set_error (error, GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "Constraints without 'source' must also not "
+                       "have a 'source-attribute' attribute");
+          return NULL;
+        }
+
+      source = NULL;
+    }
+  else
+    source = gtk_builder_get_object (builder, data->source_name);
+
+  if (g_strcmp0 (data->target_name, "super") == 0)
+    target = NULL;
+  else
+    {
+      target = gtk_builder_get_object (builder, data->target_name);
+
+      if (target == NULL)
+        {
+          g_set_error (error, GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "Unable to find target '%s' for constraint",
+                       data->target_name);
+          return NULL;
+        }
+    }
+
+  if (data->source_attr != NULL)
+    {
+      res = _gtk_builder_enum_from_string (GTK_TYPE_CONSTRAINT_ATTRIBUTE,
+                                           data->source_attr,
+                                           &source_attr,
+                                           error);
+      if (!res)
+        return NULL;
+    }
+  else
+    source_attr = GTK_CONSTRAINT_ATTRIBUTE_NONE;
+
+  res = _gtk_builder_enum_from_string (GTK_TYPE_CONSTRAINT_ATTRIBUTE,
+                                       data->target_attr,
+                                       &target_attr,
+                                       error);
+  if (!res)
+    return NULL;
+
+  if (data->relation != NULL)
+    {
+      res = _gtk_builder_enum_from_string (GTK_TYPE_CONSTRAINT_RELATION,
+                                           data->relation,
+                                           &relation,
+                                           error);
+      if (!res)
+        return NULL;
+    }
+  else
+    relation = GTK_CONSTRAINT_RELATION_EQ;
+
+  if (data->strength != NULL)
+    {
+      res = _gtk_builder_enum_from_string (GTK_TYPE_CONSTRAINT_STRENGTH,
+                                           data->strength,
+                                           &strength,
+                                           error);
+    }
+  else
+    strength = GTK_CONSTRAINT_STRENGTH_REQUIRED;
+
+  if (source != NULL && source_attr != GTK_CONSTRAINT_ATTRIBUTE_NONE)
+    return gtk_constraint_new (target, target_attr,
+                               relation,
+                               source, source_attr,
+                               data->multiplier,
+                               data->constant,
+                               strength);
+
+  return gtk_constraint_new_constant (target, target_attr,
+                                      relation,
+                                      data->constant,
+                                      strength);
+}
+
+static void
+constraints_start_element (GMarkupParseContext  *context,
+                           const char           *element_name,
+                           const char          **attr_names,
+                           const char          **attr_values,
+                           gpointer              user_data,
+                           GError              **error)
+{
+  ConstraintsParserData *data = user_data;
+
+  if (strcmp (element_name, "constraints") == 0)
+    {
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, attr_names, attr_values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
+    }
+  else if (strcmp (element_name, "constraint") == 0)
+    {
+      const char *target_name, *target_attribute;
+      const char *relation_str = NULL;
+      const char *source_name = NULL, *source_attribute = NULL;
+      const char *multiplier_str = NULL, *constant_str = NULL;
+      const char *strength_str = NULL;
+      ConstraintData *cdata;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "constraints", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, attr_names, attr_values, error,
+                                        G_MARKUP_COLLECT_STRING, "target", &target_name,
+                                        G_MARKUP_COLLECT_STRING, "target-attribute", &target_attribute,
+                                        G_MARKUP_COLLECT_STRING, "relation", &relation_str,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "source", &source_name,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "source-attribute", &source_attribute,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "multiplier", &multiplier_str,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "constant", &constant_str,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "strength", &strength_str,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      cdata = g_new0 (ConstraintData, 1);
+      cdata->target_name = g_strdup (target_name);
+      cdata->target_attr = g_strdup (target_attribute);
+      cdata->relation = g_strdup (relation_str);
+      cdata->source_name = g_strdup (source_name);
+      cdata->source_attr = g_strdup (source_attribute);
+      parse_double (multiplier_str, &cdata->multiplier, 1.0);
+      parse_double (constant_str, &cdata->constant, 0.0);
+      cdata->strength = g_strdup (strength_str);
+
+      data->constraints = g_list_prepend (data->constraints, cdata);
+    }
+  else
+    {
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkConstraintLayout", element_name,
+                                        error);
+    }
+}
+
+static void
+constraints_end_element (GMarkupParseContext  *context,
+                         const char           *element_name,
+                         gpointer              user_data,
+                         GError              **error)
+{
+}
+
+static const GMarkupParser constraints_parser = {
+  constraints_start_element,
+  constraints_end_element,
+  NULL,
+};
+
+static gboolean
+gtk_constraint_layout_custom_tag_start (GtkBuildable  *buildable,
+                                        GtkBuilder    *builder,
+                                        GObject       *child,
+                                        const char    *element_name,
+                                        GMarkupParser *parser,
+                                        gpointer      *parser_data)
+{
+  if (strcmp (element_name, "constraints") == 0)
+    {
+      ConstraintsParserData *data = g_new (ConstraintsParserData, 1);
+
+      data->layout = g_object_ref (GTK_CONSTRAINT_LAYOUT (buildable));
+      data->builder = builder;
+      data->constraints = NULL;
+
+      *parser = constraints_parser;
+      *parser_data = data;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_constraint_layout_custom_tag_end (GtkBuildable *buildable,
+                                      GtkBuilder   *builder,
+                                      GObject      *child,
+                                      const char   *element_name,
+                                      gpointer      data)
+{
+}
+
+static void
+gtk_constraint_layout_custom_finished (GtkBuildable *buildable,
+                                       GtkBuilder   *builder,
+                                       GObject      *child,
+                                       const char   *element_name,
+                                       gpointer      user_data)
+{
+  ConstraintsParserData *data = user_data;
+
+  if (strcmp (element_name, "constraints") == 0)
+    {
+      GList *l;
+
+      data->constraints = g_list_reverse (data->constraints);
+      for (l = data->constraints; l != NULL; l = l->next)
+        {
+          const ConstraintData *cdata = l->data;
+          GtkConstraint *c;
+          GError *error = NULL;
+
+          c = constraint_data_to_constraint (cdata, builder, &error);
+          if (error != NULL)
+            {
+              g_critical ("Unable to parse constraint definition '%s.%s [%s] %s.%s * %g + %g': %s",
+                          cdata->target_name, cdata->target_attr,
+                          cdata->relation,
+                          cdata->source_name, cdata->source_attr,
+                          cdata->multiplier,
+                          cdata->constant,
+                          error->message);
+              g_error_free (error);
+              continue;
+            }
+
+          gtk_constraint_layout_add_constraint (data->layout, c);
+        }
+
+      g_list_free_full (data->constraints, constraint_data_free);
+      g_object_unref (data->layout);
+      g_free (data);
+    }
+}
+
+static void
+gtk_buildable_interface_init (GtkBuildableIface *iface)
+{
+  iface->custom_tag_start = gtk_constraint_layout_custom_tag_start;
+  iface->custom_tag_end = gtk_constraint_layout_custom_tag_end;
+  iface->custom_finished = gtk_constraint_layout_custom_finished;
 }
 
 /**
