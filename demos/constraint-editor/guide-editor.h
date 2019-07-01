@@ -26,3 +26,7 @@
 G_DECLARE_FINAL_TYPE (GuideEditor, guide_editor, GUIDE, EDITOR, GtkWidget)
 
 GuideEditor * guide_editor_new (GtkConstraintGuide  *guide);
+
+void guide_editor_serialize_guide (GString            *str,
+                                   int                 indent,
+                                   GtkConstraintGuide *guide);

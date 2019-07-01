@@ -66,6 +66,151 @@ constraint_editor_window_load (ConstraintEditorWindow *self,
 }
 
 static void
+open_response_cb (GtkNativeDialog        *dialog,
+                  gint                    response,
+                  ConstraintEditorWindow *self)
+{
+  gtk_native_dialog_hide (dialog);
+
+  if (response == GTK_RESPONSE_ACCEPT)
+    {
+      GFile *file;
+
+      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+      constraint_editor_window_load (self, file);
+      g_object_unref (file);
+    }
+
+  gtk_native_dialog_destroy (dialog);
+}
+
+static void
+open_cb (GtkWidget              *button,
+         ConstraintEditorWindow *self)
+{
+  GtkFileChooserNative *dialog;
+
+  dialog = gtk_file_chooser_native_new ("Open file",
+                                        GTK_WINDOW (self),
+                                        GTK_FILE_CHOOSER_ACTION_OPEN,
+                                        "_Load",
+                                        "_Cancel");
+
+  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), ".");
+  g_signal_connect (dialog, "response", G_CALLBACK (open_response_cb), self);
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+}
+
+static void
+serialize_child (GString   *str,
+                 int        indent,
+                 GtkWidget *child)
+{
+  const char *name;
+
+  name = gtk_widget_get_name (child);
+  g_string_append_printf (str, "%*s<child>\n", indent, "");
+  g_string_append_printf (str, "%*s  <object class=\"GtkLabel\" id=\"%s\">\n", indent, "", name);
+  g_string_append_printf (str, "%*s    <property name=\"label\">%s</property>\n", indent, "", name);
+  g_string_append_printf (str, "%*s  </object>\n", indent, "");
+  g_string_append_printf (str, "%*s</child>\n", indent, "");
+}
+
+static char *
+serialize_model (GListModel *list)
+{
+  GString *str = g_string_new ("");
+  int i;
+
+  g_string_append (str, "<interface>\n");
+  g_string_append (str, "  <object class=\"GtkBox\" id=\"view\">\n");
+  g_string_append (str, "    <property name=\"layout-manager\">\n");
+  g_string_append (str, "      <object class=\"GtkConstraintLayout\">\n");
+  g_string_append (str, "        <constraints>\n");
+  for (i = 0; i < g_list_model_get_n_items (list); i++)
+    {
+      gpointer item = g_list_model_get_item (list, i);
+      g_object_unref (item);
+      if (GTK_IS_CONSTRAINT (item))
+        constraint_editor_serialize_constraint (str, 10, GTK_CONSTRAINT (item));
+      else if (GTK_IS_CONSTRAINT_GUIDE (item))
+        guide_editor_serialize_guide (str, 10, GTK_CONSTRAINT_GUIDE (item));
+    }
+  g_string_append (str, "        </constraints>\n");
+  g_string_append (str, "      </object>\n");
+  g_string_append (str, "    </property>\n");
+  for (i = 0; i < g_list_model_get_n_items (list); i++)
+    {
+      gpointer item = g_list_model_get_item (list, i);
+      g_object_unref (item);
+      if (GTK_IS_WIDGET (item))
+        serialize_child (str, 4, GTK_WIDGET (item));
+    }
+  g_string_append (str, "  </object>\n");
+  g_string_append (str, "</interface>\n");
+
+  return g_string_free (str, FALSE);
+}
+
+
+static void
+save_response_cb (GtkNativeDialog        *dialog,
+                  gint                    response,
+                  ConstraintEditorWindow *self)
+{
+  gtk_native_dialog_hide (dialog);
+
+  if (response == GTK_RESPONSE_ACCEPT)
+    {
+      GListModel *model;
+      char *text, *filename;
+      GError *error = NULL;
+
+      model = constraint_view_get_model (CONSTRAINT_VIEW (self->view));
+      text = serialize_model (model);
+
+      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+      if (!g_file_set_contents (filename, text, -1, &error))
+        {
+          GtkWidget *dialog;
+
+          dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
+                                           GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_INFO,
+                                           GTK_BUTTONS_OK,
+                                           "Saving failed");
+          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                    "%s", error->message);
+          g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+          gtk_widget_show (dialog);
+          g_error_free (error);
+        }
+      g_free (filename);
+    }
+
+  gtk_native_dialog_destroy (dialog);
+}
+
+static void
+save_cb (GtkWidget              *button,
+         ConstraintEditorWindow *self)
+{
+  GtkFileChooserNative *dialog;
+
+  dialog = gtk_file_chooser_native_new ("Save constraints",
+                                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
+                                        GTK_FILE_CHOOSER_ACTION_SAVE,
+                                        "_Save",
+                                        "_Cancel");
+
+  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), ".");
+  g_signal_connect (dialog, "response", G_CALLBACK (save_response_cb), self);
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+}
+
+static void
 constraint_editor_window_finalize (GObject *object)
 {
   //ConstraintEditorWindow *self = (ConstraintEditorWindow *)object;
@@ -213,6 +358,8 @@ constraint_editor_window_class_init (ConstraintEditorWindowClass *class)
   gtk_widget_class_bind_template_child (widget_class, ConstraintEditorWindow, view);
   gtk_widget_class_bind_template_child (widget_class, ConstraintEditorWindow, list);
 
+  gtk_widget_class_bind_template_callback (widget_class, open_cb);
+  gtk_widget_class_bind_template_callback (widget_class, save_cb);
   gtk_widget_class_bind_template_callback (widget_class, add_child);
   gtk_widget_class_bind_template_callback (widget_class, add_guide);
   gtk_widget_class_bind_template_callback (widget_class, add_constraint);

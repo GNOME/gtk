@@ -89,6 +89,29 @@ get_strength_nick (GtkConstraintStrength strength)
   return nick;
 }
 
+void
+guide_editor_serialize_guide (GString *str,
+                              int      indent,
+                              GtkConstraintGuide *guide)
+{
+  int min_width, min_height;
+  int nat_width, nat_height;
+  int max_width, max_height;
+  const char *name;
+  const char *strength;
+
+  gtk_constraint_guide_get_min_size (guide, &min_width, &min_height);
+  gtk_constraint_guide_get_nat_size (guide, &nat_width, &nat_height);
+  gtk_constraint_guide_get_max_size (guide, &max_width, &max_height);
+  name = gtk_constraint_guide_get_name (guide);
+  strength = get_strength_nick (gtk_constraint_guide_get_strength (guide));
+
+  g_string_append_printf (str, "%*s<guide min-width=\"%d\" min-height=\"%d\"\n", indent, "", min_width, min_height);
+  g_string_append_printf (str, "%*s       nat-width=\"%d\" nat-height=\"%d\"\n", indent, "", nat_width, nat_height);
+  g_string_append_printf (str, "%*s       max-width=\"%d\" max-height=\"%d\"\n", indent, "", max_width, max_height);
+  g_string_append_printf (str, "%*s       name=\"%s\" strength=\"%s\" />\n", indent, "", name, strength);
+}
+
 static void
 create_guide (GtkButton   *button,
               GuideEditor *editor)
