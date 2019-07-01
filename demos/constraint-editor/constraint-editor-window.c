@@ -66,6 +66,101 @@ constraint_editor_window_load (ConstraintEditorWindow *self,
 }
 
 static void
+open_response_cb (GtkNativeDialog        *dialog,
+                  gint                    response,
+                  ConstraintEditorWindow *self)
+{
+  gtk_native_dialog_hide (dialog);
+
+  if (response == GTK_RESPONSE_ACCEPT)
+    {
+      GFile *file;
+
+      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+      constraint_editor_window_load (self, file);
+      g_object_unref (file);
+    }
+
+  gtk_native_dialog_destroy (dialog);
+}
+
+static void
+open_cb (GtkWidget              *button,
+         ConstraintEditorWindow *self)
+{
+  GtkFileChooserNative *dialog;
+
+  dialog = gtk_file_chooser_native_new ("Open file",
+                                        GTK_WINDOW (self),
+                                        GTK_FILE_CHOOSER_ACTION_OPEN,
+                                        "_Load",
+                                        "_Cancel");
+
+  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), ".");
+  g_signal_connect (dialog, "response", G_CALLBACK (open_response_cb), self);
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+}
+
+static void
+save_response_cb (GtkNativeDialog        *dialog,
+                  gint                    response,
+                  ConstraintEditorWindow *self)
+{
+  gtk_native_dialog_hide (dialog);
+
+  if (response == GTK_RESPONSE_ACCEPT)
+    {
+      char *text, *filename;
+      GError *error = NULL;
+
+#if 0
+      text = get_current_text (self->text_buffer);
+#else
+      text = "Sorry, Dave";
+#endif
+
+      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+      if (!g_file_set_contents (filename, text, -1, &error))
+        {
+          GtkWidget *dialog;
+
+          dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
+                                           GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+                                           GTK_MESSAGE_INFO,
+                                           GTK_BUTTONS_OK,
+                                           "Saving failed");
+          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                    "%s", error->message);
+          g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
+          gtk_widget_show (dialog);
+          g_error_free (error);
+        }
+      g_free (filename);
+    }
+
+  gtk_native_dialog_destroy (dialog);
+}
+
+static void
+save_cb (GtkWidget              *button,
+         ConstraintEditorWindow *self)
+{
+  GtkFileChooserNative *dialog;
+
+  dialog = gtk_file_chooser_native_new ("Save constraints",
+                                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (button))),
+                                        GTK_FILE_CHOOSER_ACTION_SAVE,
+                                        "_Save",
+                                        "_Cancel");
+
+  gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (dialog), TRUE);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), ".");
+  g_signal_connect (dialog, "response", G_CALLBACK (save_response_cb), self);
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
+}
+
+static void
 constraint_editor_window_finalize (GObject *object)
 {
   //ConstraintEditorWindow *self = (ConstraintEditorWindow *)object;
@@ -213,6 +308,8 @@ constraint_editor_window_class_init (ConstraintEditorWindowClass *class)
   gtk_widget_class_bind_template_child (widget_class, ConstraintEditorWindow, view);
   gtk_widget_class_bind_template_child (widget_class, ConstraintEditorWindow, list);
 
+  gtk_widget_class_bind_template_callback (widget_class, open_cb);
+  gtk_widget_class_bind_template_callback (widget_class, save_cb);
   gtk_widget_class_bind_template_callback (widget_class, add_child);
   gtk_widget_class_bind_template_callback (widget_class, add_guide);
   gtk_widget_class_bind_template_callback (widget_class, add_constraint);
