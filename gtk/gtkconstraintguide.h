@@ -25,7 +25,6 @@
 
 G_BEGIN_DECLS
 
-
 #define GTK_TYPE_CONSTRAINT_GUIDE (gtk_constraint_guide_get_type ())
 
 /**

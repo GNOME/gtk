@@ -1061,7 +1061,7 @@ gtk_constraint_layout_new (void)
 
 /**
  * gtk_constraint_layout_add_constraint:
- * @manager: a #GtkConstraintLayout
+ * @layout: a #GtkConstraintLayout
  * @constraint: (transfer full): a #GtkConstraint
  *
  * Adds a #GtkConstraint to the layout manager.
@@ -1070,65 +1070,65 @@ gtk_constraint_layout_new (void)
  * properties of @constraint can be:
  *
  *  - set to %NULL to indicate that the constraint refers to the
- *    widget using @manager
- *  - set to the #GtkWidget using @manager
- *  - set to a child of the #GtkWidget using @manager
+ *    widget using @layout
+ *  - set to the #GtkWidget using @layout
+ *  - set to a child of the #GtkWidget using @layout
  *
- * The @manager acquires the ownership of @constraint after calling
+ * The @layout acquires the ownership of @constraint after calling
  * this function.
  */
 void
-gtk_constraint_layout_add_constraint (GtkConstraintLayout *manager,
+gtk_constraint_layout_add_constraint (GtkConstraintLayout *layout,
                                       GtkConstraint       *constraint)
 {
-  g_return_if_fail (GTK_IS_CONSTRAINT_LAYOUT (manager));
+  g_return_if_fail (GTK_IS_CONSTRAINT_LAYOUT (layout));
   g_return_if_fail (GTK_IS_CONSTRAINT (constraint));
   g_return_if_fail (!gtk_constraint_is_attached (constraint));
 
-  layout_add_constraint (manager, constraint);
+  layout_add_constraint (layout, constraint);
 
-  g_hash_table_add (manager->constraints, constraint);
+  g_hash_table_add (layout->constraints, constraint);
 
-  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (manager));
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
 }
 
 /**
  * gtk_constraint_layout_remove_constraint:
- * @manager: a #GtkConstraintLayout
+ * @layout: a #GtkConstraintLayout
  * @constraint: a #GtkConstraint
  *
  * Removes @constraint from the layout manager,
  * so that it no longer influences the layout.
  */
 void
-gtk_constraint_layout_remove_constraint (GtkConstraintLayout *manager,
+gtk_constraint_layout_remove_constraint (GtkConstraintLayout *layout,
                                          GtkConstraint       *constraint)
 {
-  g_return_if_fail (GTK_IS_CONSTRAINT_LAYOUT (manager));
+  g_return_if_fail (GTK_IS_CONSTRAINT_LAYOUT (layout));
   g_return_if_fail (GTK_IS_CONSTRAINT (constraint));
   g_return_if_fail (gtk_constraint_is_attached (constraint));
 
   gtk_constraint_detach (constraint);
-  g_hash_table_remove (manager->constraints, constraint);
+  g_hash_table_remove (layout->constraints, constraint);
 
-  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (manager));
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
 }
 
 /**
  * gtk_constraint_layout_remove_all_constraints:
- * @manager: a #GtkConstraintLayout
+ * @layout: a #GtkConstraintLayout
  *
  * Removes all constraints from the layout manager.
  */
 void
-gtk_constraint_layout_remove_all_constraints (GtkConstraintLayout *manager)
+gtk_constraint_layout_remove_all_constraints (GtkConstraintLayout *layout)
 {
   GHashTableIter iter;
   gpointer key;
 
-  g_return_if_fail (GTK_IS_CONSTRAINT_LAYOUT (manager));
+  g_return_if_fail (GTK_IS_CONSTRAINT_LAYOUT (layout));
 
-  g_hash_table_iter_init (&iter, manager->constraints);
+  g_hash_table_iter_init (&iter, layout->constraints);
   while (g_hash_table_iter_next (&iter, &key, NULL))
     {
       GtkConstraint *constraint = key;
@@ -1137,7 +1137,7 @@ gtk_constraint_layout_remove_all_constraints (GtkConstraintLayout *manager)
       g_hash_table_iter_remove (&iter);
     }
 
-  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (manager));
+  gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
 }
 
 /**
@@ -1149,7 +1149,7 @@ gtk_constraint_layout_remove_all_constraints (GtkConstraintLayout *manager)
  * the source or target of constraints, like a widget,
  * but it is not visible.
  *
- * The @manager acquires the ownership of @guide after calling
+ * The @layout acquires the ownership of @guide after calling
  * this function.
  */
 void
