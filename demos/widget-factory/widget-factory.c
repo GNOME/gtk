@@ -1707,7 +1707,7 @@ activate (GApplication *app)
   gtk_css_provider_load_from_resource (provider, "/org/gtk/WidgetFactory4/widget-factory.css");
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                               GTK_STYLE_PROVIDER (provider),
-                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
+                                              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   g_object_unref (provider);
 
   builder = gtk_builder_new_from_resource ("/org/gtk/WidgetFactory4/widget-factory.ui");
