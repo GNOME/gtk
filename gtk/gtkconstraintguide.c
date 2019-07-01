@@ -22,9 +22,10 @@
  * @Title: GtkConstraintGuide
  * @Short_description: An invisible constraint target
  *
- * #GtkConstraintGuide is an invisible layout element that can be used by
- * widgets inside a #GtkConstraintLayout as a source or a target of a
- * #GtkConstraint.
+ * A #GtkConstraintGuide is an invisible layout element that can be
+ * used by widgets inside a #GtkConstraintLayout as a source or a target
+ * of a #GtkConstraint. Guides can be used like guidelines or as
+ * flexible space.
  *
  * Unlike a #GtkWidget, a #GtkConstraintGuide will not be drawn.
  */

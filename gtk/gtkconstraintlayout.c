@@ -1097,6 +1097,7 @@ gtk_constraint_layout_new (void)
  *    widget using @layout
  *  - set to the #GtkWidget using @layout
  *  - set to a child of the #GtkWidget using @layout
+ *  - set to a guide that is part of @layout
  *
  * The @layout acquires the ownership of @constraint after calling
  * this function.
@@ -1252,12 +1253,12 @@ gtk_constraint_vfl_parser_error_quark (void)
  * @n_lines: the number of lines
  * @hspacing: default horizontal spacing value, or -1 for the fallback value
  * @vspacing: default vertical spacing value, or -1 for the fallback value
- * @views: (element-type utf8 Gtk.Widget): a dictionary of [ name, widget ]
+ * @views: (element-type utf8 Gtk.ConstraintTarget): a dictionary of [ name, target ]
  *   pairs; the `name` keys map to the view names in the VFL lines, while
- *   the `widget` values map to children of the widget using a #GtkConstraintLayout
+ *   the `target` values map to children of the widget using a #GtkConstraintLayout, or guides
  * @error: return location for a #GError
  *
- * Creates a list of constraints they formal description using a compact
+ * Creates a list of constraints from a formal description using a compact
  * description syntax called VFL, or "Visual Format Language".
  *
  * The Visual Format Language is based on Apple's AutoLayout [VFL](https://developer.apple.com/library/content/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html).
