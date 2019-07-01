@@ -105,7 +105,7 @@ pages:
   image: registry.gitlab.gnome.org/gnome/gtk/master:v6
   stage: deploy 
   script:
-    - meson -Ddocumentation=true _build .
+    - meson -Dgtk_doc=true _build .
     - ninja -C _build
     - ninja -C _build gdk4-doc gsk4-doc gtk4-doc
 
