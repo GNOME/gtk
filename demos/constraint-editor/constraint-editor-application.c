@@ -51,6 +51,7 @@ static void
 constraint_editor_application_startup (GApplication *app)
 {
   const char *quit_accels[2] = { "<Ctrl>Q", NULL };
+  const char *open_accels[2] = { "<Ctrl>O", NULL };
   GtkCssProvider *provider;
 
   G_APPLICATION_CLASS (constraint_editor_application_parent_class)->startup (app);
@@ -59,6 +60,7 @@ constraint_editor_application_startup (GApplication *app)
                                    app_entries, G_N_ELEMENTS (app_entries),
                                    app);
   gtk_application_set_accels_for_action (GTK_APPLICATION (app), "app.quit", quit_accels);
+  gtk_application_set_accels_for_action (GTK_APPLICATION (app), "win.open", open_accels);
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_resource (provider, "/org/gtk/gtk4/constraint-editor/constraint-editor.css");
@@ -77,12 +79,30 @@ constraint_editor_application_activate (GApplication *app)
 }
 
 static void
+constraint_editor_application_open (GApplication  *app,
+                                    GFile        **files,
+                                    gint           n_files,
+                                    const gchar   *hint)
+{
+  ConstraintEditorWindow *win;
+  gint i;
+
+  for (i = 0; i < n_files; i++)
+    {
+      win = constraint_editor_window_new (CONSTRAINT_EDITOR_APPLICATION (app));
+      constraint_editor_window_load (win, files[i]);
+      gtk_window_present (GTK_WINDOW (win));
+    }
+}
+
+static void
 constraint_editor_application_class_init (ConstraintEditorApplicationClass *class)
 {
   GApplicationClass *application_class = G_APPLICATION_CLASS (class);
 
   application_class->startup = constraint_editor_application_startup;
   application_class->activate = constraint_editor_application_activate;
+  application_class->open = constraint_editor_application_open;
 }
 
 ConstraintEditorApplication *
@@ -90,5 +110,6 @@ constraint_editor_application_new (void)
 {
   return g_object_new (CONSTRAINT_EDITOR_APPLICATION_TYPE,
                        "application-id", "org.gtk.gtk4.ConstraintEditor",
+                       "flags", G_APPLICATION_HANDLES_OPEN,
                        NULL);
 }

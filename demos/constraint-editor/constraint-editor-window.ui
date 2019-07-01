@@ -11,6 +11,20 @@
       <object class="GtkHeaderBar" id="header">
         <property name="title" translatable="yes">GTK Constraint Editor</property>
         <property name="show-title-buttons">1</property>
+        <child type="start">
+          <object class="GtkButton">
+            <property name="icon-name">document-open-symbolic</property>
+            <property name="tooltip-text">Open ui file</property>
+            <signal name="clicked" handler="open_cb"/>
+          </object>
+        </child>
+        <child type="start">
+          <object class="GtkButton">
+            <property name="icon-name">document-save-symbolic</property>
+            <property name="tooltip-text">Save to ui file</property>
+            <signal name="clicked" handler="save_cb"/>
+          </object>
+        </child>
       </object>
     </child>
     <child>
