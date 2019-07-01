@@ -465,6 +465,7 @@ gtk_public_headers = files([
   'gtkcolorutils.h',
   'gtkcombobox.h',
   'gtkcomboboxtext.h',
+  'gtkconstraintguide.h',
   'gtkconstraintlayout.h',
   'gtkconstraint.h',
   'gtkcontainer.h',
