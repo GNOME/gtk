@@ -66,7 +66,6 @@ guide_strength_combo (GtkWidget *combo)
   gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "required", "Required");
 }
 
-#if 0
 static GtkConstraintStrength
 get_strength (const char *id)
 {
@@ -78,7 +77,6 @@ get_strength (const char *id)
 
   return strength;
 }
-#endif
 
 const char *
 get_strength_nick (GtkConstraintStrength strength)
@@ -95,34 +93,28 @@ static void
 create_guide (GtkButton   *button,
               GuideEditor *editor)
 {
-#if 0
   const char *id;
   int strength;
-#endif
   const char *name;
   int w, h;
   GtkConstraintGuide *guide;
 
-  //guide = gtk_constraint_guide_new ();
   if (editor->guide)
     guide = g_object_ref (editor->guide);
   else
-    guide = g_object_new (GTK_TYPE_CONSTRAINT_GUIDE, NULL);
+    guide = gtk_constraint_guide_new ();
 
   name = gtk_editable_get_text (GTK_EDITABLE (editor->name));
   g_object_set_data_full (G_OBJECT (guide), "name", g_strdup (name), g_free);
 
   w = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (editor->min_width));
   h = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (editor->min_height));
-  //gtk_constraint_guide_set_min_size (guide, w, h);
-  g_object_set (guide, "min-width", w, "min-height", h, NULL);
+  gtk_constraint_guide_set_min_size (guide, w, h);
 
   w = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (editor->nat_width));
   h = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (editor->nat_height));
-  //gtk_constraint_guide_set_nat_size (guide, w, h);
-  g_object_set (guide, "nat-width", w, "nat-height", h, NULL);
+  gtk_constraint_guide_set_nat_size (guide, w, h);
 
-#if 0
   w = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (editor->max_width));
   h = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (editor->max_height));
   gtk_constraint_guide_set_max_size (guide, w, h);
@@ -130,7 +122,6 @@ create_guide (GtkButton   *button,
   id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->strength));
   strength = get_strength (id);
   gtk_constraint_guide_set_strength (guide, strength);
-#endif
 
   g_signal_emit (editor, signals[DONE], 0, guide);
   g_object_unref (guide);
@@ -144,6 +135,84 @@ guide_editor_init (GuideEditor *editor)
 
 static int guide_counter;
 
+static int
+min_input (GtkSpinButton *spin_button,
+           double        *new_val)
+{
+  if (strcmp (gtk_editable_get_text (GTK_EDITABLE (spin_button)), "") == 0)
+    {
+      *new_val = 0.0;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static int
+max_input (GtkSpinButton *spin_button,
+           double        *new_val)
+{
+  if (strcmp (gtk_editable_get_text (GTK_EDITABLE (spin_button)), "") == 0)
+    {
+      *new_val = G_MAXINT;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+min_output (GtkSpinButton *spin_button)
+{
+  GtkAdjustment *adjustment;
+  double value;
+  GtkWidget *box, *text;
+
+  adjustment = gtk_spin_button_get_adjustment (spin_button);
+  value = gtk_adjustment_get_value (adjustment);
+
+  box = gtk_widget_get_first_child (GTK_WIDGET (spin_button));
+  text = gtk_widget_get_first_child (box);
+
+  if (value == 0.0)
+    {
+      gtk_editable_set_text (GTK_EDITABLE (spin_button), "");
+      gtk_text_set_placeholder_text (GTK_TEXT (text), "unset");
+      return TRUE;
+    }
+  else
+    {
+      gtk_text_set_placeholder_text (GTK_TEXT (text), "");
+      return FALSE;
+    }
+}
+
+static gboolean
+max_output (GtkSpinButton *spin_button)
+{
+  GtkAdjustment *adjustment;
+  double value;
+  GtkWidget *box, *text;
+
+  adjustment = gtk_spin_button_get_adjustment (spin_button);
+  value = gtk_adjustment_get_value (adjustment);
+
+  box = gtk_widget_get_first_child (GTK_WIDGET (spin_button));
+  text = gtk_widget_get_first_child (box);
+
+  if (value == (double)G_MAXINT)
+    {
+      gtk_editable_set_text (GTK_EDITABLE (spin_button), "");
+      gtk_text_set_placeholder_text (GTK_TEXT (text), "unset");
+      return TRUE;
+    }
+  else
+    {
+      gtk_text_set_placeholder_text (GTK_TEXT (text), "");
+      return FALSE;
+    }
+}
+
 static void
 guide_editor_constructed (GObject *object)
 {
@@ -151,40 +220,42 @@ guide_editor_constructed (GObject *object)
 
   guide_strength_combo (editor->strength);
 
-  gtk_widget_set_sensitive (editor->max_width, FALSE);
-  gtk_widget_set_sensitive (editor->max_height, FALSE);
-  gtk_widget_set_sensitive (editor->strength, FALSE);
+  g_signal_connect (editor->min_width, "input", G_CALLBACK (min_input), NULL);
+  g_signal_connect (editor->min_width, "output", G_CALLBACK (min_output), NULL);
+
+  g_signal_connect (editor->min_height, "input", G_CALLBACK (min_input), NULL);
+  g_signal_connect (editor->min_height, "output", G_CALLBACK (min_output), NULL);
+
+  g_signal_connect (editor->max_width, "input", G_CALLBACK (max_input), NULL);
+  g_signal_connect (editor->max_width, "output", G_CALLBACK (max_output), NULL);
+
+  g_signal_connect (editor->max_height, "input", G_CALLBACK (max_input), NULL);
+  g_signal_connect (editor->max_height, "output", G_CALLBACK (max_output), NULL);
 
   if (editor->guide)
     {
-#if 0
-      GtkConstaintStrength strength;
-#endif
+      GtkConstraintStrength strength;
       const char *nick;
       int w, h;
 
       nick = (char *)g_object_get_data (G_OBJECT (editor->guide), "name");
       gtk_editable_set_text (GTK_EDITABLE (editor->name), nick);
 
-      //gtk_constaint_guide_get_min_size (editor->guide, &w, &h);
-      g_object_get (editor->guide, "min-width", &w, "min-height", &h, NULL);
+      gtk_constraint_guide_get_min_size (editor->guide, &w, &h);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (editor->min_width), w);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (editor->min_height), h);
 
-      //gtk_constaint_guide_get_nat_size (editor->guide, &w, &h);
-      g_object_get (editor->guide, "nat-width", &w, "nat-height", &h, NULL);
+      gtk_constraint_guide_get_nat_size (editor->guide, &w, &h);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (editor->nat_width), w);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (editor->nat_height), h);
 
-#if 0
-      gtk_constaint_guide_get_max_size (editor->guide, &w, &h);
+      gtk_constraint_guide_get_max_size (editor->guide, &w, &h);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (editor->max_width), w);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (editor->max_height), h);
 
-      strength = gtk_guide_get_strength (editor->guide);
+      strength = gtk_constraint_guide_get_strength (editor->guide);
       nick = get_strength_nick (strength);
       gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->strength), nick);
-#endif
 
       gtk_button_set_label (GTK_BUTTON (editor->button), "Apply");
     }
@@ -201,12 +272,10 @@ guide_editor_constructed (GObject *object)
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (editor->min_height), 0.0);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (editor->nat_width), 0.0);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (editor->nat_height), 0.0);
-#if 0
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (editor->max_width), G_MAXINT);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (editor->max_height), G_MAXINT);
 
       gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->strength), "medium");
-#endif
 
       gtk_button_set_label (GTK_BUTTON (editor->button), "Create");
     }
