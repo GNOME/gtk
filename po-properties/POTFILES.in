@@ -113,6 +113,7 @@ gtk/gtkcolorplane.c
 gtk/gtkcolorscale.c
 gtk/gtkcolorswatch.c
 gtk/gtkcombobox.c
+gtk/gtkconstraint.c
 gtk/gtkcontainer.c
 gtk/gtkcssiconthemevalue.c
 gtk/gtkcssnode.c

@@ -1,5 +1,6 @@
 # List of source files that should *not* be translated.
 # Please keep this file sorted alphabetically.
+demos/constraint-editor/constraint-editor-window.ui
 demos/gtk-demo/application.ui
 demos/gtk-demo/appmenu.ui
 demos/gtk-demo/appwindow.c
