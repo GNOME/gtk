@@ -395,7 +395,8 @@ constraint_editor_constructed (GObject *object)
       double constant;
 
       nick = (char *)g_object_get_data (G_OBJECT (editor->constraint), "name");
-      gtk_editable_set_text (GTK_EDITABLE (editor->name), nick);
+      if (nick)
+        gtk_editable_set_text (GTK_EDITABLE (editor->name), nick);
 
       target = gtk_constraint_get_target (editor->constraint);
       nick = get_target_name (target);

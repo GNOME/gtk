@@ -295,13 +295,16 @@ create_widget_func (gpointer item,
   ConstraintEditorWindow *win = user_data;
   const char *name;
   GtkWidget *row, *box, *label, *button;
+  char *str;
 
   name = (const char *)g_object_get_data (G_OBJECT (item), "name");
 
   row = gtk_list_box_row_new ();
-  g_object_set_data (G_OBJECT (row), "item", item);
+  g_object_set_data_full (G_OBJECT (row), "item", g_object_ref (item), g_object_unref);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  label = gtk_label_new (name);
+  str = g_strdup_printf ("%s %p", name, item);
+  label = gtk_label_new (str);
+  g_free (str);
   g_object_set (label,
                 "margin", 10,
                 NULL);

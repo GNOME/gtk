@@ -239,7 +239,8 @@ guide_editor_constructed (GObject *object)
       int w, h;
 
       nick = (char *)g_object_get_data (G_OBJECT (editor->guide), "name");
-      gtk_editable_set_text (GTK_EDITABLE (editor->name), nick);
+      if (nick)
+        gtk_editable_set_text (GTK_EDITABLE (editor->name), nick);
 
       gtk_constraint_guide_get_min_size (editor->guide, &w, &h);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (editor->min_width), w);
