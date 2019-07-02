@@ -46,6 +46,9 @@ void                gtk_grid_constraint_add     (GtkGridConstraint   *self,
                                                  int                  bottom);
 
 GDK_AVAILABLE_IN_ALL
+void                gtk_grid_constraint_remove (GtkGridConstraint   *self,
+                                                 GtkWidget           *child);
+GDK_AVAILABLE_IN_ALL
 void     gtk_grid_constraint_attach      (GtkGridConstraint   *self,
                                           GtkConstraintLayout *layout);
 GDK_AVAILABLE_IN_ALL
