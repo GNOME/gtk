@@ -103,6 +103,62 @@ open_cb (GtkWidget              *button,
 }
 
 static void
+serialize_child (GString   *str,
+                 int        indent,
+                 GtkWidget *child)
+{
+  const char *name;
+
+  name = gtk_widget_get_name (child);
+  g_string_append_printf (str, "%*s<child>\n", indent, "");
+  g_string_append_printf (str, "%*s  <object class=\"GtkLabel\" id=\"%s\">\n", indent, "", name);
+  g_string_append_printf (str, "%*s    <property name=\"label\">%s</property>\n", indent, "", name);
+  g_string_append_printf (str, "%*s  </object>\n", indent, "");
+  g_string_append_printf (str, "%*s</child>\n", indent, "");
+}
+
+static char *
+get_current_text (ConstraintEditorWindow *self)
+{
+  GString *str = g_string_new ("");
+  GtkLayoutManager *manager;
+  GListModel *list;
+  int i;
+
+  list = constraint_view_get_model (CONSTRAINT_VIEW (self->view));
+
+  g_string_append (str, "<interface>\n");
+  g_string_append (str, "  <object class=\"GtkBox\" id=\"view\">\n");
+  g_string_append (str, "    <property name=\"layout-manager\">\n");
+  g_string_append (str, "      <object class=\"GtkConstraintLayout\">\n");
+  g_string_append (str, "        <constraints>\n");
+  for (i = 0; i < g_list_model_get_n_items (list); i++)
+    {
+      gpointer item = g_list_model_get_item (list, i);
+      g_object_unref (item);
+      if (GTK_IS_CONSTRAINT (item))
+        constraint_editor_serialize_constraint (str, 10, GTK_CONSTRAINT (item));
+      else if (GTK_IS_CONSTRAINT_GUIDE (item))
+        guide_editor_serialize_guide (str, 10, GTK_CONSTRAINT_GUIDE (item));
+    }
+  g_string_append (str, "        </constraints>\n");
+  g_string_append (str, "      </object>\n");
+  g_string_append (str, "    </property>\n");
+  for (i = 0; i < g_list_model_get_n_items (list); i++)
+    {
+      gpointer item = g_list_model_get_item (list, i);
+      g_object_unref (item);
+      if (GTK_IS_WIDGET (item))
+        serialize_child (str, 4, GTK_WIDGET (item));
+    }
+  g_string_append (str, "  </object>\n");
+  g_string_append (str, "</interface>\n");
+
+  return g_string_free (str, FALSE);
+}
+
+
+static void
 save_response_cb (GtkNativeDialog        *dialog,
                   gint                    response,
                   ConstraintEditorWindow *self)
@@ -114,11 +170,7 @@ save_response_cb (GtkNativeDialog        *dialog,
       char *text, *filename;
       GError *error = NULL;
 
-#if 0
-      text = get_current_text (self->text_buffer);
-#else
-      text = "Sorry, Dave";
-#endif
+      text = get_current_text (self);
 
       filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
       if (!g_file_set_contents (filename, text, -1, &error))

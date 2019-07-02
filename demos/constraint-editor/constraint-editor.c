@@ -236,6 +236,40 @@ get_strength_nick (GtkConstraintStrength strength)
   return nick;
 }
 
+void
+constraint_editor_serialize_constraint (GString       *str,
+                                        int            indent,
+                                        GtkConstraint *constraint)
+{
+  const char *target;
+  const char *target_attr;
+  const char *relation;
+  const char *source;
+  const char *source_attr;
+  double multiplier;
+  double constant;
+  const char *strength;
+
+  target = get_target_name (gtk_constraint_get_target (constraint));
+  target_attr = get_attr_nick (gtk_constraint_get_target_attribute (constraint));
+  relation = get_relation_nick (gtk_constraint_get_relation (constraint));
+  source = get_target_name (gtk_constraint_get_source (constraint));
+  source_attr = get_attr_nick (gtk_constraint_get_source_attribute (constraint));
+  multiplier = gtk_constraint_get_multiplier (constraint);
+  constant = gtk_constraint_get_constant (constraint);
+  strength = get_strength_nick (gtk_constraint_get_strength (constraint));
+
+  g_string_append_printf (str, "%*s<constraint target=\"%s\" target-attribute=\"%s\"\n", indent, "", target, target_attr);
+  g_string_append_printf (str, "%*s            relation=\"%s\"\n", indent, "", relation);
+  if (strcmp (source_attr, "none") != 0)
+    {
+      g_string_append_printf (str, "%*s            source=\"%s\" source-attribute=\"%s\"\n", indent, "", source, source_attr);
+      g_string_append_printf (str, "%*s            multiplier=\"%g\"\n", indent, "", multiplier);
+    }
+  g_string_append_printf (str, "%*s            constant=\"%g\"\n", indent, "", constant);
+  g_string_append_printf (str, "%*s            strength=\"%s\" />\n", indent, "", strength);
+}
+
 static void
 create_constraint (GtkButton        *button,
                    ConstraintEditor *editor)
