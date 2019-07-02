@@ -59,6 +59,9 @@
     <file>cssview.css</file>
     <file>reset.css</file>
   </gresource>
+  <gresource prefix="/constraints5">
+    <file>words</file>
+  </gresource>
   <gresource prefix="/cursors">
     <file>cursors.ui</file>
     <file>alias_cursor.png</file>
@@ -153,6 +156,8 @@
     <file>constraints.c</file>
     <file>constraints2.c</file>
     <file>constraints3.c</file>
+    <file>constraints4.c</file>
+    <file>constraints5.c</file>
     <file>css_accordion.c</file>
     <file>css_basics.c</file>
     <file>css_blendmodes.c</file>
