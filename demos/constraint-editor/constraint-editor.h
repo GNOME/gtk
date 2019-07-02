@@ -31,3 +31,4 @@ ConstraintEditor * constraint_editor_new (GListModel    *model,
 void constraint_editor_serialize_constraint (GString       *str,
                                              int            indent,
                                              GtkConstraint *constraint);
+char *constraint_editor_constraint_to_string (GtkConstraint *constraint);
