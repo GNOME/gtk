@@ -27,3 +27,7 @@ G_DECLARE_FINAL_TYPE (ConstraintEditor, constraint_editor, CONSTRAINT, EDITOR, G
 
 ConstraintEditor * constraint_editor_new (GListModel    *model,
                                           GtkConstraint *constraint);
+
+void constraint_editor_serialize_constraint (GString       *str,
+                                             int            indent,
+                                             GtkConstraint *constraint);
