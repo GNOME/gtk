@@ -21,7 +21,7 @@ struct _ConstraintView
 {
   GtkWidget parent;
 
-  GListStore *store;
+  GListModel *model;
 
   GtkWidget *drag_widget;
 };
@@ -37,7 +37,7 @@ constraint_view_dispose (GObject *object)
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (view))) != NULL)
     gtk_widget_unparent (child);
 
-  g_clear_object (&view->store);
+  g_clear_object (&view->model);
 
   G_OBJECT_CLASS (constraint_view_parent_class)->dispose (object);
 }
@@ -70,30 +70,38 @@ update_weak_position (ConstraintView *self,
                                                constraint);
       g_object_set_data (G_OBJECT (child), "x-constraint", NULL);
     }
-  constraint = gtk_constraint_new_constant (child,
-                                            GTK_CONSTRAINT_ATTRIBUTE_CENTER_X,
-                                            GTK_CONSTRAINT_RELATION_EQ,
-                                            x,
-                                            GTK_CONSTRAINT_STRENGTH_WEAK);
-  gtk_constraint_layout_add_constraint (GTK_CONSTRAINT_LAYOUT (manager),
-                                        constraint);
-  g_object_set_data (G_OBJECT (child), "x-constraint", constraint);
+  if (x != -100)
+    {
+      constraint = gtk_constraint_new_constant (child,
+                                                GTK_CONSTRAINT_ATTRIBUTE_CENTER_X,
+                                                GTK_CONSTRAINT_RELATION_EQ,
+                                                x,
+                                                GTK_CONSTRAINT_STRENGTH_WEAK);
+      g_object_set_data (G_OBJECT (constraint), "internal", "yes");
+      gtk_constraint_layout_add_constraint (GTK_CONSTRAINT_LAYOUT (manager),
+                                            constraint);
+      g_object_set_data (G_OBJECT (child), "x-constraint", constraint);
+    }
 
   constraint = (GtkConstraint *)g_object_get_data (G_OBJECT (child), "y-constraint");
   if (constraint)
     {
       gtk_constraint_layout_remove_constraint (GTK_CONSTRAINT_LAYOUT (manager),
-                                               constraint);
+                                                   constraint);
       g_object_set_data (G_OBJECT (child), "y-constraint", NULL);
     }
-  constraint = gtk_constraint_new_constant (child,
-                                            GTK_CONSTRAINT_ATTRIBUTE_CENTER_Y,
-                                            GTK_CONSTRAINT_RELATION_EQ,
-                                            y,
-                                            GTK_CONSTRAINT_STRENGTH_WEAK);
-  gtk_constraint_layout_add_constraint (GTK_CONSTRAINT_LAYOUT (manager),
-                                        constraint);
-  g_object_set_data (G_OBJECT (child), "y-constraint", constraint);
+  if (y != -100)
+    {
+      constraint = gtk_constraint_new_constant (child,
+                                                GTK_CONSTRAINT_ATTRIBUTE_CENTER_Y,
+                                                GTK_CONSTRAINT_RELATION_EQ,
+                                                y,
+                                                GTK_CONSTRAINT_STRENGTH_WEAK);
+      g_object_set_data (G_OBJECT (constraint), "internal", "yes");
+      gtk_constraint_layout_add_constraint (GTK_CONSTRAINT_LAYOUT (manager),
+                                            constraint);
+      g_object_set_data (G_OBJECT (child), "y-constraint", constraint);
+    }
 }
 
 static void
@@ -141,15 +149,48 @@ drag_end (GtkGestureDrag *drag,
   self->drag_widget = NULL;
 }
 
+static gboolean
+omit_internal (gpointer item, gpointer user_data)
+{
+  if (g_object_get_data (G_OBJECT (item), "internal"))
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 constraint_view_init (ConstraintView *self)
 {
+  GtkLayoutManager *manager;
   GtkEventController *controller;
+  GListStore *list;
+  GListModel *all_children;
+  GListModel *all_constraints;
+  GListModel *guides;
+  GListModel *children;
+  GListModel *constraints;
 
-  gtk_widget_set_layout_manager (GTK_WIDGET (self),
-                                 gtk_constraint_layout_new ());
+  manager = gtk_constraint_layout_new ();
+  gtk_widget_set_layout_manager (GTK_WIDGET (self), manager);
 
-  self->store = g_list_store_new (G_TYPE_OBJECT);
+  all_children = gtk_widget_observe_children (GTK_WIDGET (self));
+  all_constraints = gtk_constraint_layout_observe_constraints (GTK_CONSTRAINT_LAYOUT (manager));
+  guides = gtk_constraint_layout_observe_guides (GTK_CONSTRAINT_LAYOUT (manager));
+  constraints = (GListModel *)gtk_filter_list_model_new (all_constraints, omit_internal, NULL, NULL);
+  children = (GListModel *)gtk_filter_list_model_new (all_children, omit_internal, NULL, NULL);
+
+  list = g_list_store_new (G_TYPE_LIST_MODEL);
+  g_list_store_append (list, children);
+  g_list_store_append (list, guides);
+  g_list_store_append (list, constraints);
+  self->model = G_LIST_MODEL (gtk_flatten_list_model_new (G_TYPE_OBJECT, G_LIST_MODEL (list)));
+  g_object_unref (children);
+  g_object_unref (guides);
+  g_object_unref (constraints);
+  g_object_unref (all_children);
+  g_object_unref (all_constraints);
+  g_object_unref (list);
+
 
   controller = (GtkEventController *)gtk_gesture_drag_new ();
   g_signal_connect (controller, "drag-begin", G_CALLBACK (drag_begin), self);
@@ -174,168 +215,103 @@ constraint_view_add_child (ConstraintView *view,
   label = gtk_label_new (name);
   frame = gtk_frame_new (NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (frame), "child");
-  g_object_set_data_full (G_OBJECT (frame), "name", g_strdup (name), g_free);
+  gtk_widget_set_name (frame, name);
   gtk_container_add (GTK_CONTAINER (frame), label);
   gtk_widget_set_parent (frame, GTK_WIDGET (view));
 
   update_weak_position (view, frame, 100, 100);
-
-  g_list_store_append (view->store, frame);
 }
 
 void
 constraint_view_remove_child (ConstraintView *view,
                               GtkWidget      *child)
 {
-  int i;
-
+  update_weak_position (view, child, -100, -100);
   gtk_widget_unparent (child);
-
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (view->store)); i++)
-    {
-      if (g_list_model_get_item (G_LIST_MODEL (view->store), i) == (GObject*)child)
-        {
-          g_list_store_remove (view->store, i);
-          break;
-        }
-    }
 }
 
 void
 constraint_view_add_guide (ConstraintView *view,
                            GtkConstraintGuide *guide)
 {
-  GtkLayoutManager *manager;
+  GtkConstraintLayout *layout;
   GtkWidget *frame;
   GtkWidget *label;
   const char *name;
   GtkConstraint *constraint;
+  struct {
+    const char *name;
+    GtkConstraintAttribute attr;
+  } names[] = {
+    { "left-constraint", GTK_CONSTRAINT_ATTRIBUTE_LEFT },
+    { "top-constraint", GTK_CONSTRAINT_ATTRIBUTE_TOP },
+    { "width-constraint", GTK_CONSTRAINT_ATTRIBUTE_WIDTH },
+    { "height-constraint", GTK_CONSTRAINT_ATTRIBUTE_HEIGHT },
+  };
+  int i;
 
-  name = (const char *)g_object_get_data (G_OBJECT (guide), "name");
-
+  name = gtk_constraint_guide_get_name (guide);
   label = gtk_label_new (name);
+  g_object_bind_property (guide, "name",
+                          label, "label",
+                          G_BINDING_DEFAULT);
+
   frame = gtk_frame_new (NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (frame), "guide");
-  g_object_set_data_full (G_OBJECT (frame), "name", g_strdup (name), g_free);
+  g_object_set_data (G_OBJECT (frame), "internal", "yes");
   gtk_container_add (GTK_CONTAINER (frame), label);
   gtk_widget_insert_after (frame, GTK_WIDGET (view), NULL);
 
   g_object_set_data (G_OBJECT (guide), "frame", frame);
-  g_object_set_data (G_OBJECT (guide), "label", label);
 
-  manager = gtk_widget_get_layout_manager (GTK_WIDGET (view));
-  gtk_constraint_layout_add_guide (GTK_CONSTRAINT_LAYOUT (manager),
-                                   g_object_ref (guide));
+  layout = GTK_CONSTRAINT_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (view)));
+  gtk_constraint_layout_add_guide (layout, g_object_ref (guide));
 
-  constraint = gtk_constraint_new (frame,
-                                   GTK_CONSTRAINT_ATTRIBUTE_LEFT,
-                                   GTK_CONSTRAINT_RELATION_EQ,
-                                   guide,
-                                   GTK_CONSTRAINT_ATTRIBUTE_LEFT,
-                                   1.0, 0.0,
-                                   GTK_CONSTRAINT_STRENGTH_REQUIRED);
-  gtk_constraint_layout_add_constraint (GTK_CONSTRAINT_LAYOUT (manager),
-                                        constraint);
-  g_object_set_data (G_OBJECT (guide), "left-constraint", constraint);
-
-  constraint = gtk_constraint_new (frame,
-                                   GTK_CONSTRAINT_ATTRIBUTE_TOP,
-                                   GTK_CONSTRAINT_RELATION_EQ,
-                                   guide,
-                                   GTK_CONSTRAINT_ATTRIBUTE_TOP,
-                                   1.0, 0.0,
-                                   GTK_CONSTRAINT_STRENGTH_REQUIRED);
-  gtk_constraint_layout_add_constraint (GTK_CONSTRAINT_LAYOUT (manager),
-                                        constraint);
-  g_object_set_data (G_OBJECT (guide), "top-constraint", constraint);
-
-  constraint = gtk_constraint_new (frame,
-                                   GTK_CONSTRAINT_ATTRIBUTE_WIDTH,
-                                   GTK_CONSTRAINT_RELATION_EQ,
-                                   guide,
-                                   GTK_CONSTRAINT_ATTRIBUTE_WIDTH,
-                                   1.0, 0.0,
-                                   GTK_CONSTRAINT_STRENGTH_REQUIRED);
-  gtk_constraint_layout_add_constraint (GTK_CONSTRAINT_LAYOUT (manager),
-                                        constraint);
-  g_object_set_data (G_OBJECT (guide), "width-constraint", constraint);
-
-  constraint = gtk_constraint_new (frame,
-                                   GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
-                                   GTK_CONSTRAINT_RELATION_EQ,
-                                   guide,
-                                   GTK_CONSTRAINT_ATTRIBUTE_HEIGHT,
-                                   1.0, 0.0,
-                                   GTK_CONSTRAINT_STRENGTH_REQUIRED);
-  gtk_constraint_layout_add_constraint (GTK_CONSTRAINT_LAYOUT (manager),
-                                        constraint);
-  g_object_set_data (G_OBJECT (guide), "height-constraint", constraint);
+  for (i = 0; i < G_N_ELEMENTS (names); i++)
+    {
+      constraint = gtk_constraint_new (frame,
+                                       names[i].attr,
+                                       GTK_CONSTRAINT_RELATION_EQ,
+                                       guide,
+                                       names[i].attr,
+                                       1.0, 0.0,
+                                       GTK_CONSTRAINT_STRENGTH_REQUIRED);
+      g_object_set_data (G_OBJECT (constraint), "internal", "yes");
+      gtk_constraint_layout_add_constraint (layout, constraint);
+      g_object_set_data (G_OBJECT (guide), names[i].name, constraint);
+    }
 
   update_weak_position (view, frame, 150, 150);
-
-  g_list_store_append (view->store, guide);
-}
-
-void
-constraint_view_guide_changed (ConstraintView     *view,
-                               GtkConstraintGuide *guide)
-{
-  GtkWidget *label;
-  const char *name;
-  int i;
-
-  name = (const char *)g_object_get_data (G_OBJECT (guide), "name");
-  label = (GtkWidget *)g_object_get_data (G_OBJECT (guide), "label");
-  gtk_label_set_label (GTK_LABEL (label), name);
-
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (view->store)); i++)
-    {
-      if (g_list_model_get_item (G_LIST_MODEL (view->store), i) == (GObject*)guide)
-        {
-          g_list_model_items_changed (G_LIST_MODEL (view->store), i, 1, 1);
-          break;
-        }
-    }
 }
 
 void
 constraint_view_remove_guide (ConstraintView     *view,
                               GtkConstraintGuide *guide)
 {
-  GtkLayoutManager *manager;
+  GtkConstraintLayout *layout;
   GtkWidget *frame;
   GtkConstraint *constraint;
+  const char *names[] = {
+    "left-constraint",
+    "top-constraint",
+    "width-constraint",
+    "height-constraint"
+  };
   int i;
 
-  manager = gtk_widget_get_layout_manager (GTK_WIDGET (view));
+  layout = GTK_CONSTRAINT_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (view)));
 
-  constraint = (GtkConstraint*)g_object_get_data (G_OBJECT (guide), "left-constraint");
-  gtk_constraint_layout_remove_constraint (GTK_CONSTRAINT_LAYOUT (manager),
-                                           constraint);
-  constraint = (GtkConstraint*)g_object_get_data (G_OBJECT (guide), "top-constraint");
-  gtk_constraint_layout_remove_constraint (GTK_CONSTRAINT_LAYOUT (manager),
-                                           constraint);
-  constraint = (GtkConstraint*)g_object_get_data (G_OBJECT (guide), "width-constraint");
-  gtk_constraint_layout_remove_constraint (GTK_CONSTRAINT_LAYOUT (manager),
-                                           constraint);
-  constraint = (GtkConstraint*)g_object_get_data (G_OBJECT (guide), "height-constraint");
-  gtk_constraint_layout_remove_constraint (GTK_CONSTRAINT_LAYOUT (manager),
-                                           constraint);
+  for (i = 0; i < G_N_ELEMENTS (names); i++)
+    {
+      constraint = (GtkConstraint*)g_object_get_data (G_OBJECT (guide), names[i]);
+      gtk_constraint_layout_remove_constraint (layout, constraint);
+    }
 
   frame = (GtkWidget *)g_object_get_data (G_OBJECT (guide), "frame");
+  update_weak_position (view, frame, -100, -100);
   gtk_widget_unparent (frame);
 
-  gtk_constraint_layout_remove_guide (GTK_CONSTRAINT_LAYOUT (manager),
-                                      guide);
-
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (view->store)); i++)
-    {
-      if (g_list_model_get_item (G_LIST_MODEL (view->store), i) == (GObject*)guide)
-        {
-          g_list_store_remove (view->store, i);
-          break;
-        }
-    }
+  gtk_constraint_layout_remove_guide (layout, guide);
 }
 
 void
@@ -347,8 +323,6 @@ constraint_view_add_constraint (ConstraintView *view,
   manager = gtk_widget_get_layout_manager (GTK_WIDGET (view));
   gtk_constraint_layout_add_constraint (GTK_CONSTRAINT_LAYOUT (manager),
                                         g_object_ref (constraint));
-
-  g_list_store_append (view->store, constraint);
 }
 
 void
@@ -356,23 +330,14 @@ constraint_view_remove_constraint (ConstraintView *view,
                                    GtkConstraint  *constraint)
 {
   GtkLayoutManager *manager;
-  int i;
 
   manager = gtk_widget_get_layout_manager (GTK_WIDGET (view));
   gtk_constraint_layout_remove_constraint (GTK_CONSTRAINT_LAYOUT (manager),
                                            constraint);
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (view->store)); i++)
-    {
-      if (g_list_model_get_item (G_LIST_MODEL (view->store), i) == (GObject*)constraint)
-        {
-          g_list_store_remove (view->store, i);
-          break;
-        }
-    }
 }
 
 GListModel *
 constraint_view_get_model (ConstraintView *view)
 {
-  return G_LIST_MODEL (view->store);
+  return view->model;
 }

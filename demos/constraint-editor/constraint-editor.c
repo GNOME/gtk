@@ -26,7 +26,6 @@ struct _ConstraintEditor
   GtkWidget parent_instance;
 
   GtkWidget *grid;
-  GtkWidget *name;
   GtkWidget *target;
   GtkWidget *target_attr;
   GtkWidget *relation;
@@ -66,8 +65,12 @@ get_target_name (GtkConstraintTarget *target)
 {
   if (target == NULL)
     return "super";
+  else if (GTK_IS_WIDGET (target))
+    return gtk_widget_get_name (GTK_WIDGET (target));
+  else if (GTK_IS_CONSTRAINT_GUIDE (target))
+    return gtk_constraint_guide_get_name (GTK_CONSTRAINT_GUIDE (target));
   else
-    return (const char *)g_object_get_data (G_OBJECT (target), "name");
+    return "";
 }
 
 static void
@@ -145,13 +148,19 @@ get_target (GListModel *model,
   for (i = 0; i < g_list_model_get_n_items (model); i++)
     {
       GObject *item = g_list_model_get_object (model, i);
-      const char *name;
+      g_object_unref (item);
       if (GTK_IS_CONSTRAINT (item))
         continue;
-      name = (const char *)g_object_get_data (item, "name");
-      g_object_unref (item);
-      if (strcmp (name, id) == 0)
-        return item;
+      else if (GTK_IS_WIDGET (item))
+        {
+          if (strcmp (id, gtk_widget_get_name (GTK_WIDGET (item))) == 0)
+            return item;
+        }
+      else if (GTK_IS_CONSTRAINT_GUIDE (item))
+        {
+          if (strcmp (id, gtk_constraint_guide_get_name (GTK_CONSTRAINT_GUIDE (item))) == 0)
+            return item;
+        }
     }
 
   return NULL;
@@ -226,6 +235,40 @@ get_strength_nick (GtkConstraintStrength strength)
   return nick;
 }
 
+void
+constraint_editor_serialize_constraint (GString       *str,
+                                        int            indent,
+                                        GtkConstraint *constraint)
+{
+  const char *target;
+  const char *target_attr;
+  const char *relation;
+  const char *source;
+  const char *source_attr;
+  double multiplier;
+  double constant;
+  const char *strength;
+
+  target = get_target_name (gtk_constraint_get_target (constraint));
+  target_attr = get_attr_nick (gtk_constraint_get_target_attribute (constraint));
+  relation = get_relation_nick (gtk_constraint_get_relation (constraint));
+  source = get_target_name (gtk_constraint_get_source (constraint));
+  source_attr = get_attr_nick (gtk_constraint_get_source_attribute (constraint));
+  multiplier = gtk_constraint_get_multiplier (constraint);
+  constant = gtk_constraint_get_constant (constraint);
+  strength = get_strength_nick (gtk_constraint_get_strength (constraint));
+
+  g_string_append_printf (str, "%*s<constraint target=\"%s\" target-attribute=\"%s\"\n", indent, "", target, target_attr);
+  g_string_append_printf (str, "%*s            relation=\"%s\"\n", indent, "", relation);
+  if (strcmp (source_attr, "none") != 0)
+    {
+      g_string_append_printf (str, "%*s            source=\"%s\" source-attribute=\"%s\"\n", indent, "", source, source_attr);
+      g_string_append_printf (str, "%*s            multiplier=\"%g\"\n", indent, "", multiplier);
+    }
+  g_string_append_printf (str, "%*s            constant=\"%g\"\n", indent, "", constant);
+  g_string_append_printf (str, "%*s            strength=\"%s\" />\n", indent, "", strength);
+}
+
 static void
 create_constraint (GtkButton        *button,
                    ConstraintEditor *editor)
@@ -240,7 +283,6 @@ create_constraint (GtkButton        *button,
   double constant;
   int strength;
   GtkConstraint *constraint;
-  const char *name;
 
   id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->target));
   target = get_target (editor->model, id);
@@ -262,15 +304,12 @@ create_constraint (GtkButton        *button,
   id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->strength));
   strength = get_strength (id);
 
-  name = gtk_editable_get_text (GTK_EDITABLE (editor->name));
-
   constraint = gtk_constraint_new (target, target_attr,
                                    relation,
                                    source, source_attr,
                                    multiplier,
                                    constant,
                                    strength);
-  g_object_set_data_full (G_OBJECT (constraint), "name", g_strdup (name), g_free);
   g_signal_emit (editor, signals[DONE], 0, constraint);
   g_object_unref (constraint);
 }
@@ -293,6 +332,53 @@ source_attr_changed (ConstraintEditor *editor)
       gtk_widget_set_sensitive (editor->source, TRUE);
       gtk_widget_set_sensitive (editor->multiplier, TRUE);
     }
+}
+
+char *
+constraint_editor_constraint_to_string (GtkConstraint *constraint)
+{
+  GString *str;
+  const char *name;
+  const char *attr;
+  const char *relation;
+  double c, m;
+
+  str = g_string_new ("");
+
+  name = get_target_name (gtk_constraint_get_target (constraint));
+  attr = get_attr_nick (gtk_constraint_get_target_attribute (constraint));
+  relation = get_relation_nick (gtk_constraint_get_relation (constraint));
+
+  if (name == NULL)
+    name = "[ ]";
+
+  g_string_append_printf (str, "%s.%s %s ", name, attr, relation);
+
+  c = gtk_constraint_get_constant (constraint);
+
+  attr = get_attr_nick (gtk_constraint_get_source_attribute (constraint));
+  if (strcmp (attr, "none") != 0)
+    {
+      name = get_target_name (gtk_constraint_get_source (constraint));
+      m = gtk_constraint_get_multiplier (constraint);
+
+      if (name == NULL)
+        name = "[ ]";
+
+      g_string_append_printf (str, "%s.%s", name, attr);
+
+      if (m != 1.0)
+        g_string_append_printf (str, " × %g", m);
+
+      if (c > 0.0)
+        g_string_append_printf (str, " + %g", c);
+      else if (c < 0.0)
+        g_string_append_printf (str, " - %g", -c);
+    }
+  else
+    g_string_append_printf (str, "%g", c);
+
+  return g_string_free (str, FALSE);
 }
 
 static void
@@ -368,8 +454,6 @@ constraint_editor_init (ConstraintEditor *editor)
   gtk_widget_init_template (GTK_WIDGET (editor));
 }
 
-static int constraint_counter;
-
 static void
 constraint_editor_constructed (GObject *object)
 {
@@ -393,9 +477,6 @@ constraint_editor_constructed (GObject *object)
       char *val;
       double multiplier;
       double constant;
-
-      nick = (char *)g_object_get_data (G_OBJECT (editor->constraint), "name");
-      gtk_editable_set_text (GTK_EDITABLE (editor->name), nick);
 
       target = gtk_constraint_get_target (editor->constraint);
       nick = get_target_name (target);
@@ -435,13 +516,6 @@ constraint_editor_constructed (GObject *object)
     }
   else
     {
-      char *name;
-
-      constraint_counter++;
-      name = g_strdup_printf ("Constraint %d", constraint_counter);
-      gtk_editable_set_text (GTK_EDITABLE (editor->name), name);
-      g_free (name);
-
       gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->target_attr), "left");
       gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->source_attr), "left");
       gtk_combo_box_set_active_id (GTK_COMBO_BOX (editor->relation), "eq");
@@ -554,7 +628,6 @@ constraint_editor_class_init (ConstraintEditorClass *class)
                                                "/org/gtk/gtk4/constraint-editor/constraint-editor.ui");
 
   gtk_widget_class_bind_template_child (widget_class, ConstraintEditor, grid);
-  gtk_widget_class_bind_template_child (widget_class, ConstraintEditor, name);
   gtk_widget_class_bind_template_child (widget_class, ConstraintEditor, target);
   gtk_widget_class_bind_template_child (widget_class, ConstraintEditor, target_attr);
   gtk_widget_class_bind_template_child (widget_class, ConstraintEditor, relation);
