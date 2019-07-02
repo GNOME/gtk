@@ -85,4 +85,9 @@ GList *                 gtk_constraint_layout_add_constraints_from_descriptionv 
                                                                                  GHashTable          *views,
                                                                                  GError             **error);
 
+GDK_AVAILABLE_IN_ALL
+GListModel *          gtk_constraint_layout_observe_constraints (GtkConstraintLayout *layout);
+GDK_AVAILABLE_IN_ALL
+GListModel *          gtk_constraint_layout_observe_guides (GtkConstraintLayout *layout);
+
 G_END_DECLS
