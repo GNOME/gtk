@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="ConstraintEditor" parent="GtkWidget">
+    <child>
+      <object class="GtkGrid" id="grid">
+        <property name="margin">20</property>
+        <property name="row-spacing">10</property>
+        <property name="column-spacing">10</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Name</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="name">
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Target</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="target">
+            <signal name="changed" handler="update_preview" swapped="yes"/>
+            <signal name="changed" handler="update_button" swapped="yes"/>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="target_attr">
+            <signal name="changed" handler="update_preview" swapped="yes"/>
+            <layout>
+              <property name="left-attach">2</property>
+              <property name="top-attach">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Relation</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="relation">
+            <signal name="changed" handler="update_preview" swapped="yes"/>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Source</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">3</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="source">
+            <signal name="changed" handler="update_preview" swapped="yes"/>
+            <signal name="changed" handler="update_button" swapped="yes"/>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">3</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="source_attr">
+            <signal name="changed" handler="update_preview" swapped="yes"/>
+            <signal name="changed" handler="source_attr_changed" swapped="yes"/>
+            <layout>
+              <property name="left-attach">2</property>
+              <property name="top-attach">3</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Multiplier</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">4</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="multiplier">
+            <signal name="changed" handler="update_preview" swapped="yes"/>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">4</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Constant</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">5</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="constant">
+            <signal name="changed" handler="update_preview" swapped="yes"/>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">5</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Strength</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">6</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkComboBoxText" id="strength">
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">6</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="preview">
+            <property name="xalign">0</property>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">7</property>
+              <property name="column-span">2</property>
+            </layout>
+            <attributes>
+              <attribute name="scale" value="1.44"/>
+            </attributes>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="button">
+            <property name="label">Create</property>
+            <signal name="clicked" handler="create_constraint"/>
+            <layout>
+              <property name="left-attach">2</property>
+              <property name="top-attach">8</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -1,3 +1,4 @@
+subdir('constraint-editor')
 subdir('gtk-demo')
 subdir('icon-browser')
 subdir('node-editor')

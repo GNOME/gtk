@@ -42,6 +42,10 @@ G_DECLARE_DERIVABLE_TYPE (GtkLayoutManager, gtk_layout_manager, GTK, LAYOUT_MANA
  * @layout_child_type: the type of #GtkLayoutChild used by this layout manager
  * @create_layout_child: a virtual function, used to create a #GtkLayoutChild
  *   meta object for the layout properties
+ * @root: a virtual function, called when the widget using the layout
+ *   manager is attached to a #GtkRoot
+ * @unroot: a virtual function, called when the widget using the layout
+ *   manager is detached from a #GtkRoot
  *
  * The `GtkLayoutManagerClass` structure contains only private data, and
  * should only be accessed through the provided API, or when subclassing
@@ -76,6 +80,9 @@ struct _GtkLayoutManagerClass
   GtkLayoutChild *   (* create_layout_child) (GtkLayoutManager *manager,
                                               GtkWidget        *widget,
                                               GtkWidget        *for_child);
+
+  void               (* root)                (GtkLayoutManager *manager);
+  void               (* unroot)              (GtkLayoutManager *manager);
 
   /*< private >*/
   gpointer _padding[16];

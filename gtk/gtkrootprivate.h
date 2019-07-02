@@ -3,7 +3,27 @@
 
 #include "gtkroot.h"
 
+#include "gtkconstraintsolverprivate.h"
+
 G_BEGIN_DECLS
+
+/**
+ * GtkRootIface:
+ *
+ * The list of functions that must be implemented for the #GtkRoot interface.
+ */
+struct _GtkRootInterface
+{
+  /*< private >*/
+  GTypeInterface g_iface;
+
+  /*< public >*/
+  GdkDisplay * (* get_display)  (GtkRoot *self);
+
+  GtkConstraintSolver * (* get_constraint_solver) (GtkRoot *self);
+};
+
+GtkConstraintSolver *   gtk_root_get_constraint_solver  (GtkRoot *self);
 
 enum {
   GTK_ROOT_PROP_FOCUS_WIDGET,
