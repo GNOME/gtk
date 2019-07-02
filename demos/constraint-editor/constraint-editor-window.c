@@ -35,32 +35,158 @@ struct _ConstraintEditorWindow
 
 G_DEFINE_TYPE(ConstraintEditorWindow, constraint_editor_window, GTK_TYPE_APPLICATION_WINDOW);
 
+static GtkConstraintTarget *
+find_target (GListModel *model,
+             GtkConstraintTarget *orig)
+{
+  const char *name;
+  const char *model_name;
+  gpointer item;
+  int i;
+
+  if (orig == NULL)
+    return NULL;
+
+  if (GTK_IS_LABEL (orig))
+    name = gtk_label_get_label (GTK_LABEL (orig));
+  else if (GTK_IS_CONSTRAINT_GUIDE (orig))
+    name = gtk_constraint_guide_get_name (GTK_CONSTRAINT_GUIDE (orig));
+  else
+    {
+      g_warning ("Don't know how to handle %s targets", G_OBJECT_TYPE_NAME (orig));
+      return NULL;
+    }
+  for (i = 0; i < g_list_model_get_n_items (model); i++)
+    {
+      item = g_list_model_get_item (model, i);
+      g_object_unref (item);
+      if (GTK_IS_WIDGET (item))
+        model_name = gtk_widget_get_name (GTK_WIDGET (item));
+      else
+        model_name = gtk_constraint_guide_get_name (GTK_CONSTRAINT_GUIDE (item));
+
+      if (strcmp (name, model_name) == 0)
+        return GTK_CONSTRAINT_TARGET (item);
+    }
+  g_warning ("Failed to find target '%s'", name);
+
+  return NULL;
+}
+
 gboolean
 constraint_editor_window_load (ConstraintEditorWindow *self,
                                GFile            *file)
 {
-  GBytes *bytes;
+  char *path;
+  GtkBuilder *builder;
+  GError *error = NULL;
+  GtkWidget *view;
+  GtkLayoutManager *layout;
+  GtkWidget *child;
+  const char *name;
+  gpointer item;
+  int i;
+  GListModel *list;
 
-  bytes = g_file_load_bytes (file, NULL, NULL, NULL);
-  if (bytes == NULL)
-    return FALSE;
+  path = g_file_get_path (file);
 
-  if (!g_utf8_validate (g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), NULL))
+  builder = gtk_builder_new ();
+  if (!gtk_builder_add_from_file (builder, path, &error))
     {
-      g_bytes_unref (bytes);
+      g_print ("Could not load %s: %s", path, error->message);
+      g_error_free (error);
+      g_free (path);
+      g_object_unref (builder);
       return FALSE;
     }
 
-#if 0
+  view = GTK_WIDGET (gtk_builder_get_object (builder, "view"));
+  if (!GTK_IS_BOX (view))
+    {
+      g_print ("Could not load %s: No GtkBox named 'view'", path);
+      g_free (path);
+      g_object_unref (builder);
+      return FALSE;
+    }
+  layout = gtk_widget_get_layout_manager (view);
+  if (!GTK_IS_CONSTRAINT_LAYOUT (layout))
+    {
+      g_print ("Could not load %s: Widget 'view' does not use GtkConstraintLayout", path);
+      g_free (path);
+      g_object_unref (builder);
+      return FALSE;
+    }
 
-  gtk_text_buffer_get_end_iter (self->text_buffer, &end);
-  gtk_text_buffer_insert (self->text_buffer,
-                          &end,
-                          g_bytes_get_data (bytes, NULL),
-                          g_bytes_get_size (bytes));
-#endif
+  for (child = gtk_widget_get_first_child (view);
+       child;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (!GTK_IS_LABEL (child))
+        {
+          g_print ("Skipping non-GtkLabel child\n");
+          continue;
+        }
 
-  g_bytes_unref (bytes);
+      name = gtk_label_get_label (GTK_LABEL (child));
+      constraint_view_add_child (CONSTRAINT_VIEW (self->view), name);
+    }
+
+  list = gtk_constraint_layout_observe_guides (GTK_CONSTRAINT_LAYOUT (layout));
+  for (i = 0; i < g_list_model_get_n_items (list); i++)
+    {
+      GtkConstraintGuide *guide, *clone;
+      int w, h;
+
+      item = g_list_model_get_item (list, i);
+      guide = GTK_CONSTRAINT_GUIDE (item);
+
+      /* need to clone here, to attach to the right targets */
+      clone = gtk_constraint_guide_new ();
+      gtk_constraint_guide_set_name (clone, gtk_constraint_guide_get_name (guide));
+      gtk_constraint_guide_set_strength (clone, gtk_constraint_guide_get_strength (guide));
+      gtk_constraint_guide_get_min_size (guide, &w, &h);
+      gtk_constraint_guide_set_min_size (clone, w, h);
+      gtk_constraint_guide_get_nat_size (guide, &w, &h);
+      gtk_constraint_guide_set_nat_size (clone, w, h);
+      gtk_constraint_guide_get_max_size (guide, &w, &h);
+      gtk_constraint_guide_set_max_size (clone, w, h);
+      constraint_view_add_guide (CONSTRAINT_VIEW (self->view), clone);
+      g_object_unref (guide);
+      g_object_unref (clone);
+    }
+  g_object_unref (list);
+
+  list = gtk_constraint_layout_observe_constraints (GTK_CONSTRAINT_LAYOUT (layout));
+  for (i = 0; i < g_list_model_get_n_items (list); i++)
+    {
+      GtkConstraint *constraint;
+      GtkConstraint *clone;
+      GtkConstraintTarget *target;
+      GtkConstraintTarget *source;
+
+      item = g_list_model_get_item (list, i);
+      constraint = GTK_CONSTRAINT (item);
+
+      target = gtk_constraint_get_target (constraint);
+      source = gtk_constraint_get_source (constraint);
+      clone = gtk_constraint_new (find_target (constraint_view_get_model (CONSTRAINT_VIEW (self->view)), target),
+                                  gtk_constraint_get_target_attribute (constraint),
+                                  gtk_constraint_get_relation (constraint),
+                                  find_target (constraint_view_get_model (CONSTRAINT_VIEW (self->view)), source),
+                                  gtk_constraint_get_target_attribute (constraint),
+                                  gtk_constraint_get_multiplier (constraint),
+                                  gtk_constraint_get_constant (constraint),
+                                  gtk_constraint_get_strength (constraint));
+
+      constraint_view_add_constraint (CONSTRAINT_VIEW (self->view), clone);
+
+      g_object_unref (constraint);
+      g_object_unref (clone);
+    }
+  g_object_unref (list);
+
+  g_free (path);
+  g_object_unref (builder);
 
   return TRUE;
 }
