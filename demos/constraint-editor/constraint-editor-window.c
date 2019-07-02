@@ -441,14 +441,17 @@ create_widget_func (gpointer item,
 {
   ConstraintEditorWindow *win = user_data;
   const char *name;
+  char *freeme = NULL;
   GtkWidget *row, *box, *label, *button;
 
   if (GTK_IS_WIDGET (item))
     name = gtk_widget_get_name (GTK_WIDGET (item));
   else if (GTK_IS_CONSTRAINT_GUIDE (item))
     name = gtk_constraint_guide_get_name (GTK_CONSTRAINT_GUIDE (item));
+  else if (GTK_IS_CONSTRAINT (item))
+    name = freeme = constraint_editor_constraint_to_string (GTK_CONSTRAINT (item));
   else
-    name = (const char *)g_object_get_data (G_OBJECT (item), "name");
+    name = "";
 
   row = gtk_list_box_row_new ();
   g_object_set_data_full (G_OBJECT (row), "item", g_object_ref (item), g_object_unref);
@@ -483,6 +486,8 @@ create_widget_func (gpointer item,
       g_signal_connect (button, "clicked", G_CALLBACK (row_delete), win);
       gtk_container_add (GTK_CONTAINER (box), button);
     }
+
+  g_free (freeme);
 
   return row;
 }
