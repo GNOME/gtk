@@ -253,6 +253,9 @@ struct _GtkConstraintLayout
 
   /* HashSet<GtkConstraintGuide> */
   GHashTable *guides;
+
+  GListStore *constraints_observer;
+  GListStore *guides_observer;
 };
 
 G_DEFINE_TYPE (GtkConstraintLayoutChild, gtk_constraint_layout_child, GTK_TYPE_LAYOUT_CHILD)
@@ -533,6 +536,19 @@ static void
 gtk_constraint_layout_finalize (GObject *gobject)
 {
   GtkConstraintLayout *self = GTK_CONSTRAINT_LAYOUT (gobject);
+
+  if (self->constraints_observer)
+    {
+      g_list_store_remove_all (self->constraints_observer);
+      g_object_remove_weak_pointer ((GObject *)self->constraints_observer,
+                                    (gpointer *)&self->constraints_observer);
+    }
+  if (self->guides_observer)
+    {
+      g_list_store_remove_all (self->guides_observer);
+      g_object_remove_weak_pointer ((GObject *)self->guides_observer,
+                                    (gpointer *)&self->guides_observer);
+    }
 
   g_clear_pointer (&self->bound_attributes, g_hash_table_unref);
   g_clear_pointer (&self->constraints, g_hash_table_unref);
@@ -1709,8 +1725,28 @@ gtk_constraint_layout_add_constraint (GtkConstraintLayout *layout,
   layout_add_constraint (layout, constraint);
 
   g_hash_table_add (layout->constraints, constraint);
+  if (layout->constraints_observer)
+    g_list_store_append (layout->constraints_observer, constraint);
 
   gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
+}
+
+static void
+list_store_remove_item (GListStore *store,
+                        gpointer    item)
+{
+  int i;
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (store)); i++)
+    {
+      gpointer *model_item = g_list_model_get_item (G_LIST_MODEL (store), i);
+      g_object_unref (model_item);
+      if (item == model_item)
+        {
+          g_list_store_remove (store, i);
+          break;
+        }
+    }
 }
 
 /**
@@ -1731,6 +1767,8 @@ gtk_constraint_layout_remove_constraint (GtkConstraintLayout *layout,
 
   gtk_constraint_detach (constraint);
   g_hash_table_remove (layout->constraints, constraint);
+  if (layout->constraints_observer)
+    list_store_remove_item (layout->constraints_observer, constraint);
 
   gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
 }
@@ -1757,6 +1795,8 @@ gtk_constraint_layout_remove_all_constraints (GtkConstraintLayout *layout)
       gtk_constraint_detach (constraint);
       g_hash_table_iter_remove (&iter);
     }
+  if (layout->constraints_observer)
+    g_list_store_remove_all (layout->constraints_observer);
 
   gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
 }
@@ -1783,6 +1823,8 @@ gtk_constraint_layout_add_guide (GtkConstraintLayout *layout,
 
   gtk_constraint_guide_set_layout (guide, layout);
   g_hash_table_add (layout->guides, guide);
+  if (layout->guides_observer)
+    g_list_store_append (layout->guides_observer, guide);
 
   gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
 }
@@ -1807,6 +1849,8 @@ gtk_constraint_layout_remove_guide (GtkConstraintLayout *layout,
 
   gtk_constraint_guide_set_layout (guide, NULL);
   g_hash_table_remove (layout->guides, guide);
+  if (layout->guides_observer)
+    list_store_remove_item (layout->guides_observer, guide);
 
   gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
 }
@@ -2026,6 +2070,8 @@ gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *la
 
           layout_add_constraint (layout, constraint);
           g_hash_table_add (layout->constraints, constraint);
+          if (layout->constraints_observer)
+            g_list_store_append (layout->constraints_observer, constraint);
 
           res = g_list_prepend (res, constraint);
         }
@@ -2115,4 +2161,50 @@ gtk_constraint_layout_add_constraints_from_description (GtkConstraintLayout *lay
   g_hash_table_unref (views);
 
   return res;
+}
+
+GListModel *
+gtk_constraint_layout_observe_constraints (GtkConstraintLayout *layout)
+{
+  GHashTableIter iter;
+  gpointer key;
+
+  if (layout->constraints_observer)
+    return g_object_ref (G_LIST_MODEL (layout->constraints_observer));
+
+  layout->constraints_observer = g_list_store_new (GTK_TYPE_CONSTRAINT);
+  g_object_add_weak_pointer ((GObject *)layout->constraints_observer,
+                             (gpointer *)&layout->constraints_observer);
+
+  g_hash_table_iter_init (&iter, layout->constraints);
+  while (g_hash_table_iter_next (&iter, &key, NULL))
+    {
+      GtkConstraint *constraint = key;
+      g_list_store_append (layout->constraints_observer, constraint);
+    }
+
+  return G_LIST_MODEL (layout->constraints_observer);
+}
+
+GListModel *
+gtk_constraint_layout_observe_guides (GtkConstraintLayout *layout)
+{
+  GHashTableIter iter;
+  gpointer key;
+
+  if (layout->guides_observer)
+    return g_object_ref (G_LIST_MODEL (layout->guides_observer));
+
+  layout->guides_observer = g_list_store_new (GTK_TYPE_CONSTRAINT_GUIDE);
+  g_object_add_weak_pointer ((GObject *)layout->guides_observer,
+                             (gpointer *)&layout->guides_observer);
+
+  g_hash_table_iter_init (&iter, layout->guides);
+  while (g_hash_table_iter_next (&iter, &key, NULL))
+    {
+      GtkConstraintGuide *guide = key;
+      g_list_store_append (layout->guides_observer, guide);
+    }
+
+  return G_LIST_MODEL (layout->guides_observer);
 }
