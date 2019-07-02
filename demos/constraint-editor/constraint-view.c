@@ -219,6 +219,7 @@ constraint_view_add_child (ConstraintView *view,
   frame = gtk_frame_new (NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (frame), "child");
   gtk_widget_set_name (frame, name);
+  gtk_widget_set_size_request (frame, 100, 25);
   label = gtk_label_new (name);
   gtk_container_add (GTK_CONTAINER (frame), label);
   g_object_bind_property (frame, "name",

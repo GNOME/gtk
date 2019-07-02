@@ -212,6 +212,19 @@ get_relation_nick (GtkConstraintRelation relation)
   return nick;
 }
 
+static const char *
+get_relation_to_string (GtkConstraintRelation relation)
+{
+  switch (relation)
+    {
+    case GTK_CONSTRAINT_RELATION_LE: return "≤";
+    case GTK_CONSTRAINT_RELATION_EQ: return "=";
+    case GTK_CONSTRAINT_RELATION_GE: return "≥";
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 static GtkConstraintStrength
 get_strength (const char *id)
 {
@@ -290,9 +303,17 @@ create_constraint (GtkButton        *button,
   target_attr = get_target_attr (id);
 
   id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source));
-  source = get_target (editor->model, id);
-  id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source_attr));
-  source_attr = get_target_attr (id);
+  if (id != NULL)
+    {
+      source = get_target (editor->model, id);
+      id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source_attr));
+      source_attr = get_target_attr (id);
+    }
+  else
+    {
+      source = NULL;
+      source_attr = GTK_CONSTRAINT_ATTRIBUTE_NONE;
+    }
 
   id = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->relation));
   relation = get_relation (id);
@@ -347,7 +368,7 @@ constraint_editor_constraint_to_string (GtkConstraint *constraint)
 
   name = get_target_name (gtk_constraint_get_target (constraint));
   attr = get_attr_nick (gtk_constraint_get_target_attribute (constraint));
-  relation = get_relation_nick (gtk_constraint_get_relation (constraint));
+  relation = get_relation_to_string (gtk_constraint_get_relation (constraint));
 
   if (name == NULL)
     name = "[ ]";
@@ -408,14 +429,20 @@ update_preview (ConstraintEditor *editor)
   g_free (relation);
 
   constant = gtk_editable_get_text (GTK_EDITABLE (editor->constant));
-  c = g_ascii_strtod (constant, NULL);
+  if (constant[0] != '\0')
+    c = g_ascii_strtod (constant, NULL);
+  else
+    c = 0.0;
 
   attr = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source_attr));
   if (strcmp (attr, "none") != 0)
     {
       name = gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source));
       multiplier = gtk_editable_get_text (GTK_EDITABLE (editor->multiplier));
-      m = g_ascii_strtod (multiplier, NULL);
+      if (multiplier[0] != '\0')
+        m = g_ascii_strtod (multiplier, NULL);
+      else
+        m = 1.0;
 
       if (name == NULL)
         name = "[ ]";
@@ -441,8 +468,7 @@ update_preview (ConstraintEditor *editor)
 static void
 update_button (ConstraintEditor *editor)
 {
-  if (gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->target)) != NULL &&
-      gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->source)) != NULL)
+  if (gtk_combo_box_get_active_id (GTK_COMBO_BOX (editor->target)) != NULL)
     gtk_widget_set_sensitive (editor->button, TRUE);
   else
     gtk_widget_set_sensitive (editor->button, FALSE);
