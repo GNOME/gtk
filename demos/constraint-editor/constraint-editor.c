@@ -66,8 +66,12 @@ get_target_name (GtkConstraintTarget *target)
 {
   if (target == NULL)
     return "super";
+  else if (GTK_IS_WIDGET (target))
+    return gtk_widget_get_name (GTK_WIDGET (target));
+  else if (GTK_IS_CONSTRAINT_GUIDE (target))
+    return gtk_constraint_guide_get_name (GTK_CONSTRAINT_GUIDE (target));
   else
-    return (const char *)g_object_get_data (G_OBJECT (target), "name");
+    return "";
 }
 
 static void
@@ -145,13 +149,19 @@ get_target (GListModel *model,
   for (i = 0; i < g_list_model_get_n_items (model); i++)
     {
       GObject *item = g_list_model_get_object (model, i);
-      const char *name;
+      g_object_unref (item);
       if (GTK_IS_CONSTRAINT (item))
         continue;
-      name = (const char *)g_object_get_data (item, "name");
-      g_object_unref (item);
-      if (strcmp (name, id) == 0)
-        return item;
+      else if (GTK_IS_WIDGET (item))
+        {
+          if (strcmp (id, gtk_widget_get_name (GTK_WIDGET (item))) == 0)
+            return item;
+        }
+      else if (GTK_IS_CONSTRAINT_GUIDE (item))
+        {
+          if (strcmp (id, gtk_constraint_guide_get_name (GTK_CONSTRAINT_GUIDE (item))) == 0)
+            return item;
+        }
     }
 
   return NULL;
