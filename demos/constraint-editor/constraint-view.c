@@ -216,11 +216,15 @@ constraint_view_add_child (ConstraintView *view,
   GtkWidget *frame;
   GtkWidget *label;
 
-  label = gtk_label_new (name);
   frame = gtk_frame_new (NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (frame), "child");
   gtk_widget_set_name (frame, name);
+  label = gtk_label_new (name);
   gtk_container_add (GTK_CONTAINER (frame), label);
+  g_object_bind_property (frame, "name",
+                          label, "label",
+                          G_BINDING_DEFAULT);
+
   gtk_widget_set_parent (frame, GTK_WIDGET (view));
 
   update_weak_position (view, frame, 100, 100);

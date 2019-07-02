@@ -23,6 +23,7 @@
 #include "constraint-view.h"
 #include "constraint-editor.h"
 #include "guide-editor.h"
+#include "child-editor.h"
 
 struct _ConstraintEditorWindow
 {
@@ -454,6 +455,33 @@ edit_guide (ConstraintEditorWindow *win,
 }
 
 static void
+child_editor_done (ChildEditor            *editor,
+                   GtkWidget              *child,
+                   ConstraintEditorWindow *win)
+{
+  gtk_widget_destroy (gtk_widget_get_ancestor (GTK_WIDGET (editor), GTK_TYPE_WINDOW));
+}
+
+static void
+edit_child (ConstraintEditorWindow *win,
+            GtkWidget              *child)
+{
+  GtkWidget *window;
+  ChildEditor *editor;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+  gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (win));
+  gtk_window_set_title (GTK_WINDOW (window), "Edit Child");
+
+  editor = child_editor_new (child);
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (editor));
+
+  g_signal_connect (editor, "done", G_CALLBACK (child_editor_done), win);
+  gtk_widget_show (window);
+}
+
+static void
 row_activated (GtkListBox *list,
                GtkListBoxRow *row,
                ConstraintEditorWindow *win)
@@ -466,6 +494,8 @@ row_activated (GtkListBox *list,
     edit_constraint (win, GTK_CONSTRAINT (item));
   else if (GTK_IS_CONSTRAINT_GUIDE (item))
     edit_guide (win, GTK_CONSTRAINT_GUIDE (item));
+  else if (GTK_IS_WIDGET (item))
+    edit_child (win, GTK_WIDGET (item));
 }
 
 static void
@@ -506,6 +536,8 @@ row_edit (GtkButton *button,
     edit_constraint (win, GTK_CONSTRAINT (item));
   else if (GTK_IS_CONSTRAINT_GUIDE (item))
     edit_guide (win, GTK_CONSTRAINT_GUIDE (item));
+  else if (GTK_IS_WIDGET (item))
+    edit_child (win, GTK_WIDGET (item));
 }
 
 static void
@@ -594,25 +626,15 @@ create_widget_func (gpointer item,
   gtk_container_add (GTK_CONTAINER (row), box);
   gtk_container_add (GTK_CONTAINER (box), label);
 
-  if (GTK_IS_CONSTRAINT (item) || GTK_IS_CONSTRAINT_GUIDE (item))
-    {
-      button = gtk_button_new_from_icon_name ("document-edit-symbolic");
-      gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-      g_signal_connect (button, "clicked", G_CALLBACK (row_edit), win);
-      g_object_set_data (G_OBJECT (row), "edit", button);
-      gtk_container_add (GTK_CONTAINER (box), button);
-      button = gtk_button_new_from_icon_name ("edit-delete-symbolic");
-      gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-      g_signal_connect (button, "clicked", G_CALLBACK (row_delete), win);
-      gtk_container_add (GTK_CONTAINER (box), button);
-    }
-  else if (GTK_IS_WIDGET (item))
-    {
-      button = gtk_button_new_from_icon_name ("edit-delete-symbolic");
-      gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-      g_signal_connect (button, "clicked", G_CALLBACK (row_delete), win);
-      gtk_container_add (GTK_CONTAINER (box), button);
-    }
+  button = gtk_button_new_from_icon_name ("document-edit-symbolic");
+  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+  g_signal_connect (button, "clicked", G_CALLBACK (row_edit), win);
+  g_object_set_data (G_OBJECT (row), "edit", button);
+  gtk_container_add (GTK_CONTAINER (box), button);
+  button = gtk_button_new_from_icon_name ("edit-delete-symbolic");
+  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+  g_signal_connect (button, "clicked", G_CALLBACK (row_delete), win);
+  gtk_container_add (GTK_CONTAINER (box), button);
 
   g_free (freeme);
 

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkAdjustment" id="min_width_adj">
+    <property name="lower">0</property>
+    <property name="upper">2147483647</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+    <property name="page-size">0</property>
+  </object>
+  <object class="GtkAdjustment" id="min_height_adj">
+    <property name="lower">0</property>
+    <property name="upper">2147483647</property>
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+    <property name="page-size">0</property>
+  </object>
+  <template class="ChildEditor" parent="GtkWidget">
+    <child>
+      <object class="GtkGrid" id="grid">
+        <property name="margin">20</property>
+        <property name="row-spacing">10</property>
+        <property name="column-spacing">10</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Name</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="name">
+            <property name="max-width-chars">20</property>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">0</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Min Size</property>
+            <layout>
+              <property name="left-attach">0</property>
+              <property name="top-attach">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="min_width">
+            <property name="adjustment">min_width_adj</property>
+            <property name="max-width-chars">5</property>
+            <layout>
+              <property name="left-attach">1</property>
+              <property name="top-attach">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="min_height">
+            <property name="adjustment">min_height_adj</property>
+            <property name="max-width-chars">5</property>
+            <layout>
+              <property name="left-attach">2</property>
+              <property name="top-attach">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="button">
+            <property name="label">Apply</property>
+            <signal name="clicked" handler="apply"/>
+            <layout>
+              <property name="left-attach">2</property>
+              <property name="top-attach">5</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

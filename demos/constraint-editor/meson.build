@@ -5,6 +5,7 @@ constraint_editor_sources = [
   'constraint-view.c',
   'constraint-editor.c',
   'guide-editor.c',
+  'child-editor.c',
   'guide-placeholder.c',
 ]
 
