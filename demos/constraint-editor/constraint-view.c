@@ -215,7 +215,7 @@ constraint_view_add_child (ConstraintView *view,
   label = gtk_label_new (name);
   frame = gtk_frame_new (NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (frame), "child");
-  g_object_set_data_full (G_OBJECT (frame), "name", g_strdup (name), g_free);
+  gtk_widget_set_name (frame, name);
   gtk_container_add (GTK_CONTAINER (frame), label);
   gtk_widget_set_parent (frame, GTK_WIDGET (view));
 
@@ -250,9 +250,12 @@ constraint_view_add_guide (ConstraintView *view,
   };
   int i;
 
-  name = (const char *)g_object_get_data (G_OBJECT (guide), "name");
-
+  name = gtk_constraint_guide_get_name (guide);
   label = gtk_label_new (name);
+  g_object_bind_property (guide, "name",
+                          label, "label",
+                          G_BINDING_DEFAULT);
+
   frame = gtk_frame_new (NULL);
   gtk_style_context_add_class (gtk_widget_get_style_context (frame), "guide");
   g_object_set_data (G_OBJECT (frame), "internal", "yes");
@@ -260,7 +263,6 @@ constraint_view_add_guide (ConstraintView *view,
   gtk_widget_insert_after (frame, GTK_WIDGET (view), NULL);
 
   g_object_set_data (G_OBJECT (guide), "frame", frame);
-  g_object_set_data (G_OBJECT (guide), "label", label);
 
   layout = GTK_CONSTRAINT_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (view)));
   gtk_constraint_layout_add_guide (layout, g_object_ref (guide));
@@ -280,27 +282,6 @@ constraint_view_add_guide (ConstraintView *view,
     }
 
   update_weak_position (view, frame, 150, 150);
-}
-
-void
-constraint_view_guide_changed (ConstraintView     *view,
-                               GtkConstraintGuide *guide)
-{
-  GtkWidget *label;
-  const char *name;
-  int i;
-
-  name = (const char *)g_object_get_data (G_OBJECT (guide), "name");
-  label = (GtkWidget *)g_object_get_data (G_OBJECT (guide), "label");
-  gtk_label_set_label (GTK_LABEL (label), name);
-  for (i = 0; i < g_list_model_get_n_items (view->model); i++)
-    {
-      if (g_list_model_get_item (view->model, i) == (GObject*)guide)
-        {
-          g_list_model_items_changed (view->model, i, 1, 1);
-          break;
-        }
-    }
 }
 
 void
