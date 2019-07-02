@@ -7338,6 +7338,10 @@ gtk_constraint_layout_remove_guide
 gtk_constraint_layout_add_constraints_from_description
 gtk_constraint_layout_add_constraints_from_descriptionv
 
+<SUBSECTION>
+gtk_constraint_layout_observe_constraints
+gtk_constraint_layout_observe_guides
+
 <SUBSECTION Standard>
 GTK_TYPE_CONSTRAINT_LAYOUT
 gtk_constraint_layout_get_type
