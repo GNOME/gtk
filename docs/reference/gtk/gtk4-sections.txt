@@ -7328,7 +7328,7 @@ gtk_constraint_layout_new
 <SUBSECTION Constraints>
 gtk_constraint_layout_add_constraint
 gtk_constraint_layout_remove_constraint
-gtk_constraint_layout_remove_all_constraint
+gtk_constraint_layout_remove_all_constraints
 
 <SUBSECTION Guides>
 gtk_constraint_layout_add_guide
