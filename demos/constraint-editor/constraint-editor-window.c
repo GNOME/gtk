@@ -95,8 +95,9 @@ add_guide (ConstraintEditorWindow *win)
 
   guide_counter++;
   name = g_strdup_printf ("Guide %d", guide_counter);
-  guide = g_object_new (GTK_TYPE_CONSTRAINT_GUIDE, NULL);
-  g_object_set_data_full (G_OBJECT (guide), "name", name, g_free);
+  guide = gtk_constraint_guide_new ();
+  gtk_constraint_guide_set_name (guide, name);
+  g_free (name);
 
   constraint_view_add_guide (CONSTRAINT_VIEW (win->view), guide);
 }
@@ -158,7 +159,6 @@ guide_editor_done (GuideEditor            *editor,
                    GtkConstraintGuide     *guide,
                    ConstraintEditorWindow *win)
 {
-  constraint_view_guide_changed (CONSTRAINT_VIEW (win->view), guide);
   gtk_widget_destroy (gtk_widget_get_ancestor (GTK_WIDGET (editor), GTK_TYPE_WINDOW));
 }
 
@@ -295,19 +295,23 @@ create_widget_func (gpointer item,
   ConstraintEditorWindow *win = user_data;
   const char *name;
   GtkWidget *row, *box, *label, *button;
-  char *str;
 
-  name = (const char *)g_object_get_data (G_OBJECT (item), "name");
+  if (GTK_IS_WIDGET (item))
+    name = gtk_widget_get_name (GTK_WIDGET (item));
+  else if (GTK_IS_CONSTRAINT_GUIDE (item))
+    name = gtk_constraint_guide_get_name (GTK_CONSTRAINT_GUIDE (item));
+  else
+    name = (const char *)g_object_get_data (G_OBJECT (item), "name");
 
   row = gtk_list_box_row_new ();
   g_object_set_data_full (G_OBJECT (row), "item", g_object_ref (item), g_object_unref);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  str = g_strdup_printf ("%s %p", name, item);
-  label = gtk_label_new (str);
-  g_free (str);
-  g_object_set (label,
-                "margin", 10,
-                NULL);
+  label = gtk_label_new (name);
+  if (GTK_IS_WIDGET (item) || GTK_IS_CONSTRAINT_GUIDE (item))
+    g_object_bind_property (item, "name",
+                            label, "label",
+                            G_BINDING_DEFAULT);
+  g_object_set (label, "margin", 10, NULL);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_widget_set_hexpand (label, TRUE);
   gtk_container_add (GTK_CONTAINER (row), box);
