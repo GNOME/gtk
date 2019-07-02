@@ -5,6 +5,7 @@ constraint_editor_sources = [
   'constraint-view.c',
   'constraint-editor.c',
   'guide-editor.c',
+  'guide-placeholder.c',
 ]
 
 constraint_editor_resources = gnome.compile_resources('constraint_editor_resources',

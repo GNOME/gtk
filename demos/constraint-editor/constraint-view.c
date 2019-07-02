@@ -16,6 +16,7 @@
 
 #include <gtk/gtk.h>
 #include "constraint-view.h"
+#include "guide-placeholder.h"
 
 struct _ConstraintView
 {
@@ -111,16 +112,19 @@ drag_begin (GtkGestureDrag *drag,
             ConstraintView *self)
 {
   GtkWidget *widget;
+  GtkWidget *target;
 
   widget = gtk_widget_pick (GTK_WIDGET (self), start_x, start_y, GTK_PICK_DEFAULT);
 
-  if (GTK_IS_LABEL (widget))
+  if (widget)
     {
-      widget = gtk_widget_get_ancestor (widget, GTK_TYPE_FRAME);
-      if (widget &&
-          gtk_widget_get_parent (widget) == (GtkWidget *)self)
+      target = gtk_widget_get_ancestor (widget, GUIDE_PLACEHOLDER_TYPE);
+      if (!target)
+        target = gtk_widget_get_ancestor (widget, GTK_TYPE_FRAME);
+      if (target &&
+          gtk_widget_get_parent (target) == (GtkWidget *)self)
         {
-          self->drag_widget = widget;
+          self->drag_widget = target;
         }
     }
 }
@@ -235,8 +239,7 @@ constraint_view_add_guide (ConstraintView *view,
                            GtkConstraintGuide *guide)
 {
   GtkConstraintLayout *layout;
-  GtkWidget *frame;
-  GtkWidget *label;
+  GtkWidget *placeholder;
   const char *name;
   GtkConstraint *constraint;
   struct {
@@ -251,25 +254,24 @@ constraint_view_add_guide (ConstraintView *view,
   int i;
 
   name = gtk_constraint_guide_get_name (guide);
-  label = gtk_label_new (name);
+
+  placeholder = guide_placeholder_new (guide);
+  gtk_widget_set_tooltip_text (placeholder, name);
   g_object_bind_property (guide, "name",
-                          label, "label",
+                          placeholder, "tooltip-text",
                           G_BINDING_DEFAULT);
 
-  frame = gtk_frame_new (NULL);
-  gtk_style_context_add_class (gtk_widget_get_style_context (frame), "guide");
-  g_object_set_data (G_OBJECT (frame), "internal", "yes");
-  gtk_container_add (GTK_CONTAINER (frame), label);
-  gtk_widget_insert_after (frame, GTK_WIDGET (view), NULL);
+  g_object_set_data (G_OBJECT (placeholder), "internal", "yes");
+  gtk_widget_insert_after (placeholder, GTK_WIDGET (view), NULL);
 
-  g_object_set_data (G_OBJECT (guide), "frame", frame);
+  g_object_set_data (G_OBJECT (guide), "placeholder", placeholder);
 
   layout = GTK_CONSTRAINT_LAYOUT (gtk_widget_get_layout_manager (GTK_WIDGET (view)));
   gtk_constraint_layout_add_guide (layout, g_object_ref (guide));
 
   for (i = 0; i < G_N_ELEMENTS (names); i++)
     {
-      constraint = gtk_constraint_new (frame,
+      constraint = gtk_constraint_new (placeholder,
                                        names[i].attr,
                                        GTK_CONSTRAINT_RELATION_EQ,
                                        guide,
@@ -281,7 +283,7 @@ constraint_view_add_guide (ConstraintView *view,
       g_object_set_data (G_OBJECT (guide), names[i].name, constraint);
     }
 
-  update_weak_position (view, frame, 150, 150);
+  update_weak_position (view, placeholder, 150, 150);
 }
 
 void
@@ -289,7 +291,7 @@ constraint_view_remove_guide (ConstraintView     *view,
                               GtkConstraintGuide *guide)
 {
   GtkConstraintLayout *layout;
-  GtkWidget *frame;
+  GtkWidget *placeholder;
   GtkConstraint *constraint;
   const char *names[] = {
     "left-constraint",
@@ -307,9 +309,9 @@ constraint_view_remove_guide (ConstraintView     *view,
       gtk_constraint_layout_remove_constraint (layout, constraint);
     }
 
-  frame = (GtkWidget *)g_object_get_data (G_OBJECT (guide), "frame");
-  update_weak_position (view, frame, -100, -100);
-  gtk_widget_unparent (frame);
+  placeholder = (GtkWidget *)g_object_get_data (G_OBJECT (guide), "placeholder");
+  update_weak_position (view, placeholder, -100, -100);
+  gtk_widget_unparent (placeholder);
 
   gtk_constraint_layout_remove_guide (layout, guide);
 }

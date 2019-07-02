@@ -368,6 +368,7 @@ add_guide (ConstraintEditorWindow *win)
   name = g_strdup_printf ("Guide %d", guide_counter);
   guide = gtk_constraint_guide_new ();
   gtk_constraint_guide_set_name (guide, name);
+  gtk_constraint_guide_set_min_size (guide, 100, 25);
   g_free (name);
 
   constraint_view_add_guide (CONSTRAINT_VIEW (win->view), guide);
