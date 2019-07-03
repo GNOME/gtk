@@ -1,3 +1,31 @@
+Overview of Changes in GTK+ 3.24.10
+===================================
+
+* Make gtk_widget_get_action_group behave as documented
+
+* Make gdk_screen_get_monitor_plug_name works as before
+
+* Adwaita:
+  - Update infobar look
+  - Fix some issues with submenus and popovers
+
+* Wayland: Use the xdg-output protocol
+
+* Fix build issues around cups
+
+* Quartz: Build fixes
+
+* treeview: Bring the pixel cache back, since its removal
+  was causing problems in some applications
+
+* Various documentation improvements
+
+* Translation updates:
+ Slovenian
+ Croatian
+ Spanish
+
+
 Overview of Changes in GTK+ 3.24.9
 ==================================
 
