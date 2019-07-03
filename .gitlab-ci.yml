@@ -1,7 +1,7 @@
 stages:
   - build
   - flatpak
-  - deploy
+#  - deploy
 
 .cache-paths: &cache-paths
   paths:
