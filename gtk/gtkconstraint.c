@@ -256,7 +256,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
    * GtkConstraint:multiplier:
    *
    * The multiplication factor to be applied to the
-   * #GtkConstraint:source-attribue.
+   * #GtkConstraint:source-attribute.
    */
   obj_props[PROP_MULTIPLIER] =
     g_param_spec_double ("multiplier",
