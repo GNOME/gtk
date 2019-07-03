@@ -622,7 +622,13 @@ static void
 enable (GtkIMContextWayland       *context_wayland,
         GtkIMContextWaylandGlobal *global)
 {
+  GtkInputHints hints;
   gboolean result;
+
+  g_object_get (context_wayland, "input-hints", &hints, NULL);
+  if (hints & GTK_INPUT_HINT_INHIBIT_OSK)
+	  return;
+
   zwp_text_input_v3_enable (global->text_input);
   g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
   notify_content_type (context_wayland);
