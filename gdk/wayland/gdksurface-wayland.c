@@ -349,7 +349,7 @@ frame_callback (void               *data,
     return;
 
   impl->awaiting_frame = FALSE;
-  _gdk_frame_clock_thaw (clock);
+  gdk_surface_thaw_updates (surface);
 
   timings = gdk_frame_clock_get_timings (clock, impl->pending_frame_counter);
   impl->pending_frame_counter = 0;
@@ -465,8 +465,9 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
       g_signal_emit (impl, signals[COMMITTED], 0);
     }
 
-  if (impl->awaiting_frame)
-    _gdk_frame_clock_freeze (clock);
+  if (impl->awaiting_frame &&
+      impl->pending_frame_counter == gdk_frame_clock_get_frame_counter (clock))
+    gdk_surface_freeze_updates (surface);
 }
 
 void
@@ -2577,12 +2578,8 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
 
       if (impl->awaiting_frame)
         {
-          GdkFrameClock *frame_clock;
-
           impl->awaiting_frame = FALSE;
-          frame_clock = gdk_surface_get_frame_clock (surface);
-          if (frame_clock)
-            _gdk_frame_clock_thaw (frame_clock);
+          gdk_surface_thaw_updates (surface);
         }
 
       if (impl->display_server.gtk_surface)

@@ -1341,10 +1341,14 @@ gdk_surface_schedule_update (GdkSurface *surface)
 {
   GdkFrameClock *frame_clock;
 
-  if (surface &&
-      (surface->update_freeze_count ||
-       gdk_surface_is_toplevel_frozen (surface)))
-    return;
+  g_return_if_fail (surface);
+
+  if (surface->update_freeze_count ||
+      gdk_surface_is_toplevel_frozen (surface))
+    {
+      surface->pending_schedule_update = TRUE;
+      return;
+    }
 
   /* If there's no frame clock (a foreign surface), then the invalid
    * region will just stick around unless gdk_surface_process_updates()
@@ -1400,7 +1404,6 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
                             void          *data)
 {
   GdkSurface *surface = GDK_SURFACE (data);
-  GList *l;
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
@@ -1420,9 +1423,6 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
       gdk_surface_process_updates_internal (surface);
       gdk_surface_remove_update_surface (surface);
     }
-
-  for (l = surface->children; l; l = l->next)
-    gdk_surface_paint_on_clock (clock, l->data);
 
   g_object_unref (surface);
 }
@@ -1581,13 +1581,17 @@ gdk_surface_freeze_updates (GdkSurface *surface)
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   surface->update_freeze_count++;
+  if (surface->update_freeze_count == 1)
+    _gdk_frame_clock_uninhibit_freeze (surface->frame_clock);
 }
 
 /**
  * gdk_surface_thaw_updates:
  * @surface: a #GdkSurface
  *
- * Thaws a surface frozen with gdk_surface_freeze_updates().
+ * Thaws a surface frozen with gdk_surface_freeze_updates(). Note that this
+ * will not necessarily schedule updates if the surface freeze count reaches
+ * zero.
  **/
 void
 gdk_surface_thaw_updates (GdkSurface *surface)
@@ -1597,7 +1601,15 @@ gdk_surface_thaw_updates (GdkSurface *surface)
   g_return_if_fail (surface->update_freeze_count > 0);
 
   if (--surface->update_freeze_count == 0)
-    gdk_surface_schedule_update (surface);
+    {
+      _gdk_frame_clock_inhibit_freeze (surface->frame_clock);
+
+      if (surface->pending_schedule_update)
+        {
+          surface->pending_schedule_update = FALSE;
+          gdk_surface_schedule_update (surface);
+        }
+    }
 }
 
 void
@@ -1606,7 +1618,7 @@ gdk_surface_freeze_toplevel_updates (GdkSurface *surface)
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   surface->update_and_descendants_freeze_count++;
-  _gdk_frame_clock_freeze (gdk_surface_get_frame_clock (surface));
+  gdk_surface_freeze_updates (surface);
 }
 
 void
@@ -1616,9 +1628,9 @@ gdk_surface_thaw_toplevel_updates (GdkSurface *surface)
   g_return_if_fail (surface->update_and_descendants_freeze_count > 0);
 
   surface->update_and_descendants_freeze_count--;
-  _gdk_frame_clock_thaw (gdk_surface_get_frame_clock (surface));
-
   gdk_surface_schedule_update (surface);
+  gdk_surface_thaw_updates (surface);
+
 }
 
 /**
@@ -3703,40 +3715,42 @@ gdk_surface_set_frame_clock (GdkSurface     *surface,
   if (clock)
     {
       g_object_ref (clock);
-      if (surface->parent == NULL)
-        {
-          g_signal_connect (G_OBJECT (clock),
-                            "flush-events",
-                            G_CALLBACK (gdk_surface_flush_events),
-                            surface);
-          g_signal_connect (G_OBJECT (clock),
-                            "resume-events",
-                            G_CALLBACK (gdk_surface_resume_events),
-                            surface);
-          g_signal_connect (G_OBJECT (clock),
-                            "paint",
-                            G_CALLBACK (gdk_surface_paint_on_clock),
-                            surface);
-        }
+
+      g_signal_connect (G_OBJECT (clock),
+                        "flush-events",
+                        G_CALLBACK (gdk_surface_flush_events),
+                        surface);
+      g_signal_connect (G_OBJECT (clock),
+                        "resume-events",
+                        G_CALLBACK (gdk_surface_resume_events),
+                        surface);
+      g_signal_connect (G_OBJECT (clock),
+                        "paint",
+                        G_CALLBACK (gdk_surface_paint_on_clock),
+                        surface);
+
+      if (surface->update_freeze_count == 0)
+        _gdk_frame_clock_inhibit_freeze (clock);
     }
 
   if (surface->frame_clock)
     {
-      if (surface->parent == NULL)
-        {
-          if (surface->frame_clock_events_paused)
-            gdk_surface_resume_events (surface->frame_clock, G_OBJECT (surface));
+      if (surface->frame_clock_events_paused)
+        gdk_surface_resume_events (surface->frame_clock, G_OBJECT (surface));
 
-          g_signal_handlers_disconnect_by_func (G_OBJECT (surface->frame_clock),
-                                                G_CALLBACK (gdk_surface_flush_events),
-                                                surface);
-          g_signal_handlers_disconnect_by_func (G_OBJECT (surface->frame_clock),
-                                                G_CALLBACK (gdk_surface_resume_events),
-                                                surface);
-          g_signal_handlers_disconnect_by_func (G_OBJECT (surface->frame_clock),
-                                                G_CALLBACK (gdk_surface_paint_on_clock),
-                                                surface);
-        }
+      g_signal_handlers_disconnect_by_func (G_OBJECT (surface->frame_clock),
+                                            G_CALLBACK (gdk_surface_flush_events),
+                                            surface);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (surface->frame_clock),
+                                            G_CALLBACK (gdk_surface_resume_events),
+                                            surface);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (surface->frame_clock),
+                                            G_CALLBACK (gdk_surface_paint_on_clock),
+                                            surface);
+
+      if (surface->update_freeze_count == 0)
+        _gdk_frame_clock_uninhibit_freeze (surface->frame_clock);
+
       g_object_unref (surface->frame_clock);
     }
 
