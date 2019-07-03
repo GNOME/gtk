@@ -495,8 +495,6 @@ struct _GtkTreeViewPrivate
   guint hover_expand : 1;
   guint imcontext_changed : 1;
 
-  guint in_scroll : 1;
-
   guint rubber_banding_enable : 1;
 
   guint in_grab : 1;
@@ -2420,11 +2418,6 @@ gtk_tree_view_bin_window_invalidate_handler (GdkWindow *window,
 
   gdk_window_get_user_data (window, &widget);
   tree_view = GTK_TREE_VIEW (widget);
-
-  /* Scrolling will invalidate everything in the bin window,
-     but we already have it in the cache, so we can ignore that */
-  if (tree_view->priv->in_scroll)
-    return;
 
   y = gtk_adjustment_get_value (tree_view->priv->vadjustment);
   cairo_region_translate (region,
@@ -11400,9 +11393,7 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
 		       - gtk_adjustment_get_value (tree_view->priv->hadjustment),
 		       0);
       dy = tree_view->priv->dy - (int) gtk_adjustment_get_value (tree_view->priv->vadjustment);
-      tree_view->priv->in_scroll = TRUE;
       gdk_window_scroll (tree_view->priv->bin_window, 0, dy);
-      tree_view->priv->in_scroll = FALSE;
 
       if (dy != 0)
         {
