@@ -2303,7 +2303,7 @@ gtk_widget_set_property (GObject         *object,
         gtk_css_node_set_name (priv->cssnode, GTK_WIDGET_GET_CLASS (widget)->priv->css_name);
       break;
     case PROP_LAYOUT_MANAGER:
-      gtk_widget_set_layout_manager (widget, g_value_get_object (value));
+      gtk_widget_set_layout_manager (widget, g_value_dup_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
