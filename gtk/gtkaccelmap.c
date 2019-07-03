@@ -821,13 +821,17 @@ gtk_accel_map_foreach (gpointer           data,
     {
       AccelEntry *entry = slist->data;
       gboolean changed = entry->accel_key != entry->std_accel_key || entry->accel_mods != entry->std_accel_mods;
+      gboolean skip = FALSE;
 
       for (node = accel_filters; node; node = node->next)
-	if (g_pattern_match_string (node->data, entry->accel_path))
-	  goto skip_accel;
-      foreach_func (data, entry->accel_path, entry->accel_key, entry->accel_mods, changed);
-    skip_accel:
-      /* noop */;
+        if (g_pattern_match_string (node->data, entry->accel_path))
+          {
+            skip = TRUE;
+            break;
+          }
+
+      if (!skip)
+        foreach_func (data, entry->accel_path, entry->accel_key, entry->accel_mods, changed);
     }
   g_slist_free (entries);
 }
