@@ -155,6 +155,16 @@ accel_entry_equal (gconstpointer key1,
   return g_str_equal (entry1->accel_path, entry2->accel_path);
 }
 
+static int
+accel_entry_compare (gconstpointer a,
+                     gconstpointer b)
+{
+  const AccelEntry *entry1 = a;
+  const AccelEntry *entry2 = b;
+
+  return strcmp (entry1->accel_path, entry2->accel_path);
+}
+
 static inline AccelEntry*
 accel_path_lookup (const gchar *accel_path)
 {
@@ -817,6 +827,8 @@ gtk_accel_map_foreach (gpointer           data,
   g_return_if_fail (foreach_func != NULL);
 
   entries = g_hash_table_slist_values (accel_entry_ht);
+  entries = g_slist_sort (entries, accel_entry_compare);
+
   for (slist = entries; slist; slist = slist->next)
     {
       AccelEntry *entry = slist->data;
