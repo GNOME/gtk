@@ -4007,6 +4007,50 @@ compare_name (GtkFileSystemModel   *model,
   return result;
 }
 
+static int
+compare_query_pos (GtkFileSystemModel   *model,
+                   GtkTreeIter          *a,
+                   GtkTreeIter          *b,
+                   GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
+  const char *query = NULL;
+  const char *name_a, *name_b;
+  char *normalized_a, *normalized_b;
+  char *cmp_a, *cmp_b;
+  gsize pos1, pos2;
+
+  /* Just for safety */
+  if (!priv->search_query)
+    return 0;
+
+  query = gtk_query_get_text (priv->search_query);
+
+  name_a = g_value_get_string (_gtk_file_system_model_get_value (model, a, MODEL_COL_NAME));
+  name_b = g_value_get_string (_gtk_file_system_model_get_value (model, b, MODEL_COL_NAME));
+
+  normalized_a = g_utf8_normalize (name_a, -1, G_NORMALIZE_NFD);
+  normalized_b = g_utf8_normalize (name_b, -1, G_NORMALIZE_NFD);
+
+  cmp_a = g_utf8_strdown (normalized_a, -1);
+  cmp_b = g_utf8_strdown (normalized_b, -1);
+
+  pos1 = strstr(cmp_a, query) - cmp_a;
+  pos2 = strstr(cmp_b, query) - cmp_b;
+
+  g_free (cmp_a);
+  g_free (cmp_b);
+  g_free (normalized_a);
+  g_free (normalized_b);
+
+  if (pos1 < pos2)
+    return -1;
+  else if (pos1 > pos2)
+    return 1;
+
+  return 0;
+}
+
 static gint
 compare_size (GtkFileSystemModel   *model,
               GtkTreeIter          *a,
@@ -4171,6 +4215,9 @@ search_sort_func (GtkTreeModel *model,
   gint result;
 
   result = compare_location (fs_model, a, b, impl);
+
+  if (result == 0)
+    result = compare_query_pos (fs_model, a, b, impl);
 
   if (result == 0)
     result = compare_name (fs_model, a, b, impl);
