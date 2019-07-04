@@ -69,90 +69,97 @@ static void
 set_query (GtkSearchEngine *engine,
            GtkQuery        *query)
 {
-  g_set_object (&engine->priv->query, query);
+  GtkSearchEnginePrivate *priv = _gtk_search_engine_get_instance_private (engine);
 
-  if (engine->priv->native)
-    _gtk_search_engine_set_query (engine->priv->native, query);
+  g_set_object (&priv->query, query);
 
-  if (engine->priv->simple)
-    _gtk_search_engine_set_query (engine->priv->simple, query);
+  if (priv->native)
+    _gtk_search_engine_set_query (priv->native, query);
 
-  if (engine->priv->model)
-    _gtk_search_engine_set_query (engine->priv->model, query);
+  if (priv->simple)
+    _gtk_search_engine_set_query (priv->simple, query);
+
+  if (priv->model)
+    _gtk_search_engine_set_query (priv->model, query);
 }
 
 static void
 start (GtkSearchEngine *engine)
 {
-  g_hash_table_remove_all (engine->priv->hits);
+  GtkSearchEnginePrivate *priv = _gtk_search_engine_get_instance_private (engine);
 
-  if (engine->priv->native)
+  g_hash_table_remove_all (priv->hits);
+
+  if (priv->native)
     {
-      g_clear_pointer (&engine->priv->native_error, g_free);
-      _gtk_search_engine_start (engine->priv->native);
-      engine->priv->native_running = TRUE;
+      g_clear_pointer (&priv->native_error, g_free);
+      _gtk_search_engine_start (priv->native);
+      priv->native_running = TRUE;
     }
 
-  if (engine->priv->simple)
+  if (priv->simple)
     {
-      g_clear_pointer (&engine->priv->simple_error, g_free);
-      _gtk_search_engine_start (engine->priv->simple);
-      engine->priv->simple_running = TRUE;
+      g_clear_pointer (&priv->simple_error, g_free);
+      _gtk_search_engine_start (priv->simple);
+      priv->simple_running = TRUE;
     }
 
-  if (engine->priv->model)
+  if (priv->model)
     {
-      g_clear_pointer (&engine->priv->model_error, g_free);
-      _gtk_search_engine_start (engine->priv->model);
-      engine->priv->model_running = TRUE;
+      g_clear_pointer (&priv->model_error, g_free);
+      _gtk_search_engine_start (priv->model);
+      priv->model_running = TRUE;
     }
 
-  engine->priv->running = TRUE;
+  priv->running = TRUE;
 }
 
 static void
 stop (GtkSearchEngine *engine)
 {
-  if (engine->priv->native)
+  GtkSearchEnginePrivate *priv = _gtk_search_engine_get_instance_private (engine);
+
+  if (priv->native)
     {
-      _gtk_search_engine_stop (engine->priv->native);
-      engine->priv->native_running = FALSE;
+      _gtk_search_engine_stop (priv->native);
+      priv->native_running = FALSE;
     }
 
-  if (engine->priv->simple)
+  if (priv->simple)
     {
-      _gtk_search_engine_stop (engine->priv->simple);
-      engine->priv->simple_running = FALSE;
+      _gtk_search_engine_stop (priv->simple);
+      priv->simple_running = FALSE;
     }
 
-  if (engine->priv->model)
+  if (priv->model)
     {
-      _gtk_search_engine_stop (engine->priv->model);
-      engine->priv->model_running = FALSE;
+      _gtk_search_engine_stop (priv->model);
+      priv->model_running = FALSE;
     }
 
-  engine->priv->running = FALSE;
+  priv->running = FALSE;
 
-  g_hash_table_remove_all (engine->priv->hits);
+  g_hash_table_remove_all (priv->hits);
 }
 
 static void
 finalize (GObject *object)
 {
   GtkSearchEngine *engine = GTK_SEARCH_ENGINE (object);
+  GtkSearchEnginePrivate *priv = _gtk_search_engine_get_instance_private (engine);
 
-  g_clear_object (&engine->priv->native);
-  g_free (engine->priv->native_error);
+  g_clear_object (&priv->native);
+  g_free (priv->native_error);
 
-  g_clear_object (&engine->priv->simple);
-  g_free (engine->priv->simple_error);
+  g_clear_object (&priv->simple);
+  g_free (priv->simple_error);
 
-  g_clear_object (&engine->priv->model);
-  g_free (engine->priv->model_error);
+  g_clear_object (&priv->model);
+  g_free (priv->model_error);
 
-  g_clear_pointer (&engine->priv->hits, g_hash_table_unref);
+  g_clear_pointer (&priv->hits, g_hash_table_unref);
 
-  g_clear_object (&engine->priv->query);
+  g_clear_object (&priv->query);
 
   G_OBJECT_CLASS (_gtk_search_engine_parent_class)->finalize (object);
 }
@@ -201,9 +208,9 @@ _gtk_search_engine_class_init (GtkSearchEngineClass *class)
 static void
 _gtk_search_engine_init (GtkSearchEngine *engine)
 {
-  engine->priv = _gtk_search_engine_get_instance_private (engine);
+  GtkSearchEnginePrivate *priv = _gtk_search_engine_get_instance_private (engine);
 
-  engine->priv->recursive = TRUE;
+  priv->recursive = TRUE;
 }
 
 static void
@@ -212,6 +219,7 @@ hits_added (GtkSearchEngine *engine,
             gpointer         data)
 {
   GtkSearchEngine *composite = GTK_SEARCH_ENGINE (data);
+  GtkSearchEnginePrivate *priv = _gtk_search_engine_get_instance_private (composite);
   GList *added, *l;
   GtkSearchHit *hit;
 
@@ -221,10 +229,10 @@ hits_added (GtkSearchEngine *engine,
     {
       hit = l->data;
 
-      if (!g_hash_table_contains (composite->priv->hits, hit))
+      if (!g_hash_table_contains (priv->hits, hit))
         {
           hit = _gtk_search_hit_dup (hit);
-          g_hash_table_add (composite->priv->hits, hit);
+          g_hash_table_add (priv->hits, hit);
           added = g_list_prepend (added, hit);
         }
     }
@@ -239,22 +247,23 @@ hits_added (GtkSearchEngine *engine,
 static void
 update_status (GtkSearchEngine *engine)
 {
+  GtkSearchEnginePrivate *priv = _gtk_search_engine_get_instance_private (engine);
   gboolean running;
 
-  running = engine->priv->native_running || engine->priv->simple_running;
+  running = priv->native_running || priv->simple_running;
 
-  if (running != engine->priv->running)
+  if (running != priv->running)
     {
-      engine->priv->running = running;
+      priv->running = running;
 
       if (!running)
         {
-          if (engine->priv->native_error)
-            _gtk_search_engine_error (engine, engine->priv->native_error);
-          else if (engine->priv->simple_error)
-            _gtk_search_engine_error (engine, engine->priv->simple_error);
-          else if (engine->priv->model_error)
-            _gtk_search_engine_error (engine, engine->priv->model_error);
+          if (priv->native_error)
+            _gtk_search_engine_error (engine, priv->native_error);
+          else if (priv->simple_error)
+            _gtk_search_engine_error (engine, priv->simple_error);
+          else if (priv->model_error)
+            _gtk_search_engine_error (engine, priv->model_error);
           else
             _gtk_search_engine_finished (engine);
         }
@@ -266,13 +275,14 @@ finished (GtkSearchEngine *engine,
           gpointer         data)
 {
   GtkSearchEngine *composite = GTK_SEARCH_ENGINE (data);
+  GtkSearchEnginePrivate *priv = _gtk_search_engine_get_instance_private (composite);
 
-  if (engine == composite->priv->native)
-    composite->priv->native_running = FALSE;
-  else if (engine == composite->priv->simple)
-    composite->priv->simple_running = FALSE;
-  else if (engine == composite->priv->model)
-    composite->priv->model_running = FALSE;
+  if (engine == priv->native)
+    priv->native_running = FALSE;
+  else if (engine == priv->simple)
+    priv->simple_running = FALSE;
+  else if (engine == priv->model)
+    priv->model_running = FALSE;
 
   update_status (composite);
 }
@@ -283,24 +293,25 @@ error (GtkSearchEngine *engine,
        gpointer         data)
 {
   GtkSearchEngine *composite = GTK_SEARCH_ENGINE (data);
+  GtkSearchEnginePrivate *priv = _gtk_search_engine_get_instance_private (composite);
 
-  if (engine == composite->priv->native)
+  if (engine == priv->native)
     {
-      g_free (composite->priv->native_error);
-      composite->priv->native_error = g_strdup (message);
-      composite->priv->native_running = FALSE;
+      g_free (priv->native_error);
+      priv->native_error = g_strdup (message);
+      priv->native_running = FALSE;
     }
-  else if (engine == composite->priv->simple)
+  else if (engine == priv->simple)
     {
-      g_free (composite->priv->simple_error);
-      composite->priv->simple_error = g_strdup (message);
-      composite->priv->simple_running = FALSE;
+      g_free (priv->simple_error);
+      priv->simple_error = g_strdup (message);
+      priv->simple_running = FALSE;
     }
-  else if (engine == composite->priv->model)
+  else if (engine == priv->model)
     {
-      g_free (composite->priv->model_error);
-      composite->priv->model_error = g_strdup (message);
-      composite->priv->model_running = FALSE;
+      g_free (priv->model_error);
+      priv->model_error = g_strdup (message);
+      priv->model_running = FALSE;
     }
 
   update_status (composite);
@@ -360,37 +371,39 @@ GtkSearchEngine *
 _gtk_search_engine_new (void)
 {
   GtkSearchEngine *engine;
+  GtkSearchEnginePrivate *priv;
 
   engine = g_object_new (GTK_TYPE_SEARCH_ENGINE, NULL);
+  priv = _gtk_search_engine_get_instance_private (engine);
 
-  engine->priv->simple = _gtk_search_engine_simple_new ();
+  priv->simple = _gtk_search_engine_simple_new ();
   g_debug ("Using simple search engine");
-  connect_engine_signals (engine->priv->simple, engine);
+  connect_engine_signals (priv->simple, engine);
 
 #ifdef HAVE_TRACKER
-  engine->priv->native = _gtk_search_engine_tracker_new ();
-  if (engine->priv->native)
+  priv->native = _gtk_search_engine_tracker_new ();
+  if (priv->native)
     {
       g_debug ("Using Tracker search engine");
-      connect_engine_signals (engine->priv->native, engine);
-      _gtk_search_engine_simple_set_indexed_cb (GTK_SEARCH_ENGINE_SIMPLE (engine->priv->simple),
+      connect_engine_signals (priv->native, engine);
+      _gtk_search_engine_simple_set_indexed_cb (GTK_SEARCH_ENGINE_SIMPLE (priv->simple),
                                                 _gtk_search_engine_tracker_is_indexed,
-                                                g_object_ref (engine->priv->native),
+                                                g_object_ref (priv->native),
                                                 g_object_unref);
     }
 #endif
 
 #ifdef GDK_WINDOWING_QUARTZ
-  engine->priv->native = _gtk_search_engine_quartz_new ();
-  if (engine->priv->native)
+  priv->native = _gtk_search_engine_quartz_new ();
+  if (priv->native)
     {
       g_debug ("Using Quartz search engine");
-      connect_engine_signals (engine->priv->native, engine);
+      connect_engine_signals (priv->native, engine);
     }
 #endif
 
-  engine->priv->hits = g_hash_table_new_full (search_hit_hash, search_hit_equal,
-                                              (GDestroyNotify)_gtk_search_hit_free, NULL);
+  priv->hits = g_hash_table_new_full (search_hit_hash, search_hit_equal,
+                                      (GDestroyNotify)_gtk_search_hit_free, NULL);
 
   return engine;
 }
@@ -453,37 +466,43 @@ void
 _gtk_search_engine_set_recursive (GtkSearchEngine *engine,
                                   gboolean         recursive)
 {
+  GtkSearchEnginePrivate *priv = _gtk_search_engine_get_instance_private (engine);
+
   g_return_if_fail (GTK_IS_SEARCH_ENGINE (engine));
 
-  g_assert (!engine->priv->running);
+  g_assert (!priv->running);
 
-  engine->priv->recursive = recursive;
+  priv->recursive = recursive;
 
-  if (engine->priv->native)
-    _gtk_search_engine_set_recursive (engine->priv->native, recursive);
+  if (priv->native)
+    _gtk_search_engine_set_recursive (priv->native, recursive);
 
-  if (engine->priv->simple)
-    _gtk_search_engine_set_recursive (engine->priv->simple, recursive);
+  if (priv->simple)
+    _gtk_search_engine_set_recursive (priv->simple, recursive);
 }
 
 gboolean
 _gtk_search_engine_get_recursive (GtkSearchEngine *engine)
 {
+  GtkSearchEnginePrivate *priv = _gtk_search_engine_get_instance_private (engine);
+
   g_return_val_if_fail (GTK_IS_SEARCH_ENGINE (engine), TRUE);
 
-  return engine->priv->recursive;
+  return priv->recursive;
 }
 
 void
 _gtk_search_engine_set_model (GtkSearchEngine    *engine,
                               GtkFileSystemModel *model)
 {
-  g_clear_object (&engine->priv->model);
+  GtkSearchEnginePrivate *priv = _gtk_search_engine_get_instance_private (engine);
+
+  g_clear_object (&priv->model);
   if (model)
     {
-      engine->priv->model = _gtk_search_engine_model_new (model);
-      connect_engine_signals (engine->priv->model, engine);
-      if (engine->priv->query)
-        _gtk_search_engine_set_query (engine->priv->model, engine->priv->query);
+      priv->model = _gtk_search_engine_model_new (model);
+      connect_engine_signals (priv->model, engine);
+      if (priv->query)
+        _gtk_search_engine_set_query (priv->model, priv->query);
     }
 }

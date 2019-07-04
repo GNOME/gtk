@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  *
- * Author: Anders Carlsson <andersca@imendio.com> 
+ * Author: Anders Carlsson <andersca@imendio.com>
  *
  * Based on nautilus-search-engine.h
  */
@@ -49,25 +49,23 @@ struct _GtkSearchHit
 struct _GtkSearchEngine
 {
   GObject parent;
-
-  GtkSearchEnginePrivate *priv;
 };
 
-struct _GtkSearchEngineClass 
+struct _GtkSearchEngineClass
 {
   GObjectClass parent_class;
-  
+
   /* VTable */
-  void     (*set_query)       (GtkSearchEngine *engine, 
+  void     (*set_query)       (GtkSearchEngine *engine,
 			       GtkQuery        *query);
   void     (*start)           (GtkSearchEngine *engine);
   void     (*stop)            (GtkSearchEngine *engine);
-  
+
   /* Signals */
-  void     (*hits_added)      (GtkSearchEngine *engine, 
+  void     (*hits_added)      (GtkSearchEngine *engine,
 			       GList           *hits);
   void     (*finished)        (GtkSearchEngine *engine);
-  void     (*error)           (GtkSearchEngine *engine, 
+  void     (*error)           (GtkSearchEngine *engine,
 			       const gchar     *error_message);
 };
 
@@ -75,15 +73,15 @@ GType            _gtk_search_engine_get_type        (void);
 
 GtkSearchEngine* _gtk_search_engine_new             (void);
 
-void             _gtk_search_engine_set_query       (GtkSearchEngine *engine, 
+void             _gtk_search_engine_set_query       (GtkSearchEngine *engine,
                                                      GtkQuery        *query);
 void	         _gtk_search_engine_start           (GtkSearchEngine *engine);
 void	         _gtk_search_engine_stop            (GtkSearchEngine *engine);
 
-void	         _gtk_search_engine_hits_added      (GtkSearchEngine *engine, 
+void	         _gtk_search_engine_hits_added      (GtkSearchEngine *engine,
 						     GList           *hits);
 void	         _gtk_search_engine_finished        (GtkSearchEngine *engine);
-void	         _gtk_search_engine_error           (GtkSearchEngine *engine, 
+void	         _gtk_search_engine_error           (GtkSearchEngine *engine,
 						     const gchar     *error_message);
 void             _gtk_search_engine_set_recursive   (GtkSearchEngine *engine,
                                                      gboolean         recursive);
