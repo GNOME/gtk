@@ -2239,12 +2239,20 @@ notebook {
       border-bottom-style: solid;
       > tabs {
         margin-bottom: -2px;
+        padding-top: 4px;
         > tab {
-          &:hover { box-shadow: inset 0 -3px $borders_color; }
+          border: 1px solid transparent;
+          border-radius: 4px 4px 0 0;
 
           &:backdrop { box-shadow: none; }
 
-          &:checked { box-shadow: inset 0 -3px $selected_bg_color; }
+          &:checked {
+            background-color: $base_color;
+            border: 1px solid $borders_color;
+            border-bottom-color: transparent;
+
+            &:hover { background-color: $base_color; }
+          }
         }
       }
     }
@@ -2253,12 +2261,20 @@ notebook {
       border-top-style: solid;
       > tabs {
         margin-top: -2px;
+        padding-bottom: 4px;
         > tab {
-          &:hover { box-shadow: inset 0 3px $borders_color; }
+          border: 1px solid transparent;
+          border-radius: 0 0 4px 4px;
 
           &:backdrop { box-shadow: none; }
 
-          &:checked { box-shadow: inset 0 3px $selected_bg_color; }
+          &:checked {
+            background-color: $base_color;
+            border: 1px solid $borders_color;
+            border-top-color: transparent;
+
+            &:hover { background-color: $base_color; }
+          }
         }
       }
     }
@@ -2267,12 +2283,20 @@ notebook {
       border-right-style: solid;
       > tabs {
         margin-right: -2px;
+        padding-left: 4px;
         > tab {
-          &:hover { box-shadow: inset -3px 0 $borders_color; }
+          border: 1px solid transparent;
+          border-radius: 4px 0 0 4px;
 
           &:backdrop { box-shadow: none; }
 
-          &:checked { box-shadow: inset -3px 0 $selected_bg_color; }
+          &:checked {
+            background-color: $base_color;
+            border: 1px solid $borders_color;
+            border-right-color: transparent;
+
+            &:hover { background-color: $base_color; }
+          }
         }
       }
     }
@@ -2281,12 +2305,20 @@ notebook {
       border-left-style: solid;
       > tabs {
         margin-left: -2px;
+        padding-right: 4px;
         > tab {
-          &:hover { box-shadow: inset 3px 0 $borders_color; }
+          border: 1px solid transparent;
+          border-radius: 0 4px 4px 0;
 
           &:backdrop { box-shadow: none; }
 
-          &:checked { box-shadow: inset 3px 0 $selected_bg_color; }
+          &:checked {
+            background-color: $base_color;
+            border: 1px solid $borders_color;
+            border-left-color: transparent;
+
+            &:hover { background-color: $base_color; }
+          }
         }
       }
     }
@@ -2727,7 +2759,7 @@ switch {
       @include button(normal-alt, $c: lighten($bg_color,6%), $edge: $shadow_color);
     }
   }
-  
+
   image { color: transparent; } /* only show i / o for the accessible theme */
 
   &:hover slider {
