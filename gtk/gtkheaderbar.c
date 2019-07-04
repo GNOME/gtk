@@ -1356,7 +1356,6 @@ gtk_header_bar_set_custom_title (GtkHeaderBar *bar,
 
       gtk_header_bar_reorder_css_node (bar, GTK_PACK_START, priv->custom_title);
       gtk_widget_set_parent (priv->custom_title, GTK_WIDGET (bar));
-      gtk_widget_set_valign (priv->custom_title, GTK_ALIGN_CENTER);
 
       if (priv->label_box != NULL)
         {
