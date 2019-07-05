@@ -159,8 +159,6 @@
         <child>
           <object class="GtkModelButton">
             <property name="text">Submenu 1</property>
-            <property name="inverted">1</property>
-            <property name="centered">1</property>
             <property name="menu-name">main</property>
           </object>
         </child>
@@ -215,7 +213,6 @@
                 <property name="action-name">top.set-view</property>
                 <property name="action-target">&apos;list&apos;</property>
                 <property name="iconic">1</property>
-                <property name="centered">1</property>
                 <property name="icon">icon-list</property>
               </object>
             </child>
@@ -225,7 +222,6 @@
                 <property name="action-name">top.set-view</property>
                 <property name="action-target">&apos;grid&apos;</property>
                 <property name="iconic">1</property>
-                <property name="centered">1</property>
                 <property name="icon">icon-grid</property>
               </object>
             </child>
@@ -275,7 +271,6 @@
                 <property name="text">Bold</property>
                 <property name="action-name">top.bold</property>
                 <property name="iconic">1</property>
-                <property name="centered">1</property>
               </object>
             </child>
             <child>
@@ -283,7 +278,6 @@
                 <property name="text">Italic</property>
                 <property name="action-name">top.italic</property>
                 <property name="iconic">1</property>
-                <property name="centered">1</property>
                 <property name="icon">icon-italic</property>
               </object>
             </child>
@@ -292,7 +286,6 @@
                 <property name="text">Strikethrough</property>
                 <property name="action-name">top.strikethrough</property>
                 <property name="iconic">1</property>
-                <property name="centered">1</property>
                 <property name="icon">icon-strikethrough</property>
               </object>
             </child>
@@ -301,7 +294,6 @@
                 <property name="text">Underline</property>
                 <property name="action-name">top.underline</property>
                 <property name="iconic">1</property>
-                <property name="centered">1</property>
                 <property name="icon">icon-underline</property>
               </object>
             </child>
@@ -368,8 +360,6 @@
         <child>
           <object class="GtkModelButton">
             <property name="text">Submenu 2</property>
-            <property name="inverted">1</property>
-            <property name="centered">1</property>
             <property name="menu-name">main</property>
           </object>
         </child>
@@ -402,8 +392,6 @@
         <child>
           <object class="GtkModelButton">
             <property name="text">Subsubmenu</property>
-            <property name="inverted">1</property>
-            <property name="centered">1</property>
             <property name="menu-name">submenu2</property>
           </object>
         </child>
