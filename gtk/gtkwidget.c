@@ -4468,6 +4468,7 @@ gtk_widget_allocate (GtkWidget    *widget,
   if (adjusted.x || adjusted.y)
     transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
 
+  gsk_transform_unref (priv->transform);
   priv->transform = transform;
 
   if (priv->surface_transform_data)
