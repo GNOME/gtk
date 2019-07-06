@@ -10,6 +10,22 @@
   fun:gtk_widget_class_add_action
 }
 
+{
+   GTK media extension gio modules
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:g_malloc
+   fun:g_slice_alloc
+   fun:g_slice_alloc0
+   fun:g_type_create_instance
+   fun:g_object_new_internal
+   fun:g_object_new_with_properties
+   fun:g_object_new
+   fun:g_io_module_new
+   fun:g_io_modules_scan_all_in_directory_with_scope
+   fun:gtk_media_file_extension_init
+}
 
 # mesa driver stuff
 {
