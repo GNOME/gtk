@@ -4,14 +4,14 @@ uniform sampler2D u_source2;
 float
 combine (float source, float backdrop)
 {
-  return source + backdrop * (1 - source);
+  return source + backdrop * (1.0 - source);
 }
 
 vec4
 composite (vec4 Cs, vec4 Cb, vec3 B)
 {
-  float ao = Cs.a + Cb.a * (1 - Cs.a);
-  vec3 Co = (Cs.a*(1 - Cb.a)*Cs.rgb + Cs.a*Cb.a*B + (1 - Cs.a)*Cb.a*Cb.rgb) / ao;
+  float ao = Cs.a + Cb.a * (1.0 - Cs.a);
+  vec3 Co = (Cs.a*(1.0 - Cb.a)*Cs.rgb + Cs.a*Cb.a*B + (1.0 - Cs.a)*Cb.a*Cb.rgb) / ao;
   return vec4(Co, ao);
 }
 
@@ -43,9 +43,9 @@ float
 hard_light (float source, float backdrop)
 {
   if (source <= 0.5)
-    return 2 * backdrop * source;
+    return 2.0 * backdrop * source;
   else
-    return 2 * (backdrop + source - backdrop * source) - 1;
+    return 2.0 * (backdrop + source - backdrop * source) - 1.0;
 }
 
 vec4
@@ -63,14 +63,14 @@ soft_light (float source, float backdrop)
   float db;
 
   if (backdrop <= 0.25)
-    db = ((16 * backdrop - 12) * backdrop + 4) * backdrop;
+    db = ((16.0 * backdrop - 12.0) * backdrop + 4.0) * backdrop;
   else
     db = sqrt (backdrop);
 
   if (source <= 0.5)
-    return backdrop - (1 - 2 * source) * backdrop * (1 - backdrop);
+    return backdrop - (1.0 - 2.0 * source) * backdrop * (1.0 - backdrop);
   else
-    return backdrop + (2 * source - 1) * (db - backdrop);
+    return backdrop + (2.0 * source - 1.0) * (db - backdrop);
 }
 
 vec4
@@ -155,8 +155,8 @@ clip_color (vec3 c)
   float l = lum (c);
   float n = min (c.r, min (c.g, c.b));
   float x = max (c.r, max (c.g, c.b));
-  if (n < 0) c = l + (((c - l) * l) / (l - n));
-  if (x > 1) c = l + (((c - l) * (1 - l)) / (x - l));
+  if (n < 0.0) c = l + (((c - l) * l) / (l - n));
+  if (x > 1.0) c = l + (((c - l) * (1.0 - l)) / (x - l));
   return c;
 }
 
@@ -189,12 +189,12 @@ set_sat (vec3 c, float s)
           if (c.g == cmin)
             {
               res.b = ((c.b - cmin) * s) / (cmax - cmin);
-              res.g = 0;
+              res.g = 0.0;
             }
           else
             {
               res.g = ((c.g - cmin) * s) / (cmax - cmin);
-              res.b = 0;
+              res.b = 0.0;
             }
           res.r = s;
         }
@@ -203,12 +203,12 @@ set_sat (vec3 c, float s)
           if (c.r == cmin)
             {
               res.b = ((c.b - cmin) * s) / (cmax - cmin);
-              res.r = 0;
+              res.r = 0.0;
             }
           else
             {
               res.r = ((c.r - cmin) * s) / (cmax - cmin);
-              res.b = 0;
+              res.b = 0.0;
             }
           res.g = s;
         }
@@ -217,12 +217,12 @@ set_sat (vec3 c, float s)
           if (c.r == cmin)
             {
               res.g = ((c.g - cmin) * s) / (cmax - cmin);
-              res.r = 0;
+              res.r = 0.0;
             }
           else
             {
               res.r = ((c.r - cmin) * s) / (cmax - cmin);
-              res.g = 0;
+              res.g = 0.0;
             }
           res.b = s;
         }
