@@ -1407,6 +1407,7 @@ text_view_add_to_context_menu (GtkTextView *text_view)
   g_menu_append_item (G_MENU (menu), item);
 
   gtk_text_view_set_extra_menu (text_view, G_MENU_MODEL (menu));
+  g_object_unref (menu);
 
   g_signal_connect (gtk_text_view_get_buffer (text_view), "changed", G_CALLBACK (text_changed), NULL);
   g_signal_connect (gtk_text_view_get_buffer (text_view), "mark-set", G_CALLBACK (text_changed), NULL);
