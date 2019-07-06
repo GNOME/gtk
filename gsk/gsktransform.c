@@ -646,7 +646,7 @@ gsk_transform_translate_3d (GskTransform             *next,
   GskTranslateTransform *result;
 
   if (graphene_point3d_equal (point, graphene_point3d_zero ()))
-    return gsk_transform_ref (next);
+    return next;
 
   if (gsk_transform_has_class (next, &GSK_TRANSLATE_TRANSFORM_CLASS))
     {
@@ -801,7 +801,7 @@ gsk_transform_rotate (GskTransform *next,
   GskRotateTransform *result;
 
   if (angle == 0.0f)
-    return gsk_transform_ref (next);
+    return next;
 
   if (gsk_transform_has_class (next, &GSK_ROTATE_TRANSFORM_CLASS))
     {
@@ -932,7 +932,7 @@ gsk_transform_rotate_3d (GskTransform          *next,
     return gsk_transform_rotate (next, angle);
 
   if (angle == 0.0f)
-    return gsk_transform_ref (next);
+    return next;
 
   result = gsk_transform_alloc (&GSK_ROTATE3D_TRANSFORM_CLASS,
                                 GSK_TRANSFORM_CATEGORY_3D,
@@ -1121,7 +1121,7 @@ gsk_transform_scale_3d (GskTransform *next,
   GskScaleTransform *result;
 
   if (factor_x == 1 && factor_y == 1 && factor_z == 1)
-    return gsk_transform_ref (next);
+    return next;
 
   if (gsk_transform_has_class (next, &GSK_SCALE_TRANSFORM_CLASS))
     {
@@ -1250,7 +1250,7 @@ gsk_transform_perspective (GskTransform *next,
                            float         depth)
 {
   GskPerspectiveTransform *result;
-  
+
   if (gsk_transform_has_class (next, &GSK_PERSPECTIVE_TRANSFORM_CLASS))
     {
       GskTransform *r = gsk_transform_perspective (gsk_transform_ref (next->next),
