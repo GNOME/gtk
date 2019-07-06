@@ -859,6 +859,59 @@ gtk_widget_real_grab_notify (GtkWidget *widget,
     }
 }
 
+
+static void
+gtk_widget_dequeue_resize (GtkWidget *widget)
+{
+  GtkRoot *root;
+  GtkWindow *window;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  root = gtk_widget_get_root (widget);
+
+  if (!root)
+    return;
+
+  /* TODO: This check should ultimately go away I guess. */
+  if (!GTK_IS_WINDOW (root))
+    {
+      g_warning ("%s: Not in a window...", __FUNCTION__);
+      return;
+    }
+
+  window = GTK_WINDOW (root);
+  gtk_window_remove_resize_widget (window, widget);
+}
+
+
+static void
+gtk_widget_dequeue_allocate (GtkWidget *widget)
+{
+  GtkRoot *root;
+  GtkWindow *window;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  root = gtk_widget_get_root (widget);
+
+  if (!root)
+    return;
+
+  /* TODO: This check should ultimately go away I guess. */
+  if (!GTK_IS_WINDOW (root))
+    {
+      g_warning ("%s: Not in a window...", __FUNCTION__);
+      return;
+    }
+
+  window = GTK_WINDOW (root);
+  gtk_window_remove_allocate_widget (window, widget);
+}
+
+
+
+
 static void
 gtk_widget_real_root (GtkWidget *widget)
 {
@@ -868,6 +921,10 @@ gtk_widget_real_root (GtkWidget *widget)
 static void
 gtk_widget_real_unroot (GtkWidget *widget)
 {
+
+  gtk_widget_dequeue_resize (widget);
+  gtk_widget_dequeue_allocate (widget);
+
   gtk_widget_forall (widget, (GtkCallback) gtk_widget_unroot, NULL);
 }
 
@@ -2921,6 +2978,9 @@ gtk_widget_unroot (GtkWidget *widget)
   g_assert (priv->root);
   g_assert (!priv->realized);
 
+  gtk_widget_dequeue_resize (widget);
+  gtk_widget_dequeue_allocate (widget);
+
   surface_transform_data = priv->surface_transform_data;
   if (surface_transform_data &&
       surface_transform_data->tracked_parent)
@@ -4076,12 +4136,25 @@ gtk_widget_set_alloc_needed (GtkWidget *widget);
 void
 gtk_widget_queue_allocate (GtkWidget *widget)
 {
+  GtkRoot *root;
+  GtkWindow *window;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (_gtk_widget_get_realized (widget))
-    gtk_widget_queue_draw (widget);
+  root = gtk_widget_get_root (widget);
 
-  gtk_widget_set_alloc_needed (widget);
+  if (!root)
+    return;
+
+  /* TODO: This check should ultimately go away I guess. */
+  if (!GTK_IS_WINDOW (root))
+    {
+      g_warning ("%s: Not in a window...", __FUNCTION__);
+      return;
+    }
+
+  window = GTK_WINDOW (root);
+  gtk_window_add_allocate_widget (window, widget);
 }
 
 static inline gboolean
@@ -4133,6 +4206,28 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
     }
 }
 
+void
+old_gtk_widget_queue_resize (GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (_gtk_widget_get_realized (widget))
+    gtk_widget_queue_draw (widget);
+
+  gtk_widget_queue_resize_internal (widget);
+}
+
+void
+old_gtk_widget_queue_allocate (GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (_gtk_widget_get_realized (widget))
+    gtk_widget_queue_draw (widget);
+
+  gtk_widget_set_alloc_needed (widget);
+}
+
 /**
  * gtk_widget_queue_resize:
  * @widget: a #GtkWidget
@@ -4151,12 +4246,25 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
 void
 gtk_widget_queue_resize (GtkWidget *widget)
 {
+  GtkRoot *root;
+  GtkWindow *window;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (_gtk_widget_get_realized (widget))
-    gtk_widget_queue_draw (widget);
+  root = gtk_widget_get_root (widget);
 
-  gtk_widget_queue_resize_internal (widget);
+  if (!root)
+    return;
+
+  /* TODO: This check should ultimately go away I guess. */
+  if (!GTK_IS_WINDOW (root))
+    {
+      g_warning ("%s: Not in a window...", __FUNCTION__);
+      return;
+    }
+
+  window = GTK_WINDOW (root);
+  gtk_window_add_resize_widget (window, widget);
 }
 
 /**
@@ -4171,7 +4279,8 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_widget_queue_resize_internal (widget);
+  /* TODO: Remove this entire function */
+  gtk_widget_queue_resize (widget);
 }
 
 /**
@@ -11498,7 +11607,7 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
 
       if (GTK_IS_ROOT (widget))
         {
-          gtk_container_start_idle_sizer (GTK_CONTAINER (widget));
+          /*gtk_container_start_idle_sizer (GTK_CONTAINER (widget));*/
           break;
         }
 

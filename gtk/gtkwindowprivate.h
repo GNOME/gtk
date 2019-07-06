@@ -164,6 +164,23 @@ GtkWidget *      gtk_window_pick_popover (GtkWindow   *window,
                                           double       y,
                                           GtkPickFlags flags);
 
+GPtrArray * gtk_window_get_resize_widgets (GtkWindow *window);
+void             gtk_window_add_resize_widget    (GtkWindow *window,
+                                                  GtkWidget *widget);
+void             gtk_window_remove_resize_widget (GtkWindow *window,
+                                                  GtkWidget *widget);
+
+GPtrArray * gtk_window_get_allocate_widgets (GtkWindow *window);
+void             gtk_window_add_allocate_widget    (GtkWindow *window,
+                                                    GtkWidget *widget);
+void             gtk_window_remove_allocate_widget (GtkWindow *window,
+                                                    GtkWidget *widget);
+
+void             gtk_window_set_last_allocate_iteration (GtkWindow *window,
+                                                         gboolean   is_last);
+
+
+
 G_END_DECLS
 
 #endif /* __GTK_WINDOW_PRIVATE_H__ */

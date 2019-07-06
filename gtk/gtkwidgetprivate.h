@@ -367,6 +367,9 @@ guint             gtk_widget_add_surface_transform_changed_callback (GtkWidget  
 void              gtk_widget_remove_surface_transform_changed_callback (GtkWidget *widget,
                                                                         guint      id);
 
+void              old_gtk_widget_queue_resize   (GtkWidget *widget);
+void              old_gtk_widget_queue_allocate (GtkWidget *widget);
+
 
 /* inline getters */
 

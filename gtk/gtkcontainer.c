@@ -36,7 +36,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-//#include "gtkwindowprivate.h"
+#include "gtkdebug.h"
 
 #include "a11y/gtkcontaineraccessibleprivate.h"
 
@@ -85,6 +85,7 @@
  * See more about implementing custom widgets at https://wiki.gnome.org/HowDoI/CustomWidgets
  */
 
+#define N_ALLOCATE_ITERATIONS 2
 
 struct _GtkContainerPrivate
 {
@@ -333,62 +334,135 @@ gtk_container_remove (GtkContainer *container,
   g_object_unref (container);
 }
 
-static gboolean
-gtk_container_needs_idle_sizer (GtkContainer *container)
-{
-  GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
-
-  if (priv->restyle_pending)
-    return TRUE;
-
-  return gtk_widget_needs_allocate (GTK_WIDGET (container));
-}
-
 static void
 gtk_container_idle_sizer (GdkFrameClock *clock,
-			  GtkContainer  *container)
+                          GtkContainer  *container)
 {
   GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
+  GtkWidget *widget = GTK_WIDGET (container);
+  GtkWindow *window;
+  GPtrArray *resize_widgets;
+  GPtrArray *allocate_widgets;
+  int allocate_iteration;
+  guint i;
 
-  /* We validate the style contexts in a single loop before even trying
-   * to handle resizes instead of doing validations inline.
-   * This is mostly necessary for compatibility reasons with old code,
-   * because both style_updated and size_allocate functions often change
-   * styles and so could cause infinite loops in this function.
-   *
-   * It's important to note that even an invalid style context returns
-   * sane values. So the result of an invalid style context will never be
-   * a program crash, but only a wrong layout or rendering.
-   */
-  if (priv->restyle_pending)
+  if (!GTK_IS_WINDOW (container))
+    return;
+
+
+  g_message ("========== %s ========", __FUNCTION__);
+
+  window = GTK_WINDOW (container);
+  resize_widgets = gtk_window_get_resize_widgets (window);
+  allocate_widgets = gtk_window_get_allocate_widgets (window);
+
+  for (allocate_iteration = 0; allocate_iteration < N_ALLOCATE_ITERATIONS; allocate_iteration ++)
     {
-      priv->restyle_pending = FALSE;
-      gtk_css_node_validate (gtk_widget_get_css_node (GTK_WIDGET (container)));
+      const gboolean last_iteration = (allocate_iteration == N_ALLOCATE_ITERATIONS - 1);
+      g_message ("Iteration %d", allocate_iteration);
+
+      if (last_iteration)
+        gtk_window_set_last_allocate_iteration (window, TRUE);
+
+      /* Actually mutate the widget tree */
+      for (i = 0; i < resize_widgets->len; i ++)
+        {
+          GtkWidget *w = g_ptr_array_index (resize_widgets, i);
+          old_gtk_widget_queue_resize (w);
+        }
+
+      for (i = 0; i < allocate_widgets->len; i ++)
+        {
+          GtkWidget *w = g_ptr_array_index (allocate_widgets, i);
+          old_gtk_widget_queue_allocate (w);
+        }
+
+      /* Clear for now */
+      g_ptr_array_remove_range (resize_widgets, 0, resize_widgets->len);
+      g_ptr_array_remove_range (allocate_widgets, 0, allocate_widgets->len);
+
+      /* We validate the style contexts in a single loop before even trying
+       * to handle resizes instead of doing validations inline.
+       * This is mostly necessary for compatibility reasons with old code,
+       * because both style_updated and size_allocate functions often change
+       * styles and so could cause infinite loops in this function.
+       *
+       * It's important to note that even an invalid style context returns
+       * sane values. So the result of an invalid style context will never be
+       * a program crash, but only a wrong layout or rendering.
+       */
+      if (priv->restyle_pending)
+        {
+          priv->restyle_pending = FALSE;
+          gtk_css_node_validate (gtk_widget_get_css_node (GTK_WIDGET (container)));
+        }
+
+      /* Actually do the allocate */
+      gtk_window_check_resize (GTK_WINDOW (container));
+
+      if (resize_widgets->len   == 0 &&
+          allocate_widgets->len == 0 &&
+          priv->restyle_pending == 0)
+        {
+          gtk_container_stop_idle_sizer (container);
+
+          /* We don't need a second iteration */
+          break;
+        }
+      else if (!last_iteration)
+        {
+          gdk_frame_clock_request_phase (clock,
+                                         GDK_FRAME_CLOCK_PHASE_LAYOUT);
+
+          g_message ("Second iteration caused by...");
+          for (i = 0; i < resize_widgets->len; i ++)
+            {
+              GtkWidget *w = g_ptr_array_index (resize_widgets, i);
+              g_message ("Resize:: %s %s %p",
+                         G_OBJECT_TYPE_NAME (w),
+                         gtk_css_node_get_name (gtk_widget_get_css_node (w)),
+                         w);
+            }
+
+          for (i = 0; i < allocate_widgets->len; i ++)
+            {
+              GtkWidget *w = g_ptr_array_index (allocate_widgets, i);
+              g_message ("Allocate: %s %s %p",
+                         G_OBJECT_TYPE_NAME (w),
+                         gtk_css_node_get_name (gtk_widget_get_css_node (w)),
+                         w);
+            }
+
+
+        }
     }
 
-  /* we may be invoked with a container_resize_queue of NULL, because
-   * queue_resize could have been adding an extra idle function while
-   * the queue still got processed. we better just ignore such case
-   * than trying to explicitly work around them with some extra flags,
-   * since it doesn't cause any actual harm.
-   */
-  if (gtk_widget_needs_allocate (GTK_WIDGET (container)))
+  if (1 || GTK_DISPLAY_DEBUG_CHECK (_gtk_widget_get_display (widget), GEOMETRY))
     {
-      if (GTK_IS_WINDOW (container))
-        gtk_window_check_resize (GTK_WINDOW (container));
-      else
-        g_warning ("gtk_container_idle_sizer() called on a non-window");
+      for (i = 0; i < resize_widgets->len; i ++)
+        {
+          GtkWidget *w = g_ptr_array_index (resize_widgets, i);
+          g_warning ("    Resize after second iteration: %s %s %p",
+                     G_OBJECT_TYPE_NAME (w),
+                     gtk_css_node_get_name (gtk_widget_get_css_node (w)),
+                     w);
+        }
+
+      for (i = 0; i < allocate_widgets->len; i ++)
+        {
+          GtkWidget *w = g_ptr_array_index (allocate_widgets, i);
+          g_warning ("    Allocate after second iteration: %s %s %p",
+                     G_OBJECT_TYPE_NAME (w),
+                     gtk_css_node_get_name (gtk_widget_get_css_node (w)),
+                     w);
+        }
     }
 
-  if (!gtk_container_needs_idle_sizer (container))
-    {
-      gtk_container_stop_idle_sizer (container);
-    }
-  else
-    {
-      gdk_frame_clock_request_phase (clock,
-                                     GDK_FRAME_CLOCK_PHASE_LAYOUT);
-    }
+  /* Ignore everything after the last iteration */
+  g_ptr_array_remove_range (resize_widgets, 0, resize_widgets->len);
+  g_ptr_array_remove_range (allocate_widgets, 0, allocate_widgets->len);
+  gtk_container_stop_idle_sizer (container);
+  gtk_window_set_last_allocate_iteration (window, FALSE);
 }
 
 void
@@ -398,9 +472,6 @@ gtk_container_start_idle_sizer (GtkContainer *container)
   GdkFrameClock *clock;
 
   if (priv->resize_handler != 0)
-    return;
-
-  if (!gtk_container_needs_idle_sizer (container))
     return;
 
   clock = gtk_widget_get_frame_clock (GTK_WIDGET (container));

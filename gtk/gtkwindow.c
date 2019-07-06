@@ -266,6 +266,8 @@ typedef struct
   guint    hide_on_close             : 1;
   guint    in_emit_close_request     : 1;
 
+  guint    last_allocate_iteration : 1;
+
   GdkSurfaceTypeHint type_hint;
 
   GtkGesture *click_gesture;
@@ -283,6 +285,10 @@ typedef struct
   GList *foci;
 
   GtkConstraintSolver *constraint_solver;
+
+  GPtrArray *resize_widgets;
+  GPtrArray *allocate_widgets;
+
 } GtkWindowPrivate;
 
 #ifdef GDK_WINDOWING_X11
@@ -1835,6 +1841,9 @@ gtk_window_init (GtkWindow *window)
   g_object_ref_sink (window);
   priv->has_user_ref_count = TRUE;
   gtk_window_update_debugging ();
+
+  priv->resize_widgets = g_ptr_array_new ();
+  priv->allocate_widgets = g_ptr_array_new ();
 
 #ifdef GDK_WINDOWING_X11
   g_signal_connect (gtk_settings_get_for_display (priv->display),
@@ -4719,6 +4728,9 @@ gtk_window_finalize (GObject *object)
       g_source_remove (priv->keys_changed_handler);
       priv->keys_changed_handler = 0;
     }
+
+  g_ptr_array_free (priv->resize_widgets, TRUE);
+  g_ptr_array_free (priv->allocate_widgets, TRUE);
 
   g_signal_handlers_disconnect_by_func (gdk_display_get_default_seat (priv->display),
                                         device_removed_cb,
@@ -9520,4 +9532,79 @@ gtk_window_maybe_update_cursor (GtkWindow *window,
       if (device)
         break;
     }
+}
+
+void
+gtk_window_add_resize_widget (GtkWindow *window,
+                              GtkWidget *widget)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  if (g_ptr_array_find (priv->resize_widgets, widget, NULL))
+    return;
+
+  if (priv->last_allocate_iteration)
+    g_critical ("Resize of %s %p caused N+1 allocate iterations.", G_OBJECT_TYPE_NAME (widget), widget);
+
+  g_ptr_array_add (priv->resize_widgets, widget);
+  gtk_container_start_idle_sizer (GTK_CONTAINER (window));
+}
+
+void
+gtk_window_remove_resize_widget (GtkWindow *window,
+                                 GtkWidget *widget)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  g_ptr_array_remove_fast (priv->resize_widgets, widget);
+}
+
+void
+gtk_window_add_allocate_widget (GtkWindow *window,
+                              GtkWidget *widget)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  if (g_ptr_array_find (priv->allocate_widgets, widget, NULL))
+    return;
+
+  if (priv->last_allocate_iteration)
+    g_critical ("Allocate of %s %p caused N+1 allocate iterations.", G_OBJECT_TYPE_NAME (widget), widget);
+
+  g_ptr_array_add (priv->allocate_widgets, widget);
+  gtk_container_start_idle_sizer (GTK_CONTAINER (window));
+}
+
+void
+gtk_window_remove_allocate_widget (GtkWindow *window,
+                                 GtkWidget *widget)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  g_ptr_array_remove_fast (priv->allocate_widgets, widget);
+}
+
+GPtrArray *
+gtk_window_get_resize_widgets (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  return priv->resize_widgets;
+}
+
+GPtrArray *
+gtk_window_get_allocate_widgets (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  return priv->allocate_widgets;
+}
+
+void
+gtk_window_set_last_allocate_iteration (GtkWindow *window,
+                                        gboolean   is_last)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  priv->last_allocate_iteration = is_last;
 }
