@@ -290,6 +290,7 @@ void              ops_dump_framebuffer   (RenderOpBuilder         *builder,
                                           int                      width,
                                           int                      height);
 void              ops_init               (RenderOpBuilder         *builder);
+void              ops_free               (RenderOpBuilder         *builder);
 void              ops_push_debug_group    (RenderOpBuilder         *builder,
                                            const char              *text);
 void              ops_pop_debug_group     (RenderOpBuilder         *builder);

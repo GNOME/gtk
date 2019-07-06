@@ -2342,6 +2342,7 @@ gsk_gl_renderer_dispose (GObject *gobject)
   GskGLRenderer *self = GSK_GL_RENDERER (gobject);
 
   g_clear_pointer (&self->render_ops, g_array_unref);
+  ops_free (&self->op_builder);
 
   G_OBJECT_CLASS (gsk_gl_renderer_parent_class)->dispose (gobject);
 }
