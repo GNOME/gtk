@@ -1,0 +1,128 @@
+# Actual GTK things
+{
+  GtkWidgetClass action GPtrArray
+  Memcheck:Leak
+  fun:malloc
+  fun:g_malloc
+  fun:g_slice_alloc
+  fun:g_ptr_array_sized_new
+  fun:g_ptr_array_new
+  fun:gtk_widget_class_add_action
+}
+
+
+# mesa driver stuff
+{
+   i965 addr4
+   Memcheck:Addr4
+   obj:/usr/lib/dri/i965_dri.so*
+}
+
+{
+   i965 addr8
+   Memcheck:Addr8
+   obj:/usr/lib/dri/i965_dri.so*
+}
+
+{
+   i965 memcpy
+   Memcheck:Addr8
+   fun:memcpy*
+   obj:/usr/lib/dri/i965_dri.so*
+}
+
+{
+   i965 memcpy
+   Memcheck:Addr2
+   fun:memcpy*
+   obj:/usr/lib/dri/i965_dri.so*
+}
+
+{
+   mesa memcmp 8
+   Memcheck:Addr8
+   fun:*memcmp*
+   obj:/usr/lib/dri/i965_dri.so*
+}
+
+{
+   mesa memcmp 1
+   Memcheck:Addr1
+   fun:*memcmp*
+   obj:/usr/lib/dri/i965_dri.so*
+}
+
+{
+   mesa memset 8
+   Memcheck:Addr8
+   fun:*memset*
+   obj:/usr/lib/dri/i965_dri.so
+}
+
+{
+   mesa realpath
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:realpath@@GLIBC_2.3
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   fun:epoxy_eglInitialize_global_rewrite_ptr
+}
+
+{
+   mesa calloc
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:calloc
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   fun:epoxy_eglInitialize_global_rewrite_ptr
+}
+
+# Fontconfig
+{
+   FcFontSetList
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   obj:/usr/lib/libfontconfig.so*
+   obj:/usr/lib/libfontconfig.so*
+   fun:FcFontSetList
+}
+
+{
+   FcFontRenderPrepare
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:realloc
+   obj:/usr/lib/libfontconfig.so*
+   obj:/usr/lib/libfontconfig.so*
+   fun:FcFontRenderPrepare
+}
+
+# Pango
+{
+   pango 1
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:realloc
+   obj:/usr/lib/libfontconfig.so*
+   obj:/usr/lib/libfontconfig.so*
+   obj:/usr/lib/libcairo.so*
+   fun:pango_cairo_fc_font_map_fontset_key_substitute
+}
+
