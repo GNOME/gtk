@@ -193,10 +193,10 @@ upload_glyph (GlyphCacheKey    *key,
   if (render_glyph (key, value, &r))
     {
       glBindTexture (GL_TEXTURE_2D, value->texture_id);
-      glTextureSubImage2D (value->texture_id, 0,
-                           r.x, r.y, r.width, r.height,
-                           GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
-                           r.data);
+      glTexSubImage2D (GL_TEXTURE_2D, 0,
+                       r.x, r.y, r.width, r.height,
+                       GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                       r.data);
       g_free (r.data);
     }
 

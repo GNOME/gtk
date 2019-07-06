@@ -136,7 +136,7 @@ upload_region_or_else (GskGLIconCache *self,
                        GskImageRegion *region)
 {
   glBindTexture (GL_TEXTURE_2D, texture_id);
-  glTextureSubImage2D (texture_id, 0, region->x, region->y, region->width, region->height,
+  glTexSubImage2D (GL_TEXTURE_2D, 0, region->x, region->y, region->width, region->height,
                    GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, region->data);
 }
 
