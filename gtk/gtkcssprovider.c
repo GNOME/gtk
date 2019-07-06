@@ -1118,6 +1118,8 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
 
       if (parent == NULL)
         gtk_css_provider_postprocess (self);
+
+      g_bytes_unref (bytes);
     }
 }
 
@@ -1149,8 +1151,8 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
 
   gtk_css_provider_reset (css_provider);
 
+  g_bytes_ref (bytes);
   gtk_css_provider_load_internal (css_provider, NULL, NULL, bytes);
-
   g_bytes_unref (bytes);
 
   gtk_style_provider_changed (GTK_STYLE_PROVIDER (css_provider));
