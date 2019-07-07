@@ -4604,7 +4604,6 @@ gtk_widget_get_vexpand
 gtk_widget_set_vexpand
 gtk_widget_get_vexpand_set
 gtk_widget_set_vexpand_set
-gtk_widget_queue_compute_expand
 gtk_widget_compute_expand
 
 <SUBSECTION Templates>

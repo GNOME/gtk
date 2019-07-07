@@ -645,8 +645,6 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_widget_set_vexpand_set      (GtkWidget      *widget,
                                           gboolean        set);
 GDK_AVAILABLE_IN_ALL
-void     gtk_widget_queue_compute_expand (GtkWidget      *widget);
-GDK_AVAILABLE_IN_ALL
 gboolean gtk_widget_compute_expand       (GtkWidget      *widget,
                                           GtkOrientation  orientation);
 

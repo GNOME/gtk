@@ -713,6 +713,8 @@ static gboolean gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_
 
 static void remove_parent_surface_transform_changed_listener (GtkWidget *widget);
 static void add_parent_surface_transform_changed_listener (GtkWidget *widget);
+static void gtk_widget_queue_compute_expand (GtkWidget *widget);
+
 
 
 /* --- variables --- */
@@ -8955,7 +8957,7 @@ gtk_widget_update_computed_expand (GtkWidget *widget)
  *
  * See gtk_widget_compute_expand().
  */
-void
+static void
 gtk_widget_queue_compute_expand (GtkWidget *widget)
 {
   GtkWidget *parent;
