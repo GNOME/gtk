@@ -4367,7 +4367,7 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
   
   g_object_thaw_notify (G_OBJECT (window));
   
-  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
+  gtk_widget_queue_resize (GTK_WIDGET (window));
 }
 
 /**
@@ -4498,7 +4498,7 @@ gtk_window_resize (GtkWindow *window,
   info->resize_width = width;
   info->resize_height = height;
 
-  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
+  gtk_widget_queue_resize (GTK_WIDGET (window));
 }
 
 /**
@@ -7129,7 +7129,7 @@ gtk_window_move_resize (GtkWindow *window)
            * to postpone our configure request until later.
            */
 	  info->last = saved_last_info;
-	  gtk_widget_queue_resize_no_redraw (widget); /* might recurse for GTK_RESIZE_IMMEDIATE */
+	  gtk_widget_queue_resize (widget); /* might recurse for GTK_RESIZE_IMMEDIATE */
 	}
 
       return;			/* Bail out, we didn't really process the move/resize */
@@ -7963,7 +7963,7 @@ gtk_window_set_resizable (GtkWindow *window,
 
       update_window_buttons (window);
 
-      gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
+      gtk_widget_queue_resize (GTK_WIDGET (window));
 
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_RESIZABLE]);
     }

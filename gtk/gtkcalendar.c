@@ -3474,7 +3474,7 @@ gtk_calendar_set_detail_width_chars (GtkCalendar *calendar,
     {
       priv->detail_width_chars = chars;
       g_object_notify (G_OBJECT (calendar), "detail-width-chars");
-      gtk_widget_queue_resize_no_redraw (GTK_WIDGET (calendar));
+      gtk_widget_queue_resize (GTK_WIDGET (calendar));
     }
 }
 
@@ -3498,7 +3498,7 @@ gtk_calendar_set_detail_height_rows (GtkCalendar *calendar,
     {
       priv->detail_height_rows = rows;
       g_object_notify (G_OBJECT (calendar), "detail-height-rows");
-      gtk_widget_queue_resize_no_redraw (GTK_WIDGET (calendar));
+      gtk_widget_queue_resize (GTK_WIDGET (calendar));
     }
 }
 

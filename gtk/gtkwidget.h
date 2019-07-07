@@ -375,8 +375,6 @@ void       gtk_widget_queue_draw          (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_queue_resize        (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
-GDK_AVAILABLE_IN_ALL
 void       gtk_widget_queue_allocate      (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 GdkFrameClock* gtk_widget_get_frame_clock (GtkWidget           *widget);

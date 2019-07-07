@@ -4432,7 +4432,6 @@ gtk_widget_realize
 gtk_widget_unrealize
 gtk_widget_queue_draw
 gtk_widget_queue_resize
-gtk_widget_queue_resize_no_redraw
 gtk_widget_queue_allocate
 gtk_widget_get_frame_clock
 gtk_widget_get_scale_factor

@@ -933,13 +933,13 @@ slide_idle_handler (gpointer data)
       
       if (cont)
 	{
-	  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (toolbar));
+	  gtk_widget_queue_resize (GTK_WIDGET (toolbar));
 	  
 	  return TRUE;
 	}
     }
   
-  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (toolbar));
+  gtk_widget_queue_resize (GTK_WIDGET (toolbar));
 
   priv->is_sliding = FALSE;
   priv->idle_id = 0;
@@ -1052,7 +1052,7 @@ gtk_toolbar_begin_sliding (GtkToolbar *toolbar)
    * so that the idle handler will not immediately return
    * FALSE
    */
-  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (toolbar));
+  gtk_widget_queue_resize (GTK_WIDGET (toolbar));
   g_timer_reset (priv->timer);
 }
 
@@ -1086,7 +1086,7 @@ gtk_toolbar_stop_sliding (GtkToolbar *toolbar)
 	    }
 	}
       
-      gtk_widget_queue_resize_no_redraw (GTK_WIDGET (toolbar));
+      gtk_widget_queue_resize (GTK_WIDGET (toolbar));
     }
 }
 

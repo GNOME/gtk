@@ -4162,21 +4162,6 @@ gtk_widget_queue_resize (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_queue_resize_no_redraw:
- * @widget: a #GtkWidget
- *
- * This function works like gtk_widget_queue_resize(),
- * except that the widget is not invalidated.
- **/
-void
-gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_widget_queue_resize_internal (widget);
-}
-
-/**
  * gtk_widget_get_frame_clock:
  * @widget: a #GtkWidget
  *
