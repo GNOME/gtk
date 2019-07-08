@@ -360,7 +360,7 @@ test_sizegroup (void)
   const gchar buffer1[] =
     "<interface domain=\"test\">"
     "  <object class=\"GtkSizeGroup\" id=\"sizegroup1\">"
-    "    <property name=\"mode\">GTK_SIZE_GROUP_HORIZONTAL</property>"
+    "    <property name=\"mode\">horizontal</property>"
     "    <widgets>"
     "      <widget name=\"radio1\"/>"
     "      <widget name=\"radio2\"/>"
@@ -383,7 +383,7 @@ test_sizegroup (void)
   const gchar buffer2[] =
     "<interface domain=\"test\">"
     "  <object class=\"GtkSizeGroup\" id=\"sizegroup1\">"
-    "    <property name=\"mode\">GTK_SIZE_GROUP_HORIZONTAL</property>"
+    "    <property name=\"mode\">horizontal</property>"
     "    <widgets>"
     "    </widgets>"
     "   </object>"
@@ -391,14 +391,14 @@ test_sizegroup (void)
   const gchar buffer3[] =
     "<interface domain=\"test\">"
     "  <object class=\"GtkSizeGroup\" id=\"sizegroup1\">"
-    "    <property name=\"mode\">GTK_SIZE_GROUP_HORIZONTAL</property>"
+    "    <property name=\"mode\">horizontal</property>"
     "    <widgets>"
     "      <widget name=\"radio1\"/>"
     "      <widget name=\"radio2\"/>"
     "    </widgets>"
     "  </object>"
     "  <object class=\"GtkSizeGroup\" id=\"sizegroup2\">"
-    "    <property name=\"mode\">GTK_SIZE_GROUP_HORIZONTAL</property>"
+    "    <property name=\"mode\">horizontal</property>"
     "    <widgets>"
     "      <widget name=\"radio1\"/>"
     "      <widget name=\"radio2\"/>"
@@ -833,7 +833,7 @@ test_construct_only_property (void)
   const gchar buffer[] =
     "<interface>"
     "  <object class=\"GtkWindow\" id=\"window1\">"
-    "    <property name=\"type\">GTK_WINDOW_POPUP</property>"
+    "    <property name=\"type\">popup</property>"
     "  </object>"
     "</interface>";
   const gchar buffer2[] =

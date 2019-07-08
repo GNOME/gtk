@@ -365,7 +365,7 @@
  * |[
  * <interface>
  *   <template class="FooWidget" parent="GtkBox">
- *     <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+ *     <property name="orientation">horizontal</property>
  *     <property name="spacing">4</property>
  *     <child>
  *       <object class="GtkButton" id="hello_button">
