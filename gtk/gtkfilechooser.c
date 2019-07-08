@@ -2281,7 +2281,7 @@ gtk_file_chooser_get_do_overwrite_confirmation (GtkFileChooser *chooser)
  * Compare gtk_file_chooser_set_extra_widget().
  *
  * Since: 3.22
- */
+ **/
 void
 gtk_file_chooser_add_choice (GtkFileChooser  *chooser,
                              const char      *id,
@@ -2303,7 +2303,7 @@ gtk_file_chooser_add_choice (GtkFileChooser  *chooser,
  * Removes a 'choice' that has been added with gtk_file_chooser_add_choice().
  *
  * Since: 3.22
- */
+ **/
 void
 gtk_file_chooser_remove_choice (GtkFileChooser  *chooser,
                                 const char      *id)
@@ -2325,7 +2325,7 @@ gtk_file_chooser_remove_choice (GtkFileChooser  *chooser,
  * possible options are "true" and "false".
  *
  * Since: 3.22
- */
+ **/
 void
 gtk_file_chooser_set_choice (GtkFileChooser  *chooser,
                              const char      *id,
@@ -2346,7 +2346,7 @@ gtk_file_chooser_set_choice (GtkFileChooser  *chooser,
  *
  * Returns: the ID of the currenly selected option
  * Since: 3.22
- */
+ **/
 const char *
 gtk_file_chooser_get_choice (GtkFileChooser  *chooser,
                              const char      *id)
