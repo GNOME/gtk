@@ -591,6 +591,59 @@ filechooser_win32_thread (gpointer _data)
         g_warning_hr ("Can't set current file type", hr);
     }
 
+  if (data->self->choices)
+    {
+      DWORD id = 0;
+      IFileDialogCustomize *pfdc;
+      hr = IFileDialog_QueryInterface (pfd, &IID_IFileDialogCustomize, (LPVOID *) &pfdc);
+      if (SUCCEEDED (hr))
+        {
+          for (GSList *l = data->self->choices; l; l = l->next)
+            {
+              GtkFileChooserNativeChoice *choice = (GtkFileChooserNativeChoice*) l->data;
+
+              if (choice->options)
+                {
+                  gunichar2 *label_u16 = g_utf8_to_utf16 (choice->label, -1, NULL, NULL, NULL);
+
+                  IFileDialogCustomize_StartVisualGroup (pfdc, id++, label_u16);
+                  IFileDialogCustomize_AddComboBox (pfdc, id);
+                  for (DWORD index = 0; choice->options[index] != NULL; index++)
+                    {
+                      gunichar2 *option_label_u16 = g_utf8_to_utf16 (choice->option_labels[index],
+                                                                     -1,
+                                                                     NULL,
+                                                                     NULL,
+                                                                     NULL);
+
+                      hr = IFileDialogCustomize_AddControlItem (pfdc, id, index, (LPCWSTR) option_label_u16);
+                      if (FAILED (hr))
+                        g_warning_hr ("Can't add choice option", hr);
+
+                      g_free(option_label_u16);
+                    }
+                  id++;
+                  /*TODO: Set default selection */
+                  IFileDialogCustomize_EndVisualGroup (pfdc);
+
+                  g_free(label_u16);
+                }
+              else
+                {
+                  gunichar2 *label_u16 = g_utf8_to_utf16 (choice->label, -1, NULL, NULL, NULL);
+
+                  hr = IFileDialogCustomize_AddCheckButton (pfdc, id++, label_u16, FALSE);
+                  if (FAILED (hr))
+                    g_warning_hr ("Can't add choice", hr);
+
+                  g_free (label_u16);
+                }
+            }
+
+          IFileDialogCustomize_Release (pfdc);
+        }
+    }
+
   data->response = GTK_RESPONSE_CANCEL;
 
   hr = IFileDialog_Advise (pfd, data->events, &cookie);
