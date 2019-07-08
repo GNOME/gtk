@@ -93,7 +93,7 @@
  * An example of a UI definition fragment with GtkSizeGroup:
  * |[
  * <object class="GtkSizeGroup">
- *   <property name="mode">GTK_SIZE_GROUP_HORIZONTAL</property>
+ *   <property name="mode">horizontal</property>
  *   <widgets>
  *     <widget name="radio1"/>
  *     <widget name="radio2"/>
