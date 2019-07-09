@@ -803,6 +803,8 @@ gtk_action_muxer_finalize (GObject *object)
   if (muxer->primary_accels)
     g_hash_table_unref (muxer->primary_accels);
 
+  g_free (muxer->widget_actions_enabled);
+
   G_OBJECT_CLASS (gtk_action_muxer_parent_class)
     ->finalize (object);
 }

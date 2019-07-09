@@ -375,8 +375,6 @@ void       gtk_widget_queue_draw          (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_queue_resize        (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
-GDK_AVAILABLE_IN_ALL
 void       gtk_widget_queue_allocate      (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 GdkFrameClock* gtk_widget_get_frame_clock (GtkWidget           *widget);
@@ -644,8 +642,6 @@ gboolean gtk_widget_get_vexpand_set      (GtkWidget      *widget);
 GDK_AVAILABLE_IN_ALL
 void     gtk_widget_set_vexpand_set      (GtkWidget      *widget,
                                           gboolean        set);
-GDK_AVAILABLE_IN_ALL
-void     gtk_widget_queue_compute_expand (GtkWidget      *widget);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_widget_compute_expand       (GtkWidget      *widget,
                                           GtkOrientation  orientation);

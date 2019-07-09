@@ -6311,7 +6311,7 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
                                 MAX (gtk_adjustment_get_upper (tree_view->priv->vadjustment), requisition.height));
 
       if (queue_resize)
-        gtk_widget_queue_resize_no_redraw (GTK_WIDGET (tree_view));
+        gtk_widget_queue_resize (GTK_WIDGET (tree_view));
     }
 
   if (path) gtk_tree_path_free (path);
@@ -8319,7 +8319,7 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
       if (node_visible && node_is_visible (tree_view, tree, tmpnode))
 	gtk_widget_queue_resize (GTK_WIDGET (tree_view));
       else
-	gtk_widget_queue_resize_no_redraw (GTK_WIDGET (tree_view));
+        gtk_widget_queue_resize (GTK_WIDGET (tree_view));
     }
   else
     install_presize_handler (tree_view);

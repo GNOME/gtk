@@ -713,6 +713,8 @@ static gboolean gtk_widget_class_get_visible_by_default (GtkWidgetClass *widget_
 
 static void remove_parent_surface_transform_changed_listener (GtkWidget *widget);
 static void add_parent_surface_transform_changed_listener (GtkWidget *widget);
+static void gtk_widget_queue_compute_expand (GtkWidget *widget);
+
 
 
 /* --- variables --- */
@@ -4160,21 +4162,6 @@ gtk_widget_queue_resize (GtkWidget *widget)
 }
 
 /**
- * gtk_widget_queue_resize_no_redraw:
- * @widget: a #GtkWidget
- *
- * This function works like gtk_widget_queue_resize(),
- * except that the widget is not invalidated.
- **/
-void
-gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_widget_queue_resize_internal (widget);
-}
-
-/**
  * gtk_widget_get_frame_clock:
  * @widget: a #GtkWidget
  *
@@ -4468,6 +4455,7 @@ gtk_widget_allocate (GtkWidget    *widget,
   if (adjusted.x || adjusted.y)
     transform = gsk_transform_translate (transform, &GRAPHENE_POINT_INIT (adjusted.x, adjusted.y));
 
+  gsk_transform_unref (priv->transform);
   priv->transform = transform;
 
   if (priv->surface_transform_data)
@@ -8954,7 +8942,7 @@ gtk_widget_update_computed_expand (GtkWidget *widget)
  *
  * See gtk_widget_compute_expand().
  */
-void
+static void
 gtk_widget_queue_compute_expand (GtkWidget *widget)
 {
   GtkWidget *parent;

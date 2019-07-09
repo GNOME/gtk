@@ -44,8 +44,8 @@ get_output_dir (void)
         }
       g_error_free (error);
     }
-
-  g_object_unref (file);
+  else
+    g_object_unref (file);
 
   return output_dir;
 }

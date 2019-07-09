@@ -4449,7 +4449,7 @@ changed_handler (GtkTextLayout     *layout,
 
           tmp_list = tmp_list->next;
         }
-      gtk_widget_queue_resize_no_redraw(widget);
+      gtk_widget_queue_resize(widget);
     }
 }
 

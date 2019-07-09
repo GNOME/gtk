@@ -188,6 +188,17 @@ ops_init (RenderOpBuilder *builder)
 }
 
 void
+ops_free (RenderOpBuilder *builder)
+{
+  int i;
+
+  for (i = 0; i < GL_N_PROGRAMS; i ++)
+    {
+      gsk_transform_unref (builder->program_state[i].modelview);
+    }
+}
+
+void
 ops_set_program (RenderOpBuilder *builder,
                  const Program   *program)
 {
@@ -225,6 +236,7 @@ ops_set_program (RenderOpBuilder *builder,
       op.op = OP_CHANGE_MODELVIEW;
       gsk_transform_to_matrix (builder->current_modelview, &op.modelview);
       g_array_append_val (builder->render_ops, op);
+      gsk_transform_unref (program_state->modelview);
       program_state->modelview = gsk_transform_ref (builder->current_modelview);
     }
 
