@@ -30,7 +30,7 @@ static const GtkIMContextInfo ime_info = {
   NC_("input method menu", "Windows IME"),
   GETTEXT_PACKAGE,
   "",
-  "ja:ko:zh",
+  "*",
 };
 
 static const GtkIMContextInfo *info_list[] = {
