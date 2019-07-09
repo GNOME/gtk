@@ -121,7 +121,8 @@ else
   gail_library_version = '0.0.0'
 endif
 
-gtk_osxversions = [(100 * gtk_minor_version) + 1, '@0@.@1@.0'.format((100 * gtk_minor_version) + 1, gtk_micro_version)]
+osx_current = gtk_binary_age - gtk_interface_age + 1
+gtk_osxversions = [osx_current, '@0@.@1@.0'.format(osx_current, gtk_interface_age)]
 
 gtk_api_version = '@0@.0'.format(gtk_major_version)
 

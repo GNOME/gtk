@@ -20,6 +20,7 @@ endif
 libgailutil = shared_library('gailutil-3',
                              soversion: gtk_soversion,
                              version: gail_library_version,
+                             darwin_versions: ['1', '1.0'],
                              sources: [gailutil_sources],
                              dependencies: libgtk_dep,
                              include_directories: [confinc, gtkinc],
