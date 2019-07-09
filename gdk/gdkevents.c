@@ -585,7 +585,7 @@ gdk_event_new (GdkEventType type)
   return new_event;
 }
 
-static gboolean
+gboolean
 gdk_event_is_allocated (const GdkEvent *event)
 {
   if (event_hash)
@@ -663,6 +663,11 @@ gdk_event_copy (const GdkEvent *event)
       new_private->source_device = private->source_device ? g_object_ref (private->source_device) : NULL;
       new_private->seat = private->seat;
       new_private->tool = private->tool;
+
+#ifdef GDK_WINDOWING_WIN32
+      new_private->translation_len = private->translation_len;
+      new_private->translation = g_memdup(private->translation, private->translation_len*sizeof(private->translation[0]));
+#endif
     }
 
   switch (event->any.type)
@@ -767,6 +772,9 @@ gdk_event_free (GdkEvent *event)
       private = (GdkEventPrivate *) event;
       g_clear_object (&private->device);
       g_clear_object (&private->source_device);
+#ifdef GDK_WINDOWING_WIN32
+      g_free(private->translation);
+#endif
     }
 
   switch (event->any.type)

@@ -192,6 +192,11 @@ struct _GdkEventPrivate
   GdkSeat   *seat;
   GdkDeviceTool *tool;
   guint16    key_scancode;
+
+#ifdef GDK_WINDOWING_WIN32
+  gunichar2 *translation;
+  guint      translation_len;
+#endif
 };
 
 typedef struct _GdkWindowPaint GdkWindowPaint;
@@ -411,6 +416,10 @@ void     gdk_event_set_scancode        (GdkEvent *event,
 
 void     gdk_event_set_seat              (GdkEvent *event,
                                           GdkSeat  *seat);
+
+/* The IME IM module needs this symbol exported. */
+_GDK_EXTERN
+gboolean gdk_event_is_allocated      (const GdkEvent *event);
 
 void   _gdk_event_emit               (GdkEvent   *event);
 GList* _gdk_event_queue_find_first   (GdkDisplay *display);
