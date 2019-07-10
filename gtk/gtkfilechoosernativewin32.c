@@ -69,6 +69,7 @@ typedef struct {
   char *title;
 
   GSList *shortcut_uris;
+  GArray *choices_selections;
 
   GFile *current_folder;
   GFile *current_file;
@@ -327,6 +328,11 @@ filechooser_win32_thread_data_free (FilechooserWin32ThreadData *data)
   g_clear_object (&data->current_file);
   g_free (data->current_name);
 
+  if (data->choices_selections)
+    {
+      g_array_free (data->choices_selections, TRUE);
+      data->choices_selections = NULL;
+    }
   g_slist_free_full (data->shortcut_uris, g_free);
   g_slist_free_full (data->files, g_object_unref);
   if (data->self)
@@ -344,6 +350,27 @@ filechooser_win32_thread_done (gpointer _data)
   GtkFileChooserNative *self = data->self;
 
   self->mode_data = NULL;
+
+  for (GSList *l = self->choices; l; l = l->next)
+    {
+      GtkFileChooserNativeChoice *choice = (GtkFileChooserNativeChoice*) l->data;
+      gint sel = g_array_index (data->choices_selections, gint,
+                                g_slist_position (self->choices, l));
+
+      if (sel >= 0)
+        {
+          if (choice->options)
+            {
+              g_free (choice->selected);
+              choice->selected = g_strdup (choice->options[sel]);
+            }
+          else
+            {
+              g_free (choice->selected);
+              choice->selected = sel ? g_strdup ("true") : g_strdup ("false");
+            }
+        }
+    }
 
   if (!data->skip_response)
     {
@@ -591,6 +618,77 @@ filechooser_win32_thread (gpointer _data)
         g_warning_hr ("Can't set current file type", hr);
     }
 
+  if (data->self->choices)
+    {
+      IFileDialogCustomize *pfdc;
+      DWORD dialog_control_id = 0;
+      DWORD dialog_auxiliary_id = (DWORD) g_slist_length (data->self->choices);
+
+      hr = IFileDialog_QueryInterface (pfd, &IID_IFileDialogCustomize, (LPVOID *) &pfdc);
+      if (SUCCEEDED (hr))
+        {
+          for (GSList *l = data->self->choices; l; l = l->next, dialog_control_id++)
+            {
+              GtkFileChooserNativeChoice *choice = (GtkFileChooserNativeChoice*) l->data;
+
+              if (choice->options)
+                {
+                  gunichar2 *label = g_utf8_to_utf16 (choice->label, -1, NULL, NULL, NULL);
+                  DWORD sub_id = 0;
+
+                  IFileDialogCustomize_StartVisualGroup (pfdc, dialog_auxiliary_id++, label);
+                  hr = IFileDialogCustomize_AddComboBox (pfdc, dialog_control_id);
+                  if (FAILED (hr))
+                    g_warning_hr ("Can't add choice", hr);
+                  IFileDialogCustomize_EndVisualGroup (pfdc);
+
+                  for (gchar **option = choice->options; *option != NULL; option++, sub_id++)
+                    {
+                      gunichar2 *option_label = g_utf8_to_utf16 (choice->option_labels[sub_id],
+                                                                 -1, NULL, NULL, NULL);
+
+                      hr = IFileDialogCustomize_AddControlItem (pfdc,
+                                                                dialog_control_id,
+                                                                sub_id,
+                                                                (LPCWSTR) option_label);
+                      if (FAILED (hr))
+                        g_warning_hr ("Can't add choice option", hr);
+
+                      if (choice->selected && g_str_equal (*option, choice->selected))
+                        IFileDialogCustomize_SetSelectedControlItem (pfdc,
+                                                                     dialog_control_id,
+                                                                     sub_id);
+
+                      g_free(option_label);
+                    }
+
+                  g_free(label);
+                }
+              else
+                {
+                  gunichar2 *label = g_utf8_to_utf16 (choice->label,
+                                                          -1, NULL, NULL, NULL);
+
+                  hr = IFileDialogCustomize_AddCheckButton (pfdc,
+                                                            dialog_control_id,
+                                                            label,
+                                                            FALSE);
+                  if (FAILED (hr))
+                    g_warning_hr ("Can't add choice", hr);
+
+                  if (choice->selected)
+                    IFileDialogCustomize_SetCheckButtonState (pfdc,
+                                                              dialog_control_id,
+                                                              g_str_equal (choice->selected, "true"));
+
+                  g_free (label);
+                }
+            }
+
+          IFileDialogCustomize_Release (pfdc);
+        }
+    }
+
   data->response = GTK_RESPONSE_CANCEL;
 
   hr = IFileDialog_Advise (pfd, data->events, &cookie);
@@ -640,6 +738,53 @@ filechooser_win32_thread (gpointer _data)
           IShellItem_Release (item);
         }
     }
+
+  if (data->self->choices)
+    {
+      IFileDialogCustomize *pfdc = NULL;
+
+      if (data->choices_selections)
+        g_array_free (data->choices_selections, TRUE);
+      data->choices_selections = g_array_sized_new (FALSE, FALSE, sizeof(gint),
+                                                    g_slist_length (data->self->choices));
+
+      hr = IFileDialog_QueryInterface (pfd, &IID_IFileDialogCustomize, (LPVOID *) &pfdc);
+      if (SUCCEEDED (hr))
+        {
+          for (GSList *l = data->self->choices; l; l = l->next)
+            {
+              GtkFileChooserNativeChoice *choice = (GtkFileChooserNativeChoice*) l->data;
+              DWORD dialog_item_id = (DWORD) g_slist_position (data->self->choices, l);
+              gint val = -1;
+
+              if (choice->options)
+                {
+                  DWORD dialog_sub_item_id = 0;
+
+                  hr = IFileDialogCustomize_GetSelectedControlItem (pfdc,
+                                                                    dialog_item_id,
+                                                                    &dialog_sub_item_id);
+                  if (SUCCEEDED (hr))
+                    val = (gint) dialog_sub_item_id;
+                }
+              else
+                {
+                  BOOL dialog_check_box_checked = FALSE;
+
+                  hr = IFileDialogCustomize_GetCheckButtonState (pfdc,
+                                                                 dialog_item_id,
+                                                                 &dialog_check_box_checked);
+                  if (SUCCEEDED (hr))
+                    val = dialog_check_box_checked ? 1 : 0;
+                }
+
+              g_array_append_val (data->choices_selections, val);
+            }
+
+          IFileDialogCustomize_Release (pfdc);
+        }
+    }
+
 
   hr = IFileDialog_Unadvise (pfd, cookie);
   if (FAILED (hr))
@@ -729,7 +874,8 @@ gtk_file_chooser_native_win32_show (GtkFileChooserNative *self)
   GSList *filters, *l;
   int n_filters, i;
 
-  if (gtk_file_chooser_get_extra_widget (GTK_FILE_CHOOSER (self)) != NULL)
+  if (gtk_file_chooser_get_extra_widget (GTK_FILE_CHOOSER (self)) != NULL
+      && self->choices == NULL)
     return FALSE;
 
   update_preview_signal = g_signal_lookup ("update-preview", GTK_TYPE_FILE_CHOOSER);
