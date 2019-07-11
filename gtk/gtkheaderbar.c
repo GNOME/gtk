@@ -339,12 +339,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                 "gtk-decoration-layout", &layout_desc,
                 NULL);
 
-  if (priv->decoration_layout_set)
-    {
-      g_free (layout_desc);
-      layout_desc = g_strdup (priv->decoration_layout);
-    }
-
   window = GTK_WINDOW (toplevel);
 
   if (!shown_by_shell && gtk_window_get_application (window))
@@ -355,6 +349,17 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   is_sovereign_window = (!gtk_window_get_modal (window) &&
                           gtk_window_get_transient_for (window) == NULL &&
                           gtk_window_get_type_hint (window) == GDK_SURFACE_TYPE_HINT_NORMAL);
+
+  if (gtk_window_is_mobile (window))
+    {
+      g_free (layout_desc);
+      layout_desc = g_strdup (is_sovereign_window ? ":" : "back:");
+    }
+  else if (priv->decoration_layout_set)
+    {
+      g_free (layout_desc);
+      layout_desc = g_strdup (priv->decoration_layout);
+    }
 
   tokens = g_strsplit (layout_desc, ":", 2);
   if (tokens)
@@ -480,6 +485,22 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, _("Close"));
+                }
+              else if (strcmp (t[j], "back") == 0 &&
+                       gtk_window_get_deletable (window))
+                {
+                  button = gtk_button_new ();
+                  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+                  image = gtk_image_new_from_icon_name ("go-previous-symbolic");
+                  g_object_set (image, "use-fallback", TRUE, NULL);
+                  gtk_container_add (GTK_CONTAINER (button), image);
+                  gtk_widget_set_can_focus (button, TRUE);
+                  g_signal_connect_swapped (button, "clicked",
+                                            G_CALLBACK (gtk_window_close), window);
+
+                  accessible = gtk_widget_get_accessible (button);
+                  if (GTK_IS_ACCESSIBLE (accessible))
+                    atk_object_set_name (accessible, _("Back"));
                 }
 
               if (button)
@@ -1108,13 +1129,42 @@ surface_state_changed (GtkWidget *widget)
     _gtk_header_bar_update_window_buttons (bar);
 }
 
+static gboolean
+update_window_buttons_once (GtkHeaderBar *bar)
+{
+  _gtk_header_bar_update_window_buttons (bar);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+on_window_mobile_state_changed (GtkHeaderBar *bar)
+{
+  /* As the window's is-mobile property can be changed during its
+   * allocation phase, we can't update the window buttons directly as
+   * it may change the headerbar's allocation, and ultimately the
+   * window's allocation too. We must update the window buttons only
+   * once we are sure we are done measuring, allocating, and redrawing
+   * the window.
+   */
+
+  g_idle_add ((GSourceFunc) update_window_buttons_once, bar);
+}
+
 static void
 gtk_header_bar_root (GtkWidget *widget)
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
+  GtkRoot *root;
+
+  root = _gtk_widget_get_root (widget);
+  if (root)
+    g_signal_handlers_disconnect_by_func (root, on_window_mobile_state_changed, widget);
 
   GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->root (widget);
 
+  root = _gtk_widget_get_root (widget);
+  g_signal_connect_swapped (root, "notify::is-mobile",
+                            G_CALLBACK (on_window_mobile_state_changed), widget);
   _gtk_header_bar_update_window_buttons (bar);
 }
 
