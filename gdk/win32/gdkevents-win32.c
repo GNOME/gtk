@@ -2604,25 +2604,27 @@ gdk_event_translate (MSG  *msg,
 	 WM_CHAR messages - they generate WM_DEAD_CHAR instead, but we are not interested in those
 	 messages). */
 
-      if (gdk_event_is_allocated(event)) { /* Should always be true */
-	GdkEventPrivate *event_priv = (GdkEventPrivate*)event;
+      if (gdk_event_is_allocated (event)) /* Should always be true */
+	{
+	  GdkEventPrivate *event_priv = (GdkEventPrivate*) event;
 
-	MSG msg2;
-	while (PeekMessageW(&msg2, msg->hwnd, 0, 0, 0) && (msg2.message == WM_CHAR || msg2.message == WM_SYSCHAR)) {
-	  /* The character is encoded in WPARAM as UTF-16. */
-	  gunichar2 c = msg2.wParam;
+	  MSG msg2;
+	  while (PeekMessageW (&msg2, msg->hwnd, 0, 0, 0) && (msg2.message == WM_CHAR || msg2.message == WM_SYSCHAR))
+	    {
+	      /* The character is encoded in WPARAM as UTF-16. */
+	      gunichar2 c = msg2.wParam;
 
-	  if (!g_unichar_iscntrl(c)) { /* Ignore control sequences like Backspace */
-	    /* Append character to translation string. */
-	    event_priv->translation_len++;
-	    event_priv->translation = g_realloc(event_priv->translation, event_priv->translation_len*sizeof(event_priv->translation[0]));
-	    event_priv->translation[event_priv->translation_len-1] = c;
-	  }
+	      if (!g_unichar_iscntrl(c)) { /* Ignore control sequences like Backspace */
+		/* Append character to translation string. */
+		event_priv->translation_len ++;
+		event_priv->translation = g_realloc (event_priv->translation, event_priv->translation_len * sizeof (event_priv->translation[0]));
+		event_priv->translation[event_priv->translation_len - 1] = c;
+	      }
 
-	  /* Remove message from queue */
-	  GetMessageW(&msg2, msg->hwnd, 0, 0);
+	      /* Remove message from queue */
+	      GetMessageW (&msg2, msg->hwnd, 0, 0);
+	    }
 	}
-      }
 
       if (HIWORD (msg->lParam) & KF_EXTENDED)
 	{
