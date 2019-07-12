@@ -170,10 +170,10 @@ struct _GdkWaylandSurfaceClass
   GdkSurfaceClass parent_class;
 };
 
-static void gdk_wayland_surface_maybe_configure (GdkSurface *surface,
-                                                 int         width,
-                                                 int         height,
-                                                 int         scale);
+static void gdk_wayland_surface_maybe_resize (GdkSurface *surface,
+                                              int         width,
+                                              int         height,
+                                              int         scale);
 
 static void maybe_set_gtk_surface_dbus_properties (GdkSurface *surface);
 static void maybe_set_gtk_surface_modal (GdkSurface *surface);
@@ -492,7 +492,9 @@ gdk_wayland_surface_update_scale (GdkSurface *surface)
     }
 
   /* Notify app that scale changed */
-  gdk_wayland_surface_maybe_configure (surface, surface->width, surface->height, scale);
+  gdk_wayland_surface_maybe_resize (surface,
+                                    surface->width, surface->height,
+                                    scale);
 }
 
 static void gdk_wayland_surface_create_surface (GdkSurface *surface);
@@ -649,10 +651,10 @@ gdk_wayland_surface_finalize (GObject *object)
 }
 
 static void
-gdk_wayland_surface_configure (GdkSurface *surface,
-                               int         width,
-                               int         height,
-                               int         scale)
+gdk_wayland_surface_resize (GdkSurface *surface,
+                            int         width,
+                            int         height,
+                            int         scale)
 {
   GdkDisplay *display;
   GdkEvent *event;
@@ -702,10 +704,10 @@ static void gdk_wayland_surface_show (GdkSurface *surface,
 static void gdk_wayland_surface_hide (GdkSurface *surface);
 
 static void
-gdk_wayland_surface_maybe_configure (GdkSurface *surface,
-                                     int         width,
-                                     int         height,
-                                     int         scale)
+gdk_wayland_surface_maybe_resize (GdkSurface *surface,
+                                  int         width,
+                                  int         height,
+                                  int         scale)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   gboolean is_xdg_popup;
@@ -728,7 +730,7 @@ gdk_wayland_surface_maybe_configure (GdkSurface *surface,
   if (is_xdg_popup && is_visible && !impl->initial_configure_received)
     gdk_wayland_surface_hide (surface);
 
-  gdk_wayland_surface_configure (surface, width, height, scale);
+  gdk_wayland_surface_resize (surface, width, height, scale);
 
   if (is_xdg_popup && is_visible && !impl->initial_configure_received)
     gdk_wayland_surface_show (surface, FALSE);
@@ -1113,7 +1115,7 @@ gdk_wayland_surface_handle_configure (GdkSurface *surface,
           _gdk_wayland_surface_save_size (surface);
         }
 
-      gdk_wayland_surface_configure (surface, width, height, impl->scale);
+      gdk_wayland_surface_resize (surface, width, height, impl->scale);
     }
 
   GDK_DISPLAY_NOTE (gdk_surface_get_display (surface), EVENTS,
@@ -2670,7 +2672,7 @@ gdk_wayland_surface_move_resize (GdkSurface *surface,
    * just move the surface - don't update its size
    */
   if (width > 0 && height > 0)
-    gdk_wayland_surface_maybe_configure (surface, width, height, impl->scale);
+    gdk_wayland_surface_maybe_resize (surface, width, height, impl->scale);
 }
 
 /* Avoid zero width/height as this is a protocol error */
@@ -3663,7 +3665,9 @@ gdk_wayland_surface_set_shadow_width (GdkSurface *surface,
     (impl->margin_left + impl->margin_right) + (left + right);
   new_height = surface->height -
     (impl->margin_top + impl->margin_bottom) + (top + bottom);
-  gdk_wayland_surface_maybe_configure (surface, new_width, new_height, impl->scale);
+  gdk_wayland_surface_maybe_resize (surface,
+                                    new_width, new_height,
+                                    impl->scale);
 
   impl->margin_left = left;
   impl->margin_right = right;
