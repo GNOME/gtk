@@ -376,7 +376,7 @@ gtk_file_chooser_native_add_choice (GtkFileChooser  *chooser,
   choice->options = g_strdupv ((char **)options);
   choice->option_labels = g_strdupv ((char **)option_labels);
 
-  self->choices = g_slist_prepend (self->choices, choice);
+  self->choices = g_slist_append (self->choices, choice);
 
   gtk_file_chooser_add_choice (GTK_FILE_CHOOSER (self->dialog),
                                id, label, options, option_labels);
