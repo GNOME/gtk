@@ -150,9 +150,20 @@ struct _GdkWaylandSurface
   } pending_move_to_rect;
 
   struct {
-    int width;
-    int height;
-    GdkSurfaceState state;
+    struct {
+      int width;
+      int height;
+      GdkSurfaceState state;
+    } toplevel;
+
+    struct {
+      int x;
+      int y;
+      int width;
+      int height;
+    } popup;
+
+    uint32_t serial;
   } pending;
 
   struct {
@@ -174,6 +185,8 @@ static void gdk_wayland_surface_maybe_resize (GdkSurface *surface,
                                               int         width,
                                               int         height,
                                               int         scale);
+
+static void gdk_wayland_surface_configure (GdkSurface *surface);
 
 static void maybe_set_gtk_surface_dbus_properties (GdkSurface *surface);
 static void maybe_set_gtk_surface_modal (GdkSurface *surface);
@@ -1041,43 +1054,26 @@ gdk_wayland_surface_create_surface (GdkSurface *surface)
 }
 
 static void
-gdk_wayland_surface_handle_configure (GdkSurface *surface,
-                                      uint32_t    serial)
+gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkSurfaceState new_state;
-  int width = impl->pending.width;
-  int height = impl->pending.height;
+  int width, height;
   gboolean fixed_size;
   gboolean saved_size;
 
-  if (!impl->initial_configure_received)
-    {
-      gdk_surface_thaw_updates (surface);
-      impl->initial_configure_received = TRUE;
-    }
-
-  if (impl->display_server.xdg_popup)
-    {
-      xdg_surface_ack_configure (impl->display_server.xdg_surface, serial);
-      return;
-    }
-  else if (impl->display_server.zxdg_popup_v6)
-    {
-      zxdg_surface_v6_ack_configure (impl->display_server.zxdg_surface_v6,
-                                     serial);
-      return;
-    }
-
-  new_state = impl->pending.state;
-  impl->pending.state = 0;
+  new_state = impl->pending.toplevel.state;
+  impl->pending.toplevel.state = 0;
 
   fixed_size =
     new_state & (GDK_SURFACE_STATE_MAXIMIZED |
                  GDK_SURFACE_STATE_FULLSCREEN |
                  GDK_SURFACE_STATE_TILED);
+
+  width = impl->pending.toplevel.width;
+  height = impl->pending.toplevel.height;
 
   saved_size = (width == 0 && height == 0);
   /* According to xdg_shell, an xdg_surface.configure with size 0x0
@@ -1131,11 +1127,12 @@ gdk_wayland_surface_handle_configure (GdkSurface *surface,
   switch (display_wayland->shell_variant)
     {
     case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
-      xdg_surface_ack_configure (impl->display_server.xdg_surface, serial);
+      xdg_surface_ack_configure (impl->display_server.xdg_surface,
+                                 impl->pending.serial);
       break;
     case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
       zxdg_surface_v6_ack_configure (impl->display_server.zxdg_surface_v6,
-                                     serial);
+                                     impl->pending.serial);
       break;
     default:
       g_assert_not_reached ();
@@ -1147,6 +1144,87 @@ gdk_wayland_surface_handle_configure (GdkSurface *surface,
 }
 
 static void
+gdk_wayland_surface_configure_popup (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  int x, y, width, height;
+  GdkRectangle flipped_rect;
+  GdkRectangle final_rect;
+  gboolean flipped_x;
+  gboolean flipped_y;
+
+  g_return_if_fail (impl->transient_for);
+
+  if (impl->display_server.xdg_popup)
+    {
+      xdg_surface_ack_configure (impl->display_server.xdg_surface,
+                                 impl->pending.serial);
+    }
+  else if (impl->display_server.zxdg_popup_v6)
+    {
+      zxdg_surface_v6_ack_configure (impl->display_server.zxdg_surface_v6,
+                                     impl->pending.serial);
+    }
+
+  if (impl->position_method != POSITION_METHOD_MOVE_TO_RECT)
+    return;
+
+  x = impl->pending.popup.x;
+  y = impl->pending.popup.y;
+  width = impl->pending.popup.width;
+  height = impl->pending.popup.height;
+
+  gdk_wayland_surface_resize (surface, width, height, impl->scale);
+
+  calculate_moved_to_rect_result (surface,
+                                  x, y,
+                                  width, height,
+                                  &flipped_rect,
+                                  &final_rect,
+                                  &flipped_x,
+                                  &flipped_y);
+
+  impl->position_method = POSITION_METHOD_MOVE_TO_RECT;
+
+  g_signal_emit_by_name (surface,
+                         "moved-to-rect",
+                         &flipped_rect,
+                         &final_rect,
+                         flipped_x,
+                         flipped_y);
+}
+
+static void
+gdk_wayland_surface_configure (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  if (!impl->initial_configure_received)
+    {
+      gdk_surface_thaw_updates (surface);
+      impl->initial_configure_received = TRUE;
+    }
+
+  if (is_realized_popup (surface))
+    gdk_wayland_surface_configure_popup (surface);
+  else if (is_realized_toplevel (surface))
+    gdk_wayland_surface_configure_toplevel (surface);
+  else
+    g_warn_if_reached ();
+}
+
+static void
+gdk_wayland_surface_handle_configure (GdkSurface *surface,
+                                      uint32_t    serial)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  impl->pending.serial = serial;
+
+  gdk_wayland_surface_configure (surface);
+}
+
+static void
 gdk_wayland_surface_handle_configure_toplevel (GdkSurface      *surface,
                                                int32_t          width,
                                                int32_t          height,
@@ -1154,9 +1232,9 @@ gdk_wayland_surface_handle_configure_toplevel (GdkSurface      *surface,
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  impl->pending.state |= state;
-  impl->pending.width = width;
-  impl->pending.height = height;
+  impl->pending.toplevel.state |= state;
+  impl->pending.toplevel.width = width;
+  impl->pending.toplevel.height = height;
 }
 
 static void
@@ -1435,30 +1513,11 @@ gdk_wayland_surface_handle_configure_popup (GdkSurface *surface,
                                             int32_t     height)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  GdkRectangle flipped_rect;
-  GdkRectangle final_rect;
-  gboolean flipped_x;
-  gboolean flipped_y;
 
-  g_return_if_fail (impl->transient_for);
-
-  if (impl->position_method != POSITION_METHOD_MOVE_TO_RECT)
-    return;
-
-  calculate_moved_to_rect_result (surface, x, y, width, height,
-                                  &flipped_rect,
-                                  &final_rect,
-                                  &flipped_x,
-                                  &flipped_y);
-
-  impl->position_method = POSITION_METHOD_MOVE_TO_RECT;
-
-  g_signal_emit_by_name (surface,
-                         "moved-to-rect",
-                         &flipped_rect,
-                         &final_rect,
-                         flipped_x,
-                         flipped_y);
+  impl->pending.popup.x = x;
+  impl->pending.popup.y = y;
+  impl->pending.popup.width = width;
+  impl->pending.popup.height = height;
 }
 
 static void
@@ -2926,7 +2985,7 @@ gtk_surface_configure (void                *data,
         }
     }
 
-  impl->pending.state |= new_state;
+  impl->pending.toplevel.state |= new_state;
 }
 
 static void
@@ -2963,7 +3022,7 @@ gtk_surface_configure_edges (void                *data,
         }
     }
 
-  impl->pending.state |= new_state;
+  impl->pending.toplevel.state |= new_state;
 }
 
 static const struct gtk_surface1_listener gtk_surface_listener = {
