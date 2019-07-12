@@ -563,7 +563,6 @@ populate_completion (GtkEmojiCompletion *completion,
   GVariantIter iter;
   GVariant *item;
 
-  text = g_strdup (text);
   g_free (completion->text);
   completion->text = g_strdup (text);
   completion->length = g_utf8_strlen (text, -1);
