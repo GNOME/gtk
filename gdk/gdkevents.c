@@ -666,7 +666,7 @@ gdk_event_copy (const GdkEvent *event)
 
 #ifdef GDK_WINDOWING_WIN32
       new_private->translation_len = private->translation_len;
-      new_private->translation = g_memdup(private->translation, private->translation_len*sizeof(private->translation[0]));
+      new_private->translation = g_memdup (private->translation, private->translation_len * sizeof (private->translation[0]));
 #endif
     }
 
@@ -773,7 +773,7 @@ gdk_event_free (GdkEvent *event)
       g_clear_object (&private->device);
       g_clear_object (&private->source_device);
 #ifdef GDK_WINDOWING_WIN32
-      g_free(private->translation);
+      g_free (private->translation);
 #endif
     }
 
