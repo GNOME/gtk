@@ -306,6 +306,7 @@ do_fishbowl (GtkWidget *do_widget)
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       gtk_widget_realize (window);
+      g_object_unref (builder);
     }
 
   if (!gtk_widget_get_visible (window))
