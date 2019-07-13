@@ -858,6 +858,7 @@ button {
   // hide separators
   &.font{
     separator { background-color: transparent; }
+    > box { border-spacing: 6px; }
     > box > box > label { font-weight: bold; }
   }
 
