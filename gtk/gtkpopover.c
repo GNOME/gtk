@@ -683,7 +683,7 @@ surface_transform_changed_cb (GtkWidget               *widget,
                               const graphene_matrix_t *transform,
                               gpointer                 user_data)
 {
-  GtkPopover *popover = GTK_POPOVER (widget);
+  GtkPopover *popover = user_data;
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
   move_to_rect (popover);
