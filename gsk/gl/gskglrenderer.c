@@ -1015,12 +1015,49 @@ render_opacity_node (GskGLRenderer   *self,
                      GskRenderNode   *node,
                      RenderOpBuilder *builder)
 {
+  GskRenderNode *child = gsk_opacity_node_get_child (node);
+  const float opacity = gsk_opacity_node_get_opacity (node);
   float prev_opacity;
 
-  prev_opacity = ops_set_opacity (builder,
-                                  builder->current_opacity * gsk_opacity_node_get_opacity (node));
+  if (gsk_render_node_get_node_type (child) == GSK_CONTAINER_NODE)
+    {
+      const float min_x = builder->dx + node->bounds.origin.x;
+      const float min_y = builder->dy + node->bounds.origin.y;
+      const float max_x = min_x + node->bounds.size.width;
+      const float max_y = min_y + node->bounds.size.height;
+      gboolean is_offscreen;
+      TextureRegion region;
 
-  gsk_gl_renderer_add_render_ops (self, gsk_opacity_node_get_child (node), builder);
+      /* The semantics of an opacity node mandate that when, e.g., two color nodes overlap,
+       * there may not be any blending between them */
+      add_offscreen_ops (self, builder, &child->bounds,
+                         child,
+                         &region, &is_offscreen,
+                         FORCE_OFFSCREEN | RESET_OPACITY | RESET_CLIP);
+
+      prev_opacity = ops_set_opacity (builder,
+                                      builder->current_opacity * opacity);
+
+      ops_set_program (builder, &self->blit_program);
+      ops_set_texture (builder, region.texture_id);
+
+      ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+        { { min_x, min_y }, { region.x,  region.y2 }, },
+        { { min_x, max_y }, { region.x,  region.y  }, },
+        { { max_x, min_y }, { region.x2, region.y2 }, },
+
+        { { max_x, max_y }, { region.x2, region.y  }, },
+        { { min_x, max_y }, { region.x,  region.y  }, },
+        { { max_x, min_y }, { region.x2, region.y2 }, },
+      });
+    }
+  else
+    {
+      prev_opacity = ops_set_opacity (builder,
+                                      builder->current_opacity * opacity);
+
+      gsk_gl_renderer_add_render_ops (self, child, builder);
+    }
 
   ops_set_opacity (builder, prev_opacity);
 }
@@ -1290,7 +1327,7 @@ render_rounded_clip_node (GskGLRenderer       *self,
         { { min_x, min_y }, { 0, 1 }, },
         { { min_x, max_y }, { 0, 0 }, },
         { { max_x, min_y }, { 1, 1 }, },
- 
+
         { { max_x, max_y }, { 1, 0 }, },
         { { min_x, max_y }, { 0, 0 }, },
         { { max_x, min_y }, { 1, 1 }, },

@@ -58,7 +58,8 @@ compare_render_tests = [
   'texture-url',
   'color-matrix-identity',
   'clip-nested1',
-  'scale-up-down'
+  'scale-up-down',
+  'opacity-overlapping-children',
 ]
 
 renderers = [
