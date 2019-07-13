@@ -809,6 +809,8 @@ gtk_picture_set_paintable (GtkPicture   *self,
         g_signal_handlers_disconnect_by_func (self->paintable,
                                               gtk_picture_paintable_invalidate_size,
                                               self);
+
+      g_object_unref (self->paintable);
     }
 
   self->paintable = paintable;
