@@ -856,10 +856,10 @@ button {
   }
 
   // hide separators
-  &.font,
-  &.file { separator { background-color: transparent; }}
-
-  &.font { > box > box > label { font-weight: bold; }}
+  &.font{
+    separator { background-color: transparent; }
+    > box > box > label { font-weight: bold; }
+  }
 
   // inline-toolbar buttons
   .inline-toolbar & { @extend %linked; }
