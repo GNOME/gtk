@@ -707,6 +707,14 @@ static void
 node_editor_window_unrealize (GtkWidget *widget)
 {
   NodeEditorWindow *self = NODE_EDITOR_WINDOW (widget);
+  guint i;
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->renderers)); i ++)
+    {
+      gpointer item = g_list_model_get_item (G_LIST_MODEL (self->renderers), i);
+      gsk_renderer_unrealize (gtk_renderer_paintable_get_renderer (item));
+      g_object_unref (item);
+    }
 
   g_list_store_remove_all (self->renderers);
 
