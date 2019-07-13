@@ -117,6 +117,17 @@
    obj:/usr/lib/dri/i965_dri.so*
 }
 
+{
+   mesa glReadPixels
+   Memcheck:Addr16
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   fun:epoxy_glReadPixels_global_rewrite_ptr
+}
+
 # Fontconfig
 {
    FcFontSetList
