@@ -817,7 +817,7 @@ parse_container_node (GtkCssParser *parser)
        token = gtk_css_parser_get_token (parser))
     {
       node = NULL;
-      /* We don't wand a semicolon here, but the parse_node function will figure
+      /* We don't want a semicolon here, but the parse_node function will figure
        * that out itself and return an error if we encounter one.
        */
       gtk_css_parser_start_semicolon_block (parser, GTK_CSS_TOKEN_OPEN_CURLY);
