@@ -537,8 +537,6 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   AtkObject *atk_obj;
   gchar *text, *name;
 
-  priv = gtk_color_chooser_widget_get_instance_private (cc);
-
   priv->use_alpha = TRUE;
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (cc), GTK_ORIENTATION_VERTICAL);

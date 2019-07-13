@@ -408,7 +408,6 @@ gtk_cell_renderer_toggle_snapshot (GtkCellRenderer      *cell,
   GtkBorder padding, border;
   GtkCssImageBuiltinType image_type;
 
-  context = gtk_widget_get_style_context (widget);
   gtk_cell_renderer_toggle_get_size (cell, widget, cell_area,
 				     &x_offset, &y_offset,
 				     &width, &height);

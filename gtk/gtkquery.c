@@ -40,9 +40,6 @@ finalize (GObject *object)
   GtkQuery *query = GTK_QUERY (object);
   GtkQueryPrivate *priv = gtk_query_get_instance_private (query);
 
-
-  query = GTK_QUERY (object);
-
   g_clear_object (&priv->location);
   g_free (priv->text);
   g_strfreev (priv->words);
