@@ -2268,7 +2268,7 @@ msgstr "Seleccion_a-ho tot"
 
 #: gtk/gtkentry.c:9614 gtk/gtktextview.c:9525
 msgid "Insert _Emoji"
-msgstr "_Insereix Emoji"
+msgstr "_Insereix un emoji"
 
 #: gtk/gtkentry.c:9790 gtk/gtktextview.c:9745
 msgid "Select all"
@@ -2292,7 +2292,7 @@ msgstr "La fixació de majúscules està activada"
 
 #: gtk/gtkentry.c:11144
 msgid "Insert Emoji"
-msgstr "Insereix Emoji"
+msgstr "Insereix un emoji"
 
 #: gtk/gtkfilechooserbutton.c:107
 msgid "Select a File"
