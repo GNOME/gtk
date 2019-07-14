@@ -2005,7 +2005,7 @@ msgstr "La fixació de majúscules està activada"
 
 #: gtk/gtkentry.c:9533
 msgid "Insert Emoji"
-msgstr "Inserta emoji"
+msgstr "Inserta un emoji"
 
 #: gtk/gtkfilechooserbutton.c:106
 msgid "Select a File"
