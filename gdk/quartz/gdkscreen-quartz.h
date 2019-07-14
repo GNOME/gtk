@@ -39,8 +39,6 @@ struct _GdkQuartzScreen
   gint mm_height;
 
   guint screen_changed_id;
-
-  guint emit_monitors_changed : 1;
 };
 
 struct _GdkQuartzScreenClass
