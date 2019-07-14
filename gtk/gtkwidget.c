@@ -10107,6 +10107,7 @@ gtk_widget_buildable_finish_layout_properties (GtkWidget *widget,
     }
 
   g_slist_free_full (layout_properties, layout_property_info_free);
+  g_slice_free (LayoutParserData, layout_data);
 }
 
 static void
