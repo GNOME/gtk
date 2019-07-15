@@ -1783,6 +1783,7 @@ gtk_text_dispose (GObject *object)
   GtkText *self = GTK_TEXT (object);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GdkKeymap *keymap;
+  GtkWidget *chooser;
 
   priv->current_pos = 0;
 
@@ -1794,6 +1795,9 @@ gtk_text_dispose (GObject *object)
     }
 
   g_clear_pointer (&priv->emoji_completion, gtk_widget_unparent);
+  chooser = g_object_get_data (object, "gtk-emoji-chooser");
+  if (chooser)
+    gtk_widget_unparent (chooser);
 
   keymap = gdk_display_get_keymap (gtk_widget_get_display (GTK_WIDGET (object)));
   g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, self);
