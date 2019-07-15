@@ -1588,7 +1588,9 @@ handle_dpi_changed (GdkSurface *window,
   _gdk_win32_adjust_client_rect (window, rect);
 
   if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
-    gdk_surface_move_resize (window, window->x, window->y, window->width, window->height);
+    gdk_win32_surface_move_resize (window,
+                                   window->x, window->y,
+                                   window->width, window->height);
   else
     gdk_surface_resize (window, window->width, window->height);
 }

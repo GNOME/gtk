@@ -108,13 +108,6 @@ static void update_cursor               (GdkDisplay *display,
 static void gdk_surface_set_frame_clock (GdkSurface      *surface,
                                          GdkFrameClock  *clock);
 
-static void gdk_surface_move_resize_internal (GdkSurface *surface,
-                                              gboolean   with_move,
-                                              gint       x,
-                                              gint       y,
-                                              gint       width,
-                                              gint       height);
-
 
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
@@ -2076,34 +2069,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   GDK_SURFACE_GET_CLASS (surface)->hide (surface);
 }
 
-static void
-gdk_surface_move_resize_toplevel (GdkSurface *surface,
-                                  gboolean   with_move,
-                                  gint       x,
-                                  gint       y,
-                                  gint       width,
-                                  gint       height)
-{
-  GDK_SURFACE_GET_CLASS (surface)->move_resize (surface, with_move, x, y, width, height);
-}
-
-
-static void
-gdk_surface_move_resize_internal (GdkSurface *surface,
-                                  gboolean   with_move,
-                                  gint       x,
-                                  gint       y,
-                                  gint       width,
-                                  gint       height)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (surface->destroyed)
-    return;
-
-  gdk_surface_move_resize_toplevel (surface, with_move, x, y, width, height);
-}
-
 /**
  * gdk_surface_resize:
  * @surface: a #GdkSurface
@@ -2122,30 +2087,6 @@ gdk_surface_resize (GdkSurface *surface,
                     gint       height)
 {
   GDK_SURFACE_GET_CLASS (surface)->toplevel_resize (surface, width, height);
-}
-
-
-/*
- * gdk_surface_move_resize:
- * @surface: a #GdkSurface
- * @x: new X position relative to surface’s parent
- * @y: new Y position relative to surface’s parent
- * @width: new width
- * @height: new height
- *
- * Equivalent to calling gdk_surface_move() and gdk_surface_resize(),
- * except that both operations are performed at once, avoiding strange
- * visual effects. (i.e. the user may be able to see the surface first
- * move, then resize, if you don’t use gdk_surface_move_resize().)
- **/
-void
-gdk_surface_move_resize (GdkSurface *surface,
-                         gint       x,
-                         gint       y,
-                         gint       width,
-                         gint       height)
-{
-  gdk_surface_move_resize_internal (surface, TRUE, x, y, width, height);
 }
 
 /**
@@ -2942,8 +2883,7 @@ gdk_surface_set_modal_hint (GdkSurface *surface,
  * this is to constrain user resizing, but the windowing system
  * will typically  (but is not required to) also constrain the
  * current size of the surface to the provided values and
- * constrain programatic resizing via gdk_surface_resize() or
- * gdk_surface_move_resize().
+ * constrain programatic resizing via gdk_surface_resize().
  *
  * Note that on X11, this effect has no effect on surfaces
  * of type %GDK_SURFACE_TEMP since these surfaces are not resizable
