@@ -3952,7 +3952,8 @@ update_pos (MoveResizeData *mv_resize,
 				     w, h, &w, &h);
 	}
 
-      gdk_surface_move_resize (mv_resize->moveresize_surface, x, y, w, h);
+      gdk_x11_surface_move_resize (mv_resize->moveresize_surface, TRUE,
+                                   x, y, w, h);
     }
   else
     {
@@ -4654,7 +4655,6 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->raise = gdk_x11_surface_raise;
   impl_class->lower = gdk_x11_surface_lower;
   impl_class->restack_toplevel = gdk_x11_surface_restack_toplevel;
-  impl_class->move_resize = gdk_x11_surface_move_resize;
   impl_class->toplevel_resize = gdk_x11_surface_toplevel_resize;
   impl_class->move_to_rect = gdk_x11_surface_move_to_rect;
   impl_class->get_geometry = gdk_x11_surface_get_geometry;
