@@ -4382,15 +4382,12 @@ gtk_text_draw_cursor (GtkText     *self,
   PangoLayout *layout;
   const char *text;
   int x, y;
-  int width, height;
 
   context = gtk_widget_get_style_context (widget);
 
   layout = gtk_text_ensure_layout (self, TRUE);
   text = pango_layout_get_text (layout);
   gtk_text_get_layout_offsets (self, &x, &y);
-  width = gtk_widget_get_width (widget);
-  height = gtk_widget_get_height (widget);
 
   if (type == CURSOR_DND)
     cursor_index = g_utf8_offset_to_pointer (text, priv->dnd_position) - text;
@@ -4410,6 +4407,8 @@ gtk_text_draw_cursor (GtkText     *self,
     }
   else /* overwrite_mode */
     {
+      int width = gtk_widget_get_width (widget);
+      int height = gtk_widget_get_height (widget);
       graphene_rect_t bounds;
 
       bounds.origin.x = PANGO_PIXELS (cursor_rect.x) + x;
