@@ -33,7 +33,7 @@
 #include "gtkorientable.h"
 #include "gtkorientableprivate.h"
 #include "gtkprivate.h"
-#include "gtkbox.h"
+#include "gtkboxlayout.h"
 
 
 /**
@@ -59,14 +59,13 @@
  *
  * |[<!-- language="plain" -->
  * scrollbar
- * ╰── box
- *     ╰── range[.fine-tune]
- *         ╰── trough
- *             ╰── slider
+ * ╰── range[.fine-tune]
+ *     ╰── trough
+ *         ╰── slider
  * ]|
  *
  * GtkScrollbar has a main CSS node with name scrollbar and a subnode for its
- * contents. Both the main node and the box subnode get the .horizontal or .vertical
+ * contents. The main node gets the .horizontal or .vertical
  * style classes applied, depending on the scrollbar's orientation.
  *
  * The range node gets the style class .fine-tune added when the scrollbar is
@@ -95,7 +94,6 @@ struct _GtkScrollbarClass
 
 typedef struct {
   GtkOrientation orientation;
-  GtkWidget *box;
   GtkWidget *range;
 } GtkScrollbarPrivate;
 
@@ -113,39 +111,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkScrollbar, gtk_scrollbar, GTK_TYPE_WIDGET,
 
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
-
-
-static void
-gtk_scrollbar_measure (GtkWidget      *widget,
-                       GtkOrientation  orientation,
-                       int             for_size,
-                       int            *minimum,
-                       int            *natural,
-                       int            *minimum_baseline,
-                       int            *natural_baseline)
-{
-  GtkScrollbar *self = GTK_SCROLLBAR (widget);
-  GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
-
-  gtk_widget_measure (priv->box, orientation, for_size,
-                      minimum, natural, minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_scrollbar_size_allocate (GtkWidget *widget,
-                             int        width,
-                             int        height,
-                             int        baseline)
-{
-  GtkScrollbar *self = GTK_SCROLLBAR (widget);
-  GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
-
-  gtk_widget_size_allocate (priv->box,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            }, -1);
-}
 
 static void
 gtk_scrollbar_get_property (GObject    *object,
@@ -190,7 +155,8 @@ gtk_scrollbar_set_property (GObject      *object,
 
         if (orientation != priv->orientation)
           {
-            gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->box), orientation);
+            GtkLayoutManager *layout = gtk_widget_get_layout_manager (GTK_WIDGET (self));
+            gtk_orientable_set_orientation (GTK_ORIENTABLE (layout), orientation);
             gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->range), orientation);
             priv->orientation = orientation;
             _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
@@ -212,7 +178,7 @@ gtk_scrollbar_dispose (GObject *object)
   GtkScrollbar *self = GTK_SCROLLBAR (object);
   GtkScrollbarPrivate *priv = gtk_scrollbar_get_instance_private (self);
 
-  g_clear_pointer (&priv->box, gtk_widget_unparent);
+  g_clear_pointer (&priv->range, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_scrollbar_parent_class)->dispose (object);
 }
@@ -227,9 +193,6 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
   object_class->set_property = gtk_scrollbar_set_property;
   object_class->dispose = gtk_scrollbar_dispose;
 
-  widget_class->measure = gtk_scrollbar_measure;
-  widget_class->size_allocate = gtk_scrollbar_size_allocate;
-
   props[PROP_ADJUSTMENT] =
       g_param_spec_object ("adjustment",
                            P_("Adjustment"),
@@ -243,6 +206,7 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_SCROLL_BAR);
   gtk_widget_class_set_css_name (widget_class, I_("scrollbar"));
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
 }
 
 static gboolean
@@ -262,13 +226,11 @@ gtk_scrollbar_init (GtkScrollbar *self)
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 
-  priv->box = gtk_box_new (priv->orientation, 0);
-  gtk_widget_set_parent (priv->box, GTK_WIDGET (self));
   priv->range = g_object_new (GTK_TYPE_RANGE, NULL);
   g_signal_connect_swapped (priv->range, "popup-menu", G_CALLBACK (emit_popup_menu), self);
   gtk_widget_set_hexpand (priv->range, TRUE);
   gtk_widget_set_vexpand (priv->range, TRUE);
-  gtk_container_add (GTK_CONTAINER (priv->box), priv->range);
+  gtk_widget_set_parent (priv->range, GTK_WIDGET (self));
 
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
 }
