@@ -2142,7 +2142,7 @@ gdk_surface_resize (GdkSurface *surface,
                     gint       width,
                     gint       height)
 {
-  gdk_surface_move_resize_internal (surface, FALSE, 0, 0, width, height);
+  GDK_SURFACE_GET_CLASS (surface)->toplevel_resize (surface, width, height);
 }
 
 

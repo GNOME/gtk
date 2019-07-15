@@ -1255,6 +1255,14 @@ gdk_surface_quartz_move_resize (GdkSurface *window,
     }
 }
 
+static void
+gdk_surface_quartz_toplevel_resize (GdkSurface *surface,
+                                    gint        width,
+                                    gint        height)
+{
+  window_quartz_resize (window, width, height);
+}
+
 /* Get the toplevel ordering from NSApp and update our own list. We do
  * this on demand since the NSApp’s list is not up to date directly
  * after we get windowDidBecomeMain.
@@ -2642,6 +2650,7 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->lower = gdk_surface_quartz_lower;
   impl_class->restack_toplevel = gdk_surface_quartz_restack_toplevel;
   impl_class->move_resize = gdk_surface_quartz_move_resize;
+  impl_class->toplevel_resize = gdk_surface_quartz_toplevel_resize;
   impl_class->get_geometry = gdk_surface_quartz_get_geometry;
   impl_class->get_root_coords = gdk_surface_quartz_get_root_coords;
   impl_class->get_device_state = gdk_surface_quartz_get_device_state;

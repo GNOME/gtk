@@ -119,6 +119,9 @@ struct _GdkSurfaceClass
                                          gint             y,
                                          gint             width,
                                          gint             height);
+  void         (* toplevel_resize)      (GdkSurface      *surface,
+                                         gint             width,
+                                         gint             height);
   void         (* move_to_rect)         (GdkSurface       *surface,
                                          const GdkRectangle *rect,
                                          GdkGravity       rect_anchor,
