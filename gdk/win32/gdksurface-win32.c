@@ -1098,8 +1098,8 @@ gdk_win32_surface_withdraw (GdkSurface *window)
 }
 
 static void
-gdk_win32_surface_move (GdkSurface *window,
-		       gint x, gint y)
+gdk_win32_surface_do_move (GdkSurface *window,
+                           gint x, gint y)
 {
   RECT outer_rect;
   GdkWin32Surface *impl;
@@ -1242,7 +1242,7 @@ gdk_win32_surface_move_resize (GdkSurface *window,
 
   if (with_move && (width < 0 && height < 0))
     {
-      gdk_win32_surface_move (window, x, y);
+      gdk_win32_surface_do_move (window, x, y);
     }
   else
     {
@@ -1268,6 +1268,14 @@ gdk_win32_surface_toplevel_resize (GdkSurface *surface,
                                    gint        y)
 {
   gdk_win32_surface_move_resize  (surface, FALSE, 0, 0, width, height);
+}
+
+void
+gdk_win32_surface_move (GdkSurface *surface,
+                        gint        x,
+                        gint        y)
+{
+  gdk_win32_surface_move_resize (surface, TRUE, x, y, -1, -1);
 }
 
 static void

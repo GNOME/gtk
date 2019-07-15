@@ -108,6 +108,13 @@ static void update_cursor               (GdkDisplay *display,
 static void gdk_surface_set_frame_clock (GdkSurface      *surface,
                                          GdkFrameClock  *clock);
 
+static void gdk_surface_move_resize_internal (GdkSurface *surface,
+                                              gboolean   with_move,
+                                              gint       x,
+                                              gint       y,
+                                              gint       width,
+                                              gint       height);
+
 
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
@@ -365,7 +372,7 @@ gdk_surface_real_move_to_rect (GdkSurface         *surface,
   if (final_rect.width != surface->width || final_rect.height != surface->height)
     gdk_surface_move_resize (surface, final_rect.x, final_rect.y, final_rect.width, final_rect.height);
   else
-    gdk_surface_move (surface, final_rect.x, final_rect.y);
+    gdk_surface_move_resize_internal (surface, TRUE, final_rect.x, final_rect.y, -1, -1);
 
   gdk_surface_get_origin (toplevel, &x, &y);
   final_rect.x -= x;
@@ -2098,31 +2105,6 @@ gdk_surface_move_resize_internal (GdkSurface *surface,
     return;
 
   gdk_surface_move_resize_toplevel (surface, with_move, x, y, width, height);
-}
-
-
-
-/*
- * gdk_surface_move:
- * @surface: a #GdkSurface
- * @x: X coordinate relative to surface’s parent
- * @y: Y coordinate relative to surface’s parent
- *
- * Repositions a surface relative to its parent surface.
- * For toplevel surfaces, window managers may ignore or modify the move;
- * you should probably use gtk_window_move() on a #GtkWindow widget
- * anyway, instead of using GDK functions. For child surfaces,
- * the move will reliably succeed.
- *
- * If you’re also planning to resize the surface, use gdk_surface_move_resize()
- * to both move and resize simultaneously, for a nicer visual effect.
- **/
-void
-gdk_surface_move (GdkSurface *surface,
-                  gint       x,
-                  gint       y)
-{
-  gdk_surface_move_resize_internal (surface, TRUE, x, y, -1, -1);
 }
 
 /**

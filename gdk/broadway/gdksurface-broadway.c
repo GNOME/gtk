@@ -433,6 +433,14 @@ gdk_broadway_surface_toplevel_resize (GdkSurface *surface,
 }
 
 static void
+gdk_broadway_surface_move (GdkSurface *surface,
+                           gint        x,
+                           gint        y)
+{
+  gdk_broadway_surface_move_resize (surface, TRUE, x, y, -1, -1);
+}
+
+static void
 gdk_broadway_surface_raise (GdkSurface *surface)
 {
 }
@@ -952,7 +960,7 @@ update_pos (MoveResizeData *mv_resize,
       x = mv_resize->moveresize_orig_x + dx;
       y = mv_resize->moveresize_orig_y + dy;
 
-      gdk_surface_move (mv_resize->moveresize_surface, x, y);
+      gdk_broadway_surface_move (mv_resize->moveresize_surface, x, y);
     }
 }
 
