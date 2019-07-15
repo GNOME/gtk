@@ -4323,7 +4323,6 @@ gtk_text_draw_text (GtkText     *self,
   GtkStyleContext *context;
   PangoLayout *layout;
   int x, y;
-  int width, height;
 
   /* Nothing to display at all */
   if (gtk_text_get_display_mode (self) == DISPLAY_BLANK)
@@ -4331,8 +4330,6 @@ gtk_text_draw_text (GtkText     *self,
 
   context = gtk_widget_get_style_context (widget);
   layout = gtk_text_ensure_layout (self, TRUE);
-  width = gtk_widget_get_width (widget);
-  height = gtk_widget_get_height (widget);
 
   gtk_text_get_layout_offsets (self, &x, &y);
 
@@ -4346,6 +4343,10 @@ gtk_text_draw_text (GtkText     *self,
       cairo_region_t *clip;
       cairo_rectangle_int_t clip_extents;
       int range[2];
+      int width, height;
+
+      width = gtk_widget_get_width (widget);
+      height = gtk_widget_get_height (widget);
 
       range[0] = MIN (start_index, end_index);
       range[1] = MAX (start_index, end_index);
