@@ -1237,25 +1237,6 @@ window_quartz_move_resize (GdkSurface *window,
 }
 
 static void
-gdk_surface_quartz_move_resize (GdkSurface *window,
-                               gboolean   with_move,
-                               gint       x,
-                               gint       y,
-                               gint       width,
-                               gint       height)
-{
-  if (with_move && (width < 0 && height < 0))
-    window_quartz_move (window, x, y);
-  else
-    {
-      if (with_move)
-        window_quartz_move_resize (window, x, y, width, height);
-      else
-        window_quartz_resize (window, width, height);
-    }
-}
-
-static void
 gdk_surface_quartz_toplevel_resize (GdkSurface *surface,
                                     gint        width,
                                     gint        height)
@@ -2697,7 +2678,6 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->raise = gdk_surface_quartz_raise;
   impl_class->lower = gdk_surface_quartz_lower;
   impl_class->restack_toplevel = gdk_surface_quartz_restack_toplevel;
-  impl_class->move_resize = gdk_surface_quartz_move_resize;
   impl_class->toplevel_resize = gdk_surface_quartz_toplevel_resize;
   impl_class->move_to_rect = gdk_surface_quartz_move_to_rect;
   impl_class->get_geometry = gdk_surface_quartz_get_geometry;

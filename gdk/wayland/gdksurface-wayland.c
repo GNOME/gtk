@@ -197,6 +197,12 @@ static void gdk_wayland_surface_sync_opaque_region (GdkSurface *surface);
 
 static void unset_transient_for_exported (GdkSurface *surface);
 
+static void gdk_wayland_surface_move_resize (GdkSurface *surface,
+                                             gint        x,
+                                             gint        y,
+                                             gint        width,
+                                             gint        height);
+
 static void calculate_moved_to_rect_result (GdkSurface    *surface,
                                             int            x,
                                             int            y,
@@ -1963,9 +1969,9 @@ calculate_moved_to_rect_result (GdkSurface   *surface,
   surface_width = width + surface->shadow_left + surface->shadow_right;
   surface_height = height + surface->shadow_top + surface->shadow_bottom;
 
-  gdk_surface_move_resize (surface,
-                          surface_x, surface_y,
-                          surface_width, surface_height);
+  gdk_wayland_surface_move_resize (surface,
+                                   surface_x, surface_y,
+                                   surface_width, surface_height);
 
   calculate_popup_rect (surface,
                         impl->pending_move_to_rect.rect_anchor,
@@ -2708,7 +2714,6 @@ gdk_wayland_surface_restack_toplevel (GdkSurface *surface,
 
 static void
 gdk_wayland_surface_move_resize (GdkSurface *surface,
-                                 gboolean    with_move,
                                  gint        x,
                                  gint        y,
                                  gint        width,
@@ -2716,22 +2721,9 @@ gdk_wayland_surface_move_resize (GdkSurface *surface,
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  if (with_move)
-    {
-      /* Each toplevel has in its own "root" coordinate system */
-      if (GDK_SURFACE_TYPE (surface) != GDK_SURFACE_TOPLEVEL)
-        {
-          surface->x = x;
-          surface->y = y;
-          impl->position_method = POSITION_METHOD_MOVE_RESIZE;
-        }
-    }
-
-  /* If this function is called with width and height = -1 then that means
-   * just move the surface - don't update its size
-   */
-  if (width > 0 && height > 0)
-    gdk_wayland_surface_maybe_resize (surface, width, height, impl->scale);
+  surface->x = x;
+  surface->y = y;
+  gdk_wayland_surface_maybe_resize (surface, width, height, impl->scale);
 }
 
 static void
@@ -3821,7 +3813,6 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->raise = gdk_wayland_surface_raise;
   impl_class->lower = gdk_wayland_surface_lower;
   impl_class->restack_toplevel = gdk_wayland_surface_restack_toplevel;
-  impl_class->move_resize = gdk_wayland_surface_move_resize;
   impl_class->toplevel_resize = gdk_wayland_surface_toplevel_resize;
   impl_class->move_to_rect = gdk_wayland_surface_move_to_rect;
   impl_class->get_geometry = gdk_wayland_surface_get_geometry;
