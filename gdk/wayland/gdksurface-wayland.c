@@ -2734,6 +2734,18 @@ gdk_wayland_surface_move_resize (GdkSurface *surface,
     gdk_wayland_surface_maybe_resize (surface, width, height, impl->scale);
 }
 
+static void
+gdk_wayland_surface_toplevel_resize (GdkSurface *surface,
+                                     gint        width,
+                                     gint        height)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  gdk_wayland_surface_maybe_resize (surface,
+                                    width, height,
+                                    impl->scale);
+}
+
 /* Avoid zero width/height as this is a protocol error */
 static void
 sanitize_anchor_rect (GdkSurface   *surface,
@@ -3810,6 +3822,7 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->lower = gdk_wayland_surface_lower;
   impl_class->restack_toplevel = gdk_wayland_surface_restack_toplevel;
   impl_class->move_resize = gdk_wayland_surface_move_resize;
+  impl_class->toplevel_resize = gdk_wayland_surface_toplevel_resize;
   impl_class->move_to_rect = gdk_wayland_surface_move_to_rect;
   impl_class->get_geometry = gdk_wayland_surface_get_geometry;
   impl_class->get_root_coords = gdk_wayland_surface_get_root_coords;

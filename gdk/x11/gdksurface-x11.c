@@ -1392,6 +1392,14 @@ gdk_x11_surface_move_resize (GdkSurface *surface,
     }
 }
 
+static void
+gdk_x11_surface_toplevel_resize (GdkSurface *surface,
+                                 gint        width,
+                                 gint        height)
+{
+  x11_surface_resize (surface, width, height);
+}
+
 static void gdk_x11_surface_restack_toplevel (GdkSurface *surface,
                                               GdkSurface *sibling,
                                               gboolean    above);
@@ -4590,6 +4598,7 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->lower = gdk_x11_surface_lower;
   impl_class->restack_toplevel = gdk_x11_surface_restack_toplevel;
   impl_class->move_resize = gdk_x11_surface_move_resize;
+  impl_class->toplevel_resize = gdk_x11_surface_toplevel_resize;
   impl_class->get_geometry = gdk_x11_surface_get_geometry;
   impl_class->get_root_coords = gdk_x11_surface_get_root_coords;
   impl_class->get_device_state = gdk_x11_surface_get_device_state;

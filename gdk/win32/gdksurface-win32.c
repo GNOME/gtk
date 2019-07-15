@@ -1263,6 +1263,14 @@ gdk_win32_surface_move_resize (GdkSurface *window,
 }
 
 static void
+gdk_win32_surface_toplevel_resize (GdkSurface *surface,
+                                   gint        width,
+                                   gint        height)
+{
+  gdk_win32_surface_move_resize  (surface, FALSE, 0, 0, width, height);
+}
+
+static void
 gdk_win32_surface_raise (GdkSurface *window)
 {
   if (!GDK_SURFACE_DESTROYED (window))
@@ -5083,6 +5091,7 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->lower = gdk_win32_surface_lower;
   impl_class->restack_toplevel = gdk_win32_surface_restack_toplevel;
   impl_class->move_resize = gdk_win32_surface_move_resize;
+  impl_class->toplevel_resize = gdk_win32_surface_toplevel_resize;
   impl_class->get_geometry = gdk_win32_surface_get_geometry;
   impl_class->get_device_state = gdk_surface_win32_get_device_state;
   impl_class->get_root_coords = gdk_win32_surface_get_root_coords;

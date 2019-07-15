@@ -425,6 +425,14 @@ gdk_broadway_surface_move_resize (GdkSurface *surface,
 }
 
 static void
+gdk_broadway_surface_toplevel_resize (GdkSurface *surface,
+                                      gint        width,
+                                      gint        height)
+{
+  gdk_broadway_surface_move_resize (surface, FALSE, 0, 0, width, height);
+}
+
+static void
 gdk_broadway_surface_raise (GdkSurface *surface)
 {
 }
@@ -1312,6 +1320,7 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->lower = gdk_broadway_surface_lower;
   impl_class->restack_toplevel = gdk_broadway_surface_restack_toplevel;
   impl_class->move_resize = gdk_broadway_surface_move_resize;
+  impl_class->toplevel_resize = gdk_broadway_surface_toplevel_resize;
   impl_class->get_geometry = gdk_broadway_surface_get_geometry;
   impl_class->get_root_coords = gdk_broadway_surface_get_root_coords;
   impl_class->get_device_state = gdk_broadway_surface_get_device_state;
