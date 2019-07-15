@@ -365,8 +365,8 @@ display_reconfiguration_callback (CGDirectDisplayID            cg_display,
       return;
 
   if (flags & (kCGDisplayMovedFlag | kCGDisplayAddFlag | kCGDisplayEnabledFlag |
-               kCGDisplaySetMainFlag | kCGDisplayDesktopShapeChangedFlag |
-               kCGDisplayMirrorFlag | kCGDisplayUnMirrorFlag))
+               kCGDisplaySetMainFlag | kCGDisplayMirrorFlag |
+               kCGDisplayUnMirrorFlag))
     {
       GdkQuartzMonitor *monitor = NULL;
       guint index;

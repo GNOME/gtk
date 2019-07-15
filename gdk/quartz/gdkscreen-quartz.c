@@ -90,7 +90,6 @@ gdk_quartz_screen_init (GdkQuartzScreen *quartz_screen)
   /* The first monitors-changed should have fired already. */
   _gdk_screen_set_resolution (screen, dpi);
   gdk_quartz_screen_calculate_layout (quartz_screen, NULL);
-  quartz_screen->emit_monitors_changed = FALSE;
 }
 
 static void
@@ -185,11 +184,7 @@ gdk_quartz_screen_reconfigure (GdkQuartzDisplay *display, GdkQuartzScreen *scree
 
   _gdk_quartz_screen_update_window_sizes (GDK_SCREEN (screen));
 
-  if (screen->emit_monitors_changed)
-    {
-      g_signal_emit_by_name (screen, "monitors-changed");
-      screen->emit_monitors_changed = FALSE;
-    }
+  g_signal_emit_by_name (screen, "monitors-changed");
 
   if (width != gdk_screen_get_width (GDK_SCREEN (screen))
       || height != gdk_screen_get_height (GDK_SCREEN (screen)))
