@@ -1757,7 +1757,7 @@ GtkWidget*
 gtk_menu_get_active (GtkMenu *menu)
 {
   GtkMenuPrivate *priv;
-  GtkWidget *child;
+  GtkWidget *child = NULL;
   GList *children, *l;
 
   g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
