@@ -113,12 +113,6 @@ struct _GdkSurfaceClass
                                          GdkSurface       *sibling,
                                          gboolean        above);
 
-  void         (* move_resize)          (GdkSurface       *surface,
-                                         gboolean         with_move,
-                                         gint             x,
-                                         gint             y,
-                                         gint             width,
-                                         gint             height);
   void         (* toplevel_resize)      (GdkSurface      *surface,
                                          gint             width,
                                          gint             height);
