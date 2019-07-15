@@ -253,14 +253,15 @@ maybe_flip_position (gint      bounds_pos,
   return primary;
 }
 
-static void
-gdk_surface_real_move_to_rect (GdkSurface         *surface,
-                               const GdkRectangle *rect,
-                               GdkGravity          rect_anchor,
-                               GdkGravity          surface_anchor,
-                               GdkAnchorHints      anchor_hints,
-                               gint                rect_anchor_dx,
-                               gint                rect_anchor_dy)
+void
+gdk_surface_move_to_rect_helper (GdkSurface            *surface,
+                                 const GdkRectangle    *rect,
+                                 GdkGravity             rect_anchor,
+                                 GdkGravity             surface_anchor,
+                                 GdkAnchorHints         anchor_hints,
+                                 gint                   rect_anchor_dx,
+                                 gint                   rect_anchor_dy,
+                                 GdkSurfaceMovedToRect  moved_to_rect)
 {
   GdkSurface *toplevel;
   GdkDisplay *display;
@@ -369,16 +370,13 @@ gdk_surface_real_move_to_rect (GdkSurface         *surface,
   final_rect.width += surface->shadow_left + surface->shadow_right;
   final_rect.height += surface->shadow_top + surface->shadow_bottom;
 
-  if (final_rect.width != surface->width || final_rect.height != surface->height)
-    gdk_surface_move_resize (surface, final_rect.x, final_rect.y, final_rect.width, final_rect.height);
-  else
-    gdk_surface_move_resize_internal (surface, TRUE, final_rect.x, final_rect.y, -1, -1);
-
   gdk_surface_get_origin (toplevel, &x, &y);
   final_rect.x -= x;
   final_rect.y -= y;
   flipped_rect.x -= x;
   flipped_rect.y -= y;
+
+  moved_to_rect (surface, final_rect);
 
   g_signal_emit_by_name (surface,
                          "moved-to-rect",
@@ -418,7 +416,6 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   object_class->get_property = gdk_surface_get_property;
 
   klass->beep = gdk_surface_real_beep;
-  klass->move_to_rect = gdk_surface_real_move_to_rect;
 
   /**
    * GdkSurface:cursor:
