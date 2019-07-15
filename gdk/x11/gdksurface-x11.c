@@ -1400,6 +1400,14 @@ gdk_x11_surface_toplevel_resize (GdkSurface *surface,
   x11_surface_resize (surface, width, height);
 }
 
+void
+gdk_x11_surface_move (GdkSurface *surface,
+                      gint        x,
+                      gint        y)
+{
+  gdk_x11_surface_move_resize (surface, TRUE, x, y, -1, -1);
+}
+
 static void gdk_x11_surface_restack_toplevel (GdkSurface *surface,
                                               GdkSurface *sibling,
                                               gboolean    above);
@@ -3253,7 +3261,7 @@ gdk_x11_surface_fullscreen_on_monitor (GdkSurface  *surface,
     return;
 
   gdk_monitor_get_geometry (monitor, &geom);
-  gdk_surface_move (surface, geom.x, geom.y);
+  gdk_x11_surface_move (surface, geom.x, geom.y);
 
   gdk_surface_set_fullscreen_mode (surface, GDK_FULLSCREEN_ON_CURRENT_MONITOR);
   gdk_x11_surface_fullscreen (surface);
@@ -3904,7 +3912,7 @@ update_pos (MoveResizeData *mv_resize,
       x = mv_resize->moveresize_orig_x + dx;
       y = mv_resize->moveresize_orig_y + dy;
 
-      gdk_surface_move (mv_resize->moveresize_surface, x, y);
+      gdk_x11_surface_move (mv_resize->moveresize_surface, x, y);
     }
 }
 
