@@ -98,7 +98,9 @@ _gdk_broadway_display_size_changed (GdkDisplay                      *display,
       GdkBroadwaySurface *toplevel = l->data;
 
       if (toplevel->maximized)
-        gdk_surface_move_resize (GDK_SURFACE (toplevel), 0, 0, msg->width, msg->height);
+        gdk_broadway_surface_move_resize (GDK_SURFACE (toplevel),
+                                          0, 0,
+                                          msg->width, msg->height);
     }
 }
 

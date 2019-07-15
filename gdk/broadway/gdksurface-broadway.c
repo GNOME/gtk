@@ -368,12 +368,12 @@ gdk_broadway_surface_withdraw (GdkSurface *surface)
 }
 
 static void
-gdk_broadway_surface_move_resize (GdkSurface *surface,
-                                  gboolean   with_move,
-                                  gint       x,
-                                  gint       y,
-                                  gint       width,
-                                  gint       height)
+gdk_broadway_surface_move_resize_internal (GdkSurface *surface,
+                                           gboolean    with_move,
+                                           gint        x,
+                                           gint        y,
+                                           gint        width,
+                                           gint        height)
 {
   GdkBroadwaySurface *impl = GDK_BROADWAY_SURFACE (surface);
   GdkBroadwayDisplay *broadway_display;
@@ -422,6 +422,18 @@ gdk_broadway_surface_move_resize (GdkSurface *surface,
       surface->resize_count++;
       _gdk_surface_update_size (surface);
     }
+}
+
+static void
+gdk_broadway_surface_move_resize (GdkSurface *surface,
+                                  gint        x,
+                                  gint        y,
+                                  gint        width,
+                                  gint        height)
+{
+  gdk_broadway_surface_move_resize_internal (surface, TRUE,
+                                             x, y,
+                                             width, height);
 }
 
 static void
@@ -760,9 +772,9 @@ gdk_broadway_surface_maximize (GdkSurface *surface)
   monitor = gdk_display_get_primary_monitor (display);
   gdk_monitor_get_geometry (monitor, &geom);
 
-  gdk_surface_move_resize (surface,
-                          geom.x, geom.y,
-                          geom.width, geom.height);
+  gdk_broadway_surface_move_resize (surface,
+                                    geom.x, geom.y,
+                                    geom.width, geom.height);
 }
 
 static void
@@ -783,11 +795,11 @@ gdk_broadway_surface_unmaximize (GdkSurface *surface)
 
   gdk_synthesize_surface_state (surface, GDK_SURFACE_STATE_MAXIMIZED, 0);
 
-  gdk_surface_move_resize (surface,
-                          impl->pre_maximize_x,
-                          impl->pre_maximize_y,
-                          impl->pre_maximize_width,
-                          impl->pre_maximize_height);
+  gdk_broadway_surface_move_resize (surface,
+                                    impl->pre_maximize_x,
+                                    impl->pre_maximize_y,
+                                    impl->pre_maximize_width,
+                                    impl->pre_maximize_height);
 }
 
 static void
@@ -1000,7 +1012,8 @@ update_pos (MoveResizeData *mv_resize,
                                      w, h, &w, &h);
         }
 
-      gdk_surface_move_resize (mv_resize->moveresize_surface, x, y, w, h);
+      gdk_broadway_surface_move_resize (mv_resize->moveresize_surface,
+                                        x, y, w, h);
     }
   else
     {
@@ -1376,7 +1389,6 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->raise = gdk_broadway_surface_raise;
   impl_class->lower = gdk_broadway_surface_lower;
   impl_class->restack_toplevel = gdk_broadway_surface_restack_toplevel;
-  impl_class->move_resize = gdk_broadway_surface_move_resize;
   impl_class->toplevel_resize = gdk_broadway_surface_toplevel_resize;
   impl_class->move_to_rect = gdk_broadway_surface_move_to_rect;
   impl_class->get_geometry = gdk_broadway_surface_get_geometry;
