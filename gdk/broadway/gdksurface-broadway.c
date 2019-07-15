@@ -441,6 +441,55 @@ gdk_broadway_surface_move (GdkSurface *surface,
 }
 
 static void
+gdk_broadway_surface_moved_to_rect (GdkSurface   *surface,
+                                    GdkRectangle  final_rect)
+{
+  GdkSurface *toplevel;
+  int x, y;
+
+  if (surface->surface_type == GDK_SURFACE_POPUP)
+    toplevel = surface->parent;
+  else
+    toplevel = surface->transient_for;
+
+  gdk_surface_get_origin (toplevel, &x, &y);
+  x += final_rect.x;
+  y += final_rect.y;
+
+  if (final_rect.width != surface->width ||
+      final_rect.height != surface->height)
+    {
+      gdk_broadway_surface_move_resize (surface,
+                                        TRUE,
+                                        x, y,
+                                        final_rect.width, final_rect.height);
+    }
+  else
+    {
+      gdk_broadway_surface_move (surface, x, y);
+    }
+}
+
+static void
+gdk_broadway_surface_move_to_rect (GdkSurface         *surface,
+                                   const GdkRectangle *rect,
+                                   GdkGravity          rect_anchor,
+                                   GdkGravity          surface_anchor,
+                                   GdkAnchorHints      anchor_hints,
+                                   gint                rect_anchor_dx,
+                                   gint                rect_anchor_dy)
+{
+  gdk_surface_move_to_rect_helper (surface,
+                                   rect,
+                                   rect_anchor,
+                                   surface_anchor,
+                                   anchor_hints,
+                                   rect_anchor_dx,
+                                   rect_anchor_dy,
+                                   gdk_broadway_surface_moved_to_rect);
+}
+
+static void
 gdk_broadway_surface_raise (GdkSurface *surface)
 {
 }
@@ -1329,6 +1378,7 @@ gdk_broadway_surface_class_init (GdkBroadwaySurfaceClass *klass)
   impl_class->restack_toplevel = gdk_broadway_surface_restack_toplevel;
   impl_class->move_resize = gdk_broadway_surface_move_resize;
   impl_class->toplevel_resize = gdk_broadway_surface_toplevel_resize;
+  impl_class->move_to_rect = gdk_broadway_surface_move_to_rect;
   impl_class->get_geometry = gdk_broadway_surface_get_geometry;
   impl_class->get_root_coords = gdk_broadway_surface_get_root_coords;
   impl_class->get_device_state = gdk_broadway_surface_get_device_state;
