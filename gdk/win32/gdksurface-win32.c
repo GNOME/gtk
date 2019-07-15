@@ -1279,6 +1279,55 @@ gdk_win32_surface_move (GdkSurface *surface,
 }
 
 static void
+gdk_win32_surface_moved_to_rect (GdkSurface   *surface,
+                                 GdkRectangle  final_rect)
+{
+  GdkSurface *toplevel;
+  int x, y;
+
+  if (surface->surface_type == GDK_SURFACE_POPUP)
+    toplevel = surface->parent;
+  else
+    toplevel = surface->transient_for;
+
+  gdk_surface_get_origin (toplevel, &x, &y);
+  x += final_rect.x;
+  y += final_rect.y;
+
+  if (final_rect.width != surface->width ||
+      final_rect.height != surface->height)
+    {
+      gdk_win32_surface_move_resize (surface,
+                                     TRUE,
+                                     x, y,
+                                     final_rect.width, final_rect.height);
+    }
+  else
+    {
+      gdk_win32_surface_move (surface, x, y);
+    }
+}
+
+static void
+gdk_win32_surface_move_to_rect (GdkSurface         *surface,
+                                const GdkRectangle *rect,
+                                GdkGravity          rect_anchor,
+                                GdkGravity          surface_anchor,
+                                GdkAnchorHints      anchor_hints,
+                                gint                rect_anchor_dx,
+                                gint                rect_anchor_dy)
+{
+  gdk_surface_move_to_rect_helper (surface,
+                                   rect,
+                                   rect_anchor,
+                                   surface_anchor,
+                                   anchor_hints,
+                                   rect_anchor_dx,
+                                   rect_anchor_dy,
+                                   gdk_win32_surface_moved_to_rect);
+}
+
+static void
 gdk_win32_surface_raise (GdkSurface *window)
 {
   if (!GDK_SURFACE_DESTROYED (window))
@@ -5100,6 +5149,7 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->restack_toplevel = gdk_win32_surface_restack_toplevel;
   impl_class->move_resize = gdk_win32_surface_move_resize;
   impl_class->toplevel_resize = gdk_win32_surface_toplevel_resize;
+  impl_class->move_to_rect = gdk_win32_surface_move_to_rect;
   impl_class->get_geometry = gdk_win32_surface_get_geometry;
   impl_class->get_device_state = gdk_surface_win32_get_device_state;
   impl_class->get_root_coords = gdk_win32_surface_get_root_coords;
