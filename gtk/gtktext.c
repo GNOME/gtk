@@ -2253,18 +2253,18 @@ gtk_text_snapshot (GtkWidget   *widget,
 
   /* Draw text and cursor */
   if (priv->dnd_position != -1)
-    gtk_text_draw_cursor (GTK_TEXT (widget), snapshot, CURSOR_DND);
+    gtk_text_draw_cursor (self, snapshot, CURSOR_DND);
 
   if (priv->placeholder)
     gtk_widget_snapshot_child (widget, priv->placeholder, snapshot);
 
-  gtk_text_draw_text (GTK_TEXT (widget), snapshot);
+  gtk_text_draw_text (self, snapshot);
 
   /* When no text is being displayed at all, don't show the cursor */
   if (gtk_text_get_display_mode (self) != DISPLAY_BLANK &&
       gtk_widget_has_focus (widget) &&
       priv->selection_bound == priv->current_pos && priv->cursor_visible)
-    gtk_text_draw_cursor (GTK_TEXT (widget), snapshot, CURSOR_STANDARD);
+    gtk_text_draw_cursor (self, snapshot, CURSOR_STANDARD);
 
   gtk_text_draw_undershoot (self, snapshot);
 }
