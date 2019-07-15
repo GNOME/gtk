@@ -1459,9 +1459,9 @@ move_drag_surface (GdkDrag *drag,
 {
   GdkX11Drag *drag_x11 = GDK_X11_DRAG (drag);
 
-  gdk_surface_move (drag_x11->drag_surface,
-                   x_root - drag_x11->hot_x,
-                   y_root - drag_x11->hot_y);
+  gdk_x11_surface_move (drag_x11->drag_surface,
+                        x_root - drag_x11->hot_x,
+                        y_root - drag_x11->hot_y);
   gdk_surface_raise (drag_x11->drag_surface);
 }
 
@@ -1841,9 +1841,9 @@ gdk_drag_anim_timeout (gpointer data)
   t = ease_out_cubic (f);
 
   gdk_surface_show (drag->drag_surface);
-  gdk_surface_move (drag->drag_surface,
-                   drag->last_x + (drag->start_x - drag->last_x) * t,
-                   drag->last_y + (drag->start_y - drag->last_y) * t);
+  gdk_x11_surface_move (drag->drag_surface,
+                        drag->last_x + (drag->start_x - drag->last_x) * t,
+                        drag->last_y + (drag->start_y - drag->last_y) * t);
   gdk_surface_set_opacity (drag->drag_surface, 1.0 - f);
 
   return G_SOURCE_CONTINUE;

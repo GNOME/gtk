@@ -1270,6 +1270,14 @@ gdk_win32_surface_toplevel_resize (GdkSurface *surface,
   gdk_win32_surface_move_resize  (surface, FALSE, 0, 0, width, height);
 }
 
+void
+gdk_win32_surface_move (GdkSurface *surface,
+                        gint        x,
+                        gint        y)
+{
+  gdk_win32_surface_move_resize (surface, TRUE, x, y, -1, -1);
+}
+
 static void
 gdk_win32_surface_raise (GdkSurface *window)
 {
