@@ -792,6 +792,8 @@ filechooser_win32_thread (gpointer _data)
 
   IFileDialog_Release ((IUnknown *)pfd);
 
+  CoUninitialize();
+
   g_main_context_invoke (NULL,
                          filechooser_win32_thread_done,
                          data);
