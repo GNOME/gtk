@@ -17,11 +17,13 @@
     <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '12.0|Win32'">c:\python34</PythonDir>
     <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '14.0|Win32'">c:\python36</PythonDir>
     <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '15.0|Win32'">c:\python36</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '16.0|Win32'">c:\python36</PythonDir>
     <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '10.0|x64'">c:\python34.x64</PythonDir>
     <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '11.0|x64'">c:\python34.x64</PythonDir>
     <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '12.0|x64'">c:\python34.x64</PythonDir>
     <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '14.0|x64'">c:\python36.x64</PythonDir>
     <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '15.0|x64'">c:\python36.x64</PythonDir>
+    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '16.0|x64'">c:\python36.x64</PythonDir>
     <IntrospectPythonParam>PYTHON=$(PythonDir)\python.exe</IntrospectPythonParam>
   </PropertyGroup>
   <PropertyGroup>
