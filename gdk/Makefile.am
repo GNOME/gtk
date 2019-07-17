@@ -203,16 +203,8 @@ nodist_gdkinclude_HEADERS = gdkconfig.h gdkenumtypes.h gdkversionmacros.h
 deprecatedincludedir = $(includedir)/gtk-3.0/gdk/deprecated
 deprecatedinclude_HEADERS = $(deprecated_h_sources)
 
-common_sources = 		\
-	$(gdk_private_headers)	\
-	$(gdk_c_sources)	\
-	gdkenumtypes.c		\
-	gdkmarshalers.c		\
-	gdkmarshalers.h		\
-	gdkresources.h		\
-	gdkresources.c
-
-libgdk_3_la_SOURCES = $(common_sources)
+libgdk_3_la_SOURCES = $(gdk_private_headers) $(gdk_c_sources)
+nodist_libgdk_3_la_SOURCES = $(gdk_built_sources)
 libgdk_3_la_CFLAGS = $(AM_CFLAGS) $(GDK_HIDDEN_VISIBILITY_CFLAGS)
 libgdk_3_la_LIBADD = $(GDK_DEP_LIBS) $(SHM_LIBS)
 libgdk_3_la_LDFLAGS = $(LDADD)
@@ -417,10 +409,8 @@ endif
 
 lib_LTLIBRARIES = libgdk-3.la
 
-MAINTAINERCLEANFILES = $(gdk_built_sources) stamp-gdkenumtypes.h
-EXTRA_DIST += \
-	$(gdk_built_sources)	\
-	fallback-c89.c
+DISTCLEANFILES = $(gdk_built_sources) stamp-gdkenumtypes.h
+EXTRA_DIST += fallback-c89.c
 
 install-exec-hook:
 if DISABLE_EXPLICIT_DEPS
@@ -504,7 +494,7 @@ gdkresources.c: gdk.gresource.xml $(resource_files)
 # ------------------- MSVC Build Items ----------------
 MSVCPROJS = gdk-3
 
-gdk_3_FILES = $(libgdk_3_la_SOURCES)
+gdk_3_FILES = $(libgdk_3_la_SOURCES) $(nodist_libgdk_3_la_SOURCES)
 gdk_3_EXCLUDES = dummy
 gdk_3_HEADERS_DIR = $(gdkincludedir)
 
@@ -558,19 +548,12 @@ dist-hook: \
 	$(top_builddir)/build/win32/vs9/gdk-3.headers	\
 	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
-DISTCLEANFILES = gdkconfig.h stamp-gc-h
+DISTCLEANFILES += gdkconfig.h stamp-gc-h
 
 install-data-local: install-ms-lib install-def-file
 
 uninstall-local: uninstall-ms-lib uninstall-def-file
 	rm -f $(DESTDIR)$(configexecincludedir)/gdkconfig.h
-
-# if srcdir!=builddir, clean out maintainer-clean files from builddir
-# this allows dist to pass.
-distclean-local:
-	if test $(srcdir) != .; then \
-	  rm -f $(MAINTAINERCLEANFILES); \
-	fi
 
 .PHONY: files
 
