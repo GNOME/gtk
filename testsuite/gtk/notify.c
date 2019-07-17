@@ -329,8 +329,7 @@ check_property (GObject *instance, GParamSpec *pspec)
     }
   else
     {
-      if (g_test_verbose ())
-        g_print ("Skipping property %s.%s of type %s\n", g_type_name (pspec->owner_type), pspec->name, g_type_name (pspec->value_type));
+      g_test_message ("Skipping property %s.%s of type %s\n", g_type_name (pspec->owner_type), pspec->name, g_type_name (pspec->value_type));
     }
 }
 
@@ -628,8 +627,7 @@ test_type (gconstpointer data)
            g_str_equal (pspec->name, "position"))
          continue;
 
-      if (g_test_verbose ())
-        g_print ("Property %s.%s\n", g_type_name (pspec->owner_type), pspec->name);
+      g_test_message ("Property %s.%s\n", g_type_name (pspec->owner_type), pspec->name);
 
       check_property (instance, pspec);
     }
