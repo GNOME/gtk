@@ -554,7 +554,8 @@ gdk_x11_gl_context_dispose (GObject *gobject)
       GdkGLContext *context = GDK_GL_CONTEXT (gobject);
       GdkDisplay *display = gdk_gl_context_get_display (context);
 
-      if (eglGetCurrentContext () != context_x11->egl_context)
+      /* Unset the current context if we're disposing it */
+      if (eglGetCurrentContext () == context_x11->egl_context)
         eglMakeCurrent (gdk_x11_display_get_egl_display (display),
                         EGL_NO_SURFACE,
                         EGL_NO_SURFACE,
