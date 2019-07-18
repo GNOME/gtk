@@ -80,6 +80,7 @@ $(if $(or $(findstring --header-only,$($(_gir_name)_MSVC_SCANNERFLAGS)),
     $(error Need to define $(_gir_name)_MSVC_LIBS or $(_gir_name)_MSVC_PROGRAM))
 
 $(top_builddir)/build/win32/$(_gir_name)_list: Makefile
+	rm -f $(top_builddir)/build/win32/$(_gir_name)_list
 	for F in $(_gir_files_msvc); do \
 		case $$$$F in \
 		*.c|*.cpp|*.cc|*.cxx|*.h|*.hpp|*.hh|*.hxx) \
