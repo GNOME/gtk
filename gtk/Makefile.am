@@ -554,7 +554,6 @@ gtk_private_h_sources =		\
 	gtkrenderborderprivate.h \
 	gtkrendericonprivate.h	\
 	gtkrenderprivate.h	\
-	gtkresources.h		\
 	gtkroundedboxprivate.h	\
 	gtksearchengine.h	\
 	gtksearchenginesimple.h	\
@@ -1171,20 +1170,18 @@ gtk_extra_sources =				\
 #
 # setup GTK+ sources and their dependencies
 #
-MAINTAINERCLEANFILES = \
+DISTCLEANFILES = \
 	$(gtk_built_sources) 			\
 	$(gtk_dbus_built_sources)		\
 	$(print_portal_built_sources)		\
-	$(stamp_files)
-
-DISTCLEANFILES = gtktypefuncs.inc
+	$(stamp_files)				\
+	gtktypefuncs.inc
 
 if OS_WIN32
 DISTCLEANFILES += gtk-win32.rc
 endif
 
 EXTRA_DIST += $(gtk_all_private_h_sources) $(gtk_extra_sources)
-EXTRA_DIST += $(gtk_built_sources)
 
 
 pkgdatadir = $(datadir)/gtk-$(GTK_API_VERSION)
@@ -1457,7 +1454,8 @@ $(srcdir)/gtktestutils.c: gtktypefuncs.inc
 lib_LTLIBRARIES = libgtk-3.la
 
 gtkincludedir = $(includedir)/gtk-3.0/gtk
-gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk_built_public_sources) gtkversion.h
+gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources)
+nodist_gtkinclude_HEADERS = $(gtk_built_public_sources) gtkversion.h
 
 a11yincludedir = $(includedir)/gtk-3.0/gtk/a11y
 a11yinclude_HEADERS= $(a11y_h_sources)
@@ -1516,6 +1514,7 @@ gtk_3_HEADERS_DIR = $(gtkincludedir)
 
 gtk_3_HEADERS_INST = \
 	$(gtkinclude_HEADERS)	\
+	$(nodist_gtkinclude_HEADERS)	\
 	$(a11y_h_sources)	\
 	$(deprecated_h_sources)
 
@@ -1597,7 +1596,7 @@ distclean-local:
 	fi
 
 if HAVE_INTROSPECTION
-introspected_pub_headers = $(filter-out %private.h gtktextdisplay.h gtktextlayout.h gtkx.h, $(gtkinclude_HEADERS) $(a11yinclude_HEADERS) $(deprecatedinclude_HEADERS))
+introspected_pub_headers = $(filter-out %private.h gtktextdisplay.h gtktextlayout.h gtkx.h, $(gtkinclude_HEADERS) $(a11yinclude_HEADERS) $(deprecatedinclude_HEADERS) $(nodist_gtkinclude_HEADERS))
 
 introspection_files = \
     $(introspected_pub_headers) \
