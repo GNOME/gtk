@@ -5,12 +5,11 @@ bin_PROGRAMS = gtk3-widget-factory
 desktopdir = $(datadir)/applications
 dist_desktop_DATA = gtk3-widget-factory.desktop
 
-gtk3_widget_factory_SOURCES = 		\
-	widget-factory.c		\
-	widget_factory_resources.c
+gtk3_widget_factory_SOURCES = widget-factory.c
+nodist_gtk3_widget_factory_SOURCES = widget_factory_resources.c
 
-BUILT_SOURCES = 			\
-	widget_factory_resources.c
+BUILT_SOURCES = $(nodist_gtk3_widget_factory_SOURCES)
+CLEANFILES = $(nodist_gtk3_widget_factory_SOURCES)
 
 gtk3_widget_factory_DEPENDENCIES = 	\
 	$(top_builddir)/gtk/libgtk-3.la

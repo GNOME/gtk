@@ -15,7 +15,8 @@ exampleapp_LDADD = $(GTK_LIBS)
 exampleapp_SOURCES = 				\
 	main.c 					\
 	exampleapp.c exampleapp.h 		\
-	exampleappwin.c exampleappwin.h 	\
+	exampleappwin.c exampleappwin.h
+nodist_exampleapp_SOURCES = 			\
 	resources.c
 
 BUILT_SOURCES = 				\
@@ -42,6 +43,7 @@ EXTRA_DIST = 					\
 	meson.build
 
 CLEANFILES = 					\
+	$(nodist_exampleapp_SOURCES)		\
 	gschemas.compiled
 
 -include $(top_srcdir)/git.mk

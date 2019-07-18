@@ -25,6 +25,8 @@ test_css_style_LDADD = \
 
 test_css_style_SOURCES = \
         test-css-style.c		\
+	$(NULL)
+nodist_test_css_style_SOURCES = \
 	resources.c			\
 	$(NULL)
 
@@ -39,7 +41,8 @@ test_data = \
 	nth-child.ui		nth-child.css	        nth-child.nodes         \
 	$(NULL)
 
-BUILT_SOURCES = resources.c
+BUILT_SOURCES = $(nodist_test_css_style_SOURCES)
+CLEANFILES += $(BUILT_SOURCES)
 
 resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(builddir)/test-css-style.gresource.xml)
 
