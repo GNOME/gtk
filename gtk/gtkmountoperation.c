@@ -772,6 +772,12 @@ call_password_proxy_cb (GObject      *source,
         g_mount_operation_set_password (op, g_variant_get_string (value, NULL));
       else if (strcmp (key, "password_save") == 0)
         g_mount_operation_set_password_save (op, g_variant_get_uint32 (value));
+      else if (strcmp (key, "hidden_volume") == 0)
+        g_mount_operation_set_is_tcrypt_hidden_volume (op, g_variant_get_boolean (value));
+      else if (strcmp (key, "system_volume") == 0)
+        g_mount_operation_set_is_tcrypt_system_volume (op, g_variant_get_boolean (value));
+      else if (strcmp (key, "pim") == 0)
+        g_mount_operation_set_pim (op, g_variant_get_uint32 (value));
     }
 
  out:
