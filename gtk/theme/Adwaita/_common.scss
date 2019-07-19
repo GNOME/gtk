@@ -3986,7 +3986,7 @@ row image.sidebar-icon { opacity: $_placesidebar_icons_opacity; } // dim the sid
                                                                   // on this oddity
 
 placessidebar {
-  > viewport.frame { border-style: none; }
+  > scrolledwindow.frame { border-style: none; }
 
   row {
     // Needs overriding of the GtkListBoxRow padding
