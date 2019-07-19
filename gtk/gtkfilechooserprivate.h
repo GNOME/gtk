@@ -41,7 +41,6 @@ G_BEGIN_DECLS
 #define SETTINGS_KEY_SHOW_TYPE_COLUMN       "show-type-column"
 #define SETTINGS_KEY_SORT_COLUMN            "sort-column"
 #define SETTINGS_KEY_SORT_ORDER             "sort-order"
-#define SETTINGS_KEY_WINDOW_POSITION        "window-position"
 #define SETTINGS_KEY_WINDOW_SIZE            "window-size"
 #define SETTINGS_KEY_SIDEBAR_WIDTH          "sidebar-width"
 #define SETTINGS_KEY_STARTUP_MODE           "startup-mode"
