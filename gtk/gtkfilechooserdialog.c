@@ -582,19 +582,14 @@ save_dialog_geometry (GtkFileChooserDialog *dialog)
 {
   GtkWindow *window;
   GSettings *settings;
-  int old_x, old_y, old_width, old_height;
-  int x, y, width, height;
+  int old_width, old_height;
+  int width, height;
 
   settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (dialog));
 
   window = GTK_WINDOW (dialog);
 
-  gtk_window_get_position (window, &x, &y);
   gtk_window_get_size (window, &width, &height);
-
-  g_settings_get (settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", &old_x, &old_y);
-  if (old_x != x || old_y != y)
-    g_settings_set (settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", x, y);
 
   g_settings_get (settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", &old_width, &old_height);
   if (old_width != width || old_height != height)
