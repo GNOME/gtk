@@ -6177,14 +6177,15 @@ gtk_file_chooser_widget_get_default_size (GtkFileChooserEmbed *chooser_embed,
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser_embed);
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
   GtkRequisition req;
-  int width, height;
+  int x, y, width, height;
   GSettings *settings;
 
   settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
 
+  g_settings_get (settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", &x, &y);
   g_settings_get (settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", &width, &height);
 
-  if (width > 0 && height > 0)
+  if (x >= 0 && y >= 0 && width > 0 && height > 0)
     {
       *default_width = width;
       *default_height = height;
