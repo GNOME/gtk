@@ -3601,7 +3601,6 @@ gtk_file_chooser_widget_unroot (GtkWidget *widget)
 
   remove_settings_signal (impl, gtk_widget_get_display (widget));
   check_icon_theme (impl);
-  emit_default_size_changed (impl);
 
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->unroot (widget);
 }
