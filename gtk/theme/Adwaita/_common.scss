@@ -4667,10 +4667,13 @@ stackswitcher button.text-button.circular { // FIXME aggregate with buttons
       -1px 0 rgba(0,0,0,0.1);
 }
 
-/* Drapshadow for large icons */ 
+/* Dropshadow for large icons */
 .icon-dropshadow {
-  -gtk-icon-shadow: 0 2px 12px rgba(0,0,0,0.1), 
-               0 1px 2px rgba(0,0,0,0.5);
+  -gtk-icon-shadow: 0 1px 12px rgba(0,0,0,0.05),
+      0 -1px rgba(0,0,0,0.05),
+      1px 0 rgba(0,0,0,0.1),
+      0 1px rgba(0,0,0,0.3),
+      -1px 0 rgba(0,0,0,0.1);
 }
 
 /*********
