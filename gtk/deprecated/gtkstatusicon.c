@@ -742,9 +742,7 @@ wndproc (HWND   hwnd,
 	  }
 
 	  priv->nid.hWnd = hwnd;
-	  priv->nid.uID = status_icon_id++;
-	  priv->nid.uCallbackMessage = WM_GTK_TRAY_NOTIFICATION;
-	  priv->nid.uFlags = NIF_MESSAGE;
+	  priv->nid.uFlags &= ~NIF_ICON;
 
 	  if (!Shell_NotifyIconW (NIM_ADD, &priv->nid))
 	    {
