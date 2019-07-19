@@ -2461,19 +2461,6 @@ location_changed_timeout_cb (gpointer user_data)
 }
 
 static void
-reset_location_timeout (GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-
-  if (priv->location_changed_id > 0)
-    g_source_remove (priv->location_changed_id);
-  priv->location_changed_id = g_timeout_add (LOCATION_CHANGED_TIMEOUT,
-                                            location_changed_timeout_cb,
-                                            impl);
-  g_source_set_name_by_id (priv->location_changed_id, "[gtk] location_changed_timeout_cb");
-}
-
-static void
 location_entry_changed_cb (GtkEditable          *editable,
                            GtkFileChooserWidget *impl)
 {
@@ -2489,7 +2476,16 @@ location_entry_changed_cb (GtkEditable          *editable,
     }
 
   if (priv->action != GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-    reset_location_timeout (impl);
+    {
+      /* Reset location timeout */
+      if (priv->location_changed_id > 0)
+        g_source_remove (priv->location_changed_id);
+
+      priv->location_changed_id = g_timeout_add (LOCATION_CHANGED_TIMEOUT,
+                                                location_changed_timeout_cb,
+                                                impl);
+      g_source_set_name_by_id (priv->location_changed_id, "[gtk] location_changed_timeout_cb");
+    }
 }
 
 static void
