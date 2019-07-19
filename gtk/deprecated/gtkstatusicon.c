@@ -746,6 +746,17 @@ wndproc (HWND   hwnd,
 	  priv->nid.uCallbackMessage = WM_GTK_TRAY_NOTIFICATION;
 	  priv->nid.uFlags = NIF_MESSAGE;
 
+	  /* To help win7 identify the icon create it with an application "unique" tip */
+	  if (g_get_prgname ())
+	  {
+	    WCHAR *wcs = g_utf8_to_utf16 (g_get_prgname (), -1, NULL, NULL, NULL);
+
+	    priv->nid.uFlags |= NIF_TIP;
+	    wcsncpy (priv->nid.szTip, wcs, G_N_ELEMENTS (priv->nid.szTip) - 1);
+	    priv->nid.szTip[G_N_ELEMENTS (priv->nid.szTip) - 1] = 0;
+	    g_free (wcs);
+	  }
+
 	  if (!Shell_NotifyIconW (NIM_ADD, &priv->nid))
 	    {
 	      g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_ADD) failed");
