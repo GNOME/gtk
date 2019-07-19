@@ -1428,7 +1428,7 @@ render_blur_node (GskGLRenderer       *self,
   ops_set_program (builder, &self->blur_program);
   op.op = OP_CHANGE_BLUR;
   graphene_size_init_from_size (&op.blur.size, &node->bounds.size);
-  op.blur.radius = gsk_blur_node_get_radius (node);
+  op.blur.radius = blur_radius;
   ops_add (builder, &op);
 
   ops_set_texture (builder, region.texture_id);
@@ -1439,7 +1439,7 @@ render_blur_node (GskGLRenderer       *self,
         { { min_x, min_y }, { 0, 1 }, },
         { { min_x, max_y }, { 0, 0 }, },
         { { max_x, min_y }, { 1, 1 }, },
- 
+
         { { max_x, max_y }, { 1, 0 }, },
         { { min_x, max_y }, { 0, 0 }, },
         { { max_x, min_y }, { 1, 1 }, },
