@@ -1890,10 +1890,10 @@ render_shadow_node (GskGLRenderer       *self,
                     RenderOpBuilder     *builder,
                     const GskQuadVertex *vertex_data)
 {
-  float min_x = node->bounds.origin.x;
-  float min_y = node->bounds.origin.y;
-  float max_x = min_x + node->bounds.size.width;
-  float max_y = min_y + node->bounds.size.height;
+  float min_x;
+  float min_y;
+  float max_x;
+  float max_y;
   GskRenderNode *original_child = gsk_shadow_node_get_child (node);
   GskRenderNode *shadow_child = original_child;
   gsize n_shadows = gsk_shadow_node_get_n_shadows (node);
@@ -1919,6 +1919,11 @@ render_shadow_node (GskGLRenderer       *self,
       shadow_child = gsk_color_matrix_node_get_child (shadow_child);
     }
 
+  min_x = builder->dx + shadow_child->bounds.origin.x;
+  min_y = builder->dy + shadow_child->bounds.origin.y;
+  max_x = min_x + shadow_child->bounds.size.width;
+  max_y = min_y + shadow_child->bounds.size.height;
+
   for (i = 0; i < n_shadows; i ++)
     {
       const GskShadow *shadow = gsk_shadow_node_peek_shadow (node, i);
@@ -1939,11 +1944,6 @@ render_shadow_node (GskGLRenderer       *self,
 
       if (gdk_rgba_is_clear (&shadow->color))
         continue;
-
-      min_x = builder->dx + shadow_child->bounds.origin.x;
-      min_y = builder->dy + shadow_child->bounds.origin.y;
-      max_x = min_x + shadow_child->bounds.size.width;
-      max_y = min_y + shadow_child->bounds.size.height;
 
       /* Draw the child offscreen, without the offset. */
       add_offscreen_ops (self, builder,
