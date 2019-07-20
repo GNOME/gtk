@@ -899,7 +899,7 @@ endif
 
 if quartz_enabled
   gtk_sources += gtk_use_quartz_sources
-  gtk_cargs += ['-DGDK_WINDOWING_QUARTZ', '-xobjective-c']
+  gtk_cargs += ['-xobjective-c']
 endif
 
 # So we don't add these twice

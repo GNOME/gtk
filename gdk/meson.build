@@ -165,6 +165,7 @@ gdkconfig_cdata.set('GDK_WINDOWING_X11', x11_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_WAYLAND', wayland_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_WIN32', win32_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_BROADWAY', broadway_enabled)
+gdkconfig_cdata.set('GDK_WINDOWING_QUARTZ', quartz_enabled)
 
 gdkconfig = configure_file(
   input  : 'gdkconfig.h.meson',
@@ -268,7 +269,7 @@ foreach backend : ['broadway', 'quartz', 'wayland', 'win32', 'x11', 'mir']
       gdk_backends_gen_headers += get_variable('gdk_@0@_gen_headers'.format(backend))
     endif
     if backend == 'quartz'
-      common_cflags += ['-DGDK_WINDOWING_QUARTZ', '-xobjective-c']
+      common_cflags += ['-xobjective-c']
     endif
   endif
 endforeach
