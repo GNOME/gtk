@@ -5357,7 +5357,7 @@ gtk_text_view_paint (GtkWidget   *widget,
   gtk_snapshot_save (snapshot);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-priv->xoffset, -priv->yoffset));
 
-  gtk_text_layout_snapshot (priv->layout,
+  gtk_text_layout_snapshot2 (priv->layout,
                             widget,
                             snapshot,
                             &(GdkRectangle) {
