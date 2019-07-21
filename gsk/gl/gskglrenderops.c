@@ -401,7 +401,7 @@ ops_set_modelview (RenderOpBuilder *builder,
   g_array_set_size (builder->mv_stack, builder->mv_stack->len + 1);
   entry = &g_array_index (builder->mv_stack, MatrixStackEntry, builder->mv_stack->len - 1);
 
-  entry->transform = transform;
+  entry->transform = gsk_transform_ref (transform);
 
   entry->metadata.dx_before = builder->dx;
   entry->metadata.dy_before = builder->dy;
