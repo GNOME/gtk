@@ -149,6 +149,16 @@
    fun:FcFontRenderPrepare
 }
 
+{
+   FcDefaultSubstitute
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:realloc
+   obj:/usr/lib/libfontconfig.so*
+   obj:/usr/lib/libfontconfig.so*
+   fun:FcDefaultSubstitute
+}
+
 # Pango
 {
    pango 1
