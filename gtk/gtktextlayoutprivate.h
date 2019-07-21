@@ -396,6 +396,11 @@ void gtk_text_anchored_child_set_layout     (GtkWidget          *child,
 
 void gtk_text_layout_spew (GtkTextLayout *layout);
 
+void gtk_text_layout_snapshot (GtkTextLayout        *layout,
+                               GtkWidget            *widget,
+                               GtkSnapshot          *snapshot,
+                               const GdkRectangle   *clip);
+
 G_END_DECLS
 
 #endif  /* __GTK_TEXT_LAYOUT_PRIVATE_H__ */
