@@ -1966,14 +1966,14 @@ gsk_transform_node_diff (GskRenderNode  *node1,
             cairo_region_t *tmp = cairo_region_copy (sub);
             cairo_region_translate (tmp, 1, 0);
             cairo_region_union (sub, tmp);
-            cairo_region_destroy (sub);
+            cairo_region_destroy (tmp);
           }
         if (floor (dy) != dy)
           {
             cairo_region_t *tmp = cairo_region_copy (sub);
             cairo_region_translate (tmp, 0, 1);
             cairo_region_union (sub, tmp);
-            cairo_region_destroy (sub);
+            cairo_region_destroy (tmp);
           }
         cairo_region_union (region, sub);
         cairo_region_destroy (sub);
