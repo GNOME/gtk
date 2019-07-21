@@ -1091,8 +1091,7 @@ gtk_popover_size_allocate (GtkWidget *widget,
   GtkAllocation child_alloc;
   int tail_height = priv->has_arrow ? TAIL_HEIGHT : 0;
 
-  if (priv->surface)
-    gtk_popover_move_resize (popover);
+  gtk_popover_move_resize (popover);
 
   switch (priv->final_position)
     {
@@ -1414,10 +1413,7 @@ size_changed (GtkWidget   *widget,
               int          baseline,
               GtkPopover  *popover)
 {
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-
-  if (priv->surface)
-    gtk_popover_move_resize (popover);
+  gtk_popover_move_resize (popover);
 }
 
 void
