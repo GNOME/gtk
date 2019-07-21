@@ -1999,10 +1999,22 @@ listbox_filter_func (GtkListBoxRow *row,
                 NULL);
 
   if (name)
-    retval |= strstr (name, priv->search_query) != NULL;
+    {
+      char *lowercase_name = g_utf8_strdown (name, -1);
+
+      retval |= strstr (lowercase_name, priv->search_query) != NULL;
+
+      g_free (lowercase_name);
+    }
 
   if (path)
-    retval |= strstr (path, priv->search_query) != NULL;
+    {
+      char *lowercase_path = g_utf8_strdown (path, -1);
+
+      retval |= strstr (lowercase_path, priv->search_query) != NULL;
+
+      g_free (lowercase_path);
+    }
 
   g_free (name);
   g_free (path);
@@ -2459,7 +2471,7 @@ gtk_places_view_set_search_query (GtkPlacesView *view,
   if (g_strcmp0 (priv->search_query, query_text) != 0)
     {
       g_clear_pointer (&priv->search_query, g_free);
-      priv->search_query = g_strdup (query_text);
+      priv->search_query = g_utf8_strdown (query_text, -1);
 
       gtk_list_box_invalidate_filter (GTK_LIST_BOX (priv->listbox));
       gtk_list_box_invalidate_headers (GTK_LIST_BOX (priv->listbox));
