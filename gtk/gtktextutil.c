@@ -27,8 +27,8 @@
 #include "gtktextview.h"
 #include "gtktextutil.h"
 
-#include "gtktextdisplayprivate.h"
 #include "gtktextbuffer.h"
+#include "gtktextlayoutprivate.h"
 #include "gtkmenuitem.h"
 #include "gtkintl.h"
 
