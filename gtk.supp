@@ -159,6 +159,15 @@
    fun:FcDefaultSubstitute
 }
 
+# Pixman
+{
+   pixman_image_composite32
+   Memcheck:Cond
+   obj:/usr/lib/libpixman-1.so*
+   obj:/usr/lib/libpixman-1.so*
+   fun:pixman_image_composite32
+}
+
 # Pango
 {
    pango 1
