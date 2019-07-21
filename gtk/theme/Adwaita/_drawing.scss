@@ -39,7 +39,7 @@
 //        use the default one
 //
 // possible $t values:
-// normal, focus, insensitive, backdrop, backdrop-insensitive, osd, osd-focus, osd-backdrop;
+// normal, focus, insensitive, backdrop, backdrop-insensitive, osd, osd-focus, osd-backdrop, block_cursor;
 //
 
   $_blank_edge: if($edge == none, none, 0 1px transparentize($edge, 1));
@@ -110,6 +110,10 @@
     box-shadow: none;
     text-shadow: none;
     -gtk-icon-shadow: none;
+  }
+  @if $t==block_cursor {
+    color: $base_color;
+    background-color: $text_color;
   }
 }
 

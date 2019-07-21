@@ -315,6 +315,10 @@ entry {
       @extend .dim-label;
     }
 
+    block-cursor {
+      @include entry(block_cursor);
+    }
+
     &.flat {
       &:focus, &:backdrop, &:disabled, &:backdrop:disabled, & {
         min-height: 0;
