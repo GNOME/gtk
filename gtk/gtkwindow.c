@@ -9354,6 +9354,7 @@ gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
           /* Unmapping the toplevel, remove pointer focus */
           priv->foci = g_list_remove_link (priv->foci, cur);
           gtk_pointer_focus_unref (focus);
+          g_list_free (cur);
         }
       else if (focus->target == widget ||
                gtk_widget_is_ancestor (focus->target, widget))
