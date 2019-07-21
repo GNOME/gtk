@@ -113,14 +113,6 @@ struct _GtkTextLayout
   gint width;
   gint height;
 
-  /* Pixel offsets from the left and from the top to be used when we
-   * draw; these allow us to create left/top margins. We don't need
-   * anything special for bottom/right margins, because those don't
-   * affect drawing.
-   */
-  /* gint left_edge; */
-  /* gint top_edge; */
-
   GtkTextBuffer *buffer;
 
   gint left_padding;
@@ -145,7 +137,7 @@ struct _GtkTextLayout
 
   /* Whether we are allowed to wrap right now */
   gint wrap_loop_count;
-  
+
   /* Whether to show the insertion cursor */
   guint cursor_visible : 1;
 
