@@ -77,12 +77,16 @@
 
 #include "config.h"
 #include "gtkmarshalers.h"
+#include "gtkstylecontextprivate.h"
 #include "gtktextlayoutprivate.h"
 #include "gtktextbtree.h"
 #include "gtktextbufferprivate.h"
 #include "gtktextiterprivate.h"
 #include "gtktextutil.h"
+#include "gskpango.h"
 #include "gtkintl.h"
+#include "gtkwidgetprivate.h"
+#include "gtktextviewprivate.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -3784,4 +3788,345 @@ gtk_text_layout_buffer_delete_range (GtkTextBuffer *textbuffer,
   GtkTextLayout *layout = GTK_TEXT_LAYOUT (data);
 
   gtk_text_layout_update_cursor_line (layout);
+}
+
+static void
+render_para (GskPangoRenderer   *crenderer,
+             int                 offset_y,
+             GtkTextLineDisplay *line_display,
+             int                 selection_start_index,
+             int                 selection_end_index,
+             float               cursor_alpha)
+{
+  GtkStyleContext *context;
+  PangoLayout *layout = line_display->layout;
+  int byte_offset = 0;
+  PangoLayoutIter *iter;
+  int screen_width;
+  GdkRGBA *selection;
+  gboolean first = TRUE;
+  GtkCssNode *selection_node;
+  graphene_point_t point = { 0, offset_y };
+
+  g_return_if_fail (GTK_IS_TEXT_VIEW (crenderer->widget));
+
+  iter = pango_layout_get_iter (layout);
+  screen_width = line_display->total_width;
+
+  context = gtk_widget_get_style_context (crenderer->widget);
+  selection_node = gtk_text_view_get_selection_node ((GtkTextView*)crenderer->widget);
+  gtk_style_context_save_to_node (context, selection_node);
+
+  gtk_style_context_get (context, "background-color", &selection, NULL);
+
+  gtk_style_context_restore (context);
+
+  gtk_snapshot_save (crenderer->snapshot);
+  gtk_snapshot_translate (crenderer->snapshot, &point);
+
+  do
+    {
+      PangoLayoutLine *line = pango_layout_iter_get_line_readonly (iter);
+      int selection_y, selection_height;
+      int first_y, last_y;
+      PangoRectangle line_rect;
+      int baseline;
+      gboolean at_last_line;
+
+      pango_layout_iter_get_line_extents (iter, NULL, &line_rect);
+      baseline = pango_layout_iter_get_baseline (iter);
+      pango_layout_iter_get_line_yrange (iter, &first_y, &last_y);
+
+      /* Adjust for margins */
+
+      line_rect.x += line_display->x_offset * PANGO_SCALE;
+      line_rect.y += line_display->top_margin * PANGO_SCALE;
+      baseline += line_display->top_margin * PANGO_SCALE;
+
+      /* Selection is the height of the line, plus top/bottom
+       * margin if we're the first/last line
+       */
+      selection_y = PANGO_PIXELS (first_y) + line_display->top_margin;
+      selection_height = PANGO_PIXELS (last_y) - PANGO_PIXELS (first_y);
+
+      if (first)
+        {
+          selection_y -= line_display->top_margin;
+          selection_height += line_display->top_margin;
+        }
+
+      at_last_line = pango_layout_iter_at_last_line (iter);
+      if (at_last_line)
+        selection_height += line_display->bottom_margin;
+
+      first = FALSE;
+
+      if (selection_start_index < byte_offset &&
+          selection_end_index > line->length + byte_offset) /* All selected */
+        {
+          gtk_snapshot_append_color (crenderer->snapshot,
+                                     selection,
+                                     &GRAPHENE_RECT_INIT (line_display->left_margin,
+                                                          selection_y,
+                                                          screen_width,
+                                                          selection_height));
+          gsk_pango_renderer_set_state (crenderer, GSK_PANGO_RENDERER_SELECTED);
+          pango_renderer_draw_layout_line (PANGO_RENDERER (crenderer),
+                                           line,
+                                           line_rect.x,
+                                           baseline);
+        }
+      else
+        {
+          if (line_display->pg_bg_rgba_set)
+            gtk_snapshot_append_color (crenderer->snapshot,
+                                       &line_display->pg_bg_rgba,
+                                       &GRAPHENE_RECT_INIT (line_display->left_margin,
+                                                            selection_y,
+                                                            screen_width,
+                                                            selection_height));
+
+          gsk_pango_renderer_set_state (crenderer, GSK_PANGO_RENDERER_NORMAL);
+          pango_renderer_draw_layout_line (PANGO_RENDERER (crenderer),
+                                           line,
+                                           line_rect.x,
+                                           baseline);
+
+          /* Check if some part of the line is selected; the newline
+           * that is after line->length for the last line of the
+           * paragraph counts as part of the line for this
+           */
+          if ((selection_start_index < byte_offset + line->length ||
+               (selection_start_index == byte_offset + line->length && pango_layout_iter_at_last_line (iter))) &&
+              selection_end_index > byte_offset)
+            {
+              gint *ranges = NULL;
+              gint n_ranges, i;
+
+              pango_layout_line_get_x_ranges (line, selection_start_index, selection_end_index, &ranges, &n_ranges);
+
+              gsk_pango_renderer_set_state (crenderer, GSK_PANGO_RENDERER_SELECTED);
+
+              for (i = 0; i < n_ranges; i++)
+                {
+                  graphene_rect_t bounds;
+
+                  bounds.origin.x = line_display->x_offset + PANGO_PIXELS (ranges[2*i]);
+                  bounds.origin.y = selection_y;
+                  bounds.size.width = PANGO_PIXELS (ranges[2*i + 1]) - PANGO_PIXELS (ranges[2*i]);
+                  bounds.size.height = selection_height;
+
+                  gtk_snapshot_append_color (crenderer->snapshot, selection, &bounds);
+                  gtk_snapshot_push_clip (crenderer->snapshot, &bounds);
+                  pango_renderer_draw_layout_line (PANGO_RENDERER (crenderer),
+                                                   line,
+                                                   line_rect.x,
+                                                   baseline);
+                  gtk_snapshot_pop (crenderer->snapshot);
+                }
+
+              g_free (ranges);
+
+              /* Paint in the ends of the line */
+              if (line_rect.x > line_display->left_margin * PANGO_SCALE &&
+                  ((line_display->direction == GTK_TEXT_DIR_LTR && selection_start_index < byte_offset) ||
+                   (line_display->direction == GTK_TEXT_DIR_RTL && selection_end_index > byte_offset + line->length)))
+                gtk_snapshot_append_color (crenderer->snapshot,
+                                           selection,
+                                           &GRAPHENE_RECT_INIT (line_display->left_margin,
+                                                                selection_y,
+                                                                PANGO_PIXELS (line_rect.x) - line_display->left_margin,
+                                                                selection_height));
+
+              if (line_rect.x + line_rect.width <
+                  (screen_width + line_display->left_margin) * PANGO_SCALE &&
+                  ((line_display->direction == GTK_TEXT_DIR_LTR && selection_end_index > byte_offset + line->length) ||
+                   (line_display->direction == GTK_TEXT_DIR_RTL && selection_start_index < byte_offset)))
+                {
+                  int nonlayout_width = line_display->left_margin
+                                      + screen_width
+                                      - PANGO_PIXELS (line_rect.x)
+                                      - PANGO_PIXELS (line_rect.width);
+                  gtk_snapshot_append_color (crenderer->snapshot,
+                                             selection,
+                                             &GRAPHENE_RECT_INIT (PANGO_PIXELS (line_rect.x) + PANGO_PIXELS (line_rect.width),
+                                                                  selection_y,
+                                                                  nonlayout_width,
+                                                                  selection_height));
+                }
+            }
+          else if (line_display->has_block_cursor &&
+                   gtk_widget_has_focus (crenderer->widget) &&
+                   byte_offset <= line_display->insert_index &&
+                   (line_display->insert_index < byte_offset + line->length ||
+                    (at_last_line && line_display->insert_index == byte_offset + line->length)))
+            {
+              GdkRGBA cursor_color;
+              graphene_rect_t bounds = {
+                .origin.x = line_display->x_offset + line_display->block_cursor.x,
+                .origin.y = line_display->block_cursor.y + line_display->top_margin,
+                .size.width = line_display->block_cursor.width,
+                .size.height = line_display->block_cursor.height,
+              };
+
+              /* we draw text using base color on filled cursor rectangle of cursor color
+               * (normally white on black) */
+              _gtk_style_context_get_cursor_color (context, &cursor_color, NULL);
+
+              gtk_snapshot_push_opacity (crenderer->snapshot, cursor_alpha);
+              gtk_snapshot_append_color (crenderer->snapshot, &cursor_color, &bounds);
+
+              /* draw text under the cursor if any */
+              if (!line_display->cursor_at_line_end)
+                {
+                  gsk_pango_renderer_set_state (crenderer, GSK_PANGO_RENDERER_CURSOR);
+                  gtk_snapshot_push_clip (crenderer->snapshot, &bounds);
+                  pango_renderer_draw_layout_line (PANGO_RENDERER (crenderer),
+                                                   line,
+                                                   line_rect.x,
+                                                   baseline);
+                  gtk_snapshot_pop (crenderer->snapshot);
+                }
+              gtk_snapshot_pop (crenderer->snapshot);
+            }
+        }
+
+      byte_offset += line->length;
+    }
+  while (pango_layout_iter_next_line (iter));
+
+  gtk_snapshot_restore (crenderer->snapshot);
+
+  gdk_rgba_free (selection);
+  pango_layout_iter_free (iter);
+}
+
+void
+gtk_text_layout_snapshot (GtkTextLayout      *layout,
+                          GtkWidget          *widget,
+                          GtkSnapshot        *snapshot,
+                          const GdkRectangle *clip,
+                          float               cursor_alpha)
+{
+  GskPangoRenderer *crenderer;
+  GtkStyleContext *context;
+  gint offset_y;
+  GtkTextIter selection_start, selection_end;
+  gboolean have_selection;
+  GSList *line_list;
+  GSList *tmp_list;
+  GdkRGBA color;
+
+  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
+  g_return_if_fail (layout->default_style != NULL);
+  g_return_if_fail (layout->buffer != NULL);
+  g_return_if_fail (snapshot != NULL);
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_get_color (context, &color);
+
+  line_list = gtk_text_layout_get_lines (layout, clip->y, clip->y + clip->height, &offset_y);
+
+  if (line_list == NULL)
+    return; /* nothing on the screen */
+
+  crenderer = gsk_pango_renderer_acquire ();
+
+  crenderer->widget = widget;
+  crenderer->snapshot = snapshot;
+  crenderer->fg_color = color;
+
+  graphene_rect_init (&crenderer->bounds,
+                      clip->x,
+                      clip->y,
+                      clip->width,
+                      clip->height);
+
+  gtk_text_layout_wrap_loop_start (layout);
+
+  have_selection = gtk_text_buffer_get_selection_bounds (layout->buffer,
+                                                         &selection_start,
+                                                         &selection_end);
+
+  tmp_list = line_list;
+  while (tmp_list != NULL)
+    {
+      GtkTextLine *line = tmp_list->data;
+      GtkTextLineDisplay *line_display;
+      gint selection_start_index = -1;
+      gint selection_end_index = -1;
+
+      line_display = gtk_text_layout_get_line_display (layout, line, FALSE);
+
+      if (line_display->height > 0)
+        {
+          g_assert (line_display->layout != NULL);
+
+          if (have_selection)
+            {
+              GtkTextIter line_start, line_end;
+              gint byte_count;
+
+              gtk_text_layout_get_iter_at_line (layout, &line_start, line, 0);
+              line_end = line_start;
+              if (!gtk_text_iter_ends_line (&line_end))
+                gtk_text_iter_forward_to_line_end (&line_end);
+              byte_count = gtk_text_iter_get_visible_line_index (&line_end);
+
+              if (gtk_text_iter_compare (&selection_start, &line_end) <= 0 &&
+                  gtk_text_iter_compare (&selection_end, &line_start) >= 0)
+                {
+                  if (gtk_text_iter_compare (&selection_start, &line_start) >= 0)
+                    selection_start_index = gtk_text_iter_get_visible_line_index (&selection_start);
+                  else
+                    selection_start_index = -1;
+
+                  if (gtk_text_iter_compare (&selection_end, &line_end) <= 0)
+                    selection_end_index = gtk_text_iter_get_visible_line_index (&selection_end);
+                  else
+                    selection_end_index = byte_count + 1; /* + 1 to flag past-the-end */
+                }
+            }
+
+          render_para (crenderer, offset_y, line_display,
+                       selection_start_index, selection_end_index,
+                       cursor_alpha);
+
+          /* We paint the cursors last, because they overlap another chunk
+           * and need to appear on top.
+           */
+          if (line_display->cursors != NULL)
+            {
+              int i;
+
+              gtk_snapshot_push_opacity (crenderer->snapshot, cursor_alpha);
+              for (i = 0; i < line_display->cursors->len; i++)
+                {
+                  int index;
+                  PangoDirection dir;
+
+                  index = g_array_index(line_display->cursors, int, i);
+                  dir = (line_display->direction == GTK_TEXT_DIR_RTL) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
+
+                  gtk_snapshot_render_insertion_cursor (crenderer->snapshot, context,
+                                                        line_display->x_offset, offset_y + line_display->top_margin,
+                                                        line_display->layout, index, dir);
+                }
+
+              gtk_snapshot_pop (crenderer->snapshot);
+            }
+        } /* line_display->height > 0 */
+
+      offset_y += line_display->height;
+
+      gtk_text_layout_free_line_display (layout, line_display);
+
+      tmp_list = tmp_list->next;
+    }
+
+  gtk_text_layout_wrap_loop_end (layout);
+
+  g_slist_free (line_list);
+
+  gsk_pango_renderer_release (crenderer);
 }

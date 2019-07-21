@@ -27,8 +27,8 @@
 #include "gtktextview.h"
 #include "gtktextutil.h"
 
-#include "gtktextdisplayprivate.h"
 #include "gtktextbuffer.h"
+#include "gtktextlayoutprivate.h"
 #include "gtkmenuitem.h"
 #include "gtkintl.h"
 
@@ -335,7 +335,7 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
 
   snapshot = gtk_snapshot_new ();
 
-  gtk_text_layout_snapshot (layout, widget, snapshot, &(GdkRectangle) { 0, 0, layout_width, layout_height });
+  gtk_text_layout_snapshot (layout, widget, snapshot, &(GdkRectangle) { 0, 0, layout_width, layout_height }, 1.0);
 
   g_object_unref (layout);
   g_object_unref (new_buffer);

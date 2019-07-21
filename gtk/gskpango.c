@@ -23,40 +23,25 @@
 #include "gsk/gskrendernodeprivate.h"
 #include "gskpango.h"
 #include "gtksnapshotprivate.h"
+#include "gtkstylecontextprivate.h"
+#include "gtktextlayoutprivate.h"
+#include "gtktextviewprivate.h"
 
 #include <math.h>
 
 #include <pango/pango.h>
 #include <cairo.h>
 
-#define GSK_PANGO_RENDERER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GSK_TYPE_PANGO_RENDERER, GskPangoRendererClass))
-#define GSK_IS_PANGO_RENDERER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GSK_TYPE_PANGO_RENDERER))
-#define GSK_PANGO_RENDERER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GSK_TYPE_PANGO_RENDERER, GskPangoRendererClass))
-
-/*
- * This is a PangoRenderer implementation that translates all the draw calls to
- * gsk render nodes, using the GtkSnapshot helper class. Glyphs are translated
- * to text nodes, all other draw calls fall back to cairo nodes.
- */
-
-struct _GskPangoRenderer
-{
-  PangoRenderer parent_instance;
-
-  GtkSnapshot *snapshot;
-  GdkRGBA fg_color;
-  graphene_rect_t bounds;
-
-  /* house-keeping options */
-  gboolean is_cached_renderer;
-};
-
-struct _GskPangoRendererClass
-{
-  PangoRendererClass parent_class;
-};
-
 G_DEFINE_TYPE (GskPangoRenderer, gsk_pango_renderer, PANGO_TYPE_RENDERER)
+
+void
+gsk_pango_renderer_set_state (GskPangoRenderer      *crenderer,
+                              GskPangoRendererState  state)
+{
+  g_return_if_fail (GSK_IS_PANGO_RENDERER (crenderer));
+
+  crenderer->state = state;
+}
 
 static void
 get_color (GskPangoRenderer *crenderer,
@@ -158,15 +143,14 @@ gsk_pango_renderer_draw_rectangle (PangoRenderer     *renderer,
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
   GdkRGBA rgba;
-  graphene_rect_t bounds;
 
   get_color (crenderer, part, &rgba);
-
-  graphene_rect_init (&bounds,
-                      (double)x / PANGO_SCALE, (double)y / PANGO_SCALE,
-                      (double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
-
-  gtk_snapshot_append_color (crenderer->snapshot, &rgba, &bounds);
+  gtk_snapshot_append_color (crenderer->snapshot,
+                             &rgba,
+                             &GRAPHENE_RECT_INIT ((double)x / PANGO_SCALE,
+                                                  (double)y / PANGO_SCALE,
+                                                  (double)width / PANGO_SCALE,
+                                                  (double)height / PANGO_SCALE));
 }
 
 static void
@@ -337,6 +321,124 @@ gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
 }
 
 static void
+text_renderer_set_rgba (GskPangoRenderer *crenderer,
+                        PangoRenderPart   part,
+                        const GdkRGBA    *rgba)
+{
+  PangoRenderer *renderer = PANGO_RENDERER (crenderer);
+  PangoColor color = { 0, };
+  guint16 alpha;
+
+  if (rgba)
+    {
+      color.red = (guint16)(rgba->red * 65535);
+      color.green = (guint16)(rgba->green * 65535);
+      color.blue = (guint16)(rgba->blue * 65535);
+      alpha = (guint16)(rgba->alpha * 65535);
+      pango_renderer_set_color (renderer, part, &color);
+      pango_renderer_set_alpha (renderer, part, alpha);
+    }
+  else
+    {
+      pango_renderer_set_color (renderer, part, NULL);
+      pango_renderer_set_alpha (renderer, part, 0);
+    }
+}
+
+static GtkTextAppearance *
+get_item_appearance (PangoItem *item)
+{
+  GSList *tmp_list = item->analysis.extra_attrs;
+
+  while (tmp_list)
+    {
+      PangoAttribute *attr = tmp_list->data;
+
+      if (attr->klass->type == gtk_text_attr_appearance_type)
+        return &((GtkTextAttrAppearance *)attr)->appearance;
+
+      tmp_list = tmp_list->next;
+    }
+
+  return NULL;
+}
+
+static void
+gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
+                                PangoLayoutRun *run)
+{
+  GtkStyleContext *context;
+  GskPangoRenderer *crenderer = GSK_PANGO_RENDERER (renderer);
+  GdkRGBA *bg_rgba = NULL;
+  GdkRGBA *fg_rgba = NULL;
+  GtkTextAppearance *appearance;
+
+  PANGO_RENDERER_CLASS (gsk_pango_renderer_parent_class)->prepare_run (renderer, run);
+
+  appearance = get_item_appearance (run->item);
+
+  if (appearance == NULL)
+    return;
+
+  context = gtk_widget_get_style_context (crenderer->widget);
+
+  if (appearance->draw_bg && crenderer->state == GSK_PANGO_RENDERER_NORMAL)
+    bg_rgba = appearance->bg_rgba;
+  else
+    bg_rgba = NULL;
+
+  text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_BACKGROUND, bg_rgba);
+
+  if (crenderer->state == GSK_PANGO_RENDERER_SELECTED &&
+      GTK_IS_TEXT_VIEW (crenderer->widget))
+    {
+      GtkCssNode *selection_node;
+
+      selection_node = gtk_text_view_get_selection_node ((GtkTextView *)crenderer->widget);
+      gtk_style_context_save_to_node (context, selection_node);
+
+      gtk_style_context_get (context,
+                             "color", &fg_rgba,
+                             NULL);
+
+      gtk_style_context_restore (context);
+    }
+  else if (crenderer->state == GSK_PANGO_RENDERER_CURSOR && gtk_widget_has_focus (crenderer->widget))
+    {
+      gtk_style_context_get (context,
+                             "background-color", &fg_rgba,
+                             NULL);
+    }
+  else
+    fg_rgba = appearance->fg_rgba;
+
+  text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_FOREGROUND, fg_rgba);
+
+  if (appearance->strikethrough_rgba)
+    text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_STRIKETHROUGH, appearance->strikethrough_rgba);
+  else
+    text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_STRIKETHROUGH, fg_rgba);
+
+  if (appearance->underline_rgba)
+    text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_UNDERLINE, appearance->underline_rgba);
+  else if (appearance->underline == PANGO_UNDERLINE_ERROR)
+    {
+      if (!crenderer->error_color)
+        {
+          static const GdkRGBA red = { 1, 0, 0, 1 };
+          crenderer->error_color = gdk_rgba_copy (&red);
+        }
+
+      text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_UNDERLINE, crenderer->error_color);
+    }
+  else
+    text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_UNDERLINE, fg_rgba);
+
+  if (fg_rgba != appearance->fg_rgba)
+    gdk_rgba_free (fg_rgba);
+}
+
+static void
 gsk_pango_renderer_init (GskPangoRenderer *renderer G_GNUC_UNUSED)
 {
 }
@@ -352,13 +454,14 @@ gsk_pango_renderer_class_init (GskPangoRendererClass *klass)
   renderer_class->draw_trapezoid = gsk_pango_renderer_draw_trapezoid;
   renderer_class->draw_error_underline = gsk_pango_renderer_draw_error_underline;
   renderer_class->draw_shape = gsk_pango_renderer_draw_shape;
+  renderer_class->prepare_run = gsk_pango_renderer_prepare_run;
 }
 
 static GskPangoRenderer *cached_renderer = NULL; /* MT-safe */
 G_LOCK_DEFINE_STATIC (cached_renderer);
 
-static GskPangoRenderer *
-acquire_renderer (void)
+GskPangoRenderer *
+gsk_pango_renderer_acquire (void)
 {
   GskPangoRenderer *renderer;
 
@@ -380,12 +483,19 @@ acquire_renderer (void)
   return renderer;
 }
 
-static void
-release_renderer (GskPangoRenderer *renderer)
+void
+gsk_pango_renderer_release (GskPangoRenderer *renderer)
 {
   if (G_LIKELY (renderer->is_cached_renderer))
     {
+      renderer->widget = NULL;
       renderer->snapshot = NULL;
+
+      if (renderer->error_color)
+        {
+          gdk_rgba_free (renderer->error_color);
+          renderer->error_color = NULL;
+        }
 
       G_UNLOCK (cached_renderer);
     }
@@ -414,7 +524,7 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
 
-  crenderer = acquire_renderer ();
+  crenderer = gsk_pango_renderer_acquire ();
 
   crenderer->snapshot = snapshot;
   crenderer->fg_color = *color;
@@ -424,5 +534,5 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
 
   pango_renderer_draw_layout (PANGO_RENDERER (crenderer), layout, 0, 0);
 
-  release_renderer (crenderer);
+  gsk_pango_renderer_release (crenderer);
 }
