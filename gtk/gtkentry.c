@@ -1529,12 +1529,37 @@ gtk_entry_measure (GtkWidget      *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  int i;
 
   gtk_widget_measure (priv->text,
                       orientation,
                       for_size,
                       minimum, natural,
                       minimum_baseline, natural_baseline);
+
+  for (i = 0; i < MAX_ICONS; i++)
+    {
+      EntryIconInfo *icon_info = priv->icons[i];
+      int icon_min, icon_nat;
+
+      if (!icon_info)
+        continue;
+
+      gtk_widget_measure (icon_info->widget,
+                          GTK_ORIENTATION_HORIZONTAL,
+                          -1, &icon_min, &icon_nat, NULL, NULL);
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          *minimum += icon_min;
+          *natural += icon_nat;
+        }
+      else
+        {
+          *minimum = MAX (*minimum, icon_min);
+          *natural = MAX (*natural, icon_nat);
+        }
+    }
 
   if (priv->progress_widget && gtk_widget_get_visible (priv->progress_widget))
     {
