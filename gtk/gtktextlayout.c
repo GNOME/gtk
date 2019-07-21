@@ -3795,7 +3795,8 @@ render_para (GskPangoRenderer   *crenderer,
              int                 offset_y,
              GtkTextLineDisplay *line_display,
              int                 selection_start_index,
-             int                 selection_end_index)
+             int                 selection_end_index,
+             float               cursor_alpha)
 {
   GtkStyleContext *context;
   PangoLayout *layout = line_display->layout;
@@ -3972,6 +3973,7 @@ render_para (GskPangoRenderer   *crenderer,
                * (normally white on black) */
               _gtk_style_context_get_cursor_color (context, &cursor_color, NULL);
 
+              gtk_snapshot_push_opacity (crenderer->snapshot, cursor_alpha);
               gtk_snapshot_append_color (crenderer->snapshot, &cursor_color, &bounds);
 
               /* draw text under the cursor if any */
@@ -3985,6 +3987,7 @@ render_para (GskPangoRenderer   *crenderer,
                                                    baseline);
                   gtk_snapshot_pop (crenderer->snapshot);
                 }
+              gtk_snapshot_pop (crenderer->snapshot);
             }
         }
 
@@ -4002,7 +4005,8 @@ void
 gtk_text_layout_snapshot (GtkTextLayout      *layout,
                           GtkWidget          *widget,
                           GtkSnapshot        *snapshot,
-                          const GdkRectangle *clip)
+                          const GdkRectangle *clip,
+                          float               cursor_alpha)
 {
   GskPangoRenderer *crenderer;
   GtkStyleContext *context;
@@ -4079,7 +4083,8 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
             }
 
           render_para (crenderer, offset_y, line_display,
-                       selection_start_index, selection_end_index);
+                       selection_start_index, selection_end_index,
+                       cursor_alpha);
 
           /* We paint the cursors last, because they overlap another chunk
            * and need to appear on top.
@@ -4088,6 +4093,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
             {
               int i;
 
+              gtk_snapshot_push_opacity (crenderer->snapshot, cursor_alpha);
               for (i = 0; i < line_display->cursors->len; i++)
                 {
                   int index;
@@ -4100,6 +4106,8 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
                                                         line_display->x_offset, offset_y + line_display->top_margin,
                                                         line_display->layout, index, dir);
                 }
+
+              gtk_snapshot_pop (crenderer->snapshot);
             }
         } /* line_display->height > 0 */
 
