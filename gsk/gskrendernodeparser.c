@@ -749,6 +749,8 @@ parse_glyphs (GtkCssParser *parser,
               pango_glyph_string_set_size (glyph_string, glyph_string->num_glyphs + 1);
               glyph_string->glyphs[glyph_string->num_glyphs - 1] = gi;
             }
+
+          g_free (s);
         }
       else
         {
