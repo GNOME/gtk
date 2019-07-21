@@ -1431,11 +1431,16 @@ set_para_values (GtkTextLayout      *layout,
       pango_layout_set_wrap (display->layout, pango_wrap);
     }
   display->total_width = MAX (layout->screen_width, layout->width) - h_margin - h_padding;
-  
+
   if (style->pg_bg_rgba)
-    display->pg_bg_rgba = gdk_rgba_copy (style->pg_bg_rgba);
+    {
+      display->pg_bg_rgba = *style->pg_bg_rgba;
+      display->pg_bg_rgba_set = TRUE;
+    }
   else
-    display->pg_bg_rgba = NULL;
+    {
+      display->pg_bg_rgba_set = FALSE;
+    }
 }
 
 static PangoAttribute *
@@ -2629,9 +2634,6 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
 
       if (display->cursors)
         g_array_free (display->cursors, TRUE);
-
-      if (display->pg_bg_rgba)
-        gdk_rgba_free (display->pg_bg_rgba);
 
       g_slice_free (GtkTextLineDisplay, display);
     }

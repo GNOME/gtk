@@ -642,13 +642,13 @@ render_para (GtkTextRenderer    *text_renderer,
         }
       else
         {
-          if (line_display->pg_bg_rgba)
+          if (line_display->pg_bg_rgba_set)
             {
               cairo_t *cr = text_renderer->cr;
 
               cairo_save (cr);
  
-	      gdk_cairo_set_source_rgba (text_renderer->cr, line_display->pg_bg_rgba);
+              gdk_cairo_set_source_rgba (text_renderer->cr, &line_display->pg_bg_rgba);
               cairo_rectangle (cr, 
                                line_display->left_margin, selection_y,
                                screen_width, selection_height);

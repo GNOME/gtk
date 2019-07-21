@@ -246,7 +246,8 @@ struct _GtkTextLineDisplay
   guint cursor_at_line_end : 1;
   guint size_only : 1;
 
-  GdkRGBA *pg_bg_rgba;
+  GdkRGBA pg_bg_rgba;
+  guint pg_bg_rgba_set : 1;
 };
 
 #ifdef GTK_COMPILATION
