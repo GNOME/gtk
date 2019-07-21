@@ -94,6 +94,7 @@ parse_texture (GtkCssParser *parser,
       if (bytes)
         {
           stream = g_memory_input_stream_new_from_bytes (bytes);
+          g_bytes_unref (bytes);
           pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, &error);
           g_object_unref (stream);
           if (pixbuf != NULL)
