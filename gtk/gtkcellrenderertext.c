@@ -1604,8 +1604,9 @@ get_size (GtkCellRenderer    *cell,
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
   GtkCellRendererTextPrivate *priv = gtk_cell_renderer_text_get_instance_private (celltext);
   PangoRectangle rect;
-  gint xpad, ypad;
-  gint cell_width, cell_height;
+  int xpad, ypad;
+  int cell_width, cell_height;
+  float xalign, yalign;
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
 
@@ -1655,36 +1656,21 @@ get_size (GtkCellRenderer    *cell,
 
   pango_layout_get_pixel_extents (layout, NULL, &rect);
 
-  if (cell_area)
-    {
-      gfloat xalign, yalign;
+  gtk_cell_renderer_get_alignment (cell, &xalign, &yalign);
 
-      gtk_cell_renderer_get_alignment (cell, &xalign, &yalign);
+  rect.height = MIN (rect.height, cell_area->height - 2 * ypad);
+  rect.width  = MIN (rect.width, cell_area->width - 2 * xpad);
 
-      rect.height = MIN (rect.height, cell_area->height - 2 * ypad);
-      rect.width  = MIN (rect.width, cell_area->width - 2 * xpad);
-
-      if (x_offset)
-	{
-	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	    *x_offset = (1.0 - xalign) * (cell_area->width - (rect.width + (2 * xpad)));
-	  else 
-	    *x_offset = xalign * (cell_area->width - (rect.width + (2 * xpad)));
-
-	  if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->wrap_width != -1)
-	    *x_offset = MAX(*x_offset, 0);
-	}
-      if (y_offset)
-	{
-	  *y_offset = yalign * (cell_area->height - (rect.height + (2 * ypad)));
-	  *y_offset = MAX (*y_offset, 0);
-	}
-    }
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    *x_offset = (1.0 - xalign) * (cell_area->width - (rect.width + (2 * xpad)));
   else
-    {
-      if (x_offset) *x_offset = 0;
-      if (y_offset) *y_offset = 0;
-    }
+    *x_offset = xalign * (cell_area->width - (rect.width + (2 * xpad)));
+
+  if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->wrap_width != -1)
+    *x_offset = MAX(*x_offset, 0);
+
+  *y_offset = yalign * (cell_area->height - (rect.height + (2 * ypad)));
+  *y_offset = MAX (*y_offset, 0);
 
   if (height)
     *height = ypad * 2 + rect.height;
