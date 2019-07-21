@@ -400,7 +400,8 @@ void gtk_text_layout_spew (GtkTextLayout *layout);
 void gtk_text_layout_snapshot (GtkTextLayout        *layout,
                                GtkWidget            *widget,
                                GtkSnapshot          *snapshot,
-                               const GdkRectangle   *clip);
+                               const GdkRectangle   *clip,
+                               float                 cursor_alpha);
 
 G_END_DECLS
 
