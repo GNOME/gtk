@@ -41,7 +41,6 @@
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
-#include "gtktextdisplayprivate.h"
 #include "gtktextiterprivate.h"
 #include "gtkimmulticontext.h"
 #include "gtkprivate.h"
