@@ -94,6 +94,10 @@ void gtk_text_layout_snapshot (GtkTextLayout        *layout,
                                GtkWidget            *widget,
                                GtkSnapshot          *snapshot,
                                const GdkRectangle   *clip);
+void gtk_text_layout_snapshot2 (GtkTextLayout        *layout,
+                               GtkWidget            *widget,
+                               GtkSnapshot          *snapshot,
+                               const GdkRectangle   *clip);
 
 
 G_END_DECLS
