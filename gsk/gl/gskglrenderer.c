@@ -3196,7 +3196,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
                            int                    scale_factor)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-  graphene_matrix_t modelview, projection;
+  graphene_matrix_t projection;
   gsize buffer_size;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
@@ -3216,7 +3216,6 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   g_assert (gsk_gl_driver_in_frame (self->gl_driver));
 
   /* Set up the modelview and projection matrices to fit our viewport */
-  graphene_matrix_init_scale (&modelview, scale_factor, scale_factor, 1.0);
   graphene_matrix_init_ortho (&projection,
                               viewport->origin.x,
                               viewport->origin.x + viewport->size.width,
