@@ -9233,30 +9233,6 @@ gtk_window_unexport_handle (GtkWindow *window)
              G_OBJECT_TYPE_NAME (priv->surface));
 }
 
-static void
-gtk_window_add_pointer_focus (GtkWindow       *window,
-                              GtkPointerFocus *focus)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  priv->foci = g_list_prepend (priv->foci, gtk_pointer_focus_ref (focus));
-}
-
-static void
-gtk_window_remove_pointer_focus (GtkWindow       *window,
-                                 GtkPointerFocus *focus)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GList *pos;
-
-  pos = g_list_find (priv->foci, focus);
-  if (!pos)
-    return;
-
-  priv->foci = g_list_remove (priv->foci, focus);
-  gtk_pointer_focus_unref (focus);
-}
-
 static GtkPointerFocus *
 gtk_window_lookup_pointer_focus (GtkWindow        *window,
                                  GdkDevice        *device,
@@ -9317,6 +9293,7 @@ gtk_window_update_pointer_focus (GtkWindow        *window,
                                  gdouble           x,
                                  gdouble           y)
 {
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkPointerFocus *focus;
 
   focus = gtk_window_lookup_pointer_focus (window, device, sequence);
@@ -9331,7 +9308,14 @@ gtk_window_update_pointer_focus (GtkWindow        *window,
         }
       else
         {
-          gtk_window_remove_pointer_focus (window, focus);
+          GList *pos;
+
+          pos = g_list_find (priv->foci, focus);
+          if (pos)
+            {
+              priv->foci = g_list_remove (priv->foci, focus);
+              gtk_pointer_focus_unref (focus);
+            }
         }
 
       gtk_pointer_focus_unref (focus);
@@ -9339,8 +9323,7 @@ gtk_window_update_pointer_focus (GtkWindow        *window,
   else if (target)
     {
       focus = gtk_pointer_focus_new (window, target, device, sequence, x, y);
-      gtk_window_add_pointer_focus (window, focus);
-      gtk_pointer_focus_unref (focus);
+      priv->foci = g_list_prepend (priv->foci, focus);
     }
 }
 
