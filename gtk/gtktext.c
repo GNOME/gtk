@@ -195,8 +195,9 @@ struct _GtkTextPrivate
 
   gunichar      invisible_char;
 
-  guint         blink_time;                  /* time in msec the cursor has blinked since last user event */
-  guint         blink_timeout;
+  guint64       blink_start_time;
+  guint         blink_tick;
+  float         cursor_alpha;
 
   guint16       preedit_length;              /* length of preedit string, in bytes */
   guint16       preedit_cursor;              /* offset of cursor within preedit string, in chars */
@@ -212,7 +213,6 @@ struct _GtkTextPrivate
   guint         activates_default       : 1;
   guint         cache_includes_preedit  : 1;
   guint         change_count            : 8;
-  guint         cursor_visible          : 1;
   guint         editing_canceled        : 1; /* Only used by GtkCellRendererText */
   guint         in_click                : 1; /* Flag so we don't select all when clicking in entry to focus in */
   guint         invisible_char_set      : 1;
@@ -1765,10 +1765,10 @@ gtk_text_destroy (GtkWidget *widget)
   gtk_text_reset_im_context (self);
   gtk_text_reset_layout (self);
 
-  if (priv->blink_timeout)
+  if (priv->blink_tick)
     {
-      g_source_remove (priv->blink_timeout);
-      priv->blink_timeout = 0;
+      gtk_widget_remove_tick_callback (widget, priv->blink_tick);
+      priv->blink_tick = 0;
     }
 
   if (priv->magnifier)
@@ -1824,9 +1824,6 @@ gtk_text_finalize (GObject *object)
   g_free (priv->im_module);
 
   g_clear_pointer (&priv->placeholder, gtk_widget_unparent);
-
-  if (priv->blink_timeout)
-    g_source_remove (priv->blink_timeout);
 
   if (priv->tabs)
     pango_tab_array_free (priv->tabs);
@@ -2267,8 +2264,12 @@ gtk_text_snapshot (GtkWidget   *widget,
   /* When no text is being displayed at all, don't show the cursor */
   if (gtk_text_get_display_mode (self) != DISPLAY_BLANK &&
       gtk_widget_has_focus (widget) &&
-      priv->selection_bound == priv->current_pos && priv->cursor_visible)
-    gtk_text_draw_cursor (self, snapshot, CURSOR_STANDARD);
+      priv->selection_bound == priv->current_pos)
+    {
+      gtk_snapshot_push_opacity (snapshot, priv->cursor_alpha);
+      gtk_text_draw_cursor (self, snapshot, CURSOR_STANDARD);
+      gtk_snapshot_pop (snapshot);
+    }
 
   gtk_text_draw_undershoot (self, snapshot);
 }
@@ -6293,47 +6294,81 @@ get_cursor_blink_timeout (GtkText *self)
   return timeout;
 }
 
+typedef struct {
+  guint64 start;
+  guint64 end;
+} BlinkData;
+
+static gboolean blink_cb (GtkWidget     *widget,
+                          GdkFrameClock *clock,
+                          gpointer       user_data);
+
 static void
-show_cursor (GtkText *self)
+add_blink_timeout (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GtkWidget *widget;
+  BlinkData *data;
+  int blink_time;
 
-  if (!priv->cursor_visible)
-    {
-      priv->cursor_visible = TRUE;
+  priv->blink_start_time = g_get_monotonic_time ();
+  priv->cursor_alpha = 1.0;
 
-      widget = GTK_WIDGET (self);
-      if (gtk_widget_has_focus (widget) && priv->selection_bound == priv->current_pos)
-        gtk_widget_queue_draw (widget);
-    }
+  blink_time = get_cursor_time (self);
+
+  data = g_new (BlinkData, 1);
+  data->start = priv->blink_start_time;
+  data->end = data->start + blink_time * 1000;
+
+  priv->blink_tick = gtk_widget_add_tick_callback (GTK_WIDGET (self),
+                                                   blink_cb,
+                                                   data,
+                                                   g_free);
 }
 
 static void
-hide_cursor (GtkText *self)
+remove_blink_timeout (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GtkWidget *widget;
 
-  if (priv->cursor_visible)
+  if (priv->blink_tick)
     {
-      priv->cursor_visible = FALSE;
-
-      widget = GTK_WIDGET (self);
-      if (gtk_widget_has_focus (widget) && priv->selection_bound == priv->current_pos)
-        gtk_widget_queue_draw (widget);
+      gtk_widget_remove_tick_callback (GTK_WIDGET (self), priv->blink_tick);
+      priv->blink_tick = 0;
     }
 }
 
 /*
  * Blink!
  */
-static int
-blink_cb (gpointer data)
+
+static float
+blink_alpha (float phase)
 {
-  GtkText *self = data;
+  /* keep it simple, and split the blink cycle evenly
+   * into visible, fading out, invisible, fading in
+   */
+  if (phase < 0.25)
+    return 1;
+  else if (phase < 0.5)
+    return 1 - 4 * (phase - 0.25);
+  else if (phase < 0.75)
+    return 0;
+  else
+    return 4 * (phase - 0.75);
+}
+
+static gboolean
+blink_cb (GtkWidget     *widget,
+          GdkFrameClock *clock,
+          gpointer       user_data)
+{
+  GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  BlinkData *data = user_data;
   int blink_timeout;
+  int blink_time;
+  guint64 now;
+  float phase;
 
   if (!gtk_widget_has_focus (GTK_WIDGET (self)))
     {
@@ -6342,39 +6377,39 @@ blink_cb (gpointer data)
                  "GDK_EVENT_PROPAGATE so the self gets the event as well");
 
       gtk_text_check_cursor_blink (self);
+      return G_SOURCE_REMOVE;
+    }
+
+  g_assert (priv->selection_bound == priv->current_pos);
+
+  blink_timeout = get_cursor_blink_timeout (self);
+  blink_time = get_cursor_time (self);
+
+  now = g_get_monotonic_time ();
+
+  if (now > priv->blink_start_time + blink_timeout * 1000000)
+    {
+      /* we've blinked enough without the user doing anything, stop blinking */
+      priv->cursor_alpha = 1.0;
+      remove_blink_timeout (self);
+      gtk_widget_queue_draw (widget);
 
       return G_SOURCE_REMOVE;
     }
-  
-  g_assert (priv->selection_bound == priv->current_pos);
-  
-  blink_timeout = get_cursor_blink_timeout (self);
-  if (priv->blink_time > 1000 * blink_timeout && 
-      blink_timeout < G_MAXINT/1000) 
+
+  phase = (now - data->start) / (float) (data->end - data->start);
+
+  priv->cursor_alpha = blink_alpha (phase);
+
+  if (now >= data->end)
     {
-      /* we've blinked enough without the user doing anything, stop blinking */
-      show_cursor (self);
-      priv->blink_timeout = 0;
-    } 
-  else if (priv->cursor_visible)
-    {
-      hide_cursor (self);
-      priv->blink_timeout = g_timeout_add (get_cursor_time (self) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
-                                           blink_cb,
-                                           self);
-      g_source_set_name_by_id (priv->blink_timeout, "[gtk] blink_cb");
-    }
-  else
-    {
-      show_cursor (self);
-      priv->blink_time += get_cursor_time (self);
-      priv->blink_timeout = g_timeout_add (get_cursor_time (self) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
-                                           blink_cb,
-                                           self);
-      g_source_set_name_by_id (priv->blink_timeout, "[gtk] blink_cb");
+      data->start = data->end;
+      data->end = data->start + blink_time * 1000;
     }
 
-  return G_SOURCE_REMOVE;
+  gtk_widget_queue_draw (widget);
+
+  return G_SOURCE_CONTINUE;
 }
 
 static void
@@ -6384,42 +6419,23 @@ gtk_text_check_cursor_blink (GtkText *self)
 
   if (cursor_blinks (self))
     {
-      if (!priv->blink_timeout)
-        {
-          show_cursor (self);
-          priv->blink_timeout = g_timeout_add (get_cursor_time (self) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
-                                               blink_cb,
-                                               self);
-          g_source_set_name_by_id (priv->blink_timeout, "[gtk] blink_cb");
-        }
+      if (!priv->blink_tick)
+        add_blink_timeout (self);
     }
   else
     {
-      if (priv->blink_timeout)
-        {
-          g_source_remove (priv->blink_timeout);
-          priv->blink_timeout = 0;
-        }
-
-      priv->cursor_visible = TRUE;
+      if (priv->blink_tick)
+        remove_blink_timeout (self);
     }
 }
 
 static void
 gtk_text_pend_cursor_blink (GtkText *self)
 {
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-
   if (cursor_blinks (self))
     {
-      if (priv->blink_timeout != 0)
-        g_source_remove (priv->blink_timeout);
-
-      priv->blink_timeout = g_timeout_add (get_cursor_time (self) * CURSOR_PEND_MULTIPLIER / CURSOR_DIVIDER,
-                                           blink_cb,
-                                           self);
-      g_source_set_name_by_id (priv->blink_timeout, "[gtk] blink_cb");
-      show_cursor (self);
+      remove_blink_timeout (self);
+      add_blink_timeout (self);
     }
 }
 
@@ -6428,7 +6444,7 @@ gtk_text_reset_blink_time (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
-  priv->blink_time = 0;
+  priv->blink_start_time = g_get_monotonic_time ();
 }
 
 /**
