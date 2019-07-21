@@ -128,6 +128,37 @@
    fun:epoxy_glReadPixels_global_rewrite_ptr
 }
 
+{
+   epoxy glxQueryServerString 1
+   Memcheck:Leak
+   fun:malloc
+   fun:XextAddDisplay
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   fun:epoxy_glXQueryServerString_global_rewrite_ptr
+
+}
+
+{
+   epoxy glxQueryServerString 2
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:realpath*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   fun:epoxy_glXQueryServerString_global_rewrite_ptr
+}
+
+
 # Fontconfig
 {
    FcFontSetList
