@@ -1652,11 +1652,6 @@ get_size (GtkCellRenderer    *cell,
       if (width == NULL)
 	return;
     }
-  
-  if (layout)
-    g_object_ref (layout);
-  else
-    layout = get_layout (celltext, widget, NULL, 0);
 
   pango_layout_get_pixel_extents (layout, NULL, &rect);
 
@@ -1696,8 +1691,6 @@ get_size (GtkCellRenderer    *cell,
 
   if (width)
     *width = xpad * 2 + rect.width;
-
-  g_object_unref (layout);
 }
 
 static void
