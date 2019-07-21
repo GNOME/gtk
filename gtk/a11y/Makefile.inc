@@ -14,6 +14,7 @@ a11y_h_sources =				\
 	a11y/gtkflowboxaccessible.h		\
 	a11y/gtkflowboxchildaccessible.h	\
 	a11y/gtkframeaccessible.h		\
+	a11y/gtkheaderbaraccessible.h	        \
 	a11y/gtkiconviewaccessible.h		\
 	a11y/gtkimageaccessible.h		\
 	a11y/gtkimagecellaccessible.h		\
@@ -88,6 +89,7 @@ a11y_c_sources =				\
 	a11y/gtkflowboxaccessible.c		\
 	a11y/gtkflowboxchildaccessible.c	\
 	a11y/gtkframeaccessible.c		\
+	a11y/gtkheaderbaraccessible.c	        \
 	a11y/gtkiconviewaccessible.c		\
 	a11y/gtkimageaccessible.c		\
 	a11y/gtkimagecellaccessible.c		\
