@@ -4036,11 +4036,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   crenderer->snapshot = snapshot;
   crenderer->fg_color = color;
 
-  graphene_rect_init (&crenderer->bounds,
-                      clip->x,
-                      clip->y,
-                      clip->width,
-                      clip->height);
+  graphene_rect_init (&crenderer->bounds, 0, 0, clip->width, clip->height);
 
   gtk_text_layout_wrap_loop_start (layout);
 
