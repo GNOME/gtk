@@ -199,6 +199,9 @@ struct _GtkTextPrivate
   guint         blink_tick;
   float         cursor_alpha;
 
+  GskRenderNode *content_node;
+  GskRenderNode *cursor_node;
+
   guint16       preedit_length;              /* length of preedit string, in bytes */
   guint16       preedit_cursor;              /* offset of cursor within preedit string, in chars */
 
@@ -2246,32 +2249,60 @@ gtk_text_draw_undershoot (GtkText     *self,
 }
 
 static void
+gtk_text_queue_draw (GtkWidget *widget)
+{
+  GtkText *self = GTK_TEXT (widget);
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  gtk_widget_queue_draw (widget);
+
+  g_clear_pointer (&priv->content_node, gsk_render_node_unref);
+  g_clear_pointer (&priv->cursor_node, gsk_render_node_unref);
+}
+
+static void
 gtk_text_snapshot (GtkWidget   *widget,
                    GtkSnapshot *snapshot)
 {
   GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
-  /* Draw text and cursor */
-  if (priv->dnd_position != -1)
-    gtk_text_draw_cursor (self, snapshot, CURSOR_DND);
+  if (!priv->content_node)
+    {
+      GtkSnapshot *s = gtk_snapshot_new ();
 
-  if (priv->placeholder)
-    gtk_widget_snapshot_child (widget, priv->placeholder, snapshot);
+      if (priv->dnd_position != -1)
+        gtk_text_draw_cursor (self, s, CURSOR_DND);
 
-  gtk_text_draw_text (self, snapshot);
+      if (priv->placeholder)
+        gtk_widget_snapshot_child (widget, priv->placeholder, s);
+
+      gtk_text_draw_text (self, s);
+      gtk_text_draw_undershoot (self, s);
+
+      priv->content_node = gtk_snapshot_free_to_node (s);
+    }
+
+  gtk_snapshot_append_node (snapshot, priv->content_node);
 
   /* When no text is being displayed at all, don't show the cursor */
   if (gtk_text_get_display_mode (self) != DISPLAY_BLANK &&
       gtk_widget_has_focus (widget) &&
       priv->selection_bound == priv->current_pos)
     {
+      if (!priv->cursor_node)
+        {
+          GtkSnapshot *s = gtk_snapshot_new ();
+
+          gtk_text_draw_cursor (self, s, CURSOR_STANDARD);
+
+          priv->cursor_node = gtk_snapshot_free_to_node (s);
+        }
+
       gtk_snapshot_push_opacity (snapshot, priv->cursor_alpha);
-      gtk_text_draw_cursor (self, snapshot, CURSOR_STANDARD);
+      gtk_snapshot_append_node (snapshot, priv->cursor_node);
       gtk_snapshot_pop (snapshot);
     }
-
-  gtk_text_draw_undershoot (self, snapshot);
 }
 
 static void
@@ -2974,7 +3005,7 @@ gtk_text_focus_in (GtkWidget *widget)
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GdkKeymap *keymap;
 
-  gtk_widget_queue_draw (widget);
+  gtk_text_queue_draw (widget);
 
   keymap = gdk_display_get_keymap (gtk_widget_get_display (widget));
 
@@ -3004,7 +3035,7 @@ gtk_text_focus_out (GtkWidget *widget)
     _gtk_text_handle_set_mode (priv->text_handle,
                                GTK_TEXT_HANDLE_MODE_NONE);
 
-  gtk_widget_queue_draw (widget);
+  gtk_text_queue_draw (widget);
 
   keymap = gdk_display_get_keymap (gtk_widget_get_display (widget));
 
@@ -3894,7 +3925,7 @@ gtk_text_toggle_overwrite (GtkText *self)
     }
 
   gtk_text_pend_cursor_blink (self);
-  gtk_widget_queue_draw (GTK_WIDGET (self));
+  gtk_text_queue_draw (GTK_WIDGET (self));
 }
 
 static void
@@ -4150,7 +4181,7 @@ gtk_text_recompute (GtkText *self)
         gtk_text_update_handles (self, handle_mode);
     }
 
-  gtk_widget_queue_draw (GTK_WIDGET (self));
+  gtk_text_queue_draw (GTK_WIDGET (self));
 }
 
 static PangoLayout *
@@ -5241,7 +5272,7 @@ gtk_text_set_editable (GtkText  *self,
                                                is_editable ? priv->im_context : NULL);
 
       g_object_notify (G_OBJECT (self), "editable");
-      gtk_widget_queue_draw (widget);
+      gtk_text_queue_draw (widget);
     }
 }
 
@@ -6050,7 +6081,7 @@ gtk_text_drag_leave (GtkWidget *widget,
 
   gtk_drag_unhighlight (widget);
   priv->dnd_position = -1;
-  gtk_widget_queue_draw (widget);
+  gtk_text_queue_draw (widget);
 }
 
 static gboolean
@@ -6121,7 +6152,7 @@ gtk_text_drag_motion (GtkWidget *widget,
     gtk_drag_highlight (widget);
 
   if (priv->dnd_position != old_position)
-    gtk_widget_queue_draw (widget);
+    gtk_text_queue_draw (widget);
 
   return TRUE;
 }
