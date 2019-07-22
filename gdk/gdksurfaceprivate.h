@@ -43,7 +43,7 @@ struct _GdkSurface
   gint x;
   gint y;
 
-  guint8 surface_type;
+  GdkSurfaceType surface_type;
 
   guint8 resize_count;
 
