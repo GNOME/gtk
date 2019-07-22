@@ -69,7 +69,7 @@
  */
 
 enum {
-  MOVED_TO_RECT,
+  RELAYOUT_FINISHED,
   SIZE_CHANGED,
   RENDER,
   EVENT,
@@ -246,21 +246,31 @@ maybe_flip_position (gint      bounds_pos,
   return primary;
 }
 
-void
-gdk_surface_move_to_rect_helper (GdkSurface            *surface,
-                                 const GdkRectangle    *rect,
-                                 GdkGravity             rect_anchor,
-                                 GdkGravity             surface_anchor,
-                                 GdkAnchorHints         anchor_hints,
-                                 gint                   rect_anchor_dx,
-                                 gint                   rect_anchor_dy,
-                                 GdkSurfaceMovedToRect  moved_to_rect)
+struct _QueueRelayoutHelperData
 {
+  gint width;
+  gint height;
+  GdkSurface *surface;
+  GdkRectangle anchor_rect;
+  GdkGravity rect_anchor;
+  GdkGravity surface_anchor;
+  GdkAnchorHints anchor_hints;
+  gint rect_anchor_dx;
+  gint rect_anchor_dy;
+  GdkSurfaceRelayoutFinished finished_cb;
+};
+
+static gboolean
+gdk_surface_queue_relayout_idle_cb (gpointer user_data)
+{
+  GdkSurface *surface = GDK_SURFACE (user_data);
+  QueueRelayoutHelperData *data = surface->queue_relayout_helper_data;
   GdkSurface *toplevel;
   GdkDisplay *display;
   GdkMonitor *monitor;
   GdkRectangle bounds;
-  GdkRectangle root_rect = *rect;
+  GdkRectangle root_rect;
+  int width, height;
   GdkRectangle flipped_rect;
   GdkRectangle final_rect;
   gboolean flipped_x;
@@ -269,13 +279,14 @@ gdk_surface_move_to_rect_helper (GdkSurface            *surface,
 
   /* This implementation only works for backends that
    * can provide root coordinates via get_root_coords.
-   * Other backends need to implement move_to_rect.
+   * Other backends need to implement queue_relayout.
    */
   if (surface->surface_type == GDK_SURFACE_POPUP)
     toplevel = surface->parent;
   else
     toplevel = surface->transient_for;
 
+  root_rect = data->anchor_rect;
   gdk_surface_get_root_coords (toplevel,
                                root_rect.x,
                                root_rect.y,
@@ -286,32 +297,34 @@ gdk_surface_move_to_rect_helper (GdkSurface            *surface,
   monitor = get_monitor_for_rect (display, &root_rect);
   gdk_monitor_get_workarea (monitor, &bounds);
 
-  flipped_rect.width = surface->width - surface->shadow_left - surface->shadow_right;
-  flipped_rect.height = surface->height - surface->shadow_top - surface->shadow_bottom;
+  width = data->width == 0 ? surface->width : data->width;
+  height = data->height == 0 ? surface->height : data->height;
+  flipped_rect.width = width - surface->shadow_left - surface->shadow_right;
+  flipped_rect.height = height - surface->shadow_top - surface->shadow_bottom;
   flipped_rect.x = maybe_flip_position (bounds.x,
                                         bounds.width,
                                         root_rect.x,
                                         root_rect.width,
                                         flipped_rect.width,
-                                        get_anchor_x_sign (rect_anchor),
-                                        get_anchor_x_sign (surface_anchor),
-                                        rect_anchor_dx,
-                                        anchor_hints & GDK_ANCHOR_FLIP_X,
+                                        get_anchor_x_sign (data->rect_anchor),
+                                        get_anchor_x_sign (data->surface_anchor),
+                                        data->rect_anchor_dx,
+                                        data->anchor_hints & GDK_ANCHOR_FLIP_X,
                                         &flipped_x);
   flipped_rect.y = maybe_flip_position (bounds.y,
                                         bounds.height,
                                         root_rect.y,
                                         root_rect.height,
                                         flipped_rect.height,
-                                        get_anchor_y_sign (rect_anchor),
-                                        get_anchor_y_sign (surface_anchor),
-                                        rect_anchor_dy,
-                                        anchor_hints & GDK_ANCHOR_FLIP_Y,
+                                        get_anchor_y_sign (data->rect_anchor),
+                                        get_anchor_y_sign (data->surface_anchor),
+                                        data->rect_anchor_dy,
+                                        data->anchor_hints & GDK_ANCHOR_FLIP_Y,
                                         &flipped_y);
 
   final_rect = flipped_rect;
 
-  if (anchor_hints & GDK_ANCHOR_SLIDE_X)
+  if (data->anchor_hints & GDK_ANCHOR_SLIDE_X)
     {
       if (final_rect.x + final_rect.width > bounds.x + bounds.width)
         final_rect.x = bounds.x + bounds.width - final_rect.width;
@@ -320,7 +333,7 @@ gdk_surface_move_to_rect_helper (GdkSurface            *surface,
         final_rect.x = bounds.x;
     }
 
-  if (anchor_hints & GDK_ANCHOR_SLIDE_Y)
+  if (data->anchor_hints & GDK_ANCHOR_SLIDE_Y)
     {
       if (final_rect.y + final_rect.height > bounds.y + bounds.height)
         final_rect.y = bounds.y + bounds.height - final_rect.height;
@@ -329,7 +342,7 @@ gdk_surface_move_to_rect_helper (GdkSurface            *surface,
         final_rect.y = bounds.y;
     }
 
-  if (anchor_hints & GDK_ANCHOR_RESIZE_X)
+  if (data->anchor_hints & GDK_ANCHOR_RESIZE_X)
     {
       if (final_rect.x < bounds.x)
         {
@@ -341,7 +354,7 @@ gdk_surface_move_to_rect_helper (GdkSurface            *surface,
         final_rect.width = bounds.x + bounds.width - final_rect.x;
     }
 
-  if (anchor_hints & GDK_ANCHOR_RESIZE_Y)
+  if (data->anchor_hints & GDK_ANCHOR_RESIZE_Y)
     {
       if (final_rect.y < bounds.y)
         {
@@ -369,14 +382,62 @@ gdk_surface_move_to_rect_helper (GdkSurface            *surface,
   flipped_rect.x -= x;
   flipped_rect.y -= y;
 
-  moved_to_rect (surface, final_rect);
+  gdk_surface_thaw_updates (surface);
+
+  data->finished_cb (surface, final_rect);
 
   g_signal_emit_by_name (surface,
-                         "moved-to-rect",
+                         "relayout-finished",
                          &flipped_rect,
                          &final_rect,
                          flipped_x,
                          flipped_y);
+
+  surface->queue_relayout_idle_id = 0;
+  g_clear_pointer (&surface->queue_relayout_helper_data, g_free);
+
+  return G_SOURCE_REMOVE;
+}
+
+void
+gdk_surface_queue_relayout_helper (GdkSurface                 *surface,
+                                   gint                        width,
+                                   gint                        height,
+                                   const GdkRectangle         *anchor_rect,
+                                   GdkGravity                  rect_anchor,
+                                   GdkGravity                  surface_anchor,
+                                   GdkAnchorHints              anchor_hints,
+                                   gint                        rect_anchor_dx,
+                                   gint                        rect_anchor_dy,
+                                   GdkSurfaceRelayoutFinished  finished_cb)
+{
+  QueueRelayoutHelperData *data;
+
+  data = g_new0 (QueueRelayoutHelperData, 1);
+  *data = (QueueRelayoutHelperData) {
+    .width = width,
+    .height = height,
+    .anchor_rect = *anchor_rect,
+    .rect_anchor = rect_anchor,
+    .surface_anchor = surface_anchor,
+    .anchor_hints = anchor_hints,
+    .rect_anchor_dx = rect_anchor_dx,
+    .rect_anchor_dy = rect_anchor_dy,
+    .finished_cb = finished_cb,
+  };
+
+  if (!surface->queue_relayout_idle_id)
+    gdk_surface_freeze_updates (surface);
+
+  g_clear_handle_id (&surface->queue_relayout_idle_id, g_source_remove);
+
+  g_clear_pointer (&surface->queue_relayout_helper_data, g_free);
+  surface->queue_relayout_helper_data = data;
+
+  surface->queue_relayout_idle_id =
+    g_idle_add_full (G_PRIORITY_HIGH_IDLE,
+                     gdk_surface_queue_relayout_idle_cb,
+                     surface, NULL);
 }
 
 static void
@@ -481,8 +542,8 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
-   * GdkSurface::moved-to-rect:
-   * @surface: the #GdkSurface that moved
+   * GdkSurface::relayout-finished
+   * @surface: the #GdkSurface that was laid out
    * @flipped_rect: (nullable): the position of @surface after any possible
    *                flipping or %NULL if the backend can't obtain it
    * @final_rect: (nullable): the final position of @surface or %NULL if the
@@ -490,8 +551,8 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    * @flipped_x: %TRUE if the anchors were flipped horizontally
    * @flipped_y: %TRUE if the anchors were flipped vertically
    *
-   * Emitted when the position of @surface is finalized after being moved to a
-   * destination rectangle.
+   * Emitted when the layout of a @surface has changed, e.g. after showing or
+   * after queuing a relayout (see gdk_surface_queue_relayout()).
    *
    * @surface might be flipped over the destination rectangle in order to keep
    * it on-screen, in which case @flipped_x and @flipped_y will be set to %TRUE
@@ -503,8 +564,8 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    * keeping @surface on-screen.
    * Stability: Private
    */
-  signals[MOVED_TO_RECT] =
-    g_signal_new (g_intern_static_string ("moved-to-rect"),
+  signals[RELAYOUT_FINISHED] =
+    g_signal_new (g_intern_static_string ("relayout-finished"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_FIRST,
                   0,
@@ -807,7 +868,7 @@ gdk_surface_new_temp (GdkDisplay         *display,
  *
  * The surface will be attached to @parent and can
  * be positioned relative to it using
- * gdk_surface_move_to_rect().
+ * gdk_surface_queue_relayout().
  *
  * Returns: (transfer full): a new #GdkSurface
  */
@@ -916,6 +977,13 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
     }
 
   _gdk_surface_clear_update_area (surface);
+
+  if (surface->queue_relayout_idle_id)
+    {
+      gdk_surface_thaw_updates (surface);
+      g_clear_handle_id (&surface->queue_relayout_idle_id, g_source_remove);
+      g_clear_pointer (&surface->queue_relayout_helper_data, g_free);
+    }
 
   surface->state |= GDK_SURFACE_STATE_WITHDRAWN;
   surface->destroyed = TRUE;
@@ -1422,6 +1490,19 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
     }
 
   g_object_unref (surface);
+}
+
+static void
+gdk_surface_maybe_relayout (GdkFrameClock *clock,
+                            void          *data)
+{
+  GdkSurface *surface = GDK_SURFACE (data);
+
+  if (surface->queue_relayout_idle_id)
+    {
+      g_source_remove (surface->queue_relayout_idle_id);
+      gdk_surface_queue_relayout_idle_cb (surface);
+    }
 }
 
 /**
@@ -2028,6 +2109,13 @@ gdk_surface_hide (GdkSurface *surface)
   if (surface->destroyed)
     return;
 
+  if (surface->queue_relayout_idle_id)
+    {
+      gdk_surface_thaw_updates (surface);
+      g_clear_handle_id (&surface->queue_relayout_idle_id, g_source_remove);
+      g_clear_pointer (&surface->queue_relayout_helper_data, g_free);
+    }
+
   was_mapped = GDK_SURFACE_IS_MAPPED (surface);
 
   if (GDK_SURFACE_IS_MAPPED (surface))
@@ -2090,22 +2178,25 @@ gdk_surface_resize (GdkSurface *surface,
 }
 
 /**
- * gdk_surface_move_to_rect:
- * @surface: the #GdkSurface to move
- * @rect: (not nullable): the destination #GdkRectangle to align @surface with
- * @rect_anchor: the point on @rect to align with @surface's anchor point
+ * gdk_surface_queue_relayout:
+ * @surface: the #GdkSurface to layout
+ * @width: the unconstrained surface width to layout
+ * @height: the unconstrained surface height to layout
+ * @anchor_rect: (not nullable): the anchor #GdkRectangle to align @surface with
+ * @rect_anchor: the point on @anchor_rect to align with @surface's anchor point
  * @surface_anchor: the point on @surface to align with @rect's anchor point
  * @anchor_hints: positioning hints to use when limited on space
  * @rect_anchor_dx: horizontal offset to shift @surface, i.e. @rect's anchor
  *                  point
  * @rect_anchor_dy: vertical offset to shift @surface, i.e. @rect's anchor point
  *
- * Moves @surface to @rect, aligning their anchor points.
+ * Layout @surface relative to the @anchor_rect on its parent surface, aligning
+ * their achor points.
  *
- * @rect is relative to the top-left corner of the surface that @surface is
- * transient for. @rect_anchor and @surface_anchor determine anchor points on
- * @rect and @surface to pin together. @rect's anchor point can optionally be
- * offset by @rect_anchor_dx and @rect_anchor_dy, which is equivalent to
+ * @anchor_rect is relative to the top-left corner of the surface that @surface
+ * is transient for. @rect_anchor and @surface_anchor determine anchor points
+ * on @rect and @surface to pin together. @rect's anchor point can optionally
+ * be offset by @rect_anchor_dx and @rect_anchor_dy, which is equivalent to
  * offsetting the position of @surface.
  *
  * @anchor_hints determines how @surface will be moved if the anchor points cause
@@ -2113,29 +2204,34 @@ gdk_surface_resize (GdkSurface *surface,
  * %GDK_GRAVITY_NORTH_WEST with %GDK_GRAVITY_NORTH_EAST and vice versa if
  * @surface extends beyond the left or right edges of the monitor.
  *
- * Connect to the #GdkSurface::moved-to-rect signal to find out how it was
- * actually positioned.
+ * Connect to the #GdkSurface::layout signal to find out how it was
+ * laid out.
  */
 void
-gdk_surface_move_to_rect (GdkSurface          *surface,
-                          const GdkRectangle *rect,
-                          GdkGravity          rect_anchor,
-                          GdkGravity          surface_anchor,
-                          GdkAnchorHints      anchor_hints,
-                          gint                rect_anchor_dx,
-                          gint                rect_anchor_dy)
+gdk_surface_queue_relayout (GdkSurface         *surface,
+                            gint                width,
+                            gint                height,
+                            const GdkRectangle *anchor_rect,
+                            GdkGravity          rect_anchor,
+                            GdkGravity          surface_anchor,
+                            GdkAnchorHints      anchor_hints,
+                            gint                rect_anchor_dx,
+                            gint                rect_anchor_dy)
 {
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (surface->parent || surface->transient_for);
-  g_return_if_fail (rect);
+  g_return_if_fail (anchor_rect);
+  g_return_if_fail (!GDK_SURFACE_DESTROYED (surface));
 
-  GDK_SURFACE_GET_CLASS (surface)->move_to_rect (surface,
-                                                 rect,
-                                                 rect_anchor,
-                                                 surface_anchor,
-                                                 anchor_hints,
-                                                 rect_anchor_dx,
-                                                 rect_anchor_dy);
+  GDK_SURFACE_GET_CLASS (surface)->queue_relayout (surface,
+                                                   width,
+                                                   height,
+                                                   anchor_rect,
+                                                   rect_anchor,
+                                                   surface_anchor,
+                                                   anchor_hints,
+                                                   rect_anchor_dx,
+                                                   rect_anchor_dy);
 }
 
 static void
@@ -3647,6 +3743,10 @@ gdk_surface_set_frame_clock (GdkSurface     *surface,
                         "paint",
                         G_CALLBACK (gdk_surface_paint_on_clock),
                         surface);
+      g_signal_connect_after (G_OBJECT (clock),
+                              "layout",
+                              G_CALLBACK (gdk_surface_maybe_relayout),
+                              surface);
 
       if (surface->update_freeze_count == 0)
         _gdk_frame_clock_inhibit_freeze (clock);

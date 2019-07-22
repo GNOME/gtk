@@ -1289,8 +1289,8 @@ gdk_win32_surface_move (GdkSurface *surface,
 }
 
 static void
-gdk_win32_surface_moved_to_rect (GdkSurface   *surface,
-                                 GdkRectangle  final_rect)
+gdk_win32_surface_relayout_finished (GdkSurface   *surface,
+                                     GdkRectangle  final_rect)
 {
   GdkSurface *toplevel;
   int x, y;
@@ -1318,22 +1318,26 @@ gdk_win32_surface_moved_to_rect (GdkSurface   *surface,
 }
 
 static void
-gdk_win32_surface_move_to_rect (GdkSurface         *surface,
-                                const GdkRectangle *rect,
-                                GdkGravity          rect_anchor,
-                                GdkGravity          surface_anchor,
-                                GdkAnchorHints      anchor_hints,
-                                gint                rect_anchor_dx,
-                                gint                rect_anchor_dy)
+gdk_win32_surface_queue_relayout (GdkSurface         *surface,
+                                  gint                width,
+                                  gint                height,
+                                  const GdkRectangle *anchor_rect,
+                                  GdkGravity          rect_anchor,
+                                  GdkGravity          surface_anchor,
+                                  GdkAnchorHints      anchor_hints,
+                                  gint                rect_anchor_dx,
+                                  gint                rect_anchor_dy)
 {
-  gdk_surface_move_to_rect_helper (surface,
-                                   rect,
-                                   rect_anchor,
-                                   surface_anchor,
-                                   anchor_hints,
-                                   rect_anchor_dx,
-                                   rect_anchor_dy,
-                                   gdk_win32_surface_moved_to_rect);
+  gdk_surface_queue_relayout_helper (surface,
+                                     width,
+                                     height,
+                                     anchor_rect,
+                                     rect_anchor,
+                                     surface_anchor,
+                                     anchor_hints,
+                                     rect_anchor_dx,
+                                     rect_anchor_dy,
+                                     gdk_win32_surface_relayout_finished);
 }
 
 static void
@@ -5161,7 +5165,7 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->lower = gdk_win32_surface_lower;
   impl_class->restack_toplevel = gdk_win32_surface_restack_toplevel;
   impl_class->toplevel_resize = gdk_win32_surface_toplevel_resize;
-  impl_class->move_to_rect = gdk_win32_surface_move_to_rect;
+  impl_class->queue_relayout = gdk_win32_surface_queue_relayout;
   impl_class->get_geometry = gdk_win32_surface_get_geometry;
   impl_class->get_device_state = gdk_surface_win32_get_device_state;
   impl_class->get_root_coords = gdk_win32_surface_get_root_coords;
