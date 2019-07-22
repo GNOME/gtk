@@ -3798,9 +3798,8 @@ render_para (GskPangoRenderer   *crenderer,
   int byte_offset = 0;
   PangoLayoutIter *iter;
   int screen_width;
-  GdkRGBA *selection;
+  GdkRGBA *selection = NULL;
   gboolean first = TRUE;
-  GtkCssNode *selection_node;
   graphene_point_t point = { 0, offset_y };
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (crenderer->widget));
@@ -3808,13 +3807,16 @@ render_para (GskPangoRenderer   *crenderer,
   iter = pango_layout_get_iter (layout);
   screen_width = line_display->total_width;
 
-  context = gtk_widget_get_style_context (crenderer->widget);
-  selection_node = gtk_text_view_get_selection_node ((GtkTextView*)crenderer->widget);
-  gtk_style_context_save_to_node (context, selection_node);
+  context = _gtk_widget_get_style_context (crenderer->widget);
+  if (selection_start_index != -1 || selection_end_index != -1)
+    {
+      GtkCssNode *selection_node = gtk_text_view_get_selection_node ((GtkTextView*)crenderer->widget);
+      gtk_style_context_save_to_node (context, selection_node);
 
-  gtk_style_context_get (context, "background-color", &selection, NULL);
+      gtk_style_context_get (context, "background-color", &selection, NULL);
 
-  gtk_style_context_restore (context);
+      gtk_style_context_restore (context);
+    }
 
   gtk_snapshot_save (crenderer->snapshot);
   gtk_snapshot_translate (crenderer->snapshot, &point);
