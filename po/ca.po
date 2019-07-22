@@ -3738,7 +3738,7 @@ msgstr "Dreceres de cerca"
 #: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:376
 #: gtk/ui/gtkfilechooserwidget.ui:310
 msgid "No Results Found"
-msgstr "No s'ha trobat cap tipus de lletra"
+msgstr "No s'ha trobat cap resultat"
 
 #: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:390
 #: gtk/ui/gtkfilechooserwidget.ui:324 gtk/ui/gtkplacesview.ui:406
