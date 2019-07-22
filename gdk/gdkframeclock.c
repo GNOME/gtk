@@ -98,6 +98,7 @@ struct _GdkFrameClockPrivate
   gint current;
   GdkFrameTimings *timings[FRAME_HISTORY_MAX_LENGTH];
   gint n_freeze_inhibitors;
+  GdkFrameClockPhase current_phase;
 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
@@ -649,43 +650,63 @@ gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
 void
 _gdk_frame_clock_emit_flush_events (GdkFrameClock *frame_clock)
 {
+  frame_clock->priv->current_phase = GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS;
   g_signal_emit (frame_clock, signals[FLUSH_EVENTS], 0);
+  frame_clock->priv->current_phase = GDK_FRAME_CLOCK_PHASE_NONE;
 }
 
 void
 _gdk_frame_clock_emit_before_paint (GdkFrameClock *frame_clock)
 {
+  frame_clock->priv->current_phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
   g_signal_emit (frame_clock, signals[BEFORE_PAINT], 0);
+  frame_clock->priv->current_phase = GDK_FRAME_CLOCK_PHASE_NONE;
 }
 
 void
 _gdk_frame_clock_emit_update (GdkFrameClock *frame_clock)
 {
+  frame_clock->priv->current_phase = GDK_FRAME_CLOCK_PHASE_UPDATE;
   g_signal_emit (frame_clock, signals[UPDATE], 0);
+  frame_clock->priv->current_phase = GDK_FRAME_CLOCK_PHASE_NONE;
 }
 
 void
 _gdk_frame_clock_emit_layout (GdkFrameClock *frame_clock)
 {
+  frame_clock->priv->current_phase = GDK_FRAME_CLOCK_PHASE_LAYOUT;
   g_signal_emit (frame_clock, signals[LAYOUT], 0);
+  frame_clock->priv->current_phase = GDK_FRAME_CLOCK_PHASE_NONE;
 }
 
 void
 _gdk_frame_clock_emit_paint (GdkFrameClock *frame_clock)
 {
+  frame_clock->priv->current_phase = GDK_FRAME_CLOCK_PHASE_PAINT;
   g_signal_emit (frame_clock, signals[PAINT], 0);
+  frame_clock->priv->current_phase = GDK_FRAME_CLOCK_PHASE_NONE;
 }
 
 void
 _gdk_frame_clock_emit_after_paint (GdkFrameClock *frame_clock)
 {
+  frame_clock->priv->current_phase = GDK_FRAME_CLOCK_PHASE_AFTER_PAINT;
   g_signal_emit (frame_clock, signals[AFTER_PAINT], 0);
+  frame_clock->priv->current_phase = GDK_FRAME_CLOCK_PHASE_NONE;
 }
 
 void
 _gdk_frame_clock_emit_resume_events (GdkFrameClock *frame_clock)
 {
+  frame_clock->priv->current_phase = GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS;
   g_signal_emit (frame_clock, signals[RESUME_EVENTS], 0);
+  frame_clock->priv->current_phase = GDK_FRAME_CLOCK_PHASE_NONE;
+}
+
+GdkFrameClockPhase
+_gdk_frame_clock_get_current_phase (GdkFrameClock *frame_clock)
+{
+  return frame_clock->priv->current_phase;
 }
 
 #ifdef G_ENABLE_DEBUG
