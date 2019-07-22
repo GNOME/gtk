@@ -1274,22 +1274,26 @@ gdk_quartz_surface_moved_to_rect (GdkSurface   *surface,
 }
 
 static void
-gdk_quartz_surface_move_to_rect (GdkSurface         *surface,
-                                 const GdkRectangle *rect,
-                                 GdkGravity          rect_anchor,
-                                 GdkGravity          surface_anchor,
-                                 GdkAnchorHints      anchor_hints,
-                                 gint                rect_anchor_dx,
-                                 gint                rect_anchor_dy)
+gdk_quartz_surface_queue_relayout (GdkSurface         *surface,
+                                   gint                width,
+                                   gint                height,
+                                   const GdkRectangle *anchor_rect,
+                                   GdkGravity          rect_anchor,
+                                   GdkGravity          surface_anchor,
+                                   GdkAnchorHints      anchor_hints,
+                                   gint                rect_anchor_dx,
+                                   gint                rect_anchor_dy)
 {
-  gdk_surface_move_to_rect_helper (surface,
-                                   rect,
-                                   rect_anchor,
-                                   surface_anchor,
-                                   anchor_hints,
-                                   rect_anchor_dx,
-                                   rect_anchor_dy,
-                                   gdk_quartz_surface_moved_to_rect);
+  gdk_surface_queue_lelayout_helper (surface,
+                                     width,
+                                     height,
+                                     anchor_rect,
+                                     rect_anchor,
+                                     surface_anchor,
+                                     anchor_hints,
+                                     rect_anchor_dx,
+                                     rect_anchor_dy,
+                                     gdk_quartz_surface_moved_to_rect);
 }
 
 /* Get the toplevel ordering from NSApp and update our own list. We do
@@ -2679,7 +2683,7 @@ gdk_surface_impl_quartz_class_init (GdkSurfaceImplQuartzClass *klass)
   impl_class->lower = gdk_surface_quartz_lower;
   impl_class->restack_toplevel = gdk_surface_quartz_restack_toplevel;
   impl_class->toplevel_resize = gdk_surface_quartz_toplevel_resize;
-  impl_class->move_to_rect = gdk_surface_quartz_move_to_rect;
+  impl_class->queue_relayout = gdk_surface_quartz_queue_relayout;
   impl_class->get_geometry = gdk_surface_quartz_get_geometry;
   impl_class->get_root_coords = gdk_surface_quartz_get_root_coords;
   impl_class->get_device_state = gdk_surface_quartz_get_device_state;

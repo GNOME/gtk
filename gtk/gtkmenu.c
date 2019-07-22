@@ -857,12 +857,12 @@ gtk_menu_init (GtkMenu *menu)
 }
 
 static void
-moved_to_rect_cb (GdkSurface          *surface,
-                  const GdkRectangle *flipped_rect,
-                  const GdkRectangle *final_rect,
-                  gboolean            flipped_x,
-                  gboolean            flipped_y,
-                  GtkMenu            *menu)
+surface_relayout_finished (GdkSurface          *surface,
+                           const GdkRectangle *flipped_rect,
+                           const GdkRectangle *final_rect,
+                           gboolean            flipped_x,
+                           gboolean            flipped_y,
+                           GtkMenu            *menu)
 {
   g_signal_emit (menu,
                  menu_signals[POPPED_UP],
@@ -897,7 +897,9 @@ gtk_menu_destroy (GtkWidget *widget)
 
   if (priv->toplevel)
     {
-      g_signal_handlers_disconnect_by_func (priv->toplevel, moved_to_rect_cb, menu);
+      g_signal_handlers_disconnect_by_func (priv->toplevel,
+                                            surface_relayout_finished,
+                                            menu);
       gtk_widget_destroy (priv->toplevel);
     }
 
@@ -2458,18 +2460,21 @@ gtk_menu_position (GtkMenu *menu)
 
   gdk_surface_set_transient_for (toplevel, rect_surface);
 
-  g_signal_handlers_disconnect_by_func (toplevel, moved_to_rect_cb, menu);
+  g_signal_handlers_disconnect_by_func (toplevel, surface_relayout_finished, menu);
 
-  g_signal_connect (toplevel, "moved-to-rect", G_CALLBACK (moved_to_rect_cb),
+  g_signal_connect (toplevel, "relayout-finished",
+                    G_CALLBACK (surface_relayout_finished),
                     menu);
 
-  gdk_surface_move_to_rect (toplevel,
-                           &rect,
-                           rect_anchor,
-                           menu_anchor,
-                           anchor_hints,
-                           rect_anchor_dx,
-                           rect_anchor_dy);
+  gdk_surface_queue_relayout (toplevel,
+                              gdk_surface_get_width (toplevel),
+                              gdk_surface_get_height (toplevel),
+                              &rect,
+                              rect_anchor,
+                              menu_anchor,
+                              anchor_hints,
+                              rect_anchor_dx,
+                              rect_anchor_dy);
 }
 
 static void

@@ -226,13 +226,14 @@ gtk_popover_native_get_surface_transform (GtkNative *native,
 }
 
 static void
-move_to_rect (GtkPopover *popover)
+queue_popup_relayout (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GdkRectangle rect;
   GdkGravity parent_anchor;
   GdkGravity surface_anchor;
   GdkAnchorHints anchor_hints;
+  GtkRequisition req;
 
   gtk_widget_get_surface_allocation (priv->relative_to, &rect);
   if (priv->has_pointing_to)
@@ -309,46 +310,26 @@ move_to_rect (GtkPopover *popover)
       g_assert_not_reached ();
     }
 
-  gdk_surface_move_to_rect (priv->surface,
-                            &rect,
-                            parent_anchor,
-                            surface_anchor,
-                            anchor_hints,
-                            0, 0);
-}
-
-static void
-gtk_popover_move_resize (GtkPopover *popover)
-{
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
-  GtkRequisition req;
-
-  if (priv->surface)
-    {
-      gtk_widget_get_preferred_size (GTK_WIDGET (popover), NULL, &req);
-      gdk_surface_resize (priv->surface, req.width, req.height);
-      move_to_rect (popover);
-    }
+  gtk_widget_get_preferred_size (GTK_WIDGET (popover), NULL, &req);
+  gdk_surface_queue_relayout (priv->surface,
+                              req.width, req.height,
+                              &rect,
+                              parent_anchor,
+                              surface_anchor,
+                              anchor_hints,
+                              0, 0);
 }
 
 static void
 gtk_popover_native_check_resize (GtkNative *native)
 {
   GtkPopover *popover = GTK_POPOVER (native);
-  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *widget = GTK_WIDGET (popover);
 
   if (!_gtk_widget_get_alloc_needed (widget))
     gtk_widget_ensure_allocate (widget);
   else if (gtk_widget_get_visible (widget))
-    {
-      gtk_popover_move_resize (popover);
-      if (priv->surface)
-        gtk_widget_allocate (GTK_WIDGET (popover),
-                             gdk_surface_get_width (priv->surface),
-                             gdk_surface_get_height (priv->surface),
-                             -1, NULL);
-    }
+    queue_popup_relayout (popover);
 }
 
 
@@ -422,15 +403,20 @@ surface_event (GdkSurface *surface,
 }
 
 static void
-surface_moved_to_rect (GdkSurface   *surface,
-                       GdkRectangle *flipped_rect,
-                       GdkRectangle *final_rect,
-                       gboolean      flipped_x,
-                       gboolean      flipped_y,
-                       GtkWidget    *widget)
+surface_relayout_finished (GdkSurface   *surface,
+                           GdkRectangle *flipped_rect,
+                           GdkRectangle *final_rect,
+                           gboolean      flipped_x,
+                           gboolean      flipped_y,
+                           GtkWidget    *widget)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  gtk_widget_allocate (widget,
+                       gdk_surface_get_width (priv->surface),
+                       gdk_surface_get_height (priv->surface),
+                       -1, NULL);
 
   priv->final_rect = *final_rect;
 
@@ -452,6 +438,9 @@ surface_moved_to_rect (GdkSurface   *surface,
       g_assert_not_reached ();
       break;
     }
+
+  g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
+  gtk_widget_queue_draw (GTK_WIDGET (popover));
 }
 
 static void
@@ -607,7 +596,7 @@ gtk_popover_realize (GtkWidget *widget)
   g_signal_connect_swapped (priv->surface, "size-changed", G_CALLBACK (surface_size_changed), widget);
   g_signal_connect (priv->surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (priv->surface, "event", G_CALLBACK (surface_event), widget);
-  g_signal_connect (priv->surface, "moved-to-rect", G_CALLBACK (surface_moved_to_rect), widget);
+  g_signal_connect (priv->surface, "relayout-finished", G_CALLBACK (surface_relayout_finished), widget);
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->realize (widget);
 
@@ -629,7 +618,7 @@ gtk_popover_unrealize (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (priv->surface, surface_size_changed, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (priv->surface, surface_event, widget);
-  g_signal_handlers_disconnect_by_func (priv->surface, surface_moved_to_rect, widget);
+  g_signal_handlers_disconnect_by_func (priv->surface, surface_relayout_finished, widget);
   gdk_surface_set_widget (priv->surface, NULL);
   gdk_surface_destroy (priv->surface);
   g_clear_object (&priv->surface);
@@ -651,7 +640,7 @@ gtk_popover_show (GtkWidget *widget)
   _gtk_widget_set_visible_flag (widget, TRUE);
   gtk_css_node_validate (gtk_widget_get_css_node (widget));
   gtk_widget_realize (widget);
-  gtk_popover_native_check_resize (GTK_NATIVE (widget));
+  queue_popup_relayout (popover);
   gtk_widget_map (widget);
 
   if (priv->autohide)
@@ -686,8 +675,8 @@ surface_transform_changed_cb (GtkWidget               *widget,
   GtkPopover *popover = user_data;
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
 
-  move_to_rect (popover);
-  g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
+  if (priv->surface)
+    queue_popup_relayout (popover);
 
   return G_SOURCE_CONTINUE;
 }
@@ -702,7 +691,7 @@ gtk_popover_map (GtkWidget *widget)
 
   gdk_surface_show (priv->surface);
   gtk_widget_get_surface_allocation (priv->relative_to, &parent_rect);
-  move_to_rect (popover);
+  queue_popup_relayout (popover);
 
   priv->surface_transform_changed_cb =
     gtk_widget_add_surface_transform_changed_callback (priv->relative_to,
@@ -1091,8 +1080,6 @@ gtk_popover_size_allocate (GtkWidget *widget,
   GtkAllocation child_alloc;
   int tail_height = priv->has_arrow ? TAIL_HEIGHT : 0;
 
-  gtk_popover_move_resize (popover);
-
   switch (priv->final_position)
     {
     case GTK_POS_TOP:
@@ -1407,13 +1394,16 @@ gtk_popover_new (GtkWidget *relative_to)
 }
 
 static void
-size_changed (GtkWidget   *widget,
-              int          width,
-              int          height,
-              int          baseline,
-              GtkPopover  *popover)
+relative_to_size_changed (GtkWidget  *widget,
+                          int         width,
+                          int         height,
+                          int         baseline,
+                          GtkPopover *popover)
 {
-  gtk_popover_move_resize (popover);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+
+  if (priv->surface)
+    queue_popup_relayout (popover);
 }
 
 void
@@ -1480,7 +1470,9 @@ gtk_popover_set_relative_to (GtkPopover *popover,
 
   if (priv->relative_to)
     {
-      g_signal_handlers_disconnect_by_func (priv->relative_to, size_changed, popover);
+      g_signal_handlers_disconnect_by_func (priv->relative_to,
+                                            relative_to_size_changed,
+                                            popover);
       gtk_widget_unparent (GTK_WIDGET (popover));
     }
 
@@ -1488,7 +1480,8 @@ gtk_popover_set_relative_to (GtkPopover *popover,
 
   if (priv->relative_to)
     {
-      g_signal_connect (priv->relative_to, "size-allocate", G_CALLBACK (size_changed), popover);
+      g_signal_connect (priv->relative_to, "size-allocate",
+                        G_CALLBACK (relative_to_size_changed), popover);
       gtk_css_node_set_parent (gtk_widget_get_css_node (GTK_WIDGET (popover)),
                                gtk_widget_get_css_node (relative_to));
       gtk_widget_set_parent (GTK_WIDGET (popover), relative_to);

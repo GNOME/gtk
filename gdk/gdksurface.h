@@ -450,8 +450,10 @@ void          gdk_surface_resize                (GdkSurface     *surface,
                                                  gint           width,
                                                  gint           height);
 GDK_AVAILABLE_IN_ALL
-void          gdk_surface_move_to_rect          (GdkSurface         *surface,
-                                                 const GdkRectangle *rect,
+void          gdk_surface_queue_relayout        (GdkSurface         *surface,
+                                                 gint                width,
+                                                 gint                height,
+                                                 const GdkRectangle *anchor_rect,
                                                  GdkGravity          rect_anchor,
                                                  GdkGravity          surface_anchor,
                                                  GdkAnchorHints      anchor_hints,
