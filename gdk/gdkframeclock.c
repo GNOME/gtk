@@ -704,6 +704,12 @@ _gdk_frame_clock_emit_resume_events (GdkFrameClock *frame_clock)
 }
 
 GdkFrameClockPhase
+_gdk_frame_clock_get_requested_phases (GdkFrameClock *clock)
+{
+  return GDK_FRAME_CLOCK_GET_CLASS (clock)->get_requested_phases (clock);
+}
+
+GdkFrameClockPhase
 _gdk_frame_clock_get_current_phase (GdkFrameClock *frame_clock)
 {
   return frame_clock->priv->current_phase;
