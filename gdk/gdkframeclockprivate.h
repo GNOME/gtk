@@ -126,6 +126,8 @@ void _gdk_frame_clock_emit_paint         (GdkFrameClock *frame_clock);
 void _gdk_frame_clock_emit_after_paint   (GdkFrameClock *frame_clock);
 void _gdk_frame_clock_emit_resume_events (GdkFrameClock *frame_clock);
 
+GdkFrameClockPhase _gdk_frame_clock_get_current_phase (GdkFrameClock *frame_clock);
+
 G_END_DECLS
 
 #endif /* __GDK_FRAME_CLOCK_PRIVATE_H__ */
