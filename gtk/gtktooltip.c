@@ -668,12 +668,14 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   gtk_window_set_transient_for (GTK_WINDOW (tooltip->current_window),
                                 GTK_WINDOW (toplevel));
 
-  gdk_surface_move_to_rect (surface,
-                            &anchor_rect,
-                            GDK_GRAVITY_SOUTH,
-                            GDK_GRAVITY_NORTH,
-                            GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X,
-                            rect_anchor_dx, 0);
+  gdk_surface_queue_relayout (surface,
+                              gdk_surface_get_width (surface),
+                              gdk_surface_get_height (surface),
+                              &anchor_rect,
+                              GDK_GRAVITY_SOUTH,
+                              GDK_GRAVITY_NORTH,
+                              GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X,
+                              rect_anchor_dx, 0);
   gtk_widget_show (GTK_WIDGET (tooltip->current_window));
 }
 
