@@ -3027,7 +3027,7 @@ treeview.view check,
 treeview.view radio {
   &:selected {
     &:focus, & {
-      color: $fg_color;
+      color: $checkradio_fg_color;
 
       @if $variant == 'light' { border-color: $selected_borders_color; }
     }
