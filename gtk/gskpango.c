@@ -187,79 +187,6 @@ gsk_pango_renderer_draw_trapezoid (PangoRenderer   *renderer,
   cairo_destroy (cr);
 }
 
-/* Draws an error underline that looks like one of:
- *              H       E                H
- *     /\      /\      /\        /\      /\               -
- *   A/  \    /  \    /  \     A/  \    /  \              |
- *    \   \  /    \  /   /D     \   \  /    \             |
- *     \   \/  C   \/   /        \   \/   C  \            | height = HEIGHT_SQUARES * square
- *      \      /\  F   /          \  F   /\   \           |
- *       \    /  \    /            \    /  \   \G         |
- *        \  /    \  /              \  /    \  /          |
- *         \/      \/                \/      \/           -
- *         B                         B
- *         |---|
- *       unit_width = (HEIGHT_SQUARES - 1) * square
- *
- * The x, y, width, height passed in give the desired bounding box;
- * x/width are adjusted to make the underline a integer number of units
- * wide.
- */
-#define HEIGHT_SQUARES 2.5
-
-static void
-draw_error_underline (cairo_t *cr,
-                      double   x,
-                      double   y,
-                      double   width,
-                      double   height)
-{
-  double square = height / HEIGHT_SQUARES;
-  double unit_width = (HEIGHT_SQUARES - 1) * square;
-  double double_width = 2 * unit_width;
-  int width_units = (width + unit_width / 2) / unit_width;
-  double y_top, y_bottom;
-  double x_left, x_middle, x_right;
-  int i;
-
-  x += (width - width_units * unit_width) / 2;
-
-  y_top = y;
-  y_bottom = y + height;
-
-  /* Bottom of squiggle */
-  x_middle = x + unit_width;
-  x_right  = x + double_width;
-  cairo_move_to (cr, x - square / 2, y_top + square / 2); /* A */
-  for (i = 0; i < width_units-2; i += 2)
-    {
-      cairo_line_to (cr, x_middle, y_bottom); /* B */
-      cairo_line_to (cr, x_right, y_top + square); /* C */
-
-      x_middle += double_width;
-      x_right  += double_width;
-    }
-  cairo_line_to (cr, x_middle, y_bottom); /* B */
-
-  if (i + 1 == width_units)
-    cairo_line_to (cr, x_middle + square / 2, y_bottom - square / 2); /* G */
-  else if (i + 2 == width_units) {
-    cairo_line_to (cr, x_right + square / 2, y_top + square / 2); /* D */
-    cairo_line_to (cr, x_right, y_top); /* E */
-  }
-
-  /* Top of squiggle */
-  x_left = x_middle - unit_width;
-  for (; i >= 0; i -= 2)
-    {
-      cairo_line_to (cr, x_middle, y_bottom - square); /* F */
-      cairo_line_to (cr, x_left, y_top);   /* H */
-
-      x_left   -= double_width;
-      x_middle -= double_width;
-    }
-}
-
 static void
 gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
                                          int            x,
@@ -267,22 +194,61 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
                                          int            width,
                                          int            height)
 {
+  GdkRGBA rgba;
+  double xx, yy, ww, hh;
+  double hs;
+  double e, o;
+
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
-  cairo_t *cr;
 
-  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
+  xx = (double)x / PANGO_SCALE;
+  yy = (double)y / PANGO_SCALE;
+  ww = (double)width / PANGO_SCALE;
+  hh = (double)height / PANGO_SCALE;
+  hs = hh / M_SQRT2;
 
-  set_color (crenderer, PANGO_RENDER_PART_UNDERLINE, cr);
+  e = fmod (ww - 2 * hs * 2/5, hs * 3/5);
 
-  cairo_new_path (cr);
+#if 0
+  gdk_rgba_parse (&rgba, "yellow");
+  gtk_snapshot_append_color (crenderer->snapshot, &rgba,
+                             &GRAPHENE_RECT_INIT (xx, yy, ww, hh));
+#endif
 
-  draw_error_underline (cr,
-                        (double)x / PANGO_SCALE, (double)y / PANGO_SCALE,
-                        (double)width / PANGO_SCALE, (double)height / PANGO_SCALE);
 
-  cairo_fill (cr);
+  get_color (crenderer, PANGO_RENDER_PART_UNDERLINE, &rgba);
+  gtk_snapshot_save (crenderer->snapshot);
+  gtk_snapshot_translate (crenderer->snapshot,
+                          &GRAPHENE_POINT_INIT (xx, yy));
 
-  cairo_destroy (cr);
+  gtk_snapshot_rotate (crenderer->snapshot, 45);
+  gtk_snapshot_translate (crenderer->snapshot,
+                          &GRAPHENE_POINT_INIT (e / 2 + hs * 2/5,
+                                                - hs * 2/5));
+
+  xx = yy = o = 0;
+  while (1)
+    {
+      if (o + hs * 7/5 >= ww)
+        break;
+
+      gtk_snapshot_append_color (crenderer->snapshot, &rgba,
+                                 &GRAPHENE_RECT_INIT (xx, yy, hh, hh * 2/5));
+
+      xx += hh * 3/5;
+      yy -= hh * 3/5;
+      o += hs * 3/5;
+
+      if (o + hs * 7/5 >= ww)
+        break;
+
+      gtk_snapshot_append_color (crenderer->snapshot, &rgba,
+                                 &GRAPHENE_RECT_INIT (xx, yy, hh * 2/5, hh));
+
+      o += hs * 3/5;
+    }
+
+  gtk_snapshot_restore (crenderer->snapshot);
 }
 
 static void
