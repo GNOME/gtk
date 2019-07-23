@@ -3262,10 +3262,21 @@ static void
 gtk_text_style_updated (GtkWidget *widget)
 {
   GtkText *self = GTK_TEXT (widget);
+  GtkStyleContext *context;
+  GtkCssStyleChange *change = NULL;
+
+  context = gtk_widget_get_style_context (widget);
+  change = gtk_style_context_get_change (context);
 
   GTK_WIDGET_CLASS (gtk_text_parent_class)->style_updated (widget);
 
   gtk_text_update_cached_style_values (self);
+
+  if (change == NULL ||
+      gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT |
+                                            GTK_CSS_AFFECTS_BACKGROUND |
+                                            GTK_CSS_AFFECTS_CONTENT))
+    gtk_text_queue_draw (GTK_WIDGET (self));
 }
 
 static void
