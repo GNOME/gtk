@@ -3276,7 +3276,7 @@ gtk_text_style_updated (GtkWidget *widget)
       gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT |
                                             GTK_CSS_AFFECTS_BACKGROUND |
                                             GTK_CSS_AFFECTS_CONTENT))
-    gtk_text_queue_draw (GTK_WIDGET (self));
+    gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
 static void
