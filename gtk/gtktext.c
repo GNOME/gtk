@@ -2190,9 +2190,6 @@ gtk_text_size_allocate (GtkWidget *widget,
                                 -1);
     }
 
-  /* Do this here instead of gtk_text_size_allocate() so it works
-   * inside spinbuttons, which don't chain up.
-   */
   if (gtk_widget_get_realized (widget))
     gtk_text_recompute (self);
 
