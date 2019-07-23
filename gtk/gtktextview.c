@@ -4573,11 +4573,15 @@ gtk_text_view_style_updated (GtkWidget *widget)
   style_context = gtk_widget_get_style_context (widget);
   change = gtk_style_context_get_change (style_context);
 
-  if ((change == NULL || gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT)) &&
+  if ((change == NULL ||
+       gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT |
+                                             GTK_CSS_AFFECTS_BACKGROUND |
+                                             GTK_CSS_AFFECTS_CONTENT)) &&
       priv->layout && priv->layout->default_style)
     {
       gtk_text_view_set_attributes_from_style (text_view,
                                                priv->layout->default_style);
+      gtk_text_layout_default_style_changed (priv->layout);
 
       ltr_context = gtk_widget_create_pango_context (widget);
       pango_context_set_base_dir (ltr_context, PANGO_DIRECTION_LTR);
