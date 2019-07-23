@@ -284,7 +284,6 @@ gtk/gtkswitch.c
 gtk/gtktextbuffer.c
 gtk/gtktext.c
 gtk/gtktextchild.c
-gtk/gtktextdisplay.c
 gtk/gtktexthandle.c
 gtk/gtktextiter.c
 gtk/gtktextlayout.c
