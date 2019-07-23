@@ -300,6 +300,8 @@ GtkTextLineDisplay* gtk_text_layout_get_line_display  (GtkTextLayout      *layou
                                                        gboolean            size_only);
 void                gtk_text_layout_free_line_display (GtkTextLayout      *layout,
                                                        GtkTextLineDisplay *display);
+GtkTextLineDisplay *gtk_text_line_display_ref         (GtkTextLineDisplay *display);
+void                gtk_text_line_display_unref       (GtkTextLineDisplay *display);
 
 void gtk_text_layout_get_line_at_y     (GtkTextLayout     *layout,
                                         GtkTextIter       *target_iter,

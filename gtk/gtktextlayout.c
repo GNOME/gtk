@@ -197,12 +197,7 @@ gtk_text_layout_dispose (GObject *object)
   g_clear_object (&layout->ltr_context);
   g_clear_object (&layout->rtl_context);
 
-  if (layout->one_display_cache)
-    {
-      GtkTextLineDisplay *tmp_display = layout->one_display_cache;
-      layout->one_display_cache = NULL;
-      gtk_text_layout_free_line_display (layout, tmp_display);
-    }
+  g_clear_pointer (&layout->one_display_cache, gtk_text_line_display_unref);
 
   if (layout->preedit_attrs != NULL)
     {
@@ -826,20 +821,17 @@ gtk_text_layout_invalidate_cache (GtkTextLayout *layout,
 {
   if (layout->one_display_cache && line == layout->one_display_cache->line)
     {
-      GtkTextLineDisplay *display = layout->one_display_cache;
-
       if (cursors_only)
 	{
-          if (display->cursors)
-            g_array_free (display->cursors, TRUE);
-	  display->cursors = NULL;
+          GtkTextLineDisplay *display = layout->one_display_cache;
+
+          g_clear_pointer (&display->cursors, g_array_unref);
 	  display->cursors_invalid = TRUE;
 	  display->has_block_cursor = FALSE;
 	}
       else
 	{
-	  layout->one_display_cache = NULL;
-	  gtk_text_layout_free_line_display (layout, display);
+          g_clear_pointer (&layout->one_display_cache, gtk_text_line_display_unref);
 	}
     }
 }
@@ -2287,19 +2279,17 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 	{
 	  if (!size_only)
             update_text_display_cursors (layout, line, layout->one_display_cache);
-	  return layout->one_display_cache;
+	  return gtk_text_line_display_ref (layout->one_display_cache);
 	}
       else
         {
-          GtkTextLineDisplay *tmp_display = layout->one_display_cache;
-          layout->one_display_cache = NULL;
-          gtk_text_layout_free_line_display (layout, tmp_display);
+          g_clear_pointer (&layout->one_display_cache, gtk_text_line_display_unref);
         }
     }
 
   DV (g_print ("creating one line display cache (%s)\n", G_STRLOC));
 
-  display = g_slice_new0 (GtkTextLineDisplay);
+  display = g_rc_box_new0 (GtkTextLineDisplay);
 
   display->size_only = size_only;
   display->line = line;
@@ -2619,7 +2609,9 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   if (tags != NULL)
     g_ptr_array_free (tags, TRUE);
 
-  layout->one_display_cache = display;
+  g_assert (layout->one_display_cache == NULL);
+
+  layout->one_display_cache = gtk_text_line_display_ref (display);
 
   if (saw_widget)
     allocate_child_widgets (layout, display);
@@ -2627,20 +2619,32 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   return display;
 }
 
+static void
+gtk_text_line_display_finalize (GtkTextLineDisplay *display)
+{
+  g_clear_object (&display->layout);
+  g_clear_pointer (&display->cursors, g_array_unref);
+}
+
+GtkTextLineDisplay *
+gtk_text_line_display_ref (GtkTextLineDisplay *display)
+{
+  return g_rc_box_acquire (display);
+}
+
+void
+gtk_text_line_display_unref (GtkTextLineDisplay *display)
+{
+  g_rc_box_release_full (display, (GDestroyNotify)gtk_text_line_display_finalize);
+}
+
+/* For compat until we switch away from this */
 void
 gtk_text_layout_free_line_display (GtkTextLayout      *layout,
                                    GtkTextLineDisplay *display)
 {
-  if (display != layout->one_display_cache)
-    {
-      if (display->layout)
-        g_object_unref (display->layout);
-
-      if (display->cursors)
-        g_array_free (display->cursors, TRUE);
-
-      g_slice_free (GtkTextLineDisplay, display);
-    }
+  if (display != NULL)
+    gtk_text_line_display_unref (display);
 }
 
 /* Functions to convert iter <=> index for the line of a GtkTextLineDisplay
