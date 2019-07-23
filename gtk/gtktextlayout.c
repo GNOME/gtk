@@ -1182,7 +1182,7 @@ gtk_text_layout_real_wrap (GtkTextLayout   *layout,
   pango_layout_get_pixel_extents (display->layout, &ink_rect, &logical_rect);
   line_data->top_ink = MAX (0, logical_rect.x - ink_rect.x);
   line_data->bottom_ink = MAX (0, logical_rect.x + logical_rect.width - ink_rect.x - ink_rect.width);
-  gtk_text_layout_free_line_display (layout, display);
+  gtk_text_line_display_unref (display);
 
   return line_data;
 }
@@ -2638,15 +2638,6 @@ gtk_text_line_display_unref (GtkTextLineDisplay *display)
   g_rc_box_release_full (display, (GDestroyNotify)gtk_text_line_display_finalize);
 }
 
-/* For compat until we switch away from this */
-void
-gtk_text_layout_free_line_display (GtkTextLayout      *layout,
-                                   GtkTextLineDisplay *display)
-{
-  if (display != NULL)
-    gtk_text_line_display_unref (display);
-}
-
 /* Functions to convert iter <=> index for the line of a GtkTextLineDisplay
  * taking into account the preedit string and invisible text if necessary.
  */
@@ -2820,7 +2811,7 @@ gtk_text_layout_get_iter_at_position (GtkTextLayout *layout,
 
   line_display_index_to_iter (layout, display, target_iter, byte_index, 0);
 
-  gtk_text_layout_free_line_display (layout, display);
+  gtk_text_line_display_unref (display);
 
   return inside;
 }
@@ -2893,7 +2884,7 @@ gtk_text_layout_get_cursor_locations (GtkTextLayout  *layout,
       weak_pos->height = pango_weak_pos.height / PANGO_SCALE;
     }
 
-  gtk_text_layout_free_line_display (layout, display);
+  gtk_text_line_display_unref (display);
 }
 
 /**
@@ -2952,7 +2943,8 @@ _gtk_text_layout_get_block_cursor (GtkTextLayout *layout,
       pos->y += line_top + display->top_margin;
     }
 
-  gtk_text_layout_free_line_display (layout, display);
+  gtk_text_line_display_unref (display);
+
   return block;
 }
 
@@ -3028,7 +3020,7 @@ gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
   rect->width = PANGO_PIXELS (pango_rect.width);
   rect->height = PANGO_PIXELS (pango_rect.height);
 
-  gtk_text_layout_free_line_display (layout, display);
+  gtk_text_line_display_unref (display);
 }
 
 /* FFIXX */
@@ -3089,7 +3081,7 @@ find_display_line_below (GtkTextLayout *layout,
       pango_layout_iter_free (layout_iter);
       
       line_top += display->bottom_margin;
-      gtk_text_layout_free_line_display (layout, display);
+      gtk_text_line_display_unref (display);
 
       next = _gtk_text_line_next_excluding_last (line);
       if (!next)
@@ -3160,7 +3152,7 @@ find_display_line_above (GtkTextLayout *layout,
 
       pango_layout_iter_free (layout_iter);
       
-      gtk_text_layout_free_line_display (layout, display);
+      gtk_text_line_display_unref (display);
 
       line = _gtk_text_line_previous (line);
     }
@@ -3264,7 +3256,7 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
           goto out;
         }
 
-      gtk_text_layout_free_line_display (layout, display);
+      gtk_text_line_display_unref (display);
 
       line = prev_line;
       display = gtk_text_layout_get_line_display (layout, prev_line, FALSE);
@@ -3291,7 +3283,7 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
 
       while (prev_line)
         {
-          gtk_text_layout_free_line_display (layout, display);
+          gtk_text_line_display_unref (display);
 
           display = gtk_text_layout_get_line_display (layout, prev_line, FALSE);
 
@@ -3331,7 +3323,7 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
 
  out:
   
-  gtk_text_layout_free_line_display (layout, display);
+  gtk_text_line_display_unref (display);
 
   return
     !gtk_text_iter_equal (iter, &orig) &&
@@ -3402,7 +3394,7 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
 
     next:
       
-      gtk_text_layout_free_line_display (layout, display);
+      gtk_text_line_display_unref (display);
 
       line = _gtk_text_line_next_excluding_last (line);
     }
@@ -3468,7 +3460,7 @@ gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
       tmp_list = tmp_list->next;
     }
 
-  gtk_text_layout_free_line_display (layout, display);
+  gtk_text_line_display_unref (display);
 
   return
     !gtk_text_iter_equal (iter, &orig) &&
@@ -3510,7 +3502,7 @@ gtk_text_layout_iter_starts_line (GtkTextLayout       *layout,
           /* We're located on this line or the para delimiters before
            * it
            */
-          gtk_text_layout_free_line_display (layout, display);
+          gtk_text_line_display_unref (display);
           
           if (line_byte == layout_line->start_index)
             return TRUE;
@@ -3591,7 +3583,7 @@ gtk_text_layout_move_iter_to_x (GtkTextLayout *layout,
 
   pango_layout_iter_free (layout_iter);
   
-  gtk_text_layout_free_line_display (layout, display);
+  gtk_text_line_display_unref (display);
 }
 
 /**
@@ -3686,7 +3678,7 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
             }
           while (totally_invisible_line (layout, line, &lineiter));
           
- 	  gtk_text_layout_free_line_display (layout, display);
+          gtk_text_line_display_unref (display);
  	  display = gtk_text_layout_get_line_display (layout, line, FALSE);
           gtk_text_iter_forward_to_line_end (&lineiter);
           new_index = gtk_text_iter_get_visible_line_index (&lineiter);
@@ -3701,7 +3693,7 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
             }
           while (totally_invisible_line (layout, line, &lineiter));
 
- 	  gtk_text_layout_free_line_display (layout, display);
+          gtk_text_line_display_unref (display);
  	  display = gtk_text_layout_get_line_display (layout, line, FALSE);
           new_index = 0;
         }
@@ -3711,8 +3703,7 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
 	 gtk_text_iter_backward_char (iter);
     }
 
-  if (display)
-    gtk_text_layout_free_line_display (layout, display);
+  g_clear_pointer (&display, gtk_text_line_display_unref);
 
  done:
   
@@ -4119,7 +4110,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
       offset_y += line_display->height;
 
-      gtk_text_layout_free_line_display (layout, line_display);
+      gtk_text_line_display_unref (line_display);
 
       tmp_list = tmp_list->next;
     }
