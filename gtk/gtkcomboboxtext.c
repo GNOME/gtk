@@ -580,7 +580,7 @@ gtk_combo_box_text_remove_all (GtkComboBoxText *combo_box)
  * function will return its contents (which will not necessarily
  * be an item from the list).
  *
- * Returns: (transfer full): a newly allocated string containing the
+ * Returns: (nullable) (transfer full): a newly allocated string containing the
  *     currently active text. Must be freed with g_free().
  */
 gchar *
