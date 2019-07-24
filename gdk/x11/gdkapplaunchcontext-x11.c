@@ -302,7 +302,7 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
                                       0, NULL, NULL);
 
       display_name = get_display_name (files->data, fileinfo);
-      description = g_strdup_printf (_("Opening %s"), display_name);
+      description = g_strdup_printf (_("Opening “%s”"), display_name);
       g_free (display_name);
     }
   else
