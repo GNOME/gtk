@@ -289,7 +289,7 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
   files_count = g_list_length (files);
   if (files_count == 0)
     {
-      description = g_strdup_printf (_("Starting %s"), g_app_info_get_name (info));
+      description = g_strdup_printf (_("Starting “%s”"), g_app_info_get_name (info));
     }
   else if (files_count == 1)
     {
@@ -302,7 +302,7 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
                                       0, NULL, NULL);
 
       display_name = get_display_name (files->data, fileinfo);
-      description = g_strdup_printf (_("Opening %s"), display_name);
+      description = g_strdup_printf (_("Opening “%s”"), display_name);
       g_free (display_name);
     }
   else
