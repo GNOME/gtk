@@ -1649,6 +1649,9 @@ gtk_popover_get_position (GtkPopover *popover)
  * A modal popover will grab the keyboard focus on it when being
  * displayed. Clicking outside the popover area or pressing Esc will
  * dismiss the popover.
+ *
+ * Called this function on an already showing popup with a new autohide value
+ * different from the current one, will cause the popup to be hidden.
  **/
 void
 gtk_popover_set_autohide (GtkPopover *popover,
@@ -1664,6 +1667,8 @@ gtk_popover_set_autohide (GtkPopover *popover,
     return;
 
   priv->autohide = autohide;
+
+  gtk_widget_unrealize (GTK_WIDGET (popover));
 
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_AUTOHIDE]);
 }
