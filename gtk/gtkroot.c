@@ -50,9 +50,14 @@ gtk_root_default_get_display (GtkRoot *self)
   return gdk_display_get_default ();
 }
 
-
 static GtkConstraintSolver *
 gtk_root_default_get_constraint_solver (GtkRoot *self)
+{
+  return NULL;
+}
+
+static GtkAnimationManager *
+gtk_root_default_get_animation_manager (GtkRoot *self)
 {
   return NULL;
 }
@@ -62,6 +67,7 @@ gtk_root_default_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_root_default_get_display;
   iface->get_constraint_solver = gtk_root_default_get_constraint_solver;
+  iface->get_animation_manager = gtk_root_default_get_animation_manager;
 
   g_object_interface_install_property (iface,
       g_param_spec_object ("focus-widget",
@@ -99,6 +105,17 @@ gtk_root_get_constraint_solver (GtkRoot *self)
 
   iface = GTK_ROOT_GET_IFACE (self);
   return iface->get_constraint_solver (self);
+}
+
+GtkAnimationManager *
+gtk_root_get_animation_manager (GtkRoot *self)
+{
+  GtkRootInterface *iface;
+
+  g_return_val_if_fail (GTK_IS_ROOT (self), NULL);
+
+  iface = GTK_ROOT_GET_IFACE (self);
+  return iface->get_animation_manager (self);
 }
 
 /**
