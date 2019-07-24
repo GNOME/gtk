@@ -658,6 +658,9 @@ GDK_AVAILABLE_IN_ALL
 void       gdk_surface_thaw_updates        (GdkSurface    *surface);
 
 GDK_AVAILABLE_IN_ALL
+gboolean   gdk_surface_can_resize_now      (GdkSurface    *surface);
+
+GDK_AVAILABLE_IN_ALL
 void       gdk_surface_constrain_size      (GdkGeometry    *geometry,
                                             GdkSurfaceHints  flags,
                                             gint            width,
