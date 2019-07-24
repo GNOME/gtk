@@ -1401,7 +1401,7 @@ gdk_surface_is_toplevel_frozen (GdkSurface *surface)
   return surface->update_and_descendants_freeze_count > 0;
 }
 
-static void
+void
 gdk_surface_schedule_update (GdkSurface *surface)
 {
   GdkFrameClock *frame_clock;

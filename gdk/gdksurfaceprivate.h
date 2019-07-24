@@ -265,6 +265,8 @@ void gdk_surface_set_state (GdkSurface      *surface,
 typedef void (* GdkSurfaceRelayoutFinished) (GdkSurface   *surface,
                                              GdkRectangle  final_rect);
 
+void gdk_surface_schedule_update (GdkSurface *surface);
+
 void gdk_surface_queue_relayout_helper (GdkSurface                 *surface,
                                         gint                        width,
                                         gint                        height,
