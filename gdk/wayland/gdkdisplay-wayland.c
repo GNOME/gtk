@@ -427,6 +427,7 @@ gdk_registry_handle_global (void               *data,
   else if (strcmp (interface, "xdg_wm_base") == 0)
     {
       display_wayland->xdg_wm_base_id = id;
+      display_wayland->xdg_wm_base_version = version;
     }
   else if (strcmp (interface, "zxdg_shell_v6") == 0)
     {
@@ -655,7 +656,8 @@ _gdk_wayland_display_open (const gchar *display_name)
       display_wayland->xdg_wm_base =
         wl_registry_bind (display_wayland->wl_registry,
                           display_wayland->xdg_wm_base_id,
-                          &xdg_wm_base_interface, 1);
+                          &xdg_wm_base_interface,
+                          MIN (display_wayland->xdg_wm_base_version, 3));
       xdg_wm_base_add_listener (display_wayland->xdg_wm_base,
                                 &xdg_wm_base_listener,
                                 display_wayland);

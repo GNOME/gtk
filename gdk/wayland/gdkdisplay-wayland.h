@@ -89,6 +89,7 @@ struct _GdkWaylandDisplay
   guint32 serial;
 
   uint32_t xdg_wm_base_id;
+  int xdg_wm_base_version;
   uint32_t zxdg_shell_v6_id;
   GdkWaylandShellVariant shell_variant;
 
