@@ -8255,6 +8255,8 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
                               GtkTextView   *text_view)
 {
   gtk_text_view_commit_text (text_view, str);
+  gtk_text_view_reset_blink_time (text_view);
+  gtk_text_view_pend_cursor_blink (text_view);
 }
 
 static void
