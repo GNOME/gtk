@@ -257,6 +257,7 @@ struct _GdkSurfaceClass
                                            GdkGLContext   *share,
                                            GError        **error);
   gboolean     (* supports_edge_constraints)(GdkSurface    *surface);
+  gboolean     (* can_resize_now)         (GdkSurface     *surface);
 };
 
 void gdk_surface_set_state (GdkSurface      *surface,
