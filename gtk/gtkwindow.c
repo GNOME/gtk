@@ -283,6 +283,7 @@ typedef struct
   GList *foci;
 
   GtkConstraintSolver *constraint_solver;
+  GtkAnimationManager *animation_manager;
 } GtkWindowPrivate;
 
 #ifdef GDK_WINDOWING_X11
@@ -2367,6 +2368,23 @@ gtk_window_root_get_constraint_solver (GtkRoot *root)
   return priv->constraint_solver;
 }
 
+static GtkAnimationManager *
+gtk_window_root_get_animation_manager (GtkRoot *root)
+{
+  GtkWindow *self = GTK_WINDOW (root);
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (self);
+  GdkFrameClock *frame_clock;
+
+  if (priv->animation_manager == NULL)
+    priv->animation_manager = gtk_animation_manager_new ();
+
+  frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (self));
+  if (frame_clock != NULL)
+    gtk_animation_manager_set_frame_clock (priv->animation_manager, frame_clock);
+
+  return priv->animation_manager;
+}
+
 static void
 gtk_window_native_get_surface_transform (GtkNative *native,
                                          int       *x,
@@ -2396,6 +2414,7 @@ gtk_window_root_interface_init (GtkRootInterface *iface)
 {
   iface->get_display = gtk_window_root_get_display;
   iface->get_constraint_solver = gtk_window_root_get_constraint_solver;
+  iface->get_animation_manager = gtk_window_root_get_animation_manager;
 }
 
 static void
@@ -4738,6 +4757,7 @@ gtk_window_finalize (GObject *object)
       priv->mnemonics_display_timeout_id = 0;
     }
 
+  g_clear_object (&priv->animation_manager);
   g_clear_object (&priv->constraint_solver);
   g_clear_object (&priv->renderer);
 
