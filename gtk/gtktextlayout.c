@@ -1641,32 +1641,62 @@ add_text_attrs (GtkTextLayout      *layout,
                 gint                byte_count,
                 PangoAttrList      *attrs,
                 gint                start,
-                gboolean            size_only)
+                gboolean            size_only,
+                PangoAttribute    **last_font_attr,
+                PangoAttribute    **last_scale_attr,
+                PangoAttribute    **last_fallback_attr)
 {
   PangoAttribute *attr;
 
-  attr = pango_attr_font_desc_new (style->font);
-  attr->start_index = start;
-  attr->end_index = start + byte_count;
+  if (*last_font_attr &&
+      pango_font_description_equal (style->font, ((PangoAttrFontDesc*)*last_font_attr)->desc) &&
+      (*last_font_attr)->end_index >= start)
+    {
+      (*last_font_attr)->start_index = MIN ((*last_font_attr)->start_index, start);
+      (*last_font_attr)->end_index = MAX ((*last_font_attr)->end_index, start + byte_count);
+    }
+  else
+    {
+      attr = pango_attr_font_desc_new (style->font);
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
 
-  pango_attr_list_insert (attrs, attr);
+      pango_attr_list_insert (attrs, attr);
+      *last_font_attr = attr;
+    }
 
-  if (style->font_scale != 1.0)
+  if (*last_scale_attr &&
+      style->font_scale == ((PangoAttrFloat*)*last_scale_attr)->value &&
+      (*last_scale_attr)->end_index >= start)
+    {
+      (*last_scale_attr)->start_index = MIN ((*last_scale_attr)->start_index, start);
+      (*last_scale_attr)->end_index = MAX ((*last_scale_attr)->end_index, start + byte_count);
+    }
+  else if (style->font_scale != 1.0)
     {
       attr = pango_attr_scale_new (style->font_scale);
       attr->start_index = start;
       attr->end_index = start + byte_count;
 
       pango_attr_list_insert (attrs, attr);
+      *last_scale_attr = attr;
     }
 
-  if (style->no_fallback)
+  if (*last_fallback_attr &&
+      (!style->no_fallback) == ((PangoAttrInt*)*last_fallback_attr)->value &&
+      (*last_fallback_attr)->end_index >= start)
+    {
+      (*last_fallback_attr)->start_index = MIN ((*last_fallback_attr)->start_index, start);
+      (*last_fallback_attr)->end_index = MAX ((*last_fallback_attr)->end_index, start + byte_count);
+    }
+  else if (style->no_fallback)
     {
       attr = pango_attr_fallback_new (!style->no_fallback);
       attr->start_index = start;
       attr->end_index = start + byte_count;
 
       pango_attr_list_insert (attrs, attr);
+      *last_fallback_attr = attr;
     }
 
   if (style->letter_spacing != 0)
@@ -2269,7 +2299,10 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   gboolean initial_toggle_segments;
   gint h_margin;
   gint h_padding;
-  
+  PangoAttribute *last_font_attr = NULL;
+  PangoAttribute *last_scale_attr = NULL;
+  PangoAttribute *last_fallback_attr = NULL;
+
   g_return_val_if_fail (line != NULL, NULL);
 
   if (layout->one_display_cache)
@@ -2316,7 +2349,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
       base_dir = (layout->keyboard_direction == GTK_TEXT_DIR_LTR) ?
 	 PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL;
     }
-  
+
   /* Allocate space for flat text for buffer
    */
   text_allocated = _gtk_text_line_byte_count (line);
@@ -2413,7 +2446,10 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                                      attrs, layout_byte_offset - bytes,
                                      size_only, TRUE);
                   add_text_attrs (layout, style, bytes, attrs,
-                                  layout_byte_offset - bytes, size_only);
+                                  layout_byte_offset - bytes, size_only,
+                                  &last_font_attr,
+                                  &last_scale_attr,
+                                  &last_fallback_attr);
                 }
               else if (seg->type == &gtk_text_texture_type)
                 {
