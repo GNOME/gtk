@@ -1147,6 +1147,18 @@ typedef enum {
   GTK_CONSTRAINT_VFL_PARSER_ERROR_INVALID_RELATION
 } GtkConstraintVflParserError;
 
+/**
+ * GtkAnimationDirection:
+ * @GTK_ANIMATION_DIRECTION_FORWARD:
+ * @GTK_ANIMATION_DIRECTION_BACKWARD:
+ *
+ * The direction of the animation.
+ */
+typedef enum {
+  GTK_ANIMATION_DIRECTION_FORWARD,
+  GTK_ANIMATION_DIRECTION_BACKWARD
+} GtkAnimationDirection;
+
 typedef enum {
   GTK_STEP_POSITION_JUMP_START,
   GTK_STEP_POSITION_JUMP_END,
