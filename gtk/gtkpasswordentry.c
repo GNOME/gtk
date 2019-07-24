@@ -193,12 +193,6 @@ gtk_password_entry_dispose (GObject *object)
 }
 
 static void
-gtk_password_entry_finalize (GObject *object)
-{
-  G_OBJECT_CLASS (gtk_password_entry_parent_class)->finalize (object);
-}
-
-static void
 gtk_password_entry_set_property (GObject      *object,
                                  guint         prop_id,
                                  const GValue *value,
@@ -380,7 +374,6 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->dispose = gtk_password_entry_dispose;
-  object_class->finalize = gtk_password_entry_finalize;
   object_class->get_property = gtk_password_entry_get_property;
   object_class->set_property = gtk_password_entry_set_property;
 
