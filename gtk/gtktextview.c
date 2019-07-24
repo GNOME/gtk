@@ -5674,7 +5674,8 @@ static gboolean blink_cb (GtkWidget     *widget,
 
 
 static void
-add_blink_timeout (GtkTextView *self)
+add_blink_timeout (GtkTextView *self,
+                   gboolean     delay)
 {
   GtkTextViewPrivate *priv = self->priv;
   BlinkData *data;
@@ -5687,6 +5688,8 @@ add_blink_timeout (GtkTextView *self)
 
   data = g_new (BlinkData, 1);
   data->start = priv->blink_start_time;
+  if (delay)
+    data->start += blink_time * 1000 / 2;
   data->end = data->start + blink_time * 1000;
 
   priv->blink_tick = gtk_widget_add_tick_callback (GTK_WIDGET (self),
@@ -5728,16 +5731,14 @@ blink_cb (GtkWidget     *widget,
           GdkFrameClock *clock,
           gpointer       user_data)
 {
-  GtkTextView *text_view;
-  GtkTextViewPrivate *priv;
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+  GtkTextViewPrivate *priv = text_view->priv;
+  BlinkData *data = user_data;
   gint blink_timeout;
   gint blink_time;
   guint64 now;
   float phase;
-  BlinkData *data = user_data;
-
-  text_view = GTK_TEXT_VIEW (widget);
-  priv = text_view->priv;
+  float  alpha;
 
   if (!gtk_widget_has_focus (GTK_WIDGET (text_view)))
     {
@@ -5769,15 +5770,19 @@ blink_cb (GtkWidget     *widget,
 
   phase = (now - data->start) / (float) (data->end - data->start);
 
-  priv->cursor_alpha = blink_alpha (phase);
-
   if (now >= data->end)
     {
       data->start = data->end;
       data->end = data->start + blink_time * 1000;
     }
 
-  gtk_widget_queue_draw (widget);
+  alpha = blink_alpha (phase);
+
+  if (priv->cursor_alpha != alpha)
+    {
+      priv->cursor_alpha = alpha;
+      gtk_widget_queue_draw (widget);
+    }
 
   return G_SOURCE_CONTINUE;
 }
@@ -5797,7 +5802,7 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
   if (cursor_blinks (text_view))
     {
       if (!priv->blink_tick)
-        add_blink_timeout (text_view);
+        add_blink_timeout (text_view, FALSE);
     }
   else
     {
@@ -5812,7 +5817,7 @@ gtk_text_view_pend_cursor_blink (GtkTextView *text_view)
   if (cursor_blinks (text_view))
     {
       remove_blink_timeout (text_view);
-      add_blink_timeout (text_view);
+      add_blink_timeout (text_view, TRUE);
     }
 }
 
@@ -8250,6 +8255,8 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
                               GtkTextView   *text_view)
 {
   gtk_text_view_commit_text (text_view, str);
+  gtk_text_view_reset_blink_time (text_view);
+  gtk_text_view_pend_cursor_blink (text_view);
 }
 
 static void
