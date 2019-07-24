@@ -470,6 +470,8 @@ gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
 
   g_return_if_fail (GTK_IS_PASSWORD_ENTRY (entry));
 
+  show_peek_icon = !!show_peek_icon;
+
   if (show_peek_icon == (priv->peek_icon != NULL))
     return;
 
