@@ -23,6 +23,7 @@ gtk_private_sources = files([
   'gtkactionobservable.c',
   'gtkactionobserver.c',
   'gtkallocatedbitmask.c',
+  'gtkanimationmanager.c',
   'gtkapplicationaccels.c',
   'gtkapplicationimpl.c',
   'gtkbookmarksmanager.c',
