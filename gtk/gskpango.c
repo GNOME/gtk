@@ -86,16 +86,11 @@ set_color (GskPangoRenderer *crenderer,
 }
 
 static void
-gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
-                                     const char           *text,
-                                     int                   text_len,
-                                     PangoGlyphString     *glyphs,
-                                     cairo_text_cluster_t *clusters,
-                                     int                   num_clusters,
-                                     gboolean              backward,
-                                     PangoFont            *font,
-                                     int                   x,
-                                     int                   y)
+gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
+                                    const char     *text,
+                                    PangoGlyphItem *glyph_item,
+                                    int             x,
+                                    int             y)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
   GdkRGBA color;
@@ -103,34 +98,11 @@ gsk_pango_renderer_show_text_glyphs (PangoRenderer        *renderer,
   get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &color);
 
   gtk_snapshot_append_text (crenderer->snapshot,
-                            font,
-                            glyphs,
+                            glyph_item->item->analysis.font,
+                            glyph_item->glyphs,
                             &color,
                             (float) x / PANGO_SCALE,
                             (float) y / PANGO_SCALE);
-}
-
-static void
-gsk_pango_renderer_draw_glyphs (PangoRenderer    *renderer,
-                                PangoFont        *font,
-                                PangoGlyphString *glyphs,
-                                int               x,
-                                int               y)
-{
-  gsk_pango_renderer_show_text_glyphs (renderer, NULL, 0, glyphs, NULL, 0, FALSE, font, x, y);
-}
-
-static void
-gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
-                                    const char     *text,
-                                    PangoGlyphItem *glyph_item,
-                                    int             x,
-                                    int             y)
-{
-  PangoFont *font = glyph_item->item->analysis.font;
-  PangoGlyphString *glyphs = glyph_item->glyphs;
-
-  gsk_pango_renderer_show_text_glyphs (renderer, NULL, 0, glyphs, NULL, 0, FALSE, font, x, y);
 }
 
 static void
@@ -416,7 +388,6 @@ gsk_pango_renderer_class_init (GskPangoRendererClass *klass)
 {
   PangoRendererClass *renderer_class = PANGO_RENDERER_CLASS (klass);
 
-  renderer_class->draw_glyphs = gsk_pango_renderer_draw_glyphs;
   renderer_class->draw_glyph_item = gsk_pango_renderer_draw_glyph_item;
   renderer_class->draw_rectangle = gsk_pango_renderer_draw_rectangle;
   renderer_class->draw_trapezoid = gsk_pango_renderer_draw_trapezoid;
