@@ -1650,6 +1650,8 @@ gtk_popover_set_autohide (GtkPopover *popover,
 
   priv->autohide = autohide;
 
+  gtk_widget_unrealize (GTK_WIDGET (popover));
+
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_AUTOHIDE]);
 }
 
