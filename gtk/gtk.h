@@ -232,6 +232,7 @@
 #include <gtk/gtktexttag.h>
 #include <gtk/gtktexttagtable.h>
 #include <gtk/gtktextview.h>
+#include <gtk/gtktimingfunction.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktoggletoolbutton.h>
 #include <gtk/gtktoolbar.h>
