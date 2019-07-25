@@ -370,6 +370,7 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
         int i;
         guint count;
         guint texture_index;
+        gint x_position;
         GskVulkanRenderer *renderer = GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render));
 
         if (font_has_color_glyphs (font))
@@ -402,11 +403,17 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
         op.text.texture_index = G_MAXUINT;
         op.text.scale = self->scale_factor;
 
+        x_position = 0;
         for (i = 0, count = 0; i < num_glyphs; i++)
           {
             const PangoGlyphInfo *gi = &glyphs[i];
 
-            texture_index = gsk_vulkan_renderer_cache_glyph (renderer, (PangoFont *)font, gi->glyph, op.text.scale);
+            texture_index = gsk_vulkan_renderer_cache_glyph (renderer,
+                                                             (PangoFont *)font,
+                                                             gi->glyph,
+                                                             x_position + gi->geometry.x_offset,
+                                                             gi->geometry.y_offset,
+                                                             op.text.scale);
             if (op.text.texture_index == G_MAXUINT)
               op.text.texture_index = texture_index;
             if (texture_index != op.text.texture_index)
@@ -421,6 +428,8 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
               }
             else
               count++;
+
+            x_position += gi->geometry.width;
           }
 
         if (op.text.texture_index != G_MAXUINT && count != 0)
