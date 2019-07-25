@@ -32,6 +32,7 @@ update_image (void)
   PangoFontDescription *desc;
   PangoLayout *layout;
   PangoRectangle ink, logical;
+  int baseline;
   cairo_surface_t *surface;
   cairo_t *cr;
   GdkPixbuf *pixbuf;
@@ -40,6 +41,7 @@ update_image (void)
   cairo_font_options_t *fopt;
   cairo_hint_style_t hintstyle;
   cairo_hint_metrics_t hintmetrics;
+  int i;
 
   if (!context)
     context = gtk_widget_create_pango_context (image);
@@ -77,19 +79,64 @@ update_image (void)
       pango_layout_set_font_description (layout, desc);
       pango_layout_set_text (layout, text, -1);
       pango_layout_get_extents (layout, &ink, &logical);
+      baseline = pango_layout_get_baseline (layout);
 
-      pango_extents_to_pixels (&logical, NULL);
+      pango_extents_to_pixels (&ink, NULL);
 
-      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, logical.width, logical.height);
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, ink.width + 20, ink.height + 20);
       cr = cairo_create (surface);
       cairo_set_source_rgb (cr, 1, 1, 1);
       cairo_paint (cr);
 
       cairo_set_source_rgb (cr, 0, 0, 0);
+      cairo_move_to (cr, 10, 10);
       pango_cairo_show_layout (cr, layout);
 
       cairo_destroy (cr);
       g_object_unref (layout);
+
+      pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, cairo_image_surface_get_width (surface), cairo_image_surface_get_height (surface));
+      pixbuf2 = gdk_pixbuf_scale_simple (pixbuf, gdk_pixbuf_get_width (pixbuf) * scale, gdk_pixbuf_get_height (pixbuf) * scale, GDK_INTERP_NEAREST);
+
+      g_object_unref (pixbuf);
+      cairo_surface_destroy (surface);
+
+      surface = cairo_image_surface_create_for_data (gdk_pixbuf_get_pixels (pixbuf2),
+                                                     CAIRO_FORMAT_ARGB32,
+                                                     gdk_pixbuf_get_width (pixbuf2),
+                                                     gdk_pixbuf_get_height (pixbuf2),
+                                                     gdk_pixbuf_get_rowstride (pixbuf2));
+
+      cr = cairo_create (surface);
+      cairo_set_line_width (cr, 1);
+
+      cairo_set_source_rgba (cr, 0.2, 0, 0, 0.2);
+      for (i = 1; i < ink.height + 20; i++)
+        {
+          cairo_move_to (cr, 0, scale * i - 0.5);
+          cairo_line_to (cr, scale * (ink.width + 20), scale * i - 0.5);
+          cairo_stroke (cr);
+        }
+      for (i = 1; i < ink.width + 20; i++)
+        {
+          cairo_move_to (cr, scale * i - 0.5, 0);
+          cairo_line_to (cr, scale * i - 0.5, scale * (ink.height + 20));
+          cairo_stroke (cr);
+        }
+
+      cairo_set_source_rgba (cr, 0, 0, 1, 1);
+      cairo_rectangle (cr,
+                       scale * (10 + (double)logical.x / PANGO_SCALE) - 0.5,
+                       scale * (10 + (double)logical.y / PANGO_SCALE) - 0.5,
+                       scale * ((double)logical.width / PANGO_SCALE) + 1,
+                       scale * ((double)logical.height / PANGO_SCALE) + 1);
+      cairo_stroke (cr);
+      cairo_move_to (cr, scale * (10 + (double)logical.x / PANGO_SCALE) - 0.5,
+                         scale * (10 + baseline / PANGO_SCALE) - 0.5);
+      cairo_line_to (cr, scale * (10 + (double)(logical.x + logical.width) / PANGO_SCALE) + 1,
+                         scale * (10 + baseline / PANGO_SCALE) - 0.5);
+      cairo_stroke (cr);
+      cairo_surface_destroy (surface);
     }
   else
     {
@@ -135,17 +182,18 @@ update_image (void)
       cairo_destroy (cr);
       pango_layout_iter_free (iter);
       g_object_unref (layout);
+
+      pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, cairo_image_surface_get_width (surface), cairo_image_surface_get_height (surface));
+      pixbuf2 = gdk_pixbuf_scale_simple (pixbuf, gdk_pixbuf_get_width (pixbuf) * scale, gdk_pixbuf_get_height (pixbuf) * scale, GDK_INTERP_NEAREST);
+      g_object_unref (pixbuf);
+      cairo_surface_destroy (surface);
     }
 
-  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, cairo_image_surface_get_width (surface), cairo_image_surface_get_height (surface));
-  pixbuf2 = gdk_pixbuf_scale_simple (pixbuf, gdk_pixbuf_get_width (pixbuf) * scale, gdk_pixbuf_get_height (pixbuf) * scale, GDK_INTERP_NEAREST);
 
   gtk_picture_set_pixbuf (GTK_PICTURE (image), pixbuf2);
 
-  g_object_unref (pixbuf);
   g_object_unref (pixbuf2);
 
-  cairo_surface_destroy (surface);
   pango_font_description_free (desc);
 }
 
