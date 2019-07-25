@@ -37,6 +37,7 @@ SUBDIRS =	\
 
 EXTRA_DIST +=	\
 	config-msvc.mak		\
+	config-msvc.mak.in		\
 	detectenv-msvc.mak		\
 	generate-msvc.mak	\
 	gtk-introspection-msvc.mak	\

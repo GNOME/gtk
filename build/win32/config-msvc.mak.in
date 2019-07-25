@@ -29,6 +29,4 @@ GDBUS_CODEGEN = $(PREFIX)\bin\gdbus-codegen
 !endif
 
 # Please do not change anything beneath this line unless maintaining the NMake Makefiles
-GTK_MAJOR_VERSION = 3
-GTK_MINOR_VERSION = 24
-GTK_MICRO_VERSION = 10
+GTK_VERSION = @GTK_VERSION@

@@ -7,7 +7,7 @@
     <GenerateRequiredSourcesBase>cd ..
 set VCInstallDir=$(VCInstallDir)
 nmake -f generate-msvc.mak PREFIX=$(GlibEtcInstallRoot)</GenerateRequiredSourcesBase>
-    <GeneratedSources>..\..\..\config.h;..\..\..\gdk\gdkconfig.h</GeneratedSources>
+    <GeneratedGdkSources>..\..\..\config.h;..\..\..\gdk\gdkconfig.h;..\..\gdk\gdkversionmacros.h;..\..\..\gdk\gdkmarshalers.h;..\..\..\gdk\gdkmarshalers.c;..\..\..\gdk\gdkresources.h;..\..\..\gdk\gdkresources.c</GeneratedGdkSources>
     <GDbusCodeGenCmd>c:\vs$(VSVer).0\$(Platform)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml</GDbusCodeGenCmd>
     <GenerateGtkDbusBuiltSources>cd ..\..\..\gtk &amp; $(PythonDir)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)</GenerateGtkDbusBuiltSources>
     <CopyGtkWin32RC>copy ..\..\..\gtk\gtk-win32.rc.body ..\..\..\gtk\gtk-win32.rc</CopyGtkWin32RC>
@@ -28,8 +28,8 @@ del ..\..\..\gtk\gtktypefuncs.combined.c ..\..\..\gtk\gtktypefuncs.preproc.c
     <BuildMacro Include="GenerateRequiredSourcesBase">
       <Value>$(GenerateRequiredSourcesBase)</Value>
     </BuildMacro>
-    <BuildMacro Include="GeneratedSources">
-      <Value>$(GeneratedSources)</Value>
+    <BuildMacro Include="GeneratedGdkSources">
+      <Value>$(GeneratedGdkSources)</Value>
     </BuildMacro>
     <BuildMacro Include="GDbusCodeGenCmd">
       <Value>$(GDbusCodeGenCmd)</Value>

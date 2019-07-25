@@ -10,8 +10,8 @@
 		Value="cd ..&#x0D;&#x0A;set VCInstallDir=$(VCInstallDir)&#x0D;&#x0A;nmake -f generate-msvc.mak PREFIX=$(GlibEtcInstallRoot)"
 	/>
 	<UserMacro
-		Name="GeneratedSources"
-		Value="..\..\..\config.h;..\..\..\gdk\gdkconfig.h"
+		Name="GeneratedGdkSources"
+		Value="..\..\..\config.h;..\..\..\gdk\gdkconfig.h;..\..\gdk\gdkversionmacros.h;..\..\..\gdk\gdkmarshalers.h;..\..\..\gdk\gdkmarshalers.c;..\..\..\gdk\gdkresources.h;..\..\..\gdk\gdkresources.c"
 	/>
 	<UserMacro
 		Name="GDbusCodeGenCmd"
