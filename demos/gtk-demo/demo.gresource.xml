@@ -174,6 +174,7 @@
     <file>foreigndrawing.c</file>
     <file>font_features.c</file>
     <file>fontplane.c</file>
+    <file>fontrendering.c</file>
     <file>gestures.c</file>
     <file>glarea.c</file>
     <file>headerbar.c</file>
@@ -280,6 +281,9 @@
   </gresource>
   <gresource prefix="/fixed">
     <file>fixed.css</file>
+  </gresource>
+  <gresource prefix="/fontrendering">
+    <file>fontrendering.ui</file>
   </gresource>
   <gresource prefix="/org/gtk/Demo4">
     <file>icons/16x16/actions/application-exit.png</file>
