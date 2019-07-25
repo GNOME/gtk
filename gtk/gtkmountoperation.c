@@ -708,23 +708,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   priv->pim_entry = NULL;
   if (priv->ask_flags & G_ASK_PASSWORD_TCRYPT)
     {
-      GtkWidget *volume_type_label;
       GtkWidget *volume_type_box;
-
-      volume_type_label = gtk_label_new (_("Volume type"));
-      gtk_widget_set_halign (volume_type_label, GTK_ALIGN_END);
-      gtk_widget_set_hexpand (volume_type_label, FALSE);
-      gtk_grid_attach (GTK_GRID (grid), volume_type_label, 0, rows, 1, 1);
-      priv->user_widgets = g_list_prepend (priv->user_widgets, volume_type_label);
-
-      volume_type_box =  gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
-      gtk_grid_attach (GTK_GRID (grid), volume_type_box, 1, rows++, 1, 1);
+      volume_type_box =  gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+      gtk_grid_attach (GTK_GRID (grid), volume_type_box, 0, rows++, 2, 1);
       priv->user_widgets = g_list_prepend (priv->user_widgets, volume_type_box);
 
-      priv->tcrypt_hidden_toggle = gtk_check_button_new_with_mnemonic (_("_Hidden"));
+      priv->tcrypt_hidden_toggle = gtk_check_button_new_with_mnemonic (_("_Hidden Volume"));
       gtk_container_add (GTK_CONTAINER (volume_type_box), priv->tcrypt_hidden_toggle);
 
-      priv->tcrypt_system_toggle = gtk_check_button_new_with_mnemonic (_("_Windows system"));
+      priv->tcrypt_system_toggle = gtk_check_button_new_with_mnemonic (_("_Windows System Volume"));
       gtk_container_add (GTK_CONTAINER (volume_type_box), priv->tcrypt_system_toggle);
 
       priv->pim_entry = table_add_entry (operation, rows++, _("_PIM"), NULL, operation);
