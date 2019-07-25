@@ -140,7 +140,7 @@ main (int argc, char **argv)
   GError *error = NULL;
   GOptionContext *context;
 
-  context = g_option_context_new ("- run GSK node tests");
+  context = g_option_context_new ("NODE REF - run GSK node tests");
   g_option_context_add_main_entries (context, options, NULL);
   g_option_context_set_ignore_unknown_options (context, TRUE);
 
@@ -149,8 +149,12 @@ main (int argc, char **argv)
       g_error ("Option parsing failed: %s\n", error->message);
       return 1;
     }
-
-  g_assert (argc == 3);
+  else if (argc != 3)
+    {
+      char *help = g_option_context_get_help (context, TRUE, NULL);
+      g_print ("%s", help);
+      return 1;
+    }
 
   gtk_init ();
 
