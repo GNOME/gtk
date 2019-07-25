@@ -30,6 +30,8 @@ typedef struct
 guint                  gsk_vulkan_renderer_cache_glyph      (GskVulkanRenderer *renderer,
                                                              PangoFont         *font,
                                                              PangoGlyph         glyph,
+                                                             int                x,
+                                                             int                y,
                                                              float              scale);
 
 GskVulkanImage *       gsk_vulkan_renderer_ref_glyph_image  (GskVulkanRenderer *self,
@@ -39,6 +41,8 @@ GskVulkanImage *       gsk_vulkan_renderer_ref_glyph_image  (GskVulkanRenderer *
 GskVulkanCachedGlyph * gsk_vulkan_renderer_get_cached_glyph (GskVulkanRenderer *self,
                                                              PangoFont         *font,
                                                              PangoGlyph         glyph,
+                                                             int                x,
+                                                             int                y,
                                                              float              scale);
 
 

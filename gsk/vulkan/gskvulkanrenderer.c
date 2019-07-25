@@ -362,15 +362,6 @@ gsk_vulkan_renderer_ref_texture_image (GskVulkanRenderer *self,
   return image;
 }
 
-guint
-gsk_vulkan_renderer_cache_glyph (GskVulkanRenderer *self,
-                                 PangoFont         *font,
-                                 PangoGlyph         glyph,
-                                 float              scale)
-{
-  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, TRUE, font, glyph, scale)->texture_index;
-}
-
 GskVulkanImage *
 gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
                                      GskVulkanUploader  *uploader,
@@ -379,13 +370,26 @@ gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
   return g_object_ref (gsk_vulkan_glyph_cache_get_glyph_image (self->glyph_cache, uploader, index));
 }
 
+guint
+gsk_vulkan_renderer_cache_glyph (GskVulkanRenderer *self,
+                                 PangoFont         *font,
+                                 PangoGlyph         glyph,
+                                 int                x,
+                                 int                y,
+                                 float              scale)
+{
+  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, TRUE, font, glyph, x, y, scale)->texture_index;
+}
+
 GskVulkanCachedGlyph *
 gsk_vulkan_renderer_get_cached_glyph (GskVulkanRenderer *self,
                                       PangoFont         *font,
                                       PangoGlyph         glyph,
+                                      int                x,
+                                      int                y,
                                       float              scale)
 {
-  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, FALSE, font, glyph, scale);
+  return gsk_vulkan_glyph_cache_lookup (self->glyph_cache, FALSE, font, glyph, x, y, scale);
 }
 
 /**
