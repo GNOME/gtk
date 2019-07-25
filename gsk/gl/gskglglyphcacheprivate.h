@@ -22,6 +22,8 @@ typedef struct
 {
   PangoFont *font;
   PangoGlyph glyph;
+  guint xshift;
+  guint yshift;
   guint scale; /* times 1024 */
 } GlyphCacheKey;
 
@@ -55,6 +57,8 @@ void                     gsk_gl_glyph_cache_begin_frame     (GskGLGlyphCache    
 gboolean                 gsk_gl_glyph_cache_lookup          (GskGLGlyphCache        *self,
                                                              PangoFont              *font,
                                                              PangoGlyph              glyph,
+                                                             int                     x,
+                                                             int                     y,
                                                              float                   scale,
                                                              GskGLCachedGlyph *cached_glyph_out);
 void                    gsk_gl_glyph_cache_get_texture      (GskGLDriver *driver,

@@ -82,6 +82,8 @@ glyph_cache_equal (gconstpointer v1, gconstpointer v2)
 
   return key1->font == key2->font &&
          key1->glyph == key2->glyph &&
+         key1->xshift == key2->xshift &&
+         key1->yshift == key2->yshift &&
          key1->scale == key2->scale;
 }
 
@@ -90,7 +92,7 @@ glyph_cache_hash (gconstpointer v)
 {
   const GlyphCacheKey *key = v;
 
-  return GPOINTER_TO_UINT (key->font) ^ key->glyph ^ key->scale;
+  return GPOINTER_TO_UINT (key->font) ^ key->glyph ^ (key->xshift << 24) ^ (key->yshift << 26) ^ key->scale;
 }
 
 static void
@@ -147,10 +149,10 @@ render_glyph (GlyphCacheKey    *key,
   glyph_info.glyph = key->glyph;
   glyph_info.geometry.width = value->draw_width * 1024;
   if (key->glyph & PANGO_GLYPH_UNKNOWN_FLAG)
-    glyph_info.geometry.x_offset = 0;
+    glyph_info.geometry.x_offset = key->xshift * 256;
   else
-    glyph_info.geometry.x_offset = - value->draw_x * 1024;
-  glyph_info.geometry.y_offset = - value->draw_y * 1024;
+    glyph_info.geometry.x_offset = key->xshift * 256 - value->draw_x * 1024;
+  glyph_info.geometry.y_offset = key->yshift * 256 - value->draw_y * 1024;
 
   glyph_string.num_glyphs = 1;
   glyph_string.glyphs = &glyph_info;
@@ -272,10 +274,14 @@ gsk_gl_glyph_cache_get_texture (GskGLDriver      *driver,
   upload_glyph (&key, value);
 }
 
+#define PHASE(x) ((x % PANGO_SCALE) * 4 / PANGO_SCALE)
+
 gboolean
 gsk_gl_glyph_cache_lookup (GskGLGlyphCache  *cache,
                            PangoFont        *font,
                            PangoGlyph        glyph,
+                           int               x,
+                           int               y,
                            float             scale,
                            GskGLCachedGlyph *cached_glyph_out)
 {
@@ -285,6 +291,8 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache  *cache,
                                &(GlyphCacheKey) {
                                  .font = font,
                                  .glyph = glyph,
+                                 .xshift = PHASE (x),
+                                 .yshift = PHASE (y),
                                  .scale = (guint)(scale * 1024)
                                });
 
