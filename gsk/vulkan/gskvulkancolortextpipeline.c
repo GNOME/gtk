@@ -119,12 +119,17 @@ gsk_vulkan_color_text_pipeline_collect_vertex_data (GskVulkanColorTextPipeline *
 
       if (gi->glyph != PANGO_GLYPH_EMPTY)
         {
-          double cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-          double cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
+          double cx = (x_position + gi->geometry.x_offset) / PANGO_SCALE;
+          double cy = gi->geometry.y_offset / PANGO_SCALE;
           GskVulkanColorTextInstance *instance = &instances[count];
           GskVulkanCachedGlyph *glyph;
 
-          glyph = gsk_vulkan_renderer_get_cached_glyph (renderer, font, gi->glyph, scale);
+          glyph = gsk_vulkan_renderer_get_cached_glyph (renderer,
+                                                        font,
+                                                        gi->glyph,
+                                                        x_position + gi->geometry.x_offset,
+                                                        gi->geometry.y_offset,
+                                                        scale);
 
           instance->tex_rect[0] = glyph->tx;
           instance->tex_rect[1] = glyph->ty;
