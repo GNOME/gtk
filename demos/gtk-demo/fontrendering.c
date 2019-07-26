@@ -72,6 +72,7 @@ update_image (void)
 
   pango_cairo_context_set_font_options (context, fopt);
   cairo_font_options_destroy (fopt);
+  pango_context_changed (context);
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (text_radio)))
     {
@@ -126,23 +127,24 @@ update_image (void)
         }
 
       cairo_set_source_rgba (cr, 0, 0, 1, 1);
+
       cairo_rectangle (cr,
-                       scale * (10 + logical.x / PANGO_SCALE) - 0.5,
-                       scale * (10 + logical.y / PANGO_SCALE) - 0.5,
-                       scale * (logical.width / PANGO_SCALE) + 1,
-                       scale * (logical.height / PANGO_SCALE) + 1);
+                       scale * (10 + pango_units_to_double (logical.x)) - 0.5,
+                       scale * (10 + pango_units_to_double (logical.y)) - 0.5,
+                       scale * pango_units_to_double (logical.width) + 1,
+                       scale * pango_units_to_double (logical.height) + 1);
       cairo_stroke (cr);
-      cairo_move_to (cr, scale * (10 + logical.x / PANGO_SCALE) - 0.5,
-                         scale * (10 + baseline / PANGO_SCALE) - 0.5);
-      cairo_line_to (cr, scale * (10 + (logical.x + logical.width) / PANGO_SCALE) + 1,
-                         scale * (10 + baseline / PANGO_SCALE) - 0.5);
+      cairo_move_to (cr, scale * (10 + pango_units_to_double (logical.x)) - 0.5,
+                         scale * (10 + pango_units_to_double (baseline)) - 0.5);
+      cairo_line_to (cr, scale * (10 + pango_units_to_double (logical.x + logical.width)) + 1,
+                         scale * (10 + pango_units_to_double (baseline)) - 0.5);
       cairo_stroke (cr);
       cairo_set_source_rgba (cr, 1, 0, 0, 1);
       cairo_rectangle (cr,
-                       scale * (10 + pink.x / PANGO_SCALE) + 0.5,
-                       scale * (10 + pink.y / PANGO_SCALE) + 0.5,
-                       scale * (pink.width / PANGO_SCALE) - 0.5,
-                       scale * (pink.height / PANGO_SCALE) - 0.5);
+                       scale * (10 + pango_units_to_double (pink.x)) + 0.5,
+                       scale * (10 + pango_units_to_double (pink.y)) + 0.5,
+                       scale * pango_units_to_double (pink.width) - 1,
+                       scale * pango_units_to_double (pink.height) - 1);
       cairo_stroke (cr);
       cairo_surface_destroy (surface);
     }
