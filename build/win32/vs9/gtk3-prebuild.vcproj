@@ -21,262 +21,127 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			ConfigurationType="10"
+			ConfigurationType="0"
 			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
+				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
+				Output="$(GeneratedGdkSources)"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			ConfigurationType="10"
+			ConfigurationType="0"
 			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
+				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
+				Output="$(GeneratedGdkSources)"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Debug_Broadway|Win32"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="10"
+			ConfigurationType="0"
 			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam)"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean all"
+				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean"
+				Output="$(GeneratedGdkSources)"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Debug_Broadway|x64"
-			ConfigurationType="10"
+			ConfigurationType="0"
 			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam)"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean all"
+				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean"
+				Output="$(GeneratedGdkSources)"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="10"
+			ConfigurationType="0"
 			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			WholeProgramOptimization="1"
 			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
+				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
+				Output="$(GeneratedGdkSources)"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			ConfigurationType="10"
+			ConfigurationType="0"
 			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			WholeProgramOptimization="1"
 			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
+				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
+				Output="$(GeneratedGdkSources)"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release_Broadway|Win32"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="10"
+			ConfigurationType="0"
 			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			WholeProgramOptimization="1"
 			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam)"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean all"
+				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean"
+				Output="$(GeneratedGdkSources)"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release_Broadway|x64"
-			ConfigurationType="10"
+			ConfigurationType="0"
 			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			WholeProgramOptimization="1"
 			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam)"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean all"
+				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean"
+				Output="$(GeneratedGdkSources)"
+			/>
 		</Configuration>
 	</Configurations>
-	<References>
-	</References>
-	<Files>
-		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
-			>
-			<File RelativePath="..\..\..\config.h.win32">
-				<FileConfiguration Name="Debug|Win32">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying config.h from config.h.win32..."
-						CommandLine="$(GenConfigH)"
-						Outputs="..\..\..\config.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Debug_Broadway|Win32">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying config.h from config.h.win32..."
-						CommandLine="$(GenConfigH)"
-						Outputs="..\..\..\config.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release|Win32">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying config.h from config.h.win32..."
-						CommandLine="$(GenConfigH)"
-						Outputs="..\..\..\config.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release_Broadway|Win32">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying config.h from config.h.win32..."
-						CommandLine="$(GenConfigH)"
-						Outputs="..\..\..\config.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Debug|x64">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying config.h from config.h.win32..."
-						CommandLine="$(GenConfigH)"
-						Outputs="..\..\..\config.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Debug_Broadway|x64">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying config.h from config.h.win32..."
-						CommandLine="$(GenConfigH)"
-						Outputs="..\..\..\config.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release|x64">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying config.h from config.h.win32..."
-						CommandLine="$(GenConfigH)"
-						Outputs="..\..\..\config.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release_Broadway|x64">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying config.h from config.h.win32..."
-						CommandLine="$(GenConfigH)"
-						Outputs="..\..\..\config.h"
-					/>
-				</FileConfiguration>
-			</File>
-			<File RelativePath="..\..\..\gdk\gdkconfig.h.win32">
-				<FileConfiguration Name="Debug|Win32">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying gdkconfig.h from gdkconfig.h.win32..."
-						CommandLine="$(GenGdkConfigHWin32)"
-						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_WIN32ONLY_BUILD;..\..\..\MSVC_$(ConfigurationName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release|Win32">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying gdkconfig.h from gdkconfig.h.win32..."
-						CommandLine="$(GenGdkConfigHWin32)"
-						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_WIN32ONLY_BUILD;..\..\..\MSVC_$(ConfigurationName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Debug|x64">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying gdkconfig.h from gdkconfig.h.win32..."
-						CommandLine="$(GenGdkConfigHWin32)"
-						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_WIN32ONLY_BUILD;..\..\..\MSVC_$(ConfigurationName)"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release|x64">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying gdkconfig.h from gdkconfig.h.win32..."
-						CommandLine="$(GenGdkConfigHWin32)"
-						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_WIN32ONLY_BUILD;..\..\..\MSVC_$(ConfigurationName)"
-					/>
-				</FileConfiguration>
-			</File>
-			<File RelativePath="..\..\..\gdk\gdkconfig.h.win32_broadway">
-				<FileConfiguration Name="Debug_Broadway|Win32">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying gdkconfig.h from gdkconfig.h.win32_broadway..."
-						CommandLine="$(GenGdkConfigHBroadway)"
-						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_BROADWAY_BUILD;..\..\..\MSVC_$(ConfigurationName)_Broadway"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release_Broadway|Win32">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying gdkconfig.h from gdkconfig.h.win32_broadway..."
-						CommandLine="$(GenGdkConfigHBroadway)"
-						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_BROADWAY_BUILD;..\..\..\MSVC_$(ConfigurationName)_Broadway"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Debug_Broadway|x64">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying gdkconfig.h from gdkconfig.h.win32_broadway..."
-						CommandLine="$(GenGdkConfigHBroadway)"
-						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_BROADWAY_BUILD;..\..\..\MSVC_$(ConfigurationName)_Broadway"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release_Broadway|x64">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying gdkconfig.h from gdkconfig.h.win32_broadway..."
-						CommandLine="$(GenGdkConfigHBroadway)"
-						Outputs="..\..\..\gdk\gdkconfig.h;..\..\..\GDK_BROADWAY_BUILD;..\..\..\MSVC_$(ConfigurationName)_Broadway"
-					/>
-				</FileConfiguration>
-			</File>
-			<File RelativePath="..\..\..\demos\gtk-demo\demos.h.win32">
-				<FileConfiguration Name="Debug|Win32">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying demos.h from demos.h.win32..."
-						CommandLine="$(CopyDemosH)"
-						Outputs="..\..\..\demos\gtk-demo\demos.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Debug_Broadway|Win32">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying demos.h from demos.h.win32..."
-						CommandLine="$(CopyDemosH)"
-						Outputs="..\..\..\demos\gtk-demo\demos.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release|Win32">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying demos.h from demos.h.win32..."
-						CommandLine="$(CopyDemosH)"
-						Outputs="..\..\..\demos\gtk-demo\demos.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release_Broadway|Win32">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying demos.h from demos.h.win32..."
-						CommandLine="$(CopyDemosH)"
-						Outputs="..\..\..\demos\gtk-demo\demos.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Debug|x64">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying demos.h from demos.h.win32..."
-						CommandLine="$(CopyDemosH)"
-						Outputs="..\..\..\demos\gtk-demo\demos.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Debug_Broadway|x64">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying demos.h from demos.h.win32..."
-						CommandLine="$(CopyDemosH)"
-						Outputs="..\..\..\demos\gtk-demo\demos.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release|x64">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying demos.h from demos.h.win32..."
-						CommandLine="$(CopyDemosH)"
-						Outputs="..\..\..\demos\gtk-demo\demos.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration Name="Release_Broadway|x64">
-					<Tool Name="VCCustomBuildTool"
-						Description="Copying demos.h from demos.h.win32..."
-						CommandLine="$(CopyDemosH)"
-						Outputs="..\..\..\demos\gtk-demo\demos.h"
-					/>
-				</FileConfiguration>
-			</File>
-		</Filter>
-	</Files>
-	<Globals>
-	</Globals>
 </VisualStudioProject>

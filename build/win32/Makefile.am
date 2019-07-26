@@ -36,7 +36,11 @@ SUBDIRS =	\
 	vs16
 
 EXTRA_DIST +=	\
+	config-msvc.mak		\
+	config-msvc.mak.in		\
 	detectenv-msvc.mak		\
+	gen-gdkversionmacros-h.py	\
+	generate-msvc.mak	\
 	gtk-introspection-msvc.mak	\
 	introspection-msvc.mak		\
 	replace.py			\

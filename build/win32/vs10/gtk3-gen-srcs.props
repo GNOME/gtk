@@ -4,41 +4,11 @@
     <Import Project="gtk3-build-defines.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <GenConfigH>copy ..\..\..\config.h.win32 ..\..\..\config.h</GenConfigH>
-    <GenGdkConfigHWin32>
-if exist ..\..\..\MSVC_$(Configuration) goto DONE_GDKCONFIG_H
-
-if exist ..\..\..\gdk\gdkconfig.h del ..\..\..\gdk\gdkconfig.h
-if exist ..\..\..\GDK_BROADWAY_BUILD del ..\..\..\GDK_BROADWAY_BUILD
-if exist ..\..\..\MSVC_$(Configuration)_Broadway del ..\..\..\MSVC_$(Configuration)_Broadway
-if exist $(Configuration)\$(Platform)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll del $(Configuration)\$(Platform)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll
-if exist $(Configuration)\$(Platform)\bin\gdk-$(ApiVersion).lib del $(Configuration)\$(Platform)\bin\gdk-$(ApiVersion).lib
-if "$(Configuration)" == "Release" del ..\..\..\MSVC_Debug
-if "$(Configuration)" == "Debug" del ..\..\..\MSVC_Release
-copy ..\..\..\gdk\gdkconfig.h.win32 ..\..\..\gdk\gdkconfig.h
-copy ..\..\..\gdk\gdkconfig.h.win32 ..\..\..\GDK_WIN32ONLY_BUILD
-echo $(Configuration) &gt; ..\..\..\MSVC_$(Configuration)
-
-:DONE_GDKCONFIG_H
-    </GenGdkConfigHWin32>
-    <GenGdkConfigHBroadway>
-if exist ..\..\..\MSVC_$(Configuration)_Broadway goto DONE_GDKCONFIG_H
-
-if exist ..\..\..\gdk\gdkconfig.h del ..\..\..\gdk\gdkconfig.h
-if exist ..\..\..\GDK_WIN32ONLY_BUILD del ..\..\..\GDK_WIN32ONLY_BUILD
-if exist ..\..\..\MSVC_Release del ..\..\..\MSVC_Release
-if exist ..\..\..\MSVC_Debug del ..\..\..\MSVC_Debug
-
-if "$(Configuration)" == "Release_Broadway" del ..\..\..\MSVC_Debug_Broadway
-if "$(Configuration)" == "Debug_Broadway" del ..\..\..\MSVC_Release_Broadway
-
-copy ..\..\..\gdk\gdkconfig.h.win32_broadway ..\..\..\gdk\gdkconfig.h
-copy ..\..\..\gdk\gdkconfig.h.win32_broadway ..\..\..\GDK_BROADWAY_BUILD
-echo $(Configuration) &gt; ..\..\..\MSVC_$(Configuration)_Broadway
-
-:DONE_GDKCONFIG_H
-    </GenGdkConfigHBroadway>
-    <GDbusCodeGenCmd>$(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml</GDbusCodeGenCmd>
+    <GenerateRequiredSourcesBase>cd ..
+set VCInstallDir=$(VCInstallDir)
+nmake -f generate-msvc.mak PREFIX=$(GlibEtcInstallRoot)</GenerateRequiredSourcesBase>
+    <GeneratedGdkSources>..\..\..\config.h;..\..\..\gdk\gdkconfig.h;..\..\gdk\gdkversionmacros.h;..\..\..\gdk\gdkmarshalers.h;..\..\..\gdk\gdkmarshalers.c;..\..\..\gdk\gdkresources.h;..\..\..\gdk\gdkresources.c</GeneratedGdkSources>
+    <GDbusCodeGenCmd>c:\vs$(VSVer).0\$(Platform)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml</GDbusCodeGenCmd>
     <GenerateGtkDbusBuiltSources>cd ..\..\..\gtk &amp; $(PythonDir)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)</GenerateGtkDbusBuiltSources>
     <CopyGtkWin32RC>copy ..\..\..\gtk\gtk-win32.rc.body ..\..\..\gtk\gtk-win32.rc</CopyGtkWin32RC>
     <GenerateGtkWin32Manifest>$(PythonDir)\python ..\replace.py --action=replace-var --input=..\..\..\gtk\libgtk3.manifest.in --output=..\..\..\gtk\libgtk3.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*</GenerateGtkWin32Manifest>
@@ -55,14 +25,11 @@ del ..\..\..\gtk\gtktypefuncs.combined.c ..\..\..\gtk\gtktypefuncs.preproc.c
     <_PropertySheetDisplayName>gtk3gensrcsprops</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemGroup>
-    <BuildMacro Include="GenConfigH">
-      <Value>$(GenConfigH)</Value>
+    <BuildMacro Include="GenerateRequiredSourcesBase">
+      <Value>$(GenerateRequiredSourcesBase)</Value>
     </BuildMacro>
-    <BuildMacro Include="GenGdkConfigHWin32">
-      <Value>$(GenGdkConfigHWin32)</Value>
-    </BuildMacro>
-    <BuildMacro Include="GenGdkConfigHBroadway">
-      <Value>$(GenGdkConfigHBroadway)</Value>
+    <BuildMacro Include="GeneratedGdkSources">
+      <Value>$(GeneratedGdkSources)</Value>
     </BuildMacro>
     <BuildMacro Include="GDbusCodeGenCmd">
       <Value>$(GDbusCodeGenCmd)</Value>
