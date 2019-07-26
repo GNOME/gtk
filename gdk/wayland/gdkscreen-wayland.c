@@ -87,6 +87,7 @@ struct _GdkWaylandScreenClass
 };
 
 #define OUTPUT_VERSION_WITH_DONE 2
+#define NO_XDG_OUTPUT_DONE_SINCE_VERSION 3
 
 #define GTK_SETTINGS_DBUS_PATH "/org/gtk/Settings"
 #define GTK_SETTINGS_DBUS_NAME "org.gtk.Settings"
@@ -1449,6 +1450,7 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
 {
   GdkDisplay *display = GDK_MONITOR (monitor)->display;
   GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (gdk_display_get_default_screen (display));
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   GDK_NOTE (MISC,
             g_message ("monitor %d changed position %d %d, size %d %d",
@@ -1460,7 +1462,11 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
   gdk_monitor_set_size (GDK_MONITOR (monitor), monitor->width, monitor->height);
   gdk_monitor_set_connector (GDK_MONITOR (monitor), monitor->name);
   monitor->wl_output_done = FALSE;
-  monitor->xdg_output_done = FALSE;
+  /* xdg_output v3 marks xdg_output.done as deprecated, so if using
+   * that version, no need to wait for xdg-output.done event.
+   */
+  monitor->xdg_output_done =
+     (display_wayland->xdg_output_version >= NO_XDG_OUTPUT_DONE_SINCE_VERSION);
 
   g_signal_emit_by_name (screen_wayland, "monitors-changed");
   update_screen_size (screen_wayland);
