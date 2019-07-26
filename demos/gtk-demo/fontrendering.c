@@ -14,6 +14,8 @@ static GtkWidget *hint_metrics = NULL;
 static GtkWidget *up_button = NULL;
 static GtkWidget *down_button = NULL;
 static GtkWidget *text_radio = NULL;
+static GtkWidget *show_grid = NULL;
+static GtkWidget *show_extents = NULL;
 
 static PangoContext *context;
 
@@ -112,46 +114,54 @@ update_image (void)
       cr = cairo_create (surface);
       cairo_set_line_width (cr, 1);
 
-      cairo_set_source_rgba (cr, 0.2, 0, 0, 0.2);
-      for (i = 1; i < ink.height + 20; i++)
+      if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (show_grid)))
         {
-          cairo_move_to (cr, 0, scale * i - 0.5);
-          cairo_line_to (cr, scale * (ink.width + 20), scale * i - 0.5);
-          cairo_stroke (cr);
+          cairo_set_source_rgba (cr, 0.2, 0, 0, 0.2);
+          for (i = 1; i < ink.height + 20; i++)
+            {
+              cairo_move_to (cr, 0, scale * i - 0.5);
+              cairo_line_to (cr, scale * (ink.width + 20), scale * i - 0.5);
+              cairo_stroke (cr);
+            }
+          for (i = 1; i < ink.width + 20; i++)
+            {
+              cairo_move_to (cr, scale * i - 0.5, 0);
+              cairo_line_to (cr, scale * i - 0.5, scale * (ink.height + 20));
+              cairo_stroke (cr);
+            }
         }
-      for (i = 1; i < ink.width + 20; i++)
+
+      if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (show_extents)))
         {
-          cairo_move_to (cr, scale * i - 0.5, 0);
-          cairo_line_to (cr, scale * i - 0.5, scale * (ink.height + 20));
+          cairo_set_source_rgba (cr, 0, 0, 1, 1);
+
+          cairo_rectangle (cr,
+                           scale * (10 + pango_units_to_double (logical.x)) - 0.5,
+                           scale * (10 + pango_units_to_double (logical.y)) - 0.5,
+                           scale * pango_units_to_double (logical.width) + 1,
+                           scale * pango_units_to_double (logical.height) + 1);
+          cairo_stroke (cr);
+          cairo_move_to (cr, scale * (10 + pango_units_to_double (logical.x)) - 0.5,
+                             scale * (10 + pango_units_to_double (baseline)) - 0.5);
+          cairo_line_to (cr, scale * (10 + pango_units_to_double (logical.x + logical.width)) + 1,
+                             scale * (10 + pango_units_to_double (baseline)) - 0.5);
+          cairo_stroke (cr);
+          cairo_set_source_rgba (cr, 1, 0, 0, 1);
+          cairo_rectangle (cr,
+                           scale * (10 + pango_units_to_double (pink.x)) + 0.5,
+                           scale * (10 + pango_units_to_double (pink.y)) + 0.5,
+                           scale * pango_units_to_double (pink.width) - 1,
+                           scale * pango_units_to_double (pink.height) - 1);
           cairo_stroke (cr);
         }
 
-      cairo_set_source_rgba (cr, 0, 0, 1, 1);
-
-      cairo_rectangle (cr,
-                       scale * (10 + pango_units_to_double (logical.x)) - 0.5,
-                       scale * (10 + pango_units_to_double (logical.y)) - 0.5,
-                       scale * pango_units_to_double (logical.width) + 1,
-                       scale * pango_units_to_double (logical.height) + 1);
-      cairo_stroke (cr);
-      cairo_move_to (cr, scale * (10 + pango_units_to_double (logical.x)) - 0.5,
-                         scale * (10 + pango_units_to_double (baseline)) - 0.5);
-      cairo_line_to (cr, scale * (10 + pango_units_to_double (logical.x + logical.width)) + 1,
-                         scale * (10 + pango_units_to_double (baseline)) - 0.5);
-      cairo_stroke (cr);
-      cairo_set_source_rgba (cr, 1, 0, 0, 1);
-      cairo_rectangle (cr,
-                       scale * (10 + pango_units_to_double (pink.x)) + 0.5,
-                       scale * (10 + pango_units_to_double (pink.y)) + 0.5,
-                       scale * pango_units_to_double (pink.width) - 1,
-                       scale * pango_units_to_double (pink.height) - 1);
-      cairo_stroke (cr);
       cairo_surface_destroy (surface);
+      cairo_destroy (cr);
     }
   else
     {
       PangoLayoutIter *iter;
-      PangoGlyphItem *run;
+      PangoLayoutRun *run;
       PangoGlyphInfo *g;
       int i, j;
 
@@ -161,13 +171,13 @@ update_image (void)
       pango_layout_get_extents (layout, &ink, &logical);
       pango_extents_to_pixels (&logical, NULL);
 
-      iter = pango_layout_get_iter (layout);
-      run = pango_layout_iter_get_run (iter);
-
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, logical.width * 3 / 2, 4*logical.height);
       cr = cairo_create (surface);
       cairo_set_source_rgb (cr, 1, 1, 1);
       cairo_paint (cr);
+
+      iter = pango_layout_get_iter (layout);
+      run = pango_layout_iter_get_run (iter);
 
       cairo_set_source_rgb (cr, 0, 0, 0);
       for (i = 0; i < 4; i++)
@@ -252,7 +262,9 @@ do_fontrendering (GtkWidget *do_widget)
       image = GTK_WIDGET (gtk_builder_get_object (builder, "image"));
       hinting = GTK_WIDGET (gtk_builder_get_object (builder, "hinting"));
       hint_metrics = GTK_WIDGET (gtk_builder_get_object (builder, "hint_metrics"));
-      text_radio = GTK_WIDGET (gtk_builder_get_object (builder, "text_radio")); 
+      text_radio = GTK_WIDGET (gtk_builder_get_object (builder, "text_radio"));
+      show_grid = GTK_WIDGET (gtk_builder_get_object (builder, "show_grid"));
+      show_extents = GTK_WIDGET (gtk_builder_get_object (builder, "show_extents"));
 
       g_signal_connect (up_button, "clicked", G_CALLBACK (scale_up), NULL);
       g_signal_connect (down_button, "clicked", G_CALLBACK (scale_down), NULL);
@@ -261,6 +273,8 @@ do_fontrendering (GtkWidget *do_widget)
       g_signal_connect (hinting, "notify::active", G_CALLBACK (update_image), NULL);
       g_signal_connect (hint_metrics, "notify::active", G_CALLBACK (update_image), NULL);
       g_signal_connect (text_radio, "notify::active", G_CALLBACK (update_image), NULL);
+      g_signal_connect (show_grid, "notify::active", G_CALLBACK (update_image), NULL);
+      g_signal_connect (show_extents, "notify::active", G_CALLBACK (update_image), NULL);
 
       update_image ();
     }

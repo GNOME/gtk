@@ -98,13 +98,48 @@
           </object>
         </child>
         <child>
+          <object class="GtkCheckButton" id="show_extents">
+            <property name="active">1</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Show Extents</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
+            <layout>
+              <property name="left-attach">4</property>
+              <property name="top-attach">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="show_grid">
+            <property name="active">1</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Show Grid</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
+            <layout>
+              <property name="left-attach">4</property>
+              <property name="top-attach">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
           <object class="GtkButton" id="up_button">
             <property name="icon-name">list-add-symbolic</property>
             <style>
               <class name="circular"/>
             </style>
             <layout>
-              <property name="left-attach">4</property>
+              <property name="left-attach">5</property>
+              <property name="top-attach">0</property>
             </layout>
           </object>
         </child>
@@ -115,7 +150,7 @@
               <class name="circular"/>
             </style>
             <layout>
-              <property name="left-attach">4</property>
+              <property name="left-attach">5</property>
               <property name="top-attach">1</property>
             </layout>
           </object>
