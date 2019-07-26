@@ -258,8 +258,6 @@ typedef struct
 typedef struct
 {
   ProgramState program_state[GL_N_PROGRAMS];
-  /* Current global state */
-  ProgramState *current_program_state;
   const Program *current_program;
   int current_render_target;
   int current_texture;
