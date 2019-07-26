@@ -369,6 +369,7 @@ gtk_public_sources = files([
   'gtktexthandle.c',
   'gtktextiter.c',
   'gtktextlayout.c',
+  'gtktextlinedisplaycache.c',
   'gtktextmark.c',
   'gtktextsegment.c',
   'gtktexttag.c',
