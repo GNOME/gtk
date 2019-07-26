@@ -95,6 +95,7 @@ struct _GdkWaylandDisplay
   struct zwp_keyboard_shortcuts_inhibit_manager_v1 *keyboard_shortcuts_inhibit;
   struct org_kde_kwin_server_decoration_manager *server_decoration_manager;
   struct zxdg_output_manager_v1 *xdg_output_manager;
+  uint32_t xdg_output_version;
 
   GList *async_roundtrips;
 

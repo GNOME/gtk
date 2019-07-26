@@ -515,11 +515,12 @@ gdk_registry_handle_global (void               *data,
     }
   else if (strcmp(interface, "zxdg_output_manager_v1") == 0)
     {
-      display_wayland->xdg_output_manager_version = MIN (version, 2);
+      display_wayland->xdg_output_manager_version = MIN (version, 3);
       display_wayland->xdg_output_manager =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &zxdg_output_manager_v1_interface,
                           display_wayland->xdg_output_manager_version);
+      display_wayland->xdg_output_version = version;
       _gdk_wayland_screen_init_xdg_output (display_wayland->screen);
       _gdk_wayland_display_async_roundtrip (display_wayland);
     }
