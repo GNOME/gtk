@@ -1392,6 +1392,71 @@ gdk_x11_surface_move_resize (GdkSurface *surface,
     }
 }
 
+static void
+gdk_x11_surface_toplevel_resize (GdkSurface *surface,
+                                 gint        width,
+                                 gint        height)
+{
+  x11_surface_resize (surface, width, height);
+}
+
+void
+gdk_x11_surface_move (GdkSurface *surface,
+                      gint        x,
+                      gint        y)
+{
+  gdk_x11_surface_move_resize (surface, TRUE, x, y, -1, -1);
+}
+
+static void
+gdk_x11_surface_moved_to_rect (GdkSurface   *surface,
+                               GdkRectangle  final_rect)
+{
+  GdkSurface *toplevel;
+  int x, y;
+
+  if (surface->surface_type == GDK_SURFACE_POPUP)
+    toplevel = surface->parent;
+  else
+    toplevel = surface->transient_for;
+
+  gdk_surface_get_origin (toplevel, &x, &y);
+  x += final_rect.x;
+  y += final_rect.y;
+
+  if (final_rect.width != surface->width ||
+      final_rect.height != surface->height)
+    {
+      gdk_x11_surface_move_resize (surface,
+                                   TRUE,
+                                   x, y,
+                                   final_rect.width, final_rect.height);
+    }
+  else
+    {
+      gdk_x11_surface_move (surface, x, y);
+    }
+}
+
+static void
+gdk_x11_surface_move_to_rect (GdkSurface         *surface,
+                              const GdkRectangle *rect,
+                              GdkGravity          rect_anchor,
+                              GdkGravity          surface_anchor,
+                              GdkAnchorHints      anchor_hints,
+                              gint                rect_anchor_dx,
+                              gint                rect_anchor_dy)
+{
+  gdk_surface_move_to_rect_helper (surface,
+                                   rect,
+                                   rect_anchor,
+                                   surface_anchor,
+                                   anchor_hints,
+                                   rect_anchor_dx,
+                                   rect_anchor_dy,
+                                   gdk_x11_surface_moved_to_rect);
+}
+
 static void gdk_x11_surface_restack_toplevel (GdkSurface *surface,
                                               GdkSurface *sibling,
                                               gboolean    above);
@@ -3245,7 +3310,7 @@ gdk_x11_surface_fullscreen_on_monitor (GdkSurface  *surface,
     return;
 
   gdk_monitor_get_geometry (monitor, &geom);
-  gdk_surface_move (surface, geom.x, geom.y);
+  gdk_x11_surface_move (surface, geom.x, geom.y);
 
   gdk_surface_set_fullscreen_mode (surface, GDK_FULLSCREEN_ON_CURRENT_MONITOR);
   gdk_x11_surface_fullscreen (surface);
@@ -3887,7 +3952,8 @@ update_pos (MoveResizeData *mv_resize,
 				     w, h, &w, &h);
 	}
 
-      gdk_surface_move_resize (mv_resize->moveresize_surface, x, y, w, h);
+      gdk_x11_surface_move_resize (mv_resize->moveresize_surface, TRUE,
+                                   x, y, w, h);
     }
   else
     {
@@ -3896,7 +3962,7 @@ update_pos (MoveResizeData *mv_resize,
       x = mv_resize->moveresize_orig_x + dx;
       y = mv_resize->moveresize_orig_y + dy;
 
-      gdk_surface_move (mv_resize->moveresize_surface, x, y);
+      gdk_x11_surface_move (mv_resize->moveresize_surface, x, y);
     }
 }
 
@@ -4589,7 +4655,8 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->raise = gdk_x11_surface_raise;
   impl_class->lower = gdk_x11_surface_lower;
   impl_class->restack_toplevel = gdk_x11_surface_restack_toplevel;
-  impl_class->move_resize = gdk_x11_surface_move_resize;
+  impl_class->toplevel_resize = gdk_x11_surface_toplevel_resize;
+  impl_class->move_to_rect = gdk_x11_surface_move_to_rect;
   impl_class->get_geometry = gdk_x11_surface_get_geometry;
   impl_class->get_root_coords = gdk_x11_surface_get_root_coords;
   impl_class->get_device_state = gdk_x11_surface_get_device_state;
