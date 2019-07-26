@@ -183,6 +183,10 @@ void            _gdk_x11_surface_set_surface_scale   (GdkSurface *window,
 
 void            gdk_x11_surface_pre_damage           (GdkSurface *surface);
 
+void            gdk_x11_surface_move                 (GdkSurface *surface,
+                                                      gint        x,
+                                                      gint        y);
+
 G_END_DECLS
 
 #endif /* __GDK_X11_SURFACE__ */

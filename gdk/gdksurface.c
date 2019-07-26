@@ -246,14 +246,15 @@ maybe_flip_position (gint      bounds_pos,
   return primary;
 }
 
-static void
-gdk_surface_real_move_to_rect (GdkSurface         *surface,
-                               const GdkRectangle *rect,
-                               GdkGravity          rect_anchor,
-                               GdkGravity          surface_anchor,
-                               GdkAnchorHints      anchor_hints,
-                               gint                rect_anchor_dx,
-                               gint                rect_anchor_dy)
+void
+gdk_surface_move_to_rect_helper (GdkSurface            *surface,
+                                 const GdkRectangle    *rect,
+                                 GdkGravity             rect_anchor,
+                                 GdkGravity             surface_anchor,
+                                 GdkAnchorHints         anchor_hints,
+                                 gint                   rect_anchor_dx,
+                                 gint                   rect_anchor_dy,
+                                 GdkSurfaceMovedToRect  moved_to_rect)
 {
   GdkSurface *toplevel;
   GdkDisplay *display;
@@ -362,16 +363,13 @@ gdk_surface_real_move_to_rect (GdkSurface         *surface,
   final_rect.width += surface->shadow_left + surface->shadow_right;
   final_rect.height += surface->shadow_top + surface->shadow_bottom;
 
-  if (final_rect.width != surface->width || final_rect.height != surface->height)
-    gdk_surface_move_resize (surface, final_rect.x, final_rect.y, final_rect.width, final_rect.height);
-  else
-    gdk_surface_move (surface, final_rect.x, final_rect.y);
-
   gdk_surface_get_origin (toplevel, &x, &y);
   final_rect.x -= x;
   final_rect.y -= y;
   flipped_rect.x -= x;
   flipped_rect.y -= y;
+
+  moved_to_rect (surface, final_rect);
 
   g_signal_emit_by_name (surface,
                          "moved-to-rect",
@@ -411,7 +409,6 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   object_class->get_property = gdk_surface_get_property;
 
   klass->beep = gdk_surface_real_beep;
-  klass->move_to_rect = gdk_surface_real_move_to_rect;
 
   /**
    * GdkSurface:cursor:
@@ -2072,59 +2069,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   GDK_SURFACE_GET_CLASS (surface)->hide (surface);
 }
 
-static void
-gdk_surface_move_resize_toplevel (GdkSurface *surface,
-                                  gboolean   with_move,
-                                  gint       x,
-                                  gint       y,
-                                  gint       width,
-                                  gint       height)
-{
-  GDK_SURFACE_GET_CLASS (surface)->move_resize (surface, with_move, x, y, width, height);
-}
-
-
-static void
-gdk_surface_move_resize_internal (GdkSurface *surface,
-                                  gboolean   with_move,
-                                  gint       x,
-                                  gint       y,
-                                  gint       width,
-                                  gint       height)
-{
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-
-  if (surface->destroyed)
-    return;
-
-  gdk_surface_move_resize_toplevel (surface, with_move, x, y, width, height);
-}
-
-
-
-/*
- * gdk_surface_move:
- * @surface: a #GdkSurface
- * @x: X coordinate relative to surface’s parent
- * @y: Y coordinate relative to surface’s parent
- *
- * Repositions a surface relative to its parent surface.
- * For toplevel surfaces, window managers may ignore or modify the move;
- * you should probably use gtk_window_move() on a #GtkWindow widget
- * anyway, instead of using GDK functions. For child surfaces,
- * the move will reliably succeed.
- *
- * If you’re also planning to resize the surface, use gdk_surface_move_resize()
- * to both move and resize simultaneously, for a nicer visual effect.
- **/
-void
-gdk_surface_move (GdkSurface *surface,
-                  gint       x,
-                  gint       y)
-{
-  gdk_surface_move_resize_internal (surface, TRUE, x, y, -1, -1);
-}
-
 /**
  * gdk_surface_resize:
  * @surface: a #GdkSurface
@@ -2142,31 +2086,7 @@ gdk_surface_resize (GdkSurface *surface,
                     gint       width,
                     gint       height)
 {
-  gdk_surface_move_resize_internal (surface, FALSE, 0, 0, width, height);
-}
-
-
-/*
- * gdk_surface_move_resize:
- * @surface: a #GdkSurface
- * @x: new X position relative to surface’s parent
- * @y: new Y position relative to surface’s parent
- * @width: new width
- * @height: new height
- *
- * Equivalent to calling gdk_surface_move() and gdk_surface_resize(),
- * except that both operations are performed at once, avoiding strange
- * visual effects. (i.e. the user may be able to see the surface first
- * move, then resize, if you don’t use gdk_surface_move_resize().)
- **/
-void
-gdk_surface_move_resize (GdkSurface *surface,
-                         gint       x,
-                         gint       y,
-                         gint       width,
-                         gint       height)
-{
-  gdk_surface_move_resize_internal (surface, TRUE, x, y, width, height);
+  GDK_SURFACE_GET_CLASS (surface)->toplevel_resize (surface, width, height);
 }
 
 /**
@@ -2963,8 +2883,7 @@ gdk_surface_set_modal_hint (GdkSurface *surface,
  * this is to constrain user resizing, but the windowing system
  * will typically  (but is not required to) also constrain the
  * current size of the surface to the provided values and
- * constrain programatic resizing via gdk_surface_resize() or
- * gdk_surface_move_resize().
+ * constrain programatic resizing via gdk_surface_resize().
  *
  * Note that on X11, this effect has no effect on surfaces
  * of type %GDK_SURFACE_TEMP since these surfaces are not resizable

@@ -264,16 +264,6 @@ void gdk_surface_get_geometry (GdkSurface *surface,
                                gint       *width,
                                gint       *height);
 
-void gdk_surface_move         (GdkSurface *surface,
-                               gint           x,
-                               gint           y);
-
-void gdk_surface_move_resize  (GdkSurface     *surface,
-                               gint           x,
-                               gint           y,
-                               gint           width,
-                               gint           height);
-
 GdkGLContext *gdk_surface_get_shared_data_gl_context (GdkSurface *surface);
 
 G_END_DECLS

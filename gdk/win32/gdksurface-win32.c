@@ -1098,8 +1098,8 @@ gdk_win32_surface_withdraw (GdkSurface *window)
 }
 
 static void
-gdk_win32_surface_move (GdkSurface *window,
-		       gint x, gint y)
+gdk_win32_surface_do_move (GdkSurface *window,
+                           gint x, gint y)
 {
   RECT outer_rect;
   GdkWin32Surface *impl;
@@ -1174,11 +1174,11 @@ gdk_win32_surface_resize (GdkSurface *window,
 }
 
 static void
-gdk_win32_surface_move_resize_internal (GdkSurface *window,
-				       gint       x,
-				       gint       y,
-				       gint       width,
-				       gint       height)
+gdk_win32_surface_do_move_resize (GdkSurface *window,
+                                  gint        x,
+                                  gint        y,
+                                  gint        width,
+                                  gint        height)
 {
   RECT outer_rect;
   GdkWin32Surface *impl;
@@ -1224,12 +1224,12 @@ gdk_win32_surface_move_resize_internal (GdkSurface *window,
 }
 
 static void
-gdk_win32_surface_move_resize (GdkSurface *window,
-			      gboolean   with_move,
-			      gint       x,
-			      gint       y,
-			      gint       width,
-			      gint       height)
+gdk_win32_surface_move_resize_internal (GdkSurface *window,
+                                        gboolean    with_move,
+                                        gint        x,
+                                        gint        y,
+                                        gint        width,
+                                        gint        height)
 {
   GdkWin32Surface *surface = GDK_WIN32_SURFACE (window);
 
@@ -1242,13 +1242,13 @@ gdk_win32_surface_move_resize (GdkSurface *window,
 
   if (with_move && (width < 0 && height < 0))
     {
-      gdk_win32_surface_move (window, x, y);
+      gdk_win32_surface_do_move (window, x, y);
     }
   else
     {
       if (with_move)
 	{
-	  gdk_win32_surface_move_resize_internal (window, x, y, width, height);
+          gdk_win32_surface_do_move_resize (window, x, y, width, height);
 	}
       else
 	{
@@ -1260,6 +1260,80 @@ gdk_win32_surface_move_resize (GdkSurface *window,
   surface->inhibit_configure = FALSE;
 
   _gdk_win32_emit_configure_event (window);
+}
+
+void
+gdk_win32_surface_move_resize (GdkSurface *window,
+                               gint        x,
+                               gint        y,
+                               gint        width,
+                               gint        height)
+{
+  gdk_win32_surface_move_resize_internal (window, TRUE, x, y, width, height);
+}
+
+static void
+gdk_win32_surface_toplevel_resize (GdkSurface *surface,
+                                   gint        width,
+                                   gint        height)
+{
+  gdk_win32_surface_move_resize_internal (surface, FALSE, 0, 0, width, height);
+}
+
+void
+gdk_win32_surface_move (GdkSurface *surface,
+                        gint        x,
+                        gint        y)
+{
+  gdk_win32_surface_move_resize_internal (surface, TRUE, x, y, -1, -1);
+}
+
+static void
+gdk_win32_surface_moved_to_rect (GdkSurface   *surface,
+                                 GdkRectangle  final_rect)
+{
+  GdkSurface *toplevel;
+  int x, y;
+
+  if (surface->surface_type == GDK_SURFACE_POPUP)
+    toplevel = surface->parent;
+  else
+    toplevel = surface->transient_for;
+
+  gdk_surface_get_origin (toplevel, &x, &y);
+  x += final_rect.x;
+  y += final_rect.y;
+
+  if (final_rect.width != surface->width ||
+      final_rect.height != surface->height)
+    {
+      gdk_win32_surface_move_resize (surface,
+                                     x, y,
+                                     final_rect.width, final_rect.height);
+    }
+  else
+    {
+      gdk_win32_surface_move (surface, x, y);
+    }
+}
+
+static void
+gdk_win32_surface_move_to_rect (GdkSurface         *surface,
+                                const GdkRectangle *rect,
+                                GdkGravity          rect_anchor,
+                                GdkGravity          surface_anchor,
+                                GdkAnchorHints      anchor_hints,
+                                gint                rect_anchor_dx,
+                                gint                rect_anchor_dy)
+{
+  gdk_surface_move_to_rect_helper (surface,
+                                   rect,
+                                   rect_anchor,
+                                   surface_anchor,
+                                   anchor_hints,
+                                   rect_anchor_dx,
+                                   rect_anchor_dy,
+                                   gdk_win32_surface_moved_to_rect);
 }
 
 static void
@@ -2518,8 +2592,8 @@ unsnap (GdkSurface  *window,
 
   GDK_NOTE (MISC, g_print ("Unsnapped window size %d x %d @ %d : %d\n", rect.width, rect.height, rect.x, rect.y));
 
-  gdk_surface_move_resize (window, rect.x, rect.y,
-                          rect.width, rect.height);
+  gdk_win32_surface_move_resize (window, rect.x, rect.y,
+                                 rect.width, rect.height);
 
   g_clear_pointer (&impl->snap_stash, g_free);
   g_clear_pointer (&impl->snap_stash_int, g_free);
@@ -2624,7 +2698,7 @@ snap_up (GdkSurface *window)
   width += impl->margins_x;
   height += impl->margins_y;
 
-  gdk_surface_move_resize (window, x, y, width, height);
+  gdk_win32_surface_move_resize (window, x, y, width, height);
 }
 
 static void
@@ -2650,7 +2724,9 @@ snap_left (GdkSurface  *window,
   rect.width = rect.width + impl->margins_x;
   rect.height = rect.height + impl->margins_y;
 
-  gdk_surface_move_resize (window, rect.x, rect.y, rect.width, rect.height);
+  gdk_win32_surface_move_resize (window,
+                                 rect.x, rect.y,
+                                 rect.width, rect.height);
 }
 
 static void
@@ -2677,7 +2753,9 @@ snap_right (GdkSurface  *window,
   rect.width = rect.width + impl->margins_x;
   rect.height = rect.height + impl->margins_y;
 
-  gdk_surface_move_resize (window, rect.x, rect.y, rect.width, rect.height);
+  gdk_win32_surface_move_resize (window,
+                                 rect.x, rect.y,
+                                 rect.width, rect.height);
 }
 
 void
@@ -3928,8 +4006,8 @@ setup_drag_move_resize_context (GdkSurface                   *window,
           GDK_NOTE (MISC, g_print ("Unsnapped window to %d : %d\n",
                                    new_pos.x, new_pos.y));
           discard_snapinfo (window);
-          gdk_surface_move_resize (window, new_pos.x, new_pos.y,
-                                  new_pos.width, new_pos.height);
+          gdk_win32_surface_move_resize (window, new_pos.x, new_pos.y,
+                                         new_pos.width, new_pos.height);
         }
 
 
@@ -5082,7 +5160,8 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->raise = gdk_win32_surface_raise;
   impl_class->lower = gdk_win32_surface_lower;
   impl_class->restack_toplevel = gdk_win32_surface_restack_toplevel;
-  impl_class->move_resize = gdk_win32_surface_move_resize;
+  impl_class->toplevel_resize = gdk_win32_surface_toplevel_resize;
+  impl_class->move_to_rect = gdk_win32_surface_move_to_rect;
   impl_class->get_geometry = gdk_win32_surface_get_geometry;
   impl_class->get_device_state = gdk_surface_win32_get_device_state;
   impl_class->get_root_coords = gdk_win32_surface_get_root_coords;

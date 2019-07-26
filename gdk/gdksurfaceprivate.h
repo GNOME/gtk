@@ -113,10 +113,7 @@ struct _GdkSurfaceClass
                                          GdkSurface       *sibling,
                                          gboolean        above);
 
-  void         (* move_resize)          (GdkSurface       *surface,
-                                         gboolean         with_move,
-                                         gint             x,
-                                         gint             y,
+  void         (* toplevel_resize)      (GdkSurface      *surface,
                                          gint             width,
                                          gint             height);
   void         (* move_to_rect)         (GdkSurface       *surface,
@@ -257,6 +254,19 @@ struct _GdkSurfaceClass
 
 void gdk_surface_set_state (GdkSurface      *surface,
                             GdkSurfaceState  new_state);
+
+typedef void (* GdkSurfaceMovedToRect) (GdkSurface   *surface,
+                                        GdkRectangle  final_rect);
+
+void
+gdk_surface_move_to_rect_helper (GdkSurface            *surface,
+                                 const GdkRectangle    *rect,
+                                 GdkGravity             rect_anchor,
+                                 GdkGravity             surface_anchor,
+                                 GdkAnchorHints         anchor_hints,
+                                 gint                   rect_anchor_dx,
+                                 gint                   rect_anchor_dy,
+                                 GdkSurfaceMovedToRect  moved_to_rect);
 
 G_END_DECLS
 
