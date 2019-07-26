@@ -138,11 +138,6 @@ struct _GtkTextLayout
    * over long runs with the same style. */
   GtkTextAttributes *one_style_cache;
 
-  /* A cache of one line display. Getting the same line
-   * many times in a row is the most common case.
-   */
-  GtkTextLineDisplay *one_display_cache;
-
   /* Whether we are allowed to wrap right now */
   gint wrap_loop_count;
   
@@ -223,6 +218,12 @@ struct _GtkTextLineDisplay
   PangoLayout *layout;
   GArray *cursors;      /* indexes of cursors in the PangoLayout */
 
+  /* GSequenceIter backpointer for use within cache */
+  GSequenceIter *cache_iter;
+
+  /* GQueue link for use in MRU to help cull cache */
+  GList          mru_link;
+
   GtkTextDirection direction;
 
   gint width;                   /* Width of layout */
@@ -298,8 +299,12 @@ void gtk_text_layout_wrap_loop_end   (GtkTextLayout *layout);
 GtkTextLineDisplay* gtk_text_layout_get_line_display  (GtkTextLayout      *layout,
                                                        GtkTextLine        *line,
                                                        gboolean            size_only);
-GtkTextLineDisplay *gtk_text_line_display_ref         (GtkTextLineDisplay *display);
-void                gtk_text_line_display_unref       (GtkTextLineDisplay *display);
+
+GtkTextLineDisplay *gtk_text_line_display_ref         (GtkTextLineDisplay       *display);
+void                gtk_text_line_display_unref       (GtkTextLineDisplay       *display);
+gint                gtk_text_line_display_compare     (const GtkTextLineDisplay *display1,
+                                                       const GtkTextLineDisplay *display2,
+                                                       GtkTextLayout            *layout);
 
 void gtk_text_layout_get_line_at_y     (GtkTextLayout     *layout,
                                         GtkTextIter       *target_iter,
@@ -354,6 +359,12 @@ void     gtk_text_layout_get_cursor_locations (GtkTextLayout     *layout,
                                                GtkTextIter       *iter,
                                                GdkRectangle      *strong_pos,
                                                GdkRectangle      *weak_pos);
+GtkTextLineDisplay *gtk_text_layout_create_display (GtkTextLayout *layout,
+                                                    GtkTextLine   *line,
+                                                    gboolean       size_only);
+void     gtk_text_layout_update_display_cursors (GtkTextLayout      *layout,
+                                                 GtkTextLine        *line,
+                                                 GtkTextLineDisplay *display);
 gboolean _gtk_text_layout_get_block_cursor    (GtkTextLayout     *layout,
 					       GdkRectangle      *pos);
 gboolean gtk_text_layout_clamp_iter_to_vrange (GtkTextLayout     *layout,
