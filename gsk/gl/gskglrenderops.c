@@ -435,7 +435,6 @@ void
 ops_push_modelview (RenderOpBuilder *builder,
                     GskTransform    *transform)
 {
-  float scale = ops_get_scale (builder);
   MatrixStackEntry *entry;
 
   if (G_UNLIKELY (builder->mv_stack == NULL))
@@ -455,7 +454,7 @@ ops_push_modelview (RenderOpBuilder *builder,
       /* Multiply given matrix with current modelview */
 
       t = gsk_transform_translate (gsk_transform_ref (cur->transform),
-                                   &(graphene_point_t) { builder->dx * scale, builder->dy * scale});
+                                   &(graphene_point_t) { builder->dx, builder->dy});
       t = gsk_transform_transform (t, transform);
       entry->transform = t;
     }
