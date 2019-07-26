@@ -60,9 +60,9 @@ gtk_debug_cflags = []
 buildtype = get_option('buildtype')
 if buildtype.startswith('debug')
   gtk_debug_cflags += '-DG_ENABLE_DEBUG'
-  if buildtype == 'debug'
-    gtk_debug_cflags += '-DG_ENABLE_CONSISTENCY_CHECKS'
-  endif
+#  if buildtype == 'debug'
+#    gtk_debug_cflags += '-DG_ENABLE_CONSISTENCY_CHECKS'
+#  endif
 elif buildtype == 'release'
   gtk_debug_cflags += '-DG_DISABLE_CAST_CHECKS'
 endif
