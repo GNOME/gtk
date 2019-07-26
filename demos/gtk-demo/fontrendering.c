@@ -31,7 +31,7 @@ update_image (void)
   const char *text;
   PangoFontDescription *desc;
   PangoLayout *layout;
-  PangoRectangle ink, logical;
+  PangoRectangle ink, pink, logical;
   int baseline;
   cairo_surface_t *surface;
   cairo_t *cr;
@@ -79,6 +79,7 @@ update_image (void)
       pango_layout_set_font_description (layout, desc);
       pango_layout_set_text (layout, text, -1);
       pango_layout_get_extents (layout, &ink, &logical);
+      pink = ink;
       baseline = pango_layout_get_baseline (layout);
 
       pango_extents_to_pixels (&ink, NULL);
@@ -126,15 +127,22 @@ update_image (void)
 
       cairo_set_source_rgba (cr, 0, 0, 1, 1);
       cairo_rectangle (cr,
-                       scale * (10 + (double)logical.x / PANGO_SCALE) - 0.5,
-                       scale * (10 + (double)logical.y / PANGO_SCALE) - 0.5,
-                       scale * ((double)logical.width / PANGO_SCALE) + 1,
-                       scale * ((double)logical.height / PANGO_SCALE) + 1);
+                       scale * (10 + logical.x / PANGO_SCALE) - 0.5,
+                       scale * (10 + logical.y / PANGO_SCALE) - 0.5,
+                       scale * (logical.width / PANGO_SCALE) + 1,
+                       scale * (logical.height / PANGO_SCALE) + 1);
       cairo_stroke (cr);
-      cairo_move_to (cr, scale * (10 + (double)logical.x / PANGO_SCALE) - 0.5,
+      cairo_move_to (cr, scale * (10 + logical.x / PANGO_SCALE) - 0.5,
                          scale * (10 + baseline / PANGO_SCALE) - 0.5);
-      cairo_line_to (cr, scale * (10 + (double)(logical.x + logical.width) / PANGO_SCALE) + 1,
+      cairo_line_to (cr, scale * (10 + (logical.x + logical.width) / PANGO_SCALE) + 1,
                          scale * (10 + baseline / PANGO_SCALE) - 0.5);
+      cairo_stroke (cr);
+      cairo_set_source_rgba (cr, 1, 0, 0, 1);
+      cairo_rectangle (cr,
+                       scale * (10 + pink.x / PANGO_SCALE) + 0.5,
+                       scale * (10 + pink.y / PANGO_SCALE) + 0.5,
+                       scale * (pink.width / PANGO_SCALE) - 0.5,
+                       scale * (pink.height / PANGO_SCALE) - 0.5);
       cairo_stroke (cr);
       cairo_surface_destroy (surface);
     }
