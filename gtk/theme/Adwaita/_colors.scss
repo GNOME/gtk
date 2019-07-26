@@ -72,6 +72,6 @@ $backdrop_menu_color: if($variant == 'light', $backdrop_base_color, mix($backdro
 $suggested_bg_color: $selected_bg_color;
 $suggested_border_color: $selected_borders_color;
 $progress_bg_color: $selected_bg_color;
-$progress_border_color: if($variant=='light', darken($progress_bg_color, 15%), darken($progress_bg_color, 30%));
-$checkradio_bg_color: $bg_color;
-$checkradio_fg_color: $fg_color;
+$progress_border_color: $selected_borders_color;
+$checkradio_bg_color: $selected_bg_color;
+$checkradio_fg_color: $selected_fg_color;
