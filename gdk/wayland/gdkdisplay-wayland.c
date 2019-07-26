@@ -93,6 +93,7 @@
 
 #define GTK_SHELL1_VERSION       2
 #define OUTPUT_VERSION_WITH_DONE 2
+#define NO_XDG_OUTPUT_DONE_SINCE_VERSION 3
 
 static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland);
 
@@ -531,7 +532,7 @@ gdk_registry_handle_global (void               *data,
     }
   else if (strcmp(interface, "zxdg_output_manager_v1") == 0)
     {
-      display_wayland->xdg_output_manager_version = MIN (version, 2);
+      display_wayland->xdg_output_manager_version = MIN (version, 3);
       display_wayland->xdg_output_manager =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &zxdg_output_manager_v1_interface,
@@ -2217,6 +2218,9 @@ should_update_monitor (GdkWaylandMonitor *monitor)
 static void
 apply_monitor_change (GdkWaylandMonitor *monitor)
 {
+  GdkDisplay *display = GDK_MONITOR (monitor)->display;
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
   GDK_NOTE (MISC,
             g_message ("monitor %d changed position %d %d, size %d %d",
                        monitor->id,
@@ -2227,7 +2231,11 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
   gdk_monitor_set_size (GDK_MONITOR (monitor), monitor->width, monitor->height);
   gdk_monitor_set_connector (GDK_MONITOR (monitor), monitor->name);
   monitor->wl_output_done = FALSE;
-  monitor->xdg_output_done = FALSE;
+  /* xdg_output v3 marks xdg_output.done as deprecated, so if using
+   * that version, no need to wait for xdg-output.done event.
+   */
+  monitor->xdg_output_done =
+     (display_wayland->xdg_output_manager_version >= NO_XDG_OUTPUT_DONE_SINCE_VERSION);
 
   update_scale (GDK_MONITOR (monitor)->display);
 }
