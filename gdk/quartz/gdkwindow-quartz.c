@@ -2719,7 +2719,7 @@ window_is_fullscreen (GdkWindow *window)
     return ([impl->toplevel styleMask] & GDK_QUARTZ_FULLSCREEN_WINDOW) != 0;
   else
 #endif
-    return g_object_get_data (G_OBJECT (window), FULLSCREEN_DATA);
+    return g_object_get_data (G_OBJECT (window), FULLSCREEN_DATA) != NULL;
 }
 
 static void
@@ -2859,7 +2859,7 @@ _gdk_quartz_window_update_fullscreen_state (GdkWindow *window)
     {
       gboolean is_fullscreen = window_is_fullscreen (window);
       gboolean was_fullscreen = (gdk_window_get_state (window) &&
-                                 GDK_WINDOW_STATE_FULLSCREEN) != 0;
+                                 GDK_WINDOW_STATE_FULLSCREEN != 0);
 
       if (is_fullscreen != was_fullscreen)
         {
