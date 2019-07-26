@@ -241,11 +241,14 @@ ops_set_program (RenderOpBuilder *builder,
   if (program_state->modelview == NULL ||
       !gsk_transform_equal (builder->current_modelview, program_state->modelview))
     {
+      GskTransform *freeme;
+
       op.op = OP_CHANGE_MODELVIEW;
       gsk_transform_to_matrix (builder->current_modelview, &op.modelview);
       g_array_append_val (builder->render_ops, op);
-      gsk_transform_unref (program_state->modelview);
+      freeme = program_state->modelview;
       program_state->modelview = gsk_transform_ref (builder->current_modelview);
+      gsk_transform_unref (freeme);
     }
 
   if (rect_equal (&empty_rect, &program_state->viewport) ||
