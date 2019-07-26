@@ -82,6 +82,7 @@
 #include "gtktextbtree.h"
 #include "gtktextbufferprivate.h"
 #include "gtktextiterprivate.h"
+#include "gtktextlinedisplaycacheprivate.h"
 #include "gtktextutil.h"
 #include "gskpango.h"
 #include "gtkintl.h"
@@ -101,6 +102,9 @@ struct _GtkTextLayoutPrivate
      direction only influences the direction of the cursor line.
   */
   GtkTextLine *cursor_line;
+
+  /* Cache for GtkTextLineDisplay to reduce overhead creating layouts */
+  GtkTextLineDisplayCache *cache;
 };
 
 static GtkTextLineData *gtk_text_layout_real_wrap (GtkTextLayout *layout,
@@ -133,19 +137,33 @@ static void gtk_text_layout_invalidate_all (GtkTextLayout *layout);
 
 static PangoAttribute *gtk_text_attr_appearance_new (const GtkTextAppearance *appearance);
 
-static void gtk_text_layout_mark_set_handler    (GtkTextBuffer     *buffer,
-						 const GtkTextIter *location,
-						 GtkTextMark       *mark,
-						 gpointer           data);
-static void gtk_text_layout_buffer_insert_text  (GtkTextBuffer     *textbuffer,
-						 GtkTextIter       *iter,
-						 gchar             *str,
-						 gint               len,
-						 gpointer           data);
-static void gtk_text_layout_buffer_delete_range (GtkTextBuffer     *textbuffer,
-						 GtkTextIter       *start,
-						 GtkTextIter       *end,
-						 gpointer           data);
+static void gtk_text_layout_after_mark_set_handler     (GtkTextBuffer     *buffer,
+                                                        const GtkTextIter *location,
+                                                        GtkTextMark       *mark,
+                                                        gpointer           data);
+static void gtk_text_layout_after_buffer_insert_text   (GtkTextBuffer     *textbuffer,
+                                                        GtkTextIter       *iter,
+                                                        gchar             *str,
+                                                        gint               len,
+                                                        gpointer           data);
+static void gtk_text_layout_after_buffer_delete_range  (GtkTextBuffer     *textbuffer,
+                                                        GtkTextIter       *start,
+                                                        GtkTextIter       *end,
+                                                        gpointer           data);
+static void gtk_text_layout_before_mark_set_handler    (GtkTextBuffer     *buffer,
+                                                        const GtkTextIter *location,
+                                                        GtkTextMark       *mark,
+                                                        gpointer           data);
+static void gtk_text_layout_before_buffer_insert_text  (GtkTextBuffer     *textbuffer,
+                                                        GtkTextIter       *iter,
+                                                        gchar             *str,
+                                                        gint               len,
+                                                        gpointer           data);
+static void gtk_text_layout_before_buffer_delete_range (GtkTextBuffer     *textbuffer,
+                                                        GtkTextIter       *start,
+                                                        GtkTextIter       *end,
+                                                        gpointer           data);
+
 
 static void gtk_text_layout_update_cursor_line (GtkTextLayout *layout);
 
@@ -182,9 +200,10 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkTextLayout, gtk_text_layout, G_TYPE_OBJECT)
 static void
 gtk_text_layout_dispose (GObject *object)
 {
-  GtkTextLayout *layout;
+  GtkTextLayout *layout = GTK_TEXT_LAYOUT (object);
+  GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
 
-  layout = GTK_TEXT_LAYOUT (object);
+  g_clear_pointer (&priv->cache, gtk_text_line_display_cache_free);
 
   gtk_text_layout_set_buffer (layout, NULL);
 
@@ -196,8 +215,6 @@ gtk_text_layout_dispose (GObject *object)
 
   g_clear_object (&layout->ltr_context);
   g_clear_object (&layout->rtl_context);
-
-  g_clear_pointer (&layout->one_display_cache, gtk_text_line_display_unref);
 
   if (layout->preedit_attrs != NULL)
     {
@@ -275,7 +292,10 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
 static void
 gtk_text_layout_init (GtkTextLayout *text_layout)
 {
+  GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (text_layout);
+
   text_layout->cursor_visible = TRUE;
+  priv->cache = gtk_text_line_display_cache_new ();
 }
 
 GtkTextLayout*
@@ -315,14 +335,24 @@ gtk_text_layout_set_buffer (GtkTextLayout *layout,
       _gtk_text_btree_remove_view (_gtk_text_buffer_get_btree (layout->buffer),
                                   layout);
 
-      g_signal_handlers_disconnect_by_func (layout->buffer, 
-                                            G_CALLBACK (gtk_text_layout_mark_set_handler), 
+      g_signal_handlers_disconnect_by_func (layout->buffer,
+                                            G_CALLBACK (gtk_text_layout_after_mark_set_handler),
                                             layout);
-      g_signal_handlers_disconnect_by_func (layout->buffer, 
-                                            G_CALLBACK (gtk_text_layout_buffer_insert_text), 
+      g_signal_handlers_disconnect_by_func (layout->buffer,
+                                            G_CALLBACK (gtk_text_layout_after_buffer_insert_text),
                                             layout);
-      g_signal_handlers_disconnect_by_func (layout->buffer, 
-                                            G_CALLBACK (gtk_text_layout_buffer_delete_range), 
+      g_signal_handlers_disconnect_by_func (layout->buffer,
+                                            G_CALLBACK (gtk_text_layout_after_buffer_delete_range),
+                                            layout);
+
+      g_signal_handlers_disconnect_by_func (layout->buffer,
+                                            G_CALLBACK (gtk_text_layout_before_mark_set_handler),
+                                            layout);
+      g_signal_handlers_disconnect_by_func (layout->buffer,
+                                            G_CALLBACK (gtk_text_layout_before_buffer_insert_text),
+                                            layout);
+      g_signal_handlers_disconnect_by_func (layout->buffer,
+                                            G_CALLBACK (gtk_text_layout_before_buffer_delete_range),
                                             layout);
 
       g_object_unref (layout->buffer);
@@ -339,11 +369,18 @@ gtk_text_layout_set_buffer (GtkTextLayout *layout,
 
       /* Bind to all signals that move the insert mark. */
       g_signal_connect_after (layout->buffer, "mark-set",
-                              G_CALLBACK (gtk_text_layout_mark_set_handler), layout);
+                              G_CALLBACK (gtk_text_layout_after_mark_set_handler), layout);
       g_signal_connect_after (layout->buffer, "insert-text",
-                              G_CALLBACK (gtk_text_layout_buffer_insert_text), layout);
+                              G_CALLBACK (gtk_text_layout_after_buffer_insert_text), layout);
       g_signal_connect_after (layout->buffer, "delete-range",
-                              G_CALLBACK (gtk_text_layout_buffer_delete_range), layout);
+                              G_CALLBACK (gtk_text_layout_after_buffer_delete_range), layout);
+
+      g_signal_connect (layout->buffer, "mark-set",
+                        G_CALLBACK (gtk_text_layout_before_mark_set_handler), layout);
+      g_signal_connect (layout->buffer, "insert-text",
+                        G_CALLBACK (gtk_text_layout_before_buffer_insert_text), layout);
+      g_signal_connect (layout->buffer, "delete-range",
+                        G_CALLBACK (gtk_text_layout_before_buffer_delete_range), layout);
 
       gtk_text_layout_update_cursor_line (layout);
     }
@@ -627,46 +664,26 @@ gtk_text_layout_emit_changed (GtkTextLayout *layout,
   g_signal_emit (layout, signals[CHANGED], 0, y, old_height, new_height);
 }
 
-static void
-text_layout_changed (GtkTextLayout *layout,
-                     gint           y,
-                     gint           old_height,
-                     gint           new_height,
-                     gboolean       cursors_only)
-{
-  /* Check if the range intersects our cached line display,
-   * and invalidate the cached line if so.
-   */
-  if (layout->one_display_cache)
-    {
-      GtkTextLine *line = layout->one_display_cache->line;
-      gint cache_y = _gtk_text_btree_find_line_top (_gtk_text_buffer_get_btree (layout->buffer),
-						    line, layout);
-      gint cache_height = layout->one_display_cache->height;
-
-      if (cache_y + cache_height > y && cache_y < y + old_height)
-	gtk_text_layout_invalidate_cache (layout, line, cursors_only);
-    }
-
-  gtk_text_layout_emit_changed (layout, y, old_height, new_height);
-}
-
 void
 gtk_text_layout_changed (GtkTextLayout *layout,
                          gint           y,
                          gint           old_height,
                          gint           new_height)
 {
-  text_layout_changed (layout, y, old_height, new_height, FALSE);
+  GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
+  gtk_text_line_display_cache_invalidate_y_range (priv->cache, layout, y, old_height, FALSE);
+  gtk_text_layout_emit_changed (layout, y, old_height, new_height);
 }
 
 void
 gtk_text_layout_cursors_changed (GtkTextLayout *layout,
                                  gint           y,
-				 gint           old_height,
-				 gint           new_height)
+                                 gint           old_height,
+                                 gint           new_height)
 {
-  text_layout_changed (layout, y, old_height, new_height, TRUE);
+  GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
+  gtk_text_line_display_cache_invalidate_y_range (priv->cache, layout, y, old_height, TRUE);
+  gtk_text_layout_emit_changed (layout, y, old_height, new_height);
 }
 
 void
@@ -819,20 +836,16 @@ gtk_text_layout_invalidate_cache (GtkTextLayout *layout,
                                   GtkTextLine   *line,
 				  gboolean       cursors_only)
 {
-  if (layout->one_display_cache && line == layout->one_display_cache->line)
+  GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
+
+  g_assert (GTK_IS_TEXT_LAYOUT (layout));
+
+  if (priv->cache != NULL)
     {
       if (cursors_only)
-	{
-          GtkTextLineDisplay *display = layout->one_display_cache;
-
-          g_clear_pointer (&display->cursors, g_array_unref);
-	  display->cursors_invalid = TRUE;
-	  display->has_block_cursor = FALSE;
-	}
+        gtk_text_line_display_cache_invalidate_cursors (priv->cache, line);
       else
-	{
-          g_clear_pointer (&layout->one_display_cache, gtk_text_line_display_unref);
-	}
+        gtk_text_line_display_cache_invalidate_line (priv->cache, line);
     }
 }
 
@@ -840,7 +853,7 @@ gtk_text_layout_invalidate_cache (GtkTextLayout *layout,
  */
 static void
 gtk_text_layout_invalidate_cursor_line (GtkTextLayout *layout,
-					gboolean cursors_only)
+					gboolean       cursors_only)
 {
   GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
   GtkTextLineData *line_data;
@@ -849,22 +862,20 @@ gtk_text_layout_invalidate_cursor_line (GtkTextLayout *layout,
     return;
 
   line_data = _gtk_text_line_get_data (priv->cursor_line, layout);
-  if (line_data)
+
+  if (line_data != NULL)
     {
-      if (cursors_only)
-	  gtk_text_layout_invalidate_cache (layout, priv->cursor_line, TRUE);
-      else
-	{
-	  gtk_text_layout_invalidate_cache (layout, priv->cursor_line, FALSE);
-	  _gtk_text_line_invalidate_wrap (priv->cursor_line, line_data);
-	}
+      gtk_text_layout_invalidate_cache (layout, priv->cursor_line, cursors_only);
+
+      if (!cursors_only)
+        _gtk_text_line_invalidate_wrap (priv->cursor_line, line_data);
 
       gtk_text_layout_invalidated (layout);
     }
 }
 
 static void
-gtk_text_layout_update_cursor_line(GtkTextLayout *layout)
+gtk_text_layout_update_cursor_line (GtkTextLayout *layout)
 {
   GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
   GtkTextIter iter;
@@ -873,6 +884,8 @@ gtk_text_layout_update_cursor_line(GtkTextLayout *layout)
                                     gtk_text_buffer_get_insert (layout->buffer));
 
   priv->cursor_line = _gtk_text_iter_get_text_line (&iter);
+
+  gtk_text_line_display_cache_set_cursor_line (priv->cache, priv->cursor_line);
 }
 
 static void
@@ -924,34 +937,8 @@ gtk_text_layout_real_invalidate_cursors (GtkTextLayout     *layout,
 					 const GtkTextIter *start,
 					 const GtkTextIter *end)
 {
-  /* Check if the range intersects our cached line display,
-   * and invalidate the cached line if so.
-   */
-  if (layout->one_display_cache)
-    {
-      GtkTextIter line_start, line_end;
-      GtkTextLine *line = layout->one_display_cache->line;
-
-      gtk_text_layout_get_iter_at_line (layout, &line_start, line, 0);
-
-      line_end = line_start;
-      if (!gtk_text_iter_ends_line (&line_end))
-	gtk_text_iter_forward_to_line_end (&line_end);
-
-      if (gtk_text_iter_compare (start, end) > 0)
-	{
-	  const GtkTextIter *tmp = start;
-	  start = end;
-	  end = tmp;
-	}
-
-      if (gtk_text_iter_compare (&line_start, end) <= 0 &&
-	  gtk_text_iter_compare (start, &line_end) <= 0)
-	{
-	  gtk_text_layout_invalidate_cache (layout, line, TRUE);
-	}
-    }
-
+  GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
+  gtk_text_line_display_cache_invalidate_range (priv->cache, layout, start, end, TRUE);
   gtk_text_layout_invalidated (layout);
 }
 
@@ -2122,10 +2109,10 @@ add_preedit_attrs (GtkTextLayout     *layout,
 
 /* Iterate over the line and fill in display->cursors.
  * It’s a stripped copy of gtk_text_layout_get_line_display() */
-static void
-update_text_display_cursors (GtkTextLayout      *layout,
-			     GtkTextLine        *line,
-			     GtkTextLineDisplay *display)
+void
+gtk_text_layout_update_display_cursors (GtkTextLayout      *layout,
+                                        GtkTextLine        *line,
+                                        GtkTextLineDisplay *display)
 {
   GtkTextLineSegment *seg;
   GtkTextIter iter;
@@ -2275,9 +2262,9 @@ tags_array_toggle_tag (GPtrArray  *array,
 }
 
 GtkTextLineDisplay *
-gtk_text_layout_get_line_display (GtkTextLayout *layout,
-                                  GtkTextLine   *line,
-                                  gboolean       size_only)
+gtk_text_layout_create_display (GtkTextLayout *layout,
+                                GtkTextLine   *line,
+                                gboolean       size_only)
 {
   GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
   GtkTextLineDisplay *display;
@@ -2305,26 +2292,10 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
   g_return_val_if_fail (line != NULL, NULL);
 
-  if (layout->one_display_cache)
-    {
-      if (line == layout->one_display_cache->line &&
-          (size_only || !layout->one_display_cache->size_only))
-	{
-	  if (!size_only)
-            update_text_display_cursors (layout, line, layout->one_display_cache);
-	  return gtk_text_line_display_ref (layout->one_display_cache);
-	}
-      else
-        {
-          g_clear_pointer (&layout->one_display_cache, gtk_text_line_display_unref);
-        }
-    }
-
-  DV (g_print ("creating one line display cache (%s)\n", G_STRLOC));
-
   display = g_rc_box_new0 (GtkTextLineDisplay);
 
-  display->size_only = size_only;
+  display->mru_link.data = display;
+  display->size_only = !!size_only;
   display->line = line;
   display->insert_index = -1;
 
@@ -2347,7 +2318,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
       line->dir_strong == PANGO_DIRECTION_NEUTRAL)
     {
       base_dir = (layout->keyboard_direction == GTK_TEXT_DIR_LTR) ?
-	 PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL;
+         PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL;
     }
 
   /* Allocate space for flat text for buffer
@@ -2371,7 +2342,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
           seg->type == &gtk_text_child_type)
         {
           style = get_style (layout, tags);
-	  initial_toggle_segments = FALSE;
+          initial_toggle_segments = FALSE;
 
           /* We have to delay setting the paragraph values until we
            * hit the first texture or text segment because toggles at
@@ -2401,9 +2372,9 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                    */
 
                   gint bytes = 0;
- 		  GtkTextLineSegment *prev_seg = NULL;
+                  GtkTextLineSegment *prev_seg = NULL;
   
- 		  while (seg)
+                  while (seg)
                     {
                       if (seg->type == &gtk_text_char_type)
                         {
@@ -2412,35 +2383,35 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
                           buffer_byte_offset += seg->byte_count;
                           bytes += seg->byte_count;
                         }
- 		      else if (seg->type == &gtk_text_right_mark_type ||
- 			       seg->type == &gtk_text_left_mark_type)
+                      else if (seg->type == &gtk_text_right_mark_type ||
+                               seg->type == &gtk_text_left_mark_type)
                         {
- 			  /* If we have preedit string, break out of this loop - we'll almost
- 			   * certainly have different attributes on the preedit string
- 			   */
+                          /* If we have preedit string, break out of this loop - we'll almost
+                           * certainly have different attributes on the preedit string
+                           */
 
- 			  if (layout->preedit_len > 0 &&
- 			      _gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
- 							     seg->body.mark.obj))
-			    break;
+                          if (layout->preedit_len > 0 &&
+                              _gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
+                                                             seg->body.mark.obj))
+                            break;
 
- 			  if (seg->body.mark.visible)
- 			    {
-			      cursor_byte_offsets = g_slist_prepend (cursor_byte_offsets, GINT_TO_POINTER (layout_byte_offset));
-			      cursor_segs = g_slist_prepend (cursor_segs, seg);
-			      if (_gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
-								  seg->body.mark.obj))
-				display->insert_index = layout_byte_offset;
-			    }
+                          if (seg->body.mark.visible)
+                            {
+                              cursor_byte_offsets = g_slist_prepend (cursor_byte_offsets, GINT_TO_POINTER (layout_byte_offset));
+                              cursor_segs = g_slist_prepend (cursor_segs, seg);
+                              if (_gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
+                                                                  seg->body.mark.obj))
+                                display->insert_index = layout_byte_offset;
+                            }
                         }
-		      else
-			break;
+                      else
+                        break;
 
- 		      prev_seg = seg;
+                      prev_seg = seg;
                       seg = seg->next;
                     }
 
- 		  seg = prev_seg; /* Back up one */
+                  seg = prev_seg; /* Back up one */
                   add_generic_attrs (layout, &style->appearance,
                                      bytes,
                                      attrs, layout_byte_offset - bytes,
@@ -2503,42 +2474,42 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
           /* Style may have changed, drop our
              current cached style */
           invalidate_cached_style (layout);
-	  /* Add the tag only after we have seen some non-toggle non-mark segment,
-	   * otherwise the tag is already accounted for by _gtk_text_btree_get_tags(). */
-	  if (!initial_toggle_segments)
-	    tags = tags_array_toggle_tag (tags, seg->body.toggle.info->tag);
+          /* Add the tag only after we have seen some non-toggle non-mark segment,
+           * otherwise the tag is already accounted for by _gtk_text_btree_get_tags(). */
+          if (!initial_toggle_segments)
+            tags = tags_array_toggle_tag (tags, seg->body.toggle.info->tag);
         }
 
       /* Marks */
       else if (seg->type == &gtk_text_right_mark_type ||
                seg->type == &gtk_text_left_mark_type)
         {
-	  gint cursor_offset = 0;
- 	  
-	  /* At the insertion point, add the preedit string, if any */
-	  
-	  if (_gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
-					     seg->body.mark.obj))
-	    {
-	      display->insert_index = layout_byte_offset;
-	      
-	      if (layout->preedit_len > 0)
-		{
-		  text_allocated += layout->preedit_len;
-		  text = g_realloc (text, text_allocated);
+          gint cursor_offset = 0;
+          
+          /* At the insertion point, add the preedit string, if any */
+          
+          if (_gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
+                                             seg->body.mark.obj))
+            {
+              display->insert_index = layout_byte_offset;
+              
+              if (layout->preedit_len > 0)
+                {
+                  text_allocated += layout->preedit_len;
+                  text = g_realloc (text, text_allocated);
 
-		  style = get_style (layout, tags);
-		  add_preedit_attrs (layout, style, attrs, layout_byte_offset, size_only);
-		  release_style (layout, style);
+                  style = get_style (layout, tags);
+                  add_preedit_attrs (layout, style, attrs, layout_byte_offset, size_only);
+                  release_style (layout, style);
                   
-		  memcpy (text + layout_byte_offset, layout->preedit_string, layout->preedit_len);
-		  layout_byte_offset += layout->preedit_len;
+                  memcpy (text + layout_byte_offset, layout->preedit_string, layout->preedit_len);
+                  layout_byte_offset += layout->preedit_len;
                   /* DO NOT increment the buffer byte offset for preedit */
                   
-		  cursor_offset = layout->preedit_cursor - layout->preedit_len;
-		}
-	    }
-	  
+                  cursor_offset = layout->preedit_cursor - layout->preedit_len;
+                }
+            }
+          
 
           /* Display visible marks */
 
@@ -2623,17 +2594,17 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
       gint excess = display->total_width - text_pixel_width;
 
       switch (pango_layout_get_alignment (display->layout))
-	{
-	case PANGO_ALIGN_LEFT:
+        {
+        case PANGO_ALIGN_LEFT:
         default:
-	  break;
-	case PANGO_ALIGN_CENTER:
-	  display->x_offset += excess / 2;
-	  break;
-	case PANGO_ALIGN_RIGHT:
-	  display->x_offset += excess;
-	  break;
-	}
+          break;
+        case PANGO_ALIGN_CENTER:
+          display->x_offset += excess / 2;
+          break;
+        case PANGO_ALIGN_RIGHT:
+          display->x_offset += excess;
+          break;
+        }
     }
   
   /* Free this if we aren't in a loop */
@@ -2645,19 +2616,37 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   if (tags != NULL)
     g_ptr_array_free (tags, TRUE);
 
-  g_assert (layout->one_display_cache == NULL);
-
-  layout->one_display_cache = gtk_text_line_display_ref (display);
-
   if (saw_widget)
     allocate_child_widgets (layout, display);
   
+  return g_steal_pointer (&display);
+}
+
+GtkTextLineDisplay *
+gtk_text_layout_get_line_display (GtkTextLayout *layout,
+                                  GtkTextLine   *line,
+                                  gboolean       size_only)
+{
+  GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
+  GtkTextLineDisplay *display;
+
+  display = gtk_text_line_display_cache_get (priv->cache, layout, line, size_only);
+
+  if (display)
+    gtk_text_line_display_ref (display);
+
   return display;
 }
 
 static void
 gtk_text_line_display_finalize (GtkTextLineDisplay *display)
 {
+  g_assert (display != NULL);
+  g_assert (display->cache_iter == NULL);
+  g_assert (display->mru_link.prev == NULL);
+  g_assert (display->mru_link.next == NULL);
+  g_assert (display->mru_link.data == display);
+
   g_clear_object (&display->layout);
   g_clear_pointer (&display->cursors, g_array_unref);
 }
@@ -3784,26 +3773,57 @@ gtk_text_layout_spew (GtkTextLayout *layout)
 #endif
 }
 
+static void
+gtk_text_layout_before_mark_set_handler (GtkTextBuffer     *buffer,
+                                         const GtkTextIter *location,
+                                         GtkTextMark       *mark,
+                                         gpointer           data)
+{
+  GtkTextLayout *layout = GTK_TEXT_LAYOUT (data);
+  GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
+
+  if (mark == gtk_text_buffer_get_insert (buffer))
+    gtk_text_line_display_cache_set_cursor_line (priv->cache, NULL);
+}
+
 /* Catch all situations that move the insertion point.
  */
 static void
-gtk_text_layout_mark_set_handler (GtkTextBuffer     *buffer,
-                                  const GtkTextIter *location,
-                                  GtkTextMark       *mark,
-                                  gpointer           data)
+gtk_text_layout_after_mark_set_handler (GtkTextBuffer     *buffer,
+                                        const GtkTextIter *location,
+                                        GtkTextMark       *mark,
+                                        gpointer           data)
 {
   GtkTextLayout *layout = GTK_TEXT_LAYOUT (data);
+  GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
 
   if (mark == gtk_text_buffer_get_insert (buffer))
-    gtk_text_layout_update_cursor_line (layout);
+    {
+      gtk_text_layout_update_cursor_line (layout);
+      gtk_text_line_display_cache_set_cursor_line (priv->cache, priv->cursor_line);
+    }
 }
 
 static void
-gtk_text_layout_buffer_insert_text (GtkTextBuffer *textbuffer,
-				    GtkTextIter   *iter,
-				    gchar         *str,
-				    gint           len,
-				    gpointer       data)
+gtk_text_layout_before_buffer_insert_text (GtkTextBuffer *textbuffer,
+                                           GtkTextIter   *iter,
+                                           gchar         *str,
+                                           gint           len,
+                                           gpointer       data)
+{
+  GtkTextLayout *layout = GTK_TEXT_LAYOUT (data);
+  GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
+  GtkTextLine *line = _gtk_text_iter_get_text_line (iter);
+
+  gtk_text_line_display_cache_invalidate_line (priv->cache, line);
+}
+
+static void
+gtk_text_layout_after_buffer_insert_text (GtkTextBuffer *textbuffer,
+                                          GtkTextIter   *iter,
+                                          gchar         *str,
+                                          gint           len,
+                                          gpointer       data)
 {
   GtkTextLayout *layout = GTK_TEXT_LAYOUT (data);
 
@@ -3811,10 +3831,22 @@ gtk_text_layout_buffer_insert_text (GtkTextBuffer *textbuffer,
 }
 
 static void
-gtk_text_layout_buffer_delete_range (GtkTextBuffer *textbuffer,
-				     GtkTextIter   *start,
-				     GtkTextIter   *end,
-				     gpointer       data)
+gtk_text_layout_before_buffer_delete_range (GtkTextBuffer *textbuffer,
+                                            GtkTextIter   *start,
+                                            GtkTextIter   *end,
+                                            gpointer       data)
+{
+  GtkTextLayout *layout = GTK_TEXT_LAYOUT (data);
+  GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
+
+  gtk_text_line_display_cache_invalidate_range (priv->cache, layout, start, end, FALSE);
+}
+
+static void
+gtk_text_layout_after_buffer_delete_range (GtkTextBuffer *textbuffer,
+                                           GtkTextIter   *start,
+                                           GtkTextIter   *end,
+                                           gpointer       data)
 {
   GtkTextLayout *layout = GTK_TEXT_LAYOUT (data);
 
@@ -4041,6 +4073,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
                           const GdkRectangle *clip,
                           float               cursor_alpha)
 {
+  GtkTextLayoutPrivate *priv;
   GskPangoRenderer *crenderer;
   GtkStyleContext *context;
   gint offset_y;
@@ -4054,6 +4087,8 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   g_return_if_fail (layout->default_style != NULL);
   g_return_if_fail (layout->buffer != NULL);
   g_return_if_fail (snapshot != NULL);
+
+  priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_get_color (context, &color);
@@ -4155,7 +4190,24 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
   gtk_text_layout_wrap_loop_end (layout);
 
+  /* Only update eviction source once per snapshot */
+  gtk_text_line_display_cache_delay_eviction (priv->cache);
+
   g_slist_free (line_list);
 
   gsk_pango_renderer_release (crenderer);
+}
+
+gint
+gtk_text_line_display_compare (const GtkTextLineDisplay *display1,
+                               const GtkTextLineDisplay *display2,
+                               GtkTextLayout            *layout)
+{
+  GtkTextIter iter1;
+  GtkTextIter iter2;
+
+  gtk_text_layout_get_iter_at_line (layout, &iter1, display1->line, 0);
+  gtk_text_layout_get_iter_at_line (layout, &iter2, display2->line, 0);
+
+  return gtk_text_iter_compare (&iter1, &iter2);
 }
