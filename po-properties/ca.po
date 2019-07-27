@@ -370,15 +370,15 @@ msgstr "L'etiqueta de l'enllaç al lloc web del programa"
 
 #: gtk/gtkaboutdialog.c:501
 msgid "Authors"
-msgstr "Autors"
+msgstr "Autoria"
 
 #: gtk/gtkaboutdialog.c:502
 msgid "List of authors of the program"
-msgstr "Llista d'autors del programa"
+msgstr "Autoria del programa"
 
 #: gtk/gtkaboutdialog.c:515
 msgid "Documenters"
-msgstr "Documentadors"
+msgstr "Equip de documentació"
 
 #: gtk/gtkaboutdialog.c:516
 msgid "List of people documenting the program"
