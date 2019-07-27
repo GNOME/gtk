@@ -52,6 +52,7 @@
 #include "gtkmain.h"
 #include "gtksettings.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkheaderbar.h"
 
 #include <glib/gprintf.h>
 
@@ -570,6 +571,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   widget = g_object_new (GTK_TYPE_DIALOG,
                          "use-header-bar", use_header,
                          NULL);
+  printf("use_header: %u\n", use_header);
   dialog = GTK_DIALOG (widget);
   window = GTK_WINDOW (widget);
 
@@ -621,24 +623,34 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   secondary = strstr (message, "\n");
   if (secondary != NULL)
     {
-      primary = g_strndup (message, secondary - message + 1);
+      primary = g_strndup (message, secondary - message);
     }
   else
     {
       primary = g_strdup (message);
     }
 
-  label = gtk_label_new (primary);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-  gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (label),
-                      FALSE, TRUE, 0);
+  if (use_header)
+    {
+      GtkWidget *header;
+      header = gtk_dialog_get_header_bar (GTK_DIALOG (dialog));
+      gtk_header_bar_set_title (GTK_HEADER_BAR (header), primary);
+    }
+  else
+    {
+      label = gtk_label_new (primary);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+      gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+      gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (label),
+                          FALSE, TRUE, 0);
+      attrs = pango_attr_list_new ();
+      pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
+      gtk_label_set_attributes (GTK_LABEL (label), attrs);
+      pango_attr_list_unref (attrs);
+    }
+
   g_free (primary);
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango_attr_list_unref (attrs);
 
   if (secondary != NULL)
     {
