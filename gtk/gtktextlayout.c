@@ -3848,6 +3848,33 @@ gtk_text_layout_after_buffer_delete_range (GtkTextBuffer *textbuffer,
 }
 
 static void
+push_translate (GskPangoRenderer       *crenderer,
+                const graphene_point_t *point)
+{
+  gtk_snapshot_save (crenderer->fg_snapshot);
+  gtk_snapshot_save (crenderer->bg_snapshot);
+  gtk_snapshot_save (crenderer->selection_fg_snapshot);
+  gtk_snapshot_save (crenderer->selection_bg_snapshot);
+  gtk_snapshot_save (crenderer->cursors_snapshot);
+
+  gtk_snapshot_translate (crenderer->fg_snapshot, point);
+  gtk_snapshot_translate (crenderer->bg_snapshot, point);
+  gtk_snapshot_translate (crenderer->selection_fg_snapshot, point);
+  gtk_snapshot_translate (crenderer->selection_bg_snapshot, point);
+  gtk_snapshot_translate (crenderer->cursors_snapshot, point);
+}
+
+static void
+pop_translate (GskPangoRenderer *crenderer)
+{
+  gtk_snapshot_restore (crenderer->fg_snapshot);
+  gtk_snapshot_restore (crenderer->bg_snapshot);
+  gtk_snapshot_restore (crenderer->selection_fg_snapshot);
+  gtk_snapshot_restore (crenderer->selection_bg_snapshot);
+  gtk_snapshot_restore (crenderer->cursors_snapshot);
+}
+
+static void
 render_para (GskPangoRenderer   *crenderer,
              int                 offset_y,
              GtkTextLineDisplay *line_display,
@@ -3880,8 +3907,7 @@ render_para (GskPangoRenderer   *crenderer,
       gtk_style_context_restore (context);
     }
 
-  gtk_snapshot_save (crenderer->snapshot);
-  gtk_snapshot_translate (crenderer->snapshot, &point);
+  push_translate (crenderer, &point);
 
   do
     {
@@ -3923,7 +3949,7 @@ render_para (GskPangoRenderer   *crenderer,
       if (selection_start_index < byte_offset &&
           selection_end_index > line->length + byte_offset) /* All selected */
         {
-          gtk_snapshot_append_color (crenderer->snapshot,
+          gtk_snapshot_append_color (crenderer->selection_bg_snapshot,
                                      selection,
                                      &GRAPHENE_RECT_INIT (line_display->left_margin,
                                                           selection_y,
@@ -3938,7 +3964,7 @@ render_para (GskPangoRenderer   *crenderer,
       else
         {
           if (line_display->pg_bg_rgba_set)
-            gtk_snapshot_append_color (crenderer->snapshot,
+            gtk_snapshot_append_color (crenderer->selection_bg_snapshot,
                                        &line_display->pg_bg_rgba,
                                        &GRAPHENE_RECT_INIT (line_display->left_margin,
                                                             selection_y,
@@ -3975,13 +4001,13 @@ render_para (GskPangoRenderer   *crenderer,
                   bounds.size.width = PANGO_PIXELS (ranges[2*i + 1]) - PANGO_PIXELS (ranges[2*i]);
                   bounds.size.height = selection_height;
 
-                  gtk_snapshot_append_color (crenderer->snapshot, selection, &bounds);
-                  gtk_snapshot_push_clip (crenderer->snapshot, &bounds);
+                  gtk_snapshot_append_color (crenderer->selection_bg_snapshot, selection, &bounds);
+                  gtk_snapshot_push_clip (crenderer->selection_fg_snapshot, &bounds);
                   pango_renderer_draw_layout_line (PANGO_RENDERER (crenderer),
                                                    line,
                                                    line_rect.x,
                                                    baseline);
-                  gtk_snapshot_pop (crenderer->snapshot);
+                  gtk_snapshot_pop (crenderer->selection_fg_snapshot);
                 }
 
               g_free (ranges);
@@ -3990,7 +4016,7 @@ render_para (GskPangoRenderer   *crenderer,
               if (line_rect.x > line_display->left_margin * PANGO_SCALE &&
                   ((line_display->direction == GTK_TEXT_DIR_LTR && selection_start_index < byte_offset) ||
                    (line_display->direction == GTK_TEXT_DIR_RTL && selection_end_index > byte_offset + line->length)))
-                gtk_snapshot_append_color (crenderer->snapshot,
+                gtk_snapshot_append_color (crenderer->selection_bg_snapshot,
                                            selection,
                                            &GRAPHENE_RECT_INIT (line_display->left_margin,
                                                                 selection_y,
@@ -4006,7 +4032,7 @@ render_para (GskPangoRenderer   *crenderer,
                                       + screen_width
                                       - PANGO_PIXELS (line_rect.x)
                                       - PANGO_PIXELS (line_rect.width);
-                  gtk_snapshot_append_color (crenderer->snapshot,
+                  gtk_snapshot_append_color (crenderer->selection_bg_snapshot,
                                              selection,
                                              &GRAPHENE_RECT_INIT (PANGO_PIXELS (line_rect.x) + PANGO_PIXELS (line_rect.width),
                                                                   selection_y,
@@ -4032,21 +4058,21 @@ render_para (GskPangoRenderer   *crenderer,
                * (normally white on black) */
               _gtk_style_context_get_cursor_color (context, &cursor_color, NULL);
 
-              gtk_snapshot_push_opacity (crenderer->snapshot, cursor_alpha);
-              gtk_snapshot_append_color (crenderer->snapshot, &cursor_color, &bounds);
+              gtk_snapshot_push_opacity (crenderer->cursors_snapshot, cursor_alpha);
+              gtk_snapshot_append_color (crenderer->cursors_snapshot, &cursor_color, &bounds);
 
               /* draw text under the cursor if any */
               if (!line_display->cursor_at_line_end)
                 {
                   gsk_pango_renderer_set_state (crenderer, GSK_PANGO_RENDERER_CURSOR);
-                  gtk_snapshot_push_clip (crenderer->snapshot, &bounds);
+                  gtk_snapshot_push_clip (crenderer->cursors_snapshot, &bounds);
                   pango_renderer_draw_layout_line (PANGO_RENDERER (crenderer),
                                                    line,
                                                    line_rect.x,
                                                    baseline);
-                  gtk_snapshot_pop (crenderer->snapshot);
+                  gtk_snapshot_pop (crenderer->cursors_snapshot);
                 }
-              gtk_snapshot_pop (crenderer->snapshot);
+              gtk_snapshot_pop (crenderer->cursors_snapshot);
             }
         }
 
@@ -4054,7 +4080,7 @@ render_para (GskPangoRenderer   *crenderer,
     }
   while (pango_layout_iter_next_line (iter));
 
-  gtk_snapshot_restore (crenderer->snapshot);
+  pop_translate (crenderer);
 
   gdk_rgba_free (selection);
   pango_layout_iter_free (iter);
@@ -4070,12 +4096,12 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   GtkTextLayoutPrivate *priv;
   GskPangoRenderer *crenderer;
   GtkStyleContext *context;
-  gint offset_y;
   GtkTextIter selection_start, selection_end;
   gboolean have_selection;
   GSList *line_list;
   GSList *tmp_list;
   GdkRGBA color;
+  gint offset_y;
 
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (layout->default_style != NULL);
@@ -4095,7 +4121,6 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   crenderer = gsk_pango_renderer_acquire ();
 
   crenderer->widget = widget;
-  crenderer->snapshot = snapshot;
   crenderer->fg_color = color;
 
   graphene_rect_init (&crenderer->bounds, 0, 0, clip->width, clip->height);
@@ -4157,7 +4182,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
             {
               int i;
 
-              gtk_snapshot_push_opacity (crenderer->snapshot, cursor_alpha);
+              gtk_snapshot_push_opacity (crenderer->cursors_snapshot, cursor_alpha);
               for (i = 0; i < line_display->cursors->len; i++)
                 {
                   int index;
@@ -4166,12 +4191,12 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
                   index = g_array_index(line_display->cursors, int, i);
                   dir = (line_display->direction == GTK_TEXT_DIR_RTL) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
 
-                  gtk_snapshot_render_insertion_cursor (crenderer->snapshot, context,
+                  gtk_snapshot_render_insertion_cursor (crenderer->cursors_snapshot, context,
                                                         line_display->x_offset, offset_y + line_display->top_margin,
                                                         line_display->layout, index, dir);
                 }
 
-              gtk_snapshot_pop (crenderer->snapshot);
+              gtk_snapshot_pop (crenderer->cursors_snapshot);
             }
         } /* line_display->height > 0 */
 
@@ -4184,10 +4209,12 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
   gtk_text_layout_wrap_loop_end (layout);
 
+  g_slist_free (line_list);
+
+  gsk_pango_renderer_apply (crenderer, snapshot);
+
   /* Only update eviction source once per snapshot */
   gtk_text_line_display_cache_delay_eviction (priv->cache);
-
-  g_slist_free (line_list);
 
   gsk_pango_renderer_release (crenderer);
 }
