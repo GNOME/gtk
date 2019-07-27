@@ -705,23 +705,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     priv->domain_entry = table_add_entry (operation, rows++, _("_Domain"),
                                           default_domain, operation);
 
-  priv->pim_entry = NULL;
-  if (priv->ask_flags & G_ASK_PASSWORD_TCRYPT)
-    {
-      GtkWidget *volume_type_box;
-      volume_type_box =  gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
-      gtk_grid_attach (GTK_GRID (grid), volume_type_box, 0, rows++, 2, 1);
-      priv->user_widgets = g_list_prepend (priv->user_widgets, volume_type_box);
-
-      priv->tcrypt_hidden_toggle = gtk_check_button_new_with_mnemonic (_("_Hidden Volume"));
-      gtk_container_add (GTK_CONTAINER (volume_type_box), priv->tcrypt_hidden_toggle);
-
-      priv->tcrypt_system_toggle = gtk_check_button_new_with_mnemonic (_("_Windows System Volume"));
-      gtk_container_add (GTK_CONTAINER (volume_type_box), priv->tcrypt_system_toggle);
-
-      priv->pim_entry = table_add_entry (operation, rows++, _("_PIM"), NULL, operation);
-    }
-
   priv->password_entry = NULL;
   if (priv->ask_flags & G_ASK_PASSWORD_NEED_PASSWORD)
     {
@@ -775,6 +758,33 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       g_signal_connect (choice, "toggled",
                         G_CALLBACK (remember_button_toggled), operation);
       gtk_box_pack_start (GTK_BOX (remember_box), choice, FALSE, FALSE, 0);
+    }
+
+  priv->pim_entry = NULL;
+  if (priv->ask_flags & G_ASK_PASSWORD_TCRYPT)
+    {
+      GtkWidget *volume_type_box;
+      gchar *str;
+
+      str = g_strdup_printf ("<b>%s</b>", _("Encryption Options"));
+      label = gtk_label_new (str);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+      g_free (str);
+      gtk_grid_attach (GTK_GRID (grid), label, 0, rows++, 2, 1);
+      priv->user_widgets = g_list_prepend (priv->user_widgets, label);
+
+      volume_type_box =  gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+      gtk_grid_attach (GTK_GRID (grid), volume_type_box, 0, rows++, 2, 1);
+      priv->user_widgets = g_list_prepend (priv->user_widgets, volume_type_box);
+
+      priv->tcrypt_hidden_toggle = gtk_check_button_new_with_mnemonic (_("_Hidden Volume"));
+      gtk_container_add (GTK_CONTAINER (volume_type_box), priv->tcrypt_hidden_toggle);
+
+      priv->tcrypt_system_toggle = gtk_check_button_new_with_mnemonic (_("_Windows System Volume"));
+      gtk_container_add (GTK_CONTAINER (volume_type_box), priv->tcrypt_system_toggle);
+
+      priv->pim_entry = table_add_entry (operation, rows++, _("_PIM"), NULL, operation);
     }
 
   g_signal_connect (G_OBJECT (dialog), "response",
