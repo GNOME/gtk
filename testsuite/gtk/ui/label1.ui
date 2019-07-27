@@ -20,6 +20,8 @@
       <attribute name="underline-color" value="green"/>
       <attribute name="strikethrough-color" value="purple"/>
       <attribute name="scale" value="1.5"/>
+      <attribute name="allow-breaks" value="true"/>
+      <attribute name="show" value="spaces|line-breaks"/>
     </attributes>
   </object>
 </interface>
