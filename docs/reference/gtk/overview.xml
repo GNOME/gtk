@@ -11,7 +11,10 @@ GTK is released under the GNU Library General Public License
 applications. GTK has a C-based object-oriented architecture that
 allows for maximum flexibility.  Bindings for many other languages have
 been written, including C++, Objective-C, Guile/Scheme, Perl, Python,
-TOM, Ada95, Free Pascal, and Eiffel.
+TOM, Ada95, Free Pascal, and Eiffel.  The GTK library itself contains
+<firstterm>widgets</firstterm>, that is, GUI components such as GtkButton
+or GtkTextView.
+
 </para>
 <para>
 GTK depends on the following libraries:
@@ -103,14 +106,6 @@ X11, Windows, and OS X.
 GSK is a library for creating a scene graph from render nodes,
 and rendering it using different rendering APIs. GSK provides renderers
 for OpenGL, Vulkan and cairo.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term>GTK</term>
-<listitem><para>
-The GTK library itself contains <firstterm>widgets</firstterm>,
-that is, GUI components such as GtkButton or GtkTextView.
 </para></listitem>
 </varlistentry>
 </variablelist>
