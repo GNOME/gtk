@@ -8087,9 +8087,10 @@ gtk_window_set_display (GtkWindow  *window,
                     "notify::gtk-application-prefer-dark-theme",
                     G_CALLBACK (gtk_window_on_theme_variant_changed), window);
 #endif
-  priv->display = display;
 
   gtk_widget_unroot (widget);
+  priv->display = display;
+
   gtk_widget_root (widget);
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DISPLAY]);
