@@ -7014,7 +7014,7 @@ msgstr "Hongarès antic"
 #: gtk/script-names.c:147
 msgctxt "Script"
 msgid "Signwriting"
-msgstr "Lengua de signes"
+msgstr "Llengua de signes"
 
 #: gtk/script-names.c:148
 msgctxt "Script"
