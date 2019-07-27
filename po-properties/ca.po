@@ -1238,15 +1238,15 @@ msgstr "L'etiqueta de l'enllaç al lloc web del programa"
 
 #: gtk/gtkaboutdialog.c:482
 msgid "Authors"
-msgstr "Autors"
+msgstr "Autoria"
 
 #: gtk/gtkaboutdialog.c:483
 msgid "List of authors of the program"
-msgstr "Llista d'autors del programa"
+msgstr "Autoria del programa"
 
 #: gtk/gtkaboutdialog.c:498
 msgid "Documenters"
-msgstr "Documentadors"
+msgstr "Equip de documentació"
 
 #: gtk/gtkaboutdialog.c:499
 msgid "List of people documenting the program"
@@ -1262,7 +1262,7 @@ msgstr "Llista de gent que ha contribuït amb imatges al programa"
 
 #: gtk/gtkaboutdialog.c:530
 msgid "Translator credits"
-msgstr "Traductors"
+msgstr "Equip de traducció"
 
 #: gtk/gtkaboutdialog.c:531
 msgid ""
@@ -5618,7 +5618,7 @@ msgstr "Dispositiu pad"
 
 #: gtk/gtkpadcontroller.c:380
 msgid "Pad device to control"
-msgstr "Dispositiu pad a control·lar"
+msgstr "Dispositiu pad a controlar"
 
 #: gtk/gtkpaned.c:369
 msgid ""
