@@ -19,6 +19,7 @@ demos/gtk-demo/filtermodel.ui
 demos/gtk-demo/fishbowl.ui
 demos/gtk-demo/font_features.c
 demos/gtk-demo/font-features.ui
+demos/gtk-demo/fontrendering.ui
 demos/gtk-demo/iconview.c
 demos/gtk-demo/infobar.c
 demos/gtk-demo/listbox.ui
