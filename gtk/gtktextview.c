@@ -8903,12 +8903,10 @@ append_bubble_item (GtkTextView *text_view,
     item = gtk_button_new ();
   gtk_widget_set_focus_on_click (item, FALSE);
   image = gtk_image_new_from_icon_name (icon_name);
-  gtk_widget_show (image);
   gtk_container_add (GTK_CONTAINER (item), image);
   gtk_style_context_add_class (gtk_widget_get_style_context (item), "image-button");
   gtk_actionable_set_action_name (GTK_ACTIONABLE (item), action_name);
 
-  gtk_widget_show (GTK_WIDGET (item));
   gtk_container_add (GTK_CONTAINER (toolbar), item);
 }
 
@@ -8939,7 +8937,6 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   g_object_set (box, "margin", 10, NULL);
-  gtk_widget_show (box);
   toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_style_context_add_class (gtk_widget_get_style_context (toolbar), "linked");
   gtk_container_add (GTK_CONTAINER (priv->selection_bubble), box);
