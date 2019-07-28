@@ -117,8 +117,7 @@ render_glyph (GlyphCacheKey    *key,
   cairo_surface_t *surface;
   cairo_t *cr;
   cairo_scaled_font_t *scaled_font;
-  PangoGlyphString glyph_string;
-  PangoGlyphInfo glyph_info;
+  cairo_glyph_t cairo_glyph;
   int surface_width, surface_height;
   int stride;
   unsigned char *data;
@@ -145,18 +144,14 @@ render_glyph (GlyphCacheKey    *key,
   cairo_set_scaled_font (cr, scaled_font);
   cairo_set_source_rgba (cr, 1, 1, 1, 1);
 
-  glyph_info.glyph = key->glyph;
-  glyph_info.geometry.width = value->draw_width * 1024;
+  cairo_glyph.index = key->glyph;
   if (key->glyph & PANGO_GLYPH_UNKNOWN_FLAG)
-    glyph_info.geometry.x_offset = 0;
+    cairo_glyph.x = 0;
   else
-    glyph_info.geometry.x_offset = - value->draw_x * 1024;
-  glyph_info.geometry.y_offset = - value->draw_y * 1024;
+    cairo_glyph.x = - value->draw_x;
+  cairo_glyph.y = - value->draw_y;
 
-  glyph_string.num_glyphs = 1;
-  glyph_string.glyphs = &glyph_info;
-
-  pango_cairo_show_glyph_string (cr, key->font, &glyph_string);
+  cairo_show_glyphs (cr, &cairo_glyph, 1);
   cairo_destroy (cr);
 
   cairo_surface_flush (surface);
