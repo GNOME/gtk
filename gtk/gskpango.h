@@ -52,7 +52,11 @@ struct _GskPangoRenderer
   PangoRenderer          parent_instance;
 
   GtkWidget             *widget;
-  GtkSnapshot           *snapshot;
+  GtkSnapshot           *fg_snapshot;
+  GtkSnapshot           *bg_snapshot;
+  GtkSnapshot           *selection_fg_snapshot;
+  GtkSnapshot           *selection_bg_snapshot;
+  GtkSnapshot           *cursors_snapshot;
   GdkRGBA                fg_color;
   graphene_rect_t        bounds;
 
@@ -75,6 +79,8 @@ void              gsk_pango_renderer_set_state (GskPangoRenderer      *crenderer
                                                 GskPangoRendererState  state);
 GskPangoRenderer *gsk_pango_renderer_acquire   (void);
 void              gsk_pango_renderer_release   (GskPangoRenderer      *crenderer);
+void              gsk_pango_renderer_apply     (GskPangoRenderer      *crenderer,
+                                                GtkSnapshot           *snapshot);
 
 G_END_DECLS
 

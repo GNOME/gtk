@@ -43,6 +43,32 @@ gsk_pango_renderer_set_state (GskPangoRenderer      *crenderer,
   crenderer->state = state;
 }
 
+static GtkSnapshot *
+get_snapshot (GskPangoRenderer *crenderer,
+              gboolean          foreground)
+{
+  switch (crenderer->state)
+    {
+    case GSK_PANGO_RENDERER_CURSOR:
+      return crenderer->cursors_snapshot;
+
+    case GSK_PANGO_RENDERER_NORMAL:
+      if (foreground)
+        return crenderer->fg_snapshot;
+      else
+        return crenderer->bg_snapshot;
+
+    case GSK_PANGO_RENDERER_SELECTED:
+      if (foreground)
+        return crenderer->selection_fg_snapshot;
+      else
+        return crenderer->selection_bg_snapshot;
+
+    default:
+      g_return_val_if_reached (NULL);
+    }
+}
+
 static void
 get_color (GskPangoRenderer *crenderer,
            PangoRenderPart   part,
@@ -97,7 +123,7 @@ gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
 
   get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &color);
 
-  gtk_snapshot_append_text (crenderer->snapshot,
+  gtk_snapshot_append_text (get_snapshot (crenderer, TRUE),
                             glyph_item->item->analysis.font,
                             glyph_item->glyphs,
                             &color,
@@ -117,7 +143,7 @@ gsk_pango_renderer_draw_rectangle (PangoRenderer     *renderer,
   GdkRGBA rgba;
 
   get_color (crenderer, part, &rgba);
-  gtk_snapshot_append_color (crenderer->snapshot,
+  gtk_snapshot_append_color (get_snapshot (crenderer, FALSE),
                              &rgba,
                              &GRAPHENE_RECT_INIT ((double)x / PANGO_SCALE,
                                                   (double)y / PANGO_SCALE,
@@ -139,7 +165,8 @@ gsk_pango_renderer_draw_trapezoid (PangoRenderer   *renderer,
   cairo_t *cr;
   gdouble x, y;
 
-  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
+  cr = gtk_snapshot_append_cairo (get_snapshot (crenderer, TRUE),
+                                  &crenderer->bounds);
 
   set_color (crenderer, part, cr);
 
@@ -168,12 +195,14 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
                                          int            width,
                                          int            height)
 {
+  GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
+  GtkSnapshot *snapshot;
   GdkRGBA rgba;
   double xx, yy, ww, hh;
   double hs;
   double e, o;
 
-  GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
+  snapshot = get_snapshot (crenderer, TRUE);
 
   xx = (double)x / PANGO_SCALE;
   yy = (double)y / PANGO_SCALE;
@@ -185,18 +214,18 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
 
 #if 0
   gdk_rgba_parse (&rgba, "yellow");
-  gtk_snapshot_append_color (crenderer->snapshot, &rgba,
+  gtk_snapshot_append_color (snapshot, &rgba,
                              &GRAPHENE_RECT_INIT (xx, yy, ww, hh));
 #endif
 
 
   get_color (crenderer, PANGO_RENDER_PART_UNDERLINE, &rgba);
-  gtk_snapshot_save (crenderer->snapshot);
-  gtk_snapshot_translate (crenderer->snapshot,
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_translate (snapshot,
                           &GRAPHENE_POINT_INIT (xx, yy));
 
-  gtk_snapshot_rotate (crenderer->snapshot, 45);
-  gtk_snapshot_translate (crenderer->snapshot,
+  gtk_snapshot_rotate (snapshot, 45);
+  gtk_snapshot_translate (snapshot,
                           &GRAPHENE_POINT_INIT (e / 2 + hs * HEIGHT_RATIO,
                                                 - hs * HEIGHT_RATIO));
 
@@ -206,7 +235,7 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
       if (o + hs * (1 + HEIGHT_RATIO) >= ww)
         break;
 
-      gtk_snapshot_append_color (crenderer->snapshot, &rgba,
+      gtk_snapshot_append_color (snapshot, &rgba,
                                  &GRAPHENE_RECT_INIT (xx, yy, hh, hh * HEIGHT_RATIO));
 
       xx += hh * (1 - HEIGHT_RATIO);
@@ -216,13 +245,13 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
       if (o + hs * (1 + HEIGHT_RATIO) >= ww)
         break;
 
-      gtk_snapshot_append_color (crenderer->snapshot, &rgba,
+      gtk_snapshot_append_color (snapshot, &rgba,
                                  &GRAPHENE_RECT_INIT (xx, yy, hh * HEIGHT_RATIO, hh));
 
       o += hs * (1 - HEIGHT_RATIO);
     }
 
-  gtk_snapshot_restore (crenderer->snapshot);
+  gtk_snapshot_restore (snapshot);
 }
 
 static void
@@ -232,6 +261,7 @@ gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
                                int             y)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
+  GtkSnapshot *snapshot;
   cairo_t *cr;
   PangoLayout *layout;
   PangoCairoShapeRendererFunc shape_renderer;
@@ -239,7 +269,8 @@ gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
   double base_x = (double)x / PANGO_SCALE;
   double base_y = (double)y / PANGO_SCALE;
 
-  cr = gtk_snapshot_append_cairo (crenderer->snapshot, &crenderer->bounds);
+  snapshot = get_snapshot (crenderer, TRUE);
+  cr = gtk_snapshot_append_cairo (snapshot, &crenderer->bounds);
 
   layout = pango_renderer_get_layout (renderer);
   if (!layout)
@@ -419,6 +450,12 @@ gsk_pango_renderer_acquire (void)
       renderer = g_object_new (GSK_TYPE_PANGO_RENDERER, NULL);
     }
 
+  renderer->fg_snapshot = gtk_snapshot_new ();
+  renderer->bg_snapshot = gtk_snapshot_new ();
+  renderer->selection_fg_snapshot = gtk_snapshot_new ();
+  renderer->selection_bg_snapshot = gtk_snapshot_new ();
+  renderer->cursors_snapshot = gtk_snapshot_new ();
+
   return renderer;
 }
 
@@ -428,7 +465,6 @@ gsk_pango_renderer_release (GskPangoRenderer *renderer)
   if (G_LIKELY (renderer->is_cached_renderer))
     {
       renderer->widget = NULL;
-      renderer->snapshot = NULL;
 
       if (renderer->error_color)
         {
@@ -436,10 +472,52 @@ gsk_pango_renderer_release (GskPangoRenderer *renderer)
           renderer->error_color = NULL;
         }
 
+      g_clear_object (&renderer->fg_snapshot);
+      g_clear_object (&renderer->bg_snapshot);
+      g_clear_object (&renderer->selection_fg_snapshot);
+      g_clear_object (&renderer->selection_bg_snapshot);
+      g_clear_object (&renderer->cursors_snapshot);
+
       G_UNLOCK (cached_renderer);
     }
   else
     g_object_unref (renderer);
+}
+
+static void
+append_to_snapshot (GtkSnapshot  *snapshot,
+                    GtkSnapshot **source)
+{
+  g_assert (GTK_IS_SNAPSHOT (snapshot));
+  g_assert (source != NULL);
+
+  if (*source != NULL)
+    {
+      GskRenderNode *node;
+
+      node = gtk_snapshot_free_to_node (*source);
+      *source = NULL;
+
+      if (node != NULL)
+        {
+          gtk_snapshot_append_node (snapshot, node);
+          gsk_render_node_unref (node);
+        }
+    }
+}
+
+void
+gsk_pango_renderer_apply (GskPangoRenderer *crenderer,
+                          GtkSnapshot      *snapshot)
+{
+  g_return_if_fail (GSK_IS_PANGO_RENDERER (crenderer));
+  g_return_if_fail (GTK_IS_SNAPSHOT (snapshot));
+
+  append_to_snapshot (snapshot, &crenderer->bg_snapshot);
+  append_to_snapshot (snapshot, &crenderer->fg_snapshot);
+  append_to_snapshot (snapshot, &crenderer->selection_bg_snapshot);
+  append_to_snapshot (snapshot, &crenderer->selection_fg_snapshot);
+  append_to_snapshot (snapshot, &crenderer->cursors_snapshot);
 }
 
 /**
@@ -465,7 +543,6 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
 
   crenderer = gsk_pango_renderer_acquire ();
 
-  crenderer->snapshot = snapshot;
   crenderer->fg_color = *color;
 
   pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
@@ -473,5 +550,6 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
 
   pango_renderer_draw_layout (PANGO_RENDERER (crenderer), layout, 0, 0);
 
+  gsk_pango_renderer_apply (crenderer, snapshot);
   gsk_pango_renderer_release (crenderer);
 }

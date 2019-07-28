@@ -5358,6 +5358,25 @@ gtk_text_iter_equal (const GtkTextIter *lhs,
     }
 }
 
+gboolean
+_gtk_text_iter_same_line (const GtkTextIter *lhs,
+                          const GtkTextIter *rhs)
+{
+  GtkTextRealIter *real_lhs;
+  GtkTextRealIter *real_rhs;
+
+  real_lhs = gtk_text_iter_make_surreal (lhs);
+  real_rhs = gtk_text_iter_make_surreal (rhs);
+
+  if (real_lhs == NULL || real_rhs == NULL)
+    return FALSE;
+
+  check_invariants (lhs);
+  check_invariants (rhs);
+
+  return real_lhs->line == real_rhs->line;
+}
+
 /**
  * gtk_text_iter_compare:
  * @lhs: a #GtkTextIter
