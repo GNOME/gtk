@@ -41,6 +41,8 @@ gboolean            _gtk_text_iter_forward_indexable_segment  (GtkTextIter      
 gboolean            _gtk_text_iter_backward_indexable_segment (GtkTextIter       *iter);
 gint                _gtk_text_iter_get_segment_byte           (const GtkTextIter *iter);
 gint                _gtk_text_iter_get_segment_char           (const GtkTextIter *iter);
+gboolean            _gtk_text_iter_same_line                  (const GtkTextIter *lhs,
+                                                               const GtkTextIter *rhs);
 
 gboolean       gtk_text_iter_get_attributes (const GtkTextIter *iter,
                                              GtkTextAttributes *values);
