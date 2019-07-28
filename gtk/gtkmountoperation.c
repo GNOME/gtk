@@ -520,6 +520,7 @@ table_add_entry (GtkMountOperation *operation,
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_widget_set_hexpand (label, FALSE);
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), "dim-label");
   operation->priv->user_widgets = g_list_prepend (operation->priv->user_widgets, label);
 
   entry = gtk_entry_new ();
@@ -684,6 +685,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_widget_set_halign (label, GTK_ALIGN_END);
       gtk_widget_set_valign (label, GTK_ALIGN_START);
       gtk_widget_set_hexpand (label, FALSE);
+      gtk_style_context_add_class (gtk_widget_get_style_context (label), "dim-label");
       gtk_grid_attach (GTK_GRID (grid), label, 0, rows, 1, 1);
 
       anon_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
