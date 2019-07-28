@@ -430,6 +430,10 @@ xfails = [
   'textview-border-windows.ui',
   'window-show-contents-on-map.ui',
   'toplevel-vs-popup.ui',
+  # these depend on details of text layout
+  'label-background.ui',
+  'label-wrap-justify.ui',
+  'quit-mnemonic.ui',
 ]
 
 foreach testname : testdata
