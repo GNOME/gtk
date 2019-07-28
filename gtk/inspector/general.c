@@ -71,6 +71,7 @@ struct _GtkInspectorGeneralPrivate
   GtkWidget *gtk_version;
   GtkWidget *gdk_backend;
   GtkWidget *gsk_renderer;
+  GtkWidget *pango_fontmap;
   GtkWidget *gl_version;
   GtkWidget *gl_vendor;
   GtkWidget *vk_device;
@@ -625,6 +626,27 @@ init_display (GtkInspectorGeneral *gen)
   populate_display (display, gen);
 }
 
+static void
+init_pango (GtkInspectorGeneral *gen)
+{
+  PangoFontMap *fontmap;
+  const char *type;
+  const char *name;
+
+  fontmap = pango_cairo_font_map_get_default ();
+  type = G_OBJECT_TYPE_NAME (fontmap);
+  if (strcmp (type, "PangoCairoFcFontMap") == 0)
+    name = "fontconfig";
+  else if (strcmp (type, "PangoCairoCoreTextFontMap") == 0)
+    name = "coretext";
+  else if (strcmp (type, "PangoCairoWin32FontMap") == 0)
+    name = "win32";
+  else
+    name = type;
+
+  gtk_label_set_label (GTK_LABEL (gen->priv->pango_fontmap), name);
+}
+
 static void populate_seats (GtkInspectorGeneral *gen);
 
 static void
@@ -793,6 +815,7 @@ gtk_inspector_general_init (GtkInspectorGeneral *gen)
   init_version (gen);
   init_env (gen);
   init_display (gen);
+  init_pango (gen);
   init_gl (gen);
   init_vulkan (gen);
   init_device (gen);
@@ -924,6 +947,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_version);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gdk_backend);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gsk_renderer);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, pango_fontmap);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gl_version);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gl_vendor);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, vk_device);

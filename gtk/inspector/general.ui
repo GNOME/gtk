@@ -96,6 +96,33 @@
                         </child>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <property name="activatable">0</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="margin">10</property>
+                            <property name="spacing">40</property>
+                            <child>
+                              <object class="GtkLabel" id="pango_fontmap_label">
+                                <property name="label" translatable="yes">Pango Fontmap</property>
+                                <property name="halign">start</property>
+                                <property name="valign">baseline</property>
+                                <property name="xalign">0.0</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="pango_fontmap">
+                                <property name="selectable">1</property>
+                                <property name="halign">end</property>
+                                <property name="valign">baseline</property>
+                                <property name="hexpand">1</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -578,6 +605,7 @@
       <widget name="gtk_version_label"/>
       <widget name="gdk_backend_label"/>
       <widget name="gsk_renderer_label"/>
+      <widget name="pango_fontmap_label"/>
       <widget name="gl_version_label"/>
       <widget name="gl_vendor_label"/>
       <widget name="vk_device_label"/>
