@@ -835,10 +835,10 @@ configure_file(input: 'config.h.meson',
 # pkg-config files - bit of a mess all of this
 pkgconf = configuration_data()
 
-pkgconf.set('prefix', get_option('prefix'))
+pkgconf.set('prefix', gtk_prefix)
 pkgconf.set('exec_prefix', '${prefix}')
-pkgconf.set('libdir', '${prefix}/@0@'.format(get_option('libdir')))
-pkgconf.set('includedir', '${prefix}/@0@'.format(get_option('includedir')))
+pkgconf.set('libdir', gtk_libdir)
+pkgconf.set('includedir', join_paths('${prefix}', gtk_includedir))
 pkgconf.set('GTK_API_VERSION', gtk_api_version)
 pkgconf.set('VERSION', meson.project_version())
 pkgconf.set('GTK_BINARY_VERSION', gtk_binary_version)
