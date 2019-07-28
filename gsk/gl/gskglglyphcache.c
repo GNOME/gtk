@@ -311,6 +311,7 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache  *cache,
   if (value == NULL)
     {
       PangoRectangle ink_rect;
+      const guint key_scale = (guint)(scale * 1024);
 
       pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
       pango_extents_to_pixels (&ink_rect, NULL);
@@ -324,7 +325,8 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache  *cache,
       value->timestamp = cache->timestamp;
       value->atlas = NULL; /* For now */
 
-      if (ink_rect.width < 128 && ink_rect.height < 128)
+      if ((ink_rect.width * key_scale) < 128 &&
+          (ink_rect.height * key_scale) < 128)
         {
           GlyphCacheKey *key;
 
@@ -332,9 +334,11 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache  *cache,
 
           key->font = g_object_ref (font);
           key->glyph = glyph;
-          key->scale = (guint)(scale * 1024);
+          key->scale =  key_scale;
 
-          if (ink_rect.width > 0 && ink_rect.height > 0 && key->scale > 0)
+          if (key->scale > 0 &&
+              ink_rect.width * key->scale > 0 &&
+              ink_rect.height * key->scale > 0)
             add_to_cache (cache, key, value);
 
           *cached_glyph_out = *value;
