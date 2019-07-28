@@ -56,11 +56,7 @@ gboolean                 gsk_gl_glyph_cache_lookup          (GskGLGlyphCache    
                                                              PangoFont              *font,
                                                              PangoGlyph              glyph,
                                                              float                   scale,
-                                                             GskGLCachedGlyph *cached_glyph_out);
-void                    gsk_gl_glyph_cache_get_texture      (GskGLDriver *driver,
-                                                             PangoFont   *font,
-                                                             PangoGlyph   glyph,
-                                                             float        scale,
-                                                             GskGLCachedGlyph *glyph_out);
+                                                             GskGLDriver            *driver,
+                                                             GskGLCachedGlyph       *cached_glyph_out);
 
 #endif

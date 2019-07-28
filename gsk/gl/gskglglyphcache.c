@@ -24,6 +24,7 @@
  */
 
 #define MAX_FRAME_AGE (5 * 60)
+#define MAX_GLYPH_SIZE 128 /* Will get its own texture if bigger */
 
 static guint    glyph_cache_hash       (gconstpointer v);
 static gboolean glyph_cache_equal      (gconstpointer v1,
@@ -206,70 +207,45 @@ upload_glyph (GlyphCacheKey    *key,
 static void
 add_to_cache (GskGLGlyphCache  *self,
               GlyphCacheKey    *key,
+              GskGLDriver      *driver,
               GskGLCachedGlyph *value)
 {
   const int width = value->draw_width * key->scale / 1024;
   const int height = value->draw_height * key->scale / 1024;
-  GskGLTextureAtlas *atlas = NULL;
-  int packed_x = 0;
-  int packed_y = 0;
 
-  gsk_gl_texture_atlases_pack (self->atlases, width + 2, height + 2, &atlas, &packed_x, &packed_y);
+  if (width < MAX_GLYPH_SIZE && height < MAX_GLYPH_SIZE)
+    {
+      GskGLTextureAtlas *atlas = NULL;
+      int packed_x = 0;
+      int packed_y = 0;
 
-  value->tx = (float)(packed_x + 1) / atlas->width;
-  value->ty = (float)(packed_y + 1) / atlas->height;
-  value->tw = (float)width / atlas->width;
-  value->th = (float)height / atlas->height;
-  value->used = TRUE;
+      gsk_gl_texture_atlases_pack (self->atlases, width + 2, height + 2, &atlas, &packed_x, &packed_y);
 
-  value->atlas = atlas;
-  value->texture_id = atlas->texture_id;
+      value->tx = (float)(packed_x + 1) / atlas->width;
+      value->ty = (float)(packed_y + 1) / atlas->height;
+      value->tw = (float)width / atlas->width;
+      value->th = (float)height / atlas->height;
+      value->used = TRUE;
+
+      value->atlas = atlas;
+      value->texture_id = atlas->texture_id;
+    }
+  else
+    {
+      value->atlas = NULL;
+      value->texture_id = gsk_gl_driver_create_texture (driver, width, height);
+
+      gsk_gl_driver_bind_source_texture (driver, value->texture_id);
+      gsk_gl_driver_init_texture_empty (driver, value->texture_id, GL_NEAREST, GL_NEAREST);
+
+      value->tx = 0.0f;
+      value->ty = 0.0f;
+      value->tw = 1.0f;
+      value->th = 1.0f;
+    }
+
 
   upload_glyph (key, value);
-}
-
-void
-gsk_gl_glyph_cache_get_texture (GskGLDriver      *driver,
-                                PangoFont        *font,
-                                PangoGlyph        glyph,
-                                float             scale,
-                                GskGLCachedGlyph *value)
-{
-  PangoRectangle ink_rect;
-  GlyphCacheKey key;
-  int width, height;
-  guint texture_id;
-
-  pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
-  pango_extents_to_pixels (&ink_rect, NULL);
-
-  key.font = font;
-  key.glyph = glyph;
-  key.scale = (guint)(scale * 1024);
-
-  value->atlas = NULL;
-  value->timestamp = 0;
-
-  value->draw_x = ink_rect.x;
-  value->draw_y = ink_rect.y;
-  value->draw_width = ink_rect.width;
-  value->draw_height = ink_rect.height;
-
-  value->tx = 0.0f;
-  value->ty = 0.0f;
-  value->tw = 1.0f;
-  value->th = 1.0f;
-
-  width = value->draw_width * key.scale / 1024;
-  height = value->draw_height * key.scale / 1024;
-
-  texture_id = gsk_gl_driver_create_texture (driver, width, height);
-  gsk_gl_driver_bind_source_texture (driver, texture_id);
-  gsk_gl_driver_init_texture_empty (driver, texture_id, GL_NEAREST, GL_NEAREST);
-
-  value->texture_id = texture_id;
-
-  upload_glyph (&key, value);
 }
 
 gboolean
@@ -277,6 +253,7 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache  *cache,
                            PangoFont        *font,
                            PangoGlyph        glyph,
                            float             scale,
+                           GskGLDriver      *driver,
                            GskGLCachedGlyph *cached_glyph_out)
 {
   GskGLCachedGlyph *value;
@@ -310,6 +287,7 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache  *cache,
 
   if (value == NULL)
     {
+      GlyphCacheKey *key;
       PangoRectangle ink_rect;
       const guint key_scale = (guint)(scale * 1024);
 
@@ -325,30 +303,19 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache  *cache,
       value->timestamp = cache->timestamp;
       value->atlas = NULL; /* For now */
 
-      if ((ink_rect.width * key_scale) < 128 &&
-          (ink_rect.height * key_scale) < 128)
-        {
-          GlyphCacheKey *key;
+      key = g_new0 (GlyphCacheKey, 1);
 
-          key = g_new0 (GlyphCacheKey, 1);
+      key->font = g_object_ref (font);
+      key->glyph = glyph;
+      key->scale =  key_scale;
 
-          key->font = g_object_ref (font);
-          key->glyph = glyph;
-          key->scale =  key_scale;
+      if (key->scale > 0 &&
+          ink_rect.width * key->scale > 0 &&
+          ink_rect.height * key->scale > 0)
+        add_to_cache (cache, key, driver, value);
 
-          if (key->scale > 0 &&
-              ink_rect.width * key->scale > 0 &&
-              ink_rect.height * key->scale > 0)
-            add_to_cache (cache, key, value);
-
-          *cached_glyph_out = *value;
-          g_hash_table_insert (cache->hash_table, key, value);
-        }
-      else
-        {
-          *cached_glyph_out = *value;
-          glyph_cache_value_free (value);
-        }
+      *cached_glyph_out = *value;
+      g_hash_table_insert (cache->hash_table, key, value);
     }
   else
     {

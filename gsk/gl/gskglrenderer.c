@@ -596,22 +596,15 @@ render_text_node (GskGLRenderer   *self,
                                  (PangoFont *)font,
                                  gi->glyph,
                                  text_scale,
+                                 self->gl_driver,
                                  &glyph);
 
       /* e.g. whitespace */
       if (glyph.draw_width <= 0 || glyph.draw_height <= 0)
         goto next;
 
-      /* big glyphs are not cached */
-      if (!glyph.texture_id)
-        {
-          gsk_gl_glyph_cache_get_texture (self->gl_driver,
-                                          (PangoFont *)font,
-                                          gi->glyph,
-                                          text_scale,
-                                          &glyph);
-          g_assert (glyph.texture_id != 0);
-        }
+      if (glyph.texture_id == 0)
+        goto next;
 
       cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
       cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
