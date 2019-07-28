@@ -636,6 +636,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+      gtk_label_set_max_width_chars (GTK_LABEL (label), 55);
       gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (label),
                           FALSE, TRUE, 0);
       attrs = pango_attr_list_new ();
@@ -652,6 +653,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+      gtk_label_set_max_width_chars (GTK_LABEL (label), 55);
       gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (label),
                           FALSE, FALSE, 0);
     }
