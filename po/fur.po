@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-05 14:21+0000\n"
-"PO-Revision-Date: 2019-07-06 08:04+0200\n"
+"POT-Creation-Date: 2019-07-27 23:25+0000\n"
+"PO-Revision-Date: 2019-07-28 09:53+0200\n"
 "Last-Translator: Fabio Tomat <f.t.public@gmail.com>\n"
 "Language-Team: Friulian <fur@li.org>\n"
 "Language: fur\n"
@@ -1238,7 +1238,7 @@ msgstr ""
 #: gtk/gtkfilechoosernative.c:544 gtk/gtkfilechoosernative.c:636
 #: gtk/gtkfilechooserwidget.c:1476 gtk/gtkfilechooserwidget.c:6331
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
-#: gtk/gtkmountoperation.c:545 gtk/gtkpagesetupunixdialog.c:197
+#: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:781 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
 #: gtk/gtkwindow.c:12782 gtk/inspector/css-editor.c:201
@@ -2875,57 +2875,73 @@ msgstr "_No"
 msgid "_Yes"
 msgstr "_Sì"
 
-#: gtk/gtkmountoperation.c:546
+#: gtk/gtkmountoperation.c:595
 msgid "Co_nnect"
 msgstr "Co_net"
 
-#: gtk/gtkmountoperation.c:622
+#: gtk/gtkmountoperation.c:671
 msgid "Connect As"
 msgstr "Conet come"
 
-#: gtk/gtkmountoperation.c:631
+#: gtk/gtkmountoperation.c:680
 msgid "_Anonymous"
 msgstr "_Anonim"
 
-#: gtk/gtkmountoperation.c:640
+#: gtk/gtkmountoperation.c:689
 msgid "Registered U_ser"
 msgstr "Utent _regjistrât"
 
-#: gtk/gtkmountoperation.c:651
+#: gtk/gtkmountoperation.c:700
 msgid "_Username"
 msgstr "_Non utent"
 
-#: gtk/gtkmountoperation.c:656
+#: gtk/gtkmountoperation.c:705
 msgid "_Domain"
 msgstr "_Domini"
 
-#: gtk/gtkmountoperation.c:662
+#: gtk/gtkmountoperation.c:714
+msgid "Volume type"
+msgstr "Gjenar di volum"
+
+#: gtk/gtkmountoperation.c:724
+msgid "_Hidden"
+msgstr "_Platât"
+
+#: gtk/gtkmountoperation.c:727
+msgid "_Windows system"
+msgstr "Sisteme _Windows"
+
+#: gtk/gtkmountoperation.c:730
+msgid "_PIM"
+msgstr "_PIM"
+
+#: gtk/gtkmountoperation.c:736
 msgid "_Password"
 msgstr "_Password"
 
-#: gtk/gtkmountoperation.c:684
+#: gtk/gtkmountoperation.c:758
 msgid "Forget password _immediately"
 msgstr "Dismentee la password _subite"
 
-#: gtk/gtkmountoperation.c:694
+#: gtk/gtkmountoperation.c:768
 msgid "Remember password until you _logout"
 msgstr "Visâsi la password fintremai che no si _jes de session"
 
-#: gtk/gtkmountoperation.c:704
+#: gtk/gtkmountoperation.c:778
 msgid "Remember _forever"
 msgstr "Visâsi par _simpri"
 
-#: gtk/gtkmountoperation.c:1093
+#: gtk/gtkmountoperation.c:1173
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Aplicazion no cognossude (PID %d)"
 
-#: gtk/gtkmountoperation.c:1278
+#: gtk/gtkmountoperation.c:1358
 #, c-format
 msgid "Unable to end process"
 msgstr "Impussibil terminâ il procès"
 
-#: gtk/gtkmountoperation.c:1312
+#: gtk/gtkmountoperation.c:1392
 msgid "_End Process"
 msgstr "_Termine procès"
 
@@ -4730,12 +4746,12 @@ msgstr ""
 #: gtk/open-type-layout.h:28
 msgctxt "OpenType layout"
 msgid "Centered CJK Punctuation"
-msgstr ""
+msgstr "Puntuazion CJK centrade"
 
 #: gtk/open-type-layout.h:29
 msgctxt "OpenType layout"
 msgid "Capital Spacing"
-msgstr ""
+msgstr "Spaziadure maiuscule"
 
 #: gtk/open-type-layout.h:30
 msgctxt "OpenType layout"
@@ -4939,11 +4955,9 @@ msgid "Left-to-right alternates"
 msgstr "Alternativis di di çampe a drete"
 
 #: gtk/open-type-layout.h:70
-#, fuzzy
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
-msgstr "LRM - segn _çampe-a-diestre"
+msgstr "Formis spieladis di çampe a drete"
 
 #: gtk/open-type-layout.h:71
 msgctxt "OpenType layout"
@@ -5101,11 +5115,9 @@ msgid "Right-to-left alternates"
 msgstr "Alternativis di di drete a çampe"
 
 #: gtk/open-type-layout.h:102
-#, fuzzy
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
-msgstr "RLM - segn _diestre-a-çampe"
+msgstr "Formis spieladis di drete a çampe"
 
 #: gtk/open-type-layout.h:103
 msgctxt "OpenType layout"
@@ -5133,9 +5145,10 @@ msgid "Optical size"
 msgstr "Dimension otiche"
 
 #: gtk/open-type-layout.h:108
+#, fuzzy
 msgctxt "OpenType layout"
 msgid "Small Capitals"
-msgstr ""
+msgstr "Maiusculis piçulis"
 
 #: gtk/open-type-layout.h:109
 msgctxt "OpenType layout"
@@ -5325,7 +5338,7 @@ msgstr "Metrichis miezis verticâls alternativis"
 #: gtk/open-type-layout.h:146
 msgctxt "OpenType layout"
 msgid "Vowel Jamo Forms"
-msgstr ""
+msgstr "Formis Jamo Vowel"
 
 #: gtk/open-type-layout.h:147
 msgctxt "OpenType layout"
