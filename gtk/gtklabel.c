@@ -1543,6 +1543,7 @@ attribute_from_text (GtkBuilder   *builder,
       if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
         attribute = pango_attr_background_alpha_new ((guint16)g_value_get_int (&val));
       break;
+#if PANGO_VERSION_CHECK(1,44,0)
     case PANGO_ATTR_ALLOW_BREAKS:
       if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
         attribute = pango_attr_allow_breaks_new (g_value_get_boolean (&val));
@@ -1551,6 +1552,7 @@ attribute_from_text (GtkBuilder   *builder,
       if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_SHOW_FLAGS, value, &val, error))
 	attribute = pango_attr_show_new (g_value_get_flags (&val));
       break;
+#endif
     case PANGO_ATTR_INVALID:
     default:
       break;
