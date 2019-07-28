@@ -18,7 +18,6 @@ node_parser = executable(
 )
 
 compare_render_tests = [
-  'big-glyph',
   'blend-normal',
   'blend-difference',
   'clip-coordinates-3d',
@@ -43,10 +42,8 @@ compare_render_tests = [
   'empty-repeat',
   'empty-rounded-clip',
   'empty-shadow',
-  'empty-text',
   'empty-texture',
   'empty-transform',
-  'huge-glyph',
   'opacity_clip',
   'outset_shadow_offset_both',
   'outset_shadow_offset_x',
@@ -60,6 +57,14 @@ compare_render_tests = [
   'clip-nested1',
   'scale-up-down',
   'opacity-overlapping-children',
+]
+
+# these are too sensitive to differences in the renderers
+# to run in ci, but still useful to keep around
+informative_render_tests = [
+  'big-glyph',
+  'empty-text',
+  'huge-glyph',
 ]
 
 renderers = [
