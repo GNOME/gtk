@@ -36,6 +36,7 @@ GDK_CONFIG_TEMPLATE = ..\..\gdk\gdkconfig.h.win32
 
 GDK_MARSHALERS_FLAGS = --prefix=_gdk_marshal --valist-marshallers
 GDK_RESOURCES_ARGS = $** --target=$@ --sourcedir=..\..\gdk --c-name _gdk --manual-register
+GTK_MARSHALERS_FLAGS = --prefix=_gtk_marshal --valist-marshallers
 GTK_RESOURCES_ARGS = $** --target=$@ --sourcedir=..\..\gtk --c-name _gtk --manual-register
 
 all:	\
@@ -52,6 +53,8 @@ all:	\
 	..\..\gtk\gtkdbusgenerated.c	\
 	..\..\gtk\gtktypefuncs.inc	\
 	..\..\gtk\gtk.gresource.xml	\
+	..\..\gtk\gtkmarshalers.h	\
+	..\..\gtk\gtkmarshalers.c	\
 	..\..\gtk\gtkresources.h	\
 	..\..\gtk\gtkresources.c	\
 	..\..\demos\gtk-demo\demos.h
@@ -168,11 +171,24 @@ all:	\
 	@echo Generating $@...
 	@$(GLIB_COMPILE_RESOURCES) $(GTK_RESOURCES_ARGS) --generate-source
 
+..\..\gtk\gtkmarshalers.h: ..\..\gtk\gtkmarshalers.list
+	@echo Generating $@...
+	@$(PYTHON) $(GLIB_GENMARSHAL) $(GTK_MARSHALERS_FLAGS) --header $** > $@.tmp
+	@move $@.tmp $@
+
+..\..\gtk\gtkmarshalers.c: ..\..\gtk\gtkmarshalers.list
+	@echo Generating $@...
+	@echo #undef G_ENABLE_DEBUG> $@.tmp
+	@$(PYTHON) $(GLIB_GENMARSHAL) $(GTK_MARSHALERS_FLAGS) --body $** >> $@.tmp
+	@move $@.tmp $@
+
 # Remove the generated files
 clean:
 	@-del /f /q ..\..\demos\gtk-demo\demos.h
 	@-del /f /q ..\..\gtk\gtkresources.c
 	@-del /f /q ..\..\gtk\gtkresources.h
+	@-del /f /q ..\..\gtk\gtkmarshalers.c
+	@-del /f /q ..\..\gtk\gtkmarshalers.h
 	@-del /f /q ..\..\gtk\gtk.gresource.xml
 	@-del /f /q ..\..\gtk\gtktypefuncs.inc
 	@-del /f /q ..\..\gtk\gtkdbusgenerated.c
