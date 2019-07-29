@@ -513,7 +513,7 @@ button:link > label:disabled, button:visited > label:disabled, button:link > lab
 
 button:link > label:backdrop:backdrop:hover, button:visited > label:backdrop:backdrop:hover, button:link > label:backdrop:backdrop:hover:selected, button:visited > label:backdrop:backdrop:hover:selected, button:link > label:backdrop, button:visited > label:backdrop, *:link:backdrop:backdrop:hover, button:backdrop:backdrop:hover:link, button:backdrop:backdrop:hover:visited, *:link:backdrop:backdrop:hover:selected, button:backdrop:backdrop:hover:selected:link, button:backdrop:backdrop:hover:selected:visited, .selection-mode .titlebar:not(headerbar) .subtitle:backdrop:backdrop:hover:link, .selection-mode.titlebar:not(headerbar) .subtitle:backdrop:backdrop:hover:link, .selection-mode headerbar .subtitle:backdrop:backdrop:hover:link, headerbar.selection-mode .subtitle:backdrop:backdrop:hover:link, *:link:backdrop, button:backdrop:link, button:backdrop:visited { color: #3584e4; }
 
-infobar.info *:link, infobar.info button:link, infobar.info button:visited, infobar.question *:link, infobar.question button:link, infobar.question button:visited, infobar.warning *:link, infobar.warning button:link, infobar.warning button:visited, infobar.error *:link, infobar.error button:link, infobar.error button:visited, button:link > label:selected, button:visited > label:selected, *:selected button:link > label, *:selected button:visited > label, *:link:selected, button:selected:link, button:selected:visited, .selection-mode .titlebar:not(headerbar) .subtitle:link, .selection-mode.titlebar:not(headerbar) .subtitle:link, .selection-mode headerbar .subtitle:link, headerbar.selection-mode .subtitle:link, *:selected *:link, *:selected button:link, *:selected button:visited { color: #d7e6fa; }
+button:link > label:selected, button:visited > label:selected, *:selected button:link > label, *:selected button:visited > label, *:link:selected, button:selected:link, button:selected:visited, .selection-mode .titlebar:not(headerbar) .subtitle:link, .selection-mode.titlebar:not(headerbar) .subtitle:link, .selection-mode headerbar .subtitle:link, headerbar.selection-mode .subtitle:link, *:selected *:link, *:selected button:link, *:selected button:visited { color: #d7e6fa; }
 
 button:link, button:visited { text-shadow: none; }
 
@@ -1865,6 +1865,8 @@ infobar.info button:backdrop:disabled label, infobar.info button:backdrop:disabl
 infobar.info button:backdrop label, infobar.info button:backdrop, infobar.info button label, infobar.info button, infobar.question button:backdrop label, infobar.question button:backdrop, infobar.question button label, infobar.question button, infobar.warning button:backdrop label, infobar.warning button:backdrop, infobar.warning button label, infobar.warning button, infobar.error button:backdrop label, infobar.error button:backdrop, infobar.error button label, infobar.error button { color: #2e3436; }
 
 infobar.info selection, infobar.question selection, infobar.warning selection, infobar.error selection { background-color: #dfdcd8; }
+
+infobar.info *:link, infobar.info button:link, infobar.info button:visited, infobar.question *:link, infobar.question button:link, infobar.question button:visited, infobar.warning *:link, infobar.warning button:link, infobar.warning button:visited, infobar.error *:link, infobar.error button:link, infobar.error button:visited { color: #1b6acb; }
 
 /************ Tooltips * */
 tooltip { padding: 4px; border-radius: 5px; box-shadow: none; text-shadow: 0 1px black; }
