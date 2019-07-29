@@ -31,7 +31,7 @@
 				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
 				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources)"
+				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 		<Configuration
@@ -46,7 +46,7 @@
 				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
 				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources)"
+				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 		<Configuration
@@ -61,7 +61,7 @@
 				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam)"
 				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean all"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources)"
+				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 		<Configuration
@@ -76,7 +76,7 @@
 				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam)"
 				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean all"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources)"
+				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 		<Configuration
@@ -92,7 +92,7 @@
 				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
 				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources)"
+				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 		<Configuration
@@ -108,7 +108,7 @@
 				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
 				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources)"
+				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 		<Configuration
@@ -124,7 +124,7 @@
 				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam)"
 				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean all"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources)"
+				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 		<Configuration
@@ -140,7 +140,7 @@
 				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam)"
 				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean all"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources)"
+				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 	</Configurations>

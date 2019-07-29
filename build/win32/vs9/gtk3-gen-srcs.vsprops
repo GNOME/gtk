@@ -14,51 +14,11 @@
 		Value="..\..\..\config.h;..\..\..\gdk\gdkconfig.h;..\..\gdk\gdkversionmacros.h;..\..\..\gdk\gdkmarshalers.h;..\..\..\gdk\gdkmarshalers.c;..\..\..\gdk\gdkresources.h;..\..\..\gdk\gdkresources.c"
 	/>
 	<UserMacro
+		Name="GeneratedGtkSources"
+		Value="..\..\..\gtk\gtk-win32.rc;..\..\..\gtk\libgtk3.manifest;..\..\..\gtk\gtkdbusgenerated.h;..\..\..\gtk\gtkdbusgenerated.c"
+	/>
+	<UserMacro
 		Name="GeneratedDemoSources"
 		Value="..\..\..\demos\gtk-demo\demos.h"
-	/>
-	<UserMacro
-		Name="GDbusCodeGenCmd"
-		Value="$(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml"
-	/>
-	<UserMacro
-		Name="GenerateGtkDbusBuiltSources"
-		Value="cd ..\..\..\gtk &amp; $(PythonDir)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)"
-	/>
-	<UserMacro
-		Name="GenerateGtkDbusBuiltSourcesX64"
-		Value="cd ..\..\..\gtk &amp; $(PythonDirX64)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)"
-	/>
-	<UserMacro
-		Name="CopyGtkWin32RC"
-		Value="copy ..\..\..\gtk\gtk-win32.rc.body ..\..\..\gtk\gtk-win32.rc"
-	/>
-	<UserMacro
-		Name="GenerateGtkWin32Manifest"
-		Value="$(PythonDir)\python ..\replace.py --action=replace-var --input=..\..\..\gtk\libgtk3.manifest.in --output=..\..\..\gtk\libgtk3.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*"
-	/>
-	<UserMacro
-		Name="CopyDemosH"
-		Value="copy ..\..\..\demos\gtk-demo\demos.h.win32 ..\..\..\demos\gtk-demo\demos.h"
-	/>
-	<UserMacro
-		Name="GenerateTypeFuncs"
-		Value="
-echo #undef GTK_COMPILATION &gt; ..\..\..\gtk\gtktypefuncs.preproc.c&#x0D;&#x0A;
-echo #include &quot;gtkx.h&quot; &gt;&gt; ..\..\..\gtk\gtktypefuncs.preproc.c&#x0D;&#x0A;
-cl /EP /I..\..\..\gtk /I..\..\..\gdk /I..\..\..\gdk\win32 /I..\..\.. /I$(GlibEtcInstallRoot)\include\gdk-pixbuf-2.0 /I$(GlibEtcInstallRoot)\include\pango-1.0 /I$(GlibEtcInstallRoot)\include\atk-1.0 /I$(GlibEtcInstallRoot)\include\cairo /I$(GlibEtcInstallRoot)\include\gio-win32-2.0 /I$(GlibEtcInstallRoot)\include\glib-2.0 /I$(GlibEtcInstallRoot)\lib\glib-2.0\include /I$(GlibEtcInstallRoot)\include /DHAVE_CONFIG_H /DG_DISABLE_SINGLE_INCLUDES /DATK_DISABLE_SINGLE_INCLUDES /DGDK_PIXBUF_DISABLE_SINGLE_INCLUDES /DGTK_DISABLE_SINGLE_INCLUDES /D_USE_MATH_DEFINES /DINCLUDE_IM_am_et /DINCLUDE_IM_cedilla /DINCLUDE_IM_cyrillic_translit /DINCLUDE_IM_ime /DINCLUDE_IM_inuktitut /DINCLUDE_IM_ipa /DINCLUDE_IM_multipress /DINCLUDE_IM_thai /DINCLUDE_IM_ti_er /DINCLUDE_IM_ti_et /DINCLUDE_IM_viqr /DGTK_COMPILATION /DG_LOG_DOMAIN=\&quot;Gtk\&quot; /DGTK_HOST=\&quot;i686-pc-vs$(VSVer)\&quot; /DGTK_PRINT_BACKENDS=\&quot;file\&quot; /DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED /D$(GtkIncludedImmodulesDefines) /DGTK_LIBDIR=\&quot;$(GtkDummyPrefix)/lib\&quot; /DGTK_DATADIR=\&quot;$(GtkDummyPrefix)/share\&quot; /DGTK_DATA_PREFIX=\&quot;$(GtkDummyPrefix)\&quot; /DGTK_SYSCONFDIR=\&quot;$(GtkDummyPrefix)/etc\&quot; /DMULTIPRESS_CONFDIR=\&quot;$(GtkDummyPrefix)/etc/gtk-$(ApiVersion)\&quot; /DMULTIPRESS_LOCALEDIR=\&quot;$(GtkDummyPrefix)/share/locale\&quot; /DGTK_VERSION=\&quot;$(GtkVersion)\&quot; /DGTK_BINARY_VERSION=\&quot;$(GtkBinaryVersion)\&quot; /DGDK_DISABLE_DEPRECATED /DISOLATION_AWARE_ENABLED ..\..\..\gtk\gtktypefuncs.preproc.c &gt; ..\..\..\gtk\gtktypefuncs.combined.c&#x0D;&#x0A;
-$(PythonDir)\python ..\..\..\gtk\gentypefuncs.py ..\..\..\gtk\gtktypefuncs.inc ..\..\..\gtk\gtktypefuncs.combined.c&#x0D;&#x0A;
-del ..\..\..\gtk\gtktypefuncs.combined.c ..\..\..\gtk\gtktypefuncs.preproc.c&#x0D;&#x0A;
-		      "
-	/>
-	<UserMacro
-		Name="GenerateTypeFuncsX64"
-		Value="
-echo #undef GTK_COMPILATION &gt; ..\..\..\gtk\gtktypefuncs.preproc.c&#x0D;&#x0A;
-echo #include &quot;gtkx.h&quot; &gt;&gt; ..\..\..\gtk\gtktypefuncs.preproc.c&#x0D;&#x0A;
-cl /EP /I..\..\..\gtk /I..\..\..\gdk /I..\..\..\gdk\win32 /I..\..\.. /I$(GlibEtcInstallRoot)\include\gdk-pixbuf-2.0 /I$(GlibEtcInstallRoot)\include\pango-1.0 /I$(GlibEtcInstallRoot)\include\atk-1.0 /I$(GlibEtcInstallRoot)\include\cairo /I$(GlibEtcInstallRoot)\include\gio-win32-2.0 /I$(GlibEtcInstallRoot)\include\glib-2.0 /I$(GlibEtcInstallRoot)\lib\glib-2.0\include /I$(GlibEtcInstallRoot)\include /DHAVE_CONFIG_H /DG_DISABLE_SINGLE_INCLUDES /DATK_DISABLE_SINGLE_INCLUDES /DGDK_PIXBUF_DISABLE_SINGLE_INCLUDES /DGTK_DISABLE_SINGLE_INCLUDES /D_USE_MATH_DEFINES /DINCLUDE_IM_am_et /DINCLUDE_IM_cedilla /DINCLUDE_IM_cyrillic_translit /DINCLUDE_IM_ime /DINCLUDE_IM_inuktitut /DINCLUDE_IM_ipa /DINCLUDE_IM_multipress /DINCLUDE_IM_thai /DINCLUDE_IM_ti_er /DINCLUDE_IM_ti_et /DINCLUDE_IM_viqr /DGTK_COMPILATION /DG_LOG_DOMAIN=\&quot;Gtk\&quot; /DGTK_HOST=\&quot;i686-pc-vs$(VSVer)\&quot; /DGTK_PRINT_BACKENDS=\&quot;file\&quot; /DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED /D$(GtkIncludedImmodulesDefines) /DGTK_LIBDIR=\&quot;$(GtkDummyPrefix)/lib\&quot; /DGTK_DATADIR=\&quot;$(GtkDummyPrefix)/share\&quot; /DGTK_DATA_PREFIX=\&quot;$(GtkDummyPrefix)\&quot; /DGTK_SYSCONFDIR=\&quot;$(GtkDummyPrefix)/etc\&quot; /DMULTIPRESS_CONFDIR=\&quot;$(GtkDummyPrefix)/etc/gtk-$(ApiVersion)\&quot; /DMULTIPRESS_LOCALEDIR=\&quot;$(GtkDummyPrefix)/share/locale\&quot; /DGTK_VERSION=\&quot;$(GtkVersion)\&quot; /DGTK_BINARY_VERSION=\&quot;$(GtkBinaryVersion)\&quot; /DGDK_DISABLE_DEPRECATED /DISOLATION_AWARE_ENABLED ..\..\..\gtk\gtktypefuncs.preproc.c &gt; ..\..\..\gtk\gtktypefuncs.combined.c&#x0D;&#x0A;
-$(PythonDirX64)\python ..\..\..\gtk\gentypefuncs.py ..\..\..\gtk\gtktypefuncs.inc ..\..\..\gtk\gtktypefuncs.combined.c&#x0D;&#x0A;
-del ..\..\..\gtk\gtktypefuncs.combined.c ..\..\..\gtk\gtktypefuncs.preproc.c&#x0D;&#x0A;
-		      "
 	/>
 </VisualStudioPropertySheet>

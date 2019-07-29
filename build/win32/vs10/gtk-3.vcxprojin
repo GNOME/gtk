@@ -163,28 +163,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\gtk\gtkdbusinterfaces.xml">
-      <Message>Generating GTK+ DBus Sources...</Message>
-      <Command>$(GenerateGtkDbusBuiltSources)</Command>
-      <Outputs>..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\gtk\gtk-win32.rc.body">
-      <Message>Copying GTK+ Win32 Version Resource...</Message>
-      <Command>$(CopyGtkWin32RC)</Command>
-      <Outputs>..\..\..\gtk\gtk-win32.rc;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\gtk\libgtk3.manifest.in">
-      <Message>Generating GTK+ Win32 Manifest...</Message>
-      <Command>$(GenerateGtkWin32Manifest)</Command>
-      <Outputs>..\..\..\gtk\libgtk3.manifest;%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="..\..\..\gtk\gentypefuncs.py">
-      <Message>Generating ..\..\..\gtk\gtktypefuncs.inc</Message>
-      <Command>$(GenerateTypeFuncs)</Command>
-      <Outputs>..\..\..\gtk\gtktypefuncs.inc</Outputs>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="..\..\..\gtk\gtk-win32.rc" />
   </ItemGroup>
   <ItemGroup>

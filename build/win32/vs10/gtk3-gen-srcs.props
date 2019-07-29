@@ -8,12 +8,8 @@
 set VCInstallDir=$(VCInstallDir)
 nmake -f generate-msvc.mak PREFIX=$(GlibEtcInstallRoot)</GenerateRequiredSourcesBase>
     <GeneratedGdkSources>..\..\..\config.h;..\..\..\gdk\gdkconfig.h;..\..\gdk\gdkversionmacros.h;..\..\..\gdk\gdkmarshalers.h;..\..\..\gdk\gdkmarshalers.c;..\..\..\gdk\gdkresources.h;..\..\..\gdk\gdkresources.c</GeneratedGdkSources>
+    <GeneratedGtkSources>..\..\..\gtk\gtk-win32.rc;..\..\..\gtk\libgtk3.manifest;..\..\..\gtk\gtkdbusgenerated.h;..\..\..\gtk\gtkdbusgenerated.c</GeneratedGtkSources>
     <GeneratedDemoSources>..\..\..\demos\gtk-demo\demos.h</GeneratedDemoSources>
-    <GDbusCodeGenCmd>$(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml</GDbusCodeGenCmd>
-    <GenerateGtkDbusBuiltSources>cd ..\..\..\gtk &amp; $(PythonDir)\python $(GDbusCodeGenCmd) &amp; cd $(SolutionDir)</GenerateGtkDbusBuiltSources>
-    <CopyGtkWin32RC>copy ..\..\..\gtk\gtk-win32.rc.body ..\..\..\gtk\gtk-win32.rc</CopyGtkWin32RC>
-    <GenerateGtkWin32Manifest>$(PythonDir)\python ..\replace.py --action=replace-var --input=..\..\..\gtk\libgtk3.manifest.in --output=..\..\..\gtk\libgtk3.manifest --var=EXE_MANIFEST_ARCHITECTURE --outstring=*</GenerateGtkWin32Manifest>
-    <CopyDemosH>copy ..\..\..\demos\gtk-demo\demos.h.win32 ..\..\..\demos\gtk-demo\demos.h</CopyDemosH>
     <GenerateTypeFuncs>
 echo #undef GTK_COMPILATION &gt; ..\..\..\gtk\gtktypefuncs.preproc.c
 echo #include "gtkx.h" &gt;&gt; ..\..\..\gtk\gtktypefuncs.preproc.c
@@ -32,23 +28,11 @@ del ..\..\..\gtk\gtktypefuncs.combined.c ..\..\..\gtk\gtktypefuncs.preproc.c
     <BuildMacro Include="GeneratedGdkSources">
       <Value>$(GeneratedGdkSources)</Value>
     </BuildMacro>
+    <BuildMacro Include="GeneratedGtkSources">
+      <Value>$(GeneratedGtkSources)</Value>
+    </BuildMacro>
     <BuildMacro Include="GeneratedDemoSources">
       <Value>$(GeneratedDemoSources)</Value>
-    </BuildMacro>
-    <BuildMacro Include="GDbusCodeGenCmd">
-      <Value>$(GDbusCodeGenCmd)</Value>
-    </BuildMacro>
-    <BuildMacro Include="GenerateGtkDbusBuiltSources">
-      <Value>$(GenerateGtkDbusBuiltSources)</Value>
-    </BuildMacro>
-    <BuildMacro Include="CopyGtkWin32RC">
-      <Value>$(CopyGtkWin32RC)</Value>
-    </BuildMacro>
-    <BuildMacro Include="GenerateGtkWin32Manifest">
-      <Value>$(GenerateGtkWin32Manifest)</Value>
-    </BuildMacro>
-    <BuildMacro Include="CopyDemosH">
-      <Value>$(CopyDemosH)</Value>
     </BuildMacro>
     <BuildMacro Include="GenerateTypeFuncs">
       <Value>$(GenerateTypeFuncs)</Value>

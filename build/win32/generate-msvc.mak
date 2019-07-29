@@ -45,11 +45,17 @@ all:	\
 	..\..\gdk\gdkmarshalers.c	\
 	..\..\gdk\gdkresources.h	\
 	..\..\gdk\gdkresources.c	\
+	..\..\gtk\gtk-win32.rc	\
+	..\..\gtk\libgtk3.manifest	\
+	..\..\gtk\gtkdbusgenerated.h	\
+	..\..\gtk\gtkdbusgenerated.c	\
+	..\..\gtk\gtktypefuncs.inc	\
 	..\..\demos\gtk-demo\demos.h
 
 # Copy the pre-defined config.h.win32 and demos.h.win32
 ..\..\config.h: ..\..\config.h.win32
 ..\..\demos\gtk-demo\demos.h: ..\..\demos\gtk-demo\demos.h.win32
+..\..\gtk\gtk-win32.rc: ..\..\gtk\gtk-win32.rc.body
 
 ..\..\gdk-$(CFG)-$(GDK_CONFIG)-build: $(GDK_CONFIG_TEMPLATE)
 	@if exist ..\..\gdk-$(GDK_OLD_CFG)-$(GDK_DEL_CONFIG)-build del ..\..\gdk-$(GDK_OLD_CFG)-$(GDK_DEL_CONFIG)-build
@@ -61,21 +67,27 @@ all:	\
 
 ..\..\config.h	\
 ..\..\gdk\gdkconfig.h	\
+..\..\gtk\gtk-win32.rc	\
 ..\..\demos\gtk-demo\demos.h:
+	@echo Copying $@...
 	@copy $** $@
 
 ..\..\gdk\gdkversionmacros.h: ..\..\gdk\gdkversionmacros.h.in
-	$(PYTHON) gen-gdkversionmacros-h.py --version=$(GTK_VERSION)
+	@echo Generating $@...
+	@$(PYTHON) gen-gdkversionmacros-h.py --version=$(GTK_VERSION)
 
 ..\..\gdk\gdkmarshalers.h: ..\..\gdk\gdkmarshalers.list
-	$(PYTHON) $(GLIB_GENMARSHAL) $(GDK_MARSHALERS_FLAGS) --header $** > $@.tmp
+	@echo Generating $@...
+	@$(PYTHON) $(GLIB_GENMARSHAL) $(GDK_MARSHALERS_FLAGS) --header $** > $@.tmp
 	@move $@.tmp $@
 
 ..\..\gdk\gdkmarshalers.c: ..\..\gdk\gdkmarshalers.list
-	$(PYTHON) $(GLIB_GENMARSHAL) $(GDK_MARSHALERS_FLAGS) --body $** > $@.tmp
+	@echo Generating $@...
+	@$(PYTHON) $(GLIB_GENMARSHAL) $(GDK_MARSHALERS_FLAGS) --body $** > $@.tmp
 	@move $@.tmp $@
 
 ..\..\gdk\gdk.gresource.xml:
+	@echo Generating $@...
 	@echo ^<?xml version='1.0' encoding='UTF-8'?^> >$@
 	@echo ^<gresources^> >> $@
 	@echo  ^<gresource prefix='/org/gtk/libgdk'^> >> $@
@@ -84,14 +96,44 @@ all:	\
 	@echo ^</gresources^> >> $@
 
 ..\..\gdk\gdkresources.h: ..\..\gdk\gdk.gresource.xml
-	$(GLIB_COMPILE_RESOURCES) $(GDK_RESOURCES_ARGS) --generate-header
+	@echo Generating $@...
+	@$(GLIB_COMPILE_RESOURCES) $(GDK_RESOURCES_ARGS) --generate-header
 
 ..\..\gdk\gdkresources.c: ..\..\gdk\gdk.gresource.xml $(GDK_RESOURCES)
-	$(GLIB_COMPILE_RESOURCES) $(GDK_RESOURCES_ARGS) --generate-source
+	@echo Generating $@...
+	@$(GLIB_COMPILE_RESOURCES) $(GDK_RESOURCES_ARGS) --generate-source
+
+..\..\gtk\libgtk3.manifest: ..\..\gtk\libgtk3.manifest.in
+	@echo Generating $@...
+	@$(PYTHON) replace.py	\
+	--action=replace-var	\
+	--input=$**	--output=$@	\
+	--var=EXE_MANIFEST_ARCHITECTURE	\
+	--outstring=*
+
+..\..\gtk\gtkdbusgenerated.h ..\..\gtk\gtkdbusgenerated.c: ..\..\gtk\gtkdbusinterfaces.xml
+	@echo Generating GTK DBus sources...
+	@$(PYTHON) $(PREFIX)\bin\gdbus-codegen	\
+	--interface-prefix org.Gtk. --c-namespace _Gtk	\
+	--generate-c-code gtkdbusgenerated $**	\
+	--output-directory $(@D)
+
+..\..\gtk\gtktypefuncs.inc: ..\..\gtk\gentypefuncs.py
+	@echo Generating $@...
+	@echo #undef GTK_COMPILATION > $(@R).preproc.c
+	@echo #include "gtkx.h" >> $(@R).preproc.c
+	@cl /EP $(GTK_PREPROCESSOR_FLAGS) $(@R).preproc.c > $(@R).combined.c
+	@$(PYTHON) $** $@ $(@R).combined.c
+	@del $(@R).preproc.c $(@R).combined.c
 
 # Remove the generated files
 clean:
+	@-del /f /q ..\..\gtk\gtktypefuncs.inc
+	@-del /f /q ..\..\gtk\gtkdbusgenerated.c
+	@-del /f /q ..\..\gtk\gtkdbusgenerated.h
 	@-del /f /q ..\..\demos\gtk-demo\demos.h
+	@-del /f /q ..\..\gtk\libgtk3.manifest
+	@-del /f /q ..\..\gtk\gtk-win32.rc
 	@-del /f /q ..\..\gdk\gdkresources.c
 	@-del /f /q ..\..\gdk\gdkresources.h
 	@-del /f /q ..\..\gdk\gdk.gresource.xml
