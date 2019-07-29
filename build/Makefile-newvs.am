@@ -21,17 +21,17 @@ if MSVC_NO_TOOLSET_SET
 MSVC_TOOLSET = $(MSVC_VER)0
 endif
 
-%.sln:
+%.sln: $(top_builddir)/build/win32/vs10/Makefile
 	sed 's/11\.00/$(MSVC_FORMAT_VER)\.00/g' < $(top_srcdir)/build/win32/vs10/$@ > $(top_builddir)/build/win32/vs$(MSVC_VER)/$@.tmp
 	sed 's/2010/$(MSVC_VER_LONG)/g' < $(top_builddir)/build/win32/vs$(MSVC_VER)/$@.tmp > $(top_builddir)/build/win32/vs$(MSVC_VER)/$@
 	rm $(top_builddir)/build/win32/vs$(MSVC_VER)/$@.tmp
 
-%.txt:
+%.txt: $(top_builddir)/build/win32/vs10/Makefile
 	sed 's/vs10/vs$(MSVC_VER)/g' < $(top_srcdir)/build/win32/vs10/$@ > $(top_builddir)/build/win32/vs$(MSVC_VER)/$@.tmp
 	sed 's/VS10/VS$(MSVC_VER)/g' < $(top_builddir)/build/win32/vs$(MSVC_VER)/$@.tmp > $(top_builddir)/build/win32/vs$(MSVC_VER)/$@
 	rm $(top_builddir)/build/win32/vs$(MSVC_VER)/$@.tmp
 
-%.vcxproj:
+%.vcxproj: $(top_builddir)/build/win32/vs10/Makefile
 	if test -e $(top_srcdir)/build/win32/vs10/$@; then \
 		sed 's/v100/v$(MSVC_TOOLSET)/g' < $(top_srcdir)/build/win32/vs10/$@ > $(top_builddir)/build/win32/vs$(MSVC_VER)/$@; \
 	else \
@@ -45,7 +45,7 @@ endif
 		sed 's/<VSVer>10<\/VSVer>/<VSVer>$(MSVC_VER)<\/VSVer>/g' < $(top_builddir)/build/win32/vs10/$@ > $(top_builddir)/build/win32/vs$(MSVC_VER)/$@; \
 	fi
 
-%.vcxproj.filters:
+%.vcxproj.filters: $(top_builddir)/build/win32/vs10/Makefile
 	if test -e $(top_srcdir)/build/win32/vs10/$@; then \
 		cp $(top_srcdir)/build/win32/vs10/$@ $(top_builddir)/build/win32/vs$(MSVC_VER)/$@; \
 	else \
