@@ -4240,7 +4240,7 @@ infobar {
 
     selection { background-color: darken($bg_color, 10%); }
 
-    *:link { @extend %link_selected; }
+    *:link { color: $link_color; }
   }
 }
 
