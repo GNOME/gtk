@@ -133,7 +133,7 @@
     <NMakeCleanCommandLine Condition="'$(Configuration)' == 'Release_Broadway'">$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean</NMakeCleanCommandLine>
     <NMakeCleanCommandLine Condition="'$(Configuration)' == 'Debug'">$(GenerateRequiredSourcesBase) CFG=$(Configuration) $(IntrospectPythonParam) clean</NMakeCleanCommandLine>
     <NMakeCleanCommandLine Condition="'$(Configuration)' == 'Release'">$(GenerateRequiredSourcesBase) CFG=$(Configuration) $(IntrospectPythonParam) clean</NMakeCleanCommandLine>
-    <NMakeOutput>$(GeneratedGdkSources)</NMakeOutput>
+    <NMakeOutput>$(GeneratedGdkSources);$(GeneratedDemoSources)</NMakeOutput>
   </PropertyGroup>
   <ItemGroup>
   </ItemGroup>

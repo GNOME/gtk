@@ -14,6 +14,10 @@
 		Value="..\..\..\config.h;..\..\..\gdk\gdkconfig.h;..\..\gdk\gdkversionmacros.h;..\..\..\gdk\gdkmarshalers.h;..\..\..\gdk\gdkmarshalers.c;..\..\..\gdk\gdkresources.h;..\..\..\gdk\gdkresources.c"
 	/>
 	<UserMacro
+		Name="GeneratedDemoSources"
+		Value="..\..\..\demos\gtk-demo\demos.h"
+	/>
+	<UserMacro
 		Name="GDbusCodeGenCmd"
 		Value="$(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml"
 	/>

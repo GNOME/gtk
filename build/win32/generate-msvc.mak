@@ -44,10 +44,12 @@ all:	\
 	..\..\gdk\gdkmarshalers.h	\
 	..\..\gdk\gdkmarshalers.c	\
 	..\..\gdk\gdkresources.h	\
-	..\..\gdk\gdkresources.c
+	..\..\gdk\gdkresources.c	\
+	..\..\demos\gtk-demo\demos.h
 
-# Copy the pre-defined config.h.win32
+# Copy the pre-defined config.h.win32 and demos.h.win32
 ..\..\config.h: ..\..\config.h.win32
+..\..\demos\gtk-demo\demos.h: ..\..\demos\gtk-demo\demos.h.win32
 
 ..\..\gdk-$(CFG)-$(GDK_CONFIG)-build: $(GDK_CONFIG_TEMPLATE)
 	@if exist ..\..\gdk-$(GDK_OLD_CFG)-$(GDK_DEL_CONFIG)-build del ..\..\gdk-$(GDK_OLD_CFG)-$(GDK_DEL_CONFIG)-build
@@ -58,7 +60,8 @@ all:	\
 ..\..\gdk\gdkconfig.h: ..\..\gdk-$(CFG)-$(GDK_CONFIG)-build
 
 ..\..\config.h	\
-..\..\gdk\gdkconfig.h:
+..\..\gdk\gdkconfig.h	\
+..\..\demos\gtk-demo\demos.h:
 	@copy $** $@
 
 ..\..\gdk\gdkversionmacros.h: ..\..\gdk\gdkversionmacros.h.in
@@ -88,6 +91,7 @@ all:	\
 
 # Remove the generated files
 clean:
+	@-del /f /q ..\..\demos\gtk-demo\demos.h
 	@-del /f /q ..\..\gdk\gdkresources.c
 	@-del /f /q ..\..\gdk\gdkresources.h
 	@-del /f /q ..\..\gdk\gdk.gresource.xml
