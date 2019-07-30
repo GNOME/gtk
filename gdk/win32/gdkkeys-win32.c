@@ -125,78 +125,98 @@ gdk_win32_keymap_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_win32_keymap_parent_class)->finalize (object);
 }
 
-#define DEFINE_SPECIAL(map)                     \
-    map   (VK_CANCEL,     GDK_KEY_Cancel)       \
-    map   (VK_BACK,       GDK_KEY_BackSpace)    \
-    map   (VK_CLEAR,      GDK_KEY_Clear)        \
-    map   (VK_RETURN,     GDK_KEY_Return)       \
-    map   (VK_LSHIFT,     GDK_KEY_Shift_L)      \
-    map   (VK_LCONTROL,   GDK_KEY_Control_L)    \
-    map   (VK_LMENU,      GDK_KEY_Alt_L)        \
-    map   (VK_PAUSE,      GDK_KEY_Pause)        \
-    map   (VK_ESCAPE,     GDK_KEY_Escape)       \
-    map   (VK_PRIOR,      GDK_KEY_Prior)        \
-    map   (VK_NEXT,       GDK_KEY_Next)         \
-    map   (VK_END,        GDK_KEY_End)          \
-    map   (VK_HOME,       GDK_KEY_Home)         \
-    map   (VK_LEFT,       GDK_KEY_Left)         \
-    map   (VK_UP,         GDK_KEY_Up)           \
-    map   (VK_RIGHT,      GDK_KEY_Right)        \
-    map   (VK_DOWN,       GDK_KEY_Down)         \
-    map   (VK_SELECT,     GDK_KEY_Select)       \
-    map   (VK_PRINT,      GDK_KEY_Print)        \
-    map   (VK_EXECUTE,    GDK_KEY_Execute)      \
-    map   (VK_INSERT,     GDK_KEY_Insert)       \
-    map   (VK_DELETE,     GDK_KEY_Delete)       \
-    map   (VK_HELP,       GDK_KEY_Help)         \
-    map   (VK_LWIN,       GDK_KEY_Meta_L)       \
-    map   (VK_RWIN,       GDK_KEY_Meta_R)       \
-    map   (VK_APPS,       GDK_KEY_Menu)         \
-    map   (VK_DECIMAL,    GDK_KEY_KP_Decimal)   \
-    map   (VK_MULTIPLY,   GDK_KEY_KP_Multiply)  \
-    map   (VK_ADD,        GDK_KEY_KP_Add)       \
-    map   (VK_SEPARATOR,  GDK_KEY_KP_Separator) \
-    map   (VK_SUBTRACT,   GDK_KEY_KP_Subtract)  \
-    map   (VK_DIVIDE,     GDK_KEY_KP_Divide)    \
-    map   (VK_NUMPAD0,    GDK_KEY_KP_0)         \
-    map   (VK_NUMPAD1,    GDK_KEY_KP_1)         \
-    map   (VK_NUMPAD2,    GDK_KEY_KP_2)         \
-    map   (VK_NUMPAD3,    GDK_KEY_KP_3)         \
-    map   (VK_NUMPAD4,    GDK_KEY_KP_4)         \
-    map   (VK_NUMPAD5,    GDK_KEY_KP_5)         \
-    map   (VK_NUMPAD6,    GDK_KEY_KP_6)         \
-    map   (VK_NUMPAD7,    GDK_KEY_KP_7)         \
-    map   (VK_NUMPAD8,    GDK_KEY_KP_8)         \
-    map   (VK_NUMPAD9,    GDK_KEY_KP_9)         \
-    map   (VK_F1,         GDK_KEY_F1)           \
-    map   (VK_F2,         GDK_KEY_F2)           \
-    map   (VK_F3,         GDK_KEY_F3)           \
-    map   (VK_F4,         GDK_KEY_F4)           \
-    map   (VK_F5,         GDK_KEY_F5)           \
-    map   (VK_F6,         GDK_KEY_F6)           \
-    map   (VK_F7,         GDK_KEY_F7)           \
-    map   (VK_F8,         GDK_KEY_F8)           \
-    map   (VK_F9,         GDK_KEY_F9)           \
-    map   (VK_F10,        GDK_KEY_F10)          \
-    map   (VK_F11,        GDK_KEY_F11)          \
-    map   (VK_F12,        GDK_KEY_F12)          \
-    map   (VK_F13,        GDK_KEY_F13)          \
-    map   (VK_F14,        GDK_KEY_F14)          \
-    map   (VK_F15,        GDK_KEY_F15)          \
-    map   (VK_F16,        GDK_KEY_F16)          \
-    map   (VK_F17,        GDK_KEY_F17)          \
-    map   (VK_F18,        GDK_KEY_F18)          \
-    map   (VK_F19,        GDK_KEY_F19)          \
-    map   (VK_F20,        GDK_KEY_F20)          \
-    map   (VK_F21,        GDK_KEY_F21)          \
-    map   (VK_F22,        GDK_KEY_F22)          \
-    map   (VK_F23,        GDK_KEY_F23)          \
-    map   (VK_F24,        GDK_KEY_F24)          \
-    map   (VK_NUMLOCK,    GDK_KEY_Num_Lock)     \
-    map   (VK_SCROLL,     GDK_KEY_Scroll_Lock)  \
-    map   (VK_RSHIFT,     GDK_KEY_Shift_R)      \
-    map   (VK_RCONTROL,   GDK_KEY_Control_R)    \
-    map   (VK_RMENU,      GDK_KEY_Alt_R)  
+#define DEFINE_SPECIAL(map)                 \
+  map (VK_CANCEL,     GDK_KEY_Cancel)       \
+  map (VK_BACK,       GDK_KEY_BackSpace)    \
+  map (VK_CLEAR,      GDK_KEY_Clear)        \
+  map (VK_RETURN,     GDK_KEY_Return)       \
+  map (VK_LSHIFT,     GDK_KEY_Shift_L)      \
+  map (VK_LCONTROL,   GDK_KEY_Control_L)    \
+  map (VK_LMENU,      GDK_KEY_Alt_L)        \
+  map (VK_PAUSE,      GDK_KEY_Pause)        \
+  map (VK_ESCAPE,     GDK_KEY_Escape)       \
+  map (VK_PRIOR,      GDK_KEY_Prior)        \
+  map (VK_NEXT,       GDK_KEY_Next)         \
+  map (VK_END,        GDK_KEY_End)          \
+  map (VK_HOME,       GDK_KEY_Home)         \
+  map (VK_LEFT,       GDK_KEY_Left)         \
+  map (VK_UP,         GDK_KEY_Up)           \
+  map (VK_RIGHT,      GDK_KEY_Right)        \
+  map (VK_DOWN,       GDK_KEY_Down)         \
+  map (VK_SELECT,     GDK_KEY_Select)       \
+  map (VK_PRINT,      GDK_KEY_Print)        \
+  map (VK_EXECUTE,    GDK_KEY_Execute)      \
+  map (VK_INSERT,     GDK_KEY_Insert)       \
+  map (VK_DELETE,     GDK_KEY_Delete)       \
+  map (VK_HELP,       GDK_KEY_Help)         \
+  map (VK_LWIN,       GDK_KEY_Meta_L)       \
+  map (VK_RWIN,       GDK_KEY_Meta_R)       \
+  map (VK_APPS,       GDK_KEY_Menu)         \
+  map (VK_DECIMAL,    GDK_KEY_KP_Decimal)   \
+  map (VK_MULTIPLY,   GDK_KEY_KP_Multiply)  \
+  map (VK_ADD,        GDK_KEY_KP_Add)       \
+  map (VK_SEPARATOR,  GDK_KEY_KP_Separator) \
+  map (VK_SUBTRACT,   GDK_KEY_KP_Subtract)  \
+  map (VK_DIVIDE,     GDK_KEY_KP_Divide)    \
+  map (VK_NUMPAD0,    GDK_KEY_KP_0)         \
+  map (VK_NUMPAD1,    GDK_KEY_KP_1)         \
+  map (VK_NUMPAD2,    GDK_KEY_KP_2)         \
+  map (VK_NUMPAD3,    GDK_KEY_KP_3)         \
+  map (VK_NUMPAD4,    GDK_KEY_KP_4)         \
+  map (VK_NUMPAD5,    GDK_KEY_KP_5)         \
+  map (VK_NUMPAD6,    GDK_KEY_KP_6)         \
+  map (VK_NUMPAD7,    GDK_KEY_KP_7)         \
+  map (VK_NUMPAD8,    GDK_KEY_KP_8)         \
+  map (VK_NUMPAD9,    GDK_KEY_KP_9)         \
+  map (VK_F1,         GDK_KEY_F1)           \
+  map (VK_F2,         GDK_KEY_F2)           \
+  map (VK_F3,         GDK_KEY_F3)           \
+  map (VK_F4,         GDK_KEY_F4)           \
+  map (VK_F5,         GDK_KEY_F5)           \
+  map (VK_F6,         GDK_KEY_F6)           \
+  map (VK_F7,         GDK_KEY_F7)           \
+  map (VK_F8,         GDK_KEY_F8)           \
+  map (VK_F9,         GDK_KEY_F9)           \
+  map (VK_F10,        GDK_KEY_F10)          \
+  map (VK_F11,        GDK_KEY_F11)          \
+  map (VK_F12,        GDK_KEY_F12)          \
+  map (VK_F13,        GDK_KEY_F13)          \
+  map (VK_F14,        GDK_KEY_F14)          \
+  map (VK_F15,        GDK_KEY_F15)          \
+  map (VK_F16,        GDK_KEY_F16)          \
+  map (VK_F17,        GDK_KEY_F17)          \
+  map (VK_F18,        GDK_KEY_F18)          \
+  map (VK_F19,        GDK_KEY_F19)          \
+  map (VK_F20,        GDK_KEY_F20)          \
+  map (VK_F21,        GDK_KEY_F21)          \
+  map (VK_F22,        GDK_KEY_F22)          \
+  map (VK_F23,        GDK_KEY_F23)          \
+  map (VK_F24,        GDK_KEY_F24)          \
+  map (VK_NUMLOCK,    GDK_KEY_Num_Lock)     \
+  map (VK_SCROLL,     GDK_KEY_Scroll_Lock)  \
+  map (VK_RSHIFT,     GDK_KEY_Shift_R)      \
+  map (VK_RCONTROL,   GDK_KEY_Control_R)    \
+  map (VK_RMENU,      GDK_KEY_Alt_R)  
+
+
+#define DEFINE_DEAD(map)                                                      \
+  map ('"',                          /* 0x022 */ GDK_KEY_dead_diaeresis)      \
+  map ('\'',                         /* 0x027 */ GDK_KEY_dead_acute)          \
+  map (GDK_KEY_asciicircum,          /* 0x05e */ GDK_KEY_dead_circumflex)     \
+  map (GDK_KEY_grave,                /* 0x060 */ GDK_KEY_dead_grave)          \
+  map (GDK_KEY_asciitilde,           /* 0x07e */ GDK_KEY_dead_tilde)          \
+  map (GDK_KEY_diaeresis,            /* 0x0a8 */ GDK_KEY_dead_diaeresis)      \
+  map (GDK_KEY_degree,               /* 0x0b0 */ GDK_KEY_dead_abovering)      \
+  map (GDK_KEY_acute,                /* 0x0b4 */ GDK_KEY_dead_acute)          \
+  map (GDK_KEY_periodcentered,       /* 0x0b7 */ GDK_KEY_dead_abovedot)       \
+  map (GDK_KEY_cedilla,              /* 0x0b8 */ GDK_KEY_dead_cedilla)        \
+  map (GDK_KEY_breve,                /* 0x1a2 */ GDK_KEY_dead_breve)          \
+  map (GDK_KEY_ogonek,               /* 0x1b2 */ GDK_KEY_dead_ogonek)         \
+  map (GDK_KEY_caron,                /* 0x1b7 */ GDK_KEY_dead_caron)          \
+  map (GDK_KEY_doubleacute,          /* 0x1bd */ GDK_KEY_dead_doubleacute)    \
+  map (GDK_KEY_abovedot,             /* 0x1ff */ GDK_KEY_dead_abovedot)       \
+  map (0x1000384,              /* Greek tonos */ GDK_KEY_dead_acute)          \
+  map (GDK_KEY_Greek_accentdieresis, /* 0x7ae */ GDK_KEY_Greek_accentdieresis)
 
 
 static guint
@@ -216,17 +236,23 @@ vk_and_mod_mask_to_gdk_keysym (HKL hkl, guint vk, Win32ModMask mod_mask)
     return GDK_KEY_Tab;
   if (vk == VK_TAB && !(mod_mask & WIN32_MOD_SHIFT))
     return GDK_KEY_ISO_Left_Tab;
-  /* Generic non-printable keys */
+
+  /* Generic special keys */
   switch (vk)
     {
       #define MAP(a_vk, a_gdk) case a_vk: return a_gdk;
       DEFINE_SPECIAL(MAP)
       #undef MAP
     }
-  /* If all of that failed, try converting to Unicode and back */
-  /* Note that we can't use MapVirtualKeyExW(vk, MAPVK_VK_TO_CHAR, hkl) because it always
-     produces upper-case letters, but GDK expects lower case if shift is not pressed.
-     I don't know how to handle this in the general case. The following is my best attempt. */
+
+  /* If the previous attempts failed, try converting to Unicode and back */
+
+  /* Check for dead key */
+  gunichar c = MapVirtualKeyExW(vk, MAPVK_VK_TO_CHAR, hkl);
+  gboolean is_dead = c & 0x80000000;
+
+  /* Note that we can't simply use MapVirtualKeyExW(vk, MAPVK_VK_TO_CHAR, hkl) because it
+     always produces upper-case letters, but GDK expects lower case if shift is not pressed. */
   UINT scancode = MapVirtualKeyExW(vk, MAPVK_VK_TO_VSC, hkl);
 
   /* We need to query the existing keyboard state for NumLock, CapsLock etc. */
@@ -234,6 +260,7 @@ vk_and_mod_mask_to_gdk_keysym (HKL hkl, guint vk, Win32ModMask mod_mask)
   GetKeyboardState(saved_keystate);
 
   BYTE keystate[KEY_STATE_SIZE] = {0};
+
   /* Copy over some keystates like numlock and capslock */
   static const guint mode_keys[] = {
     VK_CAPITAL, 
@@ -245,8 +272,10 @@ vk_and_mod_mask_to_gdk_keysym (HKL hkl, guint vk, Win32ModMask mod_mask)
   /* Add own modifiers */
   if (mod_mask & WIN32_MOD_SHIFT)
     keystate[VK_SHIFT] = keystate[VK_LSHIFT] = 0x80;
-  /* Ctrl shifts down by 64, i.e. Ctrl+A = 0x01. We don't want this.
-     However, AltGr is emulated by Ctrl+Alt, so do set if both are set. */
+
+  /* Ctrl normally shifts down by 64, i.e. Ctrl+A = 0x01. We don't want this, so we normally
+     skip this modifier.
+     However, AltGr is emulated by Ctrl+Alt, so if both are set, we DO want to set them. */
   if ((mod_mask & (WIN32_MOD_CTRL | WIN32_MOD_ALT)) == (WIN32_MOD_CTRL | WIN32_MOD_ALT))
     {
       keystate[VK_CONTROL] = keystate[VK_LCONTROL] = 0x80;
@@ -254,26 +283,45 @@ vk_and_mod_mask_to_gdk_keysym (HKL hkl, guint vk, Win32ModMask mod_mask)
     }
 
   WCHAR utf16_buf[64];
-  int   utf16_n=0;
-  utf16_n = ToUnicodeEx(vk, scancode, keystate, utf16_buf, sizeof(utf16_buf)/sizeof(utf16_buf[0]),
-                        0, hkl);
+  int   utf16_n = 0;
+  utf16_n = ToUnicodeEx (vk, scancode, keystate, utf16_buf, sizeof(utf16_buf)/sizeof(utf16_buf[0]),
+                         0, hkl);
+
+  /* For dead keys, double-press. Don't know if this always works? */
+  if (is_dead)
+    {
+      GetKeyboardState(keystate);
+      utf16_n = ToUnicodeEx (vk, scancode, keystate, utf16_buf, sizeof(utf16_buf)/sizeof(utf16_buf[0]),
+			     0, hkl);
+    }
+
   /* ToUnicodeEx clobbers the global keystate so we have to reset it */
   SetKeyboardState(saved_keystate);
 
-  gunichar c = 0;
-  if (utf16_n > 0)
-    c = utf16_buf[0];
-  else /* fallback? */
-    c = MapVirtualKeyExW(vk, MAPVK_VK_TO_CHAR, hkl);
+  c = utf16_buf[0];
+
+  /* Fix up dead keys */
+  if (utf16_n == -1)
+    {
+      guint sym = gdk_unicode_to_keyval (c);
+      switch (sym)
+	{
+	  #define MAP(a_nondead, a_dead) case a_nondead: return a_dead;
+	  DEFINE_DEAD(MAP)
+	  #undef MAP
+	}
+    }
+
   /* Todo: Handle case where more than one wchar is returned */
 
   return gdk_unicode_to_keyval(c);
 }
 
 static void
-gdk_keysym_to_vk_and_mod_mask(HKL hkl, guint sym, guint *vk, Win32ModMask *mod_mask)
+gdk_keysym_to_vk_and_mod_mask (HKL hkl, guint sym, guint *vk, Win32ModMask *mod_mask)
 {
   *mod_mask = 0;
+
   /* Special cases */
   if (sym == GDK_KEY_Tab)
     {
@@ -286,6 +334,7 @@ gdk_keysym_to_vk_and_mod_mask(HKL hkl, guint sym, guint *vk, Win32ModMask *mod_m
       *mod_mask = WIN32_MOD_SHIFT;
       return;
     }
+
   /* Generic non-printable keys */
   switch (sym)
     {
@@ -293,11 +342,26 @@ gdk_keysym_to_vk_and_mod_mask(HKL hkl, guint sym, guint *vk, Win32ModMask *mod_m
       DEFINE_SPECIAL(MAP)
       #undef MAP
     }
-  /* If all of that failed, try converting to Unicode and back */
-  gunichar c = gdk_keyval_to_unicode(sym);
-  SHORT vk_and_mods = VkKeyScanExW(c, hkl);
-  *vk = vk_and_mods & 0xFF;
-  *mod_mask = (vk_and_mods >> 8) & 0xFF;
+
+  /* Fix up dead keys */
+  #define MAP(a_nondead, a_dead) \
+    if (sym == a_dead)           \
+      sym = a_nondead;
+  DEFINE_DEAD(MAP)
+  #undef MAP
+
+  /* Try converting to Unicode and back */
+  gunichar c = gdk_keyval_to_unicode (sym);
+  SHORT vk_and_mods = VkKeyScanExW (c, hkl);
+  if (vk_and_mods == 0xFFFF)
+    {
+      *vk = *mod_mask = 0;
+    }
+  else
+    {
+      *vk = vk_and_mods & 0xFF;
+      *mod_mask = (vk_and_mods >> 8) & 0xFF;
+    }
 }
 
 
@@ -315,7 +379,7 @@ _gdk_win32_keymap_get_decimal_mark (GdkWin32Keymap *keymap)
 
   return (guint32) '.';
   #else
-  guint32 c = MapVirtualKeyW(VK_DECIMAL,MAPVK_VK_TO_CHAR);
+  guint32 c = MapVirtualKeyW (VK_DECIMAL, MAPVK_VK_TO_CHAR);
   if (!c)
     c = (guint32) '.';
   return c;
@@ -367,13 +431,8 @@ static void update_keymap (GdkKeymap *gdk_keymap)
   static HKL              *hkls = NULL;
   gboolean                 no_list;
   static guint             current_serial = 0;
-  gint                     i, group;
+  gint                     i;
   GdkWin32Keymap          *keymap = GDK_WIN32_KEYMAP (gdk_keymap);
-
-  guchar                   key_state[KEY_STATE_SIZE];
-  guint                    scancode;
-  guint                    vk;
-  guint                   *keygroup;
 
   if (hkls_len > 0 && current_serial == _gdk_keymap_serial)
     return;
@@ -643,29 +702,27 @@ gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *gdk_keymap,
           gdk_keysym_to_vk_and_mod_mask(hkl, keyval, &vk, &base_mask);
           if (vk != 0)
             {
-              /* Combine base mask with additional modifiers. If those
-                 modifiers don't affect the keyval, add them. 
+              /* Combine base mask with additional modifiers. If those modifiers don't affect the
+	         keyval, add them. 
 
-                 NOTE: This is SLOW, because the GTK way of handling shortcuts
-                 is super-inefficient:
+                 NOTE: This is SLOW, because the GTK way of handling shortcuts is super-inefficient:
 
                  GTK wants *every* modifier+key combination that could produce a specific keyval.
-                 The problem here is that this means the number increases exponentially
-                 with the number of modifiers. On Windows we have 6 potential modifiers,
-                 but most of them don't affect the resulting key in 99 % of all cases.
+                 The problem here is that this means the number increases exponentially with the 
+		 number of modifiers. On Windows we have 6 potential modifiers, but most of them 
+		 don't affect the resulting key in 99 % of all cases.
 
                  So we get ~64 redundant entries for just one key.
                  
-                 Unfortunately, the call to vk_and_mod_mask_to_gdk_keysym() isn't exactly fast
-                 either since it involves manipulating the global 256 bytes long keyboard state 
-                 due to the way the Windows API works. So it really makes a noticeable difference
-                 whether we do 1 call or 64 calls.
+                 Unfortunately, the call to vk_and_mod_mask_to_gdk_keysym() isn't exactly fast either
+		 since it involves manipulating the global 256 bytes long keyboard state due to the
+		 way the Windows API works. So it really makes a noticeable difference whether we
+		 do 1 call or 64 calls.
                  
-                 Thus we hand-optimize here to try as few combinations as possible. We assume
-                 that [Ctrl] and [Alt] don't affect the keysym, however [Ctrl+Alt] might,
-                 since it emulates AltGr. We ignore HANKAKU, RESERVED1 and RESERVED2 because
-                 they don't seem to affect shortcuts on Windows (tested in Notepad).
-                 Besides, GTK can't handle them anyway. */
+                 Thus we hand-optimize here to try as few combinations as possible. We assume that
+		 [Ctrl] and [Alt] don't affect the keysym, however [Ctrl+Alt] might, since it emulates
+		 AltGr. We ignore HANKAKU, RESERVED1 and RESERVED2 because they don't seem to affect
+		 shortcuts on Windows (tested in Notepad). Besides, GTK can't handle them anyway. */
               #if 1
               for (int shift_yes = 0; shift_yes <= 1; ++shift_yes)
                 {

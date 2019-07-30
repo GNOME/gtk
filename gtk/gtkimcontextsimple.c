@@ -1244,7 +1244,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
             }
         }
 */
-        g_assert (0);
+        /*g_assert (0);*/
 #endif
 
       G_LOCK (global_tables);
