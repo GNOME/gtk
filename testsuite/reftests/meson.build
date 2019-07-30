@@ -30,6 +30,9 @@ gtk_reftest = executable('gtk-reftest', 'gtk-reftest.c',
   link_with : [libgtkreftestprivate, libreftest],
   dependencies : libgtk_dep)
 
+image_compare = executable('image-compare', 'image-compare.c',
+  link_with : [libgtkreftestprivate, libreftest],
+  dependencies : libgtk_dep)
 # Installed data (TODO)
 
 testdata = [
