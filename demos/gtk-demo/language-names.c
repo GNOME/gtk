@@ -18,6 +18,10 @@
 
 #include "language-names.h"
 
+#ifndef ISO_CODES_PREFIX
+#define ISO_CODES_PREFIX "/usr"
+#endif
+
 #define ISO_CODES_DATADIR ISO_CODES_PREFIX "/share/xml/iso-codes"
 #define ISO_CODES_LOCALESDIR ISO_CODES_PREFIX "/share/locale"
 
