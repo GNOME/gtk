@@ -4,7 +4,6 @@ EXTRA_DIST +=	\
 	README.txt	\
 	gtk+.sln	\
 	gtk3-prebuild.vcxproj	\
-	gtk3-prebuild.vcxproj.filters	\
 	gdk3-win32.vcxproj	\
 	gdk3-win32.vcxproj.filters	\
 	gdk-3.vcxproj	\

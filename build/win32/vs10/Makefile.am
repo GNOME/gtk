@@ -33,7 +33,6 @@ EXTRA_DIST += \
 	README.txt				\
 	gtk+.sln				\
 	gtk3-prebuild.vcxproj			\
-	gtk3-prebuild.vcxproj.filters		\
 	gdk3-win32.vcxprojin			\
 	gdk3-win32.vcxproj.filtersin		\
 	gdk3-broadway.vcxprojin			\
