@@ -38,6 +38,8 @@ SUBDIRS =	\
 EXTRA_DIST +=	\
 	config-msvc.mak		\
 	config-msvc.mak.in		\
+	create-lists.bat	\
+	create-lists-msvc.mak		\
 	detectenv-msvc.mak		\
 	gen-gdkversionmacros-h.py	\
 	generate-msvc.mak	\

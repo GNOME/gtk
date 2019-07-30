@@ -4,18 +4,7 @@
 # one is maintaining the NMake build files.
 
 !include config-msvc.mak
-
-!if [echo GDK_RESOURCES = \>> resources_sources.mak ]
-!endif
-
-!if [for %f in (..\..\gdk\resources\glsl\*.glsl) do @echo %f \>> resources_sources.mak]
-!endif
-
-!if [echo.>> resources_sources.mak]
-!endif
-
-!if [del /f /q resources_sources.mak]
-!endif
+!include create-lists-msvc.mak
 
 # Copy the pre-defined gdkconfig.h.[win32|win32_broadway]
 !if "$(CFG)" == "release" || "$(CFG)" == "Release"
@@ -35,9 +24,9 @@ GDK_CONFIG_TEMPLATE = ..\..\gdk\gdkconfig.h.win32
 !endif
 
 GDK_MARSHALERS_FLAGS = --prefix=_gdk_marshal --valist-marshallers
-GDK_RESOURCES_ARGS = $** --target=$@ --sourcedir=..\..\gdk --c-name _gdk --manual-register
+GDK_RESOURCES_ARGS = ..\..\gdk\gdk.gresource.xml --target=$@ --sourcedir=..\..\gdk --c-name _gdk --manual-register
 GTK_MARSHALERS_FLAGS = --prefix=_gtk_marshal --valist-marshallers
-GTK_RESOURCES_ARGS = $** --target=$@ --sourcedir=..\..\gtk --c-name _gtk --manual-register
+GTK_RESOURCES_ARGS = ..\..\gtk\gtk.gresource.xml --target=$@ --sourcedir=..\..\gtk --c-name _gtk --manual-register
 
 all:	\
 	..\..\config.h	\
@@ -93,7 +82,7 @@ all:	\
 	@$(PYTHON) $(GLIB_GENMARSHAL) $(GDK_MARSHALERS_FLAGS) --body $** > $@.tmp
 	@move $@.tmp $@
 
-..\..\gdk\gdk.gresource.xml:
+..\..\gdk\gdk.gresource.xml: $(GDK_RESOURCES)
 	@echo Generating $@...
 	@echo ^<?xml version='1.0' encoding='UTF-8'?^> >$@
 	@echo ^<gresources^> >> $@
@@ -139,7 +128,7 @@ all:	\
 	@$(PYTHON) $** $@ $(@R).combined.c
 	@del $(@R).preproc.c $(@R).combined.c
 
-..\..\gtk\gtk.gresource.xml:
+..\..\gtk\gtk.gresource.xml: $(GTK_RESOURCES)
 	@echo Generating $@...
 	@echo ^<?xml version='1.0' encoding='UTF-8'?^>> $@
 	@echo ^<gresources^>>> $@
@@ -176,7 +165,7 @@ all:	\
 	@if not "$(GDK_PIXBUF_PIXDATA)" == "" set GDK_PIXBUF_PIXDATA=$(GDK_PIXBUF_PIXDATA)
 	@$(GLIB_COMPILE_RESOURCES) $(GTK_RESOURCES_ARGS) --generate-header
 
-..\..\gtk\gtkresources.c: ..\..\gtk\gtk.gresource.xml
+..\..\gtk\gtkresources.c: ..\..\gtk\gtk.gresource.xml $(GTK_RESOURCES)
 	@echo Generating $@...
 	@if not "$(XMLLINT)" == "" set XMLLINT=$(XMLLINT)
 	@if not "$(JSON_GLIB_FORMAT)" == "" set JSON_GLIB_FORMAT=$(JSON_GLIB_FORMAT)
