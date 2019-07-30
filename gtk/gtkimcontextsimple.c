@@ -1217,7 +1217,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       gboolean success = FALSE;
 
 #ifdef GDK_WINDOWING_WIN32
-      if (GDK_IS_WIN32_DISPLAY (display))
+/*       if (GDK_IS_WIN32_DISPLAY (display))
         {
           guint16  output[2];
           gsize    output_size = 2;
@@ -1243,6 +1243,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
               return TRUE;
             }
         }
+*/
+        g_assert (0);
 #endif
 
       G_LOCK (global_tables);
