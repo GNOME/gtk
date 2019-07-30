@@ -104,10 +104,16 @@ all:	\
 
 ..\..\gdk\gdkresources.h: ..\..\gdk\gdk.gresource.xml
 	@echo Generating $@...
+	@if not "$(XMLLINT)" == "" set XMLLINT=$(XMLLINT)
+	@if not "$(JSON_GLIB_FORMAT)" == "" set JSON_GLIB_FORMAT=$(JSON_GLIB_FORMAT)
+	@if not "$(GDK_PIXBUF_PIXDATA)" == "" set GDK_PIXBUF_PIXDATA=$(GDK_PIXBUF_PIXDATA)
 	@$(GLIB_COMPILE_RESOURCES) $(GDK_RESOURCES_ARGS) --generate-header
 
 ..\..\gdk\gdkresources.c: ..\..\gdk\gdk.gresource.xml $(GDK_RESOURCES)
 	@echo Generating $@...
+	@if not "$(XMLLINT)" == "" set XMLLINT=$(XMLLINT)
+	@if not "$(JSON_GLIB_FORMAT)" == "" set JSON_GLIB_FORMAT=$(JSON_GLIB_FORMAT)
+	@if not "$(GDK_PIXBUF_PIXDATA)" == "" set GDK_PIXBUF_PIXDATA=$(GDK_PIXBUF_PIXDATA)
 	@$(GLIB_COMPILE_RESOURCES) $(GDK_RESOURCES_ARGS) --generate-source
 
 ..\..\gtk\libgtk3.manifest: ..\..\gtk\libgtk3.manifest.in
@@ -165,10 +171,16 @@ all:	\
 
 ..\..\gtk\gtkresources.h: ..\..\gtk\gtk.gresource.xml
 	@echo Generating $@...
+	@if not "$(XMLLINT)" == "" set XMLLINT=$(XMLLINT)
+	@if not "$(JSON_GLIB_FORMAT)" == "" set JSON_GLIB_FORMAT=$(JSON_GLIB_FORMAT)
+	@if not "$(GDK_PIXBUF_PIXDATA)" == "" set GDK_PIXBUF_PIXDATA=$(GDK_PIXBUF_PIXDATA)
 	@$(GLIB_COMPILE_RESOURCES) $(GTK_RESOURCES_ARGS) --generate-header
 
 ..\..\gtk\gtkresources.c: ..\..\gtk\gtk.gresource.xml
 	@echo Generating $@...
+	@if not "$(XMLLINT)" == "" set XMLLINT=$(XMLLINT)
+	@if not "$(JSON_GLIB_FORMAT)" == "" set JSON_GLIB_FORMAT=$(JSON_GLIB_FORMAT)
+	@if not "$(GDK_PIXBUF_PIXDATA)" == "" set GDK_PIXBUF_PIXDATA=$(GDK_PIXBUF_PIXDATA)
 	@$(GLIB_COMPILE_RESOURCES) $(GTK_RESOURCES_ARGS) --generate-source
 
 ..\..\gtk\gtkmarshalers.h: ..\..\gtk\gtkmarshalers.list
