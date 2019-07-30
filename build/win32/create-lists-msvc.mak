@@ -74,7 +74,25 @@ NULL=
 !if [for %f in (..\..\gtk\inspector\*.ui ..\..\gtk\inspector\logo.png ..\..\gtk\emoji\emoji.data) do @call create-lists.bat file resources_sources.mak %f]
 !endif
 
+!if [call create-lists.bat footer resources_sources.mak]
+!endif
+
 !include resources_sources.mak
 
 !if [del /f /q resources_sources.mak]
+!endif
+
+# Get absolute path of glib-mkenums
+!if [call create-lists.bat header gtk_sources.mak GLIB_MKENUMS_ABS]
+!endif
+
+!if [for %f in ($(GLIB_MKENUMS)) do @call create-lists.bat file gtk_sources.mak %~ff]
+!endif
+
+!if [call create-lists.bat footer gtk_sources.mak]
+!endif
+
+!include gtk_sources.mak
+
+!if [del /f /q gtk_sources.mak]
 !endif
