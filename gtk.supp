@@ -158,6 +158,19 @@
    fun:epoxy_glXQueryServerString_global_rewrite_ptr
 }
 
+{
+   epoxy glGetTexImage
+   Memcheck:Addr16
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   obj:*
+   fun:epoxy_glGetTexImage_global_rewrite_ptr
+}
+
+
+
 
 # Fontconfig
 {
@@ -211,3 +224,11 @@
    fun:pango_cairo_fc_font_map_fontset_key_substitute
 }
 
+{
+  pango 2
+  Memcheck:Leak
+  fun:realloc
+  obj:/usr/lib/libfontconfig.so*
+  obj:/usr/lib/libfontconfig.so*
+  fun:_cairo_ft_font_options_substitute
+}
