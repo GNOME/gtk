@@ -25,10 +25,7 @@
 
 G_BEGIN_DECLS
 
-GtkCssValue *   _gtk_css_ease_value_new_cubic_bezier  (double                x1,
-                                                       double                y1,
-                                                       double                x2,
-                                                       double                y2);
+GtkCssValue *   _gtk_css_ease_value_new_ease          (void);
 gboolean        _gtk_css_ease_value_can_parse         (GtkCssParser         *parser);
 GtkCssValue *   _gtk_css_ease_value_parse             (GtkCssParser         *parser);
 

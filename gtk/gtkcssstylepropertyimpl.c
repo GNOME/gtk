@@ -1613,8 +1613,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           transition_timing_function_parse,
                                           NULL,
-                                          _gtk_css_array_value_new (
-                                            _gtk_css_ease_value_new_cubic_bezier (0.25, 0.1, 0.25, 1.0)));
+                                          _gtk_css_array_value_new (_gtk_css_ease_value_new_ease ()));
   gtk_css_style_property_register        ("transition-delay",
                                           GTK_CSS_PROPERTY_TRANSITION_DELAY,
                                           G_TYPE_NONE,
@@ -1647,8 +1646,7 @@ _gtk_css_style_property_init_properties (void)
                                           0,
                                           transition_timing_function_parse,
                                           NULL,
-                                          _gtk_css_array_value_new (
-                                            _gtk_css_ease_value_new_cubic_bezier (0.25, 0.1, 0.25, 1.0)));
+                                          _gtk_css_array_value_new (_gtk_css_ease_value_new_ease ()));
   gtk_css_style_property_register        ("animation-iteration-count",
                                           GTK_CSS_PROPERTY_ANIMATION_ITERATION_COUNT,
                                           G_TYPE_NONE,
