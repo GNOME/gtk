@@ -3435,6 +3435,7 @@ bad things might happen.</property>
             <property name="halign">end</property>
             <property name="icon-name">emblem-system-symbolic</property>
             <property name="menu-model">gear_menu</property>
+            <property name="tooltip-text">This is a menu button</property>
             <layout>
               <property name="left-attach">1</property>
               <property name="top-attach">3</property>
