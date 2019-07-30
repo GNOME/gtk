@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-26 00:05+0000\n"
-"PO-Revision-Date: 2019-07-26 09:03+0200\n"
+"POT-Creation-Date: 2019-07-30 05:07+0000\n"
+"PO-Revision-Date: 2019-07-30 09:27+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -64,15 +64,15 @@ msgstr "No se soporta arrastrar y soltar desde otras aplicaciones."
 msgid "No compatible formats to transfer contents."
 msgstr "No hay formatos compatibles para transferir el contenido."
 
-#: gdk/gdksurface.c:1160
+#: gdk/gdksurface.c:1157
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Soporte de GL desactivado mediante GDK_DEBUG"
 
-#: gdk/gdksurface.c:1171
+#: gdk/gdksurface.c:1168
 msgid "The current backend does not support OpenGL"
 msgstr "El «backend» actual no soporta OpenGL"
 
-#: gdk/gdksurface.c:1279
+#: gdk/gdksurface.c:1276
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Soporte de Vulkan desactivado mediante GDK_DEBUG"
 
@@ -701,13 +701,11 @@ msgstr "COLORES"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:292
 #, c-format
-#| msgid "Starting %s"
 msgid "Starting “%s”"
 msgstr "Iniciando «%s»"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:305
 #, c-format
-#| msgid "Opening “%s”."
 msgid "Opening “%s”"
 msgstr "Abriendo «%s»"
 
@@ -2072,7 +2070,7 @@ msgstr "Ya existe un archivo con ese nombre"
 #: gtk/gtkmountoperation.c:592 gtk/gtkpagesetupunixdialog.c:210
 #: gtk/gtkprintbackend.c:657 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:680 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:9025 gtk/inspector/css-editor.c:237
+#: gtk/gtkwindow.c:9026 gtk/inspector/css-editor.c:237
 #: gtk/inspector/recorder.c:1026 gtk/ui/gtkappchooserdialog.ui:46
 #: gtk/ui/gtkassistant.ui:50 gtk/ui/gtkcolorchooserdialog.ui:28
 #: gtk/ui/gtkfontchooserdialog.ui:22
@@ -2174,7 +2172,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Si elimina un elemento, se perderña definitivamente."
 
 #: gtk/gtkfilechooserwidget.c:1465 gtk/gtkfilechooserwidget.c:2199
-#: gtk/gtklabel.c:6096 gtk/gtktext.c:5781 gtk/gtktextview.c:8667
+#: gtk/gtklabel.c:6106 gtk/gtktext.c:5781 gtk/gtktextview.c:8667
 msgid "_Delete"
 msgstr "_Eliminar"
 
@@ -2499,27 +2497,27 @@ msgstr "Advertencia"
 msgid "Error"
 msgstr "Error"
 
-#: gtk/gtklabel.c:6093 gtk/gtktext.c:5769 gtk/gtktextview.c:8655
+#: gtk/gtklabel.c:6103 gtk/gtktext.c:5769 gtk/gtktextview.c:8655
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/gtklabel.c:6094 gtk/gtktext.c:5773 gtk/gtktextview.c:8659
+#: gtk/gtklabel.c:6104 gtk/gtktext.c:5773 gtk/gtktextview.c:8659
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtklabel.c:6095 gtk/gtktext.c:5777 gtk/gtktextview.c:8663
+#: gtk/gtklabel.c:6105 gtk/gtktext.c:5777 gtk/gtktextview.c:8663
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: gtk/gtklabel.c:6101 gtk/gtktext.c:5790 gtk/gtktextview.c:8676
+#: gtk/gtklabel.c:6111 gtk/gtktext.c:5790 gtk/gtktextview.c:8676
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: gtk/gtklabel.c:6106
+#: gtk/gtklabel.c:6116
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
-#: gtk/gtklabel.c:6110
+#: gtk/gtklabel.c:6120
 msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
@@ -2621,7 +2619,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:783 gtk/gtkmessagedialog.c:801
-#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:9026
+#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:9027
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -2658,7 +2656,6 @@ msgid "_Domain"
 msgstr "_Dominio"
 
 #: gtk/gtkmountoperation.c:701
-#| msgid "Volume Up"
 msgid "Volume type"
 msgstr "Tipo de volumen"
 
@@ -2667,8 +2664,6 @@ msgid "_Hidden"
 msgstr "_Oculto"
 
 #: gtk/gtkmountoperation.c:714
-#| msgctxt "input method menu"
-#| msgid "Windows IME"
 msgid "_Windows system"
 msgstr "Sistema _Windows"
 
@@ -3564,12 +3559,12 @@ msgstr "Redimensionar"
 msgid "Always on Top"
 msgstr "Siempre encima"
 
-#: gtk/gtkwindow.c:9013
+#: gtk/gtkwindow.c:9014
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "¿Quiere usar el inspector de GTK?"
 
-#: gtk/gtkwindow.c:9015
+#: gtk/gtkwindow.c:9016
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3580,7 +3575,7 @@ msgstr ""
 "modificar los aspectos internos de cualquier aplicación de GTK. Al usarlo "
 "puede hacer que la aplicación falle o se cierre."
 
-#: gtk/gtkwindow.c:9020
+#: gtk/gtkwindow.c:9021
 msgid "Don’t show this message again"
 msgstr "No mostrar este mensaje de nuevo"
 
@@ -3678,25 +3673,25 @@ msgid "Show data"
 msgstr "Mostrar los datos"
 
 # src/file-manager/fm-icon-text-window.c:85
-#: gtk/inspector/general.c:342
+#: gtk/inspector/general.c:343
 msgctxt "GL version"
 msgid "None"
 msgstr "Ninguna"
 
 # src/file-manager/fm-icon-text-window.c:85
-#: gtk/inspector/general.c:343
+#: gtk/inspector/general.c:344
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Ninguno"
 
 # src/file-manager/fm-icon-text-window.c:85
-#: gtk/inspector/general.c:445
+#: gtk/inspector/general.c:446
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Ninguno"
 
 # src/file-manager/fm-icon-text-window.c:85
-#: gtk/inspector/general.c:446 gtk/inspector/general.c:447
+#: gtk/inspector/general.c:447 gtk/inspector/general.c:448
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Ninguna"
@@ -3713,39 +3708,43 @@ msgstr "«Backend» de GDK"
 msgid "GSK Renderer"
 msgstr "Renderizador GSK"
 
-#: gtk/inspector/general.ui:118 gtk/ui/gtkplacesview.ui:77
+#: gtk/inspector/general.ui:108
+msgid "Pango Fontmap"
+msgstr "Mapa de tipografías de Pango"
+
+#: gtk/inspector/general.ui:145 gtk/ui/gtkplacesview.ui:77
 msgid "Prefix"
 msgstr "Prefijo"
 
-#: gtk/inspector/general.ui:324
+#: gtk/inspector/general.ui:351
 msgid "Display"
 msgstr "Pantalla"
 
-#: gtk/inspector/general.ui:352
+#: gtk/inspector/general.ui:379
 msgid "RGBA Visual"
 msgstr "RGBA visual"
 
-#: gtk/inspector/general.ui:379
+#: gtk/inspector/general.ui:406
 msgid "Composited"
 msgstr "Compuesta"
 
-#: gtk/inspector/general.ui:416
+#: gtk/inspector/general.ui:443
 msgid "GL Version"
 msgstr "Versión de GL"
 
-#: gtk/inspector/general.ui:444
+#: gtk/inspector/general.ui:471
 msgid "GL Vendor"
 msgstr "Fabricante GL"
 
-#: gtk/inspector/general.ui:482
+#: gtk/inspector/general.ui:509
 msgid "Vulkan Device"
 msgstr "Dispositivo vulkan"
 
-#: gtk/inspector/general.ui:510
+#: gtk/inspector/general.ui:537
 msgid "Vulkan API version"
 msgstr "Versión de la API Vulkan"
 
-#: gtk/inspector/general.ui:538
+#: gtk/inspector/general.ui:565
 msgid "Vulkan driver version"
 msgstr "Versión del driver Vulkan"
 
