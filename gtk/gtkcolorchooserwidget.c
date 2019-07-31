@@ -22,7 +22,6 @@
 #include "gtkcolorchooserwidget.h"
 #include "gtkcoloreditorprivate.h"
 #include "gtkcolorswatchprivate.h"
-#include "gtkbox.h"
 #include "gtkgrid.h"
 #include "gtklabel.h"
 #include "gtkorientable.h"
@@ -30,6 +29,7 @@
 #include "gtkintl.h"
 #include "gtksizegroup.h"
 #include "gtkstylecontext.h"
+#include "gtkboxlayout.h"
 
 #include <math.h>
 
@@ -66,12 +66,12 @@ typedef struct _GtkColorChooserWidgetClass   GtkColorChooserWidgetClass;
 
 struct _GtkColorChooserWidget
 {
-  GtkBox parent_instance;
+  GtkWidget parent_instance;
 };
 
 struct _GtkColorChooserWidgetClass
 {
-  GtkBoxClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 struct _GtkColorChooserWidgetPrivate
@@ -102,7 +102,7 @@ enum
 
 static void gtk_color_chooser_widget_iface_init (GtkColorChooserInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkColorChooserWidget, gtk_color_chooser_widget, GTK_TYPE_BOX,
+G_DEFINE_TYPE_WITH_CODE (GtkColorChooserWidget, gtk_color_chooser_widget, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkColorChooserWidget)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_COLOR_CHOOSER,
                                                 gtk_color_chooser_widget_iface_init))
@@ -539,9 +539,8 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
 
   priv->use_alpha = TRUE;
 
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (cc), GTK_ORIENTATION_VERTICAL);
   priv->palette = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (cc), priv->palette);
+  gtk_widget_set_parent (priv->palette, GTK_WIDGET (cc));
 
   add_default_palette (cc);
 
@@ -595,9 +594,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   g_signal_connect (priv->editor, "notify::rgba",
                     G_CALLBACK (update_from_editor), cc);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (cc), box);
-  gtk_container_add (GTK_CONTAINER (box), priv->editor);
+  gtk_widget_set_parent (priv->editor, GTK_WIDGET (cc));
 
   g_settings_get (priv->settings, I_("selected-color"), "(bdddd)",
                   &selected,
@@ -606,10 +603,6 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
     gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (cc), &color);
 
   gtk_widget_hide (GTK_WIDGET (priv->editor));
-
-  priv->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-  gtk_size_group_add_widget (priv->size_group, priv->palette);
-  gtk_size_group_add_widget (priv->size_group, box);
 }
 
 /* GObject implementation {{{1 */
@@ -680,8 +673,10 @@ gtk_color_chooser_widget_finalize (GObject *object)
   GtkColorChooserWidget *cc = GTK_COLOR_CHOOSER_WIDGET (object);
   GtkColorChooserWidgetPrivate *priv = gtk_color_chooser_widget_get_instance_private (cc);
 
-  g_object_unref (priv->size_group);
   g_object_unref (priv->settings);
+
+  gtk_widget_unparent (priv->editor);
+  gtk_widget_unparent (priv->palette);
 
   G_OBJECT_CLASS (gtk_color_chooser_widget_parent_class)->finalize (object);
 }
@@ -689,6 +684,7 @@ gtk_color_chooser_widget_finalize (GObject *object)
 static void
 gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
 {
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
   object_class->get_property = gtk_color_chooser_widget_get_property;
@@ -709,11 +705,12 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
       g_param_spec_boolean ("show-editor", P_("Show editor"), P_("Show editor"),
                             FALSE, GTK_PARAM_READWRITE));
 
-  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), I_("colorchooser"));
+  gtk_widget_class_set_css_name (widget_class, I_("colorchooser"));
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
 
-  gtk_widget_class_install_action (GTK_WIDGET_CLASS (class), "color.select", "(dddd)",
+  gtk_widget_class_install_action (widget_class, "color.select", "(dddd)",
                                    gtk_color_chooser_widget_activate_color_select);
-  gtk_widget_class_install_action (GTK_WIDGET_CLASS (class), "color.customize", "(dddd)",
+  gtk_widget_class_install_action (widget_class, "color.customize", "(dddd)",
                                    gtk_color_chooser_widget_activate_color_customize);
 }
 
