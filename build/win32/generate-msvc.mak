@@ -3,8 +3,11 @@
 # Items in here should not need to be edited unless
 # one is maintaining the NMake build files.
 
+!include ..\..\demos\gtk-demo\Makefile.inc
+
 !include config-msvc.mak
 !include create-lists-msvc.mak
+
 
 # Copy the pre-defined gdkconfig.h.[win32|win32_broadway]
 !if "$(CFG)" == "release" || "$(CFG)" == "Release"
@@ -21,6 +24,12 @@ GDK_CONFIG_TEMPLATE = ..\..\gdk\gdkconfig.h.win32_broadway
 GDK_CONFIG = win32
 GDK_DEL_CONFIG = broadway
 GDK_CONFIG_TEMPLATE = ..\..\gdk\gdkconfig.h.win32
+!endif
+
+gtk_demo_sources = $(GTK_DEMO_BASE_SRCS)
+
+!ifdef HARFBUZZ
+gtk_demo_sources = $(gtk_demo_sources) $(GTK_FONT_FEATURE_DEMO_SRCS)
 !endif
 
 GDK_MARSHALERS_FLAGS = --prefix=_gdk_marshal --valist-marshallers
@@ -213,7 +222,7 @@ all:	\
 	@echo #undef G_ENABLE_DEBUG> $@.tmp
 	@$(PYTHON) $(GLIB_GENMARSHAL) $(GTK_MARSHALERS_FLAGS) --body $** >> $@.tmp
 	@move $@.tmp $@
-	
+
 ..\..\gtk\mkenums-msvc.mak:
 	@echo !include a11y\Makefile.inc>$@
 	@echo !include deprecated\Makefile.inc>>$@
@@ -260,6 +269,12 @@ all:	\
 ..\..\demos\icon-browser\resources.c: ..\..\demos\icon-browser\iconbrowser.gresource.xml $(ICON_BROWSER_RESOURCES)
 	@echo Generating $@...
 	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(@D) --generate-source $(@D)\iconbrowser.gresource.xml
+
+..\..\demos\gtk-demo\demos.h.win32: ..\..\demos\gtk-demo\geninclude.pl.in $(gtk_demo_sources)
+	@echo Re-generating $@...
+	@cd $(@D)
+	@$(PERL) geninclude.pl.in $(gtk_demo_sources:..\..\demos\gtk-demo\=)> $@
+	@cd $(MAKEDIR)
 
 # Remove the generated files
 clean:
