@@ -232,9 +232,9 @@ vk_and_mod_mask_to_gdk_keysym (HKL hkl, guint vk, Win32ModMask mod_mask)
     return GDK_KEY_Alt_L;
   if (vk == VK_SNAPSHOT)
     return GDK_KEY_Print;
-  if (vk == VK_TAB &&  (mod_mask & WIN32_MOD_SHIFT))
-    return GDK_KEY_Tab;
   if (vk == VK_TAB && !(mod_mask & WIN32_MOD_SHIFT))
+    return GDK_KEY_Tab;
+  if (vk == VK_TAB &&  (mod_mask & WIN32_MOD_SHIFT))
     return GDK_KEY_ISO_Left_Tab;
 
   /* Generic special keys */
