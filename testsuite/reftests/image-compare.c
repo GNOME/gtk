@@ -1,5 +1,7 @@
 #include "config.h"
 
+#include <stdlib.h>
+
 #include "reftest-compare.h"
 
 static char *opt_filename;
