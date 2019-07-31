@@ -2,6 +2,11 @@
 
 !include detectenv-msvc.mak
 
+# Default prefix if not defined
+!ifndef PREFIX
+PREFIX=..\..\vs$(VSVER)\$(PLAT)
+!endif
+
 # Configurable paths to the various interpreters we need
 !ifndef PERL
 PERL = perl
