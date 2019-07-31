@@ -4,7 +4,7 @@
 
 # Default prefix if not defined
 !ifndef PREFIX
-PREFIX=..\..\vs$(VSVER)\$(PLAT)
+PREFIX=..\..\..\vs$(VSVER)\$(PLAT)
 !endif
 
 # Configurable paths to the various interpreters we need
@@ -14,6 +14,11 @@ PERL = perl
 
 !ifndef PYTHON
 PYTHON=python
+!endif
+
+# Path to the pkg-config tool, if not already in the PATH
+!if "$(PKG_CONFIG)" == ""
+PKG_CONFIG=pkg-config
 !endif
 
 # Configurable paths to the various scripts and tools that we are using
@@ -35,6 +40,13 @@ GDBUS_CODEGEN = $(PREFIX)\bin\gdbus-codegen
 
 # Please do not change anything beneath this line unless maintaining the NMake Makefiles
 GTK_VERSION = @GTK_VERSION@
+
+GDK_PREPROCESSOR_FLAGS =	\
+	/DG_LOG_USE_STRUCTURED=1	\
+	/DGDK_COMPILATION	\
+	/I..\..	\
+	/I..\..\gdk	\
+	/I..\..\gdk\win32
 
 GTK_PREPROCESSOR_FLAGS =	\
 	 /I..\..\gtk	\
