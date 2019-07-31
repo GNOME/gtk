@@ -237,7 +237,7 @@ add_to_cache (GskGLGlyphCache  *self,
       value->texture_id = gsk_gl_driver_create_texture (driver, width, height);
 
       gsk_gl_driver_bind_source_texture (driver, value->texture_id);
-      gsk_gl_driver_init_texture_empty (driver, value->texture_id, GL_NEAREST, GL_NEAREST);
+      gsk_gl_driver_init_texture_empty (driver, value->texture_id, GL_LINEAR, GL_LINEAR);
 
       value->tx = 0.0f;
       value->ty = 0.0f;
@@ -245,18 +245,17 @@ add_to_cache (GskGLGlyphCache  *self,
       value->th = 1.0f;
     }
 
-
   upload_glyph (key, value);
 }
 
-#define PHASE(x) ((x % PANGO_SCALE) * 4 / PANGO_SCALE)
+#define PHASE(x) ((int)(floor (4 * (x + 0.125)) - 4 * floor (x + 0.125)))
 
 gboolean
 gsk_gl_glyph_cache_lookup (GskGLGlyphCache  *cache,
                            PangoFont        *font,
                            PangoGlyph        glyph,
-                           int               x,
-                           int               y,
+                           float             x,
+                           float             y,
                            float             scale,
                            GskGLDriver      *driver,
                            GskGLCachedGlyph *cached_glyph_out)
@@ -264,6 +263,7 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache  *cache,
   GskGLCachedGlyph *value;
   guint xshift = PHASE (x);
   guint yshift = PHASE (y);
+  const guint key_scale = (guint)(scale * 1024);
 
   value = g_hash_table_lookup (cache->hash_table,
                                &(GlyphCacheKey) {
@@ -271,7 +271,7 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache  *cache,
                                  .glyph = glyph,
                                  .xshift = xshift,
                                  .yshift = yshift,
-                                 .scale = (guint)(scale * 1024)
+                                 .scale = key_scale
                                });
 
   if (value)
@@ -298,7 +298,6 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache  *cache,
     {
       GlyphCacheKey *key;
       PangoRectangle ink_rect;
-      const guint key_scale = (guint)(scale * 1024);
 
       pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
       pango_extents_to_pixels (&ink_rect, NULL);
@@ -322,11 +321,11 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache  *cache,
       key->glyph = glyph;
       key->xshift = xshift;
       key->yshift = yshift;
-      key->scale =  key_scale;
+      key->scale = key_scale;
 
       if (key->scale > 0 &&
-          ink_rect.width * key->scale > 0 &&
-          ink_rect.height * key->scale > 0)
+          value->draw_width * key->scale / 1024 > 0 &&
+          value->draw_height * key->scale / 1024 > 0)
         add_to_cache (cache, key, driver, value);
 
       *cached_glyph_out = *value;

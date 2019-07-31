@@ -57,8 +57,8 @@ void                     gsk_gl_glyph_cache_begin_frame     (GskGLGlyphCache    
 gboolean                 gsk_gl_glyph_cache_lookup          (GskGLGlyphCache        *self,
                                                              PangoFont              *font,
                                                              PangoGlyph              glyph,
-                                                             int                     x,
-                                                             int                     y,
+                                                             float                   x,
+                                                             float                   y,
                                                              float                   scale,
                                                              GskGLDriver            *driver,
                                                              GskGLCachedGlyph       *cached_glyph_out);
