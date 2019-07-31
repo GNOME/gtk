@@ -7,10 +7,6 @@
 # You will need to have built gobject-introspection for this to work.
 # Change or pass in or set the following to suit your environment
 
-!if "$(PREFIX)" == ""
-PREFIX = ..\..\..\vs$(VSVER)\$(PLAT)
-!endif
-
 !if ![setlocal]		&& \
     ![set PFX=$(PREFIX)]	&& \
     ![for %P in (%PFX%) do @echo PREFIX_FULL=%~dpnfP > pfx.x]
@@ -33,14 +29,6 @@ PKG_CONFIG_PATH=$(PREFIX_FULL)\lib\pkgconfig;$(PKG_CONFIG_PATH)
 
 # This is required, and gobject-introspection needs to be built
 # before this can be successfully run.
-!if "$(PYTHON)" == ""
-PYTHON=python
-!endif
-
-# Path to the pkg-config tool, if not already in the PATH
-!if "$(PKG_CONFIG)" == ""
-PKG_CONFIG=pkg-config
-!endif
 
 # Don't change anything following this line!
 
