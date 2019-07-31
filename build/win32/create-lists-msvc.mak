@@ -74,6 +74,27 @@ NULL=
 !if [for %f in (..\..\gtk\inspector\*.ui ..\..\gtk\inspector\logo.png ..\..\gtk\emoji\emoji.data) do @call create-lists.bat file resources_sources.mak %f]
 !endif
 
+!if [call create-lists.bat footer resources_sources.mak]
+!endif
+
+!if [call create-lists.bat header resources_sources.mak GTK_DEMO_RESOURCES]
+!endif
+
+!if [for /f %f in ('$(GLIB_COMPILE_RESOURCES) --generate-dependencies --sourcedir=..\..\demos\gtk-demo ..\..\demos\gtk-demo\demo.gresource.xml') do @call create-lists.bat file resources_sources.mak %f]
+!endif
+
+!if [call create-lists.bat footer resources_sources.mak]
+!endif
+
+!if [call create-lists.bat header resources_sources.mak ICON_BROWSER_RESOURCES]
+!endif
+
+!if [for /f %f in ('$(GLIB_COMPILE_RESOURCES) --sourcedir=..\..\demos\icon-browser --generate-dependencies ..\..\demos\icon-browser\iconbrowser.gresource.xml') do @call create-lists.bat file resources_sources.mak %f]
+!endif
+
+!if [call create-lists.bat footer resources_sources.mak]
+!endif
+
 !include resources_sources.mak
 
 !if [del /f /q resources_sources.mak]

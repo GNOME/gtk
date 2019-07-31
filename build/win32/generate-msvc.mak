@@ -46,7 +46,9 @@ all:	\
 	..\..\gtk\gtkmarshalers.c	\
 	..\..\gtk\gtkresources.h	\
 	..\..\gtk\gtkresources.c	\
-	..\..\demos\gtk-demo\demos.h
+	..\..\demos\gtk-demo\demos.h	\
+	..\..\demos\gtk-demo\demo_resources.c	\
+	..\..\demos\icon-browser\resources.c
 
 # Copy the pre-defined config.h.win32 and demos.h.win32
 ..\..\config.h: ..\..\config.h.win32
@@ -183,8 +185,18 @@ all:	\
 	@$(PYTHON) $(GLIB_GENMARSHAL) $(GTK_MARSHALERS_FLAGS) --body $** >> $@.tmp
 	@move $@.tmp $@
 
+..\..\demos\gtk-demo\demo_resources.c: ..\..\demos\gtk-demo\demo.gresource.xml $(GTK_DEMO_RESOURCES)
+	@echo Generating $@...
+	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(@D) --generate-source $(@D)\demo.gresource.xml
+
+..\..\demos\icon-browser\resources.c: ..\..\demos\icon-browser\iconbrowser.gresource.xml $(ICON_BROWSER_RESOURCES)
+	@echo Generating $@...
+	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(@D) --generate-source $(@D)\iconbrowser.gresource.xml
+
 # Remove the generated files
 clean:
+	@-del /f /q ..\..\demos\icon-browser\resources.c
+	@-del /f /q ..\..\demos\gtk-demo\demo_resources.c
 	@-del /f /q ..\..\demos\gtk-demo\demos.h
 	@-del /f /q ..\..\gtk\gtkresources.c
 	@-del /f /q ..\..\gtk\gtkresources.h
