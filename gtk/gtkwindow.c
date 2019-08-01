@@ -4007,6 +4007,18 @@ ensure_icon_info (GtkWindow *window)
   return info;
 }
 
+static int
+icon_size_compare (GdkTexture *a,
+                   GdkTexture *b)
+{
+  int area_a, area_b;
+
+  area_a = gdk_texture_get_width (a) * gdk_texture_get_height (a);
+  area_b = gdk_texture_get_width (b) * gdk_texture_get_height (b);
+
+  return area_a - area_b;
+}
+
 static GList *
 icon_list_from_theme (GtkWindow   *window,
 		      const gchar *name)
@@ -4044,7 +4056,7 @@ icon_list_from_theme (GtkWindow   *window,
 					             0);
       if (info)
         {
-	  list = g_list_append (list, gtk_icon_info_load_texture (info));
+          list = g_list_insert_sorted (list, gtk_icon_info_load_texture (info), (GCompareDataFunc) icon_size_compare);
           g_object_unref (info);
         }
     }
