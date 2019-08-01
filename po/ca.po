@@ -7422,7 +7422,7 @@ msgstr "C_ompagina"
 
 #: gtk/ui/gtkprintunixdialog.ui:375
 msgid "_Reverse"
-msgstr "_Restaura"
+msgstr "_Inverteix"
 
 #: gtk/ui/gtkprintunixdialog.ui:452
 msgid "Layout"
