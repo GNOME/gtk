@@ -38,14 +38,17 @@
 #include "gdkkeysprivate.h"
 #include "gdkwin32keys.h"
 
-enum _Win32ModMask {
-  WIN32_MOD_SHIFT     =  1,
-  WIN32_MOD_CTRL      =  2,
-  WIN32_MOD_ALT       =  4,
-  WIN32_MOD_HANKAKU   =  8,
-  WIN32_MOD_RESERVED1 = 16,
-  WIN32_MOD_RESERVED2 = 32
-};
+/* See documentation for VkKeyScanExW:
+   https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-vkkeyscanexw */
+enum _Win32ModMask
+  {
+    WIN32_MOD_SHIFT     =  1,
+    WIN32_MOD_CTRL      =  2,
+    WIN32_MOD_ALT       =  4,
+    WIN32_MOD_HANKAKU   =  8,
+    WIN32_MOD_RESERVED1 = 16,
+    WIN32_MOD_RESERVED2 = 32
+  };
 
 typedef enum _Win32ModMask Win32ModMask;
 
@@ -241,31 +244,33 @@ vk_and_mod_mask_to_gdk_keysym (HKL hkl, guint vk, Win32ModMask mod_mask)
   switch (vk)
     {
       #define MAP(a_vk, a_gdk) case a_vk: return a_gdk;
-      DEFINE_SPECIAL(MAP)
+      DEFINE_SPECIAL (MAP)
       #undef MAP
     }
 
   /* If the previous attempts failed, try converting to Unicode and back */
 
   /* Check for dead key */
-  gunichar c = MapVirtualKeyExW(vk, MAPVK_VK_TO_CHAR, hkl);
+  gunichar c = MapVirtualKeyExW (vk, MAPVK_VK_TO_CHAR, hkl);
   gboolean is_dead = c & 0x80000000;
 
   /* Note that we can't simply use MapVirtualKeyExW(vk, MAPVK_VK_TO_CHAR, hkl) because it
      always produces upper-case letters, but GDK expects lower case if shift is not pressed. */
-  UINT scancode = MapVirtualKeyExW(vk, MAPVK_VK_TO_VSC, hkl);
+  UINT scancode = MapVirtualKeyExW (vk, MAPVK_VK_TO_VSC, hkl);
 
   /* We need to query the existing keyboard state for NumLock, CapsLock etc. */
   BYTE saved_keystate[KEY_STATE_SIZE] = {0};
-  GetKeyboardState(saved_keystate);
+  GetKeyboardState (saved_keystate);
 
   BYTE keystate[KEY_STATE_SIZE] = {0};
 
   /* Copy over some keystates like numlock and capslock */
-  static const guint mode_keys[] = {
-    VK_CAPITAL, 
-    VK_KANA, VK_HANGUL, VK_JUNJA, VK_FINAL, VK_HANJA, VK_KANJI, /* Is this correct? */
-    VK_NUMLOCK, VK_SCROLL};
+  static const guint mode_keys[] =
+    {
+      VK_CAPITAL,
+      VK_KANA, VK_HANGUL, VK_JUNJA, VK_FINAL, VK_HANJA, VK_KANJI, /* Is this correct? */
+      VK_NUMLOCK, VK_SCROLL
+    };
   for (guint i = 0; i < sizeof (mode_keys) / sizeof (mode_keys[0]); ++i)
     keystate[i] = saved_keystate[i];
   
@@ -282,16 +287,16 @@ vk_and_mod_mask_to_gdk_keysym (HKL hkl, guint vk, Win32ModMask mod_mask)
       keystate[VK_MENU] = keystate[VK_LMENU] = 0x80;
     }
 
-  WCHAR utf16_buf[64];
+  WCHAR utf16_buf[64] = {0};
   int   utf16_n = 0;
-  utf16_n = ToUnicodeEx (vk, scancode, keystate, utf16_buf, sizeof(utf16_buf)/sizeof(utf16_buf[0]),
+  utf16_n = ToUnicodeEx (vk, scancode, keystate, utf16_buf, sizeof (utf16_buf) / sizeof (utf16_buf[0]),
                          0, hkl);
 
   /* For dead keys, double-press. Don't know if this always works? */
   if (is_dead)
     {
-      GetKeyboardState(keystate);
-      utf16_n = ToUnicodeEx (vk, scancode, keystate, utf16_buf, sizeof(utf16_buf)/sizeof(utf16_buf[0]),
+      GetKeyboardState (keystate);
+      utf16_n = ToUnicodeEx (vk, scancode, keystate, utf16_buf, sizeof (utf16_buf)  / sizeof (utf16_buf[0]),
 			     0, hkl);
     }
 
@@ -307,7 +312,7 @@ vk_and_mod_mask_to_gdk_keysym (HKL hkl, guint vk, Win32ModMask mod_mask)
       switch (sym)
 	{
 	  #define MAP(a_nondead, a_dead) case a_nondead: return a_dead;
-	  DEFINE_DEAD(MAP)
+	  DEFINE_DEAD (MAP)
 	  #undef MAP
 	}
     }
@@ -339,7 +344,7 @@ gdk_keysym_to_vk_and_mod_mask (HKL hkl, guint sym, guint *vk, Win32ModMask *mod_
   switch (sym)
     {
       #define MAP(a_vk, a_gdk) case a_gdk: *vk = a_vk; return;
-      DEFINE_SPECIAL(MAP)
+      DEFINE_SPECIAL (MAP)
       #undef MAP
     }
 
@@ -347,7 +352,7 @@ gdk_keysym_to_vk_and_mod_mask (HKL hkl, guint sym, guint *vk, Win32ModMask *mod_
   #define MAP(a_nondead, a_dead) \
     if (sym == a_dead)           \
       sym = a_nondead;
-  DEFINE_DEAD(MAP)
+  DEFINE_DEAD (MAP)
   #undef MAP
 
   /* Try converting to Unicode and back */
@@ -424,15 +429,16 @@ check_that_active_layout_is_in_sync (GdkWin32Keymap *keymap)
     }
 }
 
-static void update_keymap (GdkKeymap *gdk_keymap)
+static void
+update_keymap (GdkKeymap *gdk_keymap)
 {
-  int                      hkls_len;
-  static int               hkls_size = 0;
-  static HKL              *hkls = NULL;
-  gboolean                 no_list;
-  static guint             current_serial = 0;
-  gint                     i;
-  GdkWin32Keymap          *keymap = GDK_WIN32_KEYMAP (gdk_keymap);
+  int             hkls_len;
+  static int      hkls_size = 0;
+  static HKL     *hkls = NULL;
+  gboolean        no_list;
+  static guint    current_serial = 0;
+  gint            i;
+  GdkWin32Keymap *keymap = GDK_WIN32_KEYMAP (gdk_keymap);
 
   if (hkls_len > 0 && current_serial == _gdk_keymap_serial)
     return;
@@ -539,7 +545,7 @@ gboolean
 _gdk_win32_keymap_has_altgr (GdkWin32Keymap *keymap)
 {
   /* For now we just return FALSE, since it doesn't really matter because AltGr is just Ctrl + Alt.
-     This ipmlies that we will never get a GDK_MOD2_MASK, instead we will just get
+     This implies that we will never get a GDK_MOD2_MASK, instead we will just get
      GDK_CONTROL_MASK | GDK_MOD1_MASK.
      But I don't think we have any clean way of distinguishing those cases under Windows anyway. */
 #if 0
@@ -698,8 +704,8 @@ gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *gdk_keymap,
           /* base_mask is essentially the set of modifiers that were "consumed"
              in creating the keyval */
           Win32ModMask base_mask = 0;
-          HKL hkl = g_array_index(keymap->layout_handles, HKL, group);
-          gdk_keysym_to_vk_and_mod_mask(hkl, keyval, &vk, &base_mask);
+          HKL hkl = g_array_index (keymap->layout_handles, HKL, group);
+          gdk_keysym_to_vk_and_mod_mask (hkl, keyval, &vk, &base_mask);
           if (vk != 0)
             {
               /* Combine base mask with additional modifiers. If those modifiers don't affect the
@@ -727,31 +733,31 @@ gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *gdk_keymap,
               for (int shift_yes = 0; shift_yes <= 1; ++shift_yes)
                 {
                   for (int altgr_yes = 0; altgr_yes <= 1; ++altgr_yes)
-                  {
-                    Win32ModMask mod_mask = 0;
-                    if (shift_yes)
-                      mod_mask |= WIN32_MOD_SHIFT;
-                    if (altgr_yes)
-                      mod_mask |= WIN32_MOD_CTRL | WIN32_MOD_ALT;
-                    guint kv = vk_and_mod_mask_to_gdk_keysym(hkl, vk, mod_mask);
-                    if (kv != keyval)
-                      continue;
+		    {
+		      Win32ModMask mod_mask = 0;
+		      if (shift_yes)
+			mod_mask |= WIN32_MOD_SHIFT;
+		      if (altgr_yes)
+			mod_mask |= WIN32_MOD_CTRL | WIN32_MOD_ALT;
+		      guint kv = vk_and_mod_mask_to_gdk_keysym (hkl, vk, mod_mask);
+		      if (kv != keyval)
+			continue;
                     
-                    GdkKeymapKey key;
-                    key.keycode = vk;
-                    key.group = group;
-                    key.level = win32_mod_mask_to_level[mod_mask];
-                    g_array_append_val (retval, key);
+		      GdkKeymapKey key;
+		      key.keycode = vk;
+		      key.group = group;
+		      key.level = win32_mod_mask_to_level[mod_mask];
+		      g_array_append_val (retval, key);
                     
-                    /* Now add the redundant modifiers Ctrl and Alt */
-                    if (!altgr_yes)
-                      {
-                        key.level = win32_mod_mask_to_level[mod_mask | WIN32_MOD_CTRL];
-                        g_array_append_val (retval, key);
-                        key.level = win32_mod_mask_to_level[mod_mask | WIN32_MOD_ALT];
-                        g_array_append_val (retval, key);
-                      }
-                  }
+		      /* Now add the redundant modifiers Ctrl and Alt */
+		      if (!altgr_yes)
+			{
+			  key.level = win32_mod_mask_to_level[mod_mask | WIN32_MOD_CTRL];
+			  g_array_append_val (retval, key);
+			  key.level = win32_mod_mask_to_level[mod_mask | WIN32_MOD_ALT];
+			  g_array_append_val (retval, key);
+			}
+		    }
                 }
               #else
               /* Slower, more general code, may be useful for debugging */
@@ -767,7 +773,7 @@ gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *gdk_keymap,
                      don't add the same combination multiple times. */
                   if (mod_mask != 0 && (mod_mask | base_mask) == base_mask)
                     continue;
-                  guint kv = vk_and_mod_mask_to_gdk_keysym(hkl, vk, mod_mask);
+                  guint kv = vk_and_mod_mask_to_gdk_keysym (hkl, vk, mod_mask);
                   if (kv == keyval)
                     {
                       GdkKeymapKey key;
@@ -885,9 +891,9 @@ gdk_win32_keymap_lookup_key (GdkKeymap          *gdk_keymap,
     return 0;
   if (key->level < 0 || key->level >= 64)
     return 0;
-  HKL hkl = g_array_index(keymap->layout_handles, HKL, key->group);
+  HKL hkl = g_array_index (keymap->layout_handles, HKL, key->group);
   Win32ModMask mod_mask = win32_level_to_mod_mask[key->level];
-  sym = vk_and_mod_mask_to_gdk_keysym(hkl, key->keycode, mod_mask);
+  sym = vk_and_mod_mask_to_gdk_keysym (hkl, key->keycode, mod_mask);
 
   if (sym == GDK_KEY_VoidSymbol)
     return 0;
@@ -917,10 +923,10 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
 
   g_return_val_if_fail (gdk_keymap == NULL || GDK_IS_KEYMAP (gdk_keymap), FALSE);
 
-  keymap = GDK_WIN32_KEYMAP(gdk_keymap);
-  update_keymap(keymap);
+  keymap = GDK_WIN32_KEYMAP (gdk_keymap);
+  update_keymap (keymap);
 
-  active_hkl = g_array_index(keymap->layout_handles, HKL, keymap->active_layout);
+  active_hkl = g_array_index (keymap->layout_handles, HKL, keymap->active_layout);
 
   vk = hardware_keycode;
   
@@ -936,14 +942,14 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
     mod_mask |= WIN32_MOD_CTRL | WIN32_MOD_ALT;
   /* TODO: How to handle other modifiers? Should we handle those at all? */
 
-  tmp_keyval = vk_and_mod_mask_to_gdk_keysym(active_hkl, vk, mod_mask);
+  tmp_keyval = vk_and_mod_mask_to_gdk_keysym (active_hkl, vk, mod_mask);
   tmp_effective_group = group;
   tmp_level = win32_mod_mask_to_level[mod_mask];
   tmp_consumed_modifiers = 0;
 
   /* Determine consumed modifiers */
   guint tmp_vk = 0;
-  gdk_keysym_to_vk_and_mod_mask(active_hkl, tmp_keyval, &tmp_vk, &tmp_consumed_modifiers);
+  gdk_keysym_to_vk_and_mod_mask (active_hkl, tmp_keyval, &tmp_vk, &tmp_consumed_modifiers);
   
   if (keyval)
     *keyval = tmp_keyval;
