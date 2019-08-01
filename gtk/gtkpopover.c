@@ -552,8 +552,8 @@ gtk_popover_init (GtkPopover *popover)
   GtkEventController *controller;
   GtkStyleContext *context;
 
-  priv->position = GTK_POS_TOP;
-  priv->final_position = GTK_POS_TOP;
+  priv->position = GTK_POS_BOTTOM;
+  priv->final_position = GTK_POS_BOTTOM;
   priv->autohide = TRUE;
   priv->has_arrow = TRUE;
 
@@ -1349,7 +1349,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
       g_param_spec_enum ("position",
                          P_("Position"),
                          P_("Position to place the bubble window"),
-                         GTK_TYPE_POSITION_TYPE, GTK_POS_TOP,
+                         GTK_TYPE_POSITION_TYPE, GTK_POS_BOTTOM,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   properties[PROP_AUTOHIDE] =
