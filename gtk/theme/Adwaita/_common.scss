@@ -4515,6 +4515,12 @@ button.titlebutton {
 
   @include _button_text_shadow;
 
+  border-radius: 9999px;
+  padding: 6px;
+  margin: 0 2px;
+  min-width: 0;
+  min-height: 0;
+
   .selection-mode & {
     @extend %button.flat.suggested-action;
 
