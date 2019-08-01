@@ -1470,16 +1470,8 @@ drag_gesture_begin_cb (GtkGestureDrag *gesture,
                        gdouble         y,
                        GtkWindow      *window)
 {
-  GdkEventSequence *sequence;
   GtkWindowRegion region;
   gboolean widget_drag = FALSE;
-  const GdkEvent *event;
-
-  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-
-  if (!event)
-    return;
 
   region = get_active_region_type (window, x, y);
 
