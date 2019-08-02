@@ -735,25 +735,25 @@ wndproc (HWND   hwnd,
 	  GtkStatusIcon *status_icon = GTK_STATUS_ICON (rover->data);
 	  GtkStatusIconPrivate *priv = status_icon->priv;
 
-	  /* taskbar_created_msg is also fired when DPI changes. Try to delete existing icons if possible. */
-	  if (!Shell_NotifyIconW (NIM_DELETE, &priv->nid))
-	  {
-		g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_DELETE) on existing icon failed");
-	  }
+          if (priv->visible)
+            {
+              /* taskbar_created_msg is also fired when DPI changes. Try to delete existing icons if possible. */
+              if (priv->nid.hWnd)
+                if (!Shell_NotifyIconW (NIM_DELETE, &priv->nid))
+                  g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_DELETE) on existing icon failed");
 
-	  priv->nid.hWnd = hwnd;
-	  priv->nid.uID = status_icon_id++;
-	  priv->nid.uCallbackMessage = WM_GTK_TRAY_NOTIFICATION;
-	  priv->nid.uFlags = NIF_MESSAGE;
+              priv->nid.hWnd = hwnd;
+              priv->nid.uFlags &= ~NIF_ICON;
 
-	  if (!Shell_NotifyIconW (NIM_ADD, &priv->nid))
-	    {
-	      g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_ADD) failed");
-	      priv->nid.hWnd = NULL;
-	      continue;
-	    }
+              if (!Shell_NotifyIconW (NIM_ADD, &priv->nid))
+                {
+                  g_warning (G_STRLOC ": Shell_NotifyIcon(NIM_ADD) failed");
+                  priv->nid.hWnd = NULL;
+                  continue;
+                }
 
-	  gtk_status_icon_update_image (status_icon);
+              gtk_status_icon_update_image (status_icon);
+            }
 	}
       return 0;
     }
