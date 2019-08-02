@@ -4539,6 +4539,14 @@ button.titlebutton {
 
   @include _button_text_shadow;
 
+  &:not(.appmenu) {
+    border-radius: 9999px;
+    padding: $_hb_btn_pad;
+    margin: 0 2px;
+    min-width: 0;
+    min-height: 0;
+  }
+
   .selection-mode & {
     @extend %button.flat.suggested-action;
 
