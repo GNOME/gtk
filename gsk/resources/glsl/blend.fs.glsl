@@ -263,25 +263,74 @@ void main() {
   vec4 top_color = Texture(u_source2, vUv);
 
   vec4 result;
-  switch(u_mode) {
-    case 0:  result = normal(top_color, bottom_color);      break;
-    case 1:  result = multiply(top_color, bottom_color);    break;
-    case 2:  result = screen(top_color, bottom_color);      break;
-    case 3:  result = overlay(top_color, bottom_color);     break;
-    case 4:  result = darken(top_color, bottom_color);      break;
-    case 5:  result = lighten(top_color, bottom_color);     break;
-    case 6:  result = color_dodge(top_color, bottom_color); break;
-    case 7:  result = color_burn(top_color, bottom_color);  break;
-    case 8:  result = hard_light(top_color, bottom_color);  break;
-    case 9:  result = soft_light(top_color, bottom_color);  break;
-    case 10: result = difference(top_color, bottom_color);  break;
-    case 11: result = exclusion(top_color, bottom_color);   break;
-    case 12: result = color(top_color, bottom_color);       break;
-    case 13: result = hue(top_color, bottom_color);         break;
-    case 14: result = saturation(top_color, bottom_color);  break;
-    case 15: result = luminosity(top_color, bottom_color);  break;
-    default: discard;
-  }
+  if (u_mode == 0)
+    {
+      result = normal(top_color, bottom_color);
+    }
+  else if (u_mode == 1)
+    {
+      result = multiply(top_color, bottom_color);
+    }
+  else if (u_mode == 2)
+    {
+      result = screen(top_color, bottom_color);
+    }
+  else if (u_mode == 3)
+    {
+      result = overlay(top_color, bottom_color);
+    }
+  else if (u_mode == 4)
+    {
+      result = darken(top_color, bottom_color);
+    }
+  else if (u_mode == 5)
+    {
+      result = lighten(top_color, bottom_color);
+    }
+  else if (u_mode == 6)
+    {
+      result = color_dodge(top_color, bottom_color);
+    }
+  else if (u_mode == 7)
+    {
+      result = color_burn(top_color, bottom_color);
+    }
+  else if (u_mode == 8)
+    {
+      result = hard_light(top_color, bottom_color);
+    }
+  else if (u_mode == 9)
+    {
+      result = soft_light(top_color, bottom_color);
+    }
+  else if (u_mode == 10)
+    {
+      result = difference(top_color, bottom_color);
+    }
+  else if (u_mode == 11)
+    {
+      result = exclusion(top_color, bottom_color);
+    }
+  else if (u_mode == 12)
+    {
+      result = color(top_color, bottom_color);
+    }
+  else if (u_mode == 13)
+    {
+      result = hue(top_color, bottom_color);
+    }
+  else if (u_mode == 14)
+    {
+      result = saturation(top_color, bottom_color);
+    }
+  else if (u_mode == 15)
+    {
+      result = luminosity(top_color, bottom_color);
+    }
+  else
+    {
+      discard;
+    }
 
   setOutputColor(result * u_alpha);
 }
