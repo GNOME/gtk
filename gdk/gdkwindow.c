@@ -570,6 +570,12 @@ gdk_window_finalize (GObject *object)
 	_gdk_window_destroy (window, TRUE);
     }
 
+  if (window->synthesized_crossing_event_id)
+    {
+      g_source_remove (window->synthesized_crossing_event_id);
+      window->synthesized_crossing_event_id = 0;
+    }
+
   if (window->impl)
     {
       g_object_unref (window->impl);
@@ -8977,7 +8983,7 @@ do_synthesize_crossing_event (gpointer data)
 
   changed_toplevel = data;
 
-  changed_toplevel->synthesize_crossing_event_queued = FALSE;
+  changed_toplevel->synthesized_crossing_event_id = 0;
 
   if (GDK_WINDOW_DESTROYED (changed_toplevel))
     return FALSE;
@@ -9036,17 +9042,14 @@ _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
 
   toplevel = get_event_toplevel (changed_window);
 
-  if (!toplevel->synthesize_crossing_event_queued)
+  if (toplevel->synthesized_crossing_event_id == 0)
     {
-      guint id;
-
-      toplevel->synthesize_crossing_event_queued = TRUE;
-
-      id = gdk_threads_add_idle_full (GDK_PRIORITY_EVENTS - 1,
-                                      do_synthesize_crossing_event,
-                                      g_object_ref (toplevel),
-                                      g_object_unref);
-      g_source_set_name_by_id (id, "[gtk+] do_synthesize_crossing_event");
+      toplevel->synthesized_crossing_event_id =
+        gdk_threads_add_idle_full (GDK_PRIORITY_EVENTS - 1,
+                                   do_synthesize_crossing_event,
+                                   toplevel, NULL);
+      g_source_set_name_by_id (toplevel->synthesized_crossing_event_id,
+                               "[gtk+] do_synthesize_crossing_event");
     }
 }
 
