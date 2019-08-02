@@ -2089,7 +2089,8 @@ gtk_paned_state_flags_changed (GtkWidget     *widget,
       else
         cursor = NULL;
 
-      gdk_window_set_cursor (priv->handle, cursor);
+      if (priv->handle)
+        gdk_window_set_cursor (priv->handle, cursor);
 
       if (cursor)
         g_object_unref (cursor);
