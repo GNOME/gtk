@@ -322,6 +322,8 @@ struct _GdkWindow
   GdkWindowState old_state;
   GdkWindowState state;
 
+  guint synthesized_crossing_event_id;
+
   guint8 alpha;
   guint8 fullscreen_mode;
 
@@ -337,7 +339,6 @@ struct _GdkWindow
   guint focus_on_map : 1;
   guint shaped : 1;
   guint support_multidevice : 1;
-  guint synthesize_crossing_event_queued : 1;
   guint effective_visibility : 2;
   guint visibility : 2; /* The visibility wrt the toplevel (i.e. based on clip_region) */
   guint native_visibility : 2; /* the native visibility of a impl windows */
