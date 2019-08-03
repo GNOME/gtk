@@ -349,6 +349,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/box-packing.png				\
 	$(srcdir)/images/box-expand.png					\
 	$(srcdir)/images/button.png					\
+	$(srcdir)/images/calendar.png					\
 	$(srcdir)/images/check-button.png				\
 	$(srcdir)/images/color-button.png				\
 	$(srcdir)/images/colorchooser.png				\

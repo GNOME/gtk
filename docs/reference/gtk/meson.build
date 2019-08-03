@@ -245,6 +245,7 @@ images = [
   'images/box-packing.png',
   'images/box-expand.png',
   'images/button.png',
+  'images/calendar.png',
   'images/check-button.png',
   'images/color-button.png',
   'images/colorchooser.png',
