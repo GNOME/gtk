@@ -29,7 +29,6 @@ struct _GdkWaylandMonitor {
   guint32 id;
   guint32 version;
   struct wl_output *output;
-  gboolean added;
 
   struct zxdg_output_v1 *xdg_output;
   /* Size and position, can be either from wl_output or xdg_output */
