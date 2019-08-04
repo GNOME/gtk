@@ -3667,8 +3667,7 @@ show_row_popover (GtkSidebarRow *row)
 
   g_object_get (row, "sidebar", &sidebar, NULL);
 
-  if (sidebar->popover)
-    gtk_widget_destroy (sidebar->popover);
+  g_clear_pointer (&sidebar->popover, gtk_widget_unparent);
 
   create_row_popover (sidebar, row);
 
