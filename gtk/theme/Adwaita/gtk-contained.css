@@ -113,6 +113,8 @@ spinbutton:not(.vertical) image.left, spinbutton.vertical text image.left, entry
 
 spinbutton:not(.vertical) image.right, spinbutton.vertical text image.right, entry image.right { margin-left: 6px; }
 
+spinbutton:not(.vertical) block-cursor, spinbutton.vertical text block-cursor, entry block-cursor { color: #ffffff; background-color: black; }
+
 spinbutton.flat:focus:not(.vertical), spinbutton.vertical text.flat:focus, spinbutton.flat:backdrop:not(.vertical), spinbutton.vertical text.flat:backdrop, spinbutton.flat:disabled:not(.vertical), spinbutton.vertical text.flat:disabled, spinbutton.flat:backdrop:disabled:not(.vertical), spinbutton.vertical text.flat:backdrop:disabled, spinbutton.flat:not(.vertical), spinbutton.vertical text.flat, entry.flat:focus, entry.flat:backdrop, entry.flat:disabled, entry.flat:backdrop:disabled, entry.flat { min-height: 0; padding: 2px; background-color: transparent; border-color: transparent; border-radius: 0; }
 
 spinbutton:focus:not(.vertical), spinbutton.vertical text:focus, entry:focus { box-shadow: inset 0 0 0 1px #3584e4; border-color: #3584e4; outline: none; }
@@ -399,7 +401,9 @@ button.destructive-action:disabled:active label, button.destructive-action:disab
 
 .stack-switcher > button.needs-attention:active > label, .stack-switcher > button.needs-attention:active > image, .stack-switcher > button.needs-attention:checked > label, .stack-switcher > button.needs-attention:checked > image { animation: none; background-image: none; }
 
-button.font separator, button.file separator { background-color: transparent; }
+button.font separator { background-color: transparent; }
+
+button.font > box { border-spacing: 6px; }
 
 button.font > box > box > label { font-weight: bold; }
 
@@ -524,25 +528,25 @@ spinbutton:not(.vertical) text, .osd spinbutton:not(.vertical) text { min-width:
 
 spinbutton:not(.vertical) text:backdrop:disabled { background-color: transparent; }
 
-spinbutton:not(.vertical) button { min-height: 16px; margin: 0; padding-bottom: 0; padding-top: 0; color: #43484a; background-image: none; border-style: none none none solid; border-color: rgba(205, 199, 194, 0.3); border-radius: 0; box-shadow: none; }
+spinbutton:not(.vertical) > box > button.image-button { min-height: 16px; margin: 0; padding-bottom: 0; padding-top: 0; color: #43484a; background-image: none; border-style: none none none solid; border-color: rgba(205, 199, 194, 0.3); border-radius: 0; box-shadow: none; }
 
-spinbutton:not(.vertical) button:dir(rtl) { border-style: none solid none none; }
+spinbutton:not(.vertical) > box > button.image-button:dir(rtl) { border-style: none solid none none; }
 
-spinbutton:not(.vertical) button:hover { color: #2e3436; background-color: rgba(46, 52, 54, 0.05); }
+spinbutton:not(.vertical) > box > button.image-button:hover { color: #2e3436; background-color: rgba(46, 52, 54, 0.05); }
 
-spinbutton:not(.vertical) button:disabled { color: rgba(146, 149, 149, 0.3); background-color: transparent; }
+spinbutton:not(.vertical) > box > button.image-button:disabled { color: rgba(146, 149, 149, 0.3); background-color: transparent; }
 
-spinbutton:not(.vertical) button:active { background-color: rgba(0, 0, 0, 0.1); box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.2); }
+spinbutton:not(.vertical) > box > button.image-button:active { background-color: rgba(0, 0, 0, 0.1); box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.2); }
 
-spinbutton:not(.vertical) button:backdrop { color: #9d9f9f; background-color: transparent; border-color: rgba(213, 208, 204, 0.3); transition: 200ms ease-out; }
+spinbutton:not(.vertical) > box > button.image-button:backdrop { color: #9d9f9f; background-color: transparent; border-color: rgba(213, 208, 204, 0.3); transition: 200ms ease-out; }
 
-spinbutton:not(.vertical) button:backdrop:disabled { color: rgba(212, 207, 202, 0.3); background-color: transparent; border-style: none none none solid; }
+spinbutton:not(.vertical) > box > button.image-button:backdrop:disabled { color: rgba(212, 207, 202, 0.3); background-color: transparent; border-style: none none none solid; }
 
-spinbutton:not(.vertical) button:backdrop:disabled:dir(rtl) { border-style: none solid none none; }
+spinbutton:not(.vertical) > box > button.image-button:backdrop:disabled:dir(rtl) { border-style: none solid none none; }
 
-spinbutton:not(.vertical) button:dir(ltr):last-child { border-radius: 0 5px 5px 0; }
+spinbutton:not(.vertical) > box > button.image-button:dir(ltr):last-child { border-radius: 0 5px 5px 0; }
 
-spinbutton:not(.vertical) button:dir(rtl):first-child { border-radius: 5px 0 0 5px; }
+spinbutton:not(.vertical) > box > button.image-button:dir(rtl):first-child { border-radius: 5px 0 0 5px; }
 
 .osd spinbutton:not(.vertical) button { border-color: transparent; background-color: transparent; background-image: none; box-shadow: inset 0 1px rgba(255, 255, 255, 0); text-shadow: none; -gtk-icon-shadow: none; color: #eeeeec; border-style: none none none solid; border-color: rgba(0, 0, 0, 0.4); border-radius: 0; box-shadow: none; -gtk-icon-shadow: 0 1px black; }
 
@@ -1749,7 +1753,7 @@ separator.sidebar.selection-mode, .selection-mode separator.sidebar { background
 /**************** File chooser * */
 row image.sidebar-icon { opacity: 0.7; }
 
-placessidebar > viewport.frame { border-style: none; }
+placessidebar > scrolledwindow.frame { border-style: none; }
 
 placessidebar row { min-height: 36px; padding: 0px; }
 
