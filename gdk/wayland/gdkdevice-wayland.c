@@ -640,17 +640,21 @@ emulate_crossing (GdkWindow       *window,
 {
   GdkEvent *event;
 
+  GdkDevice *master = device;
+  if (gdk_device_get_device_type(device) == GDK_DEVICE_TYPE_SLAVE)
+      master = gdk_device_get_associated_device(device);
+
   event = gdk_event_new (type);
   event->crossing.window = window ? g_object_ref (window) : NULL;
   event->crossing.subwindow = subwindow ? g_object_ref (subwindow) : NULL;
   event->crossing.time = time_;
   event->crossing.mode = mode;
   event->crossing.detail = GDK_NOTIFY_NONLINEAR;
-  gdk_event_set_device (event, device);
+  gdk_event_set_device (event, master);
   gdk_event_set_source_device (event, device);
   gdk_event_set_seat (event, gdk_device_get_seat (device));
 
-  gdk_window_get_device_position_double (window, device,
+  gdk_window_get_device_position_double (window, master,
                                          &event->crossing.x, &event->crossing.y,
                                          &event->crossing.state);
   event->crossing.x_root = event->crossing.x;
@@ -3505,7 +3509,7 @@ gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
 
   if (event->type == GDK_PROXIMITY_OUT)
     emulate_crossing (event->proximity.window, NULL,
-                      tablet->master, GDK_LEAVE_NOTIFY,
+                      tablet->current_device, GDK_LEAVE_NOTIFY,
                       GDK_CROSSING_NORMAL, time);
 
   _gdk_wayland_display_deliver_event (gdk_seat_get_display (tablet->seat),
@@ -3513,7 +3517,7 @@ gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
 
   if (event->type == GDK_PROXIMITY_IN)
     emulate_crossing (event->proximity.window, NULL,
-                      tablet->master, GDK_ENTER_NOTIFY,
+                      tablet->current_device, GDK_ENTER_NOTIFY,
                       GDK_CROSSING_NORMAL, time);
 }
 
