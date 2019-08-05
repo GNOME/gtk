@@ -1497,7 +1497,7 @@ msgstr "S'estan obrint fitxers «%s»."
 #: gtk/gtkappchooserdialog.c:215
 #, c-format
 msgid "No applications found for “%s” files"
-msgstr "No hi ha cap aplicació disponible per fitxers «%s»."
+msgstr "No hi ha cap aplicació disponible per fitxers «%s»"
 
 #: gtk/gtkappchooserdialog.c:308
 msgid "Forget association"
@@ -6642,7 +6642,7 @@ msgstr "%s: manca el nom de l'aplicació"
 msgid "Creating AppInfo from id not supported on non unix operating systems"
 msgstr ""
 "No es poden crear «AppInfo» a partir d'identificadors en sistemes operatius "
-"que no siguin UNIX."
+"que no siguin Unix"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
