@@ -634,6 +634,7 @@ static void
 emulate_crossing (GdkWindow       *window,
                   GdkWindow       *subwindow,
                   GdkDevice       *device,
+                  GdkDevice       *source,
                   GdkEventType     type,
                   GdkCrossingMode  mode,
                   guint32          time_)
@@ -647,7 +648,7 @@ emulate_crossing (GdkWindow       *window,
   event->crossing.mode = mode;
   event->crossing.detail = GDK_NOTIFY_NONLINEAR;
   gdk_event_set_device (event, device);
-  gdk_event_set_source_device (event, device);
+  gdk_event_set_source_device (event, source);
   gdk_event_set_seat (event, gdk_device_get_seat (device));
 
   gdk_window_get_device_position_double (window, device,
@@ -724,9 +725,9 @@ device_emit_grab_crossing (GdkDevice       *device,
   else
     {
       if (from)
-        emulate_crossing (from, to, device, GDK_LEAVE_NOTIFY, mode, time_);
+        emulate_crossing (from, to, device, device, GDK_LEAVE_NOTIFY, mode, time_);
       if (to)
-        emulate_crossing (to, from, device, GDK_ENTER_NOTIFY, mode, time_);
+        emulate_crossing (to, from, device, device, GDK_ENTER_NOTIFY, mode, time_);
     }
 }
 
@@ -3504,16 +3505,16 @@ gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
     }
 
   if (event->type == GDK_PROXIMITY_OUT)
-    emulate_crossing (event->proximity.window, NULL,
-                      tablet->master, GDK_LEAVE_NOTIFY,
+    emulate_crossing (event->proximity.window, NULL, tablet->master,
+                      tablet->current_device, GDK_LEAVE_NOTIFY,
                       GDK_CROSSING_NORMAL, time);
 
   _gdk_wayland_display_deliver_event (gdk_seat_get_display (tablet->seat),
                                       event);
 
   if (event->type == GDK_PROXIMITY_IN)
-    emulate_crossing (event->proximity.window, NULL,
-                      tablet->master, GDK_ENTER_NOTIFY,
+    emulate_crossing (event->proximity.window, NULL, tablet->master,
+                      tablet->current_device, GDK_ENTER_NOTIFY,
                       GDK_CROSSING_NORMAL, time);
 }
 
