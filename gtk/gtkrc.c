@@ -2032,8 +2032,14 @@ gtk_rc_get_style (GtkWidget *widget)
     {
       if (!context->default_style)
 	{
-	  context->default_style = gtk_style_new ();
-	  _gtk_style_init_for_settings (context->default_style, context->settings);
+	  GtkStyle * style = gtk_style_new ();
+	  _gtk_style_init_for_settings (style, context->settings);
+
+	  /* Only after _gtk_style_init_for_settings() do we install the style
+	   * as the default, otherwise gtk_rc_reset_styles() can be called and
+	   * unref the style while initializing it, causing a segfault.
+	   */
+	  context->default_style = style;
 	}
 
       return context->default_style;
