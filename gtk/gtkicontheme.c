@@ -1806,6 +1806,20 @@ real_choose_icon (GtkIconTheme       *icon_theme,
         icon_info->filename = g_strdup (unthemed_icon->svg_filename);
       else if (unthemed_icon->no_svg_filename)
         icon_info->filename = g_strdup (unthemed_icon->no_svg_filename);
+      else
+        {
+          static gboolean warned_once = FALSE;
+
+          if (!warned_once)
+            {
+              g_warning ("Found an icon but could not load it. "
+                         "Most likely gdk-pixbuf does not provide SVG support.");
+              warned_once = TRUE;
+            }
+
+          g_clear_object (&icon_info);
+          goto out;
+        }
 
       if (unthemed_icon->is_resource)
         {
