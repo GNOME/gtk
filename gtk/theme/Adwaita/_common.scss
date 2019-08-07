@@ -4517,6 +4517,7 @@ button.titlebutton {
 
   &:not(.appmenu) {
     border-radius: 9999px;
+    -gtk-outline-radius: 9999px;
     padding: 6px;
     margin: 0 2px;
     min-width: 0;
