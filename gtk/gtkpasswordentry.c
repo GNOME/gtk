@@ -574,7 +574,7 @@ gtk_password_entry_set_extra_menu (GtkPasswordEntry *entry,
 
 /**
  * gtk_password_entry_get_extra_menu:
- * @self: a #GtkText
+ * @entry: a #GtkText
  *
  * Gets the menu model set with gtk_password_entry_set_extra_menu().
  *
