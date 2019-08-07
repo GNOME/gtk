@@ -8190,9 +8190,9 @@ gtk_widget_real_unmap (GtkWidget *widget)
       GtkWidget *child;
       priv->mapped = FALSE;
 
-      for (child = gtk_widget_get_first_child (widget);
+      for (child = _gtk_widget_get_first_child (widget);
            child != NULL;
-           child = gtk_widget_get_next_sibling (child))
+           child = _gtk_widget_get_next_sibling (child))
         {
           gtk_widget_unmap (child);
         }
@@ -13095,10 +13095,10 @@ gtk_widget_forall (GtkWidget   *widget,
   GtkWidget *child;
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  child = gtk_widget_get_first_child (widget);
+  child = _gtk_widget_get_first_child (widget);
   while (child)
     {
-      GtkWidget *next = gtk_widget_get_next_sibling (child);
+      GtkWidget *next = _gtk_widget_get_next_sibling (child);
 
       callback(child, user_data);
 
