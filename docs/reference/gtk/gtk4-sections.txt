@@ -6737,6 +6737,8 @@ gtk_gesture_drag_get_type
 <TITLE>GtkGestureLongPress</TITLE>
 GtkGestureLongPress
 gtk_gesture_long_press_new
+gtk_gesture_long_press_set_delay_factor
+gtk_gesture_long_press_get_delay_factor
 
 <SUBSECTION Standard>
 GTK_TYPE_GESTURE_LONG_PRESS

@@ -44,6 +44,15 @@ GType        gtk_gesture_long_press_get_type   (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkGesture * gtk_gesture_long_press_new        (void);
 
+GDK_AVAILABLE_IN_ALL
+void         gtk_gesture_long_press_set_delay_factor (GtkGestureLongPress *gesture,
+                                                      double               delay_factor);
+
+GDK_AVAILABLE_IN_ALL
+double       gtk_gesture_long_press_get_delay_factor (GtkGestureLongPress *gesture);
+
+
+
 G_END_DECLS
 
 #endif /* __GTK_GESTURE_LONG_PRESS_H__ */
