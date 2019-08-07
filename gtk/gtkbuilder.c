@@ -131,9 +131,9 @@
  *
  * It is also possible to bind a property value to another object's
  * property value using the attributes
- * "bind-source" to specify the source object of the binding,
- * "bind-property" to specify the source property and optionally
- * "bind-flags" to specify the binding flags
+ * "bind-source" to specify the source object of the binding, and
+ * optionally, "bind-property" and "bind-flags" to specify the
+ * source property and binding flags respectively.
  * Internally builder implement this using GBinding objects.
  * For more information see g_object_bind_property()
  *
