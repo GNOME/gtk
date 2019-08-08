@@ -3163,18 +3163,6 @@ scale {
 
   value { color: gtkalpha(currentColor, 0.55); }
 
-  &.fine-tune marks {
-    @each $marks_class, $marks_pos, $marks_margin in (top, top, bottom),
-                                                     (bottom, bottom, top),
-                                                     (top, left, right),
-                                                     (bottom, right, left) {
-      &.#{$marks_class} {
-        margin-#{$marks_margin}: $_marks_distance;
-        margin-#{$marks_pos}: -($_marks_distance + $_marks_length - 3px);
-      }
-    }
-  }
-
   &.horizontal {
     >marks {
       color: gtkalpha(currentColor, 0.55);
@@ -3191,7 +3179,12 @@ scale {
     >value.top    { margin-bottom: 9px; }
     >value.bottom { margin-top: 9px; }
 
-    &.fine-tune indicator { min-height: ($_marks_length - 3px); }
+    &.fine-tune >marks {
+      &.top { margin-top: 3px; }
+      &.bottom { margin-bottom: 3px; }
+
+      indicator { min-height: ($_marks_length - 3px); }
+    }
   }
 
   &.vertical {
@@ -3210,7 +3203,12 @@ scale {
     >value.top    { margin-bottom: 9px; }
     >value.bottom { margin-top: 9px; }
 
-    &.fine-tune indicator { min-width: ($_marks_length - 3px); }
+    &.fine-tune >marks {
+      &.top { margin-left: 3px; }
+      &.bottom { margin-right: 3px; }
+
+      indicator { min-height: ($_marks_length - 3px); }
+    }
   }
 
   // *WARNING* scale with marks madness following
@@ -3281,16 +3279,18 @@ scale {
           }
 
           &.fine-tune slider {
-            // bigger negative margins to make the trough grow here as well
-            margin: -7px;
-
             @if $dir_class == 'horizontal' {
+              // bigger negative margins to make the trough grow here as well
+              margin: -7px -10px;
+
               @if $marks_infix == 'scale-has-marks-above' { margin-top: -11px; }
 
               @else { margin-bottom: -11px; }
             }
 
             @else {
+              margin: -10px -7px;
+
               @if $marks_infix == 'scale-has-marks-above' { margin-left: -11px; }
 
               @else { margin-right: -11px; }
