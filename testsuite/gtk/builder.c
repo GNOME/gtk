@@ -2450,14 +2450,19 @@ test_property_bindings (void)
     "            <property name=\"sensitive\" bind-source=\"checkbutton\" bind-property=\"active\" />"
     "          </object>"
     "        </child>"
+    "        <child>"
+    "          <object class=\"GtkButton\" id=\"button3\">"
+    "            <property name=\"sensitive\" bind-source=\"button\" bind-flags=\"sync-create\" />"
+    "          </object>"
+    "        </child>"
     "      </object>"
     "    </child>"
     "  </object>"
     "</interface>";
 
   GtkBuilder *builder;
-  GObject *checkbutton, *button, *button2, *window;
-  
+  GObject *checkbutton, *button, *button2, *button3, *window;
+
   builder = builder_new_from_string (buffer, -1, NULL);
   
   checkbutton = gtk_builder_get_object (builder, "checkbutton");
@@ -2471,11 +2476,16 @@ test_property_bindings (void)
   button2 = gtk_builder_get_object (builder, "button2");
   g_assert (GTK_IS_BUTTON (button2));
   g_assert (gtk_widget_get_sensitive (GTK_WIDGET (button2)));
-  
+
+  button3 = gtk_builder_get_object (builder, "button3");
+  g_assert (GTK_IS_BUTTON (button3));
+  g_assert (!gtk_widget_get_sensitive (GTK_WIDGET (button3)));
+
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton), TRUE);
   g_assert (gtk_widget_get_sensitive (GTK_WIDGET (button)));
   g_assert (gtk_widget_get_sensitive (GTK_WIDGET (button2)));
-  
+  g_assert (gtk_widget_get_sensitive (GTK_WIDGET (button3)));
+
   window = gtk_builder_get_object (builder, "window");
   gtk_widget_destroy (GTK_WIDGET (window));
   g_object_unref (builder);
