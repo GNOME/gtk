@@ -597,6 +597,7 @@ gtk_scale_size_allocate (GtkWidget *widget,
           marks_rect.x = 0;
           marks_rect.y = 0;
           marks_rect.width = marks_width;
+          marks_rect.height = range_rect.height;
           gtk_widget_size_allocate (priv->top_marks_widget, &marks_rect, -1);
         }
 
