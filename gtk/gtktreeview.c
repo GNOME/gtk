@@ -5669,8 +5669,8 @@ validate_row (GtkTreeView   *tree_view,
 					       GTK_TREE_RBNODE_FLAG_SET (node, GTK_TREE_RBNODE_IS_PARENT),
 					       node->children?TRUE:FALSE);
       gtk_tree_view_column_cell_get_size (column,
-					  NULL, NULL, NULL,
-					  NULL, &row_height);
+                                          NULL, NULL,
+                                          NULL, &row_height);
 
       if (is_separator)
         {

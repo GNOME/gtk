@@ -1365,9 +1365,9 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
    */
   gtk_widget_get_preferred_size (completion->priv->tree_view,
                                  &tree_req, NULL);
-  gtk_tree_view_column_cell_get_size (completion->priv->column, NULL,
+  gtk_tree_view_column_cell_get_size (completion->priv->column,
                                       NULL, NULL, NULL, &height);
-  gtk_tree_view_column_cell_get_size (action_column, NULL,
+  gtk_tree_view_column_cell_get_size (action_column,
                                       NULL, NULL, NULL, &action_height);
 
   gtk_widget_realize (completion->priv->tree_view);

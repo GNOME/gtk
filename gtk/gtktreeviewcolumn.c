@@ -2758,11 +2758,10 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
  **/
 void
 gtk_tree_view_column_cell_get_size (GtkTreeViewColumn  *tree_column,
-				    const GdkRectangle *cell_area,
-				    gint               *x_offset,
-				    gint               *y_offset,
-				    gint               *width,
-				    gint               *height)
+                                    int                *x_offset,
+                                    int                *y_offset,
+                                    int                *width,
+                                    int                *height)
 {
   GtkTreeViewColumnPrivate *priv;
   gint min_width = 0, min_height = 0;
