@@ -304,6 +304,12 @@ gtk_scale_notify (GObject    *object,
 
       _gtk_range_set_stop_values (GTK_RANGE (scale), values, n);
 
+      if (priv->top_marks_widget)
+        gtk_widget_queue_resize (priv->top_marks_widget);
+
+      if (priv->bottom_marks_widget)
+        gtk_widget_queue_resize (priv->bottom_marks_widget);
+
       g_free (values);
     }
   else if (strcmp (pspec->name, "adjustment"))

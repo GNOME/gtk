@@ -781,7 +781,7 @@ gtk_range_set_inverted (GtkRange *range,
       update_fill_position (range);
       update_highlight_position (range);
 
-      gtk_widget_queue_resize (GTK_WIDGET (range));
+      gtk_widget_queue_resize (priv->trough_widget);
 
       g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_INVERTED]);
     }
