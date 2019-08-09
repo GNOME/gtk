@@ -2251,8 +2251,6 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
   else if (return_val == GTK_INPUT_ERROR)
     error = 1;
 
-  gtk_widget_queue_draw (GTK_WIDGET (spin_button));
-
   if (priv->update_policy == GTK_UPDATE_ALWAYS)
     {
       if (val < gtk_adjustment_get_lower (priv->adjustment))
