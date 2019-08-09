@@ -93,6 +93,8 @@ gtk_text_line_display_cache_free (GtkTextLineDisplayCache *cache)
   g_clear_handle_id (&cache->log_source, g_source_remove);
 #endif
 
+  gtk_text_line_display_cache_invalidate (cache);
+
   g_clear_pointer (&cache->evict_source, g_source_destroy);
   g_clear_pointer (&cache->sorted_by_line, g_sequence_free);
   g_clear_pointer (&cache->line_to_display, g_hash_table_unref);
