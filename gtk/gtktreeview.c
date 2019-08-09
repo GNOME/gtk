@@ -492,10 +492,7 @@ struct _GtkTreeViewPrivate
 
   /* Grid and tree lines */
   GtkTreeViewGridLines grid_lines;
-  double grid_line_dashes[2];
-
   gboolean tree_lines_enabled;
-  double tree_line_dashes[2];
 
   /* Row separators */
   GtkTreeViewRowSeparatorFunc row_separator_func;
@@ -4269,8 +4266,7 @@ gtk_tree_view_snapshot_line (GtkTreeView         *tree_view,
 
         gdk_cairo_set_source_rgba (cr, color);
         cairo_set_line_width (cr, _TREE_VIEW_TREE_LINE_WIDTH);
-        if (tree_view->priv->tree_line_dashes[0])
-          cairo_set_dash (cr, tree_view->priv->tree_line_dashes, 2, 0.5);
+        cairo_set_dash (cr, (double[]){ 1, 1 }, 2, 0.5);
       }
       break;
 
@@ -4282,8 +4278,7 @@ gtk_tree_view_snapshot_line (GtkTreeView         *tree_view,
 
         gdk_cairo_set_source_rgba (cr, color);
         cairo_set_line_width (cr, _TREE_VIEW_GRID_LINE_WIDTH);
-        if (tree_view->priv->grid_line_dashes[0])
-          cairo_set_dash (cr, tree_view->priv->grid_line_dashes, 2, 0.5);
+        cairo_set_dash (cr, (double[]){ 1, 1 }, 2, 0.5);
       }
       break;
 
@@ -14552,26 +14547,14 @@ gtk_tree_view_set_grid_lines (GtkTreeView           *tree_view,
 			      GtkTreeViewGridLines   grid_lines)
 {
   GtkTreeViewPrivate *priv;
-  GtkWidget *widget;
   GtkTreeViewGridLines old_grid_lines;
 
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
   priv = tree_view->priv;
-  widget = GTK_WIDGET (tree_view);
 
   old_grid_lines = priv->grid_lines;
   priv->grid_lines = grid_lines;
-  
-  if (gtk_widget_get_realized (widget))
-    {
-      if (grid_lines != GTK_TREE_VIEW_GRID_LINES_NONE && 
-	  _TREE_VIEW_GRID_LINE_WIDTH > 0)
-	{
-          priv->grid_line_dashes[0] = 1;
-          priv->grid_line_dashes[1] = 1;
-	}      
-    }
 
   if (old_grid_lines != grid_lines)
     {
@@ -14611,7 +14594,6 @@ gtk_tree_view_set_enable_tree_lines (GtkTreeView *tree_view,
 				     gboolean     enabled)
 {
   GtkTreeViewPrivate *priv;
-  GtkWidget *widget;
   gboolean was_enabled;
 
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
@@ -14619,20 +14601,10 @@ gtk_tree_view_set_enable_tree_lines (GtkTreeView *tree_view,
   enabled = enabled != FALSE;
 
   priv = tree_view->priv;
-  widget = GTK_WIDGET (tree_view);
 
   was_enabled = priv->tree_lines_enabled;
 
   priv->tree_lines_enabled = enabled;
-
-  if (gtk_widget_get_realized (widget))
-    {
-      if (enabled && _TREE_VIEW_TREE_LINE_WIDTH > 0)
-	{
-          priv->tree_line_dashes[0] = 1;
-          priv->tree_line_dashes[1] = 1;
-	}
-    }
 
   if (was_enabled != enabled)
     {
