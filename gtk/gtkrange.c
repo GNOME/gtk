@@ -1606,10 +1606,6 @@ gtk_range_size_allocate (GtkWidget *widget,
   box_alloc.height = box_min_height;
 
   gtk_widget_size_allocate (priv->trough_widget, &box_alloc, -1);
-
-  /* TODO: we should compute a proper clip from get_range_border(),
-   * but this will at least give us outset shadows.
-   */
 }
 
 static void
