@@ -253,6 +253,7 @@ update_label_request (GtkScale *scale)
   highest_value = gtk_adjustment_get_upper (adjustment);
 
   old_text = g_strdup (gtk_label_get_label (GTK_LABEL (priv->value_widget)));
+  gtk_widget_set_size_request (priv->value_widget, -1, -1);
 
   text = gtk_scale_format_value (scale, lowest_value);
   gtk_label_set_label (GTK_LABEL (priv->value_widget), text);
