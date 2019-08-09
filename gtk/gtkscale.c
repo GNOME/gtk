@@ -594,7 +594,7 @@ gtk_scale_size_allocate (GtkWidget *widget,
                               GTK_ORIENTATION_HORIZONTAL, -1,
                               &marks_width, NULL,
                               NULL, NULL);
-          marks_rect.x = 0;
+          marks_rect.x = range_rect.x - marks_width;
           marks_rect.y = 0;
           marks_rect.width = marks_width;
           marks_rect.height = range_rect.height;
