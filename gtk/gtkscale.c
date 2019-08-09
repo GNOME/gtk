@@ -148,6 +148,9 @@ struct _GtkScalePrivate
 
   gint          digits;
 
+  GtkScaleFormatValueFunc format_value_func;
+  gpointer format_value_func_user_data;
+
   guint         draw_value : 1;
   guint         value_pos  : 2;
 };
@@ -172,13 +175,8 @@ enum {
   LAST_PROP
 };
 
-enum {
-  FORMAT_VALUE,
-  LAST_SIGNAL
-};
 
 static GParamSpec *properties[LAST_PROP];
-static guint signals[LAST_SIGNAL];
 
 static void     gtk_scale_set_property            (GObject        *object,
                                                    guint           prop_id,
@@ -263,7 +261,6 @@ update_label_request (GtkScale *scale)
                       &min, NULL, NULL, NULL);
   size = MAX (size, min);
   g_free (text);
-
 
   text = gtk_scale_format_value (scale, highest_value);
   gtk_label_set_label (GTK_LABEL (priv->value_widget), text);
@@ -665,42 +662,6 @@ gtk_scale_class_init (GtkScaleClass *class)
 
   class->get_layout_offsets = gtk_scale_real_get_layout_offsets;
 
-  /**
-   * GtkScale::format-value:
-   * @scale: the object which received the signal
-   * @value: the value to format
-   *
-   * Signal which allows you to change how the scale value is displayed.
-   * Connect a signal handler which returns an allocated string representing 
-   * @value. That string will then be used to display the scale's value.
-   *
-   * If no user-provided handlers are installed, the value will be displayed on
-   * its own, rounded according to the value of the #GtkScale:digits property.
-   *
-   * Here's an example signal handler which displays a value 1.0 as
-   * with "-->1.0<--".
-   * |[<!-- language="C" -->
-   * static gchar*
-   * format_value_callback (GtkScale *scale,
-   *                        gdouble   value)
-   * {
-   *   return g_strdup_printf ("-->\%0.*g<--",
-   *                           gtk_scale_get_digits (scale), value);
-   *  }
-   * ]|
-   *
-   * Returns: allocated string representing @value
-   */
-  signals[FORMAT_VALUE] =
-    g_signal_new (I_("format-value"),
-                  G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkScaleClass, format_value),
-                  _gtk_single_string_accumulator, NULL,
-                  _gtk_marshal_STRING__DOUBLE,
-                  G_TYPE_STRING, 1,
-                  G_TYPE_DOUBLE);
-
   properties[PROP_DIGITS] =
       g_param_spec_int ("digits",
                         P_("Digits"),
@@ -1023,7 +984,7 @@ gtk_scale_new_with_range (GtkOrientation orientation,
  *
  * Note that rounding to a small number of digits can interfere with
  * the smooth autoscrolling that is built into #GtkScale. As an alternative,
- * you can use the #GtkScale::format-value signal to format the displayed
+ * you can use gtk_scale_set_format_value_func() to format the displayed
  * value yourself.
  */
 void
@@ -1560,26 +1521,19 @@ weed_out_neg_zero (gchar *str,
   return str;
 }
 
-/*
- * Emits #GtkScale:format-value signal to format the value;
- * if no user signal handlers, falls back to a default format.
- *
- * Returns: formatted value
- */
-static gchar *
+static char *
 gtk_scale_format_value (GtkScale *scale,
-                        gdouble   value)
+                        double    value)
 {
-  gchar *fmt = NULL;
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
 
-  g_signal_emit (scale, signals[FORMAT_VALUE], 0, value, &fmt);
-
-  if (fmt)
-    return fmt;
+  if (priv->format_value_func)
+    {
+      return priv->format_value_func (scale, value, priv->format_value_func_user_data);
+    }
   else
     {
-      fmt = g_strdup_printf ("%0.*f", priv->digits, value);
+      char *fmt = g_strdup_printf ("%0.*f", priv->digits, value);
       return weed_out_neg_zero (fmt, priv->digits);
     }
 }
@@ -2074,4 +2028,44 @@ gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
 					       tagname, user_data);
     }
 
+}
+
+/**
+ * gtk_scale_set_format_value_func:
+ * @scale: a #GtkScale
+ * @func: (nullable): function that formats the value
+ * @user_data: (nullable): user data to pass to @func
+ *
+ * @func allows you to change how the scale value is displayed. The given
+ * function will return an allocated string representing @value.
+ * That string will then be used to display the scale's value.
+ *
+ * If #NULL is passed as @func, the value will be displayed on
+ * its own, rounded according to the value of the #GtkScale:digits property.
+ */
+void
+gtk_scale_set_format_value_func (GtkScale                *scale,
+                                 GtkScaleFormatValueFunc  func,
+                                 gpointer                 user_data)
+{
+  GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
+  GtkAdjustment *adjustment;
+  char *text;
+
+  g_return_if_fail (GTK_IS_SCALE (scale));
+
+  priv->format_value_func = func;
+  priv->format_value_func_user_data = user_data;
+
+  if (!priv->value_widget)
+    return;
+
+  update_label_request (scale);
+
+  adjustment = gtk_range_get_adjustment (GTK_RANGE (scale));
+  text = gtk_scale_format_value (scale,
+                                 gtk_adjustment_get_value (adjustment));
+  gtk_label_set_label (GTK_LABEL (priv->value_widget), text);
+
+  g_free (text);
 }

@@ -1603,14 +1603,14 @@ reset_icon_size (GtkWidget *iv)
   gtk_widget_queue_resize (iv);
 }
 
-static gchar *
-scale_format_value_blank (GtkScale *scale, gdouble value)
+static char *
+scale_format_value_blank (GtkScale *scale, double value, gpointer user_data)
 {
   return g_strdup (" ");
 }
 
-static gchar *
-scale_format_value (GtkScale *scale, gdouble value)
+static char *
+scale_format_value (GtkScale *scale, double value, gpointer user_data)
 {
   return g_strdup_printf ("%0.*f", 1, value);
 }
@@ -1724,8 +1724,6 @@ activate (GApplication *app)
   gtk_builder_add_callback_symbol (builder, "increase_icon_size", (GCallback)increase_icon_size);
   gtk_builder_add_callback_symbol (builder, "decrease_icon_size", (GCallback)decrease_icon_size);
   gtk_builder_add_callback_symbol (builder, "reset_icon_size", (GCallback)reset_icon_size);
-  gtk_builder_add_callback_symbol (builder, "scale_format_value", (GCallback)scale_format_value);
-  gtk_builder_add_callback_symbol (builder, "scale_format_value_blank", (GCallback)scale_format_value_blank);
   gtk_builder_add_callback_symbol (builder, "osd_frame_pressed", (GCallback)osd_frame_pressed);
 
   gtk_builder_connect_signals (builder, NULL);
@@ -1944,6 +1942,12 @@ activate (GApplication *app)
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "extra_info_entry");
   g_timeout_add (100, (GSourceFunc)pulse_it, widget);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "scale3");
+  gtk_scale_set_format_value_func (GTK_SCALE (widget), scale_format_value, NULL);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "scale4");
+  gtk_scale_set_format_value_func (GTK_SCALE (widget), scale_format_value_blank, NULL);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "box_for_context");
   model = (GMenuModel *)gtk_builder_get_object (builder, "new_style_context_menu_model");

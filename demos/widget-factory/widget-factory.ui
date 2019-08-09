@@ -1019,7 +1019,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                         <property name="fill-level">75</property>
                                         <property name="digits">-1</property>
                                         <property name="halign">end</property>
-                                        <signal name="format-value" handler="scale_format_value"/>
                                       </object>
                                     </child>
                                     <child>
@@ -1033,7 +1032,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                         <property name="fill-level">75</property>
                                         <property name="digits">-1</property>
                                         <property name="halign">start</property>
-                                        <signal name="format-value" handler="scale_format_value_blank"/>
                                       </object>
                                     </child>
                                   </object>
