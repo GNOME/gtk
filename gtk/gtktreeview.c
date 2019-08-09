@@ -4235,7 +4235,6 @@ invalidate_empty_focus (GtkTreeView *tree_view)
 typedef enum {
   GTK_TREE_VIEW_GRID_LINE,
   GTK_TREE_VIEW_TREE_LINE,
-  GTK_TREE_VIEW_FOREGROUND_LINE
 } GtkTreeViewLineType;
 
 static void
@@ -4285,16 +4284,6 @@ gtk_tree_view_snapshot_line (GtkTreeView         *tree_view,
         cairo_set_line_width (cr, _TREE_VIEW_GRID_LINE_WIDTH);
         if (tree_view->priv->grid_line_dashes[0])
           cairo_set_dash (cr, tree_view->priv->grid_line_dashes, 2, 0.5);
-      }
-      break;
-
-    case GTK_TREE_VIEW_FOREGROUND_LINE:
-      {
-        GdkRGBA color;
-
-        cairo_set_line_width (cr, 1.0);
-        gtk_style_context_get_color (context, &color);
-        gdk_cairo_set_source_rgba (cr, &color);
       }
       break;
 
