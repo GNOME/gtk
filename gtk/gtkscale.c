@@ -197,10 +197,6 @@ static void     gtk_scale_measure (GtkWidget      *widget,
                                    int            *natural_baseline);
 static void     gtk_scale_get_range_border        (GtkRange       *range,
                                                    GtkBorder      *border);
-static void     gtk_scale_get_range_size_request  (GtkRange       *range,
-                                                   GtkOrientation  orientation,
-                                                   gint           *minimum,
-                                                   gint           *natural);
 static void     gtk_scale_finalize                (GObject        *object);
 static void     gtk_scale_snapshot                (GtkWidget      *widget,
                                                    GtkSnapshot    *snapshot);
@@ -665,7 +661,6 @@ gtk_scale_class_init (GtkScaleClass *class)
   widget_class->measure = gtk_scale_measure;
 
   range_class->get_range_border = gtk_scale_get_range_border;
-  range_class->get_range_size_request = gtk_scale_get_range_size_request;
   range_class->value_changed = gtk_scale_value_changed;
 
   class->get_layout_offsets = gtk_scale_real_get_layout_offsets;
@@ -1220,12 +1215,12 @@ gtk_scale_get_has_origin (GtkScale *scale)
  * gtk_scale_set_value_pos:
  * @scale: a #GtkScale
  * @pos: the position in which the current value is displayed
- * 
+ *
  * Sets the position in which the current value is displayed.
  */
 void
 gtk_scale_set_value_pos (GtkScale        *scale,
-			 GtkPositionType  pos)
+                         GtkPositionType  pos)
 {
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkWidget *widget;
@@ -1238,9 +1233,7 @@ gtk_scale_set_value_pos (GtkScale        *scale,
       widget = GTK_WIDGET (scale);
 
       update_value_position (scale);
-
-      if (gtk_widget_get_visible (widget) && gtk_widget_get_mapped (widget))
-	gtk_widget_queue_resize (widget);
+      gtk_widget_queue_resize (widget);
 
       g_object_notify_by_pspec (G_OBJECT (scale), properties[PROP_VALUE_POS]);
     }
@@ -1362,27 +1355,6 @@ gtk_scale_get_range_border (GtkRange  *range,
 }
 
 static void
-gtk_scale_get_range_size_request (GtkRange       *range,
-                                  GtkOrientation  orientation,
-                                  gint           *minimum,
-                                  gint           *natural)
-{
-  GtkScalePrivate *priv = gtk_scale_get_instance_private (GTK_SCALE (range));
-
-  /* Ensure the range requests enough size for our value */
-  if (priv->value_widget)
-    gtk_widget_measure (priv->value_widget,
-                        orientation, -1,
-                        minimum, natural,
-                        NULL, NULL);
-  else
-    {
-      *minimum = 0;
-      *natural = 0;
-    }
-}
-
-static void
 gtk_scale_measure_mark (GtkGizmo       *gizmo,
                         GtkOrientation  orientation,
                         gint            for_size,
@@ -1466,6 +1438,7 @@ gtk_scale_measure (GtkWidget      *widget,
 {
   GtkScale *scale = GTK_SCALE (widget);
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
+  GtkOrientation scale_orientation;
 
   GTK_WIDGET_CLASS (gtk_scale_parent_class)->measure (widget,
                                                       orientation,
@@ -1473,7 +1446,9 @@ gtk_scale_measure (GtkWidget      *widget,
                                                       minimum, natural,
                                                       minimum_baseline, natural_baseline);
 
-  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == orientation)
+  scale_orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
+
+  if (scale_orientation == orientation)
     {
       int top_marks_size = 0, bottom_marks_size = 0, marks_size;
 
@@ -1492,6 +1467,41 @@ gtk_scale_measure (GtkWidget      *widget,
 
       *minimum = MAX (*minimum, marks_size);
       *natural = MAX (*natural, marks_size);
+    }
+
+  if (priv->value_widget)
+    {
+      int min, nat;
+
+      gtk_widget_measure (priv->value_widget, orientation, -1, &min, &nat, NULL, NULL);
+
+      if (priv->value_pos == GTK_POS_TOP ||
+          priv->value_pos == GTK_POS_BOTTOM)
+        {
+          if (orientation == GTK_ORIENTATION_HORIZONTAL)
+            {
+              *minimum = MAX (*minimum, min);
+              *natural = MAX (*natural, nat);
+            }
+          else
+            {
+              *minimum += min;
+              *natural += nat;
+            }
+        }
+      else
+        {
+          if (orientation == GTK_ORIENTATION_HORIZONTAL)
+            {
+              *minimum += min;
+              *natural += nat;
+            }
+          else
+            {
+              *minimum = MAX (*minimum, min);
+              *natural = MAX (*natural, nat);
+            }
+        }
     }
 }
 

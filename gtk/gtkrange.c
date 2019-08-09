@@ -1381,17 +1381,6 @@ gtk_range_measure (GtkWidget      *widget,
       *minimum += border.top + border.bottom;
       *natural += border.top + border.bottom;
     }
-
-  if (GTK_RANGE_GET_CLASS (range)->get_range_size_request)
-    {
-      gint min, nat;
-
-      GTK_RANGE_GET_CLASS (range)->get_range_size_request (range, orientation,
-                                                           &min, &nat);
-
-      *minimum = MAX (*minimum, min);
-      *natural = MAX (*natural, nat);
-    }
 }
 
 static void

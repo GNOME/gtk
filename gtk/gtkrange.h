@@ -71,11 +71,6 @@ struct _GtkRangeClass
                              GtkScrollType scroll,
                              gdouble       new_value);
 
-   void (* get_range_size_request) (GtkRange       *range,
-                                    GtkOrientation  orientation,
-                                    gint           *minimum,
-                                    gint           *natural);
-
   /*< private > */
 
   gpointer padding[8];
