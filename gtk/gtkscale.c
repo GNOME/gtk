@@ -1185,17 +1185,15 @@ gtk_scale_set_value_pos (GtkScale        *scale,
                          GtkPositionType  pos)
 {
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
-  GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
   if (priv->value_pos != pos)
     {
       priv->value_pos = pos;
-      widget = GTK_WIDGET (scale);
 
       update_value_position (scale);
-      gtk_widget_queue_resize (widget);
+      gtk_widget_queue_resize (GTK_WIDGET (scale));
 
       g_object_notify_by_pspec (G_OBJECT (scale), properties[PROP_VALUE_POS]);
     }
