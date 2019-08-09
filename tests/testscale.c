@@ -118,6 +118,7 @@ int main (int argc, char *argv[])
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Ranges with marks");
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
   box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   flipbox = box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_widget_set_hexpand (flipbox, TRUE);
