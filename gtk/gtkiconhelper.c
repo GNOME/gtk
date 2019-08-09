@@ -219,7 +219,7 @@ gtk_icon_helper_paintable_snapshot (GdkPaintable *paintable,
     case GTK_IMAGE_GICON:
       {
         double x, y, w, h;
-    
+
         /* Never scale up icons. */
         w = gdk_paintable_get_intrinsic_width (self->paintable);
         h = gdk_paintable_get_intrinsic_height (self->paintable);
@@ -227,6 +227,9 @@ gtk_icon_helper_paintable_snapshot (GdkPaintable *paintable,
         h = MIN (h, height);
         x = (width - w) / 2;
         y = (height - h) / 2;
+
+        if (w == 0 || h == 0)
+          return;
 
         if (x  != 0 || y != 0)
           {
