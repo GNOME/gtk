@@ -103,9 +103,11 @@
           <attribute name="bind-source">
             <text/>
           </attribute>
-          <attribute name="bind-property">
-            <text/>
-          </attribute>
+          <optional>
+            <attribute name="bind-property">
+              <text/>
+            </attribute>
+          </optional>
           <optional>
             <attribute name="bind-flags">
               <text/>
