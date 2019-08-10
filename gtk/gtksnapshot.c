@@ -615,7 +615,8 @@ gtk_snapshot_ensure_identity (GtkSnapshot *snapshot)
  * gtk_snapshot_push_repeat:
  * @snapshot: a #GtkSnapshot
  * @bounds: the bounds within which to repeat
- * @child_bounds: the bounds of the child
+ * @child_bounds: (nullable): the bounds of the child or %NULL
+ *   to use the full size of the collected child node
  *
  * Creates a node that repeats the child node.
  *
