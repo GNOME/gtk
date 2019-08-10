@@ -57,6 +57,7 @@ compare_render_tests = [
   'clip-nested1',
   'scale-up-down',
   'opacity-overlapping-children',
+  'repeat',
 ]
 
 # these are too sensitive to differences in the renderers
