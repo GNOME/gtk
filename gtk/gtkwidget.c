@@ -1067,7 +1067,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_props[PROP_CURSOR] =
       g_param_spec_object("cursor",
                           P_("Cursor"),
-                          P_("The cursor to show when hoving above widget"),
+                          P_("The cursor to show when hovering above widget"),
                           GDK_TYPE_CURSOR,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
