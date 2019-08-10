@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-02 11:46+0000\n"
-"PO-Revision-Date: 2019-08-03 14:34+0200\n"
+"POT-Creation-Date: 2019-08-09 16:02+0000\n"
+"PO-Revision-Date: 2019-08-10 09:22+0200\n"
 "Last-Translator: Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -2675,12 +2675,12 @@ msgstr "Meniu de aplicație"
 msgid "Close"
 msgstr "Închide"
 
-#: gtk/gtkicontheme.c:2343 gtk/gtkicontheme.c:2408
+#: gtk/gtkicontheme.c:2357 gtk/gtkicontheme.c:2422
 #, c-format
 msgid "Icon '%s' not present in theme %s"
 msgstr "Iconița „%s” nu este prezentă în tema %s"
 
-#: gtk/gtkicontheme.c:4082 gtk/gtkicontheme.c:4449
+#: gtk/gtkicontheme.c:4096 gtk/gtkicontheme.c:4463
 msgid "Failed to load icon"
 msgstr "Nu s-a putut încărca iconița"
 
@@ -4681,7 +4681,7 @@ msgstr "Accesează toate alternativele"
 #: gtk/open-type-layout.h:14
 msgctxt "OpenType layout"
 msgid "Above-base Forms"
-msgstr "Formulare deasupra bazei"
+msgstr "Forme deasupra bazei"
 
 #: gtk/open-type-layout.h:15
 msgctxt "OpenType layout"
@@ -4706,7 +4706,7 @@ msgstr "Akhands"
 #: gtk/open-type-layout.h:19
 msgctxt "OpenType layout"
 msgid "Below-base Forms"
-msgstr "Formulare sub bază"
+msgstr "Forme sub bază"
 
 #: gtk/open-type-layout.h:20
 msgctxt "OpenType layout"
@@ -4726,7 +4726,7 @@ msgstr "Alternate contextuale"
 #: gtk/open-type-layout.h:23
 msgctxt "OpenType layout"
 msgid "Case-Sensitive Forms"
-msgstr "Formulare sensibile la majuscule"
+msgstr "Forme sensibile la majuscule"
 
 #: gtk/open-type-layout.h:24
 msgctxt "OpenType layout"
@@ -4736,12 +4736,12 @@ msgstr "Compoziție / Decompoziție glifuri"
 #: gtk/open-type-layout.h:25
 msgctxt "OpenType layout"
 msgid "Conjunct Form After Ro"
-msgstr ""
+msgstr "Formă conjunctă după Ro"
 
 #: gtk/open-type-layout.h:26
 msgctxt "OpenType layout"
 msgid "Conjunct Forms"
-msgstr ""
+msgstr "Forme conjuncte"
 
 #: gtk/open-type-layout.h:27
 msgctxt "OpenType layout"
@@ -4761,7 +4761,7 @@ msgstr "Spațiere în jurul majusculelor"
 #: gtk/open-type-layout.h:30
 msgctxt "OpenType layout"
 msgid "Contextual Swash"
-msgstr ""
+msgstr "Swash contextual"
 
 #: gtk/open-type-layout.h:31
 msgctxt "OpenType layout"
@@ -4786,7 +4786,7 @@ msgstr "Distanțe"
 #: gtk/open-type-layout.h:35
 msgctxt "OpenType layout"
 msgid "Discretionary Ligatures"
-msgstr ""
+msgstr "Ligaturi discreționare"
 
 #: gtk/open-type-layout.h:36
 msgctxt "OpenType layout"
@@ -4806,7 +4806,7 @@ msgstr "Forme experte"
 #: gtk/open-type-layout.h:39
 msgctxt "OpenType layout"
 msgid "Final Glyph on Line Alternates"
-msgstr ""
+msgstr "Alternative pentru glife finale pe linie"
 
 #: gtk/open-type-layout.h:40
 msgctxt "OpenType layout"
@@ -4851,7 +4851,7 @@ msgstr "Forme halant"
 #: gtk/open-type-layout.h:48
 msgctxt "OpenType layout"
 msgid "Alternate Half Widths"
-msgstr ""
+msgstr "Jumătăți de lățimi alternate"
 
 #: gtk/open-type-layout.h:49
 msgctxt "OpenType layout"
@@ -4881,7 +4881,7 @@ msgstr "Forme Hojo Kanji"
 #: gtk/open-type-layout.h:54
 msgctxt "OpenType layout"
 msgid "Half Widths"
-msgstr ""
+msgstr "Jumătăți de lățimi"
 
 #: gtk/open-type-layout.h:55
 msgctxt "OpenType layout"
@@ -4901,7 +4901,7 @@ msgstr "Cursiv"
 #: gtk/open-type-layout.h:58
 msgctxt "OpenType layout"
 msgid "Justification Alternates"
-msgstr ""
+msgstr "Alternative de justificare"
 
 #: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
@@ -4931,7 +4931,7 @@ msgstr "Kerning"
 #: gtk/open-type-layout.h:64
 msgctxt "OpenType layout"
 msgid "Left Bounds"
-msgstr ""
+msgstr "Margini la stânga"
 
 #: gtk/open-type-layout.h:65
 msgctxt "OpenType layout"
@@ -4941,12 +4941,12 @@ msgstr "Ligaturi standard"
 #: gtk/open-type-layout.h:66
 msgctxt "OpenType layout"
 msgid "Leading Jamo Forms"
-msgstr ""
+msgstr "Forme Jamo la început"
 
 #: gtk/open-type-layout.h:67
 msgctxt "OpenType layout"
 msgid "Lining Figures"
-msgstr ""
+msgstr "Numere aliniate"
 
 #: gtk/open-type-layout.h:68
 msgctxt "OpenType layout"
@@ -4961,7 +4961,7 @@ msgstr "Alternări _Stânga-Dreapta"
 #: gtk/open-type-layout.h:70
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
-msgstr "Formulare oglindite _Stânga-Dreapta"
+msgstr "Forme oglindite _Stânga-Dreapta"
 
 #: gtk/open-type-layout.h:71
 msgctxt "OpenType layout"
@@ -4996,7 +4996,7 @@ msgstr "Marchează poziționarea via substituție"
 #: gtk/open-type-layout.h:77
 msgctxt "OpenType layout"
 msgid "Alternate Annotation Forms"
-msgstr ""
+msgstr "Forme de adnotare alternative"
 
 #: gtk/open-type-layout.h:78
 msgctxt "OpenType layout"
@@ -5056,22 +5056,22 @@ msgstr "Figuri proporționale"
 #: gtk/open-type-layout.h:89
 msgctxt "OpenType layout"
 msgid "Pre-Base Forms"
-msgstr ""
+msgstr "Forme sub bază"
 
 #: gtk/open-type-layout.h:90
 msgctxt "OpenType layout"
 msgid "Pre-base Substitutions"
-msgstr ""
+msgstr "Înlocuiri sub bază"
 
 #: gtk/open-type-layout.h:91
 msgctxt "OpenType layout"
 msgid "Post-base Forms"
-msgstr ""
+msgstr "Forme deasupra bazei"
 
 #: gtk/open-type-layout.h:92
 msgctxt "OpenType layout"
 msgid "Post-base Substitutions"
-msgstr ""
+msgstr "Înlocuiri deasupra bazei"
 
 #: gtk/open-type-layout.h:93
 msgctxt "OpenType layout"
@@ -5121,7 +5121,7 @@ msgstr "Alternări _Dreapta-Stânga"
 #: gtk/open-type-layout.h:102
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
-msgstr "Formulare oglindite _Dreapta-Stânga"
+msgstr "Forme oglindite _Dreapta-Stânga"
 
 #: gtk/open-type-layout.h:103
 msgctxt "OpenType layout"
@@ -5261,12 +5261,12 @@ msgstr "Set stilistic 20"
 #: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
 msgid "Math script style alternates"
-msgstr ""
+msgstr "Alternative de script matemamtic"
 
 #: gtk/open-type-layout.h:131
 msgctxt "OpenType layout"
 msgid "Stretching Glyph Decomposition"
-msgstr ""
+msgstr "Decompunerea glifelor prin întindere"
 
 #: gtk/open-type-layout.h:132
 msgctxt "OpenType layout"
@@ -5281,12 +5281,12 @@ msgstr "Indice superior"
 #: gtk/open-type-layout.h:134
 msgctxt "OpenType layout"
 msgid "Swash"
-msgstr ""
+msgstr "Swash"
 
 #: gtk/open-type-layout.h:135
 msgctxt "OpenType layout"
 msgid "Titling"
-msgstr ""
+msgstr "Suprapunere"
 
 #: gtk/open-type-layout.h:136
 msgctxt "OpenType layout"
@@ -5311,7 +5311,7 @@ msgstr "Forme tradiționale"
 #: gtk/open-type-layout.h:140
 msgctxt "OpenType layout"
 msgid "Third Widths"
-msgstr ""
+msgstr "Treimi de lățime"
 
 #: gtk/open-type-layout.h:141
 msgctxt "OpenType layout"
@@ -5356,7 +5356,7 @@ msgstr "Kerning vertical"
 #: gtk/open-type-layout.h:149
 msgctxt "OpenType layout"
 msgid "Proportional Alternate Vertical Metrics"
-msgstr ""
+msgstr "Metrice verticale alternate proporționale"
 
 #: gtk/open-type-layout.h:150
 msgctxt "OpenType layout"
