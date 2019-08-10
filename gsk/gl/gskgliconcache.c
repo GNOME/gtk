@@ -13,11 +13,13 @@ typedef struct
   GskGLTextureAtlas *atlas;
   int frame_age; /* Number of frames this icon is unused */
   guint used: 1;
+  GdkTexture *source_texture;
 } IconData;
 
 static void
 icon_data_free (gpointer p)
 {
+  g_object_unref (((IconData *)p)->source_texture);
   g_free (p);
 }
 
@@ -182,6 +184,7 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     icon_data->atlas = atlas;
     icon_data->frame_age = 0;
     icon_data->used = TRUE;
+    icon_data->source_texture = g_object_ref (texture);
     graphene_rect_init (&icon_data->texture_rect,
                         (float)(packed_x + 1) / atlas->width,
                         (float)(packed_y + 1) / atlas->height,
