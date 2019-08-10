@@ -67,6 +67,7 @@
 #include "a11y/gtktreeviewaccessibleprivate.h"
 
 #include "gdk/gdkeventsprivate.h"
+#include "gdk/gdktextureprivate.h"
 
 #include <math.h>
 #include <string.h>
@@ -508,6 +509,10 @@ struct _GtkTreeViewPrivate
   gint tooltip_column;
 
   int expander_size;
+
+  GdkRGBA grid_line_color; /* Color used in the textures */
+  GdkTexture *horizontal_grid_line_texture;
+  GdkTexture *vertical_grid_line_texture;
 
   /* Here comes the bitfield */
   guint scroll_to_use_align : 1;
@@ -2213,6 +2218,8 @@ gtk_tree_view_destroy (GtkWidget *widget)
 
   g_clear_object (&priv->hadjustment);
   g_clear_object (&priv->vadjustment);
+  g_clear_object (&priv->horizontal_grid_line_texture);
+  g_clear_object (&priv->vertical_grid_line_texture);
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->destroy (widget);
 }
@@ -4209,7 +4216,6 @@ invalidate_empty_focus (GtkTreeView *tree_view)
 }
 
 typedef enum {
-  GTK_TREE_VIEW_GRID_LINE,
   GTK_TREE_VIEW_TREE_LINE,
 } GtkTreeViewLineType;
 
@@ -4249,18 +4255,6 @@ gtk_tree_view_snapshot_line (GtkTreeView         *tree_view,
       }
       break;
 
-    case GTK_TREE_VIEW_GRID_LINE:
-      {
-        const GdkRGBA *color;
-
-        color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
-
-        gdk_cairo_set_source_rgba (cr, color);
-        cairo_set_line_width (cr, _TREE_VIEW_GRID_LINE_WIDTH);
-        cairo_set_dash (cr, (double[]){ 1, 1 }, 2, 0.5);
-      }
-      break;
-
     default:
       g_assert_not_reached ();
       break;
@@ -4272,23 +4266,101 @@ gtk_tree_view_snapshot_line (GtkTreeView         *tree_view,
 
   cairo_destroy (cr);
 }
-                         
+
+static void
+gtk_tree_view_snapshot_grid_line (GtkTreeView            *tree_view,
+                                  GtkSnapshot            *snapshot,
+                                  GtkOrientation          orientation,
+                                  const graphene_point_t *start,
+                                  float                   size)
+{
+  GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
+  GtkStyleContext *context;
+  const GdkRGBA *grid_line_color;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
+  grid_line_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context,
+                                                                                    GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
+
+  if (!gdk_rgba_equal (grid_line_color, &priv->grid_line_color) ||
+      (orientation == GTK_ORIENTATION_HORIZONTAL && !priv->horizontal_grid_line_texture) ||
+      (orientation == GTK_ORIENTATION_VERTICAL && !priv->vertical_grid_line_texture))
+    {
+      cairo_surface_t *surface;
+      unsigned char *data;
+
+      g_clear_object (&priv->horizontal_grid_line_texture);
+      g_clear_object (&priv->vertical_grid_line_texture);
+      priv->grid_line_color = *grid_line_color;
+
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 2, 1);
+      data = cairo_image_surface_get_data (surface);
+      /* just color the first pixel... */
+      data[0] = round (grid_line_color->blue  * 255);
+      data[1] = round (grid_line_color->green * 255);
+      data[2] = round (grid_line_color->red   * 255);
+      data[3] = round (grid_line_color->alpha * 255);
+
+      priv->horizontal_grid_line_texture = gdk_texture_new_for_surface (surface);
+      cairo_surface_destroy (surface);
+
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 1, 2);
+      data = cairo_image_surface_get_data (surface);
+      data[0] = round (grid_line_color->blue  * 255);
+      data[1] = round (grid_line_color->green * 255);
+      data[2] = round (grid_line_color->red   * 255);
+      data[3] = round (grid_line_color->alpha * 255);
+
+      priv->vertical_grid_line_texture = gdk_texture_new_for_surface (surface);
+      cairo_surface_destroy (surface);
+    }
+
+  g_assert (priv->horizontal_grid_line_texture);
+  g_assert (priv->vertical_grid_line_texture);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      gtk_snapshot_push_repeat (snapshot,
+                                &GRAPHENE_RECT_INIT (
+                                  start->x, start->y,
+                                  size, 1),
+                                NULL);
+      gtk_snapshot_append_texture (snapshot, priv->horizontal_grid_line_texture,
+                                   &GRAPHENE_RECT_INIT (0, 0, 2, 1));
+      gtk_snapshot_pop (snapshot);
+    }
+  else /* VERTICAL */
+    {
+      gtk_snapshot_push_repeat (snapshot,
+                                &GRAPHENE_RECT_INIT (
+                                  start->x, start->y,
+                                  1, size),
+                                NULL);
+      gtk_snapshot_append_texture (snapshot, priv->vertical_grid_line_texture,
+                                   &GRAPHENE_RECT_INIT (0, 0, 1, 2));
+      gtk_snapshot_pop (snapshot);
+    }
+}
+
 static void
 gtk_tree_view_snapshot_grid_lines (GtkTreeView *tree_view,
-			           GtkSnapshot *snapshot)
+                                   GtkSnapshot *snapshot)
 {
+  GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GList *list, *first, *last;
   gboolean rtl;
-  gint current_x = 0;
+  int current_x = 0;
+  int tree_view_height;
 
-  if (tree_view->priv->grid_lines != GTK_TREE_VIEW_GRID_LINES_VERTICAL
-      && tree_view->priv->grid_lines != GTK_TREE_VIEW_GRID_LINES_BOTH)
+  if (priv->grid_lines != GTK_TREE_VIEW_GRID_LINES_VERTICAL &&
+      priv->grid_lines != GTK_TREE_VIEW_GRID_LINES_BOTH)
     return;
 
   rtl = (_gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
 
-  first = g_list_first (tree_view->priv->columns);
-  last = g_list_last (tree_view->priv->columns);
+  first = g_list_first (priv->columns);
+  last = g_list_last (priv->columns);
+  tree_view_height = gtk_tree_view_get_height (tree_view);
 
   for (list = (rtl ? last : first);
        list;
@@ -4305,10 +4377,11 @@ gtk_tree_view_snapshot_grid_lines (GtkTreeView *tree_view,
 
       current_x += gtk_tree_view_column_get_width (column);
 
-      gtk_tree_view_snapshot_line (tree_view, snapshot,
-                                   GTK_TREE_VIEW_GRID_LINE,
-                                   current_x - 1, 0,
-                                   current_x - 1, gtk_tree_view_get_height (tree_view));
+      gtk_tree_view_snapshot_grid_line (tree_view,
+                                        snapshot,
+                                        GTK_ORIENTATION_VERTICAL,
+                                        &(graphene_point_t) { current_x - 1, 0 },
+                                        tree_view_height);
     }
 }
 
@@ -4675,22 +4748,26 @@ gtk_tree_view_bin_snapshot (GtkWidget   *widget,
                                                     draw_focus);
 	    }
 
-	  if (draw_hgrid_lines)
-	    {
-	      if (background_area.y >= clip.y)
-                gtk_tree_view_snapshot_line (tree_view, snapshot,
-                                             GTK_TREE_VIEW_GRID_LINE,
-                                             background_area.x, background_area.y,
-                                             background_area.x + background_area.width,
-                                             background_area.y);
+          if (draw_hgrid_lines)
+            {
+              if (background_area.y >= clip.y)
+                gtk_tree_view_snapshot_grid_line (tree_view,
+                                                  snapshot,
+                                                  GTK_ORIENTATION_HORIZONTAL,
+                                                  &(graphene_point_t) {
+                                                    background_area.x, background_area.y
+                                                  },
+                                                  background_area.width);
 
-	      if (background_area.y + max_height < clip.y + clip.height)
-                gtk_tree_view_snapshot_line (tree_view, snapshot,
-                                             GTK_TREE_VIEW_GRID_LINE,
-                                             background_area.x, background_area.y + max_height,
-                                             background_area.x + background_area.width,
-                                             background_area.y + max_height);
-	    }
+              if (background_area.y + max_height < clip.y + clip.height)
+                gtk_tree_view_snapshot_grid_line (tree_view,
+                                                  snapshot,
+                                                  GTK_ORIENTATION_HORIZONTAL,
+                                                  &(graphene_point_t) {
+                                                    background_area.x, background_area.y + max_height
+                                                  },
+                                                  background_area.width);
+            }
 
 	  if (gtk_tree_view_is_expander_column (tree_view, column) &&
 	      tree_view->priv->tree_lines_enabled)
