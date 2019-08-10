@@ -4780,8 +4780,8 @@ popover.menu {
     padding-bottom: 5px;
   }
 
-  arrow,
-  &.background contents {
+  & > arrow,
+  &.background > contents {
     background-color: $menu_color;
   }
 
