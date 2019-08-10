@@ -213,10 +213,22 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     cairo_surface_destroy (padded_surface);
 
 #if 0
-    /* Some obvious debugging */
-    static int k;
-    gsk_gl_image_write_to_png (&atlas->image, self->gl_driver,
-                               g_strdup_printf ("icon%d.png", k ++));
+    {
+      static int k;
+      const int stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, atlas->width);
+      guchar *data = g_malloc (atlas->height * stride);
+      cairo_surface_t *s;
+      char *filename = g_strdup_printf ("atlas_%u_%d.png", atlas->texture_id, k++);
+
+      glBindTexture (GL_TEXTURE_2D, atlas->texture_id);
+      glGetTexImage (GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
+      s = cairo_image_surface_create_for_data (data, CAIRO_FORMAT_ARGB32, atlas->width, atlas->height, stride);
+      cairo_surface_write_to_png (s, filename);
+
+      cairo_surface_destroy (s);
+      g_free (data);
+      g_free (filename);
+    }
 #endif
   }
 }
