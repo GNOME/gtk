@@ -31,6 +31,7 @@ void                    gsk_shader_builder_set_common_vertex_shader     (GskShad
 
 int                     gsk_shader_builder_create_program               (GskShaderBuilder *builder,
                                                                          const char       *fragment_shader,
+                                                                         const char       *vertex_shader,
                                                                          GError          **error);
 
 G_END_DECLS

@@ -12,6 +12,7 @@ gsk_private_gl_shaders = [
   'resources/glsl/border.fs.glsl',
   'resources/glsl/cross_fade.fs.glsl',
   'resources/glsl/blend.fs.glsl',
+  'resources/glsl/repeat.fs.glsl',
   'resources/glsl/es2_common.fs.glsl',
   'resources/glsl/es2_common.vs.glsl',
   'resources/glsl/gl3_common.fs.glsl',

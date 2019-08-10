@@ -340,6 +340,7 @@ struct _GskGLRenderer
       Program border_program;
       Program cross_fade_program;
       Program blend_program;
+      Program repeat_program;
     };
   };
 
@@ -2083,6 +2084,81 @@ render_blend_node (GskGLRenderer   *self,
 }
 
 static inline void
+render_repeat_node (GskGLRenderer   *self,
+                    GskRenderNode   *node,
+                    RenderOpBuilder *builder)
+{
+  const float min_x = builder->dx + node->bounds.origin.x;
+  const float min_y = builder->dy + node->bounds.origin.y;
+  const float max_x = min_x + node->bounds.size.width;
+  const float max_y = min_y + node->bounds.size.height;
+  GskRenderNode *child = gsk_repeat_node_get_child (node);
+  const graphene_rect_t *child_bounds = gsk_repeat_node_peek_child_bounds (node);
+  TextureRegion region;
+  gboolean is_offscreen;
+  RenderOp op;
+
+  if (child_bounds != NULL &&
+      !graphene_rect_equal (child_bounds, &child->bounds))
+    {
+      /* TODO: Implement these repeat nodes. */
+      render_fallback_node (self, node, builder);
+      return;
+    }
+
+  /* Draw the entire child on a texture */
+  add_offscreen_ops (self, builder,
+                     &child->bounds,
+                     child,
+                     &region, &is_offscreen,
+                     RESET_CLIP | RESET_OPACITY);
+
+  ops_set_program (builder, &self->repeat_program);
+  ops_set_texture (builder, region.texture_id);
+  op.op = OP_CHANGE_REPEAT;
+  op.repeat.child_bounds[0] = 0; /* Both currently unused */
+  op.repeat.child_bounds[1] = 0;
+  op.repeat.child_bounds[2] = node->bounds.size.width / child_bounds->size.width;
+  op.repeat.child_bounds[3] = node->bounds.size.height / child_bounds->size.height;
+
+  op.repeat.texture_rect[0] = region.x;
+  op.repeat.texture_rect[1] = region.y;
+  op.repeat.texture_rect[2] = region.x2;
+  op.repeat.texture_rect[3] = region.y2;
+
+  ops_add (builder, &op);
+
+  if (is_offscreen)
+    {
+      const GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
+        { { min_x, min_y }, { region.x,  region.y2 }, },
+        { { min_x, max_y }, { region.x,  region.y  }, },
+        { { max_x, min_y }, { region.x2, region.y2 }, },
+
+        { { max_x, max_y }, { region.x2, region.y  }, },
+        { { min_x, max_y }, { region.x,  region.y  }, },
+        { { max_x, min_y }, { region.x2, region.y2 }, },
+      };
+
+      ops_draw (builder, offscreen_vertex_data);
+    }
+  else
+    {
+      const GskQuadVertex onscreen_vertex_data[GL_N_VERTICES] = {
+        { { min_x, min_y }, { region.x,  region.y  }, },
+        { { min_x, max_y }, { region.x,  region.y2 }, },
+        { { max_x, min_y }, { region.x2, region.y  }, },
+
+        { { max_x, max_y }, { region.x2, region.y2 }, },
+        { { min_x, max_y }, { region.x,  region.y2 }, },
+        { { max_x, min_y }, { region.x2, region.y  }, },
+      };
+
+      ops_draw (builder, onscreen_vertex_data);
+    }
+}
+
+static inline void
 apply_viewport_op (const Program  *program,
                    const RenderOp *op)
 {
@@ -2368,6 +2444,14 @@ apply_blend_op (const Program  *program,
   glUniform1i (program->blend.mode_location, op->blend.mode);
 }
 
+static inline void
+apply_repeat_op (const Program  *program,
+                 const RenderOp *op)
+{
+  glUniform4fv (program->repeat.child_bounds_location, 1, op->repeat.child_bounds);
+  glUniform4fv (program->repeat.texture_rect_location, 1, op->repeat.texture_rect);
+}
+
 static void
 gsk_gl_renderer_dispose (GObject *gobject)
 {
@@ -2389,19 +2473,21 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   static const struct {
     const char *name;
     const char *fs;
+    const char *vs;
   } program_definitions[] = {
-    { "blit",            "blit.fs.glsl" },
-    { "color",           "color.fs.glsl" },
-    { "coloring",        "coloring.fs.glsl" },
-    { "color matrix",    "color_matrix.fs.glsl" },
-    { "linear gradient", "linear_gradient.fs.glsl" },
-    { "blur",            "blur.fs.glsl" },
-    { "inset shadow",    "inset_shadow.fs.glsl" },
-    { "outset shadow",   "outset_shadow.fs.glsl" },
+    { "blit",                      "blit.fs.glsl" },
+    { "color",                     "color.fs.glsl" },
+    { "coloring",                  "coloring.fs.glsl" },
+    { "color matrix",              "color_matrix.fs.glsl" },
+    { "linear gradient",           "linear_gradient.fs.glsl" },
+    { "blur",                      "blur.fs.glsl" },
+    { "inset shadow",              "inset_shadow.fs.glsl" },
+    { "outset shadow",             "outset_shadow.fs.glsl" },
     { "unblurred outset shadow",   "unblurred_outset_shadow.fs.glsl" },
-    { "border",          "border.fs.glsl" },
-    { "cross fade",      "cross_fade.fs.glsl" },
-    { "blend",           "blend.fs.glsl" },
+    { "border",                    "border.fs.glsl" },
+    { "cross fade",                "cross_fade.fs.glsl" },
+    { "blend",                     "blend.fs.glsl" },
+    { "repeat",                    "repeat.fs.glsl" },
   };
 
   builder = gsk_shader_builder_new ();
@@ -2454,6 +2540,7 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
       prog->index = i;
       prog->id = gsk_shader_builder_create_program (builder,
                                                     program_definitions[i].fs,
+                                                    program_definitions[i].vs,
                                                     &shader_error);
 
       if (shader_error != NULL)
@@ -2461,8 +2548,8 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
           g_propagate_prefixed_error (error, shader_error,
                                       "Unable to create '%s' program (from %s and %s):\n",
                                       program_definitions[i].name,
-                                      "blit.vs.glsl",
-                                      program_definitions[i].fs);
+                                      program_definitions[i].fs,
+                                      program_definitions[i].vs);
 
           g_object_unref (builder);
           return FALSE;
@@ -2535,6 +2622,10 @@ gsk_gl_renderer_create_programs (GskGLRenderer  *self,
   /* blend */
   INIT_PROGRAM_UNIFORM_LOCATION (blend, source2);
   INIT_PROGRAM_UNIFORM_LOCATION (blend, mode);
+
+  /* repeat */
+  INIT_PROGRAM_UNIFORM_LOCATION (repeat, child_bounds);
+  INIT_PROGRAM_UNIFORM_LOCATION (repeat, texture_rect);
 
   g_object_unref (builder);
   return TRUE;
@@ -2863,8 +2954,11 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
       render_blend_node (self, node, builder);
     break;
 
-    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_REPEAT_NODE:
+      render_repeat_node (self, node, builder);
+    break;
+
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_CAIRO_NODE:
     default:
       {
@@ -3149,6 +3243,10 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
 
         case OP_CHANGE_UNBLURRED_OUTSET_SHADOW:
           apply_unblurred_outset_shadow_op (program, op);
+          break;
+
+        case OP_CHANGE_REPEAT:
+          apply_repeat_op (program, op);
           break;
 
         case OP_DRAW:
