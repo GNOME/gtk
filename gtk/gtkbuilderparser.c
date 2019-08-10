@@ -598,7 +598,7 @@ parse_property (ParserData   *data,
 
   g_markup_parse_context_get_position (data->ctx, &line, &col);
 
-  if (bind_source && bind_property)
+  if (bind_source)
     {
       BindingInfo *binfo;
 
@@ -606,17 +606,17 @@ parse_property (ParserData   *data,
       binfo->target = NULL;
       binfo->target_pspec = pspec;
       binfo->source = g_strdup (bind_source);
-      binfo->source_property = g_strdup (bind_property);
+      binfo->source_property = bind_property ? g_strdup (bind_property) : g_strdup (name);
       binfo->flags = bind_flags;
       binfo->line = line;
       binfo->col = col;
 
       object_info->bindings = g_slist_prepend (object_info->bindings, binfo);
     }
-  else if (bind_source || bind_property)
+  else if (bind_property)
     {
       error_missing_attribute (data, element_name,
-                               (bind_source) ? "bind-property" : "bind-source",
+                               "bind-source",
                                error);
       return;
     }
@@ -626,7 +626,7 @@ parse_property (ParserData   *data,
   info->pspec = pspec;
   info->text = g_string_new ("");
   info->translatable = translatable;
-  info->bound = (bind_source && bind_property);
+  info->bound = bind_source != NULL;
   info->context = g_strdup (context);
   info->line = line;
   info->col = col;
