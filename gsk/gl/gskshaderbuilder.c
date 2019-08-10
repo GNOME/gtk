@@ -257,6 +257,7 @@ gsk_shader_builder_set_common_vertex_shader (GskShaderBuilder  *self,
 int
 gsk_shader_builder_create_program (GskShaderBuilder *builder,
                                    const char       *fragment_shader,
+                                   const char       *vertex_shader,
                                    GError          **error)
 {
   int vertex_id;
@@ -268,7 +269,16 @@ gsk_shader_builder_create_program (GskShaderBuilder *builder,
   g_return_val_if_fail (fragment_shader != NULL, -1);
   g_return_val_if_fail (builder->common_vertex_shader_id != 0, -1);
 
-  vertex_id = builder->common_vertex_shader_id;
+  if (vertex_shader == NULL)
+    vertex_id = builder->common_vertex_shader_id;
+  else
+    vertex_id = gsk_shader_builder_compile_shader (builder, GL_VERTEX_SHADER,
+                                                   builder->vertex_preamble,
+                                                   vertex_shader,
+                                                   error);
+  if (vertex_id < 0)
+      return -1;
+
   fragment_id = gsk_shader_builder_compile_shader (builder, GL_FRAGMENT_SHADER,
                                                    builder->fragment_preamble,
                                                    fragment_shader,

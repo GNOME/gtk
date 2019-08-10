@@ -11,7 +11,7 @@
 #include "gskrendernodeprivate.h"
 
 #define GL_N_VERTICES 6
-#define GL_N_PROGRAMS 12
+#define GL_N_PROGRAMS 13
 
 
 
@@ -60,6 +60,7 @@ enum {
   OP_PUSH_DEBUG_GROUP       =  24,
   OP_POP_DEBUG_GROUP        =  25,
   OP_CHANGE_BLEND           =  26,
+  OP_CHANGE_REPEAT          =  27,
 };
 
 typedef struct
@@ -139,6 +140,10 @@ typedef struct
       int source2_location;
       int mode_location;
     } blend;
+    struct {
+      int child_bounds_location;
+      int texture_rect_location;
+    } repeat;
   };
 
 } Program;
@@ -149,7 +154,7 @@ typedef struct
 
   union {
     float opacity;
-    graphene_matrix_t modelview; /* TODO: Make both matrix members just "matrix" */
+    graphene_matrix_t modelview;
     graphene_matrix_t projection;
     const Program *program;
     int texture_id;
@@ -221,6 +226,10 @@ typedef struct
       int source2;
       int mode;
     } blend;
+    struct {
+      float child_bounds[4];
+      float texture_rect[4];
+    } repeat;
     struct {
       char *filename;
       int width;
