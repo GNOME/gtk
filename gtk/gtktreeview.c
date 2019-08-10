@@ -2111,6 +2111,7 @@ static void
 gtk_tree_view_destroy (GtkWidget *widget)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GList *list;
 
   gtk_tree_view_stop_editing (tree_view, TRUE);
@@ -2143,23 +2144,9 @@ gtk_tree_view_destroy (GtkWidget *widget)
       tree_view->priv->selection = NULL;
     }
 
-  if (tree_view->priv->scroll_to_path != NULL)
-    {
-      gtk_tree_row_reference_free (tree_view->priv->scroll_to_path);
-      tree_view->priv->scroll_to_path = NULL;
-    }
-
-  if (tree_view->priv->drag_dest_row != NULL)
-    {
-      gtk_tree_row_reference_free (tree_view->priv->drag_dest_row);
-      tree_view->priv->drag_dest_row = NULL;
-    }
-
-  if (tree_view->priv->top_row != NULL)
-    {
-      gtk_tree_row_reference_free (tree_view->priv->top_row);
-      tree_view->priv->top_row = NULL;
-    }
+  g_clear_pointer (&priv->scroll_to_path, gtk_tree_row_reference_free);
+  g_clear_pointer (&priv->drag_dest_row, gtk_tree_row_reference_free);
+  g_clear_pointer (&priv->top_row, gtk_tree_row_reference_free);
 
   if (tree_view->priv->column_drop_func_data &&
       tree_view->priv->column_drop_func_data_destroy)
@@ -2221,19 +2208,11 @@ gtk_tree_view_destroy (GtkWidget *widget)
       tree_view->priv->row_separator_destroy (tree_view->priv->row_separator_data);
       tree_view->priv->row_separator_data = NULL;
     }
-  
+
   gtk_tree_view_set_model (tree_view, NULL);
 
-  if (tree_view->priv->hadjustment)
-    {
-      g_object_unref (tree_view->priv->hadjustment);
-      tree_view->priv->hadjustment = NULL;
-    }
-  if (tree_view->priv->vadjustment)
-    {
-      g_object_unref (tree_view->priv->vadjustment);
-      tree_view->priv->vadjustment = NULL;
-    }
+  g_clear_object (&priv->hadjustment);
+  g_clear_object (&priv->vadjustment);
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->destroy (widget);
 }
