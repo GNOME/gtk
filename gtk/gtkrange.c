@@ -580,7 +580,7 @@ gtk_range_init (GtkRange *range)
   gtk_gesture_group (priv->drag_gesture, gesture);
 
   gesture = gtk_gesture_long_press_new ();
-  g_object_set (gesture, "delay-factor", 2.0, NULL);
+  gtk_gesture_long_press_set_delay_factor (GTK_GESTURE_LONG_PRESS (gesture), 2.0);
   g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_range_long_press_gesture_pressed), range);
   gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (gesture));
