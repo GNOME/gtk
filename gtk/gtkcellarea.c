@@ -1212,13 +1212,13 @@ apply_cell_attributes (GtkCellRenderer *renderer,
    * provided by the view (as these states can vary across views
    * accessing the same model).
    */
-  g_object_get (renderer, "is-expander", &is_expander, NULL);
+  is_expander = gtk_cell_renderer_get_is_expander (renderer);
   if (is_expander != data->is_expander)
-    g_object_set (renderer, "is-expander", data->is_expander, NULL);
+    gtk_cell_renderer_set_is_expander (renderer, data->is_expander);
 
-  g_object_get (renderer, "is-expanded", &is_expanded, NULL);
+  is_expanded = gtk_cell_renderer_get_is_expanded (renderer);
   if (is_expanded != data->is_expanded)
-    g_object_set (renderer, "is-expanded", data->is_expanded, NULL);
+    gtk_cell_renderer_set_is_expanded (renderer, data->is_expanded);
 
   /* Apply the attributes directly to the renderer */
   for (list = info->attributes; list; list = list->next)

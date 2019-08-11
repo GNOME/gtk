@@ -533,12 +533,10 @@ gtk_cell_renderer_pixbuf_snapshot (GtkCellRenderer      *cell,
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
   gtk_icon_size_set_style_classes (gtk_style_context_get_node (context), priv->icon_size);
 
-  g_object_get (cell, "is-expander", &is_expander, NULL);
+  is_expander = gtk_cell_renderer_get_is_expander (cell);
   if (is_expander)
     {
-      gboolean is_expanded;
-
-      g_object_get (cell, "is-expanded", &is_expanded, NULL);
+      gboolean is_expanded = gtk_cell_renderer_get_is_expanded (cell);;
 
       if (is_expanded && priv->pixbuf_expander_open != NULL)
         {

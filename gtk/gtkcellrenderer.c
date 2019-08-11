@@ -1722,6 +1722,62 @@ gtk_cell_renderer_get_state (GtkCellRenderer      *cell,
   return state;
 }
 
+void
+gtk_cell_renderer_set_is_expander (GtkCellRenderer *cell,
+                                   gboolean         is_expander)
+{
+  GtkCellRendererPrivate *priv = gtk_cell_renderer_get_instance_private (cell);
+
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  is_expander = !!is_expander;
+
+  if (is_expander != priv->is_expander)
+    {
+      priv->is_expander = is_expander;
+
+      g_object_notify (G_OBJECT (cell), "is-expander");
+    }
+}
+
+gboolean
+gtk_cell_renderer_get_is_expander (GtkCellRenderer *cell)
+{
+  GtkCellRendererPrivate *priv = gtk_cell_renderer_get_instance_private (cell);
+
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
+
+  return priv->is_expander;
+}
+
+void
+gtk_cell_renderer_set_is_expanded (GtkCellRenderer *cell,
+                                   gboolean         is_expanded)
+{
+  GtkCellRendererPrivate *priv = gtk_cell_renderer_get_instance_private (cell);
+
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  is_expanded = !!is_expanded;
+
+  if (is_expanded != priv->is_expanded)
+    {
+      priv->is_expanded = is_expanded;
+
+      g_object_notify (G_OBJECT (cell), "is-expanded");
+    }
+}
+
+gboolean
+gtk_cell_renderer_get_is_expanded (GtkCellRenderer *cell)
+{
+  GtkCellRendererPrivate *priv = gtk_cell_renderer_get_instance_private (cell);
+
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
+
+  return priv->is_expanded;
+}
+
 /**
  * gtk_cell_renderer_class_set_accessible_type:
  * @renderer_class: class to set the accessible type for

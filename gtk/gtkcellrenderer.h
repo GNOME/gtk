@@ -283,6 +283,21 @@ gboolean         gtk_cell_renderer_get_sensitive  (GtkCellRenderer      *cell);
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_cell_renderer_is_activatable (GtkCellRenderer      *cell);
 
+GDK_AVAILABLE_IN_ALL
+void             gtk_cell_renderer_set_is_expander (GtkCellRenderer     *cell,
+                                                    gboolean             is_expander);
+GDK_AVAILABLE_IN_ALL
+gboolean         gtk_cell_renderer_get_is_expander (GtkCellRenderer     *cell);
+
+GDK_AVAILABLE_IN_ALL
+void             gtk_cell_renderer_set_is_expanded (GtkCellRenderer     *cell,
+                                                    gboolean             is_expander);
+GDK_AVAILABLE_IN_ALL
+gboolean         gtk_cell_renderer_get_is_expanded (GtkCellRenderer     *cell);
+
+
+
+
 /* For use by cell renderer implementations only */
 GDK_AVAILABLE_IN_ALL
 void             gtk_cell_renderer_stop_editing   (GtkCellRenderer      *cell,
