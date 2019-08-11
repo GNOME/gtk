@@ -120,17 +120,12 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
     }
   else if (priv->type == GTK_COLOR_SCALE_ALPHA)
     {
-      cairo_t *cr;
       graphene_point_t start, end;
-
-      cr = gtk_snapshot_append_cairo (snapshot,
-                                      &GRAPHENE_RECT_INIT(0, 0, width, height));
+      const GdkRGBA *color;
 
       if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL &&
           gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
         {
-          cairo_translate (cr, width, 0);
-          cairo_scale (cr, -1, 1);
           graphene_point_init (&start, width, 0);
           graphene_point_init (&end, 0, 0);
         }
@@ -140,21 +135,7 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
           graphene_point_init (&end, width, 0);
         }
 
-      cairo_pattern_t *pattern;
-      cairo_matrix_t matrix;
-      GdkRGBA *color;
-
-      cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
-      cairo_paint (cr);
-      cairo_set_source_rgb (cr, 0.66, 0.66, 0.66);
-
-      pattern = _gtk_color_chooser_get_checkered_pattern ();
-      cairo_matrix_init_scale (&matrix, 0.125, 0.125);
-      cairo_pattern_set_matrix (pattern, &matrix);
-      cairo_mask (cr, pattern);
-      cairo_pattern_destroy (pattern);
-
-      cairo_destroy (cr);
+      _gtk_color_chooser_snapshot_checkered_pattern (snapshot, width, height);
 
       color = &priv->color;
 

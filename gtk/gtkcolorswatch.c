@@ -85,40 +85,18 @@ swatch_snapshot (GtkWidget   *widget,
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
   GtkColorSwatchPrivate *priv = gtk_color_swatch_get_instance_private (swatch);
+  const int width = gtk_widget_get_width (widget);
+  const int height = gtk_widget_get_height (widget);
 
   if (priv->has_color)
     {
-      cairo_pattern_t *pattern;
-      cairo_matrix_t matrix;
-
       if (priv->use_alpha && !gdk_rgba_is_opaque (&priv->color))
         {
-          cairo_t *cr;
-
-          cr = gtk_snapshot_append_cairo (snapshot,
-                                          &GRAPHENE_RECT_INIT (
-                                              0, 0,
-                                              gtk_widget_get_width (widget),
-                                              gtk_widget_get_height (widget)));
-          cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
-          cairo_paint (cr);
-
-          pattern = _gtk_color_chooser_get_checkered_pattern ();
-          cairo_matrix_init_scale (&matrix, 0.125, 0.125);
-          cairo_pattern_set_matrix (pattern, &matrix);
-
-          cairo_set_source_rgb (cr, 0.66, 0.66, 0.66);
-          cairo_mask (cr, pattern);
-          cairo_pattern_destroy (pattern);
-
-          cairo_destroy (cr);
+          _gtk_color_chooser_snapshot_checkered_pattern (snapshot, width, height);
 
           gtk_snapshot_append_color (snapshot,
                                      &priv->color,
-                                     &GRAPHENE_RECT_INIT (
-                                         0, 0,
-                                         gtk_widget_get_width (widget),
-                                         gtk_widget_get_height (widget)));
+                                     &GRAPHENE_RECT_INIT (0, 0, width, height));
         }
       else
         {
@@ -128,10 +106,7 @@ swatch_snapshot (GtkWidget   *widget,
 
           gtk_snapshot_append_color (snapshot,
                                      &color,
-                                     &GRAPHENE_RECT_INIT (
-                                         0, 0,
-                                         gtk_widget_get_width (widget),
-                                         gtk_widget_get_height (widget)));
+                                     &GRAPHENE_RECT_INIT (0, 0, width, height));
         }
     }
 
