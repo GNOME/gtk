@@ -2122,9 +2122,18 @@ render_repeat_node (GskGLRenderer   *self,
   op.repeat.child_bounds[3] = node->bounds.size.height / child_bounds->size.height;
 
   op.repeat.texture_rect[0] = region.x;
-  op.repeat.texture_rect[1] = region.y;
   op.repeat.texture_rect[2] = region.x2;
-  op.repeat.texture_rect[3] = region.y2;
+
+  if (is_offscreen)
+    {
+      op.repeat.texture_rect[1] = region.y2;
+      op.repeat.texture_rect[3] = region.y;
+    }
+  else
+    {
+      op.repeat.texture_rect[1] = region.y;
+      op.repeat.texture_rect[3] = region.y2;
+    }
 
   ops_add (builder, &op);
 
