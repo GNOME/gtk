@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-27 04:03+0000\n"
-"PO-Revision-Date: 2019-07-27 15:20+0200\n"
+"POT-Creation-Date: 2019-08-10 07:25+0000\n"
+"PO-Revision-Date: 2019-08-11 14:35+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -881,15 +881,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "Za_mknij"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:421 gtk/gtkwindow.c:6737
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:421 gtk/gtkwindow.c:6741
 msgid "Minimize"
 msgstr "Zminimalizuj"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:444 gtk/gtkwindow.c:6746
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:444 gtk/gtkwindow.c:6750
 msgid "Maximize"
 msgstr "Zmaksymalizuj"
 
-#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:444 gtk/gtkwindow.c:6703
+#: gtk/a11y/gtkimageaccessible.c:62 gtk/gtkheaderbar.c:444 gtk/gtkwindow.c:6707
 msgid "Restore"
 msgstr "Przywróć"
 
@@ -1876,19 +1876,19 @@ msgid "White"
 msgstr "Biały"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:549
+#: gtk/gtkcolorchooserwidget.c:548
 msgid "Custom"
 msgstr "Niestandardowy"
 
-#: gtk/gtkcolorchooserwidget.c:560
+#: gtk/gtkcolorchooserwidget.c:559
 msgid "Custom color"
 msgstr "Niestandardowy kolor"
 
-#: gtk/gtkcolorchooserwidget.c:561
+#: gtk/gtkcolorchooserwidget.c:560
 msgid "Create a custom color"
 msgstr "Tworzy niestandardowy kolor"
 
-#: gtk/gtkcolorchooserwidget.c:580
+#: gtk/gtkcolorchooserwidget.c:579
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "%d. niestandardowy kolor: %s"
@@ -2061,9 +2061,9 @@ msgstr "Plik o tej nazwie już istnieje"
 #: gtk/gtkmountoperation.c:592 gtk/gtkpagesetupunixdialog.c:210
 #: gtk/gtkprintbackend.c:657 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:680 gtk/gtkprintunixdialog.c:746
-#: gtk/gtkwindow.c:9025 gtk/inspector/css-editor.c:237
+#: gtk/gtkwindow.c:9030 gtk/inspector/css-editor.c:237
 #: gtk/inspector/recorder.c:1026 gtk/ui/gtkappchooserdialog.ui:46
-#: gtk/ui/gtkassistant.ui:50 gtk/ui/gtkcolorchooserdialog.ui:28
+#: gtk/ui/gtkassistant.ui:50 gtk/ui/gtkcolorchooserdialog.ui:27
 #: gtk/ui/gtkfontchooserdialog.ui:22
 msgid "_Cancel"
 msgstr "_Anuluj"
@@ -2162,7 +2162,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Jeśli element zostanie usunięty, to zostanie on bezpowrotnie utracony."
 
 #: gtk/gtkfilechooserwidget.c:1465 gtk/gtkfilechooserwidget.c:2199
-#: gtk/gtklabel.c:6104 gtk/gtktext.c:5781 gtk/gtktextview.c:8667
+#: gtk/gtklabel.c:6106 gtk/gtktext.c:5781 gtk/gtktextview.c:8667
 msgid "_Delete"
 msgstr "_Usuń"
 
@@ -2458,16 +2458,16 @@ msgstr "Utworzenie kontekstu OpenGL się nie powiodło"
 msgid "Application menu"
 msgstr "Menu programu"
 
-#: gtk/gtkheaderbar.c:462 gtk/gtkwindow.c:6773
+#: gtk/gtkheaderbar.c:462 gtk/gtkwindow.c:6777
 msgid "Close"
 msgstr "Zamknij"
 
-#: gtk/gtkicontheme.c:2295
+#: gtk/gtkicontheme.c:2309
 #, c-format
 msgid "Icon “%s” not present in theme %s"
 msgstr "Brak ikony „%s” w motywie %s"
 
-#: gtk/gtkicontheme.c:3741 gtk/gtkicontheme.c:4091
+#: gtk/gtkicontheme.c:3755 gtk/gtkicontheme.c:4105
 msgid "Failed to load icon"
 msgstr "Wczytanie ikony się nie powiodło"
 
@@ -2487,27 +2487,27 @@ msgstr "Ostrzeżenie"
 msgid "Error"
 msgstr "Błąd"
 
-#: gtk/gtklabel.c:6101 gtk/gtktext.c:5769 gtk/gtktextview.c:8655
+#: gtk/gtklabel.c:6103 gtk/gtktext.c:5769 gtk/gtktextview.c:8655
 msgid "Cu_t"
 msgstr "_Wytnij"
 
-#: gtk/gtklabel.c:6102 gtk/gtktext.c:5773 gtk/gtktextview.c:8659
+#: gtk/gtklabel.c:6104 gtk/gtktext.c:5773 gtk/gtktextview.c:8659
 msgid "_Copy"
 msgstr "S_kopiuj"
 
-#: gtk/gtklabel.c:6103 gtk/gtktext.c:5777 gtk/gtktextview.c:8663
+#: gtk/gtklabel.c:6105 gtk/gtktext.c:5777 gtk/gtktextview.c:8663
 msgid "_Paste"
 msgstr "Wk_lej"
 
-#: gtk/gtklabel.c:6109 gtk/gtktext.c:5790 gtk/gtktextview.c:8676
+#: gtk/gtklabel.c:6111 gtk/gtktext.c:5790 gtk/gtktextview.c:8676
 msgid "Select _All"
 msgstr "Z_aznacz wszystko"
 
-#: gtk/gtklabel.c:6114
+#: gtk/gtklabel.c:6116
 msgid "_Open Link"
 msgstr "_Otwórz odnośnik"
 
-#: gtk/gtklabel.c:6118
+#: gtk/gtklabel.c:6120
 msgid "Copy _Link Address"
 msgstr "S_kopiuj adres odnośnika"
 
@@ -2609,7 +2609,7 @@ msgid "%d:%02d"
 msgstr "%d∶%02d"
 
 #: gtk/gtkmessagedialog.c:783 gtk/gtkmessagedialog.c:801
-#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:9026
+#: gtk/gtkprintbackend.c:658 gtk/gtkwindow.c:9031
 msgid "_OK"
 msgstr "_OK"
 
@@ -3004,7 +3004,7 @@ msgstr "Wy_suń"
 msgid "_Detect Media"
 msgstr "Wy_kryj nośnik"
 
-#: gtk/gtkplacessidebar.c:4124 gtk/gtkplacesview.c:1102
+#: gtk/gtkplacessidebar.c:4123 gtk/gtkplacesview.c:1102
 msgid "Computer"
 msgstr "Komputer"
 
@@ -3129,7 +3129,7 @@ msgid "Select a filename"
 msgstr "Wybór nazwy pliku"
 
 #: gtk/gtkprinteroptionwidget.c:546 gtk/ui/gtkappchooserdialog.ui:51
-#: gtk/ui/gtkcolorchooserdialog.ui:33 gtk/ui/gtkfontchooserdialog.ui:27
+#: gtk/ui/gtkcolorchooserdialog.ui:32 gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Select"
 msgstr "_Wybierz"
 
@@ -3540,24 +3540,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d%%"
 
-#: gtk/gtkwindow.c:6721
+#: gtk/gtkwindow.c:6725
 msgid "Move"
 msgstr "Przenieś"
 
-#: gtk/gtkwindow.c:6729
+#: gtk/gtkwindow.c:6733
 msgid "Resize"
 msgstr "Zmień rozmiar"
 
-#: gtk/gtkwindow.c:6760
+#: gtk/gtkwindow.c:6764
 msgid "Always on Top"
 msgstr "Zawsze na wierzchu"
 
-#: gtk/gtkwindow.c:9013
+#: gtk/gtkwindow.c:9018
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Użyć Inspektora biblioteki GTK?"
 
-#: gtk/gtkwindow.c:9015
+#: gtk/gtkwindow.c:9020
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3568,7 +3568,7 @@ msgstr ""
 "i modyfikowanie wnętrza programu GTK. Jego użycie może spowodować awarię lub "
 "uszkodzenie programu."
 
-#: gtk/gtkwindow.c:9020
+#: gtk/gtkwindow.c:9025
 msgid "Don’t show this message again"
 msgstr "Bez wyświetlania ponownie"
 
@@ -3663,22 +3663,22 @@ msgstr "Wartość"
 msgid "Show data"
 msgstr "Wyświetla dane"
 
-#: gtk/inspector/general.c:342
+#: gtk/inspector/general.c:343
 msgctxt "GL version"
 msgid "None"
 msgstr "Brak"
 
-#: gtk/inspector/general.c:343
+#: gtk/inspector/general.c:344
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Brak"
 
-#: gtk/inspector/general.c:445
+#: gtk/inspector/general.c:446
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Brak"
 
-#: gtk/inspector/general.c:446 gtk/inspector/general.c:447
+#: gtk/inspector/general.c:447 gtk/inspector/general.c:448
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Brak"
@@ -3695,39 +3695,43 @@ msgstr "Mechanizm GDK"
 msgid "GSK Renderer"
 msgstr "Mechanizm rysowania GSK"
 
-#: gtk/inspector/general.ui:118 gtk/ui/gtkplacesview.ui:77
+#: gtk/inspector/general.ui:108
+msgid "Pango Fontmap"
+msgstr "Mapa czcionki Pango"
+
+#: gtk/inspector/general.ui:145 gtk/ui/gtkplacesview.ui:77
 msgid "Prefix"
 msgstr "Przedrostek"
 
-#: gtk/inspector/general.ui:324
+#: gtk/inspector/general.ui:351
 msgid "Display"
 msgstr "Ekran"
 
-#: gtk/inspector/general.ui:352
+#: gtk/inspector/general.ui:379
 msgid "RGBA Visual"
 msgstr "Wizualne RGBA"
 
-#: gtk/inspector/general.ui:379
+#: gtk/inspector/general.ui:406
 msgid "Composited"
 msgstr "Składane"
 
-#: gtk/inspector/general.ui:416
+#: gtk/inspector/general.ui:443
 msgid "GL Version"
 msgstr "Wersja GL"
 
-#: gtk/inspector/general.ui:444
+#: gtk/inspector/general.ui:471
 msgid "GL Vendor"
 msgstr "Dostawca GL"
 
-#: gtk/inspector/general.ui:482
+#: gtk/inspector/general.ui:509
 msgid "Vulkan Device"
 msgstr "Urządzenie Vulkan"
 
-#: gtk/inspector/general.ui:510
+#: gtk/inspector/general.ui:537
 msgid "Vulkan API version"
 msgstr "Wersja API Vulkan"
 
-#: gtk/inspector/general.ui:538
+#: gtk/inspector/general.ui:565
 msgid "Vulkan driver version"
 msgstr "Wersja sterownika Vulkan"
 
