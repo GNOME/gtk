@@ -2024,7 +2024,7 @@ update_slider_position (GtkRange *range,
   gtk_widget_translate_coordinates (GTK_WIDGET (range), priv->trough_widget,
                                     mouse_x, mouse_y, &mouse_x, &mouse_y);
 
-  if (priv->zoom && 
+  if (priv->zoom &&
       gtk_widget_compute_bounds (priv->trough_widget, priv->trough_widget, &trough_bounds))
     {
       zoom = MIN(1.0, (priv->orientation == GTK_ORIENTATION_VERTICAL ?
@@ -2044,14 +2044,20 @@ update_slider_position (GtkRange *range,
   if (priv->slide_initial_slider_position == -1)
     {
       graphene_rect_t slider_bounds;
+      double zoom_divisor;
 
       if (!gtk_widget_compute_bounds (priv->slider_widget, GTK_WIDGET (range), &slider_bounds))
         graphene_rect_init (&slider_bounds, 0, 0, 0, 0);
 
-      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-        priv->slide_initial_slider_position = (zoom * (mouse_y - priv->slide_initial_coordinate_delta) - slider_bounds.origin.y) / (zoom - 1.0);
+      if (zoom == 1.0)
+        zoom_divisor = 1.0;
       else
-        priv->slide_initial_slider_position = (zoom * (mouse_x - priv->slide_initial_coordinate_delta) - slider_bounds.origin.x) / (zoom - 1.0);
+        zoom_divisor = zoom - 1.0;
+
+      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+        priv->slide_initial_slider_position = (zoom * (mouse_y - priv->slide_initial_coordinate_delta) - slider_bounds.origin.y) / zoom_divisor;
+      else
+        priv->slide_initial_slider_position = (zoom * (mouse_x - priv->slide_initial_coordinate_delta) - slider_bounds.origin.x) / zoom_divisor;
     }
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
