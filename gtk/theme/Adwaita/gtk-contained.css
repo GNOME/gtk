@@ -731,9 +731,13 @@ window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparen
 
 .titlebar:not(headerbar) separator { background-color: #cdc7c2; }
 
-window.devel headerbar.titlebar:not(.selection-mode) { background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to left, #e3eaf2 8%, #f6f5f4 25%); color: rgba(46, 52, 54, 0.1); }
+window.devel headerbar.titlebar:not(.selection-mode) { background: #f6f5f4 -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to right, transparent 65%, rgba(53, 132, 228, 0.2)), linear-gradient(to top, #d8d4d0, #dfdcd8 3px, #edebe9); color: rgba(46, 52, 54, 0.1); }
 
 window.devel headerbar.titlebar:not(.selection-mode) label { color: #2e3436; }
+
+window.devel headerbar.titlebar:not(.selection-mode):backdrop { background: #f6f5f4 -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, image(#f6f5f4); /* background-color would flash */ color: rgba(46, 52, 54, 0.05); }
+
+window.devel headerbar.titlebar:not(.selection-mode):backdrop label { color: #929595; }
 
 /************ Pathbars * */
 .path-bar button.text-button, .path-bar button.image-button, .path-bar button { padding-left: 4px; padding-right: 4px; }
@@ -2085,7 +2089,7 @@ popover.menu box.inline-buttons { border-radius: 5px; border-style: none; border
 
 popover.menu box.circular-buttons { padding-bottom: 5px; }
 
-popover.menu arrow, popover.menu.background contents { background-color: #ffffff; }
+popover.menu > arrow, popover.menu.background > contents { background-color: #ffffff; }
 
 popover.menu.background separator { margin: 5px 0px; }
 

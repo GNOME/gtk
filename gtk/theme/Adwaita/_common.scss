@@ -1765,14 +1765,33 @@ headerbar { // headerbar border rounding
 
 // Development versions of apps to use a differently styled headerbar
 
-window.devel {    
+window.devel {
   headerbar.titlebar:not(.selection-mode) {
-    background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat,
-                linear-gradient(to left, mix($selected_bg_color, $bg_color, 10%) 8%, $bg_color 25%);
+    $c: darken($bg_color, 10%);
+    $gradient: -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat,
+               linear-gradient(to right, transparent 65%, transparentize($selected_bg_color, 0.8)),
+               linear-gradient(to top, darken($c, 3%), $c 3px, lighten($c, 6%));
+    @if $variant == 'dark' {
+      $gradient: -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat,
+                 linear-gradient(to right, transparent 65%, transparentize($selected_bg_color, 0.9)),
+                 linear-gradient(to top, lighten($c, 3%) 3px, lighten($c, 5%));
+    }
+
+    background: $bg_color $gradient;
     color: transparentize($fg_color,.9);
-    
+
     label { color: $fg_color; }
+
+    &:backdrop {
+      background: $bg_color -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat,
+                  image($bg_color); /* background-color would flash */
+      color: transparentize($fg_color,.95);
+
+      label { color: $backdrop_fg_color; }
+    }
   }
+
+
 }
 
 /************

@@ -723,9 +723,13 @@ window.csd > .titlebar:not(headerbar) { padding: 0; background-color: transparen
 
 .titlebar:not(headerbar) separator { background-color: #1b1b1b; }
 
-window.devel headerbar.titlebar:not(.selection-mode) { background: transparent -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to left, #32383f 8%, #353535 25%); color: rgba(238, 238, 236, 0.1); }
+window.devel headerbar.titlebar:not(.selection-mode) { background: #353535 -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, linear-gradient(to right, transparent 65%, rgba(21, 83, 158, 0.1)), linear-gradient(to top, #232323 3px, #282828); color: rgba(238, 238, 236, 0.1); }
 
 window.devel headerbar.titlebar:not(.selection-mode) label { color: #eeeeec; }
+
+window.devel headerbar.titlebar:not(.selection-mode):backdrop { background: #353535 -gtk-icontheme("system-run-symbolic") 90% 0/256px 256px no-repeat, image(#353535); /* background-color would flash */ color: rgba(238, 238, 236, 0.05); }
+
+window.devel headerbar.titlebar:not(.selection-mode):backdrop label { color: #919190; }
 
 /************ Pathbars * */
 .path-bar button.text-button, .path-bar button.image-button, .path-bar button { padding-left: 4px; padding-right: 4px; }
@@ -2069,7 +2073,7 @@ popover.menu box.inline-buttons { border-radius: 5px; border-style: none; border
 
 popover.menu box.circular-buttons { padding-bottom: 5px; }
 
-popover.menu arrow, popover.menu.background contents { background-color: #2f2f2f; }
+popover.menu > arrow, popover.menu.background > contents { background-color: #2f2f2f; }
 
 popover.menu.background separator { margin: 5px 0px; }
 
