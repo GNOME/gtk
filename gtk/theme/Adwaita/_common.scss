@@ -1170,7 +1170,8 @@ spinbutton {
       @extend %spinbutton_horz_entry;
     }
 
-    > box > button.image-button {
+    > box > button.image-button.up,
+    > box > button.image-button.down {
       min-height: 16px;
       margin: 0;
       padding-bottom: 0;
