@@ -5625,7 +5625,7 @@ msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "La posició del separador emmarcat en píxels (0 significa de tot el trajecte "
-"fins l'esquerra/part superior)"
+"fins a l'esquerra/part superior)"
 
 #: gtk/gtkpaned.c:376
 msgid "Position Set"
@@ -5885,7 +5885,7 @@ msgstr "Transicions habilitades"
 
 #: gtk/gtkpopover.c:1772
 msgid "Whether show/hide transitions are enabled or not"
-msgstr "Si mostra/amaga transicions està habilitat o no."
+msgstr "Si mostra/amaga transicions està habilitat o no"
 
 #: gtk/gtkpopover.c:1785
 msgid "Constraint"

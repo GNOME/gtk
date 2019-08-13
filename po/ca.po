@@ -1711,7 +1711,7 @@ msgstr "S'estan obrint fitxers «%s»."
 #: gtk/gtkappchooserdialog.c:215
 #, c-format
 msgid "No applications found for “%s” files"
-msgstr "No hi ha cap aplicació disponible per fitxers «%s»."
+msgstr "No hi ha cap aplicació disponible per fitxers «%s»"
 
 #: gtk/gtkappchooserdialog.c:308
 msgid "Forget association"
@@ -2313,7 +2313,7 @@ msgstr "Altre…"
 
 #: gtk/gtkfilechooserdialog.c:542
 msgid "_Name"
-msgstr "_Nom:"
+msgstr "_Nom"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:630
@@ -3195,7 +3195,7 @@ msgstr "No es pot iniciar «%s»"
 #: gtk/gtkplacessidebar.c:2430
 #, c-format
 msgid "Error unlocking “%s”"
-msgstr "S'produït un error desbloquejant «%s»."
+msgstr "S'produït un error desbloquejant «%s»"
 
 #: gtk/gtkplacessidebar.c:2432
 #, c-format
