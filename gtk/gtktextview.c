@@ -3522,7 +3522,7 @@ gtk_text_view_reset_cursor_blink (GtkTextView *text_view)
  * @text_view: a #GtkTextView
  *
  * Moves the cursor to the currently visible region of the
- * buffer, it it isn’t there already.
+ * buffer, if it isn’t there already.
  *
  * Returns: %TRUE if the cursor had to be moved.
  **/
