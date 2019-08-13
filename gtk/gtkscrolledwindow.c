@@ -1173,13 +1173,12 @@ get_scroll_unit (GtkScrolledWindow *sw,
 }
 
 static gboolean
-captured_event_cb (GtkWidget *widget,
-                   GdkEvent  *event)
+captured_scroll_cb (GtkEventControllerScroll *scroll,
+                    double                    delta_x,
+                    double                    delta_y,
+                    GtkScrolledWindow        *scrolled_window)
 {
-  GtkScrolledWindow *sw = GTK_SCROLLED_WINDOW (widget);
-
-  if (gdk_event_get_event_type (event) == GDK_SCROLL)
-    gtk_scrolled_window_cancel_deceleration (sw);
+  gtk_scrolled_window_cancel_deceleration (scrolled_window);
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -1972,8 +1971,6 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_scrolled_window_set_kinetic_scrolling (scrolled_window, TRUE);
   gtk_scrolled_window_set_capture_button_press (scrolled_window, TRUE);
 
-  _gtk_widget_set_captured_event_handler (widget, captured_event_cb);
-
   controller = gtk_event_controller_motion_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   g_signal_connect_swapped (controller, "motion",
@@ -2011,6 +2008,12 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   g_signal_connect (controller, "decelerate",
                     G_CALLBACK (scroll_controller_decelerate), scrolled_window);
   gtk_widget_add_controller (widget, controller);
+
+  controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES |
+                                                GTK_EVENT_CONTROLLER_SCROLL_KINETIC);
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  g_signal_connect (controller, "scroll",
+                    G_CALLBACK (captured_scroll_cb), scrolled_window);
 
   controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "leave",
