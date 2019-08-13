@@ -5176,13 +5176,6 @@ gtk_widget_event (GtkWidget       *widget,
   return gtk_widget_event_internal (widget, event);
 }
 
-void
-_gtk_widget_set_captured_event_handler (GtkWidget               *widget,
-                                        GtkCapturedEventHandler  callback)
-{
-  g_object_set_data (G_OBJECT (widget), I_("captured-event-handler"), callback);
-}
-
 gboolean
 gtk_widget_run_controllers (GtkWidget           *widget,
 			    const GdkEvent      *event,
@@ -5242,7 +5235,6 @@ _gtk_widget_captured_event (GtkWidget      *widget,
                             const GdkEvent *event)
 {
   gboolean return_val = FALSE;
-  GtkCapturedEventHandler handler;
   GdkEvent *event_copy;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
@@ -5255,19 +5247,8 @@ _gtk_widget_captured_event (GtkWidget      *widget,
   translate_event_coordinates (event_copy, widget);
 
   return_val = gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_CAPTURE);
-
-  handler = g_object_get_data (G_OBJECT (widget), I_("captured-event-handler"));
-  if (!handler)
-    goto out;
-
-  g_object_ref (widget);
-
-  return_val |= handler (widget, event_copy);
   return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event_copy);
 
-  g_object_unref (widget);
-
-out:
   g_object_unref (event_copy);
 
   return return_val;

@@ -281,11 +281,6 @@ void              _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
                                                             gpointer   user_data);
 GtkStyleContext * _gtk_widget_peek_style_context           (GtkWidget *widget);
 
-typedef gboolean (*GtkCapturedEventHandler) (GtkWidget *widget, GdkEvent *event);
-
-void              _gtk_widget_set_captured_event_handler (GtkWidget               *widget,
-                                                          GtkCapturedEventHandler  handler);
-
 gboolean          _gtk_widget_captured_event               (GtkWidget      *widget,
                                                             const GdkEvent *event);
 
