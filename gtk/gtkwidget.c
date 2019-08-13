@@ -652,8 +652,8 @@ static void             gtk_widget_propagate_state              (GtkWidget      
                                                                  const GtkStateData *data);
 static void             gtk_widget_update_alpha                 (GtkWidget        *widget);
 
-static gint		gtk_widget_event_internal		(GtkWidget	  *widget,
-                                                                 const GdkEvent   *event);
+static gboolean         gtk_widget_event_internal               (GtkWidget        *widget,
+                                                                 GdkEvent         *event);
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
 								 gboolean	   group_cycling);
 static void             gtk_widget_real_measure                 (GtkWidget        *widget,
@@ -5167,8 +5167,8 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
  *               the event was handled)
  **/
 gboolean
-gtk_widget_event (GtkWidget       *widget,
-		  const GdkEvent  *event)
+gtk_widget_event (GtkWidget *widget,
+                  GdkEvent  *event)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
@@ -5229,13 +5229,16 @@ gtk_widget_run_controllers (GtkWidget           *widget,
 
 static gboolean
 translate_event_coordinates (GdkEvent  *event,
+                             double     event_x,
+                             double     event_y,
                              GtkWidget *widget);
 gboolean
-_gtk_widget_captured_event (GtkWidget      *widget,
-                            const GdkEvent *event)
+_gtk_widget_captured_event (GtkWidget *widget,
+                            GdkEvent  *event)
 {
   gboolean return_val = FALSE;
-  GdkEvent *event_copy;
+  double old_x, old_y;
+  gboolean reset_event = FALSE;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (WIDGET_REALIZED_FOR_EVENT (widget, event), TRUE);
@@ -5243,13 +5246,17 @@ _gtk_widget_captured_event (GtkWidget      *widget,
   if (!event_surface_is_still_viewable (event))
     return TRUE;
 
-  event_copy = gdk_event_copy (event);
-  translate_event_coordinates (event_copy, widget);
+  if (gdk_event_get_coords (event, &old_x, &old_y))
+    {
+      reset_event = TRUE;
+      translate_event_coordinates (event, old_x, old_y, widget);
+    }
 
-  return_val = gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_CAPTURE);
-  return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event_copy);
+  return_val = gtk_widget_run_controllers (widget, event, GTK_PHASE_CAPTURE);
+  return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
 
-  g_object_unref (event_copy);
+  if (reset_event)
+    gdk_event_set_coords (event, old_x, old_y);
 
   return return_val;
 }
@@ -5293,20 +5300,18 @@ event_surface_is_still_viewable (const GdkEvent *event)
 
 static gboolean
 translate_event_coordinates (GdkEvent  *event,
+                             double     event_x,
+                             double     event_y,
                              GtkWidget *widget)
 {
   GtkWidget *event_widget;
-  double x, y;
   graphene_point_t p;
-
-  if (!gdk_event_get_coords (event, &x, &y))
-    return TRUE;
 
   event_widget = gtk_get_event_widget (event);
 
   if (!gtk_widget_compute_point (event_widget,
                                  widget,
-                                 &GRAPHENE_POINT_INIT (x, y),
+                                 &GRAPHENE_POINT_INIT (event_x, event_y),
                                  &p))
     return FALSE;
 
@@ -5316,11 +5321,12 @@ translate_event_coordinates (GdkEvent  *event,
 }
 
 static gboolean
-gtk_widget_event_internal (GtkWidget      *widget,
-                           const GdkEvent *event)
+gtk_widget_event_internal (GtkWidget *widget,
+                           GdkEvent  *event)
 {
   gboolean return_val = FALSE;
-  GdkEvent *event_copy;
+  gboolean reset_event = FALSE;
+  double old_x, old_y;
 
   /* We check only once for is-still-visible; if someone
    * hides the window in on of the signals on the widget,
@@ -5333,21 +5339,25 @@ gtk_widget_event_internal (GtkWidget      *widget,
   if (!_gtk_widget_get_mapped (widget))
     return FALSE;
 
-  event_copy = gdk_event_copy (event);
+  if (gdk_event_get_coords (event, &old_x, &old_y))
+    {
+      reset_event = TRUE;
+      translate_event_coordinates (event, old_x, old_y, widget);
+    }
 
-  translate_event_coordinates (event_copy, widget);
-
-  if (widget == gtk_get_event_target (event_copy))
-    return_val |= gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_TARGET);
+  if (widget == gtk_get_event_target (event))
+    return_val |= gtk_widget_run_controllers (widget, event, GTK_PHASE_TARGET);
 
   if (return_val == FALSE)
-    return_val |= gtk_widget_run_controllers (widget, event_copy, GTK_PHASE_BUBBLE);
-  g_object_unref (event_copy);
+    return_val |= gtk_widget_run_controllers (widget, event, GTK_PHASE_BUBBLE);
 
   if (return_val == FALSE &&
       (event->any.type == GDK_KEY_PRESS ||
        event->any.type == GDK_KEY_RELEASE))
     return_val |= gtk_bindings_activate_event (G_OBJECT (widget), (GdkEventKey *) event);
+
+  if (reset_event)
+    gdk_event_set_coords (event, old_x, old_y);
 
   return return_val;
 }
