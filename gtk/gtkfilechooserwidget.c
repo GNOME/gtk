@@ -337,6 +337,7 @@ struct _GtkFileChooserWidgetPrivate {
   GFile *current_folder;
   GFile *preview_file;
   char *preview_display_name;
+  GFile *renamed_file;
 
   GtkTreeViewColumn *list_name_column;
   GtkCellRenderer *list_name_renderer;
@@ -709,6 +710,7 @@ gtk_file_chooser_widget_finalize (GObject *object)
   g_clear_object (&priv->current_filter);
   g_clear_object (&priv->current_folder);
   g_clear_object (&priv->browse_path_bar_size_group);
+  g_clear_object (&priv->renamed_file);
 
   /* Free all the Models we have */
   stop_loading_and_clear_list_model (impl, FALSE);
@@ -1579,6 +1581,8 @@ rename_file_rename_clicked (GtkButton            *button,
   new_name = gtk_editable_get_text (GTK_EDITABLE (priv->rename_file_name_entry));
   dest = g_file_get_parent (priv->rename_file_source_file);
 
+  g_clear_object (&priv->renamed_file);
+
   if (dest)
     {
       GFile *child;
@@ -1590,6 +1594,12 @@ rename_file_rename_clicked (GtkButton            *button,
           if (!g_file_move (priv->rename_file_source_file, child, G_FILE_COPY_NONE,
                             NULL, NULL, NULL, &error))
             error_dialog (impl, _("The file could not be renamed"), error);
+          else
+            {
+              /* Rename succeded, save renamed file so it will
+               * be revealed by our "row-changed" handler */
+              priv->renamed_file = g_object_ref (child);
+            }
 
           g_object_unref (child);
         }
@@ -4607,6 +4617,35 @@ browse_files_model_finished_loading_cb (GtkFileSystemModel   *model,
   profile_end ("end", NULL);
 }
 
+/* Callback used when file system model adds or updates a file.
+ * We detect here when a new renamed file appears and reveal it */
+static void
+browse_files_model_row_changed_cb (GtkTreeModel         *model,
+                                   GtkTreePath          *path,
+                                   GtkTreeIter          *iter,
+                                   GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
+  GFile *file;
+  GSList files;
+
+  if (priv->renamed_file)
+    {
+      gtk_tree_model_get (model, iter, MODEL_COL_FILE, &file, -1);
+      if (g_file_equal (priv->renamed_file, file))
+        {
+          g_clear_object (&priv->renamed_file);
+
+          files.data = (gpointer) file;
+          files.next = NULL;
+
+          show_and_select_files (impl, &files);
+        }
+
+      g_object_unref (file);
+    }
+}
+
 static void
 stop_loading_and_clear_list_model (GtkFileChooserWidget *impl,
                                    gboolean              remove)
@@ -5126,6 +5165,9 @@ set_list_model (GtkFileChooserWidget  *impl,
 
   g_signal_connect (priv->browse_files_model, "finished-loading",
                     G_CALLBACK (browse_files_model_finished_loading_cb), impl);
+
+  g_signal_connect (priv->browse_files_model, "row-changed",
+                    G_CALLBACK (browse_files_model_row_changed_cb), impl);
 
   _gtk_file_system_model_set_filter (priv->browse_files_model, priv->current_filter);
 
@@ -8652,6 +8694,7 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   priv->recent_manager = gtk_recent_manager_get_default ();
   priv->create_folders = TRUE;
   priv->auto_selecting_first_row = FALSE;
+  priv->renamed_file = NULL;
 
   /* Ensure GTK+ private types used by the template
    * definition before calling gtk_widget_init_template()
