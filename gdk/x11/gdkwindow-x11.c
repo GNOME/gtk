@@ -1003,6 +1003,25 @@ connect_frame_clock (GdkWindow *window)
     }
 }
 
+static void
+clamp_window_size (GdkWindow *window,
+                   gint      *width,
+                   gint      *height)
+{
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
+
+  if (*width * impl->window_scale > 32767 ||
+      *height * impl->window_scale > 32767)
+    {
+      g_warning ("Native Windows wider or taller than 32767 pixels are not supported");
+
+      if (*width * impl->window_scale > 32767)
+        *width = 32767 / impl->window_scale;
+      if (*height  * impl->window_scale > 32767)
+        *height = 32767 /  impl->window_scale;
+    }
+}
+
 void
 _gdk_x11_display_create_window_impl (GdkDisplay    *display,
                                      GdkWindow     *window,
@@ -1101,16 +1120,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
       class = InputOnly;
     }
 
-  if (window->width * impl->window_scale > 32767 ||
-      window->height * impl->window_scale > 32767)
-    {
-      g_warning ("Native Windows wider or taller than 32767 pixels are not supported");
-
-      if (window->width * impl->window_scale > 32767)
-        window->width = 32767 / impl->window_scale;
-      if (window->height  * impl->window_scale > 32767)
-        window->height = 32767 /  impl->window_scale;
-    }
+  clamp_window_size (window, &window->width, &window->height);
 
   impl->unscaled_width = window->width * impl->window_scale;
   impl->unscaled_height = window->height * impl->window_scale;
@@ -1909,6 +1919,8 @@ gdk_window_x11_move_resize (GdkWindow *window,
     window_x11_move (window, x, y);
   else
     {
+      clamp_window_size (window, &width, &height);
+
       if (with_move)
         window_x11_move_resize (window, x, y, width, height);
       else
