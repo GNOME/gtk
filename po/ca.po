@@ -2025,7 +2025,7 @@ msgstr "Altre…"
 
 #: gtk/gtkfilechooserdialog.c:539
 msgid "_Name"
-msgstr "_Nom:"
+msgstr "_Nom"
 
 #: gtk/gtkfilechoosererrorstack.c:45
 msgid "A folder cannot be called “.”"
@@ -2285,7 +2285,7 @@ msgstr "No s'ha pogut llegir el contingut de la carpeta"
 #. Translators: see g_date_time_format() for details on the format
 #: gtk/gtkfilechooserwidget.c:4661 gtk/gtkfilechooserwidget.c:4709
 msgid "%H:%M"
-msgstr "%H:%M"
+msgstr "%-H:%M"
 
 #: gtk/gtkfilechooserwidget.c:4663 gtk/gtkfilechooserwidget.c:4711
 msgid "%l:%M %p"
@@ -2842,7 +2842,7 @@ msgstr "No es pot iniciar «%s»"
 #: gtk/gtkplacessidebar.c:2375
 #, c-format
 msgid "Error unlocking “%s”"
-msgstr "S'ha produït un error en desbloquejar «%s»."
+msgstr "S'ha produït un error en desbloquejar «%s»"
 
 #: gtk/gtkplacessidebar.c:2377
 #, c-format
