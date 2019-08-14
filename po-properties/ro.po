@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-10 07:24+0000\n"
-"PO-Revision-Date: 2019-08-14 08:27+0200\n"
+"POT-Creation-Date: 2019-08-14 06:33+0000\n"
+"PO-Revision-Date: 2019-08-14 11:06+0200\n"
 "Last-Translator: Daniel Șerbănescu <daniel [at] serbanescu [dot] dk>\n"
 "Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
@@ -4028,11 +4028,11 @@ msgstr "Etichetă de anulare"
 msgid "The label on the cancel button"
 msgstr "Etichetă de pe butonul anulează"
 
-#: gtk/gtkfilechooserwidget.c:8414 gtk/gtkfilechooserwidget.c:8415
+#: gtk/gtkfilechooserwidget.c:8460 gtk/gtkfilechooserwidget.c:8461
 msgid "Search mode"
 msgstr "Mod de căutare"
 
-#: gtk/gtkfilechooserwidget.c:8421 gtk/gtkfilechooserwidget.c:8422
+#: gtk/gtkfilechooserwidget.c:8467 gtk/gtkfilechooserwidget.c:8468
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:591
 msgid "Subtitle"
 msgstr "Subitlu"
@@ -5829,7 +5829,7 @@ msgstr "Relativ la"
 
 #: gtk/gtkpopover.c:1713
 msgid "Widget the bubble window points to"
-msgstr ""
+msgstr "Widget la care fereastra-balon indică"
 
 #: gtk/gtkpopover.c:1726
 msgid "Pointing to"
@@ -5837,11 +5837,11 @@ msgstr "Asociate la"
 
 #: gtk/gtkpopover.c:1727
 msgid "Rectangle the bubble window points to"
-msgstr ""
+msgstr "Dreptunghiul la care fereastra-balon indică"
 
 #: gtk/gtkpopover.c:1741
 msgid "Position to place the bubble window"
-msgstr ""
+msgstr "Poziția unde să se plaseze fereastra-balon"
 
 #: gtk/gtkpopover.c:1756
 msgid "Whether the popover is modal"
@@ -7838,7 +7838,7 @@ msgstr "Dispozitiv asociat GdkScreen"
 
 #: gtk/gtkstylecontext.c:236
 msgid "FrameClock"
-msgstr ""
+msgstr "FrameClock"
 
 #: gtk/gtkstylecontext.c:237
 msgid "The associated GdkFrameClock"
