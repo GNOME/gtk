@@ -128,7 +128,8 @@ void              gtk_scale_clear_marks        (GtkScale        *scale);
 GDK_AVAILABLE_IN_ALL
 void              gtk_scale_set_format_value_func (GtkScale                *scale,
                                                    GtkScaleFormatValueFunc  func,
-                                                   gpointer                 user_data);
+                                                   gpointer                 user_data,
+                                                   GDestroyNotify           destroy_notify);
 
 G_END_DECLS
 

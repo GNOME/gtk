@@ -1944,10 +1944,10 @@ activate (GApplication *app)
   g_timeout_add (100, (GSourceFunc)pulse_it, widget);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "scale3");
-  gtk_scale_set_format_value_func (GTK_SCALE (widget), scale_format_value, NULL);
+  gtk_scale_set_format_value_func (GTK_SCALE (widget), scale_format_value, NULL, NULL);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "scale4");
-  gtk_scale_set_format_value_func (GTK_SCALE (widget), scale_format_value_blank, NULL);
+  gtk_scale_set_format_value_func (GTK_SCALE (widget), scale_format_value_blank, NULL, NULL);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "box_for_context");
   model = (GMenuModel *)gtk_builder_get_object (builder, "new_style_context_menu_model");

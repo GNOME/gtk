@@ -150,6 +150,7 @@ struct _GtkScalePrivate
 
   GtkScaleFormatValueFunc format_value_func;
   gpointer format_value_func_user_data;
+  GDestroyNotify format_value_func_destroy_notify;
 
   guint         draw_value : 1;
   guint         value_pos  : 2;
@@ -1553,6 +1554,9 @@ gtk_scale_finalize (GObject *object)
 
   g_clear_pointer (&priv->value_widget, gtk_widget_unparent);
 
+  if (priv->format_value_func_destroy_notify)
+    priv->format_value_func_destroy_notify (priv->format_value_func_user_data);
+
   G_OBJECT_CLASS (gtk_scale_parent_class)->finalize (object);
 }
 
@@ -2040,6 +2044,7 @@ gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
  * @scale: a #GtkScale
  * @func: (nullable): function that formats the value
  * @user_data: (nullable): user data to pass to @func
+ * @destroy_notify: (nullable): destroy function for @user_data
  *
  * @func allows you to change how the scale value is displayed. The given
  * function will return an allocated string representing @value.
@@ -2051,7 +2056,8 @@ gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
 void
 gtk_scale_set_format_value_func (GtkScale                *scale,
                                  GtkScaleFormatValueFunc  func,
-                                 gpointer                 user_data)
+                                 gpointer                 user_data,
+                                 GDestroyNotify           destroy_notify)
 {
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkAdjustment *adjustment;
@@ -2059,8 +2065,12 @@ gtk_scale_set_format_value_func (GtkScale                *scale,
 
   g_return_if_fail (GTK_IS_SCALE (scale));
 
+  if (priv->format_value_func_destroy_notify)
+    priv->format_value_func_destroy_notify (priv->format_value_func_user_data);
+
   priv->format_value_func = func;
   priv->format_value_func_user_data = user_data;
+  priv->format_value_func_destroy_notify = destroy_notify;
 
   if (!priv->value_widget)
     return;
