@@ -122,8 +122,14 @@ gtk_scaler_dispose (GObject *object)
 
   if (self->paintable)
     {
-      g_signal_handlers_disconnect_by_func (self->paintable, gdk_paintable_invalidate_contents, self);
-      g_signal_handlers_disconnect_by_func (self->paintable, gdk_paintable_invalidate_size, self);
+      const guint flags = gdk_paintable_get_flags (self->paintable);
+
+      if ((flags & GDK_PAINTABLE_STATIC_CONTENTS) == 0)
+        g_signal_handlers_disconnect_by_func (self->paintable, gdk_paintable_invalidate_contents, self);
+
+      if ((flags & GDK_PAINTABLE_STATIC_SIZE) == 0)
+        g_signal_handlers_disconnect_by_func (self->paintable, gdk_paintable_invalidate_size, self);
+
       g_clear_object (&self->paintable);
     }
 
@@ -149,6 +155,7 @@ gtk_scaler_new (GdkPaintable *paintable,
                 double        scale_factor)
 {
   GtkScaler *self;
+  guint flags;
 
   g_return_val_if_fail (GDK_IS_PAINTABLE (paintable), NULL);
   g_return_val_if_fail (scale_factor > 0.0, NULL);
@@ -156,8 +163,14 @@ gtk_scaler_new (GdkPaintable *paintable,
   self = g_object_new (GTK_TYPE_SCALER, NULL);
 
   self->paintable = g_object_ref (paintable);
-  g_signal_connect_swapped (paintable, "invalidate-contents", G_CALLBACK (gdk_paintable_invalidate_contents), self);
-  g_signal_connect_swapped (paintable, "invalidate-size", G_CALLBACK (gdk_paintable_invalidate_size), self);
+  flags = gdk_paintable_get_flags (paintable);
+
+  if ((flags & GDK_PAINTABLE_STATIC_CONTENTS) == 0)
+    g_signal_connect_swapped (paintable, "invalidate-contents", G_CALLBACK (gdk_paintable_invalidate_contents), self);
+
+  if ((flags & GDK_PAINTABLE_STATIC_SIZE) == 0)
+    g_signal_connect_swapped (paintable, "invalidate-size", G_CALLBACK (gdk_paintable_invalidate_size), self);
+
   self->scale_factor = scale_factor;
 
   return GDK_PAINTABLE (self);
