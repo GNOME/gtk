@@ -96,9 +96,6 @@ struct _GtkSnapshotClass {
   GObjectClass           parent_class; /* it's really GdkSnapshotClass, but don't tell anyone! */
 };
 
-void                    gtk_snapshot_append_node_internal       (GtkSnapshot            *snapshot,
-                                                                 GskRenderNode          *node);
-
 GtkSnapshot *           gtk_snapshot_new_with_parent            (GtkSnapshot            *parent_snapshot);
 
 void                    gtk_snapshot_append_text                (GtkSnapshot            *snapshot,
