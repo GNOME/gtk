@@ -1044,6 +1044,25 @@ gtk_snapshot_pop_one (GtkSnapshot *snapshot)
   return node;
 }
 
+static void
+gtk_snapshot_append_node_internal (GtkSnapshot   *snapshot,
+                                   GskRenderNode *node)
+{
+  GtkSnapshotState *current_state;
+
+  current_state = gtk_snapshot_get_current_state (snapshot);
+
+  if (current_state)
+    {
+      g_ptr_array_add (snapshot->nodes, node);
+      current_state->n_nodes ++;
+    }
+  else
+    {
+      g_critical ("Tried appending a node to an already finished snapshot.");
+    }
+}
+
 static GskRenderNode *
 gtk_snapshot_pop_internal (GtkSnapshot *snapshot)
 {
@@ -1417,25 +1436,6 @@ gtk_snapshot_perspective (GtkSnapshot *snapshot,
 
   state = gtk_snapshot_get_current_state (snapshot);
   state->transform = gsk_transform_perspective (state->transform, depth);
-}
-
-void
-gtk_snapshot_append_node_internal (GtkSnapshot   *snapshot,
-                                   GskRenderNode *node)
-{
-  GtkSnapshotState *current_state;
-
-  current_state = gtk_snapshot_get_current_state (snapshot);
-
-  if (current_state)
-    {
-      g_ptr_array_add (snapshot->nodes, node);
-      current_state->n_nodes ++;
-    }
-  else
-    {
-      g_critical ("Tried appending a node to an already finished snapshot.");
-    }
 }
 
 /**
