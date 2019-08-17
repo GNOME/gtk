@@ -577,8 +577,8 @@ static gboolean
 gtk_css_image_linear_equal (GtkCssImage *image1,
                             GtkCssImage *image2)
 {
-  GtkCssImageLinear *linear1 = GTK_CSS_IMAGE_LINEAR (image1);
-  GtkCssImageLinear *linear2 = GTK_CSS_IMAGE_LINEAR (image2);
+  GtkCssImageLinear *linear1 = (GtkCssImageLinear *) image1;
+  GtkCssImageLinear *linear2 = (GtkCssImageLinear *) image2;
   guint i;
 
   if (linear1->repeating != linear2->repeating ||

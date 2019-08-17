@@ -225,7 +225,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
   else
     _gtk_css_value_ref (specified);
 
-  value = _gtk_css_value_compute (specified, id, provider, GTK_CSS_STYLE (style), parent_style);
+  value = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style);
 
   gtk_css_static_style_set_value (style, id, value, section);
 
