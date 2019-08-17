@@ -195,17 +195,17 @@ transition_info_add (TransitionInfo    infos[GTK_CSS_PROPERTY_N_PROPERTIES],
         {
           GtkCssStyleProperty *prop = _gtk_css_shorthand_property_get_subproperty (shorthand, i);
 
-          transition_info_add (infos, GTK_STYLE_PROPERTY (prop), index);
+          transition_info_add (infos, (GtkStyleProperty *)prop, index);
         }
     }
   else
     {
       guint id;
 
-      if (!_gtk_css_style_property_is_animated (GTK_CSS_STYLE_PROPERTY (property)))
+      if (!_gtk_css_style_property_is_animated ((GtkCssStyleProperty *) property))
         return;
 
-      id = _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (property));
+      id = _gtk_css_style_property_get_id ((GtkCssStyleProperty *) property);
       g_assert (id < GTK_CSS_PROPERTY_N_PROPERTIES);
       infos[id].index = index;
       infos[id].pending = TRUE;
@@ -231,7 +231,7 @@ transition_infos_set (TransitionInfo  infos[GTK_CSS_PROPERTY_N_PROPERTIES],
 
           for (j = 0; j < len; j++)
             {
-              property = GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (j));
+              property = (GtkStyleProperty *)_gtk_css_style_property_lookup_by_id (j);
               transition_info_add (infos, property, i);
             }
         }
