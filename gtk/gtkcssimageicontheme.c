@@ -187,8 +187,8 @@ static gboolean
 gtk_css_image_icon_theme_equal (GtkCssImage *image1,
                                 GtkCssImage *image2)
 {
-  GtkCssImageIconTheme *icon_theme1 = GTK_CSS_IMAGE_ICON_THEME (image1);
-  GtkCssImageIconTheme *icon_theme2 = GTK_CSS_IMAGE_ICON_THEME (image2);
+  GtkCssImageIconTheme *icon_theme1 = (GtkCssImageIconTheme *) image1;
+  GtkCssImageIconTheme *icon_theme2 = (GtkCssImageIconTheme *) image2;
 
   return g_str_equal (icon_theme1->name, icon_theme2->name);
 }
