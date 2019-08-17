@@ -991,7 +991,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_BACKGROUND,
                                           color_parse,
                                           color_query,
-                                          _gtk_css_color_value_new_rgba (0, 0, 0, 0));
+                                          _gtk_css_rgba_value_new_transparent ());
 
   gtk_css_style_property_register        ("font-family",
                                           GTK_CSS_PROPERTY_FONT_FAMILY,
