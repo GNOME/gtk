@@ -494,8 +494,8 @@ static gboolean
 gtk_css_image_builtin_equal (GtkCssImage *image1,
                              GtkCssImage *image2)
 {
-  GtkCssImageBuiltin *builtin1 = GTK_CSS_IMAGE_BUILTIN (image1);
-  GtkCssImageBuiltin *builtin2 = GTK_CSS_IMAGE_BUILTIN (image2);
+  GtkCssImageBuiltin *builtin1 = (GtkCssImageBuiltin *) image1;
+  GtkCssImageBuiltin *builtin2 = (GtkCssImageBuiltin *) image2;
 
   return gdk_rgba_equal (&builtin1->fg_color, &builtin2->fg_color)
       && gdk_rgba_equal (&builtin1->bg_color, &builtin2->bg_color);
