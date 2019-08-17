@@ -26,7 +26,8 @@
 
 G_BEGIN_DECLS
 
-GtkCssValue *   _gtk_css_rgba_value_new_from_rgba (const GdkRGBA          *rgba);
+GtkCssValue *   _gtk_css_rgba_value_new_from_rgba   (const GdkRGBA          *rgba);
+GtkCssValue *   _gtk_css_rgba_value_new_transparent (void);
 
 const GdkRGBA * _gtk_css_rgba_value_get_rgba      (const GtkCssValue      *rgba) G_GNUC_PURE;
 
