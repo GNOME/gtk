@@ -629,8 +629,8 @@ static gboolean
 gtk_css_image_radial_equal (GtkCssImage *image1,
                             GtkCssImage *image2)
 {
-  GtkCssImageRadial *radial1 = GTK_CSS_IMAGE_RADIAL (image1);
-  GtkCssImageRadial *radial2 = GTK_CSS_IMAGE_RADIAL (image2);
+  GtkCssImageRadial *radial1 = (GtkCssImageRadial *) image1;
+  GtkCssImageRadial *radial2 = (GtkCssImageRadial *) image2;
   guint i;
 
   if (radial1->repeating != radial2->repeating ||
