@@ -97,8 +97,6 @@ gtk_css_value_color_get_fallback (guint             property_id,
                                   GtkCssStyle      *style,
                                   GtkCssStyle      *parent_style)
 {
-  static const GdkRGBA transparent = { 0, 0, 0, 0 };
-
   switch (property_id)
     {
       case GTK_CSS_PROPERTY_BACKGROUND_IMAGE:
@@ -106,7 +104,7 @@ gtk_css_value_color_get_fallback (guint             property_id,
       case GTK_CSS_PROPERTY_TEXT_SHADOW:
       case GTK_CSS_PROPERTY_ICON_SHADOW:
       case GTK_CSS_PROPERTY_BOX_SHADOW:
-        return _gtk_css_rgba_value_new_from_rgba (&transparent);
+        return _gtk_css_rgba_value_new_transparent ();
       case GTK_CSS_PROPERTY_COLOR:
       case GTK_CSS_PROPERTY_BACKGROUND_COLOR:
       case GTK_CSS_PROPERTY_BORDER_TOP_COLOR:
@@ -127,7 +125,7 @@ gtk_css_value_color_get_fallback (guint             property_id,
         if (property_id < GTK_CSS_PROPERTY_N_PROPERTIES)
           g_warning ("No fallback color defined for property '%s'", 
                      _gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (property_id))));
-        return _gtk_css_rgba_value_new_from_rgba (&transparent);
+        return _gtk_css_rgba_value_new_transparent ();
     }
 }
 

@@ -189,8 +189,6 @@ gtk_css_shadow_value_new (GtkCssValue *hoffset,
 GtkCssValue *
 _gtk_css_shadow_value_new_for_transition (GtkCssValue *target)
 {
-  GdkRGBA transparent = { 0, 0, 0, 0 };
-
   g_return_val_if_fail (target->class == &GTK_CSS_VALUE_SHADOW, NULL);
 
   return gtk_css_shadow_value_new (_gtk_css_number_value_new (0, GTK_CSS_PX),
@@ -198,7 +196,7 @@ _gtk_css_shadow_value_new_for_transition (GtkCssValue *target)
                                    _gtk_css_number_value_new (0, GTK_CSS_PX),
                                    _gtk_css_number_value_new (0, GTK_CSS_PX),
                                    target->inset,
-                                   _gtk_css_rgba_value_new_from_rgba (&transparent));
+                                   _gtk_css_rgba_value_new_transparent ());
 }
 
 enum {
