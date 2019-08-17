@@ -22,28 +22,84 @@
 #include "gtkcssiconthemevalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
+#include "gtkprivate.h"
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
-  GHashTable *colors;
+  guint n_colors;
+  char **color_names;
+  GtkCssValue **color_values;
 };
 
 static GtkCssValue *default_palette;
 
 static GtkCssValue *gtk_css_palette_value_new_empty (void);
+static GtkCssValue *gtk_css_palette_value_new_sized (guint size);
 
 static void
-gtk_css_palette_value_add_color (GtkCssValue *value,
-                                 const char  *name,
+gtk_css_palette_value_set_color (GtkCssValue *value,
+                                 guint        i,
+                                 char        *name,
                                  GtkCssValue *color)
 {
-  g_hash_table_insert (value->colors, g_strdup (name), color);
+  value->color_names[i] = name; /* No strdup */
+  value->color_values[i] = color;
+}
+
+static void
+gtk_css_palette_value_sort_colors (GtkCssValue *value)
+{
+  guint i, j;
+
+  /* Bubble sort. We're mostly talking about 3 elements here. */
+  for (i = 0; i < value->n_colors; i ++)
+    for (j = 0; j < value->n_colors; j ++)
+      {
+        if (strcmp (value->color_names[i], value->color_names[j]) < 0)
+          {
+            char *tmp_name;
+            GtkCssValue *tmp_value;
+
+            tmp_name = value->color_names[i];
+            tmp_value = value->color_values[i];
+
+            value->color_names[i] = value->color_names[j];
+            value->color_values[i] = value->color_values[j];
+
+            value->color_names[j] = tmp_name;
+            value->color_values[j] = tmp_value;
+          }
+      }
+}
+
+static GtkCssValue *
+gtk_css_palette_value_find_color (GtkCssValue *value,
+                                  const char  *color_name)
+{
+  guint i;
+
+  for (i = 0; i < value->n_colors; i ++)
+    {
+      if (strcmp (value->color_names[i], color_name) == 0)
+        return value->color_values[i];
+    }
+
+  return NULL;
 }
 
 static void
 gtk_css_value_palette_free (GtkCssValue *value)
 {
-  g_hash_table_unref (value->colors);
+  guint i;
+
+  for (i = 0; i < value->n_colors; i ++)
+    {
+      g_free (value->color_names[i]);
+      _gtk_css_value_unref (value->color_values[i]);
+    }
+
+  g_free (value->color_names);
+  g_free (value->color_values);
 
   g_slice_free (GtkCssValue, value);
 }
@@ -55,20 +111,22 @@ gtk_css_value_palette_compute (GtkCssValue      *specified,
                                GtkCssStyle      *style,
                                GtkCssStyle      *parent_style)
 {
-  GHashTableIter iter;
-  gpointer name, value;
   GtkCssValue *computed_color;
   GtkCssValue *result;
   gboolean changes = FALSE;
+  guint i;
 
-  result = gtk_css_palette_value_new_empty ();
+  result = gtk_css_palette_value_new_sized (specified->n_colors);
 
-  g_hash_table_iter_init (&iter, specified->colors);
-  while (g_hash_table_iter_next (&iter, &name, &value))
+  for (i = 0; i < specified->n_colors; i ++)
     {
+      GtkCssValue *value = specified->color_values[i];
+
       computed_color = _gtk_css_value_compute (value, property_id, provider, style, parent_style);
+      result->color_names[i] = g_strdup (specified->color_names[i]);
+      result->color_values[i] = computed_color;
+
       changes |= computed_color != value;
-      gtk_css_palette_value_add_color (result, name, computed_color);
     }
 
   if (!changes)
@@ -84,20 +142,17 @@ static gboolean
 gtk_css_value_palette_equal (const GtkCssValue *value1,
                              const GtkCssValue *value2)
 {
-  gpointer name, color1, color2;
-  GHashTableIter iter;
+  guint i;
 
-  if (g_hash_table_size (value1->colors) != g_hash_table_size (value2->colors))
+  if (value1->n_colors != value2->n_colors)
     return FALSE;
 
-  g_hash_table_iter_init (&iter, value1->colors);
-  while (g_hash_table_iter_next (&iter, &name, &color1))
+  for (i = 0; i < value1->n_colors; i ++)
     {
-      color2 = g_hash_table_lookup (value2->colors, name);
-      if (color2 == NULL)
+      if (strcmp (value1->color_names[i], value2->color_names[i]) != 0)
         return FALSE;
 
-      if (!_gtk_css_value_equal (color1, color2))
+      if (!_gtk_css_value_equal (value1->color_values[i], value2->color_values[i]))
         return FALSE;
     }
 
@@ -110,9 +165,12 @@ gtk_css_value_palette_transition (GtkCssValue *start,
                                   guint        property_id,
                                   double       progress)
 {
-  gpointer name, start_color, end_color;
-  GHashTableIter iter;
   GtkCssValue *result, *transition;
+  GtkCssValue *start_color, *end_color;
+  const char *name;
+  guint i;
+  GPtrArray *new_names;
+  GPtrArray *new_values;
 
   /* XXX: For colors that are only in start or end but not both,
    * we don't transition but just keep the value.
@@ -120,28 +178,41 @@ gtk_css_value_palette_transition (GtkCssValue *start,
    */
 
   result = gtk_css_palette_value_new_empty ();
+  new_names = g_ptr_array_new ();
+  new_values = g_ptr_array_new ();
 
-  g_hash_table_iter_init (&iter, start->colors);
-  while (g_hash_table_iter_next (&iter, &name, &start_color))
+  for (i = 0; i < start->n_colors; i ++)
     {
-      end_color = g_hash_table_lookup (end->colors, name);
+      name = start->color_names[i];
+      start_color = start->color_values[i];
+      end_color = gtk_css_palette_value_find_color (end, name);
+
       if (end_color == NULL)
         transition = _gtk_css_value_ref (start_color);
       else
         transition = _gtk_css_value_transition (start_color, end_color, property_id, progress);
 
-      gtk_css_palette_value_add_color (result, name, transition);
+      g_ptr_array_add (new_names, g_strdup (name));
+      g_ptr_array_add (new_values, transition);
     }
 
-  g_hash_table_iter_init (&iter, end->colors);
-  while (g_hash_table_iter_next (&iter, &name, &end_color))
+  for (i = 0; i < end->n_colors; i ++)
     {
-      start_color = g_hash_table_lookup (start->colors, name);
+      name = end->color_names[i];
+      end_color = end->color_values[i];
+      start_color = gtk_css_palette_value_find_color (start, name);
+
       if (start_color != NULL)
         continue;
 
-      gtk_css_palette_value_add_color (result, name, _gtk_css_value_ref (end_color));
+      g_ptr_array_add (new_names, g_strdup (name));
+      g_ptr_array_add (new_values, _gtk_css_value_ref (end_color));
     }
+
+  result->n_colors = new_names->len;
+  result->color_names = (char **)g_ptr_array_free (new_names, FALSE);
+  result->color_values = (GtkCssValue **)g_ptr_array_free (new_values, FALSE);
+  gtk_css_palette_value_sort_colors (result);
 
   return result;
 }
@@ -150,9 +221,8 @@ static void
 gtk_css_value_palette_print (const GtkCssValue *value,
                              GString           *string)
 {
-  GHashTableIter iter;
-  gpointer name, color;
   gboolean first = TRUE;
+  guint i;
 
   if (value == default_palette)
     {
@@ -160,16 +230,16 @@ gtk_css_value_palette_print (const GtkCssValue *value,
       return;
     }
 
-  g_hash_table_iter_init (&iter, value->colors);
-  while (g_hash_table_iter_next (&iter, &name, &color))
+  for (i = 0; i < value->n_colors; i ++)
     {
       if (first)
         first = FALSE;
       else
         g_string_append (string, ", ");
-      g_string_append (string, name);
+
+      g_string_append (string, value->color_names[i]);
       g_string_append_c (string, ' ');
-      _gtk_css_value_print (color, string);
+      _gtk_css_value_print (value->color_values[i], string);
     }
 }
 
@@ -189,9 +259,19 @@ gtk_css_palette_value_new_empty (void)
   GtkCssValue *result;
 
   result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_PALETTE);
-  result->colors = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                          g_free,
-                                          (GDestroyNotify) _gtk_css_value_unref);
+
+  return result;
+}
+
+static GtkCssValue *
+gtk_css_palette_value_new_sized (guint size)
+{
+  GtkCssValue *result;
+
+  result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_PALETTE);
+  result->n_colors = size;
+  result->color_names = g_malloc (sizeof (char *) * size);
+  result->color_values = g_malloc (sizeof (GtkCssValue *) * size);
 
   return result;
 }
@@ -201,10 +281,14 @@ gtk_css_palette_value_new_default (void)
 {
   if (default_palette == NULL)
     {
-      default_palette = gtk_css_palette_value_new_empty ();
-      gtk_css_palette_value_add_color (default_palette, "error", _gtk_css_color_value_new_name ("error_color"));
-      gtk_css_palette_value_add_color (default_palette, "warning", _gtk_css_color_value_new_name ("warning_color"));
-      gtk_css_palette_value_add_color (default_palette, "success", _gtk_css_color_value_new_name ("success_color"));
+      default_palette = gtk_css_palette_value_new_sized (3);
+      gtk_css_palette_value_set_color (default_palette, 0, g_strdup ("error"),
+                                       _gtk_css_color_value_new_name ("error_color"));
+      gtk_css_palette_value_set_color (default_palette, 1, g_strdup ("success"),
+                                       _gtk_css_color_value_new_name ("success_color"));
+      gtk_css_palette_value_set_color (default_palette, 2, g_strdup ("warning"),
+                                       _gtk_css_color_value_new_name ("warning_color"));
+      /* Above is already sorted */
     }
 
   return _gtk_css_value_ref (default_palette);
@@ -214,12 +298,16 @@ GtkCssValue *
 gtk_css_palette_value_parse (GtkCssParser *parser)
 {
   GtkCssValue *result, *color;
+  GPtrArray *names;
+  GPtrArray *colors;
   char *ident;
 
   if (gtk_css_parser_try_ident (parser, "default"))
     return gtk_css_palette_value_new_default ();
-  
+
   result = gtk_css_palette_value_new_empty ();
+  names = g_ptr_array_new ();
+  colors = g_ptr_array_new ();
 
   do {
     ident = gtk_css_parser_consume_ident (parser);
@@ -228,7 +316,7 @@ gtk_css_palette_value_parse (GtkCssParser *parser)
         _gtk_css_value_unref (result);
         return NULL;
       }
-    
+
     color = _gtk_css_color_value_parse (parser);
     if (color == NULL)
       {
@@ -237,9 +325,14 @@ gtk_css_palette_value_parse (GtkCssParser *parser)
         return NULL;
       }
 
-    gtk_css_palette_value_add_color (result, ident, color);
-    g_free (ident);
+    g_ptr_array_add (names, ident);
+    g_ptr_array_add (colors, color);
   } while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
+
+  result->n_colors = names->len;
+  result->color_names = (char **)g_ptr_array_free (names, FALSE);
+  result->color_values = (GtkCssValue **) g_ptr_array_free (colors, FALSE);
+  gtk_css_palette_value_sort_colors (result);
 
   return result;
 }
@@ -248,13 +341,15 @@ const GdkRGBA *
 gtk_css_palette_value_get_color (GtkCssValue *value,
                                  const char  *name)
 {
-  GtkCssValue *color;
+  guint i;
 
-  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_PALETTE, NULL);
+  gtk_internal_return_val_if_fail (value->class == &GTK_CSS_VALUE_PALETTE, NULL);
 
-  color = g_hash_table_lookup (value->colors, name);
-  if (color == NULL)
-    return NULL;
+  for (i = 0; i < value->n_colors; i ++)
+    {
+      if (strcmp (value->color_names[i], name) == 0)
+        return _gtk_css_rgba_value_get_rgba (value->color_values[i]);
+    }
 
-  return _gtk_css_rgba_value_get_rgba (color);
+  return NULL;
 }
