@@ -107,6 +107,9 @@ static const GtkCssValueClass GTK_CSS_VALUE_RGBA = {
   gtk_css_value_rgba_print
 };
 
+static GtkCssValue transparent_black_singleton = (GtkCssValue) { &GTK_CSS_VALUE_RGBA, 1, { 0, 0, 0, 0 }};
+static GtkCssValue transparent_white_singleton = (GtkCssValue) { &GTK_CSS_VALUE_RGBA, 1, { 1, 1, 1, 0 }};
+
 GtkCssValue *
 _gtk_css_rgba_value_new_from_rgba (const GdkRGBA *rgba)
 {
@@ -114,10 +117,29 @@ _gtk_css_rgba_value_new_from_rgba (const GdkRGBA *rgba)
 
   g_return_val_if_fail (rgba != NULL, NULL);
 
+  if (gdk_rgba_is_clear (rgba))
+    {
+      if (rgba->red == 1 &&
+          rgba->green == 1 &&
+          rgba->blue == 1)
+        return _gtk_css_value_ref (&transparent_white_singleton);
+
+      if (rgba->red == 0 &&
+          rgba->green == 0 &&
+          rgba->blue == 0)
+        return _gtk_css_value_ref (&transparent_black_singleton);
+    }
+
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_RGBA);
   value->rgba = *rgba;
 
   return value;
+}
+
+GtkCssValue *
+_gtk_css_rgba_value_new_transparent (void)
+{
+  return _gtk_css_value_ref (&transparent_black_singleton);
 }
 
 const GdkRGBA *
