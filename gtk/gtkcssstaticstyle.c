@@ -115,7 +115,8 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *style,
 {
   if (style->values[id])
     _gtk_css_value_unref (style->values[id]);
-  style->values[id] = _gtk_css_value_ref (value);
+
+  style->values[id] = value;
 
   if (style->sections && style->sections->len > id && g_ptr_array_index (style->sections, id))
     {
@@ -228,8 +229,8 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
   value = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style);
 
   gtk_css_static_style_set_value (style, id, value, section);
+  value = NULL;
 
-  _gtk_css_value_unref (value);
   _gtk_css_value_unref (specified);
 }
 
