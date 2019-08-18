@@ -279,7 +279,7 @@ gtk_css_animated_style_create_css_transitions (GSList              *animations,
   if (_gtk_css_array_value_get_n_values (durations) == 1 &&
       _gtk_css_array_value_get_n_values (delays) == 1 &&
       _gtk_css_number_value_get (_gtk_css_array_value_get_nth (durations, 0), 100)
-      + _gtk_css_number_value_get (_gtk_css_array_value_get_nth (delays, transitions[i].index), 100) == 0)
+      + _gtk_css_number_value_get (_gtk_css_array_value_get_nth (delays, 0), 100) == 0)
     return animations;
 
   transition_infos_set (transitions, gtk_css_style_get_value (base_style, GTK_CSS_PROPERTY_TRANSITION_PROPERTY));
