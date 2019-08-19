@@ -40,12 +40,12 @@ G_BEGIN_DECLS
 
 #define OPPOSITE_ORIENTATION(_orientation) (1 - (_orientation))
 
-#ifdef G_DISABLE_CAST_CHECKS
-/* This is true for debug no and minimum */
+#ifndef G_ENABLE_CONSISTENCY_CHECKS
+/* This is true for buildtypes release and debugoptimized */
 #define gtk_internal_return_if_fail(__expr) G_STMT_START{ (void)0; }G_STMT_END
 #define gtk_internal_return_val_if_fail(__expr, __val) G_STMT_START{ (void)0; }G_STMT_END
 #else
-/* This is true for debug yes */
+/* This is true for debug builds */
 #define gtk_internal_return_if_fail(__expr) g_return_if_fail(__expr)
 #define gtk_internal_return_val_if_fail(__expr, __val) g_return_val_if_fail(__expr, __val)
 #endif
