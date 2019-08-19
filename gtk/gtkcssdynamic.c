@@ -47,7 +47,8 @@ gtk_css_dynamic_apply_values (GtkStyleAnimation    *style_animation,
       dynamic_value = gtk_css_value_get_dynamic_value (value, dynamic->timestamp);
       if (value != dynamic_value)
         gtk_css_animated_style_set_animated_value (style, i, dynamic_value);
-      gtk_css_value_unref (dynamic_value);
+      else
+        gtk_css_value_unref (dynamic_value);
     }
 }
 
