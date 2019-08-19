@@ -270,6 +270,7 @@ gtk_css_animated_style_create_css_transitions (GSList              *animations,
 {
   TransitionInfo transitions[GTK_CSS_PROPERTY_N_PROPERTIES] = { { 0, } };
   GtkCssValue *durations, *delays, *timing_functions;
+  gboolean source_is_animated;
   guint i;
 
   durations = gtk_css_style_get_value (base_style, GTK_CSS_PROPERTY_TRANSITION_DURATION);
@@ -284,6 +285,7 @@ gtk_css_animated_style_create_css_transitions (GSList              *animations,
 
   transition_infos_set (transitions, gtk_css_style_get_value (base_style, GTK_CSS_PROPERTY_TRANSITION_PROPERTY));
 
+  source_is_animated = GTK_IS_CSS_ANIMATED_STYLE (source);
   for (i = 0; i < GTK_CSS_PROPERTY_N_PROPERTIES; i++)
     {
       GtkStyleAnimation *animation;
@@ -298,14 +300,14 @@ gtk_css_animated_style_create_css_transitions (GSList              *animations,
       if (duration + delay == 0.0)
         continue;
 
-      if (GTK_IS_CSS_ANIMATED_STYLE (source))
+      if (source_is_animated)
         {
-          start = gtk_css_animated_style_get_intrinsic_value (GTK_CSS_ANIMATED_STYLE (source), i);
+          start = gtk_css_animated_style_get_intrinsic_value ((GtkCssAnimatedStyle *)source, i);
           end = gtk_css_style_get_value (base_style, i);
 
           if (_gtk_css_value_equal (start, end))
             {
-              animation = gtk_css_animated_style_find_transition (GTK_CSS_ANIMATED_STYLE (source), i);
+              animation = gtk_css_animated_style_find_transition ((GtkCssAnimatedStyle *)source, i);
               if (animation)
                 {
                   animation = _gtk_style_animation_advance (animation, timestamp);
