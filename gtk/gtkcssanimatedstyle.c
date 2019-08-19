@@ -145,7 +145,8 @@ gtk_css_animated_style_set_animated_value (GtkCssAnimatedStyle *style,
 
   if (g_ptr_array_index (style->animated_values, id))
     _gtk_css_value_unref (g_ptr_array_index (style->animated_values, id));
-  g_ptr_array_index (style->animated_values, id) = _gtk_css_value_ref (value);
+
+  g_ptr_array_index (style->animated_values, id) = value;
 
 }
 

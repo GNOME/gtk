@@ -78,7 +78,6 @@ gtk_css_transition_apply_values (GtkStyleAnimation   *style_animation,
     value = _gtk_css_value_ref (end);
 
   gtk_css_animated_style_set_animated_value (style, transition->property, value);
-  _gtk_css_value_unref (value);
 }
 
 static gboolean
