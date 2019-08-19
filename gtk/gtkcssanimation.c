@@ -113,7 +113,6 @@ gtk_css_animation_apply_values (GtkStyleAnimation    *style_animation,
                                             progress,
                                             gtk_css_animated_style_get_intrinsic_value (style, property_id));
       gtk_css_animated_style_set_animated_value (style, property_id, value);
-      _gtk_css_value_unref (value);
     }
 }
 
