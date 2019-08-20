@@ -1140,11 +1140,9 @@ gdk_wayland_selection_unset_data_source (GdkDisplay *display,
 
   if (selection == atoms[ATOM_CLIPBOARD])
     {
-      GdkDevice *device;
+      GdkSeat *seat = gdk_display_get_default_seat (display);
 
-      device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
-
-      gdk_wayland_device_set_selection (device, NULL);
+      gdk_wayland_seat_set_selection (seat, NULL);
 
       if (wayland_selection->clipboard_source)
         {
@@ -1198,11 +1196,15 @@ _gdk_wayland_display_set_selection_owner (GdkDisplay *display,
   if (selection == atoms[ATOM_CLIPBOARD])
     {
       wayland_selection->clipboard_owner = owner;
+      if (send_event && !owner)
+        gdk_wayland_selection_unset_data_source (display, selection);
       return TRUE;
     }
   else if (selection == atoms[ATOM_PRIMARY])
     {
       wayland_selection->primary_owner = owner;
+      if (send_event && !owner)
+        gdk_wayland_selection_unset_data_source (display, selection);
       return TRUE;
     }
   else if (selection == atoms[ATOM_DND])
@@ -1551,12 +1553,10 @@ gdk_wayland_selection_add_targets (GdkWindow *window,
 
   if (selection == atoms[ATOM_CLIPBOARD])
     {
-      GdkDisplay *display;
-      GdkDevice *device;
+      GdkSeat *seat;
 
-      display = gdk_window_get_display (window);
-      device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
-      gdk_wayland_device_set_selection (device, data_source);
+      seat = gdk_display_get_default_seat (display);
+      gdk_wayland_seat_set_selection (seat, data_source);
     }
   else if (selection == atoms[ATOM_PRIMARY])
     {

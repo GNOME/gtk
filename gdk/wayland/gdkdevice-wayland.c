@@ -5323,18 +5323,15 @@ gdk_wayland_device_get_data_device (GdkDevice *gdk_device)
 }
 
 void
-gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
-                                  struct wl_data_source *source)
+gdk_wayland_seat_set_selection (GdkSeat               *seat,
+                                struct wl_data_source *source)
 {
-  GdkWaylandSeat *seat;
+  GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
   GdkWaylandDisplay *display_wayland;
 
-  g_return_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device));
+  display_wayland = GDK_WAYLAND_DISPLAY (wayland_seat->display);
 
-  seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (gdk_device));
-  display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
-
-  wl_data_device_set_selection (seat->data_device, source,
+  wl_data_device_set_selection (wayland_seat->data_device, source,
                                 _gdk_wayland_display_get_serial (display_wayland));
 }
 
