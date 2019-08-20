@@ -2556,31 +2556,6 @@ gdk_event_translate (MSG  *msg,
 
       API_CALL (GetKeyboardState, (key_state));
 
-      ccount = 0;
-
-      if (msg->wParam == VK_PACKET)
-	{
-	  ccount = ToUnicode (VK_PACKET, HIWORD (msg->lParam), key_state, wbuf, 1, 0);
-	  if (ccount == 1)
-	    {
-	      if (wbuf[0] >= 0xD800 && wbuf[0] < 0xDC00)
-	        {
-		  if (msg->message == WM_KEYDOWN)
-		    impl->leading_surrogate_keydown = wbuf[0];
-		  else
-		    impl->leading_surrogate_keyup = wbuf[0];
-
-		  /* don't emit an event */
-		  return_val = TRUE;
-		  break;
-	        }
-	      else
-		{
-		  /* wait until an event is created */;
-		}
-	    }
-	}
-
       event = gdk_event_new ((msg->message == WM_KEYDOWN ||
 			      msg->message == WM_SYSKEYDOWN) ?
 			     GDK_KEY_PRESS : GDK_KEY_RELEASE);
@@ -2654,42 +2629,12 @@ gdk_event_translate (MSG  *msg,
 
       build_key_event_state (event, key_state);
 
-      if (msg->wParam == VK_PACKET && ccount == 1)
-	{
-	  if (wbuf[0] >= 0xD800 && wbuf[0] < 0xDC00)
-	    {
-	      g_assert_not_reached ();
-	    }
-	  else if (wbuf[0] >= 0xDC00 && wbuf[0] < 0xE000)
-	    {
-	      wchar_t leading;
-
-              if (msg->message == WM_KEYDOWN)
-		leading = impl->leading_surrogate_keydown;
-	      else
-		leading = impl->leading_surrogate_keyup;
-
-	      event->key.keyval = gdk_unicode_to_keyval ((leading - 0xD800) * 0x400 + wbuf[0] - 0xDC00 + 0x10000);
-	    }
-	  else
-	    {
-	      event->key.keyval = gdk_unicode_to_keyval (wbuf[0]);
-	    }
-	}
-      else
-	{
-	  gdk_keymap_translate_keyboard_state (_gdk_win32_display_get_keymap (display),
-					       event->key.hardware_keycode,
-					       event->key.state,
-					       event->key.group,
-					       &event->key.keyval,
-					       NULL, NULL, NULL);
-	}
-
-      if (msg->message == WM_KEYDOWN)
-	impl->leading_surrogate_keydown = 0;
-      else
-	impl->leading_surrogate_keyup = 0;
+      gdk_keymap_translate_keyboard_state (_gdk_win32_display_get_keymap (display),
+					   event->key.hardware_keycode,
+					   event->key.state,
+					   event->key.group,
+					   &event->key.keyval,
+					   NULL, NULL, NULL);
 
       fill_key_event_string (event);
 
