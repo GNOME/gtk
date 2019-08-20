@@ -240,14 +240,6 @@ struct _GdkWindowImplWin32
   HICON   hicon_big;
   HICON   hicon_small;
 
-  /* When VK_PACKET sends us a leading surrogate, it's stashed here.
-   * Later, when another VK_PACKET sends a tailing surrogate, we make up
-   * a full unicode character from them, or discard the leading surrogate,
-   * if the next key is not a tailing surrogate.
-   */
-  wchar_t leading_surrogate_keydown;
-  wchar_t leading_surrogate_keyup;
-
   /* Window size hints */
   gint hint_flags;
   GdkGeometry hints;
