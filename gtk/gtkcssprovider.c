@@ -407,7 +407,7 @@ verify_tree_match_results (GtkCssProvider *provider,
 			   GPtrArray *tree_rules)
 {
 #ifdef VERIFY_TREE
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (provider);
   GtkCssRuleset *ruleset;
   gboolean should_match;
   int i, j;
