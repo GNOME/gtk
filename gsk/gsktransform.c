@@ -1667,8 +1667,8 @@ gsk_transform_new (void)
  * @out_rect: (out caller-allocates): return location for the bounds
  *   of the transformed rectangle
  *
- * Transforms a #graphene_rect_t using the given matrix @m. The
- * result is the bounding box containing the coplanar quad.
+ * Transforms a #graphene_rect_t using the given transform @self.
+ * The result is the bounding box containing the coplanar quad.
  **/
 void
 gsk_transform_transform_bounds (GskTransform          *self,
