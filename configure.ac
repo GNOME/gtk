@@ -1055,17 +1055,6 @@ if test "x$enable_x11_backend" = xyes; then
   AC_CHECK_FUNC(XextFindDisplay, :,
                 AC_MSG_ERROR([*** libX11 and libXext not found. Check 'config.log' for more details.]))
 
-  # Check if <X11/extensions/XIproto.h> is needed for xReply.
-
-  AC_CHECK_TYPE([xReply], ,
-                [AC_CHECK_TYPE([xReply],
-                               [AC_DEFINE([NEED_XIPROTO_H_FOR_XREPLY], 1,
-                                          [Define if <X11/extensions/XIproto.h> needed for xReply])],
-                               [AC_MSG_ERROR([xReply type unavailable. X11 is too old])],
-                               [[#include <X11/extensions/XIproto.h>
-                                 #include <X11/Xlibint.h>]])],
-                [[#include <X11/Xlibint.h>]])
-
   # Check for XKB support.
 
   if test "x$enable_xkb" = "xyes"; then
