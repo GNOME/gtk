@@ -185,9 +185,6 @@
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #mesondefine LT_OBJDIR
 
-/* Define if <X11/extensions/XIproto.h> needed for xReply */
-#mesondefine NEED_XIPROTO_H_FOR_XREPLY
-
 /* Define to 1 if your C compiler doesn't accept -c and -o together. */
 #mesondefine NO_MINUS_C_MINUS_O
 
