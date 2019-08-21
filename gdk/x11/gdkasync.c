@@ -47,10 +47,6 @@ in this Software without prior written authorization from The Open Group.
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
 
-#ifdef NEED_XIPROTO_H_FOR_XREPLY
-#include <X11/extensions/XIproto.h>
-#endif
-
 #include <X11/Xlibint.h>
 
 
