@@ -163,7 +163,7 @@ init_sizing_box (GtkHeaderBar *bar)
   context = gtk_widget_get_style_context (w);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TITLE);
   gtk_container_add (GTK_CONTAINER (priv->label_sizing_box), w);
-  gtk_label_set_line_wrap (GTK_LABEL (w), FALSE);
+  gtk_label_set_wrap (GTK_LABEL (w), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_END);
   gtk_label_set_width_chars (GTK_LABEL (w), MIN_TITLE_CHARS);
@@ -172,7 +172,7 @@ init_sizing_box (GtkHeaderBar *bar)
   context = gtk_widget_get_style_context (w);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SUBTITLE);
   gtk_container_add (GTK_CONTAINER (priv->label_sizing_box), w);
-  gtk_label_set_line_wrap (GTK_LABEL (w), FALSE);
+  gtk_label_set_wrap (GTK_LABEL (w), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_END);
   gtk_widget_set_visible (w, priv->has_subtitle || (priv->subtitle && priv->subtitle[0]));
@@ -196,7 +196,7 @@ create_title_box (const char *title,
   title_label = gtk_label_new (title);
   context = gtk_widget_get_style_context (title_label);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TITLE);
-  gtk_label_set_line_wrap (GTK_LABEL (title_label), FALSE);
+  gtk_label_set_wrap (GTK_LABEL (title_label), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (title_label), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (title_label), PANGO_ELLIPSIZE_END);
   gtk_container_add (GTK_CONTAINER (label_box), title_label);
@@ -205,7 +205,7 @@ create_title_box (const char *title,
   subtitle_label = gtk_label_new (subtitle);
   context = gtk_widget_get_style_context (subtitle_label);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SUBTITLE);
-  gtk_label_set_line_wrap (GTK_LABEL (subtitle_label), FALSE);
+  gtk_label_set_wrap (GTK_LABEL (subtitle_label), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (subtitle_label), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (subtitle_label), PANGO_ELLIPSIZE_END);
   gtk_container_add (GTK_CONTAINER (label_box), subtitle_label);

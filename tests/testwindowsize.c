@@ -49,7 +49,7 @@ show_dialog (void)
                          "mi eu ipsum vestibulum in venenatis enim commodo. "
                          "Vivamus non malesuada ligula.");
 
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_label_set_width_chars (GTK_LABEL (label), width_chars);
   gtk_label_set_max_width_chars (GTK_LABEL (label), max_width_chars);
   gtk_window_set_default_size (GTK_WINDOW (dialog), default_width, default_height);
