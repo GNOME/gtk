@@ -37,7 +37,7 @@ gtk_css_value_initial_free (GtkCssValue *value)
   g_assert_not_reached ();
 }
 
-static GtkCssValue *
+GtkCssValue *
 gtk_css_value_initial_compute (GtkCssValue      *value,
                                guint             property_id,
                                GtkStyleProvider *provider,
