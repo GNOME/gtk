@@ -203,8 +203,14 @@ transition_info_add (TransitionInfo    infos[GTK_CSS_PROPERTY_N_PROPERTIES],
       for (i = 0; i < len; i++)
         {
           GtkCssStyleProperty *prop = _gtk_css_shorthand_property_get_subproperty (shorthand, i);
+          guint id;
 
-          transition_info_add (infos, (GtkStyleProperty *)prop, index);
+          if (!_gtk_css_style_property_is_animated ((GtkCssStyleProperty *) prop))
+            continue;
+
+          id = _gtk_css_style_property_get_id ((GtkCssStyleProperty *) prop);
+          infos[id].index = index;
+          infos[id].pending = TRUE;
         }
     }
   else
