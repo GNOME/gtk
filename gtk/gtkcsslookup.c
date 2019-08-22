@@ -29,22 +29,11 @@ _gtk_css_lookup_init (GtkCssLookup     *lookup,
                       const GtkBitmask *relevant)
 {
   memset (lookup, 0, sizeof (*lookup));
-
-  if (relevant)
-    {
-      lookup->missing = _gtk_bitmask_copy (relevant);
-    }
-  else
-    {
-      lookup->missing = _gtk_bitmask_new ();
-      lookup->missing = _gtk_bitmask_invert_range (lookup->missing, 0, GTK_CSS_PROPERTY_N_PROPERTIES);
-    }
 }
 
 void
 _gtk_css_lookup_destroy (GtkCssLookup *lookup)
 {
-  _gtk_bitmask_free (lookup->missing);
 }
 
 gboolean
@@ -53,7 +42,13 @@ _gtk_css_lookup_is_missing (const GtkCssLookup *lookup,
 {
   gtk_internal_return_val_if_fail (lookup != NULL, FALSE);
 
-  return _gtk_bitmask_get (lookup->missing, id);
+  return lookup->values[id].value == NULL;
+}
+
+gboolean
+_gtk_css_lookup_all_set (const GtkCssLookup *lookup)
+{
+  return lookup->n_set_values == GTK_CSS_PROPERTY_N_PROPERTIES;
 }
 
 /**
@@ -76,12 +71,12 @@ _gtk_css_lookup_set (GtkCssLookup  *lookup,
                      GtkCssValue   *value)
 {
   gtk_internal_return_if_fail (lookup != NULL);
-  gtk_internal_return_if_fail (_gtk_bitmask_get (lookup->missing, id));
   gtk_internal_return_if_fail (value != NULL);
+  gtk_internal_return_if_fail (lookup->values[id].value == NULL);
 
-  lookup->missing = _gtk_bitmask_set (lookup->missing, id, FALSE);
   lookup->values[id].value = value;
   lookup->values[id].section = section;
+  lookup->n_set_values ++;
 }
 
 /**
