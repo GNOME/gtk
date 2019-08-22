@@ -111,14 +111,11 @@ _gtk_css_lookup_resolve (GtkCssLookup      *lookup,
 
   for (i = 0; i < GTK_CSS_PROPERTY_N_PROPERTIES; i++)
     {
-      if (lookup->values[i].value ||
-          _gtk_bitmask_get (lookup->missing, i))
         gtk_css_static_style_compute_value (style,
                                             provider,
                                             parent_style,
                                             i,
                                             lookup->values[i].value,
                                             lookup->values[i].section);
-      /* else not a relevant property */
     }
 }
