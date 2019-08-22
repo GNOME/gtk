@@ -25,13 +25,6 @@
 
 G_BEGIN_DECLS
 
-typedef void (* GtkMenuButtonShowMenuCallback) (gpointer user_data);
-
-void       _gtk_menu_button_set_popup_with_func (GtkMenuButton                 *menu_button,
-                                                 GtkWidget                     *menu,
-                                                 GtkMenuButtonShowMenuCallback  func,
-                                                 gpointer                       user_data);
-
 void   gtk_menu_button_add_child (GtkMenuButton *button,
                                   GtkWidget     *child);
 
