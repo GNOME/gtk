@@ -2658,6 +2658,7 @@ gdk_window_add_filter (GdkWindow     *window,
       if ((filter->function == function) && (filter->data == data))
         {
           filter->ref_count++;
+          filter->flags = 0;
           return;
         }
       tmp_list = tmp_list->next;
