@@ -150,8 +150,9 @@ struct _GtkMenuButtonPrivate
   GtkWidget *popover; /* Only one at a time can be set */
   GMenuModel *model;
 
-  GtkMenuButtonShowMenuCallback func;
-  gpointer user_data;
+  GtkMenuButtonCreatePopupFunc create_popup_func;
+  gpointer create_popup_user_data;
+  GDestroyNotify create_popup_destroy_notify;
 
   GtkWidget *align_widget;
   GtkWidget *arrow_widget;
@@ -288,9 +289,6 @@ popup_menu (GtkMenuButton *menu_button,
   GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
   GdkGravity widget_anchor = GDK_GRAVITY_SOUTH_WEST;
   GdkGravity menu_anchor = GDK_GRAVITY_NORTH_WEST;
-
-  if (priv->func)
-    priv->func (priv->user_data);
 
   if (!priv->menu)
     return;
@@ -446,7 +444,13 @@ static void
 gtk_menu_button_toggled (GtkMenuButton *menu_button)
 {
   GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
-  gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->button));
+  const gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->button));
+
+  /* Might set a new menu/popover */
+  if (active && priv->create_popup_func)
+    {
+      priv->create_popup_func (menu_button, priv->create_popup_user_data);
+    }
 
   if (priv->menu)
     {
@@ -755,26 +759,34 @@ update_sensitivity (GtkMenuButton *menu_button)
   GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
 
   gtk_widget_set_sensitive (GTK_WIDGET (menu_button),
-                            priv->menu != NULL || priv->popover != NULL);
+                            priv->menu != NULL ||
+                            priv->popover != NULL ||
+                            priv->create_popup_func != NULL);
 }
 
-/* This function is used in GtkMenuToolButton, the call back will
- * be called when GtkMenuToolButton would have emitted the “show-menu”
- * signal.
+/**
+ * gtk_menu_button_set_popup:
+ * @menu_button: a #GtkMenuButton
+ * @menu: (nullable): a #GtkMenu, or %NULL to unset and disable the button
+ *
+ * Sets the #GtkMenu that will be popped up when the @menu_button is clicked, or
+ * %NULL to dissociate any existing menu and disable the button.
+ *
+ * If #GtkMenuButton:menu-model or #GtkMenuButton:popover are set, those objects
+ * are dissociated from the @menu_button, and those properties are set to %NULL.
  */
 void
-_gtk_menu_button_set_popup_with_func (GtkMenuButton                 *menu_button,
-                                      GtkWidget                     *menu,
-                                      GtkMenuButtonShowMenuCallback  func,
-                                      gpointer                       user_data)
+gtk_menu_button_set_popup (GtkMenuButton *menu_button,
+                           GtkWidget     *menu)
 {
   GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
 
   g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
   g_return_if_fail (GTK_IS_MENU (menu) || menu == NULL);
 
-  priv->func = func;
-  priv->user_data = user_data;
+  g_object_freeze_notify (G_OBJECT (menu_button));
+
+  g_clear_object (&priv->model);
 
   if (priv->menu == GTK_WIDGET (menu))
     return;
@@ -803,37 +815,8 @@ _gtk_menu_button_set_popup_with_func (GtkMenuButton                 *menu_button
                                 G_CALLBACK (menu_deactivate_cb), menu_button);
     }
 
-  update_sensitivity (menu_button);
-
   g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_POPUP]);
   g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_MENU_MODEL]);
-}
-
-/**
- * gtk_menu_button_set_popup:
- * @menu_button: a #GtkMenuButton
- * @menu: (nullable): a #GtkMenu, or %NULL to unset and disable the button
- *
- * Sets the #GtkMenu that will be popped up when the @menu_button is clicked, or
- * %NULL to dissociate any existing menu and disable the button.
- *
- * If #GtkMenuButton:menu-model or #GtkMenuButton:popover are set, those objects
- * are dissociated from the @menu_button, and those properties are set to %NULL.
- */
-void
-gtk_menu_button_set_popup (GtkMenuButton *menu_button,
-                           GtkWidget     *menu)
-{
-  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
-
-  g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
-  g_return_if_fail (GTK_IS_MENU (menu) || menu == NULL);
-
-  g_object_freeze_notify (G_OBJECT (menu_button));
-
-  g_clear_object (&priv->model);
-
-  _gtk_menu_button_set_popup_with_func (menu_button, menu, NULL, NULL);
 
   if (menu && priv->popover)
     gtk_menu_button_set_popover (menu_button, NULL);
@@ -1128,6 +1111,9 @@ gtk_menu_button_dispose (GObject *object)
 
   g_clear_object (&priv->model);
   g_clear_pointer (&priv->button, gtk_widget_unparent);
+
+  if (priv->create_popup_destroy_notify)
+    priv->create_popup_destroy_notify (priv->create_popup_user_data);
 
   G_OBJECT_CLASS (gtk_menu_button_parent_class)->dispose (object);
 }
@@ -1446,4 +1432,47 @@ gtk_menu_button_add_child (GtkMenuButton *menu_button,
     gtk_container_remove (GTK_CONTAINER (priv->button), child);
 
   gtk_container_add (GTK_CONTAINER (priv->button), new_child);
+}
+
+/**
+ * gtk_menu_button_set_create_popup_func:
+ * @menu_button: a #GtkMenuButton
+ * @func: (nullable): function to call when a popuop is about to
+ *   be shown, but none has been provided via other means, or %NULL
+ *   to reset to default behavior.
+ * @user_data: (nullable): user data to pass to @callback
+ * @destroy_notify: (nullable): destroy notify for @user_data
+ *
+ * Sets @func to be called when a popup is about to be shown.
+ * @func should use one of
+ *
+ *  - gtk_menu_button_set_popup()
+ *  - gtk_menu_button_set_popover()
+ *  - gtk_menu_button_set_menu_model()
+ *
+ * to set a popoup for @menu_button.
+ * If @func is non-%NULL, @menu_button will always be sensitive.
+ *
+ * Using this function will NOT reset the menu widget attached to @menu_button.
+ * Instead, this can be done manually in @func.
+ */
+void
+gtk_menu_button_set_create_popup_func (GtkMenuButton                *menu_button,
+                                       GtkMenuButtonCreatePopupFunc  func,
+                                       gpointer                      user_data,
+                                       GDestroyNotify                destroy_notify)
+{
+  GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
+
+  g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
+
+
+  if (priv->create_popup_destroy_notify)
+    priv->create_popup_destroy_notify (priv->create_popup_user_data);
+
+  priv->create_popup_func = func;
+  priv->create_popup_user_data = user_data;
+  priv->create_popup_destroy_notify = destroy_notify;
+
+  update_sensitivity (menu_button);
 }

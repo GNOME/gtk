@@ -1866,6 +1866,7 @@ gtk_menu_button_set_relief
 gtk_menu_button_get_relief
 gtk_menu_button_popup
 gtk_menu_button_popdown
+gtk_menu_button_set_create_popup_func
 <SUBSECTION Standard>
 GTK_TYPE_MENU_BUTTON
 GTK_MENU_BUTTON
