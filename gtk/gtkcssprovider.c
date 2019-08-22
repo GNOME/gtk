@@ -539,10 +539,6 @@ gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
           if (ruleset->styles == NULL)
             continue;
 
-          if (!_gtk_bitmask_intersects (_gtk_css_lookup_get_missing (lookup),
-                                        ruleset->set_styles))
-          continue;
-
           for (j = 0; j < ruleset->n_styles; j++)
             {
               GtkCssStyleProperty *prop = ruleset->styles[j].property;
@@ -554,10 +550,10 @@ gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
               _gtk_css_lookup_set (lookup,
                                    id,
                                    ruleset->styles[j].section,
-                                  ruleset->styles[j].value);
+                                   ruleset->styles[j].value);
             }
 
-          if (_gtk_bitmask_is_empty (_gtk_css_lookup_get_missing (lookup)))
+          if (_gtk_css_lookup_all_set (lookup))
             break;
         }
 
