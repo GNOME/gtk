@@ -622,7 +622,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   label = gtk_label_new (primary);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_container_add (GTK_CONTAINER (main_vbox), GTK_WIDGET (label));
   g_free (primary);
   attrs = pango_attr_list_new ();
@@ -635,7 +635,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
       label = gtk_label_new (secondary);
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
-      gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+      gtk_label_set_wrap (GTK_LABEL (label), TRUE);
       gtk_container_add (GTK_CONTAINER (main_vbox), GTK_WIDGET (label));
     }
 

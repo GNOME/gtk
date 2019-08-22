@@ -639,7 +639,7 @@ display_nothing (const char *resource)
 
   str = g_strdup_printf ("The lazy GTK developers forgot to add a way to display the resource '%s'", resource);
   widget = gtk_label_new (str);
-  gtk_label_set_line_wrap (GTK_LABEL (widget), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (widget), TRUE);
 
   g_free (str);
 

@@ -112,7 +112,7 @@ scrollable_policy (void)
 			 "is enough height to fit the content vertically if the window were "
 			 "to be allocated a width without a vscrollbar present");
 
-  gtk_label_set_line_wrap  (GTK_LABEL (label), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_label_set_width_chars  (GTK_LABEL (label), 40);
   gtk_label_set_max_width_chars  (GTK_LABEL (label), 100);
 

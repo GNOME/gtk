@@ -1684,8 +1684,8 @@ gtk_label_set_yalign
 gtk_label_set_ellipsize
 gtk_label_set_width_chars
 gtk_label_set_max_width_chars
-gtk_label_set_line_wrap
-gtk_label_set_line_wrap_mode
+gtk_label_set_wrap
+gtk_label_set_wrap_mode
 gtk_label_set_lines
 gtk_label_get_layout_offsets
 gtk_label_get_mnemonic_keyval
@@ -1705,8 +1705,8 @@ gtk_label_get_width_chars
 gtk_label_get_max_width_chars
 gtk_label_get_label
 gtk_label_get_layout
-gtk_label_get_line_wrap
-gtk_label_get_line_wrap_mode
+gtk_label_get_wrap
+gtk_label_get_wrap_mode
 gtk_label_get_lines
 gtk_label_get_mnemonic_widget
 gtk_label_get_selection_bounds

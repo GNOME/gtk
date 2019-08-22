@@ -46,7 +46,7 @@ create_label (gboolean wrap)
   widget = gtk_label_new ("This is a label, label label label");
 
   if (wrap)
-    gtk_label_set_line_wrap (GTK_LABEL (widget), TRUE);
+    gtk_label_set_wrap (GTK_LABEL (widget), TRUE);
 
   return widget;
 }
@@ -328,7 +328,7 @@ open_valigned_label_window (void)
   gtk_container_add (GTK_CONTAINER (box), label);
 
   label = gtk_label_new ("Some wrapping text with width-chars = 15 and max-width-chars = 35");
-  gtk_label_set_line_wrap  (GTK_LABEL (label), TRUE);
+  gtk_label_set_wrap  (GTK_LABEL (label), TRUE);
   gtk_label_set_width_chars  (GTK_LABEL (label), 15);
   gtk_label_set_max_width_chars  (GTK_LABEL (label), 35);
 
