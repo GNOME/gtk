@@ -1204,10 +1204,12 @@ void
 gtk_image_clear (GtkImage *image)
 {
   GtkImagePrivate *priv = gtk_image_get_instance_private (image);
-  GtkImageType storage_type;
+  GtkImageType storage_type = gtk_image_get_storage_type (image);
+
+  if (storage_type == GTK_IMAGE_EMPTY)
+    return;
 
   g_object_freeze_notify (G_OBJECT (image));
-  storage_type = gtk_image_get_storage_type (image);
 
   if (storage_type != GTK_IMAGE_EMPTY)
     g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_STORAGE_TYPE]);
