@@ -124,7 +124,7 @@ create_label (void)
 {
   GtkWidget *w = gtk_label_new ("pLorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.");
 
-  gtk_label_set_line_wrap (GTK_LABEL (w), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (w), TRUE);
   gtk_label_set_max_width_chars (GTK_LABEL (w), 100);
 
   return w;
