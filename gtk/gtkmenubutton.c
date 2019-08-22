@@ -158,7 +158,6 @@ struct _GtkMenuButtonPrivate
   GtkArrowType arrow_type;
 
   guint use_popover   : 1;
-  guint press_handled : 1;
 };
 
 enum
