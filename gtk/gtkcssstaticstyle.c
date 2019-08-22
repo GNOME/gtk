@@ -219,19 +219,14 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
       GtkCssStyleProperty *prop = _gtk_css_style_property_lookup_by_id (id);
 
       if (_gtk_css_style_property_is_inherit (prop))
-        specified = _gtk_css_inherit_value_new ();
+        specified = _gtk_css_inherit_value_get ();
       else
-        specified = _gtk_css_initial_value_new ();
+        specified = _gtk_css_initial_value_get ();
     }
-  else
-    _gtk_css_value_ref (specified);
 
   value = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style);
 
   gtk_css_static_style_set_value (style, id, value, section);
-  value = NULL;
-
-  _gtk_css_value_unref (specified);
 }
 
 GtkCssChange
