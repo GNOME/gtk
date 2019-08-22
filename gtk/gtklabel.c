@@ -208,7 +208,7 @@
  * understood by Pango.
  *
  * Labels can automatically wrap text if you call
- * gtk_label_set_line_wrap().
+ * gtk_label_set_wrap().
  *
  * gtk_label_set_justify() sets how the lines in a label align
  * with one another. If you want to set how the label as a whole
@@ -1205,10 +1205,10 @@ gtk_label_set_property (GObject      *object,
       gtk_label_set_pattern (label, g_value_get_string (value));
       break;
     case PROP_WRAP:
-      gtk_label_set_line_wrap (label, g_value_get_boolean (value));
+      gtk_label_set_wrap (label, g_value_get_boolean (value));
       break;	  
     case PROP_WRAP_MODE:
-      gtk_label_set_line_wrap_mode (label, g_value_get_enum (value));
+      gtk_label_set_wrap_mode (label, g_value_get_enum (value));
       break;	  
     case PROP_SELECTABLE:
       gtk_label_set_selectable (label, g_value_get_boolean (value));
@@ -3116,7 +3116,7 @@ gtk_label_get_max_width_chars (GtkLabel *label)
 }
 
 /**
- * gtk_label_set_line_wrap:
+ * gtk_label_set_wrap:
  * @label: a #GtkLabel
  * @wrap: the setting
  *
@@ -3131,8 +3131,8 @@ gtk_label_get_max_width_chars (GtkLabel *label)
  * set the label’s width using gtk_widget_set_size_request().
  **/
 void
-gtk_label_set_line_wrap (GtkLabel *label,
-			 gboolean  wrap)
+gtk_label_set_wrap (GtkLabel *label,
+                    gboolean  wrap)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
@@ -3151,16 +3151,16 @@ gtk_label_set_line_wrap (GtkLabel *label,
 }
 
 /**
- * gtk_label_get_line_wrap:
+ * gtk_label_get_wrap:
  * @label: a #GtkLabel
  *
- * Returns whether lines in the label are automatically wrapped. 
- * See gtk_label_set_line_wrap().
+ * Returns whether lines in the label are automatically wrapped.
+ * See gtk_label_set_wrap().
  *
  * Returns: %TRUE if the lines of the label are automatically wrapped.
  */
 gboolean
-gtk_label_get_line_wrap (GtkLabel *label)
+gtk_label_get_wrap (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
@@ -3170,17 +3170,17 @@ gtk_label_get_line_wrap (GtkLabel *label)
 }
 
 /**
- * gtk_label_set_line_wrap_mode:
+ * gtk_label_set_wrap_mode:
  * @label: a #GtkLabel
  * @wrap_mode: the line wrapping mode
  *
- * If line wrapping is on (see gtk_label_set_line_wrap()) this controls how
+ * If line wrapping is on (see gtk_label_set_wrap()) this controls how
  * the line wrapping is done. The default is %PANGO_WRAP_WORD which means
  * wrap on word boundaries.
  **/
 void
-gtk_label_set_line_wrap_mode (GtkLabel *label,
-			      PangoWrapMode wrap_mode)
+gtk_label_set_wrap_mode (GtkLabel *label,
+                         PangoWrapMode wrap_mode)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 
@@ -3196,15 +3196,15 @@ gtk_label_set_line_wrap_mode (GtkLabel *label,
 }
 
 /**
- * gtk_label_get_line_wrap_mode:
+ * gtk_label_get_wrap_mode:
  * @label: a #GtkLabel
  *
- * Returns line wrap mode used by the label. See gtk_label_set_line_wrap_mode().
+ * Returns line wrap mode used by the label. See gtk_label_set_wrap_mode().
  *
  * Returns: %TRUE if the lines of the label are automatically wrapped.
  */
 PangoWrapMode
-gtk_label_get_line_wrap_mode (GtkLabel *label)
+gtk_label_get_wrap_mode (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
 

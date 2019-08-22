@@ -114,7 +114,7 @@ text_grid (void)
 
   label = gtk_label_new ("Some text that may wrap if it has to");
   gtk_label_set_width_chars (GTK_LABEL (label), 10);
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
 
   gtk_grid_attach (GTK_GRID (grid), test_widget ("1", "red"), 1, 0, 1, 1);
@@ -158,7 +158,7 @@ box_comparison (void)
   gtk_container_add (GTK_CONTAINER (box), test_widget ("2", "green"));
 
   label = gtk_label_new ("Some text that may wrap if needed");
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_label_set_width_chars (GTK_LABEL (label), 10);
   gtk_container_add (GTK_CONTAINER (box), label);
 
@@ -180,7 +180,7 @@ box_comparison (void)
   gtk_grid_attach (GTK_GRID (grid), test_widget ("2", "green"), 2, 0, 1, 1);
 
   label = gtk_label_new ("Some text that may wrap if needed");
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_label_set_width_chars (GTK_LABEL (label), 10);
   gtk_grid_attach (GTK_GRID (grid), label, 3, 0, 1, 1);
   gtk_widget_set_hexpand (label, TRUE);
