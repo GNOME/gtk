@@ -175,7 +175,7 @@ gtk_css_static_style_new_compute (GtkStyleProvider    *provider,
   GtkCssLookup lookup;
   GtkCssChange change = GTK_CSS_CHANGE_ANY_SELF | GTK_CSS_CHANGE_ANY_SIBLING | GTK_CSS_CHANGE_ANY_PARENT;
 
-  _gtk_css_lookup_init (&lookup, NULL);
+  _gtk_css_lookup_init (&lookup);
 
   if (matcher)
     gtk_style_provider_lookup (provider,
