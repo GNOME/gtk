@@ -147,8 +147,8 @@ populate_flowbox_wrappy (GtkFlowBox *flowbox)
 
       gtk_container_add (GTK_CONTAINER (frame), widget);
 
-      gtk_label_set_line_wrap (GTK_LABEL (widget), TRUE);
-      gtk_label_set_line_wrap_mode (GTK_LABEL (widget), PANGO_WRAP_WORD);
+      gtk_label_set_wrap (GTK_LABEL (widget), TRUE);
+      gtk_label_set_wrap_mode (GTK_LABEL (widget), PANGO_WRAP_WORD);
       gtk_label_set_width_chars (GTK_LABEL (widget), 10);
       g_object_set_data_full (G_OBJECT (frame), "id", (gpointer)g_strdup (strings[i]), g_free);
 
