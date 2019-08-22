@@ -677,7 +677,7 @@ request_password (GtkPrintBackend  *backend,
   label = gtk_label_new (NULL);
   markup = g_markup_printf_escaped ("<span weight=\"bold\" size=\"large\">%s</span>", prompt);
   gtk_label_set_markup (GTK_LABEL (label), markup);
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_widget_set_size_request (GTK_WIDGET (label), 320, -1);
   g_free (markup);
 

@@ -118,15 +118,15 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_label_set_pattern                    (GtkLabel         *label,
 						   const gchar      *pattern);
 GDK_AVAILABLE_IN_ALL
-void     gtk_label_set_line_wrap                  (GtkLabel         *label,
-						   gboolean          wrap);
+void     gtk_label_set_wrap                       (GtkLabel         *label,
+                                                   gboolean          wrap);
 GDK_AVAILABLE_IN_ALL
-gboolean gtk_label_get_line_wrap                  (GtkLabel         *label);
+gboolean gtk_label_get_wrap                       (GtkLabel         *label);
 GDK_AVAILABLE_IN_ALL
-void     gtk_label_set_line_wrap_mode             (GtkLabel         *label,
-						   PangoWrapMode     wrap_mode);
+void     gtk_label_set_wrap_mode                  (GtkLabel         *label,
+                                                   PangoWrapMode     wrap_mode);
 GDK_AVAILABLE_IN_ALL
-PangoWrapMode gtk_label_get_line_wrap_mode        (GtkLabel         *label);
+PangoWrapMode gtk_label_get_wrap_mode             (GtkLabel         *label);
 GDK_AVAILABLE_IN_ALL
 void     gtk_label_set_selectable                 (GtkLabel         *label,
 						   gboolean          setting);

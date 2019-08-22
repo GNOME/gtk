@@ -1,4 +1,4 @@
-/* GTK - The GIMP Toolkit
+  /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
@@ -1023,7 +1023,7 @@ void create_labels (GtkWidget *widget)
 			     "     It supports multiple paragraphs correctly, and  correctly   adds "\
 			     "many          extra  spaces. ");
 
-      gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+      gtk_label_set_wrap (GTK_LABEL (label), TRUE);
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
@@ -1036,7 +1036,7 @@ void create_labels (GtkWidget *widget)
 			     "    This is another newer, longer, better paragraph.  It is coming to an end, "\
 			     "unfortunately.");
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_FILL);
-      gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+      gtk_label_set_wrap (GTK_LABEL (label), TRUE);
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_container_add (GTK_CONTAINER (vbox), frame);
 
@@ -4916,7 +4916,7 @@ tracking_label (GtkWidget *window)
 			   G_CONNECT_SWAPPED);
 
   label = gtk_label_new ("<no window state events received>");
-  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_container_add (GTK_CONTAINER (hbox), label);
 
   g_object_set_data (G_OBJECT (label), "title", (gpointer)gtk_window_get_title (GTK_WINDOW (window)));

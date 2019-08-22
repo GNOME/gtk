@@ -524,8 +524,8 @@ background_area (void)
   label = gtk_label_new ("In this example, row spacing gets devided into the background area, "
 			 "column spacing is added between each background area, item_padding is "
 			 "prepended space distributed to the background area.");
-  gtk_label_set_line_wrap  (GTK_LABEL (label), TRUE);
-  gtk_label_set_width_chars  (GTK_LABEL (label), 40);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_width_chars (GTK_LABEL (label), 40);
   gtk_container_add (GTK_CONTAINER (main_vbox), label);
 
   iconview = focus_iconview (TRUE, NULL, NULL);
