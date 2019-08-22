@@ -363,7 +363,8 @@ gtk_menu_tool_button_new (GtkWidget   *icon_widget,
 }
 
 static void
-_show_menu_emit (gpointer user_data)
+_show_menu_emit (GtkMenuButton *menu_button,
+                 gpointer       user_data)
 {
   GtkMenuToolButton *button = (GtkMenuToolButton *) user_data;
   g_signal_emit (button, signals[SHOW_MENU], 0);
@@ -388,10 +389,9 @@ gtk_menu_tool_button_set_menu (GtkMenuToolButton *button,
 
   priv = button->priv;
 
-  _gtk_menu_button_set_popup_with_func (GTK_MENU_BUTTON (priv->arrow_button),
-                                        menu,
-                                        _show_menu_emit,
-                                        button);
+  gtk_menu_button_set_popup (GTK_MENU_BUTTON (priv->arrow_button), menu);
+  gtk_menu_button_set_create_popup_func (GTK_MENU_BUTTON (priv->arrow_button),
+                                         _show_menu_emit, NULL, NULL);
 
   g_object_notify (G_OBJECT (button), "menu");
 }
