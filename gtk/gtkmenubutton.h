@@ -37,6 +37,18 @@ G_BEGIN_DECLS
 
 typedef struct _GtkMenuButton        GtkMenuButton;
 
+/**
+ * GtkMenuButtonCreatePopupFunc:
+ * @menu_button: the #GtkMenuButton
+ *
+ * User-provided callback function to create a popup for @menu_button on demand.
+ * This function is called when the popoup of @menu_button is shown, but none has
+ * been provided via gtk_menu_buton_set_popup(), gtk_menu_button_set_popover()
+ * or gtk_menu_button_set_menu_model().
+ */
+typedef void  (*GtkMenuButtonCreatePopupFunc) (GtkMenuButton *menu_button,
+                                               gpointer       user_data);
+
 GDK_AVAILABLE_IN_ALL
 GType        gtk_menu_button_get_type       (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
@@ -102,6 +114,11 @@ void          gtk_menu_button_popup (GtkMenuButton *menu_button);
 GDK_AVAILABLE_IN_ALL
 void          gtk_menu_button_popdown (GtkMenuButton *menu_button);
 
+GDK_AVAILABLE_IN_ALL
+void          gtk_menu_button_set_create_popup_func (GtkMenuButton                *menu_button,
+                                                     GtkMenuButtonCreatePopupFunc  func,
+                                                     gpointer                      user_data,
+                                                     GDestroyNotify                destroy_notify);
 
 G_END_DECLS
 
