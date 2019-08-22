@@ -106,6 +106,16 @@ _gtk_allocated_bitmask_free (GtkBitmask *mask)
   g_free (mask);
 }
 
+char *
+_gtk_allocated_bitmask_to_string (const GtkBitmask *mask)
+{
+  GString *str = g_string_new (NULL);
+
+  _gtk_allocated_bitmask_print (mask, str);
+
+  return g_string_free (str, FALSE);
+}
+
 void
 _gtk_allocated_bitmask_print (const GtkBitmask *mask,
                               GString          *string)
