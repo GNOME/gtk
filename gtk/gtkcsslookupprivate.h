@@ -40,8 +40,7 @@ struct _GtkCssLookup {
   GtkCssLookupValue  values[GTK_CSS_PROPERTY_N_PROPERTIES];
 };
 
-void                    _gtk_css_lookup_init                    (GtkCssLookup               *lookup,
-                                                                 const GtkBitmask           *relevant);
+void                    _gtk_css_lookup_init                    (GtkCssLookup               *lookup);
 void                    _gtk_css_lookup_destroy                 (GtkCssLookup               *lookup);
 gboolean                _gtk_css_lookup_is_missing              (const GtkCssLookup         *lookup,
                                                                  guint                       id);
