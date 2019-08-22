@@ -25,8 +25,7 @@
 #include "gtkprivate.h"
 
 void
-_gtk_css_lookup_init (GtkCssLookup     *lookup,
-                      const GtkBitmask *relevant)
+_gtk_css_lookup_init (GtkCssLookup     *lookup)
 {
   memset (lookup, 0, sizeof (*lookup));
 }
