@@ -25,10 +25,6 @@ G_BEGIN_DECLS
 
 
 GtkCssValue *   _gtk_css_color_value_new_literal        (const GdkRGBA  *color);
-GtkCssValue *   _gtk_css_color_value_new_rgba           (double          red,
-                                                         double          green,
-                                                         double          blue,
-                                                         double          alpha);
 GtkCssValue *   _gtk_css_color_value_new_name           (const gchar    *name);
 GtkCssValue *   _gtk_css_color_value_new_shade          (GtkCssValue    *color,
                                                          gdouble         factor);
