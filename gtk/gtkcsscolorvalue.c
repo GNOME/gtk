@@ -235,10 +235,7 @@ _gtk_css_color_value_resolve (GtkCssValue      *color,
         }
       else
         {
-          return _gtk_css_color_value_resolve (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR)),
-                                               provider,
-                                               NULL,
-                                               cycle_list);
+          return _gtk_css_value_ref (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR)));
         }
       break;
     default:
