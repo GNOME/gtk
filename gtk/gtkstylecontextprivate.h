@@ -57,9 +57,6 @@ void            gtk_style_context_validate                   (GtkStyleContext *c
                                                               GtkCssStyleChange *change);
 gboolean       _gtk_style_context_check_region_name          (const gchar     *str);
 
-gboolean       _gtk_style_context_resolve_color              (GtkStyleContext    *context,
-                                                              GtkCssValue        *color,
-                                                              GdkRGBA            *result);
 void           _gtk_style_context_get_cursor_color           (GtkStyleContext    *context,
                                                               GdkRGBA            *primary_color,
                                                               GdkRGBA            *secondary_color);
