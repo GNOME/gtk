@@ -1327,10 +1327,10 @@ gtk_style_context_get_display (GtkStyleContext *context)
   return priv->display;
 }
 
-gboolean
-_gtk_style_context_resolve_color (GtkStyleContext    *context,
-                                  GtkCssValue        *color,
-                                  GdkRGBA            *result)
+static gboolean
+gtk_style_context_resolve_color (GtkStyleContext    *context,
+                                 GtkCssValue        *color,
+                                 GdkRGBA            *result)
 {
   GtkStyleContextPrivate *priv = gtk_style_context_get_instance_private (context);
   GtkCssValue *val;
@@ -1377,7 +1377,7 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
   if (value == NULL)
     return FALSE;
 
-  return _gtk_style_context_resolve_color (context, value, color);
+  return gtk_style_context_resolve_color (context, value, color);
 }
 
 static GtkCssStyleChange magic_number;
