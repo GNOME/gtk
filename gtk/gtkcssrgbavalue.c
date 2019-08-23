@@ -150,6 +150,12 @@ _gtk_css_rgba_value_new_transparent (void)
   return _gtk_css_value_ref (&transparent_black_singleton);
 }
 
+GtkCssValue *
+_gtk_css_rgba_value_new_white (void)
+{
+  return _gtk_css_value_ref (&opaque_white_singleton);
+}
+
 const GdkRGBA *
 _gtk_css_rgba_value_get_rgba (const GtkCssValue *rgba)
 {
