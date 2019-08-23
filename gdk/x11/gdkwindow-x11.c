@@ -270,6 +270,16 @@ hook_surface_changed (GdkWindow *window)
 {
   GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
+  /* The hooking we do below doesn't work if we're rendering with
+   * OpenGL (the cairo surface is not touched) so just always
+   * do the frame.
+   */
+  if (window->current_paint.use_gl)
+    {
+      window_pre_damage (window);
+      return;
+    }
+
   if (impl->cairo_surface)
     {
       cairo_surface_set_mime_data (impl->cairo_surface,
