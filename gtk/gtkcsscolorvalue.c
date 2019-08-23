@@ -426,17 +426,6 @@ _gtk_css_color_value_new_literal (const GdkRGBA *color)
 }
 
 GtkCssValue *
-_gtk_css_color_value_new_rgba (double red,
-                               double green,
-                               double blue,
-                               double alpha)
-{
-  GdkRGBA rgba = { red, green, blue, alpha };
-
-  return _gtk_css_color_value_new_literal (&rgba);
-}
-
-GtkCssValue *
 _gtk_css_color_value_new_name (const gchar *name)
 {
   GtkCssValue *value;
