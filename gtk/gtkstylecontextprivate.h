@@ -50,9 +50,6 @@ GtkCssStyleChange *
 GtkCssStyle *   gtk_style_context_lookup_style               (GtkStyleContext *context);
 GtkCssValue   * _gtk_style_context_peek_property             (GtkStyleContext *context,
                                                               guint            property_id);
-const GValue * _gtk_style_context_peek_style_property        (GtkStyleContext *context,
-                                                              GType            widget_type,
-                                                              GParamSpec      *pspec);
 void            gtk_style_context_validate                   (GtkStyleContext *context,
                                                               GtkCssStyleChange *change);
 gboolean       _gtk_style_context_check_region_name          (const gchar     *str);
@@ -60,13 +57,6 @@ gboolean       _gtk_style_context_check_region_name          (const gchar     *s
 void           _gtk_style_context_get_cursor_color           (GtkStyleContext    *context,
                                                               GdkRGBA            *primary_color,
                                                               GdkRGBA            *secondary_color);
-
-void           _gtk_style_context_get_icon_extents           (GtkStyleContext    *context,
-                                                              GdkRectangle       *extents,
-                                                              gint                x,
-                                                              gint                y,
-                                                              gint                width,
-                                                              gint                height);
 
 PangoAttrList *_gtk_style_context_get_pango_attributes       (GtkStyleContext *context);
 
