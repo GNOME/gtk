@@ -1726,15 +1726,11 @@ microphone-sensitivity-medium-symbolic</property>
                                               </object>
                                             </child>
                                             <child>
-                                              <object class="GtkImage">
-                                                <property name="icon-name">object-select-symbolic</property>
+                                              <object class="GtkSpinButton">
+                                                <property name="adjustment">adjustment1</property>
+                                                <property name="hexpand">1</property>
                                                 <property name="halign">end</property>
                                                 <property name="valign">center</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
-                                                <property name="margin-start">12</property>
-                                                <property name="margin-end">12</property>
-                                                <property name="opacity">0</property>
                                               </object>
                                             </child>
                                           </object>
