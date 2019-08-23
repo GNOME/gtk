@@ -1170,8 +1170,9 @@ spinbutton {
       @extend %spinbutton_horz_entry;
     }
 
-    > button.image-button.up,
-    > button.image-button.down {
+    /* :not here just to bump specificity above that of the list button styling */
+    > button.image-button.up:not(.flat),
+    > button.image-button.down:not(.flat) {
       min-height: 16px;
       margin: 0;
       padding-bottom: 0;
