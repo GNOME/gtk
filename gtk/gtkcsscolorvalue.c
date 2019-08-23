@@ -129,139 +129,6 @@ gtk_css_value_color_get_fallback (guint             property_id,
     }
 }
 
-GtkCssValue *
-_gtk_css_color_value_resolve (GtkCssValue      *color,
-                              GtkStyleProvider *provider,
-                              GtkCssValue      *current,
-                              GSList           *cycle_list)
-{
-  GtkCssValue *value;
-
-  gtk_internal_return_val_if_fail (color != NULL, NULL);
-
-  switch (color->type)
-    {
-    case COLOR_TYPE_LITERAL:
-      return _gtk_css_value_ref (color->last_value);
-    case COLOR_TYPE_NAME:
-      {
-	GtkCssValue *named;
-        GSList cycle = { color, cycle_list };
-
-        /* If color exists in cycle_list, we're currently resolving it.
-         * So we've detected a cycle. */
-        if (g_slist_find (cycle_list, color))
-          return NULL;
-
-        named = gtk_style_provider_get_color (provider, color->sym_col.name);
-	if (named == NULL)
-	  return NULL;
-
-        value = _gtk_css_color_value_resolve (named, provider, current, &cycle);
-	if (value == NULL)
-	  return NULL;
-      }
-
-      break;
-    case COLOR_TYPE_SHADE:
-      {
-	GtkCssValue *val;
-        GtkHSLA hsla;
-	GdkRGBA shade;
-
-	val = _gtk_css_color_value_resolve (color->sym_col.shade.color, provider, current, cycle_list);
-	if (val == NULL)
-	  return NULL;
-
-        _gtk_hsla_init_from_rgba (&hsla, _gtk_css_rgba_value_get_rgba (val));
-        _gtk_hsla_shade (&hsla, &hsla, color->sym_col.shade.factor);
-
-        _gdk_rgba_init_from_hsla (&shade, &hsla);
-
-	_gtk_css_value_unref (val);
-
-	value = _gtk_css_rgba_value_new_from_rgba (&shade);
-      }
-
-      break;
-    case COLOR_TYPE_ALPHA:
-      {
-	GtkCssValue *val;
-	GdkRGBA alpha;
-
-	val = _gtk_css_color_value_resolve (color->sym_col.alpha.color, provider, current, cycle_list);
-	if (val == NULL)
-	  return NULL;
-
-	alpha = *_gtk_css_rgba_value_get_rgba (val);
-	alpha.alpha = CLAMP (alpha.alpha * color->sym_col.alpha.factor, 0, 1);
-
-	_gtk_css_value_unref (val);
-
-	value = _gtk_css_rgba_value_new_from_rgba (&alpha);
-      }
-      break;
-
-    case COLOR_TYPE_MIX:
-      {
-	GtkCssValue *val;
-	GdkRGBA color1, color2, res;
-
-	val = _gtk_css_color_value_resolve (color->sym_col.mix.color1, provider, current, cycle_list);
-	if (val == NULL)
-	  return NULL;
-	color1 = *_gtk_css_rgba_value_get_rgba (val);
-	_gtk_css_value_unref (val);
-
-	val = _gtk_css_color_value_resolve (color->sym_col.mix.color2, provider, current, cycle_list);
-	if (val == NULL)
-	  return NULL;
-	color2 = *_gtk_css_rgba_value_get_rgba (val);
-	_gtk_css_value_unref (val);
-
-	res.red = CLAMP (color1.red + ((color2.red - color1.red) * color->sym_col.mix.factor), 0, 1);
-	res.green = CLAMP (color1.green + ((color2.green - color1.green) * color->sym_col.mix.factor), 0, 1);
-	res.blue = CLAMP (color1.blue + ((color2.blue - color1.blue) * color->sym_col.mix.factor), 0, 1);
-	res.alpha = CLAMP (color1.alpha + ((color2.alpha - color1.alpha) * color->sym_col.mix.factor), 0, 1);
-
-	value =_gtk_css_rgba_value_new_from_rgba (&res);
-      }
-
-      break;
-    case COLOR_TYPE_CURRENT_COLOR:
-      if (current)
-        {
-          return _gtk_css_value_ref (current);
-        }
-      else
-        {
-          return _gtk_css_color_value_resolve (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR)),
-                                               provider,
-                                               NULL,
-                                               cycle_list);
-        }
-      break;
-    default:
-      value = NULL;
-      g_assert_not_reached ();
-    }
-
-  if (color->last_value != NULL &&
-      _gtk_css_value_equal (color->last_value, value))
-    {
-      _gtk_css_value_unref (value);
-      value = _gtk_css_value_ref (color->last_value);
-    }
-  else
-    {
-      if (color->last_value != NULL)
-        _gtk_css_value_unref (color->last_value);
-      color->last_value = _gtk_css_value_ref (value);
-    }
-
-  return value;
-}
-
 static GtkCssValue *
 gtk_css_value_color_compute (GtkCssValue      *value,
                              guint             property_id,
@@ -410,6 +277,148 @@ static const GtkCssValueClass GTK_CSS_VALUE_COLOR = {
   NULL,
   gtk_css_value_color_print
 };
+
+GtkCssValue *
+_gtk_css_color_value_resolve (GtkCssValue      *color,
+                              GtkStyleProvider *provider,
+                              GtkCssValue      *current,
+                              GSList           *cycle_list)
+{
+  GtkCssValue *value;
+
+  gtk_internal_return_val_if_fail (color != NULL, NULL);
+
+  switch (color->type)
+    {
+    case COLOR_TYPE_LITERAL:
+      return _gtk_css_value_ref (color->last_value);
+    case COLOR_TYPE_NAME:
+      {
+	GtkCssValue *named;
+        GSList cycle = { color, cycle_list };
+
+        /* If color exists in cycle_list, we're currently resolving it.
+         * So we've detected a cycle. */
+        if (g_slist_find (cycle_list, color))
+          return NULL;
+
+        named = gtk_style_provider_get_color (provider, color->sym_col.name);
+	if (named == NULL)
+	  return NULL;
+
+        value = _gtk_css_color_value_resolve (named, provider, current, &cycle);
+	if (value == NULL)
+	  return NULL;
+      }
+
+      break;
+    case COLOR_TYPE_SHADE:
+      {
+	GtkCssValue *val;
+        GtkHSLA hsla;
+	GdkRGBA shade;
+
+	val = _gtk_css_color_value_resolve (color->sym_col.shade.color, provider, current, cycle_list);
+	if (val == NULL)
+	  return NULL;
+
+        _gtk_hsla_init_from_rgba (&hsla, _gtk_css_rgba_value_get_rgba (val));
+        _gtk_hsla_shade (&hsla, &hsla, color->sym_col.shade.factor);
+
+        _gdk_rgba_init_from_hsla (&shade, &hsla);
+
+	_gtk_css_value_unref (val);
+
+	value = _gtk_css_rgba_value_new_from_rgba (&shade);
+      }
+
+      break;
+    case COLOR_TYPE_ALPHA:
+      {
+	GtkCssValue *val;
+	GdkRGBA alpha;
+
+	val = _gtk_css_color_value_resolve (color->sym_col.alpha.color, provider, current, cycle_list);
+	if (val == NULL)
+	  return NULL;
+
+	alpha = *_gtk_css_rgba_value_get_rgba (val);
+	alpha.alpha = CLAMP (alpha.alpha * color->sym_col.alpha.factor, 0, 1);
+
+	_gtk_css_value_unref (val);
+
+	value = _gtk_css_rgba_value_new_from_rgba (&alpha);
+      }
+      break;
+
+    case COLOR_TYPE_MIX:
+      {
+	GtkCssValue *val;
+	GdkRGBA color1, color2, res;
+
+	val = _gtk_css_color_value_resolve (color->sym_col.mix.color1, provider, current, cycle_list);
+	if (val == NULL)
+	  return NULL;
+	color1 = *_gtk_css_rgba_value_get_rgba (val);
+	_gtk_css_value_unref (val);
+
+	val = _gtk_css_color_value_resolve (color->sym_col.mix.color2, provider, current, cycle_list);
+	if (val == NULL)
+	  return NULL;
+	color2 = *_gtk_css_rgba_value_get_rgba (val);
+	_gtk_css_value_unref (val);
+
+	res.red = CLAMP (color1.red + ((color2.red - color1.red) * color->sym_col.mix.factor), 0, 1);
+	res.green = CLAMP (color1.green + ((color2.green - color1.green) * color->sym_col.mix.factor), 0, 1);
+	res.blue = CLAMP (color1.blue + ((color2.blue - color1.blue) * color->sym_col.mix.factor), 0, 1);
+	res.alpha = CLAMP (color1.alpha + ((color2.alpha - color1.alpha) * color->sym_col.mix.factor), 0, 1);
+
+	value =_gtk_css_rgba_value_new_from_rgba (&res);
+      }
+
+      break;
+    case COLOR_TYPE_CURRENT_COLOR:
+      if (current)
+        {
+          return _gtk_css_value_ref (current);
+        }
+      else
+        {
+          GtkCssValue *initial = _gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR));
+
+          if (initial->class == &GTK_CSS_VALUE_COLOR)
+            {
+              return _gtk_css_color_value_resolve (initial,
+                                                   provider,
+                                                   NULL,
+                                                   cycle_list);
+            }
+          else
+            {
+              return _gtk_css_value_ref (initial);
+            }
+        }
+      break;
+    default:
+      value = NULL;
+      g_assert_not_reached ();
+    }
+
+  if (color->last_value != NULL &&
+      _gtk_css_value_equal (color->last_value, value))
+    {
+      _gtk_css_value_unref (value);
+      value = _gtk_css_value_ref (color->last_value);
+    }
+  else
+    {
+      if (color->last_value != NULL)
+        _gtk_css_value_unref (color->last_value);
+      color->last_value = _gtk_css_value_ref (value);
+    }
+
+  return value;
+}
 
 GtkCssValue *
 _gtk_css_color_value_new_literal (const GdkRGBA *color)
