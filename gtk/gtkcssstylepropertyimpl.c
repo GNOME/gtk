@@ -947,7 +947,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_CONTENT | GTK_CSS_AFFECTS_SYMBOLIC_ICON,
                                           color_parse,
                                           color_query,
-                                          _gtk_css_color_value_new_rgba (1, 1, 1, 1));
+                                          _gtk_css_rgba_value_new_white ());
   gtk_css_style_property_register        ("-gtk-dpi",
                                           GTK_CSS_PROPERTY_DPI,
                                           G_TYPE_NONE,
