@@ -9033,14 +9033,16 @@ gtk_window_set_debugging (gboolean enable,
           g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", dialog);
         }
     }
+  gint64 t2 = g_get_monotonic_time ();
+  double d = (t2 - t) / 1000.0;
+  g_message ("s: %.2f, ms: %.2f", d / 1000.0, d);
 
+CALLGRIND_STOP_INSTRUMENTATION;
   dialog = g_object_get_data (G_OBJECT (inspector_window), "warning_dialog");
 
   if (enable)
     {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_window_present (GTK_WINDOW (inspector_window));
-      G_GNUC_END_IGNORE_DEPRECATIONS
       if (dialog)
         gtk_widget_show (dialog);
 
