@@ -109,7 +109,6 @@ struct _GtkCssScanner
   GtkCssProvider *provider;
   GtkCssParser *parser;
   GtkCssScanner *parent;
-  GSList *state;
 };
 
 struct _GtkCssProviderPrivate
