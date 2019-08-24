@@ -106,11 +106,6 @@ enum {
   NUM_PROPERTIES
 };
 
-struct _GtkCssNodeStyleChange {
-  GtkCssStyle *old_style;
-  GtkCssStyle *new_style;
-};
-
 static guint cssnode_signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *cssnode_properties[NUM_PROPERTIES];
 
