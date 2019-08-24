@@ -26,16 +26,6 @@ G_BEGIN_DECLS
 #define DEFAULT_THEME_NAME      "Adwaita"
 #define DEFAULT_ICON_THEME      "Adwaita"
 
-void                _gtk_settings_set_property_value_from_rc (GtkSettings            *settings,
-                                                              const gchar            *name,
-                                                              const GtkSettingsValue *svalue);
-void                _gtk_settings_reset_rc_values            (GtkSettings            *settings);
-
-GtkRcPropertyParser _gtk_rc_property_parser_from_type        (GType                   type);
-gboolean            _gtk_settings_parse_convert              (GtkRcPropertyParser     parser,
-                                                              const GValue           *src_value,
-                                                              GParamSpec             *pspec,
-                                                              GValue                 *dest_value);
 const cairo_font_options_t *
                     gtk_settings_get_font_options            (GtkSettings            *settings);
 GdkDisplay         *_gtk_settings_get_display                (GtkSettings            *settings);
