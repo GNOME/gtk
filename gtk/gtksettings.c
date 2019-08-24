@@ -1346,7 +1346,7 @@ gtk_settings_notify (GObject    *object,
     }
 }
 
-gboolean
+static gboolean
 _gtk_settings_parse_convert (GtkRcPropertyParser parser,
                              const GValue       *src_value,
                              GParamSpec         *pspec,
@@ -1525,21 +1525,6 @@ settings_install_property_parser (GtkSettingsClass   *class,
   return class_n_properties;
 }
 
-GtkRcPropertyParser
-_gtk_rc_property_parser_from_type (GType type)
-{
-  if (type == GTK_TYPE_REQUISITION)
-    return gtk_rc_property_parse_requisition;
-  else if (type == GTK_TYPE_BORDER)
-    return gtk_rc_property_parse_border;
-  else if (G_TYPE_FUNDAMENTAL (type) == G_TYPE_ENUM && G_TYPE_IS_DERIVED (type))
-    return gtk_rc_property_parse_enum;
-  else if (G_TYPE_FUNDAMENTAL (type) == G_TYPE_FLAGS && G_TYPE_IS_DERIVED (type))
-    return gtk_rc_property_parse_flags;
-  else
-    return NULL;
-}
-
 static void
 free_value (gpointer data)
 {
@@ -1594,19 +1579,6 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), g_quark_to_string (name_quark));
   if (pspec)
     apply_queued_setting (settings, pspec, qvalue);
-}
-
-void
-_gtk_settings_set_property_value_from_rc (GtkSettings            *settings,
-                                          const gchar            *prop_name,
-                                          const GtkSettingsValue *new_value)
-{
-  g_return_if_fail (GTK_SETTINGS (settings));
-  g_return_if_fail (prop_name != NULL);
-  g_return_if_fail (new_value != NULL);
-
-  gtk_settings_set_property_value_internal (settings, prop_name, new_value,
-                                            GTK_SETTINGS_SOURCE_THEME);
 }
 
 static const GScannerConfig gtk_rc_scanner_config =
@@ -1947,61 +1919,6 @@ gtk_rc_property_parse_border (const GParamSpec *pspec,
   g_scanner_destroy (scanner);
 
   return success;
-}
-
-static void
-reset_rc_values_foreach (GQuark   key_id,
-                         gpointer data,
-                         gpointer user_data)
-{
-  GtkSettingsValuePrivate *qvalue = data;
-  GSList **to_reset = user_data;
-
-  if (qvalue->source == GTK_SETTINGS_SOURCE_THEME)
-    *to_reset = g_slist_prepend (*to_reset, GUINT_TO_POINTER (key_id));
-}
-
-void
-_gtk_settings_reset_rc_values (GtkSettings *settings)
-{
-  GtkSettingsPrivate *priv = gtk_settings_get_instance_private (settings);
-  GSList *to_reset = NULL;
-  GSList *tmp_list;
-  GParamSpec **pspecs, **p;
-  gint i;
-
-  /* Remove any queued settings */
-  g_datalist_foreach (&priv->queued_settings,
-                      reset_rc_values_foreach,
-                      &to_reset);
-
-  for (tmp_list = to_reset; tmp_list; tmp_list = tmp_list->next)
-    {
-      GQuark key_id = GPOINTER_TO_UINT (tmp_list->data);
-      g_datalist_id_remove_data (&priv->queued_settings, key_id);
-    }
-
-   g_slist_free (to_reset);
-
-  /* Now reset the active settings
-   */
-  pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (settings), NULL);
-  i = 0;
-
-  g_object_freeze_notify (G_OBJECT (settings));
-  for (p = pspecs; *p; p++)
-    {
-      if (priv->property_values[i].source == GTK_SETTINGS_SOURCE_THEME)
-        {
-          GParamSpec *pspec = *p;
-
-          g_param_value_set_default (pspec, &priv->property_values[i].value);
-          g_object_notify_by_pspec (G_OBJECT (settings), pspec);
-        }
-      i++;
-    }
-  g_object_thaw_notify (G_OBJECT (settings));
-  g_free (pspecs);
 }
 
 static void
