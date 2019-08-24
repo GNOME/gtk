@@ -64,9 +64,6 @@ GtkCssValue *           gtk_css_style_get_value                 (GtkCssStyle    
                                                                  guint                   id) G_GNUC_PURE;
 GtkCssSection *         gtk_css_style_get_section               (GtkCssStyle            *style,
                                                                  guint                   id) G_GNUC_PURE;
-GtkBitmask *            gtk_css_style_add_difference            (GtkBitmask             *accumulated,
-                                                                 GtkCssStyle            *style,
-                                                                 GtkCssStyle            *other);
 gboolean                gtk_css_style_is_static                 (GtkCssStyle            *style) G_GNUC_PURE;
 
 char *                  gtk_css_style_to_string                 (GtkCssStyle            *style);
