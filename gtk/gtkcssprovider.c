@@ -527,6 +527,9 @@ gtk_css_style_provider_lookup (GtkStyleProvider    *provider,
   int i;
   GPtrArray *tree_rules;
 
+  if (_gtk_css_selector_tree_is_empty (priv->tree))
+    return;
+
   tree_rules = _gtk_css_selector_tree_match_all (priv->tree, matcher);
   if (tree_rules)
     {

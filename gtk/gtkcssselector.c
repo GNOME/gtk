@@ -1885,6 +1885,12 @@ gtk_css_selector_tree_get_change (const GtkCssSelectorTree *tree,
   return change;
 }
 
+gboolean
+_gtk_css_selector_tree_is_empty (const GtkCssSelectorTree *tree)
+{
+  return tree == NULL;
+}
+
 GtkCssChange
 _gtk_css_selector_tree_get_change_all (const GtkCssSelectorTree *tree,
 				       const GtkCssMatcher *matcher)
