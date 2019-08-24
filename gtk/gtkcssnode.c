@@ -25,6 +25,7 @@
 #include "gtkmarshalers.h"
 #include "gtksettingsprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkprivate.h"
 
 /*
  * CSS nodes are the backbone of the GtkStyleContext implementation and
@@ -386,12 +387,11 @@ static gboolean
 gtk_css_style_needs_recreation (GtkCssStyle  *style,
                                 GtkCssChange  change)
 {
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STATIC_STYLE (style), TRUE);
+
   /* Try to avoid invalidating if we can */
   if (change & GTK_CSS_RADICAL_CHANGE)
     return TRUE;
-
-  if (GTK_IS_CSS_ANIMATED_STYLE (style))
-    style = GTK_CSS_ANIMATED_STYLE (style)->style;
 
   if (gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (style)) & change)
     return TRUE;
