@@ -37,8 +37,6 @@ struct _GtkMagnifierPrivate
   gint x;
   gint y;
   gboolean resize;
-  gulong draw_handler;
-  gulong resize_handler;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkMagnifier, gtk_magnifier,
