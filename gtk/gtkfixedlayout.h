@@ -41,9 +41,9 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkFixedLayoutChild, gtk_fixed_layout_child, GTK, FIXED_LAYOUT_CHILD, GtkLayoutChild)
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_fixed_layout_child_set_position     (GtkFixedLayoutChild *child,
-                                                         GskTransform        *position);
+void            gtk_fixed_layout_child_set_transform    (GtkFixedLayoutChild *child,
+                                                         GskTransform        *transform);
 GDK_AVAILABLE_IN_ALL
-GskTransform *  gtk_fixed_layout_child_get_position     (GtkFixedLayoutChild *child);
+GskTransform *  gtk_fixed_layout_child_get_transform    (GtkFixedLayoutChild *child);
 
 G_END_DECLS

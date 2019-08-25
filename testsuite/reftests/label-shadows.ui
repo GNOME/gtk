@@ -12,7 +12,7 @@
             <property name="height-request">100</property>
             <property name="label" translatable="yes">ABC</property>
             <layout>
-              <property name="position">translate(50, 50) rotate(0) translate(-50,-50)</property>
+              <property name="transform">translate(50, 50) rotate(0) translate(-50,-50)</property>
             </layout>
           </object>
         </child>
@@ -22,7 +22,7 @@
             <property name="height-request">100</property>
             <property name="label" translatable="yes">ABC</property>
             <layout>
-              <property name="position">translate(150, 50) rotate(90) translate(-50,-50)</property>
+              <property name="transform">translate(150, 50) rotate(90) translate(-50,-50)</property>
             </layout>
           </object>
         </child>
@@ -32,7 +32,7 @@
             <property name="height-request">100</property>
             <property name="label" translatable="yes">ABC</property>
             <layout>
-              <property name="position">translate(150, 150) rotate(180) translate(-50,-50)</property>
+              <property name="transform">translate(150, 150) rotate(180) translate(-50,-50)</property>
             </layout>
           </object>
         </child>
@@ -42,7 +42,7 @@
             <property name="height-request">100</property>
             <property name="label" translatable="yes">ABC</property>
             <layout>
-              <property name="position">translate(50, 150) rotate(180) translate(-50,-50)</property>
+              <property name="transform">translate(50, 150) rotate(180) translate(-50,-50)</property>
             </layout>
           </object>
         </child>
