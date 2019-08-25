@@ -401,7 +401,12 @@ gdk_monitor_get_connector (GdkMonitor *monitor)
  * gdk_monitor_get_manufacturer:
  * @monitor: a #GdkMonitor
  *
- * Gets the name of the monitor's manufacturer, if available.
+ * Gets the name or PNP ID of the monitor's manufacturer, if available.
+ *
+ * Note that this value might also vary depending on actual
+ * display backend.
+ *
+ * PNP ID registry is located at https://uefi.org/pnp_id_list
  *
  * Returns: (transfer none) (nullable): the name of the manufacturer, or %NULL
  */
