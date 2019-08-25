@@ -14,8 +14,6 @@ gdk/gdkscreen.c
 gdk/gdkseat.c
 gdk/gdkwindow.c
 gdk/keyname-table.h
-gdk/mir/gdkmirglcontext.c
-gdk/mir/gdkmirwindowimpl.c
 gdk/quartz/gdkglcontext-quartz.c
 gdk/wayland/gdkglcontext-wayland.c
 gdk/win32/gdkglcontext-win32.c
