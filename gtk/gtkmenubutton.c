@@ -706,7 +706,7 @@ gtk_menu_button_init (GtkMenuButton *menu_button)
   g_signal_connect_swapped (priv->button, "toggled", G_CALLBACK (gtk_menu_button_toggled), menu_button);
   add_arrow (menu_button);
 
-  gtk_widget_set_sensitive (GTK_WIDGET (menu_button), FALSE);
+  gtk_widget_set_sensitive (priv->button, FALSE);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (menu_button));
   gtk_style_context_add_class (context, "popup");
@@ -758,7 +758,7 @@ update_sensitivity (GtkMenuButton *menu_button)
 {
   GtkMenuButtonPrivate *priv = gtk_menu_button_get_instance_private (menu_button);
 
-  gtk_widget_set_sensitive (GTK_WIDGET (menu_button),
+  gtk_widget_set_sensitive (priv->button,
                             priv->menu != NULL ||
                             priv->popover != NULL ||
                             priv->create_popup_func != NULL);
