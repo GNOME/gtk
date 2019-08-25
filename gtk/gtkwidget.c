@@ -13505,15 +13505,14 @@ gtk_widget_class_add_action (GtkWidgetClass  *widget_class,
  * gtk_widget_class_install_action:
  * @widget_class: a #GtkWidgetClass
  * @action_name: a prefixed action name, such as "clipboard.paste"
- * @parameter_type: (allow-none): the parameter type, or %NULL
+ * @parameter_type: (nullable): the parameter type, or %NULL
  * @activate: callback to use when the action is activated
  *
  * This should be called at class initialization time to specify
  * actions to be added for all instances of this class.
  *
  * Actions installed by this function are stateless. The only state
- * they have is whether they are enabled or not. For more complicated
- * actions, see gtk_widget_class_install_stateful_action().
+ * they have is whether they are enabled or not.
  */
 void
 gtk_widget_class_install_action (GtkWidgetClass              *widget_class,
