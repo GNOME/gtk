@@ -260,11 +260,11 @@ gtk_link_button_init (GtkLinkButton *link_button)
 
   gtk_button_set_relief (GTK_BUTTON (link_button), GTK_RELIEF_NONE);
   gtk_widget_set_state_flags (GTK_WIDGET (link_button), GTK_STATE_FLAG_LINK, FALSE);
+  gtk_widget_set_has_tooltip (GTK_WIDGET (link_button), TRUE);
 
   g_signal_connect (link_button, "drag-data-get",
   		    G_CALLBACK (gtk_link_button_drag_data_get_cb), NULL);
 
-  g_object_set (link_button, "has-tooltip", TRUE, NULL);
   g_signal_connect (link_button, "query-tooltip",
                     G_CALLBACK (gtk_link_button_query_tooltip_cb), NULL);
 
