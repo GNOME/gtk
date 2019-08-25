@@ -244,7 +244,7 @@ gtk_link_button_get_menu_model (void)
   menu = g_menu_new ();
 
   section = g_menu_new ();
-  g_menu_append (section, _("_Copy URL"), "context.copy-clipboard");
+  g_menu_append (section, _("_Copy URL"), "clipboard.copy");
   g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
   g_object_unref (section);
 
