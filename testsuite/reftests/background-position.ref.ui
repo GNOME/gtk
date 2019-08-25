@@ -15,7 +15,7 @@
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
-              <property name="position">translate(10, 10)</property>
+              <property name="transform">translate(10, 10)</property>
             </layout>
           </object>
         </child>
@@ -27,7 +27,7 @@
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
-              <property name="position">translate(40, 10)</property>
+              <property name="transform">translate(40, 10)</property>
             </layout>
           </object>
         </child>
@@ -39,7 +39,7 @@
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
-              <property name="position">translate(80, 20)</property>
+              <property name="transform">translate(80, 20)</property>
             </layout>
           </object>
         </child>
@@ -51,7 +51,7 @@
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
-              <property name="position">translate(20, 60)</property>
+              <property name="transform">translate(20, 60)</property>
             </layout>
           </object>
         </child>
@@ -63,7 +63,7 @@
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
-              <property name="position">translate(60, 40)</property>
+              <property name="transform">translate(60, 40)</property>
             </layout>
           </object>
         </child>
@@ -75,7 +75,7 @@
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
-              <property name="position">translate(100, 50)</property>
+              <property name="transform">translate(100, 50)</property>
             </layout>
           </object>
         </child>
@@ -87,7 +87,7 @@
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
-              <property name="position">translate(10, 90)</property>
+              <property name="transform">translate(10, 90)</property>
             </layout>
           </object>
         </child>
@@ -99,7 +99,7 @@
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
-              <property name="position">translate(40, 90)</property>
+              <property name="transform">translate(40, 90)</property>
             </layout>
           </object>
         </child>
@@ -111,7 +111,7 @@
             <property name="receives_default">1</property>
             <property name="name">ref</property>
             <layout>
-              <property name="position">translate(100, 100)</property>
+              <property name="transform">translate(100, 100)</property>
             </layout>
           </object>
         </child>
