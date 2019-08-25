@@ -12,7 +12,7 @@
             <property name="height-request">100</property>
             <property name="label" translatable="yes">ABC</property>
             <layout>
-              <property name="position">translate(50, 50) rotate(0) translate(-49,-49)</property>
+              <property name="transform">translate(50, 50) rotate(0) translate(-49,-49)</property>
             </layout>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"></attribute>
@@ -28,7 +28,7 @@
             <property name="height-request">100</property>
             <property name="label" translatable="yes">ABC</property>
             <layout>
-              <property name="position">translate(50, 50) rotate(0) translate(-50,-50)</property>
+              <property name="transform">translate(50, 50) rotate(0) translate(-50,-50)</property>
             </layout>
             <style>
               <class name="no-shadow"/>
@@ -41,36 +41,7 @@
             <property name="height-request">100</property>
             <property name="label" translatable="yes">ABC</property>
             <layout>
-              <property name="position">translate(150, 50) rotate(90) translate(-49,-49)</property>
-            </layout>
-            <attributes>
-              <attribute name="foreground" value="#ffff00000000"></attribute>
-            </attributes>
-            <style>
-              <class name="no-shadow"/>
-            </style>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="width-request">100</property>
-            <property name="height-request">100</property>
-            <property name="label" translatable="yes">ABC</property>
-            <layout>
-              <property name="position">translate(150, 50) rotate(90) translate(-50,-50)</property>
-            </layout>
-            <style>
-              <class name="no-shadow"/>
-            </style>
-          </object>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="width-request">100</property>
-            <property name="height-request">100</property>
-            <property name="label" translatable="yes">ABC</property>
-            <layout>
-              <property name="position">translate(150, 150) rotate(180) translate(-49,-49)</property>
+              <property name="transform">translate(150, 50) rotate(90) translate(-49,-49)</property>
             </layout>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"></attribute>
@@ -86,7 +57,7 @@
             <property name="height-request">100</property>
             <property name="label" translatable="yes">ABC</property>
             <layout>
-              <property name="position">translate(150, 150) rotate(180) translate(-50,-50)</property>
+              <property name="transform">translate(150, 50) rotate(90) translate(-50,-50)</property>
             </layout>
             <style>
               <class name="no-shadow"/>
@@ -99,7 +70,7 @@
             <property name="height-request">100</property>
             <property name="label" translatable="yes">ABC</property>
             <layout>
-              <property name="position">translate(50, 150) rotate(180) translate(-49,-49)</property>
+              <property name="transform">translate(150, 150) rotate(180) translate(-49,-49)</property>
             </layout>
             <attributes>
               <attribute name="foreground" value="#ffff00000000"></attribute>
@@ -115,7 +86,36 @@
             <property name="height-request">100</property>
             <property name="label" translatable="yes">ABC</property>
             <layout>
-              <property name="position">translate(50, 150) rotate(180) translate(-50,-50)</property>
+              <property name="transform">translate(150, 150) rotate(180) translate(-50,-50)</property>
+            </layout>
+            <style>
+              <class name="no-shadow"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="width-request">100</property>
+            <property name="height-request">100</property>
+            <property name="label" translatable="yes">ABC</property>
+            <layout>
+              <property name="transform">translate(50, 150) rotate(180) translate(-49,-49)</property>
+            </layout>
+            <attributes>
+              <attribute name="foreground" value="#ffff00000000"></attribute>
+            </attributes>
+            <style>
+              <class name="no-shadow"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="width-request">100</property>
+            <property name="height-request">100</property>
+            <property name="label" translatable="yes">ABC</property>
+            <layout>
+              <property name="transform">translate(50, 150) rotate(180) translate(-50,-50)</property>
             </layout>
             <style>
               <class name="no-shadow"/>
