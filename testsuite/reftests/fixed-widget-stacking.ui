@@ -27,7 +27,7 @@ TEST123</property>
               </object>
             </child>
             <layout>
-              <property name="position">translate(50, 50)</property>
+              <property name="transform">translate(50, 50)</property>
             </layout>
           </object>
         </child>

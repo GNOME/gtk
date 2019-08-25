@@ -61,7 +61,7 @@
                   <class name="reference-padding-radius"/>
                 </style>
                 <layout>
-                  <property name="position">translate(5, 5)</property>
+                  <property name="transform">translate(5, 5)</property>
                 </layout>
               </object>
             </child>
@@ -75,7 +75,7 @@
                   <class name="column1"/>
                 </style>
                 <layout>
-                  <property name="position">translate(20, 20)</property>
+                  <property name="transform">translate(20, 20)</property>
                 </layout>
               </object>
             </child>
@@ -119,7 +119,7 @@
                   <class name="column2"/>
                 </style>
                 <layout>
-                  <property name="position">translate(5, 5)</property>
+                  <property name="transform">translate(5, 5)</property>
                 </layout>
               </object>
             </child>
@@ -132,7 +132,7 @@
                   <class name="column2"/>
                 </style>
                 <layout>
-                  <property name="position">translate(20, 20)</property>
+                  <property name="transform">translate(20, 20)</property>
                 </layout>
               </object>
             </child>
@@ -165,7 +165,7 @@
                   <class name="reference-padding-radius"/>
                 </style>
                 <layout>
-                  <property name="position">translate(5, 5)</property>
+                  <property name="transform">translate(5, 5)</property>
                 </layout>
               </object>
             </child>
@@ -179,7 +179,7 @@
                   <class name="column1"/>
                 </style>
                 <layout>
-                  <property name="position">translate(30, 30)</property>
+                  <property name="transform">translate(30, 30)</property>
                 </layout>
               </object>
             </child>
@@ -223,7 +223,7 @@
                   <class name="column2"/>
                 </style>
                 <layout>
-                  <property name="position">translate(5, 5)</property>
+                  <property name="transform">translate(5, 5)</property>
                 </layout>
               </object>
             </child>
@@ -236,7 +236,7 @@
                   <class name="column2"/>
                 </style>
                 <layout>
-                  <property name="position">translate(30, 30)</property>
+                  <property name="transform">translate(30, 30)</property>
                 </layout>
               </object>
             </child>

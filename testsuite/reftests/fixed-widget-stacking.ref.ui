@@ -22,7 +22,7 @@ TEST123</property>
             <property name="can_focus">1</property>
             <property name="buffer">textbuffer1</property>
             <layout>
-              <property name="position">translate(50, 50)</property>
+              <property name="transform">translate(50, 50)</property>
             </layout>
           </object>
         </child>
