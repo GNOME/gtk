@@ -278,7 +278,7 @@ _gtk_print_backend_create (const gchar *backend_name)
 	  pb_module = g_object_new (GTK_TYPE_PRINT_BACKEND_MODULE, NULL);
 
 	  g_type_module_set_name (G_TYPE_MODULE (pb_module), backend_name);
-	  pb_module->path = g_strdup (module_path);
+	  pb_module->path = module_path;
 
 	  loaded_backends = g_slist_prepend (loaded_backends,
 		   		             pb_module);
@@ -291,8 +291,6 @@ _gtk_print_backend_create (const gchar *backend_name)
 	   */
 	  g_type_module_use (G_TYPE_MODULE (pb_module));
 	}
-      
-      g_free (module_path);
     }
 
   return pb;
