@@ -209,7 +209,8 @@ gtk_fixed_get_child_position (GtkFixed  *fixed,
  * gtk_fixed_set_child_transform:
  * @fixed: a #GtkFixed
  * @widget: a #GtkWidget, child of @fixed
- * @transform: (nullable): the transformation assigned to @widget
+ * @transform: (nullable): the transformation assigned to @widget or %NULL
+ *   to reset @widget's transform
  *
  * Sets the transformation for @widget.
  *
@@ -240,7 +241,8 @@ gtk_fixed_set_child_transform (GtkFixed     *fixed,
  * Retrieves the transformation for @widget set using
  * gtk_fixed_set_child_transform().
  *
- * Returns: (transfer none) (nullable): a #GskTransform
+ * Returns: (transfer none) (nullable): a #GskTransform or %NULL
+ *   in case no transform has been set on @widget
  */
 GskTransform *
 gtk_fixed_get_child_transform (GtkFixed  *fixed,
