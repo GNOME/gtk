@@ -114,6 +114,9 @@ struct _GdkWaylandSelection
 static void selection_buffer_read (SelectionBuffer *buffer);
 static void async_write_data_write (AsyncWriteData *write_data);
 static void emit_selection_clear (GdkDisplay *display, GdkAtom selection);
+static void emit_empty_selection_notify (GdkWindow *requestor,
+                                         GdkAtom    selection,
+                                         GdkAtom    target);
 
 static void
 selection_buffer_notify (SelectionBuffer *buffer)
@@ -168,10 +171,21 @@ selection_buffer_ref (SelectionBuffer *buffer)
 static void
 selection_buffer_unref (SelectionBuffer *buffer_data)
 {
+  GList *l;
+
   buffer_data->ref_count--;
 
   if (buffer_data->ref_count != 0)
     return;
+
+  for (l = buffer_data->requestors; l; l = l->next)
+    {
+      emit_empty_selection_notify (l->data, buffer_data->selection,
+                                   buffer_data->target);
+    }
+
+  g_list_free (buffer_data->requestors);
+  buffer_data->requestors = NULL;
 
   if (buffer_data->cancellable)
     g_object_unref (buffer_data->cancellable);
@@ -1126,11 +1140,9 @@ gdk_wayland_selection_unset_data_source (GdkDisplay *display,
 
   if (selection == atoms[ATOM_CLIPBOARD])
     {
-      GdkDevice *device;
+      GdkSeat *seat = gdk_display_get_default_seat (display);
 
-      device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
-
-      gdk_wayland_device_set_selection (device, NULL);
+      gdk_wayland_seat_set_selection (seat, NULL);
 
       if (wayland_selection->clipboard_source)
         {
@@ -1184,11 +1196,15 @@ _gdk_wayland_display_set_selection_owner (GdkDisplay *display,
   if (selection == atoms[ATOM_CLIPBOARD])
     {
       wayland_selection->clipboard_owner = owner;
+      if (send_event && !owner)
+        gdk_wayland_selection_unset_data_source (display, selection);
       return TRUE;
     }
   else if (selection == atoms[ATOM_PRIMARY])
     {
       wayland_selection->primary_owner = owner;
+      if (send_event && !owner)
+        gdk_wayland_selection_unset_data_source (display, selection);
       return TRUE;
     }
   else if (selection == atoms[ATOM_DND])
@@ -1313,7 +1329,10 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
 
   selection_data = selection_lookup_offer_by_atom (wayland_selection, selection);
   if (!selection_data)
-    return;
+    {
+      emit_empty_selection_notify (requestor, selection, target);
+      return;
+    }
 
   offer = gdk_wayland_selection_get_offer (display, selection);
   target_list = gdk_wayland_selection_get_targets (display, selection);
@@ -1534,12 +1553,10 @@ gdk_wayland_selection_add_targets (GdkWindow *window,
 
   if (selection == atoms[ATOM_CLIPBOARD])
     {
-      GdkDisplay *display;
-      GdkDevice *device;
+      GdkSeat *seat;
 
-      display = gdk_window_get_display (window);
-      device = gdk_seat_get_pointer (gdk_display_get_default_seat (display));
-      gdk_wayland_device_set_selection (device, data_source);
+      seat = gdk_display_get_default_seat (display);
+      gdk_wayland_seat_set_selection (seat, data_source);
     }
   else if (selection == atoms[ATOM_PRIMARY])
     {
