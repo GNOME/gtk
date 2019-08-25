@@ -1312,7 +1312,7 @@ gdk_event_get_scroll_deltas (const GdkEvent *event,
  * stop scroll event is the signal that a widget may trigger kinetic
  * scrolling based on the current velocity.
  *
- * Stop scroll events always have a a delta of 0/0.
+ * Stop scroll events always have a delta of 0/0.
  *
  * Returns: %TRUE if the event is a scroll stop event
  */

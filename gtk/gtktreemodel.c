@@ -2145,7 +2145,7 @@ gtk_tree_row_ref_deleted (RowRefList  *refs,
     return;
 
   /* This function corrects the path stored in the reference to
-   * account for an deletion. Note that it's called _after_ the
+   * account for a deletion. Note that it's called _after_ the
    * deletion with the old path of the just-deleted row. Which means
    * that the deleted path is the same now-defunct "coordinate system"
    * as the path saved in the reference, which is what we want to fix.

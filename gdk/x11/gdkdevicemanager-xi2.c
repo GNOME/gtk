@@ -1363,7 +1363,7 @@ scroll_valuators_changed (GdkX11DeviceXI2 *device,
 }
 
 /* We only care about focus events that indicate that _this_
- * surface (not a ancestor or child) got or lost the focus
+ * surface (not an ancestor or child) got or lost the focus
  */
 static void
 _gdk_device_manager_xi2_handle_focus (GdkSurface *surface,

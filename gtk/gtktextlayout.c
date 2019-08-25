@@ -1980,7 +1980,7 @@ convert_color (GdkRGBA        *result,
 
 /* This function is used to convert the preedit string attributes, which are
  * standard PangoAttributes, into the custom attributes used by the text
- * widget and insert them into a attr list with a given offset.
+ * widget and insert them into an attr list with a given offset.
  */
 static void
 add_preedit_attrs (GtkTextLayout     *layout,

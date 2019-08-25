@@ -180,7 +180,7 @@ struct _GdkW32DragMoveResizeContext
    *
    * For drag-move: If it's FALSE,
    * then the pointer have not yet hit a trigger, even if it is
-   * already within a edge region.
+   * already within an edge region.
    * If it's TRUE, then the pointer did hit a trigger within an
    * edge region, and have not yet left an edge region
    * (passing from one edge region into another doesn't count).
