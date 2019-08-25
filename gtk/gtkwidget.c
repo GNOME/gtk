@@ -13632,10 +13632,10 @@ gtk_widget_action_set_enabled (GtkWidget  *widget,
  * gtk_widget_class_query_action:
  * @widget_class: a #GtkWidgetClass
  * @index_: position of the action to query
- * @owner: the type where the action was defined
- * @action_name: return location for the action name
- * @parameter_type: return location for the parameter type
- * @property_name: return location for the property name
+ * @owner: (out): return location for the type where the action was defined
+ * @action_name: (out): return location for the action name
+ * @parameter_type: (out): return location for the parameter type
+ * @property_name: (out): return location for the property name
  *
  * Queries the actions that have been installed for
  * a widget class using gtk_widget_class_install_action()
