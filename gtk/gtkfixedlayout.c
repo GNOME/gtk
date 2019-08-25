@@ -77,12 +77,12 @@ struct _GtkFixedLayoutChild
 {
   GtkLayoutChild parent_instance;
 
-  GskTransform *position;
+  GskTransform *transform;
 };
 
 enum
 {
-  PROP_CHILD_POSITION = 1,
+  PROP_CHILD_TRANSFORM = 1,
 
   N_CHILD_PROPERTIES
 };
@@ -101,8 +101,8 @@ gtk_fixed_layout_child_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
-    case PROP_CHILD_POSITION:
-      gtk_fixed_layout_child_set_position (self, g_value_get_boxed (value));
+    case PROP_CHILD_TRANSFORM:
+      gtk_fixed_layout_child_set_transform (self, g_value_get_boxed (value));
       break;
 
     default:
@@ -121,8 +121,8 @@ gtk_fixed_layout_child_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_CHILD_POSITION:
-      g_value_set_boxed (value, &self->position);
+    case PROP_CHILD_TRANSFORM:
+      g_value_set_boxed (value, &self->transform);
       break;
 
     default:
@@ -136,7 +136,7 @@ gtk_fixed_layout_child_finalize (GObject *gobject)
 {
   GtkFixedLayoutChild *self = GTK_FIXED_LAYOUT_CHILD (gobject);
 
-  gsk_transform_unref (self->position);
+  gsk_transform_unref (self->transform);
 
   G_OBJECT_CLASS (gtk_fixed_layout_child_parent_class)->finalize (gobject);
 }
@@ -150,10 +150,10 @@ gtk_fixed_layout_child_class_init (GtkFixedLayoutChildClass *klass)
   gobject_class->get_property = gtk_fixed_layout_child_get_property;
   gobject_class->finalize = gtk_fixed_layout_child_finalize;
 
-  child_props[PROP_CHILD_POSITION] =
-    g_param_spec_boxed ("position",
-                        P_("Position"),
-                        P_("The position of a child of a fixed layout"),
+  child_props[PROP_CHILD_TRANSFORM] =
+    g_param_spec_boxed ("transform",
+                        P_("transform"),
+                        P_("The transform of a child of a fixed layout"),
                         GSK_TYPE_TRANSFORM,
                         G_PARAM_READWRITE |
                         G_PARAM_STATIC_STRINGS |
@@ -168,30 +168,30 @@ gtk_fixed_layout_child_init (GtkFixedLayoutChild *self)
 }
 
 /**
- * gtk_fixed_layout_child_set_position:
+ * gtk_fixed_layout_child_set_transform:
  * @child: a #GtkFixedLayoutChild
- * @position: a #GskTransform
+ * @transform: a #GskTransform
  *
  * Sets the transformation of the child of a #GtkFixedLayout.
  */
 void
-gtk_fixed_layout_child_set_position (GtkFixedLayoutChild *child,
-                                     GskTransform        *position)
+gtk_fixed_layout_child_set_transform (GtkFixedLayoutChild *child,
+                                      GskTransform        *transform)
 {
   GtkLayoutManager *layout;
 
   g_return_if_fail (GTK_IS_FIXED_LAYOUT_CHILD (child));
 
-  child->position = gsk_transform_transform (child->position, position);
+  child->transform = gsk_transform_transform (child->transform, transform);
 
   layout = gtk_layout_child_get_layout_manager (GTK_LAYOUT_CHILD (child));
   gtk_layout_manager_layout_changed (layout);
 
-  g_object_notify_by_pspec (G_OBJECT (child), child_props[PROP_CHILD_POSITION]);
+  g_object_notify_by_pspec (G_OBJECT (child), child_props[PROP_CHILD_TRANSFORM]);
 }
 
 /**
- * gtk_fixed_layout_child_get_position:
+ * gtk_fixed_layout_child_get_transform:
  * @child: a #GtkFixedLayoutChild
  *
  * Retrieves the transformation of the child of a #GtkFixedLayout.
@@ -199,11 +199,11 @@ gtk_fixed_layout_child_set_position (GtkFixedLayoutChild *child,
  * Returns: (transfer none) (nullable): a #GskTransform
  */
 GskTransform *
-gtk_fixed_layout_child_get_position (GtkFixedLayoutChild *child)
+gtk_fixed_layout_child_get_transform (GtkFixedLayoutChild *child)
 {
   g_return_val_if_fail (GTK_IS_FIXED_LAYOUT_CHILD (child), NULL);
 
-  return child->position;
+  return child->transform;
 }
 
 G_DEFINE_TYPE (GtkFixedLayout, gtk_fixed_layout, GTK_TYPE_LAYOUT_MANAGER)
@@ -250,10 +250,10 @@ gtk_fixed_layout_measure (GtkLayoutManager *layout_manager,
                           &child_min_opp, &child_nat_opp,
                           NULL, NULL);
 
-      gsk_transform_transform_bounds (child_info->position,
+      gsk_transform_transform_bounds (child_info->transform,
                                       &GRAPHENE_RECT_INIT (0.f, 0.f, child_min, child_min_opp),
                                       &min_rect);
-      gsk_transform_transform_bounds (child_info->position,
+      gsk_transform_transform_bounds (child_info->transform,
                                       &GRAPHENE_RECT_INIT (0.f, 0.f, child_nat, child_nat_opp),
                                       &nat_rect);
 
@@ -301,7 +301,7 @@ gtk_fixed_layout_allocate (GtkLayoutManager *layout_manager,
                            child_req.width,
                            child_req.height,
                            -1,
-                           gsk_transform_ref (child_info->position));
+                           gsk_transform_ref (child_info->transform));
     }
 }
 
