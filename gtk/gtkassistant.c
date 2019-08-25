@@ -396,7 +396,7 @@ add_cb (GtkContainer *container,
   GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
 
   if (priv->use_header_bar)
-    g_warning ("Content added to the action area of a assistant using header bars");
+    g_warning ("Content added to the action area of an assistant using header bars");
 
   gtk_widget_show (GTK_WIDGET (container));
 }

@@ -2284,7 +2284,7 @@ gsk_opacity_node_new (GskRenderNode *child,
 
 /**
  * gsk_opacity_node_get_child:
- * @node: a opacity @GskRenderNode
+ * @node: an opacity @GskRenderNode
  *
  * Gets the child node that is getting opacityed by the given @node.
  *

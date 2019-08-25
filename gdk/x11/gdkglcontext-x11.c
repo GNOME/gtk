@@ -676,7 +676,7 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   /* Ensure that any other context is created with a legacy bit set */
   gdk_gl_context_set_is_legacy (context, legacy_bit);
 
-  /* Ensure that any other context is created with a ES bit set */
+  /* Ensure that any other context is created with an ES bit set */
   gdk_gl_context_set_use_es (context, es_bit);
 
   xvisinfo = find_xvisinfo_for_fbconfig (display, context_x11->glx_config);

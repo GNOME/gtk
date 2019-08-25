@@ -3879,7 +3879,7 @@ list_box_sort_func (GtkListBoxRow *row1,
               retval = index_1 - index_2;
             }
           /* We order the bookmarks sections based on the bookmark index that we
-           * set on the row as a order-index property, but we have to deal with
+           * set on the row as an order-index property, but we have to deal with
            * the placeholder row wanted to be between two consecutive bookmarks,
            * with two consecutive order-index values which is the usual case.
            * For that, in the list box sort func we give priority to the placeholder row,
@@ -4480,7 +4480,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
    * @sidebar: the object which received the signal.
    *
    * The places sidebar emits this signal when it needs the calling
-   * application to present an way to directly enter a location.
+   * application to present a way to directly enter a location.
    * For example, the application may bring up a dialog box asking for
    * a URL like "http://http.example.com".
    */

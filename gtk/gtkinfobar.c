@@ -58,7 +58,7 @@
  * #GtkInfoBar is a widget that can be used to show messages to
  * the user without showing a dialog. It is often temporarily shown
  * at the top or bottom of a document. In contrast to #GtkDialog, which
- * has a action area at the bottom, #GtkInfoBar has an action area
+ * has an action area at the bottom, #GtkInfoBar has an action area
  * at the side.
  *
  * The API of #GtkInfoBar is very similar to #GtkDialog, allowing you

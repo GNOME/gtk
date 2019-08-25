@@ -5291,7 +5291,7 @@ event_surface_is_still_viewable (const GdkEvent *event)
 #endif
 
     default:
-      /* Remaining events would make sense on an not-viewable window,
+      /* Remaining events would make sense on a not-viewable window,
        * or don't have an associated window.
        */
       return TRUE;
@@ -5640,7 +5640,7 @@ gtk_widget_real_keynav_failed (GtkWidget        *widget,
  * 
  * Note that having @can_focus be %TRUE is only one of the
  * necessary conditions for being focusable. A widget must
- * also be sensitive and not have a ancestor that is marked
+ * also be sensitive and not have an ancestor that is marked
  * as not child-focusable in order to receive input focus.
  *
  * See gtk_widget_grab_focus() for actually setting the input
@@ -8859,7 +8859,7 @@ gtk_widget_real_get_accessible (GtkWidget *widget)
 }
 
 /*
- * Initialize a AtkImplementorIface instance’s virtual pointers as
+ * Initialize an AtkImplementorIface instance’s virtual pointers as
  * appropriate to this implementor’s class (GtkWidget).
  */
 static void

@@ -2004,7 +2004,7 @@ label_mnemonic_widget_weak_notify (gpointer      data,
  * @label: a #GtkLabel
  * @widget: (nullable): the target #GtkWidget, or %NULL to unset
  *
- * If the label has been set so that it has an mnemonic key (using
+ * If the label has been set so that it has a mnemonic key (using
  * i.e. gtk_label_set_markup_with_mnemonic(),
  * gtk_label_set_text_with_mnemonic(), gtk_label_new_with_mnemonic()
  * or the “use_underline” property) the label can be associated with a
@@ -2073,7 +2073,7 @@ gtk_label_get_mnemonic_widget (GtkLabel *label)
  * gtk_label_get_mnemonic_keyval:
  * @label: a #GtkLabel
  *
- * If the label has been set so that it has an mnemonic key this function
+ * If the label has been set so that it has a mnemonic key this function
  * returns the keyval used for the mnemonic accelerator. If there is no
  * mnemonic set up it returns #GDK_KEY_VoidSymbol.
  *
