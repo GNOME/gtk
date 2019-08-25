@@ -255,9 +255,6 @@
    */
 #define LT_OBJDIR ".libs/"
 
-/* Define if <X11/extensions/XIproto.h> needed for xReply */
-/* #undef NEED_XIPROTO_H_FOR_XREPLY */
-
 /* Define to 1 if your C compiler doesn't accept -c and -o together. */
 #ifndef _MSC_VER
 /* #undef NO_MINUS_C_MINUS_O */
