@@ -13559,12 +13559,28 @@ determine_type (GParamSpec *pspec)
       return G_VARIANT_TYPE_STRING;
 
     default:
-      g_critical ("Unable to use gtk_widget_class_install_property_action with property '%s::%s' of type '%s'",
+      g_critical ("Unable to use gtk_widget_class_install_property_action with property '%s:%s' of type '%s'",
                   g_type_name (pspec->owner_type), pspec->name, g_type_name (pspec->value_type));
       return NULL;
     }
 }
 
+/**
+ * gtk_widget_class_install_property_action:
+ * @widget_class: a #GtkWidgetClass
+ * @action_name: name of the action
+ * @property_name: name of the property in instances of @widget_class
+ *   or any parent class.
+ *
+ * Installs an action called @action_name on @widget_class and binds its
+ * state to the value of the @property_name property.
+ *
+ * This function will perform a few santity checks on the property selected via
+ * @property_name. Namely, the property must exist, must be readable, writable and
+ * must not be construct-only. There are also certain restrictions on the type of
+ * the given property. If any of these conditions are not met, a critical
+ * warning will be printed and no action will be added.
+ */
 void
 gtk_widget_class_install_property_action (GtkWidgetClass *widget_class,
                                           const char     *action_name,
@@ -13572,6 +13588,7 @@ gtk_widget_class_install_property_action (GtkWidgetClass *widget_class,
 {
   GParamSpec *pspec;
   GtkWidgetAction *action;
+  const GVariantType *state_type;
 
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
 
@@ -13579,23 +13596,28 @@ gtk_widget_class_install_property_action (GtkWidgetClass *widget_class,
 
   if (pspec == NULL)
     {
-      g_critical ("Attempted to use non-existent property '%s::%s' for dgtk_widget_class_install_property_action",
+      g_critical ("Attempted to use non-existent property '%s:%s' for gtk_widget_class_install_property_action",
                   g_type_name (G_TYPE_FROM_CLASS (widget_class)), property_name);
       return;
     }
 
   if (~pspec->flags & G_PARAM_READABLE || ~pspec->flags & G_PARAM_WRITABLE || pspec->flags & G_PARAM_CONSTRUCT_ONLY)
     {
-      g_critical ("Property '%s::%s' used with gtk_widget_class_install_property_action must be readable, writable, and not construct-only",
+      g_critical ("Property '%s:%s' used with gtk_widget_class_install_property_action must be readable, writable, and not construct-only",
                   g_type_name (G_TYPE_FROM_CLASS (widget_class)), property_name);
       return;
     }
+
+  state_type = determine_type (pspec);
+
+  if (!state_type)
+    return;
 
   action = g_new0 (GtkWidgetAction, 1);
   action->owner = G_TYPE_FROM_CLASS (widget_class);
   action->name = g_strdup (action_name);
   action->pspec = pspec;
-  action->state_type = determine_type (action->pspec);
+  action->state_type = state_type;
   if (action->pspec->value_type == G_TYPE_BOOLEAN)
     action->parameter_type = NULL;
   else
