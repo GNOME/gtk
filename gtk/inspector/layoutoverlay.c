@@ -69,10 +69,11 @@ static void
 recurse_child_widgets (GtkWidget   *widget,
                        GtkSnapshot *snapshot)
 {
+  gboolean needs_clip;
+  int width = gtk_widget_get_width (widget);
+  int height = gtk_widget_get_height (widget);
   GtkBorder margin, border, padding;
   GtkBorder widget_margin;
-  GtkAllocation allocation;
-  graphene_rect_t bounds;
   GtkCssStyle *style;
   GtkWidget *child;
 
@@ -90,104 +91,78 @@ recurse_child_widgets (GtkWidget   *widget,
   widget_margin.right = gtk_widget_get_margin_end (widget);
   widget_margin.bottom = gtk_widget_get_margin_bottom (widget);
 
-  gtk_widget_get_allocation (widget, &allocation);
-
+  /* width/height are the content size and we're going to grow that
+   * as we're drawing the boxes, as well as offset the origin.
+   * Right now we're at the widget's own origin.
+   */
   gtk_snapshot_save (snapshot);
-
-  /* Offset for all of the drawing done here. We assume cooridinates relative to
-   * the widget allocation, not the content allocation. */
-  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (allocation.x, allocation.y));
-
-  /* Now do all the stuff */
   gtk_snapshot_push_debug (snapshot, "Widget layout debugging");
 
-  /* Widget margins */
-  graphene_rect_init (&bounds,
-                      0, -widget_margin.top,
-                      allocation.width, widget_margin.top);
-  gtk_snapshot_append_color (snapshot, &WIDGET_MARGIN_COLOR, &bounds);
 
-  graphene_rect_init (&bounds,
-                      0, allocation.height,
-                      allocation.width, widget_margin.bottom);
-  gtk_snapshot_append_color (snapshot, &WIDGET_MARGIN_COLOR, &bounds);
+  /* CSS Padding */
+  gtk_snapshot_append_color (snapshot, &PADDING_COLOR,
+                             &GRAPHENE_RECT_INIT ( 0, - padding.top, width, padding.top));
+  gtk_snapshot_append_color (snapshot, &PADDING_COLOR,
+                             &GRAPHENE_RECT_INIT (width, 0, padding.right, height));
+  gtk_snapshot_append_color (snapshot, &PADDING_COLOR,
+                             &GRAPHENE_RECT_INIT (0, height, width, padding.bottom));
+  gtk_snapshot_append_color (snapshot, &PADDING_COLOR,
+                             &GRAPHENE_RECT_INIT (- padding.left, 0, padding.left, height));
 
-  graphene_rect_init (&bounds,
-                      -widget_margin.left, 0,
-                      widget_margin.left, allocation.height);
-  gtk_snapshot_append_color (snapshot, &WIDGET_MARGIN_COLOR, &bounds);
-
-  graphene_rect_init (&bounds,
-                      allocation.width, 0,
-                      widget_margin.right, allocation.height);
-  gtk_snapshot_append_color (snapshot, &WIDGET_MARGIN_COLOR, &bounds);
-
+  /* Grow box + offset */
+  width += padding.left + padding.right;
+  height += padding.top + padding.bottom;
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- padding.left, - padding.top));
 
   /* CSS Margins */
-  graphene_rect_init (&bounds,
-                      0, 0,
-                      allocation.width, margin.top);
-  gtk_snapshot_append_color (snapshot, &MARGIN_COLOR, &bounds);
+  gtk_snapshot_append_color (snapshot, &MARGIN_COLOR,
+                             &GRAPHENE_RECT_INIT (0, - margin.top, width, margin.top));
+  gtk_snapshot_append_color (snapshot, &MARGIN_COLOR,
+                             &GRAPHENE_RECT_INIT (width, 0, margin.right, height));
+  gtk_snapshot_append_color (snapshot, &MARGIN_COLOR,
+                             &GRAPHENE_RECT_INIT (0, height, width, margin.bottom));
+  gtk_snapshot_append_color (snapshot, &MARGIN_COLOR,
+                             &GRAPHENE_RECT_INIT (- margin.left, 0, margin.left, height));
 
-  graphene_rect_init (&bounds,
-                      0, allocation.height - margin.bottom,
-                      allocation.width, margin.bottom);
-  gtk_snapshot_append_color (snapshot, &MARGIN_COLOR, &bounds);
+  width += margin.left + margin.right;
+  height += margin.top + margin.bottom;
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- margin.left, - margin.top));
 
-  graphene_rect_init (&bounds,
-                      0, margin.top,
-                      margin.left, allocation.height - margin.top - margin.bottom);
-  gtk_snapshot_append_color (snapshot, &MARGIN_COLOR, &bounds);
-
-  graphene_rect_init (&bounds,
-                      allocation.width - margin.right, margin.top,
-                      margin.right, allocation.height - margin.top - margin.bottom);
-  gtk_snapshot_append_color (snapshot, &MARGIN_COLOR, &bounds);
-
-
-  /* Padding */
-  graphene_rect_init (&bounds,
-                      margin.left + border.left,
-                      margin.top + border.top,
-                      allocation.width - margin.left - margin.right - border.left - border.right,
-                      padding.top);
-  gtk_snapshot_append_color (snapshot, &PADDING_COLOR, &bounds);
-
-  graphene_rect_init (&bounds,
-                      margin.left + border.left,
-                      allocation.height - margin.bottom - border.bottom - padding.bottom,
-                      allocation.width - margin.left - margin.right - border.left - border.right,
-                      padding.bottom);
-  gtk_snapshot_append_color (snapshot, &PADDING_COLOR, &bounds);
-
-  graphene_rect_init (&bounds,
-                      margin.left + border.left,
-                      margin.top + border.top + padding.top,
-                      padding.left,
-                      allocation.height - margin.top - margin.bottom - border.top - border.bottom - padding.top - padding.bottom);
-  gtk_snapshot_append_color (snapshot, &PADDING_COLOR, &bounds);
-
-  graphene_rect_init (&bounds,
-                      allocation.width - margin.right - border.right - padding.right,
-                      margin.top + border.top + padding.top,
-                      padding.right,
-                      allocation.height - margin.top - margin.bottom - border.top - border.bottom - padding.top - padding.bottom);
-  gtk_snapshot_append_color (snapshot, &PADDING_COLOR, &bounds);
+  /* Widget Margins */
+  gtk_snapshot_append_color (snapshot, &WIDGET_MARGIN_COLOR,
+                             &GRAPHENE_RECT_INIT (0, - widget_margin.top, width, widget_margin.top));
+  gtk_snapshot_append_color (snapshot, &WIDGET_MARGIN_COLOR,
+                             &GRAPHENE_RECT_INIT (width, 0, widget_margin.right, height));
+  gtk_snapshot_append_color (snapshot, &WIDGET_MARGIN_COLOR,
+                             &GRAPHENE_RECT_INIT (0, height, width, widget_margin.bottom));
+  gtk_snapshot_append_color (snapshot, &WIDGET_MARGIN_COLOR,
+                             &GRAPHENE_RECT_INIT (- widget_margin.left, 0, widget_margin.left, height));
 
   gtk_snapshot_pop (snapshot);
 
+
+  needs_clip = gtk_widget_get_overflow (widget) == GTK_OVERFLOW_HIDDEN &&
+               gtk_widget_get_first_child (widget) != NULL;
+
+  if (needs_clip)
+    gtk_snapshot_push_clip (snapshot,
+                            &GRAPHENE_RECT_INIT (0, 0, gtk_widget_get_width (widget), gtk_widget_get_height (widget)));
 
   /* Recurse into child widgets */
   for (child = gtk_widget_get_first_child (widget);
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
     {
-      const int offset_x = margin.left + border.left + padding.left;
-      const int offset_y = margin.top + border.top + padding.top;
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_transform (snapshot, child->priv->transform);
 
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (offset_x, offset_y));
       recurse_child_widgets (child, snapshot);
+
+      gtk_snapshot_restore (snapshot);
     }
+
+  if (needs_clip)
+    gtk_snapshot_pop (snapshot);
 
   gtk_snapshot_restore (snapshot);
 }
