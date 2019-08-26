@@ -80,6 +80,12 @@ gtk_binary_age = 100 * gtk_minor_version + gtk_micro_version
 
 cc = meson.get_compiler('c')
 
+if host_machine.system() == 'windows' and cc.get_id() != 'msvc'
+  # The autotools build did set this for mingw and while meson sets it
+  # for gcc/clang by default, it doesn't do so on Windows.
+  add_project_arguments('-D_FILE_OFFSET_BITS=64', language: 'c')
+endif
+
 if cc.get_id() == 'msvc'
   vsver = 0
   mscver = cc.version().split('.')[0].to_int()
