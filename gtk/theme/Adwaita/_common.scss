@@ -3197,8 +3197,8 @@ scale {
       }
     }
 
-    >value.top    { margin-bottom: 9px; }
-    >value.bottom { margin-top: 9px; }
+    > value.left  { margin-right: 9px; }
+    > value.right { margin-left: 9px; }
 
     &.fine-tune >marks {
       &.top { margin-top: 3px; }
@@ -3221,8 +3221,8 @@ scale {
       }
     }
 
-    >value.top    { margin-bottom: 9px; }
-    >value.bottom { margin-top: 9px; }
+    > value.top    { margin-bottom: 9px; }
+    > value.bottom { margin-top: 9px; }
 
     &.fine-tune >marks {
       &.top { margin-left: 3px; }
