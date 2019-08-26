@@ -33,9 +33,45 @@ G_BEGIN_DECLS
 #define GTK_IS_BUILDABLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_BUILDABLE))
 #define GTK_BUILDABLE_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GTK_TYPE_BUILDABLE, GtkBuildableIface))
 
-
 typedef struct _GtkBuildable      GtkBuildable; /* Dummy typedef */
 typedef struct _GtkBuildableIface GtkBuildableIface;
+
+typedef struct _GtkBuildableParseContext      GtkBuildableParseContext;
+typedef struct _GtkBuildableParser GtkBuildableParser;
+
+struct _GtkBuildableParser
+{
+  /* Called for open tags <foo bar="baz"> */
+  void (*start_element)  (GtkBuildableParseContext *context,
+                          const gchar              *element_name,
+                          const gchar             **attribute_names,
+                          const gchar             **attribute_values,
+                          gpointer                  user_data,
+                          GError                  **error);
+
+  /* Called for close tags </foo> */
+  void (*end_element)    (GtkBuildableParseContext *context,
+                          const gchar              *element_name,
+                          gpointer                  user_data,
+                          GError                  **error);
+
+  /* Called for character data */
+  /* text is not nul-terminated */
+  void (*text)           (GtkBuildableParseContext *context,
+                          const gchar              *text,
+                          gsize                     text_len,
+                          gpointer                  user_data,
+                          GError                  **error);
+
+  /* Called on error, including one set by other
+   * methods in the vtable. The GError should not be freed.
+   */
+  void (*error)          (GtkBuildableParseContext *context,
+                          GError                   *error,
+                          gpointer                 user_data);
+
+  gpointer padding[4];
+};
 
 /**
  * GtkBuildableIface:
@@ -177,6 +213,21 @@ GDK_AVAILABLE_IN_ALL
 GObject * gtk_buildable_get_internal_child     (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
 						const gchar         *childname);
+
+GDK_AVAILABLE_IN_ALL
+void          gtk_buildable_parse_context_push              (GtkBuildableParseContext *context,
+                                                             const GtkBuildableParser *parser,
+                                                             gpointer                  user_data);
+GDK_AVAILABLE_IN_ALL
+gpointer      gtk_buildable_parse_context_pop               (GtkBuildableParseContext *context);
+GDK_AVAILABLE_IN_ALL
+const char *  gtk_buildable_parse_context_get_element       (GtkBuildableParseContext *context);
+GDK_AVAILABLE_IN_ALL
+GPtrArray    *gtk_buildable_parse_context_get_element_stack (GtkBuildableParseContext *context);
+GDK_AVAILABLE_IN_ALL
+void          gtk_buildable_parse_context_get_position      (GtkBuildableParseContext *context,
+                                                             gint                *line_number,
+                                                             gint                *char_number);
 
 G_END_DECLS
 
