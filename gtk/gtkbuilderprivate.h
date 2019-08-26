@@ -20,6 +20,7 @@
 #define __GTK_BUILDER_PRIVATE_H__
 
 #include "gtkbuilder.h"
+#include "gtkbuildable.h"
 
 enum {
   TAG_PROPERTY,
@@ -98,6 +99,19 @@ typedef struct {
   gint     major;
   gint     minor;
 } RequiresInfo;
+
+struct _GtkBuildableParseContext {
+  GMarkupParseContext *ctx;
+
+  const GtkBuildableParser *parser;
+  gpointer user_data;
+
+  GPtrArray *tag_stack;
+
+  GArray *subparser_stack;
+  gpointer held_user_data;
+  gboolean awaiting_pop;
+};
 
 typedef struct {
   GMarkupParser *parser;

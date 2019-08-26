@@ -31,6 +31,310 @@
 #include "gtkintl.h"
 
 
+typedef struct {
+  const GtkBuildableParser *last_parser;
+  gpointer last_user_data;
+  int last_depth;
+} GtkBuildableParserStack;
+
+static void
+pop_subparser_stack (GtkBuildableParseContext *context)
+{
+  GtkBuildableParserStack *stack =
+    &g_array_index (context->subparser_stack, GtkBuildableParserStack,
+                    context->subparser_stack->len - 1);
+
+  context->awaiting_pop = TRUE;
+  context->held_user_data = context->user_data;
+
+  context->user_data = stack->last_user_data;
+  context->parser = stack->last_parser;
+
+  g_array_set_size (context->subparser_stack, context->subparser_stack->len - 1);
+}
+
+static void
+possibly_finish_subparser (GtkBuildableParseContext *context)
+{
+  if (context->subparser_stack->len > 0)
+    {
+      GtkBuildableParserStack *stack =
+        &g_array_index (context->subparser_stack, GtkBuildableParserStack,
+                        context->subparser_stack->len - 1);
+
+      if (stack->last_depth ==  context->tag_stack->len)
+        pop_subparser_stack (context);
+    }
+}
+
+static void
+proxy_start_element (GMarkupParseContext *gm_context,
+                     const gchar         *element_name,
+                     const gchar        **attribute_names,
+                     const gchar        **attribute_values,
+                     gpointer             user_data,
+                     GError             **error)
+{
+  GtkBuildableParseContext *context = user_data;
+
+  // Due to the way GMarkup works we're sure this will live until the end_element callback
+  g_ptr_array_add (context->tag_stack, (char *)element_name);
+
+  if (context->parser->start_element)
+    context->parser->start_element (context, element_name,
+                                    attribute_names, attribute_values,
+                                    context->user_data, error);
+}
+
+static void
+proxy_end_element (GMarkupParseContext *gm_context,
+                   const gchar         *element_name,
+                   gpointer             user_data,
+                   GError             **error)
+{
+  GtkBuildableParseContext *context = user_data;
+
+  possibly_finish_subparser (context);
+
+  if (context->parser->end_element)
+    context->parser->end_element (context, element_name, context->user_data, error);
+
+  g_ptr_array_set_size (context->tag_stack, context->tag_stack->len - 1);
+}
+
+static void
+proxy_text (GMarkupParseContext *gm_context,
+            const gchar         *text,
+            gsize                text_len,
+            gpointer             user_data,
+            GError             **error)
+{
+  GtkBuildableParseContext *context = user_data;
+
+  if (context->parser->text)
+    context->parser->text (context, text, text_len,  context->user_data, error);
+}
+
+static void
+proxy_error (GMarkupParseContext *gm_context,
+             GError              *error,
+             gpointer             user_data)
+{
+  GtkBuildableParseContext *context = user_data;
+
+  if (context->parser->error)
+    context->parser->error (context, error, context->user_data);
+
+  /* report the error all the way up to free all the user-data */
+
+  while (context->subparser_stack->len > 0)
+    {
+      pop_subparser_stack (context);
+      context->awaiting_pop = FALSE; /* already been freed */
+
+      if (context->parser->error)
+        context->parser->error (context, error, context->user_data);
+    }
+}
+
+static const GMarkupParser gmarkup_parser = {
+  proxy_start_element,
+  proxy_end_element,
+  proxy_text,
+  NULL,
+  proxy_error,
+};
+
+static void
+gtk_buildable_parse_context_init (GtkBuildableParseContext *context,
+                                  const GtkBuildableParser *parser,
+                                  gpointer user_data)
+{
+  context->parser = parser;
+  context->user_data = user_data;
+
+  context->subparser_stack = g_array_new (FALSE, FALSE, sizeof (GtkBuildableParserStack));
+  context->tag_stack = g_ptr_array_new ();
+}
+
+static void
+gtk_buildable_parse_context_free (GtkBuildableParseContext *context)
+{
+  if (context->ctx)
+    g_markup_parse_context_free  (context->ctx);
+
+  g_array_unref (context->subparser_stack);
+  g_ptr_array_unref (context->tag_stack);
+}
+
+static gboolean
+gtk_buildable_parse_context_parse (GtkBuildableParseContext *context,
+                                   const gchar          *text,
+                                   gssize                text_len,
+                                   GError              **error)
+{
+  context->ctx = g_markup_parse_context_new (&gmarkup_parser,
+                                             G_MARKUP_TREAT_CDATA_AS_TEXT,
+                                             context, NULL);
+  return g_markup_parse_context_parse (context->ctx, text, text_len, error);
+}
+
+
+/**
+ * gtk_buildable_parse_context_push:
+ * @context: a #GtkBuildableParseContext
+ * @parser: a #GtkBuildableParser
+ * @user_data: user data to pass to #GtkBuildableParser functions
+ *
+ * Temporarily redirects markup data to a sub-parser.
+ *
+ * This function may only be called from the start_element handler of
+ * a #GtkBuildableParser. It must be matched with a corresponding call to
+ * gtk_buildable_parse_context_pop() in the matching end_element handler
+ * (except in the case that the parser aborts due to an error).
+ *
+ * All tags, text and other data between the matching tags is
+ * redirected to the subparser given by @parser. @user_data is used
+ * as the user_data for that parser. @user_data is also passed to the
+ * error callback in the event that an error occurs. This includes
+ * errors that occur in subparsers of the subparser.
+ *
+ * The end tag matching the start tag for which this call was made is
+ * handled by the previous parser (which is given its own user_data)
+ * which is why gtk_buildable_parse_context_pop() is provided to allow "one
+ * last access" to the @user_data provided to this function. In the
+ * case of error, the @user_data provided here is passed directly to
+ * the error callback of the subparser and gtk_buildable_parse_context_pop()
+ * should not be called. In either case, if @user_data was allocated
+ * then it ought to be freed from both of these locations.
+ *
+ * This function is not intended to be directly called by users
+ * interested in invoking subparsers. Instead, it is intended to be
+ * used by the subparsers themselves to implement a higher-level
+ * interface.
+ *
+ * For an example of how to use this, see g_markup_parse_context_push() which
+ * has the same kind of API.
+ **/
+void
+gtk_buildable_parse_context_push (GtkBuildableParseContext *context,
+                                  const GtkBuildableParser *parser,
+                                  gpointer                  user_data)
+{
+  GtkBuildableParserStack stack = { 0 };
+
+  stack.last_parser = context->parser;
+  stack.last_user_data = context->user_data;
+  stack.last_depth = context->tag_stack->len; // If at end_element time we're this deep, then pop it
+
+  context->parser = parser;
+  context->user_data = user_data;
+
+  g_array_append_val (context->subparser_stack, stack);
+}
+
+/**
+ * gtk_buildable_parse_context_pop:
+ * @context: a #GtkBuildableParseContext
+ *
+ * Completes the process of a temporary sub-parser redirection.
+ *
+ * This function exists to collect the user_data allocated by a
+ * matching call to gtk_buildable_parse_context_push(). It must be called
+ * in the end_element handler corresponding to the start_element
+ * handler during which gtk_buildable_parse_context_push() was called.
+ * You must not call this function from the error callback -- the
+ * @user_data is provided directly to the callback in that case.
+ *
+ * This function is not intended to be directly called by users
+ * interested in invoking subparsers. Instead, it is intended to
+ * be used by the subparsers themselves to implement a higher-level
+ * interface.
+ *
+ * Returns: the user data passed to gtk_buildable_parse_context_push()
+ */
+gpointer
+gtk_buildable_parse_context_pop (GtkBuildableParseContext *context)
+{
+  gpointer user_data;
+
+  if (!context->awaiting_pop)
+    possibly_finish_subparser (context);
+
+  g_assert (context->awaiting_pop);
+
+  context->awaiting_pop = FALSE;
+
+  user_data = context->held_user_data;
+  context->held_user_data = NULL;
+
+  return user_data;
+}
+
+/**
+ * gtk_buildable_parse_context_get_element:
+ * @context: a #GtkBuildablParseContext
+ *
+ * Retrieves the name of the currently open element.
+ *
+ * If called from the start_element or end_element handlers this will
+ * give the element_name as passed to those functions. For the parent
+ * elements, see gtk_buildable_parse_context_get_element_stack().
+ *
+ * Returns: the name of the currently open element, or %NULL
+ */
+const char *
+gtk_buildable_parse_context_get_element (GtkBuildableParseContext *context)
+{
+  if (context->tag_stack->len > 0)
+    return g_ptr_array_index (context->tag_stack, context->tag_stack->len - 1);
+  return NULL;
+}
+
+/**
+ * gtk_buildable_parse_context_get_element_stack:
+ * @context: a #GtkBuildableParseContext
+ *
+ * Retrieves the element stack from the internal state of the parser.
+ *
+ * The returned #GPtrArray is an array of strings where the last item is
+ * the currently open tag (as would be returned by
+ * gtk_buildable_parse_context_get_element()) and the previous item is its
+ * immediate parent.
+ *
+ * This function is intended to be used in the start_element and
+ * end_element handlers where gtk_buildable_parse_context_get_element()
+ * would merely return the name of the element that is being
+ * processed.
+ *
+ * Returns: the element stack, which must not be modified
+ */
+GPtrArray *
+gtk_buildable_parse_context_get_element_stack (GtkBuildableParseContext *context)
+{
+  return context->tag_stack;
+}
+
+/**
+ * gtk_buildable_parse_context_get_position:
+ * @context: a #GtkBuildableParseContext
+ * @line_number: (nullable): return location for a line number, or %NULL
+ * @char_number: (nullable): return location for a char-on-line number, or %NULL
+ *
+ * Retrieves the current line number and the number of the character on
+ * that line. Intended for use in error messages; there are no strict
+ * semantics for what constitutes the "current" line number other than
+ * "the best number we could come up with for error messages."
+ */
+void
+gtk_buildable_parse_context_get_position (GtkBuildableParseContext *context,
+                                          gint                *line_number,
+                                          gint                *char_number)
+
+{
+  g_markup_parse_context_get_position (context->ctx, line_number, char_number);
+}
+
 static void free_property_info (PropertyInfo *info);
 static void free_object_info (ObjectInfo *info);
 
