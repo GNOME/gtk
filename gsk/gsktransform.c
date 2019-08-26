@@ -106,7 +106,7 @@ gsk_transform_has_class (GskTransform            *self,
  * @transform_class: class structure for this self
  * @category: The category of this transform. Will be used to initialize
  *     the result's category together with &next's category
- * @next: (transfer full) Next matrix to multiply with or %NULL if none
+ * @next: (transfer full): Next matrix to multiply with or %NULL if none
  *
  * Returns: (transfer full): the newly created #GskTransform
  */
@@ -461,7 +461,7 @@ gsk_transform_matrix_with_category (GskTransform            *next,
 
 /**
  * gsk_transform_matrix:
- * @next: (allow-none): the next transform
+ * @next: (allow-none) (transfer full): the next transform
  * @matrix: the matrix to multiply @next with
  *
  * Multiplies @next with the given @matrix.
@@ -612,7 +612,7 @@ static const GskTransformClass GSK_TRANSLATE_TRANSFORM_CLASS =
 
 /**
  * gsk_transform_translate:
- * @next: (allow-none): the next transform
+ * @next: (allow-none) (transfer full): the next transform
  * @point: the point to translate the matrix by
  *
  * Translates @next in 2dimensional space by @point.
@@ -632,7 +632,7 @@ gsk_transform_translate (GskTransform           *next,
 
 /**
  * gsk_transform_translate_3d:
- * @next: (allow-none): the next transform
+ * @next: (allow-none) (transfer full): the next transform
  * @point: the point to translate the matrix by
  *
  * Translates @next by @point.
@@ -787,7 +787,7 @@ static const GskTransformClass GSK_ROTATE_TRANSFORM_CLASS =
 
 /**
  * gsk_transform_rotate:
- * @next: (allow-none): the next transform
+ * @next: (allow-none) (transfer full): the next transform
  * @angle: the rotation angle, in degrees (clockwise)
  *
  * Rotates @next @angle degrees in 2D - or in 3Dspeak, around the z axis.
@@ -911,7 +911,7 @@ static const GskTransformClass GSK_ROTATE3D_TRANSFORM_CLASS =
 
 /**
  * gsk_transform_rotate_3d:
- * @next: (allow-none): the next transform
+ * @next: (allow-none) (transfer full): the next transform
  * @angle: the rotation angle, in degrees (clockwise)
  * @axis: The rotation axis
  *
@@ -1084,7 +1084,7 @@ static const GskTransformClass GSK_SCALE_TRANSFORM_CLASS =
 
 /**
  * gsk_transform_scale:
- * @next: (allow-none): the next transform
+ * @next: (allow-none) (transfer full): the next transform
  * @factor_x: scaling factor on the X axis
  * @factor_y: scaling factor on the Y axis
  *
@@ -1103,7 +1103,7 @@ gsk_transform_scale (GskTransform *next,
 
 /**
  * gsk_transform_scale_3d:
- * @next: (allow-none): the next transform
+ * @next: (allow-none) (transfer full): the next transform
  * @factor_x: scaling factor on the X axis
  * @factor_y: scaling factor on the Y axis
  * @factor_z: scaling factor on the Z axis
@@ -1232,7 +1232,7 @@ static const GskTransformClass GSK_PERSPECTIVE_TRANSFORM_CLASS =
 
 /**
  * gsk_transform_perspective:
- * @next: (allow-none): the next transform
+ * @next: (allow-none) (transfer full): the next transform
  * @depth: distance of the z=0 plane. Lower values give a more
  *     flattened pyramid and therefore a more pronounced
  *     perspective effect.
