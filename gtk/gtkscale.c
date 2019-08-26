@@ -85,7 +85,7 @@
  * │   ┊    ╰── indicator
  * ┊   ┊
  * │   ╰── mark
- * ├── [value][.top][.bottom]
+ * ├── [value][.top][.right][.bottom][.left]
  * ├── trough
  * │   ├── [fill]
  * │   ├── [highlight]
@@ -1049,15 +1049,19 @@ update_value_position (GtkScale *scale)
 
   context = gtk_widget_get_style_context (priv->value_widget);
 
-  if (priv->value_pos == GTK_POS_TOP || priv->value_pos == GTK_POS_LEFT)
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TOP);
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_RIGHT);
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BOTTOM);
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_LEFT);
+
+  switch (priv->value_pos)
     {
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BOTTOM);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
-    }
-  else
-    {
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TOP);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+    case GTK_POS_TOP:    gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP); break;
+    case GTK_POS_RIGHT:  gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT); break;
+    case GTK_POS_BOTTOM: gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM); break;
+    case GTK_POS_LEFT:   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT); break;
+
+    default: g_assert_not_reached ();
     }
 }
 
