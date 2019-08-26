@@ -934,7 +934,7 @@ gtk_button_grab_notify (GtkWidget *widget,
 /**
  * gtk_button_set_icon_name:
  * @button: A #GtkButton
- * @icon_name: A icon name
+ * @icon_name: An icon name
  *
  * Adds a #GtkImage with the given icon name as a child. If @button already
  * contains a child widget, that child widget will be removed and replaced

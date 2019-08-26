@@ -1836,7 +1836,7 @@ _gtk_css_selector_tree_match_all (const GtkCssSelectorTree *tree,
 
 /* When checking for changes via the tree we need to know if a rule further
    down the tree matched, because if so we need to add "our bit" to the
-   Change. For instance in a a match like *.class:active we'll
+   Change. For instance in a match like *.class:active we'll
    get a tree that first checks :active, if that matches we continue down
    to the tree, and if we get a match we add CHANGE_CLASS. However, the
    end of the tree where we have a match is an ANY which doesn't actually

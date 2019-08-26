@@ -633,7 +633,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
        * If the anchor rectangle is too tall (meaning if we'd be constrained
        * and flip, it'd flip too far away), rely only on the pointer position
        * to position the tooltip. The approximate pointer cursorrectangle is
-       * used as a anchor rectantgle.
+       * used as an anchor rectantgle.
        *
        * If the anchor rectangle isn't to tall, make sure the tooltip isn't too
        * far away from the pointer position.

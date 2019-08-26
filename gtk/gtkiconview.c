@@ -2237,7 +2237,7 @@ gtk_icon_view_button_press (GtkGestureClick *gesture,
 					       x, y);
 	}
 
-      /* don't draw keyboard focus around an clicked-on item */
+      /* don't draw keyboard focus around a clicked-on item */
       icon_view->priv->draw_focus = FALSE;
     }
 
@@ -4380,7 +4380,7 @@ gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
  * @model, @path and @iter which have been provided will be set to point to
  * that row and the corresponding model.
  *
- * Returns: whether or not the given tooltip context points to a item
+ * Returns: whether or not the given tooltip context points to an item
  */
 gboolean
 gtk_icon_view_get_tooltip_context (GtkIconView   *icon_view,

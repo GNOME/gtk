@@ -401,7 +401,7 @@ struct _GtkStyleContextClass
 /**
  * GTK_STYLE_CLASS_SCROLLBARS_JUNCTION:
  *
- * A CSS class to match the junction area between an horizontal
+ * A CSS class to match the junction area between a horizontal
  * and vertical scrollbar, when they’re both shown.
  *
  * Refer to individual widget documentation for used style classes.
@@ -525,7 +525,7 @@ struct _GtkStyleContextClass
 /**
  * GTK_STYLE_CLASS_SPINBUTTON:
  *
- * A CSS class defining an spinbutton.
+ * A CSS class defining a spinbutton.
  *
  * Refer to individual widget documentation for used style classes.
  */

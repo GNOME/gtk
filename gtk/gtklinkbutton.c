@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * gtklinkbutton.c - an hyperlink-enabled button
+ * gtklinkbutton.c - a hyperlink-enabled button
  *
  * Copyright (C) 2006 Emmanuele Bassi <ebassi@gmail.com>
  * All rights reserved.

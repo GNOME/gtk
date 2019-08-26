@@ -770,7 +770,7 @@ gdk_gl_context_set_is_legacy (GdkGLContext *context,
  * @use_es: whether the context should use OpenGL ES instead of OpenGL,
  *   or -1 to allow auto-detection
  *
- * Requests that GDK create a OpenGL ES context instead of an OpenGL one,
+ * Requests that GDK create an OpenGL ES context instead of an OpenGL one,
  * if the platform and windowing system allows it.
  *
  * The @context must not have been realized.

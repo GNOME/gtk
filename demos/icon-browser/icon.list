@@ -285,7 +285,7 @@ user-trash=The icon for the user's “Trash” place in the file system
 user-trash-full=The icon for the user's “Trash” in the file system, when there are items in the “Trash” waiting for disposal or recovery
 emblem-system=The icon used as an emblem for directories that contain system libraries, settings, and data
 avatar-default=The generic avatar icon, which is used to represent a user that doesn't have a personalized avatar
-emblem-synchronizing=The icon used as an emblem to indicate that a a synchronizing operation is in process
+emblem-synchronizing=The icon used as an emblem to indicate that a synchronizing operation is in process
 emblem-shared=The icon used as an emblem for files and directories that are shared to other users
 help-browser=The icon used for the desktop's help browsing application
 

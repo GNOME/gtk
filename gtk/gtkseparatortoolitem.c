@@ -123,7 +123,7 @@ static void
 gtk_separator_tool_item_add (GtkContainer *container,
                              GtkWidget    *child)
 {
-  g_warning ("attempt to add a child to an GtkSeparatorToolItem");
+  g_warning ("attempt to add a child to a GtkSeparatorToolItem");
 }
 
 static gboolean

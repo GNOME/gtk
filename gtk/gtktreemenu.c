@@ -1199,7 +1199,7 @@ _gtk_tree_menu_new_with_area (GtkCellArea    *area)
 /*
  * _gtk_tree_menu_new_full:
  * @area: (allow-none): the #GtkCellArea to use to render cells in the menu, or %NULL.
- * @model: (allow-none): the #GtkTreeModel to build the menu heirarchy from, or %NULL.
+ * @model: (allow-none): the #GtkTreeModel to build the menu hierarchy from, or %NULL.
  * @root: (allow-none): the #GtkTreePath indicating the root row for this menu, or %NULL.
  *
  * Creates a new #GtkTreeMenu hierarchy from the provided @model and @root using @area to render its cells.
@@ -1223,7 +1223,7 @@ _gtk_tree_menu_new_full (GtkCellArea         *area,
  * @menu: a #GtkTreeMenu
  * @model: (allow-none): the #GtkTreeModel to build the menu hierarchy from, or %NULL.
  *
- * Sets @model to be used to build the menu heirarhcy.
+ * Sets @model to be used to build the menu hierarhcy.
  */
 void
 _gtk_tree_menu_set_model (GtkTreeMenu  *menu,
@@ -1241,7 +1241,7 @@ _gtk_tree_menu_set_model (GtkTreeMenu  *menu,
  * _gtk_tree_menu_get_model:
  * @menu: a #GtkTreeMenu
  *
- * Gets the @model currently used for the menu heirarhcy.
+ * Gets the @model currently used for the menu hierarhcy.
  *
  * Returns: (transfer none): the #GtkTreeModel which is used
  * for @menu’s hierarchy.
@@ -1293,7 +1293,7 @@ _gtk_tree_menu_set_root (GtkTreeMenu *menu,
  * @menu: a #GtkTreeMenu
  *
  * Gets the @root path for @menu’s hierarchy, or returns %NULL if @menu
- * has no model or is building a heirarchy for the entire model. *
+ * has no model or is building a hierarchy for the entire model. *
  *
  * Returns: (transfer full) (allow-none): A newly created #GtkTreePath
  * pointing to the root of @menu which must be freed with gtk_tree_path_free().

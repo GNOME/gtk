@@ -28,7 +28,7 @@
 
 /**
  * SECTION:gdkseat
- * @Short_description: Object representing an user seat
+ * @Short_description: Object representing a user seat
  * @Title: GdkSeat
  * @See_also: #GdkDisplay, #GdkDevice
  *

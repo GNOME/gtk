@@ -824,7 +824,7 @@ show_window_internal (GdkSurface *window,
 			   _gdk_win32_surface_state_to_string (window->state),
 			   (deiconify ? " deiconify" : "")));
 
-  /* If asked to show (not deiconify) an withdrawn and iconified
+  /* If asked to show (not deiconify) a withdrawn and iconified
    * window, do that.
    */
   if (!deiconify &&
@@ -1962,7 +1962,7 @@ gdk_win32_surface_set_icon_name (GdkSurface   *window,
 {
   /* In case I manage to confuse this again (or somebody else does):
    * Please note that "icon name" here really *does* mean the name or
-   * title of an window minimized as an icon on the desktop, or in the
+   * title of a window minimized as an icon on the desktop, or in the
    * taskbar. It has nothing to do with the freedesktop.org icon
    * naming stuff.
    */
