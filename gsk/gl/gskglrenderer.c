@@ -1531,7 +1531,6 @@ render_outset_shadow_node (GskGLRenderer       *self,
   const float max_y = min_y + outline->bounds.size.height + (spread + blur_extra/2.0) * 2;
   float texture_width, texture_height;
   RenderOp op;
-  graphene_matrix_t identity;
   graphene_matrix_t prev_projection;
   graphene_rect_t prev_viewport;
   graphene_matrix_t item_proj;
@@ -1580,7 +1579,6 @@ render_outset_shadow_node (GskGLRenderer       *self,
                                   0, texture_width, 0, texture_height,
                                   ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
       graphene_matrix_scale (&item_proj, 1, -1, 1);
-      graphene_matrix_init_identity (&identity);
 
       prev_render_target = ops_set_render_target (builder, render_target);
       op.op = OP_CLEAR;
