@@ -793,6 +793,7 @@ rewrite_stack_child (Element *child, MyParserData *data)
   new_object->attribute_values = g_new0 (char *, 2);
   new_object->attribute_values[0] = g_strdup ("GtkStackPage");
   new_object->children = packing->children;
+  new_object->parent = child;
   packing->children = NULL;
 
   prop = g_new0 (Element, 1);
@@ -802,6 +803,7 @@ rewrite_stack_child (Element *child, MyParserData *data)
   prop->attribute_values = g_new0 (char *, 2);
   prop->attribute_values[0] = g_strdup ("child");
   prop->children = g_list_append (prop->children, object);
+  prop->parent = new_object;
   new_object->children = g_list_append (new_object->children, prop);
       
   g_list_free (child->children);
@@ -940,6 +942,7 @@ rewrite_notebook_page (Element *child, Element *tab, MyParserData *data)
   new_object->attribute_names[0] = g_strdup ("class");
   new_object->attribute_values = g_new0 (char *, 2);
   new_object->attribute_values[0] = g_strdup ("GtkNotebookPage");
+  new_object->parent = child;
   if (packing)
     {
       new_object->children = packing->children;
@@ -953,6 +956,7 @@ rewrite_notebook_page (Element *child, Element *tab, MyParserData *data)
   prop->attribute_values = g_new0 (char *, 2);
   prop->attribute_values[0] = g_strdup ("child");
   prop->children = g_list_append (prop->children, object);
+  prop->parent = new_object;
   new_object->children = g_list_append (new_object->children, prop);
 
   if (tab_obj)
@@ -964,6 +968,7 @@ rewrite_notebook_page (Element *child, Element *tab, MyParserData *data)
       prop->attribute_values = g_new0 (char *, 2);
       prop->attribute_values[0] = g_strdup ("tab");
       prop->children = g_list_append (prop->children, tab_obj);
+      prop->parent = new_object;
       new_object->children = g_list_append (new_object->children, prop);
     }
 
