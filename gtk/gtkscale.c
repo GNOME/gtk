@@ -366,7 +366,7 @@ gtk_scale_allocate_value (GtkScale *scale)
 
         case GTK_POS_TOP:
           value_alloc.x = slider_bounds.origin.x + (slider_bounds.size.width - value_alloc.width) / 2;
-          value_alloc.y = 0;
+          value_alloc.y = slider_bounds.origin.y - value_alloc.height;
           break;
 
         case GTK_POS_BOTTOM:
