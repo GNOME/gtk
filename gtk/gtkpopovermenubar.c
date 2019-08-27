@@ -314,7 +314,11 @@ gtk_popover_menu_bar_item_size_allocate (GtkWidget *widget,
 static void
 gtk_popover_menu_bar_item_activate (GtkPopoverMenuBarItem *item)
 {
-  gtk_popover_popup (GTK_POPOVER (item->popover));
+  GtkPopoverMenuBar *bar;
+
+  bar = GTK_POPOVER_MENU_BAR (gtk_widget_get_ancestor (GTK_WIDGET (item), GTK_TYPE_POPOVER_MENU_BAR));
+
+  set_active_item (bar, item, TRUE);
 }
 
 static void

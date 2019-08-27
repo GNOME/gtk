@@ -38,18 +38,19 @@ typedef GtkBoxClass GtkMenuSectionBoxClass;
 
 struct _GtkMenuSectionBox
 {
-  GtkBox             parent_instance;
+  GtkBox               parent_instance;
 
-  GtkMenuSectionBox *toplevel;
-  GtkMenuTracker    *tracker;
-  GtkBox            *item_box;
-  GtkWidget         *separator;
-  guint              separator_sync_idle;
-  gboolean           iconic;
-  gboolean           inline_buttons;
-  gboolean           circular;
-  gint               depth;
-  GtkSizeGroup      *indicators;
+  GtkMenuSectionBox   *toplevel;
+  GtkMenuTracker      *tracker;
+  GtkBox              *item_box;
+  GtkWidget           *separator;
+  guint                separator_sync_idle;
+  gboolean             iconic;
+  gboolean             inline_buttons;
+  gboolean             circular;
+  gint                 depth;
+  GtkPopoverMenuFlags  flags;
+  GtkSizeGroup        *indicators;
 };
 
 typedef struct
@@ -295,22 +296,43 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
     }
   else if (gtk_menu_tracker_item_get_has_link (item, G_MENU_LINK_SUBMENU))
     {
-      GtkWidget *stack = NULL;
-      GtkWidget *parent = NULL;
-      gchar *name;
+      if (box->flags & GTK_POPOVER_MENU_NESTED)
+        {
+          GMenuModel *model;
+          GtkWidget *submenu;
 
-      widget = g_object_new (GTK_TYPE_MODEL_BUTTON,
-                             "menu-name", gtk_menu_tracker_item_get_label (item),
-                             "indicator-size-group", box->indicators,
-                             NULL);
-      g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
-      g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
-      g_object_bind_property (item, "sensitive", widget, "sensitive", G_BINDING_SYNC_CREATE);
+          model = _gtk_menu_tracker_item_get_link (item, G_MENU_LINK_SUBMENU);
 
-      get_ancestors (GTK_WIDGET (box->toplevel), GTK_TYPE_STACK, &stack, &parent);
-      g_object_get (gtk_stack_get_page (GTK_STACK (stack), parent), "name", &name, NULL);
-      gtk_menu_section_box_new_submenu (item, box->toplevel, widget, name);
-      g_free (name);
+          submenu = gtk_popover_menu_new_from_model_full (NULL, model, box->flags);
+          gtk_popover_set_has_arrow (GTK_POPOVER (submenu), FALSE);
+          gtk_widget_set_valign (submenu, GTK_ALIGN_START);
+
+          widget = g_object_new (GTK_TYPE_MODEL_BUTTON,
+                                 "popover", submenu,
+                                 NULL);
+          g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
+          g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
+          g_object_bind_property (item, "sensitive", widget, "sensitive", G_BINDING_SYNC_CREATE);
+        }
+      else
+        {
+          GtkWidget *stack = NULL;
+          GtkWidget *parent = NULL;
+          gchar *name;
+
+          widget = g_object_new (GTK_TYPE_MODEL_BUTTON,
+                                 "menu-name", gtk_menu_tracker_item_get_label (item),
+                                 "indicator-size-group", box->indicators,
+                                 NULL);
+          g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
+          g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
+          g_object_bind_property (item, "sensitive", widget, "sensitive", G_BINDING_SYNC_CREATE);
+
+          get_ancestors (GTK_WIDGET (box->toplevel), GTK_TYPE_STACK, &stack, &parent);
+          g_object_get (gtk_stack_get_page (GTK_STACK (stack), parent), "name", &name, NULL);
+          gtk_menu_section_box_new_submenu (item, box->toplevel, widget, name);
+          g_free (name);
+        }
     }
   else
     {
@@ -453,13 +475,15 @@ update_popover_position_cb (GObject    *source,
 }
 
 void
-gtk_menu_section_box_new_toplevel (GtkPopoverMenu *popover,
-                                   GMenuModel     *model)
+gtk_menu_section_box_new_toplevel (GtkPopoverMenu      *popover,
+                                   GMenuModel          *model,
+                                   GtkPopoverMenuFlags  flags)
 {
   GtkMenuSectionBox *box;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX,  NULL);
   box->indicators = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  box->flags = flags;
 
   gtk_popover_menu_add_submenu (popover, GTK_WIDGET (box), "main");
 
@@ -482,6 +506,7 @@ gtk_menu_section_box_new_submenu (GtkMenuTrackerItem *item,
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
   box->indicators = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
+  box->flags = toplevel->flags;
 
   button = g_object_new (GTK_TYPE_MODEL_BUTTON,
                          "menu-name", name,
@@ -521,6 +546,7 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
   box->indicators = g_object_ref (parent->indicators);
   box->toplevel = parent->toplevel;
   box->depth = parent->depth + 1;
+  box->flags = parent->flags;
 
   label = gtk_menu_tracker_item_get_label (item);
   hint = gtk_menu_tracker_item_get_display_hint (item);

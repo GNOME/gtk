@@ -1,5 +1,6 @@
 <interface>
   <object class="GtkPopoverMenu" id="popover">
+    <property name="autohide">True</property>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
@@ -105,14 +106,14 @@
         </child>
         <child>
           <object class="GtkModelButton">
-            <property name="text">Submenu 1</property>
-            <property name="menu-name">submenu1</property>
+            <property name="label">Submenu 1</property>
+            <property name="popover">submenu1</property>
           </object>
         </child>
         <child>
           <object class="GtkModelButton">
-            <property name="text">Submenu 2</property>
-            <property name="menu-name">submenu2</property>
+            <property name="label">Submenu 2</property>
+            <property name="popover">submenu2</property>
           </object>
         </child>
         <child>
@@ -151,17 +152,13 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkPopoverMenu" id="submenu1">
     <child>
       <object class="GtkBox">
         <property name="name">submenu1</property>
         <property name="orientation">vertical</property>
         <property name="margin">10</property>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Submenu 1</property>
-            <property name="menu-name">main</property>
-          </object>
-        </child>
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
@@ -352,17 +349,13 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkPopoverMenu" id="submenu2">
     <child>
       <object class="GtkBox">
         <property name="name">submenu2</property>
         <property name="orientation">vertical</property>
         <property name="margin">10</property>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Submenu 2</property>
-            <property name="menu-name">main</property>
-          </object>
-        </child>
         <child>
           <object class="GtkModelButton">
             <property name="action-name">top.action7</property>
@@ -377,24 +370,19 @@
         </child>
         <child>
           <object class="GtkModelButton">
-            <property name="text">Subsubmenu</property>
-            <property name="icon">icon9</property>
-            <property name="menu-name">subsubmenu</property>
+            <property name="label">Subsubmenu</property>
+            <property name="popover">subsubmenu</property>
           </object>
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkPopoverMenu" id="subsubmenu">
     <child>
       <object class="GtkBox">
         <property name="name">subsubmenu</property>
         <property name="orientation">vertical</property>
         <property name="margin">10</property>
-        <child>
-          <object class="GtkModelButton">
-            <property name="text">Subsubmenu</property>
-            <property name="menu-name">submenu2</property>
-          </object>
-        </child>
         <child>
           <object class="GtkModelButton">
             <property name="action-name">action8</property>
