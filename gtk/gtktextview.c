@@ -5740,16 +5740,6 @@ blink_cb (GtkWidget     *widget,
   float phase;
   float  alpha;
 
-  if (!gtk_widget_has_focus (GTK_WIDGET (text_view)))
-    {
-      g_warning ("GtkTextView - did not receive a focus-out.\n"
-                 "If you handle this event, you must return\n"
-                 "GDK_EVENT_PROPAGATE so the text view gets the event as well");
-      gtk_text_view_check_cursor_blink (text_view);
-
-      return FALSE;
-    }
-
   g_assert (priv->layout);
   g_assert (cursor_visible (text_view));
 
