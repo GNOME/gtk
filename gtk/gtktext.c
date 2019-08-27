@@ -2695,9 +2695,12 @@ _gtk_text_get_selected_text (GtkText *self)
 
   if (priv->selection_bound != priv->current_pos)
     {
+      const int start = MIN (priv->selection_bound, priv->current_pos);
+      const int end = MAX (priv->selection_bound, priv->current_pos);
       const char *text = gtk_entry_buffer_get_text (get_buffer (self));
-      int start_index = g_utf8_offset_to_pointer (text, priv->selection_bound) - text;
-      int end_index = g_utf8_offset_to_pointer (text, priv->current_pos) - text;
+      const int start_index = g_utf8_offset_to_pointer (text, start) - text;
+      const int end_index = g_utf8_offset_to_pointer (text, end) - text;
+
       return g_strndup (text + start_index, end_index - start_index);
     }
 
