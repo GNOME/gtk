@@ -124,6 +124,8 @@ struct _GtkPopoverMenu
   GtkPopover parent_instance;
 
   GtkWidget *active_item;
+  GtkWidget *open_submenu;
+  GtkWidget *parent_menu;
 };
 
 struct _GtkPopoverMenuClass
@@ -136,6 +138,39 @@ enum {
 };
 
 G_DEFINE_TYPE (GtkPopoverMenu, gtk_popover_menu, GTK_TYPE_POPOVER)
+
+GtkWidget *
+gtk_popover_menu_get_parent_menu (GtkPopoverMenu *menu)
+{
+  return menu->parent_menu;
+}
+
+void
+gtk_popover_menu_set_parent_menu (GtkPopoverMenu *menu,
+                                  GtkWidget      *parent)
+{
+  menu->parent_menu = parent;
+}
+
+GtkWidget *
+gtk_popover_menu_get_open_submenu (GtkPopoverMenu *menu)
+{
+  return menu->open_submenu;
+}
+
+void
+gtk_popover_menu_set_open_submenu (GtkPopoverMenu *menu,
+                                   GtkWidget      *submenu)
+{
+  if (menu->open_submenu != submenu)
+    menu->open_submenu = submenu;
+}
+
+GtkWidget *
+gtk_popover_menu_get_active_item (GtkPopoverMenu *menu)
+{
+  return menu->active_item;
+}
 
 void
 gtk_popover_menu_set_active_item (GtkPopoverMenu *menu,
@@ -508,6 +543,15 @@ gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
 GtkWidget *
 gtk_popover_menu_new_from_model (GtkWidget  *relative_to,
                                  GMenuModel *model)
+
+{
+  return gtk_popover_menu_new_from_model_full (relative_to, model, 0);
+}
+
+GtkWidget *
+gtk_popover_menu_new_from_model_full (GtkWidget           *relative_to,
+                                      GMenuModel          *model,
+                                      GtkPopoverMenuFlags  flags)
 {
   GtkWidget *popover;
 
@@ -515,7 +559,8 @@ gtk_popover_menu_new_from_model (GtkWidget  *relative_to,
   g_return_val_if_fail (G_IS_MENU_MODEL (model), NULL);
 
   popover = gtk_popover_menu_new (relative_to);
-  gtk_menu_section_box_new_toplevel (GTK_POPOVER_MENU (popover), model);
+  gtk_menu_section_box_new_toplevel (GTK_POPOVER_MENU (popover), model, flags);
 
   return popover;
 }
+

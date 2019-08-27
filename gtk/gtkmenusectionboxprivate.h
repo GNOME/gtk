@@ -41,8 +41,9 @@ G_BEGIN_DECLS
 typedef struct _GtkMenuSectionBox                           GtkMenuSectionBox;
 
 GType                   gtk_menu_section_box_get_type                   (void) G_GNUC_CONST;
-void                    gtk_menu_section_box_new_toplevel               (GtkPopoverMenu *popover,
-                                                                         GMenuModel     *model);
+void                    gtk_menu_section_box_new_toplevel               (GtkPopoverMenu      *popover,
+                                                                         GMenuModel          *model,
+                                                                         GtkPopoverMenuFlags  flags);
 
 G_END_DECLS
 

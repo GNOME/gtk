@@ -43,6 +43,7 @@
 #include "gtkactionable.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtknative.h"
 
 /**
  * SECTION:gtkmodelbutton
@@ -162,6 +163,7 @@ struct _GtkModelButton
   GtkWidget *start_indicator;
   GtkWidget *end_box;
   GtkWidget *end_indicator;
+  GtkWidget *popover;
   gboolean active;
   gboolean centered;
   gboolean iconic;
@@ -184,6 +186,7 @@ enum
   PROP_USE_MARKUP,
   PROP_ACTIVE,
   PROP_MENU_NAME,
+  PROP_POPOVER,
   PROP_ICONIC,
   PROP_ACCEL,
   PROP_INDICATOR_SIZE_GROUP,
@@ -275,7 +278,8 @@ gtk_model_button_update_state (GtkModelButton *button)
 
     case GTK_BUTTON_ROLE_NORMAL:
       start_type = GTK_CSS_IMAGE_BUILTIN_NONE;
-      if (button->menu_name != NULL)
+      if (button->menu_name != NULL ||
+          button->popover != NULL)
         end_type = GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT;
       else
         end_type = GTK_CSS_IMAGE_BUILTIN_NONE;
@@ -344,7 +348,7 @@ update_node_name (GtkModelButton *button)
     case GTK_BUTTON_ROLE_NORMAL:
       a11y_role = ATK_ROLE_PUSH_BUTTON;
       start_name = I_("none");
-      if (button->menu_name)
+      if (button->menu_name || button->popover)
         end_name = I_("arrow");
       else
         end_name = I_("none");
@@ -520,6 +524,28 @@ gtk_model_button_set_iconic (GtkModelButton *button,
 }
 
 static void
+gtk_model_button_set_popover (GtkModelButton *button,
+                              GtkWidget      *popover)
+{
+  if (button->popover)
+    gtk_popover_set_relative_to (GTK_POPOVER (button->popover), NULL);
+
+  button->popover = popover;
+
+  if (button->popover)
+    {
+      gtk_popover_set_relative_to (GTK_POPOVER (button->popover), GTK_WIDGET (button));
+      gtk_popover_set_position (GTK_POPOVER (button->popover), GTK_POS_RIGHT);
+    }
+
+  update_node_name (button);
+  gtk_model_button_update_state (button);
+
+  gtk_widget_queue_resize (GTK_WIDGET (button));
+  g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_POPOVER]);
+}
+
+static void
 update_accel (GtkModelButton *button,
               const char     *accel)
 {
@@ -591,6 +617,10 @@ gtk_model_button_get_property (GObject    *object,
       g_value_set_string (value, button->menu_name);
       break;
 
+    case PROP_POPOVER:
+      g_value_set_object (value, button->popover);
+      break;
+
     case PROP_ICONIC:
       g_value_set_boolean (value, button->iconic);
       break;
@@ -641,6 +671,10 @@ gtk_model_button_set_property (GObject      *object,
 
     case PROP_MENU_NAME:
       gtk_model_button_set_menu_name (button, g_value_get_string (value));
+      break;
+
+    case PROP_POPOVER:
+      gtk_model_button_set_popover (button, (GtkWidget *)g_value_get_object (value));
       break;
 
     case PROP_ICONIC:
@@ -783,7 +817,9 @@ gtk_model_button_size_allocate (GtkWidget *widget,
                                 int        height,
                                 int        baseline)
 {
-  if (GTK_MODEL_BUTTON (widget)->iconic)
+  GtkModelButton *button = GTK_MODEL_BUTTON (widget);
+
+  if (button->iconic)
     {
       GTK_WIDGET_CLASS (gtk_model_button_parent_class)->size_allocate (widget,
                                                                        width,
@@ -792,14 +828,12 @@ gtk_model_button_size_allocate (GtkWidget *widget,
     }
   else
     {
-      GtkModelButton *button;
       GtkAllocation child_allocation;
       GtkWidget *child;
       int start_width, start_height;
       int end_width, end_height;
       int min;
 
-      button = GTK_MODEL_BUTTON (widget);
       child = gtk_bin_get_child (GTK_BIN (widget));
 
       gtk_widget_measure (button->start_box,
@@ -860,6 +894,9 @@ gtk_model_button_size_allocate (GtkWidget *widget,
           gtk_widget_size_allocate (child, &child_allocation, baseline);
         }
     }
+
+  if (button->popover)
+    gtk_native_check_resize (GTK_NATIVE (button->popover));
 }
 
 static void
@@ -888,8 +925,14 @@ close_menu (GtkModelButton *button)
   GtkWidget *popover;
 
   popover = gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_POPOVER);
-  if (popover != NULL)
-    gtk_popover_popdown (GTK_POPOVER (popover));
+  while (popover != NULL)
+    {
+      gtk_popover_popdown (GTK_POPOVER (popover));
+      if (GTK_IS_POPOVER_MENU (popover))
+        popover = gtk_popover_menu_get_parent_menu (GTK_POPOVER_MENU (popover));
+      else
+        popover = NULL;
+    }
 }
 
 static void
@@ -900,6 +943,10 @@ gtk_model_button_clicked (GtkButton *button)
   if (model_button->menu_name != NULL)
     {
       switch_menu (model_button);
+    }
+  else if (model_button->popover != NULL)
+    {
+      gtk_popover_popup (GTK_POPOVER (model_button->popover));
     }
   else if (model_button->role == GTK_BUTTON_ROLE_NORMAL)
     {
@@ -915,6 +962,7 @@ gtk_model_button_finalize (GObject *object)
   gtk_widget_unparent (button->start_box);
   gtk_widget_unparent (button->end_box);
   g_free (button->accel);
+  g_clear_pointer (&button->popover, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gtk_model_button_parent_class)->finalize (object);
 }
@@ -977,6 +1025,13 @@ gtk_model_button_focus (GtkWidget        *widget,
                button->menu_name != NULL)
         {
           switch_menu (button);
+          return TRUE;
+        }
+      else if (direction == GTK_DIR_RIGHT &&
+               button->role == GTK_BUTTON_ROLE_NORMAL &&
+               button->popover != NULL)
+        {
+          gtk_popover_popup (GTK_POPOVER (button->popover));
           return TRUE;
         }
     }
@@ -1080,8 +1135,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   /**
    * GtkModelButton:menu-name:
    *
-   * The name of a submenu to open when the button is activated.
-   * If this is set, the button should not have an action associated with it.
+   * The name of a submenu to open when the button is activated.  * If this is set, the button should not have an action associated with it.
    */
   properties[PROP_MENU_NAME] =
     g_param_spec_string ("menu-name",
@@ -1089,6 +1143,13 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
                          P_("The name of the menu to open"),
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+ properties[PROP_POPOVER] =
+   g_param_spec_object ("popover",
+                        P_("Popover"),
+                        P_("Popover to open"),
+                        GTK_TYPE_POPOVER,
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkModelButton:iconic:
@@ -1130,6 +1191,38 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
 }
 
 static void
+close_submenus (GtkPopoverMenu *menu)
+{
+  GtkWidget *submenu;
+
+  submenu = gtk_popover_menu_get_open_submenu (menu);
+  if (submenu)
+    {
+      close_submenus (GTK_POPOVER_MENU (submenu));
+      gtk_popover_popdown (GTK_POPOVER (submenu));
+      gtk_popover_menu_set_open_submenu (menu, NULL);
+    }
+}
+
+static void
+open_submenu (GtkPopoverMenu *menu)
+{
+  GtkWidget *active_item;
+
+  active_item = gtk_popover_menu_get_active_item (menu);
+  if (GTK_IS_MODEL_BUTTON (active_item) &&
+      GTK_MODEL_BUTTON (active_item)->popover)
+    {
+      GtkWidget *submenu;
+
+      submenu = GTK_MODEL_BUTTON (active_item)->popover;
+      gtk_popover_popup (GTK_POPOVER (submenu));
+      gtk_popover_menu_set_open_submenu (menu, submenu);
+      gtk_popover_menu_set_parent_menu (GTK_POPOVER_MENU (submenu), GTK_WIDGET (menu));
+    }
+}
+
+static void
 enter_cb (GtkEventController *controller,
           double              x,
           double              y,
@@ -1141,6 +1234,7 @@ enter_cb (GtkEventController *controller,
   GtkWidget *popover;
   gboolean is;
   gboolean contains;
+  GtkWidget *active_item;
 
   target = gtk_event_controller_get_widget (controller);
   popover = gtk_widget_get_ancestor (target, GTK_TYPE_POPOVER_MENU);
@@ -1150,8 +1244,15 @@ enter_cb (GtkEventController *controller,
                 "contains-pointer-focus", &contains,
                 NULL);
 
-  if (popover && (is || contains))
-    gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (popover), target);
+  active_item = gtk_popover_menu_get_active_item (GTK_POPOVER_MENU (popover));
+  if (popover && (is || contains) && active_item != target)
+    {
+      close_submenus (GTK_POPOVER_MENU (popover));
+
+      gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (popover), target);
+
+      open_submenu (GTK_POPOVER_MENU (popover));
+    }
 }
 
 static void
@@ -1231,8 +1332,8 @@ gtk_model_button_init (GtkModelButton *button)
   update_node_ordering (button);
 
   controller = gtk_event_controller_motion_new ();
-  g_signal_connect (controller, "enter", G_CALLBACK (enter_cb), NULL);
-  g_signal_connect (controller, "leave", G_CALLBACK (leave_cb), NULL);
+  g_signal_connect (controller, "enter", G_CALLBACK (enter_cb), button);
+  g_signal_connect (controller, "leave", G_CALLBACK (leave_cb), button);
   gtk_widget_add_controller (GTK_WIDGET (button), controller);
 
   controller = gtk_event_controller_key_new ();
