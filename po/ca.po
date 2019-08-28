@@ -4788,7 +4788,7 @@ msgstr "Conjunt estilístic 20"
 #: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
 msgid "Math script style alternates"
-msgstr "Alternatives d'estil d'script matemàtic"
+msgstr "Alternatives d'estil de script matemàtic"
 
 #: gtk/open-type-layout.h:131
 msgctxt "OpenType layout"
