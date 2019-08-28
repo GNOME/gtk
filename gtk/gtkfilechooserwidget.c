@@ -3540,7 +3540,6 @@ gtk_file_chooser_widget_dispose (GObject *object)
 
   g_clear_pointer (&priv->browse_files_popover, gtk_widget_destroy);
   g_clear_object (&priv->extra_widget);
-  remove_settings_signal (impl, gtk_widget_get_display (GTK_WIDGET (impl)));
   g_clear_pointer (&priv->bookmarks_manager, _gtk_bookmarks_manager_free);
 
   if (priv->external_entry && priv->location_entry == priv->external_entry)
@@ -3604,9 +3603,6 @@ gtk_file_chooser_widget_unroot (GtkWidget *widget)
       priv->toplevel_last_focus_widget = NULL;
       priv->toplevel_current_focus_widget = NULL;
     }
-
-  remove_settings_signal (impl, gtk_widget_get_display (widget));
-  check_icon_theme (impl);
 
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->unroot (widget);
 }
@@ -8667,6 +8663,15 @@ gtk_file_chooser_widget_set_save_entry (GtkFileChooserWidget *impl,
 }
 
 static void
+display_changed_cb (GtkWidget            *wiget,
+                    GParamSpec           *pspec,
+                    GtkFileChooserWidget *impl)
+{
+  remove_settings_signal (impl, gtk_widget_get_display (GTK_WIDGET (impl)));
+  check_icon_theme (impl);
+}
+
+static void
 gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
@@ -8706,6 +8711,9 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
 
   gtk_widget_init_template (GTK_WIDGET (impl));
   gtk_widget_set_size_request (priv->browse_files_tree_view, 280, -1);
+
+  g_signal_connect (impl, "notify::display,", G_CALLBACK (display_changed_cb), impl);
+  check_icon_theme (impl);
 
   set_file_system_backend (impl);
 
