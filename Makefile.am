@@ -25,6 +25,7 @@ EXTRA_DIST +=			\
 	make-pot	\
 	meson_options.txt	\
 	meson.build	\
+	subprojects/	\
 	po/meson.build	\
 	po-properties/meson.build	\
 	build-aux/meson/post-install.py	\
