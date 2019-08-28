@@ -2803,7 +2803,7 @@ msgstr "%s: manca el nom de l'aplicació"
 msgid "Creating AppInfo from id not supported on non unix operating systems"
 msgstr ""
 "No es poden crear «AppInfo» a partir d'identificadors en sistemes operatius "
-"que no siguin UNIX."
+"que no siguin UNIX"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
@@ -3195,7 +3195,7 @@ msgstr "No es pot iniciar «%s»"
 #: gtk/gtkplacessidebar.c:2430
 #, c-format
 msgid "Error unlocking “%s”"
-msgstr "S'produït un error desbloquejant «%s»"
+msgstr "S'ha produït un error desbloquejant «%s»"
 
 #: gtk/gtkplacessidebar.c:2432
 #, c-format
@@ -5296,7 +5296,7 @@ msgstr "Conjunt estilístic 20"
 #: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
 msgid "Math script style alternates"
-msgstr "Alternatives d'estil d'script matemàtic"
+msgstr "Alternatives d'estil de script matemàtic"
 
 #: gtk/open-type-layout.h:131
 msgctxt "OpenType layout"
@@ -6947,7 +6947,7 @@ msgstr "Ahom"
 #: gtk/script-names.c:143
 msgctxt "Script"
 msgid "Anatolian Hieroglyphs"
-msgstr "Jeroglífics antòlics"
+msgstr "Jeroglífics anatòlics"
 
 #: gtk/script-names.c:144
 msgctxt "Script"
