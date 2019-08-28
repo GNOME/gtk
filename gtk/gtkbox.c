@@ -550,7 +550,7 @@ gtk_box_forall (GtkContainer *container,
  * @sibling: (nullable): the sibling to move @child after, or %NULL
  *
  * Inserts @child in the position after @sibling in the list
- * of @box children. If @sibling is %NULL, insert @child at 
+ * of @box children. If @sibling is %NULL, insert @child at
  * the first position.
  */
 void
@@ -558,11 +558,14 @@ gtk_box_insert_child_after (GtkBox    *box,
                             GtkWidget *child,
                             GtkWidget *sibling)
 {
-  GtkWidget *widget = GTK_WIDGET (box);
+  GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (gtk_widget_get_parent (child) == NULL);
+
+  widget = GTK_WIDGET (box);
+
   if (sibling)
     {
       g_return_if_fail (GTK_IS_WIDGET (sibling));
@@ -593,11 +596,14 @@ gtk_box_reorder_child_after (GtkBox    *box,
                              GtkWidget *child,
                              GtkWidget *sibling)
 {
-  GtkWidget *widget = GTK_WIDGET (box);
+  GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (gtk_widget_get_parent (child) == widget);
+  g_return_if_fail (gtk_widget_get_parent (child) == (GtkWidget *)box);
+
+ widget = GTK_WIDGET (box);
+
   if (sibling)
     {
       g_return_if_fail (GTK_IS_WIDGET (sibling));
