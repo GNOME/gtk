@@ -63,7 +63,21 @@
 
 struct _GtkIMContextIMEPrivate
 {
-
+  /* When pretend_empty_preedit is set to TRUE,
+   * gtk_im_context_ime_get_preedit_string() will return an empty string
+   * instead of the actual content of ImmGetCompositionStringW().
+   *
+   * This is necessary because GtkEntry expects the preedit buffer to be
+   * cleared before commit() is called, otherwise it leads to an assertion
+   * failure in Pango. However, since we emit the commit() signal while
+   * handling the WM_IME_COMPOSITION message, the IME buffer will be non-empty,
+   * so we temporarily set this flag while emmiting the appropriate signals.
+   *
+   * See also:
+   *   https://bugzilla.gnome.org/show_bug.cgi?id=787142
+   *   https://gitlab.gnome.org/GNOME/gtk/commit/c255ba68fc2c918dd84da48a472e7973d3c00b03
+   */
+  gboolean pretend_empty_preedit;
   guint32 dead_key_keyval;
 };
 
@@ -633,7 +647,7 @@ gtk_im_context_ime_get_preedit_string (GtkIMContext   *context,
 
   context_ime = GTK_IM_CONTEXT_IME (context);
 
-  if (!context_ime->focus)
+  if (!context_ime->focus || context_ime->priv->pretend_empty_preedit)
     utf8str = g_strdup ("");
   else
     utf8str = get_utf8_preedit_string (context_ime, GCS_COMPSTR, &pos);
@@ -1016,7 +1030,16 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
             gchar *utf8str = get_utf8_preedit_string (context_ime, GCS_RESULTSTR, NULL);
             if (utf8str)
               {
+                context_ime->priv->pretend_empty_preedit = TRUE;
+                g_signal_emit_by_name (context, "preedit-changed");
+                g_signal_emit_by_name (context, "preedit-end");
+
                 g_signal_emit_by_name (context, "commit", utf8str);
+
+                g_signal_emit_by_name (context, "preedit-start");
+                g_signal_emit_by_name (context, "preedit-changed");
+                context_ime->priv->pretend_empty_preedit = FALSE;
+
                 retval = TRUE;
               }
             g_free (utf8str);
