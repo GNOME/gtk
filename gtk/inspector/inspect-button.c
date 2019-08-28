@@ -109,38 +109,6 @@ on_inspect_widget (GtkInspectorWindow *iw,
 }
 
 static void
-on_highlight_widget (GtkWidget          *button,
-                     GdkEvent           *event,
-                     GtkInspectorWindow *iw)
-{
-  GtkWidget *widget;
-
-  widget = find_widget_at_pointer (gdk_event_get_device (event));
-
-  if (widget == NULL)
-    {
-      /* This window isn't in-process. Ignore it. */
-      return;
-    }
-
-  if (gtk_widget_get_root (widget) == GTK_ROOT (iw))
-    {
-      /* Don't hilight things in the inspector window */
-      return;
-    }
-
-  if (iw->flash_overlay &&
-      gtk_highlight_overlay_get_widget (GTK_HIGHLIGHT_OVERLAY (iw->flash_overlay)) == widget)
-    {
-      /* Already selected */
-      return;
-    }
-
-  clear_flash (iw);
-  start_flash (iw, widget);
-}
-
-static void
 deemphasize_window (GtkWidget *window)
 {
   GdkDisplay *display;
@@ -178,37 +146,6 @@ reemphasize_window (GtkWidget *window)
 
 static gboolean handle_event (GtkInspectorWindow *iw, GdkEvent *event);
 
-static void
-handle_button_event (GtkInspectorWindow *iw,
-                     GdkEvent           *event)
-{
-  g_signal_handlers_disconnect_by_func (iw, handle_event, NULL);
-  reemphasize_window (GTK_WIDGET (iw));
-  on_inspect_widget (iw, event);
-}
-
-static void
-handle_motion_event (GtkInspectorWindow *iw,
-                     GdkEvent           *event)
-{
-  on_highlight_widget (NULL, event, iw);
-}
-
-static void
-handle_key_event (GtkInspectorWindow *iw,
-                  GdkEvent           *event)
-{
-  guint keyval = 0;
-
-  gdk_event_get_keyval (event, &keyval);
-  if (keyval == GDK_KEY_Escape)
-    {
-      g_signal_handlers_disconnect_by_func (iw, handle_event, NULL);
-      reemphasize_window (GTK_WIDGET (iw));
-      clear_flash (iw);
-    }
-}
-
 static gboolean
 handle_event (GtkInspectorWindow *iw, GdkEvent *event)
 {
@@ -216,16 +153,52 @@ handle_event (GtkInspectorWindow *iw, GdkEvent *event)
     {
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      handle_key_event (iw, event);
+      {
+        guint keyval = 0;
+
+        gdk_event_get_keyval (event, &keyval);
+        if (keyval == GDK_KEY_Escape)
+          {
+            g_signal_handlers_disconnect_by_func (iw, handle_event, NULL);
+            reemphasize_window (GTK_WIDGET (iw));
+            clear_flash (iw);
+          }
+      }
       break;
 
     case GDK_MOTION_NOTIFY:
-      handle_motion_event (iw, event);
+      {
+        GtkWidget *widget = find_widget_at_pointer (gdk_event_get_device (event));
+
+        if (widget == NULL)
+          {
+            /* This window isn't in-process. Ignore it. */
+            break;
+          }
+
+        if (gtk_widget_get_root (widget) == GTK_ROOT (iw))
+          {
+            /* Don't hilight things in the inspector window */
+            break;
+          }
+
+        if (iw->flash_overlay &&
+            gtk_highlight_overlay_get_widget (GTK_HIGHLIGHT_OVERLAY (iw->flash_overlay)) == widget)
+          {
+            /* Already selected */
+            break;
+          }
+
+        clear_flash (iw);
+        start_flash (iw, widget);
+      }
       break;
 
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
-      handle_button_event (iw, event);
+      g_signal_handlers_disconnect_by_func (iw, handle_event, NULL);
+      reemphasize_window (GTK_WIDGET (iw));
+      on_inspect_widget (iw, event);
       break;
 
     default:;
