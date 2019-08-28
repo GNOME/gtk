@@ -7625,7 +7625,8 @@ gtk_widget_get_ancestor (GtkWidget *widget,
  *
  * Note that this function can only be called when the #GtkWidget
  * is attached to a toplevel, since the settings object is specific
- * to a particular #GdkDisplay.
+ * to a particular #GdkDisplay. If you want to monitor the widget for
+ * changes in its settings, connect to notify::display.
  *
  * Returns: (transfer none): the relevant #GtkSettings object
  */
