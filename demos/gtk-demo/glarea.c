@@ -241,7 +241,7 @@ realize (GtkWidget *widget)
       fragment_path = "/glarea/glarea-gl.fs.glsl";
     }
 
-  init_buffers (&position_buffer, NULL);
+  init_buffers (NULL, &position_buffer);
   init_shaders (vertex_path, fragment_path, &program, &mvp_location);
 }
 
