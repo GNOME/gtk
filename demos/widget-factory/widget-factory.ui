@@ -2114,7 +2114,7 @@ microphone-sensitivity-medium-symbolic</property>
                                       <object class="GtkInfoBar" id="infobar">
                                         <property name="visible">0</property>
                                         <property name="show-close-button">1</property>
-                                        <child internal-child="content_area">
+                                        <child>
                                           <object class="GtkBox">
                                             <child>
                                               <object class="GtkLabel">
