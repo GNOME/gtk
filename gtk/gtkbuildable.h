@@ -229,6 +229,11 @@ void          gtk_buildable_parse_context_get_position      (GtkBuildableParseCo
                                                              gint                *line_number,
                                                              gint                *char_number);
 
+GDK_AVAILABLE_IN_ALL
+GBytes *      gtk_buildable_parser_precompile               (const gchar              *text,
+                                                             gssize                    text_len,
+                                                             GError                  **error);
+
 G_END_DECLS
 
 #endif /* __GTK_BUILDABLE_H__ */

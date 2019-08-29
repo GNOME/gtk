@@ -28,6 +28,7 @@ gtk_private_sources = files([
   'gtkbookmarksmanager.c',
   'gtkbuilder-menus.c',
   'gtkbuilderparser.c',
+  'gtkbuilderprecompile.c',
   'gtkcellareaboxcontext.c',
   'gtkcoloreditor.c',
   'gtkcolorplane.c',

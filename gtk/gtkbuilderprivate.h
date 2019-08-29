@@ -147,6 +147,12 @@ typedef struct {
 typedef GType (*GTypeGetFunc) (void);
 
 /* Things only GtkBuilder should use */
+gboolean _gtk_buildable_parser_is_precompiled (const gchar          *data,
+                                               gssize                data_len);
+gboolean _gtk_buildable_parser_replay_precompiled (GtkBuildableParseContext *context,
+                                                   const gchar          *data,
+                                                   gssize                data_len,
+                                                   GError              **error);
 void _gtk_builder_parser_parse_buffer (GtkBuilder *builder,
                                        const gchar *filename,
                                        const gchar *buffer,
