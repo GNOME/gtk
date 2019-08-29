@@ -21,7 +21,7 @@ get_image_paintable (GtkImage *image,
       icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (image)));
       *out_size = width;
       icon_info = gtk_icon_theme_lookup_icon (icon_theme, icon_name, width, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
-      paintable = GDK_PAINTABLE (gtk_icon_info_load_texture (icon_info));
+      paintable = GDK_PAINTABLE (gtk_icon_info_load_texture (icon_info, NULL));
       g_object_unref (icon_info);
       return paintable;
     default:
