@@ -49,6 +49,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkprivate.h"
 #include "gdkpixbufutilsprivate.h"
+#include "gdk/gdktextureprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
@@ -3813,24 +3814,52 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
 /**
  * gtk_icon_info_load_texture:
  * @icon_info: a #GtkIconInfo
+ * @error: (nullable): location to store error information on failure,
+ *   or %NULL.
  *
  * Returns a texture object that can be used to render the icon
  * with GSK.
  *
- * Returns: (transfer full): the icon texture; this may be a newly
+ * Returns: (transfer full) (nullable): the icon texture; this may be a newly
  *     created texture or a new reference to an exiting texture. Use
  *     g_object_unref() to release your reference.
+ *     In case of failure, %NULL is returned and @error is set
  */
 GdkTexture *
-gtk_icon_info_load_texture (GtkIconInfo *icon_info)
+gtk_icon_info_load_texture (GtkIconInfo  *icon_info,
+                            GError      **error)
 {
+  g_return_val_if_fail (icon_info != NULL, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
   if (!icon_info->texture)
     {
       GdkPixbuf *pixbuf;
 
       pixbuf = gtk_icon_info_load_icon (icon_info, NULL);
-      icon_info->texture = gdk_texture_new_for_pixbuf (pixbuf);
-      g_object_unref (pixbuf);
+
+      if (!pixbuf)
+        {
+          if (icon_info->load_error)
+            {
+              if (error)
+                *error = g_error_copy (icon_info->load_error);
+            }
+          else
+            {
+              g_set_error_literal (error,
+                                   GTK_ICON_THEME_ERROR,
+                                   GTK_ICON_THEME_NOT_FOUND,
+                                   _("Failed to load icon"));
+            }
+
+          return NULL;
+        }
+      else
+        {
+          icon_info->texture = gdk_texture_new_for_pixbuf (pixbuf);
+          g_object_unref (pixbuf);
+        }
 
       g_object_add_weak_pointer (G_OBJECT (icon_info->texture), (void **)&icon_info->texture);
     }

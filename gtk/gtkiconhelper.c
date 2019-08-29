@@ -122,7 +122,7 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
                                        flags | GTK_ICON_LOOKUP_USE_BUILTIN | GTK_ICON_LOOKUP_GENERIC_FALLBACK);
 
   *symbolic = gtk_icon_info_is_symbolic (info);
-  paintable = GDK_PAINTABLE (gtk_icon_info_load_texture (info));
+  paintable = GDK_PAINTABLE (gtk_icon_info_load_texture (info, NULL));
   g_object_unref (info);
 
   if (paintable && scale != 1)
