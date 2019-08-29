@@ -110,7 +110,7 @@ main (int argc, char **argv)
 
   theme = gtk_icon_theme_get_default ();
   icon_info = gtk_icon_theme_lookup_icon_for_scale (theme, icon_name, 48, gtk_widget_get_scale_factor (window), GTK_ICON_LOOKUP_GENERIC_FALLBACK);
-  texture = gtk_icon_info_load_texture (icon_info);
+  texture = gtk_icon_info_load_texture (icon_info, NULL);
   g_object_unref (icon_info);
   image = gtk_image_new_from_paintable (GDK_PAINTABLE (texture));
   g_object_unref (texture);

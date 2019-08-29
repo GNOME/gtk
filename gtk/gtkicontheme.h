@@ -65,7 +65,7 @@ typedef struct _GtkIconTheme        GtkIconTheme;
  *   text direction
  * @GTK_ICON_LOOKUP_DIR_RTL: Try to load a variant of the icon for right-to-left
  *   text direction
- * 
+ *
  * Used to specify options for gtk_icon_theme_lookup_icon()
  */
 typedef enum
@@ -92,7 +92,7 @@ typedef enum
  * GtkIconThemeError:
  * @GTK_ICON_THEME_NOT_FOUND: The icon specified does not exist in the theme
  * @GTK_ICON_THEME_FAILED: An unspecified error occurred.
- * 
+ *
  * Error codes for GtkIconTheme operations.
  **/
 typedef enum {
@@ -225,7 +225,8 @@ GDK_AVAILABLE_IN_ALL
 GdkPixbuf *           gtk_icon_info_load_icon          (GtkIconInfo   *icon_info,
 							GError       **error);
 GDK_AVAILABLE_IN_ALL
-GdkTexture *          gtk_icon_info_load_texture       (GtkIconInfo   *icon_info);
+GdkTexture *          gtk_icon_info_load_texture       (GtkIconInfo   *icon_info,
+                                                        GError       **error);
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_icon_info_load_icon_async   (GtkIconInfo          *icon_info,
