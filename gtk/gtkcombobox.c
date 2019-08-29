@@ -297,25 +297,26 @@ static gchar   *gtk_combo_box_format_entry_text              (GtkComboBox     *c
 /* GtkBuildable method implementation */
 static GtkBuildableIface *parent_buildable_iface;
 
-static void     gtk_combo_box_buildable_init                 (GtkBuildableIface *iface);
-static void     gtk_combo_box_buildable_add_child            (GtkBuildable  *buildable,
-                                                              GtkBuilder    *builder,
-                                                              GObject       *child,
-                                                              const gchar   *type);
-static gboolean gtk_combo_box_buildable_custom_tag_start     (GtkBuildable  *buildable,
-                                                              GtkBuilder    *builder,
-                                                              GObject       *child,
-                                                              const gchar   *tagname,
-                                                              GMarkupParser *parser,
-                                                              gpointer      *data);
-static void     gtk_combo_box_buildable_custom_tag_end       (GtkBuildable  *buildable,
-                                                              GtkBuilder    *builder,
-                                                              GObject       *child,
-                                                              const gchar   *tagname,
-                                                              gpointer       data);
-static GObject *gtk_combo_box_buildable_get_internal_child   (GtkBuildable *buildable,
-                                                              GtkBuilder   *builder,
-                                                              const gchar  *childname);
+static void     gtk_combo_box_buildable_init                 (GtkBuildableIface  *iface);
+static void     gtk_combo_box_buildable_add_child            (GtkBuildable       *buildable,
+                                                              GtkBuilder         *builder,
+                                                              GObject            *child,
+                                                              const gchar        *type);
+static gboolean gtk_combo_box_buildable_custom_tag_start     (GtkBuildable       *buildable,
+                                                              GtkBuilder         *builder,
+                                                              GObject            *child,
+                                                              const gchar        *tagname,
+                                                              GtkBuildableParser *parser,
+                                                              gpointer           *data);
+static void     gtk_combo_box_buildable_custom_tag_end       (GtkBuildable       *buildable,
+                                                              GtkBuilder         *builder,
+                                                              GObject            *child,
+                                                              const gchar        *tagname,
+                                                              gpointer            data);
+static GObject *gtk_combo_box_buildable_get_internal_child   (GtkBuildable       *buildable,
+                                                              GtkBuilder         *builder,
+                                                              const gchar        *childname);
+
 
 
 /* GtkCellEditable method implementations */
@@ -2824,12 +2825,12 @@ gtk_combo_box_buildable_add_child (GtkBuildable *buildable,
 }
 
 static gboolean
-gtk_combo_box_buildable_custom_tag_start (GtkBuildable  *buildable,
-                                          GtkBuilder    *builder,
-                                          GObject       *child,
-                                          const gchar   *tagname,
-                                          GMarkupParser *parser,
-                                          gpointer      *data)
+gtk_combo_box_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                          GtkBuilder         *builder,
+                                          GObject            *child,
+                                          const gchar        *tagname,
+                                          GtkBuildableParser *parser,
+                                          gpointer           *data)
 {
   if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
                                                 tagname, parser, data))

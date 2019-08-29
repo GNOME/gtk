@@ -122,23 +122,23 @@ struct _FilterRule
 static void gtk_file_filter_finalize   (GObject            *object);
 
 
-static void     gtk_file_filter_buildable_init                 (GtkBuildableIface *iface);
-static void     gtk_file_filter_buildable_set_name             (GtkBuildable *buildable,
-                                                                const gchar  *name);
-static const gchar* gtk_file_filter_buildable_get_name         (GtkBuildable *buildable);
+static void         gtk_file_filter_buildable_init             (GtkBuildableIface  *iface);
+static void         gtk_file_filter_buildable_set_name         (GtkBuildable       *buildable,
+                                                                const gchar        *name);
+static const gchar* gtk_file_filter_buildable_get_name         (GtkBuildable       *buildable);
 
+static gboolean     gtk_file_filter_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                                GtkBuilder         *builder,
+                                                                GObject            *child,
+                                                                const gchar        *tagname,
+                                                                GtkBuildableParser *parser,
+                                                                gpointer           *data);
+static void         gtk_file_filter_buildable_custom_tag_end   (GtkBuildable       *buildable,
+                                                                GtkBuilder         *builder,
+                                                                GObject            *child,
+                                                                const gchar        *tagname,
+                                                                gpointer            data);
 
-static gboolean gtk_file_filter_buildable_custom_tag_start     (GtkBuildable  *buildable,
-								GtkBuilder    *builder,
-								GObject       *child,
-								const gchar   *tagname,
-								GMarkupParser *parser,
-								gpointer      *data);
-static void     gtk_file_filter_buildable_custom_tag_end       (GtkBuildable  *buildable,
-								GtkBuilder    *builder,
-								GObject       *child,
-								const gchar   *tagname,
-								gpointer       data);
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileFilter, gtk_file_filter, G_TYPE_INITIALLY_UNOWNED,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
@@ -233,12 +233,12 @@ typedef struct {
 } SubParserData;
 
 static void
-parser_start_element (GMarkupParseContext  *context,
-                      const gchar          *element_name,
-                      const gchar         **names,
-                      const gchar         **values,
-                      gpointer              user_data,
-                      GError              **error)
+parser_start_element (GtkBuildableParseContext  *context,
+                      const gchar               *element_name,
+                      const gchar              **names,
+                      const gchar              **values,
+                      gpointer                   user_data,
+                      GError                   **error)
 {
   SubParserData *data = (SubParserData*)user_data;
 
@@ -279,11 +279,11 @@ parser_start_element (GMarkupParseContext  *context,
 }
 
 static void
-parser_text_element (GMarkupParseContext *context,
-                     const gchar         *text,
-                     gsize                text_len,
-                     gpointer             user_data,
-                     GError             **error)
+parser_text_element (GtkBuildableParseContext *context,
+                     const gchar              *text,
+                     gsize                     text_len,
+                     gpointer                  user_data,
+                     GError                  **error)
 {
   SubParserData *data = (SubParserData*)user_data;
 
@@ -292,10 +292,10 @@ parser_text_element (GMarkupParseContext *context,
 }
 
 static void
-parser_end_element (GMarkupParseContext *context,
-                    const gchar         *element_name,
-                    gpointer             user_data,
-                    GError             **error)
+parser_end_element (GtkBuildableParseContext *context,
+                    const gchar              *element_name,
+                    gpointer                  user_data,
+                    GError                  **error)
 {
   SubParserData *data = (SubParserData*)user_data;
 
@@ -318,7 +318,7 @@ parser_end_element (GMarkupParseContext *context,
   data->parsing = FALSE;
 }
 
-static const GMarkupParser sub_parser =
+static const GtkBuildableParser sub_parser =
   {
     parser_start_element,
     parser_end_element,
@@ -326,12 +326,12 @@ static const GMarkupParser sub_parser =
   };
 
 static gboolean
-gtk_file_filter_buildable_custom_tag_start (GtkBuildable  *buildable,
-                                            GtkBuilder    *builder,
-                                            GObject       *child,
-                                            const gchar   *tagname,
-                                            GMarkupParser *parser,
-                                            gpointer      *parser_data)
+gtk_file_filter_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                            GtkBuilder         *builder,
+                                            GObject            *child,
+                                            const gchar        *tagname,
+                                            GtkBuildableParser *parser,
+                                            gpointer           *parser_data)
 {
   SubParserData *data = NULL;
 

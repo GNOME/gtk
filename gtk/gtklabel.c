@@ -511,19 +511,20 @@ static void     gtk_label_drag_data_get     (GtkWidget         *widget,
 					     GdkDrag           *drag,
 					     GtkSelectionData  *selection_data);
 
-static void     gtk_label_buildable_interface_init     (GtkBuildableIface *iface);
-static gboolean gtk_label_buildable_custom_tag_start   (GtkBuildable     *buildable,
-							GtkBuilder       *builder,
-							GObject          *child,
-							const gchar      *tagname,
-							GMarkupParser    *parser,
-							gpointer         *data);
+static void     gtk_label_buildable_interface_init   (GtkBuildableIface  *iface);
+static gboolean gtk_label_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                      GtkBuilder         *builder,
+                                                      GObject            *child,
+                                                      const gchar        *tagname,
+                                                      GtkBuildableParser *parser,
+                                                      gpointer           *data);
 
-static void     gtk_label_buildable_custom_finished    (GtkBuildable     *buildable,
-							GtkBuilder       *builder,
-							GObject          *child,
-							const gchar      *tagname,
-							gpointer          user_data);
+static void     gtk_label_buildable_custom_finished  (GtkBuildable       *buildable,
+                                                      GtkBuilder         *builder,
+                                                      GObject            *child,
+                                                      const gchar        *tagname,
+                                                      gpointer            user_data);
+
 
 
 static void connect_mnemonics_visible_notify    (GtkLabel   *label);
@@ -1565,12 +1566,12 @@ attribute_from_text (GtkBuilder   *builder,
 
 
 static void
-pango_start_element (GMarkupParseContext *context,
-		     const gchar         *element_name,
-		     const gchar        **names,
-		     const gchar        **values,
-		     gpointer             user_data,
-		     GError             **error)
+pango_start_element (GtkBuildableParseContext *context,
+                     const gchar              *element_name,
+                     const gchar             **names,
+                     const gchar             **values,
+                     gpointer                  user_data,
+                     GError                  **error)
 {
   PangoParserData *data = (PangoParserData*)user_data;
 
@@ -1654,18 +1655,18 @@ pango_start_element (GMarkupParseContext *context,
     }
 }
 
-static const GMarkupParser pango_parser =
+static const GtkBuildableParser pango_parser =
   {
     pango_start_element,
   };
 
 static gboolean
-gtk_label_buildable_custom_tag_start (GtkBuildable     *buildable,
-				      GtkBuilder       *builder,
-				      GObject          *child,
-				      const gchar      *tagname,
-				      GMarkupParser    *parser,
-				      gpointer         *data)
+gtk_label_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                      GtkBuilder         *builder,
+                                      GObject            *child,
+                                      const gchar        *tagname,
+                                      GtkBuildableParser *parser,
+                                      gpointer           *data)
 {
   if (buildable_parent_iface->custom_tag_start (buildable, builder, child,
 						tagname, parser, data))
