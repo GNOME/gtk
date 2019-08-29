@@ -137,6 +137,9 @@ gboolean gtk_get_any_display_debug_flag_set (void);
 
 #endif /* G_ENABLE_DEBUG */
 
+void gtk_set_current_theme (const char *name,
+                            const char *variant);
+
 G_END_DECLS
 
 #endif /* __GTK_PRIVATE_H__ */
