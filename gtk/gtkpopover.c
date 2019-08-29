@@ -1355,7 +1355,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   properties[PROP_AUTOHIDE] =
       g_param_spec_boolean ("autohide",
                             P_("Autohide"),
-                            P_("Whether to dismiss the popver on outside clicks"),
+                            P_("Whether to dismiss the popover on outside clicks"),
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
