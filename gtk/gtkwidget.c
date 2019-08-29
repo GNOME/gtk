@@ -671,31 +671,32 @@ static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
 static gboolean         gtk_widget_real_can_activate_accel      (GtkWidget *widget,
                                                                  guint      signal_id);
 
-static void             gtk_widget_buildable_interface_init     (GtkBuildableIface *iface);
-static void             gtk_widget_buildable_set_name           (GtkBuildable     *buildable,
-                                                                 const gchar      *name);
-static const gchar *    gtk_widget_buildable_get_name           (GtkBuildable     *buildable);
-static GObject *        gtk_widget_buildable_get_internal_child (GtkBuildable *buildable,
-								 GtkBuilder   *builder,
-								 const gchar  *childname);
-static gboolean         gtk_widget_buildable_custom_tag_start   (GtkBuildable     *buildable,
-                                                                 GtkBuilder       *builder,
-                                                                 GObject          *child,
-                                                                 const gchar      *tagname,
-                                                                 GMarkupParser    *parser,
-                                                                 gpointer         *data);
-static void             gtk_widget_buildable_custom_tag_end     (GtkBuildable     *buildable,
-                                                                 GtkBuilder       *builder,
-                                                                 GObject          *child,
-                                                                 const gchar      *tagname,
-                                                                 gpointer          data);
-static void             gtk_widget_buildable_custom_finished    (GtkBuildable     *buildable,
-                                                                 GtkBuilder       *builder,
-                                                                 GObject          *child,
-                                                                 const gchar      *tagname,
-                                                                 gpointer          data);
-static void             gtk_widget_buildable_parser_finished    (GtkBuildable     *buildable,
-                                                                 GtkBuilder       *builder);
+static void             gtk_widget_buildable_interface_init     (GtkBuildableIface  *iface);
+static void             gtk_widget_buildable_set_name           (GtkBuildable       *buildable,
+                                                                 const gchar        *name);
+static const gchar *    gtk_widget_buildable_get_name           (GtkBuildable       *buildable);
+static GObject *        gtk_widget_buildable_get_internal_child (GtkBuildable       *buildable,
+                                                                 GtkBuilder         *builder,
+                                                                 const gchar        *childname);
+static gboolean         gtk_widget_buildable_custom_tag_start   (GtkBuildable       *buildable,
+                                                                 GtkBuilder         *builder,
+                                                                 GObject            *child,
+                                                                 const gchar        *tagname,
+                                                                 GtkBuildableParser *parser,
+                                                                 gpointer           *data);
+static void             gtk_widget_buildable_custom_tag_end     (GtkBuildable       *buildable,
+                                                                 GtkBuilder         *builder,
+                                                                 GObject            *child,
+                                                                 const gchar        *tagname,
+                                                                 gpointer            data);
+static void             gtk_widget_buildable_custom_finished    (GtkBuildable       *buildable,
+                                                                 GtkBuilder         *builder,
+                                                                 GObject            *child,
+                                                                 const gchar        *tagname,
+                                                                 gpointer            data);
+static void             gtk_widget_buildable_parser_finished    (GtkBuildable       *buildable,
+                                                                 GtkBuilder         *builder);
+
 
 static GtkSizeRequestMode gtk_widget_real_get_request_mode      (GtkWidget        *widget);
 
@@ -9487,12 +9488,12 @@ typedef struct
 } AccessibilitySubParserData;
 
 static void
-accessibility_start_element (GMarkupParseContext  *context,
-                             const gchar          *element_name,
-                             const gchar         **names,
-                             const gchar         **values,
-                             gpointer              user_data,
-                             GError              **error)
+accessibility_start_element (GtkBuildableParseContext  *context,
+                             const gchar               *element_name,
+                             const gchar              **names,
+                             const gchar              **values,
+                             gpointer                   user_data,
+                             GError                   **error)
 {
   AccessibilitySubParserData *data = (AccessibilitySubParserData*)user_data;
 
@@ -9621,15 +9622,15 @@ accessibility_start_element (GMarkupParseContext  *context,
 }
 
 static void
-accessibility_text (GMarkupParseContext  *context,
-                    const gchar          *text,
-                    gsize                 text_len,
-                    gpointer              user_data,
-                    GError              **error)
+accessibility_text (GtkBuildableParseContext  *context,
+                    const gchar               *text,
+                    gsize                      text_len,
+                    gpointer                   user_data,
+                    GError                   **error)
 {
   AccessibilitySubParserData *data = (AccessibilitySubParserData*)user_data;
 
-  if (strcmp (g_markup_parse_context_get_element (context), "action") == 0)
+  if (strcmp (gtk_buildable_parse_context_get_element (context), "action") == 0)
     {
       AtkActionData *action = data->actions->data;
 
@@ -9637,7 +9638,7 @@ accessibility_text (GMarkupParseContext  *context,
     }
 }
 
-static const GMarkupParser accessibility_parser =
+static const GtkBuildableParser accessibility_parser =
   {
     accessibility_start_element,
     NULL,
@@ -9654,12 +9655,12 @@ typedef struct
 } AccelGroupParserData;
 
 static void
-accel_group_start_element (GMarkupParseContext  *context,
-                           const gchar          *element_name,
-                           const gchar         **names,
-                           const gchar         **values,
-                           gpointer              user_data,
-                           GError              **error)
+accel_group_start_element (GtkBuildableParseContext  *context,
+                           const gchar               *element_name,
+                           const gchar              **names,
+                           const gchar              **values,
+                           gpointer                   user_data,
+                           GError                   **error)
 {
   AccelGroupParserData *data = (AccelGroupParserData*)user_data;
 
@@ -9723,7 +9724,7 @@ accel_group_start_element (GMarkupParseContext  *context,
     }
 }
 
-static const GMarkupParser accel_group_parser =
+static const GtkBuildableParser accel_group_parser =
   {
     accel_group_start_element,
   };
@@ -9735,12 +9736,12 @@ typedef struct
 } StyleParserData;
 
 static void
-style_start_element (GMarkupParseContext  *context,
-                     const gchar          *element_name,
-                     const gchar         **names,
-                     const gchar         **values,
-                     gpointer              user_data,
-                     GError              **error)
+style_start_element (GtkBuildableParseContext  *context,
+                     const gchar               *element_name,
+                     const gchar              **names,
+                     const gchar              **values,
+                     gpointer                   user_data,
+                     GError                   **error)
 {
   StyleParserData *data = (StyleParserData *)user_data;
 
@@ -9779,7 +9780,7 @@ style_start_element (GMarkupParseContext  *context,
     }
 }
 
-static const GMarkupParser style_parser =
+static const GtkBuildableParser style_parser =
   {
     style_start_element,
   };
@@ -9817,12 +9818,12 @@ layout_property_info_free (gpointer data)
 }
 
 static void
-layout_start_element (GMarkupParseContext  *context,
-                      const gchar          *element_name,
-                      const gchar         **names,
-                      const gchar         **values,
-                      gpointer              user_data,
-                      GError              **error)
+layout_start_element (GtkBuildableParseContext  *context,
+                      const gchar               *element_name,
+                      const gchar              **names,
+                      const gchar              **values,
+                      gpointer                   user_data,
+                      GError                   **error)
 {
   LayoutParserData *layout_data = user_data;
 
@@ -9873,11 +9874,11 @@ layout_start_element (GMarkupParseContext  *context,
 }
 
 static void
-layout_text (GMarkupParseContext  *context,
-             const gchar          *text,
-             gsize                 text_len,
-             gpointer              user_data,
-             GError              **error)
+layout_text (GtkBuildableParseContext  *context,
+             const gchar               *text,
+             gsize                      text_len,
+             gpointer                   user_data,
+             GError                   **error)
 {
   LayoutParserData *layout_data = user_data;
 
@@ -9886,10 +9887,10 @@ layout_text (GMarkupParseContext  *context,
 }
 
 static void
-layout_end_element (GMarkupParseContext  *context,
-                    const char           *element_name,
-                    gpointer              user_data,
-                    GError              **error)
+layout_end_element (GtkBuildableParseContext  *context,
+                    const char                *element_name,
+                    gpointer                   user_data,
+                    GError                   **error)
 {
   LayoutParserData *layout_data = user_data;
 
@@ -9915,7 +9916,7 @@ layout_end_element (GMarkupParseContext  *context,
     }
 }
 
-static const GMarkupParser layout_parser =
+static const GtkBuildableParser layout_parser =
   {
     layout_start_element,
     layout_end_element,
@@ -9923,12 +9924,12 @@ static const GMarkupParser layout_parser =
   };
 
 static gboolean
-gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
-                                       GtkBuilder       *builder,
-                                       GObject          *child,
-                                       const gchar      *tagname,
-                                       GMarkupParser    *parser,
-                                       gpointer         *parser_data)
+gtk_widget_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                       GtkBuilder         *builder,
+                                       GObject            *child,
+                                       const gchar        *tagname,
+                                       GtkBuildableParser *parser,
+                                       gpointer           *parser_data)
 {
   if (strcmp (tagname, "accelerator") == 0)
     {

@@ -2805,7 +2805,7 @@ gtk_builder_get_application (GtkBuilder *builder)
 /*< private >
  * _gtk_builder_prefix_error:
  * @builder: a #GtkBuilder
- * @context: the #GMarkupParseContext
+ * @context: the #GtkBuildableParseContext
  * @error: an error
  *
  * Calls g_prefix_error() to prepend a filename:line:column marker
@@ -2817,21 +2817,21 @@ gtk_builder_get_application (GtkBuilder *builder)
  * g_markup_collect_attributes() in a start_element vfunc.
  */
 void
-_gtk_builder_prefix_error (GtkBuilder           *builder,
-                           GMarkupParseContext  *context,
-                           GError              **error)
+_gtk_builder_prefix_error (GtkBuilder                *builder,
+                           GtkBuildableParseContext  *context,
+                           GError                   **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   gint line, col;
 
-  g_markup_parse_context_get_position (context, &line, &col);
+  gtk_buildable_parse_context_get_position (context, &line, &col);
   g_prefix_error (error, "%s:%d:%d ", priv->filename, line, col);
 }
 
 /*< private >
  * _gtk_builder_error_unhandled_tag:
  * @builder: a #GtkBuilder
- * @context: the #GMarkupParseContext
+ * @context: the #GtkBuildableParseContext
  * @object: name of the object that is being handled
  * @element_name: name of the element whose start tag is being handled
  * @error: return location for the error
@@ -2842,16 +2842,16 @@ _gtk_builder_prefix_error (GtkBuilder           *builder,
  * This is intended to be called in a start_element vfunc.
  */
 void
-_gtk_builder_error_unhandled_tag (GtkBuilder           *builder,
-                                  GMarkupParseContext  *context,
-                                  const gchar          *object,
-                                  const gchar          *element_name,
-                                  GError              **error)
+_gtk_builder_error_unhandled_tag (GtkBuilder                *builder,
+                                  GtkBuildableParseContext  *context,
+                                  const gchar               *object,
+                                  const gchar               *element_name,
+                                  GError                   **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   gint line, col;
 
-  g_markup_parse_context_get_position (context, &line, &col);
+  gtk_buildable_parse_context_get_position (context, &line, &col);
   g_set_error (error,
                GTK_BUILDER_ERROR,
                GTK_BUILDER_ERROR_UNHANDLED_TAG,
@@ -2862,7 +2862,7 @@ _gtk_builder_error_unhandled_tag (GtkBuilder           *builder,
 
 /*< private >
  * @builder: a #GtkBuilder
- * @context: the #GMarkupParseContext
+ * @context: the #GtkBuildableParseContext
  * @parent_name: the name of the expected parent element
  * @error: return location for an error
  *
@@ -2875,27 +2875,27 @@ _gtk_builder_error_unhandled_tag (GtkBuilder           *builder,
  * Returns: %TRUE if @parent_name is the parent element
  */
 gboolean
-_gtk_builder_check_parent (GtkBuilder           *builder,
-                           GMarkupParseContext  *context,
-                           const gchar          *parent_name,
-                           GError              **error)
+_gtk_builder_check_parent (GtkBuilder                *builder,
+                           GtkBuildableParseContext  *context,
+                           const gchar               *parent_name,
+                           GError                   **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
-  const GSList *stack;
+  GPtrArray *stack;
   gint line, col;
   const gchar *parent;
   const gchar *element;
 
-  stack = g_markup_parse_context_get_element_stack (context);
+  stack = gtk_buildable_parse_context_get_element_stack (context);
 
-  element = (const gchar *)stack->data;
-  parent = stack->next ? (const gchar *)stack->next->data : "";
+  element = g_ptr_array_index (stack, stack->len - 1);
+  parent = stack->len > 1 ? g_ptr_array_index (stack, stack->len - 2) : "";
 
   if (g_str_equal (parent_name, parent) ||
       (g_str_equal (parent_name, "object") && g_str_equal (parent, "template")))
     return TRUE;
 
-  g_markup_parse_context_get_position (context, &line, &col);
+  gtk_buildable_parse_context_get_position (context, &line, &col);
   g_set_error (error,
                GTK_BUILDER_ERROR,
                GTK_BUILDER_ERROR_INVALID_TAG,

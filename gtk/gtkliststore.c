@@ -283,17 +283,17 @@ static gboolean gtk_list_store_has_default_sort_func (GtkTreeSortable        *so
 
 
 /* buildable */
-static gboolean gtk_list_store_buildable_custom_tag_start (GtkBuildable  *buildable,
-							   GtkBuilder    *builder,
-							   GObject       *child,
-							   const gchar   *tagname,
-							   GMarkupParser *parser,
-							   gpointer      *data);
-static void     gtk_list_store_buildable_custom_tag_end (GtkBuildable *buildable,
-							 GtkBuilder   *builder,
-							 GObject      *child,
-							 const gchar  *tagname,
-							 gpointer      data);
+static gboolean gtk_list_store_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                           GtkBuilder         *builder,
+                                                           GObject            *child,
+                                                           const gchar        *tagname,
+                                                           GtkBuildableParser *parser,
+                                                           gpointer           *data);
+static void     gtk_list_store_buildable_custom_tag_end   (GtkBuildable       *buildable,
+                                                           GtkBuilder         *builder,
+                                                           GObject            *child,
+                                                           const gchar        *tagname,
+                                                           gpointer            data);
 
 G_DEFINE_TYPE_WITH_CODE (GtkListStore, gtk_list_store, G_TYPE_OBJECT,
                          G_ADD_PRIVATE (GtkListStore)
@@ -2336,12 +2336,12 @@ typedef struct {
 } SubParserData;
 
 static void
-list_store_start_element (GMarkupParseContext  *context,
-                          const gchar          *element_name,
-                          const gchar         **names,
-                          const gchar         **values,
-                          gpointer              user_data,
-                          GError              **error)
+list_store_start_element (GtkBuildableParseContext *context,
+                          const gchar              *element_name,
+                          const gchar             **names,
+                          const gchar             **values,
+                          gpointer                  user_data,
+                          GError                  **error)
 {
   SubParserData *data = (SubParserData*)user_data;
 
@@ -2450,10 +2450,10 @@ list_store_start_element (GMarkupParseContext  *context,
 }
 
 static void
-list_store_end_element (GMarkupParseContext  *context,
-                        const gchar          *element_name,
-                        gpointer              user_data,
-                        GError              **error)
+list_store_end_element (GtkBuildableParseContext  *context,
+                        const gchar               *element_name,
+                        gpointer                   user_data,
+                        GError                   **error)
 {
   SubParserData *data = (SubParserData*)user_data;
 
@@ -2519,11 +2519,11 @@ list_store_end_element (GMarkupParseContext  *context,
 }
 
 static void
-list_store_text (GMarkupParseContext  *context,
-                 const gchar          *text,
-                 gsize                 text_len,
-                 gpointer              user_data,
-                 GError              **error)
+list_store_text (GtkBuildableParseContext  *context,
+                 const gchar               *text,
+                 gsize                      text_len,
+                 gpointer                   user_data,
+                 GError                   **error)
 {
   SubParserData *data = (SubParserData*)user_data;
   gint i;
@@ -2563,7 +2563,7 @@ list_store_text (GMarkupParseContext  *context,
   g_free (string);
 }
 
-static const GMarkupParser list_store_parser =
+static const GtkBuildableParser list_store_parser =
   {
     list_store_start_element,
     list_store_end_element,
@@ -2571,12 +2571,12 @@ static const GMarkupParser list_store_parser =
   };
 
 static gboolean
-gtk_list_store_buildable_custom_tag_start (GtkBuildable  *buildable,
-                                           GtkBuilder    *builder,
-                                           GObject       *child,
-                                           const gchar   *tagname,
-                                           GMarkupParser *parser,
-                                           gpointer      *parser_data)
+gtk_list_store_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                           GtkBuilder         *builder,
+                                           GObject            *child,
+                                           const gchar        *tagname,
+                                           GtkBuildableParser *parser,
+                                           gpointer           *parser_data)
 {
   SubParserData *data;
 

@@ -202,20 +202,20 @@ static void     gtk_scale_snapshot                (GtkWidget      *widget,
 static void     gtk_scale_real_get_layout_offsets (GtkScale       *scale,
                                                    gint           *x,
                                                    gint           *y);
-static void     gtk_scale_buildable_interface_init   (GtkBuildableIface *iface);
-static gboolean gtk_scale_buildable_custom_tag_start (GtkBuildable  *buildable,
-                                                      GtkBuilder    *builder,
-                                                      GObject       *child,
-                                                      const gchar   *tagname,
-                                                      GMarkupParser *parser,
-                                                      gpointer      *data);
-static void     gtk_scale_buildable_custom_finished  (GtkBuildable  *buildable,
-                                                      GtkBuilder    *builder,
-                                                      GObject       *child,
-                                                      const gchar   *tagname,
-                                                      gpointer       user_data);
-static gchar  * gtk_scale_format_value               (GtkScale      *scale,
-                                                      gdouble        value);
+static void     gtk_scale_buildable_interface_init   (GtkBuildableIface  *iface);
+static gboolean gtk_scale_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                      GtkBuilder         *builder,
+                                                      GObject            *child,
+                                                      const gchar        *tagname,
+                                                      GtkBuildableParser *parser,
+                                                      gpointer           *data);
+static void     gtk_scale_buildable_custom_finished  (GtkBuildable       *buildable,
+                                                      GtkBuilder         *builder,
+                                                      GObject            *child,
+                                                      const gchar        *tagname,
+                                                      gpointer            user_data);
+static gchar  * gtk_scale_format_value               (GtkScale           *scale,
+                                                      gdouble             value);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkScale, gtk_scale, GTK_TYPE_RANGE,
@@ -1854,12 +1854,12 @@ mark_data_free (MarkData *data)
 }
 
 static void
-marks_start_element (GMarkupParseContext *context,
-                     const gchar         *element_name,
-                     const gchar        **names,
-                     const gchar        **values,
-                     gpointer             user_data,
-                     GError             **error)
+marks_start_element (GtkBuildableParseContext *context,
+                     const gchar              *element_name,
+                     const gchar             **names,
+                     const gchar             **values,
+                     gpointer                  user_data,
+                     GError                  **error)
 {
   MarksSubparserData *data = (MarksSubparserData*)user_data;
 
@@ -1945,15 +1945,15 @@ marks_start_element (GMarkupParseContext *context,
 }
 
 static void
-marks_text (GMarkupParseContext  *context,
-            const gchar          *text,
-            gsize                 text_len,
-            gpointer              user_data,
-            GError              **error)
+marks_text (GtkBuildableParseContext  *context,
+            const gchar               *text,
+            gsize                      text_len,
+            gpointer                   user_data,
+            GError                   **error)
 {
   MarksSubparserData *data = (MarksSubparserData*)user_data;
 
-  if (strcmp (g_markup_parse_context_get_element (context), "mark") == 0)
+  if (strcmp (gtk_buildable_parse_context_get_element (context), "mark") == 0)
     {
       MarkData *mark = data->marks->data;
 
@@ -1961,7 +1961,7 @@ marks_text (GMarkupParseContext  *context,
     }
 }
 
-static const GMarkupParser marks_parser =
+static const GtkBuildableParser marks_parser =
   {
     marks_start_element,
     NULL,
@@ -1970,12 +1970,12 @@ static const GMarkupParser marks_parser =
 
 
 static gboolean
-gtk_scale_buildable_custom_tag_start (GtkBuildable  *buildable,
-                                      GtkBuilder    *builder,
-                                      GObject       *child,
-                                      const gchar   *tagname,
-                                      GMarkupParser *parser,
-                                      gpointer      *parser_data)
+gtk_scale_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                      GtkBuilder         *builder,
+                                      GObject            *child,
+                                      const gchar        *tagname,
+                                      GtkBuildableParser *parser,
+                                      gpointer           *parser_data)
 {
   MarksSubparserData *data;
 

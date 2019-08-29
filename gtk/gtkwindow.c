@@ -536,28 +536,28 @@ static void gtk_window_get_property (GObject         *object,
 				     GParamSpec      *pspec);
 
 /* GtkBuildable */
-static void gtk_window_buildable_interface_init  (GtkBuildableIface *iface);
-static void gtk_window_buildable_add_child (GtkBuildable *buildable,
-                                            GtkBuilder   *builder,
-                                            GObject      *child,
-                                            const gchar  *type);
-static void gtk_window_buildable_set_buildable_property (GtkBuildable        *buildable,
-							 GtkBuilder          *builder,
-							 const gchar         *name,
-							 const GValue        *value);
-static void gtk_window_buildable_parser_finished (GtkBuildable     *buildable,
-						  GtkBuilder       *builder);
-static gboolean gtk_window_buildable_custom_tag_start (GtkBuildable  *buildable,
-						       GtkBuilder    *builder,
-						       GObject       *child,
-						       const gchar   *tagname,
-						       GMarkupParser *parser,
-						       gpointer      *data);
-static void gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
-						      GtkBuilder    *builder,
-						      GObject       *child,
-						      const gchar   *tagname,
-						      gpointer       user_data);
+static void     gtk_window_buildable_interface_init         (GtkBuildableIface  *iface);
+static void     gtk_window_buildable_add_child              (GtkBuildable       *buildable,
+                                                             GtkBuilder         *builder,
+                                                             GObject            *child,
+                                                             const gchar        *type);
+static void     gtk_window_buildable_set_buildable_property (GtkBuildable       *buildable,
+                                                             GtkBuilder         *builder,
+                                                             const gchar        *name,
+                                                             const GValue       *value);
+static void     gtk_window_buildable_parser_finished        (GtkBuildable       *buildable,
+                                                             GtkBuilder         *builder);
+static gboolean gtk_window_buildable_custom_tag_start       (GtkBuildable       *buildable,
+                                                             GtkBuilder         *builder,
+                                                             GObject            *child,
+                                                             const gchar        *tagname,
+                                                             GtkBuildableParser *parser,
+                                                             gpointer           *data);
+static void     gtk_window_buildable_custom_finished        (GtkBuildable       *buildable,
+                                                             GtkBuilder         *builder,
+                                                             GObject            *child,
+                                                             const gchar        *tagname,
+                                                             gpointer            user_data);
 
 /* GtkRoot */
 static void             gtk_window_root_interface_init (GtkRootInterface *iface);
@@ -2219,7 +2219,7 @@ typedef struct {
 } GSListSubParserData;
 
 static void
-window_start_element (GMarkupParseContext  *context,
+window_start_element (GtkBuildableParseContext  *context,
                       const gchar          *element_name,
                       const gchar         **names,
                       const gchar         **values,
@@ -2246,7 +2246,7 @@ window_start_element (GMarkupParseContext  *context,
 
       item_data = g_new (ItemData, 1);
       item_data->name = g_strdup (name);
-      g_markup_parse_context_get_position (context, &item_data->line, &item_data->col);
+      gtk_buildable_parse_context_get_position (context, &item_data->line, &item_data->col);
       data->items = g_slist_prepend (data->items, item_data);
     }
   else if (strcmp (element_name, "accel-groups") == 0)
@@ -2267,18 +2267,18 @@ window_start_element (GMarkupParseContext  *context,
     }
 }
 
-static const GMarkupParser window_parser =
+static const GtkBuildableParser window_parser =
   {
     window_start_element
   };
 
 static gboolean
-gtk_window_buildable_custom_tag_start (GtkBuildable  *buildable,
-                                       GtkBuilder    *builder,
-                                       GObject       *child,
-                                       const gchar   *tagname,
-                                       GMarkupParser *parser,
-                                       gpointer      *parser_data)
+gtk_window_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                       GtkBuilder         *builder,
+                                       GObject            *child,
+                                       const gchar        *tagname,
+                                       GtkBuildableParser *parser,
+                                       gpointer           *parser_data)
 {
   if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
 						tagname, parser, parser_data))
