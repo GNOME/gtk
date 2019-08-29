@@ -150,19 +150,21 @@ gtk_buildable_parse_context_init (GtkBuildableParseContext *context,
                                   const GtkBuildableParser *parser,
                                   gpointer user_data)
 {
+  context->internal_callbacks = &gmarkup_parser;
+  context->ctx = NULL;
+
   context->parser = parser;
   context->user_data = user_data;
 
   context->subparser_stack = g_array_new (FALSE, FALSE, sizeof (GtkBuildableParserStack));
   context->tag_stack = g_ptr_array_new ();
+  context->held_user_data = NULL;
+  context->awaiting_pop = FALSE;
 }
 
 static void
 gtk_buildable_parse_context_free (GtkBuildableParseContext *context)
 {
-  if (context->ctx)
-    g_markup_parse_context_free  (context->ctx);
-
   g_array_unref (context->subparser_stack);
   g_ptr_array_unref (context->tag_stack);
 }
@@ -173,10 +175,15 @@ gtk_buildable_parse_context_parse (GtkBuildableParseContext *context,
                                    gssize                text_len,
                                    GError              **error)
 {
-  context->ctx = g_markup_parse_context_new (&gmarkup_parser,
+  gboolean res;
+
+  context->ctx = g_markup_parse_context_new (context->internal_callbacks,
                                              G_MARKUP_TREAT_CDATA_AS_TEXT,
                                              context, NULL);
-  return g_markup_parse_context_parse (context->ctx, text, text_len, error);
+  res = g_markup_parse_context_parse (context->ctx, text, text_len, error);
+  g_markup_parse_context_free  (context->ctx);
+
+  return res;
 }
 
 
@@ -332,7 +339,15 @@ gtk_buildable_parse_context_get_position (GtkBuildableParseContext *context,
                                           gint                *char_number)
 
 {
-  g_markup_parse_context_get_position (context->ctx, line_number, char_number);
+  if (context->ctx)
+    g_markup_parse_context_get_position (context->ctx, line_number, char_number);
+  else
+    {
+      if (line_number)
+        *line_number = 0;
+      if (char_number)
+        *char_number = 0;
+    }
 }
 
 static void free_property_info (PropertyInfo *info);

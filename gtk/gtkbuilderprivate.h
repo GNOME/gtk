@@ -101,6 +101,7 @@ typedef struct {
 } RequiresInfo;
 
 struct _GtkBuildableParseContext {
+  const GMarkupParser *internal_callbacks;
   GMarkupParseContext *ctx;
 
   const GtkBuildableParser *parser;
