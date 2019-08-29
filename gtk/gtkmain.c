@@ -2677,3 +2677,128 @@ gtk_propagate_event (GtkWidget *widget,
 
   gtk_propagate_event_internal (widget, event, topmost);
 }
+
+static char **supported_themes;
+static char **unsupported_themes;
+static char *current_theme_name;
+
+/**
+ * gtk_set_supported_themes:
+ * @themes: a %NULL-terminated array of theme names
+ *
+ * Sets a list of theme names that are supported
+ * by the application. You should mark a theme as supported
+ * if the application has been tested with this theme.
+ *
+ * Marking a theme as supported is mainly informational;
+ * GTK may warn the user if a theme is not supported.
+ */
+void
+gtk_set_supported_themes (const char **themes)
+{
+  g_strfreev (supported_themes);
+  supported_themes = g_strdupv (themes);
+}
+
+/**
+ * gtk_set_unsupported_themes:
+ * @themes: a %NULL-terminated array of theme names
+ *
+ * Sets a list of theme names that are unsupported
+ * by the application. You should mark a theme as unsupported
+ * if the application is known to have problems with this
+ * theme.
+ *
+ * Marking a theme as unsupported is mainly informational;
+ * GTK may warn the user if a theme is unsupported.
+ */
+void
+gtk_set_unsupported_themes (const char **themes)
+{
+  g_strfreev (unsupported_themes);
+  unsupported_themes = g_strdupv (themes);
+}
+
+/**
+ * gtk_set_prefer_dark_theme:
+ * @prefer_dark: whether a dark theme variant is preferred
+ *     by the application
+ *
+ * A convenience wrapper for the #GtkSettings:gtk-application-prefer-dark
+ * setting.
+ */
+void
+gtk_set_prefer_dark_theme (gboolean prefer_dark)
+{
+  GtkSettings *settings;
+
+  settings = gtk_settings_get_default ();
+
+  g_object_set (settings, "gtk-application-prefer-dark", prefer_dark, NULL);
+}
+
+/**
+ * gtk_get_current_theme:
+ *
+ * Gets the name of the theme that the application is using.
+ *
+ * This may be different from the #GtkSettings:gtk-theme-name
+ * setting. If the theme is a dark variant, the "-dark" suffix
+ * will be included in the name.
+ *
+ * If you use this function, you probably want to listen for
+ * changes of the #GtkSettings:gtk-theme-name and #GtkSettings:gtk-application-prefer-dark
+ * properties.
+ *
+ * Returns: the name of theme that is used
+ */
+const char *
+gtk_get_current_theme (void)
+{
+  return current_theme_name;
+}
+
+void
+gtk_set_current_theme (const char *name,
+                       const char *variant)
+{
+  char *theme;
+
+  if (variant)
+    theme = g_strconcat (name, "-", variant, NULL);
+  else
+    theme = g_strdup (name);
+
+  if (unsupported_themes != NULL &&
+      g_strv_contains (unsupported_themes, theme))
+    g_warning ("Theme %s is unsupported with this application", theme);
+  else if (supported_themes != NULL &&
+           !g_strv_contains (supported_themes, theme))
+    g_info ("Theme %s is untested with this application", theme);
+
+  g_free (current_theme_name);
+  current_theme_name = theme;
+}
+
+/**
+ * gtk_theme_is_dark:
+ *
+ * Returns whether the current theme is a dark theme.
+ *
+ * This information can be used to adapt custom drawing
+ * to light or dark surroundings.
+ *
+ * If you use this function, you probably want to listen for
+ * changes of the #GtkSettings:gtk-theme-name and #GtkSettings:gtk-application-prefer-dark
+ * properties.
+ *
+ * Returns: %TRUE if the current theme is dark
+ */
+gboolean
+gtk_theme_is_dark (void)
+{
+  if (current_theme_name)
+    return g_str_has_suffix (current_theme_name, "-dark");
+
+  return FALSE;
+}
