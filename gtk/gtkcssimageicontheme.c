@@ -79,7 +79,7 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
       g_assert (icon_info != NULL);
 
       symbolic = gtk_icon_info_is_symbolic (icon_info);
-      texture = gtk_icon_info_load_texture (icon_info);
+      texture = gtk_icon_info_load_texture (icon_info, NULL);
 
       g_clear_object (&icon_theme->cached_texture);
 
