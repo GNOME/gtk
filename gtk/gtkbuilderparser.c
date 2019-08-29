@@ -177,11 +177,18 @@ gtk_buildable_parse_context_parse (GtkBuildableParseContext *context,
 {
   gboolean res;
 
-  context->ctx = g_markup_parse_context_new (context->internal_callbacks,
-                                             G_MARKUP_TREAT_CDATA_AS_TEXT,
-                                             context, NULL);
-  res = g_markup_parse_context_parse (context->ctx, text, text_len, error);
-  g_markup_parse_context_free  (context->ctx);
+  if (_gtk_buildable_parser_is_precompiled (text, text_len))
+    {
+      res = _gtk_buildable_parser_replay_precompiled (context, text, text_len, error);
+    }
+  else
+    {
+      context->ctx = g_markup_parse_context_new (context->internal_callbacks,
+                                                 G_MARKUP_TREAT_CDATA_AS_TEXT,
+                                                 context, NULL);
+      res = g_markup_parse_context_parse (context->ctx, text, text_len, error);
+      g_markup_parse_context_free  (context->ctx);
+    }
 
   return res;
 }
