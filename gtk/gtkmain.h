@@ -104,6 +104,19 @@ gboolean gtk_init_check_abi_check (int     num_checks,
 #endif
 
 GDK_AVAILABLE_IN_ALL
+void           gtk_set_supported_themes (const char **themes);
+GDK_AVAILABLE_IN_ALL
+void           gtk_set_unsupported_themes (const char **themes);
+
+GDK_AVAILABLE_IN_ALL
+void           gtk_set_prefer_dark_theme (gboolean prefer_dark);
+GDK_AVAILABLE_IN_ALL
+const char *   gtk_get_current_theme (void);
+GDK_AVAILABLE_IN_ALL
+gboolean       gtk_theme_is_dark (void);
+
+
+GDK_AVAILABLE_IN_ALL
 void           gtk_disable_setlocale    (void);
 GDK_AVAILABLE_IN_ALL
 PangoLanguage *gtk_get_default_language (void);
