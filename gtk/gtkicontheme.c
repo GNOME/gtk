@@ -4244,12 +4244,12 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
 
 static GdkPixbuf *
 gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
-				      const GdkRGBA  *fg,
-				      const GdkRGBA  *success_color,
-				      const GdkRGBA  *warning_color,
-				      const GdkRGBA  *error_color,
-				      gboolean        use_cache,
-				      GError        **error)
+                                      const GdkRGBA  *fg,
+                                      const GdkRGBA  *success_color,
+                                      const GdkRGBA  *warning_color,
+                                      const GdkRGBA  *error_color,
+                                      gboolean        use_cache,
+                                      GError        **error)
 {
   GdkPixbuf *pixbuf;
   SymbolicPixbufCache *symbolic_cache;
@@ -4258,15 +4258,10 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
   if (use_cache)
     {
       symbolic_cache = symbolic_pixbuf_cache_matches (icon_info->symbolic_pixbuf_cache,
-						      fg, success_color, warning_color, error_color);
+                                                      fg, success_color, warning_color, error_color);
       if (symbolic_cache)
-	return symbolic_cache_get_proxy (symbolic_cache, icon_info);
+        return symbolic_cache_get_proxy (symbolic_cache, icon_info);
     }
-
-  /* css_fg can't possibly have failed, otherwise
-   * that would mean we have a broken style
-   */
-  g_return_val_if_fail (fg != NULL, NULL);
 
   icon_uri = g_file_get_uri (icon_info->icon_file);
   if (g_str_has_suffix (icon_uri, ".symbolic.png"))
