@@ -12220,12 +12220,32 @@ void
 gtk_widget_class_set_template (GtkWidgetClass    *widget_class,
 			       GBytes            *template_bytes)
 {
+  GBytes *data = NULL;
+
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
   g_return_if_fail (widget_class->priv->template == NULL);
   g_return_if_fail (template_bytes != NULL);
 
   widget_class->priv->template = g_slice_new0 (GtkWidgetTemplate);
-  widget_class->priv->template->data = g_bytes_ref (template_bytes);
+
+  if (!_gtk_buildable_parser_is_precompiled (g_bytes_get_data (template_bytes, NULL), g_bytes_get_size (template_bytes)))
+    {
+      GError *error = NULL;
+
+      data = gtk_buildable_parser_precompile (g_bytes_get_data (template_bytes, NULL),
+                                              g_bytes_get_size (template_bytes),
+                                              &error);
+      if (data == NULL)
+        {
+          g_warning ("Failed to precompile template for class %s: %s", G_OBJECT_CLASS_NAME (widget_class), error->message);
+          g_error_free (error);
+        }
+    }
+
+  if (data)
+    widget_class->priv->template->data = data;
+  else
+    widget_class->priv->template->data = g_bytes_ref (template_bytes);
 }
 
 /**
