@@ -151,7 +151,7 @@ gboolean _gtk_cell_layout_buildable_custom_tag_start (GtkBuildable  *buildable,
 						      GtkBuilder    *builder,
 						      GObject       *child,
 						      const gchar   *tagname,
-						      GMarkupParser *parser,
+						      GtkBuildableParser *parser,
 						      gpointer      *data);
 gboolean _gtk_cell_layout_buildable_custom_tag_end   (GtkBuildable  *buildable,
 						      GtkBuilder    *builder,

@@ -287,7 +287,7 @@ static gboolean gtk_list_store_buildable_custom_tag_start (GtkBuildable  *builda
 							   GtkBuilder    *builder,
 							   GObject       *child,
 							   const gchar   *tagname,
-							   GMarkupParser *parser,
+							   GtkBuildableParser *parser,
 							   gpointer      *data);
 static void     gtk_list_store_buildable_custom_tag_end (GtkBuildable *buildable,
 							 GtkBuilder   *builder,
@@ -2336,7 +2336,7 @@ typedef struct {
 } SubParserData;
 
 static void
-list_store_start_element (GMarkupParseContext  *context,
+list_store_start_element (GtkBuildableParseContext  *context,
                           const gchar          *element_name,
                           const gchar         **names,
                           const gchar         **values,
@@ -2450,7 +2450,7 @@ list_store_start_element (GMarkupParseContext  *context,
 }
 
 static void
-list_store_end_element (GMarkupParseContext  *context,
+list_store_end_element (GtkBuildableParseContext  *context,
                         const gchar          *element_name,
                         gpointer              user_data,
                         GError              **error)
@@ -2519,7 +2519,7 @@ list_store_end_element (GMarkupParseContext  *context,
 }
 
 static void
-list_store_text (GMarkupParseContext  *context,
+list_store_text (GtkBuildableParseContext  *context,
                  const gchar          *text,
                  gsize                 text_len,
                  gpointer              user_data,
@@ -2563,7 +2563,7 @@ list_store_text (GMarkupParseContext  *context,
   g_free (string);
 }
 
-static const GMarkupParser list_store_parser =
+static const GtkBuildableParser list_store_parser =
   {
     list_store_start_element,
     list_store_end_element,
@@ -2575,7 +2575,7 @@ gtk_list_store_buildable_custom_tag_start (GtkBuildable  *buildable,
                                            GtkBuilder    *builder,
                                            GObject       *child,
                                            const gchar   *tagname,
-                                           GMarkupParser *parser,
+                                           GtkBuildableParser *parser,
                                            gpointer      *parser_data)
 {
   SubParserData *data;

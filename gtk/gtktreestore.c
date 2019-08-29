@@ -176,7 +176,7 @@ static gboolean gtk_tree_store_buildable_custom_tag_start (GtkBuildable  *builda
 							   GtkBuilder    *builder,
 							   GObject       *child,
 							   const gchar   *tagname,
-							   GMarkupParser *parser,
+							   GtkBuildableParser *parser,
 							   gpointer      *data);
 static void     gtk_tree_store_buildable_custom_finished (GtkBuildable 	 *buildable,
 							  GtkBuilder   	 *builder,
@@ -3327,7 +3327,7 @@ typedef struct {
 } GSListSubParserData;
 
 static void
-tree_model_start_element (GMarkupParseContext  *context,
+tree_model_start_element (GtkBuildableParseContext  *context,
                           const gchar          *element_name,
                           const gchar         **names,
                           const gchar         **values,
@@ -3373,7 +3373,7 @@ tree_model_start_element (GMarkupParseContext  *context,
 }
 
 static void
-tree_model_end_element (GMarkupParseContext  *context,
+tree_model_end_element (GtkBuildableParseContext  *context,
                         const gchar          *element_name,
                         gpointer              user_data,
                         GError              **error)
@@ -3414,7 +3414,7 @@ tree_model_end_element (GMarkupParseContext  *context,
     }
 }
 
-static const GMarkupParser tree_model_parser =
+static const GtkBuildableParser tree_model_parser =
   {
     tree_model_start_element,
     tree_model_end_element
@@ -3426,7 +3426,7 @@ gtk_tree_store_buildable_custom_tag_start (GtkBuildable  *buildable,
                                            GtkBuilder    *builder,
                                            GObject       *child,
                                            const gchar   *tagname,
-                                           GMarkupParser *parser,
+                                           GtkBuildableParser *parser,
                                            gpointer      *parser_data)
 {
   GSListSubParserData *data;

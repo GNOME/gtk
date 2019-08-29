@@ -207,7 +207,7 @@ static gboolean gtk_scale_buildable_custom_tag_start (GtkBuildable  *buildable,
                                                       GtkBuilder    *builder,
                                                       GObject       *child,
                                                       const gchar   *tagname,
-                                                      GMarkupParser *parser,
+                                                      GtkBuildableParser *parser,
                                                       gpointer      *data);
 static void     gtk_scale_buildable_custom_finished  (GtkBuildable  *buildable,
                                                       GtkBuilder    *builder,
@@ -1850,7 +1850,7 @@ mark_data_free (MarkData *data)
 }
 
 static void
-marks_start_element (GMarkupParseContext *context,
+marks_start_element (GtkBuildableParseContext *context,
                      const gchar         *element_name,
                      const gchar        **names,
                      const gchar        **values,
@@ -1941,7 +1941,7 @@ marks_start_element (GMarkupParseContext *context,
 }
 
 static void
-marks_text (GMarkupParseContext  *context,
+marks_text (GtkBuildableParseContext  *context,
             const gchar          *text,
             gsize                 text_len,
             gpointer              user_data,
@@ -1949,7 +1949,7 @@ marks_text (GMarkupParseContext  *context,
 {
   MarksSubparserData *data = (MarksSubparserData*)user_data;
 
-  if (strcmp (g_markup_parse_context_get_element (context), "mark") == 0)
+  if (strcmp (gtk_buildable_parse_context_get_element (context), "mark") == 0)
     {
       MarkData *mark = data->marks->data;
 
@@ -1957,7 +1957,7 @@ marks_text (GMarkupParseContext  *context,
     }
 }
 
-static const GMarkupParser marks_parser =
+static const GtkBuildableParser marks_parser =
   {
     marks_start_element,
     NULL,
@@ -1970,7 +1970,7 @@ gtk_scale_buildable_custom_tag_start (GtkBuildable  *buildable,
                                       GtkBuilder    *builder,
                                       GObject       *child,
                                       const gchar   *tagname,
-                                      GMarkupParser *parser,
+                                      GtkBuildableParser *parser,
                                       gpointer      *parser_data)
 {
   MarksSubparserData *data;

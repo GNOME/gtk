@@ -317,7 +317,7 @@ static gboolean gtk_icon_view_buildable_custom_tag_start (GtkBuildable  *buildab
 							  GtkBuilder    *builder,
 							  GObject       *child,
 							  const gchar   *tagname,
-							  GMarkupParser *parser,
+							  GtkBuildableParser *parser,
 							  gpointer      *data);
 static void     gtk_icon_view_buildable_custom_tag_end   (GtkBuildable  *buildable,
 							  GtkBuilder    *builder,
@@ -6860,7 +6860,7 @@ gtk_icon_view_buildable_custom_tag_start (GtkBuildable  *buildable,
                                           GtkBuilder    *builder,
                                           GObject       *child,
                                           const gchar   *tagname,
-                                          GMarkupParser *parser,
+                                          GtkBuildableParser *parser,
                                           gpointer      *data)
 {
   if (parent_buildable_iface->custom_tag_start (buildable, builder, child,

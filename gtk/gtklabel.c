@@ -516,7 +516,7 @@ static gboolean gtk_label_buildable_custom_tag_start   (GtkBuildable     *builda
 							GtkBuilder       *builder,
 							GObject          *child,
 							const gchar      *tagname,
-							GMarkupParser    *parser,
+							GtkBuildableParser    *parser,
 							gpointer         *data);
 
 static void     gtk_label_buildable_custom_finished    (GtkBuildable     *buildable,
@@ -1565,7 +1565,7 @@ attribute_from_text (GtkBuilder   *builder,
 
 
 static void
-pango_start_element (GMarkupParseContext *context,
+pango_start_element (GtkBuildableParseContext *context,
 		     const gchar         *element_name,
 		     const gchar        **names,
 		     const gchar        **values,
@@ -1654,7 +1654,7 @@ pango_start_element (GMarkupParseContext *context,
     }
 }
 
-static const GMarkupParser pango_parser =
+static const GtkBuildableParser pango_parser =
   {
     pango_start_element,
   };
@@ -1664,7 +1664,7 @@ gtk_label_buildable_custom_tag_start (GtkBuildable     *buildable,
 				      GtkBuilder       *builder,
 				      GObject          *child,
 				      const gchar      *tagname,
-				      GMarkupParser    *parser,
+				      GtkBuildableParser    *parser,
 				      gpointer         *data)
 {
   if (buildable_parent_iface->custom_tag_start (buildable, builder, child,

@@ -114,7 +114,7 @@ struct _GtkBuildableParseContext {
 };
 
 typedef struct {
-  GMarkupParser *parser;
+  GtkBuildableParser *parser;
   gchar *tagname;
   const gchar *start;
   gpointer data;
@@ -128,7 +128,7 @@ typedef struct {
   gchar *domain;
   GSList *stack;
   SubParser *subparser;
-  GMarkupParseContext *ctx;
+  GtkBuildableParseContext ctx;
   const gchar *filename;
   GSList *finalizers;
   GSList *custom_finalizers;
@@ -200,15 +200,15 @@ void      _gtk_builder_menu_end   (ParserData  *parser_data);
 GType     _gtk_builder_get_template_type (GtkBuilder *builder);
 
 void _gtk_builder_prefix_error            (GtkBuilder           *builder,
-                                           GMarkupParseContext  *context,
+                                           GtkBuildableParseContext  *context,
                                            GError              **error);
 void _gtk_builder_error_unhandled_tag     (GtkBuilder           *builder,
-                                           GMarkupParseContext  *context,
+                                           GtkBuildableParseContext  *context,
                                            const gchar          *object,
                                            const gchar          *element_name,
                                            GError              **error);
 gboolean _gtk_builder_check_parent        (GtkBuilder           *builder,
-                                           GMarkupParseContext  *context,
+                                           GtkBuildableParseContext  *context,
                                            const gchar          *parent_name,
                                            GError              **error);
 GObject * _gtk_builder_lookup_object      (GtkBuilder           *builder,

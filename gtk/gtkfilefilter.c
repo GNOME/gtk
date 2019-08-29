@@ -132,7 +132,7 @@ static gboolean gtk_file_filter_buildable_custom_tag_start     (GtkBuildable  *b
 								GtkBuilder    *builder,
 								GObject       *child,
 								const gchar   *tagname,
-								GMarkupParser *parser,
+								GtkBuildableParser *parser,
 								gpointer      *data);
 static void     gtk_file_filter_buildable_custom_tag_end       (GtkBuildable  *buildable,
 								GtkBuilder    *builder,
@@ -233,7 +233,7 @@ typedef struct {
 } SubParserData;
 
 static void
-parser_start_element (GMarkupParseContext  *context,
+parser_start_element (GtkBuildableParseContext  *context,
                       const gchar          *element_name,
                       const gchar         **names,
                       const gchar         **values,
@@ -279,7 +279,7 @@ parser_start_element (GMarkupParseContext  *context,
 }
 
 static void
-parser_text_element (GMarkupParseContext *context,
+parser_text_element (GtkBuildableParseContext *context,
                      const gchar         *text,
                      gsize                text_len,
                      gpointer             user_data,
@@ -292,7 +292,7 @@ parser_text_element (GMarkupParseContext *context,
 }
 
 static void
-parser_end_element (GMarkupParseContext *context,
+parser_end_element (GtkBuildableParseContext *context,
                     const gchar         *element_name,
                     gpointer             user_data,
                     GError             **error)
@@ -318,7 +318,7 @@ parser_end_element (GMarkupParseContext *context,
   data->parsing = FALSE;
 }
 
-static const GMarkupParser sub_parser =
+static const GtkBuildableParser sub_parser =
   {
     parser_start_element,
     parser_end_element,
@@ -330,7 +330,7 @@ gtk_file_filter_buildable_custom_tag_start (GtkBuildable  *buildable,
                                             GtkBuilder    *builder,
                                             GObject       *child,
                                             const gchar   *tagname,
-                                            GMarkupParser *parser,
+                                            GtkBuildableParser *parser,
                                             gpointer      *parser_data)
 {
   SubParserData *data = NULL;

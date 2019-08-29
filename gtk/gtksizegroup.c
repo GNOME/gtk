@@ -137,7 +137,7 @@ static gboolean gtk_size_group_buildable_custom_tag_start (GtkBuildable  *builda
 							   GtkBuilder    *builder,
 							   GObject       *child,
 							   const gchar   *tagname,
-							   GMarkupParser *parser,
+							   GtkBuildableParser *parser,
 							   gpointer      *data);
 static void gtk_size_group_buildable_custom_finished (GtkBuildable  *buildable,
 						      GtkBuilder    *builder,
@@ -462,7 +462,7 @@ typedef struct {
 } GSListSubParserData;
 
 static void
-size_group_start_element (GMarkupParseContext  *context,
+size_group_start_element (GtkBuildableParseContext  *context,
                           const gchar          *element_name,
                           const gchar         **names,
                           const gchar         **values,
@@ -489,7 +489,7 @@ size_group_start_element (GMarkupParseContext  *context,
 
       item_data = g_new (ItemData, 1);
       item_data->name = g_strdup (name);
-      g_markup_parse_context_get_position (context, &item_data->line, &item_data->col);
+      gtk_buildable_parse_context_get_position (context, &item_data->line, &item_data->col);
       data->items = g_slist_prepend (data->items, item_data);
     }
   else if (strcmp (element_name, "widgets") == 0)
@@ -510,7 +510,7 @@ size_group_start_element (GMarkupParseContext  *context,
     }
 }
 
-static const GMarkupParser size_group_parser =
+static const GtkBuildableParser size_group_parser =
   {
     size_group_start_element
   };
@@ -520,7 +520,7 @@ gtk_size_group_buildable_custom_tag_start (GtkBuildable  *buildable,
                                            GtkBuilder    *builder,
                                            GObject       *child,
                                            const gchar   *tagname,
-                                           GMarkupParser *parser,
+                                           GtkBuildableParser *parser,
                                            gpointer      *parser_data)
 {
   GSListSubParserData *data;

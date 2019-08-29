@@ -104,7 +104,7 @@ static gboolean gtk_combo_box_text_buildable_custom_tag_start   (GtkBuildable   
 								 GtkBuilder       *builder,
 								 GObject          *child,
 								 const gchar      *tagname,
-								 GMarkupParser    *parser,
+								 GtkBuildableParser    *parser,
 								 gpointer         *data);
 
 static void     gtk_combo_box_text_buildable_custom_finished    (GtkBuildable     *buildable,
@@ -184,7 +184,7 @@ typedef struct {
 } ItemParserData;
 
 static void
-item_start_element (GMarkupParseContext  *context,
+item_start_element (GtkBuildableParseContext  *context,
                     const gchar          *element_name,
                     const gchar         **names,
                     const gchar         **values,
@@ -237,7 +237,7 @@ item_start_element (GMarkupParseContext  *context,
 }
 
 static void
-item_text (GMarkupParseContext  *context,
+item_text (GtkBuildableParseContext  *context,
            const gchar          *text,
            gsize                 text_len,
            gpointer              user_data,
@@ -250,7 +250,7 @@ item_text (GMarkupParseContext  *context,
 }
 
 static void
-item_end_element (GMarkupParseContext  *context,
+item_end_element (GtkBuildableParseContext  *context,
                   const gchar          *element_name,
                   gpointer              user_data,
                   GError              **error)
@@ -280,7 +280,7 @@ item_end_element (GMarkupParseContext  *context,
   data->is_text = FALSE;
 }
 
-static const GMarkupParser item_parser =
+static const GtkBuildableParser item_parser =
   {
     item_start_element,
     item_end_element,
@@ -292,7 +292,7 @@ gtk_combo_box_text_buildable_custom_tag_start (GtkBuildable  *buildable,
                                                GtkBuilder    *builder,
                                                GObject       *child,
                                                const gchar   *tagname,
-                                               GMarkupParser *parser,
+                                               GtkBuildableParser *parser,
                                                gpointer      *parser_data)
 {
   if (buildable_parent_iface->custom_tag_start (buildable, builder, child,

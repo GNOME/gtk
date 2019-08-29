@@ -144,7 +144,7 @@ struct _GtkBuildableIface
 					    GtkBuilder    *builder,
 					    GObject       *child,
 					    const gchar   *tagname,
-					    GMarkupParser *parser,
+					    GtkBuildableParser *parser,
 					    gpointer      *data);
   void          (* custom_tag_end)         (GtkBuildable  *buildable,
 					    GtkBuilder    *builder,
@@ -192,7 +192,7 @@ gboolean  gtk_buildable_custom_tag_start       (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
 						GObject             *child,
 						const gchar         *tagname,
-						GMarkupParser       *parser,
+						GtkBuildableParser  *parser,
 						gpointer            *data);
 GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_custom_tag_end         (GtkBuildable        *buildable,

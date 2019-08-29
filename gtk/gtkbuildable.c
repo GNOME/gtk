@@ -234,7 +234,7 @@ gtk_buildable_custom_tag_start (GtkBuildable  *buildable,
                                 GtkBuilder    *builder,
                                 GObject       *child,
                                 const gchar   *tagname,
-                                GMarkupParser *parser,
+                                GtkBuildableParser *parser,
                                 gpointer      *data)
 {
   GtkBuildableIface *iface;

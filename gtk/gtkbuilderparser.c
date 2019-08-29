@@ -377,7 +377,7 @@ error_missing_attribute (ParserData   *data,
 {
   gint line, col;
 
-  g_markup_parse_context_get_position (data->ctx, &line, &col);
+  gtk_buildable_parse_context_get_position (&data->ctx, &line, &col);
 
   g_set_error (error,
                GTK_BUILDER_ERROR,
@@ -394,7 +394,7 @@ error_invalid_tag (ParserData   *data,
 {
   gint line, col;
 
-  g_markup_parse_context_get_position (data->ctx, &line, &col);
+  gtk_buildable_parse_context_get_position (&data->ctx, &line, &col);
 
   if (expected)
     g_set_error (error,
@@ -417,7 +417,7 @@ error_unhandled_tag (ParserData   *data,
 {
   gint line, col;
 
-  g_markup_parse_context_get_position (data->ctx, &line, &col);
+  gtk_buildable_parse_context_get_position (&data->ctx, &line, &col);
   g_set_error (error,
                GTK_BUILDER_ERROR,
                GTK_BUILDER_ERROR_UNHANDLED_TAG,
@@ -497,7 +497,7 @@ parse_requires (ParserData   *data,
                                     G_MARKUP_COLLECT_STRING, "version", &version,
                                     G_MARKUP_COLLECT_INVALID))
     {
-      _gtk_builder_prefix_error (data->builder, data->ctx, error);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
       return;
     }
 
@@ -507,7 +507,7 @@ parse_requires (ParserData   *data,
                    GTK_BUILDER_ERROR,
                    GTK_BUILDER_ERROR_INVALID_VALUE,
                    "'version' attribute has malformed value '%s'", version);
-      _gtk_builder_prefix_error (data->builder, data->ctx, error);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
       return;
     }
   version_major = g_ascii_strtoll (split[0], NULL, 10);
@@ -538,7 +538,7 @@ is_requested_object (const gchar *object,
 }
 
 static void
-parse_object (GMarkupParseContext  *context,
+parse_object (GtkBuildableParseContext  *context,
               ParserData           *data,
               const gchar          *element_name,
               const gchar         **names,
@@ -575,7 +575,7 @@ parse_object (GMarkupParseContext  *context,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "id", &object_id,
                                     G_MARKUP_COLLECT_INVALID))
     {
-      _gtk_builder_prefix_error (data->builder, data->ctx, error);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
       return;
     }
 
@@ -666,12 +666,12 @@ parse_object (GMarkupParseContext  *context,
       return;
     }
 
-  g_markup_parse_context_get_position (context, &line, NULL);
+  gtk_buildable_parse_context_get_position (context, &line, NULL);
   g_hash_table_insert (data->object_ids, g_strdup (object_id), GINT_TO_POINTER (line));
 }
 
 static void
-parse_template (GMarkupParseContext  *context,
+parse_template (GtkBuildableParseContext  *context,
                 ParserData           *data,
                 const gchar          *element_name,
                 const gchar         **names,
@@ -692,7 +692,7 @@ parse_template (GMarkupParseContext  *context,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "parent", &parent_class,
                                     G_MARKUP_COLLECT_INVALID))
     {
-      _gtk_builder_prefix_error (data->builder, data->ctx, error);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
       return;
     }
 
@@ -770,7 +770,7 @@ parse_template (GMarkupParseContext  *context,
       return;
     }
 
-  g_markup_parse_context_get_position (context, &line, NULL);
+  gtk_buildable_parse_context_get_position (context, &line, NULL);
   g_hash_table_insert (data->object_ids, g_strdup (object_class), GINT_TO_POINTER (line));
 }
 
@@ -814,7 +814,7 @@ parse_child (ParserData   *data,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "internal-child", &internal_child,
                                     G_MARKUP_COLLECT_INVALID))
     {
-      _gtk_builder_prefix_error (data->builder, data->ctx, error);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
       return;
     }
 
@@ -874,7 +874,7 @@ parse_property (ParserData   *data,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "bind-flags", &bind_flags_str,
                                     G_MARKUP_COLLECT_INVALID))
     {
-      _gtk_builder_prefix_error (data->builder, data->ctx, error);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
       return;
     }
 
@@ -887,7 +887,7 @@ parse_property (ParserData   *data,
                    GTK_BUILDER_ERROR_INVALID_PROPERTY,
                    "Invalid property: %s.%s",
                    g_type_name (object_info->type), name);
-      _gtk_builder_prefix_error (data->builder, data->ctx, error);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
       return;
     }
 
@@ -895,12 +895,12 @@ parse_property (ParserData   *data,
     {
       if (!_gtk_builder_flags_from_string (G_TYPE_BINDING_FLAGS, NULL, bind_flags_str, &bind_flags, error))
         {
-          _gtk_builder_prefix_error (data->builder, data->ctx, error);
+          _gtk_builder_prefix_error (data->builder, &data->ctx, error);
           return;
         }
     }
 
-  g_markup_parse_context_get_position (data->ctx, &line, &col);
+  gtk_buildable_parse_context_get_position (&data->ctx, &line, &col);
 
   if (bind_source)
     {
@@ -981,7 +981,7 @@ parse_signal (ParserData   *data,
                                     G_MARKUP_COLLECT_TRISTATE|G_MARKUP_COLLECT_OPTIONAL, "swapped", &swapped,
                                     G_MARKUP_COLLECT_INVALID))
     {
-      _gtk_builder_prefix_error (data->builder, data->ctx, error);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
       return;
     }
 
@@ -992,7 +992,7 @@ parse_signal (ParserData   *data,
                    GTK_BUILDER_ERROR_INVALID_SIGNAL,
                    "Invalid signal '%s' for type '%s'",
                    name, g_type_name (object_info->type));
-      _gtk_builder_prefix_error (data->builder, data->ctx, error);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
       return;
     }
 
@@ -1051,7 +1051,7 @@ parse_interface (ParserData   *data,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "domain", &domain,
                                     G_MARKUP_COLLECT_INVALID))
     {
-      _gtk_builder_prefix_error (data->builder, data->ctx, error);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
       return;
     }
 
@@ -1073,7 +1073,7 @@ static SubParser *
 create_subparser (GObject       *object,
                   GObject       *child,
                   const gchar   *element_name,
-                  GMarkupParser *parser,
+                  GtkBuildableParser *parser,
                   gpointer       user_data)
 {
   SubParser *subparser;
@@ -1083,7 +1083,7 @@ create_subparser (GObject       *object,
   subparser->child = child;
   subparser->tagname = g_strdup (element_name);
   subparser->start = element_name;
-  subparser->parser = g_memdup (parser, sizeof (GMarkupParser));
+  subparser->parser = g_memdup (parser, sizeof (GtkBuildableParser));
   subparser->data = user_data;
 
   return subparser;
@@ -1097,7 +1097,7 @@ free_subparser (SubParser *subparser)
 }
 
 static gboolean
-subparser_start (GMarkupParseContext  *context,
+subparser_start (GtkBuildableParseContext  *context,
                  const gchar          *element_name,
                  const gchar         **names,
                  const gchar         **values,
@@ -1122,7 +1122,7 @@ subparser_start (GMarkupParseContext  *context,
 }
 
 static void
-subparser_end (GMarkupParseContext  *context,
+subparser_end (GtkBuildableParseContext  *context,
                const gchar          *element_name,
                ParserData           *data,
                GError              **error)
@@ -1157,7 +1157,7 @@ subparser_end (GMarkupParseContext  *context,
 }
 
 static gboolean
-parse_custom (GMarkupParseContext  *context,
+parse_custom (GtkBuildableParseContext  *context,
               const gchar          *element_name,
               const gchar         **names,
               const gchar         **values,
@@ -1165,7 +1165,7 @@ parse_custom (GMarkupParseContext  *context,
               GError              **error)
 {
   CommonInfo* parent_info;
-  GMarkupParser parser;
+  GtkBuildableParser parser;
   gpointer subparser_data;
   GObject *object;
   GObject *child;
@@ -1222,7 +1222,7 @@ parse_custom (GMarkupParseContext  *context,
 }
 
 static void
-start_element (GMarkupParseContext  *context,
+start_element (GtkBuildableParseContext  *context,
                const gchar          *element_name,
                const gchar         **names,
                const gchar         **values,
@@ -1308,7 +1308,7 @@ _gtk_builder_parser_translate (const gchar *domain,
 }
 
 static void
-end_element (GMarkupParseContext  *context,
+end_element (GtkBuildableParseContext  *context,
              const gchar          *element_name,
              gpointer              user_data,
              GError              **error)
@@ -1462,7 +1462,7 @@ end_element (GMarkupParseContext  *context,
 /* Called for character data */
 /* text is not nul-terminated */
 static void
-text (GMarkupParseContext  *context,
+text (GtkBuildableParseContext  *context,
       const gchar          *text,
       gsize                 text_len,
       gpointer              user_data,
@@ -1489,7 +1489,7 @@ text (GMarkupParseContext  *context,
   info = state_peek_info (data, CommonInfo);
   g_assert (info != NULL);
 
-  if (strcmp (g_markup_parse_context_get_element (context), "property") == 0)
+  if (strcmp (gtk_buildable_parse_context_get_element (context), "property") == 0)
     {
       PropertyInfo *prop_info = (PropertyInfo*)info;
 
@@ -1523,7 +1523,7 @@ free_info (CommonInfo *info)
     }
 }
 
-static const GMarkupParser parser = {
+static const GtkBuildableParser parser = {
   start_element,
   end_element,
   text,
@@ -1567,11 +1567,9 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
       data.inside_requested_object = TRUE;
     }
 
-  data.ctx = g_markup_parse_context_new (&parser,
-                                          G_MARKUP_TREAT_CDATA_AS_TEXT,
-                                          &data, NULL);
+  gtk_buildable_parse_context_init (&data.ctx, &parser, &data);
 
-  if (!g_markup_parse_context_parse (data.ctx, buffer, length, error))
+  if (!gtk_buildable_parse_context_parse (&data.ctx, buffer, length, error))
     goto out;
 
   _gtk_builder_finish (builder);
@@ -1611,7 +1609,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   g_slist_free (data.finalizers);
   g_free (data.domain);
   g_hash_table_destroy (data.object_ids);
-  g_markup_parse_context_free (data.ctx);
+  gtk_buildable_parse_context_free (&data.ctx);
 
   /* restore the original domain */
   gtk_builder_set_translation_domain (builder, domain);

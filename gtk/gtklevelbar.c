@@ -728,7 +728,7 @@ typedef struct {
 } OffsetsParserData;
 
 static void
-offset_start_element (GMarkupParseContext  *context,
+offset_start_element (GtkBuildableParseContext  *context,
                       const gchar          *element_name,
                       const gchar         **names,
                       const gchar         **values,
@@ -783,7 +783,7 @@ offset_start_element (GMarkupParseContext  *context,
     }
 }
 
-static const GMarkupParser offset_parser =
+static const GtkBuildableParser offset_parser =
 {
   offset_start_element
 };
@@ -793,7 +793,7 @@ gtk_level_bar_buildable_custom_tag_start (GtkBuildable  *buildable,
                                           GtkBuilder    *builder,
                                           GObject       *child,
                                           const gchar   *tagname,
-                                          GMarkupParser *parser,
+                                          GtkBuildableParser *parser,
                                           gpointer      *parser_data)
 {
   OffsetsParserData *data;

@@ -88,7 +88,7 @@ static gboolean   gtk_cell_view_buildable_custom_tag_start     (GtkBuildable  	 
 								GtkBuilder    	      *builder,
 								GObject       	      *child,
 								const gchar   	      *tagname,
-								GMarkupParser 	      *parser,
+								GtkBuildableParser 	      *parser,
 								gpointer      	      *data);
 static void       gtk_cell_view_buildable_custom_tag_end       (GtkBuildable  	      *buildable,
 								GtkBuilder    	      *builder,
@@ -748,7 +748,7 @@ gtk_cell_view_buildable_custom_tag_start (GtkBuildable  *buildable,
 					  GtkBuilder    *builder,
 					  GObject       *child,
 					  const gchar   *tagname,
-					  GMarkupParser *parser,
+					  GtkBuildableParser *parser,
 					  gpointer      *data)
 {
   if (parent_buildable_iface->custom_tag_start &&

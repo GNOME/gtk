@@ -609,7 +609,7 @@ typedef struct {
 } AttributesSubParserData;
 
 static void
-attributes_start_element (GMarkupParseContext *context,
+attributes_start_element (GtkBuildableParseContext *context,
 			  const gchar         *element_name,
 			  const gchar        **names,
 			  const gchar        **values,
@@ -654,7 +654,7 @@ attributes_start_element (GMarkupParseContext *context,
 }
 
 static void
-attributes_text_element (GMarkupParseContext  *context,
+attributes_text_element (GtkBuildableParseContext  *context,
 			 const gchar          *text,
 			 gsize                 text_len,
 			 gpointer              user_data,
@@ -667,7 +667,7 @@ attributes_text_element (GMarkupParseContext  *context,
 }
 
 static void
-attributes_end_element (GMarkupParseContext  *context,
+attributes_end_element (GtkBuildableParseContext  *context,
 			const gchar          *element_name,
 			gpointer              user_data,
 			GError              **error)
@@ -695,7 +695,7 @@ attributes_end_element (GMarkupParseContext  *context,
   g_string_set_size (data->string, 0);
 }
 
-static const GMarkupParser attributes_parser =
+static const GtkBuildableParser attributes_parser =
   {
     attributes_start_element,
     attributes_end_element,
@@ -750,7 +750,7 @@ typedef struct {
 } CellPackingSubParserData;
 
 static void
-cell_packing_start_element (GMarkupParseContext *context,
+cell_packing_start_element (GtkBuildableParseContext *context,
 			    const gchar         *element_name,
 			    const gchar        **names,
 			    const gchar        **values,
@@ -802,7 +802,7 @@ cell_packing_start_element (GMarkupParseContext *context,
 }
 
 static void
-cell_packing_text_element (GMarkupParseContext *context,
+cell_packing_text_element (GtkBuildableParseContext *context,
 			   const gchar         *text,
 			   gsize                text_len,
 			   gpointer             user_data,
@@ -815,7 +815,7 @@ cell_packing_text_element (GMarkupParseContext *context,
 }
 
 static void
-cell_packing_end_element (GMarkupParseContext *context,
+cell_packing_end_element (GtkBuildableParseContext *context,
 			  const gchar         *element_name,
 			  gpointer             user_data,
 			  GError             **error)
@@ -861,7 +861,7 @@ cell_packing_end_element (GMarkupParseContext *context,
 }
 
 
-static const GMarkupParser cell_packing_parser =
+static const GtkBuildableParser cell_packing_parser =
   {
     cell_packing_start_element,
     cell_packing_end_element,
@@ -873,7 +873,7 @@ _gtk_cell_layout_buildable_custom_tag_start (GtkBuildable  *buildable,
 					     GtkBuilder    *builder,
 					     GObject       *child,
 					     const gchar   *tagname,
-					     GMarkupParser *parser,
+					     GtkBuildableParser *parser,
 					     gpointer      *data)
 {
   AttributesSubParserData  *attr_data;
