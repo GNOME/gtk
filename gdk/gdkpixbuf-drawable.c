@@ -26,6 +26,7 @@
 
 #include "gdksurface.h"
 #include "gdkinternals.h"
+#include "gdktextureprivate.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -221,4 +222,32 @@ gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
 
   cairo_surface_destroy (surface);
   return dest;
+}
+
+/**
+ * gdk_pixbuf_get_from_texture:
+ * @texture: a #GdkTexture
+ *
+ * Creates a new pixbuf from @texture. This should generally not be used
+ * in newly written code as later stages will almost certainly convert
+ * the pixbuf back into a texture to draw it on screen.
+ *
+ * returns: a new #GdkPixbuf
+ */
+GdkPixbuf *
+gdk_pixbuf_get_from_texture (GdkTexture *texture)
+{
+  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
+  int width, height;
+
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
+
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
+  surface = gdk_texture_download_surface (texture);
+  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
+  cairo_surface_destroy (surface);
+
+  return pixbuf;
 }

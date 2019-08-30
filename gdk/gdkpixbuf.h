@@ -33,6 +33,8 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkversionmacros.h>
+#include <gdk/gdktexture.h>
+
 
 G_BEGIN_DECLS
 
@@ -42,6 +44,8 @@ GdkPixbuf *gdk_pixbuf_get_from_surface (cairo_surface_t *surface,
                                         gint             src_y,
                                         gint             width,
                                         gint             height);
+GDK_AVAILABLE_IN_ALL
+GdkPixbuf *gdk_pixbuf_get_from_texture (GdkTexture      *texture);
 
 G_END_DECLS
 
