@@ -7480,26 +7480,6 @@ recent_clear_model (GtkFileChooserWidget *impl,
   g_set_object (&priv->recent_model, NULL);
 }
 
-static void
-recent_setup_model (GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-
-  g_assert (priv->recent_model == NULL);
-
-  priv->recent_model = _gtk_file_system_model_new (file_system_model_set,
-                                                   impl,
-                                                   MODEL_COLUMN_TYPES);
-
-  _gtk_file_system_model_set_filter (priv->recent_model, priv->current_filter);
-  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (priv->recent_model),
-                                           recent_sort_func,
-                                           impl, NULL);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->recent_model),
-                                        GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
-                                        GTK_SORT_DESCENDING);
-}
-
 static gboolean
 recent_item_is_private (GtkRecentInfo *info)
 {
@@ -7517,62 +7497,6 @@ recent_item_is_private (GtkRecentInfo *info)
   return is_private;
 }
 
-/* Populates the file system model with the GtkRecentInfo* items
- * in the provided list; frees the items
- */
-static void
-populate_model_with_recent_items (GtkFileChooserWidget *impl,
-                                  GList                *items)
-{
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-  gint limit;
-  GList *l;
-  gint n;
-
-  limit = DEFAULT_RECENT_FILES_LIMIT;
-
-  n = 0;
-
-  for (l = items; l; l = l->next)
-    {
-      GtkRecentInfo *info = l->data;
-      GFile *file;
-
-      if (recent_item_is_private (info))
-        continue;
-
-      file = g_file_new_for_uri (gtk_recent_info_get_uri (info));
-      _gtk_file_system_model_add_and_query_file (priv->recent_model,
-                                                 file,
-                                                 MODEL_ATTRIBUTES);
-      g_object_unref (file);
-
-      n++;
-      if (limit != -1 && n >= limit)
-        break;
-    }
-
-  g_set_object (&priv->model_for_search, priv->recent_model);
-}
-
-static void
-populate_model_with_folders (GtkFileChooserWidget *impl,
-                             GList                *items)
-{
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-  GList *folders;
-  GList *l;
-
-  folders = _gtk_file_chooser_extract_recent_folders (items);
-
-  for (l = folders; l; l = l->next)
-    _gtk_file_system_model_add_and_query_file (priv->recent_model,
-                                               G_FILE (l->data),
-                                               MODEL_ATTRIBUTES);
-
-  g_list_free_full (folders, g_object_unref);
-}
-
 static void
 recent_start_loading (GtkFileChooserWidget *impl)
 {
@@ -7580,7 +7504,22 @@ recent_start_loading (GtkFileChooserWidget *impl)
   GList *items;
 
   recent_clear_model (impl, TRUE);
-  recent_setup_model (impl);
+
+  /* Setup recent model */
+  g_assert (priv->recent_model == NULL);
+
+  priv->recent_model = _gtk_file_system_model_new (file_system_model_set,
+                                                   impl,
+                                                   MODEL_COLUMN_TYPES);
+
+  _gtk_file_system_model_set_filter (priv->recent_model, priv->current_filter);
+  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (priv->recent_model),
+                                           recent_sort_func,
+                                           impl, NULL);
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->recent_model),
+                                        GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
+                                        GTK_SORT_DESCENDING);
+
 
   if (!priv->recent_manager)
     return;
@@ -7590,9 +7529,48 @@ recent_start_loading (GtkFileChooserWidget *impl)
     return;
 
   if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN)
-    populate_model_with_recent_items (impl, items);
+    {
+      const int limit = DEFAULT_RECENT_FILES_LIMIT;
+      GList *l;
+      int n;
+
+      n = 0;
+
+      for (l = items; l; l = l->next)
+        {
+          GtkRecentInfo *info = l->data;
+          GFile *file;
+
+          if (recent_item_is_private (info))
+            continue;
+
+          file = g_file_new_for_uri (gtk_recent_info_get_uri (info));
+          _gtk_file_system_model_add_and_query_file (priv->recent_model,
+                                                     file,
+                                                     MODEL_ATTRIBUTES);
+          g_object_unref (file);
+
+          n++;
+          if (limit != -1 && n >= limit)
+            break;
+        }
+
+      g_set_object (&priv->model_for_search, priv->recent_model);
+    }
   else
-    populate_model_with_folders (impl, items);
+    {
+      GList *folders;
+      GList *l;
+
+      folders = _gtk_file_chooser_extract_recent_folders (items);
+
+      for (l = folders; l; l = l->next)
+        _gtk_file_system_model_add_and_query_file (priv->recent_model,
+                                                   G_FILE (l->data),
+                                                   MODEL_ATTRIBUTES);
+
+      g_list_free_full (folders, g_object_unref);
+    }
 
   g_list_free_full (items, (GDestroyNotify) gtk_recent_info_unref);
 
