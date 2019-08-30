@@ -82,13 +82,13 @@ assert_icon_lookup_size (const char         *icon_name,
 
   if (pixbuf_size > 0)
     {
-      GdkPixbuf *pixbuf;
+      GdkTexture *texture;
       GError *error = NULL;
 
-      pixbuf = gtk_icon_info_load_icon (info, &error);
+      texture = GDK_TEXTURE (gtk_icon_info_load_icon (info, &error));
       g_assert_no_error (error);
-      g_assert_cmpint (gdk_pixbuf_get_width (pixbuf), ==, pixbuf_size);
-      g_object_unref (pixbuf);
+      g_assert_cmpint (gdk_texture_get_width (texture), ==, pixbuf_size);
+      g_object_unref (texture);
     }
 
   g_object_unref (info);
