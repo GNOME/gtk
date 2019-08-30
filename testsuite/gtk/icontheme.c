@@ -598,12 +598,12 @@ load_icon (GObject      *source,
 {
   GtkIconInfo *info = (GtkIconInfo *)source;
   GError *error = NULL;
-  GdkPixbuf *pixbuf;
+  GdkPaintable *paintable;
 
-  pixbuf = gtk_icon_info_load_icon_finish (info, res, &error);
-  g_assert (pixbuf != NULL);
+  paintable = gtk_icon_info_load_icon_finish (info, res, &error);
+  g_assert (paintable != NULL);
   g_assert_no_error (error);
-  g_object_unref (pixbuf);
+  g_object_unref (paintable);
 
   loaded++;
 }
@@ -616,12 +616,12 @@ load_symbolic (GObject      *source,
   GtkIconInfo *info = (GtkIconInfo *)source;
   GError *error = NULL;
   gboolean symbolic;
-  GdkPixbuf *pixbuf;
+  GdkPaintable *paintable;
 
-  pixbuf = gtk_icon_info_load_symbolic_finish (info, res, &symbolic, &error);
-  g_assert (pixbuf != NULL);
+  paintable = gtk_icon_info_load_symbolic_finish (info, res, &symbolic, &error);
+  g_assert (paintable != NULL);
   g_assert_no_error (error);
-  g_object_unref (pixbuf);
+  g_object_unref (paintable);
 
   loaded++;
 }
