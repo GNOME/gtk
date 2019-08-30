@@ -171,11 +171,11 @@ record_text (GMarkupParseContext  *context,
 
 static const GMarkupParser record_parser =
 {
- record_start_element,
- record_end_element,
- record_text,
- NULL, // passthrough, not stored
- NULL, // error, fails immediately
+  record_start_element,
+  record_end_element,
+  record_text,
+  NULL, // passthrough, not stored
+  NULL, // error, fails immediately
 };
 
 static gint
