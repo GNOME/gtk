@@ -112,8 +112,8 @@ GtkWidget * _gtk_window_get_popover_parent (GtkWindow *window,
 gboolean    _gtk_window_is_popover_widget  (GtkWindow *window,
                                             GtkWidget *popover);
 
-GdkTexture *     gtk_window_get_icon_for_size (GtkWindow *window,
-					       int        size);
+GdkPaintable *    gtk_window_get_icon_for_size (GtkWindow *window,
+                                                int        size);
 
 void       gtk_window_set_hardcoded_surface (GtkWindow *window,
 					     GdkSurface *surface);
