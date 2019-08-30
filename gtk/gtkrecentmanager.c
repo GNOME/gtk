@@ -150,10 +150,12 @@ struct _GtkRecentInfo
 
   gchar *mime_type;
 
-  GSList *applications;
+  RecentAppInfo *applications;
+  int n_applications;
   GHashTable *apps_lookup;
 
-  GSList *groups;
+  char **groups;
+  int n_groups;
 
   gboolean is_private;
 
@@ -218,9 +220,6 @@ static void     gtk_recent_manager_enabled_changed     (GtkRecentManager  *manag
 static void     build_recent_items_list                (GtkRecentManager  *manager);
 static void     purge_recent_items_list                (GtkRecentManager  *manager,
                                                         GError           **error);
-
-static RecentAppInfo *recent_app_info_new  (const gchar   *app_name);
-static void           recent_app_info_free (RecentAppInfo *app_info);
 
 static GtkRecentInfo *gtk_recent_info_new  (const gchar   *uri);
 static void           gtk_recent_info_free (GtkRecentInfo *recent_info);
@@ -1086,6 +1085,7 @@ build_recent_info (GBookmarkFile *bookmarks,
 {
   gchar **apps, **groups;
   gsize apps_len, groups_len, i;
+  int app_index;
 
   g_assert (bookmarks != NULL);
   g_assert (info != NULL);
@@ -1101,16 +1101,17 @@ build_recent_info (GBookmarkFile *bookmarks,
   info->visited = g_bookmark_file_get_visited (bookmarks, info->uri, NULL);
 
   groups = g_bookmark_file_get_groups (bookmarks, info->uri, &groups_len, NULL);
+  info->groups = g_malloc (sizeof (char *) * groups_len);
+  info->n_groups = groups_len;
   for (i = 0; i < groups_len; i++)
-    {
-      gchar *group_name = g_strdup (groups[i]);
-
-      info->groups = g_slist_append (info->groups, group_name);
-    }
+    info->groups[i] = g_strdup (groups[i]);
 
   g_strfreev (groups);
 
+  app_index = 0;
   apps = g_bookmark_file_get_applications (bookmarks, info->uri, &apps_len, NULL);
+  info->applications = g_malloc (sizeof (RecentAppInfo ) * apps_len);
+  info->n_applications = 0;
   for (i = 0; i < apps_len; i++)
     {
       gchar *app_name, *app_exec;
@@ -1129,13 +1130,16 @@ build_recent_info (GBookmarkFile *bookmarks,
       if (!res)
         continue;
 
-      app_info = recent_app_info_new (app_name);
+      app_info = &info->applications[app_index];
+      app_info->name= g_strdup (app_name);
       app_info->exec = app_exec;
       app_info->count = count;
       app_info->stamp = stamp;
 
-      info->applications = g_slist_prepend (info->applications, app_info);
       g_hash_table_replace (info->apps_lookup, app_info->name, app_info);
+
+      app_index ++;
+      info->n_applications ++;
     }
 
   g_strfreev (apps);
@@ -1496,6 +1500,8 @@ gtk_recent_info_new (const gchar *uri)
 static void
 gtk_recent_info_free (GtkRecentInfo *recent_info)
 {
+  int i;
+
   if (!recent_info)
     return;
 
@@ -1504,12 +1510,22 @@ gtk_recent_info_free (GtkRecentInfo *recent_info)
   g_free (recent_info->description);
   g_free (recent_info->mime_type);
 
-  g_slist_free_full (recent_info->applications, (GDestroyNotify)recent_app_info_free);
+  for (i = 0; i < recent_info->n_applications; i ++)
+    {
+      const RecentAppInfo *app_info = &recent_info->applications[i];
+
+      g_free (app_info->name);
+      g_free (app_info->exec);
+    }
+  g_free (recent_info->applications);
 
   if (recent_info->apps_lookup)
     g_hash_table_destroy (recent_info->apps_lookup);
 
-  g_slist_free_full (recent_info->groups, g_free);
+  for (i = 0; i < recent_info->n_groups; i ++)
+    g_free (recent_info->groups[i]);
+
+  g_free (recent_info->groups);
 
   g_free (recent_info);
 }
@@ -1700,35 +1716,6 @@ gtk_recent_info_get_private_hint (GtkRecentInfo *info)
   return info->is_private;
 }
 
-
-static RecentAppInfo *
-recent_app_info_new (const gchar *app_name)
-{
-  RecentAppInfo *app_info;
-
-  g_assert (app_name != NULL);
-
-  app_info = g_slice_new0 (RecentAppInfo);
-  app_info->name = g_strdup (app_name);
-  app_info->exec = NULL;
-  app_info->count = 1;
-  app_info->stamp = 0;
-
-  return app_info;
-}
-
-static void
-recent_app_info_free (RecentAppInfo *app_info)
-{
-  if (!app_info)
-    return;
-
-  g_free (app_info->name);
-  g_free (app_info->exec);
-
-  g_slice_free (RecentAppInfo, app_info);
-}
-
 /**
  * gtk_recent_info_get_application_info:
  * @info: a #GtkRecentInfo
@@ -1800,7 +1787,6 @@ gchar **
 gtk_recent_info_get_applications (GtkRecentInfo *info,
                                   gsize         *length)
 {
-  GSList *l;
   gchar **retval;
   gsize n_apps, i;
 
@@ -1814,24 +1800,20 @@ gtk_recent_info_get_applications (GtkRecentInfo *info,
       return NULL;
     }
 
-  n_apps = g_slist_length (info->applications);
+  n_apps = info->n_applications;
 
   retval = g_new0 (gchar *, n_apps + 1);
 
-  for (l = info->applications, i = 0;
-       l != NULL;
-       l = l->next)
+  for (i = 0; i < info->n_applications; i ++)
     {
-      RecentAppInfo *ai = (RecentAppInfo *) l->data;
+      const RecentAppInfo *ai = &info->applications[i];
 
-      g_assert (ai != NULL);
-
-      retval[i++] = g_strdup (ai->name);
+      retval[i] = g_strdup (ai->name);
     }
   retval[i] = NULL;
 
   if (length)
-    *length = i;
+    *length = info->n_applications;
 
   return retval;
 }
@@ -1868,15 +1850,15 @@ gtk_recent_info_has_application (GtkRecentInfo *info,
 gchar *
 gtk_recent_info_last_application (GtkRecentInfo *info)
 {
-  GSList *l;
+  int i;
   time_t last_stamp = (time_t) -1;
   gchar *name = NULL;
 
   g_return_val_if_fail (info != NULL, NULL);
 
-  for (l = info->applications; l != NULL; l = l->next)
+  for (i = 0; i < info->n_applications; i ++)
     {
-      RecentAppInfo *ai = (RecentAppInfo *) l->data;
+      const RecentAppInfo *ai = &info->applications[i];
 
       if (ai->stamp > last_stamp)
         {
@@ -2229,13 +2211,12 @@ gchar **
 gtk_recent_info_get_groups (GtkRecentInfo *info,
                             gsize         *length)
 {
-  GSList *l;
   gchar **retval;
   gsize n_groups, i;
 
   g_return_val_if_fail (info != NULL, NULL);
 
-  if (!info->groups)
+  if (!info->groups || info->n_groups == 0)
     {
       if (length)
         *length = 0;
@@ -2243,24 +2224,17 @@ gtk_recent_info_get_groups (GtkRecentInfo *info,
       return NULL;
     }
 
-  n_groups = g_slist_length (info->groups);
+  n_groups = info->n_groups;
 
   retval = g_new0 (gchar *, n_groups + 1);
 
-  for (l = info->groups, i = 0;
-       l != NULL;
-       l = l->next)
-    {
-      gchar *group_name = (gchar *) l->data;
+  for (i = 0; i < info->n_groups; i ++)
+    retval[i] = g_strdup (info->groups[i]);
 
-      g_assert (group_name != NULL);
-
-      retval[i++] = g_strdup (group_name);
-    }
   retval[i] = NULL;
 
   if (length)
-    *length = i;
+    *length = info->n_groups;
 
   return retval;
 }
@@ -2279,7 +2253,7 @@ gboolean
 gtk_recent_info_has_group (GtkRecentInfo *info,
                            const gchar   *group_name)
 {
-  GSList *l;
+  int i;
 
   g_return_val_if_fail (info != NULL, FALSE);
   g_return_val_if_fail (group_name != NULL, FALSE);
@@ -2287,9 +2261,9 @@ gtk_recent_info_has_group (GtkRecentInfo *info,
   if (!info->groups)
     return FALSE;
 
-  for (l = info->groups; l != NULL; l = l->next)
+  for (i = 0; i < info->n_groups; i ++)
     {
-      gchar *g = (gchar *) l->data;
+      const char *g = info->groups[i];
 
       if (strcmp (g, group_name) == 0)
         return TRUE;
