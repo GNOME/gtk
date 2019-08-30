@@ -295,7 +295,6 @@ struct _GtkFileChooserWidgetPrivate {
   /* OPERATION_MODE_RECENT */
   GtkRecentManager *recent_manager;
   GtkFileSystemModel *recent_model;
-  guint load_recent_id;
 
   GtkWidget *extra_and_filters;
   GtkWidget *filter_combo_hbox;
@@ -614,7 +613,6 @@ static void     show_filters                 (GtkFileChooserWidget *impl,
 
 static gboolean recent_files_setting_is_enabled (GtkFileChooserWidget *impl);
 static void     recent_start_loading         (GtkFileChooserWidget *impl);
-static void     recent_stop_loading          (GtkFileChooserWidget *impl);
 static void     recent_clear_model           (GtkFileChooserWidget *impl,
                                               gboolean               remove_from_treeview);
 static gboolean recent_should_respond        (GtkFileChooserWidget *impl);
@@ -3136,7 +3134,6 @@ operation_mode_set_other_locations (GtkFileChooserWidget *impl)
   gtk_revealer_set_reveal_child (GTK_REVEALER (priv->browse_header_revealer), FALSE);
   location_bar_update (impl);
   stop_loading_and_clear_list_model (impl, TRUE);
-  recent_stop_loading (impl);
   search_stop_searching (impl, TRUE);
   recent_clear_model (impl, TRUE);
   search_clear_model (impl, TRUE);
@@ -3506,7 +3503,6 @@ cancel_all_operations (GtkFileChooserWidget *impl)
   g_clear_pointer (&priv->file_exists_get_info_cancellable, g_cancellable_cancel);
 
   search_stop_searching (impl, TRUE);
-  recent_stop_loading (impl);
 }
 
 /* Removes the settings signal handler.  It's safe to call multiple times */
@@ -7307,7 +7303,6 @@ search_start_query (GtkFileChooserWidget *impl,
     return;
 
   stop_loading_and_clear_list_model (impl, TRUE);
-  recent_stop_loading (impl);
   recent_clear_model (impl, TRUE);
 
   search_stop_searching (impl, FALSE);
@@ -7439,21 +7434,6 @@ recent_clear_model (GtkFileChooserWidget *impl,
   g_set_object (&priv->recent_model, NULL);
 }
 
-/* Stops any ongoing loading of the recent files list; does
- * not touch the recent_model
- */
-static void
-recent_stop_loading (GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-
-  if (priv->load_recent_id)
-    {
-      g_source_remove (priv->load_recent_id);
-      priv->load_recent_id = 0;
-    }
-}
-
 static void
 recent_setup_model (GtkFileChooserWidget *impl)
 {
@@ -7472,38 +7452,6 @@ recent_setup_model (GtkFileChooserWidget *impl)
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->recent_model),
                                         GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
                                         GTK_SORT_DESCENDING);
-}
-
-typedef struct
-{
-  GtkFileChooserWidget *impl;
-  GList *items;
-} RecentLoadData;
-
-static void
-recent_idle_cleanup (gpointer data)
-{
-  RecentLoadData *load_data = data;
-  GtkFileChooserWidget *impl = load_data->impl;
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-
-  gtk_tree_view_set_model (GTK_TREE_VIEW (priv->browse_files_tree_view),
-                           GTK_TREE_MODEL (priv->recent_model));
-  gtk_tree_view_set_search_column (GTK_TREE_VIEW (priv->browse_files_tree_view), -1);
-
-  gtk_tree_view_column_set_sort_column_id (priv->list_name_column, -1);
-  gtk_tree_view_column_set_sort_column_id (priv->list_time_column, -1);
-  gtk_tree_view_column_set_sort_column_id (priv->list_size_column, -1);
-  gtk_tree_view_column_set_sort_column_id (priv->list_type_column, -1);
-  gtk_tree_view_column_set_sort_column_id (priv->list_location_column, -1);
-
-  update_columns (impl, TRUE, _("Accessed"));
-
-  set_busy_cursor (impl, FALSE);
-
-  priv->load_recent_id = 0;
-
-  g_free (load_data);
 }
 
 static gboolean
@@ -7579,54 +7527,40 @@ populate_model_with_folders (GtkFileChooserWidget *impl,
   g_list_free_full (folders, g_object_unref);
 }
 
-static gboolean
-recent_idle_load (gpointer data)
-{
-  RecentLoadData *load_data = data;
-  GtkFileChooserWidget *impl = load_data->impl;
-  GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-
-  if (!priv->recent_manager)
-    return FALSE;
-
-  load_data->items = gtk_recent_manager_get_items (priv->recent_manager);
-  if (!load_data->items)
-    return FALSE;
-
-  if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN)
-    populate_model_with_recent_items (impl, load_data->items);
-  else
-    populate_model_with_folders (impl, load_data->items);
-
-  g_list_free_full (load_data->items, (GDestroyNotify) gtk_recent_info_unref);
-  load_data->items = NULL;
-
-  return FALSE;
-}
-
 static void
 recent_start_loading (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = gtk_file_chooser_widget_get_instance_private (impl);
-  RecentLoadData *load_data;
+  GList *items;
 
-  recent_stop_loading (impl);
   recent_clear_model (impl, TRUE);
   recent_setup_model (impl);
-  set_busy_cursor (impl, TRUE);
 
-  g_assert (priv->load_recent_id == 0);
+  if (!priv->recent_manager)
+    return;
 
-  load_data = g_new (RecentLoadData, 1);
-  load_data->impl = impl;
-  load_data->items = NULL;
+  items = gtk_recent_manager_get_items (priv->recent_manager);
+  if (!items)
+    return;
 
-  /* begin lazy loading the recent files into the model */
-  priv->load_recent_id = g_idle_add_full (G_PRIORITY_DEFAULT,
-                                          recent_idle_load,
-                                          load_data,
-                                          recent_idle_cleanup);
-  g_source_set_name_by_id (priv->load_recent_id, "[gtk] recent_idle_load");
+  if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+    populate_model_with_recent_items (impl, items);
+  else
+    populate_model_with_folders (impl, items);
+
+  g_list_free_full (items, (GDestroyNotify) gtk_recent_info_unref);
+
+  gtk_tree_view_set_model (GTK_TREE_VIEW (priv->browse_files_tree_view),
+                           GTK_TREE_MODEL (priv->recent_model));
+  gtk_tree_view_set_search_column (GTK_TREE_VIEW (priv->browse_files_tree_view), -1);
+
+  gtk_tree_view_column_set_sort_column_id (priv->list_name_column, -1);
+  gtk_tree_view_column_set_sort_column_id (priv->list_time_column, -1);
+  gtk_tree_view_column_set_sort_column_id (priv->list_size_column, -1);
+  gtk_tree_view_column_set_sort_column_id (priv->list_type_column, -1);
+  gtk_tree_view_column_set_sort_column_id (priv->list_location_column, -1);
+
+  update_columns (impl, TRUE, _("Accessed"));
 }
 
 /* Called from ::should_respond(). We return whether there are selected
