@@ -222,8 +222,8 @@ const gchar *         gtk_icon_info_get_filename       (GtkIconInfo   *icon_info
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_icon_info_is_symbolic        (GtkIconInfo   *icon_info);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *           gtk_icon_info_load_icon          (GtkIconInfo   *icon_info,
-							GError       **error);
+GdkPaintable *        gtk_icon_info_load_icon          (GtkIconInfo   *icon_info,
+							                                          GError       **error);
 GDK_AVAILABLE_IN_ALL
 GdkTexture *          gtk_icon_info_load_texture       (GtkIconInfo   *icon_info,
                                                         GError       **error);
