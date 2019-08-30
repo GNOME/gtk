@@ -3758,10 +3758,11 @@ proxy_pixbuf_destroy (guchar *pixels, gpointer data)
  * the #GtkIconInfo. If this flag has been specified, the pixbuf
  * returned by this function will be scaled to the exact size.
  *
- * Returns: (transfer full): the rendered icon; this may be a newly
+ * Returns: (transfer full) (nullable): the rendered icon; this may be a newly
  *     created icon or a new reference to an internal icon, so you must
  *     not modify the icon. Use g_object_unref() to release your reference
  *     to the icon.
+ *     If the icon could not be loaded, %NULL is returned and @error is set.
  */
 GdkPixbuf *
 gtk_icon_info_load_icon (GtkIconInfo *icon_info,
@@ -3779,12 +3780,12 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
         }
       else
         {
-          g_set_error_literal (error,  
-                               GTK_ICON_THEME_ERROR,  
+          g_set_error_literal (error,
+                               GTK_ICON_THEME_ERROR,
                                GTK_ICON_THEME_NOT_FOUND,
                                _("Failed to load icon"));
         }
- 
+
       return NULL;
     }
 
