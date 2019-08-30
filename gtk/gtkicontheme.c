@@ -4890,21 +4890,27 @@ gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme       *icon_theme,
         {
           gint width, height, max;
           gdouble pixbuf_scale;
-          GdkPixbuf *scaled;
 
           width = gdk_pixbuf_get_width (pixbuf);
           height = gdk_pixbuf_get_height (pixbuf);
           max = MAX (width, height);
           pixbuf_scale = (gdouble) size * scale / (gdouble) max;
 
-          scaled = gdk_pixbuf_scale_simple (pixbuf,
-                                            0.5 + width * pixbuf_scale,
-                                            0.5 + height * pixbuf_scale,
-                                            GDK_INTERP_BILINEAR);
+           if (pixbuf_scale != 1.0)
+             {
+              GdkPixbuf *scaled;
+              scaled = gdk_pixbuf_scale_simple (pixbuf,
+                                                0.5 + width * pixbuf_scale,
+                                                0.5 + height * pixbuf_scale,
+                                                GDK_INTERP_BILINEAR);
 
-          info = gtk_icon_info_new_for_pixbuf (icon_theme, scaled);
-
-          g_object_unref (scaled);
+              info = gtk_icon_info_new_for_pixbuf (icon_theme, scaled);
+              g_object_unref (scaled);
+             }
+           else
+             {
+              info = gtk_icon_info_new_for_pixbuf (icon_theme, pixbuf);
+             }
         }
       else
         {
