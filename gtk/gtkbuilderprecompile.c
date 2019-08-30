@@ -407,6 +407,15 @@ demarshal_string (const char **tree, const char *strings)
   return strings + offset;
 }
 
+static void
+propagate_error (GtkBuildableParseContext *context,
+                 GError                  **dest,
+                 GError                   *src)
+{
+  (*context->internal_callbacks->error) (NULL, src, context);
+  g_propagate_error (dest, src);
+}
+
 static gboolean
 replay_start_element (GtkBuildableParseContext *context,
                       const char **tree,
@@ -441,7 +450,7 @@ replay_start_element (GtkBuildableParseContext *context,
 
   if (tmp_error)
     {
-      //propagate_error (context, error, tmp_error);
+      propagate_error (context, error, tmp_error);
       return FALSE;
     }
 
@@ -462,7 +471,7 @@ replay_end_element (GtkBuildableParseContext *context,
                                                 &tmp_error);
   if (tmp_error)
     {
-      //propagate_error (context, error, tmp_error);
+      propagate_error (context, error, tmp_error);
       return FALSE;
     }
 
@@ -488,7 +497,7 @@ replay_text (GtkBuildableParseContext *context,
 
   if (tmp_error)
     {
-      //propagate_error (context, error, tmp_error);
+      propagate_error (context, error, tmp_error);
       return FALSE;
     }
 
