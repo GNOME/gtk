@@ -38,6 +38,7 @@ typedef struct RecordDataTree RecordDataTree;
 struct RecordDataTree {
   RecordDataTree *parent;
   RecordTreeType type;
+  int n_attributes;
   const char *data;
   const char **attributes;
   const char **values;
@@ -133,17 +134,15 @@ record_start_element (GMarkupParseContext  *context,
                                 record_data_string_lookup (data->strings, element_name, -1));
   data->current = child;
 
-  child->attributes = g_new (const char *, n_attrs + 1);
-  child->values = g_new (const char *, n_attrs + 1);
+  child->n_attributes = n_attrs;
+  child->attributes = g_new (const char *, n_attrs);
+  child->values = g_new (const char *, n_attrs);
 
   for (i = 0; i < n_attrs; i++)
     {
       child->attributes[i] = record_data_string_lookup (data->strings, names[i], -1);
       child->values[i] = record_data_string_lookup (data->strings, values[i], -1);
     }
-
-  child->attributes[i] = NULL;
-  child->values[i] = NULL;
 }
 
 static void
@@ -271,8 +270,8 @@ marshal_tree (GString *marshaled,
     case RECORD_TYPE_ELEMENT:
       marshal_uint32 (marshaled, RECORD_TYPE_ELEMENT);
       marshal_string (marshaled, strings, tree->data);
-      marshal_uint32 (marshaled, g_strv_length ((char **)tree->attributes));
-      for (i = 0; tree->attributes[i] != NULL; i++)
+      marshal_uint32 (marshaled, tree->n_attributes);
+      for (i = 0; i < tree->n_attributes; i++)
         {
           marshal_string (marshaled, strings, tree->attributes[i]);
           marshal_string (marshaled, strings, tree->values[i]);
