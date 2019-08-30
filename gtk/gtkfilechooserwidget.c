@@ -3150,6 +3150,9 @@ operation_mode_set_recent (GtkFileChooserWidget *impl)
   GFile *file;
   GtkRevealerTransitionType old_revealer_transition_type;
 
+  if (!priv->recent_manager)
+    priv->recent_manager = gtk_recent_manager_get_default ();
+
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
 
@@ -8640,7 +8643,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   priv->operation_mode = OPERATION_MODE_BROWSE;
   priv->sort_column = MODEL_COL_NAME;
   priv->sort_order = GTK_SORT_ASCENDING;
-  priv->recent_manager = gtk_recent_manager_get_default ();
   priv->create_folders = TRUE;
   priv->auto_selecting_first_row = FALSE;
   priv->renamed_file = NULL;
