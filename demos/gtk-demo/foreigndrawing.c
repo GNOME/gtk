@@ -829,7 +829,6 @@ draw_spinbutton (GtkWidget *widget,
   GtkStyleContext *down_context;
   GtkIconTheme *icon_theme;
   GtkIconInfo *icon_info;
-  GdkPixbuf *pixbuf;
   GdkTexture *texture;
   gint icon_width, icon_height, icon_size;
   gint button_width;
@@ -857,26 +856,22 @@ draw_spinbutton (GtkWidget *widget,
                          "min-width", &icon_width, "min-height", &icon_height, NULL);
   icon_size = MIN (icon_width, icon_height);
   icon_info = gtk_icon_theme_lookup_icon (icon_theme, "list-add-symbolic", icon_size, 0);
-  pixbuf = gtk_icon_info_load_symbolic_for_context (icon_info, up_context, NULL, NULL);
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  texture = GDK_TEXTURE (gtk_icon_info_load_symbolic_for_context (icon_info, up_context, NULL, NULL));
   g_object_unref (icon_info);
   draw_style_common (up_context, cr, x + width - button_width, y, button_width, *height,
                      &contents_x, &contents_y, &contents_width, &contents_height);
   gtk_render_icon (up_context, cr, texture, contents_x, contents_y + (contents_height - icon_size) / 2);
-  g_object_unref (pixbuf);
   g_object_unref (texture);
 
   gtk_style_context_get (down_context,
                          "min-width", &icon_width, "min-height", &icon_height, NULL);
   icon_size = MIN (icon_width, icon_height);
   icon_info = gtk_icon_theme_lookup_icon (icon_theme, "list-remove-symbolic", icon_size, 0);
-  pixbuf = gtk_icon_info_load_symbolic_for_context (icon_info, down_context, NULL, NULL);
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  texture = GDK_TEXTURE (gtk_icon_info_load_symbolic_for_context (icon_info, down_context, NULL, NULL));
   g_object_unref (icon_info);
   draw_style_common (down_context, cr, x + width - 2 * button_width, y, button_width, *height,
                      &contents_x, &contents_y, &contents_width, &contents_height);
   gtk_render_icon (down_context, cr, texture, contents_x, contents_y + (contents_height - icon_size) / 2);
-  g_object_unref (pixbuf);
   g_object_unref (texture);
 
   g_object_unref (down_context);

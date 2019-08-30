@@ -230,15 +230,15 @@ GdkTexture *          gtk_icon_info_load_texture       (GtkIconInfo   *icon_info
 
 GDK_AVAILABLE_IN_ALL
 void                  gtk_icon_info_load_icon_async   (GtkIconInfo          *icon_info,
-						       GCancellable         *cancellable,
-						       GAsyncReadyCallback   callback,
-						       gpointer              user_data);
+                                                       GCancellable         *cancellable,
+                                                       GAsyncReadyCallback   callback,
+                                                       gpointer              user_data);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *           gtk_icon_info_load_icon_finish  (GtkIconInfo          *icon_info,
-						       GAsyncResult         *res,
-						       GError              **error);
+GdkPaintable *        gtk_icon_info_load_icon_finish  (GtkIconInfo          *icon_info,
+                                                       GAsyncResult         *res,
+                                                       GError              **error);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *           gtk_icon_info_load_symbolic      (GtkIconInfo   *icon_info,
+GdkPaintable *        gtk_icon_info_load_symbolic      (GtkIconInfo   *icon_info,
                                                         const GdkRGBA *fg,
                                                         const GdkRGBA *success_color,
                                                         const GdkRGBA *warning_color,
@@ -247,34 +247,34 @@ GdkPixbuf *           gtk_icon_info_load_symbolic      (GtkIconInfo   *icon_info
                                                         GError       **error);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_icon_info_load_symbolic_async (GtkIconInfo   *icon_info,
-							 const GdkRGBA *fg,
-							 const GdkRGBA *success_color,
-							 const GdkRGBA *warning_color,
-							 const GdkRGBA *error_color,
-							 GCancellable         *cancellable,
-							 GAsyncReadyCallback   callback,
-							 gpointer              user_data);
+                                                         const GdkRGBA *fg,
+                                                         const GdkRGBA *success_color,
+                                                         const GdkRGBA *warning_color,
+                                                         const GdkRGBA *error_color,
+                                                         GCancellable         *cancellable,
+                                                         GAsyncReadyCallback   callback,
+                                                         gpointer              user_data);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *           gtk_icon_info_load_symbolic_finish (GtkIconInfo   *icon_info,
-							  GAsyncResult         *res,
-							  gboolean      *was_symbolic,
-							  GError       **error);
+GdkPaintable *        gtk_icon_info_load_symbolic_finish (GtkIconInfo   *icon_info,
+                                                          GAsyncResult  *res,
+                                                          gboolean      *was_symbolic,
+                                                          GError       **error);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *           gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
+GdkPaintable *        gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
                                                                GtkStyleContext  *context,
                                                                gboolean         *was_symbolic,
                                                                GError          **error);
 GDK_AVAILABLE_IN_ALL
-void                  gtk_icon_info_load_symbolic_for_context_async (GtkIconInfo      *icon_info,
-								     GtkStyleContext  *context,
-								     GCancellable     *cancellable,
-								     GAsyncReadyCallback callback,
-								     gpointer          user_data);
+void                  gtk_icon_info_load_symbolic_for_context_async (GtkIconInfo         *icon_info,
+                                                                     GtkStyleContext     *context,
+                                                                     GCancellable        *cancellable,
+                                                                     GAsyncReadyCallback callback,
+                                                                     gpointer            user_data);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *           gtk_icon_info_load_symbolic_for_context_finish (GtkIconInfo      *icon_info,
-								      GAsyncResult     *res,
-								      gboolean         *was_symbolic,
-								      GError          **error);
+GdkPaintable *        gtk_icon_info_load_symbolic_for_context_finish (GtkIconInfo      *icon_info,
+                                                                      GAsyncResult     *res,
+                                                                      gboolean         *was_symbolic,
+                                                                      GError          **error);
 
 
 G_END_DECLS

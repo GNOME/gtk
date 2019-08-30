@@ -3942,13 +3942,14 @@ gtk_icon_info_load_icon_async (GtkIconInfo         *icon_info,
  *     not modify the icon. Use g_object_unref() to release your reference
  *     to the icon.
  */
-GdkPixbuf *
+GdkPaintable *
 gtk_icon_info_load_icon_finish (GtkIconInfo   *icon_info,
                                 GAsyncResult  *result,
                                 GError       **error)
 {
   GTask *task = G_TASK (result);
   GtkIconInfo *dup;
+  GdkTexture *texture;
 
   g_return_val_if_fail (g_task_is_valid (result, icon_info), NULL);
 
@@ -3974,7 +3975,12 @@ gtk_icon_info_load_icon_finish (GtkIconInfo   *icon_info,
   g_assert (icon_info_get_pixbuf_ready (icon_info));
 
   /* This is now guaranteed to not block */
-  return gtk_icon_info_load_icon (icon_info, error);
+  texture = gtk_icon_info_load_texture (icon_info, error);
+
+  if (texture)
+    return GDK_PAINTABLE (texture);
+
+  return NULL;
 }
 
 static void
@@ -4382,7 +4388,7 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
  *
  * Returns: (transfer full): a #GdkPixbuf representing the loaded icon
  */
-GdkPixbuf *
+GdkPaintable *
 gtk_icon_info_load_symbolic (GtkIconInfo    *icon_info,
                              const GdkRGBA  *fg,
                              const GdkRGBA  *success_color,
@@ -4391,6 +4397,7 @@ gtk_icon_info_load_symbolic (GtkIconInfo    *icon_info,
                              gboolean       *was_symbolic,
                              GError        **error)
 {
+  GdkPixbuf *pixbuf;
   gboolean is_symbolic;
 
   g_return_val_if_fail (icon_info != NULL, NULL);
@@ -4402,13 +4409,23 @@ gtk_icon_info_load_symbolic (GtkIconInfo    *icon_info,
     *was_symbolic = is_symbolic;
 
   if (!is_symbolic)
-    return gtk_icon_info_load_icon (icon_info, error);
+    return (GdkPaintable *)gtk_icon_info_load_texture (icon_info, error);
 
-  return gtk_icon_info_load_symbolic_internal (icon_info,
-                                               fg, success_color,
-                                               warning_color, error_color,
-                                               TRUE,
-                                               error);
+  pixbuf = gtk_icon_info_load_symbolic_internal (icon_info,
+                                                 fg, success_color,
+                                                 warning_color, error_color,
+                                                 TRUE,
+                                                 error);
+
+  if (pixbuf)
+    {
+      GdkTexture *texture = gdk_texture_new_for_pixbuf (pixbuf);
+      g_object_unref (pixbuf);
+
+      return GDK_PAINTABLE (texture);
+    }
+
+  return NULL;
 }
 
 void
@@ -4467,7 +4484,7 @@ gtk_icon_theme_lookup_symbolic_colors (GtkCssStyle *style,
  *
  * Returns: (transfer full): a #GdkPixbuf representing the loaded icon
  */
-GdkPixbuf *
+GdkPaintable *
 gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
                                          GtkStyleContext  *context,
                                          gboolean         *was_symbolic,
@@ -4478,6 +4495,7 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
   GdkRGBA warning_color;
   GdkRGBA error_color;
   gboolean is_symbolic;
+  GdkPixbuf *pixbuf;
 
   g_return_val_if_fail (icon_info != NULL, NULL);
   g_return_val_if_fail (context != NULL, NULL);
@@ -4488,17 +4506,27 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
     *was_symbolic = is_symbolic;
 
   if (!is_symbolic)
-    return gtk_icon_info_load_icon (icon_info, error);
+    return (GdkPaintable *)gtk_icon_info_load_texture (icon_info, error);
 
   gtk_icon_theme_lookup_symbolic_colors (gtk_style_context_lookup_style (context),
                                          &fg, &success_color,
                                          &warning_color, &error_color);
 
-  return gtk_icon_info_load_symbolic_internal (icon_info,
-                                               &fg, &success_color,
-                                               &warning_color, &error_color,
-                                               TRUE,
-                                               error);
+  pixbuf = gtk_icon_info_load_symbolic_internal (icon_info,
+                                                 &fg, &success_color,
+                                                 &warning_color, &error_color,
+                                                 TRUE,
+                                                 error);
+
+  if (pixbuf)
+    {
+      GdkTexture *texture = gdk_texture_new_for_pixbuf (pixbuf);
+      g_object_unref (pixbuf);
+
+      return GDK_PAINTABLE (texture);
+    }
+
+  return NULL;
 }
 
 typedef struct {
@@ -4530,13 +4558,13 @@ async_load_no_symbolic_cb (GObject      *source_object,
   GtkIconInfo *icon_info = GTK_ICON_INFO (source_object);
   GTask *task = user_data;
   GError *error = NULL;
-  GdkPixbuf *pixbuf;
+  GdkPaintable *paintable;
 
-  pixbuf = gtk_icon_info_load_icon_finish (icon_info, res, &error);
-  if (pixbuf == NULL)
+  paintable = gtk_icon_info_load_icon_finish (icon_info, res, &error);
+  if (paintable == NULL)
     g_task_return_error (task, error);
   else
-    g_task_return_pointer (task, pixbuf, g_object_unref);
+    g_task_return_pointer (task, paintable, g_object_unref);
   g_object_unref (task);
 }
 
@@ -4669,12 +4697,11 @@ gtk_icon_info_load_symbolic_async (GtkIconInfo          *icon_info,
  *
  * Finishes an async icon load, see gtk_icon_info_load_symbolic_async().
  *
- * Returns: (transfer full): the rendered icon; this may be a newly
- *     created icon or a new reference to an internal icon, so you must
- *     not modify the icon. Use g_object_unref() to release your reference
- *     to the icon.
+ * Returns: (transfer full): the rendered icon;
+ *  Use g_object_unref() to release your reference
+ *  to the icon.
  */
-GdkPixbuf *
+GdkPaintable *
 gtk_icon_info_load_symbolic_finish (GtkIconInfo   *icon_info,
                                     GAsyncResult  *result,
                                     gboolean      *was_symbolic,
@@ -4684,6 +4711,7 @@ gtk_icon_info_load_symbolic_finish (GtkIconInfo   *icon_info,
   AsyncSymbolicData *data = g_task_get_task_data (task);
   SymbolicPixbufCache *symbolic_cache;
   GdkPixbuf *pixbuf;
+  GdkTexture *texture;
 
   if (was_symbolic)
     *was_symbolic = data->is_symbolic;
@@ -4713,10 +4741,17 @@ gtk_icon_info_load_symbolic_finish (GtkIconInfo   *icon_info,
 
       g_object_unref (pixbuf);
 
-      return symbolic_cache_get_proxy (symbolic_cache, icon_info);
+      pixbuf = symbolic_cache_get_proxy (symbolic_cache, icon_info);
+    }
+  else
+    {
+      pixbuf = g_task_propagate_pointer (task, error);
     }
 
-  return g_task_propagate_pointer (task, error);
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  g_object_unref (pixbuf);
+
+  return GDK_PAINTABLE (texture);
 }
 
 /**
@@ -4777,7 +4812,7 @@ gtk_icon_info_load_symbolic_for_context_async (GtkIconInfo         *icon_info,
  *     not modify the icon. Use g_object_unref() to release your reference
  *     to the icon.
  */
-GdkPixbuf *
+GdkPaintable *
 gtk_icon_info_load_symbolic_for_context_finish (GtkIconInfo   *icon_info,
                                                 GAsyncResult  *result,
                                                 gboolean      *was_symbolic,

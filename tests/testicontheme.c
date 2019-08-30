@@ -39,21 +39,21 @@ icon_loaded_cb (GObject *source_object,
 		GAsyncResult *res,
 		gpointer user_data)
 {
-  GdkPixbuf *pixbuf;
+  GdkPaintable *paintable;
   GError *error;
 
   error = NULL;
-  pixbuf = gtk_icon_info_load_icon_finish (GTK_ICON_INFO (source_object),
-					   res, &error);
+  paintable = gtk_icon_info_load_icon_finish (GTK_ICON_INFO (source_object),
+                                              res, &error);
 
-  if (pixbuf == NULL)
+  if (paintable == NULL)
     {
       g_print ("%s\n", error->message);
       exit (1);
     }
 
-  gtk_image_set_from_pixbuf (GTK_IMAGE (user_data), pixbuf);
-  g_object_unref (pixbuf);
+  gtk_image_set_from_paintable (GTK_IMAGE (user_data), paintable);
+  g_object_unref (paintable);
 }
 
 
