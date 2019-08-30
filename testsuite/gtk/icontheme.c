@@ -598,12 +598,12 @@ load_icon (GObject      *source,
 {
   GtkIconInfo *info = (GtkIconInfo *)source;
   GError *error = NULL;
-  GdkPixbuf *pixbuf;
+  GdkPaintable *paintable;
 
-  pixbuf = gtk_icon_info_load_icon_finish (info, res, &error);
-  g_assert (pixbuf != NULL);
+  paintable = gtk_icon_info_load_icon_finish (info, res, &error);
+  g_assert (paintable != NULL);
   g_assert_no_error (error);
-  g_object_unref (pixbuf);
+  g_object_unref (paintable);
 
   loaded++;
 }
@@ -616,12 +616,12 @@ load_symbolic (GObject      *source,
   GtkIconInfo *info = (GtkIconInfo *)source;
   GError *error = NULL;
   gboolean symbolic;
-  GdkPixbuf *pixbuf;
+  GdkPaintable *paintable;
 
-  pixbuf = gtk_icon_info_load_symbolic_finish (info, res, &symbolic, &error);
-  g_assert (pixbuf != NULL);
+  paintable = gtk_icon_info_load_symbolic_finish (info, res, &symbolic, &error);
+  g_assert (paintable != NULL);
   g_assert_no_error (error);
-  g_object_unref (pixbuf);
+  g_object_unref (paintable);
 
   loaded++;
 }
@@ -711,6 +711,7 @@ test_nonsquare_symbolic (void)
   GdkRGBA black = { 0.0, 0.0, 0.0, 1.0 };
   gboolean was_symbolic = FALSE;
   GError *error = NULL;
+  GdkTexture *texture;
   gchar *path = g_build_filename (g_test_get_dir (G_TEST_DIST),
 				  "icons",
 				  "scalable",
@@ -735,20 +736,20 @@ test_nonsquare_symbolic (void)
   g_assert_nonnull (info);
 
   g_object_unref (pixbuf);
-  pixbuf = gtk_icon_info_load_symbolic (info, &black, NULL, NULL, NULL,
-					&was_symbolic, &error);
+  texture = GDK_TEXTURE (gtk_icon_info_load_symbolic (info, &black, NULL, NULL, NULL,
+                                                      &was_symbolic, &error));
 
   /* we are loaded successfully */
   g_assert_no_error (error);
-  g_assert_nonnull (pixbuf);
+  g_assert_nonnull (texture);
   g_assert_true (was_symbolic);
 
   /* the original dimensions have been preserved */
-  g_assert_cmpint (gdk_pixbuf_get_width (pixbuf), ==, width);
-  g_assert_cmpint (gdk_pixbuf_get_height (pixbuf), ==, height);
+  g_assert_cmpint (gdk_texture_get_width (texture), ==, width);
+  g_assert_cmpint (gdk_texture_get_height (texture), ==, height);
 
   g_free (path);
-  g_object_unref (pixbuf);
+  g_object_unref (texture);
   g_object_unref (file);
   g_object_unref (icon);
   g_object_unref (info);

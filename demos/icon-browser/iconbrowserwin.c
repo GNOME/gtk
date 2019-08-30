@@ -81,11 +81,14 @@ get_icon (GtkWidget *image, const gchar *name, gint size)
 {
   GtkIconInfo *info;
   GtkStyleContext *context;
+  GdkTexture *texture;
   GdkPixbuf *pixbuf;
 
   context = gtk_widget_get_style_context (image);
   info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), name, size, 0);
-  pixbuf = gtk_icon_info_load_symbolic_for_context (info, context, NULL, NULL);
+  texture = GDK_TEXTURE (gtk_icon_info_load_symbolic_for_context (info, context, NULL, NULL));
+  pixbuf = gdk_pixbuf_get_from_texture (texture);
+  g_object_unref (texture);
   g_object_unref (info);
 
   return pixbuf;
