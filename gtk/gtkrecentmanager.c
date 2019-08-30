@@ -682,7 +682,7 @@ build_recent_items_list (GtkRecentManager *manager)
            * will not be happy about those)
            */
           if (read_error->domain == G_FILE_ERROR &&
-            read_error->code != G_FILE_ERROR_NOENT)
+              read_error->code != G_FILE_ERROR_NOENT)
             {
               gchar *utf8 = g_filename_to_utf8 (priv->filename, -1, NULL, NULL, NULL);
               g_warning ("Attempting to read the recently used resources "
