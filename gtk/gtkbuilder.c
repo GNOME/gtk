@@ -2108,7 +2108,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
     case G_TYPE_OBJECT:
     case G_TYPE_INTERFACE:
       if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF) ||
-          G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE) || 
+          G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE) ||
           G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE))
         {
           gchar *filename;
@@ -2156,6 +2156,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
           if (pixbuf == NULL)
             {
               GtkIconTheme *theme;
+              GdkPaintable *texture;
 
               g_warning ("Could not load image '%s': %s",
                          string, tmp_error->message);
@@ -2163,11 +2164,13 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
 
               /* fall back to a missing image */
               theme = gtk_icon_theme_get_default ();
-              pixbuf = gtk_icon_theme_load_icon (theme,
+              texture = gtk_icon_theme_load_icon (theme,
                                                  "image-missing",
                                                  16,
                                                  GTK_ICON_LOOKUP_USE_BUILTIN,
                                                  NULL);
+              pixbuf = gdk_pixbuf_get_from_texture (GDK_TEXTURE (texture));
+              g_object_unref (texture);
             }
 
           if (pixbuf)
