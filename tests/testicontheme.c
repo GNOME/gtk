@@ -93,7 +93,7 @@ main (int argc, char *argv[])
   if (strcmp (argv[1], "display") == 0)
     {
       GError *error;
-      GdkPixbuf *pixbuf;
+      GdkPaintable *paintable;
       GtkWidget *window, *image;
 
       if (argc < 4)
@@ -110,8 +110,8 @@ main (int argc, char *argv[])
 	scale = atoi (argv[5]);
 
       error = NULL;
-      pixbuf = gtk_icon_theme_load_icon_for_scale (icon_theme, argv[3], size, scale, flags, &error);
-      if (!pixbuf)
+      paintable = gtk_icon_theme_load_icon_for_scale (icon_theme, argv[3], size, scale, flags, &error);
+      if (!paintable)
         {
           g_print ("%s\n", error->message);
           return 1;
@@ -119,8 +119,8 @@ main (int argc, char *argv[])
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       image = gtk_image_new ();
-      gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
-      g_object_unref (pixbuf);
+      gtk_image_set_from_paintable (GTK_IMAGE (image), paintable);
+      g_object_unref (paintable);
       gtk_container_add (GTK_CONTAINER (window), image);
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
       gtk_widget_show (window);

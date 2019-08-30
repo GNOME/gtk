@@ -2264,7 +2264,7 @@ gtk_icon_theme_error_quark (void)
  *     you must not modify the icon. Use g_object_unref() to release
  *     your reference to the icon. %NULL if the icon isn’t found.
  */
-GdkPixbuf *
+GdkPaintable *
 gtk_icon_theme_load_icon (GtkIconTheme         *icon_theme,
                           const gchar          *icon_name,
                           gint                  size,
@@ -2311,7 +2311,7 @@ gtk_icon_theme_load_icon (GtkIconTheme         *icon_theme,
  *     you must not modify the icon. Use g_object_unref() to release
  *     your reference to the icon. %NULL if the icon isn’t found.
  */
-GdkPixbuf *
+GdkPaintable *
 gtk_icon_theme_load_icon_for_scale (GtkIconTheme        *icon_theme,
                                     const gchar         *icon_name,
                                     gint                 size,
@@ -2320,8 +2320,8 @@ gtk_icon_theme_load_icon_for_scale (GtkIconTheme        *icon_theme,
                                     GError             **error)
 {
   GtkIconInfo *icon_info;
-  GdkPixbuf *pixbuf = NULL;
-  
+  GdkTexture *texture = NULL;
+
   g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), NULL);
   g_return_val_if_fail (icon_name != NULL, NULL);
   g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
@@ -2338,11 +2338,11 @@ gtk_icon_theme_load_icon_for_scale (GtkIconTheme        *icon_theme,
       return NULL;
     }
 
-  pixbuf = gtk_icon_info_load_icon (icon_info, error);
+  texture = gtk_icon_info_load_texture (icon_info, error);
   g_prefix_error (error, "Failed to load %s: ", icon_info->filename);
   g_object_unref (icon_info);
 
-  return pixbuf;
+  return GDK_PAINTABLE (texture);
 }
 
 /**
