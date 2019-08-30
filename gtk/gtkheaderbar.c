@@ -224,7 +224,7 @@ _gtk_header_bar_update_window_icon (GtkHeaderBar *bar,
                                     GtkWindow    *window)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
-  GdkTexture *texture;
+  GdkPaintable *paintable;
   gint scale;
 
   if (priv->titlebar_icon == NULL)
@@ -232,15 +232,14 @@ _gtk_header_bar_update_window_icon (GtkHeaderBar *bar,
 
   scale = gtk_widget_get_scale_factor (priv->titlebar_icon);
   if (GTK_IS_BUTTON (gtk_widget_get_parent (priv->titlebar_icon)))
-    texture = gtk_window_get_icon_for_size (window, 16 * scale);
+    paintable = gtk_window_get_icon_for_size (window, 16 * scale);
   else
-    texture = gtk_window_get_icon_for_size (window, 20 * scale);
+    paintable = gtk_window_get_icon_for_size (window, 20 * scale);
 
-  if (texture)
+  if (paintable)
     {
-      gtk_image_set_from_paintable (GTK_IMAGE (priv->titlebar_icon),
-                                    GDK_PAINTABLE (texture));
-      g_object_unref (texture);
+      gtk_image_set_from_paintable (GTK_IMAGE (priv->titlebar_icon), paintable);
+      g_object_unref (paintable);
       gtk_widget_show (priv->titlebar_icon);
 
       return TRUE;
