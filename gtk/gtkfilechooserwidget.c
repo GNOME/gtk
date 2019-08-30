@@ -737,6 +737,52 @@ get_toplevel (GtkWidget *widget)
     return NULL;
 }
 
+/* Extracts the parent folders out of the supplied list of GtkRecentInfo* items, and returns
+ * a list of GFile* for those unique parents.
+ */
+static GList *
+_gtk_file_chooser_extract_recent_folders (GList *infos)
+{
+  GList *l;
+  GList *result;
+  GHashTable *folders;
+
+  result = NULL;
+
+  folders = g_hash_table_new (g_file_hash, (GEqualFunc) g_file_equal);
+
+  for (l = infos; l; l = l->next)
+    {
+      GtkRecentInfo *info = l->data;
+      const char *uri;
+      GFile *parent;
+      GFile *file;
+
+      uri = gtk_recent_info_get_uri (info);
+
+      file = g_file_new_for_uri (uri);
+      parent = g_file_get_parent (file);
+      g_object_unref (file);
+
+      if (parent)
+        {
+          if (!g_hash_table_lookup (folders, parent))
+            {
+              g_hash_table_insert (folders, parent, (gpointer) 1);
+              result = g_list_prepend (result, g_object_ref (parent));
+            }
+
+          g_object_unref (parent);
+        }
+    }
+
+  result = g_list_reverse (result);
+
+  g_hash_table_destroy (folders);
+
+  return result;
+}
+
 /* Shows an error dialog for the file chooser */
 static void
 error_message (GtkFileChooserWidget *impl,
