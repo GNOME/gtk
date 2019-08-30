@@ -169,13 +169,13 @@ GtkIconInfo * gtk_icon_theme_choose_icon_for_scale (GtkIconTheme                
                                                     gint                         scale,
 						    GtkIconLookupFlags           flags);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *   gtk_icon_theme_load_icon             (GtkIconTheme                *icon_theme,
-						    const gchar                 *icon_name,
-						    gint                         size,
-						    GtkIconLookupFlags           flags,
-						    GError                     **error);
+GdkPaintable *gtk_icon_theme_load_icon             (GtkIconTheme                *icon_theme,
+                                                    const char                  *icon_name,
+                                                    int                          size,
+                                                    GtkIconLookupFlags           flags,
+                                                    GError                     **error);
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf *   gtk_icon_theme_load_icon_for_scale   (GtkIconTheme                *icon_theme,
+GdkPaintable *gtk_icon_theme_load_icon_for_scale   (GtkIconTheme                *icon_theme,
                                                     const gchar                 *icon_name,
                                                     gint                         size,
                                                     gint                         scale,
