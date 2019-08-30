@@ -225,10 +225,6 @@ GDK_AVAILABLE_IN_ALL
 GdkPaintable *        gtk_icon_info_load_icon          (GtkIconInfo   *icon_info,
                                                         GError       **error);
 GDK_AVAILABLE_IN_ALL
-GdkTexture *          gtk_icon_info_load_texture       (GtkIconInfo   *icon_info,
-                                                        GError       **error);
-
-GDK_AVAILABLE_IN_ALL
 void                  gtk_icon_info_load_icon_async   (GtkIconInfo          *icon_info,
                                                        GCancellable         *cancellable,
                                                        GAsyncReadyCallback   callback,

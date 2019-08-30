@@ -2320,7 +2320,7 @@ gtk_icon_theme_load_icon_for_scale (GtkIconTheme        *icon_theme,
                                     GError             **error)
 {
   GtkIconInfo *icon_info;
-  GdkTexture *texture = NULL;
+  GdkPaintable *paintable = NULL;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), NULL);
   g_return_val_if_fail (icon_name != NULL, NULL);
@@ -2338,11 +2338,11 @@ gtk_icon_theme_load_icon_for_scale (GtkIconTheme        *icon_theme,
       return NULL;
     }
 
-  texture = gtk_icon_info_load_texture (icon_info, error);
+  paintable = gtk_icon_info_load_icon (icon_info, error);
   g_prefix_error (error, "Failed to load %s: ", icon_info->filename);
   g_object_unref (icon_info);
 
-  return GDK_PAINTABLE (texture);
+  return paintable;
 }
 
 /**
@@ -3803,39 +3803,12 @@ icon_info_load_pixbuf (GtkIconInfo  *icon_info,
  * the #GtkIconInfo. If this flag has been specified, the pixbuf
  * returned by this function will be scaled to the exact size.
  *
- * Returns: (transfer full) (nullable): the rendered icon; this may be a newly
- *     created icon or a new reference to an internal icon, so you must
- *     not modify the icon. Use g_object_unref() to release your reference
- *     to the icon.
- *     If the icon could not be loaded, %NULL is returned and @error is set.
+ * Returns: (transfer full) (nullable): the rendered icon.
+ *   Use g_object_unref() to release your reference to the icon.
  */
 GdkPaintable *
 gtk_icon_info_load_icon (GtkIconInfo *icon_info,
                          GError     **error)
-{
-  g_return_val_if_fail (icon_info != NULL, NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-
-  return (GdkPaintable *)gtk_icon_info_load_texture (icon_info, error);
-}
-
-/**
- * gtk_icon_info_load_texture:
- * @icon_info: a #GtkIconInfo
- * @error: (nullable): location to store error information on failure,
- *   or %NULL.
- *
- * Returns a texture object that can be used to render the icon
- * with GSK.
- *
- * Returns: (transfer full) (nullable): the icon texture; this may be a newly
- *     created texture or a new reference to an exiting texture. Use
- *     g_object_unref() to release your reference.
- *     In case of failure, %NULL is returned and @error is set
- */
-GdkTexture *
-gtk_icon_info_load_texture (GtkIconInfo  *icon_info,
-                            GError      **error)
 {
   g_return_val_if_fail (icon_info != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
@@ -3875,7 +3848,7 @@ gtk_icon_info_load_texture (GtkIconInfo  *icon_info,
   if (icon_info->in_cache != NULL)
     ensure_in_lru_cache (icon_info->in_cache, icon_info);
 
-  return g_object_ref (icon_info->texture);
+  return GDK_PAINTABLE (g_object_ref (icon_info->texture));
 }
 
 static void
@@ -3956,7 +3929,6 @@ gtk_icon_info_load_icon_finish (GtkIconInfo   *icon_info,
 {
   GTask *task = G_TASK (result);
   GtkIconInfo *dup;
-  GdkTexture *texture;
 
   g_return_val_if_fail (g_task_is_valid (result, icon_info), NULL);
 
@@ -3982,12 +3954,7 @@ gtk_icon_info_load_icon_finish (GtkIconInfo   *icon_info,
   g_assert (icon_info_get_pixbuf_ready (icon_info));
 
   /* This is now guaranteed to not block */
-  texture = gtk_icon_info_load_texture (icon_info, error);
-
-  if (texture)
-    return GDK_PAINTABLE (texture);
-
-  return NULL;
+  return gtk_icon_info_load_icon (icon_info, error);
 }
 
 static void
@@ -4416,7 +4383,7 @@ gtk_icon_info_load_symbolic (GtkIconInfo    *icon_info,
     *was_symbolic = is_symbolic;
 
   if (!is_symbolic)
-    return (GdkPaintable *)gtk_icon_info_load_texture (icon_info, error);
+    return gtk_icon_info_load_icon (icon_info, error);
 
   pixbuf = gtk_icon_info_load_symbolic_internal (icon_info,
                                                  fg, success_color,
@@ -4513,7 +4480,7 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
     *was_symbolic = is_symbolic;
 
   if (!is_symbolic)
-    return (GdkPaintable *)gtk_icon_info_load_texture (icon_info, error);
+    return gtk_icon_info_load_icon (icon_info, error);
 
   gtk_icon_theme_lookup_symbolic_colors (gtk_style_context_lookup_style (context),
                                          &fg, &success_color,

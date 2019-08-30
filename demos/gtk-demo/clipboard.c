@@ -110,7 +110,7 @@ get_image_paintable (GtkImage *image)
       icon_info = gtk_icon_theme_lookup_icon (icon_theme, icon_name, 48, GTK_ICON_LOOKUP_GENERIC_FALLBACK);
       if (icon_info == NULL)
         return NULL;
-      return GDK_PAINTABLE (gtk_icon_info_load_texture (icon_info, NULL));
+      return gtk_icon_info_load_icon (icon_info, NULL);
     default:
       g_warning ("Image storage type %d not handled",
                  gtk_image_get_storage_type (image));
