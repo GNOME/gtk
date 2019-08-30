@@ -3740,37 +3740,10 @@ proxy_pixbuf_destroy (guchar *pixels, gpointer data)
   g_object_unref (icon_info);
 }
 
-/**
- * gtk_icon_info_load_icon:
- * @icon_info: a #GtkIconInfo from gtk_icon_theme_lookup_icon()
- * @error: (allow-none): location to store error information on failure,
- *     or %NULL.
- *
- * Renders an icon previously looked up in an icon theme using
- * gtk_icon_theme_lookup_icon(); the size will be based on the size
- * passed to gtk_icon_theme_lookup_icon(). Note that the resulting
- * pixbuf may not be exactly this size; an icon theme may have icons
- * that differ slightly from their nominal sizes, and in addition GTK+
- * will avoid scaling icons that it considers sufficiently close to the
- * requested size or for which the source image would have to be scaled
- * up too far. (This maintains sharpness.). This behaviour can be changed
- * by passing the %GTK_ICON_LOOKUP_FORCE_SIZE flag when obtaining
- * the #GtkIconInfo. If this flag has been specified, the pixbuf
- * returned by this function will be scaled to the exact size.
- *
- * Returns: (transfer full) (nullable): the rendered icon; this may be a newly
- *     created icon or a new reference to an internal icon, so you must
- *     not modify the icon. Use g_object_unref() to release your reference
- *     to the icon.
- *     If the icon could not be loaded, %NULL is returned and @error is set.
- */
-GdkPixbuf *
-gtk_icon_info_load_icon (GtkIconInfo *icon_info,
-                         GError     **error)
+static GdkPixbuf *
+icon_info_load_pixbuf (GtkIconInfo  *icon_info,
+                       GError      **error)
 {
-  g_return_val_if_fail (icon_info != NULL, NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-
   if (!icon_info_ensure_scale_and_pixbuf (icon_info))
     {
       if (icon_info->load_error)
@@ -3813,6 +3786,40 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
 }
 
 /**
+ * gtk_icon_info_load_icon:
+ * @icon_info: a #GtkIconInfo from gtk_icon_theme_lookup_icon()
+ * @error: (allow-none): location to store error information on failure,
+ *     or %NULL.
+ *
+ * Renders an icon previously looked up in an icon theme using
+ * gtk_icon_theme_lookup_icon(); the size will be based on the size
+ * passed to gtk_icon_theme_lookup_icon(). Note that the resulting
+ * pixbuf may not be exactly this size; an icon theme may have icons
+ * that differ slightly from their nominal sizes, and in addition GTK+
+ * will avoid scaling icons that it considers sufficiently close to the
+ * requested size or for which the source image would have to be scaled
+ * up too far. (This maintains sharpness.). This behaviour can be changed
+ * by passing the %GTK_ICON_LOOKUP_FORCE_SIZE flag when obtaining
+ * the #GtkIconInfo. If this flag has been specified, the pixbuf
+ * returned by this function will be scaled to the exact size.
+ *
+ * Returns: (transfer full) (nullable): the rendered icon; this may be a newly
+ *     created icon or a new reference to an internal icon, so you must
+ *     not modify the icon. Use g_object_unref() to release your reference
+ *     to the icon.
+ *     If the icon could not be loaded, %NULL is returned and @error is set.
+ */
+GdkPaintable *
+gtk_icon_info_load_icon (GtkIconInfo *icon_info,
+                         GError     **error)
+{
+  g_return_val_if_fail (icon_info != NULL, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  return (GdkPaintable *)gtk_icon_info_load_texture (icon_info, error);
+}
+
+/**
  * gtk_icon_info_load_texture:
  * @icon_info: a #GtkIconInfo
  * @error: (nullable): location to store error information on failure,
@@ -3837,7 +3844,7 @@ gtk_icon_info_load_texture (GtkIconInfo  *icon_info,
     {
       GdkPixbuf *pixbuf;
 
-      pixbuf = gtk_icon_info_load_icon (icon_info, NULL);
+      pixbuf = icon_info_load_pixbuf (icon_info, NULL);
 
       if (!pixbuf)
         {
@@ -3904,7 +3911,6 @@ gtk_icon_info_load_icon_async (GtkIconInfo         *icon_info,
                                gpointer             user_data)
 {
   GTask *task;
-  GdkPixbuf *pixbuf;
   GtkIconInfo *dup;
   GError *error = NULL;
 
@@ -3912,11 +3918,12 @@ gtk_icon_info_load_icon_async (GtkIconInfo         *icon_info,
 
   if (icon_info_get_pixbuf_ready (icon_info))
     {
-      pixbuf = gtk_icon_info_load_icon (icon_info, &error);
-      if (pixbuf == NULL)
+      GdkPaintable *paintable = gtk_icon_info_load_icon (icon_info, &error);
+
+      if (paintable == NULL)
         g_task_return_error (task, error);
       else
-        g_task_return_pointer (task, pixbuf, g_object_unref);
+        g_task_return_pointer (task, paintable, g_object_unref);
       g_object_unref (task);
     }
   else
