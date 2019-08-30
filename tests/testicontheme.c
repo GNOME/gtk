@@ -211,15 +211,15 @@ main (int argc, char *argv[])
 
       if (icon_info)
 	{
-          GdkPixbuf *pixbuf;
+          GdkTexture *texture;
 
           g_print ("Base size: %d, Scale: %d\n", gtk_icon_info_get_base_size (icon_info), gtk_icon_info_get_base_scale (icon_info));
 
-          pixbuf = gtk_icon_info_load_icon (icon_info, NULL);
-          if (pixbuf != NULL)
+          texture = GDK_TEXTURE (gtk_icon_info_load_icon (icon_info, NULL));
+          if (texture != NULL)
             {
-              g_print ("Pixbuf size: %dx%d\n", gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf));
-              g_object_unref (pixbuf);
+              g_print ("texture size: %dx%d\n", gdk_texture_get_width (texture), gdk_texture_get_height (texture));
+              g_object_unref (texture);
             }
 
 	  g_object_unref (icon_info);
