@@ -128,18 +128,16 @@ insert_text (GtkTextBuffer *buffer)
 {
   GtkTextIter iter;
   GtkTextIter start, end;
-  GdkPixbuf *pixbuf;
   GdkTexture *texture;
   GtkIconTheme *icon_theme;
 
   icon_theme = gtk_icon_theme_get_default ();
-  pixbuf = gtk_icon_theme_load_icon (icon_theme,
-                                     "gtk3-demo",
-                                     32,
-                                     GTK_ICON_LOOKUP_GENERIC_FALLBACK,
-                                     NULL);
-  g_assert (pixbuf);
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  texture = GDK_TEXTURE (gtk_icon_theme_load_icon (icon_theme,
+                                                   "gtk3-demo",
+                                                   32,
+                                                   GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                                                   NULL));
+  g_assert (texture);
 
   /* get start of buffer; each insertion will revalidate the
    * iterator to point to just after the inserted text.
@@ -379,7 +377,6 @@ insert_text (GtkTextBuffer *buffer)
   gtk_text_buffer_get_bounds (buffer, &start, &end);
   gtk_text_buffer_apply_tag_by_name (buffer, "word_wrap", &start, &end);
 
-  g_object_unref (pixbuf);
   g_object_unref (texture);
 }
 
