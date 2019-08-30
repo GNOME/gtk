@@ -7480,23 +7480,6 @@ recent_clear_model (GtkFileChooserWidget *impl,
   g_set_object (&priv->recent_model, NULL);
 }
 
-static gboolean
-recent_item_is_private (GtkRecentInfo *info)
-{
-  gboolean is_private = FALSE;
-
-  if (gtk_recent_info_get_private_hint (info))
-    {
-      const gchar *app_name = g_get_application_name ();
-      gchar **recent_apps = gtk_recent_info_get_applications (info, NULL);
-      is_private = !g_strv_contains ((const char *const*) recent_apps,
-                                     app_name);
-      g_strfreev (recent_apps);
-    }
-
-  return is_private;
-}
-
 static void
 recent_start_loading (GtkFileChooserWidget *impl)
 {
@@ -7531,6 +7514,7 @@ recent_start_loading (GtkFileChooserWidget *impl)
   if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN)
     {
       const int limit = DEFAULT_RECENT_FILES_LIMIT;
+      const char *app_name = g_get_application_name ();
       GList *l;
       int n;
 
@@ -7541,8 +7525,10 @@ recent_start_loading (GtkFileChooserWidget *impl)
           GtkRecentInfo *info = l->data;
           GFile *file;
 
-          if (recent_item_is_private (info))
+          if (gtk_recent_info_get_private_hint (info) &&
+              !gtk_recent_info_has_application (info, app_name))
             continue;
+
 
           file = g_file_new_for_uri (gtk_recent_info_get_uri (info));
           _gtk_file_system_model_add_and_query_file (priv->recent_model,
