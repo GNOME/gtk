@@ -13,13 +13,13 @@
 # Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2011, 2012, 2013, 2014, 2015, 2016.
 # Shushi KUROSE <md81bird@hitaki.net>, 2013.
 # Hajime Taira <htaira@redhat.com>, 2015.
-# sicklylife translation@sicklylife.jp>, 2019.
+# sicklylife <translation@sicklylife.jp>, 2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-30 14:11+0000\n"
+"POT-Creation-Date: 2019-08-31 12:31+0000\n"
 "PO-Revision-Date: 2019-08-31 21:20+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
@@ -3352,7 +3352,7 @@ msgstr "検索"
 
 #: gtk/gtksearchentry.c:594
 msgid "Clear entry"
-msgstr "一覧を消去する"
+msgstr "エントリーを消去する"
 
 #. Translators: This string is used to mark left/right variants of modifier
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
@@ -3526,9 +3526,9 @@ msgid ""
 "the internals of any GTK application. Using it may cause the application to "
 "break or crash."
 msgstr ""
-"GTK+ インスペクターは、GTK アプリケーションの内部状態を参照、変更できる対話"
-"的デバッガーです。使用方法によっては、アプリケーションの異常動作やクラッシュ"
-"を引き起こす可能性があります。"
+"GTK+ インスペクターは、GTK アプリケーションの内部状態を参照、変更できる対話的"
+"デバッガーです。使用方法によっては、アプリケーションの異常動作やクラッシュを"
+"引き起こす可能性があります。"
 
 #: gtk/gtkwindow.c:9025
 msgid "Don’t show this message again"
