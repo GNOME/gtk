@@ -4456,7 +4456,8 @@ gtk_icon_theme_lookup_symbolic_colors (GtkCssStyle *style,
  *
  * See gtk_icon_info_load_symbolic() for more details.
  *
- * Returns: (transfer full): a #GdkPixbuf representing the loaded icon
+ * Returns: (transfer full) (nullable): a #GdkPixbuf representing the loaded icon
+ *   or %NULL If the icon could not be loaded
  */
 GdkPaintable *
 gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
