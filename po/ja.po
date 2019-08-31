@@ -7,21 +7,20 @@
 # Takeshi AIHANA <takeshi.aihana@gmail.com>, 2003-2009.
 # KAMAGASAKO Masatoshi <emerald@gnome.gr.jp>, 2003.
 # Satoru SATOh <ss@gnome.gr.jp>, 2006.
-# Nishibori Kiyotaka <ml.nishibori.kiyotaka@gmail.com>, 2009-2010.
+# Nishibori Kiyotaka <ml.nishibori.kiyotaka@gmail.com>, 2009-2010, 2018.
 # Masato Hashimoto <cabezon.hashimoto@gmail.com>, 2010.
 # IWAI, Masaharu <iwaim.sub@gmail.com>, 2010.
 # Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2011, 2012, 2013, 2014, 2015, 2016.
 # Shushi KUROSE <md81bird@hitaki.net>, 2013.
 # Hajime Taira <htaira@redhat.com>, 2015.
-# nishbone2016 <ml.nishibori.kiyotaka@gmail.com>, 2018.
-# sicklylife <translation@sicklylife.jp>, 2019.
+# sicklylife translation@sicklylife.jp>, 2019.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-30 14:11+0000\n"
-"PO-Revision-Date: 2019-01-05 10:06+0900\n"
+"PO-Revision-Date: 2019-08-31 21:20+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -49,16 +48,14 @@ msgstr ""
 
 #: gdk/gdkcontentprovider.c:108 gdk/gdkcontentproviderimpl.c:215
 #: gtk/gtkdnd.c:816
-#, fuzzy, c-format
-#| msgid "Could not read the contents of %s"
+#, c-format
 msgid "Cannot provide contents as “%s”"
-msgstr "%s の内容を読み込めませんでした"
+msgstr ""
 
 #: gdk/gdkcontentprovider.c:129
-#, fuzzy, c-format
-#| msgid "Could not read the contents of %s"
+#, c-format
 msgid "Cannot provide contents as %s"
-msgstr "%s の内容を読み込めませんでした"
+msgstr ""
 
 #: gdk/gdkdrop.c:110
 msgid "Drag’n’drop from other applications is not supported."
@@ -606,10 +603,8 @@ msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:64
-#, fuzzy
-#| msgid "Can't close stream"
 msgid "writing a closed stream"
-msgstr "ストリームをクローズできません"
+msgstr ""
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:86
 msgid "g_try_realloc () failed"
@@ -672,14 +667,12 @@ msgid "COLORS"
 msgstr "COLORS"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:292
-#, fuzzy, c-format
-#| msgid "Starting %s"
+#, c-format
 msgid "Starting “%s”"
-msgstr "%s の起動中です"
+msgstr "“%s”の起動中です"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:305
-#, fuzzy, c-format
-#| msgid "Opening “%s”."
+#, c-format
 msgid "Opening “%s”"
 msgstr "“%s”を開いています"
 
@@ -725,10 +718,9 @@ msgid "Invalid formats in compound text conversion."
 msgstr ""
 
 #: gdk/x11/gdktextlistconverter-x11.c:202
-#, fuzzy, c-format
-#| msgid "Opening “%s”."
+#, c-format
 msgid "Unsupported encoding “%s”"
-msgstr "“%s”を開いています"
+msgstr ""
 
 #: gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
@@ -1258,10 +1250,9 @@ msgid "Malformed data: URL"
 msgstr ""
 
 #: gtk/css/gtkcssdataurl.c:141
-#, fuzzy, c-format
-#| msgid "Could not clear list"
+#, c-format
 msgid "Could not unescape string"
-msgstr "一覧をクリアできませんでした"
+msgstr ""
 
 #: gtk/gtkaboutdialog.c:118 gtk/ui/gtkaboutdialog.ui:152
 msgid "License"
@@ -1884,9 +1875,6 @@ msgid "Alpha"
 msgstr "アルファ"
 
 #: gtk/gtkcolorswatch.c:262
-#, fuzzy
-#| msgctxt "Action name"
-#| msgid "Customize"
 msgid "Customize"
 msgstr "カスタマイズ"
 
@@ -2189,10 +2177,8 @@ msgid "Show _Size Column"
 msgstr "サイズを表示する(_S)"
 
 #: gtk/gtkfilechooserwidget.c:2216
-#, fuzzy
-#| msgid "Show _Size Column"
 msgid "Show T_ype Column"
-msgstr "サイズを表示する(_S)"
+msgstr "種類を表示する(_Y)"
 
 #: gtk/gtkfilechooserwidget.c:2217
 msgid "Show _Time"
@@ -2267,14 +2253,11 @@ msgstr "%Y年%-m月%-d日"
 
 #: gtk/gtkfilechooserwidget.c:4829 gtk/gtkfilechooserwidget.c:4837
 msgid "Program"
-msgstr ""
+msgstr "プログラム"
 
 #: gtk/gtkfilechooserwidget.c:4830
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "AudioMute"
 msgid "Audio"
-msgstr "AudioMute"
+msgstr "音声"
 
 #: gtk/gtkfilechooserwidget.c:4831 gtk/gtkfontbutton.c:611
 #: gtk/inspector/visual.ui:187
@@ -2283,52 +2266,43 @@ msgstr "フォント"
 
 #: gtk/gtkfilechooserwidget.c:4832
 msgid "Image"
-msgstr ""
+msgstr "画像"
 
 #: gtk/gtkfilechooserwidget.c:4833
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Arch A"
 msgid "Archive"
-msgstr "Arch A"
+msgstr "アーカイブ"
 
 #: gtk/gtkfilechooserwidget.c:4834
 msgid "Markup"
-msgstr ""
+msgstr "マークアップ"
 
 #: gtk/gtkfilechooserwidget.c:4835 gtk/gtkfilechooserwidget.c:4836
 msgid "Text"
-msgstr ""
+msgstr "テキスト"
 
 #: gtk/gtkfilechooserwidget.c:4838
 msgid "Video"
-msgstr ""
+msgstr "動画"
 
 #: gtk/gtkfilechooserwidget.c:4839
 msgid "Contacts"
-msgstr ""
+msgstr "連絡先"
 
 #: gtk/gtkfilechooserwidget.c:4840
-#, fuzzy
-#| msgid "calendar:MY"
 msgid "Calendar"
-msgstr "calendar:YM"
+msgstr "カレンダー"
 
 #: gtk/gtkfilechooserwidget.c:4841
-#, fuzzy
-#| msgid "Documented by"
 msgid "Document"
-msgstr "ドキュメント担当"
+msgstr "ドキュメント"
 
 #: gtk/gtkfilechooserwidget.c:4842
-#, fuzzy
-#| msgid "_Orientation:"
 msgid "Presentation"
-msgstr "用紙の向き(_O):"
+msgstr "プレゼンテーション"
 
 #: gtk/gtkfilechooserwidget.c:4843
 msgid "Spreadsheet"
-msgstr ""
+msgstr "表計算"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
@@ -2396,24 +2370,16 @@ msgid "None"
 msgstr "なし"
 
 #: gtk/gtkfontchooserwidget.c:1590
-#, fuzzy
-#| msgid "_Width:"
 msgid "Width"
-msgstr "幅(_W):"
+msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:1591
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Right"
 msgid "Weight"
-msgstr "Right"
+msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:1592
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgid "Italic"
-msgstr "斜体(_I)"
+msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:1593
 msgid "Slant"
@@ -2428,18 +2394,12 @@ msgid "Default"
 msgstr "デフォルト"
 
 #: gtk/gtkfontchooserwidget.c:2167
-#, fuzzy
-#| msgctxt "event phase"
-#| msgid "Capture"
 msgid "Ligatures"
-msgstr "キャプチャ"
+msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:2168
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "US Letter Plus"
 msgid "Letter Case"
-msgstr "US レタープラス"
+msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:2169
 msgid "Number Case"
@@ -2454,10 +2414,8 @@ msgid "Number Formatting"
 msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:2172
-#, fuzzy
-#| msgid "Dark Variant"
 msgid "Character Variants"
-msgstr "ダークテーマ"
+msgstr ""
 
 #: gtk/gtkglarea.c:288
 msgid "OpenGL context creation failed"
@@ -2521,10 +2479,8 @@ msgid "Copy _Link Address"
 msgstr "リンクのアドレスをコピー(_L)"
 
 #: gtk/gtklinkbutton.c:247
-#, fuzzy
-#| msgid "Copy URL"
 msgid "_Copy URL"
-msgstr "URL のコピー"
+msgstr "URL をコピー(_C)"
 
 #: gtk/gtklinkbutton.c:505
 msgid "Invalid URI"
@@ -2657,25 +2613,20 @@ msgid "_Domain"
 msgstr "ドメイン(_D)"
 
 #: gtk/gtkmountoperation.c:701
-#, fuzzy
-#| msgid "Volume Up"
 msgid "Volume type"
-msgstr "音量を上げます"
+msgstr "ボリュームの種類"
 
 #: gtk/gtkmountoperation.c:711
 msgid "_Hidden"
-msgstr ""
+msgstr "隠しボリューム(_H)"
 
 #: gtk/gtkmountoperation.c:714
-#, fuzzy
-#| msgctxt "input method menu"
-#| msgid "Windows IME"
 msgid "_Windows system"
-msgstr "Windows IME"
+msgstr "Windows システムボリューム(_W)"
 
 #: gtk/gtkmountoperation.c:717
 msgid "_PIM"
-msgstr ""
+msgstr "PIM(_P)"
 
 #: gtk/gtkmountoperation.c:723
 msgid "_Password"
@@ -2788,32 +2739,24 @@ msgid "Page Setup"
 msgstr "ページの設定"
 
 #: gtk/gtkpasswordentry.c:131
-#, fuzzy
-#| msgid "Hide Others"
 msgid "Hide text"
-msgstr "他を隠す"
+msgstr "テキストを隠す"
 
 #: gtk/gtkpasswordentry.c:136 gtk/gtkpasswordentry.c:483
-#, fuzzy
-#| msgid "Show data"
 msgid "Show text"
-msgstr "データの表示"
+msgstr "テキストを表示する"
 
 #: gtk/gtkpasswordentry.c:152
 msgid "Caps Lock is on"
 msgstr "Caps Lock がオンになっています"
 
 #: gtk/gtkpasswordentry.c:344
-#, fuzzy
-#| msgid "_Password"
 msgid "Password"
-msgstr "パスワード(_P)"
+msgstr "パスワード"
 
 #: gtk/gtkpasswordentry.c:557
-#, fuzzy
-#| msgid "Show _Time"
 msgid "_Show Text"
-msgstr "時刻を表示する(_T)"
+msgstr "テキストを表示(_S)"
 
 #: gtk/gtkpathbar.c:1359
 msgid "File System Root"
@@ -2821,10 +2764,9 @@ msgstr "ファイルシステムのルート"
 
 #. translators: %s is the name of a cloud provider for files
 #: gtk/gtkplacessidebar.c:977
-#, fuzzy, c-format
-#| msgid "Open '%s'"
+#, c-format
 msgid "Open %s"
-msgstr "'%s' を開きます"
+msgstr "%s を開きます"
 
 #: gtk/gtkplacessidebar.c:1065
 msgid "Recent"
@@ -2835,16 +2777,12 @@ msgid "Recent files"
 msgstr "最近開いたファイル"
 
 #: gtk/gtkplacessidebar.c:1076
-#, fuzzy
-#| msgid "_Start"
 msgid "Starred"
-msgstr "開始(_S)"
+msgstr "星付き"
 
 #: gtk/gtkplacessidebar.c:1078
-#, fuzzy
-#| msgid "_Start"
 msgid "Starred files"
-msgstr "開始(_S)"
+msgstr "星を付けたファイル"
 
 #: gtk/gtkplacessidebar.c:1089
 msgid "Open your personal folder"
@@ -2948,15 +2886,14 @@ msgstr "“%s”を起動できません"
 #. * device failed. %s is the name of the device.
 #.
 #: gtk/gtkplacessidebar.c:2384
-#, fuzzy, c-format
-#| msgid "Opening “%s”."
+#, c-format
 msgid "Error unlocking “%s”"
-msgstr "“%s”を開いています"
+msgstr "“%s”のロック解除時にエラー"
 
 #: gtk/gtkplacessidebar.c:2386
 #, c-format
 msgid "Unable to access “%s”"
-msgstr "“%s” にアクセスできません"
+msgstr "“%s”にアクセスできません"
 
 #: gtk/gtkplacessidebar.c:2615
 msgid "This name is already taken"
@@ -3065,16 +3002,16 @@ msgstr "キャンセル(_L)"
 
 #: gtk/gtkplacesview.c:1614
 msgid "AppleTalk"
-msgstr ""
+msgstr "AppleTalk"
 
 #. Translators: do not translate ftp:// and ftps://
 #: gtk/gtkplacesview.c:1618
 msgid "File Transfer Protocol"
-msgstr ""
+msgstr "ファイル転送プロトコル"
 
 #: gtk/gtkplacesview.c:1618
 msgid "ftp:// or ftps://"
-msgstr ""
+msgstr "ftp:// または ftps://"
 
 #: gtk/gtkplacesview.c:1621
 msgid "Network File System"
@@ -3082,25 +3019,25 @@ msgstr "ネットワークファイルシステム"
 
 #: gtk/gtkplacesview.c:1624
 msgid "Samba"
-msgstr ""
+msgstr "Samba"
 
 #. Translators: do not translate sftp:// and ssh://
 #: gtk/gtkplacesview.c:1628
 msgid "SSH File Transfer Protocol"
-msgstr ""
+msgstr "SSH ファイル転送プロトコル"
 
 #: gtk/gtkplacesview.c:1628
 msgid "sftp:// or ssh://"
-msgstr ""
+msgstr "sftp:// または ssh://"
 
 #. Translators: do not translate dav:// and davs://
 #: gtk/gtkplacesview.c:1632
 msgid "WebDAV"
-msgstr ""
+msgstr "WebDAV"
 
 #: gtk/gtkplacesview.c:1632
 msgid "dav:// or davs://"
-msgstr ""
+msgstr "dav:// または davs://"
 
 #: gtk/gtkplacesview.c:1701
 msgid "_Disconnect"
@@ -3127,11 +3064,10 @@ msgstr "このコンピューター"
 #. * i.e. 1 GB / 24 GB available.
 #.
 #: gtk/gtkplacesviewrow.c:133
-#, fuzzy, c-format
-#| msgid "Not available"
+#, c-format
 msgid "%s / %s available"
 msgid_plural "%s / %s available"
-msgstr[0] "利用できません"
+msgstr[0] "%s / %s 利用可能"
 
 #: gtk/gtkplacesviewrow.c:480
 msgid "Disconnect"
@@ -3415,10 +3351,8 @@ msgid "Search"
 msgstr "検索"
 
 #: gtk/gtksearchentry.c:594
-#, fuzzy
-#| msgid "_Clear List"
 msgid "Clear entry"
-msgstr "一覧のクリア(_C)"
+msgstr "一覧を消去する"
 
 #. Translators: This string is used to mark left/right variants of modifier
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
@@ -3473,10 +3407,8 @@ msgid "Swipe left"
 msgstr ""
 
 #: gtk/gtkshortcutsshortcut.c:170
-#, fuzzy
-#| msgid "Two finger swipe right"
 msgid "Swipe right"
-msgstr "二本の指で右にスワイプする"
+msgstr ""
 
 #. Translators: This is the window title for the shortcuts window in normal mode
 #: gtk/gtkshortcutswindow.c:919
@@ -3583,23 +3515,18 @@ msgid "Always on Top"
 msgstr "常に最前面に配置する"
 
 #: gtk/gtkwindow.c:9018
-#, fuzzy, c-format
-#| msgid "Do you want to use GTK+ Inspector?"
+#, c-format
 msgid "Do you want to use GTK Inspector?"
-msgstr "GTK+ インスペクターを使用しますか?"
+msgstr "GTK インスペクターを使用しますか?"
 
 #: gtk/gtkwindow.c:9020
-#, fuzzy, c-format
-#| msgid ""
-#| "GTK+ Inspector is an interactive debugger that lets you explore and "
-#| "modify the internals of any GTK+ application. Using it may cause the "
-#| "application to break or crash."
+#, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK application. Using it may cause the application to "
 "break or crash."
 msgstr ""
-"GTK+ インスペクターは、GTK+ アプリケーションの内部状態を参照、変更できる対話"
+"GTK+ インスペクターは、GTK アプリケーションの内部状態を参照、変更できる対話"
 "的デバッガーです。使用方法によっては、アプリケーションの異常動作やクラッシュ"
 "を引き起こす可能性があります。"
 
@@ -3612,10 +3539,8 @@ msgid "Activate"
 msgstr "有効化"
 
 #: gtk/inspector/action-editor.c:316
-#, fuzzy
-#| msgid "State"
 msgid "Set State"
-msgstr "状態"
+msgstr ""
 
 #: gtk/inspector/actions.ui:31
 msgid "Enabled"
@@ -3651,10 +3576,8 @@ msgid "Target"
 msgstr "ターゲット"
 
 #: gtk/inspector/css-editor.c:127
-#, fuzzy
-#| msgid "You can type here any CSS rule recognized by GTK+."
 msgid "You can type here any CSS rule recognized by GTK."
-msgstr "GTK+ が認識可能な CSS ルールをここに記述できます。"
+msgstr "GTK が認識可能な CSS ルールをここに記述できます。"
 
 #: gtk/inspector/css-editor.c:128
 msgid ""
@@ -3723,20 +3646,16 @@ msgid "None"
 msgstr "なし"
 
 #: gtk/inspector/general.ui:27
-#, fuzzy
-#| msgid "GTK+ Version"
 msgid "GTK Version"
-msgstr "GTK+ バージョン"
+msgstr "GTK バージョン"
 
 #: gtk/inspector/general.ui:54
 msgid "GDK Backend"
 msgstr "GDK バックエンド"
 
 #: gtk/inspector/general.ui:81
-#, fuzzy
-#| msgid "GL Rendering"
 msgid "GSK Renderer"
-msgstr "GL レンダリング"
+msgstr ""
 
 #: gtk/inspector/general.ui:108
 msgid "Pango Fontmap"
@@ -3751,14 +3670,12 @@ msgid "Display"
 msgstr "ディスプレイ"
 
 #: gtk/inspector/general.ui:379
-#, fuzzy
 msgid "RGBA Visual"
-msgstr "RGBA 表現"
+msgstr ""
 
 #: gtk/inspector/general.ui:406
-#, fuzzy
 msgid "Composited"
-msgstr "コンピューター"
+msgstr ""
 
 #: gtk/inspector/general.ui:443
 msgid "GL Version"
@@ -3845,16 +3762,12 @@ msgid "Properties"
 msgstr "プロパティ"
 
 #: gtk/inspector/misc-info.ui:303
-#, fuzzy
-#| msgid "GL Rendering"
 msgid "Renderer"
-msgstr "GL レンダリング"
+msgstr ""
 
 #: gtk/inspector/misc-info.ui:339
-#, fuzzy
-#| msgid "Frame count"
 msgid "Frame Clock"
-msgstr "フレームカウント"
+msgstr ""
 
 #: gtk/inspector/misc-info.ui:375
 msgid "Tick Callback"
@@ -3908,16 +3821,12 @@ msgid "Uneditable property type: %s"
 msgstr "編集不可能なプロパティ型: %s"
 
 #: gtk/inspector/prop-editor.c:1216
-#, fuzzy
-#| msgid "Attribute"
 msgid "Attribute:"
-msgstr "属性"
+msgstr "属性:"
 
 #: gtk/inspector/prop-editor.c:1219
-#, fuzzy
-#| msgid "Model:"
 msgid "Model"
-msgstr "モデル:"
+msgstr "モデル"
 
 #: gtk/inspector/prop-editor.c:1224
 msgid "Column:"
@@ -3929,10 +3838,9 @@ msgid "None"
 msgstr "なし"
 
 #: gtk/inspector/prop-editor.c:1323
-#, fuzzy, c-format
-#| msgid "Object: %p (%s)"
+#, c-format
 msgid "Action from: %p (%s)"
-msgstr "オブジェクト: %p (%s)"
+msgstr ""
 
 #: gtk/inspector/prop-editor.c:1426
 msgid "bidirectional"
@@ -3959,10 +3867,9 @@ msgid "Source:"
 msgstr "ソース:"
 
 #: gtk/inspector/recorder.c:997
-#, fuzzy, c-format
-#| msgid "Saving CSS failed"
+#, c-format
 msgid "Saving RenderNode failed"
-msgstr "CSS の保存に失敗しました"
+msgstr ""
 
 #: gtk/inspector/recorder.ui:15
 msgid "Record frames"
@@ -4092,10 +3999,8 @@ msgid "GL rendering is disabled"
 msgstr "GL レンダリングは無効です"
 
 #: gtk/inspector/visual.ui:54
-#, fuzzy
-#| msgid "GTK+ Theme"
 msgid "GTK Theme"
-msgstr "GTK+ テーマ"
+msgstr "GTK テーマ"
 
 #: gtk/inspector/visual.ui:79
 msgid "Dark Variant"
@@ -4194,11 +4099,8 @@ msgid "Objects"
 msgstr "オブジェクト"
 
 #: gtk/inspector/window.ui:232
-#, fuzzy
-#| msgctxt "printing option"
-#| msgid "Two Sided"
 msgid "Toggle Sidebar"
-msgstr "両面印刷"
+msgstr ""
 
 #: gtk/inspector/window.ui:258
 msgid "Refresh action state"
@@ -4241,10 +4143,8 @@ msgid "Global"
 msgstr ""
 
 #: gtk/inspector/window.ui:474
-#, fuzzy
-#| msgid "XSettings"
 msgid "Settings"
-msgstr "XSettings"
+msgstr ""
 
 #: gtk/inspector/window.ui:483
 msgid "Resources"
@@ -4263,18 +4163,13 @@ msgid "CSS"
 msgstr "CSS"
 
 #: gtk/inspector/window.ui:529
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "_Record"
 msgid "Recorder"
-msgstr "録音(_R)"
+msgstr ""
 
 #: gtk/open-type-layout.h:13
-#, fuzzy
-#| msgid "Accessible name"
 msgctxt "OpenType layout"
 msgid "Access All Alternates"
-msgstr "アクセシブルな名前"
+msgstr ""
 
 #: gtk/open-type-layout.h:14
 msgctxt "OpenType layout"
@@ -4292,11 +4187,9 @@ msgid "Above-base Substitutions"
 msgstr ""
 
 #: gtk/open-type-layout.h:17
-#, fuzzy
-#| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Alternative Fractions"
-msgstr "認証"
+msgstr ""
 
 #: gtk/open-type-layout.h:18
 msgctxt "OpenType layout"
@@ -4409,25 +4302,19 @@ msgid "Final Glyph on Line Alternates"
 msgstr ""
 
 #: gtk/open-type-layout.h:40
-#, fuzzy
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #2"
-msgstr "端末ページャー"
+msgstr ""
 
 #: gtk/open-type-layout.h:41
-#, fuzzy
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #3"
-msgstr "端末ページャー"
+msgstr ""
 
 #: gtk/open-type-layout.h:42
-#, fuzzy
-#| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms"
-msgstr "端末ページャー"
+msgstr ""
 
 #: gtk/open-type-layout.h:43
 msgctxt "OpenType layout"
@@ -4435,18 +4322,14 @@ msgid "Flattened accent forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:44
-#, fuzzy
-#| msgid "Actions"
 msgctxt "OpenType layout"
 msgid "Fractions"
-msgstr "アクション"
+msgstr ""
 
 #: gtk/open-type-layout.h:45
-#, fuzzy
-#| msgid "Focus Widget"
 msgctxt "OpenType layout"
 msgid "Full Widths"
-msgstr "フォーカスウィジェット"
+msgstr ""
 
 #: gtk/open-type-layout.h:46
 msgctxt "OpenType layout"
@@ -4494,12 +4377,9 @@ msgid "Half Widths"
 msgstr ""
 
 #: gtk/open-type-layout.h:55
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Initial Forms"
-msgstr "初期状態"
+msgstr ""
 
 #: gtk/open-type-layout.h:56
 msgctxt "OpenType layout"
@@ -4507,12 +4387,9 @@ msgid "Isolated Forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:57
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgctxt "OpenType layout"
 msgid "Italics"
-msgstr "斜体(_I)"
+msgstr ""
 
 #: gtk/open-type-layout.h:58
 msgctxt "OpenType layout"
@@ -4540,11 +4417,9 @@ msgid "JIS2004 Forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:63
-#, fuzzy
-#| msgid "Warning"
 msgctxt "OpenType layout"
 msgid "Kerning"
-msgstr "警告"
+msgstr ""
 
 #: gtk/open-type-layout.h:64
 msgctxt "OpenType layout"
@@ -4552,12 +4427,9 @@ msgid "Left Bounds"
 msgstr ""
 
 #: gtk/open-type-layout.h:65
-#, fuzzy
-#| msgctxt "cover page"
-#| msgid "Standard"
 msgctxt "OpenType layout"
 msgid "Standard Ligatures"
-msgstr "標準"
+msgstr ""
 
 #: gtk/open-type-layout.h:66
 msgctxt "OpenType layout"
@@ -4575,18 +4447,14 @@ msgid "Localized Forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:69
-#, fuzzy
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right alternates"
-msgstr "LRM 左→右 Mark(_L)"
+msgstr ""
 
 #: gtk/open-type-layout.h:70
-#, fuzzy
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
-msgstr "LRM 左→右 Mark(_L)"
+msgstr ""
 
 #: gtk/open-type-layout.h:71
 msgctxt "OpenType layout"
@@ -4649,11 +4517,9 @@ msgid "Optical Bounds"
 msgstr ""
 
 #: gtk/open-type-layout.h:83
-#, fuzzy
-#| msgid "Signals"
 msgctxt "OpenType layout"
 msgid "Ordinals"
-msgstr "シグナル"
+msgstr ""
 
 #: gtk/open-type-layout.h:84
 msgctxt "OpenType layout"
@@ -4676,11 +4542,9 @@ msgid "Proportional Kana"
 msgstr ""
 
 #: gtk/open-type-layout.h:88
-#, fuzzy
-#| msgid "Properties"
 msgctxt "OpenType layout"
 msgid "Proportional Figures"
-msgstr "プロパティ"
+msgstr ""
 
 #: gtk/open-type-layout.h:89
 msgctxt "OpenType layout"
@@ -4743,18 +4607,14 @@ msgid "Right Bounds"
 msgstr ""
 
 #: gtk/open-type-layout.h:101
-#, fuzzy
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
-msgstr "RLM 右→左 Mark(_R)"
+msgstr ""
 
 #: gtk/open-type-layout.h:102
-#, fuzzy
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
-msgstr "RLM 右→左 Mark(_R)"
+msgstr ""
 
 #: gtk/open-type-layout.h:103
 msgctxt "OpenType layout"
@@ -4887,11 +4747,9 @@ msgid "Stylistic Set 19"
 msgstr ""
 
 #: gtk/open-type-layout.h:129
-#, fuzzy
-#| msgid "Artistic License 2.0"
 msgctxt "OpenType layout"
 msgid "Stylistic Set 20"
-msgstr "Artistic License 2.0"
+msgstr ""
 
 #: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
@@ -4904,19 +4762,14 @@ msgid "Stretching Glyph Decomposition"
 msgstr ""
 
 #: gtk/open-type-layout.h:132
-#, fuzzy
-#| msgid "Postscript"
 msgctxt "OpenType layout"
 msgid "Subscript"
-msgstr "Postscript"
+msgstr ""
 
 #: gtk/open-type-layout.h:133
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Super"
 msgctxt "OpenType layout"
 msgid "Superscript"
-msgstr "Super"
+msgstr ""
 
 #: gtk/open-type-layout.h:134
 msgctxt "OpenType layout"
@@ -4964,19 +4817,14 @@ msgid "Alternate Vertical Metrics"
 msgstr ""
 
 #: gtk/open-type-layout.h:143
-#, fuzzy
-#| msgid "Dark Variant"
 msgctxt "OpenType layout"
 msgid "Vattu Variants"
-msgstr "ダークテーマ"
+msgstr ""
 
 #: gtk/open-type-layout.h:144
-#, fuzzy
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Writing"
-msgstr "垂直"
+msgstr ""
 
 #: gtk/open-type-layout.h:145
 msgctxt "OpenType layout"
@@ -4994,12 +4842,9 @@ msgid "Vertical Kana Alternates"
 msgstr ""
 
 #: gtk/open-type-layout.h:148
-#, fuzzy
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Kerning"
-msgstr "垂直"
+msgstr ""
 
 #: gtk/open-type-layout.h:149
 msgctxt "OpenType layout"
@@ -6657,25 +6502,7 @@ msgid "Can’t close stream"
 msgstr "ストリームをクローズできません"
 
 #: gtk/tools/gtk-builder-tool.c:38
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] FILE\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate           Validate the file\n"
-#| "  simplify [OPTIONS] Simplify the file\n"
-#| "  enumerate          List all named objects\n"
-#| "  preview [OPTIONS]  Preview the file\n"
-#| "\n"
-#| "Simplify Options:\n"
-#| "  --replace          Replace the file\n"
-#| "\n"
-#| "Preview Options:\n"
-#| "  --id=ID            Preview only the named object\n"
-#| "  --css=FILE         Use style from CSS file\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
@@ -6697,58 +6524,53 @@ msgid ""
 "Perform various tasks on GtkBuilder .ui files.\n"
 msgstr ""
 "用法:\n"
-"  gtk-builder-tool [COMMAND] FILE\n"
+"  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
 "\n"
 "コマンド:\n"
-"  validate           ファイルの妥当性を検証する\n"
-"  simplify [OPTIONS] ファイルを単純化する\n"
-"  enumerate          すべての名前付きオブジェクトの一覧を表示する\n"
-"  preview [OPTIONS]  ファイルをプレビューする\n"
+"  validate     ファイルの妥当性を検証する\n"
+"  simplify     ファイルを単純化する\n"
+"  enumerate    すべての名前付きオブジェクトの一覧を表示する\n"
+"  preview      ファイルをプレビューする\n"
 "\n"
 "単純化オプション:\n"
-"  --replace          ファイルを置き換える\n"
+"  --replace    ファイルを置き換える\n"
+"  --3to4       GTK 3 から GTK 4 に変換する\n"
 "\n"
 "プレビューオプション:\n"
-"  --id=ID            指定の名前付きオブジェクトだけを表示する\n"
-"  --css=FILE         指定の CSS ファイルのスタイルを適用する\n"
+"  --id=ID      指定の名前付きオブジェクトだけを表示する\n"
+"  --css=FILE   指定の CSS ファイルのスタイルを適用する\n"
 "\n"
 "GtkBuilder .ui ファイルに関する様々な操作を行います\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:449
-#, fuzzy, c-format
-#| msgid "Couldn’t parse value for %s::%s: %s\n"
+#, c-format
 msgid "%s: Couldn’t parse value for %s: %s\n"
-msgstr "%s::%s の値を解析できませんでした: %s\n"
+msgstr "%s: %s の値を解析できませんでした: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:642
-#, fuzzy, c-format
-#| msgid "Property %s::%s not found\n"
+#, c-format
 msgid "%s: %sproperty %s::%s not found\n"
-msgstr "プロパティ %s::%s が見つかりません\n"
+msgstr "%s: %sプロパティ %s::%s が見つかりません\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:1742
-#, fuzzy, c-format
-#| msgid "Can’t load file: %s\n"
+#, c-format
 msgid "Can’t load “%s”: %s\n"
-msgstr "ファイルを読み込めません: %s\n"
+msgstr "“%s”を読み込めません: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:1753
-#, fuzzy, c-format
-#| msgid "Can’t parse file: %s\n"
+#, c-format
 msgid "Can’t parse “%s”: %s\n"
-msgstr "ファイルを解析できません: %s\n"
+msgstr "“%s”を解析できません: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:1777
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to read “%s”: %s\n"
-msgstr "%s というファイルのオープンに失敗しました: %s\n"
+msgstr "“%s”の読み取りに失敗しました: %s\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:1783
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to write %s: “%s”\n"
-msgstr "%s というファイルのオープンに失敗しました: %s\n"
+msgstr "%s の書き込みに失敗しました: “%s”\n"
 
 #: gtk/tools/gtk-builder-tool-simplify.c:1823
 #, c-format
@@ -6997,7 +6819,7 @@ msgstr "色を選択"
 
 #: gtk/ui/gtkcoloreditor.ui:43
 msgid "Pick a color from the screen"
-msgstr ""
+msgstr "画面から色を取得"
 
 #: gtk/ui/gtkcoloreditor.ui:72
 msgid "Color Name"
@@ -7038,7 +6860,7 @@ msgstr "彩度"
 #: gtk/ui/gtkemojichooser.ui:57 gtk/ui/gtkemojichooser.ui:212
 msgctxt "emoji category"
 msgid "Smileys & People"
-msgstr "表情と人々"
+msgstr "顔文字と人"
 
 #: gtk/ui/gtkemojichooser.ui:81 gtk/ui/gtkemojichooser.ui:221
 msgctxt "emoji category"
@@ -7053,7 +6875,7 @@ msgstr "動物と自然"
 #: gtk/ui/gtkemojichooser.ui:118 gtk/ui/gtkemojichooser.ui:239
 msgctxt "emoji category"
 msgid "Food & Drink"
-msgstr "食べ物と飲み物"
+msgstr "食品と飲料"
 
 #: gtk/ui/gtkemojichooser.ui:131 gtk/ui/gtkemojichooser.ui:248
 msgctxt "emoji category"
@@ -7063,12 +6885,12 @@ msgstr "旅行と場所"
 #: gtk/ui/gtkemojichooser.ui:144 gtk/ui/gtkemojichooser.ui:257
 msgctxt "emoji category"
 msgid "Activities"
-msgstr "アクティビティ"
+msgstr "活動"
 
 #: gtk/ui/gtkemojichooser.ui:157 gtk/ui/gtkemojichooser.ui:266
 msgctxt "emoji category"
 msgid "Objects"
-msgstr "オブジェクト"
+msgstr "物体"
 
 #: gtk/ui/gtkemojichooser.ui:170 gtk/ui/gtkemojichooser.ui:275
 msgctxt "emoji category"
@@ -7122,11 +6944,8 @@ msgid "Preview text"
 msgstr "テキストをプレビュー"
 
 #: gtk/ui/gtkfontchooserwidget.ui:111 gtk/ui/gtkfontchooserwidget.ui:142
-#, fuzzy
-#| msgctxt "sizegroup mode"
-#| msgid "Horizontal"
 msgid "horizontal"
-msgstr "水平"
+msgstr ""
 
 #: gtk/ui/gtkfontchooserwidget.ui:193
 msgid "No Fonts Found"
@@ -7170,16 +6989,16 @@ msgstr "上のパス"
 
 #: gtk/ui/gtkplacesview.ui:26
 msgid "Server Addresses"
-msgstr "サーバーのアドレス"
+msgstr "サーバーアドレス"
 
 #: gtk/ui/gtkplacesview.ui:38
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
-msgstr ""
+msgstr "サーバーアドレスは、プロトコル (スキーム) 名とアドレスで構成されます。"
 
 #: gtk/ui/gtkplacesview.ui:64
 msgid "Available Protocols"
-msgstr ""
+msgstr "利用可能なプロトコル"
 
 #. Translators: Server as any successfully connected network address
 #: gtk/ui/gtkplacesview.ui:116
@@ -7351,7 +7170,7 @@ msgid ""
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 msgstr ""
 "印刷する時間を指定してください:\n"
-" (例) 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
+" (例) 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
 #: gtk/ui/gtkprintunixdialog.ui:856
 msgid "Time of print"
@@ -7432,24 +7251,21 @@ msgid "Decreases the volume"
 msgstr "音量を下げます"
 
 #: modules/media/gtkffmediafile.c:216
-#, fuzzy, c-format
-#| msgid "Unspecified error"
+#, c-format
 msgid "Unspecified error decoding video"
-msgstr "原因不明のエラー"
+msgstr ""
 
 #: modules/media/gtkffmediafile.c:318 modules/media/gtkffmediafile.c:492
 msgid "Not enough memory"
 msgstr "メモリが足りません"
 
 #: modules/media/gtkffmediafile.c:515
-#, fuzzy
-#| msgid "Not a valid page setup file"
 msgid "Not a video file"
-msgstr "妥当なページ設定のファイルではありません"
+msgstr "動画ファイルではありません"
 
 #: modules/media/gtkffmediafile.c:534
 msgid "Unsupported video codec"
-msgstr ""
+msgstr "サポートしていない動画コーデックです"
 
 #. Translators: The printer status is online, i.e. it is
 #. * ready to print.
