@@ -110,6 +110,7 @@
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerkey.h"
+#include "gtkgestureclick.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkbindings.h"
 #include "gtkenums.h"
@@ -545,12 +546,27 @@ node_style_changed_cb (GtkCssNode        *node,
 }
 
 static void
+gtk_popover_click_gesture_pressed (GtkGestureClick *gesture,
+                                   gint             n_press,
+                                   gdouble          widget_x,
+                                   gdouble          widget_y,
+                                   GtkPopover      *popover)
+{
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  GtkWindow *rel_window = GTK_WINDOW (gtk_widget_get_root (priv->relative_to));
+
+  if (!gtk_window_is_active (rel_window) && gtk_widget_is_drawable (GTK_WIDGET (popover)))
+    gtk_window_present_with_time (rel_window, gtk_get_current_event_time ());
+}
+
+static void
 gtk_popover_init (GtkPopover *popover)
 {
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *widget = GTK_WIDGET (popover);
   GtkEventController *controller;
   GtkStyleContext *context;
+  GtkGesture *click_gesture;
 
   priv->position = GTK_POS_BOTTOM;
   priv->final_position = GTK_POS_BOTTOM;
@@ -571,6 +587,15 @@ gtk_popover_init (GtkPopover *popover)
   g_signal_connect_object (priv->arrow_node, "style-changed",
                            G_CALLBACK (node_style_changed_cb), popover, 0);
   g_object_unref (priv->arrow_node);
+
+  click_gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (click_gesture), 0);
+  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (click_gesture), TRUE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (click_gesture),
+                                              GTK_PHASE_CAPTURE);
+  g_signal_connect (click_gesture, "pressed",
+                    G_CALLBACK (gtk_popover_click_gesture_pressed), popover);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (click_gesture));
 
   priv->contents_widget = gtk_gizmo_new ("contents",
                                          measure_contents,
