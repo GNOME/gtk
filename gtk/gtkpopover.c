@@ -159,6 +159,7 @@ struct _GtkPopoverPrivate
   GdkRectangle pointing_to;
   GtkPopoverConstraint constraint;
   GtkProgressTracker tracker;
+  GtkGesture *multipress_gesture;
   guint prev_focus_unmap_id;
   guint hierarchy_changed_id;
   guint size_allocate_id;
@@ -199,6 +200,12 @@ static void gtk_popover_apply_modality     (GtkPopover *popover,
 static void gtk_popover_set_scrollable_full (GtkPopover    *popover,
                                              GtkScrollable *scrollable);
 
+static void gtk_popover_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
+                                                    gint                  n_press,
+                                                    gdouble               widget_x,
+                                                    gdouble               widget_y,
+                                                    GtkPopover            *popover);
+
 G_DEFINE_TYPE_WITH_PRIVATE (GtkPopover, gtk_popover, GTK_TYPE_BIN)
 
 static void
@@ -206,17 +213,26 @@ gtk_popover_init (GtkPopover *popover)
 {
   GtkWidget *widget;
   GtkStyleContext *context;
+  GtkPopoverPrivate *priv;
 
   widget = GTK_WIDGET (popover);
   gtk_widget_set_has_window (widget, TRUE);
-  popover->priv = gtk_popover_get_instance_private (popover);
-  popover->priv->modal = TRUE;
-  popover->priv->tick_id = 0;
-  popover->priv->state = STATE_HIDDEN;
-  popover->priv->visible = FALSE;
-  popover->priv->transitions_enabled = TRUE;
-  popover->priv->preferred_position = GTK_POS_TOP;
-  popover->priv->constraint = GTK_POPOVER_CONSTRAINT_WINDOW;
+  priv = popover->priv = gtk_popover_get_instance_private (popover);
+  priv->modal = TRUE;
+  priv->tick_id = 0;
+  priv->state = STATE_HIDDEN;
+  priv->visible = FALSE;
+  priv->transitions_enabled = TRUE;
+  priv->preferred_position = GTK_POS_TOP;
+  priv->constraint = GTK_POPOVER_CONSTRAINT_WINDOW;
+
+  priv->multipress_gesture = gtk_gesture_multi_press_new (widget);
+  g_signal_connect (priv->multipress_gesture, "pressed",
+                    G_CALLBACK (gtk_popover_multipress_gesture_pressed), popover);
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
+  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (priv->multipress_gesture), TRUE);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+                                              GTK_PHASE_CAPTURE);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (popover));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
@@ -335,6 +351,8 @@ gtk_popover_finalize (GObject *object)
 
   if (priv->widget)
     gtk_popover_update_relative_to (popover, NULL);
+
+  g_clear_object (&priv->multipress_gesture);
 
   G_OBJECT_CLASS (gtk_popover_parent_class)->finalize (object);
 }
@@ -2176,6 +2194,19 @@ gtk_popover_update_preferred_position (GtkPopover      *popover,
 
   popover->priv->preferred_position = position;
   g_object_notify_by_pspec (G_OBJECT (popover), properties[PROP_POSITION]);
+}
+
+static void
+gtk_popover_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
+                                        gint                  n_press,
+                                        gdouble               widget_x,
+                                        gdouble               widget_y,
+                                        GtkPopover           *popover)
+{
+  GtkPopoverPrivate *priv = popover->priv;
+
+  if (!gtk_window_is_active (priv->window) && gtk_widget_is_drawable (GTK_WIDGET (popover)))
+    gtk_window_present_with_time (priv->window, gtk_get_current_event_time ());
 }
 
 /**
