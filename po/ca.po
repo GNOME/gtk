@@ -2312,7 +2312,7 @@ msgstr "Desconegut"
 
 #: gtk/gtkfilechooserwidget.c:4948 gtk/gtkplacessidebar.c:1086
 msgid "Home"
-msgstr "Inici"
+msgstr "Carpeta de l'usuari"
 
 #: gtk/gtkfilechooserwidget.c:5441
 msgid "Cannot change to folder because it is not local"
