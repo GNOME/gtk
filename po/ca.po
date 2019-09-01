@@ -34,16 +34,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-05 12:21+0000\n"
-"PO-Revision-Date: 2019-08-07 10:41+0200\n"
-"Last-Translator: Carles Ferrando Garcia <carles.ferrando@gmail.com>\n"
+"POT-Creation-Date: 2019-08-31 11:36+0000\n"
+"PO-Revision-Date: 2019-08-31 22:51+0200\n"
+"Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 2.2.3\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -781,7 +781,7 @@ msgstr "_Cerca"
 #: gtk/a11y/gtkimageaccessible.c:72 gtk/deprecated/gtkstock.c:364
 msgctxt "Stock label"
 msgid "Find and _Replace"
-msgstr "Cerca i _reemplaça"
+msgstr "Ce_rca i substitueix"
 
 #: gtk/a11y/gtkimageaccessible.c:73 gtk/deprecated/gtkstock.c:365
 msgctxt "Stock label"
@@ -854,7 +854,7 @@ msgstr "A_juda"
 #: gtk/a11y/gtkimageaccessible.c:85 gtk/deprecated/gtkstock.c:386
 msgctxt "Stock label"
 msgid "_Home"
-msgstr "_Inici"
+msgstr "_Carpeta de l’usuari"
 
 #: gtk/a11y/gtkimageaccessible.c:86 gtk/deprecated/gtkstock.c:387
 msgctxt "Stock label"
@@ -1270,10 +1270,10 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechoosernative.c:544 gtk/gtkfilechoosernative.c:636
-#: gtk/gtkfilechooserwidget.c:1476 gtk/gtkfilechooserwidget.c:6331
+#: gtk/gtkfilechooserwidget.c:1480 gtk/gtkfilechooserwidget.c:6377
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
-#: gtk/gtkprintbackend.c:781 gtk/gtkprinteroptionwidget.c:545
+#: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
 #: gtk/gtkwindow.c:12782 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
@@ -1324,7 +1324,7 @@ msgid "_Apply"
 msgstr "_Aplica"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:782 gtk/gtkwindow.c:12783
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12783
 msgid "_OK"
 msgstr "_D'acord"
 
@@ -1828,7 +1828,7 @@ msgstr ""
 "  preview [OPCIONS]  Previsualitza el fitxer\n"
 "\n"
 "Opcions de simplificació:\n"
-"  --replace          Reemplaça el fitxer\n"
+"  --replace          Substitueix el fitxer\n"
 "\n"
 "Opcions de previsualització:\n"
 "  --id=ID            Previsualitza només l'objecte anomenat\n"
@@ -2258,8 +2258,8 @@ msgstr "_Copia"
 msgid "_Paste"
 msgstr "_Enganxa"
 
-#: gtk/gtkentry.c:9594 gtk/gtkfilechooserwidget.c:1477
-#: gtk/gtkfilechooserwidget.c:2277 gtk/gtklabel.c:6684 gtk/gtktextview.c:9511
+#: gtk/gtkentry.c:9594 gtk/gtkfilechooserwidget.c:1481
+#: gtk/gtkfilechooserwidget.c:2290 gtk/gtklabel.c:6684 gtk/gtktextview.c:9511
 msgid "_Delete"
 msgstr "_Suprimeix"
 
@@ -2339,15 +2339,15 @@ msgstr "Seleccioneu quins tipus de fitxers es mostren"
 msgid "%1$s on %2$s"
 msgstr "%1$s a %2$s"
 
-#: gtk/gtkfilechooserwidget.c:370
+#: gtk/gtkfilechooserwidget.c:371
 msgid "Type name of new folder"
 msgstr "Escriviu el nom de la carpeta nova"
 
-#: gtk/gtkfilechooserwidget.c:789
+#: gtk/gtkfilechooserwidget.c:793
 msgid "The folder could not be created"
 msgstr "No s'ha pogut crear la carpeta"
 
-#: gtk/gtkfilechooserwidget.c:802
+#: gtk/gtkfilechooserwidget.c:806
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2356,271 +2356,271 @@ msgstr ""
 "nom. Proveu d'utilitzar un nom diferent per a la carpeta, o bé canvieu el "
 "nom del fitxer abans de crear-la."
 
-#: gtk/gtkfilechooserwidget.c:817
+#: gtk/gtkfilechooserwidget.c:821
 msgid "You need to choose a valid filename."
 msgstr "Cal que trieu un nom de fitxer vàlid."
 
-#: gtk/gtkfilechooserwidget.c:820
+#: gtk/gtkfilechooserwidget.c:824
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "No es pot crear un fitxer a %s, atès que no és una carpeta"
 
-#: gtk/gtkfilechooserwidget.c:830
+#: gtk/gtkfilechooserwidget.c:834
 msgid "Cannot create file as the filename is too long"
 msgstr "No es pot crear el fitxer perquè el nom de fitxer és massa llarg"
 
-#: gtk/gtkfilechooserwidget.c:831
+#: gtk/gtkfilechooserwidget.c:835
 msgid "Try using a shorter name."
 msgstr "Escriviu un nom més curt."
 
-#: gtk/gtkfilechooserwidget.c:841
+#: gtk/gtkfilechooserwidget.c:845
 msgid "You may only select folders"
 msgstr "Només podeu seleccionar carpetes"
 
-#: gtk/gtkfilechooserwidget.c:842
+#: gtk/gtkfilechooserwidget.c:846
 msgid "The item that you selected is not a folder try using a different item."
 msgstr ""
 "L'element que heu seleccionat no és una carpeta. Utilitzeu un element "
 "diferent."
 
-#: gtk/gtkfilechooserwidget.c:850
+#: gtk/gtkfilechooserwidget.c:854
 msgid "Invalid file name"
 msgstr "El nom del fitxer no és vàlid"
 
-#: gtk/gtkfilechooserwidget.c:859
+#: gtk/gtkfilechooserwidget.c:863
 msgid "The folder contents could not be displayed"
 msgstr "No s'ha pogut mostrar el contingut de la carpeta"
 
-#: gtk/gtkfilechooserwidget.c:867
+#: gtk/gtkfilechooserwidget.c:871
 msgid "The file could not be deleted"
 msgstr "No s'ha pogut suprimir el fitxer"
 
-#: gtk/gtkfilechooserwidget.c:875
+#: gtk/gtkfilechooserwidget.c:879
 msgid "The file could not be moved to the Trash"
 msgstr "No s'ha pogut moure el fitxer a la paperera"
 
-#: gtk/gtkfilechooserwidget.c:1020
+#: gtk/gtkfilechooserwidget.c:1024
 msgid "A folder with that name already exists"
 msgstr "Ja existeix una carpeta amb aquest nom"
 
-#: gtk/gtkfilechooserwidget.c:1022
+#: gtk/gtkfilechooserwidget.c:1026
 msgid "A file with that name already exists"
 msgstr "Ja existeix un fitxer amb aquest nom"
 
-#: gtk/gtkfilechooserwidget.c:1057
+#: gtk/gtkfilechooserwidget.c:1061
 msgid "A folder cannot be called “.”"
 msgstr "Una carpeta no es pot anomenar «.»"
 
-#: gtk/gtkfilechooserwidget.c:1058
+#: gtk/gtkfilechooserwidget.c:1062
 msgid "A file cannot be called “.”"
 msgstr "Un fitxer no es pot anomenar «.»"
 
-#: gtk/gtkfilechooserwidget.c:1061
+#: gtk/gtkfilechooserwidget.c:1065
 msgid "A folder cannot be called “..”"
 msgstr "Una carpeta no es pot anomenar «..»"
 
-#: gtk/gtkfilechooserwidget.c:1062
+#: gtk/gtkfilechooserwidget.c:1066
 msgid "A file cannot be called “..”"
 msgstr "Un fitxer no es pot anomenar «..»"
 
-#: gtk/gtkfilechooserwidget.c:1065
+#: gtk/gtkfilechooserwidget.c:1069
 msgid "Folder names cannot contain “/”"
 msgstr "Els noms de les carpetes no poden contenir «/»"
 
-#: gtk/gtkfilechooserwidget.c:1066
+#: gtk/gtkfilechooserwidget.c:1070
 msgid "File names cannot contain “/”"
 msgstr "Els noms de fitxer no poden contenir «/»"
 
-#: gtk/gtkfilechooserwidget.c:1092
+#: gtk/gtkfilechooserwidget.c:1096
 msgid "Folder names should not begin with a space"
 msgstr "Els noms de les carpetes no poden començar amb un espai"
 
-#: gtk/gtkfilechooserwidget.c:1093
+#: gtk/gtkfilechooserwidget.c:1097
 msgid "File names should not begin with a space"
 msgstr "Els noms de fitxer no poden començar amb un espai"
 
-#: gtk/gtkfilechooserwidget.c:1097
+#: gtk/gtkfilechooserwidget.c:1101
 msgid "Folder names should not end with a space"
 msgstr "Els noms de les carpetes no poden acabar amb un espai"
 
-#: gtk/gtkfilechooserwidget.c:1098
+#: gtk/gtkfilechooserwidget.c:1102
 msgid "File names should not end with a space"
 msgstr "Els noms de fitxer no poden acabar amb un espai"
 
-#: gtk/gtkfilechooserwidget.c:1101
+#: gtk/gtkfilechooserwidget.c:1105
 msgid "Folder names starting with a “.” are hidden"
 msgstr "Els noms de les carpetes que comencen amb «.» són ocults"
 
-#: gtk/gtkfilechooserwidget.c:1102
+#: gtk/gtkfilechooserwidget.c:1106
 msgid "File names starting with a “.” are hidden"
 msgstr "Els noms de fitxers que comencen amb «.» són ocults"
 
-#: gtk/gtkfilechooserwidget.c:1472
+#: gtk/gtkfilechooserwidget.c:1476
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Esteu segur que voleu suprimir permanentment «%s»?"
 
-#: gtk/gtkfilechooserwidget.c:1475
+#: gtk/gtkfilechooserwidget.c:1479
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Si suprimiu un element, es perdrà definitivament."
 
-#: gtk/gtkfilechooserwidget.c:1609
+#: gtk/gtkfilechooserwidget.c:1616
 msgid "The file could not be renamed"
 msgstr "No s'ha pogut canviar el nom del fitxer"
 
-#: gtk/gtkfilechooserwidget.c:1923
+#: gtk/gtkfilechooserwidget.c:1936
 msgid "Could not select file"
 msgstr "No s'ha pogut seleccionar el fitxer"
 
-#: gtk/gtkfilechooserwidget.c:2272
+#: gtk/gtkfilechooserwidget.c:2285
 msgid "_Visit File"
 msgstr "_Visita aquest fitxer"
 
-#: gtk/gtkfilechooserwidget.c:2273
+#: gtk/gtkfilechooserwidget.c:2286
 msgid "_Open With File Manager"
 msgstr "_Obre amb el gestor de fitxers"
 
-#: gtk/gtkfilechooserwidget.c:2274
+#: gtk/gtkfilechooserwidget.c:2287
 msgid "_Copy Location"
 msgstr "_Copia la ubicació"
 
-#: gtk/gtkfilechooserwidget.c:2275
+#: gtk/gtkfilechooserwidget.c:2288
 msgid "_Add to Bookmarks"
 msgstr "_Afegeix a les adreces d'interès"
 
-#: gtk/gtkfilechooserwidget.c:2276 gtk/gtkplacessidebar.c:2741
+#: gtk/gtkfilechooserwidget.c:2289 gtk/gtkplacessidebar.c:2741
 #: gtk/ui/gtkfilechooserwidget.ui:526
 msgid "_Rename"
 msgstr "Canvia el _nom…"
 
-#: gtk/gtkfilechooserwidget.c:2278
+#: gtk/gtkfilechooserwidget.c:2291
 msgid "_Move to Trash"
 msgstr "_Mou a la paperera"
 
-#: gtk/gtkfilechooserwidget.c:2282
+#: gtk/gtkfilechooserwidget.c:2295
 msgid "Show _Hidden Files"
 msgstr "Mostra els fitxers _ocults"
 
-#: gtk/gtkfilechooserwidget.c:2283
+#: gtk/gtkfilechooserwidget.c:2296
 msgid "Show _Size Column"
 msgstr "Mostra la columna de la _mida"
 
-#: gtk/gtkfilechooserwidget.c:2284
+#: gtk/gtkfilechooserwidget.c:2297
 msgid "Show _Time"
 msgstr "M_ostra la data"
 
-#: gtk/gtkfilechooserwidget.c:2285
+#: gtk/gtkfilechooserwidget.c:2298
 msgid "Sort _Folders before Files"
 msgstr "Ordena _les carpetes abans que els fitxers"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2560 gtk/inspector/css-node-tree.ui:141
+#: gtk/gtkfilechooserwidget.c:2573 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:207 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Ubicació"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2653
+#: gtk/gtkfilechooserwidget.c:2666
 msgid "_Name:"
 msgstr "_Nom:"
 
-#: gtk/gtkfilechooserwidget.c:3278 gtk/gtkfilechooserwidget.c:3292
+#: gtk/gtkfilechooserwidget.c:3291 gtk/gtkfilechooserwidget.c:3305
 #, c-format
 msgid "Searching in %s"
 msgstr "S'està cercant a %s"
 
-#: gtk/gtkfilechooserwidget.c:3298
+#: gtk/gtkfilechooserwidget.c:3311
 msgid "Searching"
 msgstr "S'està cercant"
 
-#: gtk/gtkfilechooserwidget.c:3305
+#: gtk/gtkfilechooserwidget.c:3318
 msgid "Enter location"
 msgstr "Introduïu la ubicació"
 
-#: gtk/gtkfilechooserwidget.c:3307
+#: gtk/gtkfilechooserwidget.c:3320
 msgid "Enter location or URL"
 msgstr "Introduïu una ubicació o URL"
 
-#: gtk/gtkfilechooserwidget.c:4341 gtk/gtkfilechooserwidget.c:7245
+#: gtk/gtkfilechooserwidget.c:4354 gtk/gtkfilechooserwidget.c:7291
 #: gtk/ui/gtkfilechooserwidget.ui:235
 msgid "Modified"
 msgstr "Modificat"
 
-#: gtk/gtkfilechooserwidget.c:4619
+#: gtk/gtkfilechooserwidget.c:4632
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "No s'ha pogut llegir el contingut de %s"
 
-#: gtk/gtkfilechooserwidget.c:4623
+#: gtk/gtkfilechooserwidget.c:4636
 msgid "Could not read the contents of the folder"
 msgstr "No s'ha pogut llegir el contingut de la carpeta"
 
-#: gtk/gtkfilechooserwidget.c:4753 gtk/gtkfilechooserwidget.c:4801
+#: gtk/gtkfilechooserwidget.c:4796 gtk/gtkfilechooserwidget.c:4844
 msgid "%H:%M"
 msgstr "%-H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4755 gtk/gtkfilechooserwidget.c:4803
+#: gtk/gtkfilechooserwidget.c:4798 gtk/gtkfilechooserwidget.c:4846
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4759
+#: gtk/gtkfilechooserwidget.c:4802
 msgid "Yesterday"
 msgstr "Ahir"
 
-#: gtk/gtkfilechooserwidget.c:4767
+#: gtk/gtkfilechooserwidget.c:4810
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4771
+#: gtk/gtkfilechooserwidget.c:4814
 msgid "%-e %b %Y"
 msgstr "%-e %b de %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5006 gtk/inspector/prop-editor.c:1689
+#: gtk/gtkfilechooserwidget.c:5049 gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: gtk/gtkfilechooserwidget.c:5045 gtk/gtkplacessidebar.c:1094
+#: gtk/gtkfilechooserwidget.c:5088 gtk/gtkplacessidebar.c:1094
 msgid "Home"
-msgstr "Inici"
+msgstr "Carpeta de l’usuari"
 
-#: gtk/gtkfilechooserwidget.c:5538
+#: gtk/gtkfilechooserwidget.c:5584
 msgid "Cannot change to folder because it is not local"
 msgstr "No es pot canviar a la carpeta perquè no és local"
 
-#: gtk/gtkfilechooserwidget.c:6324 gtk/gtkprintunixdialog.c:665
+#: gtk/gtkfilechooserwidget.c:6370 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
-msgstr "Ja existeix un fitxer amb el nom «%s». Voleu reemplaçar-lo?"
+msgstr "Ja existeix un fitxer amb el nom «%s». Voleu substituir-lo?"
 
-#: gtk/gtkfilechooserwidget.c:6327 gtk/gtkprintunixdialog.c:669
+#: gtk/gtkfilechooserwidget.c:6373 gtk/gtkprintunixdialog.c:669
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
-"El fitxer ja existeix a «%s». Si el reemplaceu en sobreescriureu el "
+"El fitxer ja existeix a «%s». Si el substituïu, se sobreescriurà el seu "
 "contingut."
 
-#: gtk/gtkfilechooserwidget.c:6332 gtk/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:6378 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
-msgstr "_Reemplaça"
+msgstr "_Substitueix"
 
-#: gtk/gtkfilechooserwidget.c:6546
+#: gtk/gtkfilechooserwidget.c:6592
 msgid "You do not have access to the specified folder."
 msgstr "No teniu accés el contingut de la carpeta especificada."
 
-#: gtk/gtkfilechooserwidget.c:7169
+#: gtk/gtkfilechooserwidget.c:7215
 msgid "Could not send the search request"
 msgstr "No s'ha pogut enviar la sol·licitud de cerca"
 
-#: gtk/gtkfilechooserwidget.c:7455
+#: gtk/gtkfilechooserwidget.c:7501
 msgid "Accessed"
 msgstr "Accedit"
 
-#: gtk/gtkfilechooserwidget.c:8566 gtk/ui/gtkfilechooserwidget.ui:69
+#: gtk/gtkfilechooserwidget.c:8612 gtk/ui/gtkfilechooserwidget.ui:69
 msgid "Create Folder"
 msgstr "Crea una carpeta"
 
@@ -2706,12 +2706,12 @@ msgstr "Menú d'aplicacions"
 msgid "Close"
 msgstr "Tanca"
 
-#: gtk/gtkicontheme.c:2343 gtk/gtkicontheme.c:2408
+#: gtk/gtkicontheme.c:2357 gtk/gtkicontheme.c:2422
 #, c-format
 msgid "Icon '%s' not present in theme %s"
 msgstr "La icona «%s» no es troba al tema %s"
 
-#: gtk/gtkicontheme.c:4082 gtk/gtkicontheme.c:4449
+#: gtk/gtkicontheme.c:4096 gtk/gtkicontheme.c:4463
 msgid "Failed to load icon"
 msgstr "No s'ha pogut carregar la icona"
 
@@ -3386,11 +3386,11 @@ msgstr "Desconnecta"
 msgid "Unmount"
 msgstr "Desmunta"
 
-#: gtk/gtkprintbackend.c:780
+#: gtk/gtkprintbackend.c:778
 msgid "Authentication"
 msgstr "Autenticació"
 
-#: gtk/gtkprintbackend.c:851
+#: gtk/gtkprintbackend.c:849
 msgid "_Remember password"
 msgstr "_Recorda la contrasenya"
 
