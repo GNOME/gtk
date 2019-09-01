@@ -3640,34 +3640,6 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
   return TRUE;
 }
 
-static GdkPixbuf *
-icon_info_load_pixbuf (GtkIconInfo  *icon_info,
-                       GError      **error)
-{
-  if (!icon_info_ensure_scale_and_pixbuf (icon_info))
-    {
-      if (icon_info->load_error)
-        {
-          if (error)
-            *error = g_error_copy (icon_info->load_error);
-        }
-      else
-        {
-          g_set_error_literal (error,
-                               GTK_ICON_THEME_ERROR,
-                               GTK_ICON_THEME_NOT_FOUND,
-                               _("Failed to load icon"));
-        }
-
-      return NULL;
-    }
-
-  if (icon_info->pixbuf != NULL)
-    return g_object_ref (icon_info->pixbuf);
-
-  return NULL;
-}
-
 /**
  * gtk_icon_info_load_icon:
  * @icon_info: a #GtkIconInfo from gtk_icon_theme_lookup_icon()
@@ -3700,7 +3672,10 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
     {
       GdkPixbuf *pixbuf;
 
-      pixbuf = icon_info_load_pixbuf (icon_info, NULL);
+      icon_info_ensure_scale_and_pixbuf (icon_info);
+
+      if (icon_info->pixbuf)
+        pixbuf = g_object_ref (icon_info->pixbuf);
 
       if (!pixbuf)
         {
