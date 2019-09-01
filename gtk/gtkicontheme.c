@@ -350,7 +350,6 @@ icon_info_key_hash (gconstpointer _key)
 
   h ^= key->size * 0x10001;
   h ^= key->scale * 0x1000010;
-  h ^= key->flags * 0x100000100;
 
   return h;
 }
@@ -367,9 +366,6 @@ icon_info_key_equal (gconstpointer _a,
     return FALSE;
 
   if (a->scale != b->scale)
-    return FALSE;
-
-  if (a->flags != b->flags)
     return FALSE;
 
   for (i = 0;
