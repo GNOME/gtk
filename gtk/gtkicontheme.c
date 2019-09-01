@@ -3022,43 +3022,6 @@ scan_directory (GtkIconThemePrivate *icon_theme,
   return g_hash_table_size (dir->icons) > 0;
 }
 
-static gboolean
-scan_resources (GtkIconThemePrivate  *icon_theme,
-                IconThemeDir         *dir,
-                gchar                *full_dir)
-{
-  gint i;
-  gchar **children;
-
-  GTK_DISPLAY_NOTE (icon_theme->display, ICONTHEME,
-                    g_message ("scanning resources %s", full_dir));
-
-  children = g_resources_enumerate_children (full_dir, 0, NULL);
-  if (!children)
-    return FALSE;
-
-  dir->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-
-  for (i = 0; children[i]; i++)
-    {
-      gchar *base_name;
-      IconSuffix suffix, hash_suffix;
-
-      suffix = suffix_from_name (children[i]);
-      if (suffix == ICON_SUFFIX_NONE)
-        continue;
-
-      base_name = strip_suffix (children[i]);
-
-      hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (dir->icons, base_name));
-      /* takes ownership of base_name */
-      g_hash_table_replace (dir->icons, base_name, GUINT_TO_POINTER (hash_suffix|suffix));
-    }
-  g_strfreev (children);
-
-  return g_hash_table_size (dir->icons) > 0;
-}
-
 static void
 theme_subdir_load (GtkIconTheme *icon_theme,
                    IconTheme    *theme,
@@ -3185,13 +3148,26 @@ theme_subdir_load (GtkIconTheme *icon_theme,
     }
 
   if (strcmp (theme->name, FALLBACK_ICON_THEME) == 0)
-    { 
+    {
       for (d = icon_theme->priv->resource_paths; d; d = d->next)
         {
+          int i;
+          char **children;
+
           /* Force a trailing / here, to avoid extra copies in GResource */
           full_dir = g_build_filename ((const gchar *)d->data, subdir, " ", NULL);
           full_dir[strlen (full_dir) - 1] = '\0';
+
+          children = g_resources_enumerate_children (full_dir, 0, NULL);
+
+          if (!children)
+            {
+              g_free (full_dir);
+              continue;
+            }
+
           dir = g_new0 (IconThemeDir, 1);
+          dir->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
           dir->type = type;
           dir->is_resource = TRUE;
           dir->context = context;
@@ -3205,7 +3181,24 @@ theme_subdir_load (GtkIconTheme *icon_theme,
           dir->cache = NULL;
           dir->subdir_index = -1;
 
-          if (scan_resources (icon_theme->priv, dir, full_dir))
+          for (i = 0; children[i]; i++)
+            {
+              gchar *base_name;
+              IconSuffix suffix, hash_suffix;
+
+              suffix = suffix_from_name (children[i]);
+              if (suffix == ICON_SUFFIX_NONE)
+                continue;
+
+              base_name = strip_suffix (children[i]);
+
+              hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (dir->icons, base_name));
+              /* takes ownership of base_name */
+              g_hash_table_replace (dir->icons, base_name, GUINT_TO_POINTER (hash_suffix|suffix));
+            }
+          g_strfreev (children);
+
+          if (g_hash_table_size (dir->icons) > 0)
             theme->dirs = g_list_prepend (theme->dirs, dir);
           else
             theme_dir_destroy (dir);
