@@ -130,6 +130,8 @@ typedef enum
 #define DEBUG_CACHE(args)
 #endif
 
+#define LRU_CACHE_SIZE 100
+
 typedef struct _GtkIconInfoClass    GtkIconInfoClass;
 typedef struct _GtkIconThemeClass   GtkIconThemeClass;
 typedef struct _GtkIconThemePrivate GtkIconThemePrivate;
@@ -156,6 +158,10 @@ struct _GtkIconTheme
 struct _GtkIconThemePrivate
 {
   GHashTable *info_cache;
+
+  GtkIconInfo *lru_cache[LRU_CACHE_SIZE];
+  int lru_cache_size;
+  int lru_cache_next;
 
   gchar *current_theme;
   gchar **search_path;
@@ -391,6 +397,19 @@ icon_info_key_equal (gconstpointer _a,
 }
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkIconTheme, gtk_icon_theme, G_TYPE_OBJECT)
+
+static void
+add_to_lru_cache (GtkIconInfo *info)
+{
+  GtkIconTheme *theme = info->in_cache;
+  GtkIconThemePrivate *priv = gtk_icon_theme_get_instance_private (theme);
+
+  if (!theme)
+    return;
+
+  g_set_object (&priv->lru_cache[priv->lru_cache_next], info);
+  priv->lru_cache_next = (priv->lru_cache_next + 1) % LRU_CACHE_SIZE;
+}
 
 /**
  * gtk_icon_theme_new:
@@ -794,12 +813,9 @@ blow_themes (GtkIconTheme *icon_theme)
 static void
 gtk_icon_theme_finalize (GObject *object)
 {
-  GtkIconTheme *icon_theme;
-  GtkIconThemePrivate *priv;
+  GtkIconTheme *icon_theme = GTK_ICON_THEME (object);
+  GtkIconThemePrivate *priv = gtk_icon_theme_get_instance_private (icon_theme);
   int i;
-
-  icon_theme = GTK_ICON_THEME (object);
-  priv = icon_theme->priv;
 
   g_hash_table_destroy (priv->info_cache);
 
@@ -817,6 +833,9 @@ gtk_icon_theme_finalize (GObject *object)
   g_list_free_full (priv->resource_paths, g_free);
 
   blow_themes (icon_theme);
+
+  for (i = 0; i < priv->lru_cache_size; i ++)
+    g_object_unref (priv->lru_cache[i]);
 
   G_OBJECT_CLASS (gtk_icon_theme_parent_class)->finalize (object);  
 }
@@ -3641,6 +3660,10 @@ icon_info_ensure_scale_and_texture (GtkIconInfo *icon_info)
     }
 
   g_assert (icon_info->texture != NULL);
+
+  /* Add to LRU cache now that icon_info has a texture */
+  add_to_lru_cache (icon_info);
+
   return TRUE;
 }
 
