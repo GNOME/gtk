@@ -124,7 +124,6 @@ typedef enum
   ICON_SUFFIX_SYMBOLIC_PNG = 1 << 4
 } IconSuffix;
 
-#define INFO_CACHE_LRU_SIZE 32
 #if 0
 #define DEBUG_CACHE(args) g_print args
 #else
@@ -157,7 +156,6 @@ struct _GtkIconTheme
 struct _GtkIconThemePrivate
 {
   GHashTable *info_cache;
-  GList *info_cache_lru;
 
   gchar *current_theme;
   gchar **search_path;
@@ -347,8 +345,6 @@ static GtkIconInfo *icon_info_new             (IconThemeDirType  type,
                                                gint              dir_size,
                                                gint              dir_scale);
 static IconSuffix   suffix_from_name          (const gchar      *name);
-static void         remove_from_lru_cache     (GtkIconTheme     *icon_theme,
-                                               GtkIconInfo      *icon_info);
 static gboolean     icon_info_ensure_scale_and_pixbuf (GtkIconInfo* icon_info);
 
 static guint signal_changed = 0;
@@ -668,8 +664,6 @@ pixbuf_supports_svg (void)
 static void
 icon_info_uncached (GtkIconInfo *icon_info)
 {
-  GtkIconTheme *icon_theme = icon_info->in_cache;
-
   DEBUG_CACHE (("removing %p (%s %d 0x%x) from cache (icon_them: %p)  (cache size %d)\n",
                 icon_info,
                 g_strjoinv (",", icon_info->key.icon_names),
@@ -678,9 +672,6 @@ icon_info_uncached (GtkIconInfo *icon_info)
                 icon_theme != NULL ? g_hash_table_size (icon_theme->priv->info_cache) : 0));
 
   icon_info->in_cache = NULL;
-
-  if (icon_theme != NULL)
-    remove_from_lru_cache (icon_theme, icon_info);
 }
 
 static void
@@ -814,7 +805,6 @@ gtk_icon_theme_finalize (GObject *object)
   priv = icon_theme->priv;
 
   g_hash_table_destroy (priv->info_cache);
-  g_assert (priv->info_cache_lru == NULL);
 
   if (priv->theme_changed_idle)
     g_source_remove (priv->theme_changed_idle);
@@ -1448,94 +1438,6 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
   priv->loading_themes = FALSE;
 }
 
-/* The LRU cache is a short list of IconInfos that are kept
- * alive even though their IconInfo would otherwise have
- * been freed, so that we can avoid reloading these
- * constantly.
- * We put infos on the lru list when nothing otherwise
- * references the info. So, when we get a cache hit
- * we remove it from the list, and when the proxy
- * pixmap is released we put it on the list.
- */
-static void
-ensure_lru_cache_space (GtkIconTheme *icon_theme)
-{
-  GtkIconThemePrivate *priv = icon_theme->priv;
-  GList *l;
-
-  /* Remove last item if LRU full */
-  l = g_list_nth (priv->info_cache_lru, INFO_CACHE_LRU_SIZE - 1);
-  if (l)
-    {
-      GtkIconInfo *icon_info = l->data;
-
-      DEBUG_CACHE (("removing (due to out of space) %p (%s %d 0x%x) from LRU cache (cache size %d)\n",
-                    icon_info,
-                    g_strjoinv (",", icon_info->key.icon_names),
-                    icon_info->key.size, icon_info->key.flags,
-                    g_list_length (priv->info_cache_lru)));
-
-      priv->info_cache_lru = g_list_delete_link (priv->info_cache_lru, l);
-      g_object_unref (icon_info);
-    }
-}
-
-static void
-add_to_lru_cache (GtkIconTheme *icon_theme,
-                  GtkIconInfo  *icon_info)
-{
-  GtkIconThemePrivate *priv = icon_theme->priv;
-
-  DEBUG_CACHE (("adding  %p (%s %d 0x%x) to LRU cache (cache size %d)\n",
-                icon_info,
-                g_strjoinv (",", icon_info->key.icon_names),
-                icon_info->key.size, icon_info->key.flags,
-                g_list_length (priv->info_cache_lru)));
-
-  g_assert (g_list_find (priv->info_cache_lru, icon_info) == NULL);
-
-  ensure_lru_cache_space (icon_theme);
-  /* prepend new info to LRU */
-  priv->info_cache_lru = g_list_prepend (priv->info_cache_lru,
-                                         g_object_ref (icon_info));
-}
-
-static void
-ensure_in_lru_cache (GtkIconTheme *icon_theme,
-                     GtkIconInfo  *icon_info)
-{
-  GtkIconThemePrivate *priv = icon_theme->priv;
-  GList *l;
-
-  l = g_list_find (priv->info_cache_lru, icon_info);
-  if (l)
-    {
-      /* Move to front of LRU if already in it */
-      priv->info_cache_lru = g_list_remove_link (priv->info_cache_lru, l);
-      priv->info_cache_lru = g_list_concat (l, priv->info_cache_lru);
-    }
-  else
-    add_to_lru_cache (icon_theme, icon_info);
-}
-
-static void
-remove_from_lru_cache (GtkIconTheme *icon_theme,
-                       GtkIconInfo  *icon_info)
-{
-  GtkIconThemePrivate *priv = icon_theme->priv;
-  if (g_list_find (priv->info_cache_lru, icon_info))
-    {
-      DEBUG_CACHE (("removing %p (%s %d 0x%x) from LRU cache (cache size %d)\n",
-                    icon_info,
-                    g_strjoinv (",", icon_info->key.icon_names),
-                    icon_info->key.size, icon_info->key.flags,
-                    g_list_length (priv->info_cache_lru)));
-
-      priv->info_cache_lru = g_list_remove (priv->info_cache_lru, icon_info);
-      g_object_unref (icon_info);
-    }
-}
-
 static SymbolicPixbufCache *
 symbolic_pixbuf_cache_new (GdkPixbuf           *pixbuf,
                            const GdkRGBA       *fg,
@@ -1700,7 +1602,6 @@ real_choose_icon (GtkIconTheme       *icon_theme,
                     g_hash_table_size (priv->info_cache)));
 
       icon_info = g_object_ref (icon_info);
-      remove_from_lru_cache (icon_theme, icon_info);
 
       return icon_info;
     }
@@ -3728,14 +3629,9 @@ static void
 proxy_pixbuf_destroy (guchar *pixels, gpointer data)
 {
   GtkIconInfo *icon_info = data;
-  GtkIconTheme *icon_theme = icon_info->in_cache;
 
   g_assert (icon_info->proxy_pixbuf != NULL);
   icon_info->proxy_pixbuf = NULL;
-
-  /* Keep it alive a bit longer */
-  if (icon_theme != NULL)
-    ensure_in_lru_cache (icon_theme, icon_info);
 
   g_object_unref (icon_info);
 }
@@ -3844,9 +3740,6 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
 
       g_object_add_weak_pointer (G_OBJECT (icon_info->texture), (void **)&icon_info->texture);
     }
-
-  if (icon_info->in_cache != NULL)
-    ensure_in_lru_cache (icon_info->in_cache, icon_info);
 
   return GDK_PAINTABLE (g_object_ref (icon_info->texture));
 }
@@ -3962,7 +3855,6 @@ proxy_symbolic_pixbuf_destroy (guchar   *pixels,
                                gpointer  data)
 {
   GtkIconInfo *icon_info = data;
-  GtkIconTheme *icon_theme = icon_info->in_cache;
   SymbolicPixbufCache *symbolic_cache;
 
   for (symbolic_cache = icon_info->symbolic_pixbuf_cache;
@@ -3978,10 +3870,6 @@ proxy_symbolic_pixbuf_destroy (guchar   *pixels,
   g_assert (symbolic_cache->proxy_pixbuf != NULL);
 
   symbolic_cache->proxy_pixbuf = NULL;
-
-  /* Keep it alive a bit longer */
-  if (icon_theme != NULL)
-    ensure_in_lru_cache (icon_theme, icon_info);
 
   g_object_unref (icon_info);
 }
