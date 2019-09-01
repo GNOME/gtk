@@ -202,7 +202,6 @@ typedef struct _SymbolicPixbufCache SymbolicPixbufCache;
 
 struct _SymbolicPixbufCache {
   GdkPixbuf *pixbuf;
-  GdkPixbuf *proxy_pixbuf;
   GdkRGBA  fg;
   GdkRGBA  success_color;
   GdkRGBA  warning_color;
@@ -258,7 +257,6 @@ struct _GtkIconInfo
    * the icon.
    */
   GdkPixbuf *pixbuf;
-  GdkPixbuf *proxy_pixbuf;
   GdkTexture *texture;
   GError *load_error;
   gdouble unscaled_scale;
@@ -3299,7 +3297,6 @@ gtk_icon_info_finalize (GObject *object)
 
   g_clear_object (&icon_info->loadable);
   g_clear_object (&icon_info->pixbuf);
-  g_clear_object (&icon_info->proxy_pixbuf);
   g_clear_object (&icon_info->cache_pixbuf);
   g_clear_error (&icon_info->load_error);
 
@@ -3625,17 +3622,6 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
   return TRUE;
 }
 
-static void
-proxy_pixbuf_destroy (guchar *pixels, gpointer data)
-{
-  GtkIconInfo *icon_info = data;
-
-  g_assert (icon_info->proxy_pixbuf != NULL);
-  icon_info->proxy_pixbuf = NULL;
-
-  g_object_unref (icon_info);
-}
-
 static GdkPixbuf *
 icon_info_load_pixbuf (GtkIconInfo  *icon_info,
                        GError      **error)
@@ -3658,27 +3644,10 @@ icon_info_load_pixbuf (GtkIconInfo  *icon_info,
       return NULL;
     }
 
-  /* Instead of returning the pixbuf directly we return a proxy
-   * to it that we don't own (but that shares the data with the
-   * one we own). This way we can know when it is freed and ensure
-   * the IconInfo is alive (and thus cached) while the pixbuf is
-   * still alive.
-   */
-  if (icon_info->proxy_pixbuf != NULL)
-    return g_object_ref (icon_info->proxy_pixbuf);
+  if (icon_info->pixbuf != NULL)
+    return g_object_ref (icon_info->pixbuf);
 
-  icon_info->proxy_pixbuf =
-    gdk_pixbuf_new_from_data (gdk_pixbuf_get_pixels (icon_info->pixbuf),
-                              gdk_pixbuf_get_colorspace (icon_info->pixbuf),
-                              gdk_pixbuf_get_has_alpha (icon_info->pixbuf),
-                              gdk_pixbuf_get_bits_per_sample (icon_info->pixbuf),
-                              gdk_pixbuf_get_width (icon_info->pixbuf),
-                              gdk_pixbuf_get_height (icon_info->pixbuf),
-                              gdk_pixbuf_get_rowstride (icon_info->pixbuf),
-                              proxy_pixbuf_destroy,
-                              g_object_ref (icon_info));
-
-  return icon_info->proxy_pixbuf;
+  return NULL;
 }
 
 /**
@@ -3848,51 +3817,6 @@ gtk_icon_info_load_icon_finish (GtkIconInfo   *icon_info,
 
   /* This is now guaranteed to not block */
   return gtk_icon_info_load_icon (icon_info, error);
-}
-
-static void
-proxy_symbolic_pixbuf_destroy (guchar   *pixels,
-                               gpointer  data)
-{
-  GtkIconInfo *icon_info = data;
-  SymbolicPixbufCache *symbolic_cache;
-
-  for (symbolic_cache = icon_info->symbolic_pixbuf_cache;
-       symbolic_cache != NULL;
-       symbolic_cache = symbolic_cache->next)
-    {
-      if (symbolic_cache->proxy_pixbuf != NULL &&
-          gdk_pixbuf_get_pixels (symbolic_cache->proxy_pixbuf) == pixels)
-        break;
-    }
-
-  g_assert (symbolic_cache != NULL);
-  g_assert (symbolic_cache->proxy_pixbuf != NULL);
-
-  symbolic_cache->proxy_pixbuf = NULL;
-
-  g_object_unref (icon_info);
-}
-
-static GdkPixbuf *
-symbolic_cache_get_proxy (SymbolicPixbufCache *symbolic_cache,
-                          GtkIconInfo         *icon_info)
-{
-  if (symbolic_cache->proxy_pixbuf)
-    return g_object_ref (symbolic_cache->proxy_pixbuf);
-
-  symbolic_cache->proxy_pixbuf =
-    gdk_pixbuf_new_from_data (gdk_pixbuf_get_pixels (symbolic_cache->pixbuf),
-                              gdk_pixbuf_get_colorspace (symbolic_cache->pixbuf),
-                              gdk_pixbuf_get_has_alpha (symbolic_cache->pixbuf),
-                              gdk_pixbuf_get_bits_per_sample (symbolic_cache->pixbuf),
-                              gdk_pixbuf_get_width (symbolic_cache->pixbuf),
-                              gdk_pixbuf_get_height (symbolic_cache->pixbuf),
-                              gdk_pixbuf_get_rowstride (symbolic_cache->pixbuf),
-                              proxy_symbolic_pixbuf_destroy,
-                              g_object_ref (icon_info));
-
-  return symbolic_cache->proxy_pixbuf;
 }
 
 #define MAX_RGB_STRING_LENGTH (3 + 1 + ((3 + 1) * 3) + 1 + 1)
@@ -4186,8 +4110,8 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
     {
       symbolic_cache = symbolic_pixbuf_cache_matches (icon_info->symbolic_pixbuf_cache,
                                                       fg, success_color, warning_color, error_color);
-      if (symbolic_cache)
-        return symbolic_cache_get_proxy (symbolic_cache, icon_info);
+      if (symbolic_cache && symbolic_cache->pixbuf)
+          return g_object_ref (symbolic_cache->pixbuf);
     }
 
   icon_uri = g_file_get_uri (icon_info->icon_file);
@@ -4206,7 +4130,7 @@ gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
             symbolic_pixbuf_cache_new (pixbuf, fg, success_color, warning_color, error_color,
                                        icon_info->symbolic_pixbuf_cache);
           g_object_unref (pixbuf);
-          return symbolic_cache_get_proxy (icon_info->symbolic_pixbuf_cache, icon_info);
+          return g_object_ref (icon_info->symbolic_pixbuf_cache->pixbuf);
         }
       else
         return pixbuf;
@@ -4512,7 +4436,7 @@ gtk_icon_info_load_symbolic_async (GtkIconInfo          *icon_info,
                                                       fg, success_color, warning_color, error_color);
       if (symbolic_cache)
         {
-          pixbuf = symbolic_cache_get_proxy (symbolic_cache, icon_info);
+          pixbuf = g_object_ref (symbolic_cache->pixbuf);
           g_task_return_pointer (task, pixbuf, g_object_unref);
         }
       else
@@ -4604,7 +4528,7 @@ gtk_icon_info_load_symbolic_finish (GtkIconInfo   *icon_info,
 
       g_object_unref (pixbuf);
 
-      pixbuf = symbolic_cache_get_proxy (symbolic_cache, icon_info);
+      pixbuf = g_object_ref (symbolic_cache->pixbuf);
     }
   else
     {
