@@ -130,6 +130,9 @@ typedef enum
 #define DEBUG_CACHE(args)
 #endif
 
+#define LRU_CACHE_SIZE 100
+#define MAX_LRU_TEXTURE_SIZE 128
+
 typedef struct _GtkIconInfoClass    GtkIconInfoClass;
 typedef struct _GtkIconThemeClass   GtkIconThemeClass;
 typedef struct _GtkIconThemePrivate GtkIconThemePrivate;
@@ -156,6 +159,9 @@ struct _GtkIconTheme
 struct _GtkIconThemePrivate
 {
   GHashTable *info_cache;
+
+  GtkIconInfo *lru_cache[LRU_CACHE_SIZE];
+  int lru_cache_next;
 
   gchar *current_theme;
   gchar **search_path;
@@ -391,6 +397,34 @@ icon_info_key_equal (gconstpointer _a,
 }
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkIconTheme, gtk_icon_theme, G_TYPE_OBJECT)
+
+static void
+add_to_lru_cache (GtkIconInfo *info)
+{
+  GtkIconTheme *theme = info->in_cache;
+  GtkIconThemePrivate *priv = gtk_icon_theme_get_instance_private (theme);
+
+  if (!theme)
+    return;
+
+  if (info->texture &&
+      info->texture->width <= MAX_LRU_TEXTURE_SIZE &&
+      info->texture->height <= MAX_LRU_TEXTURE_SIZE)
+    {
+      g_set_object (&priv->lru_cache[priv->lru_cache_next], info);
+      priv->lru_cache_next = (priv->lru_cache_next + 1) % LRU_CACHE_SIZE;
+    }
+}
+
+static void
+clear_lru_cache (GtkIconTheme *icon_theme)
+{
+  GtkIconThemePrivate *priv = gtk_icon_theme_get_instance_private (icon_theme);
+  int i;
+
+  for (i = 0; i < LRU_CACHE_SIZE; i ++)
+    g_clear_object (&priv->lru_cache[i]);
+}
 
 /**
  * gtk_icon_theme_new:
@@ -762,6 +796,7 @@ do_theme_change (GtkIconTheme *icon_theme)
   GtkIconThemePrivate *priv = icon_theme->priv;
 
   g_hash_table_remove_all (priv->info_cache);
+  clear_lru_cache (icon_theme);
 
   if (!priv->themes_valid)
     return;
@@ -794,12 +829,9 @@ blow_themes (GtkIconTheme *icon_theme)
 static void
 gtk_icon_theme_finalize (GObject *object)
 {
-  GtkIconTheme *icon_theme;
-  GtkIconThemePrivate *priv;
+  GtkIconTheme *icon_theme = GTK_ICON_THEME (object);
+  GtkIconThemePrivate *priv = gtk_icon_theme_get_instance_private (icon_theme);
   int i;
-
-  icon_theme = GTK_ICON_THEME (object);
-  priv = icon_theme->priv;
 
   g_hash_table_destroy (priv->info_cache);
 
@@ -817,8 +849,9 @@ gtk_icon_theme_finalize (GObject *object)
   g_list_free_full (priv->resource_paths, g_free);
 
   blow_themes (icon_theme);
+  clear_lru_cache (icon_theme);
 
-  G_OBJECT_CLASS (gtk_icon_theme_parent_class)->finalize (object);  
+  G_OBJECT_CLASS (gtk_icon_theme_parent_class)->finalize (object);
 }
 
 /**
@@ -1421,9 +1454,10 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
         {
           g_hash_table_remove_all (priv->info_cache);
           blow_themes (icon_theme);
+          clear_lru_cache (icon_theme);
         }
     }
-  
+
   if (!priv->themes_valid)
     {
       load_themes (icon_theme);
@@ -1599,6 +1633,9 @@ real_choose_icon (GtkIconTheme       *icon_theme,
                     g_hash_table_size (priv->info_cache)));
 
       icon_info = g_object_ref (icon_info);
+
+      /* Move item to front in LRU cache */
+      add_to_lru_cache (icon_info);
 
       return icon_info;
     }
@@ -3641,6 +3678,8 @@ icon_info_ensure_scale_and_texture (GtkIconInfo *icon_info)
     }
 
   g_assert (icon_info->texture != NULL);
+  add_to_lru_cache (icon_info);
+
   return TRUE;
 }
 
