@@ -407,7 +407,7 @@ tracker_insert (GtkMenuTrackerItem *item,
                               G_BINDING_SYNC_CREATE);
 
       model = _gtk_menu_tracker_item_get_link (item, G_MENU_LINK_SUBMENU);
-      popover = GTK_POPOVER (gtk_popover_menu_new_from_model (GTK_WIDGET (widget), model));
+      popover = GTK_POPOVER (gtk_popover_menu_new_from_model_full (GTK_WIDGET (widget), model, GTK_POPOVER_MENU_NESTED));
       gtk_popover_set_position (popover, GTK_POS_BOTTOM);
       gtk_popover_set_has_arrow (popover, FALSE);
       gtk_widget_set_halign (GTK_WIDGET (popover), GTK_ALIGN_START);
