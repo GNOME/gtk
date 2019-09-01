@@ -2680,24 +2680,30 @@ string_from_suffix (IconSuffix suffix)
     }
 }
 
-static IconSuffix
+static inline IconSuffix
 suffix_from_name (const gchar *name)
 {
-  IconSuffix retval = ICON_SUFFIX_NONE;
+  const gsize name_len = strlen (name);
 
-  if (name != NULL)
+  if (name_len > 4)
     {
-      if (g_str_has_suffix (name, ".symbolic.png"))
-        retval = ICON_SUFFIX_SYMBOLIC_PNG;
-      else if (g_str_has_suffix (name, ".png"))
-        retval = ICON_SUFFIX_PNG;
-      else if (g_str_has_suffix (name, ".svg"))
-        retval = ICON_SUFFIX_SVG;
-      else if (g_str_has_suffix (name, ".xpm"))
-        retval = ICON_SUFFIX_XPM;
+      if (name_len > strlen (".symbolic.png"))
+        {
+          if (strcmp (name + name_len - strlen (".symbolic.png"), ".symbolic.png") == 0)
+            return ICON_SUFFIX_SYMBOLIC_PNG;
+        }
+
+      if (strcmp (name + name_len - strlen (".png"), ".png") == 0)
+        return ICON_SUFFIX_PNG;
+
+      if (strcmp (name + name_len - strlen (".svg"), ".svg") == 0)
+        return ICON_SUFFIX_SVG;
+
+      if (strcmp (name + name_len - strlen (".xpm"), ".xpm") == 0)
+        return ICON_SUFFIX_XPM;
     }
 
-  return retval;
+  return ICON_SUFFIX_NONE;
 }
 
 static IconSuffix
