@@ -2983,13 +2983,13 @@ theme_list_contexts (IconTheme  *theme,
     }
 }
 
-static gboolean
-scan_directory (GtkIconThemePrivate *icon_theme,
-                IconThemeDir        *dir,
-                gchar               *full_dir)
+static GHashTable *
+scan_directory (GtkIconThemePrivate  *icon_theme,
+                char                 *full_dir)
 {
   GDir *gdir;
   const gchar *name;
+  GHashTable *icons = NULL;
 
   GTK_DISPLAY_NOTE (icon_theme->display, ICONTHEME,
                     g_message ("scanning directory %s", full_dir));
@@ -2997,9 +2997,7 @@ scan_directory (GtkIconThemePrivate *icon_theme,
   gdir = g_dir_open (full_dir, 0, NULL);
 
   if (gdir == NULL)
-    return FALSE;
-
-  dir->icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+    return NULL;
 
   while ((name = g_dir_read_name (gdir)))
     {
@@ -3010,16 +3008,19 @@ scan_directory (GtkIconThemePrivate *icon_theme,
       if (suffix == ICON_SUFFIX_NONE)
         continue;
 
+      if (!icons)
+        icons = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
       base_name = strip_suffix (name);
 
-      hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (dir->icons, base_name));
+      hash_suffix = GPOINTER_TO_INT (g_hash_table_lookup (icons, base_name));
       /* takes ownership of base_name */
-      g_hash_table_replace (dir->icons, base_name, GUINT_TO_POINTER (hash_suffix|suffix));
+      g_hash_table_replace (icons, base_name, GUINT_TO_POINTER (hash_suffix|suffix));
     }
-  
+
   g_dir_close (gdir);
 
-  return g_hash_table_size (dir->icons) > 0;
+  return icons;
 }
 
 static void
@@ -3042,7 +3043,6 @@ theme_subdir_load (GtkIconTheme *icon_theme,
   GError *error = NULL;
   IconThemeDirMtime *dir_mtime;
   gint scale;
-  gboolean has_icons;
 
   size = g_key_file_get_integer (theme_file, subdir, "Size", &error);
   if (error)
@@ -3052,7 +3052,7 @@ theme_subdir_load (GtkIconTheme *icon_theme,
                  subdir, theme->name);
       return;
     }
-  
+
   type = ICON_THEME_DIR_THRESHOLD;
   type_string = g_key_file_get_string (theme_file, subdir, "Type", NULL);
   if (type_string)
@@ -3066,7 +3066,7 @@ theme_subdir_load (GtkIconTheme *icon_theme,
 
       g_free (type_string);
     }
-  
+
   context = 0;
   context_string = g_key_file_get_string (theme_file, subdir, "Context", NULL);
   if (context_string)
@@ -3107,10 +3107,33 @@ theme_subdir_load (GtkIconTheme *icon_theme,
       /* First, see if we have a cache for the directory */
       if (dir_mtime->cache != NULL || g_file_test (full_dir, G_FILE_TEST_IS_DIR))
         {
+          gboolean has_icons;
+          GtkIconCache *dir_cache;
+          GHashTable *icon_table = NULL;
+
           if (dir_mtime->cache == NULL)
             {
               /* This will return NULL if the cache doesn't exist or is outdated */
               dir_mtime->cache = gtk_icon_cache_new_for_path (dir_mtime->dir);
+            }
+
+          if (dir_mtime->cache != NULL)
+            {
+              dir_cache = dir_mtime->cache;
+              has_icons = gtk_icon_cache_has_icons (dir_cache, subdir);
+            }
+          else
+            {
+              dir_cache = NULL;
+              icon_table = scan_directory (icon_theme->priv, full_dir);
+              has_icons = icon_table != NULL;
+            }
+
+          if (!has_icons)
+            {
+              g_assert (!icon_table);
+              g_free (full_dir);
+              continue;
             }
 
           dir = g_new0 (IconThemeDir, 1);
@@ -3124,24 +3147,20 @@ theme_subdir_load (GtkIconTheme *icon_theme,
           dir->dir = full_dir;
           dir->subdir = g_strdup (subdir);
           dir->scale = scale;
+          dir->icons = icon_table;
 
-          if (dir_mtime->cache != NULL)
+          if (dir_cache)
             {
-              dir->cache = gtk_icon_cache_ref (dir_mtime->cache);
+              dir->cache = gtk_icon_cache_ref (dir_cache);
               dir->subdir_index = gtk_icon_cache_get_directory_index (dir->cache, dir->subdir);
-              has_icons = gtk_icon_cache_has_icons (dir->cache, dir->subdir);
             }
           else
             {
-              dir->cache = NULL;
+              dir_cache = NULL;
               dir->subdir_index = -1;
-              has_icons = scan_directory (icon_theme->priv, dir, full_dir);
             }
 
-          if (has_icons)
-            theme->dirs = g_list_prepend (theme->dirs, dir);
-          else
-            theme_dir_destroy (dir);
+          theme->dirs = g_list_prepend (theme->dirs, dir);
         }
       else
         g_free (full_dir);
