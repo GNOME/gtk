@@ -2187,6 +2187,7 @@ menuitem {
 
 popover.background {
   background-color: transparent;
+  font: initial; // Decouple the font of popovers from their entry/textview
 
   > arrow,
   > contents {
