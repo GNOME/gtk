@@ -85,7 +85,6 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   GMappedFile *map;
 
   gchar *cache_filename;
-  gint fd = -1;
   GStatBuf st;
   GStatBuf path_st;
 
@@ -97,24 +96,7 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   if (g_stat (path, &path_st) < 0)
     goto done;
 
-  /* Open the file and map it into memory */
-  fd = g_open (cache_filename, O_RDONLY|_O_BINARY, 0);
-
-  if (fd < 0)
-    goto done;
-
-#ifdef G_OS_WIN32
-
-/* Bug 660730: _fstat32 is only defined in msvcrt80.dll+/VS 2005+ */
-/*             or possibly in the msvcrt.dll linked to by the Windows DDK */
-/*             (will need to check on the Windows DDK part later) */
-#if ((_MSC_VER >= 1400 || __MSVCRT_VERSION__ >= 0x0800) || defined (__MINGW64_VERSION_MAJOR)) && !defined(_WIN64)
-#undef fstat /* Just in case */
-#define fstat _fstat32  
-#endif
-#endif
-
-  if (fstat (fd, &st) < 0 || st.st_size < 4)
+  if (g_stat (cache_filename, &st) < 0 || st.st_size < 4)
     goto done;
 
   /* Verify cache is uptodate */
@@ -158,8 +140,6 @@ _gtk_icon_cache_new_for_path (const gchar *path)
 
  done:
   g_free (cache_filename);  
-  if (fd >= 0)
-    close (fd);
 
   return cache;
 }
