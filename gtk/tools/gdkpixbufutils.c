@@ -132,8 +132,7 @@ _gdk_pixbuf_new_from_resource_scaled (const gchar  *resource_path,
 }
 
 static GdkPixbuf *
-load_symbolic_svg (const char     *file_data,
-                   gsize           file_len,
+load_symbolic_svg (const char     *escaped_file_data,
                    int             width,
                    int             height,
                    double          scale,
@@ -149,7 +148,6 @@ load_symbolic_svg (const char     *file_data,
   GdkPixbuf *pixbuf;
   gchar *data;
   gchar *svg_width, *svg_height;
-  gchar *escaped_file_data;
 
   if (width == 0)
     width = icon_width * scale;
@@ -158,8 +156,6 @@ load_symbolic_svg (const char     *file_data,
 
   svg_width = g_strdup_printf ("%d", icon_width);
   svg_height = g_strdup_printf ("%d", icon_height);
-
-  escaped_file_data = g_base64_encode ((guchar *) file_data, file_len);
 
   data = g_strconcat ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
                       "<svg version=\"1.1\"\n"
@@ -184,7 +180,6 @@ load_symbolic_svg (const char     *file_data,
                       "  <xi:include href=\"data:text/xml;base64,", escaped_file_data, "\"/>\n"
                       "</svg>",
                       NULL);
-  g_free (escaped_file_data);
   g_free (svg_width);
   g_free (svg_height);
 
@@ -246,6 +241,7 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
   GdkPixbuf *pixbuf = NULL;
   int plane;
   int icon_width, icon_height;
+  char *escaped_file_data;
 
   /* Fetch size from the original icon */
   {
@@ -262,6 +258,8 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
     g_object_unref (reference);
   }
 
+  escaped_file_data = g_base64_encode ((guchar *) file_data, file_len);
+
   for (plane = 0; plane < 3; plane++)
     {
       /* Here we render the svg with all colors solid, this should
@@ -276,7 +274,7 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
        * channels, with the color of the fg being implicitly
        * the "rest", as all color fractions should add up to 1.
        */
-      loaded = load_symbolic_svg (file_data, file_len, width, height, scale,
+      loaded = load_symbolic_svg (escaped_file_data, width, height, scale,
                                   icon_width,
                                   icon_height,
                                   g_string,
@@ -302,6 +300,8 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
 
       g_object_unref (loaded);
     }
+
+  g_free (escaped_file_data);
 
   return pixbuf;
 }
