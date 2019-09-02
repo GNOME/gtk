@@ -2187,59 +2187,54 @@ menuitem {
 
 popover.background {
   background-color: transparent;
-  padding: 0px;
-}
 
-popover.menu>arrow,
-popover>arrow {
-  background-color: $popover_bg_color;
-  border: 1px solid $borders_color;
-}
-
-popover>contents {
-  padding: 8px;
-  background-color: $popover_bg_color;
-  border: 1px solid $borders_color;
-  margin: 0px;
-}
-
-popover.background>contents {
-
-  background-color: $popover_bg_color;
-  box-shadow: 0 1px 2px transparentize(black, 0.7);
-  .csd &, & {
+  > arrow,
+  > contents {
+    background-color: $popover_bg_color;
     border: 1px solid $borders_color;
+    box-shadow: 0 1px 2px transparentize(black, 0.7);
+
+    &:backdrop {
+      background-color: $backdrop_bg_color;
+      border-color: $backdrop_borders_color;
+      box-shadow: none;
+    }
+  }
+
+  > contents {
+    padding: 8px;
     border-radius: $popover_radius;
+
+    > list,
+    > .view,
+    > toolbar {
+      border-style: none;
+      background-color: transparent;
+    }
+
+    separator { margin: 3px; }
+
+    list separator { margin: 0; }
   }
 
-  &:backdrop {
-    background-color: $backdrop_bg_color;
-    box-shadow: none;
-  }
-
-  > list,
-  > .view,
-  > toolbar {
-    border-style: none;
+  .osd &,
+  &.touch-selection,
+  &.magnifier {
     background-color: transparent;
-  }
 
-  .csd &, & {
-    &.touch-selection,
-    &.magnifier {
+    > arrow,
+    > contents {
       @extend %osd;
 
       border: 1px solid transparentize(white, 0.9);
-
-      button { @extend %osd_button };
+      box-shadow: none;
     }
-
-    &.osd { @extend %osd; }
   }
 
-  separator { margin: 3px; }
-
-  list separator { margin: 0px; }
+  &.touch-selection,
+  &.magnifier {
+    button { @extend %osd_button; }
+  }
 }
 
 
