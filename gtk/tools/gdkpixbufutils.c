@@ -139,29 +139,17 @@ load_symbolic_svg (const char     *file_data,
                    double          scale,
                    int             icon_width,
                    int             icon_height,
-                   const GdkRGBA  *fg,
-                   const GdkRGBA  *success_color,
-                   const GdkRGBA  *warning_color,
-                   const GdkRGBA  *error_color,
+                   const char     *fg_string,
+                   const char     *success_color_string,
+                   const char     *warning_color_string,
+                   const char     *error_color_string,
                    GError        **error)
 {
   GInputStream *stream;
   GdkPixbuf *pixbuf;
-  gchar *css_fg;
-  gchar *css_success;
-  gchar *css_warning;
-  gchar *css_error;
   gchar *data;
   gchar *svg_width, *svg_height;
   gchar *escaped_file_data;
-
-  css_fg = gdk_rgba_to_string (fg);
-
-  css_success = css_warning = css_error = NULL;
-
-  css_warning = gdk_rgba_to_string (warning_color);
-  css_error = gdk_rgba_to_string (error_color);
-  css_success = gdk_rgba_to_string (success_color);
 
   if (width == 0)
     width = icon_width * scale;
@@ -181,26 +169,22 @@ load_symbolic_svg (const char     *file_data,
                       "     height=\"", svg_height, "\">\n"
                       "  <style type=\"text/css\">\n"
                       "    rect,circle,path {\n"
-                      "      fill: ", css_fg," !important;\n"
+                      "      fill: ", fg_string," !important;\n"
                       "    }\n"
                       "    .warning {\n"
-                      "      fill: ", css_warning, " !important;\n"
+                      "      fill: ", warning_color_string, " !important;\n"
                       "    }\n"
                       "    .error {\n"
-                      "      fill: ", css_error ," !important;\n"
+                      "      fill: ", error_color_string ," !important;\n"
                       "    }\n"
                       "    .success {\n"
-                      "      fill: ", css_success, " !important;\n"
+                      "      fill: ", success_color_string, " !important;\n"
                       "    }\n"
                       "  </style>\n"
                       "  <xi:include href=\"data:text/xml;base64,", escaped_file_data, "\"/>\n"
                       "</svg>",
                       NULL);
   g_free (escaped_file_data);
-  g_free (css_fg);
-  g_free (css_warning);
-  g_free (css_error);
-  g_free (css_success);
   g_free (svg_width);
   g_free (svg_height);
 
@@ -256,7 +240,8 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
                                     GError     **error)
 
 {
-  GdkRGBA r = { 1,0,0,1}, g = {0,1,0,1};
+  const char *r_string = "rgb(1,0,0)";
+  const char *g_string = "rgb(1,1,0)";
   GdkPixbuf *loaded;
   GdkPixbuf *pixbuf = NULL;
   int plane;
@@ -294,10 +279,10 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
       loaded = load_symbolic_svg (file_data, file_len, width, height, scale,
                                   icon_width,
                                   icon_height,
-                                  &g,
-                                  plane == 0 ? &r : &g,
-                                  plane == 1 ? &r : &g,
-                                  plane == 2 ? &r : &g,
+                                  g_string,
+                                  plane == 0 ? r_string : g_string,
+                                  plane == 1 ? r_string : g_string,
+                                  plane == 2 ? r_string : g_string,
                                   error);
       if (loaded == NULL)
         return NULL;
