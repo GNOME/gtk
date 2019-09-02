@@ -935,6 +935,8 @@ close_menu (GtkModelButton *button)
     }
 }
 
+static void open_submenu (GtkPopover *popover);
+
 static void
 gtk_model_button_clicked (GtkButton *button)
 {
@@ -946,7 +948,14 @@ gtk_model_button_clicked (GtkButton *button)
     }
   else if (model_button->popover != NULL)
     {
-      gtk_popover_popup (GTK_POPOVER (model_button->popover));
+      GtkPopoverMenu *menu;
+      GtkWidget *submenu;
+
+      menu = (GtkPopoverMenu *)gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_POPOVER_MENU);
+      submenu = model_button->popover;
+      gtk_popover_popup (GTK_POPOVER (submenu));
+      gtk_popover_menu_set_open_submenu (menu, submenu);
+      gtk_popover_menu_set_parent_menu (GTK_POPOVER_MENU (submenu), GTK_WIDGET (menu));
     }
   else if (model_button->role == GTK_BUTTON_ROLE_NORMAL)
     {
@@ -1031,7 +1040,14 @@ gtk_model_button_focus (GtkWidget        *widget,
                button->role == GTK_BUTTON_ROLE_NORMAL &&
                button->popover != NULL)
         {
-          gtk_popover_popup (GTK_POPOVER (button->popover));
+          GtkPopoverMenu *menu;
+          GtkWidget *submenu;
+
+          menu = GTK_POPOVER_MENU (gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_POPOVER_MENU));
+          submenu = button->popover;
+          gtk_popover_popup (GTK_POPOVER (submenu));
+          gtk_popover_menu_set_open_submenu (menu, submenu);
+          gtk_popover_menu_set_parent_menu (GTK_POPOVER_MENU (submenu), GTK_WIDGET (menu));
           return TRUE;
         }
     }
@@ -1191,34 +1207,46 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
 }
 
 static void
-close_submenus (GtkPopoverMenu *menu)
+close_submenus (GtkPopover *popover)
 {
-  GtkWidget *submenu;
+  GtkPopoverMenu *menu;
 
-  submenu = gtk_popover_menu_get_open_submenu (menu);
-  if (submenu)
+  if (GTK_IS_POPOVER_MENU (popover))
     {
-      close_submenus (GTK_POPOVER_MENU (submenu));
-      gtk_popover_popdown (GTK_POPOVER (submenu));
-      gtk_popover_menu_set_open_submenu (menu, NULL);
+      GtkWidget *submenu;
+
+      menu = GTK_POPOVER_MENU (popover);
+      submenu = gtk_popover_menu_get_open_submenu (menu);
+      if (submenu)
+        {
+          close_submenus (GTK_POPOVER (submenu));
+          gtk_popover_popdown (GTK_POPOVER (submenu));
+          gtk_popover_menu_set_open_submenu (menu, NULL);
+        }
     }
 }
 
 static void
-open_submenu (GtkPopoverMenu *menu)
+open_submenu (GtkPopover *popover)
 {
   GtkWidget *active_item;
+  GtkPopoverMenu *menu;
 
-  active_item = gtk_popover_menu_get_active_item (menu);
-  if (GTK_IS_MODEL_BUTTON (active_item) &&
-      GTK_MODEL_BUTTON (active_item)->popover)
+  if (GTK_IS_POPOVER_MENU (popover))
     {
-      GtkWidget *submenu;
+      menu = GTK_POPOVER_MENU (popover);
 
-      submenu = GTK_MODEL_BUTTON (active_item)->popover;
-      gtk_popover_popup (GTK_POPOVER (submenu));
-      gtk_popover_menu_set_open_submenu (menu, submenu);
-      gtk_popover_menu_set_parent_menu (GTK_POPOVER_MENU (submenu), GTK_WIDGET (menu));
+      active_item = gtk_popover_menu_get_active_item (menu);
+      if (GTK_IS_MODEL_BUTTON (active_item) &&
+          GTK_MODEL_BUTTON (active_item)->popover)
+        {
+          GtkWidget *submenu;
+
+          submenu = GTK_MODEL_BUTTON (active_item)->popover;
+          gtk_popover_popup (GTK_POPOVER (submenu));
+          gtk_popover_menu_set_open_submenu (menu, submenu);
+          gtk_popover_menu_set_parent_menu (GTK_POPOVER_MENU (submenu), GTK_WIDGET (menu));
+        }
     }
 }
 
@@ -1247,11 +1275,11 @@ enter_cb (GtkEventController *controller,
   active_item = gtk_popover_menu_get_active_item (GTK_POPOVER_MENU (popover));
   if (popover && (is || contains) && active_item != target)
     {
-      close_submenus (GTK_POPOVER_MENU (popover));
+      close_submenus (GTK_POPOVER (popover));
 
       gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (popover), target);
 
-      open_submenu (GTK_POPOVER_MENU (popover));
+      open_submenu (GTK_POPOVER (popover));
     }
 }
 

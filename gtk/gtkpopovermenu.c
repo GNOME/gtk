@@ -203,14 +203,19 @@ static void
 focus_out (GtkEventController *controller,
            GdkCrossingMode     mode,
            GdkNotifyType       detail,
-           GtkPopover         *popover)
+           GtkPopoverMenu     *menu)
 {
   gboolean contains_focus;
 
   g_object_get (controller, "contains-focus", &contains_focus, NULL);
 
   if (!contains_focus)
-    gtk_popover_popdown (popover);
+    {
+      if (menu->parent_menu &&
+          GTK_POPOVER_MENU (menu->parent_menu)->open_submenu == menu)
+        GTK_POPOVER_MENU (menu->parent_menu)->open_submenu = NULL;
+      gtk_popover_popdown (GTK_POPOVER (menu));
+    }
 }
 
 static void
@@ -345,10 +350,21 @@ gtk_popover_menu_focus (GtkWidget        *widget,
     }
   else
     {
+      if (GTK_POPOVER_MENU (widget)->open_submenu)
+        {
+          if (gtk_widget_child_focus (GTK_POPOVER_MENU (widget)->open_submenu, direction))
+            return TRUE;
+          return FALSE;
+        }
+
       if (gtk_widget_focus_move (widget, direction))
         return TRUE;
 
-      if (direction == GTK_DIR_UP || direction == GTK_DIR_DOWN)
+      if (direction == GTK_DIR_LEFT || direction == GTK_DIR_RIGHT)
+        {
+          return FALSE;
+        }
+      else if (direction == GTK_DIR_UP || direction == GTK_DIR_DOWN)
         {
           GtkWidget *p;
 
