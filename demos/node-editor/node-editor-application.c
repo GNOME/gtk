@@ -26,9 +26,9 @@
 static const char *css =
 "textview.editor {"
 "  color: rgb(192, 197, 206);"
-"  caret-color: white;"
+"  caret-color: currentColor;"
 "}"
-"textview.editor text {"
+"textview.editor > text {"
 "  background-color: rgb(43, 48, 59);"
 "}"
 ;
