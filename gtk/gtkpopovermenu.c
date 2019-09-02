@@ -554,6 +554,10 @@ gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
  * Actions can also be added using gtk_widget_insert_action_group()
  * on the menus attach widget or on any of its parent widgets.
  *
+ * This function creates menus with sliding submenus.
+ * See gtk_popover_menu_new_from_model_full() for a way
+ * to control this.
+ *
  * Returns: the new #GtkPopoverMenu
  */
 GtkWidget *
@@ -564,6 +568,29 @@ gtk_popover_menu_new_from_model (GtkWidget  *relative_to,
   return gtk_popover_menu_new_from_model_full (relative_to, model, 0);
 }
 
+/**
+ * gtk_popover_menu_new_from_model_full:
+ * @relative_to: (allow-none): #GtkWidget the popover is related to
+ * @model: a #GMenuModel
+ * @flags: flags that affect how the menu is created
+ *
+ * Creates a #GtkPopoverMenu and populates it according to
+ * @model. The popover is pointed to the @relative_to widget.
+ *
+ * The created buttons are connected to actions found in the
+ * #GtkApplicationWindow to which the popover belongs - typically
+ * by means of being attached to a widget that is contained within
+ * the #GtkApplicationWindows widget hierarchy.
+ *
+ * Actions can also be added using gtk_widget_insert_action_group()
+ * on the menus attach widget or on any of its parent widgets.
+ *
+ * The only flag that is supported currently is
+ * #GTK_POPOVER_MENU_NESTED, which makes GTK create traditional,
+ * nested submenus instead of the default sliding submenus.
+ *
+ * Returns: the new #GtkPopoverMenu
+ */
 GtkWidget *
 gtk_popover_menu_new_from_model_full (GtkWidget           *relative_to,
                                       GMenuModel          *model,
