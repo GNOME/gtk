@@ -137,6 +137,8 @@ load_symbolic_svg (const char     *file_data,
                    int             width,
                    int             height,
                    double          scale,
+                   int             icon_width,
+                   int             icon_height,
                    const GdkRGBA  *fg,
                    const GdkRGBA  *success_color,
                    const GdkRGBA  *warning_color,
@@ -161,22 +163,13 @@ load_symbolic_svg (const char     *file_data,
   css_error = gdk_rgba_to_string (error_color);
   css_success = gdk_rgba_to_string (success_color);
 
-  /* Fetch size from the original icon */
-  stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
-  pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
-  g_object_unref (stream);
-
-  if (!pixbuf)
-    return NULL;
-
   if (width == 0)
-    width = gdk_pixbuf_get_width (pixbuf) * scale;
+    width = icon_width * scale;
   if (height == 0)
-    height = gdk_pixbuf_get_height (pixbuf) * scale;
+    height = icon_height * scale;
 
-  svg_width = g_strdup_printf ("%d", gdk_pixbuf_get_width (pixbuf));
-  svg_height = g_strdup_printf ("%d", gdk_pixbuf_get_height (pixbuf));
-  g_object_unref (pixbuf);
+  svg_width = g_strdup_printf ("%d", icon_width);
+  svg_height = g_strdup_printf ("%d", icon_height);
 
   escaped_file_data = g_base64_encode ((guchar *) file_data, file_len);
 
@@ -267,6 +260,22 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
   GdkPixbuf *loaded;
   GdkPixbuf *pixbuf = NULL;
   int plane;
+  int icon_width, icon_height;
+
+  /* Fetch size from the original icon */
+  {
+    GInputStream *stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
+    GdkPixbuf *reference = gdk_pixbuf_new_from_stream (stream, NULL, error);
+
+    g_object_unref (stream);
+
+    if (!reference)
+      return NULL;
+
+    icon_width = gdk_pixbuf_get_width (reference);
+    icon_height = gdk_pixbuf_get_height (reference);
+    g_object_unref (reference);
+  }
 
   for (plane = 0; plane < 3; plane++)
     {
@@ -283,6 +292,8 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
        * the "rest", as all color fractions should add up to 1.
        */
       loaded = load_symbolic_svg (file_data, file_len, width, height, scale,
+                                  icon_width,
+                                  icon_height,
                                   &g,
                                   plane == 0 ? &r : &g,
                                   plane == 1 ? &r : &g,
