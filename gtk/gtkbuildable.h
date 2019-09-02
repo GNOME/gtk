@@ -226,8 +226,8 @@ GDK_AVAILABLE_IN_ALL
 GPtrArray    *gtk_buildable_parse_context_get_element_stack (GtkBuildableParseContext *context);
 GDK_AVAILABLE_IN_ALL
 void          gtk_buildable_parse_context_get_position      (GtkBuildableParseContext *context,
-                                                             gint                *line_number,
-                                                             gint                *char_number);
+                                                             gint                     *line_number,
+                                                             gint                     *char_number);
 
 G_END_DECLS
 
