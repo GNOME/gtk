@@ -82,23 +82,23 @@
  * |[<!-- language="C" -->
  * GError *error = NULL;
  * GtkIconTheme *icon_theme;
- * GdkPixbuf *pixbuf;
+ * GdkPaintable *paintable;
  *
  * icon_theme = gtk_icon_theme_get_default ();
- * pixbuf = gtk_icon_theme_load_icon (icon_theme,
- *                                    "my-icon-name", // icon name
- *                                    48, // icon size
- *                                    0,  // flags
- *                                    &error);
- * if (!pixbuf)
+ * paintable = gtk_icon_theme_load_icon (icon_theme,
+ *                                       "my-icon-name", // icon name
+ *                                       48, // icon size
+ *                                       0,  // flags
+ *                                       &error);
+ * if (!paintable)
  *   {
  *     g_warning ("Couldn’t load icon: %s", error->message);
  *     g_error_free (error);
  *   }
  * else
  *   {
- *     // Use the pixbuf
- *     g_object_unref (pixbuf);
+ *     // Use the icon
+ *     g_object_unref (paintable);
  *   }
  * ]|
  */
