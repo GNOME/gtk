@@ -34,8 +34,10 @@ When OUTPUT is -, write to standard output.
 Examples:
   gtk-builder-convert preference.glade preferences.ui
 
-Report bugs to http://bugzilla.gnome.org/."""
+Report bugs to https://gitlab.gnome.org/GNOME/gtk/issues/new
+"""
 
+from __future__ import print_function
 import getopt
 import os
 import sys
@@ -47,12 +49,7 @@ DIALOGS = ['GtkDialog',
            'GtkMessageDialog']
 WINDOWS = ['GtkWindow'] + DIALOGS
 
-# The subprocess is only available in Python 2.4+
-try:
-    import subprocess
-    subprocess # pyflakes
-except ImportError:
-    subprocess = None
+import subprocess
 
 def get_child_nodes(node):
     assert node.tagName == 'object'
@@ -259,7 +256,7 @@ class GtkBuilderConverter(object):
         for node in objects:
             self._convert(node.getAttribute("class"), node)
             if self._get_object(node.getAttribute('id')) is not None:
-		print "WARNING: duplicate id \"" + node.getAttribute('id') + "\""
+                print("WARNING: duplicate id \"" + node.getAttribute('id') + "\"")
             self.objects[node.getAttribute('id')] = node
 
         # Convert Gazpachos UI tag
@@ -270,15 +267,8 @@ class GtkBuilderConverter(object):
         for node in self._dom.getElementsByTagName("accessibility"):
             self._convert_accessibility(node)
 
-        # Output the newly created root objects and sort them
-        # by attribute id
-        # FIXME: Use sorted(self.root_objects,
-        #                   key=lambda n: n.getAttribute('id'),
-        #                   reverse=True):
-        # when we can depend on python 2.4 or higher
         root_objects = self.root_objects[:]
-        root_objects.sort(lambda a, b: cmp(b.getAttribute('id'),
-                                           a.getAttribute('id')))
+        root_objects.sort(key=lambda a: a.getAttribute('id'), reverse=True)
         for obj in root_objects:
             self._interface.childNodes.insert(0, obj)
 
@@ -461,8 +451,8 @@ class GtkBuilderConverter(object):
             if signal_name in ['activate', 'toggled']:
                 action.appendChild(signal)
             else:
-                print 'Unhandled signal %s::%s' % (node.getAttribute('class'),
-                                                   signal_name)
+                print('Unhandled signal %s::%s' % (node.getAttribute('class'),
+                                                   signal_name))
 
         if not uimgr.childNodes:
             child = self._dom.createElement('child')
@@ -481,8 +471,8 @@ class GtkBuilderConverter(object):
         for accelerator in get_accelerator_nodes(node):
             signal_name = accelerator.getAttribute('signal')
             if signal_name != 'activate':
-                print 'Unhandled accelerator signal for %s::%s' % (
-                    node.getAttribute('class'), signal_name)
+                print('Unhandled accelerator signal for %s::%s' % (
+                    node.getAttribute('class'), signal_name))
                 continue
             accelerator.removeAttribute('signal')
             child.appendChild(accelerator)
@@ -747,7 +737,7 @@ def _indent(output):
     return s.stdout.read()
 
 def usage():
-    print __doc__
+    print(__doc__)
 
 def main(args):
     try:
@@ -788,10 +778,13 @@ def main(args):
 
     xml = _indent(conv.to_xml())
     if output_filename == "-":
-        print xml
+        if isinstance(xml, str):
+            print(xml)
+        else:
+            print(xml.decode(sys.stdout.encoding))
     else:
-        open(output_filename, 'w').write(xml)
-        print "Wrote", output_filename
+        open(output_filename, 'wb').write(xml)
+        print("Wrote", output_filename)
 
     return 0
 
