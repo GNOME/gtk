@@ -1,10 +1,18 @@
 //apps rely on some named colors to be exported
 /* GTK NAMED COLORS
    ----------------
-   use responsibly! */
 
-// Sass thinks we're using the colors in the variables as strings and may shoot
-// warning, it's innocuous and can be defeated by using "" + $var
+   Tread carefully. The purpose of exposing some named colors to applications isn't to move 
+   the burden of supporting X themes out there to app developers. It is to allow some flexibility 
+   creating custom controls/widgets in applications and have them behave gracefully with 
+   the dark variant and high contrast theme. The fact that it might work with 3rd party themes 
+   is a bonus.
+   
+   
+*/
+
+// SASS WORKAROUND: Sass thinks we're using the colors in the variables as strings and may trigger
+// a warning, can be defeated by using "" + $var
 /*
 widget text/foreground color */
 @define-color theme_fg_color #{"" +$fg_color};
@@ -18,11 +26,12 @@ widget base background color */
 @define-color theme_bg_color #{"" +$bg_color};
 
 /*
-text widgets and the like base background color */
+text widgets and the like base background color
+by defalt lighter than theme_bg_color */
 @define-color theme_base_color #{"" +$base_color};
 
 /*
-base background color of selections */
+background color of selections */
 @define-color theme_selected_bg_color #{"" +$selected_bg_color};
 
 /*
@@ -30,7 +39,7 @@ text/foreground color of selections */
 @define-color theme_selected_fg_color #{"" +$selected_fg_color};
 
 /*
-base background color of insensitive widgets */
+background color of insensitive/disabled widgets */
 @define-color insensitive_bg_color #{"" +$insensitive_bg_color};
 
 /*
@@ -78,7 +87,7 @@ widgets main borders color on backdrop windows */
 @define-color unfocused_borders #{"" +$backdrop_borders_color};
 
 /*
-these are pretty self explicative */
+semantic colors */
 @define-color warning_color #{"" +$warning_color};
 @define-color error_color #{"" +$error_color};
 @define-color success_color #{"" +$success_color};
@@ -91,8 +100,9 @@ $_wm_highlight: if($variant=='light', $top_hilight,  // Sass gets mad if this is
                                                      // color definition
 
 /*
-these colors are exported for the window manager and shouldn't be used in applications,
-read if you used those and something break with a version upgrade you're on your own... */
+These aren't really public. Colors below are exported for the window manager 
+and shouldn't be used in applications */
+
 @define-color wm_title shade(#{$fg_color}, 1.8);
 @define-color wm_unfocused_title #{$backdrop_fg_color};
 @define-color wm_highlight #{"" + $_wm_highlight};
@@ -112,5 +122,6 @@ read if you used those and something break with a version upgrade you're on your
 
 //FIXME this is really an API
 
+/* for the tiled thumbnail grid background */
 @define-color content_view_bg #{"" + $base_color};
 
