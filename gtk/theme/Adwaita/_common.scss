@@ -4780,7 +4780,7 @@ menubar {
 }
 
 popover.menu {
-  & button.flat.image-button.model {
+  button.flat.image-button.model {
     @include button(undecorated);
 
     outline: none;
@@ -4790,11 +4790,11 @@ popover.menu {
     &:selected { @extend %selected_items; }
   }
 
-  & box.inline-buttons {
+  box.inline-buttons {
     padding: 0 6px;
   }
 
-  & modelbutton {
+  modelbutton {
     min-height: 16px;
     min-width: 40px;
     padding: 4px 6px;
@@ -4803,12 +4803,12 @@ popover.menu {
     &:selected { @extend %selected_items; }
   }
 
-  & box.circular-buttons {
+  box.circular-buttons {
     padding: 4px 0;
   }
 
-  & > arrow,
-  &.background > contents {
+  > arrow,
+  > contents {
     background-color: $menu_color;
   }
 
@@ -4820,7 +4820,7 @@ popover.menu {
     }
   }
 
-  & accelerator {
+  accelerator {
     color: gtkalpha(currentColor,0.55);
 
     &:dir(ltr) { margin-left: 20px; }
