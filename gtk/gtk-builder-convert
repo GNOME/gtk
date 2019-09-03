@@ -34,7 +34,8 @@ When OUTPUT is -, write to standard output.
 Examples:
   gtk-builder-convert preference.glade preferences.ui
 
-Report bugs to http://bugzilla.gnome.org/."""
+Report bugs to https://gitlab.gnome.org/GNOME/gtk/issues/new
+"""
 
 from __future__ import print_function
 import getopt
