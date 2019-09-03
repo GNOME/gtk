@@ -2891,6 +2891,7 @@ radio {
     &:disabled { @include button(osd-insensitive); }
   }
 
+  @at-root %menu_check_radio,
   menu menuitem & {
     margin: 0; // this is a workaround for a menu check/radio size allocation issue
 
@@ -2949,6 +2950,7 @@ check {
 }
 
 menu menuitem {
+  @at-root %menu_check_radio,
   radio,
   check {
      &:checked:not(:backdrop), &:indeterminate:not(:backdrop) { transition: none; }
@@ -4779,25 +4781,30 @@ menubar {
 
 popover.menu {
   & button.flat.image-button.model {
+    @include button(undecorated);
+
+    outline: none;
+    transition: none;
     padding: 0;
-    border: none;
-  }
-  & button.flat.image-button.model:selected {
-    border: none;
-    color: $selected_fg_color;
-    background: $selected_bg_color;
+
+    &:selected { @extend %selected_items; }
   }
 
   & box.inline-buttons {
-    border-radius: 5px;
-    border-style: none;
-    border-width: 0;
-    border-image-source: none;
-    border-image-width: 1px;
+    padding: 0 6px;
+  }
+
+  & modelbutton {
+    min-height: 16px;
+    min-width: 40px;
+    padding: 4px 6px;
+    border-radius: 0;
+
+    &:selected { @extend %selected_items; }
   }
 
   & box.circular-buttons {
-    padding-bottom: 5px;
+    padding: 4px 0;
   }
 
   & > arrow,
@@ -4805,37 +4812,28 @@ popover.menu {
     background-color: $menu_color;
   }
 
-  &.background separator {
-    margin: 5px 0px;
+  > contents {
+    padding: 4px 0;
+
+    separator {
+      margin: 4px 0;
+    }
   }
 
   & accelerator {
-    margin-left: 20px;
-    color: gray;
+    color: gtkalpha(currentColor,0.55);
+
+    &:dir(ltr) { margin-left: 20px; }
+
+    &:dir(rtl) { margin-right: 20px; }
   }
 
-  & box.inline-buttons {
-    padding: 0 5px;
-  }
+  check,
+  radio {
+    @extend %menu_check_radio;
 
-  & radio.left,
-  & check.left {
-    margin-left: 0;
-    margin-right: 12px;
-  }
+    &.left { margin-right: 7px; }
 
-  & radio.right,
-  & check.right {
-    margin-left: 12px;
-    margin-right: 0;
-  }
-
-  & modelbutton:selected {
-    color: $selected_fg_color;
-    background-color: $selected_bg_color;
-  }
-
-  & modelbutton:selected accelerator {
-    color: mix($selected_fg_color, gray, 50%);
+    &.right { margin-left: 7px; }
   }
 }
