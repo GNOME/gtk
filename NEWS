@@ -1,3 +1,52 @@
+Overview of Changes in GTK+ 3.24.11
+===================================
+
+* Adwaita:
+ - Add drop shadow to icons
+ - Small color fixes
+ - Make title buttons round
+
+* OS X: Fix the monitors-changed signal
+
+* Win32:
+ - Build fixes
+ - Support choices in the native file chooser
+ - Fix icon cache freshness checks on 64bit
+
+* Wayland:
+ - Support xdg-output v3
+ - Fix clipboard ownership handling
+
+* X11: Improve monitor metadata
+
+* Build: Require GLib 2.57.2
+
+* Translation updates:
+ Basque
+ Brazilian Portuguese
+ British English
+ Catalan
+ Croatian
+ French
+ Friulian
+ Galician
+ German
+ Greek
+ Hungarian
+ Indonesian
+ Japanese
+ Korean
+ Latvian
+ Lithuanian
+ Polish
+ Punjabi
+ Romanian
+ Serbian
+ Slovenian
+ Spanish
+ Swedish
+
+
 Overview of Changes in GTK+ 3.24.10
 ===================================
 
