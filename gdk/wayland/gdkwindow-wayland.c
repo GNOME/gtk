@@ -651,10 +651,11 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
 static void
 window_update_scale (GdkWindow *window)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   guint32 scale;
-  int i;
+  GSList *l;
 
   if (display_wayland->compositor_version < WL_SURFACE_HAS_BUFFER_SCALE)
     {
@@ -663,10 +664,10 @@ window_update_scale (GdkWindow *window)
     }
 
   scale = 1;
-  for (i = 0; i < display_wayland->monitors->len; i++)
+  for (l = impl->display_server.outputs; l != NULL; l = l->next)
     {
-      GdkWaylandMonitor *monitor = display_wayland->monitors->pdata[i];
-      int output_scale = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
+      guint32 output_scale =
+        _gdk_wayland_screen_get_output_scale (display_wayland->screen, l->data);
       scale = MAX (scale, output_scale);
     }
 
