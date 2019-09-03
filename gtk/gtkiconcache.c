@@ -111,6 +111,9 @@ _gtk_icon_cache_new_for_path (const gchar *path)
 #if ((_MSC_VER >= 1400 || __MSVCRT_VERSION__ >= 0x0800) || defined (__MINGW64_VERSION_MAJOR)) && !defined(_WIN64)
 #undef fstat /* Just in case */
 #define fstat _fstat32  
+#elif defined(__MINGW64_VERSION_MAJOR) && defined(_WIN64)
+#undef fstat
+#define fstat _fstat64
 #endif
 #endif
 
