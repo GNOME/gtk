@@ -1072,6 +1072,7 @@ button.color {
 
 /* list buttons */
 /* tone down as per new designs, see issue #1473 */
+%list_button,
 list row button.image-button:not(.flat) {
   @extend %undecorated_button;
   border: 1px solid transparentize($borders_color, .5);
@@ -4805,6 +4806,8 @@ popover.menu {
 
   box.circular-buttons {
     padding: 4px 0;
+
+    button.circular.image-button.model:not(.flat) { @extend %list_button; }
   }
 
   > arrow,
