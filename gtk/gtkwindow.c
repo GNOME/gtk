@@ -9416,8 +9416,9 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
   
   info = gtk_window_get_geometry_info (window, FALSE);
 
-  if (priv->need_default_size ||
-      priv->force_resize)
+  if ((priv->need_default_size || priv->force_resize) &&
+      !priv->maximized &&
+      !priv->fullscreen)
     {
       gtk_window_guess_default_size (window, width, height);
       gtk_window_get_remembered_size (window, &w, &h);
@@ -9453,13 +9454,7 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
       gtk_window_get_remembered_size (window, width, height);
     }
 
-  /* Override any size with gtk_window_resize() values */
-  if (priv->maximized || priv->fullscreen)
-    {
-      /* Unless we are maximized or fullscreen */
-      gtk_window_get_remembered_size (window, width, height);
-    }
-  else if (info)
+  if (info)
     {
       gint resize_width_csd = info->resize_width;
       gint resize_height_csd = info->resize_height;
