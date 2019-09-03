@@ -2215,12 +2215,19 @@ should_update_monitor (GdkWaylandMonitor *monitor)
           monitor->version < OUTPUT_VERSION_WITH_DONE);
 }
 
-static void
-apply_monitor_change (GdkWaylandMonitor *monitor)
+static gboolean
+should_expect_xdg_output_done (GdkWaylandMonitor *monitor)
 {
   GdkDisplay *display = GDK_MONITOR (monitor)->display;
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
+  return (monitor_has_xdg_output (monitor) &&
+          display_wayland->xdg_output_manager_version < NO_XDG_OUTPUT_DONE_SINCE_VERSION);
+}
+
+static void
+apply_monitor_change (GdkWaylandMonitor *monitor)
+{
   GDK_NOTE (MISC,
             g_message ("monitor %d changed position %d %d, size %d %d",
                        monitor->id,
@@ -2231,11 +2238,7 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
   gdk_monitor_set_size (GDK_MONITOR (monitor), monitor->width, monitor->height);
   gdk_monitor_set_connector (GDK_MONITOR (monitor), monitor->name);
   monitor->wl_output_done = FALSE;
-  /* xdg_output v3 marks xdg_output.done as deprecated, so if using
-   * that version, no need to wait for xdg-output.done event.
-   */
-  monitor->xdg_output_done =
-     (display_wayland->xdg_output_manager_version >= NO_XDG_OUTPUT_DONE_SINCE_VERSION);
+  monitor->xdg_output_done = FALSE;
 
   update_scale (GDK_MONITOR (monitor)->display);
 }
@@ -2280,7 +2283,7 @@ xdg_output_handle_done (void                  *data,
             g_message ("handle done xdg-output %d", monitor->id));
 
   monitor->xdg_output_done = TRUE;
-  if (monitor->wl_output_done)
+  if (monitor->wl_output_done && should_expect_xdg_output_done (monitor))
     apply_monitor_change (monitor);
 }
 
@@ -2377,7 +2380,7 @@ output_handle_done (void             *data,
 
   monitor->wl_output_done = TRUE;
 
-  if (!monitor_has_xdg_output (monitor) || monitor->xdg_output_done)
+  if (!should_expect_xdg_output_done (monitor) || monitor->xdg_output_done)
     apply_monitor_change (monitor);
 }
 
