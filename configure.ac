@@ -852,10 +852,6 @@ AC_CHECK_LIB(m,round,,)
 AC_CHECK_FUNCS(round rint nearbyint sincos exp2 log2 trunc)
 AC_CHECK_DECLS([isnan, isinf], [], [], [[#include <math.h>]])
 
-# Checks for gdkspawn
-AC_CHECK_HEADERS(crt_externs.h)
-AC_CHECK_FUNCS(_NSGetEnviron)
-
 AC_MSG_CHECKING(whether to build dynamic modules)
 
 AC_ARG_ENABLE(modules,

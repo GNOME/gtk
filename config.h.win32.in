@@ -26,9 +26,6 @@
 /* define if we have colord */
 /* #undef HAVE_COLORD */
 
-/* Define to 1 if you have the <crt_externs.h> header file. */
-/* #undef HAVE_CRT_EXTERNS_H */
-
 /* Define to 1 if you have the `dcgettext' function. */
 #define HAVE_DCGETTEXT 1
 
@@ -247,9 +244,6 @@
 
 /* Define if _NL_TIME_FIRST_WEEKDAY is available */
 /* #undef HAVE__NL_TIME_FIRST_WEEKDAY */
-
-/* Define to 1 if you have the `_NSGetEnviron' function. */
-/* #undef HAVE__NSGETENVIRON */
 
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */
