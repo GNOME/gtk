@@ -2846,19 +2846,6 @@ radio {
 
   &:only-child { margin: 0; }
 
-  popover & { // when in a popover add more space between the label and the check, reset the other side margin.
-              // See https://bugzilla.gnome.org/show_bug.cgi?id=779570 for details.
-    &.left:dir(rtl) {
-      margin-left: 0;
-      margin-right: 12px;
-    }
-
-    &.right:dir(ltr) {
-      margin-left: 12px;
-      margin-right: 0;
-    }
-  }
-
   min-height: 14px;
   min-width: 14px;
   border: 1px solid;
