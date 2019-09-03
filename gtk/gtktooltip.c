@@ -1280,6 +1280,22 @@ _gtk_tooltip_hide (GtkWidget *widget)
     gtk_tooltip_hide_tooltip (tooltip);
 }
 
+void
+_gtk_tooltip_hide_in_display (GdkDisplay *display)
+{
+  GtkTooltip *tooltip;
+
+  if (!display)
+    return;
+
+  tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
+
+  if (!tooltip || !GTK_TOOLTIP_VISIBLE (tooltip))
+    return;
+
+  gtk_tooltip_hide_tooltip (tooltip);
+}
+
 static gboolean
 tooltips_enabled (GdkEvent *event)
 {

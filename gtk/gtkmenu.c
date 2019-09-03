@@ -133,6 +133,7 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
+#include "gtktooltipprivate.h"
 
 #include "deprecated/gtktearoffmenuitem.h"
 
@@ -1824,6 +1825,7 @@ gtk_menu_popup_internal (GtkMenu             *menu,
   g_return_if_fail (GTK_IS_MENU (menu));
   g_return_if_fail (device == NULL || GDK_IS_DEVICE (device));
 
+  _gtk_tooltip_hide_in_display (gtk_widget_get_display (GTK_WIDGET (menu)));
   display = gtk_widget_get_display (GTK_WIDGET (menu));
 
   if (device == NULL)
