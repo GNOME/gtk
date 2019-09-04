@@ -78,6 +78,10 @@ DISTCLEANFILES = \
 	gail-3.0.pc			\
 	config.lt
 
+dist-hook:
+	mkdir $(distdir)/subprojects
+	cp -p $(srcdir)/subprojects/*.wrap $(distdir)/subprojects
+
 distclean-local:
 	if test "$(srcdir)" = "."; then :; else \
 		rm -f ChangeLog; \
