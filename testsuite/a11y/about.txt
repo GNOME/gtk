@@ -17,6 +17,39 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
+    unnamed-GtkContainerAccessible-0
+      "filler"
+      parent: headerbar1
+      state: enabled horizontal sensitive visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      unnamed-GtkWidgetAccessible-1
+        "separator"
+        parent: unnamed-GtkContainerAccessible-0
+        index: 0
+        state: enabled sensitive vertical
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+      unnamed-GtkButtonAccessible-2
+        "push button"
+        parent: unnamed-GtkContainerAccessible-0
+        index: 1
+        name: Close
+        state: enabled sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: -1 x -1
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 description: Clicks the button
     stack_switcher
       "filler"
       parent: headerbar1
@@ -26,14 +59,14 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GtkRadioButtonAccessible-0
+      unnamed-GtkRadioButtonAccessible-3
         "radio button"
         parent: stack_switcher
         index: 0
         name: About
-        member-of: unnamed-GtkRadioButtonAccessible-1
-                   unnamed-GtkRadioButtonAccessible-2
-                   unnamed-GtkRadioButtonAccessible-0
+        member-of: unnamed-GtkRadioButtonAccessible-4
+                   unnamed-GtkRadioButtonAccessible-5
+                   unnamed-GtkRadioButtonAccessible-3
         state: checked enabled focusable sensitive visible
         toolkit: gtk
         <AtkComponent>
@@ -45,14 +78,14 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 description: Clicks the button
-      unnamed-GtkRadioButtonAccessible-2
+      unnamed-GtkRadioButtonAccessible-5
         "radio button"
         parent: stack_switcher
         index: 1
         name: Credits
-        member-of: unnamed-GtkRadioButtonAccessible-1
-                   unnamed-GtkRadioButtonAccessible-2
-                   unnamed-GtkRadioButtonAccessible-0
+        member-of: unnamed-GtkRadioButtonAccessible-4
+                   unnamed-GtkRadioButtonAccessible-5
+                   unnamed-GtkRadioButtonAccessible-3
         state: enabled focusable sensitive
         toolkit: gtk
         <AtkComponent>
@@ -64,14 +97,14 @@ window1
         <AtkAction>
         action 0 name: click
         action 0 description: Clicks the button
-      unnamed-GtkRadioButtonAccessible-1
+      unnamed-GtkRadioButtonAccessible-4
         "radio button"
         parent: stack_switcher
         index: 2
         name: License
-        member-of: unnamed-GtkRadioButtonAccessible-1
-                   unnamed-GtkRadioButtonAccessible-2
-                   unnamed-GtkRadioButtonAccessible-0
+        member-of: unnamed-GtkRadioButtonAccessible-4
+                   unnamed-GtkRadioButtonAccessible-5
+                   unnamed-GtkRadioButtonAccessible-3
         state: enabled focusable sensitive
         toolkit: gtk
         <AtkComponent>
@@ -295,7 +328,7 @@ window1
               start index: 0
               end index: 7
               anchors: http://www.gtk.org
-            unnamed-GtkLabelAccessibleLinkImpl-3
+            unnamed-GtkLabelAccessibleLinkImpl-6
               "link"
               parent: website_label
               state: enabled focusable focused multi-line sensitive showing visible
@@ -390,7 +423,7 @@ See the GNU General Public License, version 3 or later for details.
               start index: 56
               end index: 102
               anchors: https://www.gnu.org/licenses/gpl-3.0.html
-            unnamed-GtkLabelAccessibleLinkImpl-4
+            unnamed-GtkLabelAccessibleLinkImpl-7
               "link"
               parent: license_label
               state: enabled focusable focused multi-line sensitive showing visible

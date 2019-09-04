@@ -7,7 +7,7 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
-  unnamed-GtkContainerAccessible-0
+  unnamed-GtkHeaderBarAccessible-0
     "panel"
     parent: window1
     state: enabled sensitive showing visible
@@ -15,6 +15,127 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
+    unnamed-GtkContainerAccessible-1
+      "filler"
+      parent: unnamed-GtkHeaderBarAccessible-0
+      state: enabled horizontal sensitive visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      unnamed-GtkWidgetAccessible-2
+        "separator"
+        parent: unnamed-GtkContainerAccessible-1
+        index: 0
+        state: enabled sensitive vertical
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+      unnamed-GtkButtonAccessible-3
+        "push button"
+        parent: unnamed-GtkContainerAccessible-1
+        index: 1
+        name: Close
+        state: enabled sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: -1 x -1
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 description: Clicks the button
+    unnamed-GtkContainerAccessible-4
+      "filler"
+      parent: unnamed-GtkHeaderBarAccessible-0
+      state: enabled sensitive showing vertical visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      lt-accessibility-dump
+        "label"
+        parent: unnamed-GtkContainerAccessible-4
+        index: 0
+        name: lt-accessibility-dump
+        state: enabled multi-line sensitive showing visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkText>
+        text: lt-accessibility-dump
+        character count: 21
+        caret offset: 0
+        default attributes: bg-color: <omitted>
+                            bg-full-height: 0
+                            direction: <omitted>
+                            editable: false
+                            family-name: <omitted>
+                            fg-color: <omitted>
+                            indent: 0
+                            invisible: false
+                            justification: left
+                            language: <omitted>
+                            left-margin: 0
+                            pixels-above-lines: 0
+                            pixels-below-lines: 0
+                            pixels-inside-wrap: 0
+                            right-margin: 0
+                            rise: 0
+                            scale: 1
+                            size: <omitted>
+                            stretch: <omitted>
+                            strikethrough: false
+                            style: <omitted>
+                            underline: none
+                            variant: <omitted>
+                            weight: <omitted>
+                            wrap-mode: word
+        <AtkHypertext>
+      
+        "label"
+        parent: unnamed-GtkContainerAccessible-4
+        index: 1
+        name: 
+        state: enabled multi-line sensitive
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkText>
+        text: 
+        character count: 0
+        caret offset: 0
+        default attributes: bg-color: <omitted>
+                            bg-full-height: 0
+                            direction: <omitted>
+                            editable: false
+                            family-name: <omitted>
+                            fg-color: <omitted>
+                            indent: 0
+                            invisible: false
+                            justification: left
+                            language: <omitted>
+                            left-margin: 0
+                            pixels-above-lines: 0
+                            pixels-below-lines: 0
+                            pixels-inside-wrap: 0
+                            right-margin: 0
+                            rise: 0
+                            scale: 1
+                            size: <omitted>
+                            stretch: <omitted>
+                            strikethrough: false
+                            style: <omitted>
+                            underline: none
+                            variant: <omitted>
+                            weight: <omitted>
+                            wrap-mode: word
+        <AtkHypertext>
   menubutton
     "toggle button"
     parent: window1
@@ -31,7 +152,7 @@ window1
     <AtkAction>
     action 0 name: click
     action 0 description: Clicks the button
-  unnamed-GtkPopoverAccessible-1
+  unnamed-GtkPopoverAccessible-5
     "panel"
     parent: menubutton
     popup-for: menubutton
@@ -40,54 +161,54 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    unnamed-GtkStackAccessible-2
+    unnamed-GtkStackAccessible-6
       "panel"
-      parent: unnamed-GtkPopoverAccessible-1
+      parent: unnamed-GtkPopoverAccessible-5
       index: 0
       state: enabled sensitive visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GtkContainerAccessible-3
+      unnamed-GtkContainerAccessible-7
         "filler"
-        parent: unnamed-GtkStackAccessible-2
+        parent: unnamed-GtkStackAccessible-6
         index: 0
         state: enabled sensitive vertical visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
-        unnamed-GtkContainerAccessible-4
+        unnamed-GtkContainerAccessible-8
           "filler"
-          parent: unnamed-GtkContainerAccessible-3
+          parent: unnamed-GtkContainerAccessible-7
           index: 0
           state: enabled sensitive vertical visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
-          unnamed-GtkContainerAccessible-5
+          unnamed-GtkContainerAccessible-9
             "filler"
-            parent: unnamed-GtkContainerAccessible-4
+            parent: unnamed-GtkContainerAccessible-8
             index: 0
             state: enabled sensitive vertical visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
-            unnamed-GtkContainerAccessible-6
+            unnamed-GtkContainerAccessible-10
               "filler"
-              parent: unnamed-GtkContainerAccessible-5
+              parent: unnamed-GtkContainerAccessible-9
               index: 0
               state: enabled sensitive vertical visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
-              unnamed-GtkButtonAccessible-7
+              unnamed-GtkButtonAccessible-11
                 "push button"
-                parent: unnamed-GtkContainerAccessible-6
+                parent: unnamed-GtkContainerAccessible-10
                 index: 0
                 name: New
                 state: enabled focusable sensitive visible
