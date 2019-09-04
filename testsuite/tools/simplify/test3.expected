@@ -1,6 +1,6 @@
 <!-- translatable property not stripped -->
 <interface>
   <object class="GtkWindow">
-    <property name="visible" translatable="yes">False</property>
+    <property name="visible" translatable="yes">0</property>
   </object>
 </interface>
