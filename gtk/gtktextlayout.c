@@ -4197,11 +4197,16 @@ gtk_text_line_display_compare (const GtkTextLineDisplay *display1,
                                const GtkTextLineDisplay *display2,
                                GtkTextLayout            *layout)
 {
-  GtkTextIter iter1;
-  GtkTextIter iter2;
+  gint line1;
+  gint line2;
 
-  gtk_text_layout_get_iter_at_line (layout, &iter1, display1->line, 0);
-  gtk_text_layout_get_iter_at_line (layout, &iter2, display2->line, 0);
+  line1 = _gtk_text_line_get_number (display1->line);
+  line2 = _gtk_text_line_get_number (display2->line);
 
-  return gtk_text_iter_compare (&iter1, &iter2);
+  if (line1 < line2)
+    return -1;
+  else if (line1 > line2)
+    return 1;
+  else
+    return 0;
 }
