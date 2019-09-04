@@ -212,7 +212,7 @@ focus_out (GtkEventController *controller,
   if (!contains_focus)
     {
       if (menu->parent_menu &&
-          GTK_POPOVER_MENU (menu->parent_menu)->open_submenu == menu)
+          GTK_POPOVER_MENU (menu->parent_menu)->open_submenu == (GtkWidget*)menu)
         GTK_POPOVER_MENU (menu->parent_menu)->open_submenu = NULL;
       gtk_popover_popdown (GTK_POPOVER (menu));
     }

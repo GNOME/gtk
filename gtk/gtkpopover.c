@@ -370,7 +370,7 @@ close_menu (GtkPopover *popover)
     {
       gtk_popover_popdown (popover);
       if (GTK_IS_POPOVER_MENU (popover))
-        popover = gtk_popover_menu_get_parent_menu (GTK_POPOVER_MENU (popover));
+        popover = (GtkPopover *)gtk_popover_menu_get_parent_menu (GTK_POPOVER_MENU (popover));
       else
         popover = NULL;
     }
