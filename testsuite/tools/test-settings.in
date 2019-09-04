@@ -10,7 +10,7 @@ echo "1..1"
 name=gtk-query-settings
 result=$TEST_RESULT_DIR/$name.out
 $GTK_QUERY_SETTINGS 2>/dev/null >$result
-if [ $(wc -l $result | cut -f1 -d' ') -eq 882 ]; then
+if [ $(wc -l $result | cut -f1 -d' ') -eq 84 ]; then
   echo "ok 1 $name"
 else
   echo "not ok 1 $name"
