@@ -178,47 +178,47 @@ static void     gtk_assistant_page_get_property  (GObject           *object,
                                                   GValue            *value,
                                                   GParamSpec        *pspec);
 
-static void       gtk_assistant_buildable_interface_init     (GtkBuildableIface *iface);
-static void       gtk_assistant_buildable_add_child          (GtkBuildable  *buildable,
-                                                              GtkBuilder    *builder,          
-                                                              GObject       *child,
-                                                              const char    *type);
-static gboolean   gtk_assistant_buildable_custom_tag_start   (GtkBuildable  *buildable,
-                                                              GtkBuilder    *builder,
-                                                              GObject       *child,
-                                                              const gchar   *tagname,
-                                                              GMarkupParser *parser,
-                                                              gpointer      *data);
-static void       gtk_assistant_buildable_custom_finished    (GtkBuildable  *buildable,
-                                                              GtkBuilder    *builder,
-                                                              GObject       *child,
-                                                              const gchar   *tagname,
-                                                              gpointer       user_data);
+static void     gtk_assistant_buildable_interface_init   (GtkBuildableIface  *iface);
+static void     gtk_assistant_buildable_add_child        (GtkBuildable       *buildable,
+                                                          GtkBuilder         *builder,
+                                                          GObject            *child,
+                                                          const char         *type);
+static gboolean gtk_assistant_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                          GtkBuilder         *builder,
+                                                          GObject            *child,
+                                                          const gchar        *tagname,
+                                                          GtkBuildableParser *parser,
+                                                          gpointer           *data);
+static void     gtk_assistant_buildable_custom_finished  (GtkBuildable       *buildable,
+                                                          GtkBuilder         *builder,
+                                                          GObject            *child,
+                                                          const gchar        *tagname,
+                                                          gpointer            user_data);
 
-static GList*     find_page                                  (GtkAssistant  *assistant,
-                                                              GtkWidget     *page);
+static GList*   find_page                                (GtkAssistant       *assistant,
+                                                          GtkWidget          *page);
+static void     on_assistant_close                       (GtkWidget          *widget,
+                                                          GtkAssistant       *assistant);
+static void     on_assistant_apply                       (GtkWidget          *widget,
+                                                          GtkAssistant       *assistant);
+static void     on_assistant_forward                     (GtkWidget          *widget,
+                                                          GtkAssistant       *assistant);
+static void     on_assistant_back                        (GtkWidget          *widget,
+                                                          GtkAssistant       *assistant);
+static void     on_assistant_cancel                      (GtkWidget          *widget,
+                                                          GtkAssistant       *assistant);
+static void     on_assistant_last                        (GtkWidget          *widget,
+                                                          GtkAssistant       *assistant);
+static void     assistant_remove_page_cb                 (GtkContainer       *container,
+                                                          GtkWidget          *page,
+                                                          GtkAssistant       *assistant);
 
-static void       on_assistant_close                         (GtkWidget     *widget,
-							      GtkAssistant  *assistant);
-static void       on_assistant_apply                         (GtkWidget     *widget,
-							      GtkAssistant  *assistant);
-static void       on_assistant_forward                       (GtkWidget     *widget,
-							      GtkAssistant  *assistant);
-static void       on_assistant_back                          (GtkWidget     *widget,
-							      GtkAssistant  *assistant);
-static void       on_assistant_cancel                        (GtkWidget     *widget,
-							      GtkAssistant  *assistant);
-static void       on_assistant_last                          (GtkWidget     *widget,
-							      GtkAssistant  *assistant);
-static void       assistant_remove_page_cb                   (GtkContainer  *container,
-							      GtkWidget     *page,
-							      GtkAssistant  *assistant);
 
-static int        gtk_assistant_add_page                     (GtkAssistant     *assistant,
-                                                              GtkAssistantPage *page_info,
-                                                              gint              position);
+static int        gtk_assistant_add_page                 (GtkAssistant     *assistant,
+                                                          GtkAssistantPage *page_info,
+                                                          gint              position);
 
-GType             _gtk_assistant_accessible_get_type         (void);
+GType             _gtk_assistant_accessible_get_type     (void);
 
 enum
 {
@@ -2355,7 +2355,7 @@ gtk_assistant_buildable_custom_tag_start (GtkBuildable  *buildable,
                                           GtkBuilder    *builder,
                                           GObject       *child,
                                           const gchar   *tagname,
-                                          GMarkupParser *parser,
+                                          GtkBuildableParser *parser,
                                           gpointer      *data)
 {
   return parent_buildable_iface->custom_tag_start (buildable, builder, child,

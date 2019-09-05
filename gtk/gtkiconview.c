@@ -312,18 +312,19 @@ static void     remove_scroll_timeout            (GtkIconView *icon_view);
 
 /* GtkBuildable */
 static GtkBuildableIface *parent_buildable_iface;
-static void     gtk_icon_view_buildable_init             (GtkBuildableIface *iface);
-static gboolean gtk_icon_view_buildable_custom_tag_start (GtkBuildable  *buildable,
-							  GtkBuilder    *builder,
-							  GObject       *child,
-							  const gchar   *tagname,
-							  GMarkupParser *parser,
-							  gpointer      *data);
-static void     gtk_icon_view_buildable_custom_tag_end   (GtkBuildable  *buildable,
-							  GtkBuilder    *builder,
-							  GObject       *child,
-							  const gchar   *tagname,
-							  gpointer       data);
+static void     gtk_icon_view_buildable_init             (GtkBuildableIface  *iface);
+static gboolean gtk_icon_view_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                          GtkBuilder         *builder,
+                                                          GObject            *child,
+                                                          const gchar        *tagname,
+                                                          GtkBuildableParser *parser,
+                                                          gpointer           *data);
+static void     gtk_icon_view_buildable_custom_tag_end   (GtkBuildable       *buildable,
+                                                          GtkBuilder         *builder,
+                                                          GObject            *child,
+                                                          const gchar        *tagname,
+                                                          gpointer            data);
+
 
 static guint icon_view_signals[LAST_SIGNAL] = { 0 };
 
@@ -6856,12 +6857,12 @@ gtk_icon_view_get_activate_on_single_click (GtkIconView *icon_view)
 }
 
 static gboolean
-gtk_icon_view_buildable_custom_tag_start (GtkBuildable  *buildable,
-                                          GtkBuilder    *builder,
-                                          GObject       *child,
-                                          const gchar   *tagname,
-                                          GMarkupParser *parser,
-                                          gpointer      *data)
+gtk_icon_view_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                          GtkBuilder         *builder,
+                                          GObject            *child,
+                                          const gchar        *tagname,
+                                          GtkBuildableParser *parser,
+                                          gpointer           *data)
 {
   if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
                                                 tagname, parser, data))

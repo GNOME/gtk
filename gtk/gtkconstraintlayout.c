@@ -1458,12 +1458,12 @@ guide_data_to_guide (const GuideData *data,
 }
 
 static void
-constraints_start_element (GMarkupParseContext  *context,
-                           const char           *element_name,
-                           const char          **attr_names,
-                           const char          **attr_values,
-                           gpointer              user_data,
-                           GError              **error)
+constraints_start_element (GtkBuildableParseContext  *context,
+                           const char                *element_name,
+                           const char               **attr_names,
+                           const char               **attr_values,
+                           gpointer                   user_data,
+                           GError                   **error)
 {
   ConstraintsParserData *data = user_data;
 
@@ -1563,26 +1563,26 @@ constraints_start_element (GMarkupParseContext  *context,
 }
 
 static void
-constraints_end_element (GMarkupParseContext  *context,
-                         const char           *element_name,
-                         gpointer              user_data,
-                         GError              **error)
+constraints_end_element (GtkBuildableParseContext  *context,
+                         const char                *element_name,
+                         gpointer                   user_data,
+                         GError                   **error)
 {
 }
 
-static const GMarkupParser constraints_parser = {
+static const GtkBuildableParser constraints_parser = {
   constraints_start_element,
   constraints_end_element,
   NULL,
 };
 
 static gboolean
-gtk_constraint_layout_custom_tag_start (GtkBuildable  *buildable,
-                                        GtkBuilder    *builder,
-                                        GObject       *child,
-                                        const char    *element_name,
-                                        GMarkupParser *parser,
-                                        gpointer      *parser_data)
+gtk_constraint_layout_custom_tag_start (GtkBuildable       *buildable,
+                                        GtkBuilder         *builder,
+                                        GObject            *child,
+                                        const char         *element_name,
+                                        GtkBuildableParser *parser,
+                                        gpointer           *parser_data)
 {
   if (strcmp (element_name, "constraints") == 0)
     {

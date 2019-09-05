@@ -172,17 +172,17 @@ static gboolean gtk_tree_store_has_default_sort_func   (GtkTreeSortable        *
 
 /* buildable */
 
-static gboolean gtk_tree_store_buildable_custom_tag_start (GtkBuildable  *buildable,
-							   GtkBuilder    *builder,
-							   GObject       *child,
-							   const gchar   *tagname,
-							   GMarkupParser *parser,
-							   gpointer      *data);
-static void     gtk_tree_store_buildable_custom_finished (GtkBuildable 	 *buildable,
-							  GtkBuilder   	 *builder,
-							  GObject      	 *child,
-							  const gchar  	 *tagname,
-							  gpointer     	  user_data);
+static gboolean gtk_tree_store_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                           GtkBuilder         *builder,
+                                                           GObject            *child,
+                                                           const gchar        *tagname,
+                                                           GtkBuildableParser *parser,
+                                                           gpointer           *data);
+static void     gtk_tree_store_buildable_custom_finished  (GtkBuildable       *buildable,
+                                                           GtkBuilder         *builder,
+                                                           GObject            *child,
+                                                           const gchar        *tagname,
+                                                           gpointer            user_data);
 
 static void     validate_gnode                         (GNode *node);
 
@@ -3327,12 +3327,12 @@ typedef struct {
 } GSListSubParserData;
 
 static void
-tree_model_start_element (GMarkupParseContext  *context,
-                          const gchar          *element_name,
-                          const gchar         **names,
-                          const gchar         **values,
-                          gpointer              user_data,
-                          GError              **error)
+tree_model_start_element (GtkBuildableParseContext  *context,
+                          const gchar               *element_name,
+                          const gchar              **names,
+                          const gchar              **values,
+                          gpointer                   user_data,
+                          GError                   **error)
 {
   GSListSubParserData *data = (GSListSubParserData*)user_data;
 
@@ -3373,10 +3373,10 @@ tree_model_start_element (GMarkupParseContext  *context,
 }
 
 static void
-tree_model_end_element (GMarkupParseContext  *context,
-                        const gchar          *element_name,
-                        gpointer              user_data,
-                        GError              **error)
+tree_model_end_element (GtkBuildableParseContext  *context,
+                        const gchar               *element_name,
+                        gpointer                   user_data,
+                        GError                   **error)
 {
   GSListSubParserData *data = (GSListSubParserData*)user_data;
 
@@ -3414,7 +3414,7 @@ tree_model_end_element (GMarkupParseContext  *context,
     }
 }
 
-static const GMarkupParser tree_model_parser =
+static const GtkBuildableParser tree_model_parser =
   {
     tree_model_start_element,
     tree_model_end_element
@@ -3422,12 +3422,12 @@ static const GMarkupParser tree_model_parser =
 
 
 static gboolean
-gtk_tree_store_buildable_custom_tag_start (GtkBuildable  *buildable,
-                                           GtkBuilder    *builder,
-                                           GObject       *child,
-                                           const gchar   *tagname,
-                                           GMarkupParser *parser,
-                                           gpointer      *parser_data)
+gtk_tree_store_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                           GtkBuilder         *builder,
+                                           GObject            *child,
+                                           const gchar        *tagname,
+                                           GtkBuildableParser *parser,
+                                           gpointer           *parser_data)
 {
   GSListSubParserData *data;
 

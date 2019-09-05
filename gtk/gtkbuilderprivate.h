@@ -20,6 +20,7 @@
 #define __GTK_BUILDER_PRIVATE_H__
 
 #include "gtkbuilder.h"
+#include "gtkbuildable.h"
 
 enum {
   TAG_PROPERTY,
@@ -99,8 +100,22 @@ typedef struct {
   gint     minor;
 } RequiresInfo;
 
+struct _GtkBuildableParseContext {
+  const GMarkupParser *internal_callbacks;
+  GMarkupParseContext *ctx;
+
+  const GtkBuildableParser *parser;
+  gpointer user_data;
+
+  GPtrArray *tag_stack;
+
+  GArray *subparser_stack;
+  gpointer held_user_data;
+  gboolean awaiting_pop;
+};
+
 typedef struct {
-  GMarkupParser *parser;
+  GtkBuildableParser *parser;
   gchar *tagname;
   const gchar *start;
   gpointer data;
@@ -114,7 +129,7 @@ typedef struct {
   gchar *domain;
   GSList *stack;
   SubParser *subparser;
-  GMarkupParseContext *ctx;
+  GtkBuildableParseContext ctx;
   const gchar *filename;
   GSList *finalizers;
   GSList *custom_finalizers;
@@ -132,6 +147,15 @@ typedef struct {
 typedef GType (*GTypeGetFunc) (void);
 
 /* Things only GtkBuilder should use */
+GBytes * _gtk_buildable_parser_precompile (const gchar              *text,
+                                           gssize                    text_len,
+                                           GError                  **error);
+gboolean _gtk_buildable_parser_is_precompiled (const gchar          *data,
+                                               gssize                data_len);
+gboolean _gtk_buildable_parser_replay_precompiled (GtkBuildableParseContext *context,
+                                                   const gchar          *data,
+                                                   gssize                data_len,
+                                                   GError              **error);
 void _gtk_builder_parser_parse_buffer (GtkBuilder *builder,
                                        const gchar *filename,
                                        const gchar *buffer,
@@ -185,24 +209,25 @@ void      _gtk_builder_menu_end   (ParserData  *parser_data);
 
 GType     _gtk_builder_get_template_type (GtkBuilder *builder);
 
-void _gtk_builder_prefix_error            (GtkBuilder           *builder,
-                                           GMarkupParseContext  *context,
-                                           GError              **error);
-void _gtk_builder_error_unhandled_tag     (GtkBuilder           *builder,
-                                           GMarkupParseContext  *context,
-                                           const gchar          *object,
-                                           const gchar          *element_name,
-                                           GError              **error);
-gboolean _gtk_builder_check_parent        (GtkBuilder           *builder,
-                                           GMarkupParseContext  *context,
-                                           const gchar          *parent_name,
-                                           GError              **error);
-GObject * _gtk_builder_lookup_object      (GtkBuilder           *builder,
-                                           const gchar          *name,
-                                           gint                  line,
-                                           gint                  col);
-gboolean _gtk_builder_lookup_failed       (GtkBuilder           *builder,
-                                           GError              **error);
+void     _gtk_builder_prefix_error        (GtkBuilder                *builder,
+                                           GtkBuildableParseContext  *context,
+                                           GError                   **error);
+void     _gtk_builder_error_unhandled_tag (GtkBuilder                *builder,
+                                           GtkBuildableParseContext  *context,
+                                           const gchar               *object,
+                                           const gchar               *element_name,
+                                           GError                   **error);
+gboolean _gtk_builder_check_parent        (GtkBuilder                *builder,
+                                           GtkBuildableParseContext  *context,
+                                           const gchar               *parent_name,
+                                           GError                   **error);
+GObject *_gtk_builder_lookup_object       (GtkBuilder                *builder,
+                                           const gchar               *name,
+                                           gint                       line,
+                                           gint                       col);
+gboolean _gtk_builder_lookup_failed       (GtkBuilder                *builder,
+                                           GError                   **error);
+
 
 
 #endif /* __GTK_BUILDER_PRIVATE_H__ */

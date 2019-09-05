@@ -83,18 +83,18 @@ static GtkCellArea *gtk_cell_view_cell_layout_get_area         (GtkCellLayout   
 
 
 /* buildable */
-static void       gtk_cell_view_buildable_init                 (GtkBuildableIface     *iface);
-static gboolean   gtk_cell_view_buildable_custom_tag_start     (GtkBuildable  	      *buildable,
-								GtkBuilder    	      *builder,
-								GObject       	      *child,
-								const gchar   	      *tagname,
-								GMarkupParser 	      *parser,
-								gpointer      	      *data);
-static void       gtk_cell_view_buildable_custom_tag_end       (GtkBuildable  	      *buildable,
-								GtkBuilder    	      *builder,
-								GObject       	      *child,
-								const gchar   	      *tagname,
-								gpointer      	       data);
+static void        gtk_cell_view_buildable_init             (GtkBuildableIface  *iface);
+static gboolean    gtk_cell_view_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                                             GtkBuilder         *builder,
+                                                             GObject            *child,
+                                                             const gchar        *tagname,
+                                                             GtkBuildableParser *parser,
+                                                             gpointer           *data);
+static void        gtk_cell_view_buildable_custom_tag_end   (GtkBuildable       *buildable,
+                                                             GtkBuilder         *builder,
+                                                             GObject            *child,
+                                                             const gchar        *tagname,
+                                                             gpointer            data);
 
 static GtkSizeRequestMode gtk_cell_view_get_request_mode       (GtkWidget             *widget);
 static void gtk_cell_view_measure (GtkWidget      *widget,
@@ -744,12 +744,12 @@ gtk_cell_view_cell_layout_get_area (GtkCellLayout   *layout)
 
 /* GtkBuildable implementation */
 static gboolean
-gtk_cell_view_buildable_custom_tag_start (GtkBuildable  *buildable,
-					  GtkBuilder    *builder,
-					  GObject       *child,
-					  const gchar   *tagname,
-					  GMarkupParser *parser,
-					  gpointer      *data)
+gtk_cell_view_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                          GtkBuilder         *builder,
+                                          GObject            *child,
+                                          const gchar        *tagname,
+                                          GtkBuildableParser *parser,
+                                          gpointer           *data)
 {
   if (parent_buildable_iface->custom_tag_start &&
       parent_buildable_iface->custom_tag_start (buildable, builder, child,

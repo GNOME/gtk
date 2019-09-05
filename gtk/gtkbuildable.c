@@ -230,12 +230,12 @@ gtk_buildable_construct_child (GtkBuildable *buildable,
  *          if it doesn't.
  **/
 gboolean
-gtk_buildable_custom_tag_start (GtkBuildable  *buildable,
-                                GtkBuilder    *builder,
-                                GObject       *child,
-                                const gchar   *tagname,
-                                GMarkupParser *parser,
-                                gpointer      *data)
+gtk_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                GtkBuilder         *builder,
+                                GObject            *child,
+                                const gchar        *tagname,
+                                GtkBuildableParser *parser,
+                                gpointer           *data)
 {
   GtkBuildableIface *iface;
 
