@@ -605,7 +605,6 @@ gtk_entry_completion_constructed (GObject *object)
 
   /* pack it all */
   priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_use_subsurface (GTK_WINDOW (priv->popup_window), TRUE);
   gtk_window_set_resizable (GTK_WINDOW (priv->popup_window), FALSE);
   gtk_window_set_type_hint (GTK_WINDOW(priv->popup_window),
                             GDK_WINDOW_TYPE_HINT_COMBO);
@@ -1113,6 +1112,8 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
 
   _gtk_entry_completion_resize_popup (completion);
 
+  gtk_widget_show (completion->priv->popup_window);
+
   if (completion->priv->device)
     {
       gtk_grab_add (completion->priv->popup_window);
@@ -1600,16 +1601,12 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   GtkAllocation allocation;
   gint x, y;
   gint matches, actions, items, height;
-  GdkDisplay *display;
-  GdkMonitor *monitor;
   gint vertical_separator;
-  GdkRectangle area;
   GdkWindow *window;
-  GtkRequisition popup_req;
+  GdkWindow *toplevel;
   GtkRequisition entry_req;
   GtkRequisition tree_req;
   GtkTreePath *path;
-  gboolean above;
   gint width;
   GtkTreeViewColumn *action_column;
   gint action_height;
@@ -1627,8 +1624,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
                                  &entry_req, NULL);
 
   gdk_window_get_origin (window, &x, &y);
-  x += allocation.x;
-  y += allocation.y + (allocation.height - entry_req.height) / 2;
 
   matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
   actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
@@ -1652,16 +1647,10 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 
   gtk_widget_realize (completion->priv->tree_view);
 
-  display = gtk_widget_get_display (GTK_WIDGET (completion->priv->entry));
-  monitor = gdk_display_get_monitor_at_window (display, window);
-  gdk_monitor_get_workarea (monitor, &area);
-
   if (height == 0)
     items = 0;
-  else if (y > area.height / 2)
-    items = MIN (matches, (((area.y + y) - (actions * action_height)) / height) - 1);
   else
-    items = MIN (matches, (((area.height - y) - (actions * action_height)) / height) - 1);
+    items = matches;
 
   if (items <= 0)
     gtk_widget_hide (completion->priv->scrolled_window);
@@ -1669,7 +1658,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
     gtk_widget_show (completion->priv->scrolled_window);
 
   if (completion->priv->popup_set_width)
-    width = MIN (allocation.width, area.width);
+    width = allocation.width;
   else
     width = -1;
 
@@ -1683,35 +1672,23 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   else
     gtk_widget_hide (completion->priv->action_view);
 
-  gtk_widget_get_preferred_size (completion->priv->popup_window,
-                                 &popup_req, NULL);
-
-  if (x < area.x)
-    x = area.x;
-  else if (x + popup_req.width > area.x + area.width)
-    x = area.x + area.width - popup_req.width;
-
-  if (y + entry_req.height + popup_req.height <= area.y + area.height ||
-      y - area.y < (area.y + area.height) - (y + entry_req.height))
-    {
-      y += entry_req.height;
-      above = FALSE;
-    }
-  else
-    {
-      y -= popup_req.height;
-      above = TRUE;
-    }
-
   if (matches > 0)
     {
-      path = gtk_tree_path_new_from_indices (above ? matches - 1 : 0, -1);
+      path = gtk_tree_path_new_from_indices (0, -1);
       gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (completion->priv->tree_view), path,
                                     NULL, FALSE, 0.0, 0.0);
       gtk_tree_path_free (path);
     }
 
-  gtk_window_move (GTK_WINDOW (completion->priv->popup_window), x, y);
+  toplevel = gtk_widget_get_window (completion->priv->popup_window);
+  gdk_window_set_transient_for (toplevel, window);
+  gdk_window_move_to_rect (toplevel,
+                           &allocation,
+                           GDK_GRAVITY_SOUTH_WEST,
+                           GDK_GRAVITY_NORTH_WEST,
+                           GDK_ANCHOR_FLIP | GDK_ANCHOR_SLIDE | GDK_ANCHOR_RESIZE,
+                           x,
+                           y);
 }
 
 static gboolean
