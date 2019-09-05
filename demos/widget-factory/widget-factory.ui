@@ -1909,11 +1909,11 @@ microphone-sensitivity-medium-symbolic</property>
                                                   </object>
                                                 </child>
                                                 <child>
-                                                  <object class="GtkMenuItem" id="togglesmenuitem">
-                                                    <property name="label">Checks &amp; Radios</property>
+                                                  <object class="GtkMenuItem" id="checksmenuitem">
+                                                    <property name="label">_Checks</property>
                                                     <property name="use-underline">1</property>
                                                     <child type="submenu">
-                                                      <object class="GtkMenu" id="togglessubmenu">
+                                                      <object class="GtkMenu" id="checkssubmenu">
                                                         <child>
                                                           <object class="GtkCheckMenuItem" id="checkmenuitem1">
                                                             <property name="label">_Check</property>
@@ -1957,9 +1957,16 @@ microphone-sensitivity-medium-symbolic</property>
                                                             <property name="use-underline">1</property>
                                                           </object>
                                                         </child>
-                                                        <child>
-                                                          <object class="GtkSeparatorMenuItem" id="separatormenuitem"/>
-                                                        </child>
+                                                      </object>
+                                                    </child>
+                                                  </object>
+                                                </child>
+                                                <child>
+                                                  <object class="GtkMenuItem" id="radiosmenuitem">
+                                                    <property name="label">_Radios</property>
+                                                    <property name="use-underline">1</property>
+                                                    <child type="submenu">
+                                                      <object class="GtkMenu" id="radiossubmenu">
                                                         <child>
                                                           <object class="GtkRadioMenuItem" id="radiomenuitem1">
                                                             <property name="label">_Radio</property>
@@ -2011,6 +2018,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             </child>
                                           </object>
                                         </child>
+FOO
                                         <child>
                                           <object class="GtkMenuItem" id="menuitem3">
                                             <property name="label" translatable="yes">View</property>
@@ -3944,7 +3952,7 @@ bad things might happen.</property>
       </section>
       <section>
         <submenu>
-          <attribute name="label" translatable="yes">Checks &amp; Radios</attribute>
+          <attribute name="label" translatable="yes">C_hecks</attribute>
           <section>
             <item>
               <attribute name="label" translatable="yes">Check</attribute>
@@ -3968,6 +3976,9 @@ bad things might happen.</property>
               <attribute name="hidden-when">action-missing</attribute>
             </item>
           </section>
+        </submenu>
+        <submenu>
+          <attribute name="label" translatable="yes">_Radios</attribute>
           <section>
             <item>
               <attribute name="label" translatable="yes">Radio</attribute>
