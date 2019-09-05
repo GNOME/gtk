@@ -475,6 +475,7 @@ get_utf8_preedit_string (GtkIMContextIME *context_ime,
                          gint            *pos_ret)
 {
   gunichar2 *utf16str = NULL;
+  glong size;
   gchar *utf8str = NULL;
   HWND hwnd;
   HIMC himc;
@@ -491,7 +492,7 @@ get_utf8_preedit_string (GtkIMContextIME *context_ime,
   if (!himc)
     return g_strdup ("");
 
-  glong size = ImmGetCompositionStringW (himc, kind, NULL, 0);
+  size = ImmGetCompositionStringW (himc, kind, NULL, 0);
   if (size > 0)
     {
       utf16str = g_malloc (size);
@@ -540,6 +541,7 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
   PangoAttrList *attrs = pango_attr_list_new ();
   HWND hwnd;
   HIMC himc;
+  guint8 *buf = NULL;
 
   if (!GDK_IS_WINDOW (context_ime->client_window))
     return attrs;
@@ -550,8 +552,6 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
   himc = ImmGetContext (hwnd);
   if (!himc)
     return attrs;
-
-  guint8 *buf = NULL;
 
   if (context_ime->preediting)
     {
@@ -748,11 +748,12 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
 {
   GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (context);
   GtkWidget *widget = NULL;
+  gboolean was_preediting;
 
   if (!GDK_IS_WINDOW (context_ime->client_window))
     return;
 
-  gboolean was_preediting = context_ime->preediting;
+  was_preediting = context_ime->preediting;
 
   context_ime->opened = FALSE;
   context_ime->preediting = FALSE;
