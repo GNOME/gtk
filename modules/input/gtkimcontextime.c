@@ -50,9 +50,6 @@
 
 /* #define BUFSIZE 4096 */
 
-#define IS_DEAD_KEY(k) \
-    ((k) >= GDK_dead_grave && (k) <= (GDK_dead_dasia+1))
-
 #define FREE_PREEDIT_BUFFER(ctx) \
 {                                \
   g_free((ctx)->priv->comp_str); \
@@ -75,7 +72,8 @@ struct _GtkIMContextIMEPrivate
   LPVOID read_str;
   DWORD read_str_len;
 
-  guint32 dead_key_keyval;
+  guint32 compose_buffer[10];
+  gsize   n_compose;
 };
 
 
@@ -196,6 +194,8 @@ gtk_im_context_ime_init (GtkIMContextIME *context_ime)
   context_ime->priv->comp_str_len     = 0;
   context_ime->priv->read_str         = NULL;
   context_ime->priv->read_str_len     = 0;
+
+  context_ime->priv->n_compose        = 0;
 }
 
 
@@ -305,41 +305,6 @@ gtk_im_context_ime_set_client_window (GtkIMContext *context,
   context_ime->client_window = client_window;
 }
 
-static gunichar
-_gtk_im_context_ime_dead_key_unichar (guint    keyval,
-                                      gboolean spacing)
-{
-  switch (keyval)
-    {
-#define CASE(keysym, unicode, spacing_unicode) \
-      case GDK_dead_##keysym: return (spacing) ? spacing_unicode : unicode;
-
-      CASE (grave, 0x0300, 0x0060);
-      CASE (acute, 0x0301, 0x00b4);
-      CASE (circumflex, 0x0302, 0x005e);
-      CASE (tilde, 0x0303, 0x007e);	/* Also used with perispomeni, 0x342. */
-      CASE (macron, 0x0304, 0x00af);
-      CASE (breve, 0x0306, 0x02d8);
-      CASE (abovedot, 0x0307, 0x02d9);
-      CASE (diaeresis, 0x0308, 0x00a8);
-      CASE (hook, 0x0309, 0);
-      CASE (abovering, 0x030A, 0x02da);
-      CASE (doubleacute, 0x030B, 0x2dd);
-      CASE (caron, 0x030C, 0x02c7);
-      CASE (abovecomma, 0x0313, 0);         /* Equivalent to psili */
-      CASE (abovereversedcomma, 0x0314, 0); /* Equivalent to dasia */
-      CASE (horn, 0x031B, 0);	/* Legacy use for psili, 0x313 (or 0x343). */
-      CASE (belowdot, 0x0323, 0);
-      CASE (cedilla, 0x0327, 0x00b8);
-      CASE (ogonek, 0x0328, 0);	/* Legacy use for dasia, 0x314.*/
-      CASE (iota, 0x0345, 0);
-
-#undef CASE
-    default:
-      return 0;
-    }
-}
-
 static void
 _gtk_im_context_ime_commit_unichar (GtkIMContextIME *context_ime,
                                     gunichar         c)
@@ -347,21 +312,10 @@ _gtk_im_context_ime_commit_unichar (GtkIMContextIME *context_ime,
   gchar utf8[10];
   int len;
 
-  if (context_ime->priv->dead_key_keyval != 0)
-    {
-      gunichar combining;
-
-      combining =
-        _gtk_im_context_ime_dead_key_unichar (context_ime->priv->dead_key_keyval,
-                                              FALSE);
-      g_unichar_compose (c, combining, &c);
-    }
-
   len = g_unichar_to_utf8 (c, utf8);
   utf8[len] = 0;
 
   g_signal_emit_by_name (context_ime, "commit", utf8);
-  context_ime->priv->dead_key_keyval = 0;
 }
 
 static gboolean
@@ -369,8 +323,15 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
                                     GdkEventKey  *event)
 {
   GtkIMContextIME *context_ime;
-  gboolean retval = FALSE;
-  guint32 c;
+  GtkIMContextIMEPrivate *priv;
+  guint32          c;
+  gsize            i;
+  guint32          output[17];
+  gsize            output_size = 17;
+  const guint32   *ligature = NULL;
+  GdkKeymap       *keymap;
+  GdkWin32Keymap  *win32_keymap;
+  gsize            committed;
 
   g_return_val_if_fail (GTK_IS_IM_CONTEXT_IME (context), FALSE);
   g_return_val_if_fail (event, FALSE);
@@ -382,6 +343,7 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
     return FALSE;
 
   context_ime = GTK_IM_CONTEXT_IME (context);
+  priv = context_ime->priv;
 
   if (!context_ime->focus)
     return FALSE;
@@ -389,41 +351,69 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
   if (!GDK_IS_WINDOW (context_ime->client_window))
     return FALSE;
 
-  if (event->keyval == GDK_space &&
-      context_ime->priv->dead_key_keyval != 0)
+  keymap = gdk_keymap_get_default ();
+  win32_keymap = GDK_WIN32_KEYMAP (keymap);
+
+  ligature = gdk_win32_keymap_fetch_ligature (win32_keymap, event);
+
+  /* Work around the fact that event->keyval can't hold more
+   * than 1 UCS-4 codepoint.
+   */
+  if (ligature != NULL)
     {
-      c = _gtk_im_context_ime_dead_key_unichar (context_ime->priv->dead_key_keyval, TRUE);
-      context_ime->priv->dead_key_keyval = 0;
-      _gtk_im_context_ime_commit_unichar (context_ime, c);
+      for (i = 0; ligature[i] != 0 && priv->n_compose < G_N_ELEMENTS (priv->compose_buffer); i++)
+        priv->compose_buffer[priv->n_compose++] = ligature[i];
+    }
+  else
+    {
+      priv->compose_buffer[priv->n_compose++] = event->keyval;
+    }
+
+  /* Compose buffer overflow */
+  if (priv->n_compose >= G_N_ELEMENTS (priv->compose_buffer))
+    {
+      priv->n_compose = 0;
+      return FALSE;
+    }
+
+  switch (gdk_win32_keymap_check_compose32 (keymap,
+                                            priv->compose_buffer,
+                                            priv->n_compose,
+                                            output, &output_size))
+    {
+    case GDK_WIN32_KEYMAP_MATCH_NONE:
+      for (committed = 0, i = 0; i < priv->n_compose; i++)
+        {
+          c = gdk_keyval_to_unicode (priv->compose_buffer[i]);
+          if (c == 0)
+            continue;
+          _gtk_im_context_ime_commit_unichar (context_ime, c);
+          committed += 1;
+        }
+      priv->n_compose = 0;
+
+      return committed > 0;
+      break;
+    case GDK_WIN32_KEYMAP_MATCH_EXACT:
+    case GDK_WIN32_KEYMAP_MATCH_PARTIAL:
+      for (committed = 0, i = 0; i < output_size; i++)
+        {
+          c = gdk_keyval_to_unicode (output[i]);
+          if (c == 0)
+            continue;
+          _gtk_im_context_ime_commit_unichar (context_ime, c);
+          committed += 1;
+        }
+      priv->n_compose = 0;
+
+      return committed > 0;
+    case GDK_WIN32_KEYMAP_MATCH_INCOMPLETE:
       return TRUE;
     }
 
-  c = gdk_keyval_to_unicode (event->keyval);
+  priv->n_compose = 0;
 
-  if (c)
-    {
-      _gtk_im_context_ime_commit_unichar (context_ime, c);
-      retval = TRUE;
-    }
-  else if (IS_DEAD_KEY (event->keyval))
-    {
-      gunichar dead_key;
-
-      dead_key = _gtk_im_context_ime_dead_key_unichar (event->keyval, FALSE);
-
-      /* Emulate double input of dead keys */
-      if (dead_key && event->keyval == context_ime->priv->dead_key_keyval)
-        {
-          c = _gtk_im_context_ime_dead_key_unichar (context_ime->priv->dead_key_keyval, TRUE);
-          context_ime->priv->dead_key_keyval = 0;
-          _gtk_im_context_ime_commit_unichar (context_ime, c);
-          _gtk_im_context_ime_commit_unichar (context_ime, c);
-        }
-      else
-        context_ime->priv->dead_key_keyval = event->keyval;
-    }
-
-  return retval;
+  return FALSE;
 }
 
 

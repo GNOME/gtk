@@ -753,7 +753,7 @@ gdk_keyval_convert_case (guint symbol,
   xupper = symbol;
 
   /* Check for directly encoded 24-bit UCS characters: */
-  if ((symbol & 0xff000000) == 0x01000000)
+  if (((symbol & 0xff000000) & 0x01000000) == 0x01000000)
     {
       if (lower)
         *lower = gdk_unicode_to_keyval (g_unichar_tolower (symbol & 0x00ffffff));

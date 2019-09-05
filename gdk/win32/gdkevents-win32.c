@@ -659,14 +659,18 @@ build_key_event_state (GdkEvent *event,
   event->key.group = _gdk_win32_keymap_get_active_group (keymap);
 
   if (_gdk_win32_keymap_has_altgr (keymap) &&
-      (key_state[VK_LCONTROL] & 0x80) &&
-      (key_state[VK_RMENU] & 0x80))
+      (key_state[VK_CONTROL] & 0x80) &&
+      (key_state[VK_MENU] & 0x80))
     {
+      /* Treat *any* combination of ctrl and alt as "altgr" */
       event->key.state |= GDK_MOD2_MASK;
-      if (key_state[VK_RCONTROL] & 0x80)
-	event->key.state |= GDK_CONTROL_MASK;
-      if (key_state[VK_LMENU] & 0x80)
-	event->key.state |= GDK_MOD1_MASK;
+      /* If both left and right ctrl/alt are pressed, also add the "control"/"alt" flag
+       * (since otherwise it would be impossible to have ctrl+alt+... combinations)
+       */
+      if ((key_state[VK_RCONTROL] & 0x80) && (key_state[VK_LCONTROL] & 0x80))
+        event->key.state |= GDK_CONTROL_MASK;
+      if ((key_state[VK_RMENU] & 0x80) && (key_state[VK_LMENU] & 0x80))
+        event->key.state |= GDK_MOD1_MASK;
     }
   else
     {

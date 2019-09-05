@@ -279,7 +279,7 @@ gtk_compose_list_check_duplicated (GList *compose_list)
 
   for (list = compose_list; list != NULL; list = list->next)
     {
-      static guint16 keysyms[GTK_MAX_COMPOSE_LEN + 1];
+      static guint32 keysyms[GTK_MAX_COMPOSE_LEN + 1];
       int i;
       int n_compose = 0;
       gboolean compose_finish;
@@ -293,7 +293,7 @@ gtk_compose_list_check_duplicated (GList *compose_list)
       for (i = 0; i < GTK_MAX_COMPOSE_LEN + 1; i++)
         {
           gunichar codepoint = compose_data->sequence[i];
-          keysyms[i] = (guint16) codepoint;
+          keysyms[i] = codepoint;
 
           if (codepoint == 0)
             break;

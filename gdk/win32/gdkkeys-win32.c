@@ -51,85 +51,244 @@ enum _GdkWin32KeyLevelState
   GDK_WIN32_LEVEL_COUNT
 };
 
+#define GDK_KEY_UNICODE 0x01000000
+#define GDK_KEY_DEAD 0x02000000
+#define GDK_KEY_UNIDEAD 0x03000000
+
 typedef enum _GdkWin32KeyLevelState GdkWin32KeyLevelState;
-
-struct _GdkWin32KeyNode
-{
-  /* Non-spacing version of the dead key */
-  guint                  undead_gdk_keycode;
-
-  /* Virtual key code */
-  guint8                 vk;
-
-  /* Level for which this virtual key code produces this gdk_keycode */
-  GdkWin32KeyLevelState  level;
-
-  /* GDK (X11) code for this key */
-  guint                  gdk_keycode;
-
-  /* Array of GdkWin32KeyNode should be sorted by gdk_keycode, then by level */
-  GArray                *combinations;
-};
 
 typedef struct _GdkWin32KeyNode GdkWin32KeyNode;
 
+struct _GdkWin32KeyNode
+{
+  /* Virtual key code */
+  guint8                 vk;
+
+  /* Level (i.e. modifiers) with which vk is used. */
+  GdkWin32KeyLevelState  level;
+};
+
+typedef struct _GdkWin32KeyEntry GdkWin32KeyEntry;
+
+struct _GdkWin32KeyEntry
+{
+  /* GDK keyval mapped to a virtual key code.
+   * If ligature is not NULL, then gdk_keyval is the same as the first
+   * keycode in ligature array.
+   */
+  guint32  gdk_keyval;
+  /* A string mapped to a virtual key code. 0-terminated.
+   * This is used for ligatures and other things not
+   * representable by a single guint32.
+   * NULL when the value fits into gdk_keyval.
+   */
+  guint32 *ligature;
+};
+
+typedef struct _GdkWin32CombinationNode GdkWin32CombinationNode;
+
+/* Represents one dead key + another key combination. */
+struct _GdkWin32CombinationNode
+{
+  /* key.vk is the code of the second key in the combination,
+   * and key.level is the modifier for it.
+   * key.vk is never 0.
+   */
+  GdkWin32KeyNode  key;
+
+  /* The copy of the keymap key table entry for the key.vk, key.level and
+   * the active group. It's here only because looking it up in the keymap
+   * key table is not always conveinent.
+   */
+  GdkWin32KeyEntry entry;
+
+  /* Result of the combination. If this combination produces a chained
+   * dead key, the result is its spacing version.
+   */
+  GdkWin32KeyEntry result;
+
+  /* TRUE = combination produces another dead key.
+   * FALSE = combination produces normal characters.
+   */
+  gboolean         chain;
+};
+
+typedef struct _GdkWin32DeadKeyNode GdkWin32DeadKeyNode;
+
+/* We keep one of these for each dead key in layout options.
+ * Its "combinations" array is filled with GdkWin32CombinationNode structures,
+ * one for each key that can be combined with this dead key.
+ * If the combination of this dead key and another key is also a dead key,
+ * then a new node is created and added to the dead keys array at the
+ * layout options. Because all dead keys end up in the same
+ * array, the whole structure only ever has two levels and does not look
+ * like a tree. It can be traversed like a tree only because it's possible
+ * to alternate between these two levels, always picking a different root
+ * node on the even step, until an odd step ends up in a combination result
+ * that is not a dead key.
+ */
+struct _GdkWin32DeadKeyNode
+{
+  /* key.vk is the code of the key that needs to be pressed to type
+   * this dead key. key.level is the needed modifier.
+   */
+  GdkWin32KeyNode      key;
+
+  /* The spacing version of this dead key.
+   * For first-order dead keys it's just a copy of the
+   * appropriate key table entry.
+   * For chained dead keys this is a copy of the string
+   * from the corresponding GdkWin32CombinationNode (looking it up
+   * in the tree is inconvenient, since we do not maintain a link
+   * to the parent combination after sorting, hence the copy).
+   */
+  GdkWin32KeyEntry     entry;
+
+  /* Array of GdkWin32CombinationNode, should be sorted by result.gdk_keyval/ligature.
+   * Always non-NULL, although might be 0-length.
+   */
+  GArray              *combinations;
+
+  /* While the tree is being built, we need to repeatedly reproduce the
+   * ToUnicodeEx() state, thus we need to remember the keys that must be
+   * 'pressed' to achieve this combination.
+   * These values are invalid (and set to 0) after sorting.
+   */
+  GdkWin32DeadKeyNode *parent;
+  gsize                combo_index;
+};
+
 /*
 Example:
-  GdkWin32KeyNode
+  GdkWin32DeadKeyNode
   {
-    undead_gdk_keycode = 0x0b4 GDK_KEY_acute (')
-    vk = 0xde VK_OEM_7
-    level = GDK_WIN32_LEVEL_NONE
-    gdk_keycode = 0xfe51 GDK_KEY_dead_acute
-    combinations = 
+    key.vk = 0xde VK_OEM_7
+    key.level = GDK_WIN32_LEVEL_NONE
+    entry.gdk_keyval = 0x03000027 GDK_KEY_apostrophe (') | GDK_KEY_UNIDEAD
+    combinations =
     {
-      GdkWin32KeyNode
+      GdkWin32CombinationNode
       {
-        undead_gdk_keycode = 0x061 GDK_KEY_a (a)
-        level = GDK_WIN32_LEVEL_NONE
-        vk = 0x41 VK_A
-        gdk_keycode = 0xe1 GDK_KEY_aacute á
-        combinations = NULL
+        key.vk = 0xde VK_OEM_7
+        key.level = GDK_WIN32_LEVEL_NONE
+        from keytable entry: 0x027 GDK_KEY_apostrophe (')
+        result.gdk_keyval = 0x1bd GDK_KEY_doubleacute (˝)
+        chain = TRUE
       },
-      GdkWin32KeyNode
+      GdkWin32CombinationNode
       {
-        unicode_char = 0x041 GDK_KEY_A (A)
-        level = GDK_WIN32_LEVEL_SHIFT
-        vk = 0x41 VK_A
-        gdk_keycode = 0x0c1 GDK_KEY_Aacute Á
-        combinations = NULL
+        key.vk = 0x41 VK_A
+        key.level = GDK_WIN32_LEVEL_NONE
+        from keytable entry: 0x061 GDK_KEY_a (a)
+        result.gdk_keyval = 0xe1 GDK_KEY_aacute á
+        chain = FALSE
+      },
+      GdkWin32CombinationNode
+      {
+        key.vk = 0x41 VK_A
+        key.level = GDK_WIN32_LEVEL_SHIFT
+        from keytable entry: 0x041 GDK_KEY_A (A)
+        result.gdk_keyval = 0x0c1 GDK_KEY_Aacute Á
+        chain = FALSE
+      },
+      GdkWin32CombinationNode
+      {
+        key.vk = 0x53 VK_S
+        key.level = GDK_WIN32_LEVEL_NONE
+        from keytable entry: 0x053 GDK_KEY_S (S)
+        result.gdk_keyval = 0x027 0x053 's
+        chain = FALSE
+      },
+      GdkWin32CombinationNode
+      {
+        key.vk = 0x20 VK_SPACE
+        key.level = GDK_WIN32_LEVEL_NONE
+        from keytable entry: 0x020 GDK_KEY_SPACE ( )
+        result.gdk_keyval = 0x027 '
+        chain = FALSE
       },
       { ... }
     }
-  }
+  },
+  GdkWin32DeadKeyNode
+  {
+    key.vk = 0 // Can't be typed directly
+    key.level = GDK_WIN32_LEVEL_NONE
+    entry.gdk_keyval = 0x030002dd ˝ | GDK_KEY_UNIDEAD
+    combinations =
+    {
+      GdkWin32CombinationNode
+      {
+        key.vk = 0x41 VK_A
+        key.level = GDK_WIN32_LEVEL_NONE
+        from keytable entry: 0x061 GDK_KEY_a (a)
+        result.ligature = 0x061 0x30b <unicodes as gdk keyvals> a̋
+        chain = FALSE
+      },
+      GdkWin32CombinationNode
+      {
+        key.vk = 0x41 VK_A
+        key.level = GDK_WIN32_LEVEL_SHIFT
+        from keytable entry: 0x041 GDK_KEY_A (A)
+        result.ligature = 0x041 0x30b <unicodes as gdk keyvals> A̋
+        chain = FALSE
+      },
+      GdkWin32CombinationNode
+      {
+        key.vk = 0x20 VK_SPACE
+        key.level = GDK_WIN32_LEVEL_NONE
+        from keytable entry: 0x020 GDK_KEY_SPACE ( )
+        result.ligature = 0x1bd GDK_KEY_doubleacute (˝)
+        chain = FALSE
+      },
+      { ... }
+    }
+  },
+  ...
 
 Thus:
 
-GDK_KEY_dead_acute + GDK_KEY_a
+GDK_KEY_apostrophe + GDK_KEY_a
 = GDK_KEY_aacute
 
-GDK_KEY_dead_acute + GDK_KEY_A
+GDK_KEY_apostrophe + GDK_KEY_A
 = GDK_KEY_Aacute
 
-GDK_KEY_dead_acute + GDK_KEY_s
-matches partially
-(GDK_KEY_dead_acute is a known dead key, but does not combine with GDK_KEY_s)
-and resolves into:
-GDK_KEY_acute + GDK_KEY_s
+GDK_KEY_apostrophe + GDK_KEY_s
+= GDK_KEY_apostrophe + GDK_KEY_s
 
-GDK_KEY_dead_somethingelse + GDK_KEY_anything
-does not match at all
-(W32 API did not provide any deadkey info for GDK_KEY_dead_somethingelse)
-and the caller will try other matching mechanisms for compose_buffer
+GDK_KEY_apostrophe + GDK_KEY_space
+= GDK_KEY_apostrophe
+
+GDK_KEY_somethingelse
+= GDK_KEY_somethingelse
+(W32 API did not provide any deadkey info for GDK_KEY_dead_somethingelse,
+ it's copied as-is)
+
+Here's a purely theoretical (keyboard layouts normally available on Windows
+do not support dead-key chaining) GDK_KEY_doubleacute example:
+
+GDK_KEY_apostrophe + GDK_KEY_apostrophe
+= GDK_KEY_doubleacute
+
+GDK_KEY_apostrophe + GDK_KEY_apostrophe + GDK_KEY_a
+= GDK_KEY_doubleacute + GDK_KEY_a
+= 0x61 0x30b (a ligature)
+
+GDK_KEY_apostrophe + GDK_KEY_apostrophe + GDK_KEY_s
+= GDK_KEY_doubleacute + GDK_KEY_s
+
+GDK_KEY_apostrophe + GDK_KEY_apostrophe + GDK_KEY_space
+= GDK_KEY_doubleacute
 */
 
 struct _GdkWin32KeyGroupOptions
 {
   /* character that should be used as the decimal separator */
-  wchar_t         decimal_mark;
+  guint32         decimal_mark;
 
   /* Scancode for the VK_RSHIFT */
-  guint           scancode_rshift;
+  guint32         scancode_rshift;
 
   /* TRUE if Ctrl+Alt emulates AltGr */
   gboolean        has_altgr;
@@ -153,13 +312,23 @@ struct _GdkWin32Keymap
    */
   GArray *layout_handles;
 
-  /* VirtualKeyCode -> gdk_keyval table
-   * length = 256 * length(layout_handles) * 2 * 4
+  /* An array of GdkWin32KeyEntry, mapping Windows virtual key codes
+   * to GDK keyvals and strings (for ligatures).
+   * Its length is 256 * length(layout_handles) * 2 * 4.
    * 256 is the number of virtual key codes,
    * 2x4 is the number of Shift/AltGr/CapsLock combinations (level),
    * length(layout_handles) is the number of layout handles (group).
+   * The structure looks like this:
+   * Group 0 at shift level 0 for VK <vk>:
+   *    g_array_index (keysym_tab, GdkWin32KeyEntry, vk * group_count * GDK_WIN32_LEVEL_COUNT)
+   * Group <group> at shift level 0 for VK <vk>:
+   *    g_array_index (keysym_tab, GdkWin32KeyEntry, vk * group_count * GDK_WIN32_LEVEL_COUNT + group * GDK_WIN32_LEVEL_COUNT)
+   * or g_array_index (keysym_tab, GdkWin32KeyEntry, (vk * group_count + group) * GDK_WIN32_LEVEL_COUNT)
+   * Group <group> at shift level <level> for VK <vk>:
+   *    g_array_index (keysym_tab, GdkWin32KeyEntry, vk * group_count * GDK_WIN32_LEVEL_COUNT + group * GDK_WIN32_LEVEL_COUNT + level)
+   * or g_array_index (keysym_tab, GdkWin32KeyEntry, (vk * group_count + group) * GDK_WIN32_LEVEL_COUNT + level)
    */
-  guint  *keysym_tab;
+  GArray *keysym_tab;
 
   /* length = length(layout_handles), type =  GdkWin32KeyGroupOptions
    * Kept separate from layout_handles because layout_handles is
@@ -173,6 +342,8 @@ struct _GdkWin32Keymap
    */
   guint8 active_layout;
 };
+
+#define keyentry(_table, _group_count, _v_keycode, _group, _level) (&g_array_index (_table, GdkWin32KeyEntry, (_v_keycode * _group_count + _group) * GDK_WIN32_LEVEL_COUNT + _level))
 
 G_DEFINE_TYPE (GdkWin32Keymap, gdk_win32_keymap, GDK_TYPE_KEYMAP)
 
@@ -191,9 +362,32 @@ gdk_win32_key_group_options_clear (GdkWin32KeyGroupOptions *options)
 }
 
 static void
-gdk_win32_key_node_clear (GdkWin32KeyNode *node)
+gdk_win32_key_entry_clear (GdkWin32KeyEntry *entry)
 {
+  g_clear_pointer (&entry->ligature, g_free);
+}
+
+static void
+gdk_win32_key_entries_clear (GArray *entries)
+{
+  gint i;
+
+  for (i = 0; i < entries->len; i++)
+    gdk_win32_key_entry_clear (&g_array_index (entries, GdkWin32KeyEntry, i));
+}
+
+static void
+gdk_win32_dead_key_node_clear (GdkWin32DeadKeyNode *node)
+{
+  gdk_win32_key_entry_clear (&node->entry);
   g_clear_pointer (&node->combinations, g_array_unref);
+}
+
+static void
+gdk_win32_combination_node_clear (GdkWin32CombinationNode *node)
+{
+  gdk_win32_key_entry_clear (&node->result);
+  gdk_win32_key_entry_clear (&node->entry);
 }
 
 static void
@@ -202,7 +396,8 @@ gdk_win32_keymap_init (GdkWin32Keymap *keymap)
   keymap->layout_handles = g_array_new (FALSE, FALSE, sizeof (HKL));
   keymap->options = g_array_new (FALSE, FALSE, sizeof (GdkWin32KeyGroupOptions));
   g_array_set_clear_func (keymap->options, (GDestroyNotify) gdk_win32_key_group_options_clear);
-  keymap->keysym_tab = NULL;
+  keymap->keysym_tab = g_array_new (FALSE, FALSE, sizeof (GdkWin32KeyEntry));
+  g_array_set_clear_func (keymap->keysym_tab, (GDestroyNotify) gdk_win32_key_entry_clear);
   keymap->active_layout = 0;
   update_keymap (GDK_KEYMAP (keymap));
 }
@@ -212,7 +407,7 @@ gdk_win32_keymap_finalize (GObject *object)
 {
   GdkWin32Keymap *keymap = GDK_WIN32_KEYMAP (object);
 
-  g_clear_pointer (&keymap->keysym_tab, g_free);
+  g_clear_pointer (&keymap->keysym_tab, g_array_unref);
   g_clear_pointer (&keymap->layout_handles, g_array_unref);
   g_clear_pointer (&keymap->options, g_array_unref);
 
@@ -242,7 +437,10 @@ print_keysym_tab (GdkWin32Keymap *keymap)
 
           for (level = 0; level < GDK_WIN32_LEVEL_COUNT; level++)
             {
-              gchar *name = gdk_keyval_name (keymap->keysym_tab[vk * group_size * GDK_WIN32_LEVEL_COUNT + level]);
+              const gchar *name;
+              GdkWin32KeyEntry *entry = keyentry (keymap->keysym_tab, group_size, vk, li, level);
+
+              name = gdk_keyval_name (entry->gdk_keyval);
 
               g_print ("%s ", name ? name : "(none)");
             }
@@ -474,7 +672,7 @@ reset_after_dead (guchar key_state[KEY_STATE_SIZE],
                   HKL    handle)
 {
   guchar  temp_key_state[KEY_STATE_SIZE];
-  wchar_t wcs[2];
+  wchar_t wcs[17];
 
   memmove (temp_key_state, key_state, KEY_STATE_SIZE);
 
@@ -486,55 +684,6 @@ reset_after_dead (guchar key_state[KEY_STATE_SIZE],
   ToUnicodeEx (VK_SPACE, MapVirtualKey (VK_SPACE, 0),
 	       temp_key_state, wcs, G_N_ELEMENTS (wcs),
 	       0, handle);
-}
-
-static void
-handle_dead (guint  keysym,
-	     guint *ksymp)
-{
-  switch (keysym)
-    {
-    case '"': /* 0x022 */
-      *ksymp = GDK_KEY_dead_diaeresis; break;
-    case '\'': /* 0x027 */
-      *ksymp = GDK_KEY_dead_acute; break;
-    case GDK_KEY_asciicircum: /* 0x05e */
-      *ksymp = GDK_KEY_dead_circumflex; break;
-    case GDK_KEY_grave:	/* 0x060 */
-      *ksymp = GDK_KEY_dead_grave; break;
-    case GDK_KEY_asciitilde: /* 0x07e */
-      *ksymp = GDK_KEY_dead_tilde; break;
-    case GDK_KEY_diaeresis: /* 0x0a8 */
-      *ksymp = GDK_KEY_dead_diaeresis; break;
-    case GDK_KEY_degree: /* 0x0b0 */
-      *ksymp = GDK_KEY_dead_abovering; break;
-    case GDK_KEY_acute:	/* 0x0b4 */
-      *ksymp = GDK_KEY_dead_acute; break;
-    case GDK_KEY_periodcentered: /* 0x0b7 */
-      *ksymp = GDK_KEY_dead_abovedot; break;
-    case GDK_KEY_cedilla: /* 0x0b8 */
-      *ksymp = GDK_KEY_dead_cedilla; break;
-    case GDK_KEY_breve:	/* 0x1a2 */
-      *ksymp = GDK_KEY_dead_breve; break;
-    case GDK_KEY_ogonek: /* 0x1b2 */
-      *ksymp = GDK_KEY_dead_ogonek; break;
-    case GDK_KEY_caron:	/* 0x1b7 */
-      *ksymp = GDK_KEY_dead_caron; break;
-    case GDK_KEY_doubleacute: /* 0x1bd */
-      *ksymp = GDK_KEY_dead_doubleacute; break;
-    case GDK_KEY_abovedot: /* 0x1ff */
-      *ksymp = GDK_KEY_dead_abovedot; break;
-    case 0x1000384: /* Greek tonos */
-      *ksymp = GDK_KEY_dead_acute; break;
-    case GDK_KEY_Greek_accentdieresis: /* 0x7ae */
-      *ksymp = GDK_KEY_Greek_accentdieresis; break;
-    default:
-      /* By default use the keysym as such. This takes care of for
-       * instance the dead U+09CD (BENGALI VIRAMA) on the ekushey
-       * Bengali layout.
-       */
-      *ksymp = keysym; break;
-    }
 }
 
 /* keypad decimal mark depends on active keyboard layout
@@ -590,23 +739,206 @@ check_that_active_layout_is_in_sync (GdkWin32Keymap *keymap)
 }
 
 static gint
-sort_key_nodes_by_gdk_keyval (gconstpointer a,
+sort_dead_keys_by_gdk_keyval (gconstpointer a,
                               gconstpointer b)
 {
-  const GdkWin32KeyNode *one = a;
-  const GdkWin32KeyNode *two = b;
+  const GdkWin32DeadKeyNode *one = a;
+  const GdkWin32DeadKeyNode *two = b;
+  guint i;
 
-  if (one->gdk_keycode < two->gdk_keycode)
+  if (one->entry.gdk_keyval < two->entry.gdk_keyval)
     return -1;
-  else if (one->gdk_keycode > two->gdk_keycode)
+  else if (one->entry.gdk_keyval > two->entry.gdk_keyval)
     return 1;
 
-  if (one->level < two->level)
+  if (one->entry.ligature == NULL && two->entry.ligature != NULL)
     return -1;
-  else if (one->level > two->level)
+  else if (one->entry.ligature != NULL && two->entry.ligature == NULL)
     return 1;
+
+  for (i = 1; ; i++)
+    {
+      if (one->entry.ligature[i] < two->entry.ligature[i])
+        return -1;
+      else if (one->entry.ligature[i] > two->entry.ligature[i])
+        return 1;
+      if (one->entry.ligature[i] == 0)
+        break;
+    }
 
   return 0;
+}
+
+static gint
+sort_combinations_by_gdk_keyval (gconstpointer a,
+                                 gconstpointer b)
+{
+  const GdkWin32CombinationNode *one = a;
+  const GdkWin32CombinationNode *two = b;
+  guint i;
+
+  if (one->entry.gdk_keyval < two->entry.gdk_keyval)
+    return -1;
+  else if (one->entry.gdk_keyval > two->entry.gdk_keyval)
+    return 1;
+
+  if (one->entry.ligature == NULL && two->entry.ligature != NULL)
+    return -1;
+  else if (one->entry.ligature != NULL && two->entry.ligature == NULL)
+    return 1;
+  else if (one->entry.ligature == NULL && two->entry.ligature == NULL)
+    return 0;
+
+  for (i = 1; ; i++)
+    {
+      if (one->entry.ligature[i] < two->entry.ligature[i])
+        return -1;
+      else if (one->entry.ligature[i] > two->entry.ligature[i])
+        return 1;
+      if (one->entry.ligature[i] == 0)
+        break;
+    }
+
+  return 0;
+}
+
+static gboolean
+linear_find_dead_key_by_keyval (GArray   *array,
+                                guint32   keyval,
+                                gsize    *index)
+{
+  gsize i;
+  GdkWin32DeadKeyNode *dead_key;
+
+  for (i = 0; i < array->len; i++)
+    {
+      dead_key = &g_array_index (array, GdkWin32DeadKeyNode, i);
+      if (dead_key->entry.gdk_keyval == keyval)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+find_dead_key_by_keyval (GArray   *array,
+                         guint32   keyval,
+                         gsize    *index)
+{
+  gsize i;
+  gsize i_max;
+  GdkWin32DeadKeyNode *dead_key, *dead_key_max;
+
+  if (array->len == 0)
+    return FALSE;
+
+  i = 0;
+  i_max = array->len - 1;
+
+  while (i != i_max)
+    {
+      gsize middle;
+
+      dead_key = &g_array_index (array, GdkWin32DeadKeyNode, i);
+      dead_key_max = &g_array_index (array, GdkWin32DeadKeyNode, i_max);
+
+      /* It's unknown whether a deadkey can or can't occupy more than one codepoint.
+       * For now assume that it can't.
+       */
+      if (dead_key->entry.gdk_keyval == keyval)
+        {
+          break;
+        }
+      else if (dead_key_max->entry.gdk_keyval == keyval)
+        {
+          i = i_max;
+          break;
+        }
+      else if (i + 1 == i_max)
+        {
+          break;
+        }
+
+      middle = i + (i_max - i) / 2;
+      dead_key = &g_array_index (array, GdkWin32DeadKeyNode, middle);
+
+      if (dead_key->entry.gdk_keyval < keyval)
+        i = middle;
+      else if (dead_key->entry.gdk_keyval > keyval)
+        i_max = middle;
+      else
+        i = i_max = middle;
+    }
+
+  dead_key = &g_array_index (array, GdkWin32DeadKeyNode, i);
+
+  if (dead_key->entry.gdk_keyval != keyval)
+    return FALSE;
+
+  *index = i;
+
+  return TRUE;
+}
+
+static gboolean
+find_combination_by_keyval (GdkWin32Keymap *keymap,
+                            GArray         *array,
+                            guint32         keyval,
+                            gsize          *index)
+{
+  gsize  i;
+  gsize  i_max;
+  GdkWin32CombinationNode *node, *node_max;
+
+  if (array->len == 0)
+    return FALSE;
+
+  i = 0;
+  i_max = array->len - 1;
+
+  while (i != i_max)
+    {
+      gsize middle;
+
+      node = &g_array_index (array, GdkWin32CombinationNode, i);
+      node_max = &g_array_index (array, GdkWin32CombinationNode, i_max);
+
+      /* It's unknown whether a deadkey can or can't occupy more than one codepoint.
+       * For now assume that it can't.
+       */
+      if (node->entry.gdk_keyval == keyval)
+        {
+          break;
+        }
+      else if (node_max->entry.gdk_keyval == keyval)
+        {
+          i = i_max;
+          break;
+        }
+      else if (i + 1 == i_max)
+        {
+          break;
+        }
+
+      middle = i + (i_max - i) / 2;
+      node = &g_array_index (array, GdkWin32CombinationNode, middle);
+
+      if (node->entry.gdk_keyval < keyval)
+        i = middle;
+      else if (node->entry.gdk_keyval > keyval)
+        i_max = middle;
+      else
+        i = i_max = middle;
+    }
+
+  node = &g_array_index (array, GdkWin32CombinationNode, i);
+
+  if (node->entry.gdk_keyval != keyval)
+    return FALSE;
+
+  *index = i;
+
+  return TRUE;
 }
 
 static void
@@ -626,9 +958,8 @@ update_keymap (GdkKeymap *gdk_keymap)
   guchar                   key_state[KEY_STATE_SIZE];
   guint                    scancode;
   guint                    vk;
-  guint                   *keygroup;
 
-  if (keymap->keysym_tab != NULL &&
+  if (keymap->keysym_tab->len != 0 &&
       current_serial == _gdk_keymap_serial)
     return;
 
@@ -689,10 +1020,17 @@ update_keymap (GdkKeymap *gdk_keymap)
 
   keysym_tab_size = hkls_len * 256 * 2 * 4;
 
-  if (hkls_len != keymap->layout_handles->len)
-    keymap->keysym_tab = g_renew (guint, keymap->keysym_tab, keysym_tab_size);
+  gdk_win32_key_entries_clear (keymap->keysym_tab);
+  g_array_set_size (keymap->keysym_tab, keysym_tab_size);
 
-  memset (keymap->keysym_tab, 0, keysym_tab_size);
+  for (i = 0; i < keysym_tab_size; i++)
+    {
+      GdkWin32KeyEntry *entry = &g_array_index (keymap->keysym_tab, GdkWin32KeyEntry, i);
+
+      entry->gdk_keyval = 0;
+      entry->ligature = NULL;
+    }
+
   g_array_set_size (keymap->layout_handles, hkls_len);
   g_array_set_size (keymap->options, hkls_len);
 
@@ -703,8 +1041,8 @@ update_keymap (GdkKeymap *gdk_keymap)
       options->decimal_mark = 0;
       options->scancode_rshift = 0;
       options->has_altgr = FALSE;
-      options->dead_keys = g_array_new (FALSE, FALSE, sizeof (GdkWin32KeyNode));
-      g_array_set_clear_func (options->dead_keys, (GDestroyNotify) gdk_win32_key_node_clear);
+      options->dead_keys = g_array_new (FALSE, FALSE, sizeof (GdkWin32DeadKeyNode));
+      g_array_set_clear_func (options->dead_keys, (GDestroyNotify) gdk_win32_dead_key_node_clear);
 
       g_array_index (keymap->layout_handles, HKL, i) = hkls[i];
 
@@ -716,9 +1054,10 @@ update_keymap (GdkKeymap *gdk_keymap)
     {
       for (group = 0; group < hkls_len; group++)
         {
+          GdkWin32KeyEntry *keygroup = keyentry (keymap->keysym_tab, hkls_len, vk, group, 0);
+
           options = &g_array_index (keymap->options, GdkWin32KeyGroupOptions, group);
           scancode = MapVirtualKeyEx (vk, 0, hkls[group]);
-          keygroup = &keymap->keysym_tab[(vk * hkls_len + group) * GDK_WIN32_LEVEL_COUNT];
 
           /* MapVirtualKeyEx() fails to produce a scancode for VK_DIVIDE and VK_PAUSE.
            * Ignore that, handle_special() will figure out a Gdk keyval for these
@@ -729,7 +1068,7 @@ update_keymap (GdkKeymap *gdk_keymap)
               vk != VK_PAUSE)
             {
               for (level = GDK_WIN32_LEVEL_NONE; level < GDK_WIN32_LEVEL_COUNT; level++)
-                keygroup[level] = GDK_KEY_VoidSymbol;
+                keygroup[level].gdk_keyval = GDK_KEY_VoidSymbol;
 
               continue;
             }
@@ -741,91 +1080,141 @@ update_keymap (GdkKeymap *gdk_keymap)
 
           for (level = GDK_WIN32_LEVEL_NONE; level < GDK_WIN32_LEVEL_COUNT; level++)
             {
-              guint *ksymp = &keygroup[level];
+              GdkWin32KeyEntry *ksymp = &keygroup[level];
 
               set_level_vks (key_state, level);
 
-              *ksymp = 0;
+              ksymp->gdk_keyval = 0;
 
               /* First, handle those virtual keys that we always want
-               * as special GDK_* keysyms, even if ToAsciiEx might
-               * turn some them into a ASCII character (like TAB and
+               * as special GDK_* keysyms, even if ToUnicodeEx might
+               * turn some them into a Unicode character (like TAB and
                * ESC).
                */
-              handle_special (vk, ksymp, level);
+              handle_special (vk, &ksymp->gdk_keyval, level);
 
-              if ((*ksymp == 0) ||
+              /* handle_special() produced a gdk keyval for VK_DECIMAL,
+               * but we still want to know which unicode character it should
+               * correspond to.
+               */
+              if ((ksymp->gdk_keyval == 0) ||
                   ((vk == VK_DECIMAL) && (level == GDK_WIN32_LEVEL_NONE)))
                 {
-                  wchar_t         wcs[10];
-                  gint            k;
-                  guint           keysym;
-                  GdkWin32KeyNode dead_key;
+                  /* Note: ToUnicodeEx() doesn't tell us how much space it needs
+                   * to store the output. Nothing anywhere says that it can't
+                   * be longer than 16 wchars. If it does happen to be longer,
+                   * then this will cause the output to be truncated.
+                   * A workaround for this is to call ToUnicodeEx() repeatedly
+                   * with larger and larger buffer, until its positive return value
+                   * becomes less than the length of the buffer. That's very
+                   * awkward, so we'll burn this bridge after we cross it.
+                   */
+                  wchar_t              wcs[17];
+                  gint                 k;
+                  GdkWin32DeadKeyNode  dead_key;
+                  gsize                existing_deadkey_i;
+                  gunichar            *ucs4 = NULL;
+                  glong                ucs4_chars = 0;
 
-                  wcs[0] = wcs[1] = 0;
+                  memset (wcs, 0, G_N_ELEMENTS (wcs) * sizeof (wcs[0]));
                   k = ToUnicodeEx (vk, scancode, key_state,
                                    wcs, G_N_ELEMENTS (wcs),
                                    0, hkls[group]);
-#if 0
-                  g_print ("ToUnicodeEx(%#02x, %d: %d): %d, %04x %04x\n",
-                           vk, scancode, level, k,
-                           wcs[0], wcs[1]);
-#endif
-                  switch (k)
+                  wcs[G_N_ELEMENTS (wcs) - 1] = 0;
+                  /* These checks are spearate to reduce if{} nesting */
+                  if (k == -1 || k > 0)
                     {
-                    case 1:
-                      if ((vk == VK_DECIMAL) && (level == GDK_WIN32_LEVEL_NONE))
-                        options->decimal_mark = wcs[0];
-                      else
-                        *ksymp = gdk_unicode_to_keyval (wcs[0]);
-                      break;
-                    case -1:
-                      keysym = gdk_unicode_to_keyval (wcs[0]);
+                      /* Dead key or normal output, convert the string it produces */
+                      GError *error = NULL;
+                      ucs4 = g_utf16_to_ucs4 (wcs, k, NULL, &ucs4_chars, &error);
 
-                      /* It is a dead key, and it has been stored in
-                       * the keyboard layout's state by
-                       * ToAsciiEx()/ToUnicodeEx(). Yes, this is an
-                       * incredibly silly API! Make the keyboard
-                       * layout forget it by calling
-                       * ToAsciiEx()/ToUnicodeEx() once more, with the
-                       * virtual key code and scancode for the
-                       * spacebar, without shift or AltGr. Otherwise
-                       * the next call to ToAsciiEx() with a different
-                       * key would try to combine with the dead key.
-                       */
-                      reset_after_dead (key_state, hkls[group]);
-
-                      /* Use dead keysyms instead of "undead" ones */
-                      handle_dead (keysym, ksymp);
-
-                      dead_key.undead_gdk_keycode = keysym;
-                      dead_key.vk = vk;
-                      dead_key.level = level;
-                      dead_key.gdk_keycode = *ksymp;
-                      dead_key.combinations = NULL;
-                      g_array_append_val (options->dead_keys, dead_key);
-                      break;
-                    case 0:
-                      /* Seems to be necessary to "reset" the keyboard layout
-                       * in this case, too. Otherwise problems on NT4.
-                       */
-                      reset_after_dead (key_state, hkls[group]);
-                      break;
-                    default:
-#if 0
-                      GDK_NOTE (EVENTS,
-                                g_print ("ToUnicodeEx returns %d "
-                                         "for vk:%02x, sc:%02x%s%s\n",
-                                         k, vk, scancode,
-                                         (shift&0x1 ? " shift" : ""),
-                                         (shift&0x2 ? " altgr" : "")));
-#endif
-                      break;
+                      if (ucs4 == NULL)
+                        {
+                          g_warning ("Failed to convert %d UTF-16 code points to UCS-4: %s",
+                                     k, error->message);
+                          g_clear_error (&error);
+                        }
                     }
+
+                  if ((k == -1 || k > 0) && ucs4 != NULL)
+                    {
+                      /* Dead key or normal output, with a valid string */
+                      gsize ucs4_index;
+
+                      /* Remember what the decimal separator looks like.
+                       * Or just store the first keyval.
+                       */
+                      if ((vk == VK_DECIMAL) && (level == GDK_WIN32_LEVEL_NONE))
+                        options->decimal_mark = ucs4[0];
+                      else
+                        /* Be sure to keep the unicode value for dead keys, don't call gdk_unicode_to_keyval() */
+                        ksymp->gdk_keyval = k == -1 ? (ucs4[0] | GDK_KEY_UNIDEAD) : gdk_unicode_to_keyval (ucs4[0]);
+
+                      /* We store GDK keyvals, not unicode characters */
+                      for (ucs4_index = 0; ucs4_index < ucs4_chars; ucs4_index++)
+                         ucs4[ucs4_index] = k == -1 ? (ucs4[ucs4_index] | GDK_KEY_UNIDEAD) : gdk_unicode_to_keyval (ucs4[ucs4_index]);
+
+                      if (ucs4_chars == 1)
+                        {
+                          /* Everything fits into one uint32 */
+                          ksymp->ligature = NULL;
+                          g_free (ucs4);
+                        }
+                      else
+                        {
+                          /* Keep theligature array around */
+                          ksymp->ligature = ucs4;
+                        }
+                    }
+
+                  if ((k == -1) &&
+                      ucs4 != NULL &&
+                      !linear_find_dead_key_by_keyval (options->dead_keys, ksymp->gdk_keyval, &existing_deadkey_i))
+                    {
+                      /* Dead key, with a valid string, and it isn't already added to the list*/
+                      dead_key.key.vk = vk;
+                      dead_key.key.level = level;
+                      dead_key.entry.gdk_keyval = ksymp->gdk_keyval;
+                      dead_key.entry.ligature = NULL;
+
+                      if (ucs4_chars > 1)
+                        {
+                          /* Also needs to keep the ligature array around */
+                          dead_key.entry.ligature = g_new0 (guint32, ucs4_chars + 1);
+                          memcpy (dead_key.entry.ligature, ksymp->ligature, ucs4_chars * sizeof (guint32));
+                        }
+
+                      dead_key.combinations = g_array_new (FALSE, FALSE, sizeof (GdkWin32CombinationNode));
+                      g_array_set_clear_func (dead_key.combinations, (GDestroyNotify) gdk_win32_combination_node_clear);
+                      dead_key.parent = NULL;
+                      dead_key.combo_index = 0;
+                      g_array_append_val (options->dead_keys, dead_key);
+                    }
+
+                  if (k < -1)
+                    {
+                      /* This case is undocumented */
+                      g_warning ("ToUnicodeEx() returned %d for keycode %u in group %u at level %u",
+                                 k, vk, group, level);
+                    }
+
+                  /* If it is a dead key, then it has been stored in
+                   * the keyboard layout's state by
+                   * ToUnicodeEx(). Yes, this is an
+                   * incredibly silly API! Make the keyboard
+                   * layout forget it by calling
+                   * ToUnicodeEx() once more, with the
+                   * virtual key code and scancode for the
+                   * spacebar, without shift or AltGr. Otherwise
+                   * the next call to ToUnicodeEx() with a different
+                   * key would try to combine with the dead key.
+                   * We probably lose nothing by doing this here unconditionally
+                   */
+                  reset_after_dead (key_state, hkls[group]);
                 }
 
-              if (*ksymp == 0)
-                *ksymp = GDK_KEY_VoidSymbol;
+              if (ksymp->gdk_keyval == 0)
+                ksymp->gdk_keyval = GDK_KEY_VoidSymbol;
             }
 
           key_state[vk] = 0;
@@ -836,128 +1225,261 @@ update_keymap (GdkKeymap *gdk_keymap)
            * dead keys themselves, only the results of dead key combinations.
            */
           if (!options->has_altgr)
-            if ((keygroup[GDK_WIN32_LEVEL_ALTGR] != GDK_KEY_VoidSymbol &&
-                 keygroup[GDK_WIN32_LEVEL_NONE] != keygroup[GDK_WIN32_LEVEL_ALTGR]) ||
-                (keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR] != GDK_KEY_VoidSymbol &&
-                 keygroup[GDK_WIN32_LEVEL_SHIFT] != keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR]))
+            if ((keygroup[GDK_WIN32_LEVEL_ALTGR].gdk_keyval != GDK_KEY_VoidSymbol &&
+                 keygroup[GDK_WIN32_LEVEL_NONE].gdk_keyval != keygroup[GDK_WIN32_LEVEL_ALTGR].gdk_keyval) ||
+                (keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR].gdk_keyval != GDK_KEY_VoidSymbol &&
+                 keygroup[GDK_WIN32_LEVEL_SHIFT].gdk_keyval != keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR].gdk_keyval))
               options->has_altgr = TRUE;
         }
     }
 
   scancode = 0x0;
 
+  /* Now loop through all the dead keys and figure out what they combine with. */
   for (group = 0; group < hkls_len; group++)
     {
       options = &g_array_index (keymap->options, GdkWin32KeyGroupOptions, group);
 
       for (i = 0; i < options->dead_keys->len; i++)
         {
-          wchar_t          wcs[10];
-          gint             k;
-          GdkWin32KeyNode *dead_key;
-          GdkWin32KeyNode  combo;
+          GdkWin32DeadKeyNode *dead_key;
+          GdkWin32DeadKeyNode *p;
+          GList           *stack = NULL;
 
-          dead_key = &g_array_index (options->dead_keys, GdkWin32KeyNode, i);
+          dead_key = &g_array_index (options->dead_keys, GdkWin32DeadKeyNode, i);
+
+          /* For chained dead keys we need to call ToUnicodeEx() multiple
+           * times in sequence to change it to the state where we can test
+           * a particular dead key. Keep a stack of dead keys around
+           * for this purpose. The "parent" and "combo_index" members
+           * exist solely because of that.
+           */
+          p = dead_key;
+
+          do
+            {
+              stack = g_list_prepend (stack, p);
+              p = p->parent;
+            } while (p != NULL);
 
           for (vk = 0; vk < KEY_STATE_SIZE; vk++)
             {
+              /* VK_PACKET never combines with anything in any meaningful way */
+              if (vk == VK_PACKET)
+                continue;
+
               for (level = GDK_WIN32_LEVEL_NONE; level < GDK_WIN32_LEVEL_COUNT; level++)
                 {
-                  /* Prime the ToUnicodeEx() internal state */
-                  wcs[0] = wcs[1] = 0;
-                  set_level_vks (key_state, dead_key->level);
-                  k = ToUnicodeEx (dead_key->vk, scancode, key_state,
-                                   wcs, G_N_ELEMENTS (wcs),
-                                   0, hkls[group]);
-                  switch (k)
+                  wchar_t                  wcs[17];
+                  gint                     k;
+                  GdkWin32CombinationNode  combo;
+                  gsize                    existing_deadkey_i;
+                  GdkWin32DeadKeyNode      chained_dead_key;
+                  gunichar                *ucs4 = NULL;
+                  glong                    ucs4_chars;
+                  gboolean                 primed = TRUE;
+                  GList                   *stack_p;
+
+                  for (stack_p = stack; stack_p != NULL;)
                     {
-                    case -1:
-                      /* Okay */
-                      break;
-                    default:
-                      /* Expected a dead key, got something else */
+                      GdkWin32DeadKeyNode *stack_dead_key = (GdkWin32DeadKeyNode *) stack_p->data;
+
+                      /* Prime the ToUnicodeEx() internal state */
+                      set_level_vks (key_state, stack_dead_key->key.level);
+                      scancode = MapVirtualKeyEx (stack_dead_key->key.vk, 0, hkls[group]);
+                      key_state[stack_dead_key->key.vk] = 0x80;
+                      k = ToUnicodeEx (stack_dead_key->key.vk, scancode, key_state,
+                                       wcs, G_N_ELEMENTS (wcs),
+                                       0, hkls[group]);
+                      key_state[stack_dead_key->key.vk] = 0;
+
+                      stack_p = stack_p->next;
+
+                      switch (k)
+                        {
+                        case -1:
+                          /* Okay */
+                          break;
+                        default:
+                          /* Expected a dead key, got something else */
+                          reset_after_dead (key_state, hkls[group]);
+                          primed = FALSE;
+                          break;
+                        }
+                    }
+
+                  if (!primed)
+                    {
                       reset_after_dead (key_state, hkls[group]);
                       continue;
                     }
 
                   /* Check how it combines with vk */
-                  wcs[0] = wcs[1] = 0;
+                  memset (wcs, 0, G_N_ELEMENTS (wcs) * sizeof (wcs[0]));
                   set_level_vks (key_state, level);
+                  scancode = MapVirtualKeyEx (vk, 0, hkls[group]);
+                  key_state[vk] = 0x80;
                   k = ToUnicodeEx (vk, scancode, key_state,
                                    wcs, G_N_ELEMENTS (wcs),
                                    0, hkls[group]);
+                  wcs[G_N_ELEMENTS (wcs) - 1] = 0;
+                  key_state[vk] = 0;
 
-                  if (k == 0)
+                  if (k == -1 && wcs[0] == 0)
                     {
-                      reset_after_dead (key_state, hkls[group]);
-                    }
-                  else if (k == -1)
-                    {
-                      /* Dead key chaining? TODO: support this (deeper tree?) */
-                      reset_after_dead (key_state, hkls[group]);
-                    }
-                  else if (k == 1)
-                    {
-                      combo.vk = vk;
-                      combo.level = level;
-                      combo.gdk_keycode = gdk_unicode_to_keyval (wcs[0]);
-                      combo.undead_gdk_keycode = combo.gdk_keycode;
-                      combo.combinations = NULL;
-
-                      if (dead_key->combinations == NULL)
+                      /* Abnormal layout that does not produce spacing version
+                       * of the dead key. Add a space to force it to give
+                       * some output.
+                       */
+                      gsize index;
+                      set_level_vks (key_state, 0);
+                      scancode = MapVirtualKeyEx (vk, 0, hkls[group]);
+                      key_state[VK_SPACE] = 0x80;
+                      k = ToUnicodeEx (VK_SPACE, scancode, key_state,
+                                       wcs, G_N_ELEMENTS (wcs),
+                                       0, hkls[group]);
+                      key_state[VK_SPACE] = 0;
+                      if (k > 0)
                         {
-                          dead_key->combinations = g_array_new (FALSE, FALSE, sizeof (GdkWin32KeyNode));
-                          g_array_set_clear_func (dead_key->combinations, (GDestroyNotify) gdk_win32_key_node_clear);
+                          for (index = 0; index < G_N_ELEMENTS (wcs); index++)
+                            if (wcs[index] == L' ' && (index == G_N_ELEMENTS (wcs) - 1 || wcs[index + 1] == 0))
+                              {
+                                wcs[index] = 0;
+                                break;
+                              }
+                          k = -1;
+                        }
+                      else if (k == 0)
+                        {
+                          /* This message won't be entirely correct for chained deadkeys, as there
+                           * will be other deadkeys between dead_key->key.vk and vk
+                           */
+                          g_warning ("Keyboard layout (group %d) is abnormal, produces no output for dead key %d @ %u + %d @ %u\n",
+                                     group, dead_key->key.vk, dead_key->key.level, vk, level);
+                          reset_after_dead (key_state, hkls[group]);
+                          continue;
+                        }
+                      else if (k == -1)
+                        {
+                          /* Also abnormal, but less clearly */
+                          reset_after_dead (key_state, hkls[group]);
+                          continue;
+                        }
+                      else
+                        {
+                          /* Undocumented */
+                          g_warning ("ToUnicodeEx() returned %d for keycode %u in group %u at level %u",
+                                     k, vk, group, level);
+                          reset_after_dead (key_state, hkls[group]);
+                          continue;
+                        }
+                    }
+
+                  if (k == -1 || k > 0)
+                    {
+                      GError *error = NULL;
+                      ucs4 = g_utf16_to_ucs4 (wcs, k, NULL, &ucs4_chars, &error);
+
+                      if (ucs4 == NULL)
+                        {
+                          g_warning ("Failed to convert %d UTF-16 code points to UCS-4: %s",
+                                     k, error->message);
+                          g_clear_error (&error);
+                        }
+                    }
+
+                  if ((k == -1 || k > 0) && ucs4 != NULL)
+                    {
+                      gsize ucs4_index;
+                      GdkWin32KeyEntry *entry;
+                      gsize ligature_length;
+
+                      /* We store GDK keyvals, not unicode characters */
+                      for (ucs4_index = 0; ucs4_index < ucs4_chars; ucs4_index++)
+                         ucs4[ucs4_index] = k == -1 ? (ucs4[ucs4_index] | GDK_KEY_UNIDEAD) : gdk_unicode_to_keyval (ucs4[ucs4_index]);
+
+                      combo.key.vk = vk;
+                      combo.key.level = level;
+                      combo.result.gdk_keyval = ucs4[0];
+
+                      if (ucs4_chars == 1)
+                        {
+                          combo.result.ligature = NULL;
+                          g_free (ucs4);
+                        }
+                      else
+                        {
+                          combo.result.ligature = ucs4;
                         }
 
-#if 0
-                      {
-                        char *dead_key_undead_u8, *wcs_u8;
-                        wchar_t t = gdk_keyval_to_unicode (dead_key->undead_gdk_keycode);
-                        dead_key_undead_u8 = g_utf16_to_utf8 (&t, 1, NULL, NULL, NULL);
-                        wcs_u8 = g_utf16_to_utf8 (wcs, 1, NULL, NULL, NULL);
-                        g_fprintf (stdout, "%d %s%s%s0x%02x (%s) + %s%s%s0x%02x = 0x%04x (%s)\n", group,
-                                 (dead_key->level == GDK_WIN32_LEVEL_SHIFT ||
-                                  dead_key->level == GDK_WIN32_LEVEL_SHIFT_ALTGR ||
-                                  dead_key->level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK ||
-                                  dead_key->level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR) ? "SHIFT-" : "      ",
-                                 (dead_key->level == GDK_WIN32_LEVEL_CAPSLOCK ||
-                                  dead_key->level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK ||
-                                  dead_key->level == GDK_WIN32_LEVEL_CAPSLOCK_ALTGR ||
-                                  dead_key->level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR) ? "CAPSLOCK-" : "         ",
-                                 (dead_key->level == GDK_WIN32_LEVEL_ALTGR ||
-                                  dead_key->level == GDK_WIN32_LEVEL_SHIFT_ALTGR ||
-                                  dead_key->level == GDK_WIN32_LEVEL_CAPSLOCK_ALTGR ||
-                                  dead_key->level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR) ? "ALTGR-" : "      ",
-                                 dead_key->vk,
-                                 dead_key_undead_u8,
-                                 (combo.level == GDK_WIN32_LEVEL_SHIFT ||
-                                  combo.level == GDK_WIN32_LEVEL_SHIFT_ALTGR ||
-                                  combo.level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK ||
-                                  combo.level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR) ? "SHIFT-" : "      ",
-                                 (combo.level == GDK_WIN32_LEVEL_CAPSLOCK ||
-                                  combo.level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK ||
-                                  combo.level == GDK_WIN32_LEVEL_CAPSLOCK_ALTGR ||
-                                  combo.level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR) ? "CAPSLOCK-" : "         ",
-                                 (combo.level == GDK_WIN32_LEVEL_ALTGR ||
-                                  combo.level == GDK_WIN32_LEVEL_SHIFT_ALTGR ||
-                                  combo.level == GDK_WIN32_LEVEL_CAPSLOCK_ALTGR ||
-                                  combo.level == GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR) ? "ALTGR-" : "      ",
-                                 vk,
-                                 wcs[0],
-                                 wcs_u8);
-                        g_free (dead_key_undead_u8);
-                        g_free (wcs_u8);
-                      }
-#endif
+                      combo.chain = (k == -1) ? TRUE : FALSE;
+
+                      /* Copy the keysym table entry into the combination struct,
+                       * as we won't have access to the keymap when sorting.
+                       */
+                      entry = keyentry (keymap->keysym_tab, keymap->layout_handles->len, vk, group, level);
+                      combo.entry.gdk_keyval = entry->gdk_keyval;
+                      combo.entry.ligature = NULL;
+
+                      if (entry->ligature != NULL)
+                        {
+                          for (ligature_length = 0; entry->ligature[ligature_length] != 0; ligature_length++)
+                            ;
+                          combo.entry.ligature = g_new0 (guint32, ligature_length + 1);
+                          memcpy (combo.entry.ligature, entry->ligature, ligature_length * sizeof (guint32));
+                        }
 
                       g_array_append_val (dead_key->combinations, combo);
                     }
+
+                  if (k == -1 &&
+                      ucs4 != NULL &&
+                      !linear_find_dead_key_by_keyval (options->dead_keys, combo.result.gdk_keyval, &existing_deadkey_i))
+                    {
+                      /* Dead key chaining */
+                      chained_dead_key.key.vk = vk;
+                      chained_dead_key.key.level = level;
+                      chained_dead_key.entry.gdk_keyval = combo.result.gdk_keyval;
+                      chained_dead_key.entry.ligature = NULL;
+
+                      if (ucs4_chars > 1)
+                        {
+                          chained_dead_key.entry.ligature = g_new0 (guint32, ucs4_chars + 1);
+                          memcpy (chained_dead_key.entry.ligature, combo.result.ligature, ucs4_chars * sizeof (guint32));
+                        }
+
+                      chained_dead_key.combinations = g_array_new (FALSE, FALSE, sizeof (GdkWin32CombinationNode));
+                      g_array_set_clear_func (chained_dead_key.combinations, (GDestroyNotify) gdk_win32_combination_node_clear);
+                      chained_dead_key.parent = dead_key;
+                      chained_dead_key.combo_index = dead_key->combinations->len - 1;
+                      g_array_append_val (options->dead_keys, chained_dead_key);
+                    }
+
+                  if (k < -1)
+                    {
+                      g_warning ("ToUnicodeEx() returned %d for keycode %u in group %u at level %u",
+                                 k, vk, group, level);
+                    }
+
+                  reset_after_dead (key_state, hkls[group]);
                 }
             }
+
+          g_list_free (stack);
         }
 
-       g_array_sort (options->dead_keys, (GCompareFunc) sort_key_nodes_by_gdk_keyval);
+      g_array_sort (options->dead_keys, (GCompareFunc) sort_dead_keys_by_gdk_keyval);
+
+      for (i = 0; i < options->dead_keys->len; i++)
+        {
+          GdkWin32DeadKeyNode *dead_key;
+
+          dead_key = &g_array_index (options->dead_keys, GdkWin32DeadKeyNode, i);
+
+          dead_key->parent = NULL;
+          dead_key->combo_index = 0;
+          g_array_sort (dead_key->combinations, (GCompareFunc) sort_combinations_by_gdk_keyval);
+        }
     }
 
   GDK_NOTE (EVENTS, print_keysym_tab (keymap));
@@ -966,56 +1488,133 @@ update_keymap (GdkKeymap *gdk_keymap)
   current_serial = _gdk_keymap_serial;
 }
 
-static gboolean
-find_deadkey_by_keyval (GArray *dead_keys, guint16 keyval, gsize *index)
+/* Because this function can be called recursively,
+ * it's convenient to split compose_buffer into head
+ * (compose_buffer0) and tail (compose_buffer1).
+ * This is based on the assumption that dead keys
+ * produce spacing characters that occupy only one
+ * codepoint.
+ */
+static GdkWin32KeymapMatch
+check_compose_internal (GdkWin32Keymap *keymap,
+                        guint32         compose_buffer0,
+                        guint32        *compose_buffer1,
+                        gsize           compose_buffer1_len,
+                        guint32        *output,
+                        gsize          *output_len,
+                        gsize           depth)
 {
-  gsize deadkey_i;
-  gsize deadkey_i_max;
+  guint8 active_group;
+  gsize deadkey_i, node_i;
+  GdkWin32DeadKeyNode *dead_key;
+  GdkWin32KeyGroupOptions *options;
+  GdkWin32CombinationNode *node;
+  gsize output_size;
+  gsize output_i;
 
-  if (dead_keys->len == 0)
-    return FALSE;
+  g_return_val_if_fail (output != NULL && output_len != NULL, GDK_WIN32_KEYMAP_MATCH_NONE);
 
-  deadkey_i = 0;
-  deadkey_i_max = dead_keys->len - 1;
+  output_size = *output_len;
 
-  while (deadkey_i != deadkey_i_max)
+  active_group = _gdk_win32_keymap_get_active_group (keymap);
+  options = &g_array_index (keymap->options, GdkWin32KeyGroupOptions, active_group);
+
+  /* No dead keys produce this keyval => no matches */
+  if (!find_dead_key_by_keyval (options->dead_keys, compose_buffer0, &deadkey_i))
+    return GDK_WIN32_KEYMAP_MATCH_NONE;
+
+  /* We might have mulitple nodes for the same dead key, deadkey finder will
+   * find one of them, but not necessarily the first one. Step back until
+   * we find the earliest node with the same keycode.
+   */
+  while (deadkey_i > 0)
     {
-      GdkWin32KeyNode *dead_key;
-      gsize middle;
+      dead_key = &g_array_index (options->dead_keys, GdkWin32DeadKeyNode, deadkey_i - 1);
 
-      if (g_array_index (dead_keys, GdkWin32KeyNode, deadkey_i).gdk_keycode == keyval)
-        {
-          break;
-        }
-      else if (g_array_index (dead_keys, GdkWin32KeyNode, deadkey_i_max).gdk_keycode == keyval)
-        {
-          deadkey_i = deadkey_i_max;
-          break;
-        }
-      else if (deadkey_i + 1 == deadkey_i_max)
-        {
-          break;
-        }
+      if (dead_key->entry.gdk_keyval != compose_buffer0)
+        break;
 
-      middle = deadkey_i + (deadkey_i_max - deadkey_i) / 2;
-      dead_key = &g_array_index (dead_keys, GdkWin32KeyNode, middle);
-
-      if (dead_key->gdk_keycode < keyval)
-        deadkey_i = middle;
-      else if (dead_key->gdk_keycode > keyval)
-        deadkey_i_max = middle;
-      else
-        deadkey_i = deadkey_i_max = middle;
+      deadkey_i--;
     }
 
-  if (g_array_index (dead_keys, GdkWin32KeyNode, deadkey_i).gdk_keycode == keyval)
-    {
-      *index = deadkey_i;
+  if ((compose_buffer0 & GDK_KEY_UNIDEAD) != GDK_KEY_UNIDEAD)
+    return GDK_WIN32_KEYMAP_MATCH_NONE;
 
-      return TRUE;
+  /* Can't combine a buffer consisting of one keyval */
+  if (compose_buffer1_len == 0)
+    return GDK_WIN32_KEYMAP_MATCH_INCOMPLETE;
+
+  dead_key = &g_array_index (options->dead_keys, GdkWin32DeadKeyNode, deadkey_i);
+
+  /* Look for a valid combination with the second keyval */
+  if (!find_combination_by_keyval (keymap, dead_key->combinations, compose_buffer1[0], &node_i))
+    {
+      /* Found no match, copy the compose buffer into the
+       * output buffer verbatim.
+       */
+      if (output_size > 0)
+        output[0] = compose_buffer0;
+
+      for (output_i = 1;
+           output_i < output_size;
+           output_i++)
+        output[output_i] = compose_buffer1[output_i - 1];
+
+      *output_len = output_i;
+
+      return GDK_WIN32_KEYMAP_MATCH_PARTIAL;
     }
 
-  return FALSE;
+  while (node_i > 0)
+    {
+      node = &g_array_index (dead_key->combinations, GdkWin32CombinationNode, node_i - 1);
+
+      if (node->entry.gdk_keyval != compose_buffer1[0])
+        break;
+
+      node_i--;
+    }
+
+  node = &g_array_index (dead_key->combinations, GdkWin32CombinationNode, node_i);
+
+  /* Found a matching combination.
+   * If it's chained, we call this function recursively with different
+   * compose buffer (the newly-produced substitution,
+   * plus the rest of the buffer contents outside of the pair
+   * that we just processed).
+   */
+  if (node->chain)
+    {
+      GdkWin32KeymapMatch sub;
+
+      sub = check_compose_internal (keymap,
+                                    node->result.gdk_keyval,
+                                    &compose_buffer1[1],
+                                    compose_buffer1_len - 1,
+                                    output, output_len,
+                                    depth + 1);
+      if (sub == GDK_WIN32_KEYMAP_MATCH_EXACT ||
+          sub == GDK_WIN32_KEYMAP_MATCH_PARTIAL ||
+          sub == GDK_WIN32_KEYMAP_MATCH_INCOMPLETE)
+        {
+          /* Recursive invocation already filled the output buffer */
+          return sub;
+        }
+    }
+
+  if (output_size > 0)
+    output[0] = node->result.gdk_keyval;
+
+  for (output_i = 1;
+       output_i < output_size &&
+       node->result.ligature &&
+       node->result.ligature[output_i] != 0;
+       output_i++)
+    output[output_i] = node->result.ligature[output_i];
+
+  *output_len = output_i;
+
+  return GDK_WIN32_KEYMAP_MATCH_EXACT;
 }
 
 GdkWin32KeymapMatch
@@ -1025,109 +1624,54 @@ gdk_win32_keymap_check_compose (GdkWin32Keymap *keymap,
                                 guint16        *output,
                                 gsize          *output_len)
 {
-  gint partial_match;
-  guint8 active_group;
-  gsize deadkey_i, node_i;
-  GdkWin32KeyNode *dead_key;
-  GdkWin32KeyGroupOptions *options;
-  GdkWin32KeymapMatch match;
-  gsize output_size;
+  GdkWin32KeymapMatch result;
+  guint32 *compose_buffer32;
+  guint32 *output32;
+  gsize i;
 
-  g_return_val_if_fail (output != NULL && output_len != NULL, GDK_WIN32_KEYMAP_MATCH_NONE);
-
-  if (compose_buffer_len < 1)
+  /* Can't combine an empty buffer */
+  if (compose_buffer_len == 0)
     return GDK_WIN32_KEYMAP_MATCH_NONE;
 
-  output_size = *output_len;
+  compose_buffer32 = g_new0 (guint32, compose_buffer_len);
+  output32 = g_new0 (guint32, *output_len);
 
-  active_group = _gdk_win32_keymap_get_active_group (keymap);
-  options = &g_array_index (keymap->options, GdkWin32KeyGroupOptions, active_group);
+  for (i = 0; i < compose_buffer_len; i++)
+    compose_buffer32[i] = compose_buffer[i];
 
-  partial_match = -1;
-  match = GDK_WIN32_KEYMAP_MATCH_NONE;
+  result = check_compose_internal (keymap,
+                                   compose_buffer32[0], &compose_buffer32[1], compose_buffer_len - 1,
+                                   output32, output_len, 0);
 
-  if (find_deadkey_by_keyval (options->dead_keys, compose_buffer[0], &deadkey_i))
-    {
-      while (deadkey_i > 0 &&
-             g_array_index (options->dead_keys, GdkWin32KeyNode, deadkey_i - 1).gdk_keycode == compose_buffer[0])
-        deadkey_i--;
+  if (result == GDK_WIN32_KEYMAP_MATCH_EXACT ||
+      result == GDK_WIN32_KEYMAP_MATCH_PARTIAL)
+    for (i = 0; i < *output_len; i++)
+      output[i] = (guint16) output32[i];
 
-      /* Hardcoded 2-tier tree here (dead key + non dead key = character).
-       * TODO: support trees with arbitrary depth for dead key chaining.
-       */
-      dead_key = &g_array_index (options->dead_keys, GdkWin32KeyNode, deadkey_i);
+  g_free (output32);
+  g_free (compose_buffer32);
 
-      /* "Partial match" means "matched the whole sequence except the last key"
-       * (right now the sequence only has 2 keys, so this turns into "matched
-       * at least the first key").
-       * "last key" should be identified by having NULL further combinations.
-       * As a heuristic, convert the buffer contents into keyvals and use
-       * them as-is (normally there should be a separate unichar buffer for
-       * each combination, but we do not store these).
-       */
-      partial_match = deadkey_i;
+  return result;
+}
 
-      if (compose_buffer_len < 2)
-        match = GDK_WIN32_KEYMAP_MATCH_INCOMPLETE;
+GdkWin32KeymapMatch
+gdk_win32_keymap_check_compose32 (GdkWin32Keymap *keymap,
+                                  guint32        *compose_buffer,
+                                  gsize           compose_buffer_len,
+                                  guint32        *output,
+                                  gsize          *output_len)
+{
+  GdkWin32KeymapMatch result;
 
-      for (node_i = 0;
-           match != GDK_WIN32_KEYMAP_MATCH_INCOMPLETE &&
-           node_i < dead_key->combinations->len;
-           node_i++)
-        {
-          GdkWin32KeyNode *node;
+  /* Can't combine an empty buffer */
+  if (compose_buffer_len == 0)
+    return GDK_WIN32_KEYMAP_MATCH_NONE;
 
-          node = &g_array_index (dead_key->combinations, GdkWin32KeyNode, node_i);
+  result = check_compose_internal (keymap,
+                                   compose_buffer[0], &compose_buffer[1], compose_buffer_len - 1,
+                                   output, output_len, 0);
 
-          if (keymap->keysym_tab[(node->vk * keymap->layout_handles->len + active_group) * GDK_WIN32_LEVEL_COUNT + node->level] == compose_buffer[1])
-            {
-              match = GDK_WIN32_KEYMAP_MATCH_EXACT;
-              *output_len = 0;
-
-              if (*output_len < output_size && node->gdk_keycode != 0)
-                output[(*output_len)++] = node->gdk_keycode;
-
-              break;
-            }
-        }
-    }
-
-  if (match == GDK_WIN32_KEYMAP_MATCH_EXACT ||
-      match == GDK_WIN32_KEYMAP_MATCH_INCOMPLETE)
-    {
-      return match;
-    }
-
-  if (partial_match >= 0)
-    {
-      if (compose_buffer_len == 2)
-        {
-          dead_key = &g_array_index (options->dead_keys, GdkWin32KeyNode, partial_match);
-          *output_len = 0;
-
-          if (output_size >= 1)
-            output[(*output_len)++] = dead_key->undead_gdk_keycode;
-
-          if (output_size >= 2)
-            {
-              gsize second_deadkey_i;
-
-              /* Special case for "deadkey + deadkey = space-version-of-deadkey, space-version-of-deadkey" combinations.
-               * Normally the result is a sequence of 2 unichars, but we do not store this.
-               * For "deadkey + nondeadkey = space-version-of-deadkey, nondeadkey", we can use compose_buffer
-               * contents as-is, but space version of a dead key need to be looked up separately.
-               */
-              if (find_deadkey_by_keyval (options->dead_keys, compose_buffer[1], &second_deadkey_i))
-                output[(*output_len)++] = g_array_index (options->dead_keys, GdkWin32KeyNode, second_deadkey_i).undead_gdk_keycode;
-              else
-                output[(*output_len)++] = compose_buffer[1];
-            }
-        }
-
-      return GDK_WIN32_KEYMAP_MATCH_PARTIAL;
-    }
-
-  return GDK_WIN32_KEYMAP_MATCH_NONE;
+  return result;
 }
 
 guint8
@@ -1314,11 +1858,11 @@ gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *gdk_keymap,
 
               for (level = GDK_WIN32_LEVEL_NONE; level < GDK_WIN32_LEVEL_COUNT; level++)
                 {
-                  guint *keygroup;
+                  GdkWin32KeyEntry *entry;
 
-                  keygroup = &keymap->keysym_tab[(vk * keymap->layout_handles->len + group) * GDK_WIN32_LEVEL_COUNT];
+                  entry = keyentry (keymap->keysym_tab, keymap->layout_handles->len, vk, group, level);
 
-                  if (keygroup[level] == keyval)
+                  if (entry->gdk_keyval == keyval)
                     {
                       GdkKeymapKey key;
 
@@ -1425,9 +1969,10 @@ gdk_win32_keymap_get_entries_for_keycode (GdkKeymap     *gdk_keymap,
 
           if (keyval_array)
             {
-              guint keyval = keymap->keysym_tab[(hardware_keycode * keymap->layout_handles->len + group) * GDK_WIN32_LEVEL_COUNT + level];
+              GdkWin32KeyEntry *entry;
+              entry = keyentry (keymap->keysym_tab, keymap->layout_handles->len, hardware_keycode, group, level);
 
-              g_array_append_val (keyval_array, keyval);
+              g_array_append_val (keyval_array, entry->gdk_keyval);
             }
         }
     }
@@ -1464,7 +2009,7 @@ static guint
 gdk_win32_keymap_lookup_key (GdkKeymap          *gdk_keymap,
                              const GdkKeymapKey *key)
 {
-  guint sym;
+  GdkWin32KeyEntry *sym;
   GdkWin32Keymap *keymap;
 
   g_return_val_if_fail (gdk_keymap == NULL || GDK_IS_KEYMAP (gdk_keymap), 0);
@@ -1482,12 +2027,12 @@ gdk_win32_keymap_lookup_key (GdkKeymap          *gdk_keymap,
       key->level < 0 || key->level >= GDK_WIN32_LEVEL_COUNT)
     return 0;
 
-  sym = keymap->keysym_tab[(key->keycode * keymap->layout_handles->len + key->group) * GDK_WIN32_LEVEL_COUNT + key->level];
+  sym = keyentry (keymap->keysym_tab, keymap->layout_handles->len, key->keycode, key->group, key->level);
 
-  if (sym == GDK_KEY_VoidSymbol)
+  if (sym->gdk_keyval == GDK_KEY_VoidSymbol)
     return 0;
   else
-    return sym;
+    return sym->gdk_keyval;
 }
 
 static gboolean
@@ -1502,7 +2047,7 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
 {
   GdkWin32Keymap *keymap;
   guint tmp_keyval;
-  guint *keygroup;
+  GdkWin32KeyEntry *keygroup;
   GdkWin32KeyLevelState shift_level;
   GdkModifierType modifiers = GDK_SHIFT_MASK | GDK_LOCK_MASK | GDK_MOD2_MASK;
 
@@ -1534,7 +2079,7 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
   if (group < 0 || group >= keymap->layout_handles->len)
     return FALSE;
 
-  keygroup = &keymap->keysym_tab[(hardware_keycode * keymap->layout_handles->len + group) * GDK_WIN32_LEVEL_COUNT];
+  keygroup = keyentry (keymap->keysym_tab, keymap->layout_handles->len, hardware_keycode, group, GDK_WIN32_LEVEL_NONE);
 
   if ((state & (GDK_SHIFT_MASK | GDK_LOCK_MASK)) == (GDK_SHIFT_MASK | GDK_LOCK_MASK))
     shift_level = GDK_WIN32_LEVEL_SHIFT_CAPSLOCK;
@@ -1560,7 +2105,7 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
   /* Drop altgr, capslock and shift if there are no keysymbols on
    * the key for those.
    */
-  if (keygroup[shift_level] == GDK_KEY_VoidSymbol)
+  if (keygroup[shift_level].gdk_keyval == GDK_KEY_VoidSymbol)
     {
       switch (shift_level)
         {
@@ -1568,47 +2113,47 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
          case GDK_WIN32_LEVEL_ALTGR:
          case GDK_WIN32_LEVEL_SHIFT:
          case GDK_WIN32_LEVEL_CAPSLOCK:
-           if (keygroup[GDK_WIN32_LEVEL_NONE] != GDK_KEY_VoidSymbol)
+           if (keygroup[GDK_WIN32_LEVEL_NONE].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_NONE;
            break;
          case GDK_WIN32_LEVEL_SHIFT_CAPSLOCK:
-           if (keygroup[GDK_WIN32_LEVEL_CAPSLOCK] != GDK_KEY_VoidSymbol)
+           if (keygroup[GDK_WIN32_LEVEL_CAPSLOCK].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_CAPSLOCK;
-           else if (keygroup[GDK_WIN32_LEVEL_SHIFT] != GDK_KEY_VoidSymbol)
+           else if (keygroup[GDK_WIN32_LEVEL_SHIFT].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_SHIFT;
-           else if (keygroup[GDK_WIN32_LEVEL_NONE] != GDK_KEY_VoidSymbol)
+           else if (keygroup[GDK_WIN32_LEVEL_NONE].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_NONE;
            break;
          case GDK_WIN32_LEVEL_CAPSLOCK_ALTGR:
-           if (keygroup[GDK_WIN32_LEVEL_ALTGR] != GDK_KEY_VoidSymbol)
+           if (keygroup[GDK_WIN32_LEVEL_ALTGR].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_ALTGR;
-           else if (keygroup[GDK_WIN32_LEVEL_CAPSLOCK] != GDK_KEY_VoidSymbol)
+           else if (keygroup[GDK_WIN32_LEVEL_CAPSLOCK].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_CAPSLOCK;
-           else if (keygroup[GDK_WIN32_LEVEL_NONE] != GDK_KEY_VoidSymbol)
+           else if (keygroup[GDK_WIN32_LEVEL_NONE].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_NONE;
            break;
          case GDK_WIN32_LEVEL_SHIFT_ALTGR:
-           if (keygroup[GDK_WIN32_LEVEL_ALTGR] != GDK_KEY_VoidSymbol)
+           if (keygroup[GDK_WIN32_LEVEL_ALTGR].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_ALTGR;
-           else if (keygroup[GDK_WIN32_LEVEL_SHIFT] != GDK_KEY_VoidSymbol)
+           else if (keygroup[GDK_WIN32_LEVEL_SHIFT].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_SHIFT;
-           else if (keygroup[GDK_WIN32_LEVEL_NONE] != GDK_KEY_VoidSymbol)
+           else if (keygroup[GDK_WIN32_LEVEL_NONE].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_NONE;
            break;
          case GDK_WIN32_LEVEL_SHIFT_CAPSLOCK_ALTGR:
-           if (keygroup[GDK_WIN32_LEVEL_CAPSLOCK_ALTGR] != GDK_KEY_VoidSymbol)
+           if (keygroup[GDK_WIN32_LEVEL_CAPSLOCK_ALTGR].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_CAPSLOCK_ALTGR;
-           else if (keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR] != GDK_KEY_VoidSymbol)
+           else if (keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_SHIFT_ALTGR;
-           else if (keygroup[GDK_WIN32_LEVEL_ALTGR] != GDK_KEY_VoidSymbol)
+           else if (keygroup[GDK_WIN32_LEVEL_ALTGR].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_ALTGR;
-           else if (keygroup[GDK_WIN32_LEVEL_SHIFT_CAPSLOCK] != GDK_KEY_VoidSymbol)
+           else if (keygroup[GDK_WIN32_LEVEL_SHIFT_CAPSLOCK].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_SHIFT_CAPSLOCK;
-           else if (keygroup[GDK_WIN32_LEVEL_CAPSLOCK] != GDK_KEY_VoidSymbol)
+           else if (keygroup[GDK_WIN32_LEVEL_CAPSLOCK].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_CAPSLOCK;
-           else if (keygroup[GDK_WIN32_LEVEL_SHIFT] != GDK_KEY_VoidSymbol)
+           else if (keygroup[GDK_WIN32_LEVEL_SHIFT].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_SHIFT;
-           else if (keygroup[GDK_WIN32_LEVEL_NONE] != GDK_KEY_VoidSymbol)
+           else if (keygroup[GDK_WIN32_LEVEL_NONE].gdk_keyval != GDK_KEY_VoidSymbol)
              shift_level = GDK_WIN32_LEVEL_NONE;
            break;
          case GDK_WIN32_LEVEL_COUNT:
@@ -1619,31 +2164,31 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
   /* See whether the shift level actually mattered
    * to know what to put in consumed_modifiers
    */
-  if ((keygroup[GDK_WIN32_LEVEL_SHIFT] == GDK_KEY_VoidSymbol ||
-       keygroup[GDK_WIN32_LEVEL_NONE] == keygroup[GDK_WIN32_LEVEL_SHIFT]) &&
-      (keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR] == GDK_KEY_VoidSymbol ||
-       keygroup[GDK_WIN32_LEVEL_ALTGR] == keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR]) &&
-      (keygroup[GDK_WIN32_LEVEL_SHIFT_CAPSLOCK] == GDK_KEY_VoidSymbol ||
-       keygroup[GDK_WIN32_LEVEL_CAPSLOCK] == keygroup[GDK_WIN32_LEVEL_SHIFT_CAPSLOCK]))
+  if ((keygroup[GDK_WIN32_LEVEL_SHIFT].gdk_keyval == GDK_KEY_VoidSymbol ||
+       keygroup[GDK_WIN32_LEVEL_NONE].gdk_keyval == keygroup[GDK_WIN32_LEVEL_SHIFT].gdk_keyval) &&
+      (keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR].gdk_keyval == GDK_KEY_VoidSymbol ||
+       keygroup[GDK_WIN32_LEVEL_ALTGR].gdk_keyval == keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR].gdk_keyval) &&
+      (keygroup[GDK_WIN32_LEVEL_SHIFT_CAPSLOCK].gdk_keyval == GDK_KEY_VoidSymbol ||
+       keygroup[GDK_WIN32_LEVEL_CAPSLOCK].gdk_keyval == keygroup[GDK_WIN32_LEVEL_SHIFT_CAPSLOCK].gdk_keyval))
       modifiers &= ~GDK_SHIFT_MASK;
 
-  if ((keygroup[GDK_WIN32_LEVEL_CAPSLOCK] == GDK_KEY_VoidSymbol ||
-       keygroup[GDK_WIN32_LEVEL_NONE] == keygroup[GDK_WIN32_LEVEL_CAPSLOCK]) &&
-      (keygroup[GDK_WIN32_LEVEL_CAPSLOCK_ALTGR] == GDK_KEY_VoidSymbol ||
-       keygroup[GDK_WIN32_LEVEL_ALTGR] == keygroup[GDK_WIN32_LEVEL_CAPSLOCK_ALTGR]) &&
-      (keygroup[GDK_WIN32_LEVEL_SHIFT_CAPSLOCK] == GDK_KEY_VoidSymbol ||
-       keygroup[GDK_WIN32_LEVEL_SHIFT] == keygroup[GDK_WIN32_LEVEL_SHIFT_CAPSLOCK]))
+  if ((keygroup[GDK_WIN32_LEVEL_CAPSLOCK].gdk_keyval == GDK_KEY_VoidSymbol ||
+       keygroup[GDK_WIN32_LEVEL_NONE].gdk_keyval == keygroup[GDK_WIN32_LEVEL_CAPSLOCK].gdk_keyval) &&
+      (keygroup[GDK_WIN32_LEVEL_CAPSLOCK_ALTGR].gdk_keyval == GDK_KEY_VoidSymbol ||
+       keygroup[GDK_WIN32_LEVEL_ALTGR].gdk_keyval == keygroup[GDK_WIN32_LEVEL_CAPSLOCK_ALTGR].gdk_keyval) &&
+      (keygroup[GDK_WIN32_LEVEL_SHIFT_CAPSLOCK].gdk_keyval == GDK_KEY_VoidSymbol ||
+       keygroup[GDK_WIN32_LEVEL_SHIFT].gdk_keyval == keygroup[GDK_WIN32_LEVEL_SHIFT_CAPSLOCK].gdk_keyval))
       modifiers &= ~GDK_LOCK_MASK;
 
-  if ((keygroup[GDK_WIN32_LEVEL_ALTGR] == GDK_KEY_VoidSymbol ||
-       keygroup[GDK_WIN32_LEVEL_NONE] == keygroup[GDK_WIN32_LEVEL_ALTGR]) &&
-      (keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR] == GDK_KEY_VoidSymbol ||
-       keygroup[GDK_WIN32_LEVEL_SHIFT] == keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR]) &&
-      (keygroup[GDK_WIN32_LEVEL_CAPSLOCK_ALTGR] == GDK_KEY_VoidSymbol ||
-       keygroup[GDK_WIN32_LEVEL_CAPSLOCK] == keygroup[GDK_WIN32_LEVEL_CAPSLOCK_ALTGR]))
+  if ((keygroup[GDK_WIN32_LEVEL_ALTGR].gdk_keyval == GDK_KEY_VoidSymbol ||
+       keygroup[GDK_WIN32_LEVEL_NONE].gdk_keyval == keygroup[GDK_WIN32_LEVEL_ALTGR].gdk_keyval) &&
+      (keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR].gdk_keyval == GDK_KEY_VoidSymbol ||
+       keygroup[GDK_WIN32_LEVEL_SHIFT].gdk_keyval == keygroup[GDK_WIN32_LEVEL_SHIFT_ALTGR].gdk_keyval) &&
+      (keygroup[GDK_WIN32_LEVEL_CAPSLOCK_ALTGR].gdk_keyval == GDK_KEY_VoidSymbol ||
+       keygroup[GDK_WIN32_LEVEL_CAPSLOCK].gdk_keyval == keygroup[GDK_WIN32_LEVEL_CAPSLOCK_ALTGR].gdk_keyval))
       modifiers &= ~GDK_MOD2_MASK;
 
-  tmp_keyval = keygroup[shift_level];
+  tmp_keyval = keygroup[shift_level].gdk_keyval;
 
   if (keyval)
     *keyval = tmp_keyval;
@@ -1663,6 +2208,28 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
 #endif
 
   return tmp_keyval != GDK_KEY_VoidSymbol;
+}
+
+const guint32*
+gdk_win32_keymap_fetch_ligature (GdkWin32Keymap *keymap,
+                                 GdkEventKey    *event)
+{
+  gint effective_group, level;
+  GdkWin32KeyEntry *entry;
+
+  /* Convert event state into shift level (also group) */
+  if (!gdk_win32_keymap_translate_keyboard_state (GDK_KEYMAP (keymap),
+                                                  event->hardware_keycode,
+                                                  event->state,
+                                                  event->group,
+                                                  NULL,
+                                                  &effective_group, &level, NULL))
+    return NULL;
+
+  entry = keyentry (keymap->keysym_tab, keymap->layout_handles->len,
+                    event->hardware_keycode, effective_group, level);
+
+  return entry->ligature;
 }
 
 static void
