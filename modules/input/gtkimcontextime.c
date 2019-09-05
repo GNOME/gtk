@@ -48,14 +48,16 @@
 #   include <pango/pangowin32.h>
 #endif /* STRICT */
 
-/* The default behavior on Windows is that the preedit buffer is retained
- * when changing focus. However, some applications, e.g. Firefox, clear the
- * preedit buffer. You can uncomment the following define to change the
- * behavior.
- * The default behavior is to keep the preedit buffer. Uncomment the following
- * line to make GTK clear the buffer on focus change events.
- */
-//#define RESET_ON_FOCUS_CHANGE
+/* Determines what happens when focus is lost while preedit is in process. */
+typedef enum {
+  /* Preedit is committed. */
+  GTK_WIN32_IME_FOCUS_BEHAVIOR_COMMIT,
+  /* Preedit is discarded. */
+  GTK_WIN32_IME_FOCUS_BEHAVIOR_DISCARD,
+  /* Preedit follows the cursor (that means it will appear in the widget
+   * that receives the focus) */
+  GTK_WIN32_IME_FOCUS_BEHAVIOR_FOLLOW,
+} GtkWin32IMEFocusBehavior;
 
 #define IS_DEAD_KEY(k) \
     ((k) >= GDK_dead_grave && (k) <= (GDK_dead_dasia+1))
@@ -79,6 +81,7 @@ struct _GtkIMContextIMEPrivate
    */
   gboolean pretend_empty_preedit;
   guint32 dead_key_keyval;
+  GtkWin32IMEFocusBehavior focus_behavior;
 };
 
 
@@ -191,6 +194,7 @@ gtk_im_context_ime_init (GtkIMContextIME *context_ime)
   context_ime->commit_string          = NULL;
 
   context_ime->priv = g_malloc0 (sizeof (GtkIMContextIMEPrivate));
+  context_ime->priv->focus_behavior = GTK_WIN32_IME_FOCUS_BEHAVIOR_COMMIT;
 }
 
 
@@ -712,20 +716,27 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
 
   context_ime->opened = ImmGetOpenStatus (himc);
 
-#ifdef RESET_ON_FOCUS_CHANGE
-  gtk_im_context_ime_reset (context);
-#else
-  gchar *utf8str = get_utf8_preedit_string (context_ime, GCS_COMPSTR, NULL);
-  if (utf8str != NULL && strlen(utf8str) > 0)
+  switch (context_ime->priv->focus_behavior)
     {
-      context_ime->preediting = TRUE;
-      gtk_im_context_ime_set_cursor_location (context, NULL);
-      g_signal_emit_by_name (context, "preedit-start");
-      g_signal_emit_by_name (context, "preedit-changed");
+    case GTK_WIN32_IME_FOCUS_BEHAVIOR_COMMIT:
+    case GTK_WIN32_IME_FOCUS_BEHAVIOR_DISCARD:
+      {
+        gtk_im_context_ime_reset (context);
+        break;
+      }
+    case GTK_WIN32_IME_FOCUS_BEHAVIOR_FOLLOW:
+      {
+        gchar *utf8str = get_utf8_preedit_string (context_ime, GCS_COMPSTR, NULL);
+        if (utf8str != NULL && strlen(utf8str) > 0)
+          {
+            context_ime->preediting = TRUE;
+            gtk_im_context_ime_set_cursor_location (context, NULL);
+            g_signal_emit_by_name (context, "preedit-start");
+            g_signal_emit_by_name (context, "preedit-changed");
+          }
+        g_free (utf8str);
+      }
     }
-
-  g_free (utf8str);
-#endif
 
   /* clean */
   ImmReleaseContext (hwnd, himc);
@@ -746,16 +757,39 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
   context_ime->opened = FALSE;
   context_ime->preediting = FALSE;
   context_ime->focus = FALSE;
+  switch (context_ime->priv->focus_behavior)
+    {
+      case GTK_WIN32_IME_FOCUS_BEHAVIOR_COMMIT:
+        if (was_preediting)
+          {
+            gchar *utf8str = get_utf8_preedit_string (context_ime, GCS_COMPSTR, NULL);
 
-#ifdef RESET_ON_FOCUS_CHANGE
-  gtk_im_context_ime_reset (context);
+            context_ime->priv->pretend_empty_preedit = TRUE;
+            g_signal_emit_by_name (context, "preedit-changed");
+            g_signal_emit_by_name (context, "preedit-end");
 
-  /* Callbacks triggered by im_context_ime_reset() could set the focus back to our
-     context. In that case, we want to exit here. */
+            g_signal_emit_by_name (context, "commit", utf8str);
 
-  if (context_ime->focus)
-    return;
-#endif
+            g_signal_emit_by_name (context, "preedit-start");
+            g_signal_emit_by_name (context, "preedit-changed");
+            context_ime->priv->pretend_empty_preedit = FALSE;
+
+            g_free (utf8str);
+          }
+        /* fallthrough */
+      case GTK_WIN32_IME_FOCUS_BEHAVIOR_DISCARD:
+        gtk_im_context_ime_reset (context);
+
+        /* Callbacks triggered by im_context_ime_reset() could set the focus back to our
+           context. In that case, we want to exit here. */
+
+        if (context_ime->focus)
+          return;
+
+        break;
+      case GTK_WIN32_IME_FOCUS_BEHAVIOR_FOLLOW:
+        break;
+    }
 
   /* remove signal handler */
   gdk_window_get_user_data (context_ime->client_window, (gpointer) & widget);
