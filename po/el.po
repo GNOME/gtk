@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.20.1.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-07-08 12:54+0000\n"
-"PO-Revision-Date: 2019-07-09 07:21+0300\n"
+"PO-Revision-Date: 2019-09-06 23:49+0300\n"
 "Last-Translator: Efstathios Iosifidis <iosifidis@opensuse.org>\n"
 "Language-Team: www.gnome.gr\n"
 "Language: el\n"
@@ -404,8 +404,6 @@ msgid "WWW"
 msgstr "WWW"
 
 #: gdk/keyname-table.h:6902
-#, fuzzy
-#| msgid "Search"
 msgctxt "keyboard label"
 msgid "Search"
 msgstr "Αναζήτηση"
@@ -1173,11 +1171,8 @@ msgid "Amount of red light in the color."
 msgstr "Ποσότητα κόκκινου φωτός στο χρώμα."
 
 #: gtk/deprecated/gtkcolorsel.c:470
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Greek"
 msgid "_Green:"
-msgstr "Ελληνικά"
+msgstr "_Πράσινο:"
 
 #: gtk/deprecated/gtkcolorsel.c:471
 msgid "Amount of green light in the color."
@@ -1296,10 +1291,8 @@ msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "αβγδέ abcde ΆΒΓΔΕ ABCDE"
 
 #: gtk/deprecated/gtkfontsel.c:386
-#, fuzzy
-#| msgid "Font Family"
 msgid "_Family:"
-msgstr "Οικογένεια γραμματοσειράς"
+msgstr "_Οικογένεια:"
 
 #: gtk/deprecated/gtkfontsel.c:393
 msgid "_Style:"
@@ -1470,16 +1463,18 @@ msgid "Invalid size %s\n"
 msgstr "Άκυρο μέγεθος %s\n"
 
 #: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:671
-#, fuzzy, c-format
-#| msgid "Can’t load file: %s\n"
+#, c-format
 msgid "Can't load file: %s\n"
-msgstr "Αδύνατη η φόρτωση του αρχείου: %s\n"
+msgstr ""
+"Αδυναμία φόρτωσης αρχείου: %s\n"
+"\n"
 
 #: gtk/encodesymbolic.c:307 gtk/encodesymbolic.c:313
-#, fuzzy, c-format
-#| msgid "Can’t save file %s: %s\n"
+#, c-format
 msgid "Can't save file %s: %s\n"
-msgstr "Αδύνατη η αποθήκευση του αρχείου %s : %s\n"
+msgstr ""
+"Αδυναμία αποθήκευσης αρχείου %s: %s\n"
+"\n"
 
 #: gtk/encodesymbolic.c:319
 #, fuzzy, c-format
@@ -1794,10 +1789,9 @@ msgstr ""
 "\n"
 
 #: gtk/gtk-builder-tool.c:692
-#, fuzzy, c-format
-#| msgid "Can’t parse file: %s\n"
+#, c-format
 msgid "Can't parse file: %s\n"
-msgstr "Αδύνατη η ανάλυση του αρχείου: %s\n"
+msgstr "Αδυναμία ανάλυσης αρχείου: %s\n"
 
 #: gtk/gtk-builder-tool.c:1058
 #, c-format
@@ -2740,8 +2734,6 @@ msgid "None"
 msgstr "Κανένα"
 
 #: gtk/gtkimmulticontext.c:609
-#, fuzzy
-#| msgid "System"
 msgctxt "input method menu"
 msgid "System"
 msgstr "Σύστημα"
@@ -3081,14 +3073,12 @@ msgstr "Πρόσφατα αρχεία"
 
 #: gtk/gtkplacessidebar.c:1082
 msgid "Starred"
-msgstr ""
+msgstr "Επισημασμένο"
 
 #. TODO: Rename to 'Starred files'
 #: gtk/gtkplacessidebar.c:1085
-#, fuzzy
-#| msgid "Printer Profile"
 msgid "Favorite files"
-msgstr "Προφίλ εκτυπωτή"
+msgstr "Αγαπημένα αρχεία"
 
 #: gtk/gtkplacessidebar.c:1096
 msgid "Open your personal folder"
@@ -3197,10 +3187,9 @@ msgid "Unable to start “%s”"
 msgstr "Αδύνατη η εκκίνηση του «%s»"
 
 #: gtk/gtkplacessidebar.c:2430
-#, fuzzy, c-format
-#| msgid "Opening “%s”."
+#, c-format
 msgid "Error unlocking “%s”"
-msgstr "Άνοιγμα του «%s»."
+msgstr "Σφάλμα ξεκλειδώματος «%s»"
 
 #: gtk/gtkplacessidebar.c:2432
 #, c-format
@@ -3209,7 +3198,7 @@ msgstr "Αδυναμία πρόσβασης στο «%s»"
 
 #: gtk/gtkplacessidebar.c:2666
 msgid "This name is already taken"
-msgstr "Αυτό το όνομα χρησιμοποιείται ήδη."
+msgstr "Αυτό το όνομα χρησιμοποιείται ήδη"
 
 #: gtk/gtkplacessidebar.c:2735 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
@@ -3728,8 +3717,7 @@ msgid "Unable to find an item with URI '%s'"
 msgstr "Αδυναμία εύρεσης αντικειμένου με URI «%s»"
 
 #: gtk/gtkrecentmanager.c:1289
-#, fuzzy, c-format
-#| msgid "Unable to move the item with URI “%s” to “%s”"
+#, c-format
 msgid "Unable to move the item with URI '%s' to '%s'"
 msgstr "Αδυναμία μετακίνησης του αντικειμένου με URI «%s» στο «%s»"
 
@@ -3826,8 +3814,7 @@ msgid "No deserialize function found for format %s"
 msgstr "Δε βρέθηκε συνάρτηση αποσειριοποίησης για τον τύπο %s"
 
 #: gtk/gtktextbufferserialize.c:792 gtk/gtktextbufferserialize.c:818
-#, fuzzy, c-format
-#| msgid "Both “id” and “name” were found on the <%s> element"
+#, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "Τόσο το «id» όσο και το «name» βρέθηκαν στο στοιχείο <%s>"
 
@@ -4272,14 +4259,10 @@ msgid "Tick callback"
 msgstr "Σημείωση επανάκλησης"
 
 #: gtk/inspector/misc-info.ui:511
-#, fuzzy
-#| msgid "Frame Count"
 msgid "Frame count"
 msgstr "Πλήθος καρέ"
 
 #: gtk/inspector/misc-info.ui:545
-#, fuzzy
-#| msgid "Frame Rate"
 msgid "Frame rate"
 msgstr "Ρυθμός καρέ"
 
@@ -4591,8 +4574,6 @@ msgid "Right-to-Left"
 msgstr "Δεξιά προς αριστερά"
 
 #: gtk/inspector/visual.ui:347
-#, fuzzy
-#| msgid "Window Scaling"
 msgid "Window scaling"
 msgstr "Κλιμάκωση παραθύρου"
 
@@ -4651,8 +4632,6 @@ msgid "GL Rendering"
 msgstr "Απεικόνιση GL"
 
 #: gtk/inspector/visual.ui:740
-#, fuzzy
-#| msgid "When Needed"
 msgid "When needed"
 msgstr "Όταν απαιτείται"
 
@@ -4725,8 +4704,6 @@ msgid "CSS Selector"
 msgstr "Επιλογέας CSS"
 
 #: gtk/inspector/window.ui:431
-#, fuzzy
-#| msgid "CSS Nodes"
 msgid "CSS nodes"
 msgstr "Κόμβοι CSS"
 
@@ -5409,19 +5386,14 @@ msgid "Stretching Glyph Decomposition"
 msgstr ""
 
 #: gtk/open-type-layout.h:132
-#, fuzzy
-#| msgid "PostScript"
 msgctxt "OpenType layout"
 msgid "Subscript"
-msgstr "PostScript"
+msgstr "Δείκτης"
 
 #: gtk/open-type-layout.h:133
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Super"
 msgctxt "OpenType layout"
 msgid "Superscript"
-msgstr "Super"
+msgstr "Εκθέτης"
 
 #: gtk/open-type-layout.h:134
 msgctxt "OpenType layout"
@@ -6545,11 +6517,9 @@ msgid "Khmer"
 msgstr ""
 
 #: gtk/script-names.c:40
-#, fuzzy
-#| msgid "Low"
 msgctxt "Script"
 msgid "Lao"
-msgstr "Χαμηλή"
+msgstr "Λαοϊκά"
 
 #: gtk/script-names.c:41
 msgctxt "Script"
@@ -6602,11 +6572,9 @@ msgid "Syriac"
 msgstr "Συριακά"
 
 #: gtk/script-names.c:51
-#, fuzzy
-#| msgid "_Family:"
 msgctxt "Script"
 msgid "Tamil"
-msgstr "_Οικογένεια:"
+msgstr "Ταμίλ"
 
 #: gtk/script-names.c:52
 msgctxt "Script"
@@ -6739,11 +6707,9 @@ msgid "Unknown"
 msgstr "Άγνωστο"
 
 #: gtk/script-names.c:78
-#, fuzzy
-#| msgid "Baseline"
 msgctxt "Script"
 msgid "Balinese"
-msgstr "Αφετηρία"
+msgstr "Μπαλινέζικα"
 
 #: gtk/script-names.c:79
 msgctxt "Script"
@@ -6791,12 +6757,9 @@ msgid "Saurashtra"
 msgstr ""
 
 #: gtk/script-names.c:88
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Chameleon"
 msgctxt "Script"
 msgid "Cham"
-msgstr "Χρώμα χαμαιλέοντα"
+msgstr "Cham"
 
 #: gtk/script-names.c:89
 msgctxt "Script"
@@ -7004,11 +6967,9 @@ msgid "Mende Kikakui"
 msgstr ""
 
 #: gtk/script-names.c:130
-#, fuzzy
-#| msgid "Modified"
 msgctxt "Script"
 msgid "Modi"
-msgstr "Τροποποιήθηκε"
+msgstr "Μόντι"
 
 #: gtk/script-names.c:131
 msgctxt "Script"
@@ -7081,12 +7042,9 @@ msgid "Hatran"
 msgstr ""
 
 #: gtk/script-names.c:145
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Multi_key"
 msgctxt "Script"
 msgid "Multani"
-msgstr "Πολλαπλό κλειδί (Multi_key)"
+msgstr "Μουλτάνι"
 
 #: gtk/script-names.c:146
 msgctxt "Script"
@@ -7094,12 +7052,9 @@ msgid "Old Hungarian"
 msgstr "Παλιά Ουγγρικά"
 
 #: gtk/script-names.c:147
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Printing"
 msgctxt "Script"
 msgid "Signwriting"
-msgstr "Εκτύπωση"
+msgstr "Γραφή συμβόλων"
 
 #: gtk/script-names.c:148
 msgctxt "Script"
@@ -7270,23 +7225,14 @@ msgid "Body & Clothing"
 msgstr ""
 
 #: gtk/ui/gtkemojichooser.ui:83 gtk/ui/gtkemojichooser.ui:242
-#, fuzzy
-#| msgctxt "emoji category"
-#| msgid "Animals & Nature"
 msgid "Animals & Nature"
 msgstr "Ζώα & Φύση"
 
 #: gtk/ui/gtkemojichooser.ui:98 gtk/ui/gtkemojichooser.ui:257
-#, fuzzy
-#| msgctxt "emoji category"
-#| msgid "Food & Drink"
 msgid "Food & Drink"
 msgstr "Φαγητό & Ποτό"
 
 #: gtk/ui/gtkemojichooser.ui:113 gtk/ui/gtkemojichooser.ui:272
-#, fuzzy
-#| msgctxt "emoji category"
-#| msgid "Travel & Places"
 msgid "Travel & Places"
 msgstr "Ταξίδια & Τοποθεσίες"
 
@@ -8422,8 +8368,6 @@ msgid "PDF"
 msgstr "PDF"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:663
-#, fuzzy
-#| msgid "PostScript"
 msgid "Postscript"
 msgstr "PostScript"
 
