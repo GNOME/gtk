@@ -87,6 +87,10 @@
 #include "gtkprivate.h"
 #include "gtkwindowprivate.h"
 
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/wayland/gdkwayland.h>
+#endif
+
 #include <string.h>
 
 #define PAGE_STEP 14
@@ -605,10 +609,8 @@ gtk_entry_completion_constructed (GObject *object)
 
   /* pack it all */
   priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_window_set_use_subsurface (GTK_WINDOW (priv->popup_window), TRUE);
   gtk_window_set_resizable (GTK_WINDOW (priv->popup_window), FALSE);
-  gtk_window_set_type_hint (GTK_WINDOW(priv->popup_window),
-                            GDK_WINDOW_TYPE_HINT_COMBO);
+  gtk_window_set_type_hint (GTK_WINDOW(priv->popup_window), GDK_WINDOW_TYPE_HINT_COMBO);
 
   g_signal_connect (priv->popup_window, "key-press-event",
                     G_CALLBACK (gtk_entry_completion_popup_key_event),
@@ -1663,6 +1665,17 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   else
     items = MIN (matches, (((area.height - y) - (actions * action_height)) / height) - 1);
 
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+    {
+      /* Long lists might not fit into the work area and we do not have absolute coordinates
+       * to calculate the space above / below the entry.
+       * Therefore limit the number of maximal items to 10
+       */
+      items = MIN (items, 10);
+    }
+#endif
+
   if (items <= 0)
     gtk_widget_hide (completion->priv->scrolled_window);
   else
@@ -1711,7 +1724,16 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
       gtk_tree_path_free (path);
     }
 
-  gtk_window_move (GTK_WINDOW (completion->priv->popup_window), x, y);
+  if (gtk_window_get_transient_for (GTK_WINDOW (completion->priv->popup_window)))
+    {
+      gdk_window_move_to_rect (gtk_widget_get_window (completion->priv->popup_window),
+                                &allocation,
+                                GDK_GRAVITY_SOUTH,
+                                GDK_GRAVITY_NORTH,
+                                GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X,
+                                0, 0);
+      gtk_widget_show (completion->priv->popup_window);
+   }
 }
 
 static gboolean
