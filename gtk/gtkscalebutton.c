@@ -157,6 +157,9 @@ static gboolean gtk_scale_button_scroll_controller_scroll (GtkEventControllerScr
                                                            gdouble                   dx,
                                                            gdouble                   dy,
                                                            GtkScaleButton           *button);
+static void     gtk_scale_button_state_flags_changed      (GtkWidget           *widget,
+                                                           GtkStateFlags        previous_state,
+                                                           gpointer             user_data);
 
 G_DEFINE_TYPE_WITH_CODE (GtkScaleButton, gtk_scale_button, GTK_TYPE_BUTTON,
                          G_ADD_PRIVATE (GtkScaleButton)
@@ -378,6 +381,8 @@ gtk_scale_button_init (GtkScaleButton *button)
 
   gtk_widget_init_template (GTK_WIDGET (button));
   gtk_popover_set_relative_to (GTK_POPOVER (priv->dock), GTK_WIDGET (button));
+  g_signal_connect (button, "state-flags-changed",
+                    G_CALLBACK (gtk_scale_button_state_flags_changed), priv->dock);
 
   /* Need a local reference to the adjustment */
   priv->adjustment = gtk_adjustment_new (0, 0, 100, 2, 20, 0);
@@ -498,6 +503,7 @@ gtk_scale_button_dispose (GObject *object)
   GtkScaleButton *button = GTK_SCALE_BUTTON (object);
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
 
+  g_signal_handlers_disconnect_by_func (button, gtk_scale_button_state_flags_changed, priv->dock);
   g_clear_pointer (&priv->dock, gtk_widget_unparent);
 
   if (priv->click_id != 0)
@@ -1009,4 +1015,25 @@ gtk_scale_button_size_allocate (GtkWidget *widget,
   GTK_WIDGET_CLASS (gtk_scale_button_parent_class)->size_allocate (widget, width, height, baseline);
 
   gtk_native_check_resize (GTK_NATIVE (priv->dock));
+}
+
+/* Removes ACTIVE and PRELIGHT states from the main button
+ * if they were propagated from the popover. Issue #2063 */
+static void
+gtk_scale_button_state_flags_changed (GtkWidget     *widget,
+                                      GtkStateFlags  previous_state,
+                                      gpointer       user_data)
+{
+  GtkWidget *popover = GTK_WIDGET (user_data);
+  GtkStateFlags state_popover = gtk_widget_get_state_flags (popover);
+  GtkStateFlags flags_to_unset = 0;
+
+  if (state_popover & GTK_STATE_FLAG_ACTIVE)
+    flags_to_unset |= GTK_STATE_FLAG_ACTIVE;
+
+  if (state_popover & GTK_STATE_FLAG_PRELIGHT)
+    flags_to_unset |= GTK_STATE_FLAG_PRELIGHT;
+
+  if (flags_to_unset)
+    gtk_widget_unset_state_flags (widget, flags_to_unset);
 }
