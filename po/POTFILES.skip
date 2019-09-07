@@ -307,6 +307,7 @@ testsuite/reftests/window-show-contents-on-map.ui
 testsuite/tools/simplify-data-3to4/assistant.ui
 testsuite/tools/simplify-data-3to4/grid.ui
 testsuite/tools/simplify-data-3to4/notebook.ui
+testsuite/tools/simplify-data-3to4/office-runner.ui
 testsuite/tools/simplify-data-3to4/stack.ui
 testsuite/tools/simplify-data/test3.ui
 tests/visuals/inline-toolbar-horizontal.ui
