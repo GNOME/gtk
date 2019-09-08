@@ -3677,28 +3677,27 @@ gtk_icon_info_load_icon_async (GtkIconInfo         *icon_info,
                                gpointer             user_data)
 {
   GTask *task;
-  GtkIconInfo *dup;
-  GError *error = NULL;
 
   task = g_task_new (icon_info, cancellable, callback, user_data);
 
   if (icon_info_get_pixbuf_ready (icon_info))
     {
+      GError *error = NULL;
       GdkPaintable *paintable = gtk_icon_info_load_icon (icon_info, &error);
 
       if (paintable == NULL)
         g_task_return_error (task, error);
       else
         g_task_return_pointer (task, paintable, g_object_unref);
-      g_object_unref (task);
     }
   else
     {
-      dup = icon_info_dup (icon_info);
+      GtkIconInfo *dup = icon_info_dup (icon_info);
       g_task_set_task_data (task, dup, g_object_unref);
       g_task_run_in_thread (task, load_icon_thread);
-      g_object_unref (task);
     }
+
+  g_object_unref (task);
 }
 
 /**
