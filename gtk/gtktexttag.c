@@ -77,6 +77,7 @@
 #include "gtktexttag.h"
 #include "gtktexttypes.h"
 #include "gtktexttagtable.h"
+#include "gtktexttagtableprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -2029,10 +2030,7 @@ gtk_text_tag_changed (GtkTextTag *tag,
    * added, this would increase significantly the number of signal connections.
    */
   if (priv->table != NULL)
-    g_signal_emit_by_name (priv->table,
-                           "tag-changed",
-                           tag,
-                           size_changed);
+    _gtk_text_tag_table_tag_changed (priv->table, tag, size_changed);
 }
 
 static int
