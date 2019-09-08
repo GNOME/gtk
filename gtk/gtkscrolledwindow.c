@@ -2014,6 +2014,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   g_signal_connect (controller, "scroll",
                     G_CALLBACK (captured_scroll_cb), scrolled_window);
+  gtk_widget_add_controller (widget, controller);
 
   controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "leave",
