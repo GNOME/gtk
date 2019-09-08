@@ -484,3 +484,11 @@ _gtk_text_tag_table_remove_buffer (GtkTextTagTable *table,
 
   priv->buffers = g_slist_remove (priv->buffers, buffer);
 }
+
+void
+_gtk_text_tag_table_tag_changed (GtkTextTagTable *table,
+                                 GtkTextTag      *tag,
+                                 gboolean         size_changed)
+{
+  g_signal_emit (table, signals[TAG_CHANGED], 0, tag, size_changed);
+}
