@@ -171,6 +171,7 @@ struct _GtkModelButton
   GtkButtonRole role;
   GtkSizeGroup *indicators;
   char *accel;
+  guint open_timeout;
 };
 
 typedef GtkButtonClass GtkModelButtonClass;
@@ -935,8 +936,6 @@ close_menu (GtkModelButton *button)
     }
 }
 
-static void open_submenu (GtkPopover *popover);
-
 static void
 gtk_model_button_clicked (GtkButton *button)
 {
@@ -972,6 +971,9 @@ gtk_model_button_finalize (GObject *object)
   gtk_widget_unparent (button->end_box);
   g_free (button->accel);
   g_clear_pointer (&button->popover, gtk_widget_unparent);
+
+  if (button->open_timeout)
+    g_source_remove (button->open_timeout);
 
   G_OBJECT_CLASS (gtk_model_button_parent_class)->finalize (object);
 }
@@ -1226,30 +1228,59 @@ close_submenus (GtkPopover *popover)
     }
 }
 
-static void
-open_submenu (GtkPopover *popover)
+static gboolean
+open_submenu (gpointer data)
 {
+  GtkModelButton *button = data;
+  GtkPopover *popover;
+
+  popover = (GtkPopover*)gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_POPOVER);
+
   if (GTK_IS_POPOVER_MENU (popover))
     {
-      GtkWidget *active_item;
+      gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (popover), GTK_WIDGET (button));
 
-      active_item = gtk_popover_menu_get_active_item (GTK_POPOVER_MENU (popover));
-      if (GTK_IS_MODEL_BUTTON (active_item) &&
-          GTK_MODEL_BUTTON (active_item)->popover)
+      if (button->popover)
         {
-          GtkWidget *submenu;
+          GtkWidget *submenu = button->popover;
 
-          submenu = GTK_MODEL_BUTTON (active_item)->popover;
           if (gtk_popover_menu_get_open_submenu (GTK_POPOVER_MENU (popover)) != submenu)
-{
-g_print ("close submenus %p %p\n", gtk_popover_menu_get_open_submenu (GTK_POPOVER_MENU (popover)), submenu);
             close_submenus (popover);
-}
 
           gtk_popover_popup (GTK_POPOVER (submenu));
           gtk_popover_menu_set_open_submenu (GTK_POPOVER_MENU (popover), submenu);
           gtk_popover_menu_set_parent_menu (GTK_POPOVER_MENU (submenu), GTK_WIDGET (popover));
         }
+    }
+
+  button->open_timeout = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+#define OPEN_TIMEOUT 80
+
+static void
+start_open (GtkModelButton *button)
+{
+  if (button->open_timeout)
+    g_source_remove (button->open_timeout);
+
+  if (button->popover &&
+      gtk_widget_get_visible (button->popover))
+    return;
+
+  button->open_timeout = g_timeout_add (OPEN_TIMEOUT, open_submenu, button);
+  g_source_set_name_by_id (button->open_timeout, "[gtk] open_submenu");
+}
+
+static void
+stop_open (GtkModelButton *button)
+{
+  if (button->open_timeout)
+    {
+      g_source_remove (button->open_timeout);
+      button->open_timeout = 0;
     }
 }
 
@@ -1276,9 +1307,29 @@ enter_cb (GtkEventController *controller,
 
   if (popover && (is || contains))
     {
-      gtk_popover_menu_set_active_item (GTK_POPOVER_MENU (popover), target);
-      open_submenu (GTK_POPOVER (popover));
+      if (gtk_popover_menu_get_open_submenu (GTK_POPOVER_MENU (popover)) != NULL)
+        start_open (GTK_MODEL_BUTTON (target));
+      else
+        open_submenu (target);
     }
+}
+
+static void
+motion_cb (GtkEventController *controller,
+           double              x,
+           double              y,
+           gpointer            data)
+{
+  start_open (GTK_MODEL_BUTTON (data));
+}
+
+static void
+leave_cb (GtkEventController *controller,
+          GdkCrossingMode     mode,
+          GdkNotifyType       type,
+          gpointer            data)
+{
+  stop_open (GTK_MODEL_BUTTON (data));
 }
 
 static void
@@ -1336,6 +1387,8 @@ gtk_model_button_init (GtkModelButton *button)
 
   controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "enter", G_CALLBACK (enter_cb), button);
+  g_signal_connect (controller, "motion", G_CALLBACK (motion_cb), button);
+  g_signal_connect (controller, "leave", G_CALLBACK (leave_cb), button);
   gtk_widget_add_controller (GTK_WIDGET (button), controller);
 
   controller = gtk_event_controller_key_new ();
