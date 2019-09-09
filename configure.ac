@@ -62,8 +62,6 @@ m4_define([gdk_pixbuf_required_version], [2.30.0])
 m4_define([introspection_required_version], [1.39.0])
 m4_define([wayland_required_version], [1.9.91])
 m4_define([wayland_protocols_required_version], [1.14])
-m4_define([mirclient_required_version], [0.22.0])
-m4_define([mircookie_required_version], [0.17.0])
 m4_define([epoxy_required_version], [1.4])
 m4_define([cloudproviders_required_version], [0.2.5])
 m4_define([sysprof_required_version], [3.33.2])
@@ -344,11 +342,6 @@ AC_ARG_ENABLE(wayland-backend,
               [AS_HELP_STRING([--enable-wayland-backend],
                               [enable the wayland gdk backend])],
 			      [backend_set=yes])
-AC_ARG_ENABLE(mir-backend,
-              [AS_HELP_STRING([--enable-mir-backend],
-                              [enable the Mir gdk backend])],
-			      [backend_set=yes])
-
 AC_ARG_ENABLE(cloudproviders,
               [AS_HELP_STRING([--enable-cloudproviders],
                               [enable libcloudproviders integration])],
@@ -366,7 +359,6 @@ if test -z "$backend_set"; then
   else
     enable_x11_backend=yes
     enable_wayland_backend=maybe
-    enable_mir_backend=no
   fi
 fi
 
@@ -477,30 +469,6 @@ if test "$enable_wayland_backend" = "yes"; then
   AM_CONDITIONAL(USE_WAYLAND, true)
 else
   AM_CONDITIONAL(USE_WAYLAND, false)
-fi
-
-MIR_DEPENDENCIES="mirclient >= mirclient_required_version mircookie >= mircookie_required_version libcontent-hub-glib"
-if test "$enable_mir_backend" = "maybe" ; then
-  PKG_CHECK_EXISTS($MIR_DEPENDENCIES, [have_mir_deps=yes], [have_mir_deps=no])
-  AC_MSG_CHECKING([for MIR_DEPENDENCIES])
-  if test "$have_mir_deps" = "no" ; then
-    enable_mir_backend=no
-  else
-    enable_mir_backend=yes
-  fi
-  AC_MSG_RESULT($enable_mir_backend)
-fi
-
-if test "$enable_mir_backend" = "yes"; then
-  cairo_backends="$cairo_backends cairo"
-  GDK_BACKENDS="$GDK_BACKENDS mir"
-  GDK_WINDOWING="$GDK_WINDOWING
-#define GDK_WINDOWING_MIR"
-  MIR_PACKAGES="$MIR_DEPENDENCIES"
-
-  AM_CONDITIONAL(USE_MIR, true)
-else
-  AM_CONDITIONAL(USE_MIR, false)
 fi
 
 # strip leading space
@@ -1345,7 +1313,7 @@ CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 
 GDK_PACKAGES="$PANGO_PACKAGES gdk-pixbuf-2.0 >= gdk_pixbuf_required_version cairo >= cairo_required_version cairo-gobject >= cairo_required_version"
-GDK_PRIVATE_PACKAGES="$GDK_GIO_PACKAGE $X_PACKAGES $WAYLAND_PACKAGES $MIR_PACKAGES $cairo_backends epoxy >= epoxy_required_version $CLOUDPROVIDER_PACKAGES $PROFILER_PACKAGES fribidi >= fribidi_required_version"
+GDK_PRIVATE_PACKAGES="$GDK_GIO_PACKAGE $X_PACKAGES $WAYLAND_PACKAGES $cairo_backends epoxy >= epoxy_required_version $CLOUDPROVIDER_PACKAGES $PROFILER_PACKAGES fribidi >= fribidi_required_version"
 
 PKG_CHECK_MODULES(GDK_DEP, $GDK_PACKAGES $GDK_PRIVATE_PACKAGES)
 GDK_DEP_LIBS="$GDK_EXTRA_LIBS $GDK_DEP_LIBS $MATH_LIB"
@@ -1379,7 +1347,7 @@ fi
 PKG_CHECK_MODULES(ATK, $ATK_PACKAGES)
 
 GTK_PACKAGES="atk >= atk_required_version cairo >= cairo_required_version cairo-gobject >= cairo_required_version gdk-pixbuf-2.0 >= gdk_pixbuf_required_version gio-2.0 >= glib_required_version"
-GTK_PRIVATE_PACKAGES="$ATK_PACKAGES $WAYLAND_PACKAGES $MIR_PACKAGES epoxy >= epoxy_required_version fribidi >= fribidi_required_version"
+GTK_PRIVATE_PACKAGES="$ATK_PACKAGES $WAYLAND_PACKAGES epoxy >= epoxy_required_version fribidi >= fribidi_required_version"
 if test "x$enable_x11_backend" = xyes -o "x$enable_wayland_backend" = xyes; then
   GTK_PRIVATE_PACKAGES="$GTK_PRIVATE_PACKAGES pangoft2"
 fi
@@ -1966,7 +1934,6 @@ gdk/win32/rc/Makefile
 gdk/win32/rc/gdk.rc
 gdk/quartz/Makefile
 gdk/wayland/Makefile
-gdk/mir/Makefile
 gdk/gdkversionmacros.h
 gtk/Makefile
 gtk/makefile.msc

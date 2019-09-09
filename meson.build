@@ -131,7 +131,6 @@ wayland_enabled        = get_option('wayland_backend')
 broadway_enabled       = get_option('broadway_backend')
 quartz_enabled         = get_option('quartz_backend')
 win32_enabled          = get_option('win32_backend')
-mir_enabled            = get_option('mir_backend')
 
 os_unix   = false
 os_linux  = false
@@ -911,7 +910,7 @@ gdk_pcs = ['gdk-3.0.pc']
 
 pkg_targets = ''
 disabled_backends = []
-foreach backend: [ 'broadway', 'quartz', 'wayland', 'win32', 'x11', 'mir']
+foreach backend: [ 'broadway', 'quartz', 'wayland', 'win32', 'x11']
   if get_variable('@0@_enabled'.format(backend))
     gtk_pcs += ['gtk+-@0@-3.0.pc'.format(backend)]
     gdk_pcs += ['gdk-@0@-3.0.pc'.format(backend)]

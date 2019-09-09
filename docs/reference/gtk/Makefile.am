@@ -307,7 +307,6 @@ content_files =					\
 	migrating-GtkStyleContext.xml		\
 	migrating-smclient-GtkApplication.xml	\
 	migrating-unique-GtkApplication.xml	\
-	mir.xml					\
 	osx.sgml				\
 	overview.xml 				\
 	question_index.sgml			\
