@@ -48,34 +48,40 @@
 #   include <pango/pangowin32.h>
 #endif /* STRICT */
 
-/* #define BUFSIZE 4096 */
+/* Determines what happens when focus is lost while preedit is in process. */
+typedef enum {
+  /* Preedit is committed. */
+  GTK_WIN32_IME_FOCUS_BEHAVIOR_COMMIT,
+  /* Preedit is discarded. */
+  GTK_WIN32_IME_FOCUS_BEHAVIOR_DISCARD,
+  /* Preedit follows the cursor (that means it will appear in the widget
+   * that receives the focus) */
+  GTK_WIN32_IME_FOCUS_BEHAVIOR_FOLLOW,
+} GtkWin32IMEFocusBehavior;
 
 #define IS_DEAD_KEY(k) \
     ((k) >= GDK_dead_grave && (k) <= (GDK_dead_dasia+1))
 
-#define FREE_PREEDIT_BUFFER(ctx) \
-{                                \
-  g_free((ctx)->priv->comp_str); \
-  g_free((ctx)->priv->read_str); \
-  (ctx)->priv->comp_str = NULL;  \
-  (ctx)->priv->read_str = NULL;  \
-  (ctx)->priv->comp_str_len = 0; \
-  (ctx)->priv->read_str_len = 0; \
-}
-
 
 struct _GtkIMContextIMEPrivate
 {
-  /* save IME context when the client window is focused out */
-  DWORD conversion_mode;
-  DWORD sentence_mode;
-
-  LPVOID comp_str;
-  DWORD comp_str_len;
-  LPVOID read_str;
-  DWORD read_str_len;
-
+  /* When pretend_empty_preedit is set to TRUE,
+   * gtk_im_context_ime_get_preedit_string() will return an empty string
+   * instead of the actual content of ImmGetCompositionStringW().
+   *
+   * This is necessary because GtkEntry expects the preedit buffer to be
+   * cleared before commit() is called, otherwise it leads to an assertion
+   * failure in Pango. However, since we emit the commit() signal while
+   * handling the WM_IME_COMPOSITION message, the IME buffer will be non-empty,
+   * so we temporarily set this flag while emmiting the appropriate signals.
+   *
+   * See also:
+   *   https://bugzilla.gnome.org/show_bug.cgi?id=787142
+   *   https://gitlab.gnome.org/GNOME/gtk/commit/c255ba68fc2c918dd84da48a472e7973d3c00b03
+   */
+  gboolean pretend_empty_preedit;
   guint32 dead_key_keyval;
+  GtkWin32IMEFocusBehavior focus_behavior;
 };
 
 
@@ -128,7 +134,6 @@ static void cb_client_widget_hierarchy_changed  (GtkWidget       *widget,
 GType gtk_type_im_context_ime = 0;
 static GObjectClass *parent_class;
 
-
 void
 gtk_im_context_ime_register_type (GTypeModule *type_module)
 {
@@ -173,7 +178,6 @@ gtk_im_context_ime_class_init (GtkIMContextIMEClass *class)
   im_context_class->set_use_preedit     = gtk_im_context_ime_set_use_preedit;
 }
 
-
 static void
 gtk_im_context_ime_init (GtkIMContextIME *context_ime)
 {
@@ -190,12 +194,7 @@ gtk_im_context_ime_init (GtkIMContextIME *context_ime)
   context_ime->commit_string          = NULL;
 
   context_ime->priv = g_malloc0 (sizeof (GtkIMContextIMEPrivate));
-  context_ime->priv->conversion_mode  = 0;
-  context_ime->priv->sentence_mode    = 0;
-  context_ime->priv->comp_str         = NULL;
-  context_ime->priv->comp_str_len     = 0;
-  context_ime->priv->read_str         = NULL;
-  context_ime->priv->read_str_len     = 0;
+  context_ime->priv->focus_behavior = GTK_WIN32_IME_FOCUS_BEHAVIOR_COMMIT;
 }
 
 
@@ -205,10 +204,8 @@ gtk_im_context_ime_dispose (GObject *obj)
   GtkIMContext *context = GTK_IM_CONTEXT (obj);
   GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (obj);
 
-  if (context_ime->client_window)
+  if (context_ime->client_window != NULL)
     gtk_im_context_ime_set_client_window (context, NULL);
-
-  FREE_PREEDIT_BUFFER (context_ime);
 
   if (G_OBJECT_CLASS (parent_class)->dispose)
     G_OBJECT_CLASS (parent_class)->dispose (obj);
@@ -218,12 +215,10 @@ gtk_im_context_ime_dispose (GObject *obj)
 static void
 gtk_im_context_ime_finalize (GObject *obj)
 {
-  /* GtkIMContext *context = GTK_IM_CONTEXT (obj); */
   GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (obj);
 
   g_free (context_ime->priv);
   context_ime->priv = NULL;
-
   if (G_OBJECT_CLASS (parent_class)->finalize)
     G_OBJECT_CLASS (parent_class)->finalize (obj);
 }
@@ -277,25 +272,39 @@ gtk_im_context_ime_set_client_window (GtkIMContext *context,
                                       GdkWindow    *client_window)
 {
   GtkIMContextIME *context_ime;
+  GdkWindow *toplevel = NULL;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
   context_ime = GTK_IM_CONTEXT_IME (context);
 
-  if (client_window)
+  if (client_window != NULL && !GDK_IS_WINDOW (client_window))
     {
-      HIMC himc;
-      HWND hwnd;
+      g_warning ("client_window is not a GdkWindow!");
+      client_window = NULL;
+    }
 
-      hwnd = gdk_win32_window_get_impl_hwnd (client_window);
-      himc = ImmGetContext (hwnd);
-      if (himc)
-	{
-	  context_ime->opened = ImmGetOpenStatus (himc);
-	  ImmGetConversionStatus (himc,
-				  &context_ime->priv->conversion_mode,
-				  &context_ime->priv->sentence_mode);
-	  ImmReleaseContext (hwnd, himc);
-	}
+  if (client_window != NULL)
+    {
+      toplevel = gdk_window_get_toplevel (client_window);
+
+      if (GDK_IS_WINDOW (toplevel))
+        {
+          HWND hwnd = gdk_win32_window_get_impl_hwnd (toplevel);
+          HIMC himc = ImmGetContext (hwnd);
+          if (himc)
+	    {
+	      context_ime->opened = ImmGetOpenStatus (himc);
+	      ImmReleaseContext (hwnd, himc);
+	    }
+          else
+            {
+              context_ime->opened = FALSE;
+            }
+        }
+      else
+        {
+          g_warning ("Could not find toplevel window.");
+        }
     }
   else if (context_ime->focus)
     {
@@ -303,6 +312,10 @@ gtk_im_context_ime_set_client_window (GtkIMContext *context,
     }
 
   context_ime->client_window = client_window;
+  context_ime->toplevel = toplevel;
+
+  if (client_window)
+    g_return_if_fail (GDK_IS_WINDOW (context_ime->toplevel));
 }
 
 static gunichar
@@ -434,19 +447,20 @@ gtk_im_context_ime_reset (GtkIMContext *context)
   HWND hwnd;
   HIMC himc;
 
-  if (!context_ime->client_window)
+  if (!GDK_IS_WINDOW (context_ime->client_window))
     return;
 
-  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
+  g_return_if_fail (GDK_IS_WINDOW (context_ime->toplevel));
+
+  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->toplevel);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return;
 
+  ImmNotifyIME (himc, NI_COMPOSITIONSTR, CPS_CANCEL, 0);
+
   if (context_ime->preediting)
     {
-      if (ImmGetOpenStatus (himc))
-        ImmNotifyIME (himc, NI_COMPOSITIONSTR, CPS_CANCEL, 0);
-
       context_ime->preediting = FALSE;
       g_signal_emit_by_name (context, "preedit-changed");
     }
@@ -456,74 +470,50 @@ gtk_im_context_ime_reset (GtkIMContext *context)
 
 
 static gchar *
-get_utf8_preedit_string (GtkIMContextIME *context_ime, gint *pos_ret)
+get_utf8_preedit_string (GtkIMContextIME *context_ime,
+                         gint             kind,
+                         gint            *pos_ret)
 {
+  gunichar2 *utf16str = NULL;
+  glong size;
   gchar *utf8str = NULL;
   HWND hwnd;
   HIMC himc;
   gint pos = 0;
+  GError *error = NULL;
 
   if (pos_ret)
     *pos_ret = 0;
 
-  if (!context_ime->client_window)
+  if (!GDK_IS_WINDOW (context_ime->toplevel))
     return g_strdup ("");
-  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
+  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->toplevel);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return g_strdup ("");
 
-  if (context_ime->preediting)
+  size = ImmGetCompositionStringW (himc, kind, NULL, 0);
+  if (size > 0)
     {
-      glong len;
+      utf16str = g_malloc (size);
 
-      len = ImmGetCompositionStringW (himc, GCS_COMPSTR, NULL, 0);
-      if (len > 0)
+      ImmGetCompositionStringW (himc, kind, utf16str, size);
+      utf8str = g_utf16_to_utf8 (utf16str, size / sizeof (gunichar2),
+                                 NULL, NULL, &error);
+      if (error)
         {
-          GError *error = NULL;
-          gpointer buf = g_alloca (len);
-
-          ImmGetCompositionStringW (himc, GCS_COMPSTR, buf, len);
-          len /= 2;
-          utf8str = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
-          if (error)
-            {
-              g_warning ("%s", error->message);
-              g_error_free (error);
-            }
-	  
-          if (pos_ret)
-            {
-              pos = ImmGetCompositionStringW (himc, GCS_CURSORPOS, NULL, 0);
-              if (pos < 0 || len < pos)
-                {
-                  g_warning ("ImmGetCompositionString: "
-                             "Invalid cursor position!");
-                  pos = 0;
-                }
-            }
+          g_warning ("%s", error->message);
+          g_error_free (error);
         }
 
-      if (context_ime->commit_string)
+      if (pos_ret)
         {
-          if (utf8str)
+          pos = ImmGetCompositionStringW (himc, GCS_CURSORPOS, NULL, 0);
+          if (pos < 0 || size < pos)
             {
-              gchar *utf8str_new = g_strdup (utf8str);
-
-              /* Note: We *don't* want to update context_ime->commit_string here!
-               * Otherwise it will be updated repeatedly, not what we want!
-               */
-              g_free (utf8str);
-              utf8str = g_strconcat (context_ime->commit_string,
-                                     utf8str_new,
-                                     NULL);
-              g_free (utf8str_new);
-              pos += g_utf8_strlen (context_ime->commit_string, -1);
-            }
-          else
-            {
-              utf8str = g_strdup (context_ime->commit_string);
-              pos = g_utf8_strlen (context_ime->commit_string, -1);
+              g_warning ("ImmGetCompositionString: "
+                         "Invalid cursor position!");
+              pos = 0;
             }
         }
     }
@@ -539,6 +529,8 @@ get_utf8_preedit_string (GtkIMContextIME *context_ime, gint *pos_ret)
 
   ImmReleaseContext (hwnd, himc);
 
+  g_free (utf16str);
+
   return utf8str;
 }
 
@@ -549,10 +541,14 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
   PangoAttrList *attrs = pango_attr_list_new ();
   HWND hwnd;
   HIMC himc;
+  guint8 *buf = NULL;
 
-  if (!context_ime->client_window)
+  if (!GDK_IS_WINDOW (context_ime->client_window))
     return attrs;
-  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
+
+  g_return_val_if_fail (GDK_IS_WINDOW (context_ime->toplevel), attrs);
+
+  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->toplevel);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return attrs;
@@ -560,7 +556,6 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
   if (context_ime->preediting)
     {
       const gchar *schr = utf8str, *echr;
-      guint8 *buf;
       guint16 f_red, f_green, f_blue, b_red, b_green, b_blue;
       glong len, spos = 0, epos, sidx = 0, eidx;
       PangoAttribute *attr;
@@ -569,7 +564,7 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
        *  get attributes list of IME.
        */
       len = ImmGetCompositionStringW (himc, GCS_COMPATTR, NULL, 0);
-      buf = g_alloca (len);
+      buf = g_malloc (len);
       ImmGetCompositionStringW (himc, GCS_COMPATTR, buf, len);
 
       /*
@@ -638,6 +633,7 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
     }
 
   ImmReleaseContext (hwnd, himc);
+  g_free(buf);
 
   return attrs;
 }
@@ -655,20 +651,18 @@ gtk_im_context_ime_get_preedit_string (GtkIMContext   *context,
 
   context_ime = GTK_IM_CONTEXT_IME (context);
 
-  utf8str = get_utf8_preedit_string (context_ime, &pos);
+  if (!context_ime->focus || context_ime->priv->pretend_empty_preedit)
+    utf8str = g_strdup ("");
+  else
+    utf8str = get_utf8_preedit_string (context_ime, GCS_COMPSTR, &pos);
 
   if (attrs)
     *attrs = get_pango_attr_list (context_ime, utf8str);
 
   if (str)
-    {
-      *str = utf8str;
-    }
+    *str = utf8str;
   else
-    {
-      g_free (utf8str);
-      utf8str = NULL;
-    }
+    g_free (utf8str);
 
   if (cursor_pos)
     *cursor_pos = pos;
@@ -679,7 +673,7 @@ static void
 gtk_im_context_ime_focus_in (GtkIMContext *context)
 {
   GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (context);
-  GdkWindow *toplevel;
+  GdkWindow *toplevel = NULL;
   GtkWidget *widget = NULL;
   HWND hwnd;
   HIMC himc;
@@ -690,24 +684,22 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
   /* swtich current context */
   context_ime->focus = TRUE;
 
-  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
+  toplevel = gdk_window_get_toplevel (context_ime->client_window);
+  if (!GDK_IS_WINDOW (toplevel))
+    {
+      g_warning ("Could not find toplevel window.");
+      context_ime->toplevel = NULL;
+      context_ime->opened = FALSE;
+      return;
+    }
+
+  hwnd = gdk_win32_window_get_impl_hwnd (toplevel);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return;
 
-  toplevel = gdk_window_get_toplevel (context_ime->client_window);
-  if (GDK_IS_WINDOW (toplevel))
-    {
-      gdk_window_add_filter (toplevel,
-                             gtk_im_context_ime_message_filter, context_ime);
-      context_ime->toplevel = toplevel;
-    }
-  else
-    {
-      g_warning ("gtk_im_context_ime_focus_in(): "
-                 "cannot find toplevel window.");
-      return;
-    }
+  gdk_window_add_filter (toplevel,
+                         gtk_im_context_ime_message_filter, context_ime);
 
   /* trace reparenting (probably no need) */
   gdk_window_get_user_data (context_ime->client_window, (gpointer) & widget);
@@ -722,23 +714,28 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
       /* warning? */
     }
 
-  /* restore preedit context */
-  ImmSetConversionStatus (himc,
-                          context_ime->priv->conversion_mode,
-                          context_ime->priv->sentence_mode);
+  context_ime->opened = ImmGetOpenStatus (himc);
 
-  if (context_ime->opened)
+  switch (context_ime->priv->focus_behavior)
     {
-      if (!ImmGetOpenStatus (himc))
-        ImmSetOpenStatus (himc, TRUE);
-      if (context_ime->preediting)
-        {
-          ImmSetCompositionStringW (himc,
-				    SCS_SETSTR,
-				    context_ime->priv->comp_str,
-				    context_ime->priv->comp_str_len, NULL, 0);
-          FREE_PREEDIT_BUFFER (context_ime);
-        }
+    case GTK_WIN32_IME_FOCUS_BEHAVIOR_COMMIT:
+    case GTK_WIN32_IME_FOCUS_BEHAVIOR_DISCARD:
+      gtk_im_context_ime_reset (context);
+      break;
+
+    case GTK_WIN32_IME_FOCUS_BEHAVIOR_FOLLOW:
+      {
+        gchar *utf8str = get_utf8_preedit_string (context_ime, GCS_COMPSTR, NULL);
+        if (utf8str != NULL && strlen(utf8str) > 0)
+          {
+            context_ime->preediting = TRUE;
+            gtk_im_context_ime_set_cursor_location (context, NULL);
+            g_signal_emit_by_name (context, "preedit-start");
+            g_signal_emit_by_name (context, "preedit-changed");
+          }
+        g_free (utf8str);
+      }
+      break;
     }
 
   /* clean */
@@ -750,61 +747,52 @@ static void
 gtk_im_context_ime_focus_out (GtkIMContext *context)
 {
   GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (context);
-  GdkWindow *toplevel;
   GtkWidget *widget = NULL;
-  HWND hwnd;
-  HIMC himc;
+  gboolean was_preediting;
 
   if (!GDK_IS_WINDOW (context_ime->client_window))
     return;
 
-  /* swtich current context */
+  was_preediting = context_ime->preediting;
+
+  context_ime->opened = FALSE;
+  context_ime->preediting = FALSE;
   context_ime->focus = FALSE;
 
-  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
-  himc = ImmGetContext (hwnd);
-  if (!himc)
-    return;
-
-  /* save preedit context */
-  ImmGetConversionStatus (himc,
-                          &context_ime->priv->conversion_mode,
-                          &context_ime->priv->sentence_mode);
-
-  if (ImmGetOpenStatus (himc))
+  switch (context_ime->priv->focus_behavior)
     {
-      gboolean preediting = context_ime->preediting;
+      case GTK_WIN32_IME_FOCUS_BEHAVIOR_COMMIT:
+        if (was_preediting)
+          {
+            gchar *utf8str = get_utf8_preedit_string (context_ime, GCS_COMPSTR, NULL);
 
-      if (preediting)
-        {
-          FREE_PREEDIT_BUFFER (context_ime);
+            context_ime->priv->pretend_empty_preedit = TRUE;
+            g_signal_emit_by_name (context, "preedit-changed");
+            g_signal_emit_by_name (context, "preedit-end");
 
-          context_ime->priv->comp_str_len
-            = ImmGetCompositionStringW (himc, GCS_COMPSTR, NULL, 0);
-          context_ime->priv->comp_str
-            = g_malloc (context_ime->priv->comp_str_len);
-          ImmGetCompositionStringW (himc, GCS_COMPSTR,
-				    context_ime->priv->comp_str,
-				    context_ime->priv->comp_str_len);
+            g_signal_emit_by_name (context, "commit", utf8str);
 
-          context_ime->priv->read_str_len
-            = ImmGetCompositionStringW (himc, GCS_COMPREADSTR, NULL, 0);
-          context_ime->priv->read_str
-            = g_malloc (context_ime->priv->read_str_len);
-          ImmGetCompositionStringW (himc, GCS_COMPREADSTR,
-				    context_ime->priv->read_str,
-				    context_ime->priv->read_str_len);
-        }
+            g_signal_emit_by_name (context, "preedit-start");
+            g_signal_emit_by_name (context, "preedit-changed");
+            context_ime->priv->pretend_empty_preedit = FALSE;
 
-      ImmSetOpenStatus (himc, FALSE);
+            g_free (utf8str);
+          }
+        /* fallthrough */
 
-      context_ime->opened = TRUE;
-      context_ime->preediting = preediting;
-    }
-  else
-    {
-      context_ime->opened = FALSE;
-      context_ime->preediting = FALSE;
+      case GTK_WIN32_IME_FOCUS_BEHAVIOR_DISCARD:
+        gtk_im_context_ime_reset (context);
+
+        /* Callbacks triggered by im_context_ime_reset() could set the focus back to our
+           context. In that case, we want to exit here. */
+
+        if (context_ime->focus)
+          return;
+
+        break;
+
+      case GTK_WIN32_IME_FOCUS_BEHAVIOR_FOLLOW:
+        break;
     }
 
   /* remove signal handler */
@@ -816,23 +804,19 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
          G_CALLBACK (cb_client_widget_hierarchy_changed), context_ime);
     }
 
-  /* remove event fileter */
-  toplevel = gdk_window_get_toplevel (context_ime->client_window);
-  if (GDK_IS_WINDOW (toplevel))
+  /* remove filter */
+  if (GDK_IS_WINDOW (context_ime->toplevel))
     {
-      gdk_window_remove_filter (toplevel,
+      gdk_window_remove_filter (context_ime->toplevel,
                                 gtk_im_context_ime_message_filter,
                                 context_ime);
-      context_ime->toplevel = NULL;
-    }
-  else
-    {
-      g_warning ("gtk_im_context_ime_focus_out(): "
-                 "cannot find toplevel window.");
     }
 
-  /* clean */
-  ImmReleaseContext (hwnd, himc);
+  if (was_preediting)
+    {
+      g_signal_emit_by_name (context, "preedit-changed");
+      g_signal_emit_by_name (context, "preedit-end");
+    }
 }
 
 
@@ -856,7 +840,7 @@ gtk_im_context_ime_set_cursor_location (GtkIMContext *context,
   if (!context_ime->client_window)
     return;
 
-  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
+  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->toplevel);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return;
@@ -887,7 +871,7 @@ gtk_im_context_ime_set_use_preedit (GtkIMContext *context,
       HWND hwnd;
       HIMC himc;
 
-      hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
+      hwnd = gdk_win32_window_get_impl_hwnd (context_ime->toplevel);
       himc = ImmGetContext (hwnd);
       if (!himc)
         return;
@@ -925,7 +909,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
   if (!GTK_IS_WIDGET (widget))
     return;
 
-  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
+  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->toplevel);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return;
@@ -1038,10 +1022,13 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
 
   context = GTK_IM_CONTEXT (data);
   context_ime = GTK_IM_CONTEXT_IME (data);
+
   if (!context_ime->focus)
     return retval;
 
-  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
+  g_return_val_if_fail (GDK_IS_WINDOW (context_ime->toplevel), retval);
+
+  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->toplevel);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return retval;
@@ -1057,17 +1044,12 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
         get_window_position (context_ime->client_window, &wx, &wy);
         /* FIXME! */
         {
-          HWND hwnd_top;
           POINT pt;
           RECT rc;
-
-          hwnd_top =
-            gdk_win32_window_get_impl_hwnd (gdk_window_get_toplevel
-                                            (context_ime->client_window));
-          GetWindowRect (hwnd_top, &rc);
+          GetWindowRect (hwnd, &rc);
           pt.x = wx * scale;
           pt.y = wy * scale;
-          ClientToScreen (hwnd_top, &pt);
+          ClientToScreen (hwnd, &pt);
           wx = (pt.x - rc.left) / scale;
           wy = (pt.y - rc.top) / scale;
         }
@@ -1083,40 +1065,30 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
 
         if (msg->lParam & GCS_RESULTSTR)
           {
-            gsize len;
-            gchar *utf8str = NULL;
-            GError *error = NULL;
+            gchar *utf8str = get_utf8_preedit_string (context_ime, GCS_RESULTSTR, NULL);
 
-            len = ImmGetCompositionStringW (himc, GCS_RESULTSTR, NULL, 0);
-
-            if (len > 0)
+            if (utf8str)
               {
-                gpointer buf = g_alloca (len);
-                ImmGetCompositionStringW (himc, GCS_RESULTSTR, buf, len);
-                len /= 2;
-                context_ime->commit_string = g_utf16_to_utf8 (buf, len, NULL, NULL, &error);
+                context_ime->priv->pretend_empty_preedit = TRUE;
+                g_signal_emit_by_name (context, "preedit-changed");
+                g_signal_emit_by_name (context, "preedit-end");
 
-                if (error)
-                  {
-                    g_warning ("%s", error->message);
-                    g_error_free (error);
-                  }
+                g_signal_emit_by_name (context, "commit", utf8str);
 
-                if (context_ime->commit_string)
-                  {
-                    g_signal_emit_by_name (context, "commit", context_ime->commit_string);
-                    g_free (context_ime->commit_string);
-                    context_ime->commit_string = NULL;
-                    retval = TRUE;
-                  }
+                g_signal_emit_by_name (context, "preedit-start");
+                g_signal_emit_by_name (context, "preedit-changed");
+                context_ime->priv->pretend_empty_preedit = FALSE;
+
+                retval = TRUE;
               }
+
+            g_free (utf8str);
           }
 
         if (context_ime->use_preedit)
           retval = TRUE;
-
-        break;
       }
+      break;
 
     case WM_IME_STARTCOMPOSITION:
       context_ime->preediting = TRUE;
@@ -1198,6 +1170,8 @@ cb_client_widget_hierarchy_changed (GtkWidget       *widget,
     return;
 
   new_toplevel = gdk_window_get_toplevel (context_ime->client_window);
+  if (context_ime->client_window)
+    g_return_if_fail (new_toplevel != NULL);
   if (context_ime->toplevel == new_toplevel)
     return;
 
@@ -1208,18 +1182,12 @@ cb_client_widget_hierarchy_changed (GtkWidget       *widget,
                                 gtk_im_context_ime_message_filter,
                                 context_ime);
     }
-  else
-    {
-    }
 
   /* add filter to new toplevel */
   if (GDK_IS_WINDOW (new_toplevel))
     {
       gdk_window_add_filter (new_toplevel,
                              gtk_im_context_ime_message_filter, context_ime);
-    }
-  else
-    {
     }
 
   context_ime->toplevel = new_toplevel;
