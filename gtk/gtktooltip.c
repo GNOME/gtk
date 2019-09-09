@@ -42,9 +42,6 @@
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
 #endif
-#ifdef GDK_WINDOWING_MIR
-#include "mir/gdkmir.h"
-#endif
 
 
 /**

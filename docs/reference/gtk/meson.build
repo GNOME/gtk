@@ -395,7 +395,6 @@ content_files = [
   'gtk-query-immodules-3.0.xml',
   'gtk-query-settings.xml',
   'gtk-update-icon-cache.xml',
-  'mir.xml',
   'osx.sgml',
   'overview.xml',
   'resources.sgml',
