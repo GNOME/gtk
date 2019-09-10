@@ -7950,35 +7950,6 @@ finalize_assertion_new (GtkWidget           *widget,
 
   return assertion;
 }
-
-static GSList *
-build_finalize_assertion_list (GtkWidget *widget)
-{
-  GType class_type;
-  GtkWidgetClass *class;
-  GSList *l, *list = NULL;
-
-  for (class = GTK_WIDGET_GET_CLASS (widget);
-       GTK_IS_WIDGET_CLASS (class);
-       class = g_type_class_peek_parent (class))
-    {
-      if (!class->priv->template)
-	continue;
-
-      class_type = G_OBJECT_CLASS_TYPE (class);
-
-      for (l = class->priv->template->children; l; l = l->next)
-	{
-	  AutomaticChildClass *child_class = l->data;
-	  FinalizeAssertion *assertion;
-
-	  assertion = finalize_assertion_new (widget, class_type, child_class);
-	  list = g_slist_prepend (list, assertion);
-	}
-    }
-
-  return list;
-}
 #endif /* G_ENABLE_CONSISTENCY_CHECKS */
 
 static void
@@ -8006,7 +7977,28 @@ gtk_widget_real_destroy (GtkWidget *object)
        * in a full application ecosystem.
        */
       if (g_getenv ("GTK_WIDGET_ASSERT_COMPONENTS") != NULL)
-	assertions = build_finalize_assertion_list (widget);
+        {
+          GType class_type;
+
+          for (class = GTK_WIDGET_GET_CLASS (widget);
+               GTK_IS_WIDGET_CLASS (class);
+               class = g_type_class_peek_parent (class))
+            {
+              if (!class->priv->template)
+                continue;
+
+              class_type = G_OBJECT_CLASS_TYPE (class);
+
+              for (l = class->priv->template->children; l; l = l->next)
+                {
+                  AutomaticChildClass *child_class = l->data;
+                  FinalizeAssertion *assertion;
+
+                  assertion = finalize_assertion_new (widget, class_type, child_class);
+                  assertions = g_slist_prepend (assertions, assertion);
+                }
+            }
+        }
 #endif /* G_ENABLE_CONSISTENCY_CHECKS */
 
       /* Release references to all automated children */
