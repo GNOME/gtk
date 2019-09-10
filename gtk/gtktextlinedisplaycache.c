@@ -24,7 +24,7 @@
 #include "gtktextiterprivate.h"
 #include "gtktextlinedisplaycacheprivate.h"
 
-#define MRU_MAX_SIZE             250
+#define DEFAULT_MRU_SIZE         250
 #define BLOW_CACHE_TIMEOUT_SEC   20
 #define DEBUG_LINE_DISPLAY_CACHE 0
 
@@ -35,6 +35,7 @@ struct _GtkTextLineDisplayCache
   GtkTextLine *cursor_line;
   GQueue       mru;
   GSource     *evict_source;
+  guint        mru_size;
 
 #if DEBUG_LINE_DISPLAY_CACHE
   guint       log_source;
@@ -78,6 +79,7 @@ gtk_text_line_display_cache_new (void)
   ret = g_slice_new0 (GtkTextLineDisplayCache);
   ret->sorted_by_line = g_sequence_new ((GDestroyNotify)gtk_text_line_display_unref);
   ret->line_to_display = g_hash_table_new (NULL, NULL);
+  ret->mru_size = DEFAULT_MRU_SIZE;
 
 #if DEBUG_LINE_DISPLAY_CACHE
   ret->log_source = g_timeout_add_seconds (1, dump_stats, ret);
@@ -200,7 +202,7 @@ gtk_text_line_display_cache_take_display (GtkTextLineDisplayCache *cache,
   g_queue_push_head_link (&cache->mru, &display->mru_link);
 
   /* Cull the cache if we're at capacity */
-  while (cache->mru.length > MRU_MAX_SIZE)
+  while (cache->mru.length > cache->mru_size)
     {
       display = g_queue_peek_tail (&cache->mru);
 
@@ -715,4 +717,28 @@ gtk_text_line_display_cache_set_cursor_line (GtkTextLineDisplayCache *cache,
 
   if (display != NULL)
     gtk_text_line_display_cache_invalidate_display (cache, display, FALSE);
+}
+
+void
+gtk_text_line_display_cache_set_mru_size (GtkTextLineDisplayCache *cache,
+                                          guint                    mru_size)
+{
+  GtkTextLineDisplay *display;
+
+  g_assert (cache != NULL);
+
+  if (mru_size == 0)
+    mru_size = DEFAULT_MRU_SIZE;
+
+  if (mru_size != cache->mru_size)
+    {
+      cache->mru_size = mru_size;
+
+      while (cache->mru.length > cache->mru_size)
+        {
+          display = g_queue_peek_tail (&cache->mru);
+
+          gtk_text_line_display_cache_invalidate_display (cache, display, FALSE);
+        }
+    }
 }

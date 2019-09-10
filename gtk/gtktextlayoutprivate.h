@@ -414,6 +414,9 @@ void gtk_text_layout_snapshot (GtkTextLayout        *layout,
                                const GdkRectangle   *clip,
                                float                 cursor_alpha);
 
+void gtk_text_layout_set_mru_size (GtkTextLayout *layout,
+                                   guint          mru_size);
+
 G_END_DECLS
 
 #endif  /* __GTK_TEXT_LAYOUT_PRIVATE_H__ */
