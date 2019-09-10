@@ -42,6 +42,24 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_popover_menu_new_from_model (GtkWidget  *relative_to,
                                              GMenuModel *model);
 
+/**
+ * GtkPopoverMenuFlags:
+ * @GTK_POPOVER_MENU_NESTED: Create submenus as nested
+ *    popovers. Without this flag, submenus are created as
+ *    sliding pages that replace the main menu.
+ *
+ * Flags that affect how popover menus are created from
+ * a menu model.
+ */
+typedef enum {
+  GTK_POPOVER_MENU_NESTED = 1 << 0
+} GtkPopoverMenuFlags;
+
+GDK_AVAILABLE_IN_ALL
+GtkWidget * gtk_popover_menu_new_from_model_full (GtkWidget           *relative_to,
+                                                  GMenuModel          *model,
+                                                  GtkPopoverMenuFlags  flags);
+
 GDK_AVAILABLE_IN_ALL
 void        gtk_popover_menu_add_submenu (GtkPopoverMenu *popover,
                                           GtkWidget      *submenu,
