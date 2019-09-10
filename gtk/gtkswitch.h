@@ -48,16 +48,16 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_switch_new          (void);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_switch_set_active   (GtkSwitch *sw,
+void            gtk_switch_set_active   (GtkSwitch *self,
                                          gboolean   is_active);
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_switch_get_active   (GtkSwitch *sw);
+gboolean        gtk_switch_get_active   (GtkSwitch *self);
 
 GDK_AVAILABLE_IN_ALL
-void            gtk_switch_set_state   (GtkSwitch *sw,
+void            gtk_switch_set_state   (GtkSwitch *self,
                                         gboolean   state);
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_switch_get_state   (GtkSwitch *sw);
+gboolean        gtk_switch_get_state   (GtkSwitch *self);
 
 G_END_DECLS
 
