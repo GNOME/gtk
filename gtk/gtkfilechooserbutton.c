@@ -30,6 +30,7 @@
 #include <cairo-gobject.h>
 
 #include "gtkintl.h"
+#include "gtkbookmarksmanagerprivate.h"
 #include "gtkbutton.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"

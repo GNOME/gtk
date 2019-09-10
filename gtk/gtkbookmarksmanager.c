@@ -27,7 +27,7 @@
 
 #include <glib/gi18n-lib.h>
 
-#include "gtkbookmarksmanager.h"
+#include "gtkbookmarksmanagerprivate.h"
 #include "gtkfilechooser.h" /* for the GError types */
 
 static void
