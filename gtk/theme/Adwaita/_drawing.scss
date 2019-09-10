@@ -127,8 +127,7 @@
 // $bg is the background color
 //
   $_lbg: lightness($bg)/100%;
-  @if lightness($tc)<50% { @return transparentize(white, 1-$_lbg/($_lbg*1.3)); }
-  @else { @return transparentize(black, $_lbg*0.8); }
+  @return transparentize(black, $_lbg*0.8);
 }
 
 @function _button_hilight_color($c) {
