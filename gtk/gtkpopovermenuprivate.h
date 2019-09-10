@@ -22,8 +22,15 @@
 
 G_BEGIN_DECLS
 
-void gtk_popover_menu_set_active_item (GtkPopoverMenu *popover,
-                                       GtkWidget      *item);
+GtkWidget *gtk_popover_menu_get_active_item  (GtkPopoverMenu *menu);
+void       gtk_popover_menu_set_active_item  (GtkPopoverMenu *menu,
+                                              GtkWidget      *item);
+GtkWidget *gtk_popover_menu_get_open_submenu (GtkPopoverMenu *menu);
+void       gtk_popover_menu_set_open_submenu (GtkPopoverMenu *menu,
+                                              GtkWidget      *submenu);
+GtkWidget *gtk_popover_menu_get_parent_menu  (GtkPopoverMenu *menu);
+void       gtk_popover_menu_set_parent_menu  (GtkPopoverMenu *menu,
+                                              GtkWidget      *parent);
 
 G_END_DECLS
 

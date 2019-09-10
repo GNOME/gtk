@@ -107,6 +107,7 @@
 #include "config.h"
 
 #include "gtkpopoverprivate.h"
+#include "gtkpopovermenuprivate.h"
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerkey.h"
@@ -246,14 +247,50 @@ move_to_rect (GtkPopover *popover)
   switch (priv->position)
     {
     case GTK_POS_LEFT:
-      parent_anchor = GDK_GRAVITY_WEST;
-      surface_anchor = GDK_GRAVITY_EAST;
+      switch (gtk_widget_get_valign (GTK_WIDGET (popover)))
+        {
+        case GTK_ALIGN_START:
+          parent_anchor = GDK_GRAVITY_NORTH_WEST;
+          surface_anchor = GDK_GRAVITY_NORTH_EAST;
+          break;
+
+        case GTK_ALIGN_END:
+          parent_anchor = GDK_GRAVITY_SOUTH_WEST;
+          surface_anchor = GDK_GRAVITY_SOUTH_EAST;
+          break;
+
+        case GTK_ALIGN_FILL:
+        case GTK_ALIGN_CENTER:
+        case GTK_ALIGN_BASELINE:
+        default:
+          parent_anchor = GDK_GRAVITY_WEST;
+          surface_anchor = GDK_GRAVITY_EAST;
+          break;
+        }
       anchor_hints = GDK_ANCHOR_FLIP_X | GDK_ANCHOR_SLIDE_Y;
       break;
 
     case GTK_POS_RIGHT:
-      parent_anchor = GDK_GRAVITY_EAST;
-      surface_anchor = GDK_GRAVITY_WEST;
+      switch (gtk_widget_get_valign (GTK_WIDGET (popover)))
+        {
+        case GTK_ALIGN_START:
+          parent_anchor = GDK_GRAVITY_NORTH_EAST;
+          surface_anchor = GDK_GRAVITY_NORTH_WEST;
+          break;
+
+        case GTK_ALIGN_END:
+          parent_anchor = GDK_GRAVITY_SOUTH_EAST;
+          surface_anchor = GDK_GRAVITY_SOUTH_WEST;
+          break;
+
+        case GTK_ALIGN_FILL:
+        case GTK_ALIGN_CENTER:
+        case GTK_ALIGN_BASELINE:
+        default:
+          parent_anchor = GDK_GRAVITY_EAST;
+          surface_anchor = GDK_GRAVITY_WEST;
+          break;
+        }
       anchor_hints = GDK_ANCHOR_FLIP_X | GDK_ANCHOR_SLIDE_Y;
       break;
 
@@ -362,6 +399,19 @@ gtk_popover_focus_out (GtkWidget *widget)
 {
 }
 
+static void
+close_menu (GtkPopover *popover)
+{
+  while (popover)
+    {
+      gtk_popover_popdown (popover);
+      if (GTK_IS_POPOVER_MENU (popover))
+        popover = (GtkPopover *)gtk_popover_menu_get_parent_menu (GTK_POPOVER_MENU (popover));
+      else
+        popover = NULL;
+    }
+}
+
 static gboolean
 gtk_popover_key_pressed (GtkWidget       *widget,
                          guint            keyval,
@@ -370,7 +420,7 @@ gtk_popover_key_pressed (GtkWidget       *widget,
 {
   if (keyval == GDK_KEY_Escape)
     {
-      gtk_popover_popdown (GTK_POPOVER (widget));
+      close_menu (GTK_POPOVER (widget));
       return TRUE;
     }
 
