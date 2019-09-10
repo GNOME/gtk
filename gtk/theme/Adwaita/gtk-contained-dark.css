@@ -85,6 +85,25 @@ spinner:checked { opacity: 1; animation: spin 1s linear infinite; }
 
 spinner:checked:disabled { opacity: 0.5; }
 
+/********************** General Typography * */
+.large-title { font-weight: 300; font-size: 24pt; letter-spacing: 0.2rem; }
+
+.title-1 { font-weight: 800; font-size: 20pt; }
+
+.title-2 { font-weight: 800; font-size: 15pt; }
+
+.title-3 { font-weight: 700; font-size: 15pt; }
+
+.title-4 { font-weight: 700; font-size: 13pt; }
+
+.heading { font-weight: 700; font-size: 11pt; }
+
+.body { font-weight: 400; font-size: 11pt; }
+
+.caption-heading { font-weight: 700; font-size: 9pt; }
+
+.caption { font-weight: 400; font-size: 9pt; }
+
 /**************** Text Entries * */
 spinbutton:not(.vertical), entry { min-height: 32px; padding-left: 8px; padding-right: 8px; border: 1px solid; border-radius: 5px; transition: all 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94); color: white; border-color: #1b1b1b; background-color: #2d2d2d; box-shadow: inset 0 0 0 1px rgba(21, 83, 158, 0); }
 
