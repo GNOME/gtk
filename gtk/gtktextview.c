@@ -4109,6 +4109,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GdkRectangle top_rect;
   GdkRectangle bottom_rect;
   GtkWidget *chooser;
+  PangoLayout *layout;
+  guint mru_size;
   
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -4177,6 +4179,16 @@ gtk_text_view_size_allocate (GtkWidget *widget,
     gtk_text_view_set_hadjustment_values (text_view);
   if (!gtk_adjustment_is_animating (priv->vadjustment))
     gtk_text_view_set_vadjustment_values (text_view);
+
+  /* Optimize display cache size */
+  layout = gtk_widget_create_pango_layout (widget, "X");
+  pango_layout_get_pixel_size (layout, &width, &height);
+  if (height > 0)
+    {
+      mru_size = SCREEN_HEIGHT (widget) / height * 3;
+      gtk_text_layout_set_mru_size (priv->layout, mru_size);
+    }
+  g_object_unref (layout);
 
   /* The GTK resize loop processes all the pending exposes right
    * after doing the resize stuff, so the idle sizer won't have a

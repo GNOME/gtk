@@ -4210,3 +4210,12 @@ gtk_text_line_display_compare (const GtkTextLineDisplay *display1,
   else
     return 0;
 }
+
+void
+gtk_text_layout_set_mru_size (GtkTextLayout *layout,
+                              guint          mru_size)
+{
+  GtkTextLayoutPrivate *priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
+
+  gtk_text_line_display_cache_set_mru_size (priv->cache, mru_size);
+}
