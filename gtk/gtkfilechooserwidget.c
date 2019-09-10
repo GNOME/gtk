@@ -22,6 +22,7 @@
 #include "gtkfilechooserwidget.h"
 #include "gtkfilechooserwidgetprivate.h"
 
+#include "gtkbookmarksmanagerprivate.h"
 #include "gtkbindings.h"
 #include "gtkbutton.h"
 #include "gtkcelllayout.h"

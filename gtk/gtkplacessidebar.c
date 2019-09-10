@@ -33,7 +33,7 @@
 #include "gtkplacessidebarprivate.h"
 #include "gtksidebarrowprivate.h"
 #include "gdk/gdkkeysyms.h"
-#include "gtkbookmarksmanager.h"
+#include "gtkbookmarksmanagerprivate.h"
 #include "gtkcelllayout.h"
 #include "gtkfilesystem.h"
 #include "gtkicontheme.h"
