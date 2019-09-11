@@ -73,6 +73,7 @@
 #include <gtk/gtkcellrenderertoggle.h>
 #include <gtk/gtkcellview.h>
 #include <gtk/gtkcenterbox.h>
+#include <gtk/gtkcenterlayout.h>
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkcheckmenuitem.h>
 #include <gtk/gtkcolorbutton.h>
