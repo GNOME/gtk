@@ -1488,6 +1488,7 @@ headerbar {
   border-style: solid;
   border-color: $alt_borders_color;
   border-radius: 0;
+  border-spacing: 6px;
 
   @include headerbar_fill(darken($bg_color, 10%));
 
@@ -1498,6 +1499,11 @@ headerbar {
     box-shadow: inset 0 1px $top_hilight;
 
     transition: $backdrop_transition;
+  }
+
+  > box.start,
+  > box.end {
+    border-spacing: 6px;
   }
 
   .title {
