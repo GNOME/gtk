@@ -123,6 +123,7 @@ gtk_center_layout_distribute (GtkCenterLayout  *self,
   int avail;
   int i;
 
+  /* Usable space is really less... */
   size -= spacing * 2;
 
   sizes[0].minimum_size = sizes[0].natural_size = 0;
