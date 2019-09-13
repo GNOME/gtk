@@ -322,7 +322,6 @@ build_forget_menu_item (GtkAppChooserDialog *self)
   GtkWidget *retval;
 
   retval = gtk_menu_item_new_with_label (_("Forget association"));
-  gtk_widget_show (retval);
 
   g_signal_connect (retval, "activate",
                     G_CALLBACK (forget_menu_item_activate_cb), self);
@@ -504,11 +503,9 @@ setup_search (GtkAppChooserDialog *self)
       button = gtk_toggle_button_new ();
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
       image = gtk_image_new_from_icon_name ("edit-find-symbolic");
-      gtk_widget_show (image);
       gtk_container_add (GTK_CONTAINER (button), image);
       gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
       gtk_style_context_remove_class (gtk_widget_get_style_context (button), "text-button");
-      gtk_widget_show (button);
 
       header = gtk_dialog_get_header_bar (GTK_DIALOG (self));
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
