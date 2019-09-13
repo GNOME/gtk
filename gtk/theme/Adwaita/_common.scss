@@ -2254,7 +2254,7 @@ popover.background>contents {
  * Notebooks *
  *************/
 notebook {
-  box> header {
+  > header {
     padding: 1px;
     border-color: $borders_color;
     border-width: 1px;
@@ -2514,7 +2514,7 @@ notebook {
     &.bottom tab { padding-top: 4px; }
   }
 
-  box > stack:not(:only-child) { // the :not(:only-child) is for "hidden" notebooks
+  > stack:not(:only-child) { // the :not(:only-child) is for "hidden" notebooks
     background-color: $base_color;
 
     &:backdrop { background-color: $backdrop_base_color; }
