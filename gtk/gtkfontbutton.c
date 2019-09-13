@@ -190,23 +190,11 @@ clear_font_data (GtkFontButton *font_button)
 {
   GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (font_button);
 
-  if (priv->font_family)
-    g_object_unref (priv->font_family);
-  priv->font_family = NULL;
-
-  if (priv->font_face)
-    g_object_unref (priv->font_face);
-  priv->font_face = NULL;
-
-  if (priv->font_desc)
-    pango_font_description_free (priv->font_desc);
-  priv->font_desc = NULL;
-
-  g_free (priv->fontname);
-  priv->fontname = NULL;
-
-  g_free (priv->font_features);
-  priv->font_features = NULL;
+  g_clear_object (&priv->font_family);
+  g_clear_object (&priv->font_face);
+  g_clear_pointer (&priv->font_desc, pango_font_description_free);
+  g_clear_pointer (&priv->fontname, g_free);
+  g_clear_pointer (&priv->font_features, g_free);
 }
 
 static void
