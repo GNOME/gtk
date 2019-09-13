@@ -232,7 +232,8 @@ gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
  * in newly written code as later stages will almost certainly convert
  * the pixbuf back into a texture to draw it on screen.
  *
- * returns: a new #GdkPixbuf
+ * Returns: (transfer full) (nullable): a new #GdkPixbuf or %NULL
+ *   in case of an error
  */
 GdkPixbuf *
 gdk_pixbuf_get_from_texture (GdkTexture *texture)
