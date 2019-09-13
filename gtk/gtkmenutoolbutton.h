@@ -24,7 +24,6 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkmenu.h>
 #include <gtk/gtktoolbutton.h>
 
 G_BEGIN_DECLS

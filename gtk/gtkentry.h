@@ -36,7 +36,6 @@
 
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkimcontext.h>
-#include <gtk/gtkmenu.h>
 #include <gtk/gtkentrybuffer.h>
 #include <gtk/gtkentrycompletion.h>
 #include <gtk/gtkimage.h>
