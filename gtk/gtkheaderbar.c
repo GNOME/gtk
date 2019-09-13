@@ -65,9 +65,30 @@
  * For these reasons, GtkHeaderBar is the natural choice for use as the custom
  * titlebar widget of a #GtkWindow (see gtk_window_set_titlebar()), as it gives
  * features typical of titlebars while allowing the addition of child widgets.
+ *
+ * # CSS nodes
+ *
+ * |[<!-- language="plain" -->
+ * headerbar
+ * ├── box.start
+ * │   ╰── box
+ * │       ├── [image.titlebutton.icon]
+ * │       ├── [menubutton.titlebutton.appmenu]
+ * │       ├── [button.titlebutton.minimize]
+ * │       ├── [button.titlebutton.maximize]
+ * │       ╰── [button.titlebutton.close]
+ * ├── [Custom Child]
+ * ╰── box.end
+ * ]|
+ *
+ * A #GtkHeaderBar's CSS node is called headerbar. It contains two box subnodes at the start
+ * and end of the headerbar, as well as a center node that represents the title.
+ *
+ * The titlebuttons get their own box subnode, either in the start box or in the end box.
+ * Which of the title buttons exist and where they are placed exactly depends on the
+ * desktop environment.
  */
 
-#define DEFAULT_SPACING 6
 #define MIN_TITLE_CHARS 5
 
 typedef struct _GtkHeaderBarPrivate       GtkHeaderBarPrivate;
@@ -96,7 +117,6 @@ struct _GtkHeaderBarPrivate
   GtkWidget *label_sizing_box;
   GtkWidget *subtitle_sizing_label;
   GtkWidget *custom_title;
-  gint spacing;
   gboolean has_subtitle;
 
   gboolean show_title_buttons;
@@ -123,7 +143,6 @@ enum {
   PROP_SUBTITLE,
   PROP_HAS_SUBTITLE,
   PROP_CUSTOM_TITLE,
-  PROP_SPACING,
   PROP_SHOW_TITLE_BUTTONS,
   PROP_DECORATION_LAYOUT,
   PROP_DECORATION_LAYOUT_SET,
@@ -354,7 +373,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
           separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
           gtk_style_context_add_class (gtk_widget_get_style_context (separator), "titlebutton");
 
-          box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, priv->spacing);
+          box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
           for (j = 0; t[j]; j++)
             {
@@ -840,10 +859,6 @@ gtk_header_bar_get_property (GObject    *object,
       g_value_set_object (value, priv->custom_title);
       break;
 
-    case PROP_SPACING:
-      g_value_set_int (value, priv->spacing);
-      break;
-
     case PROP_SHOW_TITLE_BUTTONS:
       g_value_set_boolean (value, gtk_header_bar_get_show_title_buttons (bar));
       break;
@@ -887,15 +902,6 @@ gtk_header_bar_set_property (GObject      *object,
 
     case PROP_CUSTOM_TITLE:
       gtk_header_bar_set_custom_title (bar, g_value_get_object (value));
-      break;
-
-    case PROP_SPACING:
-      if (priv->spacing != g_value_get_int (value))
-        {
-          priv->spacing = g_value_get_int (value);
-          gtk_widget_queue_resize (GTK_WIDGET (bar));
-          g_object_notify_by_pspec (object, pspec);
-        }
       break;
 
     case PROP_SHOW_TITLE_BUTTONS:
@@ -1146,14 +1152,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                            GTK_TYPE_WIDGET,
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
-  header_bar_props[PROP_SPACING] =
-      g_param_spec_int ("spacing",
-                        P_("Spacing"),
-                        P_("The amount of space between children"),
-                        0, G_MAXINT,
-                        DEFAULT_SPACING,
-                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
   /**
    * GtkHeaderBar:show-title-buttons:
    *
@@ -1229,7 +1227,6 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   priv->title = NULL;
   priv->subtitle = NULL;
   priv->custom_title = NULL;
-  priv->spacing = DEFAULT_SPACING;
   priv->has_subtitle = TRUE;
   priv->decoration_layout = NULL;
   priv->decoration_layout_set = FALSE;
@@ -1238,9 +1235,11 @@ gtk_header_bar_init (GtkHeaderBar *bar)
 
   layout = gtk_widget_get_layout_manager (GTK_WIDGET (bar));
   priv->start_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->start_box), "start");
   gtk_widget_set_parent (priv->start_box, GTK_WIDGET (bar));
   gtk_center_layout_set_start_widget (GTK_CENTER_LAYOUT (layout), priv->start_box);
   priv->end_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->end_box), "end");
   gtk_widget_set_parent (priv->end_box, GTK_WIDGET (bar));
   gtk_center_layout_set_end_widget (GTK_CENTER_LAYOUT (layout), priv->end_box);
 
