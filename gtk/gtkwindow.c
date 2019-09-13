@@ -60,6 +60,9 @@
 #include "gtkmenushellprivate.h"
 #include "gtkpointerfocusprivate.h"
 #include "gtkpopoverprivate.h"
+#include "gtkpopovermenu.h"
+#include "gtkmodelbutton.h"
+#include "gtkseparator.h"
 #include "gtkprivate.h"
 #include "gtkroot.h"
 #include "gtknative.h"
@@ -6569,12 +6572,12 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
 }
 
 static void
-popup_menu_detach (GtkWidget *widget,
-                   GtkMenu   *menu)
+popup_menu_closed (GtkPopover *popover,
+                   GtkWindow  *widget)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (widget));
 
-  priv->popup_menu = NULL;
+  g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
 }
 
 static GdkSurfaceState
@@ -6670,6 +6673,7 @@ ontop_window_clicked (GtkMenuItem *menuitem,
   GtkWindow *window = (GtkWindow *)user_data;
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
+  gtk_popover_popdown (GTK_POPOVER (priv->popup_menu));
   gtk_window_set_keep_above (window, !priv->above_initially);
 }
 
@@ -6690,6 +6694,7 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
   GtkWidget *menuitem;
   GdkSurfaceState state;
   gboolean maximized, iconified;
+  GtkWidget *box;
 
   if (priv->popup_menu)
     gtk_widget_destroy (priv->popup_menu);
@@ -6699,16 +6704,14 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
   iconified = (state & GDK_SURFACE_STATE_ICONIFIED) == GDK_SURFACE_STATE_ICONIFIED;
   maximized = priv->maximized && !iconified;
 
-  priv->popup_menu = gtk_menu_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->popup_menu),
-                               GTK_STYLE_CLASS_CONTEXT_MENU);
+  priv->popup_menu = gtk_popover_menu_new (priv->title_box);
 
-  gtk_menu_attach_to_widget (GTK_MENU (priv->popup_menu),
-                             GTK_WIDGET (window),
-                             popup_menu_detach);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_popover_menu_add_submenu (GTK_POPOVER_MENU (priv->popup_menu), box, "main");
 
-  menuitem = gtk_menu_item_new_with_label (_("Restore"));
-  gtk_widget_show (menuitem);
+  menuitem = gtk_model_button_new ();
+  g_object_set (menuitem, "text", _("Restore"), NULL);
+
   /* "Restore" means "Unmaximize" or "Unminimize"
    * (yes, some WMs allow window menu to be shown for minimized windows).
    * Not restorable:
@@ -6721,70 +6724,80 @@ gtk_window_do_popup_fallback (GtkWindow      *window,
       (!iconified && !priv->resizable) ||
       priv->type_hint != GDK_SURFACE_TYPE_HINT_NORMAL)
     gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "activate",
+  g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (restore_window_clicked), window);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+  gtk_container_add (GTK_CONTAINER (box), menuitem);
 
-  menuitem = gtk_menu_item_new_with_label (_("Move"));
-  gtk_widget_show (menuitem);
+  menuitem = gtk_model_button_new ();
+  g_object_set (menuitem, "text", _("Move"), NULL);
+
   if (maximized || iconified)
     gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "activate",
+  g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (move_window_clicked), window);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+  gtk_container_add (GTK_CONTAINER (box), menuitem);
 
-  menuitem = gtk_menu_item_new_with_label (_("Resize"));
-  gtk_widget_show (menuitem);
+  menuitem = gtk_model_button_new ();
+  g_object_set (menuitem, "text", _("Resize"), NULL);
+
   if (!priv->resizable || maximized || iconified)
     gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "activate",
+  g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (resize_window_clicked), window);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+  gtk_container_add (GTK_CONTAINER (box), menuitem);
 
-  menuitem = gtk_menu_item_new_with_label (_("Minimize"));
-  gtk_widget_show (menuitem);
+  menuitem = gtk_model_button_new ();
+  g_object_set (menuitem, "text", _("Minimize"), NULL);
+
   if (iconified ||
       priv->type_hint != GDK_SURFACE_TYPE_HINT_NORMAL)
     gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "activate",
+  g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (minimize_window_clicked), window);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+  gtk_container_add (GTK_CONTAINER (box), menuitem);
 
-  menuitem = gtk_menu_item_new_with_label (_("Maximize"));
-  gtk_widget_show (menuitem);
+  menuitem = gtk_model_button_new ();
+  g_object_set (menuitem, "text", _("Maximize"), NULL);
+
   if (maximized ||
       !priv->resizable ||
       priv->type_hint != GDK_SURFACE_TYPE_HINT_NORMAL)
     gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "activate",
+  g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (maximize_window_clicked), window);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+  gtk_container_add (GTK_CONTAINER (box), menuitem);
 
-  menuitem = gtk_separator_menu_item_new ();
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+  menuitem = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (box), menuitem);
 
-  menuitem = gtk_check_menu_item_new_with_label (_("Always on Top"));
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), priv->above_initially);
+  menuitem = gtk_model_button_new ();
+  g_object_set (menuitem,
+                "text", _("Always on Top"),
+                "role", GTK_BUTTON_ROLE_CHECK,
+                "active", priv->above_initially,
+                NULL);
+
   if (maximized)
     gtk_widget_set_sensitive (menuitem, FALSE);
-  gtk_widget_show (menuitem);
-  g_signal_connect (G_OBJECT (menuitem), "activate",
+  g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (ontop_window_clicked), window);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+  gtk_container_add (GTK_CONTAINER (box), menuitem);
 
-  menuitem = gtk_separator_menu_item_new ();
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+  menuitem = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_container_add (GTK_CONTAINER (box), menuitem);
 
-  menuitem = gtk_menu_item_new_with_label (_("Close"));
-  gtk_widget_show (menuitem);
+  menuitem = gtk_model_button_new ();
+  g_object_set (menuitem, "text", _("Close"), NULL);
+
   if (!priv->deletable)
     gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "activate",
+  g_signal_connect (G_OBJECT (menuitem), "clicked",
                     G_CALLBACK (close_window_clicked), window);
-  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-  gtk_menu_popup_at_pointer (GTK_MENU (priv->popup_menu), (GdkEvent *) event);
+  gtk_container_add (GTK_CONTAINER (box), menuitem);
+
+  g_signal_connect (priv->popup_menu, "closed",
+                    G_CALLBACK (popup_menu_closed), window);
+  gtk_popover_popup (GTK_POPOVER (priv->popup_menu));
 }
 
 static void
