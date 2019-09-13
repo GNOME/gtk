@@ -29,6 +29,7 @@
 
 #include "gtkfontbutton.h"
 
+#include "gtkbinlayout.h"
 #include "gtkbox.h"
 #include "gtkcssprovider.h"
 #include "gtkfontchooser.h"
@@ -482,54 +483,17 @@ gtk_font_button_font_chooser_notify (GObject    *object,
 }
 
 static void
-gtk_font_button_measure (GtkWidget       *widget,
-                         GtkOrientation  orientation,
-                         int             for_size,
-                         int            *minimum,
-                         int            *natural,
-                         int            *minimum_baseline,
-                         int            *natural_baseline)
-{
-  GtkFontButton *button = GTK_FONT_BUTTON (widget);
-  GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (button);
-
-  gtk_widget_measure (priv->button, orientation, for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_font_button_size_allocate (GtkWidget *widget,
-                               int        width,
-                               int        height,
-                               int                  baseline)
-{
-  GtkFontButton *button = GTK_FONT_BUTTON (widget);
-  GtkFontButtonPrivate *priv = gtk_font_button_get_instance_private (button);
-
-  gtk_widget_size_allocate (priv->button,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            },
-                            baseline);
-}
-
-static void
 gtk_font_button_class_init (GtkFontButtonClass *klass)
 {
   GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
-  
+
   gobject_class = (GObjectClass *) klass;
   widget_class = (GtkWidgetClass *) klass;
 
   gobject_class->finalize = gtk_font_button_finalize;
   gobject_class->set_property = gtk_font_button_set_property;
   gobject_class->get_property = gtk_font_button_get_property;
-
-  widget_class->measure = gtk_font_button_measure;
-  widget_class->size_allocate = gtk_font_button_size_allocate;
 
   klass->font_set = NULL;
 
@@ -596,6 +560,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                                 NULL,
                                                 G_TYPE_NONE, 0);
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("fontbutton"));
 }
 
