@@ -5423,7 +5423,13 @@ draw_text (GtkWidget   *widget,
       gtk_snapshot_restore (snapshot);
     }
 
+  gtk_snapshot_push_clip (snapshot,
+                          &GRAPHENE_RECT_INIT (0,
+                                               0,
+                                               SCREEN_WIDTH (widget),
+                                               SCREEN_HEIGHT (widget)));
   gtk_text_view_paint (widget, snapshot);
+  gtk_snapshot_pop (snapshot);
 
   if (GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer != NULL)
     {
