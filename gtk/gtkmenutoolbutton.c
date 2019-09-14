@@ -26,6 +26,7 @@
 #include "gtkmenubuttonprivate.h"
 #include "gtkbox.h"
 #include "gtkmenu.h"
+#include "gtkpopover.h"
 #include "gtkmain.h"
 #include "gtksizerequest.h"
 #include "gtkbuildable.h"
@@ -103,7 +104,8 @@ enum
 enum
 {
   PROP_0,
-  PROP_MENU
+  PROP_MENU,
+  PROP_POPOVER
 };
 
 static gint signals[LAST_SIGNAL];
@@ -210,6 +212,10 @@ gtk_menu_tool_button_set_property (GObject      *object,
       gtk_menu_tool_button_set_menu (button, g_value_get_object (value));
       break;
 
+    case PROP_POPOVER:
+      gtk_menu_tool_button_set_popover (button, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -228,6 +234,10 @@ gtk_menu_tool_button_get_property (GObject    *object,
     {
     case PROP_MENU:
       g_value_set_object (value, gtk_menu_button_get_popup (GTK_MENU_BUTTON (button->priv->arrow_button)));
+      break;
+
+    case PROP_POPOVER:
+      g_value_set_object (value, gtk_menu_button_get_popover (GTK_MENU_BUTTON (button->priv->arrow_button)));
       break;
 
     default:
@@ -279,6 +289,13 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
                                                         P_("The dropdown menu"),
                                                         GTK_TYPE_MENU,
                                                         GTK_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
+                                   PROP_POPOVER,
+                                   g_param_spec_object ("popover",
+                                                        P_("Popover"),
+                                                        P_("The dropdown popover"),
+                                                        GTK_TYPE_POPOVER,
+                                                        GTK_PARAM_READWRITE));
 }
 
 static void
@@ -324,6 +341,9 @@ gtk_menu_tool_button_buildable_add_child (GtkBuildable *buildable,
   if (type && strcmp (type, "menu") == 0)
     gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (buildable),
                                    GTK_WIDGET (child));
+  else if (type && strcmp (type, "popover") == 0)
+    gtk_menu_tool_button_set_popover (GTK_MENU_TOOL_BUTTON (buildable),
+                                      GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
 }
@@ -413,6 +433,38 @@ gtk_menu_tool_button_get_menu (GtkMenuToolButton *button)
   g_return_val_if_fail (GTK_IS_MENU_TOOL_BUTTON (button), NULL);
 
   ret = gtk_menu_button_get_popup (GTK_MENU_BUTTON (button->priv->arrow_button));
+  if (!ret)
+    return NULL;
+
+  return GTK_WIDGET (ret);
+}
+
+void
+gtk_menu_tool_button_set_popover (GtkMenuToolButton *button,
+                                  GtkWidget         *popover)
+{
+  GtkMenuToolButtonPrivate *priv;
+
+  g_return_if_fail (GTK_IS_MENU_TOOL_BUTTON (button));
+  g_return_if_fail (GTK_IS_POPOVER (popover) || popover == NULL);
+
+  priv = button->priv;
+
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (priv->arrow_button), popover);
+  gtk_menu_button_set_create_popup_func (GTK_MENU_BUTTON (priv->arrow_button),
+                                         _show_menu_emit, NULL, NULL);
+
+  g_object_notify (G_OBJECT (button), "popover");
+}
+
+GtkWidget *
+gtk_menu_tool_button_get_popover (GtkMenuToolButton *button)
+{
+  GtkPopover *ret;
+
+  g_return_val_if_fail (GTK_IS_MENU_TOOL_BUTTON (button), NULL);
+
+  ret = gtk_menu_button_get_popover (GTK_MENU_BUTTON (button->priv->arrow_button));
   if (!ret)
     return NULL;
 
