@@ -5390,6 +5390,24 @@ draw_text (GtkWidget   *widget,
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GtkTextViewPrivate *priv = text_view->priv;
   GtkStyleContext *context;
+  graphene_point_t translate = {0};
+
+  if (priv->left_window)
+    translate.x = priv->left_window->allocation.width;
+  if (priv->top_window)
+    translate.y = priv->top_window->allocation.height;
+
+  if (translate.x || translate.y)
+    {
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &translate);
+    }
+
+  gtk_snapshot_push_clip (snapshot,
+                          &GRAPHENE_RECT_INIT (0,
+                                               0,
+                                               SCREEN_WIDTH (widget),
+                                               SCREEN_HEIGHT (widget)));
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save_to_node (context, text_view->priv->text_window->css_node);
@@ -5420,6 +5438,11 @@ draw_text (GtkWidget   *widget,
       GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer (text_view, GTK_TEXT_VIEW_LAYER_ABOVE_TEXT, snapshot);
       gtk_snapshot_restore (snapshot);
     }
+
+  gtk_snapshot_pop (snapshot);
+
+  if (translate.x || translate.y)
+    gtk_snapshot_restore (snapshot);
 }
 
 static void
