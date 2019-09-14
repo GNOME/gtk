@@ -43,8 +43,7 @@
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkmenu.h"
-#include "gtkmenuitem.h"
+#include "gtkpopovermenu.h"
 #include "gtkorientable.h"
 #include "gtksizerequest.h"
 #include "gtkstylecontextprivate.h"
@@ -237,6 +236,7 @@ struct _GtkNotebookPrivate
   GtkWidget                 *action_widget[N_ACTION_WIDGETS];
   GtkWidget                 *dnd_child;
   GtkWidget                 *menu;
+  GtkWidget                 *menu_box;
 
   GtkWidget                 *stack_widget;
   GtkWidget                 *header_widget;
@@ -807,8 +807,6 @@ static void gtk_notebook_menu_item_recreate  (GtkNotebook      *notebook,
                                               GList            *list);
 static void gtk_notebook_menu_label_unparent (GtkWidget        *widget,
                                               gpointer          data);
-static void gtk_notebook_menu_detacher       (GtkWidget        *widget,
-                                              GtkMenu          *menu);
 
 static void gtk_notebook_update_tab_pos      (GtkNotebook      *notebook);
 
@@ -2501,7 +2499,14 @@ gtk_notebook_gesture_pressed (GtkGestureClick *gesture,
 
   if (in_tabs (notebook, x, y) && priv->menu && gdk_event_triggers_context_menu (event))
     {
-      gtk_menu_popup_at_pointer (GTK_MENU (priv->menu), event);
+      GdkRectangle rect;
+
+      rect.x = x;
+      rect.y = y;
+      rect.width = 1;
+      rect.height = 1;
+      gtk_popover_set_pointing_to (GTK_POPOVER (priv->menu), &rect);
+      gtk_popover_popup (GTK_POPOVER (priv->menu));
       return;
     }
 
@@ -5592,13 +5597,13 @@ gtk_notebook_menu_switch_page (GtkWidget       *widget,
 {
   GtkNotebookPrivate *priv;
   GtkNotebook *notebook;
-  GtkWidget *parent;
   GList *children;
   guint page_num;
 
-  parent = gtk_widget_get_parent (widget);
-  notebook = GTK_NOTEBOOK (gtk_menu_get_attach_widget (GTK_MENU (parent)));
+  notebook = GTK_NOTEBOOK (gtk_widget_get_ancestor (widget, GTK_TYPE_NOTEBOOK));
   priv = notebook->priv;
+
+  gtk_popover_popdown (GTK_POPOVER (priv->menu));
 
   if (priv->cur_page == page)
     return;
@@ -5623,7 +5628,6 @@ gtk_notebook_menu_switch_page (GtkWidget       *widget,
  * gtk_notebook_menu_item_create
  * gtk_notebook_menu_item_recreate
  * gtk_notebook_menu_label_unparent
- * gtk_notebook_menu_detacher
  */
 static void
 gtk_notebook_menu_item_create (GtkNotebook *notebook,
@@ -5643,15 +5647,14 @@ gtk_notebook_menu_item_create (GtkNotebook *notebook,
       gtk_widget_set_valign (page->menu_label, GTK_ALIGN_CENTER);
     }
 
-  gtk_widget_show (page->menu_label);
-  menu_item = gtk_menu_item_new ();
+  menu_item = gtk_button_new ();
+  gtk_button_set_relief (GTK_BUTTON (menu_item), GTK_RELIEF_NONE);
   gtk_container_add (GTK_CONTAINER (menu_item), page->menu_label);
-  gtk_menu_shell_insert (GTK_MENU_SHELL (priv->menu), menu_item,
-                         g_list_index (priv->children, page));
-  g_signal_connect (menu_item, "activate",
+  gtk_container_add (GTK_CONTAINER (priv->menu_box), menu_item);
+  g_signal_connect (menu_item, "clicked",
                     G_CALLBACK (gtk_notebook_menu_switch_page), page);
-  if (gtk_widget_get_visible (page->child))
-    gtk_widget_show (menu_item);
+  if (!gtk_widget_get_visible (page->child))
+    gtk_widget_hide (menu_item);
 }
 
 static void
@@ -5673,18 +5676,6 @@ gtk_notebook_menu_label_unparent (GtkWidget *widget,
 {
   gtk_widget_unparent (gtk_bin_get_child (GTK_BIN (widget)));
   _gtk_bin_set_child (GTK_BIN (widget), NULL);
-}
-
-static void
-gtk_notebook_menu_detacher (GtkWidget *widget,
-                            GtkMenu   *menu)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPrivate *priv = notebook->priv;
-
-  g_return_if_fail (priv->menu == (GtkWidget*) menu);
-
-  priv->menu = NULL;
 }
 
 /* Public GtkNotebook Page Insert/Remove Methods :
@@ -6531,9 +6522,10 @@ gtk_notebook_popup_enable (GtkNotebook *notebook)
   if (priv->menu)
     return;
 
-  priv->menu = gtk_menu_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (priv->menu),
-                               GTK_STYLE_CLASS_CONTEXT_MENU);
+  priv->menu = gtk_popover_menu_new (priv->tabs_widget);
+
+  priv->menu_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_popover_menu_add_submenu (GTK_POPOVER_MENU (priv->menu), priv->menu_box, "main");
 
   for (list = gtk_notebook_search_page (notebook, NULL, STEP_NEXT, FALSE);
        list;
@@ -6541,9 +6533,6 @@ gtk_notebook_popup_enable (GtkNotebook *notebook)
     gtk_notebook_menu_item_create (notebook, list->data);
 
   gtk_notebook_update_labels (notebook);
-  gtk_menu_attach_to_widget (GTK_MENU (priv->menu),
-                             GTK_WIDGET (notebook),
-                             gtk_notebook_menu_detacher);
 
   g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_ENABLE_POPUP]);
 }
@@ -6569,6 +6558,8 @@ gtk_notebook_popup_disable (GtkNotebook *notebook)
   gtk_container_foreach (GTK_CONTAINER (priv->menu),
                          (GtkCallback) gtk_notebook_menu_label_unparent, NULL);
   gtk_widget_destroy (priv->menu);
+  priv->menu = NULL;
+  priv->menu_box = NULL;
 
   g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_ENABLE_POPUP]);
 }
