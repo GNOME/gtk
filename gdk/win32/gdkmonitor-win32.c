@@ -144,6 +144,20 @@ typedef LONG
 #define MONITORINFOF_PRIMARY 1
 #endif
 
+/* MinGW-w64 does not have a prototype for function in its headers
+ * at the moment of writing.
+ */
+#if !defined (HAVE_SETUP_DI_GET_DEVICE_PROPERTY_W)
+BOOL WINAPI SetupDiGetDevicePropertyW (HDEVINFO          DeviceInfoSet,
+                                       PSP_DEVINFO_DATA  DeviceInfoData,
+                                       const DEVPROPKEY *PropertyKey,
+                                       DEVPROPTYPE      *PropertyType,
+                                       PBYTE             PropertyBuffer,
+                                       DWORD             PropertyBufferSize,
+                                       PDWORD            RequiredSize,
+                                       DWORD             Flags);
+#endif
+
 #define G_GUID_FORMAT "%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X"
 #define g_format_guid(guid) (guid)->Data1, \
                             (guid)->Data2, \
