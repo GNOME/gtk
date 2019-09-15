@@ -742,6 +742,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           g_value_unset (&param->value);
         }
     }
+
   g_array_free (construct_parameters, TRUE);
 
   custom_set_property = FALSE;
@@ -754,6 +755,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       if (iface->set_buildable_property)
         custom_set_property = TRUE;
     }
+
+  /* We're going to set multiple properties in one go, so it's better
+   * to notify changes at the end
+   */
+  g_object_freeze_notify (obj);
 
   for (i = 0; i < parameters->len; i++)
     {
@@ -773,6 +779,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 #endif
       g_value_unset (&param->value);
     }
+
+  g_object_thaw_notify (obj);
+
   g_array_free (parameters, TRUE);
 
   if (info->bindings)
@@ -819,6 +828,8 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
         custom_set_property = TRUE;
     }
 
+  g_object_freeze_notify (info->object);
+
   for (i = 0; i < parameters->len; i++)
     {
       GParameter *param = &g_array_index (parameters, GParameter, i);
@@ -837,6 +848,9 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
 #endif
       g_value_unset (&param->value);
     }
+
+  g_object_thaw_notify (info->object);
+
   g_array_free (parameters, TRUE);
 }
 
