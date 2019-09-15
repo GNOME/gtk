@@ -3584,11 +3584,11 @@ gtk_entry_set_extra_menu (GtkEntry   *entry,
 
 /**
  * gtk_entry_get_extra_menu:
- * @self: a #GtkText
+ * @entry: a #GtkEntry
  *
  * Gets the menu model set with gtk_entry_set_extra_menu().
  *
- * Returns: (transfer none): (nullable): the menu model
+ * Returns: (transfer none) (nullable): the menu model
  */
 GMenuModel *
 gtk_entry_get_extra_menu (GtkEntry *entry)

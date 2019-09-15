@@ -2747,7 +2747,6 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
 /**
  * gtk_tree_view_column_cell_get_size:
  * @tree_column: A #GtkTreeViewColumn.
- * @cell_area: (allow-none): The area a cell in the column will be allocated, or %NULL
  * @x_offset: (out) (optional): location to return x offset of a cell relative to @cell_area, or %NULL
  * @y_offset: (out) (optional): location to return y offset of a cell relative to @cell_area, or %NULL
  * @width: (out) (optional): location to return width needed to render a cell, or %NULL

@@ -321,7 +321,7 @@ gtk_buildable_parse_context_get_element (GtkBuildableParseContext *context)
  * would merely return the name of the element that is being
  * processed.
  *
- * Returns: the element stack, which must not be modified
+ * Returns: (transfer none) (element-type utf8): the element stack, which must not be modified
  */
 GPtrArray *
 gtk_buildable_parse_context_get_element_stack (GtkBuildableParseContext *context)
