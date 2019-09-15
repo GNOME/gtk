@@ -44,6 +44,7 @@
 #include "gtkwindow.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
+#include "gtktooltipprivate.h"
 #include "gtkcomboboxprivate.h"
 
 #include <gobject/gvaluecollector.h>
@@ -2315,6 +2316,7 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
       return;
     }
 
+  _gtk_tooltip_hide (GTK_WIDGET (combo_box));
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (combo_box));
   if (GTK_IS_WINDOW (toplevel))
     {
