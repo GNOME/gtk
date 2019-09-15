@@ -726,6 +726,32 @@ AS_CASE([$host_os],
       [AC_MSG_ERROR([DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY is unavailable])],
       [AC_MSG_RESULT([DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY is not OK])]
     )
+    AC_MSG_CHECKING([for SetupDiGetDevicePropertyW])
+    gtk_save_LIBS="$LIBS"
+    LIBS="-lsetupapi $LIBS"
+    AC_TRY_LINK(
+      [
+#define _WIN32_WINNT 0x0600
+#include <windows.h>
+#include <devpropdef.h>
+#include <setupapi.h>
+      ],
+      [return SetupDiGetDevicePropertyW(NULL, NULL, NULL, NULL, NULL, 0, NULL, 0);],
+      [have_SetupDiGetDevicePropertyW=yes],
+      [have_SetupDiGetDevicePropertyW=no]
+    )
+    AS_IF(
+      [test x$have_SetupDiGetDevicePropertyW = xyes],
+      [
+       AC_DEFINE(
+         [HAVE_SETUP_DI_GET_DEVICE_PROPERTY_W],
+         [1],
+         [Define to 1 if SetupDiGetDevicePropertyW() is available]
+       )
+      ]
+    )
+    AC_MSG_RESULT([$have_SetupDiGetDevicePropertyW])
+    LIBS="$gtk_save_LIBS"
   ],
   []
 )
