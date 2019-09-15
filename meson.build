@@ -780,6 +780,19 @@ if os_win32
     #include <windows.h>
   ''')
   cdata.set('SIZEOF_DISPLAYCONFIG_VIDEO_OUTPUT_TECHNOLOGY', dvot_size)
+
+  getdevprop_code = '''
+    #define _WIN32_WINNT 0x0600
+    #include <windows.h>
+    #include <devpropdef.h>
+    #include <setupapi.h>
+
+    int main(int argc, char *argv[]) {
+      return SetupDiGetDevicePropertyW(NULL, NULL, NULL, NULL, NULL, 0, NULL, 0);
+    }
+  '''
+  result = cc.links(getdevprop_code, args: ['-lsetupapi'], name: 'has SetupDiGetDevicePropertyW')
+  cdata.set('HAVE_SETUP_DI_GET_DEVICE_PROPERTY_W', result ? 1 : false)
 endif
 
 have_gio_unix = false

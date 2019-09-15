@@ -116,6 +116,9 @@
 /* Define to 1 if you have the `round' function. */
 #mesondefine HAVE_ROUND
 
+/* Define to 1 if SetupDiGetDevicePropertyW() is available */
+#mesondefine HAVE_SETUP_DI_GET_DEVICE_PROPERTY_W
+
 /* Define to 1 if you have the `sincos' function. */
 #mesondefine HAVE_SINCOS
 
