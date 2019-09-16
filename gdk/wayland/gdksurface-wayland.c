@@ -52,13 +52,6 @@ static guint signals[LAST_SIGNAL];
 
 #define MAX_WL_BUFFER_SIZE (4083) /* 4096 minus header, string argument length and NUL byte */
 
-typedef enum _PositionMethod
-{
-  POSITION_METHOD_NONE,
-  POSITION_METHOD_MOVE_RESIZE,
-  POSITION_METHOD_MOVE_TO_RECT
-} PositionMethod;
-
 struct _GdkWaylandSurface
 {
   GdkSurface parent_instance;
@@ -95,7 +88,7 @@ struct _GdkWaylandSurface
   GdkSurfaceTypeHint hint;
   GdkSurface *transient_for;
   GdkSurface *popup_parent;
-  PositionMethod position_method;
+  gboolean move_to_rect;
 
   int pending_buffer_offset_x;
   int pending_buffer_offset_y;
@@ -1172,7 +1165,7 @@ gdk_wayland_surface_configure_popup (GdkSurface *surface)
                                      impl->pending.serial);
     }
 
-  if (impl->position_method != POSITION_METHOD_MOVE_TO_RECT)
+  if (!impl->move_to_rect)
     return;
 
   x = impl->pending.popup.x;
@@ -1190,7 +1183,7 @@ gdk_wayland_surface_configure_popup (GdkSurface *surface)
                                   &flipped_x,
                                   &flipped_y);
 
-  impl->position_method = POSITION_METHOD_MOVE_TO_RECT;
+  impl->move_to_rect = TRUE;
 
   g_signal_emit_by_name (surface,
                          "moved-to-rect",
@@ -2238,7 +2231,7 @@ gdk_wayland_surface_create_xdg_popup (GdkSurface     *surface,
 
   gdk_surface_freeze_updates (surface);
 
-  if (impl->position_method == POSITION_METHOD_MOVE_TO_RECT)
+  if (impl->move_to_rect)
     positioner = create_dynamic_positioner (surface);
   else
     positioner = create_simple_positioner (surface, parent);
@@ -2400,10 +2393,7 @@ should_map_as_popup (GdkSurface *surface)
       break;
     }
 
-  if (impl->position_method == POSITION_METHOD_MOVE_TO_RECT)
-    return TRUE;
-
-  return FALSE;
+  return impl->move_to_rect;
 }
 
 /* Get the surface that can be used as a parent for a popup, i.e. a xdg_toplevel
@@ -2485,7 +2475,7 @@ gdk_wayland_surface_map (GdkSurface *surface)
           /* If the position was not explicitly set, start the popup at the
            * position of the device that holds the grab.
            */
-          if (impl->position_method == POSITION_METHOD_NONE && grab_device)
+          if (!impl->move_to_rect && grab_device)
             {
               double px, py;
               gdk_surface_get_device_position (transient_for, grab_device,
@@ -2772,7 +2762,7 @@ gdk_wayland_surface_move_to_rect (GdkSurface         *surface,
   impl->pending_move_to_rect.rect_anchor_dx = rect_anchor_dx;
   impl->pending_move_to_rect.rect_anchor_dy = rect_anchor_dy;
 
-  impl->position_method = POSITION_METHOD_MOVE_TO_RECT;
+  impl->move_to_rect = TRUE;
 }
 
 static void
