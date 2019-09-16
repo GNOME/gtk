@@ -49,8 +49,6 @@
 #include "gtkmagnifierprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkmenu.h"
-#include "gtkmenuitem.h"
 #include "gtkpango.h"
 #include "gtkpopovermenu.h"
 #include "gtkprivate.h"

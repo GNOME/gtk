@@ -24,7 +24,6 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkmenu.h>
 #include <gtk/gtktoolbutton.h>
 
 G_BEGIN_DECLS
@@ -46,6 +45,11 @@ void          gtk_menu_tool_button_set_menu       (GtkMenuToolButton *button,
                                                    GtkWidget         *menu);
 GDK_AVAILABLE_IN_ALL
 GtkWidget    *gtk_menu_tool_button_get_menu       (GtkMenuToolButton *button);
+GDK_AVAILABLE_IN_ALL
+void          gtk_menu_tool_button_set_popover    (GtkMenuToolButton *button,
+                                                   GtkWidget         *popover);
+GDK_AVAILABLE_IN_ALL
+GtkWidget    *gtk_menu_tool_button_get_popover    (GtkMenuToolButton *button);
 GDK_AVAILABLE_IN_ALL
 void          gtk_menu_tool_button_set_arrow_tooltip_text   (GtkMenuToolButton *button,
 							     const gchar       *text);

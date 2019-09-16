@@ -32,7 +32,6 @@
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkimcontext.h>
 #include <gtk/gtktextbuffer.h>
-#include <gtk/gtkmenu.h>
 
 G_BEGIN_DECLS
 
