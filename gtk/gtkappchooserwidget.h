@@ -30,7 +30,6 @@
 #endif
 
 #include <gtk/gtkwidget.h>
-#include <gtk/gtkmenu.h>
 #include <gio/gio.h>
 
 G_BEGIN_DECLS

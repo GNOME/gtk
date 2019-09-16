@@ -23,7 +23,6 @@
 #endif
 
 #include <gtk/gtkimcontext.h>
-#include <gtk/gtkmenushell.h>
 
 G_BEGIN_DECLS
 

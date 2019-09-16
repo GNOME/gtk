@@ -26,8 +26,6 @@
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
-#include "gtkradiomenuitem.h"
-#include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 
 

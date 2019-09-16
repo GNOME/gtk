@@ -51,8 +51,6 @@
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkmenu.h"
-#include "gtkmenuitem.h"
 #include "gtkpango.h"
 #include "gtkpopover.h"
 #include "gtkprivate.h"
