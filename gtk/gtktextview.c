@@ -365,13 +365,12 @@ static void gtk_text_view_measure (GtkWidget      *widget,
                                    int            *natural,
                                    int            *minimum_baseline,
                                    int            *natural_baseline);
+static void gtk_text_view_measure_borders (GtkTextView *text_view,
+                                           GtkBorder   *border);
 static void gtk_text_view_size_allocate        (GtkWidget           *widget,
                                                 int                  width,
                                                 int                  height,
                                                 int                  baseline);
-static void gtk_text_view_set_border_window_size (GtkTextView       *text_view,
-                                                  GtkTextWindowType  type,
-                                                  gint               size);
 static void gtk_text_view_realize              (GtkWidget        *widget);
 static void gtk_text_view_unrealize            (GtkWidget        *widget);
 static void gtk_text_view_map                  (GtkWidget        *widget);
@@ -3913,18 +3912,22 @@ gtk_text_view_measure (GtkWidget      *widget,
                        int            *minimum_baseline,
                        int            *natural_baseline)
 {
-  GtkTextViewPrivate *priv = GTK_TEXT_VIEW (widget)->priv;
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+  GtkTextViewPrivate *priv = text_view->priv;
+  GtkBorder border_window_size;
   int min = 0, nat = 0;
   GSList *tmp_list;
 
+  gtk_text_view_measure_borders (text_view, &border_window_size);
+
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      min += priv->border_window_size.left + priv->border_window_size.right;
+      min += border_window_size.left + border_window_size.right;
       min += priv->left_margin + priv->right_margin;
     }
   else /* orientation == VERTICAL */
     {
-      min += priv->border_window_size.top + priv->border_window_size.bottom;
+      min += border_window_size.top + border_window_size.bottom;
       min += priv->height;
     }
 
@@ -4028,17 +4031,18 @@ gtk_text_view_child_allocated (GtkTextLayout *layout,
 static void
 gtk_text_view_allocate_children (GtkTextView *text_view)
 {
+  GtkTextViewPrivate *priv = text_view->priv;
   GSList *tmp_list;
 
   DV(g_print(G_STRLOC"\n"));
   
-  tmp_list = text_view->priv->children;
+  tmp_list = priv->children;
   while (tmp_list != NULL)
     {
       GtkTextViewChild *child = tmp_list->data;
 
       g_assert (child != NULL);
-          
+
       if (child->anchor)
         {
           /* We need to force-validate the regions containing
@@ -4059,35 +4063,79 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
 	    {
 	      GtkTextIter end = child_loc;
 	      gtk_text_iter_forward_char (&end);
-	      gtk_text_layout_invalidate (text_view->priv->layout, &child_loc, &end);
+	      gtk_text_layout_invalidate (priv->layout, &child_loc, &end);
 	    }
 
-          gtk_text_layout_validate_yrange (text_view->priv->layout,
+          gtk_text_layout_validate_yrange (priv->layout,
                                            &child_loc,
                                            0, 1);
+        }
+      else if ((child->type == GTK_TEXT_WINDOW_TOP ||
+                child->type == GTK_TEXT_WINDOW_BOTTOM) &&
+               gtk_widget_get_hexpand (child->widget))
+        {
+          GtkAllocation allocation;
+          GtkRequisition child_req;
+
+          gtk_widget_get_preferred_size (child->widget, &child_req, NULL);
+
+          allocation.x = priv->border_window_size.left;
+          allocation.y = 0;
+          allocation.width = SCREEN_WIDTH (text_view);
+          allocation.height = child_req.height;
+
+          if (child->type == GTK_TEXT_WINDOW_BOTTOM)
+            allocation.y = priv->border_window_size.top + SCREEN_HEIGHT (text_view);
+
+          gtk_widget_size_allocate (child->widget, &allocation, -1);
+
+          /* Allocation was likely unchanged, force a draw */
+          gtk_widget_queue_draw (child->widget);
+        }
+      else if ((child->type == GTK_TEXT_WINDOW_LEFT ||
+                child->type == GTK_TEXT_WINDOW_RIGHT) &&
+               gtk_widget_get_vexpand (child->widget))
+        {
+          GtkAllocation allocation;
+          GtkRequisition child_req;
+
+          gtk_widget_get_preferred_size (child->widget, &child_req, NULL);
+
+          allocation.x = 0;
+          allocation.y = priv->border_window_size.top;
+          allocation.width = child_req.width;
+          allocation.height = SCREEN_HEIGHT (text_view);
+
+          if (child->type == GTK_TEXT_WINDOW_RIGHT)
+            allocation.x = priv->border_window_size.left + SCREEN_WIDTH (text_view);
+
+          gtk_widget_size_allocate (child->widget, &allocation, -1);
+
+          /* Allocation was likely unchanged, force a draw */
+          gtk_widget_queue_draw (child->widget);
         }
       else
         {
           GtkAllocation allocation;
           GtkRequisition child_req;
-             
+
           allocation.x = child->x;
           allocation.y = child->y;
 
           if (child->type == GTK_TEXT_WINDOW_TEXT ||
               child->type == GTK_TEXT_WINDOW_LEFT ||
               child->type == GTK_TEXT_WINDOW_RIGHT)
-            allocation.y -= text_view->priv->yoffset;
+            allocation.y -= priv->yoffset;
           if (child->type == GTK_TEXT_WINDOW_TEXT ||
               child->type == GTK_TEXT_WINDOW_TOP ||
               child->type == GTK_TEXT_WINDOW_BOTTOM)
-            allocation.x -= text_view->priv->xoffset;
+            allocation.x -= priv->xoffset;
 
           gtk_widget_get_preferred_size (child->widget, &child_req, NULL);
 
           allocation.width = child_req.width;
           allocation.height = child_req.height;
-          
+
           gtk_widget_size_allocate (child->widget, &allocation, -1);
         }
 
@@ -4117,6 +4165,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   priv = text_view->priv;
 
   DV(g_print(G_STRLOC"\n"));
+
+  gtk_text_view_measure_borders (text_view, &priv->border_window_size);
 
   /* distribute width/height among child windows. Ensure all
    * windows get at least a 1x1 allocation.
@@ -9352,76 +9402,6 @@ gtk_text_view_window_to_buffer_coords (GtkTextView      *text_view,
     *buffer_y = window_y + priv->yoffset;
 }
 
-static void
-set_window_size (GtkTextView        *text_view,
-                 gint                size,
-                 GtkTextWindowType   type,
-                 GtkTextWindow     **winp,
-                 gint16             *sizep)
-{
-  if (*sizep == size)
-    return;
-  
-  if (size == 0)
-    {
-      text_window_free (*winp);
-      *winp = NULL;
-    }
-  else
-    {
-      if (*winp == NULL)
-        {
-          *winp = text_window_new (type, GTK_WIDGET (text_view));
-          /* if the widget is already realized we need to realize the child manually */
-          update_node_ordering (GTK_WIDGET (text_view));
-        }
-    }
-
-  *sizep = size;
-
-  gtk_widget_queue_resize (GTK_WIDGET (text_view));
-}
-
-static void
-gtk_text_view_set_border_window_size (GtkTextView       *text_view,
-                                      GtkTextWindowType  type,
-                                      gint               size)
-{
-  GtkTextViewPrivate *priv = text_view->priv;
-
-  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
-  g_return_if_fail (size >= 0);
-
-  switch (type)
-    {
-    case GTK_TEXT_WINDOW_LEFT:
-      set_window_size (text_view, size, GTK_TEXT_WINDOW_LEFT,
-                       &priv->left_window, &priv->border_window_size.left);
-      break;
-
-    case GTK_TEXT_WINDOW_RIGHT:
-      set_window_size (text_view, size, GTK_TEXT_WINDOW_RIGHT,
-                       &priv->right_window, &priv->border_window_size.right);
-      break;
-
-    case GTK_TEXT_WINDOW_TOP:
-      set_window_size (text_view, size, GTK_TEXT_WINDOW_TOP,
-                       &priv->top_window, &priv->border_window_size.top);
-      break;
-
-    case GTK_TEXT_WINDOW_BOTTOM:
-      set_window_size (text_view, size, GTK_TEXT_WINDOW_BOTTOM,
-                       &priv->bottom_window, &priv->border_window_size.bottom);
-      break;
-
-    case GTK_TEXT_WINDOW_PRIVATE:
-    case GTK_TEXT_WINDOW_WIDGET:
-    case GTK_TEXT_WINDOW_TEXT:
-    default:
-      g_return_if_reached ();
-    }
-}
-
 /**
  * gtk_text_view_get_border_window_size:
  * @text_view: a #GtkTextView
@@ -9465,6 +9445,81 @@ gtk_text_view_get_border_window_size (GtkTextView       *text_view,
     }
 
   return 0;
+}
+
+static void
+gtk_text_view_measure_borders (GtkTextView *text_view,
+                               GtkBorder   *border)
+{
+  GSList *tmp_list = text_view->priv->children;
+
+  border->top = 0;
+  border->left = 0;
+  border->right = 0;
+  border->bottom = 0;
+
+  while (tmp_list != NULL)
+    {
+      GtkTextViewChild *child = tmp_list->data;
+      GtkRequisition child_req;
+
+      tmp_list = tmp_list->next;
+
+      if (!(child->type == GTK_TEXT_WINDOW_LEFT ||
+            child->type == GTK_TEXT_WINDOW_RIGHT ||
+            child->type == GTK_TEXT_WINDOW_TOP ||
+            child->type == GTK_TEXT_WINDOW_BOTTOM))
+        continue;
+
+      gtk_widget_get_preferred_size (child->widget, &child_req, NULL);
+
+      if (child->type == GTK_TEXT_WINDOW_LEFT)
+        border->left = MAX (border->left, child_req.width);
+      else if (child->type == GTK_TEXT_WINDOW_RIGHT)
+        border->right = MAX (border->right, child_req.width);
+      else if (child->type == GTK_TEXT_WINDOW_TOP)
+        border->top = MAX (border->top, child_req.height);
+      else if (child->type == GTK_TEXT_WINDOW_BOTTOM)
+        border->bottom = MAX (border->bottom, child_req.height);
+    }
+}
+
+static void
+gtk_text_view_ensure_window (GtkTextView       *text_view,
+                             GtkTextWindowType  window_type)
+{
+  GtkTextWindow **windowptr = NULL;
+
+  switch (window_type)
+    {
+    case GTK_TEXT_WINDOW_LEFT:
+      windowptr = &text_view->priv->left_window;
+      break;
+
+    case GTK_TEXT_WINDOW_RIGHT:
+      windowptr = &text_view->priv->right_window;
+      break;
+
+    case GTK_TEXT_WINDOW_TOP:
+      windowptr = &text_view->priv->top_window;
+      break;
+
+    case GTK_TEXT_WINDOW_BOTTOM:
+      windowptr = &text_view->priv->bottom_window;
+      break;
+
+    case GTK_TEXT_WINDOW_TEXT:
+    case GTK_TEXT_WINDOW_WIDGET:
+    case GTK_TEXT_WINDOW_PRIVATE:
+    default:
+      break;
+    }
+
+  if (windowptr != NULL && *windowptr == NULL)
+    {
+      *windowptr = text_window_new (window_type, GTK_WIDGET (text_view));
+      update_node_ordering (GTK_WIDGET (text_view));
+    }
 }
 
 /*
@@ -9547,6 +9602,8 @@ add_child (GtkTextView      *text_view,
 {
   GtkCssNode *parent;
 
+  gtk_text_view_ensure_window (text_view, vc->type);
+
   text_view->priv->children = g_slist_prepend (text_view->priv->children, vc);
 
   parent = gtk_text_view_get_css_node (text_view, vc->type);
@@ -9600,13 +9657,22 @@ gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,
  * Adds a child at fixed coordinates in one of the text widget's
  * windows.
  *
- * The window must have nonzero size (see
- * gtk_text_view_set_border_window_size()). Note that the child
+ * The window must have nonzero size. Note that the child
  * coordinates are given relative to scrolling. When
  * placing a child in #GTK_TEXT_WINDOW_WIDGET, scrolling is
  * irrelevant, the child floats above all scrollable areas. But when
  * placing a child in one of the scrollable windows (border windows or
  * text window) it will move with the scrolling as needed.
+ *
+ * If @child has set #GtkWidget:vexpand and which_window is
+ * %GTK_TEXT_WINDOW_LEFT or %GTK_TEXT_WINDOW_RIGHT then @xpos and @ypos are
+ * ignored and the widget will be allocated the full visible size of the
+ * #GtkTextWindowType.
+ *
+ * If @child has set #GtkWidget:hexpand and which_window is
+ * %GTK_TEXT_WINDOW_TOP or %GTK_TEXT_WINDOW_BOTTOM then @xpos and @ypos are
+ * ignored and the widget will be allocated the full visible size of the
+ * #GtkTextWindowType.
  */
 void
 gtk_text_view_add_child_in_window (GtkTextView       *text_view,
