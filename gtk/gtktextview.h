@@ -281,10 +281,6 @@ void gtk_text_view_window_to_buffer_coords (GtkTextView       *text_view,
                                             gint              *buffer_y);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_text_view_set_border_window_size (GtkTextView       *text_view,
-                                           GtkTextWindowType  type,
-                                           gint               size);
-GDK_AVAILABLE_IN_ALL
 gint gtk_text_view_get_border_window_size (GtkTextView       *text_view,
 					   GtkTextWindowType  type);
 

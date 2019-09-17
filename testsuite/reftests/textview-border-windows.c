@@ -17,12 +17,24 @@
 
 #include <gtk/gtk.h>
 
+static void
+add_border_window (GtkTextView       *text_view,
+                   GtkTextWindowType  window_type)
+{
+  GtkWidget *box;
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_size_request (box, 30, 30);
+  gtk_widget_set_hexpand (box, TRUE);
+  gtk_widget_set_vexpand (box, TRUE);
+  gtk_text_view_add_child_in_window (text_view, box, window_type, 0, 0);
+}
 
 G_MODULE_EXPORT void
 add_border_windows (GtkTextView *text_view)
 {
-  gtk_text_view_set_border_window_size (text_view, GTK_TEXT_WINDOW_LEFT, 30);
-  gtk_text_view_set_border_window_size (text_view, GTK_TEXT_WINDOW_RIGHT, 30);
-  gtk_text_view_set_border_window_size (text_view, GTK_TEXT_WINDOW_TOP, 30);
-  gtk_text_view_set_border_window_size (text_view, GTK_TEXT_WINDOW_BOTTOM, 30);
+  add_border_window (text_view, GTK_TEXT_WINDOW_LEFT);
+  add_border_window (text_view, GTK_TEXT_WINDOW_RIGHT);
+  add_border_window (text_view, GTK_TEXT_WINDOW_TOP);
+  add_border_window (text_view, GTK_TEXT_WINDOW_BOTTOM);
 }

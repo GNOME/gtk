@@ -369,6 +369,9 @@ static void gtk_text_view_size_allocate        (GtkWidget           *widget,
                                                 int                  width,
                                                 int                  height,
                                                 int                  baseline);
+static void gtk_text_view_set_border_window_size (GtkTextView       *text_view,
+                                                  GtkTextWindowType  type,
+                                                  gint               size);
 static void gtk_text_view_realize              (GtkWidget        *widget);
 static void gtk_text_view_unrealize            (GtkWidget        *widget);
 static void gtk_text_view_map                  (GtkWidget        *widget);
@@ -9224,8 +9227,7 @@ gtk_text_view_get_css_node (GtkTextView       *text_view,
  * Converts coordinate (@buffer_x, @buffer_y) to coordinates for the window
  * @win, and stores the result in (@window_x, @window_y). 
  *
- * Note that you can’t convert coordinates for a nonexisting window (see 
- * gtk_text_view_set_border_window_size()).
+ * Note that you can’t convert coordinates for a nonexisting window.
  **/
 void
 gtk_text_view_buffer_to_surface_coords (GtkTextView      *text_view,
@@ -9295,8 +9297,7 @@ gtk_text_view_buffer_to_surface_coords (GtkTextView      *text_view,
  * Converts coordinates on the window identified by @win to buffer
  * coordinates, storing the result in (@buffer_x,@buffer_y).
  *
- * Note that you can’t convert coordinates for a nonexisting window (see 
- * gtk_text_view_set_border_window_size()).
+ * Note that you can’t convert coordinates for a nonexisting window.
  **/
 void
 gtk_text_view_window_to_buffer_coords (GtkTextView      *text_view,
@@ -9381,24 +9382,10 @@ set_window_size (GtkTextView        *text_view,
   gtk_widget_queue_resize (GTK_WIDGET (text_view));
 }
 
-/**
- * gtk_text_view_set_border_window_size:
- * @text_view: a #GtkTextView
- * @type: window to affect
- * @size: width or height of the window
- *
- * Sets the width of %GTK_TEXT_WINDOW_LEFT or %GTK_TEXT_WINDOW_RIGHT,
- * or the height of %GTK_TEXT_WINDOW_TOP or %GTK_TEXT_WINDOW_BOTTOM.
- * Automatically destroys the corresponding window if the size is set
- * to 0, and creates the window if the size is set to non-zero.  This
- * function can only be used for the “border windows,” it doesn’t work
- * with #GTK_TEXT_WINDOW_WIDGET, #GTK_TEXT_WINDOW_TEXT, or
- * #GTK_TEXT_WINDOW_PRIVATE.
- **/
-void
-gtk_text_view_set_border_window_size (GtkTextView      *text_view,
-                                      GtkTextWindowType type,
-                                      gint              size)
+static void
+gtk_text_view_set_border_window_size (GtkTextView       *text_view,
+                                      GtkTextWindowType  type,
+                                      gint               size)
 {
   GtkTextViewPrivate *priv = text_view->priv;
 
@@ -9431,8 +9418,7 @@ gtk_text_view_set_border_window_size (GtkTextView      *text_view,
     case GTK_TEXT_WINDOW_WIDGET:
     case GTK_TEXT_WINDOW_TEXT:
     default:
-      g_warning ("Can only set size of left/right/top/bottom border windows with gtk_text_view_set_border_window_size()");
-      break;
+      g_return_if_reached ();
     }
 }
 
@@ -9441,8 +9427,10 @@ gtk_text_view_set_border_window_size (GtkTextView      *text_view,
  * @text_view: a #GtkTextView
  * @type: window to return size from
  *
- * Gets the width of the specified border window. See
- * gtk_text_view_set_border_window_size().
+ * Gets the width of the specified border window.
+ *
+ * @type must be one of %GTK_TEXT_WINDOW_LEFT, %GTK_TEXT_WINDOW_RIGHT,
+ * %GTK_TEXT_WINDOW_TOP, or %GTK_TEXT_WINDOW_BOTTOM.
  *
  * Returns: width of window
  **/
