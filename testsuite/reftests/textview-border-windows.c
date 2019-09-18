@@ -27,7 +27,7 @@ add_border_window (GtkTextView       *text_view,
   gtk_widget_set_size_request (box, 30, 30);
   gtk_widget_set_hexpand (box, TRUE);
   gtk_widget_set_vexpand (box, TRUE);
-  gtk_text_view_add_child_in_window (text_view, box, window_type, 0, 0);
+  gtk_text_view_set_gutter (text_view, window_type, box);
 }
 
 G_MODULE_EXPORT void

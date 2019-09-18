@@ -317,12 +317,10 @@ void gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,
                                         GtkTextChildAnchor   *anchor);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_text_view_add_child_in_window (GtkTextView          *text_view,
-                                        GtkWidget            *child,
-                                        GtkTextWindowType     which_window,
-                                        /* window coordinates */
-                                        gint                  xpos,
-                                        gint                  ypos);
+void gtk_text_view_add_overlay (GtkTextView *text_view,
+                                GtkWidget   *child,
+                                gint         xpos,
+                                gint         ypos);
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_text_view_get_gutter    (GtkTextView          *text_view,
                                         GtkTextWindowType     window_type);
@@ -332,7 +330,7 @@ void       gtk_text_view_set_gutter    (GtkTextView          *text_view,
                                         GtkWidget            *widget);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_text_view_move_child          (GtkTextView          *text_view,
+void gtk_text_view_move_overlay        (GtkTextView          *text_view,
                                         GtkWidget            *child,
                                         /* window coordinates */
                                         gint                  xpos,

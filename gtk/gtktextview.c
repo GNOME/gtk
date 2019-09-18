@@ -5563,10 +5563,7 @@ gtk_text_view_add (GtkContainer *container,
                    GtkWidget    *child)
 {
   /* This is pretty random. */
-  gtk_text_view_add_child_in_window (GTK_TEXT_VIEW (container),
-                                     child,
-                                     GTK_TEXT_WINDOW_WIDGET,
-                                     0, 0);
+  gtk_text_view_add_overlay (GTK_TEXT_VIEW (container), child, 0, 0);
 }
 
 static gboolean
@@ -9621,8 +9618,7 @@ gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,
 
   gtk_text_view_ensure_layout (text_view);
 
-  vc = text_view_child_new_anchored (child, anchor,
-                                     text_view->priv->layout);
+  vc = text_view_child_new_anchored (child, anchor, text_view->priv->layout);
 
   add_child (text_view, vc);
 
@@ -9631,39 +9627,22 @@ gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,
 }
 
 /**
- * gtk_text_view_add_child_in_window:
+ * gtk_text_view_add_overlay:
  * @text_view: a #GtkTextView
  * @child: a #GtkWidget
- * @which_window: which window the child should appear in
- * @xpos: X position of child in window coordinates
- * @ypos: Y position of child in window coordinates
+ * @xpos: X position of child in buffer coordinates
+ * @ypos: Y position of child in buffer coordinates
  *
- * Adds a child at fixed coordinates in one of the text widget's
- * windows.
+ * Adds a child at @xpos and @ypos in buffer coordinates.
+ * Note that the child will move with scrolling as needed.
  *
- * The window must have nonzero size. Note that the child
- * coordinates are given relative to scrolling. When
- * placing a child in #GTK_TEXT_WINDOW_WIDGET, scrolling is
- * irrelevant, the child floats above all scrollable areas. But when
- * placing a child in one of the scrollable windows (border windows or
- * text window) it will move with the scrolling as needed.
- *
- * If @child has set #GtkWidget:vexpand and which_window is
- * %GTK_TEXT_WINDOW_LEFT or %GTK_TEXT_WINDOW_RIGHT then @xpos and @ypos are
- * ignored and the widget will be allocated the full visible size of the
- * #GtkTextWindowType.
- *
- * If @child has set #GtkWidget:hexpand and which_window is
- * %GTK_TEXT_WINDOW_TOP or %GTK_TEXT_WINDOW_BOTTOM then @xpos and @ypos are
- * ignored and the widget will be allocated the full visible size of the
- * #GtkTextWindowType.
+ * Since: 4.0
  */
 void
-gtk_text_view_add_child_in_window (GtkTextView       *text_view,
-                                   GtkWidget         *child,
-                                   GtkTextWindowType  which_window,
-                                   gint               xpos,
-                                   gint               ypos)
+gtk_text_view_add_overlay (GtkTextView *text_view,
+                           GtkWidget   *child,
+                           gint         xpos,
+                           gint         ypos)
 {
   GtkTextViewChild *vc;
 
@@ -9671,8 +9650,7 @@ gtk_text_view_add_child_in_window (GtkTextView       *text_view,
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (gtk_widget_get_parent (child) == NULL);
 
-  vc = text_view_child_new_window (child, which_window,
-                                   xpos, ypos);
+  vc = text_view_child_new_window (child, GTK_TEXT_WINDOW_TEXT, xpos, ypos);
 
   add_child (text_view, vc);
 
@@ -9681,19 +9659,22 @@ gtk_text_view_add_child_in_window (GtkTextView       *text_view,
 }
 
 /**
- * gtk_text_view_move_child:
+ * gtk_text_view_move_overlay:
  * @text_view: a #GtkTextView
  * @child: child widget already added to the text view
  * @xpos: new X position in window coordinates
  * @ypos: new Y position in window coordinates
  *
- * Updates the position of a child, as for gtk_text_view_add_child_in_window().
+ * Updates the position of @child, which must have been previously
+ * added with gtk_text_view_add_overlay().
+ *
+ * Since: 4.0
  **/
 void
-gtk_text_view_move_child (GtkTextView *text_view,
-                          GtkWidget   *child,
-                          gint         xpos,
-                          gint         ypos)
+gtk_text_view_move_overlay (GtkTextView *text_view,
+                            GtkWidget   *child,
+                            gint         xpos,
+                            gint         ypos)
 {
   GtkTextViewChild *vc;
 

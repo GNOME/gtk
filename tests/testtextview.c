@@ -193,10 +193,7 @@ main (int argc, char **argv)
 
   gtk_container_add (GTK_CONTAINER (window), sw);
   gtk_container_add (GTK_CONTAINER (sw), textview);
-  gtk_text_view_add_child_in_window (GTK_TEXT_VIEW (textview),
-                                     button,
-                                     GTK_TEXT_WINDOW_TEXT,
-                                     50, 150);
+  gtk_text_view_add_overlay (GTK_TEXT_VIEW (textview), button, 50, 150);
 
   gtk_text_view_add_child_at_anchor (GTK_TEXT_VIEW (textview),
                                      button2, anchor);
