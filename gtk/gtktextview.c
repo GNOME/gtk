@@ -4075,50 +4075,6 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
                                            &child_loc,
                                            0, 1);
         }
-      else if ((child->type == GTK_TEXT_WINDOW_TOP ||
-                child->type == GTK_TEXT_WINDOW_BOTTOM) &&
-               gtk_widget_get_hexpand (child->widget))
-        {
-          GtkAllocation allocation;
-          GtkRequisition child_req;
-
-          gtk_widget_get_preferred_size (child->widget, &child_req, NULL);
-
-          allocation.x = priv->border_window_size.left;
-          allocation.y = 0;
-          allocation.width = SCREEN_WIDTH (text_view);
-          allocation.height = child_req.height;
-
-          if (child->type == GTK_TEXT_WINDOW_BOTTOM)
-            allocation.y = priv->border_window_size.top + SCREEN_HEIGHT (text_view);
-
-          gtk_widget_size_allocate (child->widget, &allocation, -1);
-
-          /* Allocation was likely unchanged, force a draw */
-          gtk_widget_queue_draw (child->widget);
-        }
-      else if ((child->type == GTK_TEXT_WINDOW_LEFT ||
-                child->type == GTK_TEXT_WINDOW_RIGHT) &&
-               gtk_widget_get_vexpand (child->widget))
-        {
-          GtkAllocation allocation;
-          GtkRequisition child_req;
-
-          gtk_widget_get_preferred_size (child->widget, &child_req, NULL);
-
-          allocation.x = 0;
-          allocation.y = priv->border_window_size.top;
-          allocation.width = child_req.width;
-          allocation.height = SCREEN_HEIGHT (text_view);
-
-          if (child->type == GTK_TEXT_WINDOW_RIGHT)
-            allocation.x = priv->border_window_size.left + SCREEN_WIDTH (text_view);
-
-          gtk_widget_size_allocate (child->widget, &allocation, -1);
-
-          /* Allocation was likely unchanged, force a draw */
-          gtk_widget_queue_draw (child->widget);
-        }
       else
         {
           GtkAllocation allocation;
