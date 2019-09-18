@@ -2015,7 +2015,7 @@ gtk_text_view_get_buffer (GtkTextView *text_view)
  * cursor’s offset within the preedit sequence.
  *
  * The rectangle position is in buffer coordinates; use
- * gtk_text_view_buffer_to_surface_coords() to convert these
+ * gtk_text_view_buffer_to_widget_coords() to convert these
  * coordinates to coordinates for one of the windows in the text view.
  **/
 void
@@ -2053,7 +2053,7 @@ gtk_text_view_get_cursor_locations (GtkTextView       *text_view,
  * coordinates are coordinates for the entire buffer, not just the
  * currently-displayed portion.  If you have coordinates from an
  * event, you have to convert those to buffer coordinates with
- * gtk_text_view_window_to_buffer_coords().
+ * gtk_text_view_widget_to_buffer_coords().
  *
  * Returns: %TRUE if the position is over text
  */
@@ -2087,7 +2087,7 @@ gtk_text_view_get_iter_at_location (GtkTextView *text_view,
  * the entire buffer, not just the currently-displayed portion.
  * If you have coordinates from an event, you have to convert
  * those to buffer coordinates with
- * gtk_text_view_window_to_buffer_coords().
+ * gtk_text_view_widget_to_buffer_coords().
  *
  * Note that this is different from gtk_text_view_get_iter_at_location(),
  * which returns cursor locations, i.e. positions between
@@ -2118,7 +2118,7 @@ gtk_text_view_get_iter_at_position (GtkTextView *text_view,
  *
  * Gets a rectangle which roughly contains the character at @iter.
  * The rectangle position is in buffer coordinates; use
- * gtk_text_view_buffer_to_surface_coords() to convert these
+ * gtk_text_view_buffer_to_widget_coords() to convert these
  * coordinates to coordinates for one of the windows in the text view.
  **/
 void
@@ -2143,7 +2143,7 @@ gtk_text_view_get_iter_location (GtkTextView       *text_view,
  *
  * Gets the y coordinate of the top of the line containing @iter,
  * and the height of the line. The coordinate is a buffer coordinate;
- * convert to window coordinates with gtk_text_view_buffer_to_surface_coords().
+ * convert to window coordinates with gtk_text_view_buffer_to_widget_coords().
  **/
 void
 gtk_text_view_get_line_yrange (GtkTextView       *text_view,
@@ -2171,7 +2171,7 @@ gtk_text_view_get_line_yrange (GtkTextView       *text_view,
  *
  * Gets the #GtkTextIter at the start of the line containing
  * the coordinate @y. @y is in buffer coordinates, convert from
- * window coordinates with gtk_text_view_window_to_buffer_coords().
+ * window coordinates with gtk_text_view_widget_to_buffer_coords().
  * If non-%NULL, @line_top will be filled with the coordinate of the top
  * edge of the line.
  **/
@@ -2793,7 +2793,7 @@ gtk_text_view_move_mark_onscreen (GtkTextView *text_view,
  *
  * Fills @visible_rect with the currently-visible
  * region of the buffer, in buffer coordinates. Convert to window coordinates
- * with gtk_text_view_buffer_to_surface_coords().
+ * with gtk_text_view_buffer_to_widget_coords().
  **/
 void
 gtk_text_view_get_visible_rect (GtkTextView  *text_view,
@@ -4781,8 +4781,9 @@ gtk_text_view_show_magnifier (GtkTextView *text_view,
   gtk_text_view_get_iter_location (text_view, iter,
                                    (GdkRectangle *) &rect);
   rect.x = x + priv->xoffset;
-  gtk_text_view_buffer_to_surface_coords (text_view, GTK_TEXT_WINDOW_TEXT,
-                                         rect.x, rect.y, &rect.x, &rect.y);
+  gtk_text_view_buffer_to_widget_coords (text_view,
+                                         rect.x, rect.y,
+                                         &rect.x, &rect.y);
   _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
   req.height = rect.height * N_LINES *
     _gtk_magnifier_get_magnification (GTK_MAGNIFIER (priv->magnifier));
@@ -7170,8 +7171,7 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
               GtkTextIter iter;
               gint buffer_x, buffer_y;
 
-              gtk_text_view_window_to_buffer_coords (text_view,
-                                                     GTK_TEXT_WINDOW_TEXT,
+              gtk_text_view_widget_to_buffer_coords (text_view,
                                                      start_x, start_y,
                                                      &buffer_x,
                                                      &buffer_y);
@@ -7855,10 +7855,7 @@ gtk_text_view_drag_motion (GtkWidget *widget,
       y > (target_rect.y + target_rect.height))
     return FALSE; /* outside the text window, allow parent widgets to handle event */
 
-  gtk_text_view_window_to_buffer_coords (text_view,
-                                         GTK_TEXT_WINDOW_WIDGET,
-                                         x, y,
-                                         &bx, &by);
+  gtk_text_view_widget_to_buffer_coords (text_view, x, y, &bx, &by);
 
   gtk_text_layout_get_iter_at_pixel (priv->layout,
                                      &newplace,
@@ -8837,12 +8834,11 @@ gtk_text_view_do_popup (GtkTextView    *text_view,
 
       if (is_visible)
         {
-          gtk_text_view_buffer_to_surface_coords (text_view,
-                                                  GTK_TEXT_WINDOW_WIDGET,
-                                                  iter_location.x,
-                                                  iter_location.y,
-                                                  &iter_location.x,
-                                                  &iter_location.y);
+          gtk_text_view_buffer_to_widget_coords (text_view,
+                                                 iter_location.x,
+                                                 iter_location.y,
+                                                 &iter_location.x,
+                                                 &iter_location.y);
 
           gtk_popover_set_pointing_to (GTK_POPOVER (priv->popup_menu), &iter_location);
         }
@@ -9259,185 +9255,70 @@ gtk_text_view_get_css_node (GtkTextView       *text_view,
 }
 
 /**
- * gtk_text_view_buffer_to_surface_coords:
+ * gtk_text_view_buffer_to_widget_coords:
  * @text_view: a #GtkTextView
- * @win: a #GtkTextWindowType except #GTK_TEXT_WINDOW_PRIVATE
  * @buffer_x: buffer x coordinate
  * @buffer_y: buffer y coordinate
- * @window_x: (out) (allow-none): window x coordinate return location or %NULL
- * @window_y: (out) (allow-none): window y coordinate return location or %NULL
+ * @widget_x: (out) (allow-none): window x coordinate return location or %NULL
+ * @widget_y: (out) (allow-none): window y coordinate return location or %NULL
  *
  * Converts coordinate (@buffer_x, @buffer_y) to coordinates for the window
- * @win, and stores the result in (@window_x, @window_y). 
+ * @win, and stores the result in (@widget_x, @widget_y). 
  *
  * Note that you can’t convert coordinates for a nonexisting window.
  **/
 void
-gtk_text_view_buffer_to_surface_coords (GtkTextView      *text_view,
-                                       GtkTextWindowType win,
-                                       gint              buffer_x,
-                                       gint              buffer_y,
-                                       gint             *window_x,
-                                       gint             *window_y)
+gtk_text_view_buffer_to_widget_coords (GtkTextView       *text_view,
+                                       gint               buffer_x,
+                                       gint               buffer_y,
+                                       gint              *widget_x,
+                                       gint              *widget_y)
 {
-  GtkTextViewPrivate *priv = text_view->priv;
-
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
-  buffer_x -= priv->xoffset;
-  buffer_y -= priv->yoffset;
+  buffer_x -= text_view->priv->xoffset;
+  buffer_x += text_view->priv->border_window_size.left;
 
-  switch (win)
-    {
-    case GTK_TEXT_WINDOW_WIDGET:
-      buffer_x += priv->border_window_size.left;
-      buffer_y += priv->border_window_size.top;
-      break;
+  buffer_y -= text_view->priv->yoffset;
+  buffer_y += text_view->priv->border_window_size.top;
 
-    case GTK_TEXT_WINDOW_TEXT:
-      break;
+  if (widget_x != NULL)
+    *widget_x = buffer_x;
 
-    case GTK_TEXT_WINDOW_LEFT:
-      buffer_x += priv->border_window_size.left;
-      break;
-
-    case GTK_TEXT_WINDOW_RIGHT:
-      buffer_x -= text_window_get_width (priv->text_window);
-      break;
-
-    case GTK_TEXT_WINDOW_TOP:
-      buffer_y += priv->border_window_size.top;
-      break;
-
-    case GTK_TEXT_WINDOW_BOTTOM:
-      buffer_y -= text_window_get_height (priv->text_window);
-      break;
-
-    case GTK_TEXT_WINDOW_PRIVATE:
-      g_warning ("%s: can't get coords for private windows", G_STRFUNC);
-      break;
-
-    default:
-      g_warning ("%s: Unknown GtkTextWindowType", G_STRFUNC);
-      break;
-    }
-
-  if (window_x)
-    *window_x = buffer_x;
-  if (window_y)
-    *window_y = buffer_y;
+  if (widget_y != NULL)
+    *widget_y = buffer_y;
 }
 
 /**
- * gtk_text_view_window_to_buffer_coords:
+ * gtk_text_view_widget_to_buffer_coords:
  * @text_view: a #GtkTextView
- * @win: a #GtkTextWindowType except #GTK_TEXT_WINDOW_PRIVATE
- * @window_x: window x coordinate
- * @window_y: window y coordinate
+ * @widget_x: widget x coordinate
+ * @widget_y: widget y coordinate
  * @buffer_x: (out) (allow-none): buffer x coordinate return location or %NULL
  * @buffer_y: (out) (allow-none): buffer y coordinate return location or %NULL
  *
- * Converts coordinates on the window identified by @win to buffer
- * coordinates, storing the result in (@buffer_x,@buffer_y).
+ * Converts coordinates @widget_x and @widget_y in the widgets coordinate
+ * space to buffer coordinates, storing the result in (@buffer_x,@buffer_y).
  *
- * Note that you can’t convert coordinates for a nonexisting window.
+ * Since: 4.0
  **/
 void
-gtk_text_view_window_to_buffer_coords (GtkTextView      *text_view,
-                                       GtkTextWindowType win,
-                                       gint              window_x,
-                                       gint              window_y,
-                                       gint             *buffer_x,
-                                       gint             *buffer_y)
+gtk_text_view_widget_to_buffer_coords (GtkTextView       *text_view,
+                                       gint               widget_x,
+                                       gint               widget_y,
+                                       gint              *buffer_x,
+                                       gint              *buffer_y)
 {
-  GtkTextViewPrivate *priv = text_view->priv;
-
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
-  switch (win)
-    {
-    case GTK_TEXT_WINDOW_WIDGET:
-      window_x -= priv->border_window_size.left;
-      window_y -= priv->border_window_size.top;
-      break;
+  widget_x -= text_view->priv->border_window_size.left;
+  widget_y -= text_view->priv->border_window_size.top;
 
-    case GTK_TEXT_WINDOW_TEXT:
-      break;
+  if (buffer_x != NULL)
+    *buffer_x = widget_x + text_view->priv->xoffset;
 
-    case GTK_TEXT_WINDOW_LEFT:
-      window_x -= priv->border_window_size.left;
-      break;
-
-    case GTK_TEXT_WINDOW_RIGHT:
-      window_x += text_window_get_width (priv->text_window);
-      break;
-
-    case GTK_TEXT_WINDOW_TOP:
-      window_y -= priv->border_window_size.top;
-      break;
-
-    case GTK_TEXT_WINDOW_BOTTOM:
-      window_y += text_window_get_height (priv->text_window);
-      break;
-
-    case GTK_TEXT_WINDOW_PRIVATE:
-      g_warning ("%s: can't get coords for private windows", G_STRFUNC);
-      break;
-
-    default:
-      g_warning ("%s: Unknown GtkTextWindowType", G_STRFUNC);
-      break;
-    }
-
-  if (buffer_x)
-    *buffer_x = window_x + priv->xoffset;
-  if (buffer_y)
-    *buffer_y = window_y + priv->yoffset;
-}
-
-/**
- * gtk_text_view_get_border_window_size:
- * @text_view: a #GtkTextView
- * @type: window to return size from
- *
- * Gets the width of the specified border window.
- *
- * @type must be one of %GTK_TEXT_WINDOW_LEFT, %GTK_TEXT_WINDOW_RIGHT,
- * %GTK_TEXT_WINDOW_TOP, or %GTK_TEXT_WINDOW_BOTTOM.
- *
- * Returns: width of window
- **/
-gint
-gtk_text_view_get_border_window_size (GtkTextView       *text_view,
-				      GtkTextWindowType  type)
-{
-  GtkTextViewPrivate *priv = text_view->priv;
-
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
-  
-  switch (type)
-    {
-    case GTK_TEXT_WINDOW_LEFT:
-      return priv->border_window_size.left;
-      
-    case GTK_TEXT_WINDOW_RIGHT:
-      return priv->border_window_size.right;
-      
-    case GTK_TEXT_WINDOW_TOP:
-      return priv->border_window_size.top;
-
-    case GTK_TEXT_WINDOW_BOTTOM:
-      return priv->border_window_size.bottom;
-      
-    case GTK_TEXT_WINDOW_PRIVATE:
-    case GTK_TEXT_WINDOW_WIDGET:
-    case GTK_TEXT_WINDOW_TEXT:
-    default:
-      g_warning ("Can only get size of left/right/top/bottom border windows with gtk_text_view_get_border_window_size()");
-      break;
-    }
-
-  return 0;
+  if (buffer_y != NULL)
+    *buffer_y = widget_y + text_view->priv->yoffset;
 }
 
 static void
@@ -10042,8 +9923,7 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
                                     gtk_text_buffer_get_insert (buffer));
 
   gtk_text_view_get_iter_location (text_view, &iter, (GdkRectangle *) &rect);
-  gtk_text_view_buffer_to_surface_coords (text_view, GTK_TEXT_WINDOW_TEXT,
-                                         rect.x, rect.y, &rect.x, &rect.y);
+  gtk_text_view_buffer_to_widget_coords (text_view, rect.x, rect.y, &rect.x, &rect.y);
   _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
 
   gtk_popover_set_pointing_to (GTK_POPOVER (chooser), &rect);

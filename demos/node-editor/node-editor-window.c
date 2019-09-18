@@ -288,8 +288,7 @@ text_view_query_tooltip_cb (GtkWidget        *widget,
     {
       gint bx, by, trailing;
 
-      gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (self->text_view), GTK_TEXT_WINDOW_TEXT,
-                                             x, y, &bx, &by);
+      gtk_text_view_widget_to_buffer_coords (GTK_TEXT_VIEW (self->text_view), x, y, &bx, &by);
       gtk_text_view_get_iter_at_position (GTK_TEXT_VIEW (self->text_view), &iter, &trailing, bx, by);
     }
 

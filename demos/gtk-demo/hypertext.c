@@ -149,8 +149,7 @@ released_cb (GtkGestureClick *gesture,
   if (gtk_gesture_single_get_button (GTK_GESTURE_SINGLE (gesture)) > 1)
     return;
 
-  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
-                                         GTK_TEXT_WINDOW_WIDGET,
+  gtk_text_view_widget_to_buffer_coords (GTK_TEXT_VIEW (text_view),
                                          x, y, &tx, &ty);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));

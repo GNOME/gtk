@@ -266,23 +266,17 @@ void           gtk_text_view_get_line_at_y         (GtkTextView       *text_view
                                                     gint              *line_top);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_text_view_buffer_to_surface_coords (GtkTextView       *text_view,
-					     GtkTextWindowType  win,
-					     gint               buffer_x,
-					     gint               buffer_y,
-					     gint              *window_x,
-					     gint              *window_y);
+void gtk_text_view_buffer_to_widget_coords (GtkTextView *text_view,
+                                            gint         buffer_x,
+                                            gint         buffer_y,
+                                            gint        *widget_x,
+                                            gint        *widget_y);
 GDK_AVAILABLE_IN_ALL
-void gtk_text_view_window_to_buffer_coords (GtkTextView       *text_view,
-                                            GtkTextWindowType  win,
-                                            gint               window_x,
-                                            gint               window_y,
-                                            gint              *buffer_x,
-                                            gint              *buffer_y);
-
-GDK_AVAILABLE_IN_ALL
-gint gtk_text_view_get_border_window_size (GtkTextView       *text_view,
-					   GtkTextWindowType  type);
+void gtk_text_view_widget_to_buffer_coords (GtkTextView *text_view,
+                                            gint         widget_x,
+                                            gint         widget_y,
+                                            gint        *buffer_x,
+                                            gint        *buffer_y);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_view_forward_display_line           (GtkTextView       *text_view,

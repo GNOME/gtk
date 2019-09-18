@@ -1960,9 +1960,7 @@ text_view_released (GtkGestureClick *gesture,
   if (gtk_text_iter_get_offset (&start) != gtk_text_iter_get_offset (&end))
     return;
 
-  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
-                                         GTK_TEXT_WINDOW_WIDGET,
-                                         x, y, &tx, &ty);
+  gtk_text_view_widget_to_buffer_coords (GTK_TEXT_VIEW (text_view), x, y, &tx, &ty);
 
   gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (text_view), &iter, tx, ty);
 
@@ -2019,9 +2017,7 @@ text_view_motion (GtkEventControllerMotion *motion,
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (motion));
 
-  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (widget),
-                                         GTK_TEXT_WINDOW_WIDGET,
-                                         x, y, &tx, &ty);
+  gtk_text_view_widget_to_buffer_coords (GTK_TEXT_VIEW (widget), x, y, &tx, &ty);
 
   set_cursor_if_appropriate (about, GTK_TEXT_VIEW (widget), tx, ty);
 }

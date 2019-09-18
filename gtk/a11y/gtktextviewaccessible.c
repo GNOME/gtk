@@ -462,8 +462,7 @@ gtk_text_view_accessible_get_offset_at_point (AtkText      *text,
 
   view = GTK_TEXT_VIEW (widget);
 
-  gtk_text_view_window_to_buffer_coords (view, GTK_TEXT_WINDOW_WIDGET,
-                                         x, y, &buff_x, &buff_y);
+  gtk_text_view_widget_to_buffer_coords (view, x, y, &buff_x, &buff_y);
   gtk_text_view_get_visible_rect (view, &rect);
 
   /* Clamp point to visible rectangle */
@@ -513,8 +512,7 @@ gtk_text_view_accessible_get_character_extents (AtkText      *text,
   *height = rectangle.height;
   *width = rectangle.width;
 
-  gtk_text_view_buffer_to_surface_coords (view, GTK_TEXT_WINDOW_WIDGET,
-    rectangle.x, rectangle.y, x, y);
+  gtk_text_view_buffer_to_widget_coords (view, rectangle.x, rectangle.y, x, y);
   if (coords != ATK_XY_WINDOW)
     {
       *x = 0;
