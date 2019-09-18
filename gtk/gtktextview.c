@@ -224,6 +224,11 @@ struct _GtkTextViewPrivate
 
   GSList *children;
 
+  GtkWidget *bottom_gutter;
+  GtkWidget *left_gutter;
+  GtkWidget *right_gutter;
+  GtkWidget *top_gutter;
+
   GtkTextPendingScroll *pending_scroll;
 
   GtkGesture *drag_gesture;
@@ -671,7 +676,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkTextView, gtk_text_view, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkTextView)
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 static void
 add_move_binding (GtkBindingSet  *binding_set,
@@ -4201,24 +4206,27 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   right_rect.x = text_rect.x + text_rect.width;
   bottom_rect.y = text_rect.y + text_rect.height;
 
-  text_window_size_allocate (priv->text_window,
-                             &text_rect);
+  text_window_size_allocate (priv->text_window, &text_rect);
 
   if (priv->left_window)
-    text_window_size_allocate (priv->left_window,
-                               &left_rect);
+    text_window_size_allocate (priv->left_window, &left_rect);
+  if (priv->left_gutter)
+    gtk_widget_size_allocate (priv->left_gutter, &left_rect, -1);
 
   if (priv->right_window)
-    text_window_size_allocate (priv->right_window,
-                               &right_rect);
+    text_window_size_allocate (priv->right_window, &right_rect);
+  if (priv->right_gutter)
+    gtk_widget_size_allocate (priv->right_gutter, &right_rect, -1);
 
   if (priv->top_window)
-    text_window_size_allocate (priv->top_window,
-                               &top_rect);
+    text_window_size_allocate (priv->top_window, &top_rect);
+  if (priv->top_gutter)
+    gtk_widget_size_allocate (priv->top_gutter, &top_rect, -1);
 
   if (priv->bottom_window)
-    text_window_size_allocate (priv->bottom_window,
-                               &bottom_rect);
+    text_window_size_allocate (priv->bottom_window, &bottom_rect);
+  if (priv->bottom_gutter)
+    gtk_widget_size_allocate (priv->bottom_gutter, &bottom_rect, -1);
 
   gtk_text_view_update_layout_width (text_view);
   
@@ -5500,7 +5508,8 @@ static void
 paint_border_window (GtkTextView     *text_view,
                      GtkSnapshot     *snapshot,
                      GtkTextWindow   *text_window,
-                     GtkStyleContext *context)
+                     GtkStyleContext *context,
+                     GtkWidget       *gutter)
 {
   gint x, y, w, h;
 
@@ -5517,6 +5526,9 @@ paint_border_window (GtkTextView     *text_view,
   gtk_snapshot_render_background (snapshot, context, x, y, w, h);
 
   gtk_style_context_restore (context);
+
+  if (gutter != NULL)
+    gtk_widget_snapshot_child (GTK_WIDGET (text_view), gutter, snapshot);
 }
 
 static void
@@ -5535,10 +5547,10 @@ gtk_text_view_snapshot (GtkWidget   *widget,
 
   draw_text (widget, snapshot); 
 
-  paint_border_window (GTK_TEXT_VIEW (widget), snapshot, priv->left_window, context);
-  paint_border_window (GTK_TEXT_VIEW (widget), snapshot, priv->right_window, context);
-  paint_border_window (GTK_TEXT_VIEW (widget), snapshot, priv->top_window, context);
-  paint_border_window (GTK_TEXT_VIEW (widget), snapshot, priv->bottom_window, context);
+  paint_border_window (GTK_TEXT_VIEW (widget), snapshot, priv->left_window, context, priv->left_gutter);
+  paint_border_window (GTK_TEXT_VIEW (widget), snapshot, priv->right_window, context, priv->right_gutter);
+  paint_border_window (GTK_TEXT_VIEW (widget), snapshot, priv->top_window, context, priv->top_gutter);
+  paint_border_window (GTK_TEXT_VIEW (widget), snapshot, priv->bottom_window, context, priv->bottom_gutter);
 
   /* Propagate exposes to all unanchored children. 
    * Anchored children are handled in gtk_text_view_paint(). 
@@ -5601,6 +5613,31 @@ gtk_text_view_add (GtkContainer *container,
                                      0, 0);
 }
 
+static gboolean
+remove_gutter (GtkTextView *text_view,
+               GtkWidget   *child)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+  GtkWidget **gutterptr = NULL;
+
+  if (priv->left_gutter == child)
+    gutterptr = &priv->left_gutter;
+  else if (priv->right_gutter == child)
+    gutterptr = &priv->right_gutter;
+  else if (priv->top_gutter == child)
+    gutterptr = &priv->top_gutter;
+  else if (priv->bottom_gutter == child)
+    gutterptr = &priv->bottom_gutter;
+  else
+    return FALSE;
+
+  *gutterptr = NULL;
+  gtk_widget_unparent (child);
+  g_object_unref (child);
+
+  return TRUE;
+}
+
 static void
 gtk_text_view_remove (GtkContainer *container,
                       GtkWidget    *child)
@@ -5612,6 +5649,9 @@ gtk_text_view_remove (GtkContainer *container,
 
   text_view = GTK_TEXT_VIEW (container);
   priv = text_view->priv;
+
+  if (!remove_gutter (text_view, child))
+    return;
 
   vc = NULL;
   iter = priv->children;
@@ -9451,37 +9491,25 @@ static void
 gtk_text_view_measure_borders (GtkTextView *text_view,
                                GtkBorder   *border)
 {
-  GSList *tmp_list = text_view->priv->children;
+  GtkTextViewPrivate *priv = text_view->priv;
+  GtkRequisition left = {0};
+  GtkRequisition right = {0};
+  GtkRequisition top = {0};
+  GtkRequisition bottom = {0};
 
-  border->top = 0;
-  border->left = 0;
-  border->right = 0;
-  border->bottom = 0;
+  if (priv->left_gutter)
+    gtk_widget_get_preferred_size (priv->left_gutter, &left, NULL);
+  if (priv->right_gutter)
+    gtk_widget_get_preferred_size (priv->right_gutter, &right, NULL);
+  if (priv->top_gutter)
+    gtk_widget_get_preferred_size (priv->top_gutter, &top, NULL);
+  if (priv->bottom_gutter)
+    gtk_widget_get_preferred_size (priv->bottom_gutter, &bottom, NULL);
 
-  while (tmp_list != NULL)
-    {
-      GtkTextViewChild *child = tmp_list->data;
-      GtkRequisition child_req;
-
-      tmp_list = tmp_list->next;
-
-      if (!(child->type == GTK_TEXT_WINDOW_LEFT ||
-            child->type == GTK_TEXT_WINDOW_RIGHT ||
-            child->type == GTK_TEXT_WINDOW_TOP ||
-            child->type == GTK_TEXT_WINDOW_BOTTOM))
-        continue;
-
-      gtk_widget_get_preferred_size (child->widget, &child_req, NULL);
-
-      if (child->type == GTK_TEXT_WINDOW_LEFT)
-        border->left = MAX (border->left, child_req.width);
-      else if (child->type == GTK_TEXT_WINDOW_RIGHT)
-        border->right = MAX (border->right, child_req.width);
-      else if (child->type == GTK_TEXT_WINDOW_TOP)
-        border->top = MAX (border->top, child_req.height);
-      else if (child->type == GTK_TEXT_WINDOW_BOTTOM)
-        border->bottom = MAX (border->bottom, child_req.height);
-    }
+  border->top = top.height;
+  border->bottom = bottom.height;
+  border->left = left.width;
+  border->right = right.width;
 }
 
 static void
@@ -10125,4 +10153,114 @@ gtk_text_view_get_extra_menu (GtkTextView *text_view)
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
 
   return priv->extra_menu;
+}
+
+static GtkWidget **
+get_gutter (GtkTextView       *text_view,
+            GtkTextWindowType  window_type)
+{
+  switch (window_type)
+    {
+    case GTK_TEXT_WINDOW_LEFT:
+      return &text_view->priv->left_gutter;
+
+    case GTK_TEXT_WINDOW_RIGHT:
+      return &text_view->priv->right_gutter;
+
+    case GTK_TEXT_WINDOW_TOP:
+      return &text_view->priv->top_gutter;
+
+    case GTK_TEXT_WINDOW_BOTTOM:
+      return &text_view->priv->bottom_gutter;
+
+    case GTK_TEXT_WINDOW_PRIVATE:
+    case GTK_TEXT_WINDOW_WIDGET:
+    case GTK_TEXT_WINDOW_TEXT:
+    default:
+      return NULL;
+    }
+}
+
+/**
+ * gtk_text_view_get_gutter:
+ * @text_view: a #GtkTextView
+ * @window_type: the window type of the gutter
+ *
+ * Gets a #GtkWidget that was previously set with gtk_text_view_set_gutter().
+ *
+ * @window_type must be one of %GTK_TEXT_WINDOW_LEFT, %GTK_TEXT_WINDOW_RIGHT,
+ * %GTK_TEXT_WINDOW_BOTTOM, or %GTK_TEXT_WINDOW_TOP.
+ *
+ * Returns: (transfer none): a #GtkWidget or %NULL
+ *
+ * Since: 4.0
+ */
+GtkWidget *
+gtk_text_view_get_gutter (GtkTextView       *text_view,
+                          GtkTextWindowType  window_type)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
+  g_return_val_if_fail (window_type == GTK_TEXT_WINDOW_LEFT ||
+                        window_type == GTK_TEXT_WINDOW_RIGHT ||
+                        window_type == GTK_TEXT_WINDOW_TOP ||
+                        window_type == GTK_TEXT_WINDOW_BOTTOM,
+                        NULL);
+
+  return *get_gutter (text_view, window_type);
+}
+
+/**
+ * gtk_text_view_set_gutter:
+ * @text_view: a #GtkTextView
+ * @window_type: a #GtkTextWindowType
+ * @widget: (nullable): a #GtkWidget or %NULL
+ *
+ * Sets a widget as the gutter for @text_view.
+ *
+ * If @widget is %NULL, then the current gutter will be removed.
+ *
+ * If a widget was previously set for @window_type, it is removed
+ * before adding @widget.
+ *
+ * Since: 4.0
+ */
+void
+gtk_text_view_set_gutter (GtkTextView       *text_view,
+                          GtkTextWindowType  window_type,
+                          GtkWidget         *widget)
+{
+  GtkWidget **gutterptr = NULL;
+
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (!widget || GTK_IS_WIDGET (widget));
+  g_return_if_fail (window_type == GTK_TEXT_WINDOW_LEFT ||
+                    window_type == GTK_TEXT_WINDOW_RIGHT ||
+                    window_type == GTK_TEXT_WINDOW_TOP ||
+                    window_type == GTK_TEXT_WINDOW_BOTTOM);
+
+  gutterptr = get_gutter (text_view, window_type);
+
+  if (*gutterptr == widget)
+    return;
+
+  if (*gutterptr != NULL)
+    gtk_widget_destroy (*gutterptr);
+
+  g_return_if_fail (*gutterptr == NULL);
+
+  if (widget != NULL)
+    {
+      GtkCssNode *parent;
+
+      gtk_text_view_ensure_window (text_view, window_type);
+
+      *gutterptr = g_object_ref (widget);
+
+      parent = gtk_text_view_get_css_node (text_view, window_type);
+      gtk_css_node_set_parent (gtk_widget_get_css_node (widget), parent);
+
+      gtk_widget_set_parent (widget, GTK_WIDGET (text_view));
+    }
+
+  gtk_widget_queue_resize (GTK_WIDGET (text_view));
 }

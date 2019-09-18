@@ -323,6 +323,13 @@ void gtk_text_view_add_child_in_window (GtkTextView          *text_view,
                                         /* window coordinates */
                                         gint                  xpos,
                                         gint                  ypos);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *gtk_text_view_get_gutter    (GtkTextView          *text_view,
+                                        GtkTextWindowType     window_type);
+GDK_AVAILABLE_IN_ALL
+void       gtk_text_view_set_gutter    (GtkTextView          *text_view,
+                                        GtkTextWindowType     window_type,
+                                        GtkWidget            *widget);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_text_view_move_child          (GtkTextView          *text_view,
