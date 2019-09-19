@@ -53,6 +53,10 @@ struct _GtkPrinterCups
   gchar *hostname;
   gint port;
   gchar **auth_info_required;
+  gchar *original_hostname;
+  gchar *original_resource;
+  gint original_port;
+  gboolean request_original_uri; /* Request PPD from original hostname */
 
   ipp_pstate_t state;
   gboolean reading_ppd;
