@@ -2438,6 +2438,8 @@ gdk_wayland_surface_map (GdkSurface *surface)
   if (impl->mapped)
     return;
 
+  _gdk_surface_clear_update_area (surface);
+
   if (should_map_as_popup (surface))
     {
       gboolean create_fallback = FALSE;
@@ -2527,6 +2529,8 @@ gdk_wayland_surface_map (GdkSurface *surface)
     {
       gdk_wayland_surface_create_xdg_toplevel (surface);
     }
+
+  gdk_surface_queue_expose (surface);
 
   impl->mapped = TRUE;
 }
