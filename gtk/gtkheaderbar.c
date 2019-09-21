@@ -944,9 +944,14 @@ gtk_header_bar_pack (GtkHeaderBar *bar,
   g_return_if_fail (gtk_widget_get_parent (widget) == NULL);
 
   if (pack_type == GTK_PACK_START)
-    gtk_container_add (GTK_CONTAINER (priv->start_box), widget);
+    {
+      gtk_container_add (GTK_CONTAINER (priv->start_box), widget);
+    }
   else if (pack_type == GTK_PACK_END)
-    gtk_container_add (GTK_CONTAINER (priv->end_box), widget);
+    {
+      gtk_container_add (GTK_CONTAINER (priv->end_box), widget);
+      gtk_box_reorder_child_after (GTK_BOX (priv->end_box), widget, NULL);
+    }
 
   g_signal_connect (widget, "notify::visible", G_CALLBACK (notify_child_cb), bar);
   _gtk_header_bar_update_separator_visibility (bar);
