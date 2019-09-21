@@ -42,6 +42,7 @@
 #include "gtkmenubar.h"
 #include "gtkmenubarprivate.h"
 
+#include "gtkboxlayout.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -57,7 +58,6 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
-#include "gtkbox.h"
 
 #define MENU_BAR_POPUP_DELAY 0
 
@@ -70,7 +70,6 @@ struct _GtkMenuBar
   GtkMenuShell menu_shell;
 
   int toggle_size;
-  GtkWidget *box;
 };
 
 struct _GtkMenuBarClass
@@ -83,17 +82,6 @@ static void gtk_menu_bar_add    (GtkContainer *container,
 static void gtk_menu_bar_remove (GtkContainer *container,
                                  GtkWidget    *widget);
 
-static void gtk_menu_bar_measure (GtkWidget     *widget,
-                                  GtkOrientation  orientation,
-                                  int             for_size,
-                                  int            *minimum,
-                                  int            *natural,
-                                  int            *minimum_baseline,
-                                  int            *natural_baseline);
-static void gtk_menu_bar_size_allocate     (GtkWidget *widget,
-                                            int        width,
-                                            int        height,
-                                            int        baseline);
 static void gtk_menu_bar_root              (GtkWidget *widget);
 static void gtk_menu_bar_unroot            (GtkWidget *widget);
 static gint gtk_menu_bar_get_popup_delay   (GtkMenuShell    *menu_shell);
@@ -109,8 +97,17 @@ static GList *
 gtk_menu_bar_get_items (GtkMenuShell *menu_shell)
 {
   GtkMenuBar *menu_bar = GTK_MENU_BAR (menu_shell);
+  GList *list = NULL;
+  GtkWidget *child;
 
-  return gtk_container_get_children (GTK_CONTAINER (menu_bar->box));
+  for (child = gtk_widget_get_last_child (GTK_WIDGET (menu_bar));
+       child != NULL;
+       child = gtk_widget_get_prev_sibling (child))
+    {
+      list = g_list_prepend (list, child);
+    }
+
+  return list;
 }
 
 static void
@@ -123,8 +120,17 @@ static void
 gtk_menu_bar_dispose (GObject *object)
 {
   GtkMenuBar *menu_bar = GTK_MENU_BAR (object);
+  GtkWidget *child;
 
-  g_clear_pointer (&menu_bar->box, gtk_widget_unparent);
+  child = gtk_widget_get_first_child (GTK_WIDGET (menu_bar));
+  while (child)
+    {
+      GtkWidget *next = gtk_widget_get_next_sibling (child);
+
+      gtk_widget_unparent (child);
+
+      child = next;
+    }
 
   G_OBJECT_CLASS (gtk_menu_bar_parent_class)->dispose (object);
 }
@@ -135,9 +141,17 @@ gtk_menu_bar_forall (GtkContainer *container,
                      gpointer      data)
 {
   GtkMenuBar *menu_bar = GTK_MENU_BAR (container);
+  GtkWidget *child;
 
-  if (menu_bar->box)
-    gtk_container_forall (GTK_CONTAINER (menu_bar->box), callback, data);
+  child = gtk_widget_get_first_child (GTK_WIDGET (menu_bar));
+  while (child)
+    {
+      GtkWidget *next = gtk_widget_get_next_sibling (child);
+
+      (*callback) (child, data);
+
+      child = next;
+    }
 }
 
 static void
@@ -153,8 +167,6 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
   object_class->finalize = gtk_menu_bar_finalize;
   object_class->dispose = gtk_menu_bar_dispose;
 
-  widget_class->measure = gtk_menu_bar_measure;
-  widget_class->size_allocate = gtk_menu_bar_size_allocate;
   widget_class->root = gtk_menu_bar_root;
   widget_class->unroot = gtk_menu_bar_unroot;
 
@@ -211,14 +223,13 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 				GTK_MENU_DIR_CHILD);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_MENU_BAR);
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("menubar"));
 }
 
 static void
 gtk_menu_bar_init (GtkMenuBar *menu_bar)
 {
-  menu_bar->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_widget_set_parent (menu_bar->box, GTK_WIDGET (menu_bar));
 }
 
 /**
@@ -232,37 +243,6 @@ GtkWidget*
 gtk_menu_bar_new (void)
 {
   return g_object_new (GTK_TYPE_MENU_BAR, NULL);
-}
-
-static void
-gtk_menu_bar_measure (GtkWidget      *widget,
-                      GtkOrientation  orientation,
-                      int             for_size,
-                      int            *minimum,
-                      int            *natural,
-                      int            *minimum_baseline,
-                      int            *natural_baseline)
-{
-  GtkMenuBar *menu_bar = GTK_MENU_BAR (widget);
-
-  gtk_widget_measure (menu_bar->box,
-                      orientation,
-                      for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_menu_bar_size_allocate (GtkWidget *widget,
-                            int        width,
-                            int        height,
-                            int        baseline)
-{
-  GtkMenuBar *menu_bar = GTK_MENU_BAR (widget);
-
-  gtk_widget_size_allocate (menu_bar->box,
-                            &(GtkAllocation) { 0, 0, width, height },
-                            baseline);
 }
 
 static GList *
@@ -463,18 +443,14 @@ static void
 gtk_menu_bar_add (GtkContainer *container,
                   GtkWidget    *widget)
 {
-  GtkMenuBar *menu_bar = GTK_MENU_BAR (container);
-
-  gtk_container_add (GTK_CONTAINER (menu_bar->box), widget);
+  gtk_widget_set_parent (widget, GTK_WIDGET (container));
 }
 
 static void
 gtk_menu_bar_remove (GtkContainer *container,
                      GtkWidget    *widget)
 {
-  GtkMenuBar *menu_bar = GTK_MENU_BAR (container);
-
-  gtk_container_remove (GTK_CONTAINER (menu_bar->box), widget);
+  gtk_widget_unparent (widget);
 
   GTK_CONTAINER_CLASS (gtk_menu_bar_parent_class)->remove (container, widget);
 }
@@ -488,17 +464,17 @@ gtk_menu_bar_reorder_child (GtkMenuBar *menu_bar,
   int i;
 
   if (position < 0)
-    sibling = gtk_widget_get_last_child (menu_bar->box);
+    sibling = gtk_widget_get_last_child (GTK_WIDGET (menu_bar));
 
   for (i = 0; i < position; i++)
     {
       if (sibling == NULL)
-        sibling = gtk_widget_get_first_child (menu_bar->box);
+        sibling = gtk_widget_get_first_child (GTK_WIDGET (menu_bar));
       else
         sibling = gtk_widget_get_next_sibling (sibling);
     }
 
-  gtk_box_reorder_child_after (GTK_BOX (menu_bar->box), child, sibling);
+  gtk_widget_insert_after (child, GTK_WIDGET (menu_bar), sibling);
 }
 
 static void
@@ -508,6 +484,6 @@ gtk_menu_bar_insert (GtkMenuShell *menu_shell,
 {
   GtkMenuBar *menu_bar = GTK_MENU_BAR (menu_shell);
 
-  gtk_container_add (GTK_CONTAINER (menu_bar->box), child);
+  gtk_widget_set_parent (child, GTK_WIDGET (menu_bar));
   gtk_menu_bar_reorder_child (menu_bar, child, position);
 }
