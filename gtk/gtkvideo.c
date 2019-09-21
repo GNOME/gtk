@@ -21,6 +21,7 @@
 
 #include "gtkvideo.h"
 
+#include "gtkbinlayout.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
@@ -99,39 +100,6 @@ gtk_video_motion (GtkEventControllerMotion *motion,
   self->controls_hide_source = g_timeout_add (5 * 1000,
                                               gtk_video_hide_controls,
                                               self);
-}
-
-static void
-gtk_video_measure (GtkWidget      *widget,
-                   GtkOrientation  orientation,
-                   int             for_size,
-                   int            *minimum,
-                   int            *natural,
-                   int            *minimum_baseline,
-                   int            *natural_baseline)
-{
-  GtkVideo *self = GTK_VIDEO (widget);
-
-  gtk_widget_measure (self->box,
-                      orientation,
-                      for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_video_size_allocate (GtkWidget *widget,
-                         int        width,
-                         int        height,
-                         int        baseline)
-{
-  GtkVideo *self = GTK_VIDEO (widget);
-
-  gtk_widget_size_allocate (self->box,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            }, baseline);
 }
 
 static void
@@ -280,8 +248,6 @@ gtk_video_class_init (GtkVideoClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  widget_class->measure = gtk_video_measure;
-  widget_class->size_allocate = gtk_video_size_allocate;
   widget_class->realize = gtk_video_realize;
   widget_class->unrealize = gtk_video_unrealize;
   widget_class->map = gtk_video_map;
@@ -349,6 +315,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkVideo, controls_revealer);
   gtk_widget_class_bind_template_callback (widget_class, gtk_video_motion);
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("video"));
 }
 
