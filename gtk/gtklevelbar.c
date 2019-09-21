@@ -119,6 +119,7 @@
  */
 #include "config.h"
 
+#include "gtkbinlayout.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkintl.h"
@@ -419,24 +420,6 @@ gtk_level_bar_measure_trough (GtkGizmo       *gizmo,
 }
 
 static void
-gtk_level_bar_measure (GtkWidget      *widget,
-                       GtkOrientation  orientation,
-                       int             for_size,
-                       int            *minimum,
-                       int            *natural,
-                       int            *minimum_baseline,
-                       int            *natural_baseline)
-{
-  GtkLevelBarPrivate *priv = gtk_level_bar_get_instance_private (GTK_LEVEL_BAR (widget));
-
-  gtk_widget_measure (priv->trough_widget,
-                      orientation,
-                      for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
 gtk_level_bar_allocate_trough_continuous (GtkLevelBar *self,
                                           int          width,
                                           int          height,
@@ -550,21 +533,6 @@ gtk_level_bar_allocate_trough (GtkGizmo *gizmo,
     gtk_level_bar_allocate_trough_continuous (self, width, height, baseline);
   else
     gtk_level_bar_allocate_trough_discrete (self, width, height, baseline);
-}
-
-static void
-gtk_level_bar_size_allocate (GtkWidget *widget,
-                             int        width,
-                             int        height,
-                             int        baseline)
-{
-  GtkLevelBarPrivate *priv = gtk_level_bar_get_instance_private (GTK_LEVEL_BAR (widget));
-
-  gtk_widget_size_allocate (priv->trough_widget,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            }, baseline);
 }
 
 static void
@@ -962,8 +930,6 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   oclass->set_property = gtk_level_bar_set_property;
   oclass->finalize = gtk_level_bar_finalize;
 
-  wclass->size_allocate = gtk_level_bar_size_allocate;
-  wclass->measure = gtk_level_bar_measure;
   wclass->direction_changed = gtk_level_bar_direction_changed;
 
   g_object_class_override_property (oclass, PROP_ORIENTATION, "orientation");
@@ -1065,6 +1031,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
   g_object_class_install_properties (oclass, LAST_PROPERTY, properties);
 
   gtk_widget_class_set_accessible_type (wclass, GTK_TYPE_LEVEL_BAR_ACCESSIBLE);
+  gtk_widget_class_set_layout_manager_type (wclass, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (wclass, I_("levelbar"));
 }
 
