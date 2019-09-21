@@ -2049,7 +2049,7 @@ menubar,
 
   &:backdrop { background-color: $backdrop_bg_color; }
 
-  > box > menuitem {
+  > menuitem {
     min-height: 16px;
     padding: 4px 8px;
 
