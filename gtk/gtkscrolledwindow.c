@@ -2343,23 +2343,6 @@ gtk_scrolled_window_get_policy (GtkScrolledWindow *scrolled_window,
     *vscrollbar_policy = priv->vscrollbar_policy;
 }
 
-static void
-gtk_scrolled_window_set_placement_internal (GtkScrolledWindow *scrolled_window,
-					    GtkCornerType      window_placement)
-{
-  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
-
-  if (priv->window_placement != window_placement)
-    {
-      priv->window_placement = window_placement;
-      update_scrollbar_positions (scrolled_window);
-
-      gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
-
-      g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_WINDOW_PLACEMENT]);
-    }
-}
-
 /**
  * gtk_scrolled_window_set_placement:
  * @scrolled_window: a #GtkScrolledWindow
@@ -2378,11 +2361,21 @@ gtk_scrolled_window_set_placement_internal (GtkScrolledWindow *scrolled_window,
  */
 void
 gtk_scrolled_window_set_placement (GtkScrolledWindow *scrolled_window,
-				   GtkCornerType      window_placement)
+                                   GtkCornerType      window_placement)
 {
+  GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
+
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
 
-  gtk_scrolled_window_set_placement_internal (scrolled_window, window_placement);
+  if (priv->window_placement != window_placement)
+    {
+      priv->window_placement = window_placement;
+      update_scrollbar_positions (scrolled_window);
+
+      gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+
+      g_object_notify_by_pspec (G_OBJECT (scrolled_window), properties[PROP_WINDOW_PLACEMENT]);
+    }
 }
 
 /**
@@ -2423,7 +2416,7 @@ gtk_scrolled_window_unset_placement (GtkScrolledWindow *scrolled_window)
 {
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
 
-  gtk_scrolled_window_set_placement_internal (scrolled_window, GTK_CORNER_TOP_LEFT);
+  gtk_scrolled_window_set_placement (scrolled_window, GTK_CORNER_TOP_LEFT);
 }
 
 /**
@@ -2660,8 +2653,8 @@ gtk_scrolled_window_set_property (GObject      *object,
 				      g_value_get_enum (value));
       break;
     case PROP_WINDOW_PLACEMENT:
-      gtk_scrolled_window_set_placement_internal (scrolled_window,
-		      				  g_value_get_enum (value));
+      gtk_scrolled_window_set_placement (scrolled_window,
+                                         g_value_get_enum (value));
       break;
     case PROP_SHADOW_TYPE:
       gtk_scrolled_window_set_shadow_type (scrolled_window,
