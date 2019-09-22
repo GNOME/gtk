@@ -2090,18 +2090,22 @@ model_add_empty_selection (GtkFileChooserButton *button)
   GtkListStore *store;
   GtkTreeIter iter;
   gint pos;
+  GIcon *icon;
 
   store = GTK_LIST_STORE (priv->model);
   pos = model_get_type_position (button, ROW_TYPE_EMPTY_SELECTION);
+  icon = g_themed_icon_new ("document-open-symbolic");
 
   gtk_list_store_insert (store, &iter, pos);
   gtk_list_store_set (store, &iter,
-		      ICON_COLUMN, NULL,
-		      DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
-		      TYPE_COLUMN, ROW_TYPE_EMPTY_SELECTION,
-		      DATA_COLUMN, NULL,
-		      IS_FOLDER_COLUMN, FALSE,
-		      -1);
+                      ICON_COLUMN, icon,
+                      DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
+                      TYPE_COLUMN, ROW_TYPE_EMPTY_SELECTION,
+                      DATA_COLUMN, NULL,
+                      IS_FOLDER_COLUMN, FALSE,
+                      -1);
+
+  g_object_unref (icon);
 }
 
 static void
