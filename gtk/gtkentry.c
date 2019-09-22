@@ -9911,13 +9911,16 @@ gtk_entry_drag_begin (GtkWidget      *widget,
     {
       gint *ranges, n_ranges;
       cairo_surface_t *surface;
+      double sx, sy;
 
       surface = _gtk_text_util_create_drag_icon (widget, text, -1);
 
       gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
+      sx = sy = 1;
+      cairo_surface_get_device_scale (surface, &sx, &sy);
       cairo_surface_set_device_offset (surface,
-                                       -(priv->drag_start_x - ranges[0]),
-                                       -(priv->drag_start_y));
+                                       -(priv->drag_start_x - ranges[0]) * sx,
+                                       -(priv->drag_start_y) * sy);
       g_free (ranges);
 
       gtk_drag_set_icon_surface (context, surface);
