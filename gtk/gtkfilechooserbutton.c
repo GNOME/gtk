@@ -198,9 +198,6 @@ typedef struct
   GtkCellRenderer *icon_cell;
   GtkCellRenderer *name_cell;
 
-  /* Currently visible child (either priv->combo_box or priv->button) */
-  GtkWidget *child;
-
   GtkTreeModel *model;
   GtkTreeModel *filter_model;
 
@@ -498,8 +495,6 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 
   gtk_widget_hide (priv->combo_box);
   gtk_widget_set_parent (priv->combo_box, GTK_WIDGET (button));
-
-  priv->child = priv->button;
 
   /* Bookmarks manager */
   priv->bookmarks_manager = _gtk_bookmarks_manager_new (bookmarks_changed_cb, button);
@@ -915,23 +910,21 @@ gtk_file_chooser_button_set_property (GObject      *object,
       update_combo_box (GTK_FILE_CHOOSER_BUTTON (object));
 
       switch (g_value_get_enum (value))
-	{
-	case GTK_FILE_CHOOSER_ACTION_OPEN:
+        {
+        case GTK_FILE_CHOOSER_ACTION_OPEN:
           gtk_widget_hide (priv->combo_box);
           gtk_widget_show (priv->button);
-          priv->child = priv->button;
           gtk_widget_queue_resize (GTK_WIDGET (button));
-	  break;
-	case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
+          break;
+        case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
           gtk_widget_show (priv->combo_box);
           gtk_widget_hide (priv->button);
-          priv->child = priv->combo_box;
           gtk_widget_queue_resize (GTK_WIDGET (button));
-	  break;
-	default:
-	  g_assert_not_reached ();
-	  break;
-	}
+          break;
+        default:
+          g_assert_not_reached ();
+          break;
+        }
       break;
 
     case PROP_TITLE:
@@ -1026,9 +1019,15 @@ gtk_file_chooser_button_state_flags_changed (GtkWidget     *widget,
   GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
 
   if (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_DROP_ACTIVE)
-    gtk_widget_set_state_flags (priv->child, GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
+    {
+      gtk_widget_set_state_flags (priv->button, GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
+      gtk_widget_set_state_flags (priv->combo_box, GTK_STATE_FLAG_DROP_ACTIVE, FALSE);
+    }
   else
-    gtk_widget_unset_state_flags (priv->child, GTK_STATE_FLAG_DROP_ACTIVE);
+    {
+      gtk_widget_unset_state_flags (priv->button, GTK_STATE_FLAG_DROP_ACTIVE);
+      gtk_widget_unset_state_flags (priv->combo_box, GTK_STATE_FLAG_DROP_ACTIVE);
+    }
 
   GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->state_flags_changed (widget, previous_state);
 }
