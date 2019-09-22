@@ -901,8 +901,6 @@ gtk_dialog_add_button (GtkDialog   *dialog,
   button = gtk_button_new_with_label (button_text);
   gtk_button_set_use_underline (GTK_BUTTON (button), TRUE);
 
-  gtk_widget_show (button);
-
   gtk_dialog_add_action_widget (dialog, button, response_id);
 
   return button;
