@@ -253,7 +253,7 @@ gtk_media_file_get_impl_type (void)
  *
  * Returns: a new #GtkMediaFile
  **/
-GtkMediaStream *
+GtkMediaFile *
 gtk_media_file_new (void)
 {
   return g_object_new (gtk_media_file_get_impl_type (), NULL);
@@ -268,7 +268,7 @@ gtk_media_file_new (void)
  *
  * Returns: a new #GtkMediaFile playing @filename
  **/
-GtkMediaStream *
+GtkMediaFile *
 gtk_media_file_new_for_filename (const char *filename)
 {
   GtkMediaStream *result;
@@ -296,7 +296,7 @@ gtk_media_file_new_for_filename (const char *filename)
  *
  * Returns: a new #GtkMediaFile playing @resource_path
  **/
-GtkMediaStream *
+GtkMediaFile *
 gtk_media_file_new_for_resource (const char *resource_path)
 {
   GtkMediaStream *result;
@@ -329,13 +329,13 @@ gtk_media_file_new_for_resource (const char *resource_path)
 
 /**
  * gtk_media_file_new_for_file:
- * @file: (allow-none): The file to play
+ * @file: The file to play
  *
  * Creates a new media file to play @file. 
  *
  * Returns: a new #GtkMediaFile playing @file
  **/
-GtkMediaStream *
+GtkMediaFile *
 gtk_media_file_new_for_file (GFile *file)
 {
   g_return_val_if_fail (file == NULL || G_IS_FILE (file), NULL);
@@ -347,7 +347,7 @@ gtk_media_file_new_for_file (GFile *file)
 
 /**
  * gtk_media_file_new_for_input_stream:
- * @stream: (allow-none): The stream to play
+ * @stream: The stream to play
  *
  * Creates a new media file to play @stream. If you want the
  * resulting media to be seekable, the stream should implement
@@ -355,7 +355,7 @@ gtk_media_file_new_for_file (GFile *file)
  *
  * Returns: a new #GtkMediaFile
  **/
-GtkMediaStream *
+GtkMediaFile *
 gtk_media_file_new_for_input_stream (GInputStream *stream)
 {
   g_return_val_if_fail (stream == NULL || G_IS_INPUT_STREAM (stream), NULL);
