@@ -30,6 +30,7 @@
 
 #include "gtkcolorbutton.h"
 
+#include "gtkbinlayout.h"
 #include "gtkbutton.h"
 #include "gtkcolorchooser.h"
 #include "gtkcolorchooserprivate.h"
@@ -148,40 +149,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkColorButton, gtk_color_button, GTK_TYPE_WIDGET,
                                                 gtk_color_button_iface_init))
 
 static void
-gtk_color_button_measure (GtkWidget       *widget,
-                          GtkOrientation  orientation,
-                          int             for_size,
-                          int            *minimum,
-                          int            *natural,
-                          int            *minimum_baseline,
-                          int            *natural_baseline)
-{
-  GtkColorButton *button = GTK_COLOR_BUTTON (widget);
-  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
-
-  gtk_widget_measure (priv->button, orientation, for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_color_button_size_allocate (GtkWidget *widget,
-                                int        width,
-                                int        height,
-                                int        baseline)
-{
-  GtkColorButton *button = GTK_COLOR_BUTTON (widget);
-  GtkColorButtonPrivate *priv = gtk_color_button_get_instance_private (button);
-
-  gtk_widget_size_allocate (priv->button,
-                            &(GtkAllocation) {
-                              0, 0,
-                              width, height
-                            },
-                            baseline);
-}
-
-static void
 gtk_color_button_class_init (GtkColorButtonClass *klass)
 {
   GObjectClass *gobject_class;
@@ -194,8 +161,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   gobject_class->set_property = gtk_color_button_set_property;
   gobject_class->finalize = gtk_color_button_finalize;
 
-  widget_class->measure = gtk_color_button_measure;
-  widget_class->size_allocate = gtk_color_button_size_allocate;
   klass->color_set = NULL;
 
   /**
@@ -275,6 +240,8 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
                                                          P_("Whether to show the color editor right away"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 static void
