@@ -133,7 +133,7 @@ create_label (void)
 static GtkWidget *
 create_video (void)
 {
-  GtkMediaStream *stream = gtk_media_file_new_for_resource ("/images/gtk-logo.webm");
+  GtkMediaStream *stream = GTK_MEDIA_STREAM (gtk_media_file_new_for_resource ("/images/gtk-logo.webm"));
   GtkWidget *w = gtk_picture_new_for_paintable (GDK_PAINTABLE (stream));
 
   gtk_widget_set_size_request (w, 64, 64);

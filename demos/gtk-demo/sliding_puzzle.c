@@ -427,7 +427,7 @@ do_sliding_puzzle (GtkWidget *do_widget)
       gtk_style_context_add_class (gtk_widget_get_style_context (choices), GTK_STYLE_CLASS_VIEW);
       add_choice (choices, puzzle);
       add_choice (choices, gtk_nuclear_animation_new ());
-      media = gtk_media_file_new_for_resource ("/images/gtk-logo.webm");
+      media = GTK_MEDIA_STREAM (gtk_media_file_new_for_resource ("/images/gtk-logo.webm"));
       gtk_media_stream_set_loop (media, TRUE);
       gtk_media_stream_set_muted (media, TRUE);
       gtk_media_stream_play (media);

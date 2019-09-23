@@ -50,15 +50,15 @@ struct _GtkMediaFileClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GtkMediaStream *        gtk_media_file_new                      (void);
+GtkMediaFile *          gtk_media_file_new                      (void);
 GDK_AVAILABLE_IN_ALL
-GtkMediaStream *        gtk_media_file_new_for_filename         (const char     *filename);
+GtkMediaFile *          gtk_media_file_new_for_filename         (const char     *filename);
 GDK_AVAILABLE_IN_ALL
-GtkMediaStream *        gtk_media_file_new_for_resource         (const char     *resource_path);
+GtkMediaFile *          gtk_media_file_new_for_resource         (const char     *resource_path);
 GDK_AVAILABLE_IN_ALL
-GtkMediaStream *        gtk_media_file_new_for_file             (GFile          *file);
+GtkMediaFile *          gtk_media_file_new_for_file             (GFile          *file);
 GDK_AVAILABLE_IN_ALL
-GtkMediaStream *        gtk_media_file_new_for_input_stream     (GInputStream   *stream);
+GtkMediaFile *          gtk_media_file_new_for_input_stream     (GInputStream   *stream);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_media_file_clear                    (GtkMediaFile   *self);
