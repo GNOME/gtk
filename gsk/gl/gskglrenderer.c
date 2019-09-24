@@ -1164,13 +1164,13 @@ gsk_rounded_rect_intersection (const GskRoundedRect *outer,
 
   get_inner_rect (inner, &inner_inner);
 
-  contained_x = outer_inner.origin.x <= inner_inner.origin.x &&
-                (outer_inner.origin.x + outer_inner.size.width) > (inner_inner.origin.x +
-                                                                   inner_inner.size.width);
+  contained_x = outer_inner.origin.x <= inner_bounds->origin.x &&
+                (outer_inner.origin.x + outer_inner.size.width) > (inner_bounds->origin.x +
+                                                                   inner_bounds->size.width);
 
-  contained_y = outer_inner.origin.y <= inner_inner.origin.y &&
-                (outer_inner.origin.y + outer_inner.size.height) > (inner_inner.origin.y +
-                                                                    inner_inner.size.height);
+  contained_y = outer_inner.origin.y <= inner_bounds->origin.y &&
+                (outer_inner.origin.y + outer_inner.size.height) > (inner_bounds->origin.y +
+                                                                    inner_bounds->size.height);
 
   if (contained_x && !contained_y)
     {
