@@ -62,6 +62,7 @@
 #include <gdk/gdktypes.h>
 #include <gdk/gdkvisual.h>
 #include <gdk/gdkwindow.h>
+#include "gdk/gdkeventinterpolationprivate.h"
 
 #ifndef GDK_DISABLE_DEPRECATED
 #include <gdk/deprecated/gdkcolor.h>
