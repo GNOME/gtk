@@ -1119,6 +1119,57 @@ gdk_event_get_coords (const GdkEvent *event,
   return fetched;
 }
 
+void
+gdk_event_set_coords (GdkEvent *event,
+                      gdouble   x,
+                      gdouble   y)
+{
+  g_return_if_fail (event != NULL);
+
+  switch ((guint) event->any.type)
+    {
+    case GDK_CONFIGURE:
+      event->configure.x = x;
+      event->configure.y = y;
+      break;
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+      event->crossing.x = x;
+      event->crossing.y = y;
+      break;
+    case GDK_SCROLL:
+      event->scroll.x = x;
+      event->scroll.y = y;
+      break;
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      event->button.x = x;
+      event->button.y = y;
+      break;
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+      event->touch.x = x;
+      event->touch.y = y;
+      break;
+    case GDK_MOTION_NOTIFY:
+      event->motion.x = x;
+      event->motion.y = y;
+      break;
+    case GDK_TOUCHPAD_SWIPE:
+      event->touchpad_swipe.x = x;
+      event->touchpad_swipe.y = y;
+      break;
+    case GDK_TOUCHPAD_PINCH:
+      event->touchpad_pinch.x = x;
+      event->touchpad_pinch.y = y;
+      break;
+    default:
+      break;
+    }
+}
+
 /**
  * gdk_event_get_root_coords:
  * @event: a #GdkEvent

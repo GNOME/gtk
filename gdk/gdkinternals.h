@@ -413,6 +413,10 @@ void     gdk_event_set_scancode        (GdkEvent *event,
 void     gdk_event_set_seat              (GdkEvent *event,
                                           GdkSeat  *seat);
 
+void gdk_event_set_coords               (GdkEvent        *event,
+                                         gdouble          x,
+                                         gdouble          y);
+
 void   _gdk_event_emit               (GdkEvent   *event);
 GList* _gdk_event_queue_find_first   (GdkDisplay *display);
 void   _gdk_event_queue_remove_link  (GdkDisplay *display,
