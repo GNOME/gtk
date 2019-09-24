@@ -591,6 +591,19 @@ gtk_event_controller_scroll_init (GtkEventControllerScroll *scroll)
 GtkEventController *
 gtk_event_controller_scroll_new (GtkEventControllerScrollFlags flags)
 {
+  const char *override;
+
+  override = g_getenv ("GTK_INTERPOLATE_EVENTS");
+  if (override)
+    {
+      if (g_strcmp0 (override, "true") == 0)
+        flags |= GTK_EVENT_CONTROLLER_SCROLL_INTERP;
+      else if (g_strcmp0 (override, "false") == 0)
+        flags &= ~GTK_EVENT_CONTROLLER_SCROLL_INTERP;
+      else
+        g_warning ("Failed to parse GTK_INTERPOLATE_EVENTS: %s", override);
+    }
+
   return g_object_new (GTK_TYPE_EVENT_CONTROLLER_SCROLL,
                        "flags", flags,
                        NULL);
