@@ -32,7 +32,7 @@
 #include "gtkaccessible.h"
 #include "gtkbindings.h"
 #include "gtkeditable.h"
-#include "gtkbox.h"
+#include "gtkboxlayout.h"
 #include "gtkgestureclick.h"
 #include "gtktextprivate.h"
 #include "gtkimage.h"
@@ -230,65 +230,6 @@ gtk_search_entry_get_property (GObject    *object,
     }
 }
 
-static void
-gtk_search_entry_measure (GtkWidget      *widget,
-                          GtkOrientation  orientation,
-                          int             for_size,
-                          int            *minimum,
-                          int            *natural,
-                          int            *minimum_baseline,
-                          int            *natural_baseline)
-{
-  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (widget);
-  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
-  int icon_min = 0, icon_nat = 0;
-
-  gtk_widget_measure (priv->entry, orientation, for_size,
-                      minimum, natural,
-                      minimum_baseline, natural_baseline);
-
-  gtk_widget_measure (priv->icon, orientation, for_size,
-                      &icon_min, &icon_nat,
-                      NULL, NULL);
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      *minimum += icon_min;
-      *natural += icon_nat;
-    }
-  else
-    {
-      *minimum = MAX (*minimum, icon_min);
-      *natural = MAX (*natural, icon_nat);
-    }
-}
-
-static void
-gtk_search_entry_size_allocate (GtkWidget *widget,
-                                int        width,
-                                int        height,
-                                int        baseline)
-{
-  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (widget);
-  GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
-  int icon_min = 0, icon_nat = 0;
-  int text_width;
-
-  gtk_widget_measure (priv->icon, GTK_ORIENTATION_HORIZONTAL, -1,
-                      &icon_min, &icon_nat,
-                      NULL, NULL);
-
-  text_width = width - icon_nat;
-
-  gtk_widget_size_allocate (priv->entry,
-                            &(GtkAllocation) { 0, 0, text_width, height },
-                            baseline);
-
-  gtk_widget_size_allocate (priv->icon,
-                            &(GtkAllocation) { text_width, 0, icon_nat, height },
-                            baseline);
-}
-
 static AtkObject *
 gtk_search_entry_get_accessible (GtkWidget *widget)
 {
@@ -332,8 +273,6 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
   object_class->get_property = gtk_search_entry_get_property;
   object_class->set_property = gtk_search_entry_set_property;
 
-  widget_class->measure = gtk_search_entry_measure;
-  widget_class->size_allocate = gtk_search_entry_size_allocate;
   widget_class->get_accessible = gtk_search_entry_get_accessible;
   widget_class->grab_focus = gtk_search_entry_grab_focus;
   widget_class->mnemonic_activate = gtk_search_entry_mnemonic_activate;
@@ -472,6 +411,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                                 "stop-search", 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("entry"));
 }
 
