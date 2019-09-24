@@ -701,6 +701,7 @@ static gboolean
 scroll_controller_scroll (GtkEventControllerScroll *Scroll,
 			  gdouble                   dx,
 			  gdouble                   dy,
+			  GdkModifierType           state,
 			  GtkWidget                *widget)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);

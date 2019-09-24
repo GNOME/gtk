@@ -1174,8 +1174,9 @@ get_scroll_unit (GtkScrolledWindow *sw,
 
 static gboolean
 captured_scroll_cb (GtkEventControllerScroll *scroll,
-                    double                    delta_x,
-                    double                    delta_y,
+                    gdouble                   delta_x,
+                    gdouble                   delta_y,
+                    GdkModifierType           state,
                     GtkScrolledWindow        *scrolled_window)
 {
   gtk_scrolled_window_cancel_deceleration (scrolled_window);
@@ -1267,14 +1268,11 @@ static gboolean
 scroll_controller_scroll (GtkEventControllerScroll *scroll,
                           gdouble                   delta_x,
                           gdouble                   delta_y,
+                          GdkModifierType           state,
                           GtkScrolledWindow        *scrolled_window)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
   gboolean shifted;
-  GdkModifierType state;
-
-  if (!gtk_get_current_event_state (&state))
-    return GDK_EVENT_PROPAGATE;
 
   shifted = (state & GDK_SHIFT_MASK) != 0;
 
@@ -1998,7 +1996,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_scrolled_window_update_use_indicators (scrolled_window);
 
   controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES |
-                                                GTK_EVENT_CONTROLLER_SCROLL_KINETIC);
+                                                GTK_EVENT_CONTROLLER_SCROLL_KINETIC |
+                                                GTK_EVENT_CONTROLLER_SCROLL_INTERP);
   g_signal_connect (controller, "scroll-begin",
                     G_CALLBACK (scroll_controller_scroll_begin), scrolled_window);
   g_signal_connect (controller, "scroll",
@@ -2010,7 +2009,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_widget_add_controller (widget, controller);
 
   controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES |
-                                                GTK_EVENT_CONTROLLER_SCROLL_KINETIC);
+                                                GTK_EVENT_CONTROLLER_SCROLL_KINETIC |
+                                                GTK_EVENT_CONTROLLER_SCROLL_INTERP);
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   g_signal_connect (controller, "scroll",
                     G_CALLBACK (captured_scroll_cb), scrolled_window);

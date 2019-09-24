@@ -156,6 +156,7 @@ static void     cb_popup_mapped                 (GtkWidget           *popup,
 static gboolean gtk_scale_button_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                                            gdouble                   dx,
                                                            gdouble                   dy,
+                                                           GdkModifierType           state,
                                                            GtkScaleButton           *button);
 
 G_DEFINE_TYPE_WITH_CODE (GtkScaleButton, gtk_scale_button, GTK_TYPE_BUTTON,
@@ -770,6 +771,7 @@ static gboolean
 gtk_scale_button_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                            gdouble                   dx,
                                            gdouble                   dy,
+                                           GdkModifierType           state,
                                            GtkScaleButton           *button)
 {
   GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);

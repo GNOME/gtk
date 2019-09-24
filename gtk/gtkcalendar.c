@@ -365,6 +365,7 @@ static gint calendar_get_inner_border  (GtkCalendar *calendar);
 static gboolean gtk_calendar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                                        gdouble                   dx,
                                                        gdouble                   dy,
+                                                       GdkModifierType           state,
                                                        GtkWidget                *widget);
 
 static char    *default_abbreviated_dayname[7];
@@ -2710,6 +2711,7 @@ static gboolean
 gtk_calendar_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                        gdouble                   dx,
                                        gdouble                   dy,
+                                       GdkModifierType           state,
                                        GtkWidget                *widget)
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
