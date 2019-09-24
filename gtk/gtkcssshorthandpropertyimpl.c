@@ -1118,7 +1118,12 @@ unpack_font_description (GtkCssShorthandProperty *shorthand,
       g_value_init (&v, G_TYPE_DOUBLE);
       size = pango_font_description_get_size (description) / PANGO_SCALE;
       if (!pango_font_description_get_size_is_absolute (description))
-        size = size * gdk_screen_get_resolution (gdk_screen_get_default ()) / 72.0;
+        {
+          double dpi = gdk_screen_get_resolution (gdk_screen_get_default ());
+          if (dpi <= 0.0)
+            dpi = 96.0;
+          size = size * dpi / 72.0;
+        }
       g_value_set_double (&v, size);
       prop = _gtk_style_property_lookup ("font-size");
       _gtk_style_property_assign (prop, props, state, &v);
