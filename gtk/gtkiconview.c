@@ -6485,6 +6485,7 @@ gtk_icon_view_drag_begin (GtkWidget      *widget,
   cairo_surface_t *icon;
   gint x, y;
   GtkTreePath *path;
+  double sx, sy;
 
   icon_view = GTK_ICON_VIEW (widget);
 
@@ -6507,7 +6508,8 @@ gtk_icon_view_drag_begin (GtkWidget      *widget,
   icon = gtk_icon_view_create_drag_icon (icon_view, path);
   gtk_tree_path_free (path);
 
-  cairo_surface_set_device_offset (icon, -x, -y);
+  cairo_surface_get_device_scale (icon, &sx, &sy);
+  cairo_surface_set_device_offset (icon, -x * sx, -y * sy);
 
   gtk_drag_set_icon_surface (context, icon);
 

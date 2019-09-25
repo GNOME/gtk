@@ -7944,6 +7944,7 @@ gtk_tree_view_drag_begin (GtkWidget      *widget,
   gint cell_x, cell_y;
   cairo_surface_t *row_pix;
   TreeViewDragInfo *di;
+  double sx, sy;
 
   tree_view = GTK_TREE_VIEW (widget);
 
@@ -7972,10 +7973,11 @@ gtk_tree_view_drag_begin (GtkWidget      *widget,
 
   row_pix = gtk_tree_view_create_row_drag_icon (tree_view,
                                                 path);
+  cairo_surface_get_device_scale (row_pix, &sx, &sy);
   cairo_surface_set_device_offset (row_pix,
                                    /* the + 1 is for the black border in the icon */
-                                   - (tree_view->priv->press_start_x + 1),
-                                   - (cell_y + 1));
+                                   - (tree_view->priv->press_start_x + 1) * sx,
+                                   - (cell_y + 1) * sy);
 
   gtk_drag_set_icon_surface (context, row_pix);
 
