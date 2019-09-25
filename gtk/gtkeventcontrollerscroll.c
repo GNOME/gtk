@@ -243,7 +243,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
   GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (controller);
   GdkScrollDirection direction = GDK_SCROLL_SMOOTH;
   gdouble dx = 0, dy = 0;
-  gboolean handled = TRUE;
+  gboolean handled = GDK_EVENT_PROPAGATE;
 
   if (gdk_event_get_event_type (event) != GDK_SCROLL)
     return FALSE;
