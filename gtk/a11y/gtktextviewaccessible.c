@@ -1272,6 +1272,100 @@ gtk_text_view_accessible_set_selection (AtkText *text,
     return FALSE;
 }
 
+static gboolean
+gtk_text_view_accessible_scroll_substring_to(AtkText       *text,
+                                             gint           start_offset,
+                                             gint           end_offset,
+                                             AtkScrollType  type)
+{
+  GtkTextView *view;
+  GtkWidget *widget;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  gdouble xalign = -1.0, yalign = -1.0;
+  gboolean use_align = TRUE;
+  gint offset, rtl = 0;
+
+  if (end_offset < start_offset)
+    return FALSE;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
+  if (widget == NULL)
+    return FALSE;
+
+  view = GTK_TEXT_VIEW (widget);
+  buffer = gtk_text_view_get_buffer (view);
+
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    rtl = 1;
+
+  /*
+   * Opportunistically pick which offset should be used to calculate
+   * the scrolling factor.
+   *
+   * Considering only an extremity of the substring is good enough when
+   * the selected string doesn't include line break and isn't larger than
+   * the visible rectangle.
+   */
+  switch (type)
+    {
+    case ATK_SCROLL_TOP_LEFT:
+      offset = (rtl) ? end_offset : start_offset;
+      xalign = 0.0;
+      yalign = 0.0;
+      break;
+    case ATK_SCROLL_BOTTOM_RIGHT:
+      offset = (rtl) ? start_offset : end_offset;
+      xalign = 1.0;
+      yalign = 1.0;
+      break;
+    case ATK_SCROLL_TOP_EDGE:
+      offset = start_offset;
+      yalign = 0.0;
+      break;
+    case ATK_SCROLL_BOTTOM_EDGE:
+      offset = end_offset;
+      yalign = 1.0;
+      break;
+    case ATK_SCROLL_LEFT_EDGE:
+      offset = (rtl) ? end_offset : start_offset;
+      xalign = 0.0;
+      break;
+    case ATK_SCROLL_RIGHT_EDGE:
+      offset = (rtl) ? start_offset : end_offset;
+      xalign = 1.0;
+      break;
+    case ATK_SCROLL_ANYWHERE:
+      offset = start_offset;
+      use_align = FALSE;
+      xalign = yalign = 0.0;
+      break;
+    default:
+      return FALSE;
+    }
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
+
+  /* Get current iter location to be able to scroll in a single direction. */
+  if (use_align && (xalign == -1.0 || yalign == -1.0))
+    {
+      GdkRectangle rect, irect;
+
+      gtk_text_view_get_visible_rect (view, &rect);
+      gtk_text_view_get_iter_location (view, &iter, &irect);
+
+      if (xalign == -1.0)
+        xalign = ((gdouble)(irect.x - rect.x)) / (rect.width - 1);
+      if (yalign == -1.0)
+        yalign = ((gdouble)(irect.y - rect.y)) / (rect.height - 1);
+    }
+
+  gtk_text_view_scroll_to_iter (view, &iter, 0, use_align, xalign, yalign);
+
+  return TRUE;
+
+}
+
 static void
 atk_text_interface_init (AtkTextIface *iface)
 {
@@ -1292,6 +1386,7 @@ atk_text_interface_init (AtkTextIface *iface)
   iface->set_selection = gtk_text_view_accessible_set_selection;
   iface->get_run_attributes = gtk_text_view_accessible_get_run_attributes;
   iface->get_default_attributes = gtk_text_view_accessible_get_default_attributes;
+  iface->scroll_substring_to = gtk_text_view_accessible_scroll_substring_to;
 }
 
 /* atkeditabletext.h */
