@@ -5146,7 +5146,6 @@ gtk_label_set_selectable (GtkLabel *label,
 
           priv->select_info->selectable = FALSE;
           gtk_label_clear_select_info (label);
-          gtk_label_update_cursor (label);
         }
     }
   if (setting != old_setting)
