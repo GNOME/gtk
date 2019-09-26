@@ -3739,27 +3739,22 @@ static void
 gtk_label_update_cursor (GtkLabel *label)
 {
   GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkWidget *widget;
+  GtkWidget *widget = GTK_WIDGET (label);
 
   if (!priv->select_info)
     return;
 
-  widget = GTK_WIDGET (label);
-
-  if (gtk_widget_get_realized (widget))
+  if (gtk_widget_is_sensitive (widget))
     {
-      if (gtk_widget_is_sensitive (widget))
-        {
-          if (priv->select_info->active_link)
-            gtk_widget_set_cursor_from_name (widget, "pointer");
-          else if (priv->select_info->selectable)
-            gtk_widget_set_cursor_from_name (widget, "text");
-          else
-            gtk_widget_set_cursor (widget, NULL);
-        }
+      if (priv->select_info->active_link)
+        gtk_widget_set_cursor_from_name (widget, "pointer");
+      else if (priv->select_info->selectable)
+        gtk_widget_set_cursor_from_name (widget, "text");
       else
         gtk_widget_set_cursor (widget, NULL);
     }
+  else
+    gtk_widget_set_cursor (widget, NULL);
 }
 
 static void
