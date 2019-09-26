@@ -487,7 +487,6 @@ static void gtk_label_do_popup                   (GtkLabel      *label,
                                                   double         x,
                                                   double         y);
 
-static void gtk_label_set_selectable_hint (GtkLabel *label);
 static void gtk_label_ensure_select_info  (GtkLabel *label);
 static void gtk_label_clear_select_info   (GtkLabel *label);
 static void gtk_label_update_cursor       (GtkLabel *label);
@@ -4905,19 +4904,6 @@ gtk_label_leave (GtkEventControllerMotion *controller,
     }
 }
 
-static void
-gtk_label_set_selectable_hint (GtkLabel *label)
-{
-  GtkLabelPrivate *priv = gtk_label_get_instance_private (label);
-  GtkWidget *widget;
-
-  g_assert (priv->select_info);
-  widget = GTK_WIDGET (label);
-
-  if (priv->select_info->selectable)
-    gtk_widget_set_cursor_from_name (widget, "text");
-}
-
 #define GTK_TYPE_LABEL_CONTENT            (gtk_label_content_get_type ())
 #define GTK_LABEL_CONTENT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LABEL_CONTENT, GtkLabelContent))
 #define GTK_IS_LABEL_CONTENT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_LABEL_CONTENT))
@@ -5040,9 +5026,6 @@ gtk_label_ensure_select_info (GtkLabel *label)
 
       gtk_widget_set_can_focus (GTK_WIDGET (label), TRUE);
 
-      if (gtk_widget_get_realized (GTK_WIDGET (label)))
-	gtk_label_set_selectable_hint (label);
-
       priv->select_info->drag_gesture = gtk_gesture_drag_new ();
       g_signal_connect (priv->select_info->drag_gesture, "drag-begin",
                         G_CALLBACK (gtk_label_drag_gesture_begin), label);
@@ -5069,6 +5052,8 @@ gtk_label_ensure_select_info (GtkLabel *label)
 
       priv->select_info->provider = g_object_new (GTK_TYPE_LABEL_CONTENT, NULL);
       GTK_LABEL_CONTENT (priv->select_info->provider)->label = label;
+
+      gtk_label_update_cursor (label);
     }
 }
 
