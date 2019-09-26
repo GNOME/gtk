@@ -200,7 +200,9 @@ pressed_cb (GtkGesture       *gesture,
             double            y,
             GtkPlacesViewRow *row)
 {
-  g_signal_emit_by_name (row, "popup-menu", 0);
+  gboolean menu_activated;
+
+  g_signal_emit_by_name (row, "popup-menu", &menu_activated);
 }
 
 static void
