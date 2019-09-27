@@ -9082,6 +9082,11 @@ gtk_window_style_updated (GtkWidget *widget)
  * 
  * Checks whether the focus and default widgets of @window are
  * @widget or a descendent of @widget, and if so, unset them.
+ *
+ * If @widget is a #GtkPopover then nothing will be done with
+ * respect to the default widget of @window, the reason being that
+ * popovers already have specific logic for clearing/restablishing
+ * the default widget of its enclosing window.
  **/
 void
 _gtk_window_unset_focus_and_default (GtkWindow *window,
@@ -9106,15 +9111,18 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
       if (child == widget)
 	gtk_window_set_focus (GTK_WINDOW (window), NULL);
     }
-      
-  child = priv->default_widget;
-      
-  while (child && child != widget)
-    child = _gtk_widget_get_parent (child);
-
-  if (child == widget)
-    gtk_window_set_default (window, NULL);
   
+  if (!GTK_IS_POPOVER (widget))
+    {
+      child = priv->default_widget;
+
+      while (child && child != widget)
+        child = _gtk_widget_get_parent (child);
+
+      if (child == widget)
+        gtk_window_set_default (window, NULL);
+    }
+
   g_object_unref (widget);
   g_object_unref (window);
 }
