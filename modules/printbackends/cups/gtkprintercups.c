@@ -105,6 +105,10 @@ gtk_printer_cups_init (GtkPrinterCups *printer)
   printer->state = 0;
   printer->hostname = NULL;
   printer->port = 0;
+  printer->original_hostname = NULL;
+  printer->original_resource = NULL;
+  printer->original_port = 0;
+  printer->request_original_uri = FALSE;
   printer->ppd_name = NULL;
   printer->ppd_file = NULL;
   printer->default_cover_before = NULL;
@@ -153,6 +157,8 @@ gtk_printer_cups_finalize (GObject *object)
   g_free (printer->original_device_uri);
   g_free (printer->printer_uri);
   g_free (printer->hostname);
+  g_free (printer->original_hostname);
+  g_free (printer->original_resource);
   g_free (printer->ppd_name);
   g_free (printer->default_cover_before);
   g_free (printer->default_cover_after);
