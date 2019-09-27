@@ -2480,12 +2480,24 @@ cups_create_printer (GtkPrintBackendCups *cups_backend,
   cups_printer->default_cover_before = g_strdup (info->default_cover_before);
   cups_printer->default_cover_after = g_strdup (info->default_cover_after);
   cups_printer->original_device_uri = g_strdup (info->original_device_uri);
+  cups_printer->hostname = g_strdup (hostname);
+  cups_printer->port = port;
+
+  if (cups_printer->original_device_uri != NULL)
+    {
+      httpSeparateURI (HTTP_URI_CODING_ALL, cups_printer->original_device_uri,
+                       method, sizeof (method),
+                       username, sizeof (username),
+                       hostname, sizeof (hostname),
+                       &port,
+                       resource, sizeof (resource));
+      cups_printer->original_hostname = g_strdup (hostname);
+      cups_printer->original_resource = g_strdup (resource);
+      cups_printer->original_port = port;
+    }
 
   if (info->default_number_up > 0)
     cups_printer->default_number_up = info->default_number_up;
-
-  cups_printer->hostname = g_strdup (hostname);
-  cups_printer->port = port;
 
   cups_printer->auth_info_required = g_strdupv (info->auth_info_required);
   g_strfreev (info->auth_info_required);
@@ -3796,10 +3808,47 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
        ((gtk_cups_result_get_error_type (result) == GTK_CUPS_ERROR_HTTP) &&
          (gtk_cups_result_get_error_status (result) == HTTP_NOT_FOUND))))
     {
-      cups_request_printer_info (GTK_PRINTER_CUPS (printer)->printer_uri,
-                                 GTK_PRINTER_CUPS (printer)->hostname,
-                                 GTK_PRINTER_CUPS (printer)->port,
-                                 GTK_PRINT_BACKEND_CUPS (gtk_printer_get_backend (printer)));
+      GtkPrinterCups *cups_printer = GTK_PRINTER_CUPS (printer);
+
+      /* Try to get the PPD from original host if it is not
+       * available on current CUPS server.
+       */
+      if (!cups_printer->avahi_browsed &&
+          (gtk_cups_result_is_error (result) &&
+           ((gtk_cups_result_get_error_type (result) == GTK_CUPS_ERROR_HTTP) &&
+            (gtk_cups_result_get_error_status (result) == HTTP_NOT_FOUND))) &&
+          cups_printer->remote &&
+          !cups_printer->request_original_uri &&
+          cups_printer->original_device_uri != NULL &&
+          (g_str_has_prefix (cups_printer->original_device_uri, "ipp://") ||
+           g_str_has_prefix (cups_printer->original_device_uri, "ipps://")))
+        {
+          cups_printer->request_original_uri = TRUE;
+
+          gtk_cups_connection_test_free (cups_printer->remote_cups_connection_test);
+          g_clear_handle_id (&cups_printer->get_remote_ppd_poll, g_source_remove);
+          cups_printer->get_remote_ppd_attempts = 0;
+
+          cups_printer->remote_cups_connection_test =
+            gtk_cups_connection_test_new (cups_printer->original_hostname,
+                                          cups_printer->original_port);
+
+          if (cups_request_ppd (printer))
+            {
+              cups_printer->get_remote_ppd_poll = g_timeout_add (50, (GSourceFunc) cups_request_ppd, printer);
+              g_source_set_name_by_id (cups_printer->get_remote_ppd_poll, "[gtk] cups_request_ppd");
+            }
+        }
+      else
+        {
+          if (cups_printer->request_original_uri)
+            cups_printer->request_original_uri = FALSE;
+
+          cups_request_printer_info (cups_printer->printer_uri,
+                                     cups_printer->hostname,
+                                     cups_printer->port,
+                                     GTK_PRINT_BACKEND_CUPS (gtk_printer_get_backend (printer)));
+        }
 
       goto done;
     }
@@ -3823,6 +3872,8 @@ cups_request_ppd (GtkPrinter *printer)
   http_t *http;
   GetPPDData *data;
   int fd;
+  const gchar *hostname;
+  gint port;
 
   cups_printer = GTK_PRINTER_CUPS (printer);
 
@@ -3867,7 +3918,21 @@ cups_request_ppd (GtkPrinter *printer)
         }
     }
 
-  http = httpConnect2 (cups_printer->hostname, cups_printer->port,
+  if (cups_printer->request_original_uri)
+    {
+      hostname = cups_printer->original_hostname;
+      port = cups_printer->original_port;
+      resource = g_strdup_printf ("%s.ppd", cups_printer->original_resource);
+    }
+  else
+    {
+      hostname = cups_printer->hostname;
+      port = cups_printer->port;
+      resource = g_strdup_printf ("/printers/%s.ppd",
+                                  gtk_printer_cups_get_ppd_name (GTK_PRINTER_CUPS (printer)));
+    }
+
+  http = httpConnect2 (hostname, port,
                        NULL, AF_UNSPEC,
                        cupsEncryption (),
                        1, 30000, NULL);
@@ -3908,16 +3973,13 @@ cups_request_ppd (GtkPrinter *printer)
 
   data->printer = (GtkPrinterCups *) g_object_ref (printer);
 
-  resource = g_strdup_printf ("/printers/%s.ppd",
-                              gtk_printer_cups_get_ppd_name (GTK_PRINTER_CUPS (printer)));
-
   print_backend = gtk_printer_get_backend (printer);
 
   request = gtk_cups_request_new_with_username (data->http,
                                                 GTK_CUPS_GET,
                                                 0,
                                                 data->ppd_io,
-                                                cups_printer->hostname,
+                                                hostname,
                                                 resource,
                                                 GTK_PRINT_BACKEND_CUPS (print_backend)->username);
 
