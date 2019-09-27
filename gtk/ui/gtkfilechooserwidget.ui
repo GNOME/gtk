@@ -231,6 +231,18 @@
                                       </object>
                                     </child>
                                     <child>
+                                      <object class="GtkTreeViewColumn" id="list_type_column">
+                                        <property name="title" translatable="yes">Type</property>
+                                        <property name="resizable">1</property>
+                                        <child>
+                                          <object class="GtkCellRendererText" id="list_type_renderer">
+                                            <property name="xalign">0</property>
+                                            <property name="xpad">6</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
                                       <object class="GtkTreeViewColumn" id="list_time_column">
                                         <property name="title" translatable="yes">Modified</property>
                                         <property name="sizing">fixed</property>
