@@ -101,6 +101,9 @@ _gtk_accessibility_override_atk_util (void)
 {
   AtkUtilClass *atk_class = ATK_UTIL_CLASS (g_type_class_ref (ATK_TYPE_UTIL));
 
+  if (atk_class->get_root)
+    return;
+
   atk_class->add_key_event_listener = add_key_event_listener;
   atk_class->remove_key_event_listener = remove_key_event_listener;
   atk_class->get_root = get_root;
