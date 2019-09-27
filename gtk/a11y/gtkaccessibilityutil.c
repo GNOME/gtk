@@ -101,11 +101,16 @@ _gtk_accessibility_override_atk_util (void)
 {
   AtkUtilClass *atk_class = ATK_UTIL_CLASS (g_type_class_ref (ATK_TYPE_UTIL));
 
-  atk_class->add_key_event_listener = add_key_event_listener;
-  atk_class->remove_key_event_listener = remove_key_event_listener;
-  atk_class->get_root = get_root;
-  atk_class->get_toolkit_name = get_toolkit_name;
-  atk_class->get_toolkit_version = get_toolkit_version;
+  if (!atk_class->add_key_event_listener)
+    atk_class->add_key_event_listener = add_key_event_listener;
+  if (!atk_class->remove_key_event_listener)
+    atk_class->remove_key_event_listener = remove_key_event_listener;
+  if (!atk_class->get_root)
+    atk_class->get_root = get_root;
+  if (!atk_class->get_toolkit_name)
+    atk_class->get_toolkit_name = get_toolkit_name;
+  if (!atk_class->get_toolkit_version)
+    atk_class->get_toolkit_version = get_toolkit_version;
 }
 
 static void
