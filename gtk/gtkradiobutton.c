@@ -392,7 +392,7 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
  *
  *   while (some_condition)
  *     {
- *        radio_button = gtk_radio_button_new (NULL);
+ *        radio_button = GTK_RADIO_BUTTON (gtk_radio_button_new (NULL));
  *
  *        gtk_radio_button_join_group (radio_button, last_button);
  *        last_button = radio_button;
