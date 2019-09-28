@@ -21,6 +21,7 @@ fedora-meson:
     name: "gtk3-${CI_JOB_NAME}-${CI_COMMIT_REF_NAME}"
     paths:
       - "_build/meson-logs"
+      - "_build/testsuite/reftests/output"
 
 msys2-mingw32-meson:
   variables:

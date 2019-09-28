@@ -28,7 +28,9 @@ testdata = \
 	focus1.ui focus1.in focus1.out \
 	focus2.ui focus2.in focus2.out
 
-EXTRA_DIST += $(testdata) meson.build
+EXTRA_DIST += $(testdata) \
+	meson.build \
+	a11ystate.test.in
 
 if BUILDOPT_INSTALL_TESTS
 insttestdir = $(libexecdir)/installed-tests/$(PACKAGE)

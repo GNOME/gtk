@@ -1,0 +1,4 @@
+[Test]
+Type=session
+Output=TAP
+Exec=env G_ENABLE_DIAGNOSTIC=0 TEST_DATA_DIR="@testexecdir@/simplify" @testexecdir@/@test@

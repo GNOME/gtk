@@ -12,6 +12,7 @@ python3 -m pip install --user meson==0.49.2
 meson \
     -Dgtk_doc=true \
     -Dman=true \
+    -Dinstalled_tests=true \
     -Dbroadway_backend=true \
     -Dxinerama=yes \
     -Dprint_backends="file,lpr,test,cloudprint,cups" \

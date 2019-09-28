@@ -11,7 +11,9 @@ tests = [
 
 foreach t : tests
   test_exe = executable(t, '@0@.c'.format(t),
-                        dependencies: libgtk_dep)
+                        dependencies: libgtk_dep,
+                        install: get_option('installed_tests'),
+                        install_dir: installed_test_bindir)
 
   test(t, test_exe,
        args: [ '--tap', '-k' ],

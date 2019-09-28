@@ -68,6 +68,7 @@ clean-local:
 
 EXTRA_DIST += \
 	align-expand.sh \
+	meson.build \
 	$(NULL)
 
 testdata = \

@@ -73,7 +73,9 @@ foreach t : tests
   test_exe = executable(test_name, test_srcs,
     c_args : test_cargs + test_extra_cargs,
     link_args : test_extra_ldflags,
-    dependencies : libgtk_dep)
+    dependencies : libgtk_dep,
+    install: get_option('installed_tests'),
+    install_dir: installed_test_bindir)
 
   test(test_name, test_exe,
        args: [ '--tap', '-k' ],
@@ -95,7 +97,9 @@ if add_languages('cpp', required: false)
   test_exe = executable('autotestkeywords',
                         'autotestkeywords.cc',
                         c_args : test_cargs + ['-Idummy-headers'],
-                        dependencies : libgtk_dep)
+                        dependencies : libgtk_dep,
+                        install: get_option('installed_tests'),
+                        install_dir: installed_test_bindir)
   test('c++ keywords', test_exe,
        args: [ '--tap', '-k' ],
        env: [ 'GIO_USE_VOLUME_MONITOR=unix',
@@ -107,4 +111,32 @@ if add_languages('cpp', required: false)
               'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
             ],
        suite: 'gtk')
+
+  if get_option('installed_tests')
+    conf = configuration_data()
+    conf.set('testexecdir', installed_test_bindir)
+    conf.set('test', 'autotestkeywords')
+    configure_file(input: 'gtk.test.in',
+                   output: 'autotestkeywords.test',
+                   configuration: conf,
+                   install_dir: installed_test_datadir)
+  endif
+endif
+
+
+if get_option('installed_tests')
+  foreach t : tests
+    test_name = t.get(0)
+    conf = configuration_data()
+    conf.set('testexecdir', installed_test_bindir)
+    conf.set('test', test_name)
+    configure_file(input: 'gtk.test.in',
+                   output: '@0@.test'.format(test_name),
+                   configuration: conf,
+                   install_dir: installed_test_datadir)
+  endforeach
+
+  install_subdir('icons', install_dir: installed_test_bindir)
+  install_subdir('icons2', install_dir: installed_test_bindir)
+  install_subdir('ui', install_dir: installed_test_bindir)
 endif

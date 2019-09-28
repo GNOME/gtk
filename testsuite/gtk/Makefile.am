@@ -266,6 +266,7 @@ EXTRA_DIST +=				\
 	$(test_icontheme)		\
 	$(test_ui)			\
 	meson.build	\
+	gtk.test.in \
 	$(NULL)
 
 GTK_GSETTINGS_SCHEMAS = \
