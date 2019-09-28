@@ -2089,9 +2089,9 @@ menubar > item:disabled { color: #929595; box-shadow: none; }
 
 menubar .csd.popup decoration { border-radius: 0; }
 
-popover.menu button.flat.image-button.model { padding: 0; border: none; }
+popover.menu button.image-button.model { padding: 0; border: none; background: none; box-shadow: none; }
 
-popover.menu button.flat.image-button.model:selected { border: none; color: #ffffff; background: #3584e4; }
+popover.menu button.image-button.model:selected { border: none; color: #ffffff; background: #3584e4; }
 
 popover.menu box.inline-buttons { border-radius: 5px; border-style: none; border-width: 0; border-image-source: none; border-image-width: 1px; }
 
