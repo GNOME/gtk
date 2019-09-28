@@ -94,8 +94,6 @@ struct _GtkButtonPrivate
 
 enum {
   CLICKED,
-  ENTER,
-  LEAVE,
   ACTIVATE,
   LAST_SIGNAL
 };
