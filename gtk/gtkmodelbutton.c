@@ -788,13 +788,17 @@ static void
 gtk_model_button_root (GtkWidget *widget)
 {
   GtkModelButton *self = GTK_MODEL_BUTTON (widget);
-  GtkRoot *root = gtk_widget_get_root (widget);
+  GtkRoot *root;
   GtkApplication *app;
   const char *action_name;
   GVariant *action_target;
 
+  GTK_WIDGET_CLASS (gtk_model_button_parent_class)->root (widget);
+
   if (!self->accel)
     return;
+
+  root = gtk_widget_get_root (widget);
 
   if (!GTK_IS_WINDOW (root))
     return;
