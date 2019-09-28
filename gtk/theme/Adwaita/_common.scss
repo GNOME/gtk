@@ -4807,11 +4807,13 @@ menubar {
 }
 
 popover.menu {
-  & button.flat.image-button.model {
+  & button.image-button.model {
     padding: 0;
     border: none;
+    background: none;
+    box-shadow: none;
   }
-  & button.flat.image-button.model:selected {
+  & button.image-button.model:selected {
     border: none;
     color: $selected_fg_color;
     background: $selected_bg_color;
