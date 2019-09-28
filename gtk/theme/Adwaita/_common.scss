@@ -2867,9 +2867,10 @@ radio {
   -gtk-icon-source: none;
 
   @include button(normal-alt, $edge: $shadow_color);
-
-  &:hover { @include button(hover-alt, $edge: $shadow_color); }
-  &:active { @include button(active); }
+  &:hover { @include button(hover-alt, $c:$checkradio_bg_color, $tc:$checkradio_fg_color, $edge: $shadow_color); }
+  &:hover:not(:checked) { @include button(hover-alt, $edge: $shadow_color); }
+  &:active { @include button(active, $c:$checkradio_bg_color, $tc:$checkradio_fg_color); }
+  &:checked { @include button(normal-alt, $c:$checkradio_bg_color, $tc:$checkradio_fg_color, $edge: $shadow_color); }
   &:disabled { @include button(insensitive); }
   &:backdrop {
     @include button(backdrop);
