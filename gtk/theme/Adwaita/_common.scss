@@ -2839,11 +2839,7 @@ checkbutton.text-button, radiobutton.text-button {
   // this is for a nice focus on check and radios text
   padding: 2px 0;
   outline-offset: 0;
-
-  label:not(:only-child) {
-    &:first-child { margin-left: 4px; }
-    &:last-child { margin-right: 4px; }
-  }
+  border-spacing: 4px;
 }
 
 check,
