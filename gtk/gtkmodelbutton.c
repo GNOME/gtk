@@ -547,7 +547,7 @@ gtk_model_button_set_popover (GtkModelButton *button,
 }
 
 static void
-update_accel (GtkModelButton *button,
+update_accel (GtkModelButton *self,
               const char     *accel)
 {
   if (accel)
@@ -557,19 +557,25 @@ update_accel (GtkModelButton *button,
       GtkAccelLabelClass *accel_class;
       char *str;
 
+      if (!self->accel_label)
+        {
+          self->accel_label = g_object_new (GTK_TYPE_LABEL,
+                                            "css-name", "accelerator",
+                                            NULL);
+          gtk_widget_insert_before (self->accel_label, GTK_WIDGET (self), NULL);
+        }
+
       gtk_accelerator_parse (accel, &key, &mods);
 
       accel_class = g_type_class_ref (GTK_TYPE_ACCEL_LABEL);
       str = _gtk_accel_label_class_get_accelerator_label (accel_class, key, mods);
-      gtk_label_set_label (GTK_LABEL (button->accel_label), str);
+      gtk_label_set_label (GTK_LABEL (self->accel_label), str);
       g_free (str);
       g_type_class_unref (accel_class);
-
-      gtk_widget_show (button->accel_label);
     }
   else
     {
-      gtk_widget_hide (button->accel_label);
+      g_clear_pointer (&self->accel_label, gtk_widget_unparent);
     }
 }
 
@@ -1361,16 +1367,9 @@ gtk_model_button_init (GtkModelButton *button)
   gtk_widget_hide (button->image);
   button->label = gtk_label_new ("");
   gtk_widget_hide (button->label);
-  button->accel_label = g_object_new (GTK_TYPE_LABEL,
-                                      "css-name", "accelerator",
-                                      NULL);
-  gtk_widget_set_hexpand (button->accel_label, TRUE);
-  gtk_label_set_xalign (GTK_LABEL (button->accel_label), 0.0f);
-  gtk_widget_set_halign (button->accel_label, GTK_ALIGN_END);
-  gtk_widget_hide (button->accel_label);
+
   gtk_container_add (GTK_CONTAINER (button->box), button->image);
   gtk_container_add (GTK_CONTAINER (button->box), button->label);
-  gtk_container_add (GTK_CONTAINER (button->box), button->accel_label);
   gtk_container_add (GTK_CONTAINER (button), button->box);
 
   button->start_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
