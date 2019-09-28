@@ -55,6 +55,10 @@
  * #GtkEventControllerScroll::decelerate signal, emitted at the end of scrolling
  * with two X/Y velocity arguments that are consistent with the motion that
  * was received.
+ *
+ * The #GTK_EVENT_CONTROLLER_SCROLL_INTERP flag toggles interpolating the scroll
+ * deltas to the screen refresh rate. Setting this flag also throttles emitted
+ * scroll events to 1 per display frame.
  **/
 #include "config.h"
 
@@ -62,6 +66,7 @@
 #include "gtkwidget.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkeventcontrollerscroll.h"
+#include "gtkeventinterpolationprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
@@ -80,6 +85,11 @@ struct _GtkEventControllerScroll
   GtkEventController parent_instance;
   GtkEventControllerScrollFlags flags;
   GArray *scroll_history;
+
+  /* for event interpolation */
+  GtkRelativeEventInterpolation * relative_interpolator;
+  guint32 timestamp_offset_from_latest;
+  guint interpolation_tick_id;
 
   /* For discrete event coalescing */
   gdouble cur_dx;
@@ -193,7 +203,17 @@ gtk_event_controller_scroll_finalize (GObject *object)
 {
   GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (object);
 
+  if (scroll->interpolation_tick_id)
+    {
+      GtkWidget* widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(scroll));
+      gtk_widget_remove_tick_callback (widget,
+                                       scroll->interpolation_tick_id);
+      scroll->interpolation_tick_id = 0;
+    }
+
   g_array_unref (scroll->scroll_history);
+
+  gtk_relative_event_interpolation_free (scroll->relative_interpolator);
 
   G_OBJECT_CLASS (gtk_event_controller_scroll_parent_class)->finalize (object);
 }
@@ -236,11 +256,75 @@ gtk_event_controller_scroll_get_property (GObject    *object,
     }
 }
 
+static void
+send_interpolated_scroll (GtkEventControllerScroll *scroll,
+                          gint64                    frame_time)
+{
+  gdouble dx = 0, dy = 0;
+  guint wrapped_state;
+  GdkModifierType state;
+  gboolean handled;
+  guint32 timestamp_offset_from_latest;
+  gint64 adjusted_interpolation_point;
+
+  timestamp_offset_from_latest =
+    gtk_relative_event_interpolation_offset_from_latest (scroll->relative_interpolator,
+                                                         frame_time);
+
+  /* TODO replace the following with a moving window over, say, the last 20 input events */
+  if (scroll->timestamp_offset_from_latest < timestamp_offset_from_latest)
+    scroll->timestamp_offset_from_latest = timestamp_offset_from_latest;
+
+  /*
+   * limit to at most 40ms between the upcoming display frame and the last
+   * input event. this is done in order to not get stuck with high latency due
+   * to transient hiccups in received input events. since frame_time is the
+   * timestamp of the upcoming frame, and the input events in the interpolation
+   * history are from the previous frame at the latest, assuming a 60Hz display
+   * there will be at least 16ms gap between the upcoming frame and the latest
+   * event. if due to some reason (display manager delay etc) input events
+   * arrived a frame late we already have at least 32ms gap. experimentally
+   * 40ms seems like a good hard limit.
+   *
+   * note that in order to get smooth animation, scroll->timestamp_offset_from_latest
+   * should stay relatively constant.
+   */
+  if (scroll->timestamp_offset_from_latest > 40)
+    scroll->timestamp_offset_from_latest = 40;
+
+  adjusted_interpolation_point = frame_time - (scroll->timestamp_offset_from_latest * 1000);
+
+  /* synthesize and send an interpolated event */
+  gtk_relative_event_interpolation_interpolate_event (scroll->relative_interpolator,
+                                                      adjusted_interpolation_point,
+                                                      &wrapped_state,
+                                                      &dx,
+                                                      &dy);
+
+  state = (GdkModifierType)wrapped_state;
+  g_signal_emit (GTK_EVENT_CONTROLLER(scroll), signals[SCROLL], 0, dx, dy, state, &handled);
+}
+
+static gboolean
+interpolation_tick_callback (GtkWidget     *widget,
+                             GdkFrameClock *frame_clock,
+                             gpointer       user_data)
+{
+  gint64 frame_time = gdk_frame_clock_get_frame_time (frame_clock);
+  GtkEventController *controller = user_data;
+  GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (controller);
+
+  send_interpolated_scroll (scroll, frame_time);
+
+  return G_SOURCE_CONTINUE;
+}
+
 static gboolean
 gtk_event_controller_scroll_handle_event (GtkEventController *controller,
                                           const GdkEvent     *event)
 {
   GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (controller);
+  GtkWidget* widget = gtk_event_controller_get_widget (controller);
   GdkScrollDirection direction = GDK_SCROLL_SMOOTH;
   gdouble dx = 0, dy = 0;
   gboolean handled = GDK_EVENT_PROPAGATE;
@@ -264,6 +348,18 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
         {
           g_signal_emit (controller, signals[SCROLL_BEGIN], 0);
           scroll_history_reset (scroll);
+
+          gtk_relative_event_interpolation_history_reset (scroll->relative_interpolator);
+
+          if (scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_INTERP)
+            {
+              scroll->timestamp_offset_from_latest = 0;
+
+              /* start interpolation tick */
+              scroll->interpolation_tick_id = gtk_widget_add_tick_callback (widget,
+                  interpolation_tick_callback, controller, NULL);
+            }
+
           scroll->active = TRUE;
         }
 
@@ -323,18 +419,39 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
         dx = 0;
     }
 
+  GdkModifierType state;
+  if (!gdk_event_get_state (event, &state))
+    return FALSE;
+
+  guint32 evtime = gdk_event_get_time (event);
+
+  if (scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_INTERP)
+    gtk_relative_event_interpolation_history_push (scroll->relative_interpolator,
+                                                   evtime, state, dx, dy);
+
   if (dx != 0 || dy != 0)
     {
-      g_signal_emit (controller, signals[SCROLL], 0, dx, dy, &handled);
+      if (!(scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_INTERP))
+        g_signal_emit (controller, signals[SCROLL], 0, dx, dy, state, &handled);
 
       if (scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_KINETIC)
-        scroll_history_push (scroll, dx, dy, gdk_event_get_time (event));
+        scroll_history_push (scroll, dx, dy, evtime);
     }
 
   if (scroll->active && gdk_event_is_scroll_stop_event (event))
     {
       g_signal_emit (controller, signals[SCROLL_END], 0);
       scroll->active = FALSE;
+
+      if (scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_INTERP)
+        {
+          /* TODO should the callback tick should be stopped in the callback? */
+          gtk_widget_remove_tick_callback (widget,
+                                           scroll->interpolation_tick_id);
+          scroll->interpolation_tick_id = 0;
+
+          gtk_relative_event_interpolation_history_reset (scroll->relative_interpolator);
+        }
 
       if (scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_KINETIC)
         {
@@ -344,6 +461,11 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
           g_signal_emit (controller, signals[DECELERATE], 0, vel_x, vel_y);
         }
     }
+
+  /* if event interpolation is enabled we have to propagate the event, since
+     it's not handled here */
+  if (scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_INTERP)
+    return FALSE;
 
   return handled;
 }
@@ -403,11 +525,12 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
                   GTK_TYPE_EVENT_CONTROLLER_SCROLL,
                   G_SIGNAL_RUN_LAST,
                   0, NULL, NULL,
-                  _gtk_marshal_BOOLEAN__DOUBLE_DOUBLE,
-                  G_TYPE_BOOLEAN, 2, G_TYPE_DOUBLE, G_TYPE_DOUBLE);
+                  _gtk_marshal_BOOLEAN__DOUBLE_DOUBLE_FLAGS,
+                  G_TYPE_BOOLEAN, 3, G_TYPE_DOUBLE, G_TYPE_DOUBLE,
+                  G_TYPE_UINT);
   g_signal_set_va_marshaller (signals[SCROLL],
                               G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__DOUBLE_DOUBLEv);
+                              _gtk_marshal_BOOLEAN__DOUBLE_DOUBLE_FLAGSv);
   /**
    * GtkEventControllerScroll::scroll-end:
    * @controller: The object that received the signal
@@ -453,6 +576,8 @@ gtk_event_controller_scroll_init (GtkEventControllerScroll *scroll)
 {
   scroll->scroll_history = g_array_new (FALSE, FALSE,
                                         sizeof (ScrollHistoryElem));
+
+  scroll->relative_interpolator = gtk_relative_event_interpolation_new ();
 }
 
 /**
@@ -466,6 +591,19 @@ gtk_event_controller_scroll_init (GtkEventControllerScroll *scroll)
 GtkEventController *
 gtk_event_controller_scroll_new (GtkEventControllerScrollFlags flags)
 {
+  const char *override;
+
+  override = g_getenv ("GTK_INTERPOLATE_EVENTS");
+  if (override)
+    {
+      if (g_strcmp0 (override, "true") == 0)
+        flags |= GTK_EVENT_CONTROLLER_SCROLL_INTERP;
+      else if (g_strcmp0 (override, "false") == 0)
+        flags &= ~GTK_EVENT_CONTROLLER_SCROLL_INTERP;
+      else
+        g_warning ("Failed to parse GTK_INTERPOLATE_EVENTS: %s", override);
+    }
+
   return g_object_new (GTK_TYPE_EVENT_CONTROLLER_SCROLL,
                        "flags", flags,
                        NULL);

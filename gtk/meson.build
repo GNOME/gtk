@@ -226,6 +226,7 @@ gtk_public_sources = files([
   'gtkeventcontrollerlegacy.c',
   'gtkeventcontrollermotion.c',
   'gtkeventcontrollerscroll.c',
+  'gtkeventinterpolation.c',
   'gtkexpander.c',
   'gtkfilechooser.c',
   'gtkfilechooserbutton.c',

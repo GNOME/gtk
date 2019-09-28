@@ -860,9 +860,10 @@ static void     gtk_tree_view_search_pressed_cb         (GtkGesture       *gestu
                                                          double            y,
 							 GtkTreeView      *tree_view);
 static gboolean gtk_tree_view_search_scroll_event       (GtkWidget        *entry,
-							 gdouble           dx,
+                                                         gdouble           dx,
                                                          gdouble           dy,
-							 GtkTreeView      *tree_view);
+                                                         GdkModifierType   state,
+                                                         GtkTreeView      *tree_view);
 static gboolean gtk_tree_view_search_key_pressed        (GtkEventControllerKey *key,
                                                          guint                  keyval,
                                                          guint                  keycode,
@@ -13933,10 +13934,11 @@ gtk_tree_view_search_pressed_cb (GtkGesture  *gesture,
 }
 
 static gboolean
-gtk_tree_view_search_scroll_event (GtkWidget   *widget,
-                                   gdouble      dx,
-                                   gdouble      dy,
-				   GtkTreeView *tree_view)
+gtk_tree_view_search_scroll_event (GtkWidget       *widget,
+                                   gdouble          dx,
+                                   gdouble          dy,
+                                   GdkModifierType  state,
+                                   GtkTreeView     *tree_view)
 {
   GdkScrollDirection direction;
 

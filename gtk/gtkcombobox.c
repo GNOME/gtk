@@ -244,6 +244,7 @@ static gboolean gtk_combo_box_real_popdown         (GtkComboBox      *combo_box)
 static gboolean gtk_combo_box_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                                         gdouble                   dx,
                                                         gdouble                   dy,
+                                                        GdkModifierType           state,
                                                         GtkComboBox              *combo_box);
 
 /* listening to the model */
@@ -1714,6 +1715,7 @@ static gboolean
 gtk_combo_box_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                         gdouble                   dx,
                                         gdouble                   dy,
+                                        GdkModifierType           state,
                                         GtkComboBox              *combo_box)
 {
   GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);

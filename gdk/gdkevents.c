@@ -1294,10 +1294,10 @@ gdk_event_get_scroll_deltas (const GdkEvent *event,
     }
 
   if (delta_x)
-    *delta_x = dx;
+    *delta_x = dx / 4;
 
   if (delta_y)
-    *delta_y = dy;
+    *delta_y = dy / 4;
 
   return fetched;
 }

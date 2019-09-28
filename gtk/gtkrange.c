@@ -240,6 +240,7 @@ static void          gtk_range_render_trough            (GtkGizmo     *gizmo,
 static gboolean      gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                                          gdouble                   dx,
                                                          gdouble                   dy,
+                                                         GdkModifierType           state,
                                                          GtkRange                 *range);
 
 G_DEFINE_TYPE_WITH_CODE (GtkRange, gtk_range, GTK_TYPE_WIDGET,
@@ -2203,6 +2204,7 @@ static gboolean
 gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                     gdouble                   dx,
                                     gdouble                   dy,
+                                    GdkModifierType           state,
                                     GtkRange                 *range)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
