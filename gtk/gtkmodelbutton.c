@@ -161,7 +161,6 @@ struct _GtkModelButton
   GtkWidget *accel_label;
   GtkWidget *start_box;
   GtkWidget *start_indicator;
-  GtkWidget *end_box;
   GtkWidget *end_indicator;
   GtkWidget *popover;
   gboolean active;
@@ -217,8 +216,8 @@ update_node_ordering (GtkModelButton *button)
       if (child != button->start_box)
         gtk_widget_insert_before (button->start_box, GTK_WIDGET (button), child);
       child = gtk_widget_get_last_child (GTK_WIDGET (button));
-      if (child != button->end_box)
-        gtk_widget_insert_after (button->end_box, GTK_WIDGET (button), child);
+      if (child != button->end_indicator)
+        gtk_widget_insert_after (button->end_indicator, GTK_WIDGET (button), child);
     }
   else
     {
@@ -228,8 +227,8 @@ update_node_ordering (GtkModelButton *button)
       gtk_style_context_remove_class (end_indicator_context, GTK_STYLE_CLASS_RIGHT);
 
       child = gtk_widget_get_first_child (GTK_WIDGET (button));
-      if (child != button->end_box)
-        gtk_widget_insert_before (button->end_box, GTK_WIDGET (button), child);
+      if (child != button->end_indicator)
+        gtk_widget_insert_before (button->end_indicator, GTK_WIDGET (button), child);
       child = gtk_widget_get_last_child (GTK_WIDGET (button));
       if (child != button->start_box)
         gtk_widget_insert_after (button->start_box, GTK_WIDGET (button), child);
@@ -514,7 +513,7 @@ gtk_model_button_set_iconic (GtkModelButton *button,
   button->centered = iconic;
 
   gtk_widget_set_visible (button->start_box, !iconic);
-  gtk_widget_set_visible (button->end_box, !iconic);
+  gtk_widget_set_visible (button->end_indicator, !iconic);
 
   gtk_widget_set_halign (button->box, button->centered ? GTK_ALIGN_CENTER : GTK_ALIGN_FILL);
 
@@ -740,7 +739,7 @@ gtk_model_button_measure (GtkWidget      *widget,
                               &start_min, &start_nat,
                               NULL, NULL);
 
-          gtk_widget_measure (button->end_box,
+          gtk_widget_measure (button->end_indicator,
                               GTK_ORIENTATION_HORIZONTAL,
                               -1,
                               &end_min, &end_nat,
@@ -782,7 +781,7 @@ gtk_model_button_measure (GtkWidget      *widget,
                               &start_min, &start_nat,
                               NULL, NULL);
 
-          gtk_widget_measure (button->end_box,
+          gtk_widget_measure (button->end_indicator,
                               GTK_ORIENTATION_VERTICAL,
                               -1,
                               &end_min, &end_nat,
@@ -864,12 +863,12 @@ gtk_model_button_size_allocate (GtkWidget *widget,
 
       gtk_widget_size_allocate (button->start_box, &child_allocation, baseline);
 
-      gtk_widget_measure (button->end_box,
+      gtk_widget_measure (button->end_indicator,
                           GTK_ORIENTATION_HORIZONTAL,
                           -1,
                           &min, &end_width,
                           NULL, NULL);
-      gtk_widget_measure (button->end_box,
+      gtk_widget_measure (button->end_indicator,
                           GTK_ORIENTATION_VERTICAL,
                           -1,
                           &min, &end_height,
@@ -974,7 +973,7 @@ gtk_model_button_finalize (GObject *object)
   GtkModelButton *button = GTK_MODEL_BUTTON (object);
 
   gtk_widget_unparent (button->start_box);
-  gtk_widget_unparent (button->end_box);
+  gtk_widget_unparent (button->end_indicator);
   g_free (button->accel);
   g_clear_pointer (&button->popover, gtk_widget_unparent);
 
@@ -1376,10 +1375,11 @@ gtk_model_button_init (GtkModelButton *button)
   button->start_indicator = gtk_icon_new ("none");
   button->end_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   button->end_indicator = gtk_icon_new ("none");
+  gtk_widget_set_halign (button->end_indicator, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (button->end_indicator, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (button->start_box), button->start_indicator);
-  gtk_container_add (GTK_CONTAINER (button->end_box), button->end_indicator);
   gtk_widget_set_parent (button->start_box, GTK_WIDGET (button));
-  gtk_widget_set_parent (button->end_box, GTK_WIDGET (button));
+  gtk_widget_set_parent (button->end_indicator, GTK_WIDGET (button));
   gtk_widget_hide (button->start_indicator);
   gtk_widget_hide (button->end_indicator);
   update_node_ordering (button);
