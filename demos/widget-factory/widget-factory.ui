@@ -3596,21 +3596,18 @@ bad things might happen.</property>
               <object class="GtkModelButton">
                 <property name="icon"><object class="GThemedIcon"><property name="name">edit-cut-symbolic</property></object></property>
                 <property name="iconic">1</property>
-                <property name="relief">none</property>
               </object>
             </child>
             <child>
               <object class="GtkModelButton">
                 <property name="icon"><object class="GThemedIcon"><property name="name">edit-copy-symbolic</property></object></property>
                 <property name="iconic">1</property>
-                <property name="relief">none</property>
               </object>
             </child>
             <child>
               <object class="GtkModelButton">
                 <property name="icon"><object class="GThemedIcon"><property name="name">edit-paste-symbolic</property></object></property>
                 <property name="iconic">1</property>
-                <property name="relief">none</property>
               </object>
             </child>
           </object>
