@@ -334,6 +334,11 @@ test_data = \
 	declarations-valid-24.ref.css \
 	declarations-valid-25.css \
 	declarations-valid-25.ref.css \
+	declarations-valid-26.css \
+	declarations-valid-26.ref.css \
+	deprecated.css \
+	deprecated.errors \
+	deprecated.ref.css \
 	does-not-exist.css \
 	does-not-exist.errors \
 	does-not-exist.ref.css \
