@@ -984,21 +984,21 @@ gtk_model_button_finalize (GObject *object)
 }
 
 static void
-gtk_model_button_map (GtkWidget *widget)
+gtk_model_button_root (GtkWidget *widget)
 {
-  GtkModelButton *button = GTK_MODEL_BUTTON (widget);
-  GtkWindow *window;
+  GtkModelButton *self = GTK_MODEL_BUTTON (widget);
+  GtkRoot *root = gtk_widget_get_root (widget);
   GtkApplication *app;
   const char *action_name;
   GVariant *action_target;
 
-  GTK_WIDGET_CLASS (gtk_model_button_parent_class)->map (widget);
-
-  if (button->accel)
+  if (!self->accel)
     return;
 
-  window = GTK_WINDOW (gtk_widget_get_root (widget));
-  app = gtk_window_get_application (window);
+  if (!GTK_IS_WINDOW (root))
+    return;
+
+  app = gtk_window_get_application (GTK_WINDOW (root));
 
   if (!app)
     return;
@@ -1014,7 +1014,7 @@ gtk_model_button_map (GtkWidget *widget)
       detailed = g_action_print_detailed_name (action_name, action_target);
       accels = gtk_application_get_accels_for_action (app, detailed);
 
-      update_accel (button, accels[0]);
+      update_accel (self, accels[0]);
 
       g_strfreev (accels);
       g_free (detailed);
@@ -1081,10 +1081,10 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   widget_class->measure = gtk_model_button_measure;
   widget_class->size_allocate = gtk_model_button_size_allocate;
   widget_class->destroy = gtk_model_button_destroy;
-  widget_class->map = gtk_model_button_map;
   widget_class->state_flags_changed = gtk_model_button_state_flags_changed;
   widget_class->direction_changed = gtk_model_button_direction_changed;
   widget_class->focus = gtk_model_button_focus;
+  widget_class->root = gtk_model_button_root;
 
   button_class->clicked = gtk_model_button_clicked;
 
