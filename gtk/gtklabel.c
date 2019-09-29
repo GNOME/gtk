@@ -4483,14 +4483,14 @@ gtk_label_click_gesture_pressed (GtkGestureClick *gesture,
     {
       if (gdk_event_triggers_context_menu (event))
         {
-          info->link_clicked = 1;
+          info->link_clicked = TRUE;
           update_link_state (label);
           gtk_label_do_popup (label, widget_x, widget_y);
           return;
         }
       else if (button == GDK_BUTTON_PRIMARY)
         {
-          info->link_clicked = 1;
+          info->link_clicked = TRUE;
           update_link_state (label);
           gtk_widget_queue_draw (widget);
           if (!info->selectable)
@@ -4570,7 +4570,7 @@ gtk_label_click_gesture_released (GtkGestureClick *gesture,
            info->link_clicked)
     {
       emit_activate_link (label, info->active_link);
-      info->link_clicked = 0;
+      info->link_clicked = FALSE;
     }
 }
 
@@ -4855,7 +4855,7 @@ gtk_label_update_active_link (GtkWidget *widget,
         {
           if (info->active_link != link)
             {
-              info->link_clicked = 0;
+              info->link_clicked = FALSE;
               info->active_link = link;
               update_link_state (label);
               gtk_label_update_cursor (label);
@@ -4866,7 +4866,7 @@ gtk_label_update_active_link (GtkWidget *widget,
         {
           if (info->active_link != NULL)
             {
-              info->link_clicked = 0;
+              info->link_clicked = FALSE;
               info->active_link = NULL;
               update_link_state (label);
               gtk_label_update_cursor (label);
