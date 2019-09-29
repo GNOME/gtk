@@ -13438,6 +13438,12 @@ gtk_widget_set_layout_manager (GtkWidget        *widget,
   if (priv->layout_manager == layout_manager)
     return;
 
+  if (priv->layout_manager)
+    {
+      gtk_layout_manager_set_widget (priv->layout_manager, NULL);
+      g_object_unref (priv->layout_manager);
+    }
+
   priv->layout_manager = layout_manager;
   if (priv->layout_manager != NULL)
     gtk_layout_manager_set_widget (priv->layout_manager, widget);
