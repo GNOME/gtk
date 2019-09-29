@@ -1513,7 +1513,7 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
         {
           apply_response_for_action_area (dialog, GTK_WIDGET (object), ad->response_id);
         }
-      else if (gtk_widget_get_parent (GTK_WIDGET (object)) == priv->headerbar)
+      else if (gtk_widget_get_ancestor (GTK_WIDGET (object), GTK_TYPE_HEADER_BAR) == priv->headerbar)
         {
           if (is_action)
             {
