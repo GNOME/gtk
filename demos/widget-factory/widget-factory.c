@@ -1003,6 +1003,9 @@ populate_flowbox (GtkWidget *flowbox)
 
   while ((name = g_dir_read_name (dir)) != NULL)
     {
+      if (g_str_has_suffix (name, ".xml"))
+        continue;
+
       filename = g_build_filename (location, name, NULL);
       file = g_file_new_for_path (filename);
       stream = G_INPUT_STREAM (g_file_read (file, NULL, &error));
@@ -1017,7 +1020,7 @@ populate_flowbox (GtkWidget *flowbox)
           bd = g_new (BackgroundData, 1);
           bd->flowbox = flowbox;
           bd->filename = filename;
-          gdk_pixbuf_new_from_stream_at_scale_async (stream, 110, 110, TRUE, NULL, 
+          gdk_pixbuf_new_from_stream_at_scale_async (stream, 110, 110, TRUE, NULL,
                                                      background_loaded_cb, bd);
         }
 
