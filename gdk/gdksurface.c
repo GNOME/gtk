@@ -108,6 +108,9 @@ static void update_cursor               (GdkDisplay *display,
 static void gdk_surface_set_frame_clock (GdkSurface      *surface,
                                          GdkFrameClock  *clock);
 
+static void gdk_surface_start_interpolation_callback(GdkSurface *surface);
+
+static void gdk_surface_stop_interpolation_callback(GdkSurface *surface);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
@@ -397,6 +400,11 @@ gdk_surface_init (GdkSurface *surface)
 
   surface->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                  NULL, g_object_unref);
+
+  surface->relative_interpolator = gdk_relative_event_interpolation_new ();
+
+  /* FIXME make that configurable */
+  surface->interpolate_events = TRUE;
 }
 
 static void
@@ -603,6 +611,9 @@ static void
 gdk_surface_finalize (GObject *object)
 {
   GdkSurface *surface = GDK_SURFACE (object);
+
+  /* FIXME stop any ongoing animation */
+  gdk_relative_event_interpolation_free (surface->relative_interpolator);
 
   g_signal_handlers_disconnect_by_func (surface->display,
                                         seat_removed_cb, surface);
@@ -4100,6 +4111,83 @@ add_event_mark (GdkEvent *event,
 }
 #endif
 
+static void
+gdk_surface_interpolation_tick_callback (GdkFrameClock *frame_clock,
+                                         GdkSurface    *surface)
+{
+  gboolean handled;
+  guint32 timestamp_offset_from_latest;
+  gint64 adjusted_interpolation_point;
+  gint64 frame_time = gdk_frame_clock_get_frame_time (frame_clock);
+
+  timestamp_offset_from_latest =
+    gdk_relative_event_interpolation_offset_from_latest (surface->relative_interpolator,
+                                                         frame_time);
+
+  /* TODO replace the following with a moving window over, say, the last 20 input events */
+  if (surface->timestamp_offset_from_latest < timestamp_offset_from_latest)
+    surface->timestamp_offset_from_latest = timestamp_offset_from_latest;
+
+  /*
+   * limit to at most 40ms between the upcoming display frame and the last
+   * input event. this is done in order to not get stuck with high latency due
+   * to transient hiccups in received input events. since frame_time is the
+   * timestamp of the upcoming frame, and the input events in the interpolation
+   * history are from the previous frame at the latest, assuming a 60Hz display
+   * there will be at least 16ms gap between the upcoming frame and the latest
+   * event. if due to some reason (display manager delay etc) input events
+   * arrived a frame late we already have at least 32ms gap. experimentally
+   * 40ms seems like a good hard limit.
+   *
+   * note that in order to get smooth animation, surface->timestamp_offset_from_latest
+   * should stay relatively constant.
+   */
+  if (surface->timestamp_offset_from_latest > 40)
+    surface->timestamp_offset_from_latest = 40;
+
+  adjusted_interpolation_point = frame_time - (surface->timestamp_offset_from_latest * 1000);
+
+  /* synthesize and send an interpolated event */
+  GdkEvent* interpolated_event =
+    gdk_relative_event_interpolation_interpolate_event (surface->relative_interpolator,
+                                                        adjusted_interpolation_point);
+
+  g_signal_emit (surface, signals[EVENT], 0, interpolated_event, &handled);
+
+  g_object_unref (interpolated_event);
+}
+
+static void gdk_surface_start_interpolation_callback(GdkSurface *surface)
+{
+  surface->timestamp_offset_from_latest = 0;
+
+  /* start animation */
+  if (!surface->interpolation_tick_id)
+    {
+      GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
+      if (frame_clock)
+        {
+          surface->interpolation_tick_id = g_signal_connect (frame_clock, "update",
+                                                             G_CALLBACK (gdk_surface_interpolation_tick_callback),
+                                                             surface);
+          gdk_frame_clock_begin_updating (frame_clock);
+        }
+    }
+}
+
+static void gdk_surface_stop_interpolation_callback(GdkSurface *surface)
+{
+  GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
+  if (frame_clock)
+    {
+      g_signal_handler_disconnect (frame_clock, surface->interpolation_tick_id);
+      surface->interpolation_tick_id = 0;
+      gdk_frame_clock_end_updating (frame_clock);
+    }
+
+  gdk_relative_event_interpolation_history_reset (surface->relative_interpolator);
+}
+
 gboolean
 gdk_surface_handle_event (GdkEvent *event)
 {
@@ -4119,9 +4207,34 @@ gdk_surface_handle_event (GdkEvent *event)
     }
   else
     {
+      GdkSurface *surface = gdk_event_get_surface (event);
+
       if (is_key_event (event))
         rewrite_event_for_toplevel (event);
-      g_signal_emit (gdk_event_get_surface (event), signals[EVENT], 0, event, &handled);
+
+      if (surface->interpolate_events &&
+          gdk_event_get_event_type (event) == GDK_SCROLL &&
+          event->scroll.direction == GDK_SCROLL_SMOOTH)
+        {
+          if (!gdk_relative_event_interpolation_history_length (surface->relative_interpolator))
+            {
+              /* scrolling starts */
+              gdk_surface_start_interpolation_callback (surface);
+            }
+
+          gdk_relative_event_interpolation_history_push (surface->relative_interpolator,
+                                                         event);
+
+          if (gdk_event_is_scroll_stop_event (event))
+            {
+              gdk_surface_stop_interpolation_callback (surface);
+              g_signal_emit (gdk_event_get_surface (event), signals[EVENT], 0, event, &handled);
+            }
+        }
+      else
+        {
+          g_signal_emit (gdk_event_get_surface (event), signals[EVENT], 0, event, &handled);
+        }
     }
 
 #ifdef G_ENABLE_DEBUG

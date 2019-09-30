@@ -23,6 +23,7 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "gdkenumtypes.h"
 #include "gdksurface.h"
+#include "gdkeventinterpolationprivate.h"
 
 G_BEGIN_DECLS
 
@@ -72,6 +73,7 @@ struct _GdkSurface
   guint in_update : 1;
   guint frame_clock_events_paused : 1;
   guint autohide : 1;
+  guint interpolate_events : 1;
 
   guint update_and_descendants_freeze_count;
 
@@ -94,6 +96,11 @@ struct _GdkSurface
   GdkDrawContext *paint_context;
 
   cairo_region_t *opaque_region;
+
+  /* for event interpolation */
+  GdkRelativeEventInterpolation *relative_interpolator;
+  guint32 timestamp_offset_from_latest;
+  guint interpolation_tick_id;
 };
 
 struct _GdkSurfaceClass
