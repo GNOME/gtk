@@ -4184,8 +4184,11 @@ gdk_wayland_surface_unexport_handle (GdkSurface *surface)
 
   g_clear_pointer (&impl->display_server.xdg_exported,
                    zxdg_exported_v1_destroy);
-  g_clear_pointer (&impl->exported.user_data,
-                   impl->exported.destroy_func);
+  if (impl->exported.destroy_func)
+    {
+      g_clear_pointer (&impl->exported.user_data,
+                       impl->exported.destroy_func);
+    }
 }
 
 static void
