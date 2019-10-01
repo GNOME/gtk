@@ -16,10 +16,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ gtk-3.22\n"
+"Project-Id-Version: gtk gtk-3.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-03 15:18+0000\n"
-"PO-Revision-Date: 2019-04-10 16:32+0200\n"
+"POT-Creation-Date: 2019-09-30 07:40+0000\n"
+"PO-Revision-Date: 2019-10-01 16:02+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: čeština <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -93,11 +93,11 @@ msgstr "PŘÍZNAKY"
 msgid "GDK debugging flags to unset"
 msgstr "Ladicí příznaky GDK, jejichž nastavení zruší"
 
-#: gdk/gdkwindow.c:2850
+#: gdk/gdkwindow.c:2851
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Podpora GL je zakázána skrz GDK_DEBUG"
 
-#: gdk/gdkwindow.c:2861
+#: gdk/gdkwindow.c:2862
 msgid "The current backend does not support OpenGL"
 msgstr "Aktuální podpůrná vrstva nepodporuje OpenGL"
 
@@ -478,20 +478,16 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "UspatDoPaměti"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:2226
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1177
-#: gdk/x11/gdkglcontext-x11.c:1277
-msgid "No GL implementation is available"
-msgstr "Není k dispozici žádná implementace GL"
+#: gdk/quartz/gdkglcontext-quartz.c:122
+msgid "Unable to create a GL pixel format"
+msgstr "Nezdařilo se vytvořit pixelový formát GL"
 
-#: gdk/mir/gdkmirglcontext.c:89 gdk/quartz/gdkglcontext-quartz.c:132
-#: gdk/wayland/gdkglcontext-wayland.c:208 gdk/win32/gdkglcontext-win32.c:1070
-#: gdk/win32/gdkglcontext-win32.c:1110 gdk/x11/gdkglcontext-x11.c:720
-#: gdk/x11/gdkglcontext-x11.c:770
+#: gdk/quartz/gdkglcontext-quartz.c:132 gdk/wayland/gdkglcontext-wayland.c:208
+#: gdk/win32/gdkglcontext-win32.c:1070 gdk/win32/gdkglcontext-win32.c:1110
+#: gdk/x11/gdkglcontext-x11.c:720 gdk/x11/gdkglcontext-x11.c:770
 msgid "Unable to create a GL context"
 msgstr "Nelze vytvořit kontext GL"
 
-#: gdk/mir/gdkmirwindowimpl.c:2188 gdk/mir/gdkmirwindowimpl.c:2198
 #: gdk/wayland/gdkglcontext-wayland.c:418
 #: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:908
 #: gdk/win32/gdkglcontext-win32.c:918 gdk/win32/gdkglcontext-win32.c:1035
@@ -499,13 +495,10 @@ msgstr "Nelze vytvořit kontext GL"
 msgid "No available configurations for the given pixel format"
 msgstr "Není dostupné žádné nastavení pro daný pixelový fotmát"
 
-#: gdk/mir/gdkmirwindowimpl.c:2234
-msgid "3.2 core GL profile is not available on EGL implementation"
-msgstr "Profil základního GL 3.2 není k dispozici v implementaci EGL"
-
-#: gdk/quartz/gdkglcontext-quartz.c:122
-msgid "Unable to create a GL pixel format"
-msgstr "Nezdařilo se vytvořit pixelový formát GL"
+#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1177
+#: gdk/x11/gdkglcontext-x11.c:1277
+msgid "No GL implementation is available"
+msgstr "Není k dispozici žádná implementace GL"
 
 #: gdk/wayland/gdkglcontext-wayland.c:476
 msgid "Core GL is not available on EGL implementation"
@@ -693,15 +686,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Zavřít"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9307
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9306
 msgid "Minimize"
 msgstr "Minimalizovat"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9316
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9315
 msgid "Maximize"
 msgstr "Maximalizovat"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9273
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9272
 msgid "Restore"
 msgstr "Obnovit"
 
@@ -1243,12 +1236,12 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechoosernative.c:544 gtk/gtkfilechoosernative.c:636
-#: gtk/gtkfilechooserwidget.c:1480 gtk/gtkfilechooserwidget.c:6377
+#: gtk/gtkfilechooserwidget.c:1494 gtk/gtkfilechooserwidget.c:6548
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
-#: gtk/gtkwindow.c:12782 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12776 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1297,13 +1290,13 @@ msgid "_Apply"
 msgstr "_Použít"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12783
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12777
 msgid "_OK"
 msgstr "_Budiž"
 
 #: gtk/deprecated/gtkfontsel.c:1709
 msgid "Font Selection"
-msgstr "Výběr písma"
+msgstr "Výběr fontu"
 
 #. Translators: the format here is used to build the string that will be rendered
 #. * in the number emblem.
@@ -1411,7 +1404,7 @@ msgstr "_Barva"
 #: gtk/deprecated/gtkstock.c:446
 msgctxt "Stock label"
 msgid "_Font"
-msgstr "_Písmo"
+msgstr "_Font"
 
 #: gtk/deprecated/gtkstock.c:455
 msgctxt "Stock label"
@@ -2226,8 +2219,8 @@ msgstr "_Kopírovat"
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: gtk/gtkentry.c:9594 gtk/gtkfilechooserwidget.c:1481
-#: gtk/gtkfilechooserwidget.c:2290 gtk/gtklabel.c:6684 gtk/gtktextview.c:9511
+#: gtk/gtkentry.c:9594 gtk/gtkfilechooserwidget.c:1495
+#: gtk/gtkfilechooserwidget.c:2321 gtk/gtklabel.c:6684 gtk/gtktextview.c:9511
 msgid "_Delete"
 msgstr "_Smazat"
 
@@ -2255,11 +2248,11 @@ msgstr "Kopírovat"
 msgid "Paste"
 msgstr "Vložit"
 
-#: gtk/gtkentry.c:10870
+#: gtk/gtkentry.c:10872
 msgid "Caps Lock is on"
 msgstr "Funkce Caps Lock je zapnuta"
 
-#: gtk/gtkentry.c:11145
+#: gtk/gtkentry.c:11147
 msgid "Insert Emoji"
 msgstr "Vložit Emodži"
 
@@ -2294,7 +2287,7 @@ msgstr "_Otevřít"
 msgid "_Save"
 msgstr "_Uložit"
 
-#: gtk/gtkfilechoosernativequartz.c:332 gtk/ui/gtkfilechooserwidget.ui:392
+#: gtk/gtkfilechoosernativequartz.c:332 gtk/ui/gtkfilechooserwidget.ui:404
 msgid "Select which types of files are shown"
 msgstr "Výběr zobrazených typů souborů"
 
@@ -2307,15 +2300,15 @@ msgstr "Výběr zobrazených typů souborů"
 msgid "%1$s on %2$s"
 msgstr "%1$s na %2$s"
 
-#: gtk/gtkfilechooserwidget.c:371
+#: gtk/gtkfilechooserwidget.c:383
 msgid "Type name of new folder"
 msgstr "Napište název nové složky"
 
-#: gtk/gtkfilechooserwidget.c:793
+#: gtk/gtkfilechooserwidget.c:807
 msgid "The folder could not be created"
 msgstr "Složku nelze vytvořit"
 
-#: gtk/gtkfilechooserwidget.c:806
+#: gtk/gtkfilechooserwidget.c:820
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2323,268 +2316,326 @@ msgstr ""
 "Složku nelze vytvořit, protože již existuje soubor se stejným názvem. Zkuste "
 "pro složku použít jiný název, nebo nejprve přejmenovat soubor."
 
-#: gtk/gtkfilechooserwidget.c:821
+#: gtk/gtkfilechooserwidget.c:835
 msgid "You need to choose a valid filename."
 msgstr "Vybraný název souboru musí být platný."
 
-#: gtk/gtkfilechooserwidget.c:824
+#: gtk/gtkfilechooserwidget.c:838
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "V %s nelze vytvořit soubor, jelikož se nejedná o složku"
 
-#: gtk/gtkfilechooserwidget.c:834
+#: gtk/gtkfilechooserwidget.c:848
 msgid "Cannot create file as the filename is too long"
 msgstr "Nelze vytvořit soubor, protože název je příliš dlouhý"
 
-#: gtk/gtkfilechooserwidget.c:835
+#: gtk/gtkfilechooserwidget.c:849
 msgid "Try using a shorter name."
 msgstr "Zkuste použít kratší název."
 
-#: gtk/gtkfilechooserwidget.c:845
+#: gtk/gtkfilechooserwidget.c:859
 msgid "You may only select folders"
 msgstr "Vybírat můžete jen složky"
 
-#: gtk/gtkfilechooserwidget.c:846
+#: gtk/gtkfilechooserwidget.c:860
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Položka, kterou jste vybrali, není složka. Zkuste použít jinou."
 
-#: gtk/gtkfilechooserwidget.c:854
+#: gtk/gtkfilechooserwidget.c:868
 msgid "Invalid file name"
 msgstr "Neplatný název souboru"
 
-#: gtk/gtkfilechooserwidget.c:863
+#: gtk/gtkfilechooserwidget.c:877
 msgid "The folder contents could not be displayed"
 msgstr "Obsah složky nelze zobrazit"
 
-#: gtk/gtkfilechooserwidget.c:871
+#: gtk/gtkfilechooserwidget.c:885
 msgid "The file could not be deleted"
 msgstr "Soubor nelze smazat"
 
-#: gtk/gtkfilechooserwidget.c:879
+#: gtk/gtkfilechooserwidget.c:893
 msgid "The file could not be moved to the Trash"
 msgstr "Soubor nelze přesunout do koše"
 
-#: gtk/gtkfilechooserwidget.c:1024
+#: gtk/gtkfilechooserwidget.c:1038
 msgid "A folder with that name already exists"
 msgstr "Složka s tímto názvem již existuje"
 
-#: gtk/gtkfilechooserwidget.c:1026
+#: gtk/gtkfilechooserwidget.c:1040
 msgid "A file with that name already exists"
 msgstr "Soubor s tímto názvem již existuje"
 
-#: gtk/gtkfilechooserwidget.c:1061
+#: gtk/gtkfilechooserwidget.c:1075
 msgid "A folder cannot be called “.”"
 msgstr "Složka se nemůže nazývat „.“"
 
-#: gtk/gtkfilechooserwidget.c:1062
+#: gtk/gtkfilechooserwidget.c:1076
 msgid "A file cannot be called “.”"
 msgstr "Soubor se nemůže nazývat „.“"
 
-#: gtk/gtkfilechooserwidget.c:1065
+#: gtk/gtkfilechooserwidget.c:1079
 msgid "A folder cannot be called “..”"
 msgstr "Složka se nemůže nazývat „..“"
 
-#: gtk/gtkfilechooserwidget.c:1066
+#: gtk/gtkfilechooserwidget.c:1080
 msgid "A file cannot be called “..”"
 msgstr "Soubor se nemůže nazývat „..“"
 
-#: gtk/gtkfilechooserwidget.c:1069
+#: gtk/gtkfilechooserwidget.c:1083
 msgid "Folder names cannot contain “/”"
 msgstr "Název složky nemůže obsahovat „/“"
 
-#: gtk/gtkfilechooserwidget.c:1070
+#: gtk/gtkfilechooserwidget.c:1084
 msgid "File names cannot contain “/”"
 msgstr "Názvy souborů nemohou obsahovat „/“"
 
-#: gtk/gtkfilechooserwidget.c:1096
+#: gtk/gtkfilechooserwidget.c:1110
 msgid "Folder names should not begin with a space"
 msgstr "Názvy složek by neměly začínat mezerou"
 
-#: gtk/gtkfilechooserwidget.c:1097
+#: gtk/gtkfilechooserwidget.c:1111
 msgid "File names should not begin with a space"
 msgstr "Názvy souborů by neměly začínat mezerou"
 
-#: gtk/gtkfilechooserwidget.c:1101
+#: gtk/gtkfilechooserwidget.c:1115
 msgid "Folder names should not end with a space"
 msgstr "Názvy složek by neměly končit mezerou"
 
-#: gtk/gtkfilechooserwidget.c:1102
+#: gtk/gtkfilechooserwidget.c:1116
 msgid "File names should not end with a space"
 msgstr "Názvy souborů by neměly končit mezerou"
 
-#: gtk/gtkfilechooserwidget.c:1105
+#: gtk/gtkfilechooserwidget.c:1119
 msgid "Folder names starting with a “.” are hidden"
 msgstr "Názvy složek začínající na „.“ jsou skryté"
 
-#: gtk/gtkfilechooserwidget.c:1106
+#: gtk/gtkfilechooserwidget.c:1120
 msgid "File names starting with a “.” are hidden"
 msgstr "Názvy souborů začínající na „.“ jsou skryté"
 
-#: gtk/gtkfilechooserwidget.c:1476
+#: gtk/gtkfilechooserwidget.c:1490
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Jste si jisti, že chcete trvale smazat „%s“?"
 
-#: gtk/gtkfilechooserwidget.c:1479
+#: gtk/gtkfilechooserwidget.c:1493
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Pokud smažete položku, bude natrvalo ztracena."
 
-#: gtk/gtkfilechooserwidget.c:1616
+#: gtk/gtkfilechooserwidget.c:1630
 msgid "The file could not be renamed"
 msgstr "Soubor nemohl být přejmenován."
 
-#: gtk/gtkfilechooserwidget.c:1936
+#: gtk/gtkfilechooserwidget.c:1966
 msgid "Could not select file"
 msgstr "Nelze vybrat soubor"
 
-#: gtk/gtkfilechooserwidget.c:2285
+#: gtk/gtkfilechooserwidget.c:2316
 msgid "_Visit File"
 msgstr "Podí_vat se na tento soubor"
 
-#: gtk/gtkfilechooserwidget.c:2286
+#: gtk/gtkfilechooserwidget.c:2317
 msgid "_Open With File Manager"
 msgstr "_Otevřít pomocí správce souborů"
 
-#: gtk/gtkfilechooserwidget.c:2287
+#: gtk/gtkfilechooserwidget.c:2318
 msgid "_Copy Location"
 msgstr "_Kopírovat umístění"
 
-#: gtk/gtkfilechooserwidget.c:2288
+#: gtk/gtkfilechooserwidget.c:2319
 msgid "_Add to Bookmarks"
 msgstr "_Přidat mezi záložky"
 
-#: gtk/gtkfilechooserwidget.c:2289 gtk/gtkplacessidebar.c:2741
-#: gtk/ui/gtkfilechooserwidget.ui:526
+#: gtk/gtkfilechooserwidget.c:2320 gtk/gtkplacessidebar.c:2741
+#: gtk/ui/gtkfilechooserwidget.ui:538
 msgid "_Rename"
 msgstr "Př_ejmenovat"
 
-#: gtk/gtkfilechooserwidget.c:2291
+#: gtk/gtkfilechooserwidget.c:2322
 msgid "_Move to Trash"
 msgstr "Pře_sunout do koše"
 
-#: gtk/gtkfilechooserwidget.c:2295
+#: gtk/gtkfilechooserwidget.c:2326
 msgid "Show _Hidden Files"
 msgstr "Zobrazovat _skryté soubory"
 
-#: gtk/gtkfilechooserwidget.c:2296
+#: gtk/gtkfilechooserwidget.c:2327
 msgid "Show _Size Column"
 msgstr "Z_obrazovat sloupec Velikost"
 
-#: gtk/gtkfilechooserwidget.c:2297
-msgid "Show _Time"
-msgstr "Zobrazi_t čas"
+#: gtk/gtkfilechooserwidget.c:2328
+msgid "Show T_ype Column"
+msgstr "Zobrazovat sloupec T_yp"
 
-#: gtk/gtkfilechooserwidget.c:2298
+#: gtk/gtkfilechooserwidget.c:2329
+msgid "Show _Time"
+msgstr "Zobrazova_t čas"
+
+#: gtk/gtkfilechooserwidget.c:2330
 msgid "Sort _Folders before Files"
 msgstr "_Složky řadit před soubory"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2573 gtk/inspector/css-node-tree.ui:141
+#: gtk/gtkfilechooserwidget.c:2609 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:207 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Umístění"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2666
+#: gtk/gtkfilechooserwidget.c:2702
 msgid "_Name:"
 msgstr "_Název:"
 
-#: gtk/gtkfilechooserwidget.c:3291 gtk/gtkfilechooserwidget.c:3305
+#: gtk/gtkfilechooserwidget.c:3327 gtk/gtkfilechooserwidget.c:3341
 #, c-format
 msgid "Searching in %s"
 msgstr "Hledá se v %s"
 
-#: gtk/gtkfilechooserwidget.c:3311
+#: gtk/gtkfilechooserwidget.c:3347
 msgid "Searching"
 msgstr "Hledá se"
 
-#: gtk/gtkfilechooserwidget.c:3318
+#: gtk/gtkfilechooserwidget.c:3354
 msgid "Enter location"
 msgstr "Zadat umístění"
 
-#: gtk/gtkfilechooserwidget.c:3320
+#: gtk/gtkfilechooserwidget.c:3356
 msgid "Enter location or URL"
 msgstr "Zadat umístění nebo URL"
 
-#: gtk/gtkfilechooserwidget.c:4354 gtk/gtkfilechooserwidget.c:7291
-#: gtk/ui/gtkfilechooserwidget.ui:235
+#: gtk/gtkfilechooserwidget.c:4432 gtk/gtkfilechooserwidget.c:7463
+#: gtk/ui/gtkfilechooserwidget.ui:247
 msgid "Modified"
 msgstr "Změněno"
 
-#: gtk/gtkfilechooserwidget.c:4632
+#: gtk/gtkfilechooserwidget.c:4710
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nelze přečíst obsah %s"
 
-#: gtk/gtkfilechooserwidget.c:4636
+#: gtk/gtkfilechooserwidget.c:4714
 msgid "Could not read the contents of the folder"
 msgstr "Nelze přečíst obsah složky"
 
-#: gtk/gtkfilechooserwidget.c:4796 gtk/gtkfilechooserwidget.c:4844
+#: gtk/gtkfilechooserwidget.c:4874 gtk/gtkfilechooserwidget.c:4922
 msgid "%H:%M"
 msgstr "%k∶%M"
 
-#: gtk/gtkfilechooserwidget.c:4798 gtk/gtkfilechooserwidget.c:4846
+#: gtk/gtkfilechooserwidget.c:4876 gtk/gtkfilechooserwidget.c:4924
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4802
+#: gtk/gtkfilechooserwidget.c:4880
 msgid "Yesterday"
 msgstr "Včera"
 
-#: gtk/gtkfilechooserwidget.c:4810
+#: gtk/gtkfilechooserwidget.c:4888
 msgid "%-e %b"
 msgstr "%-e. %B"
 
-#: gtk/gtkfilechooserwidget.c:4814
+#: gtk/gtkfilechooserwidget.c:4892
 msgid "%-e %b %Y"
 msgstr "%-e. %B %Y"
 
+#: gtk/gtkfilechooserwidget.c:4991 gtk/gtkfilechooserwidget.c:4999
+msgid "Program"
+msgstr "Program"
+
+#: gtk/gtkfilechooserwidget.c:4992
+msgid "Audio"
+msgstr "Zvuk"
+
+#: gtk/gtkfilechooserwidget.c:4993 gtk/inspector/visual.ui:230
+#: gtk/ui/gtkfontbutton.ui:13
+msgid "Font"
+msgstr "Font"
+
+#: gtk/gtkfilechooserwidget.c:4994 gtk/inspector/visual.ui:488
+msgid "Image"
+msgstr "Obraz"
+
+#: gtk/gtkfilechooserwidget.c:4995
+msgid "Archive"
+msgstr "Archiv"
+
+#: gtk/gtkfilechooserwidget.c:4996
+msgid "Markup"
+msgstr "Formátovaný text"
+
+#: gtk/gtkfilechooserwidget.c:4997 gtk/gtkfilechooserwidget.c:4998
+msgid "Text"
+msgstr "Text"
+
+#: gtk/gtkfilechooserwidget.c:5000
+msgid "Video"
+msgstr "Video"
+
+#: gtk/gtkfilechooserwidget.c:5001
+msgid "Contacts"
+msgstr "Kontakty"
+
+#: gtk/gtkfilechooserwidget.c:5002
+msgid "Calendar"
+msgstr "Kalendář"
+
+#: gtk/gtkfilechooserwidget.c:5003
+msgid "Document"
+msgstr "Dokument"
+
+#: gtk/gtkfilechooserwidget.c:5004
+msgid "Presentation"
+msgstr "Prezentace"
+
+#: gtk/gtkfilechooserwidget.c:5005
+msgid "Spreadsheet"
+msgstr "Tabulka"
+
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5049 gtk/inspector/prop-editor.c:1689
+#: gtk/gtkfilechooserwidget.c:5036 gtk/gtkfilechooserwidget.c:5219
+#: gtk/inspector/prop-editor.c:1689
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: gtk/gtkfilechooserwidget.c:5088 gtk/gtkplacessidebar.c:1094
+#: gtk/gtkfilechooserwidget.c:5258 gtk/gtkplacessidebar.c:1094
 msgid "Home"
 msgstr "Domů"
 
-#: gtk/gtkfilechooserwidget.c:5584
+#: gtk/gtkfilechooserwidget.c:5755
 msgid "Cannot change to folder because it is not local"
 msgstr "Nelze přejít do složky, protože není místní"
 
-#: gtk/gtkfilechooserwidget.c:6370 gtk/gtkprintunixdialog.c:665
+#: gtk/gtkfilechooserwidget.c:6541 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Soubor nazvaný „%s“ již existuje. Chcete jej nahradit?"
 
-#: gtk/gtkfilechooserwidget.c:6373 gtk/gtkprintunixdialog.c:669
+#: gtk/gtkfilechooserwidget.c:6544 gtk/gtkprintunixdialog.c:669
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
 "V „%s“ již tento soubor existuje. Jeho nahrazením přepíšete celý jeho obsah."
 
-#: gtk/gtkfilechooserwidget.c:6378 gtk/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:6549 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
 msgstr "Na_hradit"
 
-#: gtk/gtkfilechooserwidget.c:6592
+#: gtk/gtkfilechooserwidget.c:6763
 msgid "You do not have access to the specified folder."
 msgstr "Do zadané složky nemáte přístup."
 
-#: gtk/gtkfilechooserwidget.c:7215
+#: gtk/gtkfilechooserwidget.c:7386
 msgid "Could not send the search request"
 msgstr "Nelze odeslat vyhledávací požadavek"
 
-#: gtk/gtkfilechooserwidget.c:7501
+#: gtk/gtkfilechooserwidget.c:7674
 msgid "Accessed"
 msgstr "Otevřeno"
 
-#: gtk/gtkfilechooserwidget.c:8612 gtk/ui/gtkfilechooserwidget.ui:69
+#: gtk/gtkfilechooserwidget.c:8793 gtk/ui/gtkfilechooserwidget.ui:69
 msgid "Create Folder"
 msgstr "Vytvořit složku"
 
@@ -2603,7 +2654,7 @@ msgstr "Sans 12"
 
 #: gtk/gtkfontbutton.c:492 gtk/gtkfontbutton.c:626
 msgid "Pick a Font"
-msgstr "Vybrat písmo"
+msgstr "Vybrat font"
 
 #: gtk/gtkfontbutton.c:1395
 msgctxt "font"
@@ -2666,7 +2717,7 @@ msgstr "Vytvoření kontextu GL selhalo"
 msgid "Application menu"
 msgstr "Nabídka aplikace"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9343
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9342
 msgid "Close"
 msgstr "Zavřít"
 
@@ -3167,7 +3218,7 @@ msgstr "Název je již použit"
 
 #: gtk/gtkplacessidebar.c:2735 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
-#: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:500
+#: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:512
 msgid "Name"
 msgstr "Název"
 
@@ -3457,7 +3508,7 @@ msgstr "Došel papír"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:621
-#: modules/printbackends/cups/gtkprintbackendcups.c:2602
+#: modules/printbackends/cups/gtkprintbackendcups.c:2614
 msgid "Paused"
 msgstr "Přerušeno"
 
@@ -3525,42 +3576,42 @@ msgstr "Získávají se informace o tiskárně…"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3120
-#: modules/printbackends/cups/gtkprintbackendcups.c:5378
+#: modules/printbackends/cups/gtkprintbackendcups.c:5440
 msgid "Left to right, top to bottom"
 msgstr "Zleva doprava, shora dolů"
 
 #: gtk/gtkprintunixdialog.c:3120
-#: modules/printbackends/cups/gtkprintbackendcups.c:5378
+#: modules/printbackends/cups/gtkprintbackendcups.c:5440
 msgid "Left to right, bottom to top"
 msgstr "Zleva doprava, zdola nahoru"
 
 #: gtk/gtkprintunixdialog.c:3121
-#: modules/printbackends/cups/gtkprintbackendcups.c:5379
+#: modules/printbackends/cups/gtkprintbackendcups.c:5441
 msgid "Right to left, top to bottom"
 msgstr "Zprava doleva, shora dolů"
 
 #: gtk/gtkprintunixdialog.c:3121
-#: modules/printbackends/cups/gtkprintbackendcups.c:5379
+#: modules/printbackends/cups/gtkprintbackendcups.c:5441
 msgid "Right to left, bottom to top"
 msgstr "Zprava doleva, zdola nahoru"
 
 #: gtk/gtkprintunixdialog.c:3122
-#: modules/printbackends/cups/gtkprintbackendcups.c:5380
+#: modules/printbackends/cups/gtkprintbackendcups.c:5442
 msgid "Top to bottom, left to right"
 msgstr "Shora dolů, zleva doprava"
 
 #: gtk/gtkprintunixdialog.c:3122
-#: modules/printbackends/cups/gtkprintbackendcups.c:5380
+#: modules/printbackends/cups/gtkprintbackendcups.c:5442
 msgid "Top to bottom, right to left"
 msgstr "Shora dolů, zprava doleva"
 
 #: gtk/gtkprintunixdialog.c:3123
-#: modules/printbackends/cups/gtkprintbackendcups.c:5381
+#: modules/printbackends/cups/gtkprintbackendcups.c:5443
 msgid "Bottom to top, left to right"
 msgstr "Zdola nahoru, zleva doprava"
 
 #: gtk/gtkprintunixdialog.c:3123
-#: modules/printbackends/cups/gtkprintbackendcups.c:5381
+#: modules/printbackends/cups/gtkprintbackendcups.c:5443
 msgid "Bottom to top, right to left"
 msgstr "Zdola nahoru, zprava doleva"
 
@@ -3754,12 +3805,12 @@ msgid "Search Shortcuts"
 msgstr "hledat zkratku"
 
 #: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:376
-#: gtk/ui/gtkfilechooserwidget.ui:310
+#: gtk/ui/gtkfilechooserwidget.ui:322
 msgid "No Results Found"
 msgstr "Nebyly nalezeny žádné výsledky"
 
 #: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:390
-#: gtk/ui/gtkfilechooserwidget.ui:324 gtk/ui/gtkplacesview.ui:274
+#: gtk/ui/gtkfilechooserwidget.ui:336 gtk/ui/gtkplacesview.ui:274
 msgid "Try a different search"
 msgstr "Zkuste zadat jiný termín k vyhledání"
 
@@ -3942,24 +3993,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9291
+#: gtk/gtkwindow.c:9290
 msgid "Move"
 msgstr "Přesunout"
 
-#: gtk/gtkwindow.c:9299
+#: gtk/gtkwindow.c:9298
 msgid "Resize"
 msgstr "Změnit velikost"
 
-#: gtk/gtkwindow.c:9330
+#: gtk/gtkwindow.c:9329
 msgid "Always on Top"
 msgstr "Vždy navrchu"
 
-#: gtk/gtkwindow.c:12770
+#: gtk/gtkwindow.c:12764
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Chcete použít GTK+ Inspector?"
 
-#: gtk/gtkwindow.c:12772
+#: gtk/gtkwindow.c:12766
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3970,7 +4021,7 @@ msgstr ""
 "změnit vnitřní strukturu jakékoliv aplikace GTK+. Použití tohoto programu "
 "může vést k přerušení běhu nebo pádu aplikace."
 
-#: gtk/gtkwindow.c:12777
+#: gtk/gtkwindow.c:12771
 msgid "Don't show this message again"
 msgstr "Tuto zprávu znovu nezobrazovat"
 
@@ -4177,7 +4228,7 @@ msgstr "Časování snímků"
 
 #: gtk/inspector/misc-info.ui:475
 msgid "Tick callback"
-msgstr "Zpětné volání při zaškrtnutí"
+msgstr "Zpětné volání tiku hodin"
 
 #: gtk/inspector/misc-info.ui:511
 msgid "Frame count"
@@ -4307,6 +4358,7 @@ msgid "Property"
 msgstr "Vlastnost"
 
 #: gtk/inspector/prop-list.ui:68 gtk/inspector/statistics.ui:53
+#: gtk/ui/gtkfilechooserwidget.ui:235
 msgid "Type"
 msgstr "Typ"
 
@@ -4464,13 +4516,9 @@ msgstr "Velikost kurzoru"
 msgid "Icon Theme"
 msgstr "Motiv ikon"
 
-#: gtk/inspector/visual.ui:230 gtk/ui/gtkfontbutton.ui:13
-msgid "Font"
-msgstr "Písmo"
-
 #: gtk/inspector/visual.ui:263
 msgid "Font Scale"
-msgstr "Škálování písma"
+msgstr "Škálování fontu"
 
 #: gtk/inspector/visual.ui:309
 msgid "Text Direction"
@@ -4503,10 +4551,6 @@ msgstr "Režim vykreslování"
 #: gtk/inspector/visual.ui:487
 msgid "Similar"
 msgstr "Podobnost"
-
-#: gtk/inspector/visual.ui:488
-msgid "Image"
-msgstr "Obraz"
 
 #: gtk/inspector/visual.ui:489
 msgid "Recording"
@@ -7119,29 +7163,29 @@ msgstr "Vlajky"
 msgid "Files"
 msgstr "Soubory"
 
-#: gtk/ui/gtkfilechooserwidget.ui:261
+#: gtk/ui/gtkfilechooserwidget.ui:273
 msgid "Remote location — only searching the current folder"
 msgstr "Vzdálené umístění — prohledává se pouze aktuální složka"
 
-#: gtk/ui/gtkfilechooserwidget.ui:433
+#: gtk/ui/gtkfilechooserwidget.ui:445
 msgid "Folder Name"
 msgstr "Název složky"
 
-#: gtk/ui/gtkfilechooserwidget.ui:461
+#: gtk/ui/gtkfilechooserwidget.ui:473
 msgid "_Create"
 msgstr "_Vytvořit"
 
 #: gtk/ui/gtkfontchooserdialog.ui:6
 msgid "Select Font"
-msgstr "Vybrat písmo"
+msgstr "Výběr fontu"
 
 #: gtk/ui/gtkfontchooserwidget.ui:53
 msgid "Search font name"
-msgstr "Hledat název písma"
+msgstr "Hledat název fontu"
 
 #: gtk/ui/gtkfontchooserwidget.ui:100
 msgid "Font Family"
-msgstr "Rodina písma"
+msgstr "Rodina fontu"
 
 #: gtk/ui/gtkfontchooserwidget.ui:121 gtk/ui/gtkfontchooserwidget.ui:248
 msgid "Preview text"
@@ -7149,7 +7193,7 @@ msgstr "Náhled textu"
 
 #: gtk/ui/gtkfontchooserwidget.ui:201
 msgid "No Fonts Found"
-msgstr "Nebyla nalezena žádná písma"
+msgstr "Nebyly nalezeny žádné fonty"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:47
 msgid "_Format for:"
@@ -7763,361 +7807,361 @@ msgstr ""
 msgid "Authentication is required to print this document"
 msgstr "Je vyžadováno ověření, aby bylo možné tento dokument vytisknout"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2531
+#: modules/printbackends/cups/gtkprintbackendcups.c:2543
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "Tiskárně „%s“ dochází toner."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2535
+#: modules/printbackends/cups/gtkprintbackendcups.c:2547
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "Tiskárně „%s“ došel toner."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:2540
+#: modules/printbackends/cups/gtkprintbackendcups.c:2552
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "Tiskárně „%s“ dochází vývojka."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:2545
+#: modules/printbackends/cups/gtkprintbackendcups.c:2557
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "Tiskárně „%s“ došla vývojka."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:2550
+#: modules/printbackends/cups/gtkprintbackendcups.c:2562
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "Tiskárně „%s“ dochází zásoba alespoň jednoho popisovače."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:2555
+#: modules/printbackends/cups/gtkprintbackendcups.c:2567
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "Tiskárně „%s“ došla zásoba alespoň jednoho popisovače."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2559
+#: modules/printbackends/cups/gtkprintbackendcups.c:2571
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "Na tiskárně „%s“ je otevřen kryt."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2563
+#: modules/printbackends/cups/gtkprintbackendcups.c:2575
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "Na tiskárně „%s“ jsou otevřena dvířka."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2567
+#: modules/printbackends/cups/gtkprintbackendcups.c:2579
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "Tiskárně „%s“ dochází papír."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2571
+#: modules/printbackends/cups/gtkprintbackendcups.c:2583
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "Tiskárně „%s“ došel papír."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2575
+#: modules/printbackends/cups/gtkprintbackendcups.c:2587
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "Tiskárna „%s“ není v tomto okamžiku připojena."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2579
+#: modules/printbackends/cups/gtkprintbackendcups.c:2591
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "Na tiskárně „%s“ se vyskytla chyba."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2599
+#: modules/printbackends/cups/gtkprintbackendcups.c:2611
 msgid "Paused; Rejecting Jobs"
 msgstr "Pozastaveno ; Úlohy se odmítají"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2605
+#: modules/printbackends/cups/gtkprintbackendcups.c:2617
 msgid "Rejecting Jobs"
 msgstr "Úlohy se odmítají"
 
 #. Translators: this string connects multiple printer states together.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2646
+#: modules/printbackends/cups/gtkprintbackendcups.c:2658
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4324
-#: modules/printbackends/cups/gtkprintbackendcups.c:4391
+#: modules/printbackends/cups/gtkprintbackendcups.c:4386
+#: modules/printbackends/cups/gtkprintbackendcups.c:4453
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Oboustranný"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4325
+#: modules/printbackends/cups/gtkprintbackendcups.c:4387
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Typ papíru"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4326
+#: modules/printbackends/cups/gtkprintbackendcups.c:4388
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Zdroj papíru"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4327
-#: modules/printbackends/cups/gtkprintbackendcups.c:4392
+#: modules/printbackends/cups/gtkprintbackendcups.c:4389
+#: modules/printbackends/cups/gtkprintbackendcups.c:4454
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Výstupní zásobník"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4328
+#: modules/printbackends/cups/gtkprintbackendcups.c:4390
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Rozlišení"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4329
+#: modules/printbackends/cups/gtkprintbackendcups.c:4391
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "Předběžné filtrování GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4338
+#: modules/printbackends/cups/gtkprintbackendcups.c:4400
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Jednostranný"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4340
+#: modules/printbackends/cups/gtkprintbackendcups.c:4402
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Delší okraj (standardní)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4342
+#: modules/printbackends/cups/gtkprintbackendcups.c:4404
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Kratší okraj (otočené)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4344
-#: modules/printbackends/cups/gtkprintbackendcups.c:4346
-#: modules/printbackends/cups/gtkprintbackendcups.c:4354
+#: modules/printbackends/cups/gtkprintbackendcups.c:4406
+#: modules/printbackends/cups/gtkprintbackendcups.c:4408
+#: modules/printbackends/cups/gtkprintbackendcups.c:4416
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Automatický výběr"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4348
-#: modules/printbackends/cups/gtkprintbackendcups.c:4350
-#: modules/printbackends/cups/gtkprintbackendcups.c:4352
-#: modules/printbackends/cups/gtkprintbackendcups.c:4356
+#: modules/printbackends/cups/gtkprintbackendcups.c:4410
+#: modules/printbackends/cups/gtkprintbackendcups.c:4412
+#: modules/printbackends/cups/gtkprintbackendcups.c:4414
+#: modules/printbackends/cups/gtkprintbackendcups.c:4418
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Výchozí podle tiskárny"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4358
+#: modules/printbackends/cups/gtkprintbackendcups.c:4420
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Vložit pouze fonty GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4360
+#: modules/printbackends/cups/gtkprintbackendcups.c:4422
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Převést na PS, úroveň 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4362
+#: modules/printbackends/cups/gtkprintbackendcups.c:4424
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Převést na PS, úroveň 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4364
+#: modules/printbackends/cups/gtkprintbackendcups.c:4426
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Bez předběžného filtrování"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:4373
+#: modules/printbackends/cups/gtkprintbackendcups.c:4435
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Různé"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4400
+#: modules/printbackends/cups/gtkprintbackendcups.c:4462
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Jednostranný"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4402
+#: modules/printbackends/cups/gtkprintbackendcups.c:4464
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Delší okraj (standardní)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4404
+#: modules/printbackends/cups/gtkprintbackendcups.c:4466
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Kratší okraj (otočení)"
 
 #. Translators: Top output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4407
+#: modules/printbackends/cups/gtkprintbackendcups.c:4469
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Horní zásobník"
 
 #. Translators: Middle output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4409
+#: modules/printbackends/cups/gtkprintbackendcups.c:4471
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Prostřední zásobník"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4411
+#: modules/printbackends/cups/gtkprintbackendcups.c:4473
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Spodní zásobník"
 
 #. Translators: Side output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4413
+#: modules/printbackends/cups/gtkprintbackendcups.c:4475
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Boční zásobník"
 
 #. Translators: Left output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4415
+#: modules/printbackends/cups/gtkprintbackendcups.c:4477
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Levý zásobník"
 
 #. Translators: Right output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4417
+#: modules/printbackends/cups/gtkprintbackendcups.c:4479
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Pravý zásobník"
 
 #. Translators: Center output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4419
+#: modules/printbackends/cups/gtkprintbackendcups.c:4481
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Středový zásobník"
 
 #. Translators: Rear output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4421
+#: modules/printbackends/cups/gtkprintbackendcups.c:4483
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Zadní zásobník"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4423
+#: modules/printbackends/cups/gtkprintbackendcups.c:4485
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Zásobník lícem nahoru"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4425
+#: modules/printbackends/cups/gtkprintbackendcups.c:4487
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Zásobník lícem dolů"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4427
+#: modules/printbackends/cups/gtkprintbackendcups.c:4489
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Vysokokapacitní zásobník"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4449
+#: modules/printbackends/cups/gtkprintbackendcups.c:4511
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "Třídička %d"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4453
+#: modules/printbackends/cups/gtkprintbackendcups.c:4515
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "Poštovní schránka %d"
 
 #. Translators: Private mailbox
-#: modules/printbackends/cups/gtkprintbackendcups.c:4457
+#: modules/printbackends/cups/gtkprintbackendcups.c:4519
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Moje poštovní schránka"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4461
+#: modules/printbackends/cups/gtkprintbackendcups.c:4523
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "Zásobník %d"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4932
+#: modules/printbackends/cups/gtkprintbackendcups.c:4994
 msgid "Printer Default"
 msgstr "Výchozí pro tiskárnu"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5373
+#: modules/printbackends/cups/gtkprintbackendcups.c:5435
 msgid "Urgent"
 msgstr "Naléhavá"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5373
+#: modules/printbackends/cups/gtkprintbackendcups.c:5435
 msgid "High"
 msgstr "Vysoká"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5373
+#: modules/printbackends/cups/gtkprintbackendcups.c:5435
 msgid "Medium"
 msgstr "Střední"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5373
+#: modules/printbackends/cups/gtkprintbackendcups.c:5435
 msgid "Low"
 msgstr "Nízká"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5403
+#: modules/printbackends/cups/gtkprintbackendcups.c:5465
 msgid "Job Priority"
 msgstr "Priorita úlohy"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5414
+#: modules/printbackends/cups/gtkprintbackendcups.c:5476
 msgid "Billing Info"
 msgstr "Účtovací informace"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5438
+#: modules/printbackends/cups/gtkprintbackendcups.c:5500
 msgctxt "cover page"
 msgid "None"
 msgstr "Žádná"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5439
+#: modules/printbackends/cups/gtkprintbackendcups.c:5501
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Utajované"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5440
+#: modules/printbackends/cups/gtkprintbackendcups.c:5502
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Důvěrné"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5441
+#: modules/printbackends/cups/gtkprintbackendcups.c:5503
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Tajné"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5442
+#: modules/printbackends/cups/gtkprintbackendcups.c:5504
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Standardní"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5443
+#: modules/printbackends/cups/gtkprintbackendcups.c:5505
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Přísně tajné"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5444
+#: modules/printbackends/cups/gtkprintbackendcups.c:5506
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Neutajované"
@@ -8125,7 +8169,7 @@ msgstr "Neutajované"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5456
+#: modules/printbackends/cups/gtkprintbackendcups.c:5518
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Stránek na list"
@@ -8133,7 +8177,7 @@ msgstr "Stránek na list"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5473
+#: modules/printbackends/cups/gtkprintbackendcups.c:5535
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Řazení stránek"
@@ -8141,7 +8185,7 @@ msgstr "Řazení stránek"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5515
+#: modules/printbackends/cups/gtkprintbackendcups.c:5577
 msgctxt "printer option"
 msgid "Before"
 msgstr "Před"
@@ -8149,7 +8193,7 @@ msgstr "Před"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5530
+#: modules/printbackends/cups/gtkprintbackendcups.c:5592
 msgctxt "printer option"
 msgid "After"
 msgstr "Za"
@@ -8158,7 +8202,7 @@ msgstr "Za"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5550
+#: modules/printbackends/cups/gtkprintbackendcups.c:5612
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Vytisknout"
@@ -8166,7 +8210,7 @@ msgstr "Vytisknout"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5561
+#: modules/printbackends/cups/gtkprintbackendcups.c:5623
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Vytisknout v určený čas"
@@ -8176,35 +8220,35 @@ msgstr "Vytisknout v určený čas"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5606
+#: modules/printbackends/cups/gtkprintbackendcups.c:5668
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Vlastní %s×%s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5716
+#: modules/printbackends/cups/gtkprintbackendcups.c:5778
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Profil tiskárny"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/cups/gtkprintbackendcups.c:5723
+#: modules/printbackends/cups/gtkprintbackendcups.c:5785
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Není k dispozici"
 
 #. TRANSLATORS: when we're running an old CUPS, and
 #. * it hasn't registered the device with colord
-#: modules/printbackends/cups/gtkprintercups.c:269
+#: modules/printbackends/cups/gtkprintercups.c:275
 msgid "Color management unavailable"
 msgstr "Správa barev není k dispozici"
 
 #. TRANSLATORS: when there is no color profile available
-#: modules/printbackends/cups/gtkprintercups.c:281
+#: modules/printbackends/cups/gtkprintercups.c:287
 msgid "No profile available"
 msgstr "Žádný profil není k dispozici"
 
 #. TRANSLATORS: when the color profile has no title
-#: modules/printbackends/cups/gtkprintercups.c:292
+#: modules/printbackends/cups/gtkprintercups.c:298
 msgid "Unspecified profile"
 msgstr "Neurčený profil"
 
