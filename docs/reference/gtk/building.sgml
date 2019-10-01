@@ -336,181 +336,182 @@ How to compile GTK itself
       See <xref linkend="gtk-resources"/> for more information.
     </para>
   </refsect1>
-      <refsect1 id="extra-configuration-options">
-      <title>Extra Configuration Options</title>
+
+  <refsect1 id="extra-configuration-options">
+    <title>Extra Configuration Options</title>
+
+    <para>
+      In addition to the normal options provided by Meson, GTK defines
+      various arguments that modify what should be built.
+
+      <cmdsynopsis>
+        <command>meson</command>
+        <sbr/>
+        <group>
+          <arg choice="plain">-Dx11-backend=true</arg>
+          <arg choice="plain">-Dx11-backend=false</arg>
+        </group>
+        <sbr/>
+        <group>
+          <arg choice="plain">-Dwayland-backend=true</arg>
+          <arg choice="plain">-Dwayland-backend=false</arg>
+        </group>
+        <sbr/>
+        <group>
+          <arg choice="plain">-Dbroadway-backend=true</arg>
+          <arg choice="plain">-Dbroadway-backend=false</arg>
+        </group>
+        <sbr/>
+        <group>
+          <arg choice="plain">-Dwin32-backend=true</arg>
+          <arg choice="plain">-Dwin32-backend=false</arg>
+        </group>
+        <sbr/>
+        <group>
+          <arg choice="plain">-Dquartz-backend=true</arg>
+          <arg choice="plain">-Dquartz-backend=false</arg>
+        </group>
+        <sbr/>
+        <group>
+          <arg choice="plain">-Dmedia=gstreamer</arg>
+          <arg choice="plain">-Dmedia=ffmpeg</arg>
+          <arg choice="plain">-Dmedia=all</arg>
+          <arg choice="plain">-Dmedia=none</arg>
+        </group>
+        <sbr/>
+        <group>
+          <arg choice="plain">-Dvulkan=yes</arg>
+          <arg choice="plain">-Dvulkan=no</arg>
+          <arg choice="plain">-Dvulkan=auto</arg>
+        </group>
+        <sbr/>
+        <group>
+          <arg choice="plain">-Dxinerama=yes</arg>
+          <arg choice="plain">-Dxinerama=no</arg>
+          <arg choice="plain">-Dxinerama=auto</arg>
+        </group>
+        <sbr/>
+        <group>
+          <arg choice="plain">-Dcloudproviders=true</arg>
+          <arg choice="plain">-Dcloudproviders=false</arg>
+        </group>
+        <sbr/>
+        <group>
+          <arg choice="plain">-Dprint-backends=all</arg>
+          <arg choice="plain">-Dprint-backends=none</arg>
+          <arg choice="plain">-Dprint-backends=cups,lpr,...</arg>
+        </group>
+        <sbr/>
+        <group>
+          <arg choice="plain">-Dcolord=yes</arg>
+          <arg choice="plain">-Dcolord=no</arg>
+          <arg choice="plain">-Dcolord=auto</arg>
+        </group>
+        <sbr/>
+        <group>
+          <arg choice="plain">-Dgtk_doc=true</arg>
+          <arg choice="plain">-Dgtk_doc=false</arg>
+        </group>
+        <sbr/>
+        <group>
+          <arg choice="plain">-Dman-pages=true</arg>
+          <arg choice="plain">-Dman-pages=false</arg>
+        </group>
+        <sbr/>
+        <group>
+          <arg choice="plain">-Dintrospection=true</arg>
+          <arg choice="plain">-Dintrospection=false</arg>
+        </group>
+      </cmdsynopsis>
+    </para>
+
+    <formalpara>
+      <title><systemitem>xinerama</systemitem></title>
 
       <para>
-        In addition to the normal options provided by Meson, GTK defines
-        various arguments that modify what should be built.
-
-        <cmdsynopsis>
-          <command>meson</command>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dx11-backend=true</arg>
-            <arg choice="plain">-Dx11-backend=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dwayland-backend=true</arg>
-            <arg choice="plain">-Dwayland-backend=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dbroadway-backend=true</arg>
-            <arg choice="plain">-Dbroadway-backend=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dwin32-backend=true</arg>
-            <arg choice="plain">-Dwin32-backend=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dquartz-backend=true</arg>
-            <arg choice="plain">-Dquartz-backend=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dmedia=gstreamer</arg>
-            <arg choice="plain">-Dmedia=ffmpeg</arg>
-            <arg choice="plain">-Dmedia=all</arg>
-            <arg choice="plain">-Dmedia=none</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dvulkan=yes</arg>
-            <arg choice="plain">-Dvulkan=no</arg>
-            <arg choice="plain">-Dvulkan=auto</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dxinerama=yes</arg>
-            <arg choice="plain">-Dxinerama=no</arg>
-            <arg choice="plain">-Dxinerama=auto</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dcloudproviders=true</arg>
-            <arg choice="plain">-Dcloudproviders=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dprint-backends=all</arg>
-            <arg choice="plain">-Dprint-backends=none</arg>
-            <arg choice="plain">-Dprint-backends=cups,lpr,...</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dcolord=yes</arg>
-            <arg choice="plain">-Dcolord=no</arg>
-            <arg choice="plain">-Dcolord=auto</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dgtk_doc=true</arg>
-            <arg choice="plain">-Dgtk_doc=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dman-pages=true</arg>
-            <arg choice="plain">-Dman-pages=false</arg>
-          </group>
-          <sbr/>
-          <group>
-            <arg choice="plain">-Dintrospection=true</arg>
-            <arg choice="plain">-Dintrospection=false</arg>
-          </group>
-        </cmdsynopsis>
+        By default GTK will try to link against the Xinerama libraries
+        if they are found. This options can be used to explicitly control
+        whether Xinerama should be used.
       </para>
+    </formalpara>
 
-      <formalpara>
-        <title><systemitem>xinerama</systemitem></title>
+    <formalpara>
+      <title><systemitem>gtk_doc</systemitem> and
+        <systemitem>man-pages</systemitem></title>
 
-        <para>
-          By default GTK will try to link against the Xinerama libraries
-          if they are found. This options can be used to explicitly control
-          whether Xinerama should be used.
-        </para>
-      </formalpara>
+      <para>
+        The <application>gtk-doc</application> package is
+        used to generate the reference documentation included
+        with GTK. By default support for <application>gtk-doc</application>
+        is disabled because it requires various extra dependencies
+        to be installed. If you have
+        <application>gtk-doc</application> installed and
+        are modifying GTK, you may want to enable
+        <application>gtk-doc</application> support by passing
+        in <systemitem>gtk_doc</systemitem>.
+      </para>
+      <para>
+        Additionally, some tools provided by GTK have their own
+        manual pages generated using a similar set of dependencies;
+        if you have <application>xsltproc</application> then you
+        can generate manual pages by passing <systemitem>man-pages</systemitem>
+        when configuring the build.
+      </para>
+    </formalpara>
 
-      <formalpara>
-        <title><systemitem>gtk_doc</systemitem> and
-          <systemitem>man-pages</systemitem></title>
+    <formalpara>
+      <title><systemitem>print-backends</systemitem></title>
 
-        <para>
-          The <application>gtk-doc</application> package is
-          used to generate the reference documentation included
-          with GTK. By default support for <application>gtk-doc</application>
-          is disabled because it requires various extra dependencies
-          to be installed. If you have
-          <application>gtk-doc</application> installed and
-          are modifying GTK, you may want to enable
-          <application>gtk-doc</application> support by passing
-          in <systemitem>gtk_doc</systemitem>.
-        </para>
-        <para>
-          Additionally, some tools provided by GTK have their own
-          manual pages generated using a similar set of dependencies;
-          if you have <application>xsltproc</application> then you
-          can generate manual pages by passing <systemitem>man-pages</systemitem>
-          when configuring the build.
-        </para>
-      </formalpara>
+      <para>
+        By default, GTK will try to build various print backends if
+        their dependencies are found. This option can be used to
+        explicitly control which print backends should be built.
+      </para>
+    </formalpara>
 
-      <formalpara>
-        <title><systemitem>print-backends</systemitem></title>
+    <formalpara>
+      <title><systemitem>x11-backend</systemitem>,
+        <systemitem>win32-backend</systemitem>,
+        <systemitem>quartz-backend</systemitem>,
+        <systemitem>broadway-backend</systemitem> and
+        <systemitem>wayland-backend</systemitem></title>
 
-        <para>
-          By default, GTK will try to build various print backends if
-          their dependencies are found. This option can be used to
-          explicitly control which print backends should be built.
-        </para>
-      </formalpara>
+      <para>
+        Enable specific backends for GDK.  If none of these options
+        are given, the Wayland backend will be enabled by default,
+        if the platform is Linux; the X11 backend will also be enabled
+        by default, unless the platform is Windows, in which case the
+        default is win32, or the platform is macOS, in which case the
+        default is quartz. If any backend is explicitly enabled or disabled,
+        no other platform will be enabled automatically.
+      </para>
+    </formalpara>
 
-      <formalpara>
-        <title><systemitem>x11-backend</systemitem>,
-          <systemitem>win32-backend</systemitem>,
-          <systemitem>quartz-backend</systemitem>,
-          <systemitem>broadway-backend</systemitem> and
-          <systemitem>wayland-backend</systemitem></title>
+    <formalpara>
+      <title><systemitem>introspection</systemitem></title>
 
-        <para>
-          Enable specific backends for GDK.  If none of these options
-          are given, the Wayland backend will be enabled by default,
-          if the platform is Linux; the X11 backend will also be enabled
-          by default, unless the platform is Windows, in which case the
-          default is win32, or the platform is macOS, in which case the
-          default is quartz. If any backend is explicitly enabled or disabled,
-          no other platform will be enabled automatically.
-        </para>
-      </formalpara>
+      <para>
+        Allows to disable building introspection support. This is option
+        is mainly useful for shortening turnaround times on developer
+        systems. Installed builds of GTK should always have introspection
+        support.
+      </para>
+    </formalpara>
 
-      <formalpara>
-        <title><systemitem>introspection</systemitem></title>
+    <formalpara>
+      <title><systemitem>build-tests</systemitem>,
+             <systemitem>install-tests</systemitem>,
+             <systemitem>demos</systemitem></title>
 
-        <para>
-          Allows to disable building introspection support. This is option
-          is mainly useful for shortening turnaround times on developer
-          systems. Installed builds of GTK should always have introspection
-          support.
-        </para>
-      </formalpara>
+      <para>
+        By default, GTK will build quite a few tests and demos.
+        While these are useful on a developer system, they are not
+        needed when GTK is built e.g. for a flatpak runtime. These
+        options allow to disable building tests and demos.
+      </para>
+    </formalpara>
 
-      <formalpara>
-        <title><systemitem>build-tests</systemitem>,
-               <systemitem>install-tests</systemitem>,
-               <systemitem>demos</systemitem></title>
-
-        <para>
-          By default, GTK will build quite a few tests and demos.
-          While these are useful on a developer system, they are not
-          needed when GTK is built e.g. for a flatpak runtime. These
-          options allow to disable building tests and demos.
-        </para>
-      </formalpara>
-
-    </refsect1>
+  </refsect1>
 
 </refentry>
 
