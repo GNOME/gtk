@@ -76,10 +76,10 @@ How to compile GTK itself
     </para>
     <para>
       Several environment variables are useful to pass to set before
-      running configure. <envar>CPPFLAGS</envar> contains options to
-      pass to the C compiler, and is used to tell the compiler where
-      to look for include files. The <envar>LDFLAGS</envar> variable
-      is used in a similar fashion for the linker. Finally the
+      running <application>meson</application>. <envar>CPPFLAGS</envar>
+      contains options to pass to the C compiler, and is used to tell
+      the compiler where to look for include files. The <envar>LDFLAGS</envar>
+      variable is used in a similar fashion for the linker. Finally the
       <envar>PKG_CONFIG_PATH</envar> environment variable contains
       a search path that <command>pkg-config</command> (see below)
       uses when looking for files describing how to compile
