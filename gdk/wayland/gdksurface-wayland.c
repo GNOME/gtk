@@ -4063,8 +4063,11 @@ xdg_exported_handle (void                    *data,
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
   impl->exported.callback (surface, handle, impl->exported.user_data);
-  g_clear_pointer (&impl->exported.user_data,
-                   impl->exported.destroy_func);
+  if (impl->exported.destroy_func)
+    {
+      g_clear_pointer (&impl->exported.user_data,
+                       impl->exported.destroy_func);
+    }
 }
 
 static const struct zxdg_exported_v1_listener xdg_exported_listener = {
