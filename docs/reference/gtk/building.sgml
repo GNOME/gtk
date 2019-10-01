@@ -106,6 +106,59 @@ How to compile GTK itself
       export LD_LIBRARY_PATH PATH
     </programlisting>
   </refsect1>
+
+  <refsect1 id="build-types">
+    <title>Build types</title>
+
+    <para>Meson has different build types, exposed by the <literal>buildtype</literal>
+    configuration option. GTK enables and disables functionality depending on
+    the build type used when calling <application>meson</application> to
+    configure the build.</para>
+
+    <formalpara>
+      <title><systemitem>debug</systemitem> and <systemitem>debugoptimized</systemitem></title>
+
+      <para>
+        GTK will enable debugging code paths in both the
+        <literal>debug</literal> and <literal>debugoptimized</literal>
+        build types. Builds with <literal>buildtype</literal> set
+        to <literal>debug</literal> will additionally enable
+        consistency checks on the internal state of the toolkit.
+      </para>
+
+      <para>
+        It is recommended to use the <literal>debug</literal> or
+        <literal>debugoptimized</literal> build types when developing
+        GTK itself.
+      </para>
+
+      <para>
+        The <literal>debugoptimized</literal> build type is the
+        default for GTK if no build type is specified when calling
+        <application>meson</application>
+      </para>
+    </formalpara>
+
+    <formalpara>
+      <title><systemitem>release</systemitem></title>
+
+      <para>
+        The <literal>release</literal> build type will disable
+        debugging code paths and additional run time safeties, like
+        checked casts for object instances.
+      </para>
+    </formalpara>
+
+    <para>
+      The <literal>plain</literal> build type provided by Meson
+      should only be used when packaging GTK, and it's expected
+      that packagers will provide their own compiler flags when
+      building GTK. See the previous section for the list of
+      environment variables to be used to define compiler and
+      linker flags.
+    </para>
+  </refsect1>
+
   <refsect1 id="dependencies">
     <title>Dependencies</title>
     <para>
