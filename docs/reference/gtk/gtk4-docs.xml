@@ -22,8 +22,8 @@
     <title>GTK Overview</title>
     <xi:include href="overview.xml"/>
     <xi:include href="xml/getting_started.xml"/>
-    <xi:include href="resources.sgml" />
-    <xi:include href="xml/question_index.sgml" />
+    <xi:include href="resources.xml" />
+    <xi:include href="xml/question_index.xml" />
     <xi:include href="xml/drawing-model.xml" />
     <xi:include href="xml/input-handling.xml" />
     <xi:include href="xml/actions.xml" />
@@ -167,7 +167,7 @@
 
     <chapter id="TextWidgetObjects">
       <title>Multiline Text Editor</title>
-      <xi:include href="xml/text_widget.sgml" />
+      <xi:include href="xml/text_widget.xml" />
       <xi:include href="xml/gtktextiter.xml" />
       <xi:include href="xml/gtktextmark.xml" />
       <xi:include href="xml/gtktextbuffer.xml" />
@@ -178,7 +178,7 @@
 
     <chapter id="TreeWidgetObjects">
       <title>Tree, List and Icon Grid Widgets</title>
-      <xi:include href="xml/tree_widget.sgml" />
+      <xi:include href="xml/tree_widget.xml" />
       <xi:include href="xml/gtktreemodel.xml" />
       <xi:include href="xml/gtktreeselection.xml" />
       <xi:include href="xml/gtktreeviewcolumn.xml" />
@@ -406,12 +406,12 @@
 
   <part id="platform-support">
     <title>GTK Platform Support</title>
-    <xi:include href="building.sgml" />
-    <xi:include href="xml/compiling.sgml" />
-    <xi:include href="running.sgml" />
-    <xi:include href="x11.sgml" />
-    <xi:include href="windows.sgml" />
-    <xi:include href="osx.sgml" />
+    <xi:include href="building.xml" />
+    <xi:include href="xml/compiling.xml" />
+    <xi:include href="running.xml" />
+    <xi:include href="x11.xml" />
+    <xi:include href="windows.xml" />
+    <xi:include href="osx.xml" />
     <xi:include href="broadway.xml" />
     <xi:include href="wayland.xml" />
   </part>
