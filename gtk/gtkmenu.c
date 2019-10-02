@@ -171,9 +171,7 @@ static void     gtk_menu_get_property      (GObject          *object,
                                             guint             prop_id,
                                             GValue           *value,
                                             GParamSpec       *pspec);
-static void     gtk_menu_finalize          (GObject          *object);
 static void     gtk_menu_dispose           (GObject          *object);
-static void     gtk_menu_destroy           (GtkWidget        *widget);
 static void     gtk_menu_realize           (GtkWidget        *widget);
 static void     gtk_menu_unrealize         (GtkWidget        *widget);
 static void     gtk_menu_size_allocate     (GtkWidget        *widget,
@@ -302,13 +300,11 @@ gtk_menu_class_init (GtkMenuClass *class)
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
   GtkMenuShellClass *menu_shell_class = GTK_MENU_SHELL_CLASS (class);
   GtkBindingSet *binding_set;
-  
+
   gobject_class->set_property = gtk_menu_set_property;
   gobject_class->get_property = gtk_menu_get_property;
-  gobject_class->finalize = gtk_menu_finalize;
   gobject_class->dispose = gtk_menu_dispose;
 
-  widget_class->destroy = gtk_menu_destroy;
   widget_class->realize = gtk_menu_realize;
   widget_class->unrealize = gtk_menu_unrealize;
   widget_class->size_allocate = gtk_menu_size_allocate;
@@ -874,13 +870,16 @@ moved_to_rect_cb (GdkSurface          *surface,
 }
 
 static void
-gtk_menu_destroy (GtkWidget *widget)
+gtk_menu_dispose (GObject *object)
 {
-  GtkMenu *menu = GTK_MENU (widget);
+  GtkMenu *menu = GTK_MENU (object);
   GtkMenuPrivate *priv = menu->priv;
   GtkMenuAttachData *data;
 
-  data = g_object_get_data (G_OBJECT (widget), attach_data_key);
+  g_clear_pointer (&priv->swin, gtk_widget_unparent);
+  priv->box = NULL;
+
+  data = g_object_get_data (object, attach_data_key);
   if (data)
     gtk_menu_detach (menu);
 
@@ -890,7 +889,7 @@ gtk_menu_destroy (GtkWidget *widget)
   if (priv->needs_destruction_ref)
     {
       priv->needs_destruction_ref = FALSE;
-      g_object_ref (widget);
+      g_object_ref (object);
     }
 
   g_clear_object (&priv->accel_group);
@@ -902,24 +901,6 @@ gtk_menu_destroy (GtkWidget *widget)
     }
 
   g_clear_pointer (&priv->heights, g_free);
-
-  GTK_WIDGET_CLASS (gtk_menu_parent_class)->destroy (widget);
-}
-
-static void
-gtk_menu_finalize (GObject *object)
-{
-  G_OBJECT_CLASS (gtk_menu_parent_class)->finalize (object);
-}
-
-static void
-gtk_menu_dispose (GObject *object)
-{
-  GtkMenu *menu = GTK_MENU (object);
-  GtkMenuPrivate *priv = menu->priv;
-
-  g_clear_pointer (&priv->swin, gtk_widget_unparent);
-  priv->box = NULL;
 
   G_OBJECT_CLASS (gtk_menu_parent_class)->dispose (object);
 }
