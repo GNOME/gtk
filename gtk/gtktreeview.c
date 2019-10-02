@@ -634,7 +634,7 @@ static void     gtk_tree_view_get_property         (GObject         *object,
 						    GParamSpec      *pspec);
 
 /* gtkwidget signals */
-static void     gtk_tree_view_destroy              (GtkWidget        *widget);
+static void     gtk_tree_view_dispose              (GObject          *object);
 static void     gtk_tree_view_realize              (GtkWidget        *widget);
 static void     gtk_tree_view_unrealize            (GtkWidget        *widget);
 static void     gtk_tree_view_map                  (GtkWidget        *widget);
@@ -1016,10 +1016,10 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   /* GObject signals */
   o_class->set_property = gtk_tree_view_set_property;
   o_class->get_property = gtk_tree_view_get_property;
+  o_class->dispose = gtk_tree_view_dispose;
   o_class->finalize = gtk_tree_view_finalize;
 
   /* GtkWidget signals */
-  widget_class->destroy = gtk_tree_view_destroy;
   widget_class->map = gtk_tree_view_map;
   widget_class->realize = gtk_tree_view_realize;
   widget_class->unrealize = gtk_tree_view_unrealize;
@@ -2117,9 +2117,9 @@ gtk_tree_view_destroy_search_window (GtkTreeView *tree_view)
 }
 
 static void
-gtk_tree_view_destroy (GtkWidget *widget)
+gtk_tree_view_dispose (GObject *object)
 {
-  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  GtkTreeView *tree_view = GTK_TREE_VIEW (object);
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GList *list;
 
@@ -2227,7 +2227,7 @@ gtk_tree_view_destroy (GtkWidget *widget)
   g_clear_object (&priv->horizontal_tree_line_texture);
   g_clear_object (&priv->vertical_tree_line_texture);
 
-  GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_tree_view_parent_class)->dispose (object);
 }
 
 /* GtkWidget::map helper */
