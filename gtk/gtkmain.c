@@ -605,17 +605,19 @@ do_pre_parse_initialization (void)
 
   gdk_pre_parse ();
 
-#ifdef G_ENABLE_DEBUG
   env_string = g_getenv ("GTK_DEBUG");
   if (env_string != NULL)
     {
+#ifdef G_ENABLE_DEBUG
       debug_flags[0].flags = g_parse_debug_string (env_string,
                                                    gtk_debug_keys,
                                                    G_N_ELEMENTS (gtk_debug_keys));
       any_display_debug_flags_set = debug_flags[0].flags > 0;
+#else
+      g_warning ("GTK_DEBUG set but ignored because gtk isn't built with G_ENABLE_DEBUG");
+#endif  /* G_ENABLE_DEBUG */
       env_string = NULL;
     }
-#endif  /* G_ENABLE_DEBUG */
 
   env_string = g_getenv ("GTK_SLOWDOWN");
   if (env_string)
