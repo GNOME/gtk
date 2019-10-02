@@ -875,13 +875,13 @@ gtk_model_button_set_property (GObject      *object,
 }
 
 static void
-gtk_model_button_destroy (GtkWidget *widget)
+gtk_model_button_dispose (GObject *object)
 {
-  GtkModelButton *model_button = GTK_MODEL_BUTTON (widget);
+  GtkModelButton *model_button = GTK_MODEL_BUTTON (object);
 
   g_clear_pointer (&model_button->menu_name, g_free);
 
-  GTK_WIDGET_CLASS (gtk_model_button_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_model_button_parent_class)->dispose (object);
 }
 
 static void
@@ -1054,11 +1054,11 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
+  object_class->dispose = gtk_model_button_dispose;
   object_class->finalize = gtk_model_button_finalize;
   object_class->get_property = gtk_model_button_get_property;
   object_class->set_property = gtk_model_button_set_property;
 
-  widget_class->destroy = gtk_model_button_destroy;
   widget_class->state_flags_changed = gtk_model_button_state_flags_changed;
   widget_class->direction_changed = gtk_model_button_direction_changed;
   widget_class->focus = gtk_model_button_focus;
