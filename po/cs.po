@@ -3965,7 +3965,7 @@ msgstr "Kumulativní"
 
 #: gtk/inspector/statistics.ui:151
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
-msgstr "Povolit statistiky pomocí GOBJECT_DEBUG=instance-count"
+msgstr "Povolte statistiky pomocí GOBJECT_DEBUG=instance-count"
 
 #: gtk/inspector/type-info.ui:14
 msgid "Hierarchy"
