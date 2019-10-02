@@ -1273,6 +1273,30 @@ gtk_file_filter_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkdirectorylist</FILE>
+<TITLE>GtkDirectoryList</TITLE>
+GtkDirectoryList
+gtk_directory_list_new
+gtk_directory_list_get_attributes
+gtk_directory_list_set_attributes
+gtk_directory_list_get_file
+gtk_directory_list_set_file
+gtk_directory_list_get_io_priority
+gtk_directory_list_set_io_priority
+gtk_directory_list_is_loading
+gtk_directory_list_get_error
+<SUBSECTION Standard>
+GTK_DIRECTORY_LIST
+GTK_IS_DIRECTORY_LIST
+GTK_TYPE_DIRECTORY_LIST
+GTK_DIRECTORY_LIST_CLASS
+GTK_IS_DIRECTORY_LIST_CLASS
+GTK_DIRECTORY_LIST_GET_CLASS
+<SUBSECTION Private>
+gtk_directory_list_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkfilterlistmodel</FILE>
 <TITLE>GtkFilterListModel</TITLE>
 GtkFilterListModel
