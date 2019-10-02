@@ -106,7 +106,7 @@ static void gtk_viewport_get_property             (GObject         *object,
 						   guint            prop_id,
 						   GValue          *value,
 						   GParamSpec      *pspec);
-static void gtk_viewport_destroy                  (GtkWidget        *widget);
+static void gtk_viewport_dispose                  (GObject          *object);
 static void gtk_viewport_size_allocate            (GtkWidget        *widget,
                                                    int               width,
                                                    int               height,
@@ -239,13 +239,13 @@ gtk_viewport_class_init (GtkViewportClass *class)
   gobject_class = G_OBJECT_CLASS (class);
   widget_class = (GtkWidgetClass*) class;
 
+  gobject_class->dispose = gtk_viewport_dispose;
   gobject_class->set_property = gtk_viewport_set_property;
   gobject_class->get_property = gtk_viewport_get_property;
 
-  widget_class->destroy = gtk_viewport_destroy;
   widget_class->size_allocate = gtk_viewport_size_allocate;
   widget_class->measure = gtk_viewport_measure;
-  
+
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_VIEWPORT);
 
   /* GtkScrollable implementation */
@@ -406,14 +406,14 @@ viewport_disconnect_adjustment (GtkViewport    *viewport,
 }
 
 static void
-gtk_viewport_destroy (GtkWidget *widget)
+gtk_viewport_dispose (GObject *object)
 {
-  GtkViewport *viewport = GTK_VIEWPORT (widget);
+  GtkViewport *viewport = GTK_VIEWPORT (object);
 
   viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL);
   viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_VERTICAL);
 
-  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_viewport_parent_class)->dispose (object);
 }
 
 static void
