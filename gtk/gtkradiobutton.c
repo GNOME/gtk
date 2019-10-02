@@ -161,7 +161,7 @@ enum {
 static GParamSpec *radio_button_props[LAST_PROP] = { NULL, };
 static guint signals[N_SIGNALS] = { 0 };
 
-static void     gtk_radio_button_destroy        (GtkWidget           *widget);
+static void     gtk_radio_button_dispose        (GObject             *object);
 static gboolean gtk_radio_button_focus          (GtkWidget           *widget,
 						 GtkDirectionType     direction);
 static void     gtk_radio_button_clicked        (GtkButton           *button);
@@ -187,6 +187,7 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
   widget_class = (GtkWidgetClass*) class;
   button_class = (GtkButtonClass*) class;
 
+  gobject_class->dispose = gtk_radio_button_dispose;
   gobject_class->set_property = gtk_radio_button_set_property;
   gobject_class->get_property = gtk_radio_button_get_property;
 
@@ -204,7 +205,6 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 
   g_object_class_install_properties (gobject_class, LAST_PROP, radio_button_props);
 
-  widget_class->destroy = gtk_radio_button_destroy;
   widget_class->focus = gtk_radio_button_focus;
 
   button_class->clicked = gtk_radio_button_clicked;
@@ -591,10 +591,10 @@ gtk_radio_button_get_group (GtkRadioButton *radio_button)
 
 
 static void
-gtk_radio_button_destroy (GtkWidget *widget)
+gtk_radio_button_dispose (GObject *object)
 {
   GtkWidget *old_group_singleton = NULL;
-  GtkRadioButton *radio_button = GTK_RADIO_BUTTON (widget);
+  GtkRadioButton *radio_button = GTK_RADIO_BUTTON (object);
   GtkRadioButtonPrivate *priv = gtk_radio_button_get_instance_private (radio_button);
   GSList *tmp_list;
   gboolean was_in_group;
@@ -625,7 +625,7 @@ gtk_radio_button_destroy (GtkWidget *widget)
   if (was_in_group)
     g_signal_emit (radio_button, signals[GROUP_CHANGED], 0);
 
-  GTK_WIDGET_CLASS (gtk_radio_button_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_radio_button_parent_class)->dispose (object);
 }
 
 static gboolean
