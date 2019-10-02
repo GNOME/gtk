@@ -396,7 +396,6 @@ struct _GtkWindowGeometryInfo
 static void gtk_window_constructed        (GObject           *object);
 static void gtk_window_dispose            (GObject           *object);
 static void gtk_window_finalize           (GObject           *object);
-static void gtk_window_destroy            (GtkWidget         *widget);
 static void gtk_window_show               (GtkWidget         *widget);
 static void gtk_window_hide               (GtkWidget         *widget);
 static void gtk_window_map                (GtkWidget         *widget);
@@ -799,7 +798,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   gobject_class->set_property = gtk_window_set_property;
   gobject_class->get_property = gtk_window_get_property;
 
-  widget_class->destroy = gtk_window_destroy;
   widget_class->show = gtk_window_show;
   widget_class->hide = gtk_window_hide;
   widget_class->map = gtk_window_map;
@@ -3011,10 +3009,29 @@ remove_attach_widget (GtkWindow *window)
 }
 
 static void
+gtk_window_release_application (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  if (priv->application)
+    {
+      GtkApplication *application;
+
+      /* steal reference into temp variable */
+      application = priv->application;
+      priv->application = NULL;
+
+      gtk_application_remove_window (application, window);
+      g_object_unref (application);
+    }
+}
+
+static void
 gtk_window_dispose (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  int i;
 
   g_list_free_full (priv->foci, (GDestroyNotify) gtk_pointer_focus_unref);
   priv->foci = NULL;
@@ -3022,6 +3039,37 @@ gtk_window_dispose (GObject *object)
   gtk_window_set_focus (window, NULL);
   gtk_window_set_default_widget (window, NULL);
   remove_attach_widget (window);
+
+  gtk_window_release_application (window);
+
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (toplevel_list)); i++)
+    {
+      gpointer item = g_list_model_get_item (G_LIST_MODEL (toplevel_list), i);
+      if (item == window)
+        {
+          g_list_store_remove (toplevel_list, i);
+          break;
+        }
+      else
+        g_object_unref (item);
+    }
+  gtk_window_update_debugging ();
+
+  if (priv->transient_parent)
+    gtk_window_set_transient_for (window, NULL);
+
+  remove_attach_widget (window);
+
+  if (priv->has_user_ref_count)
+    {
+      priv->has_user_ref_count = FALSE;
+      g_object_unref (window);
+    }
+
+  if (priv->group)
+    gtk_window_group_remove_window (priv->group, window);
+
+   gtk_window_free_key_hash (window);
 
   G_OBJECT_CLASS (gtk_window_parent_class)->dispose (object);
   unset_titlebar (window);
@@ -3321,24 +3369,6 @@ gtk_window_get_application (GtkWindow *window)
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
   return priv->application;
-}
-
-static void
-gtk_window_release_application (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (priv->application)
-    {
-      GtkApplication *application;
-
-      /* steal reference into temp variable */
-      application = priv->application;
-      priv->application = NULL;
-
-      gtk_application_remove_window (application, window);
-      g_object_unref (application);
-    }
 }
 
 /**
@@ -4630,47 +4660,6 @@ gtk_window_get_size (GtkWindow *window,
     *width = w;
   if (height)
     *height = h;
-}
-
-static void
-gtk_window_destroy (GtkWidget *widget)
-{
-  GtkWindow *window = GTK_WINDOW (widget);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  guint i;
-
-  gtk_window_release_application (window);
-
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (toplevel_list)); i++)
-    {
-      gpointer item = g_list_model_get_item (G_LIST_MODEL (toplevel_list), i);
-      if (item == window)
-        {
-          g_list_store_remove (toplevel_list, i);
-          break;
-        }
-      else
-        g_object_unref (item);
-    }
-  gtk_window_update_debugging ();
-
-  if (priv->transient_parent)
-    gtk_window_set_transient_for (window, NULL);
-
-  remove_attach_widget (window);
-
-  if (priv->has_user_ref_count)
-    {
-      priv->has_user_ref_count = FALSE;
-      g_object_unref (window);
-    }
-
-  if (priv->group)
-    gtk_window_group_remove_window (priv->group, window);
-
-   gtk_window_free_key_hash (window);
-
-  GTK_WIDGET_CLASS (gtk_window_parent_class)->destroy (widget);
 }
 
 static gboolean
