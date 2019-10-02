@@ -160,7 +160,7 @@ struct _GtkAssistantPrivate
   guint committed : 1;
 };
 
-static void     gtk_assistant_destroy            (GtkWidget         *widget);
+static void     gtk_assistant_dispose            (GObject           *object);
 static void     gtk_assistant_map                (GtkWidget         *widget);
 static void     gtk_assistant_unmap              (GtkWidget         *widget);
 static gboolean gtk_assistant_close_request      (GtkWindow         *window);
@@ -517,12 +517,12 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   container_class = (GtkContainerClass *) class;
   window_class    = (GtkWindowClass *) class;
 
+  gobject_class->dispose = gtk_assistant_dispose;
   gobject_class->finalize = gtk_assistant_finalize;
   gobject_class->constructed  = gtk_assistant_constructed;
   gobject_class->set_property = gtk_assistant_set_property;
   gobject_class->get_property = gtk_assistant_get_property;
 
-  widget_class->destroy = gtk_assistant_destroy;
   widget_class->map = gtk_assistant_map;
   widget_class->unmap = gtk_assistant_unmap;
 
@@ -1337,9 +1337,9 @@ gtk_assistant_page_get_property (GObject      *object,
 }
 
 static void
-gtk_assistant_destroy (GtkWidget *widget)
+gtk_assistant_dispose (GObject *object)
 {
-  GtkAssistant *assistant = GTK_ASSISTANT (widget);
+  GtkAssistant *assistant = GTK_ASSISTANT (object);
   GtkAssistantPrivate *priv = gtk_assistant_get_instance_private (assistant);
 
   if (priv->model)
@@ -1391,8 +1391,9 @@ gtk_assistant_destroy (GtkWidget *widget)
       priv->visited_pages = NULL;
     }
 
-  gtk_window_set_titlebar (GTK_WINDOW (widget), NULL);
-  GTK_WIDGET_CLASS (gtk_assistant_parent_class)->destroy (widget);
+  gtk_window_set_titlebar (GTK_WINDOW (object), NULL);
+
+  G_OBJECT_CLASS (gtk_assistant_parent_class)->dispose (object);
 }
 
 static GList*
