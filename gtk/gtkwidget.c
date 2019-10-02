@@ -7922,35 +7922,6 @@ finalize_assertion_weak_ref (gpointer data,
   FinalizeAssertion *assertion = (FinalizeAssertion *)data;
   assertion->did_finalize = TRUE;
 }
-
-static FinalizeAssertion *
-finalize_assertion_new (GtkWidget           *widget,
-			GType                widget_type,
-			AutomaticChildClass *child_class)
-{
-  FinalizeAssertion *assertion = NULL;
-  GObject           *object;
-
-  object = gtk_widget_get_template_child (widget, widget_type, child_class->name);
-
-  /* We control the hash table entry, the object should never be NULL
-   */
-  g_assert (object);
-  if (!G_IS_OBJECT (object))
-    g_critical ("Automated component '%s' of class '%s' seems to have been prematurely finalized",
-		child_class->name, g_type_name (widget_type));
-  else
-    {
-      assertion = g_slice_new0 (FinalizeAssertion);
-      assertion->child_class = child_class;
-      assertion->widget_type = widget_type;
-      assertion->object = object;
-
-      g_object_weak_ref (object, finalize_assertion_weak_ref, assertion);
-    }
-
-  return assertion;
-}
 #endif /* G_ENABLE_CONSISTENCY_CHECKS */
 
 static void
@@ -7993,10 +7964,29 @@ gtk_widget_real_destroy (GtkWidget *object)
               for (l = class->priv->template->children; l; l = l->next)
                 {
                   AutomaticChildClass *child_class = l->data;
-                  FinalizeAssertion *assertion;
+                  GObject *child_object = gtk_widget_get_template_child (widget,
+                                                                         class_type,
+                                                                         child_class->name);
 
-                  assertion = finalize_assertion_new (widget, class_type, child_class);
-                  assertions = g_slist_prepend (assertions, assertion);
+                  g_assert (child_object);
+
+                  if (!G_IS_OBJECT (child_object))
+                    {
+                      g_critical ("Automated component '%s' of class '%s' seems to"
+                                  " have been prematurely finalized",
+                                  child_class->name, g_type_name (class_type));
+                    }
+                  else
+                    {
+                      FinalizeAssertion *assertion = g_slice_new0 (FinalizeAssertion);
+                      assertion->child_class = child_class;
+                      assertion->widget_type = class_type;
+                      assertion->object = child_object;
+
+                      g_object_weak_ref (child_object, finalize_assertion_weak_ref, assertion);
+
+                      assertions = g_slist_prepend (assertions, assertion);
+                    }
                 }
             }
         }
