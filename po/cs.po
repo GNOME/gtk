@@ -4469,7 +4469,7 @@ msgstr "Kumulativní"
 
 #: gtk/inspector/statistics.ui:165
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
-msgstr "Povolit statistiky pomocí GOBJECT_DEBUG=instance-count"
+msgstr "Povolte statistiky pomocí GOBJECT_DEBUG=instance-count"
 
 #: gtk/inspector/visual.c:432 gtk/inspector/visual.c:447
 msgid "Theme is hardcoded by GTK_THEME"
