@@ -204,8 +204,6 @@ static void     gtk_combo_box_cell_editable_init   (GtkCellEditableIface *iface)
 static void     gtk_combo_box_constructed          (GObject          *object);
 static void     gtk_combo_box_dispose              (GObject          *object);
 static void     gtk_combo_box_unmap                (GtkWidget        *widget);
-static void     gtk_combo_box_destroy              (GtkWidget        *widget);
-
 static void     gtk_combo_box_set_property         (GObject         *object,
                                                     guint            prop_id,
                                                     const GValue    *value,
@@ -430,7 +428,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->grab_focus = gtk_combo_box_grab_focus;
   widget_class->measure = gtk_combo_box_measure;
   widget_class->unmap = gtk_combo_box_unmap;
-  widget_class->destroy = gtk_combo_box_destroy;
   widget_class->compute_expand = gtk_combo_box_compute_expand;
 
   object_class = (GObjectClass *)klass;
@@ -2350,41 +2347,6 @@ gtk_combo_box_unmap (GtkWidget *widget)
 }
 
 static void
-gtk_combo_box_destroy (GtkWidget *widget)
-{
-  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
-  GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
-
-  if (priv->popup_idle_id > 0)
-    {
-      g_source_remove (priv->popup_idle_id);
-      priv->popup_idle_id = 0;
-    }
-
-  if (priv->box)
-    {
-      /* destroy things (unparent will kill the latest ref from us)
-       * last unref on button will destroy the arrow
-       */
-      gtk_widget_unparent (priv->box);
-      priv->box = NULL;
-      priv->button = NULL;
-      priv->arrow = NULL;
-      _gtk_bin_set_child (GTK_BIN (combo_box), NULL);
-    }
-
-  if (priv->row_separator_destroy)
-    priv->row_separator_destroy (priv->row_separator_data);
-
-  priv->row_separator_func = NULL;
-  priv->row_separator_data = NULL;
-  priv->row_separator_destroy = NULL;
-
-  GTK_WIDGET_CLASS (gtk_combo_box_parent_class)->destroy (widget);
-  priv->cell_view = NULL;
-}
-
-static void
 gtk_combo_box_entry_contents_changed (GtkEntry *entry,
                                       gpointer  user_data)
 {
@@ -2503,7 +2465,33 @@ gtk_combo_box_dispose (GObject* object)
 
   gtk_combo_box_unset_model (combo_box);
 
+  if (priv->popup_idle_id > 0)
+    {
+      g_source_remove (priv->popup_idle_id);
+      priv->popup_idle_id = 0;
+    }
+
+  if (priv->box)
+    {
+      /* destroy things (unparent will kill the latest ref from us)
+       * last unref on button will destroy the arrow
+       */
+      gtk_widget_unparent (priv->box);
+      priv->box = NULL;
+      priv->button = NULL;
+      priv->arrow = NULL;
+      _gtk_bin_set_child (GTK_BIN (combo_box), NULL);
+    }
+
+  if (priv->row_separator_destroy)
+    priv->row_separator_destroy (priv->row_separator_data);
+
+  priv->row_separator_func = NULL;
+  priv->row_separator_data = NULL;
+  priv->row_separator_destroy = NULL;
+
   G_OBJECT_CLASS (gtk_combo_box_parent_class)->dispose (object);
+  priv->cell_view = NULL;
 }
 
 static gboolean
