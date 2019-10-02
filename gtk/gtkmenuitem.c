@@ -145,7 +145,6 @@ static void gtk_menu_item_get_property   (GObject          *object,
                                           guint             prop_id,
                                           GValue           *value,
                                           GParamSpec       *pspec);
-static void gtk_menu_item_destroy        (GtkWidget        *widget);
 static void gtk_menu_item_enter          (GtkEventController *controller,
                                           double              x,
                                           double              y,
@@ -504,7 +503,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   gobject_class->set_property = gtk_menu_item_set_property;
   gobject_class->get_property = gtk_menu_item_get_property;
 
-  widget_class->destroy = gtk_menu_item_destroy;
   widget_class->size_allocate = gtk_menu_item_size_allocate;
   widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
   widget_class->can_activate_accel = gtk_menu_item_can_activate_accel;
@@ -740,6 +738,9 @@ gtk_menu_item_dispose (GObject *object)
   GtkMenuItem *menu_item = GTK_MENU_ITEM (object);
   GtkMenuItemPrivate *priv = menu_item->priv;
 
+  if (priv->submenu)
+    gtk_widget_destroy (priv->submenu);
+
   g_clear_object (&priv->motion_controller);
   g_clear_object (&priv->action_helper);
   g_clear_pointer (&priv->arrow_widget, gtk_widget_unparent);
@@ -814,18 +815,6 @@ gtk_menu_item_get_property (GObject    *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-gtk_menu_item_destroy (GtkWidget *widget)
-{
-  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
-  GtkMenuItemPrivate *priv = menu_item->priv;
-
-  if (priv->submenu)
-    gtk_widget_destroy (priv->submenu);
-
-  GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->destroy (widget);
 }
 
 static void
