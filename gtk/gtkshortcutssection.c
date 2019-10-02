@@ -196,9 +196,9 @@ gtk_shortcuts_section_unmap (GtkWidget *widget)
 }
 
 static void
-gtk_shortcuts_section_destroy (GtkWidget *widget)
+gtk_shortcuts_section_dispose (GObject *object)
 {
-  GtkShortcutsSection *self = GTK_SHORTCUTS_SECTION (widget);
+  GtkShortcutsSection *self = GTK_SHORTCUTS_SECTION (object);
 
   if (self->stack)
     {
@@ -215,7 +215,7 @@ gtk_shortcuts_section_destroy (GtkWidget *widget)
   g_list_free (self->groups);
   self->groups = NULL;
 
-  GTK_WIDGET_CLASS (gtk_shortcuts_section_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_shortcuts_section_parent_class)->dispose (object);
 }
 
 static void
@@ -308,13 +308,13 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkBindingSet *binding_set;
 
+  object_class->dispose = gtk_shortcuts_section_dispose;
   object_class->finalize = gtk_shortcuts_section_finalize;
   object_class->get_property = gtk_shortcuts_section_get_property;
   object_class->set_property = gtk_shortcuts_section_set_property;
 
   widget_class->map = gtk_shortcuts_section_map;
   widget_class->unmap = gtk_shortcuts_section_unmap;
-  widget_class->destroy = gtk_shortcuts_section_destroy;
 
   container_class->add = gtk_shortcuts_section_add;
   container_class->remove = gtk_shortcuts_section_remove;
