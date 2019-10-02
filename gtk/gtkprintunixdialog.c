@@ -125,7 +125,7 @@
 
 
 static void     gtk_print_unix_dialog_constructed  (GObject            *object);
-static void     gtk_print_unix_dialog_destroy      (GtkWidget          *widget);
+static void     gtk_print_unix_dialog_dispose      (GObject            *object);
 static void     gtk_print_unix_dialog_finalize     (GObject            *object);
 static void     gtk_print_unix_dialog_set_property (GObject            *object,
                                                     guint               prop_id,
@@ -418,11 +418,10 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   widget_class = (GtkWidgetClass *) class;
 
   object_class->constructed = gtk_print_unix_dialog_constructed;
+  object_class->dispose = gtk_print_unix_dialog_dispose;
   object_class->finalize = gtk_print_unix_dialog_finalize;
   object_class->set_property = gtk_print_unix_dialog_set_property;
   object_class->get_property = gtk_print_unix_dialog_get_property;
-
-  widget_class->destroy = gtk_print_unix_dialog_destroy;
 
   g_object_class_install_property (object_class,
                                    PROP_PAGE_SETUP,
@@ -837,14 +836,14 @@ gtk_print_unix_dialog_constructed (GObject *object)
 }
 
 static void
-gtk_print_unix_dialog_destroy (GtkWidget *widget)
+gtk_print_unix_dialog_dispose (GObject *object)
 {
-  GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (widget);
+  GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (object);
 
   /* Make sure we don't destroy custom widgets owned by the backends */
   clear_per_printer_ui (dialog);
 
-  GTK_WIDGET_CLASS (gtk_print_unix_dialog_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_print_unix_dialog_parent_class)->dispose (object);
 }
 
 static void
