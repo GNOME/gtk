@@ -264,10 +264,10 @@ static void     gtk_file_chooser_button_get_property       (GObject          *ob
 							    guint             param_id,
 							    GValue           *value,
 							    GParamSpec       *pspec);
+static void     gtk_file_chooser_button_dispose            (GObject          *object);
 static void     gtk_file_chooser_button_finalize           (GObject          *object);
 
 /* GtkWidget Functions */
-static void     gtk_file_chooser_button_destroy            (GtkWidget        *widget);
 static void     gtk_file_chooser_button_drag_data_received (GtkWidget        *widget,
 							    GdkDrop          *drop,
 							    GtkSelectionData *data);
@@ -368,9 +368,9 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   gobject_class->constructed = gtk_file_chooser_button_constructed;
   gobject_class->set_property = gtk_file_chooser_button_set_property;
   gobject_class->get_property = gtk_file_chooser_button_get_property;
+  gobject_class->dispose = gtk_file_chooser_button_dispose;
   gobject_class->finalize = gtk_file_chooser_button_finalize;
 
-  widget_class->destroy = gtk_file_chooser_button_destroy;
   widget_class->drag_data_received = gtk_file_chooser_button_drag_data_received;
   widget_class->show = gtk_file_chooser_button_show;
   widget_class->hide = gtk_file_chooser_button_hide;
@@ -1033,9 +1033,9 @@ gtk_file_chooser_button_state_flags_changed (GtkWidget     *widget,
 }
 
 static void
-gtk_file_chooser_button_destroy (GtkWidget *widget)
+gtk_file_chooser_button_dispose (GObject *object)
 {
-  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (object);
   GtkFileChooserButtonPrivate *priv = gtk_file_chooser_button_get_instance_private (button);
   GSList *l;
 
@@ -1077,7 +1077,7 @@ gtk_file_chooser_button_destroy (GtkWidget *widget)
 
   g_clear_pointer (&priv->bookmarks_manager, _gtk_bookmarks_manager_free);
 
-  GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->dispose (object);
 }
 
 struct DndSelectFolderData
