@@ -302,7 +302,6 @@ static void   gtk_text_dispose              (GObject      *object);
 
 /* GtkWidget methods
  */
-static void   gtk_text_destroy              (GtkWidget        *widget);
 static void   gtk_text_realize              (GtkWidget        *widget);
 static void   gtk_text_unrealize            (GtkWidget        *widget);
 static void   gtk_text_unmap                (GtkWidget        *widget);
@@ -688,7 +687,6 @@ gtk_text_class_init (GtkTextClass *class)
   gobject_class->set_property = gtk_text_set_property;
   gobject_class->get_property = gtk_text_get_property;
 
-  widget_class->destroy = gtk_text_destroy;
   widget_class->unmap = gtk_text_unmap;
   widget_class->realize = gtk_text_realize;
   widget_class->unrealize = gtk_text_unrealize;
@@ -1754,28 +1752,6 @@ gtk_text_init (GtkText *self)
 }
 
 static void
-gtk_text_destroy (GtkWidget *widget)
-{
-  GtkText *self = GTK_TEXT (widget);
-  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-
-  priv->current_pos = priv->selection_bound = 0;
-  gtk_text_reset_im_context (self);
-  gtk_text_reset_layout (self);
-
-  if (priv->blink_tick)
-    {
-      gtk_widget_remove_tick_callback (widget, priv->blink_tick);
-      priv->blink_tick = 0;
-    }
-
-  if (priv->magnifier)
-    _gtk_magnifier_set_inspected (GTK_MAGNIFIER (priv->magnifier), NULL);
-
-  GTK_WIDGET_CLASS (gtk_text_parent_class)->destroy (widget);
-}
-
-static void
 gtk_text_dispose (GObject *object)
 {
   GtkText *self = GTK_TEXT (object);
@@ -1783,7 +1759,7 @@ gtk_text_dispose (GObject *object)
   GdkKeymap *keymap;
   GtkWidget *chooser;
 
-  priv->current_pos = 0;
+  priv->current_pos = priv->selection_bound =  0;
 
   if (priv->buffer)
     {
@@ -1803,6 +1779,18 @@ gtk_text_dispose (GObject *object)
   g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
   g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
   g_clear_object (&priv->extra_menu);
+
+  gtk_text_reset_im_context (self);
+  gtk_text_reset_layout (self);
+
+  if (priv->blink_tick)
+    {
+      gtk_widget_remove_tick_callback (GTK_WIDGET (self), priv->blink_tick);
+      priv->blink_tick = 0;
+    }
+
+  if (priv->magnifier)
+    _gtk_magnifier_set_inspected (GTK_MAGNIFIER (priv->magnifier), NULL);
 
   G_OBJECT_CLASS (gtk_text_parent_class)->dispose (object);
 }
