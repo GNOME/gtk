@@ -338,7 +338,7 @@ static void     gtk_scrolled_window_get_property       (GObject           *objec
                                                         GValue            *value,
                                                         GParamSpec        *pspec);
 
-static void     gtk_scrolled_window_destroy            (GtkWidget         *widget);
+static void     gtk_scrolled_window_dispose            (GObject           *object);
 static void     gtk_scrolled_window_snapshot           (GtkWidget         *widget,
                                                         GtkSnapshot       *snapshot);
 static void     gtk_scrolled_window_size_allocate      (GtkWidget         *widget,
@@ -526,10 +526,10 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
+  gobject_class->dispose = gtk_scrolled_window_dispose;
   gobject_class->set_property = gtk_scrolled_window_set_property;
   gobject_class->get_property = gtk_scrolled_window_get_property;
 
-  widget_class->destroy = gtk_scrolled_window_destroy;
   widget_class->snapshot = gtk_scrolled_window_snapshot;
   widget_class->size_allocate = gtk_scrolled_window_size_allocate;
   widget_class->focus = gtk_scrolled_window_focus;
@@ -2573,13 +2573,13 @@ gtk_scrolled_window_get_capture_button_press (GtkScrolledWindow *scrolled_window
 }
 
 static void
-gtk_scrolled_window_destroy (GtkWidget *widget)
+gtk_scrolled_window_dispose (GObject *object)
 {
-  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (object);
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
   GtkWidget *child;
 
-  child = gtk_bin_get_child (GTK_BIN (widget));
+  child = gtk_bin_get_child (GTK_BIN (object));
   if (child)
     gtk_widget_destroy (child);
 
@@ -2610,7 +2610,7 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
 
   if (priv->deceleration_id)
     {
-      gtk_widget_remove_tick_callback (widget, priv->deceleration_id);
+      gtk_widget_remove_tick_callback (GTK_WIDGET (object), priv->deceleration_id);
       priv->deceleration_id = 0;
     }
 
@@ -2620,7 +2620,7 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
       priv->scroll_events_overshoot_id = 0;
     }
 
-  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_scrolled_window_parent_class)->dispose (object);
 }
 
 static void
