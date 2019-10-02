@@ -128,11 +128,18 @@ enum
 static void     gtk_statusbar_update            (GtkStatusbar      *statusbar,
 						 guint              context_id,
 						 const gchar       *text);
-static void     gtk_statusbar_destroy           (GtkWidget         *widget);
 
 static guint              statusbar_signals[SIGNAL_LAST] = { 0 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkStatusbar, gtk_statusbar, GTK_TYPE_WIDGET)
+
+
+static void
+gtk_statusbar_msg_free (GtkStatusbarMsg *msg)
+{
+  g_free (msg->text);
+  g_slice_free (GtkStatusbarMsg, msg);
+}
 
 static void
 gtk_statusbar_dispose (GObject *object)
@@ -140,6 +147,12 @@ gtk_statusbar_dispose (GObject *object)
   GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (GTK_STATUSBAR (object));
 
   g_clear_pointer (&priv->frame, gtk_widget_unparent);
+
+  g_slist_free_full (priv->messages, (GDestroyNotify) gtk_statusbar_msg_free);
+  priv->messages = NULL;
+
+  g_slist_free_full (priv->keys, g_free);
+  priv->keys = NULL;
 
   G_OBJECT_CLASS (gtk_statusbar_parent_class)->dispose (object);
 }
@@ -185,7 +198,6 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 
   widget_class->measure = gtk_statusbar_measure;
   widget_class->size_allocate = gtk_statusbar_size_allocate;
-  widget_class->destroy = gtk_statusbar_destroy;
 
   class->text_pushed = gtk_statusbar_update;
   class->text_popped = gtk_statusbar_update;
@@ -333,13 +345,6 @@ gtk_statusbar_msg_create (GtkStatusbar *statusbar,
   msg->message_id = priv->seq_message_id++;
 
   return msg;
-}
-
-static void
-gtk_statusbar_msg_free (GtkStatusbarMsg *msg)
-{
-  g_free (msg->text);
-  g_slice_free (GtkStatusbarMsg, msg);
 }
 
 /**
@@ -548,19 +553,4 @@ gtk_statusbar_get_message_area (GtkStatusbar *statusbar)
   g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), NULL);
 
   return priv->message_area;
-}
-
-static void
-gtk_statusbar_destroy (GtkWidget *widget)
-{
-  GtkStatusbar *statusbar = GTK_STATUSBAR (widget);
-  GtkStatusbarPrivate *priv = gtk_statusbar_get_instance_private (statusbar);
-
-  g_slist_free_full (priv->messages, (GDestroyNotify) gtk_statusbar_msg_free);
-  priv->messages = NULL;
-
-  g_slist_free_full (priv->keys, g_free);
-  priv->keys = NULL;
-
-  GTK_WIDGET_CLASS (gtk_statusbar_parent_class)->destroy (widget);
 }
