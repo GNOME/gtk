@@ -100,7 +100,7 @@ enum {
 };
 
 /* --- prototypes --- */
-static void     gtk_container_destroy              (GtkWidget         *widget);
+static void     gtk_container_dispose              (GObject           *object);
 static void     gtk_container_add_unimplemented    (GtkContainer      *container,
                                                     GtkWidget         *widget);
 static void     gtk_container_remove_unimplemented (GtkContainer      *container,
@@ -139,7 +139,8 @@ gtk_container_class_init (GtkContainerClass *class)
   vadjustment_key_id = g_quark_from_static_string ("gtk-vadjustment");
   hadjustment_key_id = g_quark_from_static_string ("gtk-hadjustment");
 
-  widget_class->destroy = gtk_container_destroy;
+  gobject_class->dispose = gtk_container_dispose;
+
   widget_class->compute_expand = gtk_container_compute_expand;
   widget_class->get_request_mode = gtk_container_get_request_mode;
 
@@ -242,9 +243,9 @@ gtk_container_init (GtkContainer *container)
 }
 
 static void
-gtk_container_destroy (GtkWidget *widget)
+gtk_container_dispose (GObject *object)
 {
-  GtkContainer *container = GTK_CONTAINER (widget);
+  GtkContainer *container = GTK_CONTAINER (object);
   GtkContainerPrivate *priv = gtk_container_get_instance_private (container);
 
   if (priv->restyle_pending)
@@ -252,7 +253,7 @@ gtk_container_destroy (GtkWidget *widget)
 
   gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
 
-  GTK_WIDGET_CLASS (gtk_container_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_container_parent_class)->dispose (object);
 }
 
 /**
