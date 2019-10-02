@@ -431,7 +431,7 @@ static void gtk_label_get_property      (GObject          *object,
 					 GValue           *value,
 					 GParamSpec       *pspec);
 static void gtk_label_finalize          (GObject          *object);
-static void gtk_label_destroy           (GtkWidget        *widget);
+static void gtk_label_dispose           (GObject          *object);
 static void gtk_label_size_allocate     (GtkWidget        *widget,
                                          int               width,
                                          int               height,
@@ -643,9 +643,9 @@ gtk_label_class_init (GtkLabelClass *class)
 
   gobject_class->set_property = gtk_label_set_property;
   gobject_class->get_property = gtk_label_get_property;
+  gobject_class->dispose = gtk_label_dispose;
   gobject_class->finalize = gtk_label_finalize;
 
-  widget_class->destroy = gtk_label_destroy;
   widget_class->size_allocate = gtk_label_size_allocate;
   widget_class->state_flags_changed = gtk_label_state_flags_changed;
   widget_class->style_updated = gtk_label_style_updated;
@@ -3212,13 +3212,13 @@ gtk_label_get_wrap_mode (GtkLabel *label)
 }
 
 static void
-gtk_label_destroy (GtkWidget *widget)
+gtk_label_dispose (GObject *object)
 {
-  GtkLabel *label = GTK_LABEL (widget);
+  GtkLabel *label = GTK_LABEL (object);
 
   gtk_label_set_mnemonic_widget (label, NULL);
 
-  GTK_WIDGET_CLASS (gtk_label_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_label_parent_class)->dispose (object);
 }
 
 static void
