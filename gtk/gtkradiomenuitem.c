@@ -100,7 +100,7 @@ enum {
 };
 
 
-static void gtk_radio_menu_item_destroy        (GtkWidget             *widget);
+static void gtk_radio_menu_item_dispose        (GObject               *object);
 static void gtk_radio_menu_item_activate       (GtkMenuItem           *menu_item);
 static void gtk_radio_menu_item_set_property   (GObject               *object,
 						guint                  prop_id,
@@ -410,8 +410,7 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
 
   gobject_class->set_property = gtk_radio_menu_item_set_property;
   gobject_class->get_property = gtk_radio_menu_item_get_property;
-
-  widget_class->destroy = gtk_radio_menu_item_destroy;
+  gobject_class->dispose = gtk_radio_menu_item_dispose;
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_RADIO_MENU_ITEM_ACCESSIBLE);
 
@@ -460,9 +459,9 @@ gtk_radio_menu_item_init (GtkRadioMenuItem *radio_menu_item)
 }
 
 static void
-gtk_radio_menu_item_destroy (GtkWidget *widget)
+gtk_radio_menu_item_dispose (GObject *object)
 {
-  GtkRadioMenuItem *radio_menu_item = GTK_RADIO_MENU_ITEM (widget);
+  GtkRadioMenuItem *radio_menu_item = GTK_RADIO_MENU_ITEM (object);
   GtkRadioMenuItemPrivate *priv = gtk_radio_menu_item_get_instance_private (radio_menu_item);
   GtkWidget *old_group_singleton = NULL;
   GSList *tmp_list;
@@ -487,13 +486,13 @@ gtk_radio_menu_item_destroy (GtkWidget *widget)
 
   /* this radio menu item is no longer in the group */
   priv->group = NULL;
-  
+
   if (old_group_singleton)
     g_signal_emit (old_group_singleton, group_changed_signal, 0);
   if (was_in_group)
     g_signal_emit (radio_menu_item, group_changed_signal, 0);
 
-  GTK_WIDGET_CLASS (gtk_radio_menu_item_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_radio_menu_item_parent_class)->dispose (object);
 }
 
 static void
