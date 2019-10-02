@@ -380,27 +380,27 @@ activate_row (GtkPlacesView      *view,
 static void update_places (GtkPlacesView *view);
 
 static void
-gtk_places_view_destroy (GtkWidget *widget)
+gtk_places_view_dispose (GObject *object)
 {
-  GtkPlacesView *self = GTK_PLACES_VIEW (widget);
+  GtkPlacesView *self = GTK_PLACES_VIEW (object);
   GtkPlacesViewPrivate *priv = gtk_places_view_get_instance_private (self);
 
   priv->destroyed = 1;
 
-  g_signal_handlers_disconnect_by_func (priv->volume_monitor, update_places, widget);
+  g_signal_handlers_disconnect_by_func (priv->volume_monitor, update_places, self);
 
   if (priv->network_monitor)
-    g_signal_handlers_disconnect_by_func (priv->network_monitor, update_places, widget);
+    g_signal_handlers_disconnect_by_func (priv->network_monitor, update_places, self);
 
   if (priv->server_list_monitor)
-    g_signal_handlers_disconnect_by_func (priv->server_list_monitor, server_file_changed_cb, widget);
+    g_signal_handlers_disconnect_by_func (priv->server_list_monitor, server_file_changed_cb, self);
 
   g_cancellable_cancel (priv->cancellable);
   g_cancellable_cancel (priv->networks_fetching_cancellable);
 
   g_clear_pointer (&priv->server_adresses_popover, gtk_widget_unparent);
 
-  GTK_WIDGET_CLASS (gtk_places_view_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_places_view_parent_class)->dispose (object);
 }
 
 static void
@@ -2221,12 +2221,12 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = gtk_places_view_dispose;
   object_class->finalize = gtk_places_view_finalize;
   object_class->constructed = gtk_places_view_constructed;
   object_class->get_property = gtk_places_view_get_property;
   object_class->set_property = gtk_places_view_set_property;
 
-  widget_class->destroy = gtk_places_view_destroy;
   widget_class->map = gtk_places_view_map;
 
   /*
