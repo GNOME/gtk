@@ -90,6 +90,7 @@
 #include <gtk/gtkcustomlayout.h>
 #include <gtk/gtkdebug.h>
 #include <gtk/gtkdialog.h>
+#include <gtk/gtkdirectorylist.h>
 #include <gtk/gtkdnd.h>
 #include <gtk/gtkdragdest.h>
 #include <gtk/gtkdragsource.h>
