@@ -269,7 +269,7 @@ struct _GtkCalendarPrivate
   gint detail_overflow[6];
 };
 
-static void gtk_calendar_destroy      (GtkWidget    *widget);
+static void gtk_calendar_dispose      (GObject      *object);
 static void gtk_calendar_set_property (GObject      *object,
                                        guint         prop_id,
                                        const GValue *value,
@@ -383,8 +383,9 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 
   gobject_class->set_property = gtk_calendar_set_property;
   gobject_class->get_property = gtk_calendar_get_property;
+  gobject_class->dispose = gtk_calendar_dispose;
 
-  widget_class->destroy = gtk_calendar_destroy;
+
   widget_class->snapshot = gtk_calendar_snapshot;
   widget_class->measure = gtk_calendar_measure;
   widget_class->size_allocate = gtk_calendar_size_allocate;
@@ -1340,9 +1341,9 @@ calendar_set_month_prev (GtkCalendar *calendar)
  ****************************************/
 
 static void
-gtk_calendar_destroy (GtkWidget *widget)
+gtk_calendar_dispose (GObject *object)
 {
-  GtkCalendar *calendar = GTK_CALENDAR (widget);
+  GtkCalendar *calendar = GTK_CALENDAR (object);
   GtkCalendarPrivate *priv = gtk_calendar_get_instance_private (calendar);
 
   calendar_stop_spinning (calendar);
@@ -1355,7 +1356,7 @@ gtk_calendar_destroy (GtkWidget *widget)
       priv->detail_func_destroy = NULL;
     }
 
-  GTK_WIDGET_CLASS (gtk_calendar_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_calendar_parent_class)->dispose (object);
 }
 
 static gboolean
