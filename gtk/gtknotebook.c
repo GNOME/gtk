@@ -680,7 +680,6 @@ static void gtk_notebook_finalize            (GObject         *object);
 static void gtk_notebook_dispose             (GObject         *object);
 
 /*** GtkWidget Methods ***/
-static void gtk_notebook_destroy             (GtkWidget        *widget);
 static void gtk_notebook_unmap               (GtkWidget        *widget);
 static gboolean gtk_notebook_popup_menu      (GtkWidget        *widget);
 static void gtk_notebook_motion              (GtkEventController *controller,
@@ -958,7 +957,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   gobject_class->finalize = gtk_notebook_finalize;
   gobject_class->dispose = gtk_notebook_dispose;
 
-  widget_class->destroy = gtk_notebook_destroy;
   widget_class->unmap = gtk_notebook_unmap;
   widget_class->popup_menu = gtk_notebook_popup_menu;
   widget_class->grab_notify = gtk_notebook_grab_notify;
@@ -1824,7 +1822,6 @@ gtk_notebook_get_property (GObject         *object,
 
 /* Private GtkWidget Methods :
  *
- * gtk_notebook_destroy
  * gtk_notebook_map
  * gtk_notebook_unmap
  * gtk_notebook_snapshot
@@ -1847,29 +1844,6 @@ remove_switch_tab_timer (GtkNotebook *notebook)
       g_source_remove (priv->switch_tab_timer);
       priv->switch_tab_timer = 0;
     }
-}
-
-static void
-gtk_notebook_destroy (GtkWidget *widget)
-{
-  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
-  GtkNotebookPrivate *priv = notebook->priv;
-
-  if (priv->pages)
-    g_list_model_items_changed (G_LIST_MODEL (priv->pages), 0, g_list_length (priv->children), 0);
-
-  if (priv->menu)
-    gtk_notebook_popup_disable (notebook);
-
-  if (priv->source_targets)
-    {
-      gdk_content_formats_unref (priv->source_targets);
-      priv->source_targets = NULL;
-    }
-
-  remove_switch_tab_timer (notebook);
-
-  GTK_WIDGET_CLASS (gtk_notebook_parent_class)->destroy (widget);
 }
 
 static void
@@ -1898,6 +1872,20 @@ gtk_notebook_dispose (GObject *object)
 
       gtk_notebook_remove (GTK_CONTAINER (notebook), page->child);
     }
+
+  if (priv->pages)
+    g_list_model_items_changed (G_LIST_MODEL (priv->pages), 0, g_list_length (priv->children), 0);
+
+  if (priv->menu)
+    gtk_notebook_popup_disable (notebook);
+
+  if (priv->source_targets)
+    {
+      gdk_content_formats_unref (priv->source_targets);
+      priv->source_targets = NULL;
+    }
+
+  remove_switch_tab_timer (notebook);
 
   G_OBJECT_CLASS (gtk_notebook_parent_class)->dispose (object);
 }
