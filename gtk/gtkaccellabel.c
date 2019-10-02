@@ -158,7 +158,7 @@ static void         gtk_accel_label_get_property (GObject            *object,
 						  guint               prop_id,
 						  GValue             *value,
 						  GParamSpec         *pspec);
-static void         gtk_accel_label_destroy      (GtkWidget          *widget);
+static void         gtk_accel_label_dispose      (GObject            *object);
 static void         gtk_accel_label_finalize     (GObject            *object);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_WIDGET)
@@ -169,11 +169,10 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
+  gobject_class->dispose = gtk_accel_label_dispose;
   gobject_class->finalize = gtk_accel_label_finalize;
   gobject_class->set_property = gtk_accel_label_set_property;
   gobject_class->get_property = gtk_accel_label_get_property;
-
-  widget_class->destroy = gtk_accel_label_destroy;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_ACCEL_LABEL);
 
@@ -344,14 +343,14 @@ gtk_accel_label_new (const gchar *string)
 }
 
 static void
-gtk_accel_label_destroy (GtkWidget *widget)
+gtk_accel_label_dispose (GObject *object)
 {
-  GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
+  GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (object);
 
   gtk_accel_label_set_accel_widget (accel_label, NULL);
   gtk_accel_label_set_accel_closure (accel_label, NULL);
 
-  GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gtk_accel_label_parent_class)->dispose (object);
 }
 
 static void
