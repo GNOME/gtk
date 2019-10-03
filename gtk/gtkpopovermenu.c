@@ -210,19 +210,15 @@ visible_submenu_changed (GObject        *object,
 }
 
 static void
-focus_out (GtkEventController *controller,
-           GdkCrossingMode     mode,
-           GdkNotifyType       detail,
-           GtkPopoverMenu     *menu)
+focus_out (GtkEventControllerKey *controller,
+           GdkCrossingMode        mode,
+           GdkNotifyType          detail,
+           GtkPopoverMenu        *menu)
 {
-  gboolean contains_focus;
-
-  g_object_get (controller, "contains-focus", &contains_focus, NULL);
-
-  if (!contains_focus)
+  if (!gtk_event_controller_key_contains_focus (controller))
     {
       if (menu->parent_menu &&
-          GTK_POPOVER_MENU (menu->parent_menu)->open_submenu == (GtkWidget*)menu)
+          GTK_POPOVER_MENU (menu->parent_menu)->open_submenu == (GtkWidget*) menu)
         GTK_POPOVER_MENU (menu->parent_menu)->open_submenu = NULL;
       gtk_popover_popdown (GTK_POPOVER (menu));
     }

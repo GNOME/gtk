@@ -59,9 +59,15 @@ GDK_AVAILABLE_IN_ALL
 guint               gtk_event_controller_key_get_group      (GtkEventControllerKey *controller);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget *         gtk_event_controller_key_get_focus_origin (GtkEventControllerKey *controller);
+GtkWidget *         gtk_event_controller_key_get_focus_origin   (GtkEventControllerKey  *controller);
 GDK_AVAILABLE_IN_ALL
-GtkWidget *         gtk_event_controller_key_get_focus_target (GtkEventControllerKey *controller);
+GtkWidget *         gtk_event_controller_key_get_focus_target   (GtkEventControllerKey  *controller);
+
+GDK_AVAILABLE_IN_ALL
+gboolean            gtk_event_controller_key_contains_focus     (GtkEventControllerKey  *self);
+GDK_AVAILABLE_IN_ALL
+gboolean            gtk_event_controller_key_is_focus           (GtkEventControllerKey  *self);
+
 
 G_END_DECLS
 

@@ -5619,7 +5619,8 @@ gtk_tree_view_key_controller_focus_out (GtkEventControllerKey *key,
 
   /* destroy interactive search dialog */
   if (tree_view->priv->search_window &&
-      !is_focus && !contains_focus)
+      !gtk_event_controller_key_is_focus (key) &&
+      !gtk_event_controller_key_contains_focus (key))
     gtk_tree_view_search_window_hide (tree_view->priv->search_window, tree_view,
                                       gtk_get_current_event_device ());
 }

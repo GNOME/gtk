@@ -26,47 +26,35 @@ detail_to_string (GdkNotifyType detail)
 }
 
 static void
-focus_in (GtkEventController *controller,
-          GdkCrossingMode mode,
-          GdkNotifyType detail,
-          GString *s)
+focus_in (GtkEventControllerKey *key,
+          GdkCrossingMode        mode,
+          GdkNotifyType          detail,
+          GString               *s)
 {
-  GtkWidget *widget = gtk_event_controller_get_widget (controller);
-  gboolean is_focus;
-  gboolean contains_focus;
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (key));
 
-  g_object_get (controller,
-                "is-focus", &is_focus,
-                "contains-focus", &contains_focus,
-                NULL);
   g_string_append_printf (s, "%s: focus-in %s %s is-focus: %d contains-focus: %d\n",
                           widget_name (widget),
                           mode_to_string (mode),
                           detail_to_string (detail),
-                          is_focus,
-                          contains_focus);
+                          gtk_event_controller_key_is_focus (key),
+                          gtk_event_controller_key_contains_focus (key));
 }
 
 static void
-focus_out (GtkEventController *controller,
-           GdkCrossingMode mode,
-           GdkNotifyType detail,
-           GString *s)
+focus_out (GtkEventControllerKey *key,
+           GdkCrossingMode        mode,
+           GdkNotifyType          detail,
+           GString               *s)
 {
-  GtkWidget *widget = gtk_event_controller_get_widget (controller);
-  gboolean is_focus;
-  gboolean contains_focus;
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (key));
 
-  g_object_get (controller,
-                "is-focus", &is_focus,
-                "contains-focus", &contains_focus,
-                NULL);
   g_string_append_printf (s, "%s: focus-out %s %s is-focus: %d contains-focus: %d\n",
                           widget_name (widget),
                           mode_to_string (mode),
                           detail_to_string (detail),
-                          is_focus,
-                          contains_focus);
+                          gtk_event_controller_key_is_focus (key),
+                          gtk_event_controller_key_contains_focus (key));
 }
 
 static void

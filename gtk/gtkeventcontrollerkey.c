@@ -596,3 +596,35 @@ gtk_event_controller_key_get_focus_target (GtkEventControllerKey *controller)
   else
     return (GtkWidget *)gdk_event_get_related_target (controller->current_event);
 }
+
+/**
+ * gtk_event_controller_key_contains_focus:
+ * @self: a #GtkEventControllerKey
+ *
+ * Returns the value of the GtkEventControllerKey:contains-focus property.
+ *
+ * Returns: %TRUE if focus is within @self or one of its children
+ */
+gboolean
+gtk_event_controller_key_contains_focus (GtkEventControllerKey *self)
+{
+  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_KEY (self), FALSE);
+
+  return self->contains_focus;
+}
+
+/**
+ * gtk_event_controller_key_is_focus:
+ * @self: a #GtkEventControllerKey
+ *
+ * Returns the value of the GtkEventControllerKey:is-focus property.
+ *
+ * Returns: %TRUE if focus is within @self but not one of its children
+ */
+gboolean
+gtk_event_controller_key_is_focus (GtkEventControllerKey *self)
+{
+  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_KEY (self), FALSE);
+
+  return self->is_focus;
+}
