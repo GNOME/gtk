@@ -945,12 +945,12 @@ gtk_model_button_finalize (GObject *object)
 {
   GtkModelButton *button = GTK_MODEL_BUTTON (object);
 
+  g_clear_object (&button->action_helper);
   g_clear_pointer (&button->image, gtk_widget_unparent);
   g_clear_pointer (&button->label, gtk_widget_unparent);
   g_clear_pointer (&button->start_box, gtk_widget_unparent);
   g_clear_pointer (&button->accel_label, gtk_widget_unparent);
   g_clear_pointer (&button->end_indicator, gtk_widget_unparent);
-  g_clear_object (&button->action_helper);
   g_free (button->accel);
   g_clear_pointer (&button->popover, gtk_widget_unparent);
 

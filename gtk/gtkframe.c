@@ -149,6 +149,17 @@ G_DEFINE_TYPE_WITH_CODE (GtkFrame, gtk_frame, GTK_TYPE_BIN,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_frame_buildable_init))
 
+
+static void
+gtk_frame_dispose (GObject *object)
+{
+  GtkFramePrivate *priv = gtk_frame_get_instance_private (GTK_FRAME (object));
+
+  g_clear_pointer (&priv->label_widget, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_frame_parent_class)->dispose (object);
+}
+
 static void
 gtk_frame_class_init (GtkFrameClass *class)
 {
@@ -160,6 +171,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   widget_class = GTK_WIDGET_CLASS (class);
   container_class = GTK_CONTAINER_CLASS (class);
 
+  gobject_class->dispose = gtk_frame_dispose;
   gobject_class->set_property = gtk_frame_set_property;
   gobject_class->get_property = gtk_frame_get_property;
 

@@ -271,21 +271,27 @@ _gtk_header_bar_update_separator_visibility (GtkHeaderBar *bar)
   GList *l;
   GList *children;
 
-  children = gtk_container_get_children (GTK_CONTAINER (priv->start_box));
-  for (l = children; l; l = l->next)
+  if (priv->start_box)
     {
-      if (l->data != priv->titlebar_start_box && gtk_widget_get_visible (l->data))
-        have_visible_at_start = TRUE;
+      children = gtk_container_get_children (GTK_CONTAINER (priv->start_box));
+      for (l = children; l; l = l->next)
+        {
+          if (l->data != priv->titlebar_start_box && gtk_widget_get_visible (l->data))
+            have_visible_at_start = TRUE;
+        }
+      g_list_free (children);
     }
-  g_list_free (children);
 
-  children = gtk_container_get_children (GTK_CONTAINER (priv->end_box));
-  for (l = children; l; l = l->next)
+  if (priv->end_box)
     {
-      if (l->data != priv->titlebar_end_box && gtk_widget_get_visible (l->data))
-        have_visible_at_end = TRUE;
+      children = gtk_container_get_children (GTK_CONTAINER (priv->end_box));
+      for (l = children; l; l = l->next)
+        {
+          if (l->data != priv->titlebar_end_box && gtk_widget_get_visible (l->data))
+            have_visible_at_end = TRUE;
+        }
+      g_list_free (children);
     }
-  g_list_free (children);
 
   if (priv->titlebar_start_separator != NULL)
     gtk_widget_set_visible (priv->titlebar_start_separator, have_visible_at_start);
@@ -806,14 +812,40 @@ gtk_header_bar_get_custom_title (GtkHeaderBar *bar)
 }
 
 static void
+notify_child_cb (GObject      *child,
+                 GParamSpec   *pspec,
+                 GtkHeaderBar *bar)
+{
+  _gtk_header_bar_update_separator_visibility (bar);
+}
+
+static void
 gtk_header_bar_dispose (GObject *object)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (object));
+  GtkWidget *w;
 
   if (priv->label_sizing_box)
     {
       gtk_widget_destroy (priv->label_sizing_box);
       g_clear_object (&priv->label_sizing_box);
+    }
+
+  /* Clean start/end box manually here so the visible notify won't fire on a
+   * headerbar that's in the middle of being disposed */
+  for (w = gtk_widget_get_first_child (priv->start_box);
+       w != NULL;
+       w = gtk_widget_get_next_sibling (w))
+    {
+      if (w != priv->titlebar_start_box)
+        g_signal_handlers_disconnect_by_func (w, notify_child_cb, object);
+    }
+  for (w = gtk_widget_get_first_child (priv->end_box);
+       w != NULL;
+       w = gtk_widget_get_next_sibling (w))
+    {
+      if (w != priv->titlebar_end_box)
+        g_signal_handlers_disconnect_by_func (w, notify_child_cb, object);
     }
 
   g_clear_pointer (&priv->custom_title, gtk_widget_unparent);
@@ -924,14 +956,6 @@ gtk_header_bar_set_property (GObject      *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-notify_child_cb (GObject      *child,
-                 GParamSpec   *pspec,
-                 GtkHeaderBar *bar)
-{
-  _gtk_header_bar_update_separator_visibility (bar);
 }
 
 static void

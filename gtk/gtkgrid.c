@@ -326,12 +326,31 @@ gtk_grid_child_type (GtkContainer *container)
 }
 
 static void
+gtk_grid_dispose (GObject *object)
+{
+  GtkWidget *child;
+
+  child = gtk_widget_get_first_child (GTK_WIDGET (object));
+  while (child)
+    {
+      GtkWidget *next = gtk_widget_get_next_sibling (child);
+
+      gtk_widget_unparent (child);
+
+      child = next;
+    }
+
+  G_OBJECT_CLASS (gtk_grid_parent_class)->dispose (object);
+}
+
+static void
 gtk_grid_class_init (GtkGridClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
 
+  object_class->dispose = gtk_grid_dispose;
   object_class->get_property = gtk_grid_get_property;
   object_class->set_property = gtk_grid_set_property;
 
