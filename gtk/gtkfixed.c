@@ -93,10 +93,31 @@ typedef struct {
 G_DEFINE_TYPE_WITH_PRIVATE (GtkFixed, gtk_fixed, GTK_TYPE_CONTAINER)
 
 static void
+gtk_fixed_dispose (GObject *object)
+{
+  GtkWidget *child;
+
+  child = gtk_widget_get_first_child (GTK_WIDGET (object));
+  while (child)
+    {
+      GtkWidget *next = gtk_widget_get_next_sibling (child);
+
+      gtk_widget_unparent (child);
+
+      child = next;
+    }
+
+  G_OBJECT_CLASS (gtk_fixed_parent_class)->dispose (object);
+}
+
+static void
 gtk_fixed_class_init (GtkFixedClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->dispose = gtk_fixed_dispose;
 
   container_class->add = gtk_fixed_add;
   container_class->remove = gtk_fixed_remove;
