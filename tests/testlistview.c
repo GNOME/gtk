@@ -37,7 +37,6 @@ create_directory_list (GFile *file)
   GtkDirectoryList *dir;
 
   dir = gtk_directory_list_new (G_FILE_ATTRIBUTE_STANDARD_TYPE
-                                "," G_FILE_ATTRIBUTE_STANDARD_ICON
                                 "," G_FILE_ATTRIBUTE_STANDARD_NAME
                                 "," G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
                                 NULL);
@@ -94,6 +93,7 @@ struct _RowData
   GtkWidget *expander;
   GtkWidget *icon;
   GtkWidget *name;
+  GCancellable *cancellable;
 
   GtkTreeListRow *current_item;
   GBinding *expander_binding;
@@ -108,9 +108,79 @@ row_data_unbind (RowData *data)
   if (data->current_item == NULL)
     return;
 
+  if (data->cancellable)
+    {
+      g_cancellable_cancel (data->cancellable);
+      g_clear_object (&data->cancellable);
+    }
+
   g_binding_unbind (data->expander_binding);
 
   g_clear_object (&data->current_item);
+}
+
+static void
+row_data_update_info (RowData   *data,
+                      GFileInfo *info)
+{
+  GIcon *icon;
+  const char *thumbnail_path;
+
+  thumbnail_path = g_file_info_get_attribute_byte_string (info, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
+  if (thumbnail_path)
+    {
+      /* XXX: not async */
+      GFile *thumbnail_file = g_file_new_for_path (thumbnail_path);
+      icon = g_file_icon_new (thumbnail_file);
+      g_object_unref (thumbnail_file);
+    }
+  else
+    {
+      icon = g_file_info_get_icon (info);
+    }
+
+  gtk_widget_set_visible (data->icon, icon != NULL);
+  gtk_image_set_from_gicon (GTK_IMAGE (data->icon), icon);
+}
+
+static void
+copy_attribute (GFileInfo   *to,
+                GFileInfo   *from,
+                const gchar *attribute)
+{
+  GFileAttributeType type;
+  gpointer value;
+
+  if (g_file_info_get_attribute_data (from, attribute, &type, &value, NULL))
+    g_file_info_set_attribute (to, attribute, type, value);
+}
+
+static void
+row_data_got_thumbnail_info_cb (GObject      *source,
+                                GAsyncResult *res,
+                                gpointer      _data)
+{
+  RowData *data = _data; /* invalid if operation was cancelled */
+  GFile *file = G_FILE (source);
+  GFileInfo *queried, *info;
+
+  queried = g_file_query_info_finish (file, res, NULL);
+  if (queried == NULL)
+    return;
+
+  /* now we know row is valid */
+
+  info = gtk_tree_list_row_get_item (data->current_item);
+
+  copy_attribute (info, queried, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
+  copy_attribute (info, queried, G_FILE_ATTRIBUTE_THUMBNAILING_FAILED);
+  copy_attribute (info, queried, G_FILE_ATTRIBUTE_STANDARD_ICON);
+
+  g_object_unref (queried);
+
+  row_data_update_info (data, info);
+  
+  g_clear_object (&data->cancellable);
 }
 
 static void
@@ -118,7 +188,6 @@ row_data_bind (RowData        *data,
                GtkTreeListRow *item)
 {
   GFileInfo *info;
-  GIcon *icon;
   guint depth;
 
   row_data_unbind (data);
@@ -136,10 +205,22 @@ row_data_bind (RowData        *data,
 
   info = gtk_tree_list_row_get_item (item);
 
-  icon = g_file_info_get_icon (info);
-  gtk_widget_set_visible (data->icon, icon != NULL);
-  if (icon)
-    gtk_image_set_from_gicon (GTK_IMAGE (data->icon), icon);
+  if (!g_file_info_has_attribute (info, "filechooser::queried"))
+    {
+      data->cancellable = g_cancellable_new ();
+      g_file_info_set_attribute_boolean (info, "filechooser::queried", TRUE);
+      g_file_query_info_async (G_FILE (g_file_info_get_attribute_object (info, "standard::file")),
+                               G_FILE_ATTRIBUTE_THUMBNAIL_PATH ","
+                               G_FILE_ATTRIBUTE_THUMBNAILING_FAILED ","
+                               G_FILE_ATTRIBUTE_STANDARD_ICON,
+                               G_FILE_QUERY_INFO_NONE,
+                               G_PRIORITY_DEFAULT,
+                               data->cancellable,
+                               row_data_got_thumbnail_info_cb,
+                               data);
+    }
+
+  row_data_update_info (data, info);
 
   gtk_label_set_label (GTK_LABEL (data->name), g_file_info_get_display_name (info));
 
