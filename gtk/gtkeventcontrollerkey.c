@@ -112,11 +112,11 @@ update_focus (GtkEventControllerKey *key,
     case GDK_NOTIFY_ANCESTOR:
     case GDK_NOTIFY_NONLINEAR:
       is_focus = focus_in;
-      contains_focus = FALSE;
+      contains_focus = is_focus;
       break;
     case GDK_NOTIFY_INFERIOR:
       is_focus = focus_in;
-      contains_focus = !focus_in;
+      contains_focus = TRUE;
       break;
     case GDK_NOTIFY_UNKNOWN:
     default:
@@ -257,7 +257,7 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
    * GtkEventControllerKey:is-focus:
    *
    * Whether focus is in the controllers widget itself,
-   * as opposed to in a descendent widget. See
+   * opposed to in a descendent widget. See also
    * #GtkEventControllerKey:contains-focus.
    *
    * When handling focus events, this property is updated
@@ -274,8 +274,9 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
   /**
    * GtkEventControllerKey:contains-focus:
    *
-   * Whether focus is in a descendant of the controllers widget.
-   * See #GtkEventControllerKey:is-focus.
+   * Whether focus is contain in the controllers widget. See
+   * See #GtkEventControllerKey:is-focus for whether the focus is in the widget itself
+   * or inside a descendent.
    *
    * When handling focus events, this property is updated
    * before #GtkEventControllerKey::focus-in or
