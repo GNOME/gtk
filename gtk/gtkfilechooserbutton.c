@@ -1235,7 +1235,7 @@ gtk_file_chooser_button_hide (GtkWidget *widget)
 
   if (priv->dialog)
     gtk_widget_hide (priv->dialog);
-  else
+  else if (priv->native)
     gtk_native_dialog_hide (GTK_NATIVE_DIALOG (priv->native));
 
   if (GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->hide)
