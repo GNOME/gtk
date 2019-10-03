@@ -3497,8 +3497,8 @@ icon_info_ensure_scale_and_texture (GtkIconInfo *icon_info)
   else
     {
       GdkPixbuf *scaled = gdk_pixbuf_scale_simple (source_pixbuf,
-                                                   0.5 + image_width * icon_info->scale,
-                                                   0.5 + image_height * icon_info->scale,
+                                                   MAX (1, 0.5 + image_width * icon_info->scale),
+                                                   MAX (1, 0.5 + image_height * icon_info->scale),
                                                    GDK_INTERP_BILINEAR);
       icon_info->texture = gdk_texture_new_for_pixbuf (scaled);
       g_object_unref (scaled);
