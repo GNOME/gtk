@@ -122,7 +122,6 @@ gtk_box_dispose (GObject *object)
 {
   GtkWidget *child;
 
-
   child = gtk_widget_get_first_child (GTK_WIDGET (object));
   while (child)
     {
