@@ -434,6 +434,24 @@ gtk_list_box_finalize (GObject *obj)
 }
 
 static void
+gtk_list_box_dispose (GObject *object)
+{
+  GtkWidget *child;
+
+  child = gtk_widget_get_first_child (GTK_WIDGET (object));
+  while (child)
+    {
+      GtkWidget *next = gtk_widget_get_next_sibling (child);
+
+      gtk_widget_unparent (child);
+
+      child = next;
+    }
+
+  G_OBJECT_CLASS (gtk_list_box_parent_class)->dispose (object);
+}
+
+static void
 gtk_list_box_class_init (GtkListBoxClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -445,6 +463,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
 
   object_class->get_property = gtk_list_box_get_property;
   object_class->set_property = gtk_list_box_set_property;
+  object_class->dispose = gtk_list_box_dispose;
   object_class->finalize = gtk_list_box_finalize;
   widget_class->show = gtk_list_box_show;
   widget_class->focus = gtk_list_box_focus;

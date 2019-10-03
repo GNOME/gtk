@@ -272,11 +272,33 @@ gtk_overlay_snapshot (GtkWidget   *widget,
 }
 
 static void
+gtk_overlay_dispose (GObject *object)
+{
+  GtkWidget *child;
+
+  child = gtk_widget_get_first_child (GTK_WIDGET (object));
+  while (child)
+    {
+      GtkWidget *next = gtk_widget_get_next_sibling (child);
+
+      gtk_widget_unparent (child);
+
+      child = next;
+    }
+
+  _gtk_bin_set_child (GTK_BIN (object), NULL);
+
+  G_OBJECT_CLASS (gtk_overlay_parent_class)->dispose (object);
+}
+
+static void
 gtk_overlay_class_init (GtkOverlayClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
+
+  object_class->dispose = gtk_overlay_dispose;
 
   widget_class->snapshot = gtk_overlay_snapshot;
 

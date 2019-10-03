@@ -251,8 +251,6 @@ gtk_container_dispose (GObject *object)
   if (priv->restyle_pending)
     priv->restyle_pending = FALSE;
 
-  gtk_container_foreach (container, (GtkCallback) gtk_widget_destroy, NULL);
-
   G_OBJECT_CLASS (gtk_container_parent_class)->dispose (object);
 }
 

@@ -118,12 +118,32 @@ G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 static void
+gtk_box_dispose (GObject *object)
+{
+  GtkWidget *child;
+
+
+  child = gtk_widget_get_first_child (GTK_WIDGET (object));
+  while (child)
+    {
+      GtkWidget *next = gtk_widget_get_next_sibling (child);
+
+      gtk_widget_unparent (child);
+
+      child = next;
+    }
+
+  G_OBJECT_CLASS (gtk_box_parent_class)->dispose (object);
+}
+
+static void
 gtk_box_class_init (GtkBoxClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
 
+  object_class->dispose = gtk_box_dispose;
   object_class->set_property = gtk_box_set_property;
   object_class->get_property = gtk_box_get_property;
 

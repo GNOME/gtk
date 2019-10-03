@@ -81,10 +81,23 @@ gtk_bin_size_allocate (GtkWidget *widget,
 }
 
 static void
+gtk_bin_dispose (GObject *object)
+{
+  GtkBinPrivate *priv = gtk_bin_get_instance_private (GTK_BIN (object));
+
+  g_clear_pointer (&priv->child, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_bin_parent_class)->dispose (object);
+}
+
+static void
 gtk_bin_class_init (GtkBinClass *class)
 {
+  GObjectClass *object_class = (GObjectClass *) class;
   GtkWidgetClass *widget_class = (GtkWidgetClass*) class;
   GtkContainerClass *container_class = (GtkContainerClass*) class;
+
+  object_class->dispose = gtk_bin_dispose;
 
   widget_class->measure = gtk_bin_measure;
   widget_class->size_allocate = gtk_bin_size_allocate;

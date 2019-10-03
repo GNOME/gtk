@@ -352,11 +352,22 @@ gtk_path_bar_dispose (GObject *object)
 {
   GtkPathBar *path_bar = GTK_PATH_BAR (object);
   GtkPathBarPrivate *priv = gtk_path_bar_get_instance_private (path_bar);
+  GtkWidget *child;
 
   remove_settings_signal (path_bar, gtk_widget_get_display (GTK_WIDGET (object)));
 
   priv->get_info_cancellable = NULL;
   cancel_all_cancellables (path_bar);
+
+  child = gtk_widget_get_first_child (GTK_WIDGET (object));
+  while (child)
+    {
+      GtkWidget *next = gtk_widget_get_next_sibling (child);
+
+      gtk_widget_unparent (child);
+
+      child = next;
+    }
 
   G_OBJECT_CLASS (gtk_path_bar_parent_class)->dispose (object);
 }
