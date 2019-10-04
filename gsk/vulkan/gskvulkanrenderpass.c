@@ -172,7 +172,7 @@ gsk_vulkan_render_pass_new (GdkVulkanContext  *context,
                                               .samples = VK_SAMPLE_COUNT_1_BIT,
                                               .loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
                                               .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
-                                              .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED,
+                                              .initialLayout = VK_IMAGE_LAYOUT_GENERAL,
                                               .finalLayout = final_layout
                                            }
                                         },
