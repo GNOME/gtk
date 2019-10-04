@@ -1,3 +1,34 @@
+Overview of Changes in GTK+ 3.24.12
+===================================
+
+* file chooser: allow sorting by file type
+
+* dnd: fix pointer offsets under X11 and Wayland
+
+* broadway: Fix a font problem
+
+* mir Drop this backend
+
+* printing: Get PPD from original host if needed
+
+* a11y: Fix interference with clutter a11y impl
+
+* Translation updates:
+ Brazilian Portuguese
+ Czech
+ Danish
+ Dutch
+ Italian
+ Greek
+ Lithuanian
+ Norwegian Bokmål
+ Polish
+ Romanian
+ Slovenian
+ Spanish
+ Turkish
+
+
 Overview of Changes in GTK+ 3.24.11
 ===================================
 
