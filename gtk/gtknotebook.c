@@ -5674,8 +5674,13 @@ static void
 gtk_notebook_menu_label_unparent (GtkWidget *widget,
                                   gpointer  data)
 {
-  gtk_widget_unparent (gtk_bin_get_child (GTK_BIN (widget)));
-  _gtk_bin_set_child (GTK_BIN (widget), NULL);
+  GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
+
+  if (child != NULL)
+    {
+      gtk_widget_unparent (child);
+      _gtk_bin_set_child (GTK_BIN (widget), NULL);
+    }
 }
 
 /* Public GtkNotebook Page Insert/Remove Methods :
