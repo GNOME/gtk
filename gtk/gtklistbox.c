@@ -2221,7 +2221,7 @@ gtk_list_box_update_header (GtkListBox    *box,
   GtkListBoxRow *row;
   GSequenceIter *before_iter;
   GtkListBoxRow *before_row;
-  GtkWidget *old_header;
+  GtkWidget *old_header, *new_header;
 
   if (iter == NULL || g_sequence_iter_is_end (iter))
     return;
@@ -2247,18 +2247,20 @@ gtk_list_box_update_header (GtkListBox    *box,
       priv->update_header_func (row,
                                 before_row,
                                 priv->update_header_func_target);
-      if (old_header != ROW_PRIV (row)->header)
+      new_header = ROW_PRIV (row)->header;
+      if (old_header != new_header)
         {
           if (old_header != NULL)
             {
               gtk_widget_unparent (old_header);
               g_hash_table_remove (priv->header_hash, old_header);
             }
-          if (ROW_PRIV (row)->header != NULL)
+          if (new_header != NULL)
             {
-              g_hash_table_insert (priv->header_hash, ROW_PRIV (row)->header, row);
-              gtk_widget_set_parent (ROW_PRIV (row)->header, GTK_WIDGET (box));
-              gtk_widget_show (ROW_PRIV (row)->header);
+              g_hash_table_insert (priv->header_hash, new_header, row);
+              gtk_widget_unparent (new_header);
+              gtk_widget_set_parent (new_header, GTK_WIDGET (box));
+              gtk_widget_show (new_header);
             }
           gtk_widget_queue_resize (GTK_WIDGET (box));
         }
