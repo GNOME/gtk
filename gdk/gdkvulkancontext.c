@@ -64,6 +64,9 @@ struct _GdkVulkanContextPrivate {
   guint n_images;
   VkImage *images;
   cairo_region_t **regions;
+
+  unsigned int has_present_region : 1;
+
 #endif
 
   guint32 draw_index;
@@ -385,6 +388,27 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   return res == VK_SUCCESS;
 }
 
+static gboolean
+device_supports_incremental_present (VkPhysicalDevice device)
+{
+  VkExtensionProperties *extensions;
+  uint32_t n_device_extensions;
+  int i;
+
+  vkEnumerateDeviceExtensionProperties (device, NULL, &n_device_extensions, NULL);
+
+  extensions = g_newa (VkExtensionProperties, n_device_extensions);
+  vkEnumerateDeviceExtensionProperties (device, NULL, &n_device_extensions, extensions);
+
+  for (i = 0; i < n_device_extensions; i++)
+    {
+      if (g_str_equal (extensions[i].extensionName, VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
                                 cairo_region_t *region)
@@ -414,6 +438,29 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+  VkPresentRegionsKHR *regions = VK_NULL_HANDLE;
+
+  if (priv->has_present_region)
+    {
+      cairo_rectangle_int_t extents;
+
+      cairo_region_get_extents (priv->regions[priv->draw_index], &extents);
+
+      regions = g_alloca (sizeof (VkPresentRegionsKHR));
+      *regions = (VkPresentRegionsKHR) {
+          .sType = VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR,
+          .swapchainCount = 1,
+          .pRegions = &(VkPresentRegionKHR) {
+              .rectangleCount = 1,
+              .pRectangles = &(VkRectLayerKHR) {
+                  .offset.x = extents.x,
+                  .offset.y = extents.y,
+                  .extent.width = extents.width,
+                  .extent.height = extents.height,
+              }
+          },
+      };
+    }
 
   GDK_VK_CHECK (vkQueuePresentKHR, gdk_vulkan_context_get_queue (context),
                                    &(VkPresentInfoKHR) {
@@ -429,6 +476,7 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
                                        .pImageIndices = (uint32_t[]) {
                                            priv->draw_index
                                        },
+                                       .pNext = regions,
                                    });
 
   cairo_region_destroy (priv->regions[priv->draw_index]);
@@ -491,11 +539,12 @@ gdk_vulkan_context_real_init (GInitable     *initable,
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (initable);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+  GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
   VkResult res;
   VkBool32 supported;
   uint32_t i;
 
-  priv->vulkan_ref = gdk_display_ref_vulkan (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), error);
+  priv->vulkan_ref = gdk_display_ref_vulkan (display, error);
   if (!priv->vulkan_ref)
     return FALSE;
 
@@ -543,6 +592,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
           goto out_surface;  
         }
       priv->image_format = formats[i];
+      priv->has_present_region = device_supports_incremental_present (display->vk_physical_device);
 
       if (!gdk_vulkan_context_check_swapchain (context, error))
         goto out_surface;
@@ -866,11 +916,20 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
       vkGetPhysicalDeviceQueueFamilyProperties (devices[i], &n_queue_props, NULL);
       VkQueueFamilyProperties *queue_props = g_newa (VkQueueFamilyProperties, n_queue_props);
       vkGetPhysicalDeviceQueueFamilyProperties (devices[i], &n_queue_props, queue_props);
-
       for (j = 0; j < n_queue_props; j++)
         {
           if (queue_props[j].queueFlags & VK_QUEUE_GRAPHICS_BIT)
             {
+              GPtrArray *device_extensions;
+              gboolean has_incremental_present;
+
+              has_incremental_present = device_supports_incremental_present (devices[i]);
+
+              device_extensions = g_ptr_array_new ();
+              g_ptr_array_add (device_extensions, (gpointer) VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+              if (has_incremental_present)
+                g_ptr_array_add (device_extensions, (gpointer) VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
+
               GDK_DISPLAY_NOTE (display, VULKAN, g_print ("Using Vulkan device %u, queue %u\n", i, j));
               if (GDK_VK_CHECK (vkCreateDevice, devices[i],
                                                 &(VkDeviceCreateInfo) {
@@ -886,14 +945,17 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                                                     },
                                                     0,
                                                     NULL,
-                                                    1,
-                                                    (const char * const []) {
-                                                       VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-                                                    },
+                                                    device_extensions->len,
+                                                    (const gchar * const *) device_extensions->pdata
                                                 },
                                                 NULL,
                                                 &display->vk_device) != VK_SUCCESS)
-                continue;
+                {
+                  g_ptr_array_unref (device_extensions);
+                  continue;
+                }
+
+              g_ptr_array_unref (device_extensions);
 
               display->vk_physical_device = devices[i];
               vkGetDeviceQueue(display->vk_device, j, 0, &display->vk_queue);
