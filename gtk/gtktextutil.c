@@ -158,6 +158,19 @@ set_attributes_from_style (GtkStyleContext   *context,
   gtk_style_context_get (context, "font", &values->font, NULL);
 }
 
+static gint
+get_border_window_size (GtkTextView       *text_view,
+                        GtkTextWindowType  window_type)
+{
+  GtkWidget *gutter;
+
+  gutter = gtk_text_view_get_gutter (text_view, window_type);
+  if (gutter != NULL)
+    return gtk_widget_get_width (gutter);
+
+  return 0;
+}
+
 GdkPaintable *
 gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
                                      GtkTextBuffer *buffer,
@@ -208,8 +221,8 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   if (GTK_IS_TEXT_VIEW (widget))
     {
       layout_width = layout_width
-        - gtk_text_view_get_border_window_size (GTK_TEXT_VIEW (widget), GTK_TEXT_WINDOW_LEFT)
-        - gtk_text_view_get_border_window_size (GTK_TEXT_VIEW (widget), GTK_TEXT_WINDOW_RIGHT);
+        - get_border_window_size (GTK_TEXT_VIEW (widget), GTK_TEXT_WINDOW_LEFT)
+        - get_border_window_size (GTK_TEXT_VIEW (widget), GTK_TEXT_WINDOW_RIGHT);
     }
 
   style->direction = gtk_widget_get_direction (widget);
