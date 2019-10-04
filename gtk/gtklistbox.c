@@ -2426,8 +2426,11 @@ gtk_list_box_update_header (GtkListBox    *box,
                                 priv->update_header_func_target);
       if (old_header != ROW_PRIV (row)->header)
         {
-          if (old_header != NULL)
+          if (old_header != NULL &&
+              g_hash_table_lookup (priv->header_hash, old_header) == row)
             {
+              /* Only unparent the @old_header if it hasn’t been re-used as the
+               * header for a different row. */
               gtk_widget_unparent (old_header);
               g_hash_table_remove (priv->header_hash, old_header);
             }
