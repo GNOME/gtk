@@ -1165,7 +1165,7 @@ row:selected switch slider:checked, row:selected switch slider { border-color: #
 
 .view.content-view.check:active:not(list), iconview.content-view.check:active:not(list), .content-view .tile check:active:not(list) { margin: 4px; min-width: 32px; min-height: 32px; color: transparent; background-color: rgba(53, 132, 228, 0.95); border-radius: 5px; background-image: none; transition: 200ms; box-shadow: none; border-width: 0; -gtk-icon-source: none; -gtk-icon-shadow: none; }
 
-.view.content-view.check:backdrop:not(list), iconview.content-view.check:backdrop:not(list), .content-view .tile check:backdrop:not(list) { margin: 4px; min-width: 32px; min-height: 32px; color: transparent; background-color: rgba(140, 140, 141, 0.95); border-radius: 5px; background-image: none; transition: 200ms; box-shadow: none; border-width: 0; -gtk-icon-source: none; -gtk-icon-shadow: none; }
+.view.content-view.check:backdrop:not(list), iconview.content-view.check:backdrop:not(list), .content-view .tile check:backdrop:not(list) { margin: 4px; min-width: 32px; min-height: 32px; color: transparent; background-color: rgba(141, 141, 141, 0.95); border-radius: 5px; background-image: none; transition: 200ms; box-shadow: none; border-width: 0; -gtk-icon-source: none; -gtk-icon-shadow: none; }
 
 .view.content-view.check:checked:not(list), iconview.content-view.check:checked:not(list), .content-view .tile check:checked:not(list) { margin: 4px; min-width: 32px; min-height: 32px; color: #eeeeec; background-color: rgba(53, 132, 228, 0.95); border-radius: 5px; background-image: none; transition: 200ms; box-shadow: none; border-width: 0; -gtk-icon-source: -gtk-icontheme('object-select-symbolic'); -gtk-icon-shadow: none; }
 
@@ -1173,7 +1173,7 @@ row:selected switch slider:checked, row:selected switch slider { border-color: #
 
 .view.content-view.check:checked:active:not(list), iconview.content-view.check:checked:active:not(list), .content-view .tile check:checked:active:not(list) { margin: 4px; min-width: 32px; min-height: 32px; color: #eeeeec; background-color: rgba(53, 132, 228, 0.95); border-radius: 5px; background-image: none; transition: 200ms; box-shadow: none; border-width: 0; -gtk-icon-source: -gtk-icontheme('object-select-symbolic'); -gtk-icon-shadow: none; }
 
-.view.content-view.check:backdrop:checked:not(list), iconview.content-view.check:backdrop:checked:not(list), .content-view .tile check:backdrop:checked:not(list) { margin: 4px; min-width: 32px; min-height: 32px; color: rgba(238, 238, 236, 0.8); background-color: rgba(140, 140, 141, 0.95); border-radius: 5px; background-image: none; transition: 200ms; box-shadow: none; border-width: 0; -gtk-icon-source: -gtk-icontheme('object-select-symbolic'); -gtk-icon-shadow: none; }
+.view.content-view.check:backdrop:checked:not(list), iconview.content-view.check:backdrop:checked:not(list), .content-view .tile check:backdrop:checked:not(list) { margin: 4px; min-width: 32px; min-height: 32px; color: rgba(238, 238, 236, 0.8); background-color: rgba(141, 141, 141, 0.95); border-radius: 5px; background-image: none; transition: 200ms; box-shadow: none; border-width: 0; -gtk-icon-source: -gtk-icontheme('object-select-symbolic'); -gtk-icon-shadow: none; }
 
 checkbutton.text-button, radiobutton.text-button { padding: 2px 0; outline-offset: 0; }
 
@@ -1552,37 +1552,41 @@ progressbar.osd progress { border-style: none; border-radius: 0; }
 progressbar trough.empty progress { all: unset; }
 
 /************* Level Bar * */
-levelbar.horizontal block { min-height: 1px; }
+levelbar.horizontal block { min-height: 12px; border-radius: 3px; }
 
-levelbar.horizontal.discrete block { margin: 0 1px; min-width: 32px; }
+levelbar.horizontal block:dir(rtl) { border-radius: 0 3px 3px 0; }
 
-levelbar.vertical block { min-width: 1px; }
+levelbar.horizontal block:dir(ltr) { border-radius: 3px 0 0 3px; }
 
-levelbar.vertical.discrete block { margin: 1px 0; min-height: 32px; }
+levelbar.horizontal block.empty, levelbar.horizontal block.full { border-radius: 3px; }
+
+levelbar.horizontal.discrete block { min-height: 5px; margin: 0 1px; min-width: 32px; border-radius: 3px; }
+
+levelbar.vertical block { min-width: 12px; border-radius: 3px; }
+
+levelbar.vertical.discrete block { min-width: 5px; margin: 1px 0; min-height: 32px; }
 
 levelbar:backdrop { transition: 200ms ease-out; }
 
-levelbar trough { border: 1px solid; padding: 2px; border-radius: 3px; color: black; border-color: #cdc7c2; background-color: #ffffff; box-shadow: inset 0 0 0 1px rgba(53, 132, 228, 0); }
+levelbar trough { padding: 0; }
 
-levelbar trough:backdrop { color: #323232; border-color: #d5d0cc; background-color: #fcfcfc; box-shadow: none; }
+levelbar block { border: 1px solid; }
 
-levelbar block { border: 1px solid; border-radius: 1px; }
-
-levelbar block.low { border-color: #8f4700; background-color: #f57900; }
+levelbar block.low { border-color: #c26000; background-color: #f57900; }
 
 levelbar block.low:backdrop { border-color: #f57900; }
 
-levelbar block.high, levelbar block:not(.empty) { border-color: #15539e; background-color: #3584e4; }
+levelbar block.high, levelbar block:not(.empty) { border-color: #1b6acb; background-color: #3584e4; }
 
 levelbar block.high:backdrop, levelbar block:not(.empty):backdrop { border-color: #3584e4; }
 
-levelbar block.full { border-color: #1d814a; background-color: #33d17a; }
+levelbar block.full { border-color: #26ab62; background-color: #33d17a; }
 
 levelbar block.full:backdrop { border-color: #33d17a; }
 
-levelbar block.empty { background-color: transparent; border-color: rgba(46, 52, 54, 0.2); }
+levelbar block.empty { background-color: #ebe8e6; border-color: #cdc7c2; }
 
-levelbar block.empty:backdrop { border-color: rgba(146, 149, 149, 0.15); }
+levelbar block.empty:backdrop { border-color: rgba(205, 199, 194, 0.3); }
 
 /**************** Print dialog * */
 printdialog drawing { color: #2e3436; background: white; border: none; padding: 0; }
