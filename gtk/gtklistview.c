@@ -732,6 +732,48 @@ gtk_list_view_select_item (GtkWidget  *widget,
 }
 
 static void
+gtk_list_view_scroll_to_item (GtkWidget  *widget,
+                              const char *action_name,
+                              GVariant   *parameter)
+{
+  GtkListView *self = GTK_LIST_VIEW (widget);
+  ListRow *row;
+  guint pos;
+
+  if (!g_variant_check_format_string (parameter, "u", FALSE))
+    return;
+
+  g_variant_get (parameter, "u", &pos);
+  row = gtk_list_item_manager_get_nth (self->item_manager, pos, NULL);
+  if (row == NULL)
+    return;
+
+  if (row->parent.widget)
+    {
+      int y = list_row_get_y (self, row);
+      int start = gtk_adjustment_get_value (self->adjustment[GTK_ORIENTATION_VERTICAL]);
+      int height = gtk_widget_get_height (GTK_WIDGET (self));
+      double align;
+
+      if (y < start)
+        align = 0.0;
+      else if (y + row->height > start + height)
+        align = 1.0;
+      else
+        align = (double) (y - start) / (height - row->height);
+
+      gtk_list_view_set_anchor (self, pos, align);
+    }
+  else
+    {
+      if (pos < gtk_list_item_tracker_get_position (self->item_manager, self->anchor))
+        gtk_list_view_set_anchor (self, pos, 0.0);
+      else
+        gtk_list_view_set_anchor (self, pos, 1.0);
+    }
+}
+
+static void
 gtk_list_view_class_init (GtkListViewClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -809,6 +851,18 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                                    "list.select-item",
                                    "(ubb)",
                                    gtk_list_view_select_item);
+
+  /**
+   * GtkListView|list.scroll-to-item:
+   * @position: position of item to scroll to
+   *
+   * Scrolls to the item given in @position with the minimum amount
+   * of scrolling required. If the item is already visible, nothing happens.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "list.scroll-to-item",
+                                   "u",
+                                   gtk_list_view_scroll_to_item);
 
   gtk_widget_class_set_css_name (widget_class, I_("list"));
 }
