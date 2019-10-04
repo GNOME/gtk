@@ -23,6 +23,7 @@
 
 #include "gtkbinlayout.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkeventcontrollerfocus.h"
 #include "gtkgestureclick.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
@@ -273,6 +274,18 @@ gtk_list_item_click_gesture_pressed (GtkGestureClick *gesture,
 }
 
 static void
+gtk_list_item_enter_cb (GtkEventControllerFocus *controller,
+                        GtkListItem             *self)
+{
+  GtkWidget *widget = GTK_WIDGET (self);
+
+  gtk_widget_activate_action (widget,
+                              "list.scroll-to-item",
+                              "u",
+                              self->position);
+}
+
+static void
 gtk_list_item_click_gesture_released (GtkGestureClick *gesture,
                                       int              n_press,
                                       double           x,
@@ -293,6 +306,7 @@ gtk_list_item_click_gesture_canceled (GtkGestureClick  *gesture,
 static void
 gtk_list_item_init (GtkListItem *self)
 {
+  GtkEventController *controller;
   GtkGesture *gesture;
 
   self->selectable = TRUE;
@@ -312,6 +326,10 @@ gtk_list_item_init (GtkListItem *self)
   g_signal_connect (gesture, "cancel",
                     G_CALLBACK (gtk_list_item_click_gesture_canceled), self);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
+
+  controller = gtk_event_controller_focus_new ();
+  g_signal_connect (controller, "enter", G_CALLBACK (gtk_list_item_enter_cb), self);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 }
 
 GtkListItem *
