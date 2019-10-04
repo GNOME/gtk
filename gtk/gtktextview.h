@@ -44,7 +44,6 @@ G_BEGIN_DECLS
 
 /**
  * GtkTextWindowType:
- * @GTK_TEXT_WINDOW_PRIVATE: Private value, used internally
  * @GTK_TEXT_WINDOW_WIDGET: Window that floats over scrolling areas.
  * @GTK_TEXT_WINDOW_TEXT: Scrollable text window.
  * @GTK_TEXT_WINDOW_LEFT: Left side border window.
@@ -56,8 +55,7 @@ G_BEGIN_DECLS
  */
 typedef enum
 {
-  GTK_TEXT_WINDOW_PRIVATE,
-  GTK_TEXT_WINDOW_WIDGET,
+  GTK_TEXT_WINDOW_WIDGET = 1,
   GTK_TEXT_WINDOW_TEXT,
   GTK_TEXT_WINDOW_LEFT,
   GTK_TEXT_WINDOW_RIGHT,
@@ -281,14 +279,6 @@ void gtk_text_view_window_to_buffer_coords (GtkTextView       *text_view,
                                             gint              *buffer_y);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_text_view_set_border_window_size (GtkTextView       *text_view,
-                                           GtkTextWindowType  type,
-                                           gint               size);
-GDK_AVAILABLE_IN_ALL
-gint gtk_text_view_get_border_window_size (GtkTextView       *text_view,
-					   GtkTextWindowType  type);
-
-GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_view_forward_display_line           (GtkTextView       *text_view,
                                                        GtkTextIter       *iter);
 GDK_AVAILABLE_IN_ALL
@@ -316,24 +306,28 @@ void            gtk_text_view_reset_im_context                  (GtkTextView    
 
 /* Adding child widgets */
 GDK_AVAILABLE_IN_ALL
-void gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,
-                                        GtkWidget            *child,
-                                        GtkTextChildAnchor   *anchor);
+GtkWidget *gtk_text_view_get_gutter          (GtkTextView          *text_view,
+                                              GtkTextWindowType     win);
+GDK_AVAILABLE_IN_ALL
+void       gtk_text_view_set_gutter          (GtkTextView          *text_view,
+                                              GtkTextWindowType     win,
+                                              GtkWidget            *widget);
+GDK_AVAILABLE_IN_ALL
+void       gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,
+                                              GtkWidget            *child,
+                                              GtkTextChildAnchor   *anchor);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_text_view_add_child_in_window (GtkTextView          *text_view,
-                                        GtkWidget            *child,
-                                        GtkTextWindowType     which_window,
-                                        /* window coordinates */
-                                        gint                  xpos,
-                                        gint                  ypos);
+void       gtk_text_view_add_overlay         (GtkTextView          *text_view,
+                                              GtkWidget            *child,
+                                              gint                  xpos,
+                                              gint                  ypos);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_text_view_move_child          (GtkTextView          *text_view,
-                                        GtkWidget            *child,
-                                        /* window coordinates */
-                                        gint                  xpos,
-                                        gint                  ypos);
+void       gtk_text_view_move_overlay        (GtkTextView          *text_view,
+                                              GtkWidget            *child,
+                                              gint                  xpos,
+                                              gint                  ypos);
 
 /* Default style settings (fallbacks if no tag affects the property) */
 
