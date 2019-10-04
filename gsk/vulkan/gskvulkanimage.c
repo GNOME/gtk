@@ -142,13 +142,15 @@ gsk_vulkan_uploader_get_copy_buffer (GskVulkanUploader *self)
 void
 gsk_vulkan_uploader_upload (GskVulkanUploader *self)
 {
+  VkPipelineStageFlagBits host_and_transfer_bits = VK_PIPELINE_STAGE_HOST_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT;
+
   if (self->before_buffer_barriers->len > 0 || self->before_image_barriers->len > 0)
     {
       VkCommandBuffer command_buffer;
 
       command_buffer = gsk_vulkan_command_pool_get_buffer (self->command_pool);
       vkCmdPipelineBarrier (command_buffer,
-                            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                            VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT | VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | host_and_transfer_bits,
                             VK_PIPELINE_STAGE_HOST_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT,
                             0,
                             0, NULL,
@@ -164,7 +166,7 @@ gsk_vulkan_uploader_upload (GskVulkanUploader *self)
     {
       VkCommandBuffer command_buffer = gsk_vulkan_uploader_get_copy_buffer (self);
       vkCmdPipelineBarrier (command_buffer,
-                            VK_PIPELINE_STAGE_HOST_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT,
+                            host_and_transfer_bits,
                             VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
                             0,
                             0, NULL,
