@@ -513,7 +513,7 @@ gtk_text_view_accessible_get_character_extents (AtkText      *text,
   *height = rectangle.height;
   *width = rectangle.width;
 
-  gtk_text_view_buffer_to_surface_coords (view, GTK_TEXT_WINDOW_WIDGET,
+  gtk_text_view_buffer_to_window_coords (view, GTK_TEXT_WINDOW_WIDGET,
     rectangle.x, rectangle.y, x, y);
   if (coords != ATK_XY_WINDOW)
     {

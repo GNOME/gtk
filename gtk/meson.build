@@ -145,6 +145,7 @@ gtk_private_sources = files([
   'gtkstylecascade.c',
   'gtkstyleproperty.c',
   'gtktextbtree.c',
+  'gtktextviewchild.c',
   'gtktrashmonitor.c',
   'gtktreedatalist.c',
 ])
