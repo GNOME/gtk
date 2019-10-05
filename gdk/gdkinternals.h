@@ -348,6 +348,7 @@ struct _GdkWindow
   guint geometry_dirty : 1;
   guint event_compression : 1;
   guint frame_clock_events_paused : 1;
+  guint interpolate_events : 1;
 
   /* The GdkWindow that has the impl, ref:ed if another window.
    * This ref is required to keep the wrapper of the impl window alive
@@ -389,6 +390,11 @@ struct _GdkWindow
   GdkDrawingContext *drawing_context;
 
   cairo_region_t *opaque_region;
+
+  /* for event interpolation */
+  GdkRelativeEventInterpolation *relative_interpolator;
+  guint32 interpolation_time_offset;
+  guint interpolation_tick_id;
 };
 
 #define GDK_WINDOW_TYPE(d) ((((GdkWindow *)(d)))->window_type)
