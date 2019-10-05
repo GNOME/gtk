@@ -271,27 +271,21 @@ _gtk_header_bar_update_separator_visibility (GtkHeaderBar *bar)
   GList *l;
   GList *children;
 
-  if (priv->start_box)
+  children = gtk_container_get_children (GTK_CONTAINER (priv->start_box));
+  for (l = children; l; l = l->next)
     {
-      children = gtk_container_get_children (GTK_CONTAINER (priv->start_box));
-      for (l = children; l; l = l->next)
-        {
-          if (l->data != priv->titlebar_start_box && gtk_widget_get_visible (l->data))
-            have_visible_at_start = TRUE;
-        }
-      g_list_free (children);
+      if (l->data != priv->titlebar_start_box && gtk_widget_get_visible (l->data))
+        have_visible_at_start = TRUE;
     }
+  g_list_free (children);
 
-  if (priv->end_box)
+  children = gtk_container_get_children (GTK_CONTAINER (priv->end_box));
+  for (l = children; l; l = l->next)
     {
-      children = gtk_container_get_children (GTK_CONTAINER (priv->end_box));
-      for (l = children; l; l = l->next)
-        {
-          if (l->data != priv->titlebar_end_box && gtk_widget_get_visible (l->data))
-            have_visible_at_end = TRUE;
-        }
-      g_list_free (children);
+      if (l->data != priv->titlebar_end_box && gtk_widget_get_visible (l->data))
+        have_visible_at_end = TRUE;
     }
+  g_list_free (children);
 
   if (priv->titlebar_start_separator != NULL)
     gtk_widget_set_visible (priv->titlebar_start_separator, have_visible_at_start);

@@ -333,17 +333,6 @@ gtk_paned_handle_contains (GtkGizmo *handle,
 }
 
 static void
-gtk_paned_dispose (GObject *object)
-{
-  GtkPanedPrivate *priv = gtk_paned_get_instance_private (GTK_PANED (object));
-
-  g_clear_pointer (&priv->child1, gtk_widget_unparent);
-  g_clear_pointer (&priv->child2, gtk_widget_unparent);
-
-  G_OBJECT_CLASS (gtk_paned_parent_class)->dispose (object);
-}
-
-static void
 gtk_paned_class_init (GtkPanedClass *class)
 {
   GObjectClass *object_class;
@@ -359,7 +348,6 @@ gtk_paned_class_init (GtkPanedClass *class)
 
   object_class->set_property = gtk_paned_set_property;
   object_class->get_property = gtk_paned_get_property;
-  object_class->dispose = gtk_paned_dispose;
   object_class->finalize = gtk_paned_finalize;
 
   widget_class->measure = gtk_paned_measure;

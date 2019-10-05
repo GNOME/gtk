@@ -893,16 +893,14 @@ gtk_menu_dispose (GObject *object)
     }
 
   g_clear_object (&priv->accel_group);
+  g_clear_pointer (&priv->heights, g_free);
 
+  G_OBJECT_CLASS (gtk_menu_parent_class)->dispose (object);
   if (priv->toplevel)
     {
       g_signal_handlers_disconnect_by_func (priv->toplevel, moved_to_rect_cb, menu);
       gtk_widget_destroy (priv->toplevel);
     }
-
-  g_clear_pointer (&priv->heights, g_free);
-
-  G_OBJECT_CLASS (gtk_menu_parent_class)->dispose (object);
 }
 
 static void

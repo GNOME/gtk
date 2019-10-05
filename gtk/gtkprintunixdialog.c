@@ -826,7 +826,7 @@ gtk_print_unix_dialog_constructed (GObject *object)
        GtkWidget *button, *parent;
        button = gtk_dialog_get_widget_for_response (GTK_DIALOG (object), GTK_RESPONSE_APPLY);
        g_object_ref (button);
-       parent = gtk_widget_get_parent (button);
+       parent = gtk_widget_get_ancestor (button, GTK_TYPE_HEADER_BAR);
        gtk_container_remove (GTK_CONTAINER (parent), button); 
        gtk_header_bar_pack_end (GTK_HEADER_BAR (parent), button);
        g_object_unref (button);
