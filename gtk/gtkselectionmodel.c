@@ -118,7 +118,7 @@ gtk_selection_model_default_select_all (GtkSelectionModel *model)
 static gboolean
 gtk_selection_model_default_unselect_all (GtkSelectionModel *model)
 {
-  return gtk_selection_model_unselect_range (model, 0, g_list_model_get_n_items (G_LIST_MODEL (model)));;
+  return gtk_selection_model_unselect_range (model, 0, g_list_model_get_n_items (G_LIST_MODEL (model)));
 }
 
 static void
