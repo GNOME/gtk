@@ -19,11 +19,11 @@
  */
 
 #include "config.h"
+
 #include <glib.h>
 #include <stdio.h>
 
 #include "gdkeventinterpolationprivate.h"
-#include "gdkeventsprivate.h"
 
 #include "fallback-c89.c"
 
@@ -31,7 +31,7 @@
  * TODO: explain how the interpolation works.
  */
 
-/**
+/*
  * We need at least 2-3 display-frames worth of input events in the history
  * buffer to account for system-induced (display manager etc) latency - the
  * time it takes an event to reach this code. Display frames can last anywhere
@@ -48,7 +48,7 @@
  */
 #define EVENT_HISTORY_MAX_ELEMENTS 16
 
-/**
+/*
  * Used to determine the timestamp of a dummy 'null' absolute input event.
  * Corresponds to 1000 / 12 =~ 83 events/second which should be good enough
  * for the slowest (lowest event rate) input devices. Anyway this number is
