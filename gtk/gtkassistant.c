@@ -1002,13 +1002,13 @@ set_current_page (GtkAssistant *assistant,
       /* find the best button to focus */
       button[0] = priv->apply;
       button[1] = priv->close;
-      button[2] = priv->forward;
+      button[2] = NULL;//priv->forward;
       button[3] = priv->back;
       button[4] = priv->cancel;
       button[5] = priv->last;
       for (i = 0; i < 6; i++)
         {
-          if (gtk_widget_get_visible (button[i]) &&
+          if (button[i] && gtk_widget_get_visible (button[i]) &&
               gtk_widget_get_sensitive (button[i]))
             {
               gtk_widget_grab_focus (button[i]);
