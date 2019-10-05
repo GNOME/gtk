@@ -3069,10 +3069,10 @@ gtk_window_dispose (GObject *object)
   if (priv->group)
     gtk_window_group_remove_window (priv->group, window);
 
-   gtk_window_free_key_hash (window);
+  gtk_window_free_key_hash (window);
 
-  G_OBJECT_CLASS (gtk_window_parent_class)->dispose (object);
   unset_titlebar (window);
+  G_OBJECT_CLASS (gtk_window_parent_class)->dispose (object);
 
   while (!g_queue_is_empty (&priv->popovers))
     {

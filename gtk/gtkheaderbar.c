@@ -833,20 +833,23 @@ gtk_header_bar_dispose (GObject *object)
 
   /* Clean start/end box manually here so the visible notify won't fire on a
    * headerbar that's in the middle of being disposed */
-  for (w = gtk_widget_get_first_child (priv->start_box);
-       w != NULL;
-       w = gtk_widget_get_next_sibling (w))
-    {
-      if (w != priv->titlebar_start_box)
-        g_signal_handlers_disconnect_by_func (w, notify_child_cb, object);
-    }
-  for (w = gtk_widget_get_first_child (priv->end_box);
-       w != NULL;
-       w = gtk_widget_get_next_sibling (w))
-    {
-      if (w != priv->titlebar_end_box)
-        g_signal_handlers_disconnect_by_func (w, notify_child_cb, object);
-    }
+  if (priv->start_box)
+    for (w = gtk_widget_get_first_child (priv->start_box);
+         w != NULL;
+         w = gtk_widget_get_next_sibling (w))
+      {
+        if (w != priv->titlebar_start_box)
+          g_signal_handlers_disconnect_by_func (w, notify_child_cb, object);
+      }
+
+  if (priv->end_box)
+    for (w = gtk_widget_get_first_child (priv->end_box);
+         w != NULL;
+         w = gtk_widget_get_next_sibling (w))
+      {
+        if (w != priv->titlebar_end_box)
+          g_signal_handlers_disconnect_by_func (w, notify_child_cb, object);
+      }
 
   g_clear_pointer (&priv->custom_title, gtk_widget_unparent);
   g_clear_pointer (&priv->label_box, gtk_widget_unparent);
