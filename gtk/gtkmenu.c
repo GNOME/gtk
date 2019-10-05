@@ -896,8 +896,10 @@ gtk_menu_dispose (GObject *object)
 
   if (priv->toplevel)
     {
-      g_signal_handlers_disconnect_by_func (priv->toplevel, moved_to_rect_cb, menu);
-      gtk_widget_destroy (priv->toplevel);
+      GtkWidget *toplevel = priv->toplevel;
+      priv->toplevel = NULL;
+      g_signal_handlers_disconnect_by_func (toplevel, moved_to_rect_cb, menu);
+      gtk_widget_destroy (toplevel);
     }
 
   g_clear_pointer (&priv->heights, g_free);

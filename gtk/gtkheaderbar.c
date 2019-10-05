@@ -806,9 +806,18 @@ gtk_header_bar_get_custom_title (GtkHeaderBar *bar)
 }
 
 static void
+notify_child_cb (GObject      *child,
+                 GParamSpec   *pspec,
+                 GtkHeaderBar *bar)
+{
+  _gtk_header_bar_update_separator_visibility (bar);
+}
+
+static void
 gtk_header_bar_dispose (GObject *object)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (object));
+  GtkWidget *w;
 
   if (priv->label_sizing_box)
     {
@@ -944,14 +953,6 @@ gtk_header_bar_set_property (GObject      *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-notify_child_cb (GObject      *child,
-                 GParamSpec   *pspec,
-                 GtkHeaderBar *bar)
-{
-  _gtk_header_bar_update_separator_visibility (bar);
 }
 
 static void
