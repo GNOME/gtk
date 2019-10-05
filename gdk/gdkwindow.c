@@ -9821,7 +9821,33 @@ proxy_button_event (GdkEvent *source_event,
       event->scroll.delta_y = source_event->scroll.delta_y;
       event->scroll.is_stop = source_event->scroll.is_stop;
       gdk_event_set_source_device (event, source_device);
-      return 1;
+
+      gint events_to_unlink = 1;
+
+      if (event_win->interpolate_events &&
+          source_event->scroll.direction == GDK_SCROLL_SMOOTH)
+        {
+          if (!gdk_relative_event_interpolation_history_length (event_win->relative_interpolator))
+            {
+              /* scrolling starts */
+              gdk_window_start_interpolation_callback (event_win);
+            }
+
+          gdk_relative_event_interpolation_history_push (event_win->relative_interpolator,
+                                                         event);
+
+          if (gdk_event_is_scroll_stop_event (event))
+            {
+              /* scrolling stops */
+              gdk_window_stop_interpolation_callback (event_win);
+            }
+          else
+            {
+              events_to_unlink = 2;
+            }
+        }
+
+      return events_to_unlink;
 
     default:
       return 0;

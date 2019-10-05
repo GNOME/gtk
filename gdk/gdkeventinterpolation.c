@@ -77,7 +77,7 @@ gdk_absolute_event_interpolation_new (void)
 
   /* TODO use a ring buffer for event_history? */
   interpolator = g_slice_new (GdkAbsoluteEventInterpolation);
-  interpolator->event_history = g_ptr_array_new_with_free_func ((GDestroyNotify) g_object_unref);
+  interpolator->event_history = g_ptr_array_new_with_free_func ((GDestroyNotify) gdk_event_free);
 
   return interpolator;
 }
@@ -97,7 +97,7 @@ gdk_absolute_event_interpolation_history_push (GdkAbsoluteEventInterpolation  *i
   g_return_if_fail (gdk_event_get_event_type (event) == GDK_SCROLL);
   g_return_if_fail (event->scroll.direction == GDK_SCROLL_SMOOTH);
 
-  g_ptr_array_add (interpolator->event_history, g_object_ref (event));
+  g_ptr_array_add (interpolator->event_history, gdk_event_copy (event));
 
   if (interpolator->event_history->len > EVENT_HISTORY_MAX_ELEMENTS)
     g_ptr_array_remove_index (interpolator->event_history, 0);
