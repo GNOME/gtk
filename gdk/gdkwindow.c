@@ -297,6 +297,11 @@ gdk_window_init (GdkWindow *window)
 
   window->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                  NULL, g_object_unref);
+
+  window->relative_interpolator = gdk_relative_event_interpolation_new ();
+
+  /* FIXME make that configurable */
+  window->interpolate_events = TRUE;
 }
 
 /* Stop and return on the first non-NULL parent */
@@ -552,6 +557,9 @@ static void
 gdk_window_finalize (GObject *object)
 {
   GdkWindow *window = GDK_WINDOW (object);
+
+  /* FIXME stop any ongoing animation */
+  gdk_relative_event_interpolation_free (window->relative_interpolator);
 
   g_signal_handlers_disconnect_by_func (gdk_window_get_display (window),
                                         seat_removed_cb, window);
@@ -9052,6 +9060,83 @@ _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
       g_source_set_name_by_id (toplevel->synthesized_crossing_event_id,
                                "[gtk+] do_synthesize_crossing_event");
     }
+}
+
+static void
+gdk_window_interpolation_tick_callback (GdkFrameClock *frame_clock,
+                                         GdkWindow     *window)
+{
+  guint32 timestamp_offset_from_latest;
+  gint64 adjusted_interpolation_point;
+  gint64 frame_time = gdk_frame_clock_get_frame_time (frame_clock);
+
+  timestamp_offset_from_latest =
+    gdk_relative_event_interpolation_offset_from_latest (window->relative_interpolator,
+                                                         frame_time);
+
+  /* TODO replace the following with a moving window over, say, the last 20 input events */
+  if (window->timestamp_offset_from_latest < timestamp_offset_from_latest)
+    window->timestamp_offset_from_latest = timestamp_offset_from_latest;
+
+  /*
+   * limit to at most 40ms between the upcoming display frame and the last
+   * input event. this is done in order to not get stuck with high latency due
+   * to transient hiccups in received input events. since frame_time is the
+   * timestamp of the upcoming frame, and the input events in the interpolation
+   * history are from the previous frame at the latest, assuming a 60Hz display
+   * there will be at least 16ms gap between the upcoming frame and the latest
+   * event. if due to some reason (display manager delay etc) input events
+   * arrived a frame late we already have at least 32ms gap. experimentally
+   * 40ms seems like a good hard limit.
+   *
+   * note that in order to get smooth animation, window->timestamp_offset_from_latest
+   * should stay relatively constant.
+   */
+  if (window->timestamp_offset_from_latest > 40)
+    window->timestamp_offset_from_latest = 40;
+
+  adjusted_interpolation_point = frame_time - (window->timestamp_offset_from_latest * 1000);
+
+  /* synthesize and send an interpolated event */
+  GdkEvent* interpolated_event =
+    gdk_relative_event_interpolation_interpolate_event (window->relative_interpolator,
+                                                        adjusted_interpolation_point);
+
+  if (interpolated_event)
+    {
+      _gdk_event_emit(interpolated_event);
+      gdk_event_free (interpolated_event);
+    }
+}
+
+static void gdk_window_start_interpolation_callback(GdkWindow *window)
+{
+  window->timestamp_offset_from_latest = 0;
+  GdkFrameClock *frame_clock = gdk_window_get_frame_clock (window);
+
+  /* start animation */
+  if (frame_clock && !window->interpolation_tick_id)
+    {
+      window->interpolation_tick_id = g_signal_connect (frame_clock, "update",
+                                                         G_CALLBACK (gdk_window_interpolation_tick_callback),
+                                                         window);
+      gdk_frame_clock_begin_updating (frame_clock);
+    }
+}
+
+static void gdk_window_stop_interpolation_callback(GdkWindow *window)
+{
+  GdkFrameClock *frame_clock = gdk_window_get_frame_clock (window);
+
+  /* stop animation */
+  if (frame_clock && window->interpolation_tick_id)
+    {
+      g_signal_handler_disconnect (frame_clock, window->interpolation_tick_id);
+      window->interpolation_tick_id = 0;
+      gdk_frame_clock_end_updating (frame_clock);
+    }
+
+  gdk_relative_event_interpolation_history_reset (window->relative_interpolator);
 }
 
 /* Don't use for crossing events */
