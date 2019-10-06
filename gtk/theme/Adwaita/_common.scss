@@ -3983,15 +3983,6 @@ filechooserbutton:drop(active) {
 }
 
 stacksidebar {
-  &.sidebar {
-    &:dir(ltr),
-    &.left,
-    &.left:dir(rtl) { list { @extend %sidebar_left; }}
-
-    &:dir(rtl),
-    &.right { list { @extend %sidebar_right; }}
-  }
-
   row {
     padding: 10px 4px;
 
