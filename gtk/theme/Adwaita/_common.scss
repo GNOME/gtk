@@ -3298,7 +3298,10 @@ list {
   > row.expander { padding: 0px; }
   > row.expander .row-header { padding: 2px; }
 
-  &.separators > row:not(:first-child) {
+  &.separators.horizontal row:not(:first-child) {
+    border-left: 1px solid $borders_color;
+  }
+  &.separators:not(.horizontal) row:not(:first-child) {
     border-top: 1px solid $borders_color;
   }
 }
