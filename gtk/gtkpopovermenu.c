@@ -279,8 +279,8 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
 static void
 gtk_popover_menu_map (GtkWidget *widget)
 {
-  GTK_WIDGET_CLASS (gtk_popover_menu_parent_class)->map (widget);
   gtk_popover_menu_open_submenu (GTK_POPOVER_MENU (widget), "main");
+  GTK_WIDGET_CLASS (gtk_popover_menu_parent_class)->map (widget);
 }
 
 static void
