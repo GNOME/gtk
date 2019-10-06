@@ -514,7 +514,7 @@ render_fallback_node (GskGLRenderer       *self,
   cairo_scale (cr, 1, -1);
   cairo_translate (cr, 0, -surface_height / scale);
   cairo_set_source_surface (cr, rendered_surface, 0, 0);
-  cairo_rectangle (cr, 0, 0, surface_width, surface_height);
+  cairo_rectangle (cr, 0, 0, surface_width / scale, surface_height / scale);
   cairo_fill (cr);
   cairo_restore (cr);
 
