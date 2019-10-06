@@ -994,9 +994,9 @@ static void
 update_buttons_sensitivity (GtkSpinButton *spin_button)
 {
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
-  int lower = gtk_adjustment_get_lower (priv->adjustment);
-  int upper = gtk_adjustment_get_upper (priv->adjustment);
-  int value = gtk_adjustment_get_value (priv->adjustment);
+  const double lower = gtk_adjustment_get_lower (priv->adjustment);
+  const double upper = gtk_adjustment_get_upper (priv->adjustment);
+  const double value = gtk_adjustment_get_value (priv->adjustment);
 
   gtk_widget_set_sensitive (priv->up_button,
                             priv->wrap || upper - value > EPSILON);
