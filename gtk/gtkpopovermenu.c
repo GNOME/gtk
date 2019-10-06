@@ -287,8 +287,8 @@ gtk_popover_menu_map (GtkWidget *widget)
 static void
 gtk_popover_menu_unmap (GtkWidget *widget)
 {
-  gtk_popover_menu_open_submenu (GTK_POPOVER_MENU (widget), "main");
   GTK_WIDGET_CLASS (gtk_popover_menu_parent_class)->unmap (widget);
+  gtk_popover_menu_open_submenu (GTK_POPOVER_MENU (widget), "main");
 }
 
 static void
