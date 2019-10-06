@@ -2220,14 +2220,15 @@ gtk_tree_view_dispose (GObject *object)
 
   gtk_tree_view_set_model (tree_view, NULL);
 
-  g_clear_object (&priv->hadjustment);
-  g_clear_object (&priv->vadjustment);
   g_clear_object (&priv->horizontal_grid_line_texture);
   g_clear_object (&priv->vertical_grid_line_texture);
   g_clear_object (&priv->horizontal_tree_line_texture);
   g_clear_object (&priv->vertical_tree_line_texture);
 
   G_OBJECT_CLASS (gtk_tree_view_parent_class)->dispose (object);
+
+  g_clear_object (&priv->hadjustment);
+  g_clear_object (&priv->vadjustment);
 }
 
 /* GtkWidget::map helper */

@@ -2586,6 +2586,20 @@ gtk_scrolled_window_dispose (GObject *object)
   remove_indicator (scrolled_window, &priv->hindicator);
   remove_indicator (scrolled_window, &priv->vindicator);
 
+  if (priv->deceleration_id)
+    {
+      gtk_widget_remove_tick_callback (GTK_WIDGET (object), priv->deceleration_id);
+      priv->deceleration_id = 0;
+    }
+
+  if (priv->scroll_events_overshoot_id)
+    {
+      g_source_remove (priv->scroll_events_overshoot_id);
+      priv->scroll_events_overshoot_id = 0;
+    }
+
+  G_OBJECT_CLASS (gtk_scrolled_window_parent_class)->dispose (object);
+
   if (priv->hscrollbar)
     {
       GtkAdjustment *hadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
@@ -2607,20 +2621,6 @@ gtk_scrolled_window_dispose (GObject *object)
       gtk_widget_unparent (priv->vscrollbar);
       priv->vscrollbar = NULL;
     }
-
-  if (priv->deceleration_id)
-    {
-      gtk_widget_remove_tick_callback (GTK_WIDGET (object), priv->deceleration_id);
-      priv->deceleration_id = 0;
-    }
-
-  if (priv->scroll_events_overshoot_id)
-    {
-      g_source_remove (priv->scroll_events_overshoot_id);
-      priv->scroll_events_overshoot_id = 0;
-    }
-
-  G_OBJECT_CLASS (gtk_scrolled_window_parent_class)->dispose (object);
 }
 
 static void
