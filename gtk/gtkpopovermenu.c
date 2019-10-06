@@ -215,7 +215,10 @@ focus_out (GtkEventControllerKey *controller,
            GdkNotifyType          detail,
            GtkPopoverMenu        *menu)
 {
-  if (!gtk_event_controller_key_contains_focus (controller))
+  GtkWidget *new_focus = gtk_root_get_focus (gtk_widget_get_root (GTK_WIDGET (menu)));
+
+  if (!gtk_event_controller_key_contains_focus (controller) &&
+      new_focus != NULL)
     {
       if (menu->parent_menu &&
           GTK_POPOVER_MENU (menu->parent_menu)->open_submenu == (GtkWidget*) menu)
