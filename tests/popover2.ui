@@ -106,13 +106,13 @@
         </child>
         <child>
           <object class="GtkModelButton">
-            <property name="label">Submenu 1</property>
+            <property name="text">Submenu 1</property>
             <property name="popover">submenu1</property>
           </object>
         </child>
         <child>
           <object class="GtkModelButton">
-            <property name="label">Submenu 2</property>
+            <property name="text">Submenu 2</property>
             <property name="popover">submenu2</property>
           </object>
         </child>
@@ -370,7 +370,7 @@
         </child>
         <child>
           <object class="GtkModelButton">
-            <property name="label">Subsubmenu</property>
+            <property name="text">Subsubmenu</property>
             <property name="popover">subsubmenu</property>
           </object>
         </child>
