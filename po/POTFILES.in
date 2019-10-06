@@ -295,6 +295,7 @@ gtk/gtktexttag.c
 gtk/gtktexttagtable.c
 gtk/gtktextutil.c
 gtk/gtktextview.c
+gtk/gtktextviewchild.c
 gtk/gtktogglebutton.c
 gtk/gtktoggletoolbutton.c
 gtk/gtktoolbar.c
