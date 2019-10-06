@@ -26,7 +26,6 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbin.h>
 #include <gtk/gtkstack.h>
 
 G_BEGIN_DECLS
@@ -42,10 +41,10 @@ GType       gtk_stack_sidebar_get_type  (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_stack_sidebar_new       (void);
 GDK_AVAILABLE_IN_ALL
-void        gtk_stack_sidebar_set_stack (GtkStackSidebar *sidebar,
+void        gtk_stack_sidebar_set_stack (GtkStackSidebar *self,
                                          GtkStack        *stack);
 GDK_AVAILABLE_IN_ALL
-GtkStack *  gtk_stack_sidebar_get_stack (GtkStackSidebar *sidebar);
+GtkStack *  gtk_stack_sidebar_get_stack (GtkStackSidebar *self);
 
 G_END_DECLS
 
