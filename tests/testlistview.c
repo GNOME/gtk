@@ -1,6 +1,255 @@
 #include <gtk/gtk.h>
 
-#define ROWS 30
+#define FILE_INFO_TYPE_SELECTION (file_info_selection_get_type ())
+
+G_DECLARE_FINAL_TYPE (FileInfoSelection, file_info_selection, FILE_INFO, SELECTION, GObject)
+
+struct _FileInfoSelection
+{
+  GObject parent_instance;
+
+  GListModel *model;
+};
+
+struct _FileInfoSelectionClass
+{
+  GObjectClass parent_class;
+};
+
+static GType
+file_info_selection_get_item_type (GListModel *list)
+{
+  FileInfoSelection *self = FILE_INFO_SELECTION (list);
+
+  return g_list_model_get_item_type (self->model);
+}
+
+static guint
+file_info_selection_get_n_items (GListModel *list)
+{
+  FileInfoSelection *self = FILE_INFO_SELECTION (list);
+
+  return g_list_model_get_n_items (self->model);
+}
+
+static gpointer
+file_info_selection_get_item (GListModel *list,
+                               guint       position)
+{
+  FileInfoSelection *self = FILE_INFO_SELECTION (list);
+
+  return g_list_model_get_item (self->model, position);
+}
+
+static void
+file_info_selection_list_model_init (GListModelInterface *iface)
+{
+  iface->get_item_type = file_info_selection_get_item_type;
+  iface->get_n_items = file_info_selection_get_n_items;
+  iface->get_item = file_info_selection_get_item;
+}
+
+static gboolean
+file_info_selection_is_selected (GtkSelectionModel *model,
+                                 guint              position)
+{
+  FileInfoSelection *self = FILE_INFO_SELECTION (model);
+  gpointer item;
+
+  item = g_list_model_get_item (self->model, position);
+  if (item == NULL)
+    return FALSE;
+
+  if (GTK_IS_TREE_LIST_ROW (item))
+    {
+      GtkTreeListRow *row = item;
+      item = gtk_tree_list_row_get_item (row);
+      g_object_unref (row);
+    }
+
+  return g_file_info_get_attribute_boolean (item, "filechooser::selected");
+}
+
+static void
+file_info_selection_set_selected (FileInfoSelection *self,
+                                  guint              position,
+                                  gboolean           selected)
+{
+  gpointer item;
+
+  item = g_list_model_get_item (self->model, position);
+  if (item == NULL)
+    return;
+
+  if (GTK_IS_TREE_LIST_ROW (item))
+    {
+      GtkTreeListRow *row = item;
+      item = gtk_tree_list_row_get_item (row);
+      g_object_unref (row);
+    }
+
+  g_file_info_set_attribute_boolean (item, "filechooser::selected", selected);
+}
+
+static gboolean
+file_info_selection_select_item (GtkSelectionModel *model,
+                                 guint              position,
+                                 gboolean           exclusive)
+{
+  FileInfoSelection *self = FILE_INFO_SELECTION (model);
+
+  if (exclusive)
+    {
+      guint i;
+
+      for (i = 0; i < g_list_model_get_n_items (self->model); i++)
+        file_info_selection_set_selected (self, i, i == position);
+
+      gtk_selection_model_selection_changed (model, 0, g_list_model_get_n_items (self->model));
+    }
+  else
+    {
+      file_info_selection_set_selected (self, position, TRUE);
+
+      gtk_selection_model_selection_changed (model, position, 1);
+    }
+
+  return TRUE;
+}
+
+static gboolean
+file_info_selection_unselect_item (GtkSelectionModel *model,
+                                   guint              position)
+{
+  FileInfoSelection *self = FILE_INFO_SELECTION (model);
+
+  file_info_selection_set_selected (self, position, FALSE);
+
+  gtk_selection_model_selection_changed (model, position, 1);
+
+  return TRUE;
+}
+
+static gboolean
+file_info_selection_select_range (GtkSelectionModel *model,
+                                  guint              position,
+                                  guint              n_items,
+                                  gboolean           exclusive)
+{
+  FileInfoSelection *self = FILE_INFO_SELECTION (model);
+  guint i;
+
+  if (exclusive)
+    for (i = 0; i < position; i++)
+      file_info_selection_set_selected (self, i, FALSE);
+
+  for (i = position; i < position + n_items; i++)
+    file_info_selection_set_selected (self, i, TRUE);
+
+  if (exclusive)
+    for (i = position + n_items; i < g_list_model_get_n_items (self->model); i++)
+      file_info_selection_set_selected (self, i, FALSE);
+
+  if (exclusive)
+    gtk_selection_model_selection_changed (model, 0, g_list_model_get_n_items (self->model));
+  else
+    gtk_selection_model_selection_changed (model, position, n_items);
+
+  return TRUE;
+}
+
+static gboolean
+file_info_selection_unselect_range (GtkSelectionModel *model,
+                                    guint              position,
+                                    guint              n_items)
+{
+  FileInfoSelection *self = FILE_INFO_SELECTION (model);
+  guint i;
+
+  for (i = position; i < position + n_items; i++)
+    file_info_selection_set_selected (self, i, FALSE);
+
+  gtk_selection_model_selection_changed (model, position, n_items);
+
+  return TRUE;
+}
+
+static void
+file_info_selection_selection_model_init (GtkSelectionModelInterface *iface)
+{
+  iface->is_selected = file_info_selection_is_selected; 
+  iface->select_item = file_info_selection_select_item; 
+  iface->unselect_item = file_info_selection_unselect_item; 
+  iface->select_range = file_info_selection_select_range; 
+  iface->unselect_range = file_info_selection_unselect_range; 
+}
+
+G_DEFINE_TYPE_EXTENDED (FileInfoSelection, file_info_selection, G_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
+                                               file_info_selection_list_model_init)
+                        G_IMPLEMENT_INTERFACE (GTK_TYPE_SELECTION_MODEL,
+                                               file_info_selection_selection_model_init))
+
+static void
+file_info_selection_items_changed_cb (GListModel        *model,
+                                      guint              position,
+                                      guint              removed,
+                                      guint              added,
+                                      FileInfoSelection *self)
+{
+  g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
+}
+
+static void
+file_info_selection_clear_model (FileInfoSelection *self)
+{
+  if (self->model == NULL)
+    return;
+
+  g_signal_handlers_disconnect_by_func (self->model, 
+                                        file_info_selection_items_changed_cb,
+                                        self);
+  g_clear_object (&self->model);
+}
+
+static void
+file_info_selection_dispose (GObject *object)
+{
+  FileInfoSelection *self = FILE_INFO_SELECTION (object);
+
+  file_info_selection_clear_model (self);
+
+  G_OBJECT_CLASS (file_info_selection_parent_class)->dispose (object);
+}
+
+static void
+file_info_selection_class_init (FileInfoSelectionClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->dispose = file_info_selection_dispose;
+}
+
+static void
+file_info_selection_init (FileInfoSelection *self)
+{
+}
+
+static FileInfoSelection *
+file_info_selection_new (GListModel *model)
+{
+  FileInfoSelection *result;
+
+  result = g_object_new (FILE_INFO_TYPE_SELECTION, NULL);
+
+  result->model = g_object_ref (model);
+  g_signal_connect (result->model, "items-changed",
+                    G_CALLBACK (file_info_selection_items_changed_cb), result);
+
+  return result;
+}
+
+/*** ---------------------- ***/
 
 GSList *pending = NULL;
 guint active = 0;
@@ -369,6 +618,7 @@ main (int argc, char *argv[])
   GtkTreeListModel *tree;
   GtkFilterListModel *filter;
   GtkFilter *custom_filter;
+  FileInfoSelection *selectionmodel;
   GFile *root;
   GListModel *toplevels;
 
@@ -413,7 +663,10 @@ main (int argc, char *argv[])
   g_signal_connect (search_entry, "search-changed", G_CALLBACK (search_changed_cb), custom_filter);
   g_object_unref (custom_filter);
 
-  gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (filter));
+  selectionmodel = file_info_selection_new (G_LIST_MODEL (filter));
+  g_object_unref (filter);
+
+  gtk_list_view_set_model (GTK_LIST_VIEW (listview), G_LIST_MODEL (selectionmodel));
 
   statusbar = gtk_statusbar_new ();
   gtk_widget_add_tick_callback (statusbar, (GtkTickCallback) update_statusbar, NULL, NULL);
@@ -423,7 +676,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (vbox), statusbar);
 
   g_object_unref (tree);
-  g_object_unref (filter);
+  g_object_unref (selectionmodel);
 
   gtk_widget_show (win);
 
