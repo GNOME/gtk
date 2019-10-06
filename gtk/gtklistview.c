@@ -68,6 +68,8 @@ struct _GtkListView
 
   GtkListItemTracker *anchor;
   double anchor_align;
+  /* the last item that was selected - basically the location to extend selections from */
+  GtkListItemTracker *selected;
 };
 
 struct _ListRow
@@ -567,6 +569,11 @@ gtk_list_view_dispose (GObject *object)
       gtk_list_item_tracker_free (self->item_manager, self->anchor);
       self->anchor = NULL;
     }
+  if (self->selected)
+    {
+      gtk_list_item_tracker_free (self->item_manager, self->selected);
+      self->selected = NULL;
+    }
   g_clear_object (&self->item_manager);
 
   G_OBJECT_CLASS (gtk_list_view_parent_class)->dispose (object);
@@ -715,7 +722,44 @@ gtk_list_view_select_item (GtkWidget  *widget,
   selection_model = gtk_list_item_manager_get_model (self->item_manager);
   g_variant_get (parameter, "(ubb)", &pos, &modify, &extend);
 
-  /* XXX: handle extend by tracking the item to extend from */
+  if (extend)
+    {
+      guint start_pos = gtk_list_item_tracker_get_position (self->item_manager, self->selected);
+      if (start_pos != GTK_INVALID_LIST_POSITION)
+        {
+          guint max = MAX (start_pos, pos);
+          guint min = MIN (start_pos, pos);
+          if (modify)
+            {
+              if (gtk_selection_model_is_selected (selection_model, start_pos))
+                {
+                  if (gtk_selection_model_select_range (selection_model,
+                                                        min,
+                                                        max - min + 1,
+                                                        FALSE))
+                    return;
+                }
+              else
+                {
+                  if (gtk_selection_model_unselect_range (selection_model,
+                                                          min,
+                                                          max - min + 1))
+                    return;
+                }
+            }
+          else
+            {
+              if (gtk_selection_model_select_range (selection_model,
+                                                    min,
+                                                    max - min + 1,
+                                                    TRUE))
+                return;
+            }
+        }
+      /* If there's no range to select or selecting ranges isn't supported
+       * by the model, fall through to normal setting.
+       */
+    }
 
   if (modify)
     {
@@ -728,6 +772,10 @@ gtk_list_view_select_item (GtkWidget  *widget,
     {
       gtk_selection_model_select_item (selection_model, pos, TRUE);
     }
+  gtk_list_item_tracker_set_position (self->item_manager,
+                                      self->selected,
+                                      pos,
+                                      0, 0);
 }
 
 static void
@@ -853,6 +901,7 @@ gtk_list_view_init (GtkListView *self)
 {
   self->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self), ListRow, ListRowAugment, list_row_augment);
   self->anchor = gtk_list_item_tracker_new (self->item_manager);
+  self->selected = gtk_list_item_tracker_new (self->item_manager);
 
   self->adjustment[GTK_ORIENTATION_HORIZONTAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   self->adjustment[GTK_ORIENTATION_VERTICAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
