@@ -2117,6 +2117,8 @@ popover.menu modelbutton:selected { color: #ffffff; background-color: #3584e4; }
 
 popover.menu modelbutton:selected accelerator { color: silver; }
 
+statusbar { padding: 6px 10px 6px 10px; }
+
 /* GTK NAMED COLORS ---------------- use responsibly! */
 /*
 widget text/foreground color */
