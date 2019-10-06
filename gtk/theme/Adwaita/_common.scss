@@ -3753,7 +3753,12 @@ list {
   row.expander .row-header { padding: 2px; }
 
   &.separators row:not(:first-child) {
-    border-top: 1px solid $borders_color;
+    &.vertical {
+      border-left: 1px solid $borders_color;
+    }
+    &:not(.vertical) {
+      border-top: 1px solid $borders_color;
+    }
   }
 }
 
