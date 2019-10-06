@@ -26,11 +26,14 @@
 #include "gtkfunctionslistitemfactoryprivate.h"
 #include "gtkintl.h"
 #include "gtklistitemmanagerprivate.h"
+#include "gtkorientableprivate.h"
+#include "gtkprivate.h"
 #include "gtkrbtreeprivate.h"
 #include "gtkscrollable.h"
 #include "gtkselectionmodel.h"
 #include "gtksingleselection.h"
 #include "gtkstylecontext.h"
+#include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
 /* Maximum number of list items created by the listview.
@@ -63,6 +66,7 @@ struct _GtkListView
   GtkAdjustment *adjustment[2];
   GtkScrollablePolicy scroll_policy[2];
   gboolean show_separators;
+  GtkOrientation orientation;
 
   int list_width;
 
@@ -90,6 +94,7 @@ enum
   PROP_HADJUSTMENT,
   PROP_HSCROLL_POLICY,
   PROP_MODEL,
+  PROP_ORIENTATION,
   PROP_SHOW_SEPARATORS,
   PROP_VADJUSTMENT,
   PROP_VSCROLL_POLICY,
@@ -98,6 +103,7 @@ enum
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkListView, gtk_list_view, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
@@ -262,7 +268,7 @@ static void
 gtk_list_view_adjustment_value_changed_cb (GtkAdjustment *adjustment,
                                            GtkListView   *self)
 {
-  if (adjustment == self->adjustment[GTK_ORIENTATION_VERTICAL])
+  if (adjustment == self->adjustment[self->orientation])
     {
       ListRow *row;
       guint pos;
@@ -288,21 +294,15 @@ gtk_list_view_update_adjustments (GtkListView    *self,
 {
   double upper, page_size, value;
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      page_size = gtk_widget_get_width (GTK_WIDGET (self));
-      upper = self->list_width;
-      value = 0;
-      if (_gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
-        value = upper - page_size - value;
-      value = gtk_adjustment_get_value (self->adjustment[orientation]);
-    }
-  else
+  if (orientation == self->orientation)
     {
       ListRow *row;
       guint anchor;
 
-      page_size = gtk_widget_get_height (GTK_WIDGET (self));
+      if (self->orientation == GTK_ORIENTATION_VERTICAL)
+        page_size = gtk_widget_get_height (GTK_WIDGET (self));
+      else
+        page_size = gtk_widget_get_width (GTK_WIDGET (self));
       upper = gtk_list_view_get_list_height (self);
 
       anchor = gtk_list_item_tracker_get_position (self->item_manager, self->anchor);
@@ -312,6 +312,18 @@ gtk_list_view_update_adjustments (GtkListView    *self,
       else
         value = 0;
       value -= self->anchor_align * (page_size - (row ? row->height : 0));
+    }
+  else
+    {
+      if (self->orientation == GTK_ORIENTATION_VERTICAL)
+        page_size = gtk_widget_get_width (GTK_WIDGET (self));
+      else
+        page_size = gtk_widget_get_height (GTK_WIDGET (self));
+      upper = self->list_width;
+      value = 0;
+      if (_gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
+        value = upper - page_size - value;
+      value = gtk_adjustment_get_value (self->adjustment[orientation]);
     }
   upper = MAX (upper, page_size);
 
@@ -445,10 +457,12 @@ gtk_list_view_measure (GtkWidget      *widget,
                        int            *minimum_baseline,
                        int            *natural_baseline)
 {
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_list_view_measure_across (widget, orientation, for_size, minimum, natural);
-  else
+  GtkListView *self = GTK_LIST_VIEW (widget);
+
+  if (orientation == self->orientation)
     gtk_list_view_measure_list (widget, orientation, for_size, minimum, natural);
+  else
+    gtk_list_view_measure_across (widget, orientation, for_size, minimum, natural);
 }
 
 static void
@@ -462,19 +476,23 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   ListRow *row;
   GArray *heights;
   int min, nat, row_height;
+  GtkOrientation opposite_orientation;
+
+  opposite_orientation = OPPOSITE_ORIENTATION (self->orientation);
 
   /* step 0: exit early if list is empty */
   if (gtk_list_item_manager_get_root (self->item_manager) == NULL)
     return;
 
   /* step 1: determine width of the list */
-  gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
+  gtk_widget_measure (widget, opposite_orientation,
                       -1,
                       &min, &nat, NULL, NULL);
-  if (self->scroll_policy[GTK_ORIENTATION_HORIZONTAL] == GTK_SCROLL_MINIMUM)
-    self->list_width = MAX (min, width);
+  self->list_width = self->orientation == GTK_ORIENTATION_VERTICAL ? width : height;
+  if (self->scroll_policy[opposite_orientation] == GTK_SCROLL_MINIMUM)
+    self->list_width = MAX (min, self->list_width);
   else
-    self->list_width = MAX (nat, width);
+    self->list_width = MAX (nat, self->list_width);
 
   /* step 2: determine height of known list items */
   heights = g_array_new (FALSE, FALSE, sizeof (int));
@@ -486,10 +504,10 @@ gtk_list_view_size_allocate (GtkWidget *widget,
       if (row->parent.widget == NULL)
         continue;
 
-      gtk_widget_measure (row->parent.widget, GTK_ORIENTATION_VERTICAL,
+      gtk_widget_measure (row->parent.widget, self->orientation,
                           self->list_width,
                           &min, &nat, NULL, NULL);
-      if (self->scroll_policy[GTK_ORIENTATION_VERTICAL] == GTK_SCROLL_MINIMUM)
+      if (self->scroll_policy[self->orientation] == GTK_SCROLL_MINIMUM)
         row_height = min;
       else
         row_height = nat;
@@ -524,20 +542,39 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   gtk_list_view_update_adjustments (self, GTK_ORIENTATION_VERTICAL);
 
   /* step 4: actually allocate the widgets */
-  child_allocation.x = - gtk_adjustment_get_value (self->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+  child_allocation.x = - round (gtk_adjustment_get_value (self->adjustment[GTK_ORIENTATION_HORIZONTAL]));
   child_allocation.y = - round (gtk_adjustment_get_value (self->adjustment[GTK_ORIENTATION_VERTICAL]));
-  child_allocation.width = self->list_width;
-  for (row = gtk_list_item_manager_get_first (self->item_manager);
-       row != NULL;
-       row = gtk_rb_tree_node_get_next (row))
+  if (self->orientation == GTK_ORIENTATION_VERTICAL)
     {
-      if (row->parent.widget)
+      child_allocation.width = self->list_width;
+      for (row = gtk_list_item_manager_get_first (self->item_manager);
+           row != NULL;
+           row = gtk_rb_tree_node_get_next (row))
         {
-          child_allocation.height = row->height;
-          gtk_widget_size_allocate (row->parent.widget, &child_allocation, -1);
-        }
+          if (row->parent.widget)
+            {
+              child_allocation.height = row->height;
+              gtk_widget_size_allocate (row->parent.widget, &child_allocation, -1);
+            }
 
-      child_allocation.y += row->height * row->parent.n_items;
+          child_allocation.y += row->height * row->parent.n_items;
+        }
+    }
+  else
+    {
+      child_allocation.height = self->list_width;
+      for (row = gtk_list_item_manager_get_first (self->item_manager);
+           row != NULL;
+           row = gtk_rb_tree_node_get_next (row))
+        {
+          if (row->parent.widget)
+            {
+              child_allocation.width = row->height;
+              gtk_widget_size_allocate (row->parent.widget, &child_allocation, -1);
+            }
+
+          child_allocation.x += row->height * row->parent.n_items;
+        }
     }
 }
 
@@ -609,6 +646,10 @@ gtk_list_view_get_property (GObject    *object,
 
     case PROP_MODEL:
       g_value_set_object (value, self->model);
+      break;
+
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, self->orientation);
       break;
 
     case PROP_SHOW_SEPARATORS:
@@ -690,6 +731,19 @@ gtk_list_view_set_property (GObject      *object,
 
     case PROP_MODEL:
       gtk_list_view_set_model (self, g_value_get_object (value));
+      break;
+
+    case PROP_ORIENTATION:
+      {
+        GtkOrientation orientation = g_value_get_enum (value);
+        if (self->orientation != orientation)
+          {
+            self->orientation = orientation;
+            _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
+            gtk_widget_queue_resize (GTK_WIDGET (self));
+            g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ORIENTATION]);
+          }
+      }
       break;
 
     case PROP_SHOW_SEPARATORS:
@@ -802,10 +856,14 @@ gtk_list_view_scroll_to_item (GtkWidget  *widget,
   if (row->parent.widget)
     {
       int y = list_row_get_y (self, row);
-      int start = gtk_adjustment_get_value (self->adjustment[GTK_ORIENTATION_VERTICAL]);
-      int height = gtk_widget_get_height (GTK_WIDGET (self));
+      int start = gtk_adjustment_get_value (self->adjustment[self->orientation]);
+      int height;
       double align;
 
+      if (self->orientation == GTK_ORIENTATION_VERTICAL)
+        height = gtk_widget_get_height (GTK_WIDGET (self));
+      else
+        height = gtk_widget_get_width (GTK_WIDGET (self));
       if (y < start)
         align = 0.0;
       else if (y + row->height > start + height)
@@ -867,6 +925,20 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GtkListView:orientation:
+   *
+   * The orientation of the orientable. See GtkOrientable:orientation
+   * for details.
+   */
+  properties[PROP_ORIENTATION] =
+    g_param_spec_enum ("orientation",
+                       P_("Orientation"),
+                       P_("The orientation of the orientable"),
+                       GTK_TYPE_ORIENTATION,
+                       GTK_ORIENTATION_VERTICAL,
+                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
    * GtkListView:show-separators:
    *
    * Show separators between rows
@@ -924,6 +996,7 @@ gtk_list_view_init (GtkListView *self)
   self->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self), ListRow, ListRowAugment, list_row_augment);
   self->anchor = gtk_list_item_tracker_new (self->item_manager);
   self->selected = gtk_list_item_tracker_new (self->item_manager);
+  self->orientation = GTK_ORIENTATION_VERTICAL;
 
   self->adjustment[GTK_ORIENTATION_HORIZONTAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   self->adjustment[GTK_ORIENTATION_VERTICAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
