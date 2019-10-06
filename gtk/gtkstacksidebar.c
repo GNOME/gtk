@@ -23,12 +23,14 @@
 
 #include "gtkstacksidebar.h"
 
+#include "gtkbinlayout.h"
 #include "gtklabel.h"
 #include "gtklistbox.h"
 #include "gtkscrolledwindow.h"
 #include "gtkseparator.h"
 #include "gtkstylecontext.h"
 #include "gtkselectionmodel.h"
+#include "gtkstack.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -55,28 +57,24 @@
  * pages.
  */
 
-typedef struct _GtkStackSidebarPrivate GtkStackSidebarPrivate;
 typedef struct _GtkStackSidebarClass   GtkStackSidebarClass;
 
 struct _GtkStackSidebar
 {
-  GtkBin parent;
-};
+  GtkWidget parent_instance;
 
-struct _GtkStackSidebarClass
-{
-  GtkBinClass parent_class;
-};
-
-struct _GtkStackSidebarPrivate
-{
   GtkListBox *list;
   GtkStack *stack;
   GtkSelectionModel *pages;
   GHashTable *rows;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkStackSidebar, gtk_stack_sidebar, GTK_TYPE_BIN)
+struct _GtkStackSidebarClass
+{
+  GtkWidgetClass parent_class;
+};
+
+G_DEFINE_TYPE (GtkStackSidebar, gtk_stack_sidebar, GTK_TYPE_WIDGET)
 
 enum
 {
@@ -110,12 +108,12 @@ gtk_stack_sidebar_get_property (GObject    *object,
                                 GValue     *value,
                                 GParamSpec *pspec)
 {
-  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (GTK_STACK_SIDEBAR (object));
+  GtkStackSidebar *self = GTK_STACK_SIDEBAR (object);
 
   switch (prop_id)
     {
     case PROP_STACK:
-      g_value_set_object (value, priv->stack);
+      g_value_set_object (value, self->stack);
       break;
 
     default:
@@ -143,50 +141,46 @@ gtk_stack_sidebar_row_selected (GtkListBox    *box,
                                 GtkListBoxRow *row,
                                 gpointer       userdata)
 {
-  GtkStackSidebar *sidebar = GTK_STACK_SIDEBAR (userdata);
-  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
+  GtkStackSidebar *self = GTK_STACK_SIDEBAR (userdata);
   guint index;
 
   if (row == NULL)
     return;
 
   index = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (row), "child-index"));
-  gtk_selection_model_select_item (priv->pages, index, TRUE);
+  gtk_selection_model_select_item (self->pages, index, TRUE);
 }
 
 static void
-gtk_stack_sidebar_init (GtkStackSidebar *sidebar)
+gtk_stack_sidebar_init (GtkStackSidebar *self)
 {
   GtkStyleContext *style;
-  GtkStackSidebarPrivate *priv;
   GtkWidget *sw;
-
-  priv = gtk_stack_sidebar_get_instance_private (sidebar);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
 
-  gtk_container_add (GTK_CONTAINER (sidebar), sw);
+  gtk_widget_set_parent (sw, GTK_WIDGET (self));
 
-  priv->list = GTK_LIST_BOX (gtk_list_box_new ());
+  self->list = GTK_LIST_BOX (gtk_list_box_new ());
 
-  gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (priv->list));
+  gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (self->list));
 
-  gtk_list_box_set_header_func (priv->list, update_header, sidebar, NULL);
+  gtk_list_box_set_header_func (self->list, update_header, self, NULL);
 
-  g_signal_connect (priv->list, "row-selected",
-                    G_CALLBACK (gtk_stack_sidebar_row_selected), sidebar);
+  g_signal_connect (self->list, "row-selected",
+                    G_CALLBACK (gtk_stack_sidebar_row_selected), self);
 
-  style = gtk_widget_get_style_context (GTK_WIDGET (sidebar));
+  style = gtk_widget_get_style_context (GTK_WIDGET (self));
   gtk_style_context_add_class (style, "sidebar");
 
-  priv->rows = g_hash_table_new (NULL, NULL);
+  self->rows = g_hash_table_new (NULL, NULL);
 }
 
 static void
-update_row (GtkStackSidebar *sidebar,
+update_row (GtkStackSidebar *self,
             GtkStackPage    *page,
             GtkWidget       *row)
 {
@@ -219,20 +213,18 @@ update_row (GtkStackSidebar *sidebar,
 static void
 on_page_updated (GtkStackPage    *page,
                  GParamSpec      *pspec,
-                 GtkStackSidebar *sidebar)
+                 GtkStackSidebar *self)
 {
-  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
   GtkWidget *row;
 
-  row = g_hash_table_lookup (priv->rows, page);
-  update_row (sidebar, page, row);
+  row = g_hash_table_lookup (self->rows, page);
+  update_row (self, page, row);
 }
 
 static void
 add_child (guint            position,
-           GtkStackSidebar *sidebar)
+           GtkStackSidebar *self)
 {
-  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
   GtkWidget *item;
   GtkWidget *row;
   GtkStackPage *page;
@@ -244,48 +236,46 @@ add_child (guint            position,
   row = gtk_list_box_row_new ();
   gtk_container_add (GTK_CONTAINER (row), item);
 
-  page = g_list_model_get_item (G_LIST_MODEL (priv->pages), position);
-  update_row (sidebar, page, row);
+  page = g_list_model_get_item (G_LIST_MODEL (self->pages), position);
+  update_row (self, page, row);
 
-  gtk_container_add (GTK_CONTAINER (priv->list), row);
+  gtk_container_add (GTK_CONTAINER (self->list), row);
 
   g_object_set_data (G_OBJECT (row), "child-index", GUINT_TO_POINTER (position));
-  if (gtk_selection_model_is_selected (priv->pages, position))
-    gtk_list_box_select_row (priv->list, GTK_LIST_BOX_ROW (row));
+  if (gtk_selection_model_is_selected (self->pages, position))
+    gtk_list_box_select_row (self->list, GTK_LIST_BOX_ROW (row));
   else
-    gtk_list_box_unselect_row (priv->list, GTK_LIST_BOX_ROW (row));
+    gtk_list_box_unselect_row (self->list, GTK_LIST_BOX_ROW (row));
 
-  g_signal_connect (page, "notify", G_CALLBACK (on_page_updated), sidebar);
+  g_signal_connect (page, "notify", G_CALLBACK (on_page_updated), self);
 
-  g_hash_table_insert (priv->rows, page, row);
+  g_hash_table_insert (self->rows, page, row);
 
   g_object_unref (page);
 }
 
 static void
-populate_sidebar (GtkStackSidebar *sidebar)
+populate_sidebar (GtkStackSidebar *self)
 {
-  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
   guint i;
 
-  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (priv->pages)); i++)
-    add_child (i, sidebar);
+  for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->pages)); i++)
+    add_child (i, self);
 }
 
 static void
-clear_sidebar (GtkStackSidebar *sidebar)
+clear_sidebar (GtkStackSidebar *self)
 {
-  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
   GHashTableIter iter;
   GtkStackPage *page;
   GtkWidget *row;
 
-  g_hash_table_iter_init (&iter, priv->rows);
+  g_hash_table_iter_init (&iter, self->rows);
   while (g_hash_table_iter_next (&iter, (gpointer *)&page, (gpointer *)&row))
     {
-      gtk_container_remove (GTK_CONTAINER (priv->list), row);
+      gtk_container_remove (GTK_CONTAINER (self->list), row);
       g_hash_table_iter_remove (&iter);
-      g_signal_handlers_disconnect_by_func (page, on_page_updated, sidebar);
+      g_signal_handlers_disconnect_by_func (page, on_page_updated, self);
     }
 }
 
@@ -294,20 +284,19 @@ items_changed_cb (GListModel       *model,
                   guint             position,
                   guint             removed,
                   guint             added,
-                  GtkStackSidebar  *sidebar)
+                  GtkStackSidebar  *self)
 {
   /* FIXME: we can do better */
-  clear_sidebar (sidebar);
-  populate_sidebar (sidebar);
+  clear_sidebar (self);
+  populate_sidebar (self);
 }
 
 static void
 selection_changed_cb (GtkSelectionModel *model,
                       guint              position,
                       guint              n_items,
-                      GtkStackSidebar   *sidebar)
+                      GtkStackSidebar   *self)
 {
-  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
   guint i;
 
   for (i = position; i < position + n_items; i++)
@@ -315,69 +304,70 @@ selection_changed_cb (GtkSelectionModel *model,
       GtkStackPage *page;
       GtkWidget *row;
 
-      page = g_list_model_get_item (G_LIST_MODEL (priv->pages), i);
-      row = g_hash_table_lookup (priv->rows, page);
-      if (gtk_selection_model_is_selected (priv->pages, i))
-        gtk_list_box_select_row (priv->list, GTK_LIST_BOX_ROW (row));
+      page = g_list_model_get_item (G_LIST_MODEL (self->pages), i);
+      row = g_hash_table_lookup (self->rows, page);
+      if (gtk_selection_model_is_selected (self->pages, i))
+        gtk_list_box_select_row (self->list, GTK_LIST_BOX_ROW (row));
       else
-        gtk_list_box_unselect_row (priv->list, GTK_LIST_BOX_ROW (row));
+        gtk_list_box_unselect_row (self->list, GTK_LIST_BOX_ROW (row));
       g_object_unref (page);
     }
 }
 
 static void
-disconnect_stack_signals (GtkStackSidebar *sidebar)
+disconnect_stack_signals (GtkStackSidebar *self)
 {
-  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
-
-  g_signal_handlers_disconnect_by_func (priv->pages, items_changed_cb, sidebar);
-  g_signal_handlers_disconnect_by_func (priv->pages, selection_changed_cb, sidebar);
+  g_signal_handlers_disconnect_by_func (self->pages, items_changed_cb, self);
+  g_signal_handlers_disconnect_by_func (self->pages, selection_changed_cb, self);
 }
 
 static void
-connect_stack_signals (GtkStackSidebar *sidebar)
+connect_stack_signals (GtkStackSidebar *self)
 {
-  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
-
-  g_signal_connect (priv->pages, "items-changed", G_CALLBACK (items_changed_cb), sidebar);
-  g_signal_connect (priv->pages, "selection-changed", G_CALLBACK (selection_changed_cb), sidebar);
+  g_signal_connect (self->pages, "items-changed", G_CALLBACK (items_changed_cb), self);
+  g_signal_connect (self->pages, "selection-changed", G_CALLBACK (selection_changed_cb), self);
 }
 
 static void
-set_stack (GtkStackSidebar *sidebar,
+set_stack (GtkStackSidebar *self,
            GtkStack        *stack)
 {
-  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
-
   if (stack)
     {
-      priv->stack = g_object_ref (stack);
-      priv->pages = gtk_stack_get_pages (stack);
-      populate_sidebar (sidebar);
-      connect_stack_signals (sidebar);
+      self->stack = g_object_ref (stack);
+      self->pages = gtk_stack_get_pages (stack);
+      populate_sidebar (self);
+      connect_stack_signals (self);
     }
 }
 
 static void
-unset_stack (GtkStackSidebar *sidebar)
+unset_stack (GtkStackSidebar *self)
 {
-  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
-
-  if (priv->stack)
+  if (self->stack)
     {
-      disconnect_stack_signals (sidebar);
-      clear_sidebar (sidebar);
-      g_clear_object (&priv->stack);
-      g_clear_object (&priv->pages);
+      disconnect_stack_signals (self);
+      clear_sidebar (self);
+      g_clear_object (&self->stack);
+      g_clear_object (&self->pages);
     }
 }
 
 static void
 gtk_stack_sidebar_dispose (GObject *object)
 {
-  GtkStackSidebar *sidebar = GTK_STACK_SIDEBAR (object);
+  GtkStackSidebar *self = GTK_STACK_SIDEBAR (object);
+  GtkWidget *child;
 
-  unset_stack (sidebar);
+  unset_stack (self);
+
+  /* The scrolled window */
+  child = gtk_widget_get_first_child (GTK_WIDGET (self));
+  if (child)
+    {
+      gtk_widget_unparent (child);
+      self->list = NULL;
+    }
 
   G_OBJECT_CLASS (gtk_stack_sidebar_parent_class)->dispose (object);
 }
@@ -385,10 +375,9 @@ gtk_stack_sidebar_dispose (GObject *object)
 static void
 gtk_stack_sidebar_finalize (GObject *object)
 {
-  GtkStackSidebar *sidebar = GTK_STACK_SIDEBAR (object);
-  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
+  GtkStackSidebar *self = GTK_STACK_SIDEBAR (object);
 
-  g_hash_table_destroy (priv->rows);
+  g_hash_table_destroy (self->rows);
 
   G_OBJECT_CLASS (gtk_stack_sidebar_parent_class)->finalize (object);
 }
@@ -412,6 +401,7 @@ gtk_stack_sidebar_class_init (GtkStackSidebarClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("stacksidebar"));
 }
 
@@ -430,7 +420,7 @@ gtk_stack_sidebar_new (void)
 
 /**
  * gtk_stack_sidebar_set_stack:
- * @sidebar: a #GtkStackSidebar
+ * @self: a #GtkStackSidebar
  * @stack: a #GtkStack
  *
  * Set the #GtkStack associated with this #GtkStackSidebar.
@@ -439,29 +429,27 @@ gtk_stack_sidebar_new (void)
  * (packing) and items within the given #GtkStack.
  */
 void
-gtk_stack_sidebar_set_stack (GtkStackSidebar *sidebar,
+gtk_stack_sidebar_set_stack (GtkStackSidebar *self,
                              GtkStack        *stack)
 {
-  GtkStackSidebarPrivate *priv = gtk_stack_sidebar_get_instance_private (sidebar);
-
-  g_return_if_fail (GTK_IS_STACK_SIDEBAR (sidebar));
+  g_return_if_fail (GTK_IS_STACK_SIDEBAR (self));
   g_return_if_fail (GTK_IS_STACK (stack) || stack == NULL);
 
 
-  if (priv->stack == stack)
+  if (self->stack == stack)
     return;
 
-  unset_stack (sidebar);
-  set_stack (sidebar, stack);
+  unset_stack (self);
+  set_stack (self, stack);
 
-  gtk_widget_queue_resize (GTK_WIDGET (sidebar));
+  gtk_widget_queue_resize (GTK_WIDGET (self));
 
-  g_object_notify (G_OBJECT (sidebar), "stack");
+  g_object_notify (G_OBJECT (self), "stack");
 }
 
 /**
  * gtk_stack_sidebar_get_stack:
- * @sidebar: a #GtkStackSidebar
+ * @self: a #GtkStackSidebar
  *
  * Retrieves the stack.
  * See gtk_stack_sidebar_set_stack().
@@ -470,13 +458,9 @@ gtk_stack_sidebar_set_stack (GtkStackSidebar *sidebar,
  *     %NULL if none has been set explicitly
  */
 GtkStack *
-gtk_stack_sidebar_get_stack (GtkStackSidebar *sidebar)
+gtk_stack_sidebar_get_stack (GtkStackSidebar *self)
 {
-  GtkStackSidebarPrivate *priv;
+  g_return_val_if_fail (GTK_IS_STACK_SIDEBAR (self), NULL);
 
-  g_return_val_if_fail (GTK_IS_STACK_SIDEBAR (sidebar), NULL);
-
-  priv = gtk_stack_sidebar_get_instance_private (sidebar);
-
-  return GTK_STACK (priv->stack);
+  return GTK_STACK (self->stack);
 }
