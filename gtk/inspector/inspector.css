@@ -27,9 +27,13 @@
 .list .cell entry,
 .list .cell spinbutton,
 .list .cell button,
-.list .cell combobox
- {
+.list .cell combobox {
   min-height: 24px;
   min-width: 0;
+}
+
+.list .cell entry,
+.list .cell button,
+.list .cell combobox {
   padding: 0 4px;
 }
