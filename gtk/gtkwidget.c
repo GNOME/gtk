@@ -4342,8 +4342,6 @@ gtk_widget_allocate (GtkWidget    *widget,
   priv->alloc_needed = FALSE;
 
   baseline_changed = priv->allocated_size_baseline != baseline;
-  size_changed = (priv->allocated_width != width ||
-                  priv->allocated_height != height);
   transform_changed = !gsk_transform_equal (priv->allocated_transform, transform);
 
   gsk_transform_unref (priv->allocated_transform);
@@ -4400,6 +4398,8 @@ gtk_widget_allocate (GtkWidget    *widget,
                                      &natural_height,
                                      &adjusted.y,
                                      &adjusted.height);
+  size_changed = (priv->width != adjusted.width) || (priv->height != adjusted.height);
+
   if (baseline >= 0)
     baseline -= priv->margin.top;
 
