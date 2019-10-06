@@ -54,10 +54,7 @@ do_sidebar (GtkWidget *do_widget)
       stack = gtk_stack_new ();
       gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
       gtk_stack_sidebar_set_stack (GTK_STACK_SIDEBAR (sidebar), GTK_STACK (stack));
-
-      /* Separator between sidebar and stack */
-      widget = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-      gtk_container_add (GTK_CONTAINER(box), widget);
+      gtk_widget_set_hexpand (stack, TRUE);
 
       gtk_container_add (GTK_CONTAINER (box), stack);
 
@@ -66,6 +63,7 @@ do_sidebar (GtkWidget *do_widget)
           if (i == 0)
             {
               widget = gtk_image_new_from_icon_name ("org.gtk.Demo4");
+              gtk_style_context_add_class (gtk_widget_get_style_context (widget), "icon-dropshadow");
               gtk_image_set_pixel_size (GTK_IMAGE (widget), 256);
             }
           else
