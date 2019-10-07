@@ -2784,13 +2784,11 @@ gdk_event_translate (MSG  *msg,
         {
 	  event->scroll.direction = (((short) HIWORD (msg->wParam)) > 0) ?
 	    GDK_SCROLL_UP : GDK_SCROLL_DOWN;
-          event->scroll.delta_y = (gdouble) GET_WHEEL_DELTA_WPARAM (msg->wParam) / 120.0;
         }
       else if (msg->message == WM_MOUSEHWHEEL)
         {
 	  event->scroll.direction = (((short) HIWORD (msg->wParam)) > 0) ?
 	    GDK_SCROLL_RIGHT : GDK_SCROLL_LEFT;
-          event->scroll.delta_x = (gdouble) GET_WHEEL_DELTA_WPARAM (msg->wParam) / 120.0;
         }
       event->scroll.time = _gdk_win32_get_next_tick (msg->time);
       event->scroll.x = (gint16) point.x;
