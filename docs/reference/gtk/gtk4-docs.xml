@@ -51,6 +51,7 @@
       <xi:include href="xml/gtksortlistmodel.xml" />
       <xi:include href="xml/gtktreelistmodel.xml" />
       <xi:include href="xml/gtkselectionmodel.xml" />
+      <xi:include href="xml/gtknoselection.xml" />
       <xi:include href="xml/gtksingleselection.xml" />
     </chapter>
 
