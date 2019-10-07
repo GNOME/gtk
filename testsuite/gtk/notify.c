@@ -432,6 +432,7 @@ test_type (gconstpointer data)
       gdk_content_formats_unref (formats);
     }
   else if (g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL) ||
+           g_type_is_a (type, GTK_TYPE_NO_SELECTION) ||
            g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION))
     {
       GListStore *list_store = g_list_store_new (G_TYPE_OBJECT);
