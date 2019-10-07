@@ -166,6 +166,7 @@
 #include <gtk/gtkmountoperation.h>
 #include <gtk/gtknative.h>
 #include <gtk/gtknativedialog.h>
+#include <gtk/gtknoselection.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkorientable.h>
 #include <gtk/gtkoverlay.h>
