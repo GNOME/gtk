@@ -1616,7 +1616,7 @@ scrolledwindow junction:dir(rtl) { border-image-slice: 0 1 0 0; }
 
 scrolledwindow junction:backdrop { border-image-source: linear-gradient(to bottom, #202020 1px, transparent 1px); background-color: #2d2d2d; transition: 200ms ease-out; }
 
-separator { background: rgba(0, 0, 0, 0.1); min-width: 1px; min-height: 1px; }
+separator { background: #282828; min-width: 1px; min-height: 1px; }
 
 /********* Lists * */
 list { color: white; background-color: #2d2d2d; border-color: #1b1b1b; }
