@@ -673,7 +673,14 @@ button {
     min-width: 26px;
     min-height: 32px;
 
-    &.image-button { min-width: 34px; }
+    &.image-button { 
+      min-width: 30px;
+      &:only-child {
+        margin: 4px;
+        border-radius: 50%; // completely round when it is a single button
+        box-shadow: 0 1px 2px transparentize(black, 0.8); // drop shadow for the only child
+      };
+    }
 
     color: $osd_fg_color;
     border-radius: 5px;

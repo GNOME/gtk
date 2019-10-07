@@ -400,8 +400,8 @@
     background-image: $button_fill;
     background-clip: padding-box;
     box-shadow: inset 0 1px transparentize(white, 0.9);
-    text-shadow: 0 1px black;
-    -gtk-icon-shadow: 0 1px black;
+    text-shadow: none;
+    -gtk-icon-shadow: none;
     outline-color: transparentize($osd_fg_color, 0.7);
   }
 
@@ -418,8 +418,8 @@
     background-image: $button_fill;
     background-clip: padding-box;
     box-shadow: inset 0 1px transparentize(white, 0.9);
-    text-shadow: 0 1px black;
-    -gtk-icon-shadow: 0 1px black;
+    text-shadow: none;
+    -gtk-icon-shadow: none;
     outline-color: transparentize($osd_fg_color, 0.7);
   }
 
