@@ -1040,7 +1040,7 @@ progressbar.vertical progress.pulse {
 
 combobox entry {
     margin-right: calc( -2ex - -gtk-win32-part-width(combobox, 6, 1));
-    background-image: -gtk-win32-theme-part(combobox, 4, 1));
+    background-image: -gtk-win32-theme-part(combobox, 4, 1);
 }
 combobox entry:hover {
     background-image: -gtk-win32-theme-part(combobox, 4, 2);
