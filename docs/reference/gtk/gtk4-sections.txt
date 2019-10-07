@@ -466,6 +466,16 @@ gtk_selection_model_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtknoselection</FILE>
+<TITLE>GtkNoSelection</TITLE>
+GtkNoSelection
+gtk_no_selection_new
+gtk_no_selection_get_model
+<SUBSECTION Private>
+gtk_no_selection_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtksingleselection</FILE>
 <TITLE>GtkSingleSelection</TITLE>
 GtkSingleSelection
