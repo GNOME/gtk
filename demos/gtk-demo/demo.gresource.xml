@@ -111,6 +111,9 @@
     <file>gnome-fs-directory.png</file>
     <file>gnome-fs-regular.png</file>
   </gresource>
+  <gresource prefix="/listview_weather">
+    <file compressed="true">listview_weather.txt</file>
+  </gresource>
   <gresource prefix="/shortcuts">
     <file>shortcuts.ui</file>
     <file>shortcuts-builder.ui</file>
@@ -187,6 +190,7 @@
     <file>infobar.c</file>
     <file>links.c</file>
     <file>listbox.c</file>
+    <file>listview_weather.c</file>
     <file>list_store.c</file>
     <file>markup.c</file>
     <file>modelbutton.c</file>
