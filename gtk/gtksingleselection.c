@@ -329,9 +329,8 @@ gtk_single_selection_set_property (GObject      *object,
     case PROP_MODEL:
       gtk_single_selection_clear_model (self);
       self->model = g_value_dup_object (value);
-      if (self->model)
-        g_signal_connect (self->model, "items-changed",
-                          G_CALLBACK (gtk_single_selection_items_changed_cb), self);
+      g_signal_connect (self->model, "items-changed",
+                        G_CALLBACK (gtk_single_selection_items_changed_cb), self);
       if (self->autoselect)
         gtk_single_selection_set_selected (self, 0);
       break;
@@ -461,7 +460,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
                        P_("The model"),
                        P_("The model being managed"),
                        G_TYPE_LIST_MODEL,
-                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
@@ -489,6 +488,22 @@ gtk_single_selection_new (GListModel *model)
   return g_object_new (GTK_TYPE_SINGLE_SELECTION,
                        "model", model,
                        NULL);
+}
+
+/**
+ * gtk_single_selection_get_model:
+ * @self: a #GtkSingleSelection
+ *
+ * Gets the model that @self is wrapping.
+ *
+ * Returns: (transfer none): The model being wrapped
+ **/
+GListModel *
+gtk_single_selection_get_model (GtkSingleSelection *self)
+{
+  g_return_val_if_fail (GTK_IS_SINGLE_SELECTION (self), NULL);
+
+  return self->model;
 }
 
 /**

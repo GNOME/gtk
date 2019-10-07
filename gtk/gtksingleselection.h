@@ -42,8 +42,10 @@ GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkSingleSelection, gtk_single_selection, GTK, SINGLE_SELECTION, GObject)
 
 GDK_AVAILABLE_IN_ALL
-GtkSingleSelection * gtk_single_selection_new                (GListModel             *model);
+GtkSingleSelection *    gtk_single_selection_new                (GListModel             *model);
 
+GDK_AVAILABLE_IN_ALL
+GListModel *            gtk_single_selection_get_model          (GtkSingleSelection     *self);
 GDK_AVAILABLE_IN_ALL
 guint           gtk_single_selection_get_selected       (GtkSingleSelection     *self);
 GDK_AVAILABLE_IN_ALL

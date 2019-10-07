@@ -109,7 +109,8 @@ test_type (gconstpointer data)
       instance = G_OBJECT (g_object_ref (gdk_surface_new_temp (display,
                                                                 &(GdkRectangle) { 0, 0, 100, 100 })));
     }
-  else if (g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL))
+  else if (g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL) ||
+           g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION))
     {
       GListStore *list_store = g_list_store_new (G_TYPE_OBJECT);
       instance = g_object_new (type,
@@ -255,7 +256,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 G_GNUC_END_IGNORE_DEPRECATIONS
 
-      if (g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL) &&
+      if ((g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL) ||
+           g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION)) &&
           strcmp (pspec->name, "model") == 0)
         continue;
 
