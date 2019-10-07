@@ -110,6 +110,7 @@ test_type (gconstpointer data)
                                                                 &(GdkRectangle) { 0, 0, 100, 100 })));
     }
   else if (g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL) ||
+           g_type_is_a (type, GTK_TYPE_NO_SELECTION) ||
            g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION))
     {
       GListStore *list_store = g_list_store_new (G_TYPE_OBJECT);
@@ -257,6 +258,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_GNUC_END_IGNORE_DEPRECATIONS
 
       if ((g_type_is_a (type, GTK_TYPE_FILTER_LIST_MODEL) ||
+           g_type_is_a (type, GTK_TYPE_NO_SELECTION) ||
            g_type_is_a (type, GTK_TYPE_SINGLE_SELECTION)) &&
           strcmp (pspec->name, "model") == 0)
         continue;
