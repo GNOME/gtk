@@ -41,6 +41,7 @@ typedef struct _GtkCssStyleChange      GtkCssStyleChange;
 typedef struct _GtkEventController     GtkEventController;
 typedef struct _GtkGesture             GtkGesture;
 typedef struct _GtkLayoutManager       GtkLayoutManager;
+typedef struct _GtkListItemFactory     GtkListItemFactory;
 typedef struct _GtkNative              GtkNative;
 typedef struct _GtkRequisition	       GtkRequisition;
 typedef struct _GtkRoot  	       GtkRoot;

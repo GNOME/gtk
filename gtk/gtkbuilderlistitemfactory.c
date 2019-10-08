@@ -19,10 +19,40 @@
 
 #include "config.h"
 
-#include "gtkbuilderlistitemfactoryprivate.h"
+#include "gtkbuilderlistitemfactory.h"
 
 #include "gtkbuilder.h"
+#include "gtklistitemfactoryprivate.h"
 #include "gtklistitemprivate.h"
+
+/**
+ * SECTION:gtkbuilderlistitemfactory
+ * @Tiitle: GtkBuilderListItemFactory
+ * @Short_description: A listitem factory using ui files
+ *
+ * #GtkBuilderListItemFactory is a #GtkListItemFactory that creates
+ * widgets by instantiating #GtkBuilder UI templates. The templates
+ * must be extending #GtkListItem, and typically use #GtkExpressions
+ * to obtain data from the items in the model.
+ *
+ * Example:
+ * |[
+ *   <interface>
+ *     <template class="GtkListItem">
+ *       <property name="child">
+ *         <object class="GtkLabel">
+ *           <property name="xalign">0</property>
+ *           <binding name="label">
+ *             <lookup name="name" type="SettingsKey">
+ *               <lookup name="item">GtkListItem</lookup>
+ *             </lookup>
+ *           </binding>
+ *         </object>
+ *       </property>
+ *     </template>
+ *   </interface>
+ * ]|
+ */
 
 struct _GtkBuilderListItemFactory
 {
@@ -96,6 +126,15 @@ gtk_builder_list_item_factory_init (GtkBuilderListItemFactory *self)
 {
 }
 
+/**
+ * gtk_builder_list_item_factory_new_from_bytes:
+ * @bytes: the bytes containing the ui file to instantiate
+ *
+ * Creates s new #GtkBuilderListItemFactory that instantiates widgets
+ * using @bytes as the data to pass to #GtkBuilder.
+ *
+ * Returns: a new #GtkBuilderListItemFactory
+ **/
 GtkListItemFactory *
 gtk_builder_list_item_factory_new_from_bytes (GBytes *bytes)
 {
@@ -110,6 +149,15 @@ gtk_builder_list_item_factory_new_from_bytes (GBytes *bytes)
   return GTK_LIST_ITEM_FACTORY (self);
 }
 
+/**
+ * gtk_builder_list_item_factory_new_from_resource:
+ * @resource_path: valid path to a resource that contains the data
+ *
+ * Creates s new #GtkBuilderListItemFactory that instantiates widgets
+ * using data read from the given @resource_path to pass to #GtkBuilder.
+ *
+ * Returns: a new #GtkBuilderListItemFactory
+ **/
 GtkListItemFactory *
 gtk_builder_list_item_factory_new_from_resource (const char *resource_path)
 {

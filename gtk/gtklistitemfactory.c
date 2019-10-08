@@ -84,11 +84,7 @@ static void
 gtk_list_item_factory_default_teardown (GtkListItemFactory *self,
                                         GtkListItem        *list_item)
 {
-  GtkWidget *child;
-
-  child = gtk_bin_get_child (GTK_BIN (list_item));
-  if (child)
-    gtk_container_remove (GTK_CONTAINER (list_item), child);
+  gtk_list_item_set_child (list_item, NULL);
 
   gtk_list_item_set_selectable (list_item, TRUE);
 
