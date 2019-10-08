@@ -22,8 +22,6 @@
 #include "gtklistview.h"
 
 #include "gtkadjustment.h"
-#include "gtkbuilderlistitemfactoryprivate.h"
-#include "gtkfunctionslistitemfactoryprivate.h"
 #include "gtkintl.h"
 #include "gtklistitemmanagerprivate.h"
 #include "gtkorientableprivate.h"
@@ -91,6 +89,7 @@ struct _ListRowAugment
 enum
 {
   PROP_0,
+  PROP_FACTORY,
   PROP_HADJUSTMENT,
   PROP_HSCROLL_POLICY,
   PROP_MODEL,
@@ -636,6 +635,10 @@ gtk_list_view_get_property (GObject    *object,
 
   switch (property_id)
     {
+    case PROP_FACTORY:
+      g_value_set_object (value, gtk_list_item_manager_get_factory (self->item_manager));
+      break;
+
     case PROP_HADJUSTMENT:
       g_value_set_object (value, self->adjustment[GTK_ORIENTATION_HORIZONTAL]);
       break;
@@ -721,6 +724,10 @@ gtk_list_view_set_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_FACTORY:
+      gtk_list_view_set_factory (self, g_value_get_object (value));
+      break;
+
     case PROP_HADJUSTMENT:
       gtk_list_view_set_adjustment (self, GTK_ORIENTATION_HORIZONTAL, g_value_get_object (value));
       break;
@@ -913,6 +920,18 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                              g_object_interface_find_property (iface, "vscroll-policy"));
 
   /**
+   * GtkListView:factory:
+   *
+   * Factory for populating list items
+   */
+  properties[PROP_FACTORY] =
+    g_param_spec_object ("factory",
+                         P_("Factory"),
+                         P_("Factory for populating list items"),
+                         GTK_TYPE_LIST_ITEM_FACTORY,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkListView:model:
    *
    * Model for the items displayed
@@ -1009,8 +1028,9 @@ gtk_list_view_init (GtkListView *self)
  *
  * Creates a new empty #GtkListView.
  *
- * You most likely want to call gtk_list_view_set_model() to set
- * a model and then set up a way to map its items to widgets next.
+ * You most likely want to call gtk_list_view_set_factory() to
+ * set up a way to map its items to widgets and gtk_list_view_set_model()
+ * to set a model to provide items next.
  *
  * Returns: a new #GtkListView
  **/
@@ -1018,6 +1038,41 @@ GtkWidget *
 gtk_list_view_new (void)
 {
   return g_object_new (GTK_TYPE_LIST_VIEW, NULL);
+}
+
+/**
+ * gtk_list_view_new_with_factory:
+ * @factory: (transfer full): The factory to populate items with
+ *
+ * Creates a new #GtkListView that uses the given @factory for
+ * mapping items to widgets.
+ *
+ * You most likely want to call gtk_list_view_set_model() to set
+ * a model next.
+ *
+ * The function takes ownership of the
+ * argument, so you can write code like
+ * ```
+ *   list_view = gtk_list_view_new_with_factory (
+ *     gtk_builder_list_item_factory_newfrom_resource ("/resource.ui"));
+ * ```
+ *
+ * Returns: a new #GtkListView using the given @factory
+ **/
+GtkWidget *
+gtk_list_view_new_with_factory (GtkListItemFactory *factory)
+{
+  GtkWidget *result;
+
+  g_return_val_if_fail (GTK_IS_LIST_ITEM_FACTORY (factory), NULL);
+
+  result = g_object_new (GTK_TYPE_LIST_VIEW,
+                         "factory", factory,
+                         NULL);
+
+  g_object_unref (factory);
+
+  return result;
 }
 
 /**
@@ -1082,50 +1137,42 @@ gtk_list_view_set_model (GtkListView *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
 }
 
-void
-gtk_list_view_set_functions (GtkListView          *self,
-                             GtkListItemSetupFunc  setup_func,
-                             GtkListItemBindFunc   bind_func,
-                             gpointer              user_data,
-                             GDestroyNotify        user_destroy)
+/**
+ * gtk_list_view_get_factory:
+ * @self: a #GtkListView
+ *
+ * Gets the factory that's currently used to populate list items.
+ *
+ * Returns: (nullable) (transfer none): The factory in use
+ **/
+GtkListItemFactory *
+gtk_list_view_get_factory (GtkListView *self)
 {
-  GtkListItemFactory *factory;
+  g_return_val_if_fail (GTK_IS_LIST_VIEW (self), NULL);
 
-  g_return_if_fail (GTK_IS_LIST_VIEW (self));
-  g_return_if_fail (setup_func || bind_func);
-  g_return_if_fail (user_data != NULL || user_destroy == NULL);
-
-  factory = gtk_functions_list_item_factory_new (setup_func, bind_func, user_data, user_destroy);
-  gtk_list_item_manager_set_factory (self->item_manager, factory);
-  g_object_unref (factory);
+  return gtk_list_item_manager_get_factory (self->item_manager);
 }
 
+/**
+ * gtk_list_view_set_factory:
+ * @self: a #GtkListView
+ * @factory: (allow-none) (transfer none): the factory to use or %NULL for none
+ *
+ * Sets the #GtkListItemFactory to use for populating list items.
+ **/
 void
-gtk_list_view_set_factory_from_bytes (GtkListView *self,
-                                      GBytes      *bytes)
+gtk_list_view_set_factory (GtkListView        *self,
+                           GtkListItemFactory *factory)
 {
-  GtkListItemFactory *factory;
-
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
-  g_return_if_fail (bytes != NULL);
+  g_return_if_fail (factory == NULL || GTK_LIST_ITEM_FACTORY (factory));
 
-  factory = gtk_builder_list_item_factory_new_from_bytes (bytes);
+  if (factory == gtk_list_item_manager_get_factory (self->item_manager))
+    return;
+
   gtk_list_item_manager_set_factory (self->item_manager, factory);
-  g_object_unref (factory);
-}
 
-void
-gtk_list_view_set_factory_from_resource (GtkListView *self,
-                                         const char  *resource_path)
-{
-  GtkListItemFactory *factory;
-
-  g_return_if_fail (GTK_IS_LIST_VIEW (self));
-  g_return_if_fail (resource_path != NULL);
-
-  factory = gtk_builder_list_item_factory_new_from_resource (resource_path);
-  gtk_list_item_manager_set_factory (self->item_manager, factory);
-  g_object_unref (factory);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
 }
 
 /**
