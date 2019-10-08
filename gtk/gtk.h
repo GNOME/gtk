@@ -55,6 +55,7 @@
 #include <gtk/gtkbox.h>
 #include <gtk/gtkbuildable.h>
 #include <gtk/gtkbuilder.h>
+#include <gtk/gtkbuilderlistitemfactory.h>
 #include <gtk/gtkbuilderscope.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkcalendar.h>
@@ -127,6 +128,7 @@
 #include <gtk/gtkfontchooserwidget.h>
 #include <gtk/gtkfontlist.h>
 #include <gtk/gtkframe.h>
+#include <gtk/gtkfunctionslistitemfactory.h>
 #include <gtk/gtkgesture.h>
 #include <gtk/gtkgestureclick.h>
 #include <gtk/gtkgesturedrag.h>
@@ -156,6 +158,7 @@
 #include <gtk/gtklinkbutton.h>
 #include <gtk/gtklistbox.h>
 #include <gtk/gtklistitem.h>
+#include <gtk/gtklistitemfactory.h>
 #include <gtk/gtkliststore.h>
 #include <gtk/gtklistview.h>
 #include <gtk/gtklockbutton.h>
