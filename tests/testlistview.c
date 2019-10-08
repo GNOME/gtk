@@ -577,6 +577,7 @@ update_statusbar (GtkStatusbar *statusbar)
       g_string_append_printf (string, " (%u directories remaining)", active + g_slist_length (pending));
       result = G_SOURCE_CONTINUE;
     }
+      result = G_SOURCE_CONTINUE;
 
   gtk_statusbar_push (statusbar, 0, string->str);
   g_free (string->str);
@@ -638,11 +639,10 @@ main (int argc, char *argv[])
   gtk_search_entry_set_key_capture_widget (GTK_SEARCH_ENTRY (search_entry), sw);
   gtk_container_add (GTK_CONTAINER (vbox), sw);
 
-  listview = gtk_list_view_new ();
-  gtk_list_view_set_functions (GTK_LIST_VIEW (listview),
-                               setup_widget,
-                               NULL,
-                               NULL, NULL);
+  listview = gtk_list_view_new_with_factory (
+    gtk_functions_list_item_factory_new (setup_widget,
+                                         NULL,
+                                         NULL, NULL));
   gtk_container_add (GTK_CONTAINER (sw), listview);
 
   if (argc > 1)

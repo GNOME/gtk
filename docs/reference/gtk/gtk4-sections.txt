@@ -520,6 +520,9 @@ gtk_list_item_get_type
 <TITLE>GtkListView</TITLE>
 GtkListView
 gtk_list_view_new
+gtk_list_view_new_with_factory
+gtk_list_view_set_factory
+gtk_list_view_get_factory
 gtk_list_view_set_model
 gtk_list_view_get_model
 gtk_list_view_set_show_separators
