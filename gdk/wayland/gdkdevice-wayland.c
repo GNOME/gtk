@@ -4616,7 +4616,7 @@ pointer_surface_enter (void              *data,
   if (tablet)
     {
       tablet->pointer_info.pointer_surface_outputs =
-        g_slist_append (seat->pointer_info.pointer_surface_outputs, output);
+        g_slist_append (tablet->pointer_info.pointer_surface_outputs, output);
     }
   else
     {
@@ -4645,7 +4645,7 @@ pointer_surface_leave (void              *data,
   if (tablet)
     {
       tablet->pointer_info.pointer_surface_outputs =
-        g_slist_remove (seat->pointer_info.pointer_surface_outputs, output);
+        g_slist_remove (tablet->pointer_info.pointer_surface_outputs, output);
     }
   else
     {
