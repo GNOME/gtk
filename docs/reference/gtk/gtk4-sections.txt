@@ -528,10 +528,33 @@ gtk_list_item_factory_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkbuilderlistitemfactory</FILE>
+<TITLE>GtkBuilderListItemFactory</TITLE>
+GtkBuilderListItemFactory
+gtk_builder_list_item_factory_new_from_bytes
+gtk_builder_list_item_factory_new_from_resource
+gtk_builder_list_item_factory_get_bytes
+gtk_builder_list_item_factory_get_resource
+gtk_builder_list_item_factory_get_scope
+<SUBSECTION Standard>
+GTK_BUILDER_LIST_ITEM_FACTORY
+GTK_BUILDER_LIST_ITEM_FACTORY_CLASS
+GTK_BUILDER_LIST_ITEM_FACTORY_GET_CLASS
+GTK_IS_BUILDER_LIST_ITEM_FACTORY
+GTK_IS_BUILDER_LIST_ITEM_FACTORY_CLASS
+GTK_TYPE_BUILDER_LIST_ITEM_FACTORY
+<SUBSECTION Private>
+gtk_builder_list_item_factory_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtklistview</FILE>
 <TITLE>GtkListView</TITLE>
 GtkListView
 gtk_list_view_new
+gtk_list_view_new_with_factory
+gtk_list_view_set_factory
+gtk_list_view_get_factory
 gtk_list_view_set_model
 gtk_list_view_get_model
 gtk_list_view_set_show_separators
