@@ -2643,6 +2643,7 @@ gtk_text_line_display_finalize (GtkTextLineDisplay *display)
 
   g_clear_object (&display->layout);
   g_clear_pointer (&display->cursors, g_array_unref);
+  g_clear_pointer (&display->node, gsk_render_node_unref);
 }
 
 GtkTextLineDisplay *
@@ -3862,7 +3863,6 @@ render_para (GskPangoRenderer   *crenderer,
   int screen_width;
   GdkRGBA *selection = NULL;
   gboolean first = TRUE;
-  graphene_point_t point = { 0, offset_y };
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (crenderer->widget));
 
@@ -3880,8 +3880,12 @@ render_para (GskPangoRenderer   *crenderer,
       gtk_style_context_restore (context);
     }
 
-  gtk_snapshot_save (crenderer->snapshot);
-  gtk_snapshot_translate (crenderer->snapshot, &point);
+  if (offset_y)
+    {
+      gtk_snapshot_save (crenderer->snapshot);
+      gtk_snapshot_translate (crenderer->snapshot,
+                              &GRAPHENE_POINT_INIT (0, offset_y));
+    }
 
   do
     {
@@ -4054,7 +4058,8 @@ render_para (GskPangoRenderer   *crenderer,
     }
   while (pango_layout_iter_next_line (iter));
 
-  gtk_snapshot_restore (crenderer->snapshot);
+  if (offset_y)
+    gtk_snapshot_restore (crenderer->snapshot);
 
   gdk_rgba_free (selection);
   pango_layout_iter_free (iter);
@@ -4146,9 +4151,27 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
                 }
             }
 
-          render_para (crenderer, offset_y, line_display,
-                       selection_start_index, selection_end_index,
-                       cursor_alpha);
+          if (line_display->node == NULL)
+            {
+              GtkSnapshot *sub = gtk_snapshot_new ();
+
+              crenderer->snapshot = sub;
+              render_para (crenderer, 0, line_display,
+                           selection_start_index, selection_end_index,
+                           cursor_alpha);
+              crenderer->snapshot = snapshot;
+
+              line_display->node = gtk_snapshot_free_to_node (sub);
+            }
+
+          if (line_display->node != NULL)
+            {
+              gtk_snapshot_save (crenderer->snapshot);
+              gtk_snapshot_translate (crenderer->snapshot,
+                                      &GRAPHENE_POINT_INIT (0, offset_y));
+              gtk_snapshot_append_node (crenderer->snapshot, line_display->node);
+              gtk_snapshot_restore (crenderer->snapshot);
+            }
 
           /* We paint the cursors last, because they overlap another chunk
            * and need to appear on top.

@@ -234,6 +234,7 @@ gtk_text_line_display_cache_invalidate_display (GtkTextLineDisplayCache *cache,
   if (cursors_only)
     {
       g_clear_pointer (&display->cursors, g_array_unref);
+      g_clear_pointer (&display->node, gsk_render_node_unref);
       display->cursors_invalid = TRUE;
       display->has_block_cursor = FALSE;
     }
