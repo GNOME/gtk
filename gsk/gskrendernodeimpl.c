@@ -3424,12 +3424,6 @@ gsk_text_node_finalize (GskRenderNode *node)
   g_object_unref (self->font);
 }
 
-#ifndef STACK_BUFFER_SIZE
-#define STACK_BUFFER_SIZE (512 * sizeof (int))
-#endif
-
-#define STACK_ARRAY_LENGTH(T) (STACK_BUFFER_SIZE / sizeof(T))
-
 static void
 gsk_text_node_draw (GskRenderNode *node,
                     cairo_t       *cr)
