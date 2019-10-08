@@ -53,15 +53,15 @@ do_awardview (GtkWidget *do_widget)
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_container_add (GTK_CONTAINER (window), sw);
 
-      listview = gtk_list_view_new ();
 #if 0
+      listview = gtk_list_view_new ();
       gtk_list_view_set_functions (GTK_LIST_VIEW (listview),
                                    create_listitem,
                                    bind_listitem,
                                    NULL, NULL);
 #else
-      gtk_list_view_set_factory_from_resource (GTK_LIST_VIEW (listview),
-                                               "/awardview/awardlistitem.ui");
+      listview = gtk_list_view_new_with_factory (
+          gtk_builder_list_item_factory_new_from_resource ("/awardview/awardlistitem.ui"));
 #endif
       list = gtk_award_get_list ();
       gtk_list_view_set_model (GTK_LIST_VIEW (listview), list);
