@@ -145,11 +145,10 @@ main (int   argc,
   gtk_widget_set_vexpand (sw, TRUE);
   gtk_container_add (GTK_CONTAINER (vbox), sw);
 
-  listview = gtk_list_view_new ();
-  gtk_list_view_set_functions (GTK_LIST_VIEW (listview),
-                               setup_list_item,
-                               bind_list_item,
-                               NULL, NULL);
+  listview = gtk_list_view_new_with_factory (
+    gtk_functions_list_item_factory_new (setup_list_item,
+                                         bind_list_item,
+                                         NULL, NULL));
   gtk_container_add (GTK_CONTAINER (sw), listview);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 4);

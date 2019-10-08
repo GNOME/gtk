@@ -17,11 +17,14 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-
 #ifndef __GTK_BUILDER_LIST_ITEM_FACTORY_H__
 #define __GTK_BUILDER_LIST_ITEM_FACTORY_H__
 
-#include "gtklistitemfactoryprivate.h"
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
+#include <gtk/gtklistitemfactory.h>
 
 G_BEGIN_DECLS
 
@@ -35,9 +38,12 @@ G_BEGIN_DECLS
 typedef struct _GtkBuilderListItemFactory GtkBuilderListItemFactory;
 typedef struct _GtkBuilderListItemFactoryClass GtkBuilderListItemFactoryClass;
 
+GDK_AVAILABLE_IN_ALL
 GType                   gtk_builder_list_item_factory_get_type          (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkListItemFactory *    gtk_builder_list_item_factory_new_from_bytes    (GBytes         *bytes);
+GDK_AVAILABLE_IN_ALL
 GtkListItemFactory *    gtk_builder_list_item_factory_new_from_resource (const char     *resource_path);
 
 

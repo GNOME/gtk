@@ -18,23 +18,14 @@
  */
 
 
-#ifndef __GTK_LIST_ITEM_FACTORY_H__
-#define __GTK_LIST_ITEM_FACTORY_H__
+#ifndef __GTK_LIST_ITEM_FACTORY_PRIVATE_H__
+#define __GTK_LIST_ITEM_FACTORY_PRIVATE_H__
 
 #include <gtk/gtklistitem.h>
+#include <gtk/gtklistitemfactory.h>
 #include <gtk/gtklistview.h>
 
 G_BEGIN_DECLS
-
-#define GTK_TYPE_LIST_ITEM_FACTORY         (gtk_list_item_factory_get_type ())
-#define GTK_LIST_ITEM_FACTORY(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_LIST_ITEM_FACTORY, GtkListItemFactory))
-#define GTK_LIST_ITEM_FACTORY_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_TYPE_LIST_ITEM_FACTORY, GtkListItemFactoryClass))
-#define GTK_IS_LIST_ITEM_FACTORY(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_LIST_ITEM_FACTORY))
-#define GTK_IS_LIST_ITEM_FACTORY_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_LIST_ITEM_FACTORY))
-#define GTK_LIST_ITEM_FACTORY_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_LIST_ITEM_FACTORY, GtkListItemFactoryClass))
-
-typedef struct _GtkListItemFactory GtkListItemFactory;
-typedef struct _GtkListItemFactoryClass GtkListItemFactoryClass;
 
 struct _GtkListItemFactory
 {
@@ -74,8 +65,6 @@ struct _GtkListItemFactoryClass
                                                                  GtkListItem            *list_item);
 };
 
-GType                   gtk_list_item_factory_get_type          (void) G_GNUC_CONST;
-
 void                    gtk_list_item_factory_setup             (GtkListItemFactory     *self,
                                                                  GtkListItem            *list_item);
 void                    gtk_list_item_factory_teardown          (GtkListItemFactory     *self,
@@ -101,4 +90,4 @@ void                    gtk_list_item_factory_unbind            (GtkListItemFact
 
 G_END_DECLS
 
-#endif /* __GTK_LIST_ITEM_FACTORY_H__ */
+#endif /* __GTK_LIST_ITEM_FACTORY_PRIVATE_H__ */
