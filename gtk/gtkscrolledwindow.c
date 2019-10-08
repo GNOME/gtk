@@ -1178,6 +1178,7 @@ captured_scroll_cb (GtkEventControllerScroll *scroll,
                     double                    delta_y,
                     GtkScrolledWindow        *scrolled_window)
 {
+	g_print ("capture..\n");
   gtk_scrolled_window_cancel_deceleration (scrolled_window);
 
   return GDK_EVENT_PROPAGATE;
@@ -1273,6 +1274,7 @@ scroll_controller_scroll (GtkEventControllerScroll *scroll,
   gboolean shifted;
   GdkModifierType state;
 
+  g_print ("bubble..\n");
   if (!gtk_get_current_event_state (&state))
     return GDK_EVENT_PROPAGATE;
 
@@ -1356,6 +1358,8 @@ scroll_controller_decelerate (GtkEventControllerScroll *scroll,
   gdouble unit_x, unit_y;
   gboolean shifted;
   GdkModifierType state;
+
+  g_print ("decellll\n");
 
   if (!gtk_get_current_event_state (&state))
     return;
