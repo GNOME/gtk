@@ -292,13 +292,12 @@ do_listview_weather (GtkWidget *do_widget)
       sw = gtk_scrolled_window_new (NULL, NULL);
       gtk_container_add (GTK_CONTAINER (window), sw);
     
-      listview = gtk_list_view_new ();
+      listview = gtk_list_view_new_with_factory (
+        gtk_functions_list_item_factory_new (setup_widget,
+                                             bind_widget,
+                                             NULL, NULL));
       gtk_orientable_set_orientation (GTK_ORIENTABLE (listview), GTK_ORIENTATION_HORIZONTAL);
       gtk_list_view_set_show_separators (GTK_LIST_VIEW (listview), TRUE);
-      gtk_list_view_set_functions (GTK_LIST_VIEW (listview),
-                                   setup_widget,
-                                   bind_widget,
-                                   NULL, NULL);
       model = create_weather_model ();
       selection = G_LIST_MODEL (gtk_no_selection_new (model));
       gtk_list_view_set_model (GTK_LIST_VIEW (listview), selection);
