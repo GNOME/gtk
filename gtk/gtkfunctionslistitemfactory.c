@@ -19,8 +19,9 @@
 
 #include "config.h"
 
-#include "gtkfunctionslistitemfactoryprivate.h"
+#include "gtkfunctionslistitemfactory.h"
 
+#include "gtklistitemfactoryprivate.h"
 #include "gtklistitemprivate.h"
 
 struct _GtkFunctionsListItemFactory
