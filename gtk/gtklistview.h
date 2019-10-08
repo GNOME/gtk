@@ -36,6 +36,8 @@ G_DECLARE_FINAL_TYPE (GtkListView, gtk_list_view, GTK, LIST_VIEW, GtkWidget)
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_list_view_new                               (void);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *     gtk_list_view_new_with_factory                  (GtkListItemFactory     *factory);
 
 GDK_AVAILABLE_IN_ALL
 GListModel *    gtk_list_view_get_model                         (GtkListView            *self);
@@ -43,17 +45,11 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_list_view_set_model                         (GtkListView            *self,
                                                                  GListModel             *model);
 GDK_AVAILABLE_IN_ALL
-void            gtk_list_view_set_functions                     (GtkListView            *self,
-                                                                 GtkListItemSetupFunc    setup_func,
-                                                                 GtkListItemBindFunc     bind_func,
-                                                                 gpointer                user_data,
-                                                                 GDestroyNotify          user_destroy);
+void            gtk_list_view_set_factory                       (GtkListView            *self,
+                                                                 GtkListItemFactory     *factory);
 GDK_AVAILABLE_IN_ALL
-void            gtk_list_view_set_factory_from_bytes            (GtkListView            *self,
-                                                                 GBytes                 *bytes);
-GDK_AVAILABLE_IN_ALL
-void            gtk_list_view_set_factory_from_resource         (GtkListView            *self,
-                                                                 const char             *resource_path);
+GtkListItemFactory *
+                gtk_list_view_get_factory                       (GtkListView            *self);
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_list_view_set_show_separators               (GtkListView            *self,
