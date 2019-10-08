@@ -3468,6 +3468,8 @@ static void
 gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
                                       guint32               time)
 {
+  GdkEventType event_type;
+  GdkWindow *window;
   GdkEvent *event;
 
   event = tablet->pointer_info.frame.event;
@@ -3476,7 +3478,10 @@ gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
   if (!event)
     return;
 
-  switch (event->type)
+  event_type = event->type;
+  window = g_object_ref (gdk_event_get_window (event));
+
+  switch (event_type)
     {
     case GDK_MOTION_NOTIFY:
       event->motion.time = time;
@@ -3504,18 +3509,20 @@ gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
       return;
     }
 
-  if (event->type == GDK_PROXIMITY_OUT)
-    emulate_crossing (event->proximity.window, NULL, tablet->master,
+  if (event_type == GDK_PROXIMITY_OUT)
+    emulate_crossing (window, NULL, tablet->master,
                       tablet->current_device, GDK_LEAVE_NOTIFY,
                       GDK_CROSSING_NORMAL, time);
 
   _gdk_wayland_display_deliver_event (gdk_seat_get_display (tablet->seat),
                                       event);
 
-  if (event->type == GDK_PROXIMITY_IN)
-    emulate_crossing (event->proximity.window, NULL, tablet->master,
+  if (event_type == GDK_PROXIMITY_IN)
+    emulate_crossing (window, NULL, tablet->master,
                       tablet->current_device, GDK_ENTER_NOTIFY,
                       GDK_CROSSING_NORMAL, time);
+
+  g_object_unref (window);
 }
 
 static GdkEvent *
@@ -4616,7 +4623,7 @@ pointer_surface_enter (void              *data,
   if (tablet)
     {
       tablet->pointer_info.pointer_surface_outputs =
-        g_slist_append (seat->pointer_info.pointer_surface_outputs, output);
+        g_slist_append (tablet->pointer_info.pointer_surface_outputs, output);
     }
   else
     {
@@ -4645,7 +4652,7 @@ pointer_surface_leave (void              *data,
   if (tablet)
     {
       tablet->pointer_info.pointer_surface_outputs =
-        g_slist_remove (seat->pointer_info.pointer_surface_outputs, output);
+        g_slist_remove (tablet->pointer_info.pointer_surface_outputs, output);
     }
   else
     {
