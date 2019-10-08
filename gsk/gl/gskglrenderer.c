@@ -600,7 +600,7 @@ render_text_node (GskGLRenderer   *self,
                                  (PangoFont *)font,
                                  gi->glyph,
                                  x + cx,
-+                                y + cy,
+                                 y + cy,
                                  text_scale,
                                  self->gl_driver,
                                  &glyph);
