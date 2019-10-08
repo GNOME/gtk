@@ -19,9 +19,10 @@
 
 #include "config.h"
 
-#include "gtkbuilderlistitemfactoryprivate.h"
+#include "gtkbuilderlistitemfactory.h"
 
 #include "gtkbuilder.h"
+#include "gtklistitemfactoryprivate.h"
 #include "gtklistitemprivate.h"
 
 struct _GtkBuilderListItemFactory
