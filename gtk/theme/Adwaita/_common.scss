@@ -2127,7 +2127,7 @@ menubar,
 
     // remove padding and rounding from menubar submenus
     menu {
-      .csd &, & {
+      &:dir(rtl), &:dir(ltr) { // specificity bump
         border-radius: 0;
         padding: 0;
       }
