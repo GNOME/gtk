@@ -216,6 +216,9 @@ struct _GtkTextAttrAppearance
 struct _GtkTextLineDisplay
 {
   PangoLayout *layout;
+
+  GskRenderNode *node;
+
   GArray *cursors;      /* indexes of cursors in the PangoLayout */
 
   /* GSequenceIter backpointer for use within cache */
