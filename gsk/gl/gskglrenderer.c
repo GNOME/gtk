@@ -1141,106 +1141,6 @@ get_inner_rect (const GskRoundedRect *rect,
                           rect->corner[GSK_CORNER_BOTTOM_RIGHT].height);
 }
 
-/* Best effort intersection of two rounded rectangles */
-static gboolean
-gsk_rounded_rect_intersection (const GskRoundedRect *outer,
-                               const GskRoundedRect *inner,
-                               GskRoundedRect       *out_intersection)
-{
-  const graphene_rect_t *outer_bounds = &outer->bounds;
-  const graphene_rect_t *inner_bounds = &inner->bounds;
-  graphene_rect_t outer_inner;
-  graphene_rect_t inner_inner;
-  gboolean contained_x;
-  gboolean contained_y;
-
-  get_inner_rect (outer, &outer_inner);
-
-  if (graphene_rect_contains_rect (&outer_inner, inner_bounds))
-    {
-      *out_intersection = *inner;
-      return TRUE;
-    }
-
-  get_inner_rect (inner, &inner_inner);
-
-  contained_x = outer_inner.origin.x <= inner_bounds->origin.x &&
-                (outer_inner.origin.x + outer_inner.size.width) > (inner_bounds->origin.x +
-                                                                   inner_bounds->size.width);
-
-  contained_y = outer_inner.origin.y <= inner_bounds->origin.y &&
-                (outer_inner.origin.y + outer_inner.size.height) > (inner_bounds->origin.y +
-                                                                    inner_bounds->size.height);
-
-  if (contained_x && !contained_y)
-    {
-      /* The intersection is @inner, but cut-off and with the cut-off corners
-       * set to size 0 */
-      *out_intersection = *inner;
-
-      if (inner_bounds->origin.y < outer_bounds->origin.y)
-        {
-          /* Set top corners to 0 */
-          graphene_rect_intersection (outer_bounds, inner_bounds, &out_intersection->bounds);
-          graphene_size_init (&out_intersection->corner[GSK_CORNER_TOP_LEFT], 0, 0);
-          graphene_size_init (&out_intersection->corner[GSK_CORNER_TOP_RIGHT], 0, 0);
-          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_BOTTOM_LEFT],
-                                        &inner->corner[GSK_CORNER_BOTTOM_LEFT]);
-          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_BOTTOM_RIGHT],
-                                        &inner->corner[GSK_CORNER_BOTTOM_RIGHT]);
-          return TRUE;
-        }
-      else if (inner_bounds->origin.y + inner_bounds->size.height >
-               outer_bounds->origin.y + outer_bounds->size.height)
-        {
-          /* Set bottom corners to 0 */
-          graphene_rect_intersection (outer_bounds, inner_bounds, &out_intersection->bounds);
-          graphene_size_init (&out_intersection->corner[GSK_CORNER_BOTTOM_LEFT], 0, 0);
-          graphene_size_init (&out_intersection->corner[GSK_CORNER_BOTTOM_RIGHT], 0, 0);
-          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_TOP_LEFT],
-                                        &inner->corner[GSK_CORNER_TOP_LEFT]);
-          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_TOP_RIGHT],
-                                        &inner->corner[GSK_CORNER_TOP_RIGHT]);
-          return TRUE;
-        }
-    }
-  else if (!contained_x && contained_y)
-    {
-      /* The intersection is @inner, but cut-off and with the cut-off corners
-       * set to size 0 */
-      *out_intersection = *inner;
-
-      if (inner_bounds->origin.x < outer_bounds->origin.x)
-        {
-          /* Set left corners to 0 */
-          graphene_rect_intersection (outer_bounds, inner_bounds, &out_intersection->bounds);
-          graphene_size_init (&out_intersection->corner[GSK_CORNER_TOP_LEFT], 0, 0);
-          graphene_size_init (&out_intersection->corner[GSK_CORNER_BOTTOM_LEFT], 0, 0);
-          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_TOP_RIGHT],
-                                        &inner->corner[GSK_CORNER_TOP_RIGHT]);
-          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_BOTTOM_RIGHT],
-                                        &inner->corner[GSK_CORNER_BOTTOM_RIGHT]);
-          return TRUE;
-        }
-      else if (inner_bounds->origin.x + inner_bounds->size.width >
-               outer_bounds->origin.x + outer_bounds->size.width)
-        {
-          /* Set right corners to 0 */
-          graphene_rect_intersection (outer_bounds, inner_bounds, &out_intersection->bounds);
-          graphene_size_init (&out_intersection->corner[GSK_CORNER_TOP_RIGHT], 0, 0);
-          graphene_size_init (&out_intersection->corner[GSK_CORNER_BOTTOM_RIGHT], 0, 0);
-          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_TOP_LEFT],
-                                        &inner->corner[GSK_CORNER_TOP_LEFT]);
-          graphene_size_init_from_size (&out_intersection->corner[GSK_CORNER_BOTTOM_LEFT],
-                                        &inner->corner[GSK_CORNER_BOTTOM_LEFT]);
-          return TRUE;
-        }
-    }
-
-  /* Actually not possible or just too much work. */
-  return FALSE;
-}
-
 static inline void
 render_rounded_clip_node (GskGLRenderer       *self,
                           GskRenderNode       *node,
@@ -1250,7 +1150,6 @@ render_rounded_clip_node (GskGLRenderer       *self,
   GskRoundedRect child_clip = *gsk_rounded_clip_node_peek_clip (node);
   GskRoundedRect transformed_clip;
   GskRenderNode *child = gsk_rounded_clip_node_get_child (node);
-  GskRoundedRect intersection;
   gboolean need_offscreen;
   int i;
 
@@ -1258,16 +1157,12 @@ render_rounded_clip_node (GskGLRenderer       *self,
   ops_transform_bounds_modelview (builder, &child_clip.bounds, &transformed_clip.bounds);
 
   if (!ops_has_clip (builder))
-    {
-      intersection = transformed_clip;
-      need_offscreen = FALSE;
-    }
+    need_offscreen = FALSE;
+  else if (graphene_rect_contains_rect (&builder->current_clip->bounds,
+                                        &transformed_clip.bounds))
+    need_offscreen = FALSE;
   else
-    {
-      need_offscreen = !gsk_rounded_rect_intersection (builder->current_clip,
-                                                       &transformed_clip,
-                                                       &intersection);
-    }
+    need_offscreen = TRUE;
 
   if (!need_offscreen)
     {
@@ -1275,11 +1170,11 @@ render_rounded_clip_node (GskGLRenderer       *self,
        * the new clip and add the render ops */
       for (i = 0; i < 4; i ++)
         {
-          intersection.corner[i].width *= scale;
-          intersection.corner[i].height *= scale;
+          transformed_clip.corner[i].width *= scale;
+          transformed_clip.corner[i].height *= scale;
         }
 
-      ops_push_clip (builder, &intersection);
+      ops_push_clip (builder, &transformed_clip);
       gsk_gl_renderer_add_render_ops (self, child, builder);
       ops_pop_clip (builder);
     }
