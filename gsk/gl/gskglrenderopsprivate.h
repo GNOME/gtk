@@ -358,7 +358,7 @@ void              ops_offset             (RenderOpBuilder        *builder,
                                           float                   x,
                                           float                   y);
 
-void              ops_add                (RenderOpBuilder        *builder,
-                                          const RenderOp         *op);
+RenderOp         *ops_begin              (RenderOpBuilder        *builder,
+                                          guint                   kind);
 
 #endif
