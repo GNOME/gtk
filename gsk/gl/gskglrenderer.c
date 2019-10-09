@@ -584,7 +584,7 @@ render_text_node (GskGLRenderer   *self,
   for (i = 0; i < num_glyphs; i++)
     {
       const PangoGlyphInfo *gi = &glyphs[i];
-      GskGLCachedGlyph glyph;
+      const GskGLCachedGlyph *glyph;
       float glyph_x, glyph_y, glyph_w, glyph_h;
       float tx, ty, tx2, ty2;
       double cx;
@@ -606,23 +606,23 @@ render_text_node (GskGLRenderer   *self,
                                  &glyph);
 
       /* e.g. whitespace */
-      if (glyph.draw_width <= 0 || glyph.draw_height <= 0)
+      if (glyph->draw_width <= 0 || glyph->draw_height <= 0)
         goto next;
 
-      if (glyph.texture_id == 0)
+      if (glyph->texture_id == 0)
         goto next;
 
-      ops_set_texture (builder, glyph.texture_id);
+      ops_set_texture (builder, glyph->texture_id);
 
-      tx  = glyph.tx;
-      ty  = glyph.ty;
-      tx2 = tx + glyph.tw;
-      ty2 = ty + glyph.th;
+      tx  = glyph->tx;
+      ty  = glyph->ty;
+      tx2 = tx + glyph->tw;
+      ty2 = ty + glyph->th;
 
-      glyph_x = floor (x + cx + 0.125) + glyph.draw_x;
-      glyph_y = floor (y + cy + 0.125) + glyph.draw_y;
-      glyph_w = glyph.draw_width;
-      glyph_h = glyph.draw_height;
+      glyph_x = floor (x + cx + 0.125) + glyph->draw_x;
+      glyph_y = floor (y + cy + 0.125) + glyph->draw_y;
+      glyph_w = glyph->draw_width;
+      glyph_h = glyph->draw_height;
 
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
         { { glyph_x,           glyph_y           }, { tx,  ty  }, },
