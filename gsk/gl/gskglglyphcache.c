@@ -256,14 +256,14 @@ add_to_cache (GskGLGlyphCache  *self,
 #define PHASE(x) ((int)(floor (4 * (x + 0.125)) - 4 * floor (x + 0.125)))
 
 gboolean
-gsk_gl_glyph_cache_lookup (GskGLGlyphCache  *cache,
-                           PangoFont        *font,
-                           PangoGlyph        glyph,
-                           float             x,
-                           float             y,
-                           float             scale,
-                           GskGLDriver      *driver,
-                           GskGLCachedGlyph *cached_glyph_out)
+gsk_gl_glyph_cache_lookup (GskGLGlyphCache         *cache,
+                           PangoFont               *font,
+                           PangoGlyph               glyph,
+                           float                    x,
+                           float                    y,
+                           float                    scale,
+                           GskGLDriver             *driver,
+                           const GskGLCachedGlyph **cached_glyph_out)
 {
   GskGLCachedGlyph *value;
   guint xshift = PHASE (x);
@@ -333,15 +333,15 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache  *cache,
           value->draw_height * key->scale / 1024 > 0)
         add_to_cache (cache, key, driver, value);
 
-      *cached_glyph_out = *value;
+      *cached_glyph_out = value;
       g_hash_table_insert (cache->hash_table, key, value);
     }
   else
     {
-      *cached_glyph_out = *value;
+      *cached_glyph_out = value;
     }
 
-  return cached_glyph_out->atlas != NULL;
+  return (*cached_glyph_out)->atlas != NULL;
 }
 
 void
