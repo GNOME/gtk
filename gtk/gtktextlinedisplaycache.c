@@ -681,7 +681,7 @@ gtk_text_line_display_cache_invalidate_y_range (GtkTextLineDisplayCache *cache,
       cache_y = _gtk_text_btree_find_line_top (btree, display->line, layout);
       cache_height = display->height;
 
-      if (cache_y + cache_height > y && cache_y < y + old_height)
+      if (cache_y + cache_height >= y && cache_y <= y + old_height)
         {
           gtk_text_line_display_cache_invalidate_display (cache, display, cursors_only);
 
