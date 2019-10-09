@@ -86,6 +86,7 @@
 #include "gtktextutil.h"
 #include "gskpango.h"
 #include "gtkintl.h"
+#include "gtksnapshotprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtktextviewprivate.h"
 
@@ -4153,7 +4154,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
           if (line_display->node == NULL)
             {
-              GtkSnapshot *sub = gtk_snapshot_new ();
+              GtkSnapshot *sub = gtk_snapshot_new_with_parent (snapshot);
 
               crenderer->snapshot = sub;
               render_para (crenderer, 0, line_display,
