@@ -61,6 +61,6 @@ gboolean                 gsk_gl_glyph_cache_lookup          (GskGLGlyphCache    
                                                              float                   y,
                                                              float                   scale,
                                                              GskGLDriver            *driver,
-                                                             GskGLCachedGlyph       *cached_glyph_out);
+                                                             const GskGLCachedGlyph **cached_glyph_out);
 
 #endif
