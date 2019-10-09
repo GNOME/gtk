@@ -3045,12 +3045,12 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           op->op == OP_CHANGE_VAO)
         continue;
 
-      if (op->op != OP_PUSH_DEBUG_GROUP &&
+      if (program == NULL &&
+          op->op != OP_PUSH_DEBUG_GROUP &&
           op->op != OP_POP_DEBUG_GROUP &&
           op->op != OP_CHANGE_PROGRAM &&
           op->op != OP_CHANGE_RENDER_TARGET &&
-          op->op != OP_CLEAR &&
-          program == NULL)
+          op->op != OP_CLEAR)
         continue;
 
       OP_PRINT ("Op %u: %u", i, op->op);
