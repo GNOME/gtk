@@ -28,6 +28,7 @@
 #include "gsktransformprivate.h"
 
 #include "gdk/gdktextureprivate.h"
+#include <cairo-ft.h>
 
 static void
 rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
@@ -3408,6 +3409,7 @@ struct _GskTextNode
   GskRenderNode render_node;
 
   PangoFont *font;
+  gboolean has_color_glyphs;
 
   GdkRGBA color;
   graphene_point_t offset;
@@ -3491,6 +3493,23 @@ static const GskRenderNodeClass GSK_TEXT_NODE_CLASS = {
   gsk_text_node_diff,
 };
 
+static gboolean
+font_has_color_glyphs (const PangoFont *font)
+{
+  cairo_scaled_font_t *scaled_font;
+  gboolean has_color = FALSE;
+
+  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
+  if (cairo_scaled_font_get_type (scaled_font) == CAIRO_FONT_TYPE_FT)
+    {
+      FT_Face ft_face = cairo_ft_scaled_font_lock_face (scaled_font);
+      has_color = (FT_HAS_COLOR (ft_face) != 0);
+      cairo_ft_scaled_font_unlock_face (scaled_font);
+    }
+
+  return has_color;
+}
+
 /**
  * gsk_text_node_new:
  * @font: the #PangoFont containing the glyphs
@@ -3523,6 +3542,7 @@ gsk_text_node_new (PangoFont              *font,
   self = (GskTextNode *) gsk_render_node_new (&GSK_TEXT_NODE_CLASS, sizeof (PangoGlyphInfo) * glyphs->num_glyphs);
 
   self->font = g_object_ref (font);
+  self->has_color_glyphs = font_has_color_glyphs (font);
   self->color = *color;
   self->offset = *offset;
   self->num_glyphs = glyphs->num_glyphs;
@@ -3563,6 +3583,16 @@ gsk_text_node_peek_font (GskRenderNode *node)
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TEXT_NODE), NULL);
 
   return self->font;
+}
+
+gboolean
+gsk_text_node_has_color_glyphs (GskRenderNode *node)
+{
+  GskTextNode *self = (GskTextNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_TEXT_NODE), FALSE);
+
+  return self->has_color_glyphs;
 }
 
 guint

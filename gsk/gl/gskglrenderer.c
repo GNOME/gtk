@@ -25,7 +25,6 @@
 #include "gdk/gdkprofilerprivate.h"
 
 #include <epoxy/gl.h>
-#include <cairo-ft.h>
 
 #define SHADER_VERSION_GLES             100
 #define SHADER_VERSION_GL2_LEGACY       110
@@ -188,23 +187,6 @@ dump_node (GskRenderNode *node,
 
   cairo_surface_write_to_png (surface, filename);
   cairo_surface_destroy (surface);
-}
-
-static gboolean
-font_has_color_glyphs (const PangoFont *font)
-{
-  cairo_scaled_font_t *scaled_font;
-  gboolean has_color = FALSE;
-
-  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
-  if (cairo_scaled_font_get_type (scaled_font) == CAIRO_FONT_TYPE_FT)
-    {
-      FT_Face ft_face = cairo_ft_scaled_font_lock_face (scaled_font);
-      has_color = (FT_HAS_COLOR (ft_face) != 0);
-      cairo_ft_scaled_font_unlock_face (scaled_font);
-    }
-
-  return has_color;
 }
 
 static inline void
@@ -570,7 +552,7 @@ render_text_node (GskGLRenderer   *self,
   GlyphCacheKey lookup;
 
   /* If the font has color glyphs, we don't need to recolor anything */
-  if (!force_color && font_has_color_glyphs (font))
+  if (!force_color && gsk_text_node_has_color_glyphs (node))
     {
       ops_set_program (builder, &self->blit_program);
     }
