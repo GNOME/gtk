@@ -295,6 +295,7 @@ GskRenderNode *         gsk_text_node_new                       (PangoFont      
                                                                  const graphene_point_t   *offset);
 GDK_AVAILABLE_IN_ALL
 PangoFont *             gsk_text_node_peek_font                 (GskRenderNode            *node);
+gboolean                gsk_text_node_has_color_glyphs          (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL
 guint                   gsk_text_node_get_num_glyphs            (GskRenderNode            *node);
 GDK_AVAILABLE_IN_ALL

@@ -26,8 +26,6 @@
 #include "gskvulkanrendererprivate.h"
 #include "gskprivate.h"
 
-#include <cairo-ft.h>
-
 #define ORTHO_NEAR_PLANE        -10000
 #define ORTHO_FAR_PLANE          10000
 
@@ -236,23 +234,6 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
   g_slice_free (GskVulkanRenderPass, self);
 }
 
-static gboolean
-font_has_color_glyphs (const PangoFont *font)
-{
-  cairo_scaled_font_t *scaled_font;
-  gboolean has_color = FALSE;
-
-  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
-  if (cairo_scaled_font_get_type (scaled_font) == CAIRO_FONT_TYPE_FT)
-    {
-      FT_Face ft_face = cairo_ft_scaled_font_lock_face (scaled_font);
-      has_color = (FT_HAS_COLOR (ft_face) != 0);
-      cairo_ft_scaled_font_unlock_face (scaled_font);
-    }
-
-  return has_color;
-}
-
 #define FALLBACK(...) G_STMT_START { \
   GSK_RENDERER_NOTE (gsk_vulkan_render_get_renderer (render), FALLBACK, g_message (__VA_ARGS__)); \
   goto fallback; \
@@ -367,13 +348,14 @@ gsk_vulkan_render_pass_add_node (GskVulkanRenderPass           *self,
         const PangoFont *font = gsk_text_node_peek_font (node);
         const PangoGlyphInfo *glyphs = gsk_text_node_peek_glyphs (node);
         guint num_glyphs = gsk_text_node_get_num_glyphs (node);
+        gboolean has_color_glyphs = gsk_text_node_has_color_glyphs (node);
         int i;
         guint count;
         guint texture_index;
         gint x_position;
         GskVulkanRenderer *renderer = GSK_VULKAN_RENDERER (gsk_vulkan_render_get_renderer (render));
 
-        if (font_has_color_glyphs (font))
+        if (has_color_glyphs)
           {
             if (gsk_vulkan_clip_contains_rect (&constants->clip, &node->bounds))
               pipeline_type = GSK_VULKAN_PIPELINE_COLOR_TEXT;
