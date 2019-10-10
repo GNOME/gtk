@@ -552,6 +552,7 @@ render_text_node (GskGLRenderer   *self,
   const graphene_point_t *offset = gsk_text_node_get_offset (node);
   float x = offset->x + builder->dx;
   float y = offset->y + builder->dy;
+  GlyphCacheKey lookup;
 
   /* If the font has color glyphs, we don't need to recolor anything */
   if (!force_color && gsk_text_node_has_color_glyphs (node))
@@ -563,6 +564,9 @@ render_text_node (GskGLRenderer   *self,
       ops_set_program (builder, &self->coloring_program);
       ops_set_color (builder, color);
     }
+
+  lookup.font = (PangoFont *)font;
+  lookup.scale = (guint) (text_scale * 1024);
 
   /* We use one quad per character, unlike the other nodes which
    * use at most one quad altogether */
@@ -581,18 +585,12 @@ render_text_node (GskGLRenderer   *self,
       cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
       cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
 
+      glyph_cache_key_set_glyph_and_shift (&lookup, gi->glyph, x + cx, y + cy);
+
       gsk_gl_glyph_cache_lookup (self->glyph_cache,
-                                 (PangoFont *)font,
-                                 gi->glyph,
-                                 x + cx,
-                                 y + cy,
-                                 text_scale,
+                                 &lookup,
                                  self->gl_driver,
                                  &glyph);
-
-      /* e.g. whitespace */
-      if (glyph->draw_width <= 0 || glyph->draw_height <= 0)
-        goto next;
 
       if (glyph->texture_id == 0)
         goto next;
