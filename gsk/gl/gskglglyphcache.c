@@ -87,9 +87,7 @@ glyph_cache_hash (gconstpointer v)
 {
   const GlyphCacheKey *key = v;
 
-  return GPOINTER_TO_UINT (key->font) ^
-         key->glyph_and_shift ^
-         key->scale;
+  return key->glyph_and_shift;
 }
 
 static void
