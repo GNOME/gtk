@@ -589,7 +589,7 @@ render_text_node (GskGLRenderer   *self,
     {
       const PangoGlyphInfo *gi = &glyphs[i];
       const GskGLCachedGlyph *glyph;
-      float glyph_x, glyph_y, glyph_w, glyph_h;
+      float glyph_x, glyph_y, glyph_x2, glyph_y2;
       float tx, ty, tx2, ty2;
       double cx;
       double cy;
@@ -619,17 +619,17 @@ render_text_node (GskGLRenderer   *self,
 
       glyph_x = floor (x + cx + 0.125) + glyph->draw_x;
       glyph_y = floor (y + cy + 0.125) + glyph->draw_y;
-      glyph_w = glyph->draw_width;
-      glyph_h = glyph->draw_height;
+      glyph_x2 = glyph_x + glyph->draw_width;
+      glyph_y2 = glyph_y + glyph->draw_height;
 
       ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-        { { glyph_x,           glyph_y           }, { tx,  ty  }, },
-        { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
-        { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
+        { { glyph_x,  glyph_y  }, { tx,  ty  }, },
+        { { glyph_x,  glyph_y2 }, { tx,  ty2 }, },
+        { { glyph_x2, glyph_y  }, { tx2, ty  }, },
 
-        { { glyph_x + glyph_w, glyph_y + glyph_h }, { tx2, ty2 }, },
-        { { glyph_x,           glyph_y + glyph_h }, { tx,  ty2 }, },
-        { { glyph_x + glyph_w, glyph_y           }, { tx2, ty  }, },
+        { { glyph_x2, glyph_y2 }, { tx2, ty2 }, },
+        { { glyph_x,  glyph_y2 }, { tx,  ty2 }, },
+        { { glyph_x2, glyph_y  }, { tx2, ty  }, },
       });
 
 next:
