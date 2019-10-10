@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Benjamin Otte
+ * Copyright © 2019 Benjamin Otte
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,8 @@
 
 #include "gtkadjustment.h"
 #include "gtkintl.h"
+#include "gtklistitemfactory.h"
+#include "gtklistitemmanagerprivate.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
 
@@ -34,23 +36,44 @@
  * @short_description: A widget for displaying lists in a grid
  * @see_also: #GListModel
  *
- * GtkGridView is a widget to present a view into a large dynamic list of items.
+ * GtkGridView is a widget to present a view into a large dynamic grid of items.
  */
+
+typedef struct _Cell Cell;
+typedef struct _CellAugment CellAugment;
 
 struct _GtkGridView
 {
   GtkWidget parent_instance;
 
   GListModel *model;
+  GtkListItemManager *item_manager;
   GtkAdjustment *adjustment[2];
   GtkScrollablePolicy scroll_policy[2];
   guint min_columns;
   guint max_columns;
 };
 
+struct _Cell
+{
+  GtkListItemManagerItem parent;
+  guint size_first_row; /* total */
+  guint size; /* total */
+  guint size_last_row; /* total */
+};
+
+struct _CellAugment
+{
+  GtkListItemManagerItemAugment parent;
+  guint size_first_row; /* total */
+  guint size; /* total */
+  guint size_last_row; /* total */
+};
+
 enum
 {
   PROP_0,
+  PROP_FACTORY,
   PROP_HADJUSTMENT,
   PROP_HSCROLL_POLICY,
   PROP_MAX_COLUMNS,
@@ -154,6 +177,8 @@ gtk_grid_view_dispose (GObject *object)
   gtk_grid_view_clear_adjustment (self, GTK_ORIENTATION_HORIZONTAL);
   gtk_grid_view_clear_adjustment (self, GTK_ORIENTATION_VERTICAL);
 
+  g_clear_object (&self->item_manager);
+
   G_OBJECT_CLASS (gtk_grid_view_parent_class)->dispose (object);
 }
 
@@ -167,6 +192,10 @@ gtk_grid_view_get_property (GObject    *object,
 
   switch (property_id)
     {
+    case PROP_FACTORY:
+      g_value_set_object (value, gtk_list_item_manager_get_factory (self->item_manager));
+      break;
+
     case PROP_HADJUSTMENT:
       g_value_set_object (value, self->adjustment[GTK_ORIENTATION_HORIZONTAL]);
       break;
@@ -252,6 +281,10 @@ gtk_grid_view_set_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_FACTORY:
+      gtk_grid_view_set_factory (self, g_value_get_object (value));
+      break;
+
     case PROP_HADJUSTMENT:
       gtk_grid_view_set_adjustment (self, GTK_ORIENTATION_HORIZONTAL, g_value_get_object (value));
       break;
@@ -316,6 +349,19 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
                              g_object_interface_find_property (iface, "vscroll-policy"));
 
   /**
+   * GtkGridView:factory:
+   *
+   * Factory for populating list items
+   */
+  properties[PROP_FACTORY] =
+    g_param_spec_object ("factory",
+                         P_("Factory"),
+                         P_("Factory for populating list items"),
+                         GTK_TYPE_LIST_ITEM_FACTORY,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+
+  /**
    * GtkGridView:max-columns:
    *
    * Maximum number of columns per row
@@ -360,8 +406,41 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
 }
 
 static void
+cell_augment (GtkRbTree *tree,
+              gpointer   node_augment,
+              gpointer   node,
+              gpointer   left,
+              gpointer   right)
+{
+#if 0
+  Cell *cell = node;
+  CellAugment *aug = node_augment;
+
+  gtk_list_item_manager_augment_node (tree, node_augment, node, left, right);
+
+  aug->height = row->height * row->parent.n_items;
+
+  if (left)
+    {
+      ListRowAugment *left_aug = gtk_rb_tree_get_augment (tree, left);
+
+      aug->height += left_aug->height;
+    }
+
+  if (right)
+    {
+      ListRowAugment *right_aug = gtk_rb_tree_get_augment (tree, right);
+
+      aug->height += right_aug->height;
+    }
+#endif
+}
+
+static void
 gtk_grid_view_init (GtkGridView *self)
 {
+  self->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self), Cell, CellAugment, cell_augment);
+
   self->min_columns = 1;
   self->max_columns = DEFAULT_MAX_COLUMNS;
 
@@ -376,8 +455,9 @@ gtk_grid_view_init (GtkGridView *self)
  *
  * Creates a new empty #GtkGridView.
  *
- * You most likely want to call gtk_grid_view_set_model() to set
- * a model and then set up a way to map its items to widgets next.
+ * You most likely want to call gtk_grid_view_set_factory() to
+ * set up a way to map its items to widgets and gtk_grid_view_set_model()
+ * to set a model to provide items next.
  *
  * Returns: a new #GtkGridView
  **/
@@ -385,6 +465,41 @@ GtkWidget *
 gtk_grid_view_new (void)
 {
   return g_object_new (GTK_TYPE_GRID_VIEW, NULL);
+}
+
+/**
+ * gtk_grid_view_new_with_factory:
+ * @factory: (transfer full): The factory to populate items with
+ *
+ * Creates a new #GtkGridView that uses the given @factory for
+ * mapping items to widgets.
+ *
+ * You most likely want to call gtk_grid_view_set_model() to set
+ * a model next.
+ *
+ * The function takes ownership of the
+ * argument, so you can write code like
+ * ```
+ *   grid_view = gtk_grid_view_new_with_factory (
+ *     gtk_builder_list_item_factory_new_from_resource ("/resource.ui"));
+ * ```
+ *
+ * Returns: a new #GtkGridView using the given @factory
+ **/
+GtkWidget *
+gtk_grid_view_new_with_factory (GtkListItemFactory *factory)
+{
+  GtkWidget *result;
+
+  g_return_val_if_fail (GTK_IS_LIST_ITEM_FACTORY (factory), NULL);
+
+  result = g_object_new (GTK_TYPE_GRID_VIEW,
+                         "factory", factory,
+                         NULL);
+
+  g_object_unref (factory);
+
+  return result;
 }
 
 /**
@@ -433,6 +548,44 @@ gtk_grid_view_set_model (GtkGridView *self,
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
+}
+
+/**
+ * gtk_grid_view_get_factory:
+ * @self: a #GtkGridView
+ *
+ * Gets the factory that's currently used to populate list items.
+ *
+ * Returns: (nullable) (transfer none): The factory in use
+ **/
+GtkListItemFactory *
+gtk_grid_view_get_factory (GtkGridView *self)
+{
+  g_return_val_if_fail (GTK_IS_GRID_VIEW (self), NULL);
+
+  return gtk_list_item_manager_get_factory (self->item_manager);
+}
+
+/**
+ * gtk_grid_view_set_factory:
+ * @self: a #GtkGridView
+ * @factory: (allow-none) (transfer none): the factory to use or %NULL for none
+ *
+ * Sets the #GtkListItemFactory to use for populating list items.
+ **/
+void
+gtk_grid_view_set_factory (GtkGridView        *self,
+                           GtkListItemFactory *factory)
+{
+  g_return_if_fail (GTK_IS_GRID_VIEW (self));
+  g_return_if_fail (factory == NULL || GTK_LIST_ITEM_FACTORY (factory));
+
+  if (factory == gtk_list_item_manager_get_factory (self->item_manager))
+    return;
+
+  gtk_list_item_manager_set_factory (self->item_manager, factory);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
 }
 
 /**
