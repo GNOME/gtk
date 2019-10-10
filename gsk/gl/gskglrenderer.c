@@ -576,14 +576,14 @@ render_text_node (GskGLRenderer   *self,
       const GskGLCachedGlyph *glyph;
       float glyph_x, glyph_y, glyph_x2, glyph_y2;
       float tx, ty, tx2, ty2;
-      double cx;
-      double cy;
+      float cx;
+      float cy;
 
       if (gi->glyph == PANGO_GLYPH_EMPTY)
         continue;
 
-      cx = (double)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
-      cy = (double)(gi->geometry.y_offset) / PANGO_SCALE;
+      cx = (float)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+      cy = (float)(gi->geometry.y_offset) / PANGO_SCALE;
 
       glyph_cache_key_set_glyph_and_shift (&lookup, gi->glyph, x + cx, y + cy);
 
