@@ -1,5 +1,5 @@
 /*
- * Copyright © 2018 Benjamin Otte
+ * Copyright © 2019 Benjamin Otte
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,12 +35,20 @@ G_DECLARE_FINAL_TYPE (GtkGridView, gtk_grid_view, GTK, GRID_VIEW, GtkWidget)
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_grid_view_new                               (void);
+GDK_AVAILABLE_IN_ALL
+GtkWidget *     gtk_grid_view_new_with_factory                  (GtkListItemFactory     *factory);
 
 GDK_AVAILABLE_IN_ALL
 GListModel *    gtk_grid_view_get_model                         (GtkGridView            *self);
 GDK_AVAILABLE_IN_ALL
 void            gtk_grid_view_set_model                         (GtkGridView            *self,
                                                                  GListModel             *model);
+GDK_AVAILABLE_IN_ALL
+void            gtk_grid_view_set_factory                       (GtkGridView            *self,
+                                                                 GtkListItemFactory     *factory);
+GDK_AVAILABLE_IN_ALL
+GtkListItemFactory *
+                gtk_grid_view_get_factory                       (GtkGridView            *self);
 GDK_AVAILABLE_IN_ALL
 guint           gtk_grid_view_get_min_columns                   (GtkGridView            *self);
 GDK_AVAILABLE_IN_ALL
