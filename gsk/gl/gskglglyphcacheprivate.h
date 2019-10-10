@@ -21,11 +21,14 @@ typedef struct
 typedef struct
 {
   PangoFont *font;
-  PangoGlyph glyph;
-  guint xshift;
-  guint yshift;
+  PangoGlyph glyph_and_shift;
   guint scale; /* times 1024 */
 } GlyphCacheKey;
+
+#define GLYPH(x)   ((x) & 0xffffff)
+#define XSHIFT(x)  (((x) >> 24) & 3)
+#define YSHIFT(x)  (((x) >> 26) & 3)
+#define PHASE(x) ((int)(floor (4 * (x + 0.125)) - 4 * floor (x + 0.125)))
 
 typedef struct _GskGLCachedGlyph GskGLCachedGlyph;
 
@@ -55,11 +58,7 @@ GskGLGlyphCache *        gsk_gl_glyph_cache_ref             (GskGLGlyphCache *se
 void                     gsk_gl_glyph_cache_unref           (GskGLGlyphCache        *self);
 void                     gsk_gl_glyph_cache_begin_frame     (GskGLGlyphCache        *self);
 gboolean                 gsk_gl_glyph_cache_lookup          (GskGLGlyphCache        *self,
-                                                             PangoFont              *font,
-                                                             PangoGlyph              glyph,
-                                                             float                   x,
-                                                             float                   y,
-                                                             float                   scale,
+                                                             GlyphCacheKey          *lookup,
                                                              GskGLDriver            *driver,
                                                              const GskGLCachedGlyph **cached_glyph_out);
 
