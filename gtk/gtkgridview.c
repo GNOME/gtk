@@ -25,8 +25,10 @@
 #include "gtkintl.h"
 #include "gtklistitemfactory.h"
 #include "gtklistitemmanagerprivate.h"
+#include "gtkorientableprivate.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
+#include "gtktypebuiltins.h"
 
 #define DEFAULT_MAX_COLUMNS (7)
 
@@ -50,6 +52,7 @@ struct _GtkGridView
   GtkListItemManager *item_manager;
   GtkAdjustment *adjustment[2];
   GtkScrollablePolicy scroll_policy[2];
+  GtkOrientation orientation;
   guint min_columns;
   guint max_columns;
 };
@@ -79,6 +82,7 @@ enum
   PROP_MAX_COLUMNS,
   PROP_MIN_COLUMNS,
   PROP_MODEL,
+  PROP_ORIENTATION,
   PROP_VADJUSTMENT,
   PROP_VSCROLL_POLICY,
 
@@ -86,6 +90,7 @@ enum
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkGridView, gtk_grid_view, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
@@ -216,6 +221,10 @@ gtk_grid_view_get_property (GObject    *object,
       g_value_set_object (value, self->model);
       break;
 
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, self->orientation);
+      break;
+
     case PROP_VADJUSTMENT:
       g_value_set_object (value, self->adjustment[GTK_ORIENTATION_VERTICAL]);
       break;
@@ -299,6 +308,19 @@ gtk_grid_view_set_property (GObject      *object,
 
     case PROP_MIN_COLUMNS:
       gtk_grid_view_set_min_columns (self, g_value_get_uint (value));
+      break;
+ 
+    case PROP_ORIENTATION:
+      {
+        GtkOrientation orientation = g_value_get_enum (value);
+        if (self->orientation != orientation)
+          {
+            self->orientation = orientation;
+            _gtk_orientable_set_style_classes (GTK_ORIENTABLE (self));
+            gtk_widget_queue_resize (GTK_WIDGET (self));
+            g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ORIENTATION]);
+          }
+      }
       break;
 
     case PROP_MODEL:
@@ -400,9 +422,24 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
                          G_TYPE_LIST_MODEL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GtkGridView:orientation:
+   *
+   * The orientation of the gridview. See GtkOrientable:orientation
+   * for details.
+   */
+  properties[PROP_ORIENTATION] =
+    g_param_spec_enum ("orientation",
+                       P_("Orientation"),
+                       P_("The orientation of the orientable"),
+                       GTK_TYPE_ORIENTATION,
+                       GTK_ORIENTATION_VERTICAL,
+                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
-  gtk_widget_class_set_css_name (widget_class, I_("grid"));
+  gtk_widget_class_set_css_name (widget_class, I_("flowbox"));
+
 }
 
 static void
@@ -443,6 +480,7 @@ gtk_grid_view_init (GtkGridView *self)
 
   self->min_columns = 1;
   self->max_columns = DEFAULT_MAX_COLUMNS;
+  self->orientation = GTK_ORIENTATION_VERTICAL;
 
   self->adjustment[GTK_ORIENTATION_HORIZONTAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   self->adjustment[GTK_ORIENTATION_VERTICAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
