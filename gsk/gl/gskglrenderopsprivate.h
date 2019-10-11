@@ -159,7 +159,7 @@ typedef struct
     const Program *program;
     int texture_id;
     int render_target_id;
-    GdkRGBA color;
+    const GdkRGBA *color;
     GskQuadVertex vertex_data[6];
     GskRoundedRect clip;
     graphene_rect_t viewport;

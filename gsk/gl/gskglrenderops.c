@@ -649,7 +649,7 @@ ops_set_color (RenderOpBuilder *builder,
   current_program_state->color = *color;
 
   op = ops_begin (builder, OP_CHANGE_COLOR);
-  op->color = *color;
+  op->color = color;
 }
 
 void

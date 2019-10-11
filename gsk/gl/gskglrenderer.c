@@ -23,6 +23,7 @@
 #include "gdk/gdkgltextureprivate.h"
 #include "gdk/gdkglcontextprivate.h"
 #include "gdk/gdkprofilerprivate.h"
+#include "gdk/gdkrgbaprivate.h"
 
 #include <epoxy/gl.h>
 #include <cairo-ft.h>
@@ -398,8 +399,10 @@ add_rect_outline_ops (GskGLRenderer         *self,
                       RenderOpBuilder       *builder,
                       const graphene_rect_t *rect)
 {
+  GdkRGBA *color = gdk_rgba_copy (&GDK_RGBA ("#F00")); /* Leaked */
+
   ops_set_program (builder, &self->color_program);
-  ops_set_color (builder, &(GdkRGBA) { 1, 0, 0, 1 });
+  ops_set_color (builder, color);
 
   add_rect_ops (builder,
                 &GRAPHENE_RECT_INIT (rect->origin.x, rect->origin.y,
@@ -2122,9 +2125,13 @@ static inline void
 apply_color_op (const Program  *program,
                 const RenderOp *op)
 {
-  OP_PRINT (" -> Color: (%f, %f, %f, %f)", op->color.red, op->color.green, op->color.blue, op->color.alpha);
+  OP_PRINT (" -> Color: (%f, %f, %f, %f)",
+            op->color->red, op->color->green, op->color->blue, op->color->alpha);
   glUniform4f (program->color.color_location,
-               op->color.red, op->color.green, op->color.blue, op->color.alpha);
+               op->color->red,
+               op->color->green,
+               op->color->blue,
+               op->color->alpha);
 }
 
 static inline void
