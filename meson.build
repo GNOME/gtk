@@ -823,6 +823,11 @@ if profiler_enabled
   endif
 endif
 
+module_suffix = []
+if os_darwin
+  module_suffix = 'so'
+endif
+
 build_gir = get_option('introspection')
 subdir('gdk')
 subdir('gtk')

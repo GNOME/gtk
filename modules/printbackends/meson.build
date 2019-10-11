@@ -112,6 +112,7 @@ if print_backends.contains('file')
                 c_args: printbackends_args,
                 dependencies: libgtk_dep,
                 install_dir: printbackends_install_dir,
+                name_suffix: module_suffix,
                 install : true)
 endif
 
@@ -121,6 +122,7 @@ if print_backends.contains('lpr')
                 c_args: printbackends_args,
                 dependencies: libgtk_dep,
                 install_dir: printbackends_install_dir,
+                name_suffix: module_suffix,
                 install : true)
 endif
 
@@ -130,6 +132,7 @@ if print_backends.contains('test')
                 c_args: printbackends_args,
                 dependencies: libgtk_dep,
                 install_dir: printbackends_install_dir,
+                name_suffix: module_suffix,
                 install : true)
 endif
 
@@ -141,6 +144,7 @@ if print_backends.contains('cloudprint')
                   c_args: printbackends_args,
                   dependencies: [ libgtk_dep, rest_dep, json_glib_dep ],
                   install_dir: printbackends_install_dir,
+                  name_suffix: module_suffix,
                   install : true)
 endif
 
@@ -153,5 +157,6 @@ if print_backends.contains('cups')
                 c_args: printbackends_args,
                 dependencies: [libgtk_dep, cups_dep] + cups_extra_deps,
                 install_dir: printbackends_install_dir,
+                name_suffix: module_suffix,
                 install : true)
 endif
