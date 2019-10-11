@@ -13,7 +13,7 @@ static guint op_sizes[OP_LAST] = {
   sizeof (OpClip),
   sizeof (OpViewport),
   sizeof (OpTexture),
-  sizeof (OpVao),
+  sizeof (OpRepeat),
   sizeof (OpLinearGradient),
   sizeof (OpColorMatrix),
   sizeof (OpBlur),
@@ -30,7 +30,6 @@ static guint op_sizes[OP_LAST] = {
   sizeof (OpDebugGroup),
   0,
   sizeof (OpBlend),
-  sizeof (OpRepeat),
 };
 
 void
