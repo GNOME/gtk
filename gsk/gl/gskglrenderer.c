@@ -2972,10 +2972,10 @@ add_offscreen_ops (GskGLRenderer         *self,
 }
 
 static void
-gsk_gl_renderer_render_ops (GskGLRenderer *self,
-                            gsize          vertex_data_size)
+gsk_gl_renderer_render_ops (GskGLRenderer *self)
 {
   const Program *program = NULL;
+  gsize vertex_data_size = self->op_builder.vertices->len * sizeof (GskQuadVertex);
   float *vertex_data = (float*)self->op_builder.vertices->data;
   OpBufferIter iter;
   OpKind kind;
@@ -3173,7 +3173,6 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
   graphene_matrix_t projection;
-  gsize buffer_size;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 gpu_time, cpu_time, start_time;
@@ -3253,7 +3252,6 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   g_assert_cmpint (self->op_builder.current_render_target, ==, fbo_id);
   ops_pop_modelview (&self->op_builder);
   ops_pop_clip (&self->op_builder);
-  buffer_size = self->op_builder.buffer_size;
   ops_finish (&self->op_builder);
 
   /*g_message ("Ops: %u", self->render_ops->len);*/
@@ -3281,7 +3279,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   glBlendEquation (GL_FUNC_ADD);
 
   gdk_gl_context_push_debug_group (self->gl_context, "Rendering ops");
-  gsk_gl_renderer_render_ops (self, buffer_size);
+  gsk_gl_renderer_render_ops (self);
   gdk_gl_context_pop_debug_group (self->gl_context);
 
 #ifdef G_ENABLE_DEBUG

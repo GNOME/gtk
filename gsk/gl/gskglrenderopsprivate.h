@@ -153,8 +153,6 @@ typedef struct
   float current_opacity;
   float dx, dy;
 
-  gsize buffer_size;
-
   OpBuffer render_ops;
   GArray *vertices;
 
