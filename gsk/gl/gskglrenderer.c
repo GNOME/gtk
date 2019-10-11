@@ -1747,26 +1747,29 @@ render_outset_shadow_node (GskGLRenderer       *self,
         });
       }
 
-    /* Middle */
-    x1 = min_x + dx + left_width;
-    x2 = max_x + dx - right_width;
-    y1 = min_y + dy + top_height;
-    y2 = max_y + dy - bottom_height;
-    if (x2 > x1 && y2 > y1)
+    if (dx != 0 || dy != 0)
       {
-        tx1 = (texture_width - SHADOW_EXTRA_SIZE)  / 2.0f / texture_width;
-        tx2 = (texture_width + SHADOW_EXTRA_SIZE)  / 2.0f / texture_width;
-        ty1 = (texture_height - SHADOW_EXTRA_SIZE) / 2.0f / texture_height;
-        ty2 = (texture_height + SHADOW_EXTRA_SIZE) / 2.0f / texture_height;
-        ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
-          { { x1, y1 }, { tx1, ty2 }, },
-          { { x1, y2 }, { tx1, ty1 }, },
-          { { x2, y1 }, { tx2, ty2 }, },
+        /* Middle */
+        x1 = min_x + dx + left_width;
+        x2 = max_x + dx - right_width;
+        y1 = min_y + dy + top_height;
+        y2 = max_y + dy - bottom_height;
+        if (x2 > x1 && y2 > y1)
+          {
+            tx1 = (texture_width - SHADOW_EXTRA_SIZE)  / 2.0f / texture_width;
+            tx2 = (texture_width + SHADOW_EXTRA_SIZE)  / 2.0f / texture_width;
+            ty1 = (texture_height - SHADOW_EXTRA_SIZE) / 2.0f / texture_height;
+            ty2 = (texture_height + SHADOW_EXTRA_SIZE) / 2.0f / texture_height;
+            ops_draw (builder, (GskQuadVertex[GL_N_VERTICES]) {
+              { { x1, y1 }, { tx1, ty2 }, },
+              { { x1, y2 }, { tx1, ty1 }, },
+              { { x2, y1 }, { tx2, ty2 }, },
 
-          { { x2, y2 }, { tx2, ty1 }, },
-          { { x1, y2 }, { tx1, ty1 }, },
-          { { x2, y1 }, { tx2, ty2 }, },
-        });
+              { { x2, y2 }, { tx2, ty1 }, },
+              { { x1, y2 }, { tx1, ty1 }, },
+              { { x2, y1 }, { tx2, ty2 }, },
+            });
+          }
       }
 
   }
