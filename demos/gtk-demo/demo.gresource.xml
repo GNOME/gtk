@@ -104,6 +104,9 @@
     <file>gtkfishbowl.c</file>
     <file>gtkfishbowl.h</file>
   </gresource>
+  <gresource prefix="/iconscroll">
+    <file>iconscroll.ui</file>
+  </gresource>
   <gresource prefix="/iconview">
     <file>gnome-fs-directory.png</file>
     <file>gnome-fs-regular.png</file>
@@ -179,6 +182,7 @@
     <file>glarea.c</file>
     <file>headerbar.c</file>
     <file>hypertext.c</file>
+    <file>iconscroll.c</file>
     <file>iconview.c</file>
     <file>iconview_edit.c</file>
     <file>images.c</file>

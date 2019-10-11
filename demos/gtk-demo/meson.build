@@ -34,6 +34,7 @@ demos = files([
   'glarea.c',
   'headerbar.c',
   'hypertext.c',
+  'iconscroll.c',
   'iconview.c',
   'iconview_edit.c',
   'images.c',
