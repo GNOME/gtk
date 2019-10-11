@@ -102,44 +102,21 @@ gsk_gl_icon_cache_begin_frame (GskGLIconCache *self)
     }
 }
 
-/* FIXME: this could probably be done more efficiently */
-static cairo_surface_t *
-pad_surface (cairo_surface_t *surface)
-{
-  cairo_surface_t *padded;
-  cairo_t *cr;
-  cairo_pattern_t *pattern;
-  cairo_matrix_t matrix;
-
-  padded = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                       cairo_image_surface_get_width (surface) + 2,
-                                       cairo_image_surface_get_height (surface) + 2);
-
-  cr = cairo_create (padded);
-
-  pattern = cairo_pattern_create_for_surface (surface);
-  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
-
-  cairo_matrix_init_translate (&matrix, -1, -1);
-  cairo_pattern_set_matrix (pattern, &matrix);
-
-  cairo_set_source (cr, pattern);
-  cairo_paint (cr);
-
-  cairo_destroy (cr);
-  cairo_pattern_destroy (pattern);
-
-  return padded;
-}
-
 static void
-upload_region_or_else (GskGLIconCache *self,
-                       guint           texture_id,
-                       GskImageRegion *region)
+upload_regions (GskGLIconCache *self,
+                guint           texture_id,
+                guint           n_regions,
+                GskImageRegion *regions)
 {
+  int i;
+
   glBindTexture (GL_TEXTURE_2D, texture_id);
-  glTexSubImage2D (GL_TEXTURE_2D, 0, region->x, region->y, region->width, region->height,
-                   GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, region->data);
+  for (i = 0; i < n_regions; i++)
+    glTexSubImage2D (GL_TEXTURE_2D, 0,
+                     regions[i].x, regions[i].y,
+                     regions[i].width, regions[i].height,
+                     GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                     regions[i].data);
 }
 
 void
@@ -174,9 +151,9 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     GskGLTextureAtlas *atlas = NULL;
     int packed_x = 0;
     int packed_y = 0;
-    GskImageRegion region;
+    GskImageRegion region[5];
     cairo_surface_t *surface;
-    cairo_surface_t *padded_surface;
+    guchar *padding;
 
     gsk_gl_texture_atlases_pack (self->atlases, width + 2, height + 2, &atlas, &packed_x, &packed_y);
 
@@ -195,17 +172,42 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
 
     /* actually upload the texture */
     surface = gdk_texture_download_surface (texture);
-    padded_surface = pad_surface (surface);
-    region.x = packed_x;
-    region.y = packed_y;
-    region.width = width + 2;
-    region.height = height + 2;
-    region.data = cairo_image_surface_get_data (padded_surface);
+    padding = g_new0 (guchar, 4 * (MAX (width, height) + 2));
+
+    region[0].x = packed_x + 1;
+    region[0].y = packed_y + 1;
+    region[0].width = width;
+    region[0].height = height;
+    region[0].data = cairo_image_surface_get_data (surface);
+
+    region[1].x = packed_x;
+    region[1].y = packed_y;
+    region[1].width = width + 2;
+    region[1].height = 1;
+    region[1].data = padding;
+
+    region[2].x = packed_x;
+    region[2].y = packed_y + 1 + height;
+    region[2].width = width + 2;
+    region[2].height = 1;
+    region[2].data = padding;
+
+    region[3].x = packed_x;
+    region[3].y = packed_y;
+    region[3].width = 1;
+    region[3].height = height + 2;
+    region[3].data = padding;
+
+    region[4].x = packed_x + 1 + width;
+    region[4].y = packed_y;
+    region[4].width = 1;
+    region[4].height = height + 2;
+    region[4].data = padding;
 
     gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
                                             "Uploading texture");
 
-    upload_region_or_else (self, atlas->texture_id, &region);
+    upload_regions (self, atlas->texture_id, 5, region);
 
     gdk_gl_context_pop_debug_group (gdk_gl_context_get_current ());
 
@@ -213,7 +215,7 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     *out_texture_rect = icon_data->texture_rect;
 
     cairo_surface_destroy (surface);
-    cairo_surface_destroy (padded_surface);
+    g_free (padding);
 
 #if 0
     {
