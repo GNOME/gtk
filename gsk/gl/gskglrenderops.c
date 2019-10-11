@@ -183,6 +183,7 @@ ops_init (RenderOpBuilder *builder)
   builder->current_opacity = 1.0f;
 
   op_buffer_init (&builder->render_ops);
+  builder->vertices = g_array_new (FALSE, TRUE, sizeof (GskQuadVertex));
 
   for (i = 0; i < GL_N_PROGRAMS; i ++)
     {
@@ -200,6 +201,7 @@ ops_free (RenderOpBuilder *builder)
       gsk_transform_unref (builder->program_state[i].modelview);
     }
 
+  g_array_unref (builder->vertices);
   op_buffer_destroy (&builder->render_ops);
 }
 
@@ -681,35 +683,21 @@ ops_draw (RenderOpBuilder     *builder,
           const GskQuadVertex  vertex_data[GL_N_VERTICES])
 {
   OpDraw *op;
-  OpVao *vao;
 
   if ((op = op_buffer_peek_tail_checked (&builder->render_ops, OP_DRAW)))
     {
-      gsize old_vao_offset = op->vao_offset;
-      gsize old_vao_size = op->vao_size;
-
-      op_buffer_pop_tail (&builder->render_ops);
-
-      vao = op_buffer_add (&builder->render_ops, OP_CHANGE_VAO);
-      memcpy (vao->vertex_data, vertex_data, sizeof vao->vertex_data);
-
-      op = op_buffer_add (&builder->render_ops, OP_DRAW);
-      op->vao_offset = old_vao_offset;
-      op->vao_size = old_vao_size + GL_N_VERTICES;
+      op->vao_size += GL_N_VERTICES;
     }
   else
     {
       gsize offset = builder->buffer_size / sizeof (GskQuadVertex);
-
-      vao = op_buffer_add (&builder->render_ops, OP_CHANGE_VAO);
-      memcpy (vao->vertex_data, vertex_data, sizeof vao->vertex_data);
 
       op = op_buffer_add (&builder->render_ops, OP_DRAW);
       op->vao_offset = offset;
       op->vao_size = GL_N_VERTICES;
     }
 
-  /* We added new vertex data in both cases so increase the buffer size */
+  g_array_append_vals (builder->vertices, vertex_data, GL_N_VERTICES);
   builder->buffer_size += sizeof (GskQuadVertex) * GL_N_VERTICES;
 }
 
@@ -736,6 +724,7 @@ void
 ops_reset (RenderOpBuilder *builder)
 {
   op_buffer_clear (&builder->render_ops);
+  g_array_set_size (builder->vertices, 0);
 }
 
 OpBuffer *
