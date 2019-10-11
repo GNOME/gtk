@@ -1388,10 +1388,10 @@ render_unblurred_outset_shadow_node (GskGLRenderer       *self,
                                      const GskQuadVertex *vertex_data)
 {
   const float scale = ops_get_scale (builder);
+  const GskRoundedRect *outline = gsk_outset_shadow_node_peek_outline (node);
   const float spread = gsk_outset_shadow_node_get_spread (node);
   const float dx = gsk_outset_shadow_node_get_dx (node);
   const float dy = gsk_outset_shadow_node_get_dy (node);
-  GskRoundedRect r = *gsk_outset_shadow_node_peek_outline (node);
   RenderOp *op;
 
   ops_set_program (builder, &self->unblurred_outset_shadow_program);
@@ -1399,7 +1399,7 @@ render_unblurred_outset_shadow_node (GskGLRenderer       *self,
   rgba_to_float (gsk_outset_shadow_node_peek_color (node), op->unblurred_outset_shadow.color);
 
   rounded_rect_to_floats (self, builder,
-                          &r,
+                          outline,
                           op->unblurred_outset_shadow.outline,
                           op->unblurred_outset_shadow.corner_widths,
                           op->unblurred_outset_shadow.corner_heights);
