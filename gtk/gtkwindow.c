@@ -264,6 +264,7 @@ typedef struct
   guint    maximized                 : 1;
   guint    fullscreen                : 1;
   guint    tiled                     : 1;
+  guint    mobile                    : 1;
 
   guint    hide_on_close             : 1;
   guint    in_emit_close_request     : 1;
@@ -339,6 +340,7 @@ enum {
   PROP_FOCUS_VISIBLE,
 
   PROP_IS_MAXIMIZED,
+  PROP_IS_MOBILE,
 
   LAST_ARG
 };
@@ -495,6 +497,7 @@ static void     gtk_window_unrealize_icon             (GtkWindow    *window);
 static void     update_window_buttons                 (GtkWindow    *window);
 static void     get_shadow_width                      (GtkWindow    *window,
                                                        GtkBorder    *shadow_width);
+static void     update_is_mobile                      (GtkWindow    *window);
 
 static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
 static void        gtk_window_free_key_hash       (GtkWindow   *window);
@@ -1046,6 +1049,13 @@ gtk_window_class_init (GtkWindowClass *klass)
                             FALSE,
                             GTK_PARAM_READABLE);
 
+  window_props[PROP_IS_MOBILE] =
+      g_param_spec_boolean ("is-mobile",
+                            P_("Is mobile"),
+                            P_("Whether the window is mobile"),
+                            FALSE,
+                            GTK_PARAM_READABLE);
+
   /**
    * GtkWindow:application:
    *
@@ -1251,6 +1261,24 @@ _gtk_window_toggle_maximized (GtkWindow *window)
     gtk_window_unmaximize (window);
   else
     gtk_window_maximize (window);
+}
+
+/**
+ * gtk_window_is_mobile:
+ * @window: a #GtkWindow
+ *
+ * Retrieves the current mobile state of @window.
+ *
+ * Returns: whether the window has a mobile state.
+ */
+gboolean
+gtk_window_is_mobile (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+
+  return priv->mobile;
 }
 
 /**
@@ -2113,6 +2141,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_IS_MAXIMIZED:
       g_value_set_boolean (value, gtk_window_is_maximized (window));
+      break;
+    case PROP_IS_MOBILE:
+      g_value_set_boolean (value, gtk_window_is_mobile (window));
       break;
     case LAST_ARG + GTK_ROOT_PROP_FOCUS_WIDGET:
       g_value_set_object (value, gtk_window_get_focus (window));
@@ -5306,6 +5337,26 @@ subtract_borders (GtkBorder *one,
 }
 
 static void
+update_is_mobile (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GtkWidget *widget = GTK_WIDGET (window);
+  GtkAllocation allocation;
+  gboolean is_mobile;
+
+  gtk_widget_get_allocation (widget, &allocation);
+  is_mobile = ((gtk_window_is_maximized (window) || gtk_window_is_fullscreen (window)) &&
+               allocation.width <= 400);
+  is_mobile = allocation.width <= 400;
+
+  if (priv->mobile == is_mobile)
+    return;
+
+  priv->mobile = is_mobile ? 1 : 0;
+  g_object_notify_by_pspec (G_OBJECT (widget), window_props[PROP_IS_MOBILE]);
+}
+
+static void
 get_shadow_width (GtkWindow *window,
                   GtkBorder *shadow_width)
 {
@@ -5656,6 +5707,8 @@ gtk_window_realize (GtkWidget *widget)
   gtk_window_realize_icon (window);
 
   check_scale_changed (window);
+
+  update_is_mobile (window);
 }
 
 static void
@@ -5717,6 +5770,8 @@ gtk_window_unrealize (GtkWidget *widget)
   g_clear_object (&priv->surface);
 
   priv->hardcoded_surface = NULL;
+
+  update_is_mobile (window);
 }
 
 static void
@@ -5895,6 +5950,7 @@ gtk_window_size_allocate (GtkWidget *widget,
   child = gtk_bin_get_child (GTK_BIN (window));
   if (child && gtk_widget_get_visible (child))
     gtk_widget_size_allocate (child, &child_allocation, -1);
+  update_is_mobile (window);
 }
 
 gboolean
@@ -5995,6 +6051,7 @@ surface_state_changed (GtkWidget *widget)
     {
       priv->fullscreen =
         (new_surface_state & GDK_SURFACE_STATE_FULLSCREEN) ? 1 : 0;
+      update_is_mobile (window);
     }
 
   if (changed_mask & GDK_SURFACE_STATE_MAXIMIZED)
@@ -6002,6 +6059,7 @@ surface_state_changed (GtkWidget *widget)
       priv->maximized =
         (new_surface_state & GDK_SURFACE_STATE_MAXIMIZED) ? 1 : 0;
       g_object_notify_by_pspec (G_OBJECT (widget), window_props[PROP_IS_MAXIMIZED]);
+      update_is_mobile (window);
     }
 
   update_edge_constraints (window, new_surface_state);
