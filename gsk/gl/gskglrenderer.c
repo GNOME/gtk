@@ -1277,13 +1277,14 @@ render_blur_node (GskGLRenderer       *self,
   const float max_x = min_x + node->bounds.size.width;
   const float max_y = min_y + node->bounds.size.height;
   const float blur_radius = gsk_blur_node_get_radius (node);
+  GskRenderNode *child = gsk_blur_node_get_child (node);
   TextureRegion region;
   gboolean is_offscreen;
   RenderOp *op;
 
   if (blur_radius <= 0)
     {
-      gsk_gl_renderer_add_render_ops (self, gsk_blur_node_get_child (node), builder);
+      gsk_gl_renderer_add_render_ops (self, child, builder);
       return;
     }
 
@@ -1294,7 +1295,7 @@ render_blur_node (GskGLRenderer       *self,
 
   add_offscreen_ops (self, builder,
                      &node->bounds,
-                     gsk_blur_node_get_child (node),
+                     child,
                      &region, &is_offscreen,
                      RESET_CLIP | FORCE_OFFSCREEN | RESET_OPACITY);
 
