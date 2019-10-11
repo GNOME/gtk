@@ -156,6 +156,7 @@ typedef struct
   gsize buffer_size;
 
   OpBuffer render_ops;
+  GArray *vertices;
 
   GskGLRenderer *renderer;
 

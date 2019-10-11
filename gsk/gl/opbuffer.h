@@ -21,7 +21,7 @@ typedef enum
   OP_CHANGE_CLIP                       =  7,
   OP_CHANGE_VIEWPORT                   =  8,
   OP_CHANGE_SOURCE_TEXTURE             =  9,
-  OP_CHANGE_VAO                        = 10,
+  OP_CHANGE_REPEAT                     = 10,
   OP_CHANGE_LINEAR_GRADIENT            = 11,
   OP_CHANGE_COLOR_MATRIX               = 12,
   OP_CHANGE_BLUR                       = 13,
@@ -38,7 +38,6 @@ typedef enum
   OP_PUSH_DEBUG_GROUP                  = 24,
   OP_POP_DEBUG_GROUP                   = 25,
   OP_CHANGE_BLEND                      = 26,
-  OP_CHANGE_REPEAT                     = 27,
   OP_LAST
 } OpKind;
 
@@ -106,11 +105,6 @@ typedef struct
   gsize vao_offset;
   gsize vao_size;
 } OpDraw;
-
-typedef struct
-{
-  GskQuadVertex vertex_data[6];
-} OpVao;
 
 typedef struct
 {

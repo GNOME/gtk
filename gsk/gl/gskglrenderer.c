@@ -2976,9 +2976,7 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
                             gsize          vertex_data_size)
 {
   const Program *program = NULL;
-  gsize buffer_index = 0;
-  float *vertex_data = g_malloc (vertex_data_size);
-  OpBuffer *buffer;
+  float *vertex_data = (float*)self->op_builder.vertices->data;
   OpBufferIter iter;
   OpKind kind;
   gpointer ptr;
@@ -2992,20 +2990,6 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
 
   glGenBuffers (1, &buffer_id);
   glBindBuffer (GL_ARRAY_BUFFER, buffer_id);
-
-  // Fill buffer data
-  buffer = ops_get_buffer (&self->op_builder);
-  op_buffer_iter_init (&iter, buffer);
-  while ((ptr = op_buffer_iter_next (&iter, &kind)))
-    {
-      if (kind == OP_CHANGE_VAO)
-        {
-          const OpVao *vao = ptr;
-
-          memcpy (vertex_data + buffer_index, &vao->vertex_data, sizeof (GskQuadVertex) * GL_N_VERTICES);
-          buffer_index += sizeof (GskQuadVertex) * GL_N_VERTICES / sizeof (float);
-        }
-    }
 
   // Set buffer data
   glBufferData (GL_ARRAY_BUFFER, vertex_data_size, vertex_data, GL_STATIC_DRAW);
@@ -3026,7 +3010,7 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
   op_buffer_iter_init (&iter, ops_get_buffer (&self->op_builder));
   while ((ptr = op_buffer_iter_next (&iter, &kind)))
     {
-      if (kind == OP_NONE || kind == OP_CHANGE_VAO)
+      if (kind == OP_NONE)
         continue;
 
       if (program == NULL &&
@@ -3167,7 +3151,6 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           gdk_gl_context_pop_debug_group (self->gl_context);
           break;
 
-        case OP_CHANGE_VAO:
         case OP_NONE:
         case OP_LAST:
         default:
@@ -3177,9 +3160,6 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
       OP_PRINT ("\n");
     }
 
-  /* Done drawing, destroy the buffer again.
-   * TODO: Can we reuse the memory, though? */
-  g_free (vertex_data);
   glDeleteVertexArrays (1, &vao_id);
   glDeleteBuffers (1, &buffer_id);
 }
