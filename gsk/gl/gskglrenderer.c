@@ -1386,15 +1386,16 @@ render_unblurred_outset_shadow_node (GskGLRenderer       *self,
 {
   const float scale = ops_get_scale (builder);
   const float spread = gsk_outset_shadow_node_get_spread (node);
+  const float dx = gsk_outset_shadow_node_get_dx (node);
+  const float dy = gsk_outset_shadow_node_get_dy (node);
   GskRoundedRect r = *gsk_outset_shadow_node_peek_outline (node);
   RenderOp *op;
 
-  ops_set_program (builder, &self->unblurred_outset_shadow_program);
+  gsk_rounded_rect_shrink (&r, -spread, -spread, -spread, -spread);
 
+  ops_set_program (builder, &self->unblurred_outset_shadow_program);
   op = ops_begin (builder, OP_CHANGE_UNBLURRED_OUTSET_SHADOW);
   rgba_to_float (gsk_outset_shadow_node_peek_color (node), op->unblurred_outset_shadow.color);
-
-  gsk_rounded_rect_shrink (&r, -spread, -spread, -spread, -spread);
 
   rounded_rect_to_floats (self, builder,
                           &r,
@@ -1402,9 +1403,9 @@ render_unblurred_outset_shadow_node (GskGLRenderer       *self,
                           op->unblurred_outset_shadow.corner_widths,
                           op->unblurred_outset_shadow.corner_heights);
 
-  op->unblurred_outset_shadow.spread = gsk_outset_shadow_node_get_spread (node) * scale;
-  op->unblurred_outset_shadow.offset[0] = gsk_outset_shadow_node_get_dx (node) * scale;
-  op->unblurred_outset_shadow.offset[1] = -gsk_outset_shadow_node_get_dy (node) * scale;
+  op->unblurred_outset_shadow.spread = spread * scale;
+  op->unblurred_outset_shadow.offset[0] = dx * scale;
+  op->unblurred_outset_shadow.offset[1] = - dy * scale;
 
   ops_draw (builder, vertex_data);
 }
