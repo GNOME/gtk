@@ -48,6 +48,7 @@ gsk_private_sources = files([
   'gl/gskglnodesample.c',
   'gl/gskgltextureatlas.c',
   'gl/gskgliconcache.c',
+  'gl/opbuffer.c',
   'gl/stb_rect_pack.c',
 ])
 
