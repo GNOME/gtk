@@ -2894,7 +2894,6 @@ add_offscreen_ops (GskGLRenderer         *self,
   const float dy = builder->dy;
   int render_target;
   int prev_render_target;
-  graphene_matrix_t modelview;
   graphene_matrix_t prev_projection;
   graphene_rect_t prev_viewport;
   graphene_matrix_t item_proj;
@@ -2939,7 +2938,6 @@ add_offscreen_ops (GskGLRenderer         *self,
                               (bounds->origin.y + bounds->size.height) * scale,
                               ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
   graphene_matrix_scale (&item_proj, 1, -1, 1);
-  graphene_matrix_init_scale (&modelview, scale, scale, 1);
 
   prev_render_target = ops_set_render_target (builder, render_target);
   /* Clear since we use this rendertarget for the first time */
