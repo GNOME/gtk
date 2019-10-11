@@ -1900,8 +1900,8 @@ gtk_snapshot_append_inset_shadow (GtkSnapshot          *snapshot,
 
   node = gsk_inset_shadow_node_new (&real_outline,
                                     color,
-                                    scale_x * dx + x,
-                                    scale_y * dy + y,
+                                    scale_x * dx,
+                                    scale_y * dy,
                                     spread,
                                     blur_radius);
 
@@ -1942,8 +1942,8 @@ gtk_snapshot_append_outset_shadow (GtkSnapshot          *snapshot,
 
   node = gsk_outset_shadow_node_new (&real_outline,
                                      color,
-                                     scale_x * dx + x,
-                                     scale_y * dy + y,
+                                     scale_x * dx,
+                                     scale_y * dy,
                                      spread,
                                      blur_radius);
 
