@@ -28,7 +28,6 @@ ops_finish (RenderOpBuilder *builder)
     g_array_free (builder->clip_stack, TRUE);
   builder->clip_stack = NULL;
 
-  builder->buffer_size = 0;
   builder->dx = 0;
   builder->dy = 0;
   builder->current_modelview = NULL;
@@ -690,15 +689,12 @@ ops_draw (RenderOpBuilder     *builder,
     }
   else
     {
-      gsize offset = builder->buffer_size / sizeof (GskQuadVertex);
-
       op = op_buffer_add (&builder->render_ops, OP_DRAW);
-      op->vao_offset = offset;
+      op->vao_offset = builder->vertices->len;
       op->vao_size = GL_N_VERTICES;
     }
 
   g_array_append_vals (builder->vertices, vertex_data, GL_N_VERTICES);
-  builder->buffer_size += sizeof (GskQuadVertex) * GL_N_VERTICES;
 }
 
 /* The offset is only valid for the current modelview.
