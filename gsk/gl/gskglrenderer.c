@@ -1085,13 +1085,13 @@ render_clip_node (GskGLRenderer   *self,
                   GskRenderNode   *node,
                   RenderOpBuilder *builder)
 {
+  const graphene_rect_t *clip = gsk_clip_node_peek_clip (node);
   GskRenderNode *child = gsk_clip_node_get_child (node);
   graphene_rect_t transformed_clip;
   graphene_rect_t intersection;
   GskRoundedRect child_clip;
 
-  transformed_clip = *gsk_clip_node_peek_clip (node);
-  ops_transform_bounds_modelview (builder, &transformed_clip, &transformed_clip);
+  ops_transform_bounds_modelview (builder, clip, &transformed_clip);
 
   graphene_rect_intersection (&transformed_clip,
                               &builder->current_clip->bounds,
