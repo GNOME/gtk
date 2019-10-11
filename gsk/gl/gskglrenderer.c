@@ -1087,10 +1087,10 @@ render_linear_gradient_node (GskGLRenderer       *self,
     }
 
   op->n_color_stops = n_color_stops;
-  op->start_point.x += start->x + builder->dx;
-  op->start_point.y += start->y + builder->dy;
-  op->end_point.x += end->x + builder->dx;
-  op->end_point.y += end->y + builder->dy;
+  op->start_point.x = start->x + builder->dx;
+  op->start_point.y = start->y + builder->dy;
+  op->end_point.x = end->x + builder->dx;
+  op->end_point.y = end->y + builder->dy;
 
   ops_draw (builder, vertex_data);
 }
