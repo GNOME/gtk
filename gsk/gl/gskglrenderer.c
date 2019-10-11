@@ -1391,8 +1391,6 @@ render_unblurred_outset_shadow_node (GskGLRenderer       *self,
   GskRoundedRect r = *gsk_outset_shadow_node_peek_outline (node);
   RenderOp *op;
 
-  gsk_rounded_rect_shrink (&r, -spread, -spread, -spread, -spread);
-
   ops_set_program (builder, &self->unblurred_outset_shadow_program);
   op = ops_begin (builder, OP_CHANGE_UNBLURRED_OUTSET_SHADOW);
   rgba_to_float (gsk_outset_shadow_node_peek_color (node), op->unblurred_outset_shadow.color);

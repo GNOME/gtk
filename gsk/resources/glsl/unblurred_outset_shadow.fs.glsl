@@ -12,9 +12,10 @@ void main() {
   f.x += u_viewport.x;
   f.y = (u_viewport.y + u_viewport.w) - f.y;
 
-  RoundedRect outline = RoundedRect(vec4(u_outline.xy, u_outline.xy + u_outline.zw),
+  RoundedRect inside = RoundedRect(vec4(u_outline.xy, u_outline.xy + u_outline.zw),
                                     u_corner_widths, u_corner_heights);
-  RoundedRect inside = rounded_rect_shrink(outline, vec4(u_spread));
+
+  RoundedRect outline = rounded_rect_shrink(inside, vec4(- u_spread));
 
   vec2 offset = vec2(u_offset.x, - u_offset.y);
   vec4 color = vec4(u_color.rgb * u_color.a, u_color.a);
