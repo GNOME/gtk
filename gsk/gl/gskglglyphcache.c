@@ -357,5 +357,7 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
 
           value->accessed = FALSE;
        }
+
+      GSK_NOTE(GLYPH_CACHE, g_message ("%d glyphs cached", g_hash_table_size (self->hash_table)));
     }
 }

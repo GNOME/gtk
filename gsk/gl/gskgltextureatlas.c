@@ -87,7 +87,7 @@ gsk_gl_texture_atlases_begin_frame (GskGLTextureAtlases *self,
         {
           GSK_NOTE(GLYPH_CACHE,
                    g_message ("Dropping atlas %d (%g.2%% old)", i,
-                              gsk_gl_texture_atlas_get_unused_ratio (atlas)));
+                              100.0 * gsk_gl_texture_atlas_get_unused_ratio (atlas)));
 
           if (atlas->texture_id != 0)
             {
@@ -99,6 +99,8 @@ gsk_gl_texture_atlases_begin_frame (GskGLTextureAtlases *self,
           g_ptr_array_remove_index (self->atlases, i);
        }
     }
+
+  GSK_NOTE(GLYPH_CACHE, if (removed->len > 0) g_message ("%d atlases left", self->atlases->len));
 
 #if 0
   {
