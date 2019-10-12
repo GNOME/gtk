@@ -40,11 +40,9 @@ struct _GtkMenuItemPrivate
   GtkActionHelper *action_helper;
 
   GtkWidget *arrow_widget;
-  GtkEventController *motion_controller;
 
   guint submenu_placement      : 1;
   guint submenu_direction      : 1;
-  guint right_justify          : 1;
   guint from_menubar           : 1;
   guint reserve_indicator      : 1;
 };
