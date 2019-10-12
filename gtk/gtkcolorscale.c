@@ -105,18 +105,12 @@ gtk_color_scale_snapshot_trough (GtkColorScale  *scale,
                                             bytes,
                                             stride);
           g_bytes_unref (bytes);
-
-          gtk_snapshot_append_texture (snapshot,
-                                       texture,
-                                       &GRAPHENE_RECT_INIT(0, 0, width, height));
           priv->hue_texture = texture;
         }
-      else
-        {
-          gtk_snapshot_append_texture (snapshot,
-                                       priv->hue_texture,
-                                       &GRAPHENE_RECT_INIT(0, 0, width, height));
-        }
+
+      gtk_snapshot_append_texture (snapshot,
+                                   priv->hue_texture,
+                                   &GRAPHENE_RECT_INIT(0, 0, width, height));
     }
   else if (priv->type == GTK_COLOR_SCALE_ALPHA)
     {
