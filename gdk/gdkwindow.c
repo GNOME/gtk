@@ -559,7 +559,11 @@ gdk_window_finalize (GObject *object)
   GdkWindow *window = GDK_WINDOW (object);
 
   /* FIXME stop any ongoing animation */
-  gdk_relative_event_interpolation_free (window->relative_interpolator);
+  if (window->relative_interpolator)
+    {
+      gdk_relative_event_interpolation_free (window->relative_interpolator);
+      window->relative_interpolator = NULL;
+    }
 
   g_signal_handlers_disconnect_by_func (gdk_window_get_display (window),
                                         seat_removed_cb, window);
@@ -9118,8 +9122,8 @@ static void gdk_window_start_interpolation_callback(GdkWindow *window)
   if (frame_clock && !window->interpolation_tick_id)
     {
       window->interpolation_tick_id = g_signal_connect (frame_clock, "update",
-                                                         G_CALLBACK (gdk_window_interpolation_tick_callback),
-                                                         window);
+                                                        G_CALLBACK (gdk_window_interpolation_tick_callback),
+                                                        window);
       gdk_frame_clock_begin_updating (frame_clock);
     }
 }
