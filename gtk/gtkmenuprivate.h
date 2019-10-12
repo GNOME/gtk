@@ -54,9 +54,6 @@ struct _GtkMenuPrivate
   GtkAccelGroup *accel_group;
   const char    *accel_path;
 
-  gint                position_x;
-  gint                position_y;
-
   GdkSurface         *rect_surface;
   GdkRectangle       rect;
   GtkWidget         *widget;
@@ -83,14 +80,7 @@ struct _GtkMenuPrivate
   guint ignore_button_release : 1;
   guint no_toggle_size        : 1;
 
-  /* info used for the table */
-  guint *heights;
-  gint heights_length;
-  gint requested_height;
-
   gint monitor_num;
-
-  gint n_rows;
 };
 
 G_GNUC_INTERNAL
