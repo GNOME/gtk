@@ -476,7 +476,7 @@ cell_augment (GtkRbTree *tree,
 static void
 gtk_grid_view_init (GtkGridView *self)
 {
-  self->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self), Cell, CellAugment, cell_augment);
+  self->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self), "flowboxchild", Cell, CellAugment, cell_augment);
 
   self->min_columns = 1;
   self->max_columns = DEFAULT_MAX_COLUMNS;
