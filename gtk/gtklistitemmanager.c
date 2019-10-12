@@ -33,6 +33,7 @@ struct _GtkListItemManager
   GtkWidget *widget;
   GtkSelectionModel *model;
   GtkListItemFactory *factory;
+  const char *item_css_name;
 
   GtkRbTree *items;
   GSList *trackers;
@@ -108,6 +109,7 @@ gtk_list_item_manager_clear_node (gpointer _item)
 
 GtkListItemManager *
 gtk_list_item_manager_new_for_size (GtkWidget            *widget,
+                                    const char           *item_css_name,
                                     gsize                 element_size,
                                     gsize                 augment_size,
                                     GtkRbTreeAugmentFunc  augment_func)
@@ -122,6 +124,7 @@ gtk_list_item_manager_new_for_size (GtkWidget            *widget,
 
   /* not taking a ref because the widget refs us */
   self->widget = widget;
+  self->item_css_name = g_intern_string (item_css_name);
 
   self->items = gtk_rb_tree_new_for_size (element_size,
                                           augment_size,
@@ -926,7 +929,7 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
   g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
   g_return_val_if_fail (prev_sibling == NULL || GTK_IS_WIDGET (prev_sibling), NULL);
 
-  result = gtk_list_item_new ("row");
+  result = gtk_list_item_new (self->item_css_name);
   gtk_list_item_factory_setup (self->factory, result);
 
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
