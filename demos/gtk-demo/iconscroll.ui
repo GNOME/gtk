@@ -4,20 +4,35 @@
     <property name="resizable">0</property>
     <property name="default-width">500</property>
     <property name="default-height">500</property>
-    <property name="title">Scrolling icons</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="show-title-buttons">1</property>
+        <child>
+          <object class="GtkBox">
+            <style>
+              <class name="linked"/>
+            </style>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">pan-start-symbolic</property>
+                <signal name="clicked" handler="prev_clicked_cb"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">pan-end-symbolic</property>
+                <signal name="clicked" handler="next_clicked_cb"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
     <child>
-      <object class="GtkScrolledWindow">
+      <object class="GtkScrolledWindow" id="scrolledwindow">
         <property name="hscrollbar-policy">never</property>
         <property name="vscrollbar-policy">automatic</property>
         <property name="vadjustment"><object class="GtkAdjustment" id="adjustment"/></property> 
-        <child>
-          <object class="GtkGrid" id="grid">
-            <property name="halign">center</property>
-            <property name="margin">10</property>
-            <property name="row-spacing">10</property>
-            <property name="orientation">vertical</property>
-          </object>
-        </child>
       </object>
     </child>
   </object>

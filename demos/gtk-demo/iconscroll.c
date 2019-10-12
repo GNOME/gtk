@@ -1,12 +1,19 @@
-/* Benchmark/Icons
+/* Benchmark/Scrolling
  *
- * This demo scrolls a view with many icons.
+ * This demo scrolls a view with various content.
  */
 
 #include <gtk/gtk.h>
 
 static guint tick_cb;
 static GtkAdjustment *adjustment;
+static GtkWidget *window = NULL;
+static GtkWidget *scrolledwindow;
+static int selected;
+
+#define N_WIDGET_TYPES 3
+
+
 int increment = 5;
 
 static gboolean
@@ -29,26 +36,133 @@ scroll_cb (GtkWidget *widget,
 extern GtkWidget *create_icon (void);
 
 static void
-populate (GtkWidget *grid)
+populate_icons (void)
 {
+  GtkWidget *grid;
   int top, left;
+
+  grid = gtk_grid_new ();
+  gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
+  g_object_set (grid, "margin", 10, NULL);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
 
   for (top = 0; top < 100; top++)
     for (left = 0; left < 15; left++)
       gtk_grid_attach (GTK_GRID (grid), create_icon (), left, top, 1, 1);
+
+  gtk_container_add (GTK_CONTAINER (scrolledwindow), grid);
+}
+
+static char *content;
+static gsize content_len;
+
+extern void fontify (GtkTextBuffer *buffer);
+
+static void
+populate_text (gboolean hilight)
+{
+  GtkWidget *textview;
+  GtkTextBuffer *buffer;
+
+  if (!content)
+    {
+      GBytes *bytes;
+
+      bytes = g_resources_lookup_data ("/sources/font_features.c", 0, NULL);
+      content = g_bytes_unref_to_data (bytes, &content_len);
+    }
+
+  buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_set_text (buffer, content, (int)content_len);
+
+  if (hilight)
+    fontify (buffer);
+
+  textview = gtk_text_view_new ();
+  gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
+
+  gtk_container_add (GTK_CONTAINER (scrolledwindow), textview);
+}
+
+static void
+set_widget_type (int type)
+{
+  if (tick_cb)
+    gtk_widget_remove_tick_callback (window, tick_cb);
+
+  if (gtk_bin_get_child (GTK_BIN (scrolledwindow)))
+    gtk_container_remove (GTK_CONTAINER (scrolledwindow),
+                          gtk_bin_get_child (GTK_BIN (scrolledwindow)));
+
+  selected = type;
+
+  switch (selected)
+    {
+    case 0:
+      gtk_window_set_title (GTK_WINDOW (window), "Scrolling icons");
+      populate_icons ();
+      break;
+
+    case 1:
+      gtk_window_set_title (GTK_WINDOW (window), "Scrolling plain text");
+      populate_text (FALSE);
+      break;
+
+    case 2:
+      gtk_window_set_title (GTK_WINDOW (window), "Scrolling complex text");
+      populate_text (TRUE);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  tick_cb = gtk_widget_add_tick_callback (window, scroll_cb, NULL, NULL);
+}
+
+static void
+next_clicked_cb (GtkButton *source,
+                 gpointer   user_data)
+{
+  int new_index;
+
+  if (selected + 1 >= N_WIDGET_TYPES)
+    new_index = 0;
+  else
+    new_index = selected + 1;
+ 
+
+  set_widget_type (new_index);
+}
+
+static void
+prev_clicked_cb (GtkButton *source,
+                 gpointer   user_data)
+{
+  int new_index;
+
+  if (selected - 1 < 0)
+    new_index = N_WIDGET_TYPES - 1;
+  else
+    new_index = selected - 1;
+
+  set_widget_type (new_index);
 }
 
 GtkWidget *
 do_iconscroll (GtkWidget *do_widget)
 {
-  static GtkWidget *window = NULL;
-
   if (!window)
     {
       GtkBuilder *builder;
-      GtkWidget *grid;
 
       builder = gtk_builder_new_from_resource ("/iconscroll/iconscroll.ui");
+      gtk_builder_add_callback_symbols (builder,
+                                        "next_clicked_cb", G_CALLBACK (next_clicked_cb),
+                                        "prev_clicked_cb", G_CALLBACK (prev_clicked_cb),
+                                        NULL);
+      gtk_builder_connect_signals (builder, NULL);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
@@ -56,11 +170,10 @@ do_iconscroll (GtkWidget *do_widget)
                               gtk_widget_get_display (do_widget));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
-      grid = GTK_WIDGET (gtk_builder_get_object (builder, "grid"));
-      populate (grid);
+      scrolledwindow = GTK_WIDGET (gtk_builder_get_object (builder, "scrolledwindow"));
       gtk_widget_realize (window);
       adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "adjustment"));
-      tick_cb = gtk_widget_add_tick_callback (window, scroll_cb, NULL, NULL);
+      set_widget_type (0);
     }
 
   if (!gtk_widget_get_visible (window))
