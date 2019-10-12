@@ -97,7 +97,7 @@ gdk_absolute_event_interpolation_history_push (GdkAbsoluteEventInterpolation  *i
   g_return_if_fail (gdk_event_get_event_type (event) == GDK_SCROLL);
   g_return_if_fail (event->scroll.direction == GDK_SCROLL_SMOOTH);
 
-  g_ptr_array_add (interpolator->event_history, gdk_event_copy (event));
+  g_ptr_array_add (interpolator->event_history, event);
 
   if (interpolator->event_history->len > EVENT_HISTORY_MAX_ELEMENTS)
     g_ptr_array_remove_index (interpolator->event_history, 0);
@@ -328,13 +328,15 @@ void gdk_relative_event_interpolation_history_push (GdkRelativeEventInterpolatio
   interpolator->latest_uninterpolated_x += delta_x;
   interpolator->latest_uninterpolated_y += delta_y;
 
+  GdkEvent *saved_event = gdk_event_copy (event);
+
   /* FIXME do we really have to update the absolute event coordinates here? */
-  gdk_event_set_coords (event,
+  gdk_event_set_coords (saved_event,
                         interpolator->latest_uninterpolated_x,
                         interpolator->latest_uninterpolated_y);
 
   gdk_absolute_event_interpolation_history_push (interpolator->absolute_interpolator,
-                                                 event);
+                                                 saved_event);
 }
 
 guint
