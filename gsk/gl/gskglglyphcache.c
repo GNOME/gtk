@@ -341,7 +341,7 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
       GSK_NOTE(GLYPH_CACHE, if (dropped > 0) g_message ("Dropped %d glyphs", dropped));
     }
 
-  if (self->timestamp % MAX_FRAME_AGE == 0)
+  if (self->timestamp % MAX_FRAME_AGE == 30)
     {
       g_hash_table_iter_init (&iter, self->hash_table);
       while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
