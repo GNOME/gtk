@@ -1,7 +1,7 @@
 
 #include "gskglshadowcacheprivate.h"
 
-#define MAX_UNUSED_FRAMES (16 * 5) /* 5 seconds? */
+#define MAX_UNUSED_FRAMES (16 * 5)
 
 typedef struct
 {
@@ -62,9 +62,6 @@ gsk_gl_shadow_cache_begin_frame (GskGLShadowCache *self,
 {
   guint i, p;
 
-  /* We remove all textures with used = FALSE since those have not been used in the
-   * last frame. For all others, we reset the `used` value to FALSE instead and see
-   * if they end up with TRUE in the next call to begin_frame. */
   for (i = 0, p = self->textures->len; i < p; i ++)
     {
       CacheItem *item = &g_array_index (self->textures, CacheItem, i);
