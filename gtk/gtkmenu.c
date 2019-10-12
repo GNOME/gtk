@@ -892,8 +892,6 @@ gtk_menu_destroy (GtkWidget *widget)
       gtk_widget_destroy (priv->toplevel);
     }
 
-  g_clear_pointer (&priv->heights, g_free);
-
   GTK_WIDGET_CLASS (gtk_menu_parent_class)->destroy (widget);
 }
 
