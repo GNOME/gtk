@@ -15,9 +15,9 @@
 
 /* Cache eviction strategy
  *
- * Each cached glyph has an age that gets reset every time a cached
- * glyph gets used. Glyphs that have not been used for the
- * MAX_FRAME_AGE frames are considered old.
+ * We mark glyphs as accessed every time we use them. Every
+ * few frames, we mark glyphs that haven't been accessed since
+ * the last check as old.
  *
  * We keep count of the pixels of each atlas that are taken up by old
  * data. When the fraction of old pixels gets too high, we drop the
@@ -264,12 +264,12 @@ gsk_gl_glyph_cache_lookup_or_add (GskGLGlyphCache         *cache,
 
   if (value)
     {
-      value->timestamp = cache->timestamp;
       if (value->atlas && !value->used)
         {
           gsk_gl_texture_atlas_mark_used (value->atlas, value->draw_width, value->draw_height);
           value->used = TRUE;
         }
+      value->accessed = TRUE;
 
       *cached_glyph_out = value;
       return;
@@ -292,7 +292,7 @@ gsk_gl_glyph_cache_lookup_or_add (GskGLGlyphCache         *cache,
     value->draw_y = ink_rect.y;
     value->draw_width = ink_rect.width;
     value->draw_height = ink_rect.height;
-    value->timestamp = cache->timestamp;
+    value->accessed = TRUE;
     value->atlas = NULL; /* For now */
 
     key = g_new0 (GlyphCacheKey, 1);
@@ -341,20 +341,21 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
       GSK_NOTE(GLYPH_CACHE, if (dropped > 0) g_message ("Dropped %d glyphs", dropped));
     }
 
-  g_hash_table_iter_init (&iter, self->hash_table);
-  while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
+  if (self->timestamp % MAX_FRAME_AGE == 0)
     {
-      const guint age = self->timestamp - value->timestamp;
-
-      if (age > MAX_FRAME_AGE)
+      g_hash_table_iter_init (&iter, self->hash_table);
+      while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
         {
-          GskGLTextureAtlas *atlas = value->atlas;
-
-          if (atlas && value->used)
+          if (!value->accessed)
             {
-              gsk_gl_texture_atlas_mark_unused (atlas, value->draw_width, value->draw_height);
-              value->used = FALSE;
+              if (value->atlas && value->used)
+                {
+                  gsk_gl_texture_atlas_mark_unused (value->atlas, value->draw_width, value->draw_height);
+                  value->used = FALSE;
+                }
             }
-        }
+
+          value->accessed = FALSE;
+       }
     }
 }
