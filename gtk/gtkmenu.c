@@ -2206,10 +2206,10 @@ gtk_menu_measure (GtkWidget      *widget,
 
 static void
 gtk_menu_pressed_cb (GtkGestureClick *gesture,
-                     int                   n_press,
-                     double                x,
-                     double                y,
-                     gpointer              user_data)
+                     int              n_press,
+                     double           x,
+                     double           y,
+                     gpointer         user_data)
 {
   GtkMenu *menu = user_data;
   GdkEventSequence *sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
