@@ -15,13 +15,17 @@
 
 /* Cache eviction strategy
  *
- * We mark glyphs as accessed every time we use them. Every
- * few frames, we mark glyphs that haven't been accessed since
- * the last check as old.
+ * We mark glyphs as accessed every time we use them.
+ * Every few frames, we mark glyphs that haven't been
+ * accessed since the last check as old.
  *
- * We keep count of the pixels of each atlas that are taken up by old
- * data. When the fraction of old pixels gets too high, we drop the
- * atlas and all the items it contained.
+ * We keep count of the pixels of each atlas that are
+ * taken up by old data. When the fraction of old pixels
+ * gets too high, we drop the atlas and all the items it
+ * contained.
+ *
+ * Big glyphs are not stored in the atlas, they get their
+ * own texture, but they are still cached.
  */
 
 #define MAX_FRAME_AGE (60)
@@ -239,6 +243,7 @@ add_to_cache (GskGLGlyphCache  *self,
     {
       value->atlas = NULL;
       value->texture_id = gsk_gl_driver_create_texture (driver, width, height);
+      gsk_gl_driver_mark_texture_permanent (driver, value->texture_id);
 
       gsk_gl_driver_bind_source_texture (driver, value->texture_id);
       gsk_gl_driver_init_texture_empty (driver, value->texture_id, GL_LINEAR, GL_LINEAR);
@@ -316,6 +321,7 @@ gsk_gl_glyph_cache_lookup_or_add (GskGLGlyphCache         *cache,
 
 void
 gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
+                                GskGLDriver     *driver,
                                 GPtrArray       *removed_atlases)
 {
   GHashTableIter iter;
@@ -348,14 +354,22 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
         {
           if (!value->accessed)
             {
-              if (value->atlas && value->used)
+              if (value->atlas)
                 {
-                  gsk_gl_texture_atlas_mark_unused (value->atlas, value->draw_width, value->draw_height);
-                  value->used = FALSE;
+                  if (value->used)
+                    {
+                      gsk_gl_texture_atlas_mark_unused (value->atlas, value->draw_width, value->draw_height);
+                      value->used = FALSE;
+                    }
+                }
+              else
+                {
+                  gsk_gl_driver_destroy_texture (driver, value->texture_id);
+                  g_hash_table_iter_remove (&iter);
                 }
             }
-
-          value->accessed = FALSE;
+          else
+            value->accessed = FALSE;
        }
 
       GSK_NOTE(GLYPH_CACHE, g_message ("%d glyphs cached", g_hash_table_size (self->hash_table)));

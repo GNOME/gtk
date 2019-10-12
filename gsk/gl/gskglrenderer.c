@@ -3207,7 +3207,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 
   removed = g_ptr_array_new ();
   gsk_gl_texture_atlases_begin_frame (self->atlases, removed);
-  gsk_gl_glyph_cache_begin_frame (self->glyph_cache, removed);
+  gsk_gl_glyph_cache_begin_frame (self->glyph_cache, self->gl_driver, removed);
   gsk_gl_icon_cache_begin_frame (self->icon_cache, removed);
   gsk_gl_shadow_cache_begin_frame (&self->shadow_cache, self->gl_driver);
   g_ptr_array_unref (removed);
