@@ -587,10 +587,10 @@ render_text_node (GskGLRenderer   *self,
 
       glyph_cache_key_set_glyph_and_shift (&lookup, gi->glyph, x + cx, y + cy);
 
-      gsk_gl_glyph_cache_lookup (self->glyph_cache,
-                                 &lookup,
-                                 self->gl_driver,
-                                 &glyph);
+      gsk_gl_glyph_cache_lookup_or_add (self->glyph_cache,
+                                        &lookup,
+                                        self->gl_driver,
+                                        &glyph);
 
       if (glyph->texture_id == 0)
         goto next;
