@@ -21,12 +21,12 @@
 
 #include "gtkstackswitcher.h"
 
+#include "gtkboxlayout.h"
 #include "gtkdnd.h"
 #include "gtkdragdest.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
-#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkradiobutton.h"
 #include "gtkselectionmodel.h"
@@ -71,12 +71,12 @@ typedef struct _GtkStackSwitcherPrivate GtkStackSwitcherPrivate;
 
 struct _GtkStackSwitcher
 {
-  GtkBox widget;
+  GtkWidget parent_instance;
 };
 
 struct _GtkStackSwitcherClass
 {
-  GtkBoxClass parent_class;
+  GtkWidgetClass parent_class;
 };
 
 struct _GtkStackSwitcherPrivate
@@ -93,22 +93,18 @@ enum {
   PROP_STACK
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkStackSwitcher, gtk_stack_switcher, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkStackSwitcher, gtk_stack_switcher, GTK_TYPE_WIDGET)
 
 static void
 gtk_stack_switcher_init (GtkStackSwitcher *switcher)
 {
+  GtkStackSwitcherPrivate *priv = gtk_stack_switcher_get_instance_private (switcher);
   GtkStyleContext *context;
-  GtkStackSwitcherPrivate *priv;
-
-  priv = gtk_stack_switcher_get_instance_private (switcher);
 
   priv->buttons = g_hash_table_new_full (g_direct_hash, g_direct_equal, g_object_unref, NULL);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (switcher));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
-
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (switcher), GTK_ORIENTATION_HORIZONTAL);
 
   gtk_drag_dest_set (GTK_WIDGET (switcher), 0, NULL, 0);
   gtk_drag_dest_set_track_motion (GTK_WIDGET (switcher), TRUE);
@@ -317,7 +313,7 @@ add_child (guint             position,
   page = g_list_model_get_item (G_LIST_MODEL (priv->pages), position);
   update_button (self, page, button);
 
-  gtk_container_add (GTK_CONTAINER (self), button);
+  gtk_widget_set_parent (button, GTK_WIDGET (self));
 
   g_object_set_data (G_OBJECT (button), "child-index", GUINT_TO_POINTER (position));
   selected = gtk_selection_model_is_selected (priv->pages, position);
@@ -352,7 +348,7 @@ clear_switcher (GtkStackSwitcher *self)
   g_hash_table_iter_init (&iter, priv->buttons);
   while (g_hash_table_iter_next (&iter, (gpointer *)&page, (gpointer *)&button))
     {
-      gtk_container_remove (GTK_CONTAINER (self), button);
+      gtk_widget_unparent (button);
       g_signal_handlers_disconnect_by_func (page, on_page_updated, self);
       g_hash_table_iter_remove (&iter);
     }
@@ -576,6 +572,7 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
                                                         GTK_PARAM_READWRITE |
                                                         G_PARAM_CONSTRUCT));
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("stackswitcher"));
 }
 

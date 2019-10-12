@@ -20,6 +20,7 @@
 
 #include "gtkshortcutssection.h"
 
+#include "gtkbox.h"
 #include "gtkshortcutsgroup.h"
 #include "gtkbutton.h"
 #include "gtklabel.h"
@@ -429,7 +430,6 @@ gtk_shortcuts_section_init (GtkShortcutsSection *self)
   self->switcher = g_object_new (GTK_TYPE_STACK_SWITCHER,
                                  "halign", GTK_ALIGN_CENTER,
                                  "stack", self->stack,
-                                 "spacing", 12,
                                  "visible", FALSE,
                                  NULL);
 
@@ -561,18 +561,6 @@ gtk_shortcuts_section_filter_groups (GtkShortcutsSection *self)
   gtk_widget_set_visible (gtk_widget_get_parent (GTK_WIDGET (self->show_all)),
                           gtk_widget_get_visible (GTK_WIDGET (self->show_all)) ||
                           gtk_widget_get_visible (GTK_WIDGET (self->switcher)));
-}
-
-static void
-adjust_page_buttons (GtkWidget *widget,
-                     gpointer   data)
-{
-  GtkWidget *label;
-
-  gtk_style_context_add_class (gtk_widget_get_style_context (widget), "circular");
-
-  label = gtk_bin_get_child (GTK_BIN (widget));
-  gtk_label_set_use_underline (GTK_LABEL (label), TRUE);
 }
 
 static void
@@ -738,11 +726,26 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
     }
 
   /* fix up stack switcher */
-  gtk_container_foreach (GTK_CONTAINER (self->switcher), adjust_page_buttons, NULL);
-  gtk_widget_set_visible (GTK_WIDGET (self->switcher), (n_pages > 1));
-  gtk_widget_set_visible (gtk_widget_get_parent (GTK_WIDGET (self->switcher)),
-                          gtk_widget_get_visible (GTK_WIDGET (self->show_all)) ||
-                          gtk_widget_get_visible (GTK_WIDGET (self->switcher)));
+  {
+    GtkWidget *w;
+
+    for (w = gtk_widget_get_first_child (GTK_WIDGET (self->switcher));
+         w != NULL;
+         w = gtk_widget_get_next_sibling (w))
+      {
+        GtkWidget *label;
+
+        gtk_style_context_add_class (gtk_widget_get_style_context (w), "circular");
+
+        label = gtk_bin_get_child (GTK_BIN (w));
+        gtk_label_set_use_underline (GTK_LABEL (label), TRUE);
+      }
+
+    gtk_widget_set_visible (GTK_WIDGET (self->switcher), (n_pages > 1));
+    gtk_widget_set_visible (gtk_widget_get_parent (GTK_WIDGET (self->switcher)),
+                            gtk_widget_get_visible (GTK_WIDGET (self->show_all)) ||
+                            gtk_widget_get_visible (GTK_WIDGET (self->switcher)));
+  }
 
   /* clean up */
   g_list_free (groups);

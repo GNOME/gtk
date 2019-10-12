@@ -24,7 +24,6 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbox.h>
 #include <gtk/gtkstack.h>
 
 G_BEGIN_DECLS
