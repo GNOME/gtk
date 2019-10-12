@@ -57,11 +57,12 @@ struct _GtkListItemManagerItemAugment
 GType                   gtk_list_item_manager_get_type          (void) G_GNUC_CONST;
 
 GtkListItemManager *    gtk_list_item_manager_new_for_size      (GtkWidget              *widget,
+                                                                 const char             *item_css_name,
                                                                  gsize                   element_size,
                                                                  gsize                   augment_size,
                                                                  GtkRbTreeAugmentFunc    augment_func);
-#define gtk_list_item_manager_new(widget, type, augment_type, augment_func) \
-  gtk_list_item_manager_new_for_size (widget, sizeof (type), sizeof (augment_type), (augment_func))
+#define gtk_list_item_manager_new(widget, item_css_name, type, augment_type, augment_func) \
+  gtk_list_item_manager_new_for_size (widget, item_css_name, sizeof (type), sizeof (augment_type), (augment_func))
 
 void                    gtk_list_item_manager_augment_node      (GtkRbTree              *tree,
                                                                  gpointer                node_augment,
