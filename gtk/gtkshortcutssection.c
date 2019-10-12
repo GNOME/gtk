@@ -729,6 +729,9 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
   {
     GtkWidget *w;
 
+    gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (self->switcher)),
+                                 "circular");
+
     for (w = gtk_widget_get_first_child (GTK_WIDGET (self->switcher));
          w != NULL;
          w = gtk_widget_get_next_sibling (w))

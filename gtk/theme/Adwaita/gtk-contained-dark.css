@@ -625,11 +625,11 @@ searchbar > revealer > box { padding: 6px; border-width: 0 0 1px; }
 
 .titlebar:not(headerbar) .subtitle, headerbar .subtitle { font-size: smaller; padding-left: 12px; padding-right: 12px; }
 
-.titlebar:not(headerbar) stackswitcher button:checked, .titlebar:not(headerbar) button.toggle:checked, headerbar stackswitcher button:checked, headerbar button.toggle:checked { background: image(#1e1e1e); border-color: #141414; border-top-color: #070707; }
+.titlebar:not(headerbar) stackswitcher > button:checked, .titlebar:not(headerbar) button.toggle:checked, headerbar stackswitcher > button:checked, headerbar button.toggle:checked { background: image(#1e1e1e); border-color: #141414; border-top-color: #070707; }
 
-.titlebar:not(headerbar) stackswitcher button:checked:backdrop, .titlebar:not(headerbar) button.toggle:checked:backdrop, headerbar stackswitcher button:checked:backdrop, headerbar button.toggle:checked:backdrop { border-color: #202020; background-image: image(#2a2a2a); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
+.titlebar:not(headerbar) stackswitcher > button:checked:backdrop, .titlebar:not(headerbar) button.toggle:checked:backdrop, headerbar stackswitcher > button:checked:backdrop, headerbar button.toggle:checked:backdrop { border-color: #202020; background-image: image(#2a2a2a); box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
 
-.titlebar:not(headerbar) stackswitcher button:checked:backdrop label, .titlebar:not(headerbar) stackswitcher button:checked:backdrop, .titlebar:not(headerbar) button.toggle:checked:backdrop label, .titlebar:not(headerbar) button.toggle:checked:backdrop, headerbar stackswitcher button:checked:backdrop label, headerbar stackswitcher button:checked:backdrop, headerbar button.toggle:checked:backdrop label, headerbar button.toggle:checked:backdrop { color: #919190; }
+.titlebar:not(headerbar) stackswitcher > button:checked:backdrop label, .titlebar:not(headerbar) stackswitcher > button:checked:backdrop, .titlebar:not(headerbar) button.toggle:checked:backdrop label, .titlebar:not(headerbar) button.toggle:checked:backdrop, headerbar stackswitcher > button:checked:backdrop label, headerbar stackswitcher > button:checked:backdrop, headerbar button.toggle:checked:backdrop label, headerbar button.toggle:checked:backdrop { color: #919190; }
 
 .selection-mode .titlebar:not(headerbar), .selection-mode.titlebar:not(headerbar), .selection-mode headerbar, headerbar.selection-mode { color: #ffffff; border-color: #030c17; text-shadow: 0 -1px rgba(0, 0, 0, 0.5); background: #15539e linear-gradient(to top, #185cb0, #1961b9); box-shadow: inset 0 1px rgba(29, 88, 161, 0.535); }
 
@@ -2025,9 +2025,11 @@ shortcuts-section { margin: 20px; }
 
 :not(decoration):not(window):drop(active):focus, :not(decoration):not(window):drop(active) { border-color: #4e9a06; box-shadow: inset 0 0 0 1px #4e9a06; caret-color: #4e9a06; }
 
-stackswitcher button.text-button { min-width: 100px; }
+stackswitcher > button.text-button { min-width: 100px; }
 
-stackswitcher button.circular, stackswitcher button.text-button.circular { min-width: 32px; min-height: 32px; padding: 0; }
+stackswitcher.circular { border-spacing: 12px; }
+
+stackswitcher.circular > button.circular, stackswitcher.circular > button.text-button.circular { min-width: 32px; min-height: 32px; padding: 0; }
 
 /************* App Icons * */
 /* Outline for low res icons */

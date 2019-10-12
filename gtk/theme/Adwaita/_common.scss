@@ -1506,7 +1506,7 @@ headerbar {
   }
 
   /* Darken switchbuttons for headerbars. issue #1588 */
-  stackswitcher button:checked,
+  stackswitcher > button:checked,
   button.toggle:checked {
 
     background: if($variant == 'light', image(darken($bg_color, 17%)), image(darken($bg_color, 9%)));
@@ -4670,15 +4670,19 @@ shortcuts-section {
   caret-color: $drop_target_color;
 }
 
-stackswitcher button.text-button { min-width: 100px; } // FIXME aggregate with buttons
+stackswitcher > button.text-button { min-width: 100px; } // FIXME aggregate with buttons
 
-stackswitcher button.circular,
-stackswitcher button.text-button.circular { // FIXME aggregate with buttons
-  min-width: 32px;
-  min-height: 32px;
-  padding: 0;
+stackswitcher.circular {
+  border-spacing: 12px;
+
+  // FIXME aggregate with buttons
+  > button.circular,
+  > button.text-button.circular {
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0;
+  }
 }
-
 /*************
  * App Icons *
  *************/
