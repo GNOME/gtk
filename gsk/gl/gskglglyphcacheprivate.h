@@ -72,7 +72,8 @@ GskGLGlyphCache *        gsk_gl_glyph_cache_new             (GdkDisplay *display
                                                              GskGLTextureAtlases *atlases);
 GskGLGlyphCache *        gsk_gl_glyph_cache_ref             (GskGLGlyphCache *self);
 void                     gsk_gl_glyph_cache_unref           (GskGLGlyphCache        *self);
-void                     gsk_gl_glyph_cache_begin_frame     (GskGLGlyphCache        *self);
+void                     gsk_gl_glyph_cache_begin_frame     (GskGLGlyphCache        *self,
+                                                             GPtrArray              *removed_atlases);
 gboolean                 gsk_gl_glyph_cache_lookup          (GskGLGlyphCache        *self,
                                                              GlyphCacheKey          *lookup,
                                                              GskGLDriver            *driver,

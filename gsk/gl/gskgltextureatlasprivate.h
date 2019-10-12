@@ -35,7 +35,8 @@ GskGLTextureAtlases *gsk_gl_texture_atlases_new         (void);
 GskGLTextureAtlases *gsk_gl_texture_atlases_ref         (GskGLTextureAtlases *atlases);
 void                 gsk_gl_texture_atlases_unref       (GskGLTextureAtlases *atlases);
 
-void                 gsk_gl_texture_atlases_begin_frame (GskGLTextureAtlases *atlases);
+void                 gsk_gl_texture_atlases_begin_frame (GskGLTextureAtlases *atlases,
+                                                         GPtrArray           *removed);
 gboolean             gsk_gl_texture_atlases_pack        (GskGLTextureAtlases *atlases,
                                                          int                  width,
                                                          int                  height,

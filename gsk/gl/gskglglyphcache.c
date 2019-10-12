@@ -312,41 +312,46 @@ gsk_gl_glyph_cache_lookup (GskGLGlyphCache         *cache,
 }
 
 void
-gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self)
+gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
+                                GPtrArray       *removed_atlases)
 {
   GHashTableIter iter;
   GlyphCacheKey *key;
   GskGLCachedGlyph *value;
-  guint dropped = 0;
 
   self->timestamp++;
+
+  if (removed_atlases->len > 0)
+    {
+      guint dropped = 0;
+
+      g_hash_table_iter_init (&iter, self->hash_table);
+      while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
+        {
+          if (g_ptr_array_find (removed_atlases, value->atlas, NULL))
+            {
+              g_hash_table_iter_remove (&iter);
+              dropped++;
+            }
+        }
+
+      GSK_NOTE(GLYPH_CACHE, if (dropped > 0) g_message ("Dropped %d glyphs", dropped));
+    }
 
   g_hash_table_iter_init (&iter, self->hash_table);
   while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
     {
-      guint pos;
+      const guint age = self->timestamp - value->timestamp;
 
-      if (!g_ptr_array_find (self->atlases->atlases, value->atlas, &pos))
+      if (age > MAX_FRAME_AGE)
         {
-          g_hash_table_iter_remove (&iter);
-          dropped++;
-        }
-      else
-        {
-          const guint age = self->timestamp - value->timestamp;
+          GskGLTextureAtlas *atlas = value->atlas;
 
-          if (age > MAX_FRAME_AGE)
+          if (atlas && value->used)
             {
-              GskGLTextureAtlas *atlas = value->atlas;
-
-              if (atlas && value->used)
-                {
-                  gsk_gl_texture_atlas_mark_unused (atlas, value->draw_width, value->draw_height);
-                  value->used = FALSE;
-                }
+              gsk_gl_texture_atlas_mark_unused (atlas, value->draw_width, value->draw_height);
+              value->used = FALSE;
             }
         }
     }
-
-  GSK_NOTE(GLYPH_CACHE, if (dropped > 0) g_message ("Dropped %d glyphs", dropped));
 }

@@ -74,7 +74,8 @@ write_atlas_to_png (GskGLTextureAtlas *atlas,
 #endif
 
 void
-gsk_gl_texture_atlases_begin_frame (GskGLTextureAtlases *self)
+gsk_gl_texture_atlases_begin_frame (GskGLTextureAtlases *self,
+                                    GPtrArray           *removed)
 {
   int i;
 
@@ -94,6 +95,7 @@ gsk_gl_texture_atlases_begin_frame (GskGLTextureAtlases *self)
               atlas->texture_id = 0;
             }
 
+          g_ptr_array_add (removed, atlas);
           g_ptr_array_remove_index (self->atlases, i);
        }
     }

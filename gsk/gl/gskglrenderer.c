@@ -3181,6 +3181,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   GskProfiler *profiler;
   gint64 gpu_time, cpu_time, start_time;
 #endif
+  GPtrArray *removed;
 
 #ifdef G_ENABLE_DEBUG
   profiler = gsk_renderer_get_profiler (renderer);
@@ -3204,10 +3205,12 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
                               ORTHO_FAR_PLANE);
   graphene_matrix_scale (&projection, 1, -1, 1);
 
-  gsk_gl_texture_atlases_begin_frame (self->atlases);
-  gsk_gl_glyph_cache_begin_frame (self->glyph_cache);
-  gsk_gl_icon_cache_begin_frame (self->icon_cache);
+  removed = g_ptr_array_new ();
+  gsk_gl_texture_atlases_begin_frame (self->atlases, removed);
+  gsk_gl_glyph_cache_begin_frame (self->glyph_cache, removed);
+  gsk_gl_icon_cache_begin_frame (self->icon_cache, removed);
   gsk_gl_shadow_cache_begin_frame (&self->shadow_cache, self->gl_driver);
+  g_ptr_array_unref (removed);
 
   ops_set_projection (&self->op_builder, &projection);
   ops_set_viewport (&self->op_builder, viewport);

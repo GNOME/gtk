@@ -64,40 +64,43 @@ gsk_gl_icon_cache_unref (GskGLIconCache *self)
 }
 
 void
-gsk_gl_icon_cache_begin_frame (GskGLIconCache *self)
+gsk_gl_icon_cache_begin_frame (GskGLIconCache *self,
+                               GPtrArray      *removed_atlases)
 {
   GHashTableIter iter;
   GdkTexture *texture;
   IconData *icon_data;
 
-  /* Increase frame age of all icons */
+  /* Drop icons on removed atlases */
+  if (removed_atlases->len > 0)
+    {
+      g_hash_table_iter_init (&iter, self->icons);
+      while (g_hash_table_iter_next (&iter, (gpointer *)&texture, (gpointer *)&icon_data))
+        {
+          if (g_ptr_array_find (removed_atlases, icon_data->atlas, NULL))
+            g_hash_table_iter_remove (&iter);
+        }
+    }
+  
+  /* Increase frame age of all remaining icons */
   g_hash_table_iter_init (&iter, self->icons);
   while (g_hash_table_iter_next (&iter, (gpointer *)&texture, (gpointer *)&icon_data))
     {
-      guint pos;
+      icon_data->frame_age ++;
 
-      if (!g_ptr_array_find (self->atlases->atlases, icon_data->atlas, &pos))
+      if (icon_data->frame_age > MAX_FRAME_AGE)
         {
-          g_hash_table_iter_remove (&iter);
-        }
-      else
-        {
-          icon_data->frame_age ++;
-
-          if (icon_data->frame_age > MAX_FRAME_AGE)
+          if (icon_data->used)
             {
-
-              if (icon_data->used)
-                {
-                  const int w = icon_data->texture_rect.size.width  * icon_data->atlas->width;
-                  const int h = icon_data->texture_rect.size.height * icon_data->atlas->height;
-
-                  gsk_gl_texture_atlas_mark_unused (icon_data->atlas, w + 2, h + 2);
-                  icon_data->used = FALSE;
-                }
-              /* We do NOT remove the icon here. Instead, We wait until we drop the entire atlas.
-               * This way we can revive it when we use it again. */
+              const int w = icon_data->texture_rect.size.width  * icon_data->atlas->width;
+              const int h = icon_data->texture_rect.size.height * icon_data->atlas->height;
+              gsk_gl_texture_atlas_mark_unused (icon_data->atlas, w + 2, h + 2);
+              icon_data->used = FALSE;
             }
+
+          /* We do NOT remove the icon here. Instead, We wait until we drop the entire atlas.
+           * This way we can revive it when we use it again.
+           */
         }
     }
 }

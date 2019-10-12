@@ -24,7 +24,8 @@ GskGLIconCache * gsk_gl_icon_cache_new            (GdkDisplay *display,
                                                    GskGLTextureAtlases *atlases);
 GskGLIconCache * gsk_gl_icon_cache_ref            (GskGLIconCache        *self);
 void             gsk_gl_icon_cache_unref          (GskGLIconCache        *self);
-void             gsk_gl_icon_cache_begin_frame    (GskGLIconCache        *self);
+void             gsk_gl_icon_cache_begin_frame    (GskGLIconCache        *self,
+                                                   GPtrArray             *removed_atlases);
 void             gsk_gl_icon_cache_lookup_or_add  (GskGLIconCache        *self,
                                                    GdkTexture            *texture,
                                                    int                   *out_texture_id,
