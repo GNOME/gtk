@@ -18,6 +18,7 @@ typedef struct
   GskGLTextureAtlases *atlases;
   GHashTable *icons; /* GdkTexture -> IconData */
 
+  int timestamp;
 } GskGLIconCache;
 
 GskGLIconCache * gsk_gl_icon_cache_new            (GdkDisplay *display,
