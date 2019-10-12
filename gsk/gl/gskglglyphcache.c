@@ -79,7 +79,14 @@ gsk_gl_glyph_cache_unref (GskGLGlyphCache *self)
 static gboolean
 glyph_cache_equal (gconstpointer v1, gconstpointer v2)
 {
-  return memcmp (v1, v2, sizeof (GlyphCacheKey)) == 0;
+  const GlyphCacheKey *key1 = v1;
+  const GlyphCacheKey *key2 = v2;
+
+  return key1->font == key2->font &&
+         key1->glyph == key2->glyph &&
+         key1->xshift == key2->xshift &&
+         key1->yshift == key2->yshift &&
+         key1->scale == key2->scale;
 }
 
 static guint
