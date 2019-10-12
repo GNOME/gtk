@@ -115,11 +115,15 @@ upload_regions (GskGLIconCache *self,
 
   glBindTexture (GL_TEXTURE_2D, texture_id);
   for (i = 0; i < n_regions; i++)
-    glTexSubImage2D (GL_TEXTURE_2D, 0,
-                     regions[i].x, regions[i].y,
-                     regions[i].width, regions[i].height,
-                     GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
-                     regions[i].data);
+    {
+      glPixelStorei (GL_UNPACK_ROW_LENGTH, regions[i].stride / 4);
+      glTexSubImage2D (GL_TEXTURE_2D, 0,
+                       regions[i].x, regions[i].y,
+                       regions[i].width, regions[i].height,
+                       GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                       regions[i].data);
+    }
+  glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
 }
 
 void
@@ -181,30 +185,35 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     region[0].y = packed_y + 1;
     region[0].width = width;
     region[0].height = height;
+    region[0].stride = cairo_image_surface_get_stride (surface);
     region[0].data = cairo_image_surface_get_data (surface);
 
     region[1].x = packed_x;
     region[1].y = packed_y;
     region[1].width = width + 2;
     region[1].height = 1;
+    region[1].stride = 0;
     region[1].data = padding;
 
     region[2].x = packed_x;
     region[2].y = packed_y + 1 + height;
     region[2].width = width + 2;
     region[2].height = 1;
+    region[2].stride = 0;
     region[2].data = padding;
 
     region[3].x = packed_x;
     region[3].y = packed_y;
     region[3].width = 1;
     region[3].height = height + 2;
+    region[3].stride = 0;
     region[3].data = padding;
 
     region[4].x = packed_x + 1 + width;
     region[4].y = packed_y;
     region[4].width = 1;
     region[4].height = height + 2;
+    region[4].stride = 0;
     region[4].data = padding;
 
     gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
