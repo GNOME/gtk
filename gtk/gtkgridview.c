@@ -28,7 +28,18 @@
 #include "gtkorientableprivate.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
+#include "gtksingleselection.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
+
+/* Maximum number of list items created by the gridview.
+ * For debugging, you can set this to G_MAXUINT to ensure
+ * there's always a list item for every row.
+ *
+ * We multiply this number with GtkGridView:max-columns so
+ * that we can always display at least this many rows.
+ */
+#define GTK_GRID_VIEW_MIN_VISIBLE_ROWS (30)
 
 #define DEFAULT_MAX_COLUMNS (7)
 
@@ -55,22 +66,24 @@ struct _GtkGridView
   GtkOrientation orientation;
   guint min_columns;
   guint max_columns;
+  /* set in size_allocate */
+  guint n_columns;
+  double column_width;
+
+  GtkListItemTracker *anchor;
+  double anchor_align;
 };
 
 struct _Cell
 {
   GtkListItemManagerItem parent;
-  guint size_first_row; /* total */
-  guint size; /* total */
-  guint size_last_row; /* total */
+  guint size; /* total, only counting cells in first column */
 };
 
 struct _CellAugment
 {
   GtkListItemManagerItemAugment parent;
-  guint size_first_row; /* total */
-  guint size; /* total */
-  guint size_last_row; /* total */
+  guint size; /* total, only counting first column */
 };
 
 enum
@@ -95,6 +108,50 @@ G_DEFINE_TYPE_WITH_CODE (GtkGridView, gtk_grid_view, GTK_TYPE_WIDGET,
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
+static void G_GNUC_UNUSED
+dump (GtkGridView *self)
+{
+  Cell *cell;
+  guint n_widgets, n_list_rows, n_items;
+
+  n_widgets = 0;
+  n_list_rows = 0;
+  n_items = 0;
+  //g_print ("ANCHOR: %u - %u\n", self->anchor_start, self->anchor_end);
+  for (cell = gtk_list_item_manager_get_first (self->item_manager);
+       cell;
+       cell = gtk_rb_tree_node_get_next (cell))
+    {
+      if (cell->parent.widget)
+        n_widgets++;
+      n_list_rows++;
+      n_items += cell->parent.n_items;
+      g_print ("%6u%6u %5ux%3u %s (%upx)\n",
+               cell->parent.n_items, n_items,
+               n_items / (self->n_columns ? self->n_columns : self->min_columns),
+               n_items % (self->n_columns ? self->n_columns : self->min_columns),
+               cell->parent.widget ? " (widget)" : "", cell->size);
+    }
+
+  g_print ("  => %u widgets in %u list rows\n", n_widgets, n_list_rows);
+}
+static void
+gtk_grid_view_set_anchor (GtkGridView *self,
+                          guint        position,
+                          double       align)
+{
+  gtk_list_item_tracker_set_position (self->item_manager,
+                                      self->anchor,
+                                      0,
+                                      (GTK_GRID_VIEW_MIN_VISIBLE_ROWS * align + 1) * self->max_columns,
+                                      (GTK_GRID_VIEW_MIN_VISIBLE_ROWS * (1 - align) + 1) * self->max_columns);
+  if (self->anchor_align != align)
+    {
+      self->anchor_align = align;
+      gtk_widget_queue_allocate (GTK_WIDGET (self));
+    }
+}
+
 static void
 gtk_grid_view_adjustment_value_changed_cb (GtkAdjustment *adjustment,
                                            GtkGridView   *self)
@@ -102,10 +159,186 @@ gtk_grid_view_adjustment_value_changed_cb (GtkAdjustment *adjustment,
   gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
-static gboolean
-gtk_grid_view_is_empty (GtkGridView *self)
+static void
+gtk_grid_view_update_adjustments (GtkGridView    *self,
+                                  GtkOrientation  orientation)
 {
-  return self->model == NULL;
+  g_signal_handlers_block_by_func (self->adjustment[orientation],
+                                   gtk_grid_view_adjustment_value_changed_cb,
+                                   self);
+  gtk_adjustment_configure (self->adjustment[orientation],
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            0);
+  g_signal_handlers_unblock_by_func (self->adjustment[orientation],
+                                     gtk_grid_view_adjustment_value_changed_cb,
+                                     self);
+}
+
+static int
+compare_ints (gconstpointer first,
+              gconstpointer second)
+{
+  return *(int *) first - *(int *) second;
+}
+
+static int
+gtk_grid_view_get_unknown_row_size (GtkGridView *self,
+                                    GArray      *heights)
+{
+  g_return_val_if_fail (heights->len > 0, 0);
+
+  /* return the median and hope rows are generally uniform with few outliers */
+  g_array_sort (heights, compare_ints);
+
+  return g_array_index (heights, int, heights->len / 2);
+}
+
+static void
+gtk_grid_view_measure_column_size (GtkGridView *self,
+                                   int         *minimum,
+                                   int         *natural)
+{
+  GtkOrientation opposite;
+  Cell *cell;
+  int min, nat, child_min, child_nat;
+
+  min = 0;
+  nat = 0;
+  opposite = OPPOSITE_ORIENTATION (self->orientation);
+
+  for (cell = gtk_list_item_manager_get_first (self->item_manager);
+       cell != NULL;
+       cell = gtk_rb_tree_node_get_next (cell))
+    {
+      /* ignore unavailable cells */
+      if (cell->parent.widget == NULL)
+        continue;
+
+      gtk_widget_measure (cell->parent.widget,
+                          opposite, -1,
+                          &child_min, &child_nat, NULL, NULL);
+      min = MAX (min, child_min);
+      nat = MAX (nat, child_nat);
+    }
+
+  *minimum = min;
+  *natural = nat;
+}
+
+static void
+gtk_grid_view_measure_across (GtkWidget *widget,
+                              int        for_size,
+                              int       *minimum,
+                              int       *natural)
+{
+  GtkGridView *self = GTK_GRID_VIEW (widget);
+
+  gtk_grid_view_measure_column_size (self, minimum, natural);
+
+  *minimum *= self->min_columns;
+  *natural *= self->max_columns;
+}
+
+static guint
+gtk_grid_view_compute_n_columns (GtkGridView *self,
+                                 guint        for_size,
+                                 int          min,
+                                 int          nat)
+{
+  guint n_columns;
+
+  /* rounding down is exactly what we want here, so int division works */
+  if (self->scroll_policy[OPPOSITE_ORIENTATION (self->orientation)] == GTK_SCROLL_MINIMUM)
+    n_columns = for_size / MAX (1, min);
+  else
+    n_columns = for_size / MAX (1, nat);
+
+  n_columns = CLAMP (n_columns, self->min_columns, self->max_columns);
+
+  return n_columns;
+}
+
+static void
+gtk_grid_view_measure_list (GtkWidget *widget,
+                            int        for_size,
+                            int       *minimum,
+                            int       *natural)
+{
+  GtkGridView *self = GTK_GRID_VIEW (widget);
+  Cell *cell;
+  int height, row_height, child_min, child_nat, column_size, col_min, col_nat;
+  gboolean measured;
+  GArray *heights;
+  guint n_unknown, n_columns;
+  guint i;
+
+  heights = g_array_new (FALSE, FALSE, sizeof (int));
+  n_unknown = 0;
+  height = 0;
+
+  gtk_grid_view_measure_column_size (self, &col_min, &col_nat);
+  for_size = MAX (for_size, col_min * (int) self->min_columns);
+  n_columns = gtk_grid_view_compute_n_columns (self, for_size, col_min, col_nat);
+  column_size = for_size / n_columns;
+
+  i = 0;
+  row_height = 0;
+  measured = FALSE;
+  for (cell = gtk_list_item_manager_get_first (self->item_manager);
+       cell != NULL;
+       cell = gtk_rb_tree_node_get_next (cell))
+    {
+      if (cell->parent.widget)
+        {
+          gtk_widget_measure (cell->parent.widget,
+                              self->orientation, column_size,
+                              &child_min, &child_nat, NULL, NULL);
+          if (self->scroll_policy[self->orientation] == GTK_SCROLL_MINIMUM)
+            row_height = MAX (row_height, child_min);
+          else
+            row_height = MAX (row_height, child_nat);
+          measured = TRUE;
+        }
+      
+      i += cell->parent.n_items;
+
+      if (i >= n_columns)
+        {
+          if (measured)
+            {
+              g_array_append_val (heights, row_height);
+              i -= n_columns;
+              height += row_height;
+              measured = FALSE;
+              row_height = 0;
+            }
+          n_unknown += i / n_columns;
+          i %= n_columns;
+        }
+    }
+
+  if (i > 0)
+    {
+      if (measured)
+        {
+          g_array_append_val (heights, row_height);
+          height += row_height;
+        }
+      else
+        n_unknown++;
+    }
+
+  if (n_unknown)
+    height += n_unknown * gtk_grid_view_get_unknown_row_size (self, heights);
+
+  g_array_free (heights, TRUE);
+
+  *minimum = height;
+  *natural = height;
 }
 
 static void
@@ -119,16 +352,58 @@ gtk_grid_view_measure (GtkWidget      *widget,
 {
   GtkGridView *self = GTK_GRID_VIEW (widget);
 
-  if (gtk_grid_view_is_empty (self))
+  if (orientation == self->orientation)
+    gtk_grid_view_measure_list (widget, for_size, minimum, natural);
+  else
+    gtk_grid_view_measure_across (widget, for_size, minimum, natural);
+}
+
+static void
+cell_set_size (Cell  *cell,
+               guint  size)
+{
+  if (cell->size == size)
+    return;
+
+  cell->size = size;
+  gtk_rb_tree_node_mark_dirty (cell);
+}
+
+static void
+gtk_grid_view_size_allocate_child (GtkGridView *self,
+                                   GtkWidget   *child,
+                                   int          x,
+                                   int          y,
+                                   int          width,
+                                   int          height)
+{
+  GtkAllocation child_allocation;
+
+  if (self->orientation == GTK_ORIENTATION_VERTICAL)
     {
-      *minimum = 0;
-      *natural = 0;
-      return;
+      child_allocation.x = x;
+      child_allocation.y = y;
+      child_allocation.width = width;
+      child_allocation.height = height;
+    }
+  else if (_gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_LTR)
+    {
+      child_allocation.x = y;
+      child_allocation.y = x;
+      child_allocation.width = height;
+      child_allocation.height = width;
+    }
+  else
+    {
+      int mirror_point = gtk_widget_get_width (GTK_WIDGET (self));
+
+      child_allocation.x = mirror_point - y - height; 
+      child_allocation.y = x;
+      child_allocation.width = height;
+      child_allocation.height = width;
     }
 
-  *minimum = 0;
-  *natural = 0;
-  return;
+  gtk_widget_size_allocate (child, &child_allocation, -1);
 }
 
 static void
@@ -137,26 +412,155 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
                              int        height,
                              int        baseline)
 {
-  //GtkGridView *self = GTK_GRID_VIEW (widget);
-}
+  GtkGridView *self = GTK_GRID_VIEW (widget);
+  Cell *cell, *start;
+  GArray *heights;
+  int unknown_height, row_height, col_min, col_nat;
+  GtkOrientation opposite_orientation;
+  gboolean known;
+  int x, y;
+  guint i;
 
-static void
-gtk_grid_view_model_items_changed_cb (GListModel  *model,
-                                      guint        position,
-                                      guint        removed,
-                                      guint        added,
-                                      GtkGridView *self)
-{
-}
+  opposite_orientation = OPPOSITE_ORIENTATION (self->orientation);
 
-static void
-gtk_grid_view_clear_model (GtkGridView *self)
-{
-  if (self->model == NULL)
+  /* step 0: exit early if list is empty */
+  if (gtk_list_item_manager_get_root (self->item_manager) == NULL)
     return;
 
-  g_signal_handlers_disconnect_by_func (self->model, gtk_grid_view_model_items_changed_cb, self);
-  g_clear_object (&self->model);
+  /* step 1: determine width of the list */
+  gtk_grid_view_measure_column_size (self, &col_min, &col_nat);
+  self->n_columns = gtk_grid_view_compute_n_columns (self, 
+                                                     self->orientation == GTK_ORIENTATION_VERTICAL ? width : height,
+                                                     col_min, col_nat);
+  self->column_width = (self->orientation == GTK_ORIENTATION_VERTICAL ? width : height) / self->n_columns;
+  self->column_width = MAX (self->column_width, col_min);
+
+  /* step 2: determine height of known rows */
+  heights = g_array_new (FALSE, FALSE, sizeof (int));
+
+  i = 0;
+  row_height = 0;
+  start = NULL;
+  for (cell = gtk_list_item_manager_get_first (self->item_manager);
+       cell != NULL;
+       cell = gtk_rb_tree_node_get_next (cell))
+    {
+      if (i == 0)
+        start = cell;
+      
+      if (cell->parent.widget)
+        {
+          int min, nat, size;
+          gtk_widget_measure (cell->parent.widget, self->orientation,
+                              self->column_width,
+                              &min, &nat, NULL, NULL);
+          if (self->scroll_policy[self->orientation] == GTK_SCROLL_MINIMUM)
+            size = min;
+          else
+            size = nat;
+          g_array_append_val (heights, size);
+          row_height = MAX (row_height, size);
+        }
+      cell_set_size (cell, 0);
+      i += cell->parent.n_items;
+
+      if (i >= self->n_columns)
+        {
+          i %= self->n_columns;
+
+          cell_set_size (start, start->size + row_height);
+          start = cell;
+          row_height = 0;
+        }
+    }
+  if (i > 0)
+    cell_set_size (start, start->size + row_height);
+
+  /* step 3: determine height of rows with only unknown items */
+  unknown_height = gtk_grid_view_get_unknown_row_size (self, heights);
+  g_array_free (heights, TRUE);
+
+  i = 0;
+  known = FALSE;
+  for (start = cell = gtk_list_item_manager_get_first (self->item_manager);
+       cell != NULL;
+       cell = gtk_rb_tree_node_get_next (cell))
+    {
+      if (i == 0)
+        start = cell;
+
+      if (cell->parent.widget)
+        known = TRUE;
+
+      i += cell->parent.n_items;
+      if (i >= self->n_columns)
+        {
+          if (!known)
+            cell_set_size (start, start->size + unknown_height);
+
+          i -= self->n_columns;
+          known = FALSE;
+
+          if (i >= self->n_columns)
+            {
+              cell_set_size (cell, cell->size + unknown_height * (i / self->n_columns));
+              i %= self->n_columns;
+            }
+          start = cell;
+        }
+    }
+  if (i > 0 && !known)
+    cell_set_size (start, start->size + unknown_height);
+
+  /* step 4: update the adjustments */
+  gtk_grid_view_update_adjustments (self, GTK_ORIENTATION_HORIZONTAL);
+  gtk_grid_view_update_adjustments (self, GTK_ORIENTATION_VERTICAL);
+
+  /* step 5: actually allocate the widgets */
+  x = - round (gtk_adjustment_get_value (self->adjustment[opposite_orientation]));
+  y = - round (gtk_adjustment_get_value (self->adjustment[self->orientation]));
+
+  i = 0;
+  row_height = 0;
+  for (cell = gtk_list_item_manager_get_first (self->item_manager);
+       cell != NULL;
+       cell = gtk_rb_tree_node_get_next (cell))
+    {
+      if (cell->parent.widget)
+        {
+          if (i == 0)
+            {
+              y += row_height;
+              row_height = cell->size;
+            }
+          gtk_grid_view_size_allocate_child (self,
+                                             cell->parent.widget,
+                                             x + ceil (self->column_width * i),
+                                             y,
+                                             ceil (self->column_width * (i + 1)) - ceil (self->column_width * i),
+                                             row_height);
+          i = (i + 1) % self->n_columns;
+        }
+      else
+        {
+          i += cell->parent.n_items;
+          if (i > self->n_columns)
+            {
+              i -= self->n_columns;
+              y += row_height;
+              row_height = cell->size;
+
+              if (i > self->n_columns)
+                {
+                  guint unknown_rows = (i - 1) / self->n_columns;
+                  int unknown_height2 = unknown_rows * unknown_height;
+                  row_height -= unknown_height2;
+                  y += unknown_height2;
+                  i %= self->n_columns;
+                }
+            }
+        }
+    }
 }
 
 static void
@@ -177,11 +581,16 @@ gtk_grid_view_dispose (GObject *object)
 {
   GtkGridView *self = GTK_GRID_VIEW (object);
 
-  gtk_grid_view_clear_model (self);
+  g_clear_object (&self->model);
 
   gtk_grid_view_clear_adjustment (self, GTK_ORIENTATION_HORIZONTAL);
   gtk_grid_view_clear_adjustment (self, GTK_ORIENTATION_VERTICAL);
 
+  if (self->anchor)
+    {
+      gtk_list_item_tracker_free (self->item_manager, self->anchor);
+      self->anchor = NULL;
+    }
   g_clear_object (&self->item_manager);
 
   G_OBJECT_CLASS (gtk_grid_view_parent_class)->dispose (object);
@@ -449,34 +858,33 @@ cell_augment (GtkRbTree *tree,
               gpointer   left,
               gpointer   right)
 {
-#if 0
   Cell *cell = node;
   CellAugment *aug = node_augment;
 
   gtk_list_item_manager_augment_node (tree, node_augment, node, left, right);
 
-  aug->height = row->height * row->parent.n_items;
+  aug->size = cell->size;
 
   if (left)
     {
-      ListRowAugment *left_aug = gtk_rb_tree_get_augment (tree, left);
+      CellAugment *left_aug = gtk_rb_tree_get_augment (tree, left);
 
-      aug->height += left_aug->height;
+      aug->size += left_aug->size;
     }
 
   if (right)
     {
-      ListRowAugment *right_aug = gtk_rb_tree_get_augment (tree, right);
+      CellAugment *right_aug = gtk_rb_tree_get_augment (tree, right);
 
-      aug->height += right_aug->height;
+      aug->size += right_aug->size;
     }
-#endif
 }
 
 static void
 gtk_grid_view_init (GtkGridView *self)
 {
   self->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self), "flowboxchild", Cell, CellAugment, cell_augment);
+  self->anchor = gtk_list_item_tracker_new (self->item_manager);
 
   self->min_columns = 1;
   self->max_columns = DEFAULT_MAX_COLUMNS;
@@ -573,16 +981,27 @@ gtk_grid_view_set_model (GtkGridView *self,
   if (self->model == model)
     return;
 
-  gtk_grid_view_clear_model (self);
+  g_clear_object (&self->model);
 
   if (model)
     {
+      GtkSelectionModel *selection_model;
+
       self->model = g_object_ref (model);
 
-      g_signal_connect (model,
-                        "items-changed", 
-                        G_CALLBACK (gtk_grid_view_model_items_changed_cb),
-                        self);
+      if (GTK_IS_SELECTION_MODEL (model))
+        selection_model = GTK_SELECTION_MODEL (g_object_ref (model));
+      else
+        selection_model = GTK_SELECTION_MODEL (gtk_single_selection_new (model));
+
+      gtk_list_item_manager_set_model (self->item_manager, selection_model);
+      gtk_grid_view_set_anchor (self, 0, 0.0);
+
+      g_object_unref (selection_model);
+    }
+  else
+    {
+      gtk_list_item_manager_set_model (self->item_manager, NULL);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
@@ -663,6 +1082,10 @@ gtk_grid_view_set_max_columns (GtkGridView *self,
     return;
 
   self->max_columns = max_columns;
+
+  gtk_grid_view_set_anchor (self,
+                            gtk_list_item_tracker_get_position (self->item_manager, self->anchor),
+                            self->anchor_align);
 
   gtk_widget_queue_resize (GTK_WIDGET (self));
 
