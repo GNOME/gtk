@@ -1858,9 +1858,6 @@ gtk_notebook_destroy (GtkWidget *widget)
   if (priv->pages)
     g_list_model_items_changed (G_LIST_MODEL (priv->pages), 0, g_list_length (priv->children), 0);
 
-  if (priv->menu)
-    gtk_notebook_popup_disable (notebook);
-
   if (priv->source_targets)
     {
       gdk_content_formats_unref (priv->source_targets);
