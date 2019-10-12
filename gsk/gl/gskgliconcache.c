@@ -5,7 +5,7 @@
 
 #include <epoxy/gl.h>
 
-#define MAX_FRAME_AGE (5 * 60)
+#define MAX_FRAME_AGE 60
 
 typedef struct
 {

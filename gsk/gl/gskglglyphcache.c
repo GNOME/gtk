@@ -24,7 +24,7 @@
  * atlas and all the items it contained.
  */
 
-#define MAX_FRAME_AGE (5 * 60)
+#define MAX_FRAME_AGE (60)
 #define MAX_GLYPH_SIZE 128 /* Will get its own texture if bigger */
 
 static guint    glyph_cache_hash       (gconstpointer v);
