@@ -1012,7 +1012,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
 static void
 gtk_list_view_init (GtkListView *self)
 {
-  self->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self), ListRow, ListRowAugment, list_row_augment);
+  self->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self), "row", ListRow, ListRowAugment, list_row_augment);
   self->anchor = gtk_list_item_tracker_new (self->item_manager);
   self->selected = gtk_list_item_tracker_new (self->item_manager);
   self->orientation = GTK_ORIENTATION_VERTICAL;
