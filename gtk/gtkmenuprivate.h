@@ -80,7 +80,6 @@ struct _GtkMenuPrivate
 
   guint needs_destruction_ref : 1;
 
-  guint have_layout           : 1;
   guint ignore_button_release : 1;
   guint no_toggle_size        : 1;
 

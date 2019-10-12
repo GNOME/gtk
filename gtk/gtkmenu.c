@@ -266,15 +266,6 @@ update_scrollbars (GtkMenu *menu)
                                   policy);
 }
 
-static void
-menu_queue_resize (GtkMenu *menu)
-{
-  GtkMenuPrivate *priv = menu->priv;
-
-  priv->have_layout = FALSE;
-  gtk_widget_queue_resize (GTK_WIDGET (menu));
-}
-
 static GList *
 gtk_menu_get_items (GtkMenuShell *menu_shell)
 {
@@ -1115,7 +1106,6 @@ gtk_menu_add (GtkContainer *container,
   gtk_container_add (GTK_CONTAINER (priv->box), widget);
 
   update_scrollbars (menu);
-  menu_queue_resize (menu);
 }
 
 static void
@@ -1134,7 +1124,6 @@ gtk_menu_remove (GtkContainer *container,
   GTK_CONTAINER_CLASS (gtk_menu_parent_class)->remove (container, widget);
 
   update_scrollbars (menu);
-  menu_queue_resize (menu);
 }
 
 /**
@@ -1162,7 +1151,6 @@ gtk_menu_real_insert (GtkMenuShell *menu_shell,
   gtk_menu_reorder_child (menu, child, position);
 
   update_scrollbars (menu);
-  menu_queue_resize (menu);
 }
 
 static gboolean
