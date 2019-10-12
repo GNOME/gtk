@@ -15,7 +15,7 @@ typedef struct
   GHashTable *hash_table;
   GskGLTextureAtlases *atlases;
 
-  guint64 timestamp;
+  int timestamp;
 } GskGLGlyphCache;
 
 typedef struct
@@ -63,8 +63,8 @@ struct _GskGLCachedGlyph
   int draw_width;
   int draw_height;
 
-  guint used: 1;
-  guint64 timestamp;
+  guint accessed : 1; /* accessed since last check */
+  guint used     : 1; /* accounted as used in the atlas */
 };
 
 

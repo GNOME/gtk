@@ -11,9 +11,9 @@ typedef struct
 {
   graphene_rect_t texture_rect;
   GskGLTextureAtlas *atlas;
-  int frame_age; /* Number of frames this icon is unused */
-  guint used: 1;
   GdkTexture *source_texture;
+  guint accessed : 1;
+  guint used     : 1;
 } IconData;
 
 static void
@@ -71,6 +71,8 @@ gsk_gl_icon_cache_begin_frame (GskGLIconCache *self,
   GdkTexture *texture;
   IconData *icon_data;
 
+  self->timestamp++;
+
   /* Drop icons on removed atlases */
   if (removed_atlases->len > 0)
     {
@@ -81,26 +83,24 @@ gsk_gl_icon_cache_begin_frame (GskGLIconCache *self,
             g_hash_table_iter_remove (&iter);
         }
     }
-  
-  /* Increase frame age of all remaining icons */
-  g_hash_table_iter_init (&iter, self->icons);
-  while (g_hash_table_iter_next (&iter, (gpointer *)&texture, (gpointer *)&icon_data))
-    {
-      icon_data->frame_age ++;
 
-      if (icon_data->frame_age > MAX_FRAME_AGE)
+  if (self->timestamp % MAX_FRAME_AGE == 0)
+    {  
+      g_hash_table_iter_init (&iter, self->icons);
+      while (g_hash_table_iter_next (&iter, (gpointer *)&texture, (gpointer *)&icon_data))
         {
-          if (icon_data->used)
+          if (!icon_data->accessed)
             {
-              const int w = icon_data->texture_rect.size.width  * icon_data->atlas->width;
-              const int h = icon_data->texture_rect.size.height * icon_data->atlas->height;
-              gsk_gl_texture_atlas_mark_unused (icon_data->atlas, w + 2, h + 2);
-              icon_data->used = FALSE;
+              if (icon_data->used)
+                { 
+                  const int w = icon_data->texture_rect.size.width  * icon_data->atlas->width;
+                  const int h = icon_data->texture_rect.size.height * icon_data->atlas->height;
+                  gsk_gl_texture_atlas_mark_unused (icon_data->atlas, w + 2, h + 2);
+                  icon_data->used = FALSE;
+                }
             }
 
-          /* We do NOT remove the icon here. Instead, We wait until we drop the entire atlas.
-           * This way we can revive it when we use it again.
-           */
+          icon_data->accessed = FALSE;
         }
     }
 }
@@ -115,7 +115,6 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
 
   if (icon_data)
     {
-      icon_data->frame_age = 0;
       if (!icon_data->used)
         {
           const int w = icon_data->texture_rect.size.width  * icon_data->atlas->width;
@@ -124,6 +123,7 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
           gsk_gl_texture_atlas_mark_used (icon_data->atlas, w + 2, h + 2);
           icon_data->used = TRUE;
         }
+      icon_data->accessed = TRUE;
 
       *out_texture_id = icon_data->atlas->texture_id;
       *out_texture_rect = icon_data->texture_rect;
@@ -144,7 +144,7 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
 
     icon_data = g_new0 (IconData, 1);
     icon_data->atlas = atlas;
-    icon_data->frame_age = 0;
+    icon_data->accessed = TRUE;
     icon_data->used = TRUE;
     icon_data->source_texture = g_object_ref (texture);
     graphene_rect_init (&icon_data->texture_rect,
