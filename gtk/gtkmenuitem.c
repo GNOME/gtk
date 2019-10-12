@@ -740,7 +740,6 @@ gtk_menu_item_dispose (GObject *object)
   GtkMenuItem *menu_item = GTK_MENU_ITEM (object);
   GtkMenuItemPrivate *priv = menu_item->priv;
 
-  g_clear_object (&priv->motion_controller);
   g_clear_object (&priv->action_helper);
   g_clear_pointer (&priv->arrow_widget, gtk_widget_unparent);
 
