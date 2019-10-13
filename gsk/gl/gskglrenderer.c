@@ -565,8 +565,9 @@ render_text_node (GskGLRenderer   *self,
       ops_set_color (builder, color);
     }
 
-  lookup.font = (PangoFont *)font;
-  lookup.scale = (guint) (text_scale * 1024);
+  memset (&lookup, 0, sizeof (CacheKeyData));
+  lookup.data.font = (PangoFont *)font;
+  lookup.data.scale = (guint) (text_scale * 1024);
 
   /* We use one quad per character, unlike the other nodes which
    * use at most one quad altogether */
