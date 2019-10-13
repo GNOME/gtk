@@ -44,6 +44,7 @@ demos = files([
   'listbox.c',
   'flowbox.c',
   'list_store.c',
+  'listview_settings.c',
   'listview_weather.c',
   'markup.c',
   'menus.c',
