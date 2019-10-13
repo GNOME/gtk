@@ -2706,26 +2706,53 @@ gsk_gl_renderer_setup_render_mode (GskGLRenderer *self)
     }
 }
 
+static void
+load_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
+                  GskRenderNode   *node,
+                  RenderOpBuilder *builder)
+{
+  const float min_x = builder->dx + node->bounds.origin.x;
+  const float min_y = builder->dy + node->bounds.origin.y;
+  const float max_x = min_x + node->bounds.size.width;
+  const float max_y = min_y + node->bounds.size.height;
+
+  vertex_data[0].position[0] = min_x;
+  vertex_data[0].position[1] = min_y;
+  vertex_data[0].uv[0] = 0;
+  vertex_data[0].uv[1] = 0;
+
+  vertex_data[1].position[0] = min_x;
+  vertex_data[1].position[1] = max_y;
+  vertex_data[1].uv[0] = 0;
+  vertex_data[1].uv[1] = 0;
+
+  vertex_data[2].position[0] = max_x;
+  vertex_data[2].position[1] = min_y;
+  vertex_data[2].uv[0] = 0;
+  vertex_data[2].uv[1] = 0;
+
+  vertex_data[3].position[0] = max_x;
+  vertex_data[3].position[1] = max_y;
+  vertex_data[3].uv[0] = 0;
+  vertex_data[3].uv[1] = 0;
+
+  vertex_data[4].position[0] = min_x;
+  vertex_data[4].position[1] = max_y;
+  vertex_data[4].uv[0] = 0;
+  vertex_data[4].uv[1] = 0;
+
+  vertex_data[5].position[0] = max_x;
+  vertex_data[5].position[1] = min_y;
+  vertex_data[5].uv[0] = 0;
+  vertex_data[5].uv[1] = 0;
+}
 
 static void
 gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
                                 GskRenderNode   *node,
                                 RenderOpBuilder *builder)
 {
-  const float min_x = builder->dx + node->bounds.origin.x;
-  const float min_y = builder->dy + node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
-  /* Default vertex data */
-  const GskQuadVertex vertex_data[GL_N_VERTICES] = {
-    { { min_x, min_y }, { 0, 0 }, },
-    { { min_x, max_y }, { 0, 1 }, },
-    { { max_x, min_y }, { 1, 0 }, },
-
-    { { max_x, max_y }, { 1, 1 }, },
-    { { min_x, max_y }, { 0, 1 }, },
-    { { max_x, min_y }, { 1, 0 }, },
-  };
+  GskQuadVertex vertex_data[GL_N_VERTICES];
 
   /* This can still happen, even if the render nodes are created using
    * GtkSnapshot, so let's juse be safe. */
@@ -2779,6 +2806,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_COLOR_NODE:
+      load_vertex_data (vertex_data, node, builder);
       render_color_node (self, node, builder, vertex_data);
     break;
 
@@ -2795,6 +2823,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_LINEAR_GRADIENT_NODE:
+      load_vertex_data (vertex_data, node, builder);
       render_linear_gradient_node (self, node, builder, vertex_data);
     break;
 
@@ -2812,25 +2841,34 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_COLOR_MATRIX_NODE:
+      load_vertex_data (vertex_data, node, builder);
       render_color_matrix_node (self, node, builder, vertex_data);
     break;
 
     case GSK_BLUR_NODE:
+      load_vertex_data (vertex_data, node, builder);
       render_blur_node (self, node, builder, vertex_data);
     break;
 
     case GSK_INSET_SHADOW_NODE:
+      load_vertex_data (vertex_data, node, builder);
       render_inset_shadow_node (self, node, builder, vertex_data);
     break;
 
     case GSK_OUTSET_SHADOW_NODE:
       if (gsk_outset_shadow_node_get_blur_radius (node) > 0)
-        render_outset_shadow_node (self, node, builder);
+        {
+          render_outset_shadow_node (self, node, builder);
+        }
       else
-        render_unblurred_outset_shadow_node (self, node, builder, vertex_data);
+        {
+          load_vertex_data (vertex_data, node, builder);
+          render_unblurred_outset_shadow_node (self, node, builder, vertex_data);
+        }
     break;
 
     case GSK_SHADOW_NODE:
+      load_vertex_data (vertex_data, node, builder);
       render_shadow_node (self, node, builder, vertex_data);
     break;
 
