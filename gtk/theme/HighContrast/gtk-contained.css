@@ -679,7 +679,7 @@ notebook.frame { border: 1px solid gray; }
 
 notebook.frame:backdrop { border-color: #8d8d8d; }
 
-notebook header { background-color: #d9d9d9; }
+notebook header { background-color: #ececec; }
 
 .frame notebook header { border: 1px solid gray; }
 
@@ -793,11 +793,11 @@ notebook tab:backdrop { background-color: transparent; border-color: transparent
 
 .right notebook tab.reorderable-page:backdrop { border-color: transparent; background-color: transparent; }
 
-notebook tab label { padding: 0 2px; font-weight: bold; color: gray; /* color: inherit doesn't work here */ }
+notebook tab label { padding: 0 2px; font-weight: bold; color: #404040; /* color: inherit doesn't work here */ }
 
 notebook tab label:backdrop { color: gray; }
 
-notebook tab:hover label { color: #404040; }
+notebook tab:hover label { color: #202020; }
 
 notebook tab:checked label { color: #000; }
 
@@ -1248,15 +1248,15 @@ row:hover, row.activatable:hover { transition: none; }
 .app-notification border, .app-notification.frame border { border-width: 0; }
 
 /************* Expanders * */
-expander title > arrow { min-width: 24px; min-height: 24px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+expander { min-width: 24px; min-height: 24px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
 
-expander title > arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
+expander:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
 
-expander title > arrow:disabled { color: gray; }
+expander:checked { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
 
-expander title > arrow:checked { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+expander:disabled { color: gray; }
 
-expander title:hover > arrow { color: #4d4d4d; }
+expander-widget title:hover > expander { color: #4d4d4d; }
 
 /************ Calendar * */
 calendar { border: 1px solid gray; }

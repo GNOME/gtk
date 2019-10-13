@@ -1657,17 +1657,17 @@ row.activatable:selected:backdrop { background-color: #15539e; }
 .app-notification border, .app-notification.frame border { border: none; }
 
 /************* Expanders * */
-expander title > arrow { min-width: 16px; min-height: 16px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+expander { min-width: 16px; min-height: 16px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
 
-expander title > arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
+expander:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
 
-expander title > arrow:disabled { color: #919190; }
+expander:disabled { color: #919190; }
 
-expander title > arrow:disabled:backdrop { color: #5b5b5b; }
+expander:disabled:backdrop { color: #5b5b5b; }
 
-expander title > arrow:checked, expander title:checked > arrow { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+expander:checked { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
 
-expander title:hover > arrow { color: white; }
+expander-widget title:hover > expander { color: white; }
 
 /************ Calendar * */
 calendar { color: white; border: 1px solid #1b1b1b; }
