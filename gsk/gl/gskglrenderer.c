@@ -601,8 +601,9 @@ render_text_node (GskGLRenderer   *self,
 
   render_data = ensure_render_data (node, self->glyph_cache);
 
-  lookup.font = (PangoFont *)font;
-  lookup.scale = (guint) (text_scale * 1024);
+  memset (&lookup, 0, sizeof (CacheKeyData));
+  lookup.data.font = (PangoFont *)font;
+  lookup.data.scale = (guint) (text_scale * 1024);
 
   /* We use one quad per character, unlike the other nodes which
    * use at most one quad altogether */
