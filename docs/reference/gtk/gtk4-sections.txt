@@ -3307,6 +3307,26 @@ gtk_tree_list_row_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtktreeexpander</FILE>
+<TITLE>GtkTreeExpander</TITLE>
+gtk_tree_expander_new
+gtk_tree_expander_get_child
+gtk_tree_expander_set_child
+gtk_tree_expander_get_item
+gtk_tree_expander_get_list_row
+gtk_tree_expander_set_list_row
+<SUBSECTION Standard>
+GTK_TREE_EXPANDER
+GTK_IS_TREE_EXPANDER
+GTK_TYPE_TREE_EXPANDER
+GTK_TREE_EXPANDER_CLASS
+GTK_IS_TREE_EXPANDER_CLASS
+GTK_TREE_EXPANDER_GET_CLASS
+<SUBSECTION Private>
+gtk_tree_expander_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtktreemodel</FILE>
 <TITLE>GtkTreeModel</TITLE>
 GtkTreeModel

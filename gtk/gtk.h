@@ -248,6 +248,7 @@
 #include <gtk/gtktooltip.h>
 #include <gtk/gtktestutils.h>
 #include <gtk/gtktreednd.h>
+#include <gtk/gtktreeexpander.h>
 #include <gtk/gtktreelistmodel.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreemodelfilter.h>
