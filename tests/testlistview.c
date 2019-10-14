@@ -338,14 +338,12 @@ create_list_model_for_directory (gpointer file)
 typedef struct _RowData RowData;
 struct _RowData
 {
-  GtkWidget *depth_box;
   GtkWidget *expander;
   GtkWidget *icon;
   GtkWidget *name;
   GCancellable *cancellable;
 
   GtkTreeListRow *current_item;
-  GBinding *expander_binding;
 };
 
 static void row_data_notify_item (GtkListItem *item,
@@ -362,8 +360,6 @@ row_data_unbind (RowData *data)
       g_cancellable_cancel (data->cancellable);
       g_clear_object (&data->cancellable);
     }
-
-  g_binding_unbind (data->expander_binding);
 
   g_clear_object (&data->current_item);
 }
@@ -437,7 +433,6 @@ row_data_bind (RowData        *data,
                GtkTreeListRow *item)
 {
   GFileInfo *info;
-  guint depth;
 
   row_data_unbind (data);
 
@@ -446,11 +441,7 @@ row_data_bind (RowData        *data,
 
   data->current_item = g_object_ref (item);
 
-  depth = gtk_tree_list_row_get_depth (item);
-  gtk_widget_set_size_request (data->depth_box, 16 * depth, 0);
-
-  gtk_widget_set_sensitive (data->expander, gtk_tree_list_row_is_expandable (item));
-  data->expander_binding = g_object_bind_property (item, "expanded", data->expander, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+  gtk_tree_expander_set_list_row (GTK_TREE_EXPANDER (data->expander), item);
 
   info = gtk_tree_list_row_get_item (item);
 
@@ -512,15 +503,11 @@ setup_widget (GtkListItem *list_item,
   gtk_label_set_width_chars (GTK_LABEL (child), 5);
   gtk_box_append (GTK_BOX (box), child);
 
-  data->depth_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_box_append (GTK_BOX (box), data->depth_box);
-  
-  data->expander = g_object_new (GTK_TYPE_TOGGLE_BUTTON, "css-name", "expander-widget", NULL);
-  gtk_button_set_has_frame (GTK_BUTTON (data->expander), FALSE);
+  data->expander = gtk_tree_expander_new ();
   gtk_box_append (GTK_BOX (box), data->expander);
-  child = g_object_new (GTK_TYPE_SPINNER, "css-name", "expander", NULL);
-  g_object_bind_property (data->expander, "active", child, "spinning", G_BINDING_SYNC_CREATE);
-  gtk_button_set_child (GTK_BUTTON (data->expander), child);
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+  gtk_tree_expander_set_child (GTK_TREE_EXPANDER (data->expander), box);
 
   data->icon = gtk_image_new ();
   gtk_box_append (GTK_BOX (box), data->icon);
