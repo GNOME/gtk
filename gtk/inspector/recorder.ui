@@ -73,15 +73,14 @@
               <object class="GtkFrame">
                 <child>
                   <object class="GtkScrolledWindow">
-                    <property name="hscrollbar-policy">never</property>
                     <property name="propagate-natural-width">1</property>
                     <style>
                       <class name="sidebar"/>
                     </style>
                     <child>
-                      <object class="GtkListBox" id="render_node_list">
+                      <object class="GtkListView" id="render_node_list">
                         <property name="vexpand">1</property>
-                        <signal name="row-selected" handler="render_node_list_selection_changed"/>
+                        <property name="hexpand">1</property>
                       </object>
                     </child>
                   </object>
