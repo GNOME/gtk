@@ -47,6 +47,7 @@
 #include "gtksizegroup.h"
 #include "gtktextview.h"
 #include "gtktogglebutton.h"
+#include "gtktreeexpander.h"
 #include "gtktreelistmodel.h"
 #include "gtktreeview.h"
 #include "gtktreeselection.h"
@@ -989,7 +990,6 @@ gtk_inspector_object_tree_create_list_widget (gpointer row_item,
   GtkInspectorObjectTree *wt = user_data;
   gpointer item;
   GtkWidget *row, *box, *column, *child;
-  guint depth;
 
   item = gtk_tree_list_row_get_item (row_item);
 
@@ -1006,37 +1006,14 @@ gtk_inspector_object_tree_create_list_widget (gpointer row_item,
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (row), box);
 
-  column = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_size_group_add_widget (wt->priv->type_size_group, column);
-  gtk_container_add (GTK_CONTAINER (box), column);
-
   /* expander */
-  depth = gtk_tree_list_row_get_depth (row_item);
-  if (depth > 0)
-    {
-      child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_widget_set_size_request (child, 16 * depth, 0);
-      gtk_container_add (GTK_CONTAINER (column), child);
-    }
-  if (gtk_tree_list_row_is_expandable (row_item))
-    {
-      GtkWidget *title, *arrow;
+  child = gtk_tree_expander_new ();
+  gtk_tree_expander_set_list_row (GTK_TREE_EXPANDER (child), row_item);
+  gtk_size_group_add_widget (wt->priv->type_size_group, child);
+  gtk_container_add (GTK_CONTAINER (box), child);
 
-      child = g_object_new (GTK_TYPE_BOX, "css-name", "expander", NULL);
-
-      title = g_object_new (GTK_TYPE_TOGGLE_BUTTON, "css-name", "title", NULL);
-      gtk_button_set_relief (GTK_BUTTON (title), GTK_RELIEF_NONE);
-      g_object_bind_property (row_item, "expanded", title, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-      gtk_container_add (GTK_CONTAINER (child), title);
-
-      arrow = gtk_builtin_icon_new ("expander");
-      gtk_container_add (GTK_CONTAINER (title), arrow);
-    }
-  else
-    {
-      child = gtk_image_new (); /* empty whatever */
-    }
-  gtk_container_add (GTK_CONTAINER (column), child);
+  column = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_tree_expander_set_child (GTK_TREE_EXPANDER (child), column);
 
   /* 1st column: type name */
   child = gtk_label_new (G_OBJECT_TYPE_NAME (item));
