@@ -972,17 +972,17 @@ void                    gtk_widget_insert_action_group  (GtkWidget    *widget,
                                                          GActionGroup *group);
 
 GDK_AVAILABLE_IN_ALL
-void                    gtk_widget_activate_action      (GtkWidget  *widget,
+gboolean                gtk_widget_activate_action      (GtkWidget  *widget,
                                                          const char *name,
                                                          const char *format_string,
                                                          ...);
 GDK_AVAILABLE_IN_ALL
-void                    gtk_widget_activate_action_variant (GtkWidget  *widget,
+gboolean                gtk_widget_activate_action_variant (GtkWidget  *widget,
                                                             const char *name,
                                                             GVariant   *args);
 
 GDK_AVAILABLE_IN_ALL
-void                   gtk_widget_activate_default      (GtkWidget *widget);
+void                    gtk_widget_activate_default     (GtkWidget *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_set_font_map         (GtkWidget             *widget,

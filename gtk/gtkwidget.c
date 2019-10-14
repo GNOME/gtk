@@ -12454,8 +12454,11 @@ gtk_widget_get_template_child (GtkWidget   *widget,
  *
  * The arguments must match the actions expected parameter
  * type, as returned by g_action_get_parameter_type().
+ *
+ * Returns: %TRUE if the action was activated, %FALSE if the action does
+ *     not exist.
  */
-void
+gboolean
 gtk_widget_activate_action_variant (GtkWidget  *widget,
                                     const char *name,
                                     GVariant   *args)
@@ -12463,8 +12466,15 @@ gtk_widget_activate_action_variant (GtkWidget  *widget,
   GtkActionMuxer *muxer;
 
   muxer = _gtk_widget_get_action_muxer (widget, FALSE);
-  if (muxer)
-    g_action_group_activate_action (G_ACTION_GROUP (muxer), name, args);
+  if (muxer == NULL)
+    return FALSE;
+
+  if (!g_action_group_has_action (G_ACTION_GROUP (muxer), name))
+    return FALSE;
+
+  g_action_group_activate_action (G_ACTION_GROUP (muxer), name, args);
+
+  return TRUE;
 }
 
 /**
@@ -12480,14 +12490,18 @@ gtk_widget_activate_action_variant (GtkWidget  *widget,
  *
  * This is a wrapper around gtk_widget_activate_action_variant()
  * that constructs the @args variant according to @format_string.
+ *
+ * Returns: %TRUE if the action was activated, %FALSE if the action does
+ *     not exist.
  */
-void
+gboolean
 gtk_widget_activate_action (GtkWidget  *widget,
                             const char *name,
                             const char *format_string,
                             ...)
 {
   GVariant *parameters = NULL;
+  gboolean result;
 
   if (format_string != NULL)
     {
@@ -12500,9 +12514,11 @@ gtk_widget_activate_action (GtkWidget  *widget,
       g_variant_ref_sink (parameters);
     }
 
-  gtk_widget_activate_action_variant (widget, name, parameters);
+  result = gtk_widget_activate_action_variant (widget, name, parameters);
 
   g_clear_pointer (&parameters, g_variant_unref);
+
+  return result;
 }
 
 /**
