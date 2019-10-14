@@ -27,6 +27,7 @@
 #include <gtk/gtkpicture.h>
 #include <gtk/gtkpopover.h>
 #include <gtk/gtktogglebutton.h>
+#include <gtk/gtktreeexpander.h>
 #include <gtk/gtktreelistmodel.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeview.h>
@@ -299,44 +300,20 @@ create_widget_for_render_node (gpointer row_item,
 {
   GdkPaintable *paintable;
   GskRenderNode *node;
-  GtkWidget *row, *box, *child;
+  GtkWidget *row, *expander, *box, *child;
   char *name;
-  guint depth;
 
   paintable = gtk_tree_list_row_get_item (row_item);
   node = gtk_render_node_paintable_get_render_node (GTK_RENDER_NODE_PAINTABLE (paintable));
   row = gtk_list_box_row_new ();
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
-  gtk_container_add (GTK_CONTAINER (row), box);
 
   /* expander */
-  depth = gtk_tree_list_row_get_depth (row_item);
-  if (depth > 0)
-    {
-      child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_widget_set_size_request (child, 16 * depth, 0);
-      gtk_container_add (GTK_CONTAINER (box), child);
-    }
-  if (gtk_tree_list_row_is_expandable (row_item))
-    {
-      GtkWidget *title, *arrow;
+  expander = gtk_tree_expander_new ();
+  gtk_tree_expander_set_list_row (GTK_TREE_EXPANDER (expander), row_item);
+  gtk_container_add (GTK_CONTAINER (row), expander);
 
-      child = g_object_new (GTK_TYPE_BOX, "css-name", "expander", NULL);
-
-      title = g_object_new (GTK_TYPE_TOGGLE_BUTTON, "css-name", "title", NULL);
-      gtk_button_set_relief (GTK_BUTTON (title), GTK_RELIEF_NONE);
-      g_object_bind_property (row_item, "expanded", title, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
-      gtk_container_add (GTK_CONTAINER (child), title);
-      g_object_set_data_full (G_OBJECT (row), "make-sure-its-not-unreffed", g_object_ref (row_item), g_object_unref);
-
-      arrow = gtk_builtin_icon_new ("expander");
-      gtk_container_add (GTK_CONTAINER (title), arrow);
-    }
-  else
-    {
-      child = gtk_image_new (); /* empty whatever */
-    }
-  gtk_container_add (GTK_CONTAINER (box), child);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+  gtk_tree_expander_set_child (GTK_TREE_EXPANDER (expander), box);
 
   /* icon */
   child = gtk_image_new_from_paintable (paintable);
