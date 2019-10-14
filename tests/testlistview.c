@@ -338,14 +338,12 @@ create_list_model_for_directory (gpointer file)
 typedef struct _RowData RowData;
 struct _RowData
 {
-  GtkWidget *depth_box;
   GtkWidget *expander;
   GtkWidget *icon;
   GtkWidget *name;
   GCancellable *cancellable;
 
   GtkTreeListRow *current_item;
-  GBinding *expander_binding;
 };
 
 static void row_data_notify_item (GtkListItem *item,
@@ -362,8 +360,6 @@ row_data_unbind (RowData *data)
       g_cancellable_cancel (data->cancellable);
       g_clear_object (&data->cancellable);
     }
-
-  g_binding_unbind (data->expander_binding);
 
   g_clear_object (&data->current_item);
 }
@@ -437,7 +433,6 @@ row_data_bind (RowData        *data,
                GtkTreeListRow *item)
 {
   GFileInfo *info;
-  guint depth;
 
   row_data_unbind (data);
 
@@ -446,11 +441,7 @@ row_data_bind (RowData        *data,
 
   data->current_item = g_object_ref (item);
 
-  depth = gtk_tree_list_row_get_depth (item);
-  gtk_widget_set_size_request (data->depth_box, 16 * depth, 0);
-
-  gtk_widget_set_sensitive (data->expander, gtk_tree_list_row_is_expandable (item));
-  data->expander_binding = g_object_bind_property (item, "expanded", data->expander, "active", G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
+  gtk_tree_expander_set_list_row (GTK_TREE_EXPANDER (data->expander), item);
 
   info = gtk_tree_list_row_get_item (item);
 
@@ -495,17 +486,6 @@ row_data_free (gpointer _data)
 }
 
 static void
-expander_set_checked_cb (GtkToggleButton *button,
-                         GParamSpec      *pspec,
-                         GtkWidget       *expander)
-{
-  if (gtk_toggle_button_get_active (button))
-    gtk_widget_set_state_flags (expander, GTK_STATE_FLAG_CHECKED, FALSE);
-  else
-    gtk_widget_unset_state_flags (expander, GTK_STATE_FLAG_CHECKED);
-}
-
-static void
 setup_widget (GtkListItem *list_item,
               gpointer     unused)
 {
@@ -523,15 +503,11 @@ setup_widget (GtkListItem *list_item,
   gtk_label_set_width_chars (GTK_LABEL (child), 5);
   gtk_container_add (GTK_CONTAINER (box), child);
 
-  data->depth_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (box), data->depth_box);
-  
-  data->expander = g_object_new (GTK_TYPE_TOGGLE_BUTTON, "css-name", "title", NULL);
-  gtk_button_set_relief (GTK_BUTTON (data->expander), GTK_RELIEF_NONE);
+  data->expander = gtk_tree_expander_new ();
   gtk_container_add (GTK_CONTAINER (box), data->expander);
-  child = g_object_new (GTK_TYPE_SPINNER, "css-name", "expander", NULL);
-  g_signal_connect (data->expander, "notify::active", G_CALLBACK (expander_set_checked_cb), child);
-  gtk_container_add (GTK_CONTAINER (data->expander), child);
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
+  gtk_tree_expander_set_child (GTK_TREE_EXPANDER (data->expander), box);
 
   data->icon = gtk_image_new ();
   gtk_container_add (GTK_CONTAINER (box), data->icon);
