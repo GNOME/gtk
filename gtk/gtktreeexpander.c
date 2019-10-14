@@ -186,6 +186,7 @@ gtk_tree_expander_clear_list_row (GtkTreeExpander *self)
     return;
 
   g_signal_handler_disconnect (self->list_row, self->notify_handler);
+  self->notify_handler = 0;
   g_clear_object (&self->list_row);
 }
 
