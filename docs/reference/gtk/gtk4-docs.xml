@@ -72,6 +72,7 @@
     <chapter id="Trees">
       <xi:include href="xml/gtktreelistrow.xml" />
       <xi:include href="xml/gtktreelistmodel.xml" />
+      <xi:include href="xml/gtktreeexpander.xml" />
     </chapter>
 
     <chapter id="Application">
