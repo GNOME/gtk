@@ -536,6 +536,39 @@ render_fallback_node (GskGLRenderer       *self,
   ops_draw (builder, offscreen_vertex_data);
 }
 
+typedef struct {
+  int timestamp;
+  GskGLCachedGlyph *glyphs[];
+} TextRenderData;
+
+static inline TextRenderData *
+ensure_render_data (GskRenderNode *node,
+                    GskGLGlyphCache *cache)
+{
+  TextRenderData *data;
+  int num_glyphs;
+
+  num_glyphs = gsk_text_node_get_num_glyphs (node);
+  data = gsk_text_node_get_render_data (node);
+  if (data)
+    {
+      if (data->timestamp < cache->atlas_timestamp)
+        {
+          memset (data->glyphs, 0, sizeof (gpointer) * num_glyphs);
+          data->timestamp = cache->atlas_timestamp;
+        }
+    }
+  else
+    {
+      data = g_new0 (TextRenderData, sizeof (TextRenderData) + sizeof (gpointer) * num_glyphs);
+      data->timestamp = cache->atlas_timestamp;
+
+      gsk_text_node_set_render_data (node, data);
+    }
+
+  return data;
+}
+
 static inline void
 render_text_node (GskGLRenderer   *self,
                   GskRenderNode   *node,
@@ -553,6 +586,7 @@ render_text_node (GskGLRenderer   *self,
   float x = offset->x + builder->dx;
   float y = offset->y + builder->dy;
   GlyphCacheKey lookup;
+  TextRenderData *render_data;
 
   /* If the font has color glyphs, we don't need to recolor anything */
   if (!force_color && gsk_text_node_has_color_glyphs (node))
@@ -564,6 +598,8 @@ render_text_node (GskGLRenderer   *self,
       ops_set_program (builder, &self->coloring_program);
       ops_set_color (builder, color);
     }
+
+  render_data = ensure_render_data (node, self->glyph_cache);
 
   lookup.font = (PangoFont *)font;
   lookup.scale = (guint) (text_scale * 1024);
@@ -585,12 +621,19 @@ render_text_node (GskGLRenderer   *self,
       cx = (float)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
       cy = (float)(gi->geometry.y_offset) / PANGO_SCALE;
 
-      glyph_cache_key_set_glyph_and_shift (&lookup, gi->glyph, x + cx, y + cy);
+      glyph = render_data->glyphs[i];
+      if (!glyph)
+        {
+          glyph_cache_key_set_glyph_and_shift (&lookup, gi->glyph, x + cx, y + cy);
 
-      gsk_gl_glyph_cache_lookup_or_add (self->glyph_cache,
-                                        &lookup,
-                                        self->gl_driver,
-                                        &glyph);
+          gsk_gl_glyph_cache_lookup_or_add (self->glyph_cache,
+                                            &lookup,
+                                            self->gl_driver,
+                                            &glyph);
+          render_data->glyphs[i] = (GskGLCachedGlyph *)glyph;
+        }
+
+      gsk_gl_glyph_cache_entry_validate (self->glyph_cache, render_data->glyphs[i]);
 
       if (glyph->texture_id == 0)
         goto next;
