@@ -5436,9 +5436,23 @@ static gboolean
 gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (focus_widget);
+  GtkWidget *child;
 
-  gtk_root_set_focus (priv->root, focus_widget);
-  return TRUE;
+  if (priv->can_focus)
+    {
+      gtk_root_set_focus (priv->root, focus_widget);
+      return TRUE;
+    }
+
+  for (child = _gtk_widget_get_first_child (focus_widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    {
+      if (gtk_widget_grab_focus (child))
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 static gboolean
