@@ -346,13 +346,13 @@ gtk_password_entry_get_accessible (GtkWidget *widget)
   return atk_obj;
 }
 
-static void
+static gboolean
 gtk_password_entry_grab_focus (GtkWidget *widget)
 {
   GtkPasswordEntry *entry = GTK_PASSWORD_ENTRY (widget);
   GtkPasswordEntryPrivate *priv = gtk_password_entry_get_instance_private (entry);
 
-  gtk_widget_grab_focus (priv->entry);
+  return gtk_widget_grab_focus (priv->entry);
 }
 
 static gboolean

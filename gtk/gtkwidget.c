@@ -623,7 +623,7 @@ static void	gtk_widget_real_size_allocate    (GtkWidget         *widget,
 static void	gtk_widget_real_direction_changed(GtkWidget         *widget,
                                                   GtkTextDirection   previous_direction);
 
-static void	gtk_widget_real_grab_focus	 (GtkWidget         *focus_widget);
+static gboolean	gtk_widget_real_grab_focus	 (GtkWidget         *focus_widget);
 static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
 						  gint               x,
 						  gint               y,
@@ -5139,7 +5139,7 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
   if (!group_cycling && GTK_WIDGET_GET_CLASS (widget)->activate_signal)
     gtk_widget_activate (widget);
   else if (gtk_widget_get_can_focus (widget))
-    gtk_widget_grab_focus (widget);
+    return gtk_widget_grab_focus (widget);
   else
     {
       g_warning ("widget '%s' isn't suitable for mnemonic activation",
@@ -5411,23 +5411,48 @@ _gtk_widget_grab_notify (GtkWidget *widget,
  * Causes @widget (or one of its descendents) to have the keyboard focus
  * for the #GtkWindow it's inside.
  *
- * @widget must be focusable, or have a ::grab_focus implementation that
- * transfers the focus to a descendant of @widget that is focusable.
+ * If @widget is not focusable, or its ::grab_focus implementation cannot
+ * transfer the focus to a descendant of @widget that is focusable, it will
+ * not take focus and %FALSE will be returned.
+ *
+ * Calling gtk_widget_grab_focus() on an already focused widget is allowed,
+ * should not have an effect, and return %TRUE.
+ *
+ * Returns: %TRUE if focus is now inside @widget.
  **/
-void
+gboolean
 gtk_widget_grab_focus (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  GTK_WIDGET_GET_CLASS (widget)->grab_focus (widget);
+  if (!gtk_widget_is_sensitive (widget) ||
+      widget->priv->root == NULL)
+    return FALSE;
+
+  return GTK_WIDGET_GET_CLASS (widget)->grab_focus (widget);
 }
 
-static void
+static gboolean
 gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (focus_widget);
-  if (priv->root)
-    gtk_root_set_focus (priv->root, focus_widget);
+  GtkWidget *child;
+
+  if (priv->can_focus)
+    {
+      gtk_root_set_focus (priv->root, focus_widget);
+      return TRUE;
+    }
+
+  for (child = _gtk_widget_get_first_child (focus_widget);
+       child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    {
+      if (gtk_widget_grab_focus (child))
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 static gboolean
@@ -12444,8 +12469,11 @@ gtk_widget_get_template_child (GtkWidget   *widget,
  *
  * The arguments must match the actions expected parameter
  * type, as returned by g_action_get_parameter_type().
+ *
+ * Returns: %TRUE if the action was activated, %FALSE if the action does
+ *     not exist.
  */
-void
+gboolean
 gtk_widget_activate_action_variant (GtkWidget  *widget,
                                     const char *name,
                                     GVariant   *args)
@@ -12453,8 +12481,15 @@ gtk_widget_activate_action_variant (GtkWidget  *widget,
   GtkActionMuxer *muxer;
 
   muxer = _gtk_widget_get_action_muxer (widget, FALSE);
-  if (muxer)
-    g_action_group_activate_action (G_ACTION_GROUP (muxer), name, args);
+  if (muxer == NULL)
+    return FALSE;
+
+  if (!g_action_group_has_action (G_ACTION_GROUP (muxer), name))
+    return FALSE;
+
+  g_action_group_activate_action (G_ACTION_GROUP (muxer), name, args);
+
+  return TRUE;
 }
 
 /**
@@ -12470,14 +12505,18 @@ gtk_widget_activate_action_variant (GtkWidget  *widget,
  *
  * This is a wrapper around gtk_widget_activate_action_variant()
  * that constructs the @args variant according to @format_string.
+ *
+ * Returns: %TRUE if the action was activated, %FALSE if the action does
+ *     not exist.
  */
-void
+gboolean
 gtk_widget_activate_action (GtkWidget  *widget,
                             const char *name,
                             const char *format_string,
                             ...)
 {
   GVariant *parameters = NULL;
+  gboolean result;
 
   if (format_string != NULL)
     {
@@ -12490,9 +12529,11 @@ gtk_widget_activate_action (GtkWidget  *widget,
       g_variant_ref_sink (parameters);
     }
 
-  gtk_widget_activate_action_variant (widget, name, parameters);
+  result = gtk_widget_activate_action_variant (widget, name, parameters);
 
   g_clear_pointer (&parameters, g_variant_unref);
+
+  return result;
 }
 
 /**

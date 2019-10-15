@@ -466,11 +466,22 @@ gtk_selection_model_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtknoselection</FILE>
+<TITLE>GtkNoSelection</TITLE>
+GtkNoSelection
+gtk_no_selection_new
+gtk_no_selection_get_model
+<SUBSECTION Private>
+gtk_no_selection_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtksingleselection</FILE>
 <TITLE>GtkSingleSelection</TITLE>
 GtkSingleSelection
 GTK_INVALID_LIST_POSITION
 gtk_single_selection_new
+gtk_single_selection_get_model
 gtk_single_selection_get_selected
 gtk_single_selection_set_selected
 gtk_single_selection_get_selected_item
@@ -5236,6 +5247,9 @@ gtk_binding_set_find
 gtk_bindings_activate
 gtk_bindings_activate_event
 gtk_binding_set_activate
+gtk_binding_entry_add_action
+gtk_binding_entry_add_action_variant
+gtk_binding_entry_add_callback
 gtk_binding_entry_add_signal
 gtk_binding_entry_add_signal_from_string
 gtk_binding_entry_skip

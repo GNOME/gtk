@@ -1671,17 +1671,17 @@ row.activatable:selected:backdrop { background-color: #3584e4; }
 .app-notification border, .app-notification.frame border { border: none; }
 
 /************* Expanders * */
-expander title > arrow { min-width: 16px; min-height: 16px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
+expander { min-width: 16px; min-height: 16px; -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
 
-expander title > arrow:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
+expander:dir(rtl) { -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
 
-expander title > arrow:disabled { color: #929595; }
+expander:disabled { color: #929595; }
 
-expander title > arrow:disabled:backdrop { color: #d4cfca; }
+expander:disabled:backdrop { color: #d4cfca; }
 
-expander title > arrow:checked, expander title:checked > arrow { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
+expander:checked { -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
 
-expander title:hover > arrow { color: #748489; }
+expander-widget title:hover > expander { color: #748489; }
 
 /************ Calendar * */
 calendar { color: black; border: 1px solid #cdc7c2; }

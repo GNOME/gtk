@@ -83,7 +83,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 static void     gtk_file_chooser_entry_finalize       (GObject          *object);
 static void     gtk_file_chooser_entry_dispose        (GObject          *object);
-static void     gtk_file_chooser_entry_grab_focus     (GtkWidget        *widget);
+static gboolean gtk_file_chooser_entry_grab_focus     (GtkWidget        *widget);
 static gboolean gtk_file_chooser_entry_tab_handler    (GtkEventControllerKey *key,
                                                        guint                  keyval,
                                                        guint                  keycode,
@@ -497,11 +497,14 @@ explicitly_complete (GtkFileChooserEntry *chooser_entry)
   gtk_widget_error_bell (GTK_WIDGET (chooser_entry));
 }
 
-static void
+static gboolean
 gtk_file_chooser_entry_grab_focus (GtkWidget *widget)
 {
-  GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->grab_focus (widget);
+  if (!GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->grab_focus (widget))
+    return FALSE;
+
   _gtk_file_chooser_entry_select_filename (GTK_FILE_CHOOSER_ENTRY (widget));
+  return TRUE;
 }
 
 static void
