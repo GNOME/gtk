@@ -2721,26 +2721,26 @@ load_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
   vertex_data[1].position[0] = min_x;
   vertex_data[1].position[1] = max_y;
   vertex_data[1].uv[0] = 0;
-  vertex_data[1].uv[1] = 0;
+  vertex_data[1].uv[1] = 1;
 
   vertex_data[2].position[0] = max_x;
   vertex_data[2].position[1] = min_y;
-  vertex_data[2].uv[0] = 0;
+  vertex_data[2].uv[0] = 1;
   vertex_data[2].uv[1] = 0;
 
   vertex_data[3].position[0] = max_x;
   vertex_data[3].position[1] = max_y;
-  vertex_data[3].uv[0] = 0;
-  vertex_data[3].uv[1] = 0;
+  vertex_data[3].uv[0] = 1;
+  vertex_data[3].uv[1] = 1;
 
   vertex_data[4].position[0] = min_x;
   vertex_data[4].position[1] = max_y;
   vertex_data[4].uv[0] = 0;
-  vertex_data[4].uv[1] = 0;
+  vertex_data[4].uv[1] = 1;
 
   vertex_data[5].position[0] = max_x;
   vertex_data[5].position[1] = min_y;
-  vertex_data[5].uv[0] = 0;
+  vertex_data[5].uv[0] = 1;
   vertex_data[5].uv[1] = 0;
 }
 
