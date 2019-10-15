@@ -3414,6 +3414,7 @@ struct _GskTextNode
   GdkRGBA color;
   graphene_point_t offset;
 
+  gpointer *render_data;
   guint num_glyphs;
   PangoGlyphInfo glyphs[];
 };
@@ -3423,6 +3424,7 @@ gsk_text_node_finalize (GskRenderNode *node)
 {
   GskTextNode *self = (GskTextNode *) node;
 
+  g_free (self->render_data);
   g_object_unref (self->font);
 }
 
@@ -3624,6 +3626,35 @@ gsk_text_node_get_offset (GskRenderNode *node)
 
   return &self->offset;
 }
+
+void
+gsk_text_node_allocate_render_data (GskRenderNode *node)
+{
+  GskTextNode *self = (GskTextNode *) node;
+
+  if (!self->render_data)
+    self->render_data = g_new0 (gpointer, self->num_glyphs);
+}
+
+void
+gsk_text_node_set_render_data (GskRenderNode *node,
+                               int            pos,
+                               gpointer       data)
+{
+  GskTextNode *self = (GskTextNode *) node;
+
+  self->render_data[pos] = data;
+}
+
+gpointer
+gsk_text_node_get_render_data (GskRenderNode *node,
+                               int            pos)
+{
+  GskTextNode *self = (GskTextNode *) node;
+
+  return self->render_data[pos];
+}
+
 
 /*** GSK_BLUR_NODE ***/
 

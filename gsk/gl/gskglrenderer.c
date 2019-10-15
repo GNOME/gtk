@@ -565,6 +565,8 @@ render_text_node (GskGLRenderer   *self,
       ops_set_color (builder, color);
     }
 
+  gsk_text_node_allocate_render_data (node);
+
   lookup.font = (PangoFont *)font;
   lookup.scale = (guint) (text_scale * 1024);
 
@@ -585,12 +587,17 @@ render_text_node (GskGLRenderer   *self,
       cx = (float)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
       cy = (float)(gi->geometry.y_offset) / PANGO_SCALE;
 
-      glyph_cache_key_set_glyph_and_shift (&lookup, gi->glyph, x + cx, y + cy);
+      glyph = gsk_text_node_get_render_data (node, i);
+      if (!glyph || !gsk_gl_glyph_cache_entry_validate (self->glyph_cache, glyph))
+        {
+          glyph_cache_key_set_glyph_and_shift (&lookup, gi->glyph, x + cx, y + cy);
 
-      gsk_gl_glyph_cache_lookup_or_add (self->glyph_cache,
-                                        &lookup,
-                                        self->gl_driver,
-                                        &glyph);
+          gsk_gl_glyph_cache_lookup_or_add (self->glyph_cache,
+                                            &lookup,
+                                            self->gl_driver,
+                                            &glyph);
+          gsk_text_node_set_render_data (node, i, glyph);
+        }
 
       if (glyph->texture_id == 0)
         goto next;

@@ -358,3 +358,20 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
         }
     }
 }
+
+gboolean
+gsk_gl_glyph_cache_entry_validate (GskGLGlyphCache  *cache,
+                                   GskGLCachedGlyph *value)
+{
+  if (value->timestamp < cache->timestamp)
+    {
+      if (value->atlas)
+        {
+          if (!g_ptr_array_find (cache->atlases->atlases, value->atlas, NULL))
+            return FALSE;
+        }
+    }
+
+  value->timestamp = cache->timestamp;
+  return TRUE;
+}
