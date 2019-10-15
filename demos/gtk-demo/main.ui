@@ -65,32 +65,15 @@
                 <property name="can-focus">1</property>
                 <property name="hscrollbar-policy">never</property>
                 <property name="min-content-width">150</property>
+
                 <child>
-                  <object class="GtkTreeView" id="treeview">
-                    <property name="can-focus">1</property>
-                    <property name="model">treestore</property>
-                    <property name="headers-visible">0</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection" id="treeview-selection">
-                        <property name="mode">browse</property>
+                  <object class="GtkListView" id="listview">
+                    <signal name="activate" handler="main_activate_cb" swapped="no" />
+                    <property name="factory">
+                      <object class="GtkBuilderListItemFactory">
+                        <property name="resource">/ui/main-listitem.ui</property>
                       </object>
-                    </child>
-                    <child>
-                      <object class="GtkTreeViewColumn">
-                        <child>
-                          <object class="GtkCellRendererText"/>
-                          <attributes>
-                            <attribute name="style">4</attribute>
-                            <attribute name="text">1</attribute>
-                          </attributes>
-                        </child>
-                        <child>
-                          <object class="GtkCellRendererText">
-                            <property name="text">  </property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
+                    </property>
                   </object>
                 </child>
               </object>
