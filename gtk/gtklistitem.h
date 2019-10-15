@@ -28,22 +28,34 @@
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (GtkListItem, gtk_list_item, GTK, LIST_ITEM, GtkBin)
-
 #define GTK_TYPE_LIST_ITEM         (gtk_list_item_get_type ())
+#define GTK_LIST_ITEM(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_LIST_ITEM, GtkListItem))
+#define GTK_LIST_ITEM_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GTK_TYPE_LIST_ITEM, GtkListItemClass))
+#define GTK_IS_LIST_ITEM(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_LIST_ITEM))
+#define GTK_IS_LIST_ITEM_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GTK_TYPE_LIST_ITEM))
+#define GTK_LIST_ITEM_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GTK_TYPE_LIST_ITEM, GtkListItemClass))
+
+typedef struct _GtkListItemClass GtkListItemClass;
+
+GDK_AVAILABLE_IN_ALL
+GType           gtk_list_item_get_type                          (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 gpointer        gtk_list_item_get_item                          (GtkListItem            *self);
 GDK_AVAILABLE_IN_ALL
-guint           gtk_list_item_get_position                      (GtkListItem            *self);
+guint           gtk_list_item_get_position                      (GtkListItem            *self) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_list_item_get_selected                      (GtkListItem            *self);
+gboolean        gtk_list_item_get_selected                      (GtkListItem            *self) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
-gboolean        gtk_list_item_get_selectable                    (GtkListItem            *self);
+gboolean        gtk_list_item_get_selectable                    (GtkListItem            *self) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 void            gtk_list_item_set_selectable                    (GtkListItem            *self,
                                                                  gboolean                selectable);
+GDK_AVAILABLE_IN_ALL
+gboolean        gtk_list_item_get_activatable                   (GtkListItem            *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_ALL
+void            gtk_list_item_set_activatable                   (GtkListItem            *self,
+                                                                 gboolean                activatable);
 
 
 G_END_DECLS
