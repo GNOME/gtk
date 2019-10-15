@@ -21,8 +21,10 @@
 
 #include "gtktreeexpander.h"
 
+#include "gtkbindings.h"
 #include "gtkboxlayout.h"
 #include "gtkbuiltiniconprivate.h"
+#include "gtkgestureclick.h"
 #include "gtkintl.h"
 #include "gtktreelistmodel.h"
 
@@ -91,6 +93,42 @@ G_DEFINE_TYPE (GtkTreeExpander, gtk_tree_expander, GTK_TYPE_WIDGET)
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
 static void
+gtk_tree_expander_click_gesture_pressed (GtkGestureClick *gesture,
+                                         int              n_press,
+                                         double           x,
+                                         double           y,
+                                         gpointer         unused)
+{
+  GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+
+  gtk_widget_activate_action (widget, "listitem.toggle-expand", NULL);
+
+  gtk_widget_set_state_flags (widget,
+                              GTK_STATE_FLAG_ACTIVE,
+                              FALSE);
+}
+
+static void
+gtk_tree_expander_click_gesture_released (GtkGestureClick *gesture,
+                                          int              n_press,
+                                          double           x,
+                                          double           y,
+                                          gpointer         unused)
+{
+  gtk_widget_unset_state_flags (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
+                                GTK_STATE_FLAG_ACTIVE);
+}
+
+static void
+gtk_tree_expander_click_gesture_canceled (GtkGestureClick  *gesture,
+                                          GdkEventSequence *sequence,
+                                          gpointer          unused)
+{
+  gtk_widget_unset_state_flags (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
+                                GTK_STATE_FLAG_ACTIVE);
+}
+
+static void
 gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
 {
   if (self->list_row == NULL)
@@ -115,7 +153,25 @@ gtk_tree_expander_update_for_list_row (GtkTreeExpander *self)
         {
           if (self->expander == NULL)
             {
+              GtkGesture *gesture;
+
               self->expander = gtk_builtin_icon_new ("expander");
+
+              gesture = gtk_gesture_click_new ();
+              gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
+                                                          GTK_PHASE_BUBBLE);
+              gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture),
+                                                 FALSE);
+              gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture),
+                                             GDK_BUTTON_PRIMARY);
+              g_signal_connect (gesture, "pressed",
+                                G_CALLBACK (gtk_tree_expander_click_gesture_pressed), NULL);
+              g_signal_connect (gesture, "released",
+                                G_CALLBACK (gtk_tree_expander_click_gesture_released), NULL);
+              g_signal_connect (gesture, "cancel",
+                                G_CALLBACK (gtk_tree_expander_click_gesture_canceled), NULL);
+              gtk_widget_add_controller (self->expander, GTK_EVENT_CONTROLLER (gesture));
+
               gtk_widget_insert_before (self->expander,
                                         GTK_WIDGET (self),
                                         self->child);
@@ -177,6 +233,51 @@ gtk_tree_expander_list_row_notify_cb (GtkTreeListRow  *list_row,
       /* can this happen other than when destroying the row? */
       gtk_tree_expander_update_for_list_row (self);
     }
+}
+
+static gboolean
+gtk_tree_expander_focus (GtkWidget        *widget,
+                         GtkDirectionType  direction)
+{
+  GtkTreeExpander *self = GTK_TREE_EXPANDER (widget);
+
+  /* The idea of this function is the following:
+   * 1. If any child can take focus, do not ever attempt
+   *    to take focus.
+   * 2. Otherwise, if this item is selectable or activatable,
+   *    allow focusing this widget.
+   *
+   * This makes sure every item in a list is focusable for
+   * activation and selection handling, but no useless widgets
+   * get focused and moving focus is as fast as possible.
+   */
+  if (self->child)
+    {
+      if (gtk_widget_get_focus_child (widget))
+        return FALSE;
+      if (gtk_widget_child_focus (self->child, direction))
+        return TRUE;
+    }
+
+  if (gtk_widget_is_focus (widget))
+    return FALSE;
+
+  if (!gtk_widget_get_can_focus (widget))
+    return FALSE;
+
+  gtk_widget_grab_focus (widget);
+  return TRUE;
+}
+
+static gboolean
+gtk_tree_expander_grab_focus (GtkWidget *widget)
+{
+  GtkTreeExpander *self = GTK_TREE_EXPANDER (widget);
+
+  if (self->child && gtk_widget_grab_focus (self->child))
+    return TRUE;
+
+  return GTK_WIDGET_CLASS (gtk_tree_expander_parent_class)->grab_focus (widget);
 }
 
 static void
@@ -258,10 +359,79 @@ gtk_tree_expander_set_property (GObject      *object,
 }
 
 static void
+gtk_tree_expander_expand (GtkWidget  *widget,
+                          const char *action_name,
+                          GVariant   *parameter)
+{
+  GtkTreeExpander *self = GTK_TREE_EXPANDER (widget);
+
+  if (self->list_row == NULL)
+    return;
+
+  gtk_tree_list_row_set_expanded (self->list_row, TRUE);
+}
+
+static void
+gtk_tree_expander_collapse (GtkWidget  *widget,
+                            const char *action_name,
+                            GVariant   *parameter)
+{
+  GtkTreeExpander *self = GTK_TREE_EXPANDER (widget);
+
+  if (self->list_row == NULL)
+    return;
+
+  gtk_tree_list_row_set_expanded (self->list_row, FALSE);
+}
+
+static void
+gtk_tree_expander_toggle_expand (GtkWidget  *widget,
+                                 const char *action_name,
+                                 GVariant   *parameter)
+{
+  GtkTreeExpander *self = GTK_TREE_EXPANDER (widget);
+
+  if (self->list_row == NULL)
+    return;
+
+  gtk_tree_list_row_set_expanded (self->list_row, !gtk_tree_list_row_get_expanded (self->list_row));
+}
+
+static void
+expand_collapse_right (GtkWidget *widget,
+                       GVariant  *args,
+                       gpointer   unused)
+{
+  GtkTreeExpander *self = GTK_TREE_EXPANDER (widget);
+
+  if (self->list_row == NULL)
+    return;
+
+  gtk_tree_list_row_set_expanded (self->list_row, gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL);
+}
+
+static void
+expand_collapse_left (GtkWidget *widget,
+                      GVariant  *args,
+                      gpointer   unused)
+{
+  GtkTreeExpander *self = GTK_TREE_EXPANDER (widget);
+
+  if (self->list_row == NULL)
+    return;
+
+  gtk_tree_list_row_set_expanded (self->list_row, gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
+}
+
+static void
 gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GtkBindingSet *binding_set;
+
+  widget_class->focus = gtk_tree_expander_focus;
+  widget_class->grab_focus = gtk_tree_expander_grab_focus;
 
   gobject_class->dispose = gtk_tree_expander_dispose;
   gobject_class->get_property = gtk_tree_expander_get_property;
@@ -305,6 +475,84 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
+  /**
+   * GtkTreeExpander|listitem.expand:
+   *
+   * Expands the expander if it can be expanded.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "listitem.expand",
+                                   NULL,
+                                   gtk_tree_expander_expand);
+
+  /**
+   * GtkTreeExpander|listitem.collapse:
+   *
+   * Collapses the expander.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "listitem.collapse",
+                                   NULL,
+                                   gtk_tree_expander_collapse);
+
+  /**
+   * GtkTreeExpander|listitem.toggle-expand:
+   *
+   * Tries to expand the expander if it was collapsed or collapses it if
+   * it was expanded.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "listitem.toggle-expand",
+                                   NULL,
+                                   gtk_tree_expander_toggle_expand);
+
+  binding_set = gtk_binding_set_by_class (klass);
+
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_plus, 0,
+                                "listitem.expand", NULL);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_KP_Add, 0,
+                                "listitem.expand", NULL);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_asterisk, 0,
+                                "listitem.expand", NULL);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_KP_Multiply, 0,
+                                "listitem.expand", NULL);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_minus, 0,
+                                "listitem.collapse", NULL);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_KP_Subtract, 0,
+                                "listitem.collapse", NULL);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_slash, 0,
+                                "listitem.collapse", NULL);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_KP_Divide, 0,
+                                "listitem.collapse", NULL);
+
+  gtk_binding_entry_add_callback (binding_set, GDK_KEY_Right, GDK_SHIFT_MASK,
+                                  expand_collapse_right, NULL, NULL, NULL);
+  gtk_binding_entry_add_callback (binding_set, GDK_KEY_KP_Right, GDK_SHIFT_MASK,
+                                  expand_collapse_right, NULL, NULL, NULL);
+  gtk_binding_entry_add_callback (binding_set, GDK_KEY_Right, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                  expand_collapse_right, NULL, NULL, NULL);
+  gtk_binding_entry_add_callback (binding_set, GDK_KEY_KP_Right, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                  expand_collapse_right, NULL, NULL, NULL);
+  gtk_binding_entry_add_callback (binding_set, GDK_KEY_Left, GDK_SHIFT_MASK,
+                                  expand_collapse_left, NULL, NULL, NULL);
+  gtk_binding_entry_add_callback (binding_set, GDK_KEY_KP_Left, GDK_SHIFT_MASK,
+                                  expand_collapse_left, NULL, NULL, NULL);
+  gtk_binding_entry_add_callback (binding_set, GDK_KEY_Left, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                  expand_collapse_left, NULL, NULL, NULL);
+  gtk_binding_entry_add_callback (binding_set, GDK_KEY_KP_Left, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                  expand_collapse_left, NULL, NULL, NULL);
+
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_space, GDK_CONTROL_MASK,
+                                "listitem.toggle-expand", NULL);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_KP_Space, GDK_CONTROL_MASK,
+                                "listitem.toggle-expand", NULL);
+
+#if 0
+  /* These can't be implementes yet. */
+  gtk_binding_entry_add_callback (binding_set, GDK_KEY_BackSpace, 0, go_to_parent_row, NULL, NULL);
+  gtk_binding_entry_add_callback (binding_set, GDK_KEY_BackSpace, GDK_CONTROL_MASK, go_to_parent_row, NULL, NULL);
+#endif
+
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, I_("treeexpander"));
 }
@@ -312,6 +560,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
 static void
 gtk_tree_expander_init (GtkTreeExpander *self)
 {
+  gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
 }
 
 /**
