@@ -61,6 +61,7 @@ struct _GtkListItem
   GtkWidget *child;
   guint position;
 
+  guint activatable : 1;
   guint selectable : 1;
   guint selected : 1;
 };
@@ -68,11 +69,14 @@ struct _GtkListItem
 struct _GtkListItemClass
 {
   GtkWidgetClass parent_class;
+
+  void          (* activate_signal)                             (GtkListItem            *self);
 };
 
 enum
 {
   PROP_0,
+  PROP_ACTIVATABLE,
   PROP_CHILD,
   PROP_ITEM,
   PROP_POSITION,
@@ -82,9 +86,28 @@ enum
   N_PROPS
 };
 
+enum
+{
+  ACTIVATE_SIGNAL,
+  LAST_SIGNAL
+};
+
 G_DEFINE_TYPE (GtkListItem, gtk_list_item, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
+static guint signals[LAST_SIGNAL] = { 0 };
+
+static void
+gtk_list_item_activate_signal (GtkListItem *self)
+{
+  if (!self->activatable)
+    return;
+
+  gtk_widget_activate_action (GTK_WIDGET (self),
+                              "list.activate-item",
+                              "u",
+                              self->position);
+}
 
 static gboolean
 gtk_list_item_focus (GtkWidget        *widget,
@@ -152,6 +175,10 @@ gtk_list_item_get_property (GObject    *object,
 
   switch (property_id)
     {
+    case PROP_ACTIVATABLE:
+      g_value_set_boolean (value, self->activatable);
+      break;
+
     case PROP_CHILD:
       g_value_set_object (value, self->child);
       break;
@@ -188,6 +215,10 @@ gtk_list_item_set_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_ACTIVATABLE:
+      gtk_list_item_set_activatable (self, g_value_get_boolean (value));
+      break;
+
     case PROP_CHILD:
       gtk_list_item_set_child (self, g_value_get_object (value));
       break;
@@ -208,12 +239,26 @@ gtk_list_item_class_init (GtkListItemClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  klass->activate_signal = gtk_list_item_activate_signal;
+
   widget_class->focus = gtk_list_item_focus;
   widget_class->grab_focus = gtk_list_item_grab_focus;
 
   gobject_class->dispose = gtk_list_item_dispose;
   gobject_class->get_property = gtk_list_item_get_property;
   gobject_class->set_property = gtk_list_item_set_property;
+
+  /**
+   * GtkListItem:activatable:
+   *
+   * If the item can be activated by the user
+   */
+  properties[PROP_ACTIVATABLE] =
+    g_param_spec_boolean ("activatable",
+                          P_("Activatable"),
+                          P_("If the item can be activated by the user"),
+                          TRUE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkListItem:child:
@@ -277,6 +322,34 @@ gtk_list_item_class_init (GtkListItemClass *klass)
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
+  /**
+   * GtkListItem::activate-signal:
+   *
+   * This is a keybinding signal, which will cause this row to be activated.
+   *
+   * Do not use it, it is an implementation detail.
+   *
+   * If you want to be notified when the user activates a listitem (by key or not),
+   * look at the list widget this item is contained in.
+   */
+  signals[ACTIVATE_SIGNAL] =
+    g_signal_new (I_("activate-keybinding"),
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkListItemClass, activate_signal),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
+  widget_class->activate_signal = signals[ACTIVATE_SIGNAL];
+
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0,
+                                       "activate-keybinding", 0);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, 0,
+                                       "activate-keybinding", 0);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, 0,
+                                       "activate-keybinding", 0);
+
   /* This gets overwritten by gtk_list_item_new() but better safe than sorry */
   gtk_widget_class_set_css_name (widget_class, I_("row"));
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
@@ -290,26 +363,41 @@ gtk_list_item_click_gesture_pressed (GtkGestureClick *gesture,
                                      GtkListItem     *self)
 {
   GtkWidget *widget = GTK_WIDGET (self);
-  GdkModifierType state;
-  GdkEvent *event;
-  gboolean extend, modify;
 
-  if (!self->selectable)
+  if (!self->selectable && !self->activatable)
     {
       gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
       return;
     }
 
-  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture),
-                                      gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture)));
-  state = gdk_event_get_modifier_state (event);
-  extend = (state & GDK_SHIFT_MASK) != 0;
-  modify = (state & GDK_CONTROL_MASK) != 0;
+  if (self->selectable)
+    {
+      GdkModifierType state;
+      GdkEvent *event;
+      gboolean extend, modify;
 
-  gtk_widget_activate_action (GTK_WIDGET (self),
-                              "list.select-item",
-                              "(ubb)",
-                              self->position, modify, extend);
+      event = gtk_gesture_get_last_event (GTK_GESTURE (gesture),
+                                          gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture)));
+      state = gdk_event_get_modifier_state (event);
+      extend = (state & GDK_SHIFT_MASK) != 0;
+      modify = (state & GDK_CONTROL_MASK) != 0;
+
+      gtk_widget_activate_action (widget,
+                                  "list.select-item",
+                                  "(ubb)",
+                                  self->position, modify, extend);
+    }
+
+  if (self->activatable)
+    {
+      if (n_press == 2)
+        {
+          gtk_widget_activate_action (widget,
+                                      "list.activate-item",
+                                      "u",
+                                      self->position);
+        }
+    }
 
   gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_ACTIVE, FALSE);
 
@@ -354,6 +442,7 @@ gtk_list_item_init (GtkListItem *self)
   GtkGesture *gesture;
 
   self->selectable = TRUE;
+  self->activatable = TRUE;
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
 
   gesture = gtk_gesture_click_new ();
@@ -591,4 +680,50 @@ gtk_list_item_set_selectable (GtkListItem *self,
   self->selectable = selectable;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTABLE]);
+}
+
+/**
+ * gtk_list_item_get_activatable:
+ * @self: a #GtkListItem
+ *
+ * Checks if a list item has been set to be activatable via
+ * gtk_list_item_set_activatable().
+ *
+ * Returns: %TRUE if the item is activatable
+ **/
+gboolean
+gtk_list_item_get_activatable (GtkListItem *self)
+{
+  g_return_val_if_fail (GTK_IS_LIST_ITEM (self), FALSE);
+
+  return self->activatable;
+}
+
+/**
+ * gtk_list_item_set_activatable:
+ * @self: a #GtkListItem
+ * @activatable: if the item should be activatable
+ *
+ * Sets @self to be activatable.
+ *
+ * If an item is activatable, double-clicking on the item, using
+ * the <Return> key or calling gtk_widget_activate() will activate
+ * the item. Activating instructs the containing view to handle
+ * activation. #GtkListView for example will be emitting the
+ * GtkListView::activate signal.
+ *
+ * By default, list items are activatable
+ **/
+void
+gtk_list_item_set_activatable (GtkListItem *self,
+                               gboolean     activatable)
+{
+  g_return_if_fail (GTK_IS_LIST_ITEM (self));
+
+  if (self->activatable == activatable)
+    return;
+
+  self->activatable = activatable;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTIVATABLE]);
 }
