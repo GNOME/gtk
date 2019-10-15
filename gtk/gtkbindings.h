@@ -35,6 +35,7 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 
@@ -90,6 +91,14 @@ void           gtk_binding_entry_add_action  (GtkBindingSet       *binding_set,
                                               const char          *action_name,
                                               const char          *format_string,
                                               ...);
+
+GDK_AVAILABLE_IN_ALL
+void           gtk_binding_entry_add_callback(GtkBindingSet       *binding_set,
+                                              guint                keyval,
+                                              GdkModifierType      modifiers,
+                                              GtkCallback          callback,
+                                              gpointer             user_data,
+                                              GDestroyNotify       user_destroy);
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_binding_entry_remove      (GtkBindingSet       *binding_set,
