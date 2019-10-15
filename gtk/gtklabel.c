@@ -455,7 +455,7 @@ static void gtk_label_leave             (GtkEventControllerMotion *controller,
                                          GdkNotifyType             detail,
                                          gpointer                  data);
 
-static void     gtk_label_grab_focus        (GtkWidget        *widget);
+static gboolean gtk_label_grab_focus        (GtkWidget        *widget);
 
 static gboolean gtk_label_query_tooltip     (GtkWidget        *widget,
                                              gint              x,
@@ -4272,7 +4272,7 @@ gtk_label_select_word (GtkLabel *label)
   gtk_label_select_region_index (label, min, max);
 }
 
-static void
+static gboolean
 gtk_label_grab_focus (GtkWidget *widget)
 {
   GtkLabel *label = GTK_LABEL (widget);
@@ -4282,9 +4282,10 @@ gtk_label_grab_focus (GtkWidget *widget)
   GList *l;
 
   if (priv->select_info == NULL)
-    return;
+    return FALSE;
 
-  GTK_WIDGET_CLASS (gtk_label_parent_class)->grab_focus (widget);
+  if (!GTK_WIDGET_CLASS (gtk_label_parent_class)->grab_focus (widget))
+    return FALSE;
 
   if (priv->select_info->selectable)
     {
@@ -4313,6 +4314,8 @@ gtk_label_grab_focus (GtkWidget *widget)
             }
         }
     }
+
+  return TRUE;
 }
 
 static gboolean

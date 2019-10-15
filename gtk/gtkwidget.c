@@ -623,7 +623,7 @@ static void	gtk_widget_real_size_allocate    (GtkWidget         *widget,
 static void	gtk_widget_real_direction_changed(GtkWidget         *widget,
                                                   GtkTextDirection   previous_direction);
 
-static void	gtk_widget_real_grab_focus	 (GtkWidget         *focus_widget);
+static gboolean	gtk_widget_real_grab_focus	 (GtkWidget         *focus_widget);
 static gboolean gtk_widget_real_query_tooltip    (GtkWidget         *widget,
 						  gint               x,
 						  gint               y,
@@ -5139,7 +5139,7 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
   if (!group_cycling && GTK_WIDGET_GET_CLASS (widget)->activate_signal)
     gtk_widget_activate (widget);
   else if (gtk_widget_get_can_focus (widget))
-    gtk_widget_grab_focus (widget);
+    return gtk_widget_grab_focus (widget);
   else
     {
       g_warning ("widget '%s' isn't suitable for mnemonic activation",
@@ -5411,23 +5411,33 @@ _gtk_widget_grab_notify (GtkWidget *widget,
  * Causes @widget (or one of its descendents) to have the keyboard focus
  * for the #GtkWindow it's inside.
  *
- * @widget must be focusable, or have a ::grab_focus implementation that
- * transfers the focus to a descendant of @widget that is focusable.
+ * If @widget is not focusable, or its ::grab_focus implementation cannot
+ * transfer the focus to a descendant of @widget that is focusable, it will
+ * not take focus and %FALSE will be returned.
+ *
+ * Calling gtk_widget_grab_focus() on an already focused widget is allowed,
+ * should not have an effect, and return %TRUE.
+ *
+ * Returns: %TRUE if focus is now inside @widget.
  **/
-void
+gboolean
 gtk_widget_grab_focus (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  GTK_WIDGET_GET_CLASS (widget)->grab_focus (widget);
+  return GTK_WIDGET_GET_CLASS (widget)->grab_focus (widget);
 }
 
-static void
+static gboolean
 gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (focus_widget);
-  if (priv->root)
-    gtk_root_set_focus (priv->root, focus_widget);
+
+  if (!priv->root)
+    return FALSE;
+
+  gtk_root_set_focus (priv->root, focus_widget);
+  return TRUE;
 }
 
 static gboolean

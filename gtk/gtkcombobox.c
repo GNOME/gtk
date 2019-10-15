@@ -215,7 +215,7 @@ static void     gtk_combo_box_get_property         (GObject         *object,
                                                     GValue          *value,
                                                     GParamSpec      *spec);
 
-static void     gtk_combo_box_grab_focus           (GtkWidget       *widget);
+static gboolean gtk_combo_box_grab_focus           (GtkWidget       *widget);
 static void     gtk_combo_box_button_toggled       (GtkWidget       *widget,
                                                     gpointer         data);
 static void     gtk_combo_box_add                  (GtkContainer    *container,
@@ -2323,7 +2323,7 @@ gtk_combo_box_mnemonic_activate (GtkWidget *widget,
   return TRUE;
 }
 
-static void
+static gboolean
 gtk_combo_box_grab_focus (GtkWidget *widget)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
@@ -2335,10 +2335,12 @@ gtk_combo_box_grab_focus (GtkWidget *widget)
 
       child = gtk_bin_get_child (GTK_BIN (combo_box));
       if (child)
-        gtk_widget_grab_focus (child);
+        return gtk_widget_grab_focus (child);
+      else
+        return FALSE;
     }
   else
-    gtk_widget_grab_focus (priv->button);
+    return gtk_widget_grab_focus (priv->button);
 }
 
 static void

@@ -3409,18 +3409,21 @@ gtk_list_box_row_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_list_box_row_parent_class)->dispose (object);
 }
 
-static void
+static gboolean
 gtk_list_box_row_grab_focus (GtkWidget *widget)
 {
   GtkListBoxRow *row = GTK_LIST_BOX_ROW (widget);
   GtkListBox *box = gtk_list_box_row_get_box (row);
 
-  g_return_if_fail (box != NULL);
+  g_return_val_if_fail (box != NULL, FALSE);
+
+  if (!GTK_WIDGET_CLASS (gtk_list_box_row_parent_class)->grab_focus (widget))
+    return FALSE;
 
   if (BOX_PRIV (box)->cursor_row != row)
     gtk_list_box_update_cursor (box, row, FALSE);
 
-  GTK_WIDGET_CLASS (gtk_list_box_row_parent_class)->grab_focus (widget);
+  return TRUE;
 }
 
 static void

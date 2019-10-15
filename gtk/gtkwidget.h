@@ -266,7 +266,7 @@ struct _GtkWidgetClass
                                          gboolean             group_cycling);
 
   /* explicit focus */
-  void     (* grab_focus)               (GtkWidget           *widget);
+  gboolean (* grab_focus)               (GtkWidget           *widget);
   gboolean (* focus)                    (GtkWidget           *widget,
                                          GtkDirectionType     direction);
 
@@ -460,7 +460,7 @@ gboolean   gtk_widget_is_focus            (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_has_visible_focus   (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
-void       gtk_widget_grab_focus          (GtkWidget           *widget);
+gboolean   gtk_widget_grab_focus          (GtkWidget           *widget);
 GDK_AVAILABLE_IN_ALL
 void       gtk_widget_set_focus_on_click  (GtkWidget           *widget,
                                            gboolean             focus_on_click);

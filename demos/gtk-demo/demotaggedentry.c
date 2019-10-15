@@ -129,13 +129,13 @@ demo_tagged_entry_size_allocate (GtkWidget *widget,
                             baseline);
 }
 
-static void
+static gboolean
 demo_tagged_entry_grab_focus (GtkWidget *widget)
 {
   DemoTaggedEntry *entry = DEMO_TAGGED_ENTRY (widget);
   DemoTaggedEntryPrivate *priv = demo_tagged_entry_get_instance_private (entry);
 
-  gtk_widget_grab_focus (priv->entry);
+  return gtk_widget_grab_focus (priv->entry);
 }
 
 static void

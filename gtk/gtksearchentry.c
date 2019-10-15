@@ -241,13 +241,13 @@ gtk_search_entry_get_accessible (GtkWidget *widget)
   return atk_obj;
 }
 
-static void
+static gboolean
 gtk_search_entry_grab_focus (GtkWidget *widget)
 {
   GtkSearchEntry *entry = GTK_SEARCH_ENTRY (widget);
   GtkSearchEntryPrivate *priv = gtk_search_entry_get_instance_private (entry);
 
-  gtk_text_grab_focus_without_selecting (GTK_TEXT (priv->entry));
+  return gtk_text_grab_focus_without_selecting (GTK_TEXT (priv->entry));
 }
 
 static gboolean
