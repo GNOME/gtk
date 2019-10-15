@@ -10,7 +10,10 @@
 static void
 icon_data_free (gpointer p)
 {
-  g_object_unref (((IconData *)p)->source_texture);
+  IconData *icon_data = p;
+
+  gdk_texture_clear_render_data (icon_data->source_texture);
+  g_object_unref (icon_data->source_texture);
   g_free (p);
 }
 
@@ -91,12 +94,12 @@ gsk_gl_icon_cache_begin_frame (GskGLIconCache *self,
             {
               if (icon_data->used)
                 { 
-                  const int width = gdk_texture_get_width (icon_data->source_texture);
-                  const int height = gdk_texture_get_height (icon_data->source_texture);
+                  const int width = icon_data->source_texture->width;
+                  const int height = icon_data->source_texture->height;
                   gsk_gl_texture_atlas_mark_unused (icon_data->atlas, width + 2, height + 2);
                   icon_data->used = FALSE;
                 }
-            }
+            } 
 
           icon_data->accessed = FALSE;
         }
@@ -110,16 +113,18 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
                                  GdkTexture      *texture,
                                  const IconData **out_icon_data)
 {
-  IconData *icon_data = g_hash_table_lookup (self->icons, texture);
+  IconData *icon_data;
+
+  icon_data = gdk_texture_get_render_data (texture, self);
+
+  if (!icon_data)
+    icon_data = g_hash_table_lookup (self->icons, texture);
 
   if (icon_data)
     {
       if (!icon_data->used)
         {
-          const int width = gdk_texture_get_width (texture);
-          const int height = gdk_texture_get_height (texture);
-
-          gsk_gl_texture_atlas_mark_used (icon_data->atlas, width + 2, height + 2);
+          gsk_gl_texture_atlas_mark_used (icon_data->atlas, texture->width + 2, texture->height + 2);
           icon_data->used = TRUE;
         }
       icon_data->accessed = TRUE;
@@ -130,8 +135,8 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
 
   /* texture not on any atlas yet. Find a suitable one. */
   {
-    const int width = gdk_texture_get_width (texture);
-    const int height = gdk_texture_get_height (texture);
+    const int width = texture->width;
+    const int height = texture->height;
     GskGLTextureAtlas *atlas = NULL;
     int packed_x = 0;
     int packed_y = 0;
@@ -228,6 +233,8 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     glPixelStorei (GL_UNPACK_SKIP_ROWS, 0);
 
     gdk_gl_context_pop_debug_group (gdk_gl_context_get_current ());
+
+    gdk_texture_set_render_data (texture, self, icon_data, NULL);
 
     *out_icon_data = icon_data;
 
