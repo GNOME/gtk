@@ -13,17 +13,16 @@ in_files = sys.argv[2:]
 file_output = """
 typedef GtkWidget *(*GDoDemoFunc) (GtkWidget *do_widget);
 
-typedef struct _Demo Demo;
+typedef struct _DemoData DemoData;
 
-struct _Demo
+struct _DemoData
 {
-  gchar *name;
-  gchar *title;
-  gchar *filename;
+  char *name;
+  char *title;
+  char *filename;
   GDoDemoFunc func;
-  Demo *children;
+  DemoData *children;
 };
-
 """
 
 # Demo = namedtuple('Demo', ['name', 'title', 'file', 'func'])
@@ -67,7 +66,7 @@ for demo in demos:
 i = 0
 for parent in parents:
     id = parent_ids[i]
-    file_output += "\nDemo child" + str(id) + "[] = {\n"
+    file_output += "\nDemoData child" + str(id) + "[] = {\n"
     # iterate over all demos and check if the name starts with the given parent name
     for child in demos:
         if child[1].startswith(parent + "/"):
@@ -82,7 +81,7 @@ for parent in parents:
 # Sort demos by title
 demos = sorted(demos, key=lambda x: x[1])
 
-file_output += "\nDemo gtk_demos[] = {\n"
+file_output += "\nDemoData gtk_demos[] = {\n"
 for demo in demos:
     # Do not generate one of these for demos with a parent demo
     if "/" not in demo[1]:
