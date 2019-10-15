@@ -24,6 +24,7 @@
 #include "gtkadjustment.h"
 #include "gtkintl.h"
 #include "gtklistitemmanagerprivate.h"
+#include "gtkmain.h"
 #include "gtkorientableprivate.h"
 #include "gtkprivate.h"
 #include "gtkrbtreeprivate.h"
@@ -584,6 +585,115 @@ gtk_list_view_size_allocate (GtkWidget *widget,
 }
 
 static void
+gtk_list_view_select_item (GtkListView *self,
+                           guint        pos,
+                           gboolean     modify,
+                           gboolean     extend)
+{
+  GtkSelectionModel *selection_model;
+  gboolean success = FALSE;
+
+  selection_model = gtk_list_item_manager_get_model (self->item_manager);
+
+  if (extend)
+    {
+      guint start_pos = gtk_list_item_tracker_get_position (self->item_manager, self->selected);
+      if (start_pos != GTK_INVALID_LIST_POSITION)
+        {
+          guint max = MAX (start_pos, pos);
+          guint min = MIN (start_pos, pos);
+          if (modify)
+            {
+              if (gtk_selection_model_is_selected (selection_model, start_pos))
+                {
+                  success = gtk_selection_model_select_range (selection_model,
+                                                              min,
+                                                              max - min + 1,
+                                                              FALSE);
+                }
+              else
+                {
+                  success = gtk_selection_model_unselect_range (selection_model,
+                                                                min,
+                                                                max - min + 1);
+                }
+            }
+          else
+            {
+              success = gtk_selection_model_select_range (selection_model,
+                                                          min,
+                                                          max - min + 1,
+                                                          TRUE);
+            }
+        }
+      /* If there's no range to select or selecting ranges isn't supported
+       * by the model, fall through to normal setting.
+       */
+    }
+  if (success)
+    return;
+
+  if (modify)
+    {
+      if (gtk_selection_model_is_selected (selection_model, pos))
+        success = gtk_selection_model_unselect_item (selection_model, pos);
+      else
+        success = gtk_selection_model_select_item (selection_model, pos, FALSE);
+    }
+  else
+    {
+      success = gtk_selection_model_select_item (selection_model, pos, TRUE);
+    }
+  if (success)
+    {
+      gtk_list_item_tracker_set_position (self->item_manager,
+                                          self->selected,
+                                          pos,
+                                          0, 0);
+    }
+}
+
+static gboolean
+gtk_list_view_focus (GtkWidget        *widget,
+                     GtkDirectionType  direction)
+{
+  GtkListView *self = GTK_LIST_VIEW (widget);
+  GtkWidget *old_focus_child, *new_focus_child;
+
+  old_focus_child = gtk_widget_get_focus_child (widget);
+
+  if (!GTK_WIDGET_CLASS (gtk_list_view_parent_class)->focus (widget, direction))
+    return FALSE;
+
+  new_focus_child = gtk_widget_get_focus_child (widget);
+
+  if (old_focus_child != new_focus_child &&
+      GTK_IS_LIST_ITEM (new_focus_child))
+    {
+      GdkModifierType state;
+      GdkModifierType mask;
+      gboolean extend = FALSE, modify = FALSE;
+
+      if (old_focus_child && gtk_get_current_event_state (&state))
+        {
+          mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_MODIFY_SELECTION);
+          if ((state & mask) == mask)
+            modify = TRUE;
+          mask = gtk_widget_get_modifier_mask (widget, GDK_MODIFIER_INTENT_EXTEND_SELECTION);
+          if ((state & mask) == mask)
+            extend = TRUE;
+        }
+
+      gtk_list_view_select_item (self,
+                                 gtk_list_item_get_position (GTK_LIST_ITEM (new_focus_child)),
+                                 modify,
+                                 extend);
+    }
+
+  return TRUE;
+}
+
+static void
 gtk_list_view_clear_adjustment (GtkListView    *self,
                                 GtkOrientation  orientation)
 {
@@ -778,75 +888,17 @@ gtk_list_view_set_property (GObject      *object,
 }
 
 static void
-gtk_list_view_select_item (GtkWidget  *widget,
-                           const char *action_name,
-                           GVariant   *parameter)
+gtk_list_view_select_item_action (GtkWidget  *widget,
+                                  const char *action_name,
+                                  GVariant   *parameter)
 {
   GtkListView *self = GTK_LIST_VIEW (widget);
-  GtkSelectionModel *selection_model;
   guint pos;
   gboolean modify, extend;
-  gboolean success = FALSE;
 
-  selection_model = gtk_list_item_manager_get_model (self->item_manager);
   g_variant_get (parameter, "(ubb)", &pos, &modify, &extend);
 
-  if (extend)
-    {
-      guint start_pos = gtk_list_item_tracker_get_position (self->item_manager, self->selected);
-      if (start_pos != GTK_INVALID_LIST_POSITION)
-        {
-          guint max = MAX (start_pos, pos);
-          guint min = MIN (start_pos, pos);
-          if (modify)
-            {
-              if (gtk_selection_model_is_selected (selection_model, start_pos))
-                {
-                  success = gtk_selection_model_select_range (selection_model,
-                                                              min,
-                                                              max - min + 1,
-                                                              FALSE);
-                }
-              else
-                {
-                  success = gtk_selection_model_unselect_range (selection_model,
-                                                                min,
-                                                                max - min + 1);
-                }
-            }
-          else
-            {
-              success = gtk_selection_model_select_range (selection_model,
-                                                          min,
-                                                          max - min + 1,
-                                                          TRUE);
-            }
-        }
-      /* If there's no range to select or selecting ranges isn't supported
-       * by the model, fall through to normal setting.
-       */
-    }
-  if (success)
-    return;
-
-  if (modify)
-    {
-      if (gtk_selection_model_is_selected (selection_model, pos))
-        success = gtk_selection_model_unselect_item (selection_model, pos);
-      else
-        success = gtk_selection_model_select_item (selection_model, pos, FALSE);
-    }
-  else
-    {
-      success = gtk_selection_model_select_item (selection_model, pos, TRUE);
-    }
-  if (success)
-    {
-      gtk_list_item_tracker_set_position (self->item_manager,
-                                          self->selected,
-                                          pos,
-                                          0, 0);
-    }
+  gtk_list_view_select_item (self, pos, modify, extend);
 }
 
 static void
@@ -922,6 +974,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
 
   widget_class->measure = gtk_list_view_measure;
   widget_class->size_allocate = gtk_list_view_size_allocate;
+  widget_class->focus = gtk_list_view_focus;
 
   gobject_class->dispose = gtk_list_view_dispose;
   gobject_class->finalize = gtk_list_view_finalize;
@@ -1052,7 +1105,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   gtk_widget_class_install_action (widget_class,
                                    "list.select-item",
                                    "(ubb)",
-                                   gtk_list_view_select_item);
+                                   gtk_list_view_select_item_action);
 
   /**
    * GtkListView|list.scroll-to-item:
