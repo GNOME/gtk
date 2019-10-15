@@ -78,6 +78,55 @@ G_DEFINE_TYPE (GtkListItem, gtk_list_item, GTK_TYPE_BIN)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
+static gboolean
+gtk_list_item_focus (GtkWidget        *widget,
+                     GtkDirectionType  direction)
+{
+  GtkListItem *self = GTK_LIST_ITEM (widget);
+  GtkWidget *child;
+
+  /* The idea of this function is the following:
+   * 1. If any child can take focus, do not ever attempt
+   *    to take focus.
+   * 2. Otherwise, if this item is selectable or activatable,
+   *    allow focusing this widget.
+   *
+   * This makes sure every item in a list is focusable for
+   * activation and selection handling, but no useless widgets
+   * get focused and moving focus is as fast as possible.
+   */
+  child = gtk_bin_get_child (GTK_BIN (self));
+
+  if (child)
+    {
+      if (gtk_widget_get_focus_child (widget))
+        return FALSE;
+      if (gtk_widget_child_focus (child, direction))
+        return TRUE;
+    }
+
+  if (gtk_widget_is_focus (widget))
+    return FALSE;
+
+  if (!gtk_widget_get_can_focus (widget) ||
+      !self->selectable)
+    return FALSE;
+
+  return gtk_widget_grab_focus (widget);
+}
+
+static gboolean
+gtk_list_item_grab_focus (GtkWidget *widget)
+{
+  GtkWidget *child;
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  if (child && gtk_widget_grab_focus (child))
+    return TRUE;
+
+  return GTK_WIDGET_CLASS (gtk_list_item_parent_class)->grab_focus (widget);
+}
+
 static void
 gtk_list_item_dispose (GObject *object)
 {
@@ -145,6 +194,9 @@ gtk_list_item_class_init (GtkListItemClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  widget_class->focus = gtk_list_item_focus;
+  widget_class->grab_focus = gtk_list_item_grab_focus;
 
   gobject_class->dispose = gtk_list_item_dispose;
   gobject_class->get_property = gtk_list_item_get_property;
@@ -470,8 +522,6 @@ gtk_list_item_set_selectable (GtkListItem *self,
     return;
 
   self->selectable = selectable;
-
-  gtk_widget_set_can_focus (GTK_WIDGET (self), self->selectable);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTABLE]);
 }
