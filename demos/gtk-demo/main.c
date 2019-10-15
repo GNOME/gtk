@@ -16,9 +16,31 @@ static GtkWidget *source_view;
 
 static gchar *current_file = NULL;
 
+static GtkWidget *window;
 static GtkWidget *notebook;
-static GtkWidget *treeview;
+static GtkWidget *listview;
+static GtkSingleSelection *selection;
 static GtkWidget *headerbar;
+
+typedef struct _GtkDemo GtkDemo;
+struct _GtkDemo
+{
+  GObject parent_instance;
+
+  const char *name;
+  const char *title;
+  const char *filename;
+  GDoDemoFunc func;
+  GListModel *children_model;
+};
+
+# define GTK_TYPE_DEMO (gtk_demo_get_type ())
+G_DECLARE_FINAL_TYPE (GtkDemo, gtk_demo, GTK, DEMO, GObject);
+
+G_DEFINE_TYPE (GtkDemo, gtk_demo, G_TYPE_OBJECT);
+
+static void gtk_demo_init (GtkDemo *self) {}
+static void gtk_demo_class_init (GtkDemoClass *klass) {}
 
 enum {
   NAME_COLUMN,
@@ -116,81 +138,23 @@ activate_inspector (GSimpleAction *action,
 }
 
 static void
-window_closed_cb (GtkWidget *window, gpointer data)
-{
-  CallbackData *cbdata = data;
-  GtkTreeIter iter;
-  PangoStyle style;
-
-  gtk_tree_model_get_iter (cbdata->model, &iter, cbdata->path);
-  gtk_tree_model_get (GTK_TREE_MODEL (cbdata->model), &iter,
-                      STYLE_COLUMN, &style,
-                      -1);
-  if (style == PANGO_STYLE_ITALIC)
-    gtk_tree_store_set (GTK_TREE_STORE (cbdata->model), &iter,
-                        STYLE_COLUMN, PANGO_STYLE_NORMAL,
-                        -1);
-
-  gtk_tree_path_free (cbdata->path);
-  g_free (cbdata);
-}
-
-static void
-run_example_for_row (GtkWidget    *window,
-                     GtkTreeModel *model,
-                     GtkTreeIter  *iter)
-{
-  PangoStyle style;
-  GDoDemoFunc func;
-  GtkWidget *demo;
-
-  gtk_tree_model_get (GTK_TREE_MODEL (model),
-                      iter,
-                      FUNC_COLUMN, &func,
-                      STYLE_COLUMN, &style,
-                      -1);
-
-  if (func)
-    {
-      gtk_tree_store_set (GTK_TREE_STORE (model),
-                          iter,
-                          STYLE_COLUMN, (style == PANGO_STYLE_ITALIC ? PANGO_STYLE_NORMAL : PANGO_STYLE_ITALIC),
-                          -1);
-      demo = (func) (window);
-
-      if (demo != NULL)
-        {
-          CallbackData *cbdata;
-
-          cbdata = g_new (CallbackData, 1);
-          cbdata->model = model;
-          cbdata->path = gtk_tree_model_get_path (model, iter);
-
-          if (GTK_IS_WINDOW (demo))
-            {
-              gtk_window_set_transient_for (GTK_WINDOW (demo), GTK_WINDOW (window));
-              gtk_window_set_modal (GTK_WINDOW (demo), TRUE);
-            }
-
-          g_signal_connect (demo, "destroy",
-                            G_CALLBACK (window_closed_cb), cbdata);
-        }
-    }
-}
-
-static void
 activate_run (GSimpleAction *action,
               GVariant      *parameter,
               gpointer       user_data)
 {
-  GtkWidget *window = user_data;
-  GtkTreeSelection *selection;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
+  GtkTreeListRow *row = gtk_single_selection_get_selected_item (selection);
+  GtkDemo *demo = gtk_tree_list_row_get_item (row);
+  GtkWidget *result;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
-  if (gtk_tree_selection_get_selected (selection, &model, &iter))
-    run_example_for_row (window, model, &iter);
+  if (!demo->func)
+    return;
+
+  result = demo->func(window);
+  if (result != NULL && GTK_IS_WINDOW (result))
+    {
+      gtk_window_set_transient_for (GTK_WINDOW (result), GTK_WINDOW (window));
+      gtk_window_set_modal (GTK_WINDOW (result), TRUE);
+    }
 }
 
 /* Stupid syntax highlighting.
@@ -890,81 +854,74 @@ load_file (const gchar *demoname,
 }
 
 static void
-selection_cb (GtkTreeSelection *selection,
-              GtkTreeModel     *model)
+
+selection_cb (GtkSingleSelection *selection,
+              GParamSpec         *pspec,
+              gpointer            user_data)
 {
-  GtkTreeIter iter;
-  char *name;
-  char *filename;
-  char *title;
+  GtkTreeListRow *row = gtk_single_selection_get_selected_item (selection);
+  GtkDemo *demo = gtk_tree_list_row_get_item (row);
 
-  if (! gtk_tree_selection_get_selected (selection, NULL, &iter))
-    return;
+  if (demo->filename)
+    load_file (demo->name, demo->filename);
 
-  gtk_tree_model_get (model, &iter,
-                      NAME_COLUMN, &name,
-                      TITLE_COLUMN, &title,
-                      FILENAME_COLUMN, &filename,
-                      -1);
-
-  if (filename)
-    load_file (name, filename);
-
-  gtk_header_bar_set_title (GTK_HEADER_BAR (headerbar), title);
-
-  g_free (name);
-  g_free (title);
-  g_free (filename);
+  gtk_header_bar_set_title (GTK_HEADER_BAR (headerbar), demo->title);
 }
 
-static void
-populate_model (GtkTreeModel *model)
+
+
+static GListModel *
+create_demo_model (void)
 {
-  Demo *d = gtk_demos;
+  GListStore *store = g_list_store_new (GTK_TYPE_DEMO);
+  DemoData *demo = gtk_demos;
 
-  /* this code only supports 1 level of children. If we
-   * want more we probably have to use a recursing function.
-   */
-  while (d->title)
+  while (demo->title)
     {
-      Demo *children = d->children;
-      GtkTreeIter iter;
+      GtkDemo *d = GTK_DEMO (g_object_new (GTK_TYPE_DEMO, NULL));
+      DemoData *children = demo->children;
 
-      gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
+      d->name = demo->name;
+      d->title = demo->title;
+      d->filename = demo->filename;
+      d->func = demo->func;
 
-      gtk_tree_store_set (GTK_TREE_STORE (model),
-                          &iter,
-                          NAME_COLUMN, d->name,
-                          TITLE_COLUMN, d->title,
-                          FILENAME_COLUMN, d->filename,
-                          FUNC_COLUMN, d->func,
-                          STYLE_COLUMN, PANGO_STYLE_NORMAL,
-                          -1);
+      g_list_store_append (store, d);
 
-      d++;
-
-      if (!children)
-        continue;
-
-      while (children->title)
+      if (children)
         {
-          GtkTreeIter child_iter;
+          d->children_model = G_LIST_MODEL (g_list_store_new (GTK_TYPE_DEMO));
 
-          gtk_tree_store_append (GTK_TREE_STORE (model), &child_iter, &iter);
+          while (children->title)
+            {
+              GtkDemo *child = GTK_DEMO (g_object_new (GTK_TYPE_DEMO, NULL));
 
-          gtk_tree_store_set (GTK_TREE_STORE (model),
-                              &child_iter,
-                              NAME_COLUMN, children->name,
-                              TITLE_COLUMN, children->title,
-                              FILENAME_COLUMN, children->filename,
-                              FUNC_COLUMN, children->func,
-                              STYLE_COLUMN, PANGO_STYLE_NORMAL,
-                              -1);
+              child->name = children->name;
+              child->title = children->title;
+              child->filename = children->filename;
+              child->func = children->func;
 
-          children++;
+              g_list_store_append (G_LIST_STORE (d->children_model), child);
+              children++;
+            }
         }
+
+      demo++;
     }
 
+  return G_LIST_MODEL (store);
+}
+
+static GListModel *
+get_child_model (gpointer item,
+                 gpointer user_data)
+{
+  GtkDemo *demo = item;
+
+  if (demo->children_model)
+    return g_object_ref (G_LIST_MODEL (demo->children_model));
+
+  return NULL;
 }
 
 static void
@@ -982,22 +939,6 @@ startup (GApplication *app)
   gtk_application_set_app_menu (GTK_APPLICATION (app), appmenu);
 
   g_object_unref (builder);
-}
-
-static void
-row_activated_cb (GtkWidget         *tree_view,
-                  GtkTreePath       *path,
-                  GtkTreeViewColumn *column)
-{
-  GtkTreeIter iter;
-  GtkWidget *window;
-  GtkTreeModel *model;
-
-  window = GTK_WIDGET (gtk_widget_get_root (tree_view));
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree_view));
-  gtk_tree_model_get_iter (model, &iter, path);
-
-  run_example_for_row (window, model, &iter);
 }
 
 static void
@@ -1027,18 +968,49 @@ scrollbar_popup (GtkWidget *scrollbar, GtkWidget *menu)
 }
 
 static void
+setup_demo_row_func (GtkListItem *list_item,
+                     gpointer     user_data)
+{
+  GtkWidget *label;
+  GtkWidget *expander;
+
+  expander = gtk_tree_expander_new ();
+
+  label = gtk_label_new ("");
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+
+  gtk_tree_expander_set_child (GTK_TREE_EXPANDER (expander), label);
+  gtk_container_add (GTK_CONTAINER (list_item), expander);
+}
+
+static void
+bind_demo_row_func (GtkListItem *list_item,
+                    gpointer     user_data)
+{
+  GtkWidget *label, *expander;
+  GtkTreeListRow *row;
+  GtkDemo *demo;
+
+  row = gtk_list_item_get_item (list_item);
+  demo = gtk_tree_list_row_get_item (row);
+  expander = gtk_bin_get_child (GTK_BIN (list_item));
+  gtk_tree_expander_set_list_row (GTK_TREE_EXPANDER (expander), row);
+  label = gtk_tree_expander_get_child (GTK_TREE_EXPANDER (expander));
+
+  gtk_label_set_label (GTK_LABEL (label), demo->title);
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
-  GtkWindow *window;
-  GtkWidget *widget;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
   GError *error = NULL;
   GtkWidget *sw;
   GtkWidget *scrollbar;
   GtkWidget *menu;
   GtkWidget *item;
+  GListModel *listmodel;
+  GtkTreeListModel *treemodel;
 
   static GActionEntry win_entries[] = {
     { "run", activate_run, NULL, NULL, NULL }
@@ -1052,8 +1024,8 @@ activate (GApplication *app)
       exit (1);
     }
 
-  window = (GtkWindow *)gtk_builder_get_object (builder, "window");
-  gtk_application_add_window (GTK_APPLICATION (app), window);
+  window = (GtkWidget *)gtk_builder_get_object (builder, "window");
+  gtk_application_add_window (GTK_APPLICATION (app), GTK_WINDOW (window));
   g_action_map_add_action_entries (G_ACTION_MAP (window),
                                    win_entries, G_N_ELEMENTS (win_entries),
                                    window);
@@ -1063,8 +1035,7 @@ activate (GApplication *app)
   info_view = (GtkWidget *)gtk_builder_get_object (builder, "info-textview");
   source_view = (GtkWidget *)gtk_builder_get_object (builder, "source-textview");
   headerbar = (GtkWidget *)gtk_builder_get_object (builder, "headerbar");
-  treeview = (GtkWidget *)gtk_builder_get_object (builder, "treeview");
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (treeview));
+  listview = (GtkWidget *)gtk_builder_get_object (builder, "listview");
 
   sw = (GtkWidget *)gtk_builder_get_object (builder, "source-scrolledwindow");
   scrollbar = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (sw));
@@ -1083,17 +1054,23 @@ activate (GApplication *app)
 
   load_file (gtk_demos[0].name, gtk_demos[0].filename);
 
-  populate_model (model);
+  listmodel = create_demo_model ();
+  treemodel = gtk_tree_list_model_new (FALSE,
+                                       G_LIST_MODEL (listmodel),
+                                       FALSE,
+                                       get_child_model,
+                                       NULL,
+                                       NULL);
 
-  g_signal_connect (treeview, "row-activated", G_CALLBACK (row_activated_cb), model);
-
-  widget = (GtkWidget *)gtk_builder_get_object (builder, "treeview-selection");
-  g_signal_connect (widget, "changed", G_CALLBACK (selection_cb), model);
-
-  gtk_tree_model_get_iter_first (gtk_tree_view_get_model (GTK_TREE_VIEW (treeview)), &iter);
-  gtk_tree_selection_select_iter (GTK_TREE_SELECTION (widget), &iter);
-
-  gtk_tree_view_collapse_all (GTK_TREE_VIEW (treeview));
+  gtk_list_view_set_factory (GTK_LIST_VIEW (listview),
+                             gtk_functions_list_item_factory_new (setup_demo_row_func,
+                                                                  bind_demo_row_func,
+                                                                  NULL,
+                                                                  NULL));
+  selection = gtk_single_selection_new (G_LIST_MODEL (treemodel));
+  g_signal_connect (selection, "notify::selected-item", G_CALLBACK (selection_cb), NULL);
+  gtk_list_view_set_model (GTK_LIST_VIEW (listview),
+                           G_LIST_MODEL (selection));
 
   award ("demo-start");
 
@@ -1112,7 +1089,7 @@ auto_quit (gpointer data)
 static void
 list_demos (void)
 {
-  Demo *d, *c;
+  DemoData *d, *c;
 
   d = gtk_demos;
 
@@ -1139,7 +1116,7 @@ command_line (GApplication            *app,
   const gchar *name = NULL;
   gboolean autoquit = FALSE;
   gboolean list = FALSE;
-  Demo *d, *c;
+  DemoData *d, *c;
   GDoDemoFunc func = 0;
   GtkWidget *window, *demo;
 
