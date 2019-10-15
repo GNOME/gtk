@@ -22,6 +22,7 @@
 #include "gtklistview.h"
 
 #include "gtkadjustment.h"
+#include "gtkbindings.h"
 #include "gtkintl.h"
 #include "gtklistitemmanagerprivate.h"
 #include "gtkmain.h"
@@ -902,6 +903,32 @@ gtk_list_view_select_item_action (GtkWidget  *widget,
 }
 
 static void
+gtk_list_view_select_all (GtkWidget  *widget,
+                          const char *action_name,
+                          GVariant   *parameter)
+{
+  GtkListView *self = GTK_LIST_VIEW (widget);
+  GtkSelectionModel *selection_model;
+
+  selection_model = gtk_list_item_manager_get_model (self->item_manager);
+
+  gtk_selection_model_select_all (selection_model);
+}
+
+static void
+gtk_list_view_unselect_all (GtkWidget  *widget,
+                            const char *action_name,
+                            GVariant   *parameter)
+{
+  GtkListView *self = GTK_LIST_VIEW (widget);
+  GtkSelectionModel *selection_model;
+
+  selection_model = gtk_list_item_manager_get_model (self->item_manager);
+
+  gtk_selection_model_unselect_all (selection_model);
+}
+
+static void
 gtk_list_view_scroll_to_item (GtkWidget  *widget,
                               const char *action_name,
                               GVariant   *parameter)
@@ -970,6 +997,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GtkBindingSet *binding_set;
   gpointer iface;
 
   widget_class->measure = gtk_list_view_measure;
@@ -1108,6 +1136,28 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                                    gtk_list_view_select_item_action);
 
   /**
+   * GtkListView|list.select-all:
+   *
+   * If the selection model supports it, select all items in the model.
+   * If not, do nothing.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "list.select-all",
+                                   NULL,
+                                   gtk_list_view_select_all);
+
+  /**
+   * GtkListView|list.unselect-all:
+   *
+   * If the selection model supports it, unselect all items in the model.
+   * If not, do nothing.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "list.unselect-all",
+                                   NULL,
+                                   gtk_list_view_unselect_all);
+
+  /**
    * GtkListView|list.scroll-to-item:
    * @position: position of item to scroll to
    *
@@ -1118,6 +1168,14 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                                    "list.scroll-to-item",
                                    "u",
                                    gtk_list_view_scroll_to_item);
+
+  binding_set = gtk_binding_set_by_class (klass);
+
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_a, GDK_CONTROL_MASK, "list.select-all", NULL);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_slash, GDK_CONTROL_MASK, "list.select-all", NULL);
+
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_A, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "list.unselect-all", NULL);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_backslash, GDK_CONTROL_MASK, "list.unselect-all", NULL);
 
   gtk_widget_class_set_css_name (widget_class, I_("list"));
 }
