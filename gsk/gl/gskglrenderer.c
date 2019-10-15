@@ -827,36 +827,35 @@ upload_texture (GskGLRenderer *self,
                 GdkTexture    *texture,
                 TextureRegion *out_region)
 {
-  int texture_id;
-
   if (texture->width <= 128 &&
       texture->height <= 128 &&
       !GDK_IS_GL_TEXTURE (texture))
     {
-      graphene_rect_t trect;
+      const IconData *icon_data;
 
       gsk_gl_icon_cache_lookup_or_add (self->icon_cache,
                                        texture,
-                                       &texture_id,
-                                       &trect);
-      out_region->x = trect.origin.x;
-      out_region->y = trect.origin.y;
-      out_region->x2 = out_region->x + trect.size.width;
-      out_region->y2 = out_region->y + trect.size.height;
+                                       &icon_data);
+
+      out_region->texture_id = icon_data->texture_id;
+      out_region->x = icon_data->x;
+      out_region->y = icon_data->y;
+      out_region->x2 = icon_data->x2;
+      out_region->y2 = icon_data->y2;
     }
   else
     {
-      texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
-                                                          texture,
-                                                          GL_LINEAR,
-                                                          GL_LINEAR);
+      out_region->texture_id =
+          gsk_gl_driver_get_texture_for_texture (self->gl_driver,
+                                                 texture,
+                                                 GL_LINEAR,
+                                                 GL_LINEAR);
+
       out_region->x  = 0;
       out_region->y  = 0;
       out_region->x2 = 1;
       out_region->y2 = 1;
     }
-
-  out_region->texture_id = texture_id;
 }
 
 static inline void
