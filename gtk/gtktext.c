@@ -321,7 +321,7 @@ static void   gtk_text_snapshot             (GtkWidget        *widget,
                                              GtkSnapshot      *snapshot);
 static void   gtk_text_focus_in             (GtkWidget        *widget);
 static void   gtk_text_focus_out            (GtkWidget        *widget);
-static void   gtk_text_grab_focus           (GtkWidget        *widget);
+static gboolean gtk_text_grab_focus         (GtkWidget        *widget);
 static void   gtk_text_style_updated        (GtkWidget        *widget);
 static void   gtk_text_direction_changed    (GtkWidget        *widget,
                                              GtkTextDirection  previous_dir);
@@ -3017,14 +3017,15 @@ gtk_text_focus_out (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, self);
 }
 
-static void
+static gboolean
 gtk_text_grab_focus (GtkWidget *widget)
 {
   GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   gboolean select_on_focus;
 
-  GTK_WIDGET_CLASS (gtk_text_parent_class)->grab_focus (GTK_WIDGET (self));
+  if (!GTK_WIDGET_CLASS (gtk_text_parent_class)->grab_focus (GTK_WIDGET (self)))
+    return FALSE;
 
   if (priv->editable && !priv->in_click)
     {
@@ -3036,6 +3037,8 @@ gtk_text_grab_focus (GtkWidget *widget)
       if (select_on_focus)
         gtk_text_set_selection_bounds (self, 0, -1);
     }
+
+  return TRUE;
 }
 
 /**
@@ -3049,13 +3052,15 @@ gtk_text_grab_focus (GtkWidget *widget)
  * You only want to call this on some special entries
  * which the user usually doesn't want to replace all text in,
  * such as search-as-you-type entries.
+ *
+ * Returns: %TRUE if focus is now inside @self
  */
-void
+gboolean
 gtk_text_grab_focus_without_selecting (GtkText *self)
 {
-  g_return_if_fail (GTK_IS_TEXT (self));
+  g_return_val_if_fail (GTK_IS_TEXT (self), FALSE);
 
-  GTK_WIDGET_CLASS (gtk_text_parent_class)->grab_focus (GTK_WIDGET (self));
+  return GTK_WIDGET_CLASS (gtk_text_parent_class)->grab_focus (GTK_WIDGET (self));
 }
 
 static void

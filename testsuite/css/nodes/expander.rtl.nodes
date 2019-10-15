@@ -1,7 +1,7 @@
 [window.background:dir(rtl)]
   decoration:dir(rtl)
-  expander:dir(rtl)
+  expander-widget:dir(rtl)
     box.vertical:dir(rtl)
       title.horizontal:dir(rtl)
-        arrow.horizontal:dir(rtl)
+        expander.horizontal:dir(rtl)
         label:dir(rtl)

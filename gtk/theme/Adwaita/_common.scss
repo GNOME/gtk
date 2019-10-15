@@ -3798,21 +3798,19 @@ row {
  * Expanders *
  *************/
 expander {
-  title > arrow {
-    min-width: 16px;
-    min-height: 16px;
-    -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
-    &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
+  min-width: 16px;
+  min-height: 16px;
+  -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
+  &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
 
-    &:disabled { color: $insensitive_fg_color; }
-    &:disabled:backdrop { color: $backdrop_insensitive_color; }
-  }
+  &:disabled { color: $insensitive_fg_color; }
+  &:disabled:backdrop { color: $backdrop_insensitive_color; }
 
-  title > arrow:checked, title:checked > arrow { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
+  &:checked { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
+}
 
-  title:hover > arrow {
-    color: lighten($fg_color,30%); //only lightens the arrow
-  }
+expander-widget title:hover > expander {
+  color: lighten($fg_color,30%); //only lightens the icon 
 }
 
 

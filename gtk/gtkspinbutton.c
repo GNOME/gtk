@@ -317,13 +317,13 @@ G_DEFINE_TYPE_WITH_CODE (GtkSpinButton, gtk_spin_button, GTK_TYPE_WIDGET,
                                 GTK_TYPE_SCROLL_TYPE, scroll)
 
 
-static void
+static gboolean
 gtk_spin_button_grab_focus (GtkWidget *widget)
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
 
-  gtk_widget_grab_focus (priv->entry);
+  return gtk_widget_grab_focus (priv->entry);
 }
 
 static gboolean
@@ -333,9 +333,7 @@ gtk_spin_button_mnemonic_activate (GtkWidget *widget,
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = gtk_spin_button_get_instance_private (spin_button);
 
-  gtk_widget_grab_focus (priv->entry);
-
-  return TRUE;
+  return gtk_widget_grab_focus (priv->entry);
 }
 
 static void

@@ -669,7 +669,7 @@ static void     gtk_tree_view_key_controller_focus_out    (GtkEventControllerKey
 
 static gint     gtk_tree_view_focus                (GtkWidget        *widget,
 						    GtkDirectionType  direction);
-static void     gtk_tree_view_grab_focus           (GtkWidget        *widget);
+static gboolean gtk_tree_view_grab_focus           (GtkWidget        *widget);
 static void     gtk_tree_view_style_updated        (GtkWidget        *widget);
 
 /* container signals */
@@ -8033,8 +8033,7 @@ gtk_tree_view_focus (GtkWidget        *widget,
 	  return FALSE;
 	case GTK_DIR_TAB_FORWARD:
 	case GTK_DIR_DOWN:
-	  gtk_widget_grab_focus (widget);
-	  return TRUE;
+	  return gtk_widget_grab_focus (widget);
 	default:
 	  g_assert_not_reached ();
 	  return FALSE;
@@ -8044,8 +8043,7 @@ gtk_tree_view_focus (GtkWidget        *widget,
   /* Case 2. We don't have focus at all. */
   if (!gtk_widget_has_focus (widget))
     {
-      gtk_widget_grab_focus (widget);
-      return TRUE;
+      return gtk_widget_grab_focus (widget);
     }
 
   /* Case 3. We have focus already. */
@@ -8055,16 +8053,17 @@ gtk_tree_view_focus (GtkWidget        *widget,
     return FALSE;
 
   /* Other directions caught by the keybindings */
-  gtk_widget_grab_focus (widget);
-  return TRUE;
+  return gtk_widget_grab_focus (widget);
 }
 
-static void
+static gboolean
 gtk_tree_view_grab_focus (GtkWidget *widget)
 {
-  GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->grab_focus (widget);
+  if (!GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->grab_focus (widget))
+    return FALSE;
 
   gtk_tree_view_focus_to_cursor (GTK_TREE_VIEW (widget));
+  return TRUE;
 }
 
 static void

@@ -342,7 +342,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                   G_TYPE_NONE, 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_EXPANDER_ACCESSIBLE);
-  gtk_widget_class_set_css_name (widget_class, I_("expander"));
+  gtk_widget_class_set_css_name (widget_class, I_("expander-widget"));
 }
 
 static void
@@ -370,7 +370,7 @@ gtk_expander_init (GtkExpander *expander)
                                      NULL);
   gtk_container_add (GTK_CONTAINER (priv->box), priv->title_widget);
 
-  priv->arrow_widget = gtk_icon_new ("arrow");
+  priv->arrow_widget = gtk_icon_new ("expander");
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->arrow_widget),
                                GTK_STYLE_CLASS_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (priv->title_widget), priv->arrow_widget);
