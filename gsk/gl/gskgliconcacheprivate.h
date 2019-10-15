@@ -20,6 +20,16 @@ typedef struct
 
 } GskGLIconCache;
 
+typedef struct
+{
+  float x, y, x2, y2;
+  GskGLTextureAtlas *atlas;
+  int frame_age; /* Number of frames this icon is unused */
+  guint used: 1;
+  int texture_id;
+  GdkTexture *source_texture;
+} IconData;
+
 GskGLIconCache * gsk_gl_icon_cache_new            (GdkDisplay *display,
                                                    GskGLTextureAtlases *atlases);
 GskGLIconCache * gsk_gl_icon_cache_ref            (GskGLIconCache        *self);
@@ -28,7 +38,6 @@ void             gsk_gl_icon_cache_begin_frame    (GskGLIconCache        *self,
                                                    GPtrArray             *removed_atlases);
 void             gsk_gl_icon_cache_lookup_or_add  (GskGLIconCache        *self,
                                                    GdkTexture            *texture,
-                                                   int                   *out_texture_id,
-                                                   graphene_rect_t       *out_texture_rect);
+                                                   const IconData       **out_icon_data);
 
 #endif
