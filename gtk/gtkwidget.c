@@ -5425,6 +5425,9 @@ gtk_widget_grab_focus (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
+  if (!gtk_widget_is_sensitive (widget))
+    return FALSE;
+
   return GTK_WIDGET_GET_CLASS (widget)->grab_focus (widget);
 }
 
