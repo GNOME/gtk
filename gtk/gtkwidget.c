@@ -5425,7 +5425,8 @@ gtk_widget_grab_focus (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  if (!gtk_widget_is_sensitive (widget))
+  if (!gtk_widget_is_sensitive (widget) ||
+      widget->priv->root == NULL)
     return FALSE;
 
   return GTK_WIDGET_GET_CLASS (widget)->grab_focus (widget);
@@ -5435,9 +5436,6 @@ static gboolean
 gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (focus_widget);
-
-  if (!priv->root)
-    return FALSE;
 
   gtk_root_set_focus (priv->root, focus_widget);
   return TRUE;
