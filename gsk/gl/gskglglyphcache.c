@@ -328,6 +328,8 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
     {
       guint dropped = 0;
 
+      self->atlas_timestamp++;
+
       g_hash_table_iter_init (&iter, self->hash_table);
       while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
         {
@@ -357,4 +359,11 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
             }
         }
     }
+}
+
+void
+gsk_gl_glyph_cache_entry_validate (GskGLGlyphCache  *cache,
+                                   GskGLCachedGlyph *value)
+{
+  value->timestamp = cache->timestamp;
 }
