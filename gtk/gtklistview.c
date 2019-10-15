@@ -101,11 +101,17 @@ enum
   N_PROPS
 };
 
+enum {
+  ACTIVATE,
+  LAST_SIGNAL
+};
+
 G_DEFINE_TYPE_WITH_CODE (GtkListView, gtk_list_view, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
+static guint signals[LAST_SIGNAL] = { 0 };
 
 static void G_GNUC_UNUSED
 dump (GtkListView *self)
@@ -890,6 +896,24 @@ gtk_list_view_scroll_to_item (GtkWidget  *widget,
 }
 
 static void
+gtk_list_view_activate_item (GtkWidget  *widget,
+                             const char *action_name,
+                             GVariant   *parameter)
+{
+  GtkListView *self = GTK_LIST_VIEW (widget);
+  guint pos;
+
+  if (!g_variant_check_format_string (parameter, "u", FALSE))
+    return;
+
+  g_variant_get (parameter, "u", &pos);
+  if (self->model == NULL || pos >= g_list_model_get_n_items (self->model))
+    return;
+
+  g_signal_emit (widget, signals[ACTIVATE], 0, pos);
+}
+
+static void
 gtk_list_view_class_init (GtkListViewClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -970,6 +994,42 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
+
+  /**
+   * GtkListView::activate:
+   * @self: The #GtkListView
+   * @position: position of item to activate
+   *
+   * The ::activate signal is emitted when a row has been activated by the user,
+   * usually via activating the GtkListView|list.activate-item action.
+   *
+   * This allows for a convenient way to handle activation in a listview.
+   * See gtk_list_item_set_activatable() for details on how to use this signal.
+   */
+  signals[ACTIVATE] =
+    g_signal_new (I_("activate"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__UINT,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_UINT);
+  g_signal_set_va_marshaller (signals[ACTIVATE],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              g_cclosure_marshal_VOID__UINTv);
+
+  /**
+   * GtkListView|list.activate-item:
+   * @position: position of item to activate
+   *
+   * Activates the item given in @position by emitting the GtkListView::activate
+   * signal.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "list.activate-item",
+                                   "u",
+                                   gtk_list_view_activate_item);
 
   /**
    * GtkListView|list.select-item:
