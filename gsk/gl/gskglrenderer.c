@@ -381,7 +381,7 @@ add_rect_outline_ops (GskGLRenderer         *self,
                       RenderOpBuilder       *builder,
                       const graphene_rect_t *rect)
 {
-  GdkRGBA *color = gdk_rgba_copy (&GDK_RGBA ("#F00")); /* Leaked */
+  GdkRGBA *color = gdk_rgba_copy (&GDK_RGBA ("F00")); /* Leaked */
 
   ops_set_program (builder, &self->color_program);
   ops_set_color (builder, color);
