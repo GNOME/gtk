@@ -10,7 +10,10 @@
 static void
 icon_data_free (gpointer p)
 {
-  g_object_unref (((IconData *)p)->source_texture);
+  IconData *icon_data = p;
+
+  gdk_texture_clear_render_data (icon_data->source_texture);
+  g_object_unref (icon_data->source_texture);
   g_free (p);
 }
 
@@ -69,7 +72,9 @@ gsk_gl_icon_cache_begin_frame (GskGLIconCache *self,
       while (g_hash_table_iter_next (&iter, (gpointer *)&texture, (gpointer *)&icon_data))
         {
           if (g_ptr_array_find (removed_atlases, icon_data->atlas, NULL))
-            g_hash_table_iter_remove (&iter);
+            {
+              g_hash_table_iter_remove (&iter);
+            }
         }
     }
   
@@ -101,7 +106,12 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
                                  GdkTexture      *texture,
                                  const IconData **out_icon_data)
 {
-  IconData *icon_data = g_hash_table_lookup (self->icons, texture);
+  IconData *icon_data;
+
+  icon_data = gdk_texture_get_render_data (texture, self);
+
+  if (!icon_data)
+    icon_data = g_hash_table_lookup (self->icons, texture);
 
   if (icon_data)
     {
@@ -219,6 +229,8 @@ gsk_gl_icon_cache_lookup_or_add (GskGLIconCache  *self,
     glPixelStorei (GL_UNPACK_SKIP_ROWS, 0);
 
     gdk_gl_context_pop_debug_group (gdk_gl_context_get_current ());
+
+    gdk_texture_set_render_data (texture, self, icon_data, NULL);
 
     *out_icon_data = icon_data;
 
