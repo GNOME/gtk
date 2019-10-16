@@ -338,7 +338,6 @@ struct _GskGLRenderer
 #ifdef G_ENABLE_DEBUG
   struct {
     GQuark frames;
-    GQuark draw_calls;
   } profile_counters;
   struct {
     GQuark cpu_time;
@@ -3506,7 +3505,6 @@ gsk_gl_renderer_init (GskGLRenderer *self)
     GskProfiler *profiler = gsk_renderer_get_profiler (GSK_RENDERER (self));
 
     self->profile_counters.frames = gsk_profiler_add_counter (profiler, "frames", "Frames", FALSE);
-    self->profile_counters.draw_calls = gsk_profiler_add_counter (profiler, "draws", "glDrawArrays", TRUE);
 
     self->profile_timers.cpu_time = gsk_profiler_add_timer (profiler, "cpu-time", "CPU time", FALSE, TRUE);
     self->profile_timers.gpu_time = gsk_profiler_add_timer (profiler, "gpu-time", "GPU time", FALSE, TRUE);
