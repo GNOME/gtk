@@ -100,7 +100,12 @@ gsk_gl_texture_atlases_begin_frame (GskGLTextureAtlases *self,
        }
     }
 
-  GSK_NOTE(GLYPH_CACHE, if (removed->len > 0) g_message ("%d atlases left", self->atlases->len));
+  GSK_NOTE(GLYPH_CACHE, {
+    static guint timestamp;
+    if (timestamp++ % 60 == 0)
+      g_message ("%d atlases", self->atlases->len);
+  });
+
 
 #if 0
   {
@@ -162,6 +167,8 @@ gsk_gl_texture_atlases_pack (GskGLTextureAtlases *self,
 
       /* Pack it onto that one, which surely has enough space... */
       gsk_gl_texture_atlas_pack (atlas, width, height, &x, &y);
+
+      GSK_NOTE(GLYPH_CACHE, g_message ("adding new atlas"));
     }
 
   *atlas_out = atlas;
