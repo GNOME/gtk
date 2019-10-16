@@ -235,6 +235,25 @@ gtk_list_item_set_property (GObject      *object,
 }
 
 static void
+gtk_list_item_select_action (GtkWidget  *widget,
+                             const char *action_name,
+                             GVariant   *parameter)
+{
+  GtkListItem *self = GTK_LIST_ITEM (widget);
+  gboolean modify, extend;
+
+  if (!self->selectable)
+    return;
+
+  g_variant_get (parameter, "(bb)", &modify, &extend);
+
+  gtk_widget_activate_action (GTK_WIDGET (self),
+                              "list.select-item",
+                              "(ubb)",
+                              self->position, modify, extend);
+}
+
+static void
 gtk_list_item_class_init (GtkListItemClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -345,6 +364,24 @@ gtk_list_item_class_init (GtkListItemClass *klass)
 
   widget_class->activate_signal = signals[ACTIVATE_SIGNAL];
 
+  /**
+   * GtkListItem|listitem.select:
+   * @modify: %TRUE to toggle the existing selection, %FALSE to select
+   * @extend: %TRUE to extend the selection
+   *
+   * Changes selection if the item is selectable.
+   * If the item is not selectable, nothing happens.
+   *
+   * This function will emit the list.select-item action and the resulting
+   * behavior, in particular the interpretation of @modify and @extend
+   * depends on the view containing this listitem. See for example
+   * GtkListView|list.select-item or GtkGridView|list.select-item.
+   */
+  gtk_widget_class_install_action (widget_class,
+                                   "listitem.select",
+                                   "(bb)",
+                                   gtk_list_item_select_action);
+
   binding_set = gtk_binding_set_by_class (klass);
 
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Return, 0,
@@ -353,6 +390,25 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                                 "activate-keybinding", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0,
                                 "activate-keybinding", 0);
+
+  /* note that some of these may get overwritten by child widgets,
+   * such as GtkTreeExpander */
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_space, 0,
+                                "listitem.select", "(bb)", TRUE, FALSE);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_space, GDK_CONTROL_MASK,
+                                "listitem.select", "(bb)", TRUE, FALSE);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_space, GDK_SHIFT_MASK,
+                                "listitem.select", "(bb)", TRUE, FALSE);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_space, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "listitem.select", "(bb)", TRUE, FALSE);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_KP_Space, 0,
+                                "listitem.select", "(bb)", TRUE, FALSE);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_KP_Space, GDK_CONTROL_MASK,
+                                "listitem.select", "(bb)", TRUE, FALSE);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_KP_Space, GDK_SHIFT_MASK,
+                                "listitem.select", "(bb)", TRUE, FALSE);
+  gtk_binding_entry_add_action (binding_set, GDK_KEY_KP_Space, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "listitem.select", "(bb)", TRUE, FALSE);
 
   /* This gets overwritten by gtk_list_item_new() but better safe than sorry */
   gtk_widget_class_set_css_name (widget_class, I_("row"));
