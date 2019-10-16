@@ -321,15 +321,12 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
   GHashTableIter iter;
   GlyphCacheKey *key;
   GskGLCachedGlyph *value;
+  guint dropped = 0;
 
   self->timestamp++;
 
   if (removed_atlases->len > 0)
     {
-      guint dropped = 0;
-
-      self->atlas_timestamp++;
-
       g_hash_table_iter_init (&iter, self->hash_table);
       while (g_hash_table_iter_next (&iter, (gpointer *)&key, (gpointer *)&value))
         {
@@ -339,8 +336,6 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
               dropped++;
             }
         }
-
-      GSK_NOTE(GLYPH_CACHE, if (dropped > 0) g_message ("Dropped %d glyphs", dropped));
     }
 
   if (self->timestamp % MAX_FRAME_AGE == 30)
@@ -367,7 +362,7 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
                    * have to treat it like a dropped atlas and purge
                    * text node render data.
                    */
-                  self->atlas_timestamp++;
+                  dropped++;
                 }
             }
           else
@@ -376,6 +371,11 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
 
       GSK_NOTE(GLYPH_CACHE, g_message ("%d glyphs cached", g_hash_table_size (self->hash_table)));
     }
+
+  GSK_NOTE(GLYPH_CACHE, if (dropped > 0) g_message ("Dropped %d glyphs", dropped));
+
+  if (dropped > 0)
+    self->atlas_timestamp++;
 }
 
 void
