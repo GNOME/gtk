@@ -529,14 +529,14 @@ gtk_tree_model_sort_drag_source_init (GtkTreeDragSourceIface *iface)
  * gtk_tree_model_sort_new_with_model:
  * @child_model: A #GtkTreeModel
  *
- * Creates a new #GtkTreeModel, with @child_model as the child model.
+ * Creates a new #GtkTreeModelSort, with @child_model as the child model.
  *
- * Returns: (transfer full): A new #GtkTreeModel.
+ * Returns: (transfer full) (type Gtk.TreeModelSort): A new #GtkTreeModelSort.
  */
-GtkTreeModel *
+GtkTreeModelSort *
 gtk_tree_model_sort_new_with_model (GtkTreeModel *child_model)
 {
-  GtkTreeModel *retval;
+  GtkTreeModelSort *retval;
 
   g_return_val_if_fail (GTK_IS_TREE_MODEL (child_model), NULL);
 
