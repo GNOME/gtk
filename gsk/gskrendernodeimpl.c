@@ -3547,6 +3547,7 @@ gsk_text_node_new (PangoFont              *font,
   self->has_color_glyphs = font_has_color_glyphs (font);
   self->color = *color;
   self->offset = *offset;
+  self->render_data = NULL;
   self->num_glyphs = glyphs->num_glyphs;
   memcpy (self->glyphs, glyphs->glyphs, sizeof (PangoGlyphInfo) * glyphs->num_glyphs);
 
