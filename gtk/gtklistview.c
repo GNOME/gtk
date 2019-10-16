@@ -205,6 +205,37 @@ gtk_list_view_get_row_at_y (GtkListView *self,
 }
 
 static int
+gtk_list_view_get_position_at_y (GtkListView *self,
+                                 int          y,
+                                 int         *offset,
+                                 int         *height)
+{
+  ListRow *row;
+  guint pos;
+  int remaining;
+
+  row = gtk_list_view_get_row_at_y (self, y, &remaining);
+  if (row == NULL)
+    {
+      pos = GTK_INVALID_LIST_POSITION;
+      if (offset)
+        *offset = 0;
+      if (height)
+        *height = 0;
+      return GTK_INVALID_LIST_POSITION;
+    }
+  pos = gtk_list_item_manager_get_item_position (self->item_manager, row);
+  g_assert (remaining < row->height * row->parent.n_items);
+  pos += remaining / row->height;
+  if (offset)
+    *offset = remaining % row->height;
+  if (height)
+    *height = row->height;
+
+  return pos;
+}
+
+static int
 list_row_get_y (GtkListView *self,
                 ListRow     *row)
 {
@@ -279,18 +310,11 @@ gtk_list_view_adjustment_value_changed_cb (GtkAdjustment *adjustment,
 {
   if (adjustment == self->adjustment[self->orientation])
     {
-      ListRow *row;
       guint pos;
       int dy;
 
-      row = gtk_list_view_get_row_at_y (self, gtk_adjustment_get_value (adjustment), &dy);
-      if (row)
-        {
-          pos = gtk_list_item_manager_get_item_position (self->item_manager, row) + dy / row->height;
-        }
-      else
-        pos = 0;
-
+      pos = gtk_list_view_get_position_at_y (self, gtk_adjustment_get_value (adjustment), &dy, NULL);
+      g_return_if_fail (pos != GTK_INVALID_LIST_POSITION);
       gtk_list_view_set_anchor (self, pos, 0);
     }
   
