@@ -1400,6 +1400,7 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
   GtkWidget *widget;
   GdkPixbuf *pixbuf;
   gint round_size;
+  gint scale;
 
 #ifdef GDK_WINDOWING_X11
   widget = priv->image;
@@ -1411,18 +1412,23 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
     return;
 
   round_size = round_pixel_size (widget, priv->size);
+  scale = gtk_widget_get_scale_factor (widget);
 
   icon_helper = gtk_icon_helper_new (gtk_style_context_get_node (gtk_widget_get_style_context (widget)), widget);
   _gtk_icon_helper_set_force_scale_pixbuf (icon_helper, TRUE);
   _gtk_icon_helper_set_definition (icon_helper, priv->image_def);
   _gtk_icon_helper_set_icon_size (icon_helper, GTK_ICON_SIZE_SMALL_TOOLBAR);
   _gtk_icon_helper_set_pixel_size (icon_helper, round_size);
-  surface = gtk_icon_helper_load_surface (icon_helper, 1);
+  surface = gtk_icon_helper_load_surface (icon_helper, scale);
   if (surface)
     {
+#ifdef GDK_WINDOWING_X11
+      gtk_image_set_from_surface (GTK_IMAGE (priv->image), surface);
+#else
       pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0,
                                             cairo_image_surface_get_width (surface),
                                             cairo_image_surface_get_height (surface));
+#endif
       cairo_surface_destroy (surface);
     }
   else
@@ -1431,9 +1437,6 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 
   if (pixbuf != NULL)
     {
-#ifdef GDK_WINDOWING_X11
-      gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), pixbuf);
-#endif
 #ifdef GDK_WINDOWING_WIN32
       prev_hicon = priv->nid.hIcon;
       priv->nid.hIcon = gdk_win32_pixbuf_to_hicon_libgtk_only (pixbuf);
