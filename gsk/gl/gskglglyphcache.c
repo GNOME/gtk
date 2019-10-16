@@ -362,6 +362,12 @@ gsk_gl_glyph_cache_begin_frame (GskGLGlyphCache *self,
                 {
                   gsk_gl_driver_destroy_texture (driver, value->texture_id);
                   g_hash_table_iter_remove (&iter);
+
+                  /* Sadly, if we drop an atlas-less cached glyph, we
+                   * have to treat it like a dropped atlas and purge
+                   * text node render data.
+                   */
+                  self->atlas_timestamp++;
                 }
             }
           else
