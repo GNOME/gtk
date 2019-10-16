@@ -35,11 +35,24 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
-#include <gtk/gtkwidget.h>
+#include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS
 
 typedef struct _GtkBindingSet    GtkBindingSet;
+
+/**
+ * GtkBindingCallback:
+ * @widget: The object to invoke the callback on
+ * @args: (allow-none): The arguments or %NULL if none
+ * @user_data: The user data passed when registering the callback
+ *
+ * Prototype of the callback function registered with
+ * gtk_binding_entry_add_callback.
+ */
+typedef void   (* GtkBindingCallback)        (GtkWidget           *widget,
+                                              GVariant            *args,
+                                              gpointer             user_data);
 
 GDK_AVAILABLE_IN_ALL
 GtkBindingSet *gtk_binding_set_new           (const gchar         *set_name);
@@ -96,7 +109,8 @@ GDK_AVAILABLE_IN_ALL
 void           gtk_binding_entry_add_callback(GtkBindingSet       *binding_set,
                                               guint                keyval,
                                               GdkModifierType      modifiers,
-                                              GtkCallback          callback,
+                                              GtkBindingCallback   callback,
+                                              GVariant            *args,
                                               gpointer             user_data,
                                               GDestroyNotify       user_destroy);
 
