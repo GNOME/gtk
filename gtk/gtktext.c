@@ -1681,6 +1681,7 @@ gtk_text_init (GtkText *self)
   priv->truncate_multiline = FALSE;
   priv->xalign = 0.0;
   priv->insert_pos = -1;
+  priv->cursor_alpha = 1.0;
 
   priv->selection_content = g_object_new (GTK_TYPE_TEXT_CONTENT, NULL);
   GTK_TEXT_CONTENT (priv->selection_content)->self = self;

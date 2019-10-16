@@ -67,6 +67,9 @@ typedef enum {
 typedef struct _GtkBindingEntry  GtkBindingEntry;
 typedef struct _GtkBindingSignal GtkBindingSignal;
 typedef struct _GtkBindingArg    GtkBindingArg;
+typedef struct _GtkBindingSignalSignal   GtkBindingSignalSignal;
+typedef struct _GtkBindingSignalAction   GtkBindingSignalAction;
+typedef struct _GtkBindingSignalCallback GtkBindingSignalCallback;
 
 /**
  * GtkBindingSet:
@@ -148,9 +151,7 @@ typedef enum
 /**
  * GtkBindingSignal:
  * @next: implementation detail
- * @signal_name: the action signal to be emitted
- * @n_args: number of arguments specified for the signal
- * @args: (array length=n_args): the arguments specified for the signal
+ * @action_type: Actual type of the action
  *
  * A GtkBindingSignal stores the necessary information to
  * activate a widget in response to a key press via a signal
@@ -159,20 +160,31 @@ typedef enum
 struct _GtkBindingSignal
 {
   GtkBindingSignal     *next;
-  gchar                *signal_name;
   GtkBindingActionType  action_type;
-  union {
-    struct {
-      guint             n_args;
-      GtkBindingArg    *args;
-    };
-    GVariant           *variant;
-    struct {
-      GtkCallback       callback;
-      gpointer          user_data;
-      GDestroyNotify    user_destroy;
-    } callback;
-  };
+};
+
+struct _GtkBindingSignalSignal
+{
+  GtkBindingSignal  parent;
+  const gchar      *signal_name;
+  guint             n_args;
+  GtkBindingArg    *args;
+};
+
+struct _GtkBindingSignalAction
+{
+  GtkBindingSignal  parent;
+  const gchar      *action_name;
+  GVariant         *variant;
+};
+
+struct _GtkBindingSignalCallback
+{
+  GtkBindingSignal    parent;
+  GtkBindingCallback  callback;
+  GVariant           *args;
+  gpointer            user_data;
+  GDestroyNotify      user_destroy;
 };
 
 /* --- variables --- */
@@ -189,77 +201,90 @@ static GtkBindingSignal*
 binding_signal_new_signal (const gchar *signal_name,
                            guint        n_args)
 {
-  GtkBindingSignal *signal;
+  GtkBindingSignalSignal *signal;
 
-  signal = (GtkBindingSignal *) g_slice_alloc0 (sizeof (GtkBindingSignal) + n_args * sizeof (GtkBindingArg));
-  signal->next = NULL;
-  signal->action_type = GTK_BINDING_SIGNAL;
-  signal->signal_name = (gchar *)g_intern_string (signal_name);
+  signal = (GtkBindingSignalSignal *) g_slice_alloc0 (sizeof (GtkBindingSignalSignal) + n_args * sizeof (GtkBindingArg));
+  signal->parent.next = NULL;
+  signal->parent.action_type = GTK_BINDING_SIGNAL;
+  signal->signal_name = g_intern_string (signal_name);
   signal->n_args = n_args;
   signal->args = (GtkBindingArg *)(signal + 1);
 
-  return signal;
+  return &signal->parent;
 }
 
 static GtkBindingSignal*
-binding_signal_new_action (const gchar *signal_name,
+binding_signal_new_action (const gchar *action_name,
                            GVariant    *variant)
 {
-  GtkBindingSignal *signal;
+  GtkBindingSignalAction *signal;
 
-  signal = g_slice_new0 (GtkBindingSignal);
-  signal->next = NULL;
-  signal->action_type = GTK_BINDING_ACTION;
-  signal->signal_name = (gchar *)g_intern_string (signal_name);
+  signal = g_slice_new0 (GtkBindingSignalAction);
+  signal->parent.next = NULL;
+  signal->parent.action_type = GTK_BINDING_ACTION;
+  signal->action_name = g_intern_string (action_name);
   signal->variant = variant;
   if (variant)
     g_variant_ref_sink (variant);
 
-  return signal;
+  return &signal->parent;
 }
 
 static GtkBindingSignal *
-binding_signal_new_callback (GtkCallback    callback,
-                             gpointer       user_data,
-                             GDestroyNotify user_destroy)
+binding_signal_new_callback (GtkBindingCallback  callback,
+                             GVariant           *args,
+                             gpointer            user_data,
+                             GDestroyNotify      user_destroy)
 {
-  GtkBindingSignal *signal;
+  GtkBindingSignalCallback *signal;
 
-  signal = g_slice_new0 (GtkBindingSignal);
-  signal->next = NULL;
-  signal->action_type = GTK_BINDING_CALLBACK;
-  signal->callback.callback = callback;
-  signal->callback.user_data = user_data;
-  signal->callback.user_destroy = user_destroy;
+  signal = g_slice_new0 (GtkBindingSignalCallback);
+  signal->parent.next = NULL;
+  signal->parent.action_type = GTK_BINDING_CALLBACK;
+  signal->callback = callback;
+  signal->args = args;
+  if (args)
+    g_variant_ref_sink (args);
+  signal->user_data = user_data;
+  signal->user_destroy = user_destroy;
 
-  return signal;
+  return &signal->parent;
 }
 
 static void
-binding_signal_free (GtkBindingSignal *sig)
+binding_signal_free (GtkBindingSignal *signal)
 {
   guint i;
 
-  switch (sig->action_type)
+  switch (signal->action_type)
     {
     case GTK_BINDING_SIGNAL:
-      for (i = 0; i < sig->n_args; i++)
-        {
-          if (G_TYPE_FUNDAMENTAL (sig->args[i].arg_type) == G_TYPE_STRING)
-            g_free (sig->args[i].d.string_data);
-        }
-      g_slice_free1 (sizeof (GtkBindingSignal) + sig->n_args * sizeof (GtkBindingArg), sig);
+      {
+        GtkBindingSignalSignal *sig = (GtkBindingSignalSignal *) signal;
+        for (i = 0; i < sig->n_args; i++)
+          {
+            if (G_TYPE_FUNDAMENTAL (sig->args[i].arg_type) == G_TYPE_STRING)
+              g_free (sig->args[i].d.string_data);
+          }
+        g_slice_free1 (sizeof (GtkBindingSignalSignal) + sig->n_args * sizeof (GtkBindingArg), sig);
+      }
       break;
 
     case GTK_BINDING_ACTION:
-      g_clear_pointer (&sig->variant, g_variant_unref);
-      g_slice_free (GtkBindingSignal, sig);
+      {
+        GtkBindingSignalAction *sig = (GtkBindingSignalAction *) signal;
+        g_clear_pointer (&sig->variant, g_variant_unref);
+        g_slice_free (GtkBindingSignalAction, sig);
+      }
       break;
 
     case GTK_BINDING_CALLBACK:
-      if (sig->callback.user_destroy)
-        sig->callback.user_destroy (sig->callback.user_data);
-      g_slice_free (GtkBindingSignal, sig);
+      {
+        GtkBindingSignalCallback *sig = (GtkBindingSignalCallback *) signal;
+        if (sig->user_destroy)
+          sig->user_destroy (sig->user_data);
+        g_slice_free (GtkBindingSignalCallback, sig);
+      }
       break;
 
     default:
@@ -633,8 +658,8 @@ binding_compose_params (GObject         *object,
 }
 
 static gboolean
-binding_signal_activate_signal (GtkBindingSignal *sig,
-                                GObject          *object)
+binding_signal_activate_signal (GtkBindingSignalSignal *sig,
+                                GObject                *object)
 {
   GSignalQuery query;
   guint signal_id;
@@ -700,8 +725,8 @@ binding_signal_activate_signal (GtkBindingSignal *sig,
 }
 
 static gboolean
-binding_signal_activate_action (GtkBindingSignal *sig,
-                                GObject          *object)
+binding_signal_activate_action (GtkBindingSignalAction *sig,
+                                GObject                *object)
 {
   if (!GTK_IS_WIDGET (object))
     {
@@ -711,11 +736,11 @@ binding_signal_activate_action (GtkBindingSignal *sig,
       return FALSE;
     }
 
-  if (!gtk_widget_activate_action_variant (GTK_WIDGET (object), sig->signal_name, sig->variant))
+  if (!gtk_widget_activate_action_variant (GTK_WIDGET (object), sig->action_name, sig->variant))
     {
       g_warning ("gtk_binding_entry_activate(): "
                  "action \"%s\" does not exist on class \"%s\"",
-                 sig->signal_name,
+                 sig->action_name,
                  G_OBJECT_TYPE_NAME (object));
       return FALSE;
     }
@@ -724,8 +749,8 @@ binding_signal_activate_action (GtkBindingSignal *sig,
 }
 
 static gboolean
-binding_signal_activate_callback (GtkBindingSignal *sig,
-                                  GObject          *object)
+binding_signal_activate_callback (GtkBindingSignalCallback *sig,
+                                  GObject                  *object)
 {
   if (!GTK_IS_WIDGET (object))
     {
@@ -735,7 +760,7 @@ binding_signal_activate_callback (GtkBindingSignal *sig,
       return FALSE;
     }
 
-  sig->callback.callback (GTK_WIDGET (object), sig->callback.user_data);
+  sig->callback (GTK_WIDGET (object), sig->args, sig->user_data);
 
   return TRUE;
 }
@@ -758,15 +783,15 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
       switch (sig->action_type)
         {
         case GTK_BINDING_SIGNAL:
-          handled = binding_signal_activate_signal (sig, object);
+          handled = binding_signal_activate_signal ((GtkBindingSignalSignal *) sig, object);
           break;
 
         case GTK_BINDING_ACTION:
-          handled = binding_signal_activate_action (sig, object);
+          handled = binding_signal_activate_action ((GtkBindingSignalAction *) sig, object);
           break;
 
         case GTK_BINDING_CALLBACK:
-          handled = binding_signal_activate_callback (sig, object);
+          handled = binding_signal_activate_callback ((GtkBindingSignalCallback *) sig, object);
           break;
 
         default:
@@ -1041,7 +1066,7 @@ gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
 
   signal = binding_signal_new_signal (signal_name, g_slist_length (binding_args));
 
-  arg = signal->args;
+  arg = ((GtkBindingSignalSignal *) signal)->args;
   for (slist = binding_args; slist; slist = slist->next)
     {
       GtkBindingArg *tmp_arg;
@@ -1274,12 +1299,13 @@ gtk_binding_entry_add_action (GtkBindingSet  *binding_set,
 }
 
 void
-gtk_binding_entry_add_callback (GtkBindingSet   *binding_set,
-                                guint            keyval,
-                                GdkModifierType  modifiers,
-                                GtkCallback      callback,
-                                gpointer         user_data,
-                                GDestroyNotify   user_destroy)
+gtk_binding_entry_add_callback (GtkBindingSet      *binding_set,
+                                guint               keyval,
+                                GdkModifierType     modifiers,
+                                GtkBindingCallback  callback,
+                                GVariant           *args,
+                                gpointer            user_data,
+                                GDestroyNotify      user_destroy)
 {
   g_return_if_fail (binding_set != NULL);
   g_return_if_fail (callback != NULL);
@@ -1287,7 +1313,7 @@ gtk_binding_entry_add_callback (GtkBindingSet   *binding_set,
   gtk_binding_entry_add_binding_signal (binding_set,
                                         keyval,
                                         modifiers,
-                                        binding_signal_new_callback (callback, user_data, user_destroy));
+                                        binding_signal_new_callback (callback, args, user_data, user_destroy));
 
 }
 

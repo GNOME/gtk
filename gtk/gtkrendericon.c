@@ -166,10 +166,10 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
   if (recolor)
     gtk_snapshot_pop (snapshot);
 
+transparent:
   if (has_shadow)
     gtk_snapshot_pop (snapshot);
 
-transparent:
   gtk_css_filter_value_pop_snapshot (filter_value, snapshot);
 
   gsk_transform_unref (transform);

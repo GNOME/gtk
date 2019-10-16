@@ -1695,14 +1695,17 @@ gtk_entry_snapshot (GtkWidget   *widget,
  * You only want to call this on some special entries
  * which the user usually doesn't want to replace all text in,
  * such as search-as-you-type entries.
+ *
+ * Returns: %TRUE if focus is now inside @self
  */
-void
+gboolean
 gtk_entry_grab_focus_without_selecting (GtkEntry *entry)
 {
-  g_return_if_fail (GTK_IS_ENTRY (entry));
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
-  gtk_text_grab_focus_without_selecting (GTK_TEXT (priv->text));
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), FALSE);
+
+  return gtk_text_grab_focus_without_selecting (GTK_TEXT (priv->text));
 }
 
 static void

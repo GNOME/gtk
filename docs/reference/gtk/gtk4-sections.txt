@@ -5249,6 +5249,7 @@ gtk_bindings_activate_event
 gtk_binding_set_activate
 gtk_binding_entry_add_action
 gtk_binding_entry_add_action_variant
+GtkBindingCallback
 gtk_binding_entry_add_callback
 gtk_binding_entry_add_signal
 gtk_binding_entry_add_signal_from_string
