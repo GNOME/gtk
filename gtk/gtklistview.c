@@ -74,6 +74,8 @@ struct _GtkListView
   double anchor_align;
   /* the last item that was selected - basically the location to extend selections from */
   GtkListItemTracker *selected;
+  /* the item that has input focus */
+  GtkListItemTracker *focus;
 };
 
 struct _ListRow
@@ -663,9 +665,25 @@ gtk_list_view_focus (GtkWidget        *widget,
 
   old_focus_child = gtk_widget_get_focus_child (widget);
 
+  if (old_focus_child == NULL &&
+      (direction == GTK_DIR_TAB_FORWARD || direction == GTK_DIR_TAB_BACKWARD))
+    {
+      ListRow *row;
+      guint pos;
+
+      /* When tabbing into the listview, don't focus the first/last item,
+       * but keep the previously focused item
+       */
+      pos = gtk_list_item_tracker_get_position (self->item_manager, self->focus);
+      row = gtk_list_item_manager_get_nth (self->item_manager, pos, NULL);
+      if (row && gtk_widget_grab_focus (row->parent.widget))
+        goto moved_focus;
+    }
+
   if (!GTK_WIDGET_CLASS (gtk_list_view_parent_class)->focus (widget, direction))
     return FALSE;
 
+moved_focus:
   new_focus_child = gtk_widget_get_focus_child (widget);
 
   if (old_focus_child != new_focus_child &&
@@ -726,6 +744,11 @@ gtk_list_view_dispose (GObject *object)
     {
       gtk_list_item_tracker_free (self->item_manager, self->selected);
       self->selected = NULL;
+    }
+  if (self->focus)
+    {
+      gtk_list_item_tracker_free (self->item_manager, self->focus);
+      self->focus = NULL;
     }
   g_clear_object (&self->item_manager);
 
@@ -929,6 +952,27 @@ gtk_list_view_unselect_all (GtkWidget  *widget,
 }
 
 static void
+gtk_list_view_update_focus_tracker (GtkListView *self)
+{
+  GtkWidget *focus_child;
+  guint pos;
+
+  focus_child = gtk_widget_get_focus_child (GTK_WIDGET (self));
+  if (!GTK_IS_LIST_ITEM (focus_child))
+    return;
+
+  pos = gtk_list_item_get_position (GTK_LIST_ITEM (focus_child));
+  if (pos != gtk_list_item_tracker_get_position (self->item_manager, self->focus))
+    {
+      gtk_list_item_tracker_set_position (self->item_manager,
+                                          self->focus,
+                                          pos,
+                                          GTK_LIST_VIEW_EXTRA_ITEMS,
+                                          GTK_LIST_VIEW_EXTRA_ITEMS);
+    }
+}
+
+static void
 gtk_list_view_scroll_to_item (GtkWidget  *widget,
                               const char *action_name,
                               GVariant   *parameter)
@@ -972,6 +1016,14 @@ gtk_list_view_scroll_to_item (GtkWidget  *widget,
       else
         gtk_list_view_set_anchor (self, pos, 1.0);
     }
+
+  /* HACK HACK HACK
+   *
+   * GTK has no way to track the focused child. But we now that when a listitem
+   * gets focus, it calls this action. So we update our focus tracker from here
+   * because it's the closest we can get to accurate tracking.
+   */
+  gtk_list_view_update_focus_tracker (self);
 }
 
 static void
@@ -1184,6 +1236,7 @@ static void
 gtk_list_view_init (GtkListView *self)
 {
   self->item_manager = gtk_list_item_manager_new (GTK_WIDGET (self), "row", ListRow, ListRowAugment, list_row_augment);
+  self->focus = gtk_list_item_tracker_new (self->item_manager);
   self->anchor = gtk_list_item_tracker_new (self->item_manager);
   self->selected = gtk_list_item_tracker_new (self->item_manager);
   self->orientation = GTK_ORIENTATION_VERTICAL;
