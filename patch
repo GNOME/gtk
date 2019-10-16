@@ -1,0 +1,36 @@
+diff --git a/gtk/gtktreemodelsort.c b/gtk/gtktreemodelsort.c
+index 2e3b808e75..4376365837 100644
+--- a/gtk/gtktreemodelsort.c
++++ b/gtk/gtktreemodelsort.c
+@@ -529,14 +529,14 @@ gtk_tree_model_sort_drag_source_init (GtkTreeDragSourceIface *iface)
+  * gtk_tree_model_sort_new_with_model:
+  * @child_model: A #GtkTreeModel
+  *
+- * Creates a new #GtkTreeModel, with @child_model as the child model.
++ * Creates a new #GtkTreeModelSort, with @child_model as the child model.
+  *
+- * Returns: (transfer full): A new #GtkTreeModel.
++ * Returns: (transfer full): A new #GtkTreeModelSort.
+  */
+-GtkTreeModel *
++GtkTreeModelSort *
+ gtk_tree_model_sort_new_with_model (GtkTreeModel *child_model)
+ {
+-  GtkTreeModel *retval;
++  GtkTreeModelSort *retval;
+ 
+   g_return_val_if_fail (GTK_IS_TREE_MODEL (child_model), NULL);
+ 
+diff --git a/gtk/gtktreemodelsort.h b/gtk/gtktreemodelsort.h
+index 568372efb3..95742f499f 100644
+--- a/gtk/gtktreemodelsort.h
++++ b/gtk/gtktreemodelsort.h
+@@ -59,7 +59,7 @@ struct _GtkTreeModelSortClass
+ GDK_AVAILABLE_IN_ALL
+ GType         gtk_tree_model_sort_get_type                   (void) G_GNUC_CONST;
+ GDK_AVAILABLE_IN_ALL
+-GtkTreeModel *gtk_tree_model_sort_new_with_model             (GtkTreeModel     *child_model);
++GtkTreeModelSort *gtk_tree_model_sort_new_with_model         (GtkTreeModel     *child_model);
+ 
+ GDK_AVAILABLE_IN_ALL
+ GtkTreeModel *gtk_tree_model_sort_get_model                  (GtkTreeModelSort *tree_model);
