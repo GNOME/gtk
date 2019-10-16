@@ -304,7 +304,7 @@ GDK_AVAILABLE_IN_ALL
 PangoTabArray  *gtk_entry_get_tabs                           (GtkEntry             *entry);
 
 GDK_AVAILABLE_IN_ALL
-void           gtk_entry_grab_focus_without_selecting        (GtkEntry             *entry);
+gboolean       gtk_entry_grab_focus_without_selecting        (GtkEntry             *entry);
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_entry_set_extra_menu                      (GtkEntry             *entry,
