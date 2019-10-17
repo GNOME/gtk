@@ -8,6 +8,7 @@
 #include "gskglprofilerprivate.h"
 #include "gskprofilerprivate.h"
 #include "gskrendererprivate.h"
+#include "gskrendernodeprivate.h"
 #include "gsktransformprivate.h"
 #include "gskshaderbuilderprivate.h"
 #include "gskglglyphcacheprivate.h"
@@ -328,7 +329,6 @@ struct _GskGLRenderer
   };
 
   RenderOpBuilder op_builder;
-  GArray *render_ops;
 
   GskGLTextureAtlases *atlases;
   GskGLGlyphCache *glyph_cache;
@@ -536,6 +536,39 @@ render_fallback_node (GskGLRenderer       *self,
   ops_draw (builder, offscreen_vertex_data);
 }
 
+typedef struct {
+  int timestamp;
+  GskGLCachedGlyph *glyphs[];
+} TextRenderData;
+
+static inline TextRenderData *
+ensure_render_data (GskRenderNode *node,
+                    GskGLGlyphCache *cache)
+{
+  TextRenderData *data;
+  int num_glyphs;
+
+  num_glyphs = gsk_text_node_get_num_glyphs (node);
+  data = gsk_text_node_get_render_data (node);
+  if (data)
+    {
+      if (data->timestamp < cache->atlas_timestamp)
+        {
+          memset (data->glyphs, 0, sizeof (gpointer) * num_glyphs);
+          data->timestamp = cache->atlas_timestamp;
+        }
+    }
+  else
+    {
+      data = g_new0 (TextRenderData, sizeof (TextRenderData) + sizeof (gpointer) * num_glyphs);
+      data->timestamp = cache->atlas_timestamp;
+
+      gsk_text_node_set_render_data (node, data);
+    }
+
+  return data;
+}
+
 static inline void
 render_text_node (GskGLRenderer   *self,
                   GskRenderNode   *node,
@@ -553,6 +586,7 @@ render_text_node (GskGLRenderer   *self,
   float x = offset->x + builder->dx;
   float y = offset->y + builder->dy;
   GlyphCacheKey lookup;
+  TextRenderData *render_data;
 
   /* If the font has color glyphs, we don't need to recolor anything */
   if (!force_color && gsk_text_node_has_color_glyphs (node))
@@ -564,6 +598,8 @@ render_text_node (GskGLRenderer   *self,
       ops_set_program (builder, &self->coloring_program);
       ops_set_color (builder, color);
     }
+
+  render_data = ensure_render_data (node, self->glyph_cache);
 
   lookup.font = (PangoFont *)font;
   lookup.scale = (guint) (text_scale * 1024);
@@ -585,12 +621,19 @@ render_text_node (GskGLRenderer   *self,
       cx = (float)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
       cy = (float)(gi->geometry.y_offset) / PANGO_SCALE;
 
-      glyph_cache_key_set_glyph_and_shift (&lookup, gi->glyph, x + cx, y + cy);
+      glyph = render_data->glyphs[i];
+      if (!glyph)
+        {
+          glyph_cache_key_set_glyph_and_shift (&lookup, gi->glyph, x + cx, y + cy);
 
-      gsk_gl_glyph_cache_lookup_or_add (self->glyph_cache,
-                                        &lookup,
-                                        self->gl_driver,
-                                        &glyph);
+          gsk_gl_glyph_cache_lookup_or_add (self->glyph_cache,
+                                            &lookup,
+                                            self->gl_driver,
+                                            &glyph);
+          render_data->glyphs[i] = (GskGLCachedGlyph *)glyph;
+        }
+
+      gsk_gl_glyph_cache_entry_validate (self->glyph_cache, render_data->glyphs[i]);
 
       if (glyph->texture_id == 0)
         goto next;
@@ -784,36 +827,35 @@ upload_texture (GskGLRenderer *self,
                 GdkTexture    *texture,
                 TextureRegion *out_region)
 {
-  int texture_id;
-
   if (texture->width <= 128 &&
       texture->height <= 128 &&
       !GDK_IS_GL_TEXTURE (texture))
     {
-      graphene_rect_t trect;
+      const IconData *icon_data;
 
       gsk_gl_icon_cache_lookup_or_add (self->icon_cache,
                                        texture,
-                                       &texture_id,
-                                       &trect);
-      out_region->x = trect.origin.x;
-      out_region->y = trect.origin.y;
-      out_region->x2 = out_region->x + trect.size.width;
-      out_region->y2 = out_region->y + trect.size.height;
+                                       &icon_data);
+
+      out_region->texture_id = icon_data->texture_id;
+      out_region->x = icon_data->x;
+      out_region->y = icon_data->y;
+      out_region->x2 = icon_data->x2;
+      out_region->y2 = icon_data->y2;
     }
   else
     {
-      texture_id = gsk_gl_driver_get_texture_for_texture (self->gl_driver,
-                                                          texture,
-                                                          GL_LINEAR,
-                                                          GL_LINEAR);
+      out_region->texture_id =
+          gsk_gl_driver_get_texture_for_texture (self->gl_driver,
+                                                 texture,
+                                                 GL_LINEAR,
+                                                 GL_LINEAR);
+
       out_region->x  = 0;
       out_region->y  = 0;
       out_region->x2 = 1;
       out_region->y2 = 1;
     }
-
-  out_region->texture_id = texture_id;
 }
 
 static inline void
@@ -1047,7 +1089,7 @@ render_linear_gradient_node (GskGLRenderer       *self,
                              RenderOpBuilder     *builder,
                              const GskQuadVertex *vertex_data)
 {
-  RenderOp *op;
+  OpLinearGradient *op;
   int n_color_stops = MIN (8, gsk_linear_gradient_node_get_n_color_stops (node));
   const GskColorStop *stops = gsk_linear_gradient_node_peek_color_stops (node);
   const graphene_point_t *start = gsk_linear_gradient_node_peek_start (node);
@@ -1062,18 +1104,18 @@ render_linear_gradient_node (GskGLRenderer       *self,
     {
       const GskColorStop *stop = stops + i;
 
-      op->linear_gradient.color_stops[(i * 4) + 0] = stop->color.red;
-      op->linear_gradient.color_stops[(i * 4) + 1] = stop->color.green;
-      op->linear_gradient.color_stops[(i * 4) + 2] = stop->color.blue;
-      op->linear_gradient.color_stops[(i * 4) + 3] = stop->color.alpha;
-      op->linear_gradient.color_offsets[i] = stop->offset;
+      op->color_stops[(i * 4) + 0] = stop->color.red;
+      op->color_stops[(i * 4) + 1] = stop->color.green;
+      op->color_stops[(i * 4) + 2] = stop->color.blue;
+      op->color_stops[(i * 4) + 3] = stop->color.alpha;
+      op->color_offsets[i] = stop->offset;
     }
 
-  op->linear_gradient.n_color_stops = n_color_stops;
-  op->linear_gradient.start_point.x = start->x + builder->dx;
-  op->linear_gradient.start_point.y = start->y + builder->dy;
-  op->linear_gradient.end_point.x = end->x + builder->dx;
-  op->linear_gradient.end_point.y = end->y + builder->dy;
+  op->n_color_stops = n_color_stops;
+  op->start_point.x = start->x + builder->dx;
+  op->start_point.y = start->y + builder->dy;
+  op->end_point.x = end->x + builder->dx;
+  op->end_point.y = end->y + builder->dy;
 
   ops_draw (builder, vertex_data);
 }
@@ -1212,8 +1254,7 @@ render_rounded_clip_node (GskGLRenderer       *self,
 static inline void
 render_color_matrix_node (GskGLRenderer       *self,
                           GskRenderNode       *node,
-                          RenderOpBuilder     *builder,
-                          const GskQuadVertex *vertex_data)
+                          RenderOpBuilder     *builder)
 {
   const float min_x = builder->dx + node->bounds.origin.x;
   const float min_y = builder->dy + node->bounds.origin.y;
@@ -1267,20 +1308,27 @@ render_color_matrix_node (GskGLRenderer       *self,
 }
 
 static inline void
-render_blur_node (GskGLRenderer       *self,
-                  GskRenderNode       *node,
-                  RenderOpBuilder     *builder,
-                  const GskQuadVertex *vertex_data)
+flip_vertex_data_y (GskQuadVertex vertex_data[GL_N_VERTICES])
 {
-  const float min_x = builder->dx + node->bounds.origin.x;
-  const float min_y = builder->dy + node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
+  vertex_data[0].uv[1] = 1 - vertex_data[0].uv[1];
+  vertex_data[1].uv[1] = 1 - vertex_data[1].uv[1];
+  vertex_data[2].uv[1] = 1 - vertex_data[2].uv[1];
+  vertex_data[3].uv[1] = 1 - vertex_data[3].uv[1];
+  vertex_data[4].uv[1] = 1 - vertex_data[4].uv[1];
+  vertex_data[5].uv[1] = 1 - vertex_data[5].uv[1];
+}
+
+static inline void
+render_blur_node (GskGLRenderer   *self,
+                  GskRenderNode   *node,
+                  RenderOpBuilder *builder,
+                  GskQuadVertex   *vertex_data)
+{
   const float blur_radius = gsk_blur_node_get_radius (node);
   GskRenderNode *child = gsk_blur_node_get_child (node);
   TextureRegion region;
   gboolean is_offscreen;
-  RenderOp *op;
+  OpBlur *op;
 
   if (blur_radius <= 0)
     {
@@ -1302,29 +1350,15 @@ render_blur_node (GskGLRenderer       *self,
   ops_set_program (builder, &self->blur_program);
 
   op = ops_begin (builder, OP_CHANGE_BLUR);
-  graphene_size_init_from_size (&op->blur.size, &node->bounds.size);
-  op->blur.radius = blur_radius;
+  graphene_size_init_from_size (&op->size, &node->bounds.size);
+  op->radius = blur_radius;
 
   ops_set_texture (builder, region.texture_id);
 
   if (is_offscreen)
-    {
-      GskQuadVertex offscreen_vertex_data[GL_N_VERTICES] = {
-        { { min_x, min_y }, { 0, 1 }, },
-        { { min_x, max_y }, { 0, 0 }, },
-        { { max_x, min_y }, { 1, 1 }, },
+    flip_vertex_data_y (vertex_data);
 
-        { { max_x, max_y }, { 1, 0 }, },
-        { { min_x, max_y }, { 0, 0 }, },
-        { { max_x, min_y }, { 1, 1 }, },
-      };
-
-      ops_draw (builder, offscreen_vertex_data);
-    }
-  else
-    {
-      ops_draw (builder, vertex_data);
-    }
+  ops_draw (builder, vertex_data);
 }
 
 static inline void
@@ -1334,7 +1368,7 @@ render_inset_shadow_node (GskGLRenderer       *self,
                           const GskQuadVertex *vertex_data)
 {
   const float scale = ops_get_scale (builder);
-  RenderOp *op;
+  OpShadow *op;
 
   /* TODO: Implement blurred inset shadows as well */
   if (gsk_inset_shadow_node_get_blur_radius (node) > 0)
@@ -1346,16 +1380,16 @@ render_inset_shadow_node (GskGLRenderer       *self,
   ops_set_program (builder, &self->inset_shadow_program);
 
   op = ops_begin (builder, OP_CHANGE_INSET_SHADOW);
-  rgba_to_float (gsk_inset_shadow_node_peek_color (node), op->inset_shadow.color);
+  rgba_to_float (gsk_inset_shadow_node_peek_color (node), op->color);
   rounded_rect_to_floats (self, builder,
                           gsk_inset_shadow_node_peek_outline (node),
-                          op->inset_shadow.outline,
-                          op->inset_shadow.corner_widths,
-                          op->inset_shadow.corner_heights);
-  op->inset_shadow.radius = gsk_inset_shadow_node_get_blur_radius (node) * scale;
-  op->inset_shadow.spread = gsk_inset_shadow_node_get_spread (node) * scale;
-  op->inset_shadow.offset[0] = gsk_inset_shadow_node_get_dx (node) * scale;
-  op->inset_shadow.offset[1] = -gsk_inset_shadow_node_get_dy (node) * scale;
+                          op->outline,
+                          op->corner_widths,
+                          op->corner_heights);
+  op->radius = gsk_inset_shadow_node_get_blur_radius (node) * scale;
+  op->spread = gsk_inset_shadow_node_get_spread (node) * scale;
+  op->offset[0] = gsk_inset_shadow_node_get_dx (node) * scale;
+  op->offset[1] = -gsk_inset_shadow_node_get_dy (node) * scale;
 
   ops_draw (builder, vertex_data);
 }
@@ -1371,21 +1405,21 @@ render_unblurred_outset_shadow_node (GskGLRenderer       *self,
   const float spread = gsk_outset_shadow_node_get_spread (node);
   const float dx = gsk_outset_shadow_node_get_dx (node);
   const float dy = gsk_outset_shadow_node_get_dy (node);
-  RenderOp *op;
+  OpShadow *op;
 
   ops_set_program (builder, &self->unblurred_outset_shadow_program);
   op = ops_begin (builder, OP_CHANGE_UNBLURRED_OUTSET_SHADOW);
-  rgba_to_float (gsk_outset_shadow_node_peek_color (node), op->unblurred_outset_shadow.color);
+  rgba_to_float (gsk_outset_shadow_node_peek_color (node), op->color);
 
   rounded_rect_to_floats (self, builder,
                           outline,
-                          op->unblurred_outset_shadow.outline,
-                          op->unblurred_outset_shadow.corner_widths,
-                          op->unblurred_outset_shadow.corner_heights);
+                          op->outline,
+                          op->corner_widths,
+                          op->corner_heights);
 
-  op->unblurred_outset_shadow.spread = spread * scale;
-  op->unblurred_outset_shadow.offset[0] = dx * scale;
-  op->unblurred_outset_shadow.offset[1] = - dy * scale;
+  op->spread = spread * scale;
+  op->offset[0] = dx * scale;
+  op->offset[1] = - dy * scale;
 
   ops_draw (builder, vertex_data);
 }
@@ -1407,7 +1441,8 @@ render_outset_shadow_node (GskGLRenderer       *self,
   const float max_x = min_x + outline->bounds.size.width  + (spread + blur_extra/2.0) * 2;
   const float max_y = min_y + outline->bounds.size.height + (spread + blur_extra/2.0) * 2;
   float texture_width, texture_height;
-  RenderOp *op;
+  OpBlur *op;
+  OpShadow *shadow;
   graphene_matrix_t prev_projection;
   graphene_rect_t prev_viewport;
   graphene_matrix_t item_proj;
@@ -1494,9 +1529,9 @@ render_outset_shadow_node (GskGLRenderer       *self,
       ops_set_program (builder, &self->blur_program);
 
       op = ops_begin (builder, OP_CHANGE_BLUR);
-      op->blur.size.width = texture_width;
-      op->blur.size.height = texture_height;
-      op->blur.radius = blur_radius;
+      op->size.width = texture_width;
+      op->size.height = texture_height;
+      op->radius = blur_radius;
 
       ops_push_clip (builder, &blit_clip);
       ops_set_texture (builder, texture_id);
@@ -1531,12 +1566,12 @@ render_outset_shadow_node (GskGLRenderer       *self,
   ops_set_program (builder, &self->outset_shadow_program);
   ops_set_texture (builder, blurred_texture_id);
 
-  op = ops_begin (builder, OP_CHANGE_OUTSET_SHADOW);
+  shadow = ops_begin (builder, OP_CHANGE_OUTSET_SHADOW);
   rounded_rect_to_floats (self, builder,
                           outline,
-                          op->outset_shadow.outline,
-                          op->outset_shadow.corner_widths,
-                          op->outset_shadow.corner_heights);
+                          shadow->outline,
+                          shadow->corner_widths,
+                          shadow->corner_heights);
 
   /* We use the one outset shadow op from above to draw all 8 sides/corners. */
   {
@@ -1759,8 +1794,7 @@ render_outset_shadow_node (GskGLRenderer       *self,
 static inline void
 render_shadow_node (GskGLRenderer       *self,
                     GskRenderNode       *node,
-                    RenderOpBuilder     *builder,
-                    const GskQuadVertex *vertex_data)
+                    RenderOpBuilder     *builder)
 {
   float min_x;
   float min_y;
@@ -1861,30 +1895,20 @@ render_shadow_node (GskGLRenderer       *self,
 }
 
 static inline void
-render_cross_fade_node (GskGLRenderer       *self,
-                        GskRenderNode       *node,
-                        RenderOpBuilder     *builder)
+render_cross_fade_node (GskGLRenderer   *self,
+                        GskRenderNode   *node,
+                        RenderOpBuilder *builder,
+                        GskQuadVertex    vertex_data[GL_N_VERTICES])
 {
-  const float min_x = builder->dx + node->bounds.origin.x;
-  const float min_y = builder->dy + node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
   GskRenderNode *start_node = gsk_cross_fade_node_get_start_child (node);
   GskRenderNode *end_node = gsk_cross_fade_node_get_end_child (node);
   float progress = gsk_cross_fade_node_get_progress (node);
   TextureRegion start_region;
   TextureRegion end_region;
   gboolean is_offscreen1, is_offscreen2;
-  RenderOp *op;
-  const GskQuadVertex vertex_data[GL_N_VERTICES] = {
-    { { min_x, min_y }, { 0, 1 }, },
-    { { min_x, max_y }, { 0, 0 }, },
-    { { max_x, min_y }, { 1, 1 }, },
+  OpCrossFade *op;
 
-    { { max_x, max_y }, { 1, 0 }, },
-    { { min_x, max_y }, { 0, 0 }, },
-    { { max_x, min_y }, { 1, 1 }, },
-  };
+  flip_vertex_data_y (vertex_data);
 
   /* TODO: We create 2 textures here as big as the cross-fade node, but both the
    * start and the end node might be a lot smaller than that. */
@@ -1904,8 +1928,8 @@ render_cross_fade_node (GskGLRenderer       *self,
   ops_set_program (builder, &self->cross_fade_program);
 
   op = ops_begin (builder, OP_CHANGE_CROSS_FADE);
-  op->cross_fade.progress = progress;
-  op->cross_fade.source2 = end_region.texture_id;
+  op->progress = progress;
+  op->source2 = end_region.texture_id;
 
   ops_set_texture (builder, start_region.texture_id);
 
@@ -1915,27 +1939,17 @@ render_cross_fade_node (GskGLRenderer       *self,
 static inline void
 render_blend_node (GskGLRenderer   *self,
                    GskRenderNode   *node,
-                   RenderOpBuilder *builder)
+                   RenderOpBuilder *builder,
+                   GskQuadVertex    vertex_data[GL_N_VERTICES])
 {
   GskRenderNode *top_child = gsk_blend_node_get_top_child (node);
   GskRenderNode *bottom_child = gsk_blend_node_get_bottom_child (node);
-  const float min_x = builder->dx + node->bounds.origin.x;
-  const float min_y = builder->dy + node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
   TextureRegion top_region;
   TextureRegion bottom_region;
   gboolean is_offscreen1, is_offscreen2;
-  RenderOp *op;
-  const GskQuadVertex vertex_data[GL_N_VERTICES] = {
-    { { min_x, min_y }, { 0, 1 }, },
-    { { min_x, max_y }, { 0, 0 }, },
-    { { max_x, min_y }, { 1, 1 }, },
+  OpBlend *op;
 
-    { { max_x, max_y }, { 1, 0 }, },
-    { { min_x, max_y }, { 0, 0 }, },
-    { { max_x, min_y }, { 1, 1 }, },
-  };
+  flip_vertex_data_y (vertex_data);
 
   /* TODO: We create 2 textures here as big as the blend node, but both the
    * start and the end node might be a lot smaller than that. */
@@ -1955,8 +1969,8 @@ render_blend_node (GskGLRenderer   *self,
   ops_set_texture (builder, bottom_region.texture_id);
 
   op = ops_begin (builder, OP_CHANGE_BLEND);
-  op->blend.source2 = top_region.texture_id;
-  op->blend.mode = gsk_blend_node_get_blend_mode (node);
+  op->source2 = top_region.texture_id;
+  op->mode = gsk_blend_node_get_blend_mode (node);
 
   ops_draw (builder, vertex_data);
 }
@@ -1974,7 +1988,7 @@ render_repeat_node (GskGLRenderer   *self,
   const graphene_rect_t *child_bounds = gsk_repeat_node_peek_child_bounds (node);
   TextureRegion region;
   gboolean is_offscreen;
-  RenderOp *op;
+  OpRepeat *op;
 
   if (child_bounds != NULL &&
       !graphene_rect_equal (child_bounds, &child->bounds))
@@ -1995,23 +2009,23 @@ render_repeat_node (GskGLRenderer   *self,
   ops_set_texture (builder, region.texture_id);
 
   op = ops_begin (builder, OP_CHANGE_REPEAT);
-  op->repeat.child_bounds[0] = 0; /* Both currently unused */
-  op->repeat.child_bounds[1] = 0;
-  op->repeat.child_bounds[2] = node->bounds.size.width / child_bounds->size.width;
-  op->repeat.child_bounds[3] = node->bounds.size.height / child_bounds->size.height;
+  op->child_bounds[0] = 0; /* Both currently unused */
+  op->child_bounds[1] = 0;
+  op->child_bounds[2] = node->bounds.size.width / child_bounds->size.width;
+  op->child_bounds[3] = node->bounds.size.height / child_bounds->size.height;
 
-  op->repeat.texture_rect[0] = region.x;
-  op->repeat.texture_rect[2] = region.x2;
+  op->texture_rect[0] = region.x;
+  op->texture_rect[2] = region.x2;
 
   if (is_offscreen)
     {
-      op->repeat.texture_rect[1] = region.y2;
-      op->repeat.texture_rect[3] = region.y;
+      op->texture_rect[1] = region.y2;
+      op->texture_rect[3] = region.y;
     }
   else
     {
-      op->repeat.texture_rect[1] = region.y;
-      op->repeat.texture_rect[3] = region.y2;
+      op->texture_rect[1] = region.y;
+      op->texture_rect[3] = region.y2;
     }
 
   if (is_offscreen)
@@ -2045,10 +2059,12 @@ render_repeat_node (GskGLRenderer   *self,
 }
 
 static inline void
-apply_viewport_op (const Program  *program,
-                   const RenderOp *op)
+apply_viewport_op (const Program    *program,
+                   const OpViewport *op)
 {
-  OP_PRINT (" -> New Viewport: %f, %f, %f, %f", op->viewport.origin.x, op->viewport.origin.y, op->viewport.size.width, op->viewport.size.height);
+  OP_PRINT (" -> New Viewport: %f, %f, %f, %f",
+            op->viewport.origin.x, op->viewport.origin.y,
+            op->viewport.size.width, op->viewport.size.height);
   glUniform4f (program->viewport_location,
                op->viewport.origin.x, op->viewport.origin.y,
                op->viewport.size.width, op->viewport.size.height);
@@ -2057,38 +2073,38 @@ apply_viewport_op (const Program  *program,
 
 static inline void
 apply_modelview_op (const Program  *program,
-                    const RenderOp *op)
+                    const OpMatrix *op)
 {
   float mat[16];
 
   OP_PRINT (" -> Modelview");
-  graphene_matrix_to_float (&op->modelview, mat);
+  graphene_matrix_to_float (&op->matrix, mat);
   glUniformMatrix4fv (program->modelview_location, 1, GL_FALSE, mat);
 }
 
 static inline void
 apply_projection_op (const Program  *program,
-                     const RenderOp *op)
+                     const OpMatrix *op)
 {
   float mat[16];
 
   OP_PRINT (" -> Projection");
-  graphene_matrix_to_float (&op->projection, mat);
+  graphene_matrix_to_float (&op->matrix, mat);
   glUniformMatrix4fv (program->projection_location, 1, GL_FALSE, mat);
 }
 
 static inline void
 apply_program_op (const Program  *program,
-                  const RenderOp *op)
+                  const OpProgram *op)
 {
   OP_PRINT (" -> Program: %d", op->program->index);
   glUseProgram (op->program->id);
 }
 
 static inline void
-apply_render_target_op (GskGLRenderer  *self,
-                        const Program  *program,
-                        const RenderOp *op)
+apply_render_target_op (GskGLRenderer        *self,
+                        const Program        *program,
+                        const OpRenderTarget *op)
 {
   OP_PRINT (" -> Render Target: %d", op->render_target_id);
 
@@ -2101,29 +2117,26 @@ apply_render_target_op (GskGLRenderer  *self,
 }
 
 static inline void
-apply_color_op (const Program  *program,
-                const RenderOp *op)
+apply_color_op (const Program *program,
+                const OpColor *op)
 {
   OP_PRINT (" -> Color: (%f, %f, %f, %f)",
-            op->color->red, op->color->green, op->color->blue, op->color->alpha);
+            op->rgba.red, op->rgba.green, op->rgba.blue, op->rgba.alpha);
   glUniform4f (program->color.color_location,
-               op->color->red,
-               op->color->green,
-               op->color->blue,
-               op->color->alpha);
+               op->rgba.red, op->rgba.green, op->rgba.blue, op->rgba.alpha);
 }
 
 static inline void
-apply_opacity_op (const Program  *program,
-                  const RenderOp *op)
+apply_opacity_op (const Program   *program,
+                  const OpOpacity *op)
 {
   OP_PRINT (" -> Opacity %f", op->opacity);
   glUniform1f (program->alpha_location, op->opacity);
 }
 
 static inline void
-apply_source_texture_op (const Program  *program,
-                         const RenderOp *op)
+apply_source_texture_op (const Program   *program,
+                         const OpTexture *op)
 {
   g_assert(op->texture_id != 0);
   OP_PRINT (" -> New texture: %d", op->texture_id);
@@ -2134,22 +2147,22 @@ apply_source_texture_op (const Program  *program,
 }
 
 static inline void
-apply_color_matrix_op (const Program  *program,
-                       const RenderOp *op)
+apply_color_matrix_op (const Program       *program,
+                       const OpColorMatrix *op)
 {
   float mat[16];
   float vec[4];
   OP_PRINT (" -> Color Matrix");
-  graphene_matrix_to_float (&op->color_matrix.matrix, mat);
+  graphene_matrix_to_float (&op->matrix, mat);
   glUniformMatrix4fv (program->color_matrix.color_matrix_location, 1, GL_FALSE, mat);
 
-  graphene_vec4_to_float (&op->color_matrix.offset, vec);
+  graphene_vec4_to_float (&op->offset, vec);
   glUniform4fv (program->color_matrix.color_offset_location, 1, vec);
 }
 
 static inline void
-apply_clip_op (const Program  *program,
-               const RenderOp *op)
+apply_clip_op (const Program *program,
+               const OpClip  *op)
 {
   OP_PRINT (" -> Clip (%f, %f, %f, %f) (%f, %f, %f, %f), (%f, %f, %f, %f)",
             op->clip.bounds.origin.x, op->clip.bounds.origin.y,
@@ -2180,85 +2193,85 @@ apply_clip_op (const Program  *program,
 
 static inline void
 apply_inset_shadow_op (const Program  *program,
-                       const RenderOp *op)
+                       const OpShadow *op)
 {
   OP_PRINT (" -> inset shadow. Color: (%f, %f, %f, %f), Offset: (%f, %f), Spread: %f, Outline: (%f, %f, %f, %f) Corner widths: (%f, %f, %f, %f), Corner Heights: (%f, %f, %f, %f)",
-            op->inset_shadow.color[0],
-            op->inset_shadow.color[1],
-            op->inset_shadow.color[2],
-            op->inset_shadow.color[3],
-            op->inset_shadow.offset[0],
-            op->inset_shadow.offset[1],
-            op->inset_shadow.spread,
-            op->inset_shadow.outline[0],
-            op->inset_shadow.outline[1],
-            op->inset_shadow.outline[2],
-            op->inset_shadow.outline[3],
-            op->inset_shadow.corner_widths[0],
-            op->inset_shadow.corner_widths[1],
-            op->inset_shadow.corner_widths[2],
-            op->inset_shadow.corner_widths[3],
-            op->inset_shadow.corner_heights[0],
-            op->inset_shadow.corner_heights[1],
-            op->inset_shadow.corner_heights[2],
-            op->inset_shadow.corner_heights[3]);
-  glUniform4fv (program->inset_shadow.color_location, 1, op->inset_shadow.color);
-  glUniform2fv (program->inset_shadow.offset_location, 1, op->inset_shadow.offset);
-  glUniform1f (program->inset_shadow.spread_location, op->inset_shadow.spread);
-  glUniform4fv (program->inset_shadow.outline_location, 1, op->inset_shadow.outline);
-  glUniform4fv (program->inset_shadow.corner_widths_location, 1, op->inset_shadow.corner_widths);
-  glUniform4fv (program->inset_shadow.corner_heights_location, 1, op->inset_shadow.corner_heights);
+            op->color[0],
+            op->color[1],
+            op->color[2],
+            op->color[3],
+            op->offset[0],
+            op->offset[1],
+            op->spread,
+            op->outline[0],
+            op->outline[1],
+            op->outline[2],
+            op->outline[3],
+            op->corner_widths[0],
+            op->corner_widths[1],
+            op->corner_widths[2],
+            op->corner_widths[3],
+            op->corner_heights[0],
+            op->corner_heights[1],
+            op->corner_heights[2],
+            op->corner_heights[3]);
+  glUniform4fv (program->inset_shadow.color_location, 1, op->color);
+  glUniform2fv (program->inset_shadow.offset_location, 1, op->offset);
+  glUniform1f (program->inset_shadow.spread_location, op->spread);
+  glUniform4fv (program->inset_shadow.outline_location, 1, op->outline);
+  glUniform4fv (program->inset_shadow.corner_widths_location, 1, op->corner_widths);
+  glUniform4fv (program->inset_shadow.corner_heights_location, 1, op->corner_heights);
 }
 
 static inline void
 apply_unblurred_outset_shadow_op (const Program  *program,
-                                  const RenderOp *op)
+                                  const OpShadow *op)
 {
   OP_PRINT (" -> unblurred outset shadow");
-  glUniform4fv (program->unblurred_outset_shadow.color_location, 1, op->unblurred_outset_shadow.color);
-  glUniform2fv (program->unblurred_outset_shadow.offset_location, 1, op->unblurred_outset_shadow.offset);
-  glUniform1f (program->unblurred_outset_shadow.spread_location, op->unblurred_outset_shadow.spread);
-  glUniform4fv (program->unblurred_outset_shadow.outline_location, 1, op->unblurred_outset_shadow.outline);
+  glUniform4fv (program->unblurred_outset_shadow.color_location, 1, op->color);
+  glUniform2fv (program->unblurred_outset_shadow.offset_location, 1, op->offset);
+  glUniform1f (program->unblurred_outset_shadow.spread_location, op->spread);
+  glUniform4fv (program->unblurred_outset_shadow.outline_location, 1, op->outline);
   glUniform4fv (program->unblurred_outset_shadow.corner_widths_location, 1,
-                op->unblurred_outset_shadow.corner_widths);
+                op->corner_widths);
   glUniform4fv (program->unblurred_outset_shadow.corner_heights_location, 1,
-                op->unblurred_outset_shadow.corner_heights);
+                op->corner_heights);
 }
 
 static inline void
 apply_outset_shadow_op (const Program  *program,
-                        const RenderOp *op)
+                        const OpShadow *op)
 {
   OP_PRINT (" -> outset shadow");
-  glUniform4fv (program->outset_shadow.outline_location, 1, op->outset_shadow.outline);
-  glUniform4fv (program->outset_shadow.corner_widths_location, 1, op->outset_shadow.corner_widths);
-  glUniform4fv (program->outset_shadow.corner_heights_location, 1, op->outset_shadow.corner_heights);
+  glUniform4fv (program->outset_shadow.outline_location, 1, op->outline);
+  glUniform4fv (program->outset_shadow.corner_widths_location, 1, op->corner_widths);
+  glUniform4fv (program->outset_shadow.corner_heights_location, 1, op->corner_heights);
 }
 
 static inline void
-apply_linear_gradient_op (const Program  *program,
-                          const RenderOp *op)
+apply_linear_gradient_op (const Program          *program,
+                          const OpLinearGradient *op)
 {
   OP_PRINT (" -> Linear gradient");
   glUniform1i (program->linear_gradient.num_color_stops_location,
-               op->linear_gradient.n_color_stops);
+               op->n_color_stops);
   glUniform4fv (program->linear_gradient.color_stops_location,
-                op->linear_gradient.n_color_stops,
-                op->linear_gradient.color_stops);
+                op->n_color_stops,
+                op->color_stops);
   glUniform1fv (program->linear_gradient.color_offsets_location,
-                op->linear_gradient.n_color_stops,
-                op->linear_gradient.color_offsets);
+                op->n_color_stops,
+                op->color_offsets);
   glUniform2f (program->linear_gradient.start_point_location,
-               op->linear_gradient.start_point.x, op->linear_gradient.start_point.y);
+               op->start_point.x, op->start_point.y);
   glUniform2f (program->linear_gradient.end_point_location,
-               op->linear_gradient.end_point.x, op->linear_gradient.end_point.y);
+               op->end_point.x, op->end_point.y);
 }
 
 static inline void
 apply_border_op (const Program  *program,
-                 const RenderOp *op)
+                 const OpBorder *op)
 {
-  const GskRoundedRect *o = &op->border.outline;
+  const GskRoundedRect *o = &op->outline;
   float outline[4];
   float widths[4];
   float heights[4];
@@ -2283,63 +2296,63 @@ apply_border_op (const Program  *program,
 
 static inline void
 apply_border_width_op (const Program  *program,
-                       const RenderOp *op)
+                       const OpBorder *op)
 {
   OP_PRINT (" -> Border width (%f, %f, %f, %f)",
-            op->border.widths[0], op->border.widths[1], op->border.widths[2], op->border.widths[3]);
+            op->widths[0], op->widths[1], op->widths[2], op->widths[3]);
 
-  glUniform4fv (program->border.widths_location, 1, op->border.widths);
+  glUniform4fv (program->border.widths_location, 1, op->widths);
 }
 
 static inline void
 apply_border_color_op (const Program  *program,
-                       const RenderOp *op)
+                       const OpBorder *op)
 {
   OP_PRINT (" -> Border color (%f, %f, %f, %f)",
-            op->border.color[0], op->border.color[1], op->border.color[2], op->border.color[3]);
-  glUniform4fv (program->border.color_location, 1, op->border.color);
+            op->color[0], op->color[1], op->color[2], op->color[3]);
+  glUniform4fv (program->border.color_location, 1, op->color);
 }
 
 static inline void
-apply_blur_op (const Program  *program,
-               const RenderOp *op)
+apply_blur_op (const Program *program,
+               const OpBlur  *op)
 {
   OP_PRINT (" -> Blur");
-  glUniform1f (program->blur.blur_radius_location, op->blur.radius);
-  glUniform2f (program->blur.blur_size_location, op->blur.size.width, op->blur.size.height);
-  /*glUniform2f (program->blur.dir_location, op->blur.dir[0], op->blur.dir[1]);*/
+  glUniform1f (program->blur.blur_radius_location, op->radius);
+  glUniform2f (program->blur.blur_size_location, op->size.width, op->size.height);
+  /*glUniform2f (program->blur.dir_location, op->dir[0], op->dir[1]);*/
 }
 
 static inline void
-apply_cross_fade_op (const Program  *program,
-                     const RenderOp *op)
+apply_cross_fade_op (const Program     *program,
+                     const OpCrossFade *op)
 {
   /* End texture id */
   glUniform1i (program->cross_fade.source2_location, 1);
   glActiveTexture (GL_TEXTURE0 + 1);
-  glBindTexture (GL_TEXTURE_2D, op->cross_fade.source2);
+  glBindTexture (GL_TEXTURE_2D, op->source2);
   /* progress */
-  glUniform1f (program->cross_fade.progress_location, op->cross_fade.progress);
+  glUniform1f (program->cross_fade.progress_location, op->progress);
 }
 
 static inline void
-apply_blend_op (const Program  *program,
-                const RenderOp *op)
+apply_blend_op (const Program *program,
+                const OpBlend *op)
 {
   /* End texture id */
   glUniform1i (program->blend.source2_location, 1);
   glActiveTexture (GL_TEXTURE0 + 1);
-  glBindTexture (GL_TEXTURE_2D, op->blend.source2);
+  glBindTexture (GL_TEXTURE_2D, op->source2);
   /* progress */
-  glUniform1i (program->blend.mode_location, op->blend.mode);
+  glUniform1i (program->blend.mode_location, op->mode);
 }
 
 static inline void
 apply_repeat_op (const Program  *program,
-                 const RenderOp *op)
+                 const OpRepeat *op)
 {
-  glUniform4fv (program->repeat.child_bounds_location, 1, op->repeat.child_bounds);
-  glUniform4fv (program->repeat.texture_rect_location, 1, op->repeat.texture_rect);
+  glUniform4fv (program->repeat.child_bounds_location, 1, op->child_bounds);
+  glUniform4fv (program->repeat.texture_rect_location, 1, op->texture_rect);
 }
 
 static void
@@ -2347,7 +2360,6 @@ gsk_gl_renderer_dispose (GObject *gobject)
 {
   GskGLRenderer *self = GSK_GL_RENDERER (gobject);
 
-  g_clear_pointer (&self->render_ops, g_array_unref);
   ops_free (&self->op_builder);
 
   G_OBJECT_CLASS (gsk_gl_renderer_parent_class)->dispose (gobject);
@@ -2635,7 +2647,7 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   /* We don't need to iterate to destroy the associated GL resources,
    * as they will be dropped when we finalize the GskGLDriver
    */
-  g_array_set_size (self->render_ops, 0);
+  ops_reset (&self->op_builder);
 
   for (i = 0; i < GL_N_PROGRAMS; i ++)
     glDeleteProgram (self->programs[i].id);
@@ -2664,7 +2676,7 @@ gsk_gl_renderer_clear_tree (GskGLRenderer *self)
 
   gdk_gl_context_make_current (self->gl_context);
 
-  g_array_remove_range (self->render_ops, 0, self->render_ops->len);
+  ops_reset (&self->op_builder);
   removed_textures = gsk_gl_driver_collect_textures (self->gl_driver);
 
   GSK_RENDERER_NOTE (GSK_RENDERER (self), OPENGL, g_message ("Collected: %d textures", removed_textures));
@@ -2704,26 +2716,53 @@ gsk_gl_renderer_setup_render_mode (GskGLRenderer *self)
     }
 }
 
+static void
+load_vertex_data (GskQuadVertex    vertex_data[GL_N_VERTICES],
+                  GskRenderNode   *node,
+                  RenderOpBuilder *builder)
+{
+  const float min_x = builder->dx + node->bounds.origin.x;
+  const float min_y = builder->dy + node->bounds.origin.y;
+  const float max_x = min_x + node->bounds.size.width;
+  const float max_y = min_y + node->bounds.size.height;
+
+  vertex_data[0].position[0] = min_x;
+  vertex_data[0].position[1] = min_y;
+  vertex_data[0].uv[0] = 0;
+  vertex_data[0].uv[1] = 0;
+
+  vertex_data[1].position[0] = min_x;
+  vertex_data[1].position[1] = max_y;
+  vertex_data[1].uv[0] = 0;
+  vertex_data[1].uv[1] = 1;
+
+  vertex_data[2].position[0] = max_x;
+  vertex_data[2].position[1] = min_y;
+  vertex_data[2].uv[0] = 1;
+  vertex_data[2].uv[1] = 0;
+
+  vertex_data[3].position[0] = max_x;
+  vertex_data[3].position[1] = max_y;
+  vertex_data[3].uv[0] = 1;
+  vertex_data[3].uv[1] = 1;
+
+  vertex_data[4].position[0] = min_x;
+  vertex_data[4].position[1] = max_y;
+  vertex_data[4].uv[0] = 0;
+  vertex_data[4].uv[1] = 1;
+
+  vertex_data[5].position[0] = max_x;
+  vertex_data[5].position[1] = min_y;
+  vertex_data[5].uv[0] = 1;
+  vertex_data[5].uv[1] = 0;
+}
 
 static void
 gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
                                 GskRenderNode   *node,
                                 RenderOpBuilder *builder)
 {
-  const float min_x = builder->dx + node->bounds.origin.x;
-  const float min_y = builder->dy + node->bounds.origin.y;
-  const float max_x = min_x + node->bounds.size.width;
-  const float max_y = min_y + node->bounds.size.height;
-  /* Default vertex data */
-  const GskQuadVertex vertex_data[GL_N_VERTICES] = {
-    { { min_x, min_y }, { 0, 0 }, },
-    { { min_x, max_y }, { 0, 1 }, },
-    { { max_x, min_y }, { 1, 0 }, },
-
-    { { max_x, max_y }, { 1, 1 }, },
-    { { min_x, max_y }, { 0, 1 }, },
-    { { max_x, min_y }, { 1, 0 }, },
-  };
+  GskQuadVertex vertex_data[GL_N_VERTICES];
 
   /* This can still happen, even if the render nodes are created using
    * GtkSnapshot, so let's juse be safe. */
@@ -2777,6 +2816,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_COLOR_NODE:
+      load_vertex_data (vertex_data, node, builder);
       render_color_node (self, node, builder, vertex_data);
     break;
 
@@ -2793,6 +2833,7 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_LINEAR_GRADIENT_NODE:
+      load_vertex_data (vertex_data, node, builder);
       render_linear_gradient_node (self, node, builder, vertex_data);
     break;
 
@@ -2810,26 +2851,33 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_COLOR_MATRIX_NODE:
-      render_color_matrix_node (self, node, builder, vertex_data);
+      render_color_matrix_node (self, node, builder);
     break;
 
     case GSK_BLUR_NODE:
+      load_vertex_data (vertex_data, node, builder);
       render_blur_node (self, node, builder, vertex_data);
     break;
 
     case GSK_INSET_SHADOW_NODE:
+      load_vertex_data (vertex_data, node, builder);
       render_inset_shadow_node (self, node, builder, vertex_data);
     break;
 
     case GSK_OUTSET_SHADOW_NODE:
       if (gsk_outset_shadow_node_get_blur_radius (node) > 0)
-        render_outset_shadow_node (self, node, builder);
+        {
+          render_outset_shadow_node (self, node, builder);
+        }
       else
-        render_unblurred_outset_shadow_node (self, node, builder, vertex_data);
+        {
+          load_vertex_data (vertex_data, node, builder);
+          render_unblurred_outset_shadow_node (self, node, builder, vertex_data);
+        }
     break;
 
     case GSK_SHADOW_NODE:
-      render_shadow_node (self, node, builder, vertex_data);
+      render_shadow_node (self, node, builder);
     break;
 
     case GSK_BORDER_NODE:
@@ -2837,11 +2885,13 @@ gsk_gl_renderer_add_render_ops (GskGLRenderer   *self,
     break;
 
     case GSK_CROSS_FADE_NODE:
-      render_cross_fade_node (self, node, builder);
+      load_vertex_data (vertex_data, node, builder);
+      render_cross_fade_node (self, node, builder, vertex_data);
     break;
 
     case GSK_BLEND_NODE:
-      render_blend_node (self, node, builder);
+      load_vertex_data (vertex_data, node, builder);
+      render_blend_node (self, node, builder, vertex_data);
     break;
 
     case GSK_REPEAT_NODE:
@@ -2973,14 +3023,14 @@ add_offscreen_ops (GskGLRenderer         *self,
 }
 
 static void
-gsk_gl_renderer_render_ops (GskGLRenderer *self,
-                            gsize          vertex_data_size)
+gsk_gl_renderer_render_ops (GskGLRenderer *self)
 {
-  guint i;
-  guint n_ops = self->render_ops->len;
   const Program *program = NULL;
-  gsize buffer_index = 0;
-  float *vertex_data = g_malloc (vertex_data_size);
+  gsize vertex_data_size = self->op_builder.vertices->len * sizeof (GskQuadVertex);
+  float *vertex_data = (float*)self->op_builder.vertices->data;
+  OpBufferIter iter;
+  OpKind kind;
+  gpointer ptr;
 
   /*g_message ("%s: Buffer size: %ld", __FUNCTION__, vertex_data_size);*/
 
@@ -2991,19 +3041,6 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
 
   glGenBuffers (1, &buffer_id);
   glBindBuffer (GL_ARRAY_BUFFER, buffer_id);
-
-
-  // Fill buffer data
-  for (i = 0; i < n_ops; i ++)
-    {
-      const RenderOp *op = &g_array_index (self->render_ops, RenderOp, i);
-
-      if (op->op == OP_CHANGE_VAO)
-        {
-          memcpy (vertex_data + buffer_index, &op->vertex_data, sizeof (GskQuadVertex) * GL_N_VERTICES);
-          buffer_index += sizeof (GskQuadVertex) * GL_N_VERTICES / sizeof (float);
-        }
-    }
 
   // Set buffer data
   glBufferData (GL_ARRAY_BUFFER, vertex_data_size, vertex_data, GL_STATIC_DRAW);
@@ -3021,41 +3058,42 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
                          sizeof (GskQuadVertex),
                          (void *) G_STRUCT_OFFSET (GskQuadVertex, uv));
 
-  for (i = 0; i < n_ops; i ++)
+  op_buffer_iter_init (&iter, ops_get_buffer (&self->op_builder));
+  while ((ptr = op_buffer_iter_next (&iter, &kind)))
     {
-      const RenderOp *op = &g_array_index (self->render_ops, RenderOp, i);
-
-      if (op->op == OP_NONE ||
-          op->op == OP_CHANGE_VAO)
+      if (kind == OP_NONE)
         continue;
 
       if (program == NULL &&
-          op->op != OP_PUSH_DEBUG_GROUP &&
-          op->op != OP_POP_DEBUG_GROUP &&
-          op->op != OP_CHANGE_PROGRAM &&
-          op->op != OP_CHANGE_RENDER_TARGET &&
-          op->op != OP_CLEAR)
+          kind != OP_PUSH_DEBUG_GROUP &&
+          kind != OP_POP_DEBUG_GROUP &&
+          kind != OP_CHANGE_PROGRAM &&
+          kind != OP_CHANGE_RENDER_TARGET &&
+          kind != OP_CLEAR)
         continue;
 
-      OP_PRINT ("Op %u: %u", i, op->op);
+      OP_PRINT ("Op %u: %u", iter.pos - 2, kind);
 
-      switch (op->op)
+      switch (kind)
         {
         case OP_CHANGE_PROJECTION:
-          apply_projection_op (program, op);
+          apply_projection_op (program, ptr);
           break;
 
         case OP_CHANGE_MODELVIEW:
-          apply_modelview_op (program, op);
+          apply_modelview_op (program, ptr);
           break;
 
         case OP_CHANGE_PROGRAM:
-          apply_program_op (program, op);
-          program = op->program;
-          break;
+          {
+            const OpProgram *op = ptr;
+            apply_program_op (program, op);
+            program = op->program;
+            break;
+          }
 
         case OP_CHANGE_RENDER_TARGET:
-          apply_render_target_op (self, program, op);
+          apply_render_target_op (self, program, ptr);
           break;
 
         case OP_CLEAR:
@@ -3064,95 +3102,108 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
           break;
 
         case OP_CHANGE_VIEWPORT:
-          apply_viewport_op (program, op);
+          apply_viewport_op (program, ptr);
           break;
 
         case OP_CHANGE_OPACITY:
-          apply_opacity_op (program, op);
+          apply_opacity_op (program, ptr);
           break;
 
         case OP_CHANGE_COLOR_MATRIX:
-          apply_color_matrix_op (program, op);
+          apply_color_matrix_op (program, ptr);
           break;
 
         case OP_CHANGE_COLOR:
           /*g_assert (program == &self->color_program || program == &self->coloring_program ||*/
                     /*program == &self->shadow_program);*/
-          apply_color_op (program, op);
+          apply_color_op (program, ptr);
           break;
 
         case OP_CHANGE_BORDER_COLOR:
-          apply_border_color_op (program, op);
+          apply_border_color_op (program, ptr);
           break;
 
         case OP_CHANGE_CLIP:
-          apply_clip_op (program, op);
+          apply_clip_op (program, ptr);
           break;
 
         case OP_CHANGE_SOURCE_TEXTURE:
-          apply_source_texture_op (program, op);
+          apply_source_texture_op (program, ptr);
           break;
 
         case OP_CHANGE_CROSS_FADE:
           g_assert (program == &self->cross_fade_program);
-          apply_cross_fade_op (program, op);
+          apply_cross_fade_op (program, ptr);
           break;
 
         case OP_CHANGE_BLEND:
           g_assert (program == &self->blend_program);
-          apply_blend_op (program, op);
+          apply_blend_op (program, ptr);
           break;
 
         case OP_CHANGE_LINEAR_GRADIENT:
-          apply_linear_gradient_op (program, op);
+          apply_linear_gradient_op (program, ptr);
           break;
 
         case OP_CHANGE_BLUR:
-          apply_blur_op (program, op);
+          apply_blur_op (program, ptr);
           break;
 
         case OP_CHANGE_INSET_SHADOW:
-          apply_inset_shadow_op (program, op);
+          apply_inset_shadow_op (program, ptr);
           break;
 
         case OP_CHANGE_OUTSET_SHADOW:
-          apply_outset_shadow_op (program, op);
+          apply_outset_shadow_op (program, ptr);
           break;
 
         case OP_CHANGE_BORDER:
-          apply_border_op (program, op);
+          apply_border_op (program, ptr);
           break;
 
         case OP_CHANGE_BORDER_WIDTH:
-          apply_border_width_op (program, op);
+          apply_border_width_op (program, ptr);
           break;
 
         case OP_CHANGE_UNBLURRED_OUTSET_SHADOW:
-          apply_unblurred_outset_shadow_op (program, op);
+          apply_unblurred_outset_shadow_op (program, ptr);
           break;
 
         case OP_CHANGE_REPEAT:
-          apply_repeat_op (program, op);
+          apply_repeat_op (program, ptr);
           break;
 
         case OP_DRAW:
-          OP_PRINT (" -> draw %ld, size %ld and program %d\n",
-                    op->draw.vao_offset, op->draw.vao_size, program->index);
-          glDrawArrays (GL_TRIANGLES, op->draw.vao_offset, op->draw.vao_size);
-          break;
+          {
+            const OpDraw *op = ptr;
+
+            OP_PRINT (" -> draw %ld, size %ld and program %d\n",
+                      op->vao_offset, op->vao_size, program->index);
+            glDrawArrays (GL_TRIANGLES, op->vao_offset, op->vao_size);
+            break;
+          }
 
         case OP_DUMP_FRAMEBUFFER:
-          dump_framebuffer (op->dump.filename, op->dump.width, op->dump.height);
-          break;
+          {
+            const OpDumpFrameBuffer *op = ptr;
+
+            dump_framebuffer (op->filename, op->width, op->height);
+            break;
+          }
 
         case OP_PUSH_DEBUG_GROUP:
-          gdk_gl_context_push_debug_group (self->gl_context, op->debug_group.text);
-          break;
+          {
+            const OpDebugGroup *op = ptr;
+            gdk_gl_context_push_debug_group (self->gl_context, op->text);
+            break;
+          }
 
         case OP_POP_DEBUG_GROUP:
           gdk_gl_context_pop_debug_group (self->gl_context);
           break;
 
+        case OP_NONE:
+        case OP_LAST:
         default:
           g_warn_if_reached ();
         }
@@ -3160,9 +3211,6 @@ gsk_gl_renderer_render_ops (GskGLRenderer *self,
       OP_PRINT ("\n");
     }
 
-  /* Done drawing, destroy the buffer again.
-   * TODO: Can we reuse the memory, though? */
-  g_free (vertex_data);
   glDeleteVertexArrays (1, &vao_id);
   glDeleteBuffers (1, &buffer_id);
 }
@@ -3176,7 +3224,6 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
 {
   GskGLRenderer *self = GSK_GL_RENDERER (renderer);
   graphene_matrix_t projection;
-  gsize buffer_size;
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 gpu_time, cpu_time, start_time;
@@ -3256,7 +3303,6 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   g_assert_cmpint (self->op_builder.current_render_target, ==, fbo_id);
   ops_pop_modelview (&self->op_builder);
   ops_pop_clip (&self->op_builder);
-  buffer_size = self->op_builder.buffer_size;
   ops_finish (&self->op_builder);
 
   /*g_message ("Ops: %u", self->render_ops->len);*/
@@ -3284,7 +3330,7 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   glBlendEquation (GL_FUNC_ADD);
 
   gdk_gl_context_push_debug_group (self->gl_context, "Rendering ops");
-  gsk_gl_renderer_render_ops (self, buffer_size);
+  gsk_gl_renderer_render_ops (self);
   gdk_gl_context_pop_debug_group (self->gl_context);
 
 #ifdef G_ENABLE_DEBUG
@@ -3451,11 +3497,8 @@ gsk_gl_renderer_init (GskGLRenderer *self)
 {
   gsk_ensure_resources ();
 
-  self->render_ops = g_array_new (FALSE, FALSE, sizeof (RenderOp));
-
   ops_init (&self->op_builder);
   self->op_builder.renderer = self;
-  self->op_builder.render_ops = self->render_ops;
 
 #ifdef G_ENABLE_DEBUG
   {

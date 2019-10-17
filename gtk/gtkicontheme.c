@@ -3276,17 +3276,16 @@ gtk_icon_info_get_filename (GtkIconInfo *icon_info)
 gboolean
 gtk_icon_info_is_symbolic (GtkIconInfo *icon_info)
 {
-  gchar *icon_uri;
+  const char *path;
   gboolean is_symbolic;
 
   g_return_val_if_fail (GTK_IS_ICON_INFO (icon_info), FALSE);
 
-  icon_uri = NULL;
+  path = NULL;
   if (icon_info->icon_file)
-    icon_uri = g_file_get_uri (icon_info->icon_file);
+    path = g_file_peek_path (icon_info->icon_file);
 
-  is_symbolic = (icon_uri != NULL) && (icon_uri_is_symbolic (icon_uri, -1));
-  g_free (icon_uri);
+  is_symbolic = (path != NULL) && (icon_uri_is_symbolic (path, -1));
 
   return is_symbolic;
 }
@@ -3384,16 +3383,19 @@ icon_info_ensure_scale_and_texture (GtkIconInfo *icon_info)
                                                                     &icon_info->load_error);
           else if (size == 0)
             source_pixbuf = _gdk_pixbuf_new_from_resource_scaled (icon_info->filename,
+                                                                  "svg",
                                                                   icon_info->desired_scale,
                                                                   &icon_info->load_error);
           else
-            source_pixbuf = gdk_pixbuf_new_from_resource_at_scale (icon_info->filename,
-                                                                   size, size, TRUE,
-                                                                   &icon_info->load_error);
+            source_pixbuf = _gdk_pixbuf_new_from_resource_at_scale (icon_info->filename,
+                                                                    "svg",
+                                                                    size, size, TRUE,
+                                                                    &icon_info->load_error);
         }
       else
-        source_pixbuf = gdk_pixbuf_new_from_resource (icon_info->filename,
-                                                      &icon_info->load_error);
+        source_pixbuf = _gdk_pixbuf_new_from_resource (icon_info->filename,
+                                                       "png",
+                                                       &icon_info->load_error);
     }
   else
     {
@@ -3425,19 +3427,22 @@ icon_info_ensure_scale_and_texture (GtkIconInfo *icon_info)
                                                                     &icon_info->load_error);
               else if (size == 0)
                 source_pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream,
+                                                                    "svg",
                                                                     icon_info->desired_scale,
                                                                     NULL,
                                                                     &icon_info->load_error);
               else
-                source_pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
-                                                                     size, size,
-                                                                     TRUE, NULL,
+                source_pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream,
+                                                                      "svg",
+                                                                      size, size,
+                                                                      TRUE, NULL,
                                                                      &icon_info->load_error);
             }
           else
-            source_pixbuf = gdk_pixbuf_new_from_stream (stream,
-                                                        NULL,
-                                                        &icon_info->load_error);
+            source_pixbuf = _gdk_pixbuf_new_from_stream (stream,
+                                                         "png",
+                                                         NULL,
+                                                         &icon_info->load_error);
           g_object_unref (stream);
         }
     }
@@ -3938,7 +3943,8 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
   g_free (height);
 
   stream = g_memory_input_stream_new_from_data (data, -1, g_free);
-  pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
+  pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream,
+                                                 "svg",
                                                 gdk_texture_get_width (icon_info->texture),
                                                 gdk_texture_get_height (icon_info->texture),
                                                 TRUE,
