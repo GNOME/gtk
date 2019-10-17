@@ -3171,19 +3171,10 @@ gtk_icon_info_get_filename (GtkIconInfo *icon_info)
 gboolean
 gtk_icon_info_is_symbolic (GtkIconInfo *icon_info)
 {
-  gchar *icon_uri;
-  gboolean is_symbolic;
-
   g_return_val_if_fail (GTK_IS_ICON_INFO (icon_info), FALSE);
 
-  icon_uri = NULL;
-  if (icon_info->icon_file)
-    icon_uri = g_file_get_uri (icon_info->icon_file);
-
-  is_symbolic = (icon_uri != NULL) && (icon_uri_is_symbolic (icon_uri, -1));
-  g_free (icon_uri);
-
-  return is_symbolic;
+  return icon_info->filename != NULL &&
+         icon_uri_is_symbolic (icon_info->filename, -1);
 }
 
 /* If this returns TRUE, its safe to call icon_info_ensure_scale_and_texture
