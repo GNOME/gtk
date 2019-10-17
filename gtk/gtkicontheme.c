@@ -3454,19 +3454,18 @@ icon_info_ensure_scale_and_texture (GtkIconInfo *icon_info)
 
       if (warn_about_load_failure)
         {
-          gchar *path;
+          const char *path;
 
-          if (icon_info->is_resource)
-            path = g_strdup (icon_info->filename);
+          if (icon_info->filename)
+            path = icon_info->filename;
           else if (G_IS_FILE (icon_info->loadable))
-            path = g_file_get_path (G_FILE (icon_info->loadable));
+            path = g_file_peek_path (G_FILE (icon_info->loadable));
           else
-            path = g_strdup ("icon theme");
+            path = "icon theme";
 
           g_warning ("Could not load a pixbuf from %s.\n"
                      "This may indicate that pixbuf loaders or the mime database could not be found.",
                      path);
-          g_free (path);
 
           warn_about_load_failure = FALSE;
         }
