@@ -523,6 +523,7 @@ gtk_search_entry_init (GtkSearchEntry *entry)
 
   priv->entry = gtk_text_new ();
   gtk_widget_set_parent (priv->entry, GTK_WIDGET (entry));
+  gtk_widget_set_hexpand (priv->entry, TRUE);
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
   g_signal_connect_swapped (priv->entry, "changed", G_CALLBACK (text_changed), entry);
   g_signal_connect_after (priv->entry, "changed", G_CALLBACK (gtk_search_entry_changed), entry);
