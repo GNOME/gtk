@@ -15,6 +15,7 @@ foreach l: immodules
                   install_dir: '@0@/gtk-@1@/@2@/immodules/'.format(gtk_libdir, gtk_api_version, gtk_binary_version),
                   include_directories: [confinc, gtkinc],
                   install : true,
+                  name_suffix: module_suffix,
                   name_prefix: '')
   endif
 endforeach
