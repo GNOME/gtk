@@ -313,8 +313,6 @@ static void         theme_list_icons          (IconTheme        *theme,
                                                GQuark            context);
 static gboolean     theme_has_icon            (IconTheme        *theme,
                                                const gchar      *icon_name);
-static void         theme_list_contexts       (IconTheme        *theme,
-                                               GHashTable       *contexts);
 static void         theme_subdir_load         (GtkIconTheme     *self,
                                                IconTheme        *theme,
                                                GKeyFile         *theme_file,
@@ -2273,7 +2271,6 @@ add_key_to_list (gpointer key,
  * [Icon Theme Specification](http://www.freedesktop.org/wiki/Specifications/icon-theme-spec).
  * The standard contexts are listed in the
  * [Icon Naming Specification](http://www.freedesktop.org/wiki/Specifications/icon-naming-spec).
- * Also see gtk_icon_theme_list_contexts().
  *
  * Returns: (element-type utf8) (transfer full): a #GList list
  *     holding the names of all the icons in the theme. You must
@@ -2322,47 +2319,6 @@ gtk_icon_theme_list_icons (GtkIconTheme *self,
 
   g_hash_table_destroy (icons);
   
-  return list;
-}
-
-/**
- * gtk_icon_theme_list_contexts:
- * @self: a #GtkIconTheme
- *
- * Gets the list of contexts available within the current
- * hierarchy of icon themes.
- * See gtk_icon_theme_list_icons() for details about contexts.
- *
- * Returns: (element-type utf8) (transfer full): a #GList list
- *     holding the names of all the contexts in the theme. You must first
- *     free each element in the list with g_free(), then free the list
- *     itself with g_list_free().
- */
-GList *
-gtk_icon_theme_list_contexts (GtkIconTheme *self)
-{
-  GHashTable *contexts;
-  GList *list, *l;
-
-  ensure_valid_themes (self);
-
-  contexts = g_hash_table_new (g_str_hash, g_str_equal);
-
-  l = self->themes;
-  while (l != NULL)
-    {
-      theme_list_contexts (l->data, contexts);
-      l = l->next;
-    }
-
-  list = NULL;
-
-  g_hash_table_foreach (contexts,
-                        add_key_to_list,
-                        &list);
-
-  g_hash_table_destroy (contexts);
-
   return list;
 }
 
@@ -2833,26 +2789,6 @@ theme_has_icon (IconTheme   *theme,
     }
 
   return FALSE;
-}
-
-static void
-theme_list_contexts (IconTheme  *theme, 
-                     GHashTable *contexts)
-{
-  GList *l = theme->dirs;
-  IconThemeDir *dir;
-  const gchar *context;
-
-  while (l != NULL)
-    {
-      dir = l->data;
-
-      context = g_quark_to_string (dir->context);
-      if (context != NULL)
-        g_hash_table_replace (contexts, (gpointer) context, NULL);
-
-      l = l->next;
-    }
 }
 
 static GHashTable *

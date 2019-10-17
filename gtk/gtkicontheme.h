@@ -199,8 +199,6 @@ GDK_AVAILABLE_IN_ALL
 GList *       gtk_icon_theme_list_icons            (GtkIconTheme                *self,
 						    const gchar                 *context);
 GDK_AVAILABLE_IN_ALL
-GList *       gtk_icon_theme_list_contexts         (GtkIconTheme                *self);
-GDK_AVAILABLE_IN_ALL
 char *        gtk_icon_theme_get_example_icon_name (GtkIconTheme                *self);
 
 GDK_AVAILABLE_IN_ALL
