@@ -5039,7 +5039,14 @@ void
 _gtk_entry_grab_focus (GtkEntry  *entry,
                        gboolean   select_all)
 {
+  if (!gtk_widget_get_can_focus (GTK_WIDGET (entry)))
+    return;
+
+  if (!gtk_widget_is_sensitive (GTK_WIDGET (entry)))
+    return;
+
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->grab_focus (GTK_WIDGET (entry));
+
   if (select_all)
     gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
 }
