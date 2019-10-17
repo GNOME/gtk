@@ -234,6 +234,7 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkdebug.h"
+#include "gtkexpressionprivate.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -1029,19 +1030,9 @@ gtk_builder_apply_delayed_properties (GtkBuilder *builder)
   g_slist_free (props);
 }
 
-static inline void
-free_binding_info (gpointer data,
-                   gpointer user)
-{
-  BindingInfo *info = data;
-
-  g_free (info->source);
-  g_free (info->source_property);
-  g_slice_free (BindingInfo, data);
-}
-
-static inline void
-gtk_builder_create_bindings (GtkBuilder *builder)
+static inline gboolean
+gtk_builder_create_bindings (GtkBuilder  *builder,
+                             GError     **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GSList *l;
@@ -1051,17 +1042,43 @@ gtk_builder_create_bindings (GtkBuilder *builder)
       BindingInfo *info = l->data;
       GObject *source;
 
-      source = _gtk_builder_lookup_object (builder, info->source, info->line, info->col);
-      if (source)
-        g_object_bind_property (source, info->source_property,
-                                info->target, info->target_pspec->name,
-                                info->flags);
+      if (info->tag_type == TAG_BINDING)
+        {
+          source = _gtk_builder_lookup_object (builder, info->source, info->line, info->col);
+          if (source)
+            g_object_bind_property (source, info->source_property,
+                                    info->target, info->target_pspec->name,
+                                    info->flags);
+        }
+      else
+        {
+          GtkExpression *expression, *assign;
+          GValue value = G_VALUE_INIT;
 
-      free_binding_info (info, NULL);
+          expression = gtk_expression_parse (builder, info->source, error);
+          if (expression == NULL)
+            {
+              g_prefix_error (error, "%s:%d:%d: ", priv->filename, info->line, info->col);
+              goto fail;
+            }
+          assign = gtk_expression_new_assign (info->target, info->target_pspec->name, expression);
+          if (gtk_expression_evaluate (assign, &value))
+            g_value_unset (&value);
+          gtk_expression_unref (assign);
+        }
+
+      _free_binding_info (info, NULL);
+    }
+
+fail:
+  for (; l; l = l->next)
+    {
+      _free_binding_info (l->data, NULL);
     }
 
   g_slist_free (priv->bindings);
   priv->bindings = NULL;
+  return TRUE;
 }
 
 /**
@@ -1757,6 +1774,8 @@ _gtk_builder_finish (GtkBuilder  *builder,
 {
   gtk_builder_apply_delayed_properties (builder);
   gtk_builder_create_bindings (builder);
+  if (!gtk_builder_create_bindings (builder, error))
+    return FALSE;
   return gtk_builder_connect_signals (builder, error);
 }
 
