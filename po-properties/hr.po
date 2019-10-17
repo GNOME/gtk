@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties 0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-15 05:18+0000\n"
-"PO-Revision-Date: 2019-10-17 13:34+0200\n"
+"PO-Revision-Date: 2019-10-17 13:59+0200\n"
 "Last-Translator: gogo <linux.hr@protonmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -4261,7 +4261,7 @@ msgstr "Stranice prijenosnika."
 
 #: gtk/gtkorientable.c:60
 msgid "The orientation of the orientable"
-msgstr "Orjentacija usmjerenja"
+msgstr "Orijentacija usmjerenja"
 
 #: gtk/gtkoverlaylayout.c:126
 msgid "Measure"
