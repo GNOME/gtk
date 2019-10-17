@@ -103,7 +103,7 @@ msgstr "Tabulation"
 #: gdk/keyname-table.h:6845
 msgctxt "keyboard label"
 msgid "Return"
-msgstr "Retour"
+msgstr "Entrée"
 
 #: gdk/keyname-table.h:6846
 msgctxt "keyboard label"
