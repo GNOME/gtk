@@ -5256,7 +5256,6 @@ gtk_text_set_editable (GtkText  *self,
                                                is_editable ? priv->im_context : NULL);
 
       g_object_notify (G_OBJECT (self), "editable");
-      gtk_widget_queue_draw (widget);
     }
 }
 
